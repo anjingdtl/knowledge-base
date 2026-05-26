@@ -1,0 +1,88 @@
+==========================================================
+  ShineHeKnowledge MCP Server 配置指南
+==========================================================
+
+一、启动模式说明
+----------------------------------------------------------
+
+  【stdio 模式 — 推荐】
+  由宿主 Agent（Claude Code / Cursor / Cline 等）自动启动和管理进程，
+  无需手动启动服务器，最稳定可靠。
+
+  【HTTP 模式 — 远程/局域网共享】
+  需要先手动启动服务器：
+    shinehe-mcp -t streamable-http --host 0.0.0.0 --port 9000
+  然后各 Agent 通过 http://<IP>:9000/mcp 接入。
+  适合局域网内多 Agent 共享同一个知识库。
+
+
+二、Windows 环境重要注意事项（踩坑记录）
+----------------------------------------------------------
+
+  1. 【不要用 cmd /c 包装 Python 命令】
+     cmd.exe 会拦截 stdin，把 JSON-RPC 消息当作 cmd 命令执行，
+     导致 MCP 握手失败。直接用 Python 可执行文件路径。
+
+  2. 【使用 Python 绝对路径】
+     Agent 启动 MCP 子进程时，PATH 中可能找不到 python。
+     推荐使用绝对路径，例如：
+     "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe"
+
+  3. 【设置 cwd 字段】
+     确保 config.yaml 等配置文件能被正确找到：
+     "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
+
+  4. 【不要用 python3】
+     Windows 上 python3 可能指向 Microsoft Store 的 shim，
+     统一使用 python 或绝对路径。
+
+
+三、各 Agent 配置模板
+----------------------------------------------------------
+  详细 JSON 模板见 mcp_config_templates/ 目录：
+
+  claude-code.json  — Claude Code（CLI）
+  cursor.json       — Cursor
+  cline.json        — Cline（VS Code 扩展）
+  windsurf.json     — Windsurf
+  roo-code.json     — Roo Code（VS Code 扩展）
+  opencode.json     — OpenCode（CLI，https://opencode.ai）
+  teleclaw.json     — TeleClaw 星辰超级智能体桌面版（中国电信）
+  http-remote.json  — HTTP 远程接入模板
+
+
+四、Claude Code 快速配置
+----------------------------------------------------------
+
+  方式一：CLI 命令（推荐）
+
+    # 源码模式（Windows）
+    claude mcp add-json shinehe-kb "{\"command\":\"C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe\",\"args\":[\"run_mcp.py\"],\"cwd\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\",\"type\":\"stdio\"}" -s user
+
+    # 已安装模式（pip install -e . 后可用）
+    claude mcp add shinehe-kb -- shinehe-mcp
+
+    # HTTP 远程模式
+    claude mcp add -t http shinehe-kb http://127.0.0.1:9000/mcp
+
+  方式二：手动编辑 ~/.claude.json
+
+    在 "mcpServers" 字段中添加配置（参考 claude-code.json 模板）
+
+
+五、一键配置脚本
+----------------------------------------------------------
+
+    python scripts/setup_mcp.py
+
+  自动检测 shinehe-mcp 是否已安装，交互式选择要配置的 Agent。
+
+
+六、验证连接
+----------------------------------------------------------
+
+    claude mcp list          # 查看所有 MCP 服务器状态
+    claude mcp get shinehe-kb  # 查看单个服务器详情
+
+
+==========================================================

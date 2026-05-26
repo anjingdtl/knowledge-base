@@ -1,0 +1,50 @@
+{
+    "_说明": "TeleClaw（星辰超级智能体桌面版）MCP 配置",
+    "_官网": "https://www.teleai.com.cn/product/super-agent",
+    "_配置入口": "设置 → 工具设置 → 从JSON导入/添加",
+    "_配置格式": "标准 JSON，根对象包含 mcpServers，每个 key 为服务唯一标识",
+    "_必填字段": "command（启动命令）、args（参数数组）",
+    "_选填字段": "env（环境变量，如 API Key）",
+    "_字段命名规范": "服务 ID 建议使用小写字母、数字或连字符",
+    "_Windows注意事项": [
+        "1. Windows 上推荐使用 Python 绝对路径",
+        "2. 不要用 cmd /c 包装 Python 命令，会破坏 stdio 协议",
+        "3. 通过 SHINEHE_HOME 环境变量指定知识库路径"
+    ],
+
+    "stdio_源码模式_Windows": {
+        "mcpServers": {
+            "shinehe-kb": {
+                "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
+                "args": ["D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"],
+                "env": {
+                    "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
+                }
+            }
+        }
+    },
+
+    "stdio_源码模式_macOS_Linux": {
+        "mcpServers": {
+            "shinehe-kb": {
+                "command": "python",
+                "args": ["你的路径/knowledge-base/run_mcp.py"],
+                "env": {
+                    "SHINEHE_HOME": "你的路径/knowledge-base"
+                }
+            }
+        }
+    },
+
+    "stdio_已安装模式(pip_install)": {
+        "mcpServers": {
+            "shinehe-kb": {
+                "command": "shinehe-mcp",
+                "args": [],
+                "env": {
+                    "SHINEHE_HOME": "你的知识库项目路径"
+                }
+            }
+        }
+    }
+}

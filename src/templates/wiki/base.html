@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %}
+    <title>{% block title %}{{ site_title }}{% endblock %}</title>
+    <meta name="description" content="{{ site_description }}">
+    {% if meta_tags %}
+    {{ meta_tags | safe }}
+    {% endif %}
+    {% if structured_data %}
+    <script type="application/ld+json">
+    {{ structured_data | safe }}
+    </script>
+    {% endif %}
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --text-color: #1f2937;
+            --bg-color: #ffffff;
+            --border-color: #e5e7eb;
+            --code-bg: #f3f4f6;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        header a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        article {
+            line-height: 1.8;
+        }
+        article h1 { font-size: 1.75rem; margin-top: 2rem; }
+        article h2 { font-size: 1.5rem; margin-top: 1.5rem; }
+        article h3 { font-size: 1.25rem; margin-top: 1.25rem; }
+        article pre {
+            background: var(--code-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        article code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        article pre code {
+            background: none;
+            padding: 0;
+        }
+        .summary {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        footer {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+    {% block extra_style %}{% endblock %}
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="{{ base_url }}/index.html">{{ site_title }}</a></h1>
+            {% block nav %}
+            <div class="nav-links">
+                <a href="{{ base_url }}/index.html">首页</a>
+                <a href="{{ base_url }}/search.html">搜索</a>
+            </div>
+            {% endblock %}
+        </header>
+
+        <main>
+        {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+        {% block footer %}
+            <p>&copy; {{ site_title }} | 版本 1.1.0</p>
+        {% endblock %}
+        </footer>
+    </div>
+</body>
+</html>

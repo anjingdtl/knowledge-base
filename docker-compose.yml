@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  shinehe-api:
+    build: .
+    image: shinehe/knowledge-base:1.0.0
+    container_name: shinehe-kb-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  shinehe-desktop:
+    build: .
+    image: shinehe/knowledge-base:1.0.0
+    container_name: shinehe-kb-desktop
+    command: ["python", "main.py"]
+    volumes:
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=host.docker.internal:0
+    depends_on:
+      - shinehe-api
+    profiles:
+      - desktop

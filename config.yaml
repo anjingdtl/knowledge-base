@@ -1,0 +1,94 @@
+appearance:
+  font_size: 15
+  theme: light
+embedding:
+  api_key: REDACTED_SILICONFLOW_API_KEY
+  base_url: https://api.siliconflow.cn/v1
+  model: BAAI/bge-m3
+  provider: 硅基流动
+  reuse_llm: true
+librarian:
+  batch_size: 5
+llm:
+  api_key: REDACTED_MINIMAX_API_KEY
+  base_url: https://api.minimaxi.com/v1
+  max_tokens: 2048
+  model: MiniMax-M2.7
+  provider: Minimax
+  temperature: 0.7
+rag:
+  chunk_overlap: 150
+  chunk_size: 1000
+  custom_stages: []
+  enable_query_rewriting: true
+  enable_rerank: true
+  hybrid_search:
+    candidate_multiplier: 3
+    enabled: true
+    keyword_weight: 0.3
+    vector_weight: 0.7
+  pipeline:
+    enabled: false
+    stages:
+    - enabled: true
+      mode: llm
+      num_variations: 3
+      stage: query_rewrite
+    - enabled: true
+      limit: 3
+      stage: wiki_retrieval
+    - enabled: true
+      mode: blend
+      stage: vector_search
+      top_k: 10
+    - enabled: true
+      min_score: 0.3
+      stage: rerank
+      top_n: 5
+    - enabled: true
+      max_tokens: 2048
+      stage: generate
+      temperature: 0.7
+    - dedup: true
+      enabled: true
+      max_context_length: 8000
+      stage: postprocess
+  rerank:
+    min_score: 0.3
+    top_n: 5
+  score_threshold: 0.35
+  search_mode: blend
+  top_k: 5
+reranker:
+  api_key: REDACTED_SILICONFLOW_API_KEY
+  base_url: https://api.siliconflow.cn/v1
+  enabled: true
+  model: BAAI/bge-reranker-v2-m3
+  provider: 硅基流动
+  reuse_llm: false
+  use_llm_fallback: true
+storage:
+  chroma_dir: chroma
+  data_dir: data
+  db_name: kb.db
+web:
+  timeout: 30
+wiki:
+  auto_compile: true
+  auto_link: true
+  auto_publish: true
+  enabled: true
+  lint_contradictions: false
+  max_llm_calls_per_ingest: 3
+  query_save_min_length: 100
+  site:
+    base_url: ''
+    enabled: false
+    landing_page_sections:
+    - project_intro
+    - recent_articles
+    - categories
+    - stats
+    site_description: 企业知识库 Wiki 系统
+    site_title: 知识库 Wiki
+    static_output_dir: wiki_site
