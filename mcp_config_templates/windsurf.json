@@ -1,0 +1,30 @@
+{
+    "_说明": "Windsurf MCP 配置",
+    "_配置文件位置_Windows": "%APPDATA%\\WindSurf\\mcp_settings.json",
+    "_配置文件位置_macOS": "~/.codeium/windsurf/mcp_config.json",
+    "_Windows注意事项": [
+        "1. Windows 上推荐使用 Python 绝对路径，避免 PATH 找不到 python",
+        "2. 不要用 cmd /c 包装 Python 命令，会破坏 stdio 协议"
+    ],
+
+    "stdio_源码模式_Windows(推荐)": {
+        "shinehe-kb": {
+            "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
+            "args": ["D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"],
+            "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base",
+            "env": {
+                "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
+            }
+        }
+    },
+
+    "stdio_已安装模式": {
+        "shinehe-kb": {
+            "command": "shinehe-mcp",
+            "args": [],
+            "env": {
+                "SHINEHE_HOME": "你的知识库项目路径"
+            }
+        }
+    }
+}

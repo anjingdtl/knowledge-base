@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}{{ site_title }}{% endblock %}
+
+{% block content %}
+<div class="landing">
+    {% if "project_intro" in sections %}
+    <section class="intro">
+        <h2>欢迎访问 {{ site_title }}</h2>
+        <p>{{ site_description }}</p>
+    </section>
+    {% endif %}
+
+    {% if "stats" in sections %}
+    <section class="stats">
+        <h3>统计信息</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">{{ stats.total_pages }}</span>
+                <span class="stat-label">Wiki 页面</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ stats.total_knowledge }}</span>
+                <span class="stat-label">知识条目</span>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if "recent_articles" in sections and recent_pages %}
+    <section class="recent">
+        <h3>最近更新</h3>
+        <ul class="article-list">
+        {% for page in recent_pages %}
+            <li>
+                <a href="{{ base_url }}/pages/{{ page.id }}.html">{{ page.title }}</a>
+                {% if page.concept_summary %}
+                <span class="summary">{{ page.concept_summary[:60] }}...</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    {% if "categories" in sections and categories %}
+    <section class="categories">
+        <h3>分类目录</h3>
+        <div class="category-list">
+        {% for tag, pages in categories.items() %}
+            <div class="category-item">
+                <h4>{{ tag }}</h4>
+                <ul>
+                {% for page in pages[:5] %}
+                    <li><a href="{{ base_url }}/pages/{{ page.id }}.html">{{ page.title }}</a></li>
+                {% endfor %}
+                {% if pages | length > 5 %}
+                    <li class="more"><a href="#">更多...</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="search-box">
+        <h3>搜索知识库</h3>
+        <form action="{{ base_url }}/search.html" method="get">
+            <input type="text" name="q" placeholder="输入关键词搜索...">
+            <button type="submit">搜索</button>
+        </form>
+    </section>
+</div>
+
+<style>
+.intro {
+    text-align: center;
+    padding: 2rem 0;
+}
+.intro h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+.intro p {
+    color: #6b7280;
+    font-size: 1.1rem;
+}
+
+.stats {
+    background: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+.stats-grid {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+.stat-item {
+    text-align: center;
+}
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2563eb;
+}
+.stat-label {
+    color: #6b7280;
+}
+
+.recent ul, .categories ul {
+    list-style: none;
+    padding: 0;
+}
+.recent li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+.recent li:last-child {
+    border-bottom: none;
+}
+.recent .summary {
+    display: block;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.category-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.category-item {
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+}
+.category-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2563eb;
+}
+.category-item ul {
+    margin: 0;
+}
+.category-item li {
+    font-size: 0.875rem;
+    margin: 0.25rem 0;
+}
+.category-item .more {
+    color: #9ca3af;
+}
+
+.search-box {
+    text-align: center;
+    margin: 2rem 0;
+}
+.search-box input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    width: 300px;
+    font-size: 1rem;
+}
+.search-box button {
+    padding: 0.75rem 1.5rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.search-box button:hover {
+    background: #1d4ed8;
+}
+</style>
+{% endblock %}

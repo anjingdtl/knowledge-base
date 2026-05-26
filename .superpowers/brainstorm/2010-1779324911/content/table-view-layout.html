@@ -1,0 +1,166 @@
+<h2>知识标签表格视图 — 布局方案</h2>
+<p class="subtitle">选择你偏好的表格视图布局</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>紧凑表格 — 标准数据表</h3>
+      <div class="mockup">
+        <div class="mockup-header">方案 A: 紧凑表格</div>
+        <div class="mockup-body" style="padding:12px;">
+          <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;">
+            <div class="mock-input" style="flex:1;padding:4px 8px;">🔍 搜索知识...</div>
+            <select style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;">
+              <option>全部格式</option><option>.xlsx</option><option>.pdf</option><option>.txt</option>
+            </select>
+            <select style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;">
+              <option>全部标签</option><option>技术</option><option>产品</option>
+            </select>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="background:#f0f0f0;border-bottom:2px solid #ddd;">
+                <th style="text-align:left;padding:6px 8px;">标题 ▲</th>
+                <th style="text-align:left;padding:6px 8px;">格式</th>
+                <th style="text-align:left;padding:6px 8px;">导入时间 ▼</th>
+                <th style="text-align:left;padding:6px 8px;">文件创建时间</th>
+                <th style="text-align:left;padding:6px 8px;">标签</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #eee;">
+                <td style="padding:6px 8px;">财务报告（2024年度收支明细）</td>
+                <td style="padding:6px 8px;"><span style="background:#e3f2fd;padding:2px 6px;border-radius:3px;font-size:11px;">.xlsx</span></td>
+                <td style="padding:6px 8px;">2026-05-20 14:30</td>
+                <td style="padding:6px 8px;">2024-12-15 09:00</td>
+                <td style="padding:6px 8px;"><span style="background:#fff3e0;padding:2px 6px;border-radius:3px;font-size:11px;">财务</span> <span style="background:#e8f5e9;padding:2px 6px;border-radius:3px;font-size:11px;">年度</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid #eee;background:#fafafa;">
+                <td style="padding:6px 8px;">API接口文档</td>
+                <td style="padding:6px 8px;"><span style="background:#fce4ec;padding:2px 6px;border-radius:3px;font-size:11px;">.md</span></td>
+                <td style="padding:6px 8px;">2026-05-19 10:15</td>
+                <td style="padding:6px 8px;">2026-03-01 16:22</td>
+                <td style="padding:6px 8px;"><span style="background:#e8eaf6;padding:2px 6px;border-radius:3px;font-size:11px;">开发</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid #eee;">
+                <td style="padding:6px 8px;">用户手册 v2.0</td>
+                <td style="padding:6px 8px;"><span style="background:#f3e5f5;padding:2px 6px;border-radius:3px;font-size:11px;">.pdf</span></td>
+                <td style="padding:6px 8px;">2026-05-18 08:45</td>
+                <td style="padding:6px 8px;">2026-01-20 11:30</td>
+                <td style="padding:6px 8px;"><span style="background:#e0f7fa;padding:2px 6px;border-radius:3px;font-size:11px;">文档</span> <span style="background:#fff3e0;padding:2px 6px;border-radius:3px;font-size:11px;">用户</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:8px;font-size:11px;color:#888;">点击表头排序 · 选中行右侧显示详情面板</p>
+        </div>
+      </div>
+      <p>经典数据表格，信息密度高，排序筛选都在顶部工具栏。</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>卡片+表格混合 — 左侧卡片列表 + 右侧详情</h3>
+      <div class="mockup">
+        <div class="mockup-header">方案 B: 卡片+表格混合</div>
+        <div class="mockup-body" style="padding:12px;">
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <div class="mock-input" style="flex:1;padding:4px 8px;">🔍 搜索知识...</div>
+            <select style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;">
+              <option>全部格式</option>
+            </select>
+            <select style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;">
+              <option>全部标签</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="flex:1;">
+              <div style="border:1px solid #e0e0e0;border-radius:6px;padding:10px;margin-bottom:8px;background:#fff;">
+                <div style="font-weight:bold;margin-bottom:4px;">财务报告（2024年度收支明细）</div>
+                <div style="display:flex;gap:12px;font-size:11px;color:#666;">
+                  <span>.xlsx</span>
+                  <span>导入: 2026-05-20</span>
+                  <span>文件: 2024-12-15</span>
+                </div>
+                <div style="margin-top:4px;"><span style="background:#fff3e0;padding:2px 6px;border-radius:3px;font-size:11px;">财务</span></div>
+              </div>
+              <div style="border:1px solid #e0e0e0;border-radius:6px;padding:10px;margin-bottom:8px;background:#e3f2fd;">
+                <div style="font-weight:bold;margin-bottom:4px;">API接口文档</div>
+                <div style="display:flex;gap:12px;font-size:11px;color:#666;">
+                  <span>.md</span>
+                  <span>导入: 2026-05-19</span>
+                  <span>文件: 2026-03-01</span>
+                </div>
+                <div style="margin-top:4px;"><span style="background:#e8eaf6;padding:2px 6px;border-radius:3px;font-size:11px;">开发</span></div>
+              </div>
+            </div>
+            <div style="flex:1;border:1px solid #e0e0e0;border-radius:6px;padding:12px;background:#fafafa;">
+              <div style="font-weight:bold;font-size:14px;margin-bottom:8px;">API接口文档</div>
+              <div style="font-size:11px;color:#888;margin-bottom:8px;">
+                .md · /docs/api.md · 导入: 2026-05-19
+              </div>
+              <div style="margin-bottom:8px;">
+                <span style="background:#e8eaf6;padding:2px 6px;border-radius:3px;font-size:11px;">开发</span>
+              </div>
+              <div style="font-size:12px;color:#333;border-top:1px solid #eee;padding-top:8px;">
+                API 接口文档内容预览...（最多显示前500字）
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p>保持左右分栏，左侧改为带元数据的卡片列表，右侧详情面板不变。</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>完整表格替代 — 用表格完全替代现有列表+详情</h3>
+      <div class="mockup">
+        <div class="mockup-header">方案 C: 全表格（无右侧详情面板）</div>
+        <div class="mockup-body" style="padding:12px;">
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <div class="mock-input" style="flex:1;padding:4px 8px;">🔍 搜索知识...</div>
+            <select style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;"><option>全部格式</option></select>
+            <select style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;"><option>全部标签</option></select>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="background:#f0f0f0;border-bottom:2px solid #ddd;">
+                <th style="text-align:left;padding:6px 8px;">标题</th>
+                <th style="text-align:left;padding:6px 8px;">格式</th>
+                <th style="text-align:left;padding:6px 8px;">标签</th>
+                <th style="text-align:left;padding:6px 8px;">导入时间</th>
+                <th style="text-align:left;padding:6px 8px;">文件创建</th>
+                <th style="text-align:left;padding:6px 8px;">内容预览</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #eee;">
+                <td style="padding:6px 8px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">财务报告（2024年度收支明细）</td>
+                <td style="padding:6px 8px;"><span style="background:#e3f2fd;padding:2px 6px;border-radius:3px;font-size:11px;">.xlsx</span></td>
+                <td style="padding:6px 8px;"><span style="background:#fff3e0;padding:2px 6px;border-radius:3px;font-size:11px;">财务</span></td>
+                <td style="padding:6px 8px;white-space:nowrap;">2026-05-20 14:30</td>
+                <td style="padding:6px 8px;white-space:nowrap;">2024-12-15</td>
+                <td style="padding:6px 8px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#888;">2024年度收支情况汇总，包含各部门...</td>
+              </tr>
+              <tr style="border-bottom:1px solid #eee;background:#fafafa;">
+                <td style="padding:6px 8px;">API接口文档</td>
+                <td style="padding:6px 8px;"><span style="background:#fce4ec;padding:2px 6px;border-radius:3px;font-size:11px;">.md</span></td>
+                <td style="padding:6px 8px;"><span style="background:#e8eaf6;padding:2px 6px;border-radius:3px;font-size:11px;">开发</span></td>
+                <td style="padding:6px 8px;">2026-05-19 10:15</td>
+                <td style="padding:6px 8px;">2026-03-01</td>
+                <td style="padding:6px 8px;color:#888;">REST API 接口规范文档，涵盖用户认证...</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:8px;font-size:11px;color:#888;">点击行展开完整内容 · 表头点击排序</p>
+        </div>
+      </div>
+      <p>用一张完整表格替代整个视图，内容预览直接在表格中，点击行可展开详情。</p>
+    </div>
+  </div>
+</div>

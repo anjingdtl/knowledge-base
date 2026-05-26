@@ -1,0 +1,33 @@
+{
+    "_说明": "Streamable-HTTP 远程接入模板（局域网/跨机器共享知识库）",
+    "_启动命令": "shinehe-mcp -t streamable-http --host 0.0.0.0 --port 9000",
+    "_源码启动": "python run_mcp.py --transport streamable-http --host 0.0.0.0 --port 9000",
+    "_接入URL": "http://<服务器IP>:9000/mcp",
+
+    "claude_code_命令": "claude mcp add -t http shinehe-kb http://<IP>:9000/mcp",
+
+    "cursor_配置": {
+        "mcpServers": {
+            "shinehe-kb": {
+                "url": "http://<IP>:9000/mcp"
+            }
+        }
+    },
+
+    "cline_配置": {
+        "mcpServers": {
+            "shinehe-kb": {
+                "url": "http://<IP>:9000/mcp",
+                "disabled": false
+            }
+        }
+    },
+
+    "windsurf_配置": {
+        "mcpServers": {
+            "shinehe-kb": {
+                "url": "http://<IP>:9000/mcp"
+            }
+        }
+    }
+}

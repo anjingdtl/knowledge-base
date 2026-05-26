@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} - {{ site_title }}{% endblock %}
+
+{% block content %}
+<article>
+    <h1>{{ page.title }}</h1>
+
+    {% if page.concept_summary %}
+    <p class="summary">{{ page.concept_summary }}</p>
+    {% endif %}
+
+    {% if page.tags %}
+    <div class="tags">
+        {% set tags = page.tags | from_json if page.tags is string else page.tags %}
+        {% for tag in tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="content">
+        {{ content_html | safe }}
+    </div>
+
+    <div class="meta">
+        <p>更新时间: {{ page.updated_at }}</p>
+    </div>
+</article>
+
+<style>
+.tags {
+    margin: 1rem 0;
+}
+.tag {
+    display: inline-block;
+    background: #e5e7eb;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+    color: #374151;
+}
+.meta {
+    margin-top: 2rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+</style>
+{% endblock %}
