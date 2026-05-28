@@ -9,7 +9,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QColor, QPen, QBrush, QFont, QPainterPath, QPainter, QWheelEvent,
-    QCursor, QTransform,
+    QCursor, QTransform, QRadialGradient,
 )
 from PySide6.QtWidgets import (
     QWidget, QFrame, QVBoxLayout, QHBoxLayout, QListWidget, QListWidgetItem,
@@ -34,6 +34,15 @@ RELATION_COLORS: dict[str, str] = {
     "prerequisite": "#5cb85c",
     "contradicts": "#e74c3c",
     "part_of": "#f0ad4e",
+}
+
+RELATION_LABELS: dict[str, str] = {
+    "related": "相关",
+    "contains": "包含",
+    "references": "引用",
+    "prerequisite": "前置",
+    "contradicts": "冲突",
+    "part_of": "部分",
 }
 
 FILE_TYPE_COLORS: dict[str, str] = {
@@ -69,6 +78,21 @@ def _qcolor_from_role(role: str, alpha: int = 255) -> QColor:
         r, g, b = int(parts[0]), int(parts[1]), int(parts[2])
         return QColor(r, g, b, alpha)
     return _hex_to_qcolor(hex_str, alpha)
+
+
+def _mix_qcolor(a: QColor, b: QColor, amount: float, alpha: int | None = None) -> QColor:
+    """Linearly blend two colors; optional alpha overrides the blended alpha."""
+    amount = max(0.0, min(1.0, amount))
+    inv = 1.0 - amount
+    color = QColor(
+        int(a.red() * inv + b.red() * amount),
+        int(a.green() * inv + b.green() * amount),
+        int(a.blue() * inv + b.blue() * amount),
+        int(a.alpha() * inv + b.alpha() * amount),
+    )
+    if alpha is not None:
+        color.setAlpha(alpha)
+    return color
 
 
 # ---- 力导向布局算法 ----
@@ -176,6 +200,7 @@ class GraphNodeItem(QGraphicsItem):
             knowledge_title[:10] + ".." if len(knowledge_title) > 10 else knowledge_title
         )
         self._hovered = False
+        self._muted = False
         self._edges: list[GraphEdgeItem] = []
         self._radius = self.BASE_RADIUS
 
@@ -213,33 +238,57 @@ class GraphNodeItem(QGraphicsItem):
         r = self._radius
         scale = 1.1 if self._hovered else 1.0
         painter.save()
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        if self._muted:
+            painter.setOpacity(0.42)
         painter.scale(scale, scale)
 
         # 发光效果（悬停时）
         if self._hovered:
-            glow = _hex_to_qcolor(self._color_hex, 30)
+            glow = _hex_to_qcolor(self._color_hex, 38)
             painter.setBrush(QBrush(glow))
             painter.setPen(Qt.PenStyle.NoPen)
-            painter.drawEllipse(-r - 6, -r - 6, 2 * (r + 6), 2 * (r + 6))
+            painter.drawEllipse(QRectF(-r - 9, -r - 9, 2 * (r + 9), 2 * (r + 9)))
 
         # 填充
-        fill = _hex_to_qcolor(self._color_hex, 60)
-        painter.setBrush(QBrush(fill))
+        accent = _hex_to_qcolor(self._color_hex)
+        surface = _qcolor_from_role("surface_alt", 255)
+        border_base = _qcolor_from_role("border", 255)
+        text_color = _qcolor_from_role("text", 245)
+        dim_text = _qcolor_from_role("text_dim", 210)
+
+        shadow_alpha = 42 if self._hovered or self.isSelected() else 24
+        painter.setBrush(QBrush(QColor(15, 23, 42, shadow_alpha)))
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.drawEllipse(QRectF(-r + 2, -r + 4, 2 * r, 2 * r))
 
         # 边框
-        border = _hex_to_qcolor(self._color_hex, 230)
-        pw = 3.0 if self.isSelected() else 2.0
-        painter.setPen(QPen(border, pw))
-        painter.drawEllipse(-r, -r, 2 * r, 2 * r)
+        border = _mix_qcolor(accent, border_base, 0.18, 210)
+        painter.setBrush(QBrush(surface))
+        painter.setPen(QPen(border, 2.2))
+        painter.drawEllipse(QRectF(-r, -r, 2 * r, 2 * r))
+
+        ring_width = 4.2 if self._hovered or self.isSelected() else 3.2
+        painter.setPen(QPen(accent, ring_width, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+        painter.drawArc(
+            QRectF(-r + 4, -r + 4, 2 * (r - 4), 2 * (r - 4)),
+            35 * 16,
+            285 * 16,
+        )
+
+        accent_dot = max(5.0, r * 0.18)
+        painter.setBrush(QBrush(accent))
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.drawEllipse(QRectF(-accent_dot / 2, -accent_dot / 2, accent_dot, accent_dot))
 
         # 标题
-        text_color = _qcolor_from_role("text", 240)
-        painter.setPen(QPen(text_color))
         font = QFont()
         font.setPointSize(9)
+        font.setBold(self._hovered or self.isSelected())
         painter.setFont(font)
+        painter.setPen(QPen(text_color if self._hovered or self.isSelected() else dim_text))
         painter.drawText(
-            QRectF(-r * 2.5, r + 3, r * 5, 20),
+            QRectF(-r * 2.7, r + 6, r * 5.4, 24),
             Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWrapAnywhere,
             self._display_text,
         )
@@ -249,6 +298,10 @@ class GraphNodeItem(QGraphicsItem):
     def set_highlight(self, highlighted: bool) -> None:
         """由场景控制高亮状态。"""
         self._hovered = highlighted
+        self.update()
+
+    def set_dimmed(self, dimmed: bool) -> None:
+        self._muted = dimmed
         self.update()
 
     def hoverEnterEvent(self, event) -> None:
@@ -300,6 +353,7 @@ class GraphEdgeItem(QGraphicsItem):
         self.description = description
         self.weight = weight
         self._highlighted = False
+        self._muted = False
 
         self.setZValue(-1)
         self.setAcceptHoverEvents(True)
@@ -318,10 +372,14 @@ class GraphEdgeItem(QGraphicsItem):
         self._highlighted = highlighted
         self.update()
 
+    def set_dimmed(self, dimmed: bool) -> None:
+        self._muted = dimmed
+        self.update()
+
     def boundingRect(self) -> QRectF:
         p1 = self.source_node.pos()
         p2 = self.target_node.pos()
-        extra = 40
+        extra = 90
         x_min = min(p1.x(), p2.x()) - extra
         y_min = min(p1.y(), p2.y()) - extra
         x_max = max(p1.x(), p2.x()) + extra
@@ -329,6 +387,7 @@ class GraphEdgeItem(QGraphicsItem):
         return QRectF(x_min, y_min, x_max - x_min, y_max - y_min)
 
     def paint(self, painter: QPainter, option, widget=None) -> None:
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
         p1 = self.source_node.pos()
         p2 = self.target_node.pos()
 
@@ -345,13 +404,27 @@ class GraphEdgeItem(QGraphicsItem):
         end_x = p2.x() - ux * r2
         end_y = p2.y() - uy * r2
 
-        alpha = 200 if self._highlighted else 80
+        normal_x, normal_y = -uy, ux
+        curve_offset = max(-54.0, min(54.0, dist * 0.12))
+        ctrl_x = (start_x + end_x) / 2 + normal_x * curve_offset
+        ctrl_y = (start_y + end_y) / 2 + normal_y * curve_offset
+
+        alpha = 210 if self._highlighted else (28 if self._muted else 64)
         line_color = _hex_to_qcolor(self._color_hex, alpha)
-        line_width = max(1.2, min(self.weight * 1.5, 3.5))
+        line_width = max(1.1, min(self.weight * 1.45, 3.2))
         if self._highlighted:
-            line_width = max(line_width, 2.5)
-        painter.setPen(QPen(line_color, line_width))
-        painter.drawLine(QPoint(int(start_x), int(start_y)), QPoint(int(end_x), int(end_y)))
+            line_width = max(line_width, 2.7)
+        painter.setPen(QPen(line_color, line_width, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+
+        edge_path = QPainterPath()
+        edge_path.moveTo(start_x, start_y)
+        edge_path.quadTo(ctrl_x, ctrl_y, end_x, end_y)
+        painter.drawPath(edge_path)
+
+        arrow_dx = end_x - ctrl_x
+        arrow_dy = end_y - ctrl_y
+        arrow_dist = max(math.sqrt(arrow_dx * arrow_dx + arrow_dy * arrow_dy), 1.0)
+        aux, auy = arrow_dx / arrow_dist, arrow_dy / arrow_dist
 
         # 箭头在目标节点边缘
         arrow_size = 9
@@ -361,12 +434,12 @@ class GraphEdgeItem(QGraphicsItem):
         arrow_path = QPainterPath()
         arrow_path.moveTo(ax, ay)
         arrow_path.lineTo(
-            ax - ux * arrow_size - uy * arrow_size * 0.45,
-            ay - uy * arrow_size + ux * arrow_size * 0.45,
+            ax - aux * arrow_size - auy * arrow_size * 0.45,
+            ay - auy * arrow_size + aux * arrow_size * 0.45,
         )
         arrow_path.lineTo(
-            ax - ux * arrow_size + uy * arrow_size * 0.45,
-            ay - uy * arrow_size - ux * arrow_size * 0.45,
+            ax - aux * arrow_size + auy * arrow_size * 0.45,
+            ay - auy * arrow_size - aux * arrow_size * 0.45,
         )
         arrow_path.closeSubpath()
 
@@ -377,17 +450,24 @@ class GraphEdgeItem(QGraphicsItem):
 
         # 关系类型标签（仅悬停时显示）
         if self._highlighted:
-            mid_x = (start_x + end_x) / 2
-            mid_y = (start_y + end_y) / 2
+            mid_x = 0.25 * start_x + 0.5 * ctrl_x + 0.25 * end_x
+            mid_y = 0.25 * start_y + 0.5 * ctrl_y + 0.25 * end_y
+            label = RELATION_LABELS.get(self.relation_type, self.relation_type)
+            label_rect = QRectF(mid_x - 34, mid_y - 12, 68, 20)
+            painter.setBrush(QBrush(_qcolor_from_role("surface_alt", 238)))
+            painter.setPen(QPen(_hex_to_qcolor(self._color_hex, 110), 1.0))
+            painter.drawRoundedRect(label_rect, 7, 7)
+
             label_color = _hex_to_qcolor(self._color_hex, 240)
             painter.setPen(QPen(label_color))
             font = QFont()
             font.setPixelSize(10)
+            font.setBold(True)
             painter.setFont(font)
             painter.drawText(
-                QRectF(mid_x - 45, mid_y - 14, 90, 16),
+                label_rect,
                 Qt.AlignmentFlag.AlignCenter,
-                self.relation_type,
+                label,
             )
 
     def update_path(self) -> None:
@@ -396,6 +476,64 @@ class GraphEdgeItem(QGraphicsItem):
 
 
 # ---- 图形场景 ----
+
+class GraphLegendItem(QGraphicsItem):
+    """Small non-interactive legend pinned by GraphCanvas to the visible scene."""
+
+    WIDTH = 118
+    PADDING = 10
+    ROW_HEIGHT = 18
+
+    def __init__(self):
+        super().__init__()
+        self.setZValue(20)
+        self.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations, True)
+
+    def boundingRect(self) -> QRectF:
+        height = self.PADDING * 2 + 18 + len(RELATION_COLORS) * self.ROW_HEIGHT
+        return QRectF(0, 0, self.WIDTH, height)
+
+    def paint(self, painter: QPainter, option, widget=None) -> None:
+        painter.save()
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+
+        rect = self.boundingRect()
+        painter.setBrush(QBrush(_qcolor_from_role("surface_alt", 236)))
+        painter.setPen(QPen(_qcolor_from_role("border", 130), 1.0))
+        painter.drawRoundedRect(rect, 8, 8)
+
+        title_font = QFont()
+        title_font.setPixelSize(10)
+        title_font.setBold(True)
+        painter.setFont(title_font)
+        painter.setPen(QPen(_qcolor_from_role("text_dim", 230)))
+        painter.drawText(
+            QRectF(self.PADDING, self.PADDING - 1, self.WIDTH - self.PADDING * 2, 15),
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+            "关系类型",
+        )
+
+        font = QFont()
+        font.setPixelSize(10)
+        painter.setFont(font)
+        y = self.PADDING + 20
+        for relation_type, color_hex in RELATION_COLORS.items():
+            swatch = _hex_to_qcolor(color_hex, 230)
+            painter.setBrush(QBrush(swatch))
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.drawEllipse(QRectF(self.PADDING, y + 4, 8, 8))
+
+            painter.setPen(QPen(_qcolor_from_role("text", 220)))
+            painter.drawText(
+                QRectF(self.PADDING + 16, y, self.WIDTH - self.PADDING * 2 - 16, self.ROW_HEIGHT),
+                Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                RELATION_LABELS.get(relation_type, relation_type),
+            )
+            y += self.ROW_HEIGHT
+
+        painter.restore()
+
 
 class GraphScene(QGraphicsScene):
     """管理节点和边的场景 — 加载数据、布局、高亮交互。"""
@@ -407,9 +545,16 @@ class GraphScene(QGraphicsScene):
         self._edges: list[GraphEdgeItem] = []
         self._knowledge_callback = None
         self._highlighted_node: GraphNodeItem | None = None
+        self._legend: GraphLegendItem | None = None
+        self._ensure_legend()
 
     def set_knowledge_callback(self, callback) -> None:
         self._knowledge_callback = callback
+
+    def _ensure_legend(self) -> None:
+        if self._legend is None:
+            self._legend = GraphLegendItem()
+            self.addItem(self._legend)
 
     def load_graph(self, graph_id: str) -> None:
         self.clear_graph()
@@ -466,6 +611,8 @@ class GraphScene(QGraphicsScene):
         self._edges.clear()
         self._graph_id = None
         self._highlighted_node = None
+        self._legend = None
+        self._ensure_legend()
 
     def apply_layout(self) -> None:
         if not self._nodes:
@@ -492,22 +639,28 @@ class GraphScene(QGraphicsScene):
                 connected_ids.add(edge.source_node.knowledge_id)
                 connected_ids.add(edge.target_node.knowledge_id)
                 edge.set_highlight(True)
+                edge.set_dimmed(False)
             else:
                 edge.set_highlight(False)
+                edge.set_dimmed(True)
 
         for n in self._nodes:
             if n.knowledge_id in connected_ids:
                 n.set_highlight(True)
+                n.set_dimmed(False)
             else:
                 n.set_highlight(False)
+                n.set_dimmed(True)
 
     def clear_highlight(self) -> None:
         """清除所有高亮。"""
         self._highlighted_node = None
         for n in self._nodes:
             n.set_highlight(False)
+            n.set_dimmed(False)
         for e in self._edges:
             e.set_highlight(False)
+            e.set_dimmed(False)
 
     @property
     def nodes(self) -> list[GraphNodeItem]:
@@ -516,6 +669,10 @@ class GraphScene(QGraphicsScene):
     @property
     def edges(self) -> list[GraphEdgeItem]:
         return self._edges
+
+    @property
+    def legend(self) -> GraphLegendItem | None:
+        return self._legend
 
     @property
     def graph_id(self) -> str | None:
@@ -551,16 +708,46 @@ class GraphCanvas(QGraphicsView):
 
     def drawBackground(self, painter: QPainter, rect: QRectF) -> None:
         """绘制背景网格点（Obsidian 风格）。"""
-        super().drawBackground(painter, rect)
+        painter.save()
+        painter.fillRect(rect, QBrush(_qcolor_from_role("bg", 255)))
+
+        center = rect.center()
+        glow_radius = max(rect.width(), rect.height()) * 0.42
+        glow = QRadialGradient(center.x(), center.y(), glow_radius)
+        glow.setColorAt(0.0, _qcolor_from_role("accent_soft", 70))
+        glow.setColorAt(1.0, QColor(0, 0, 0, 0))
+        painter.setBrush(QBrush(glow))
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.drawEllipse(center, glow_radius, glow_radius)
         # 淡色网格点
         dot_color = _qcolor_from_role("text_dim", 25)
         painter.setPen(QPen(dot_color))
-        spacing = 30
+        spacing = 34
         left = int(rect.left()) - (int(rect.left()) % spacing)
         top = int(rect.top()) - (int(rect.top()) % spacing)
         for x in range(left, int(rect.right()), spacing):
             for y in range(top, int(rect.bottom()), spacing):
                 painter.drawPoint(x, y)
+        painter.restore()
+
+    def _nodes_bounding_rect(self) -> QRectF:
+        rect: QRectF | None = None
+        for node in self._scene.nodes:
+            node_rect = node.sceneBoundingRect()
+            rect = node_rect if rect is None else rect.united(node_rect)
+        return rect if rect is not None else QRectF(-80, -80, 160, 160)
+
+    def _position_overlays(self) -> None:
+        legend = self._scene.legend
+        if legend is None:
+            return
+        legend_rect = legend.boundingRect()
+        margin = 18
+        target = self.viewport().rect().bottomRight() - QPoint(
+            int(legend_rect.width()) + margin,
+            int(legend_rect.height()) + margin,
+        )
+        legend.setPos(self.mapToScene(target))
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         """鼠标滚轮缩放 — 在当前 transform 上叠加，保留平移。"""
@@ -580,6 +767,7 @@ class GraphCanvas(QGraphicsView):
             ratio = 10.0 / self._zoom
             self.scale(ratio, ratio)
             self._zoom = 10.0
+        self._position_overlays()
 
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.MiddleButton:
@@ -600,22 +788,29 @@ class GraphCanvas(QGraphicsView):
         if event.button() == Qt.MouseButton.MiddleButton:
             self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
         super().mouseReleaseEvent(event)
+        self._position_overlays()
 
     def fit_to_view(self) -> None:
         """自适应视图 — 将所有节点缩放到可视范围内。"""
         if not self._scene.nodes:
             return
-        rect = self._scene.itemsBoundingRect().adjusted(-60, -60, 60, 60)
+        rect = self._nodes_bounding_rect().adjusted(-60, -60, 60, 60)
         self.fitInView(rect, Qt.AspectRatioMode.KeepAspectRatio)
         # 同步 _zoom
         actual = self.transform().m11()
         self._zoom = max(0.1, min(5.0, actual))
+        self._position_overlays()
 
     def reset_view(self) -> None:
         """重置视图到默认。"""
         self._zoom = 1.0
         self.setTransform(QTransform().scale(1.0, 1.0))
         self.centerOn(0, 0)
+        self._position_overlays()
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self._position_overlays()
 
 
 # ---- LLM 异步工作线程 ----
