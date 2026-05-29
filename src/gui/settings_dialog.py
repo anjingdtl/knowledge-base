@@ -155,7 +155,7 @@ class SettingsDialog(QDialog):
 
         self.font_size = QSpinBox()
         self.font_size.setRange(10, 24)
-        self.font_size.setValue(13)
+        self.font_size.setValue(14)
         self.font_size.setSuffix(" px")
 
         appearance_form.addRow("主题配色：", self.theme_combo)
@@ -213,7 +213,7 @@ class SettingsDialog(QDialog):
         idx = self.theme_combo.findData(theme)
         if idx >= 0:
             self.theme_combo.setCurrentIndex(idx)
-        self.font_size.setValue(Config.get("appearance.font_size", 13))
+        self.font_size.setValue(Config.get("appearance.font_size", 14))
 
     def _save(self):
         if not self.llm_provider.text().strip() or not self.llm_base_url.text().strip():

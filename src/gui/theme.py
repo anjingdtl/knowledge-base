@@ -1,4 +1,4 @@
-"""主题管理器 - ShineHe Knowledge 现代双主题系统"""
+"""主题管理器 — 学院书斋双主题系统"""
 from pathlib import Path
 
 from PySide6.QtGui import QFont
@@ -8,113 +8,117 @@ from src.utils.config import Config
 
 RESOURCES_DIR = Path(__file__).parent / "resources"
 
-INK = "#101827"
-SLATE = "#334155"
-MUTED = "#64748B"
-PAPER = "#F7FAFD"
-CANVAS = "#EEF3F8"
-CYAN = "#0EA5B7"
-BLUE = "#2563EB"
-INDIGO = "#6366F1"
-EMERALD = "#10B981"
-AMBER = "#F59E0B"
-RED = "#EF4444"
+# 浅色基础色
+TEAL = "#1F4A48"
+GOLD = "#C9A87C"
+CREAM = "#F5F1EB"
+# 深色基础色
+ROSE = "#D64A6C"
+NOIR = "#222222"
+MOON = "#F8F9FA"
 
-DARK_CANVAS = "#0B1020"
-DARK_PANEL = "#111827"
-DARK_SURFACE = "#182235"
-DARK_TEXT = "#E5EDF7"
-DARK_DIM = "#95A3B8"
-DARK_MUTED = "#667085"
+EMERALD = "#3A8A6E"
+AMBER = "#C9976C"
+CORAL = "#C45B5B"
 
 LIGHT = {
-    "bg": CANVAS,
-    "surface": PAPER,
-    "surface_alt": "#FFFFFF",
-    "surface_hover": "#EAF2FA",
+    "bg": CREAM,
+    "surface": "#FFFFFF",
+    "surface_alt": "#FAF8F5",
+    "surface_hover": "#F0EBE3",
     "panel": "#FFFFFF",
-    "accent": BLUE,
+    "primary": TEAL,
     "on_accent": "#FFFFFF",
-    "accent_2": CYAN,
-    "accent_3": INDIGO,
-    "accent_hover": "#1D4ED8",
-    "accent_soft": "rgba(37, 99, 235, 24)",
-    "text": INK,
-    "text_dim": MUTED,
-    "text_light": "#94A3B8",
-    "sidebar_bg": "#F8FBFF",
-    "sidebar_text": SLATE,
-    "sidebar_active_text": INK,
-    "border": "rgba(31, 42, 68, 22)",
-    "border_hover": "rgba(37, 99, 235, 70)",
-    "border_focus": BLUE,
-    "border_card": "rgba(37, 99, 235, 38)",
+    "accent": GOLD,
+    "accent_2": TEAL,
+    "accent_3": "#8B7355",
+    "primary_hover": "#163B39",
+    "primary_light": "rgba(31,74,72,10)",
+    "accent_hover": "#B89560",
+    "accent_light": "rgba(201,168,124,12)",
+    "accent_soft": "rgba(31,74,72,8)",
+    "text": "#1A1A1A",
+    "text_secondary": "#5C5C5C",
+    "text_dim": "#8C8C8C",
+    "text_light": "#ACACAC",
+    "sidebar_bg": "#EDE8E0",
+    "sidebar_text": "#5C5C5C",
+    "sidebar_active_text": TEAL,
+    "border": "rgba(0,0,0,10)",
+    "border_hover": "rgba(31,74,72,35)",
+    "border_focus": TEAL,
+    "border_card": "rgba(31,74,72,15)",
     "indicator_idle": EMERALD,
-    "indicator_running": BLUE,
-    "indicator_error": RED,
+    "indicator_running": TEAL,
+    "indicator_error": CORAL,
     "mcp_online": EMERALD,
-    "mcp_offline": RED,
+    "mcp_offline": CORAL,
     "success": EMERALD,
     "warning": AMBER,
-    "danger": RED,
-    "danger_bg": "rgba(239, 68, 68, 18)",
-    "danger_border": "rgba(239, 68, 68, 80)",
-    "scroll_handle": "rgba(100, 116, 139, 70)",
-    "scroll_handle_hover": "rgba(37, 99, 235, 115)",
-    "progress_bg": "rgba(100, 116, 139, 40)",
+    "danger": CORAL,
+    "danger_bg": "rgba(196,91,91,10)",
+    "danger_border": "rgba(196,91,91,55)",
+    "scroll_handle": "rgba(140,140,140,25)",
+    "scroll_handle_hover": "rgba(31,74,72,40)",
+    "progress_bg": "rgba(140,140,140,20)",
     "garbled_fg": AMBER,
-    "typing_dots": CYAN,
-    "tag_bg": "rgba(14, 165, 183, 24)",
-    "tag_text": "#0F766E",
-    "chat_user_bubble": "rgba(37, 99, 235, 24)",
+    "typing_dots": TEAL,
+    "tag_bg": "rgba(31,74,72,10)",
+    "tag_text": "#1F4A48",
+    "chat_user_bubble": "rgba(31,74,72,8)",
     "chat_ai_bubble": "#FFFFFF",
-    "accent_surface": "rgba(37, 99, 235, 24)",
-    "shadow": "rgba(15, 23, 42, 45)",
+    "accent_surface": "rgba(31,74,72,8)",
+    "shadow": "rgba(31,74,72,12)",
 }
 
 DARK = {
-    "bg": DARK_CANVAS,
-    "surface": DARK_SURFACE,
-    "surface_alt": DARK_PANEL,
-    "surface_hover": "#1D2A40",
-    "panel": "#0F172A",
-    "accent": CYAN,
+    "bg": NOIR,
+    "surface": "#2C2C2C",
+    "surface_alt": "#272727",
+    "surface_hover": "#363636",
+    "panel": "#272727",
+    "primary": ROSE,
     "on_accent": "#FFFFFF",
-    "accent_2": INDIGO,
-    "accent_3": EMERALD,
-    "accent_hover": "#22D3EE",
-    "accent_soft": "rgba(14, 165, 183, 32)",
-    "text": DARK_TEXT,
-    "text_dim": DARK_DIM,
-    "text_light": DARK_MUTED,
-    "sidebar_bg": "#0A0F1D",
-    "sidebar_text": "#A7B3C7",
-    "sidebar_active_text": "#FFFFFF",
-    "border": "rgba(148, 163, 184, 26)",
-    "border_hover": "rgba(14, 165, 183, 90)",
-    "border_focus": CYAN,
-    "border_card": "rgba(14, 165, 183, 52)",
-    "indicator_idle": EMERALD,
-    "indicator_running": CYAN,
-    "indicator_error": RED,
-    "mcp_online": EMERALD,
-    "mcp_offline": RED,
-    "success": EMERALD,
-    "warning": AMBER,
-    "danger": RED,
-    "danger_bg": "rgba(239, 68, 68, 28)",
-    "danger_border": "rgba(239, 68, 68, 95)",
-    "scroll_handle": "rgba(148, 163, 184, 70)",
-    "scroll_handle_hover": "rgba(14, 165, 183, 130)",
-    "progress_bg": "rgba(148, 163, 184, 35)",
-    "garbled_fg": AMBER,
-    "typing_dots": CYAN,
-    "tag_bg": "rgba(14, 165, 183, 30)",
-    "tag_text": "#67E8F9",
-    "chat_user_bubble": "rgba(37, 99, 235, 32)",
-    "chat_ai_bubble": "rgba(255, 255, 255, 14)",
-    "accent_surface": "rgba(14, 165, 183, 30)",
-    "shadow": "rgba(0, 0, 0, 90)",
+    "accent": "#E8A87C",
+    "accent_2": ROSE,
+    "accent_3": "#D4A574",
+    "primary_hover": "#E55D7D",
+    "primary_light": "rgba(214,74,108,15)",
+    "accent_hover": "#F0B88E",
+    "accent_light": "rgba(232,168,124,12)",
+    "accent_soft": "rgba(214,74,108,10)",
+    "text": MOON,
+    "text_secondary": "#B8B8B8",
+    "text_dim": "#808080",
+    "text_light": "#666666",
+    "sidebar_bg": "#1C1C1C",
+    "sidebar_text": "#B8B8B8",
+    "sidebar_active_text": MOON,
+    "border": "rgba(255,255,255,10)",
+    "border_hover": "rgba(214,74,108,35)",
+    "border_focus": ROSE,
+    "border_card": "rgba(255,255,255,8)",
+    "indicator_idle": "#4CAF82",
+    "indicator_running": ROSE,
+    "indicator_error": "#E55D7D",
+    "mcp_online": "#4CAF82",
+    "mcp_offline": "#E55D7D",
+    "success": "#4CAF82",
+    "warning": "#E8A87C",
+    "danger": "#E55D7D",
+    "danger_bg": "rgba(229,93,125,10)",
+    "danger_border": "rgba(229,93,125,55)",
+    "scroll_handle": "rgba(128,128,128,25)",
+    "scroll_handle_hover": "rgba(214,74,108,40)",
+    "progress_bg": "rgba(128,128,128,20)",
+    "garbled_fg": "#E8A87C",
+    "typing_dots": ROSE,
+    "tag_bg": "rgba(214,74,108,15)",
+    "tag_text": "#E8A87C",
+    "chat_user_bubble": "rgba(214,74,108,10)",
+    "chat_ai_bubble": "#2C2C2C",
+    "accent_surface": "rgba(214,74,108,10)",
+    "shadow": "rgba(0,0,0,35)",
 }
 
 _THEMES = {"light": LIGHT, "dark": DARK}
@@ -133,7 +137,7 @@ def colors() -> dict:
 
 
 def get_color(role: str) -> str:
-    fallback = INK if not is_dark() else DARK_TEXT
+    fallback = "#1A1A1A" if not is_dark() else "#F8F9FA"
     return colors().get(role, fallback)
 
 
@@ -141,7 +145,7 @@ def _gradient_accent() -> str:
     palette = colors()
     return (
         "qlineargradient(x1:0, y1:0, x2:1, y2:0, "
-        f"stop:0 {palette['accent']}, stop:1 {palette['accent_2']})"
+        f"stop:0 {palette['primary']}, stop:1 {palette['accent']})"
     )
 
 
@@ -149,14 +153,17 @@ def _gradient_accent_v() -> str:
     palette = colors()
     return (
         "qlineargradient(x1:0, y1:0, x2:0, y2:1, "
-        f"stop:0 {palette['accent']}, stop:1 {palette['accent_2']})"
+        f"stop:0 {palette['primary']}, stop:1 {palette['accent']})"
     )
+
+
+FONT_FAMILY = '"Inter", "Segoe UI", "Microsoft YaHei", sans-serif'
 
 
 def apply(app: QApplication):
     """加载当前主题 QSS 和字体。"""
     theme = current_theme()
-    font_size = Config.get("appearance.font_size", 13)
+    font_size = Config.get("appearance.font_size", 14)
 
     qss_file = "style-dark.qss" if theme == "dark" else "style.qss"
     qss_path = RESOURCES_DIR / qss_file
@@ -165,14 +172,16 @@ def apply(app: QApplication):
         qss_text = qss_path.read_text(encoding="utf-8")
         qss_text = qss_text.replace("{{font_size}}", str(font_size))
         qss_text = qss_text.replace("{{font_size_lg}}", str(font_size + 1))
-        qss_text = qss_text.replace("{{font_size_brand}}", str(font_size + 5))
-        qss_text = qss_text.replace("{{font_size_sm}}", str(max(10, font_size - 2)))
+        qss_text = qss_text.replace("{{font_size_md}}", str(font_size + 1))
+        qss_text = qss_text.replace("{{font_size_brand}}", str(font_size + 8))
+        qss_text = qss_text.replace("{{font_size_sm}}", str(max(11, font_size - 2)))
         qss_text = qss_text.replace("{{font_size_title}}", str(font_size + 7))
         qss_text = qss_text.replace("{{font_size_subtitle}}", str(font_size + 2))
-        qss_text = qss_text.replace("{{font_size_xs}}", str(max(9, font_size - 4)))
+        qss_text = qss_text.replace("{{font_size_xs}}", str(max(10, font_size - 4)))
         qss_text = qss_text.replace("{{gradient_accent}}", _gradient_accent())
         qss_text = qss_text.replace("{{gradient_accent_v}}", _gradient_accent_v())
         app.setStyleSheet(qss_text)
 
     font = QFont("Microsoft YaHei", font_size)
+    font.setStyleHint(QFont.SansSerif)
     app.setFont(font)

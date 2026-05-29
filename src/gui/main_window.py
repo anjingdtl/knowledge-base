@@ -67,8 +67,8 @@ class MainWindow(QMainWindow):
         sidebar = QWidget()
         sidebar.setObjectName("sidebar")
         sidebar_layout = QVBoxLayout(sidebar)
-        sidebar_layout.setContentsMargins(0, 24, 0, 14)
-        sidebar_layout.setSpacing(4)
+        sidebar_layout.setContentsMargins(0, 28, 0, 20)
+        sidebar_layout.setSpacing(6)
 
         # 品牌标题（渐变文字）
         brand = QLabel("泰坦知识库")
@@ -87,16 +87,16 @@ class MainWindow(QMainWindow):
         brand_line = QFrame()
         brand_line.setObjectName("brandLine")
         brand_line.setFixedHeight(2)
-        brand_line.setContentsMargins(24, 0, 24, 0)
+        brand_line.setContentsMargins(28, 0, 28, 0)
         sidebar_layout.addWidget(brand_line)
-        sidebar_layout.addSpacing(12)
+        sidebar_layout.addSpacing(16)
 
         def nav_button(text: str, icon_key: str, index: int) -> QPushButton:
             button = QPushButton(text)
             button.setObjectName("navPrimary")
             button.setCheckable(True)
             button.setToolTip(text)
-            set_named_icon(button, icon_key, "sidebar_text", 17)
+            set_named_icon(button, icon_key, "sidebar_text", 16)
             button.clicked.connect(lambda: self._switch_page(index))
             return button
 
@@ -113,6 +113,7 @@ class MainWindow(QMainWindow):
         sidebar_layout.addWidget(self.btn_wiki)
         sidebar_layout.addWidget(self.btn_graph)
         sidebar_layout.addStretch()
+        sidebar_layout.addSpacing(16)
 
         # 状态区分隔线
         status_sep = QFrame()
@@ -163,7 +164,7 @@ class MainWindow(QMainWindow):
         sidebar_shadow = QGraphicsDropShadowEffect(sidebar)
         sidebar_shadow.setBlurRadius(18)
         sidebar_shadow.setOffset(2, 0)
-        sidebar_shadow.setColor(QColor(0, 0, 0, 26))
+        sidebar_shadow.setColor(QColor(31, 74, 72, 18))
         sidebar.setGraphicsEffect(sidebar_shadow)
 
         # ---- 内容区 ----

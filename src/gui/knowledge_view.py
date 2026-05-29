@@ -250,9 +250,9 @@ COL_TAGS = 4
 TABLE_HEADERS = ["标题", "格式", "导入时间", "文件创建时间", "标签"]
 
 FILE_TYPE_COLORS = {
-    "pdf": "#e3f2fd", "docx": "#f3e5f5", "xlsx": "#e8f5e9",
-    "csv": "#fff3e0", "txt": "#fafafa", "md": "#fce4ec",
-    "html": "#e0f7fa", "code": "#f1f8e9", "image": "#fff8e1",
+    "pdf": "#e8eff5", "docx": "#ede8ef", "xlsx": "#e6efe7",
+    "csv": "#f5efe6", "txt": "#f5f3f0", "md": "#f0e4e8",
+    "html": "#e2eff0", "code": "#eef2ea", "image": "#f5f0e6",
 }
 
 
@@ -571,9 +571,9 @@ class KnowledgeView(QWidget):
             # 格式（彩色徽章）
             file_type = item.get("file_type", "")
             format_item = QTableWidgetItem(file_type)
-            bg_color = FILE_TYPE_COLORS.get(file_type, "#f5f5f5")
+            bg_color = FILE_TYPE_COLORS.get(file_type, "#F5F1EB")
             format_item.setBackground(QColor(bg_color))
-            format_item.setForeground(QColor("#0f172a"))
+            format_item.setForeground(QColor("#1A1A1A"))
             format_item.setTextAlignment(Qt.AlignCenter)
             self.table_widget.setItem(row, COL_FORMAT, format_item)
 

@@ -28,12 +28,12 @@ from src.gui.empty_state import EmptyState
 # ---- 关系类型颜色映射 ----
 
 RELATION_COLORS: dict[str, str] = {
-    "related": "#8899aa",
-    "contains": "#4a9eff",
-    "references": "#40c8c8",
-    "prerequisite": "#5cb85c",
-    "contradicts": "#e74c3c",
-    "part_of": "#f0ad4e",
+    "related": "#8e99a5",
+    "contains": "#6a9edf",
+    "references": "#5ab8b8",
+    "prerequisite": "#6db86d",
+    "contradicts": "#d06a60",
+    "part_of": "#d8a866",
 }
 
 RELATION_LABELS: dict[str, str] = {
@@ -46,18 +46,18 @@ RELATION_LABELS: dict[str, str] = {
 }
 
 FILE_TYPE_COLORS: dict[str, str] = {
-    "pdf": "#e74c3c",
-    "docx": "#4a9eff",
-    "xlsx": "#5cb85c",
-    "md": "#a855f7",
-    "txt": "#8899aa",
-    "code": "#f59e0b",
-    "html": "#f97316",
+    "pdf": "#d06a60",
+    "docx": "#6a9edf",
+    "xlsx": "#6db86d",
+    "md": "#9a6ad4",
+    "txt": "#8e99a5",
+    "code": "#d4a038",
+    "html": "#d48548",
 }
 
 
 def _color_for_file_type(file_type: str) -> str:
-    return FILE_TYPE_COLORS.get(file_type, "#a855f7")
+    return FILE_TYPE_COLORS.get(file_type, "#9a6ad4")
 
 
 def _hex_to_qcolor(hex_color: str, alpha: int = 255) -> QColor:
@@ -258,7 +258,7 @@ class GraphNodeItem(QGraphicsItem):
         dim_text = _qcolor_from_role("text_dim", 210)
 
         shadow_alpha = 42 if self._hovered or self.isSelected() else 24
-        painter.setBrush(QBrush(QColor(15, 23, 42, shadow_alpha)))
+        painter.setBrush(QBrush(QColor(0, 0, 0, shadow_alpha)))
         painter.setPen(Qt.PenStyle.NoPen)
         painter.drawEllipse(QRectF(-r + 2, -r + 4, 2 * r, 2 * r))
 
@@ -366,7 +366,7 @@ class GraphEdgeItem(QGraphicsItem):
         source_node.add_edge(self)
         target_node.add_edge(self)
 
-        self._color_hex = RELATION_COLORS.get(relation_type, "#8899aa")
+        self._color_hex = RELATION_COLORS.get(relation_type, "#8e99a5")
 
     def set_highlight(self, highlighted: bool) -> None:
         self._highlighted = highlighted
@@ -409,7 +409,7 @@ class GraphEdgeItem(QGraphicsItem):
         ctrl_x = (start_x + end_x) / 2 + normal_x * curve_offset
         ctrl_y = (start_y + end_y) / 2 + normal_y * curve_offset
 
-        alpha = 210 if self._highlighted else (28 if self._muted else 64)
+        alpha = 210 if self._highlighted else (22 if self._muted else 50)
         line_color = _hex_to_qcolor(self._color_hex, alpha)
         line_width = max(1.1, min(self.weight * 1.45, 3.2))
         if self._highlighted:
