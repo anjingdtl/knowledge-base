@@ -34,9 +34,9 @@ class EmptyState(QWidget):
         colors = lambda role: get_color(role)
         try:
             from src.utils.config import Config
-            base_font = Config.get("appearance.font_size", 13)
+            base_font = Config.get("appearance.font_size", 14)
         except Exception:
-            base_font = 13
+            base_font = 14
 
         outer = QVBoxLayout(self)
         outer.setAlignment(Qt.AlignCenter)
@@ -49,14 +49,14 @@ class EmptyState(QWidget):
         if icon_key and NAV.get(icon_key):
             icon_label = QLabel()
             icon_label.setAlignment(Qt.AlignCenter)
-            pixmap = make_icon(NAV[icon_key], "accent", 1.0).pixmap(QSize(46, 46))
+            pixmap = make_icon(NAV[icon_key], "text_dim", 0.5).pixmap(QSize(48, 48))
             icon_label.setPixmap(pixmap)
             icon_label.setStyleSheet("border: none; background: transparent;")
             inner.addWidget(icon_label)
         elif icon:
             icon_label = QLabel(icon)
             icon_label.setAlignment(Qt.AlignCenter)
-            icon_label.setStyleSheet("font-size: 42px; border: none; background: transparent;")
+            icon_label.setStyleSheet("font-size: 48px; border: none; background: transparent;")
             inner.addWidget(icon_label)
 
         # 标题
@@ -76,7 +76,7 @@ class EmptyState(QWidget):
             desc_label = QLabel(description)
             desc_label.setAlignment(Qt.AlignCenter)
             desc_label.setWordWrap(True)
-            desc_label.setMaximumWidth(360)
+            desc_label.setMaximumWidth(320)
             desc_label.setStyleSheet(
                 f"font-size: {desc_font}px;"
                 f"color: {colors('text_dim')}; border: none; background: transparent;"
@@ -89,8 +89,8 @@ class EmptyState(QWidget):
             btn_row = QHBoxLayout()
             btn_row.setAlignment(Qt.AlignCenter)
             btn_row.setSpacing(12)
-            accent = colors("accent")
-            accent_hover = colors("accent_hover")
+            accent = colors("primary")
+            accent_hover = colors("primary_hover")
             text_on_accent = "#ffffff"
             for btn_info in buttons:
                 btn = QPushButton(btn_info["text"])
@@ -104,7 +104,7 @@ class EmptyState(QWidget):
                         f"QPushButton {{"
                         f"  background: {accent}; color: {text_on_accent};"
                         f"  border: none; border-radius: 8px;"
-                        f"  font-size: {base_font}px; font-weight: bold;"
+                        f"  font-size: {base_font}px; font-weight: 600;"
                         f"  padding: 0 20px;"
                         f"}}"
                         f"QPushButton:hover {{ background: {accent_hover}; }}"

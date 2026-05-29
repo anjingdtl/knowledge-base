@@ -3,6 +3,8 @@ from PySide6.QtWidgets import QLabel
 from PySide6.QtCore import Qt, QTimer, QPointF
 from PySide6.QtGui import QColor, QRadialGradient, QBrush, QPainter, QPolygonF
 
+from src.gui.theme import is_dark
+
 
 class LLMIndicator(QLabel):
     """侧边栏底部的 LLM 状态灯。"""
@@ -35,11 +37,17 @@ class LLMIndicator(QLabel):
             center_x = self.width() // 2 - self.fontMetrics().horizontalAdvance(self.text()) // 2 - 8
             center_y = self.height() // 2
             if status == "idle":
-                center_color = QColor(16, 185, 129, 70)
-                edge_color = QColor(16, 185, 129, 0)
+                if is_dark():
+                    center_color = QColor(76, 175, 130, 70)
+                else:
+                    center_color = QColor(58, 138, 110, 70)
+                edge_color = QColor(center_color.red(), center_color.green(), center_color.blue(), 0)
             else:
-                center_color = QColor(14, 165, 183, 75)
-                edge_color = QColor(14, 165, 183, 0)
+                if is_dark():
+                    center_color = QColor(214, 74, 108, 75)
+                else:
+                    center_color = QColor(31, 74, 72, 75)
+                edge_color = QColor(center_color.red(), center_color.green(), center_color.blue(), 0)
             glow = QRadialGradient(QPointF(center_x, center_y), 12)
             glow.setColorAt(0, center_color)
             glow.setColorAt(1, edge_color)

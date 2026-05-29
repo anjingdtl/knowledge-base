@@ -1,5 +1,5 @@
 appearance:
-  font_size: 15
+  font_size: 14
   theme: light
 embedding:
   api_key: REDACTED_SILICONFLOW_API_KEY
