@@ -58,6 +58,7 @@ class DedupWorker(QThread):
     finished = Signal(int, int)  # groups_found, removed_count
 
     def run(self):
+        from src.services.vectorstore import VectorStore
         groups = Database.find_duplicates()
         if not groups:
             self.finished.emit(0, 0)
@@ -68,6 +69,7 @@ class DedupWorker(QThread):
         for i, group in enumerate(groups):
             # 保留第一条（最新的），删除其余
             for item in group[1:]:
+                VectorStore().delete_by_knowledge(item["id"])
                 Database.delete_knowledge(item["id"])
                 removed += 1
                 self.progress.emit(
@@ -153,7 +155,12 @@ class QualityWorker(QThread):
                     reindex_knowledge_item(item["id"], ki)
                     return True
             except Exception:
-                pass
+                import logging
+                import traceback
+                logging.getLogger(__name__).warning(
+                    "源文件重读修复失败 [id=%s, path=%s]: %s",
+                    item.get("id"), source_path, traceback.format_exc(),
+                )
 
         # 方案 2: LLM 尝试修复（包括 PDF 字体映射乱码，这些文件仍有大量可读内容）
         if content and len(content) > 50:
@@ -181,7 +188,12 @@ class QualityWorker(QThread):
                     reindex_knowledge_item(item["id"], ki)
                     return True
             except Exception:
-                pass
+                import logging
+                import traceback
+                logging.getLogger(__name__).warning(
+                    "LLM 修复失败 [id=%s, title=%s]: %s",
+                    item.get("id"), item.get("title"), traceback.format_exc(),
+                )
 
         return False
 
@@ -838,6 +850,8 @@ class KnowledgeView(QWidget):
             QMessageBox.Yes | QMessageBox.No,
         )
         if reply == QMessageBox.Yes:
+            from src.services.vectorstore import VectorStore
+            VectorStore().delete_by_knowledge(data["id"])
             Database.delete_knowledge(data["id"])
             self._load_knowledge()
 

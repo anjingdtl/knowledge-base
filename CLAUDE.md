@@ -39,12 +39,15 @@ knowledge-base/
     ├── services/               # 核心服务层（所有模式共享）
     │   ├── db.py               # SQLite + FTS5 存储
     │   ├── vectorstore.py      # ChromaDB 向量存储
-    │   ├── hybrid_search.py    # 向量 + 关键词混合搜索
-    │   ├── rag_pipeline.py     # RAG 管线（可配置阶段）
+    │   ├── hybrid_search.py    # 向量 + 关键词混合搜索 (RRF 融合)
+    │   ├── rag_pipeline.py     # RAG 可配置管线
     │   ├── query_rewriter.py   # 查询改写
     │   ├── reranker.py         # LLM 重排序
-    │   ├── wiki_workflow.py    # Wiki 审批工作流
-    │   └── wiki_site.py        # 静态站点生成
+    │   ├── wiki_*.py           # Wiki 系统 (compiler/workflow/site/renderer/seo/lint)
+    │   ├── graph_builder.py    # 知识图谱构建 (LLM 分析关系)
+    │   ├── file_parser.py      # 多模态文件解析 (PDF/DOCX/图片/HTML/Excel)
+    │   ├── async_*.py           # 异步任务系统 (task/tasks/worker)
+    │   └── librarian.py        # 文本切分与批量索引
     ├── models/                 # 数据模型
     ├── utils/config.py         # Config 单例（驱动所有模式）
     └── version.py              # 版本号唯一来源
@@ -56,12 +59,26 @@ knowledge-base/
 
 1. **query_rewrite** — 查询改写（LLM 生成多版本）
 2. **wiki_retrieval** — Wiki 知识检索（FTS5）
-3. **vector_search** — ��量搜索（HybridSearcher: 向量 + 关键词 + RRF 融合）
+3. **vector_search** — 向量搜索（HybridSearcher: 向量 + 关键词 + RRF 融合）
 4. **rerank** — LLM 打分重排序
 5. **generate** — LLM 生成回答
 6. **postprocess** — 后处理（去重、截断）
 
 支持自定义阶段（custom_stages 配置）。
+
+### Wiki 工作流
+
+状态机 (`wiki_workflow.py`): draft → review → published → deprecated
+
+支持状态转换验证、版本快照、工作流历史记录。可通过配置 `wiki.auto_publish` 跳过审核直接发布。
+
+### 知识图谱
+
+`graph_builder.py` 通过 LLM 分析知识条目间的语义关系，支持 6 种关系类型：related、contains、references、prerequisite、contradicts、part_of。
+
+### 异步任务系统
+
+`async_task.py` / `async_tasks.py` / `async_worker.py` 提供后台任务处理能力，用于文件解析、索引等耗时操作。
 
 ### 配置
 

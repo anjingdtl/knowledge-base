@@ -8,6 +8,7 @@ import asyncio
 import functools
 import json
 import logging
+import os
 from contextlib import asynccontextmanager
 
 WIKI_SEARCH_LIMIT = 3  # Wiki 结构化知识搜索结果上限，可通过配置覆盖
@@ -378,35 +379,89 @@ def ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     return _do_ingest_file(file_path, tags)
 
 
+def _validate_file_path(file_path: str) -> str:
+    """验证文件路径在允许的目录范围内，防止路径遍历攻击。
+
+    允许的目录包括:
+    1. config.yaml 中 security.allowed_ingest_dirs 配置的目录
+    2. SHINEHE_HOME 环境变量指向的目录
+    3. 项目数据目录
+    """
+    from src.utils.paths import get_data_dir
+
+    resolved = os.path.realpath(file_path)
+
+    # 检查文件是否存在
+    if not os.path.isfile(resolved):
+        raise FileNotFoundError(f"文件不存在: {file_path}")
+
+    # 构建允许的目录白名单
+    allowed_dirs: list[str] = []
+
+    # 配置文件中的显式白名单
+    configured_dirs = Config.get("security.allowed_ingest_dirs", [])
+    if configured_dirs:
+        for d in configured_dirs:
+            allowed_dirs.append(os.path.realpath(d))
+
+    # SHINEHE_HOME 或项目根目录
+    env_root = os.environ.get("SHINEHE_HOME")
+    if env_root:
+        allowed_dirs.append(os.path.realpath(env_root))
+
+    # 项目数据目录
+    allowed_dirs.append(str(get_data_dir()))
+
+    # 项目根目录（源码模式下）
+    from src.utils.paths import get_project_root
+    allowed_dirs.append(str(get_project_root()))
+
+    # 用户主目录（作为常见导入来源）
+    home = os.path.expanduser("~")
+    allowed_dirs.append(os.path.realpath(home))
+
+    # 检查文件是否在任一允许的目录下
+    for allowed in allowed_dirs:
+        if resolved.startswith(allowed + os.sep) or resolved == allowed:
+            return resolved
+
+    raise PermissionError(
+        f"文件路径不在允许的目录范围内: {file_path}。"
+        f"请在 config.yaml 的 security.allowed_ingest_dirs 中添加允许的目录。"
+    )
+
+
 def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     tags = tags or []
-    parsed_list = parse_file(file_path)
+
+    # 安全校验：路径规范化 + 白名单验证
+    validated_path = _validate_file_path(file_path)
+    parsed_list = parse_file(validated_path)
 
     import hashlib
-    import os
-    from datetime import datetime
+    from datetime import datetime, timezone
 
-    # 读取文件创建时间戳
+    # 读取文件创建时间戳（使用 UTC 时区避免 naive datetime）
     file_created_at = ""
     try:
         file_created_at = datetime.fromtimestamp(
-            os.path.getctime(file_path)
+            os.path.getctime(validated_path), tz=timezone.utc
         ).isoformat()
     except OSError:
         pass
 
-    # 读取文件修改时间戳
+    # 读取文件修改时间戳（使用 UTC 时区避免 naive datetime）
     file_modified_at = ""
     try:
         file_modified_at = datetime.fromtimestamp(
-            os.path.getmtime(file_path)
+            os.path.getmtime(validated_path), tz=timezone.utc
         ).isoformat()
     except OSError:
         pass
 
     file_size = 0
     try:
-        file_size = os.path.getsize(file_path)
+        file_size = os.path.getsize(validated_path)
     except OSError:
         pass
 

@@ -40,6 +40,12 @@ def index_knowledge_item(item: KnowledgeItem):
     try:
         from src.services.embedding import EmbeddingService
         embeddings = EmbeddingService().embed_batch(texts)
+        if len(embeddings) != len(texts):
+            logging.warning(
+                "Embedding count mismatch for %s: expected %d, got %d. "
+                "Missing embeddings will be unsearchable via vector search.",
+                item.id, len(texts), len(embeddings),
+            )
     except Exception as e:
         logging.error(f"Embedding failed for {item.id}: {e}")
 
@@ -65,9 +71,7 @@ def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
     """删除旧索引，重新分块索引"""
     VectorStore().delete_by_knowledge(item_id)
     Database.delete_chunks_fts(item_id)
-    conn = Database.get_conn()
-    conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
-    conn.commit()
+    Database.delete_chunks(item_id)
     index_knowledge_item(item)
 
 

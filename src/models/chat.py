@@ -50,7 +50,10 @@ class ChatMessage:
     def from_row(cls, row: dict) -> "ChatMessage":
         sources = row.get("sources", "[]")
         if isinstance(sources, str):
-            sources = json.loads(sources)
+            try:
+                sources = json.loads(sources)
+            except (json.JSONDecodeError, ValueError):
+                sources = []
         return cls(
             id=row["id"],
             conversation_id=row["conversation_id"],

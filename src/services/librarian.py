@@ -118,7 +118,7 @@ class LibrarianService:
         valid_codes = get_all_codes(include_db=True)
         lock = threading.Lock()
         all_results = []
-        done_count = [0]
+        processed_count = [0]  # 实际已处理条目数（非批次数 × batch_size）
 
         # 构建批次
         batches = []
@@ -151,22 +151,23 @@ class LibrarianService:
             except Exception as e:
                 logging.warning(f"分类批次失败 ({len(batch)} 条): {e}")
                 return []
-            finally:
-                with lock:
-                    done_count[0] += 1
-                    if progress_cb:
-                        progress_cb("分类中", done_count[0] * batch_size, len(items))
 
         with ThreadPoolExecutor(max_workers=5) as pool:
             futures = {pool.submit(process_batch, b): b for b in batches}
             failed_batches = []
             for future in as_completed(futures):
+                batch = futures[future]
                 result = future.result()
                 if result:
                     with lock:
                         all_results.extend(result)
                 else:
-                    failed_batches.append(futures[future])
+                    failed_batches.append(batch)
+                # 进度回调在主线程中执行，避免工作线程写 DB 的竞态
+                with lock:
+                    processed_count[0] += len(batch)
+                    if progress_cb:
+                        progress_cb("分类中", min(processed_count[0], len(items)), len(items))
 
         # 对失败批次重试一次
         if failed_batches:
@@ -374,10 +375,19 @@ class LibrarianService:
 
         # 构建 code -> schema 信息的映射
         code_to_info = {}
-        for cat in CLASSIFICATION_SCHEMA:
-            code_to_info[cat["code"]] = cat
-            for sub in cat.get("subcategories", []):
-                code_to_info[sub["code"]] = {**sub, "parent_code": cat["code"]}
+        for cat_code, cat_info in CLASSIFICATION_SCHEMA.items():
+            code_to_info[cat_code] = {
+                "code": cat_code,
+                "name": cat_info["name"],
+                "description": "",
+            }
+            for child_code, child_name in cat_info.get("children", []):
+                code_to_info[child_code] = {
+                    "code": child_code,
+                    "name": child_name,
+                    "description": "",
+                    "parent_code": cat_code,
+                }
 
         # 加载 DB 中动态分类的映射
         if db_cats:
@@ -567,13 +577,13 @@ class LibrarianService:
         code_to_db_id = {}
         for cat in existing_cats:
             name = cat["name"]
-            for schema_cat in CLASSIFICATION_SCHEMA:
-                if name.startswith(schema_cat["code"]):
-                    code_to_db_id[schema_cat["code"]] = cat["id"]
+            for schema_code, schema_info in CLASSIFICATION_SCHEMA.items():
+                if name.startswith(schema_code):
+                    code_to_db_id[schema_code] = cat["id"]
                     break
-                for sub in schema_cat.get("subcategories", []):
-                    if name.startswith(sub["code"]):
-                        code_to_db_id[sub["code"]] = cat["id"]
+                for child_code, _ in schema_info.get("children", []):
+                    if name.startswith(child_code):
+                        code_to_db_id[child_code] = cat["id"]
                         break
             if name.startswith(UNCATEGORIZED["code"]):
                 code_to_db_id[UNCATEGORIZED["code"]] = cat["id"]
@@ -631,15 +641,15 @@ class LibrarianService:
                 code_to_db_id[code] = c["id"]
 
         # 先写入所有预设大类
-        for cat in CLASSIFICATION_SCHEMA:
+        for cat_code, cat_info in CLASSIFICATION_SCHEMA.items():
             cat_id = str(uuid.uuid4())
-            code_to_db_id[cat["code"]] = cat_id
-            Database.insert_category(cat_id, f"{cat['code']} {cat['name']}", cat["description"])
+            code_to_db_id[cat_code] = cat_id
+            Database.insert_category(cat_id, f"{cat_code} {cat_info['name']}", cat_info.get("description", ""))
 
-            for sub in cat.get("subcategories", []):
+            for child_code, child_name in cat_info.get("children", []):
                 sub_id = str(uuid.uuid4())
-                code_to_db_id[sub["code"]] = sub_id
-                Database.insert_category(sub_id, f"{sub['code']} {sub['name']}", sub.get("description", ""), parent_id=cat_id)
+                code_to_db_id[child_code] = sub_id
+                Database.insert_category(sub_id, f"{child_code} {child_name}", "", parent_id=cat_id)
 
         # 写入未分类
         z_id = str(uuid.uuid4())

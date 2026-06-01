@@ -33,7 +33,17 @@ class RegisterReq(BaseModel):
 
 
 @auth_router.post("/register")
-def api_register(req: RegisterReq):
+def api_register(req: RegisterReq, authorization: str = Header(default="")):
+    from src.api.auth import get_users_db
+    users = get_users_db()
+    # First user can register without auth (bootstrap)
+    if users:
+        # Subsequent registrations require admin authentication
+        if not authorization.startswith("Bearer "):
+            raise HTTPException(401, "需要管理员认证才能注册新用户")
+        user = decode_token(authorization[7:])
+        if not user:
+            raise HTTPException(401, "令牌无效或已过期")
     try:
         token = register_user(req.username, req.password)
         return {"access_token": token, "token_type": "bearer"}
@@ -88,8 +98,8 @@ class KnowledgeBatchExport(BaseModel):
 def list_knowledge(
     tag: Optional[str] = None,
     file_type: Optional[str] = None,
-    sort_by: str = "updated_at",
-    sort_order: str = "DESC",
+    sort_by: str = Query("updated_at", pattern="^(updated_at|created_at|title)$"),
+    sort_order: str = Query("DESC", pattern="^(ASC|DESC)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=200),
 ):
@@ -149,8 +159,14 @@ def update_knowledge(item_id: str, data: KnowledgeUpdate):
 
 @kb_router.delete("/{item_id}")
 def delete_knowledge(item_id: str):
-    VectorStore().delete_by_knowledge(item_id)
+    existing = Database.get_knowledge(item_id)
+    if not existing:
+        raise HTTPException(404, "知识条目不存在")
     Database.delete_knowledge(item_id)
+    try:
+        VectorStore().delete_by_knowledge(item_id)
+    except Exception:
+        pass  # Vector cleanup best-effort; DB record already deleted
     return {"message": "删除成功"}
 
 
@@ -342,10 +358,22 @@ def restore_wiki_version(page_id: str, version: int):
 
 
 # ---- Async Jobs Endpoints ----
+ALLOWED_JOB_TYPES = {"reindex_all", "wiki_compile", "wiki_lint", "wiki_site_generate"}
+
+
+class JobCreateReq(BaseModel):
+    job_type: str
+    params: dict = {}
+    priority: int = 1
+    max_retries: int = 3
+
+
 @jobs_router.post("")
-def create_job(job_type: str, params: dict = None, priority: int = 1, max_retries: int = 3):
+def create_job(data: JobCreateReq):
+    if data.job_type not in ALLOWED_JOB_TYPES:
+        raise HTTPException(400, f"不支持的任务类型: {data.job_type}，允许的类型: {', '.join(sorted(ALLOWED_JOB_TYPES))}")
     from src.services.async_task import AsyncTaskService
-    job_id = AsyncTaskService.create_job(job_type, params, priority, max_retries)
+    job_id = AsyncTaskService.create_job(data.job_type, data.params, data.priority, data.max_retries)
     return {"job_id": job_id, "status": "pending"}
 
 
@@ -354,6 +382,12 @@ def list_jobs(status: str = None, job_type: str = None, limit: int = 50, offset:
     from src.services.async_task import AsyncTaskService
     jobs = AsyncTaskService.list_jobs(status, job_type, limit, offset)
     return {"jobs": [j.__dict__ for j in jobs]}
+
+
+@jobs_router.get("/stats")
+def get_job_stats():
+    from src.services.async_task import AsyncTaskService
+    return AsyncTaskService.get_stats()
 
 
 @jobs_router.get("/{job_id}")
@@ -381,9 +415,3 @@ def delete_job(job_id: str):
     if not success:
         raise HTTPException(400, "只能删除已完成/失败的任务")
     return {"message": "任务已删除"}
-
-
-@jobs_router.get("/stats")
-def get_job_stats():
-    from src.services.async_task import AsyncTaskService
-    return AsyncTaskService.get_stats()
