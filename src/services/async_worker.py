@@ -6,13 +6,18 @@ from typing import Callable, Optional
 
 from src.services.async_task import AsyncJob, JobStatus, AsyncTaskService
 
+# 取消标记的过期时间（秒）
+_CANCELLED_JOBS_TTL = 3600  # 1 小时
+
 logger = logging.getLogger(__name__)
 
 
 class TaskRegistry:
     """任务类型注册表"""
     _handlers: dict[str, Callable] = {}
-    _cancelled_jobs: set[str] = set()
+    # {job_id: cancel_timestamp} — 带 TTL 的取消标记
+    _cancelled_jobs: dict[str, float] = {}
+    _last_cleanup: float = 0.0
 
     @classmethod
     def register(cls, job_type: str, handler: Callable):
@@ -26,19 +31,40 @@ class TaskRegistry:
         return cls._handlers.get(job_type)
 
     @classmethod
+    def _maybe_cleanup(cls):
+        """定期清理过期的取消标记"""
+        now = time.monotonic()
+        # 每 5 分钟最多清理一次
+        if now - cls._last_cleanup < 300:
+            return
+        cls._last_cleanup = now
+        expired = [jid for jid, ts in cls._cancelled_jobs.items()
+                   if now - ts > _CANCELLED_JOBS_TTL]
+        for jid in expired:
+            del cls._cancelled_jobs[jid]
+        if expired:
+            logger.debug(f"Cleaned up {len(expired)} expired cancel markers")
+
+    @classmethod
     def cancel_job(cls, job_id: str):
         """标记任务为取消"""
-        cls._cancelled_jobs.add(job_id)
+        cls._cancelled_jobs[job_id] = time.monotonic()
 
     @classmethod
     def is_cancelled(cls, job_id: str) -> bool:
-        """检查任务是否被取消"""
-        return job_id in cls._cancelled_jobs
+        """检查任务是否被取消（未过期）"""
+        ts = cls._cancelled_jobs.get(job_id)
+        if ts is None:
+            return False
+        if time.monotonic() - ts > _CANCELLED_JOBS_TTL:
+            del cls._cancelled_jobs[job_id]
+            return False
+        return True
 
     @classmethod
     def clear_cancelled(cls, job_id: str):
         """清除取消标记"""
-        cls._cancelled_jobs.discard(job_id)
+        cls._cancelled_jobs.pop(job_id, None)
 
 
 class AsyncWorker:
@@ -82,17 +108,43 @@ class AsyncWorker:
         logger.info("AsyncWorker stopped")
 
     def _run_loop(self):
-        """主循环：认领并执行任务"""
-        while self._running:
-            try:
-                job = AsyncTaskService.claim_job()
-                if job:
-                    self._execute_job(job)
-                else:
+        """主循环：认领并分发任务到工作线程池"""
+        from concurrent.futures import ThreadPoolExecutor
+        active = set()
+        lock = threading.Lock()
+
+        def _run_and_track(fut):
+            """线程完成回调：从活跃集合中移除"""
+            with lock:
+                active.discard(fut)
+
+        with ThreadPoolExecutor(max_workers=self._max_workers,
+                                thread_name_prefix="AsyncWorker") as executor:
+            while self._running:
+                try:
+                    # 清理已完成的 future
+                    with lock:
+                        done = {f for f in active if f.done()}
+                        active -= done
+
+                    # 只在有空闲线程时才认领新任务
+                    with lock:
+                        slots = self._max_workers - len(active)
+
+                    if slots > 0:
+                        job = AsyncTaskService.claim_job()
+                        if job:
+                            fut = executor.submit(self._execute_job, job)
+                            fut.add_done_callback(_run_and_track)
+                            with lock:
+                                active.add(fut)
+                            continue  # 立即尝试认领下一个
+
                     time.sleep(self._poll_interval)
-            except Exception as e:
-                logger.error(f"Worker loop error: {e}", exc_info=True)
-                time.sleep(self._poll_interval)
+                    TaskRegistry._maybe_cleanup()
+                except Exception as e:
+                    logger.error(f"Worker loop error: {e}", exc_info=True)
+                    time.sleep(self._poll_interval)
 
     def _execute_job(self, job: AsyncJob):
         """执行单个任务"""
@@ -113,15 +165,15 @@ class AsyncWorker:
         except Exception as e:
             logger.error(f"Job {job.id} failed: {e}", exc_info=True)
             if job.retry_count < job.max_retries:
-                # 重试
-                AsyncTaskService.update_status(job.id, JobStatus.PENDING)
-                # 更新重试计数
+                # 原子操作：同时更新状态为 pending 并递增重试计数
                 from src.services.db import Database
                 Database.get_conn().execute(
-                    "UPDATE async_jobs SET retry_count = retry_count + 1 WHERE id = ?",
+                    "UPDATE async_jobs SET status = 'pending', retry_count = retry_count + 1, "
+                    "started_at = NULL WHERE id = ?",
                     (job.id,),
                 )
                 Database.get_conn().commit()
+                logger.info(f"Job {job.id} retrying (attempt {job.retry_count + 1}/{job.max_retries})")
             else:
                 AsyncTaskService.update_status(job.id, JobStatus.FAILED, error=str(e))
 

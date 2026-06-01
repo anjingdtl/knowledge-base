@@ -1,5 +1,7 @@
 """SQLite 数据库操作 — 含版本控制与全文索引"""
+import logging
 import sqlite3
+import threading
 import json
 import uuid
 from datetime import datetime
@@ -7,6 +9,8 @@ from pathlib import Path
 from typing import Optional
 
 from src.utils.config import Config
+
+logger = logging.getLogger(__name__)
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS knowledge_items (
@@ -244,7 +248,8 @@ CREATE TABLE IF NOT EXISTS knowledge_graph_relations (
     target_knowledge_id TEXT NOT NULL,
     relation_type TEXT DEFAULT 'related',
     description TEXT,
-    weight REAL DEFAULT 1.0
+    weight REAL DEFAULT 1.0,
+    UNIQUE(graph_id, source_knowledge_id, target_knowledge_id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_graph_rel_src ON knowledge_graph_relations(graph_id, source_knowledge_id);
@@ -253,8 +258,19 @@ CREATE INDEX IF NOT EXISTS idx_graph_rel_tgt ON knowledge_graph_relations(graph_
 
 
 class Database:
+    """SQLite 数据库操作层
+
+    支持两种使用模式:
+    1. 类方法模式（兼容旧代码）: Database.connect(); Database.list_knowledge()
+    2. 实例模式（DI 注入）: db = Database.__new__(Database); db.connect(path)
+
+    所有数据操作方法保持 @classmethod，两种模式共享 cls._conn。
+    """
     _instance = None
     _conn: Optional[sqlite3.Connection] = None
+    _container = None  # DI 容器引用（由 create_container 设置）
+    _write_lock = threading.Lock()  # 写操作互斥锁
+    _shutdown: bool = False  # True after intentional shutdown (prevents zombie reconnect)
 
     def __new__(cls):
         if cls._instance is None:
@@ -272,6 +288,7 @@ class Database:
         cls._conn.executescript(_SCHEMA)
         cls._migrate()
         cls._conn.commit()
+        cls._shutdown = False  # allow operations after fresh connect
 
     @classmethod
     def _migrate(cls):
@@ -316,8 +333,45 @@ class Database:
             cls._conn.commit()
             _logging.getLogger(__name__).info("chunk_fts schema migrated, reindex needed")
 
+        # 为 knowledge_graph_relations 添加 UNIQUE 约束（如旧表缺失）
+        rel_sql = cls._conn.execute(
+            "SELECT sql FROM sqlite_master WHERE name='knowledge_graph_relations'"
+        ).fetchone()
+        if rel_sql and 'UNIQUE' not in (rel_sql[0] or ''):
+            # 重建表以添加唯一约束
+            cls._conn.execute("ALTER TABLE knowledge_graph_relations RENAME TO _old_graph_relations")
+            cls._conn.execute(
+                """CREATE TABLE knowledge_graph_relations (
+                    id TEXT PRIMARY KEY,
+                    graph_id TEXT REFERENCES knowledge_graphs(id) ON DELETE CASCADE,
+                    source_knowledge_id TEXT NOT NULL,
+                    target_knowledge_id TEXT NOT NULL,
+                    relation_type TEXT DEFAULT 'related',
+                    description TEXT,
+                    weight REAL DEFAULT 1.0,
+                    UNIQUE(graph_id, source_knowledge_id, target_knowledge_id)
+                )"""
+            )
+            cls._conn.execute(
+                """INSERT OR IGNORE INTO knowledge_graph_relations
+                   SELECT id, graph_id, source_knowledge_id, target_knowledge_id,
+                          relation_type, description, weight
+                   FROM _old_graph_relations"""
+            )
+            cls._conn.execute("DROP TABLE _old_graph_relations")
+            cls._conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_graph_rel_src ON knowledge_graph_relations(graph_id, source_knowledge_id)"
+            )
+            cls._conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_graph_rel_tgt ON knowledge_graph_relations(graph_id, target_knowledge_id)"
+            )
+            cls._conn.commit()
+            _logging.getLogger(__name__).info("knowledge_graph_relations: added UNIQUE constraint")
+
     @classmethod
     def get_conn(cls) -> sqlite3.Connection:
+        if cls._shutdown:
+            raise RuntimeError("Database is shut down — connection no longer available")
         if cls._conn is None:
             cls.connect()
         return cls._conn
@@ -327,19 +381,22 @@ class Database:
         if cls._conn:
             cls._conn.close()
             cls._conn = None
+        # Note: _shutdown is NOT reset here — it is reset on the next connect()
+        # call (via lifespan startup), preventing silent reconnects during shutdown.
 
     # ---- Knowledge Items ----
 
     @classmethod
     def insert_knowledge(cls, item: dict) -> str:
-        conn = cls.get_conn()
-        conn.execute(
-            """INSERT INTO knowledge_items
-               (id, title, content, source_type, source_path, file_type, file_size, content_hash, file_created_at, file_modified_at, tags, version, created_at, updated_at)
-               VALUES (:id, :title, :content, :source_type, :source_path, :file_type, :file_size, :content_hash, :file_created_at, :file_modified_at, :tags, :version, :created_at, :updated_at)""",
-            item,
-        )
-        conn.commit()
+        with cls._write_lock:
+            conn = cls.get_conn()
+            conn.execute(
+                """INSERT INTO knowledge_items
+                   (id, title, content, source_type, source_path, file_type, file_size, content_hash, file_created_at, file_modified_at, tags, version, created_at, updated_at)
+                   VALUES (:id, :title, :content, :source_type, :source_path, :file_type, :file_size, :content_hash, :file_created_at, :file_modified_at, :tags, :version, :created_at, :updated_at)""",
+                item,
+            )
+            conn.commit()
         return item["id"]
 
     @classmethod
@@ -408,12 +465,18 @@ class Database:
                 ).fetchall()
                 if fts_rows:
                     return [dict(r) for r in fts_rows]
-        except Exception:
-            pass
-        rows = conn.execute(
-            "SELECT * FROM knowledge_items WHERE title LIKE ? OR content LIKE ? ORDER BY updated_at DESC LIMIT ? OFFSET ?",
-            (f"%{query}%", f"%{query}%", limit, offset),
-        ).fetchall()
+        except sqlite3.OperationalError as e:
+            logger.warning("FTS search failed, falling back to LIKE: %s", e)
+        # 转义 LIKE 通配符，防止用户输入 % 或 _ 影响搜索行为
+        escaped = query.replace('%', '\\%').replace('_', '\\_')
+        try:
+            rows = conn.execute(
+                "SELECT * FROM knowledge_items WHERE title LIKE ? ESCAPE '\\' OR content LIKE ? ESCAPE '\\' ORDER BY updated_at DESC LIMIT ? OFFSET ?",
+                (f"%{escaped}%", f"%{escaped}%", limit, offset),
+            ).fetchall()
+        except sqlite3.OperationalError as e:
+            logger.error("LIKE fallback search failed: %s", e)
+            return []
         return [dict(r) for r in rows]
 
     @classmethod
@@ -432,27 +495,38 @@ class Database:
         invalid = set(fields) - allowed
         if invalid:
             raise ValueError(f"Invalid fields: {invalid}")
-        old = cls.get_knowledge(item_id)
-        if old and old.get("content") != fields.get("content"):
-            cls._save_version(item_id, old)
-        sets = ", ".join(f"{k} = ?" for k in fields)
-        values = list(fields.values()) + [datetime.now().isoformat(), item_id]
-        cls.get_conn().execute(
-            f"UPDATE knowledge_items SET {sets}, version = version + 1, updated_at = ? WHERE id = ?",
-            values,
-        )
-        cls.get_conn().commit()
+        with cls._write_lock:
+            conn = cls.get_conn()
+            conn.execute("BEGIN IMMEDIATE")
+            try:
+                old = cls.get_knowledge(item_id)
+                if old and old.get("content") != fields.get("content"):
+                    cls._save_version(item_id, old)
+                sets = ", ".join(f"{k} = ?" for k in fields)
+                values = list(fields.values()) + [datetime.now().isoformat(), item_id]
+                conn.execute(
+                    f"UPDATE knowledge_items SET {sets}, version = version + 1, updated_at = ? WHERE id = ?",
+                    values,
+                )
+                conn.commit()
+            except Exception:
+                conn.rollback()
+                raise
 
     @classmethod
     def delete_knowledge(cls, item_id: str):
-        from src.services.vectorstore import VectorStore
-        VectorStore().delete_by_knowledge(item_id)
-        conn = cls.get_conn()
-        cls.delete_chunks_fts(item_id)
-        conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
-        conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
-        conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
-        conn.commit()
+        """删除知识条目及其关联数据（chunks、versions、FTS）。
+
+        注意：调用方需自行负责向量存储清理（VectorStore().delete_by_knowledge），
+        以避免 db ↔ vectorstore 循环导入。
+        """
+        with cls._write_lock:
+            conn = cls.get_conn()
+            cls._delete_chunks_fts_unlocked(item_id)
+            conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
+            conn.commit()
 
     @classmethod
     def find_duplicates(cls) -> list[list[dict]]:
@@ -554,17 +628,25 @@ class Database:
 
     @classmethod
     def restore_version(cls, knowledge_id: str, version: int):
-        ver = cls.get_version(knowledge_id, version)
-        if not ver:
-            raise ValueError(f"版本 {version} 不存在")
-        old = cls.get_knowledge(knowledge_id)
-        if old:
-            cls._save_version(knowledge_id, old)
-        cls.get_conn().execute(
-            "UPDATE knowledge_items SET title = ?, content = ?, tags = ?, version = version + 1, updated_at = ? WHERE id = ?",
-            (ver["title"], ver["content"], ver["tags"], datetime.now().isoformat(), knowledge_id),
-        )
-        cls.get_conn().commit()
+        with cls._write_lock:
+            ver = cls.get_version(knowledge_id, version)
+            if not ver:
+                raise ValueError(f"版本 {version} 不存在")
+            old = cls.get_knowledge(knowledge_id)
+            if old:
+                # 使用 MAX(version)+1 确保版本号严格递增，避免重复
+                row = cls.get_conn().execute(
+                    "SELECT MAX(version) as max_ver FROM knowledge_versions WHERE knowledge_id = ?",
+                    (knowledge_id,),
+                ).fetchone()
+                next_ver = (row["max_ver"] or 0) + 1
+                old["version"] = next_ver
+                cls._save_version(knowledge_id, old)
+            cls.get_conn().execute(
+                "UPDATE knowledge_items SET title = ?, content = ?, tags = ?, version = version + 1, updated_at = ? WHERE id = ?",
+                (ver["title"], ver["content"], ver["tags"], datetime.now().isoformat(), knowledge_id),
+            )
+            cls.get_conn().commit()
 
     # ---- Knowledge Chunks ----
 
@@ -577,6 +659,18 @@ class Database:
             chunks,
         )
         conn.commit()
+
+    @classmethod
+    def delete_chunks(cls, knowledge_id: str):
+        """删除指定知识的所有 chunk 行（knowledge_chunks 表）。
+
+        仅删除 knowledge_chunks 表的行，不涉及 chunk_fts 和向量存储。
+        调用方需自行负责 VectorStore 和 chunk_fts 的清理。
+        """
+        with cls._write_lock:
+            conn = cls.get_conn()
+            conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (knowledge_id,))
+            conn.commit()
 
     @classmethod
     def get_chunks_by_knowledge(cls, knowledge_id: str) -> list[dict]:
@@ -609,6 +703,12 @@ class Database:
     @classmethod
     def delete_chunks_fts(cls, knowledge_id: str):
         """删除指定知识的 chunk FTS 记录"""
+        with cls._write_lock:
+            cls._delete_chunks_fts_unlocked(knowledge_id)
+
+    @classmethod
+    def _delete_chunks_fts_unlocked(cls, knowledge_id: str):
+        """内部方法：删除 chunk FTS 记录（调用方需持锁）"""
         cls.get_conn().execute(
             "DELETE FROM chunk_fts WHERE knowledge_id = ?", (knowledge_id,)
         )
@@ -738,15 +838,22 @@ class Database:
     @classmethod
     def clear_categories(cls, keep_dynamic=False):
         conn = cls.get_conn()
-        conn.execute("DELETE FROM knowledge_categories")
         if keep_dynamic:
-            # 只删除预设分类（名称以 schema code 开头的），保留动态分类
+            # 只删除预设分类（名称以 schema code 开头的），保留动态分类及其关联
             from src.data.classification_schema import get_all_codes
             schema_codes = get_all_codes()
             for code in schema_codes:
+                # 找到要删除的预设分类 ID，同时清除其关联
+                rows = conn.execute(
+                    "SELECT id FROM categories WHERE name LIKE ? OR name = ?",
+                    (f"{code} %", f"{code}"),
+                ).fetchall()
+                for row in rows:
+                    conn.execute("DELETE FROM knowledge_categories WHERE category_id = ?", (row["id"],))
                 conn.execute("DELETE FROM categories WHERE name LIKE ?", (f"{code} %",))
                 conn.execute("DELETE FROM categories WHERE name = ?", (f"{code}",))
         else:
+            conn.execute("DELETE FROM knowledge_categories")
             conn.execute("DELETE FROM categories")
         conn.commit()
 
@@ -1006,9 +1113,12 @@ class Database:
     @classmethod
     def update_job_status(cls, job_id: str, status: str, result: dict | None = None, error: str = ""):
         """更新任务状态"""
+        job = cls.get_job(job_id)
+        if not job:
+            raise ValueError(f"Job {job_id} not found")
         now = datetime.now().isoformat()
         conn = cls.get_conn()
-        if status == "running" and not cls.get_job(job_id).get("started_at"):
+        if status == "running" and not job.get("started_at"):
             conn.execute(
                 "UPDATE async_jobs SET status = ?, started_at = ?, progress = ? WHERE id = ?",
                 (status, now, 0, job_id),
@@ -1246,6 +1356,22 @@ class Database:
         cls.get_conn().commit()
 
     @classmethod
+    def batch_update_node_positions(cls, positions: list[tuple[float, float, str]]):
+        """Batch-update node positions in a single transaction.
+
+        Args:
+            positions: list of (x, y, node_id) tuples.
+        """
+        if not positions:
+            return
+        conn = cls.get_conn()
+        conn.executemany(
+            "UPDATE knowledge_graph_nodes SET x = ?, y = ? WHERE id = ?",
+            positions,
+        )
+        conn.commit()
+
+    @classmethod
     def delete_graph_nodes(cls, graph_id: str, knowledge_ids: list[str]):
         if not knowledge_ids:
             return
@@ -1263,9 +1389,13 @@ class Database:
         conn = cls.get_conn()
         for rel in relations:
             conn.execute(
-                """INSERT OR REPLACE INTO knowledge_graph_relations
+                """INSERT INTO knowledge_graph_relations
                    (id, graph_id, source_knowledge_id, target_knowledge_id, relation_type, description, weight)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                   VALUES (?, ?, ?, ?, ?, ?, ?)
+                   ON CONFLICT(graph_id, source_knowledge_id, target_knowledge_id)
+                   DO UPDATE SET relation_type=excluded.relation_type,
+                                 description=excluded.description,
+                                 weight=excluded.weight""",
                 (str(uuid.uuid4()), graph_id,
                  rel["source_knowledge_id"], rel["target_knowledge_id"],
                  rel.get("relation_type", "related"),

@@ -50,6 +50,36 @@ def _is_pid_alive(pid: int) -> bool:
         return False
 
 
+def _kill_process_windows(pid: int):
+    """在 Windows 上可靠终止指定 PID 的进程。
+
+    优先使用 taskkill /PID /F，对 DETACHED_PROCESS 创建的无控制台进程
+    也能正确终止。失败时回退到 ctypes 调用 TerminateProcess。
+    """
+    try:
+        subprocess.run(
+            ["taskkill", "/PID", str(pid), "/F"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        return
+    except OSError:
+        pass
+
+    # 回退：通过 ctypes 直接调用 Windows API
+    try:
+        import ctypes
+        kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
+        PROCESS_TERMINATE = 0x0001
+        handle = kernel32.OpenProcess(PROCESS_TERMINATE, False, pid)
+        if handle:
+            kernel32.TerminateProcess(handle, 1)
+            kernel32.CloseHandle(handle)
+    except (OSError, AttributeError):
+        raise ProcessLookupError(f"无法终止进程 {pid}")
+
+
 def is_running() -> bool:
     """MCP 进程是否存活（支持跨会话检测）"""
     global _process
@@ -133,10 +163,19 @@ def stop() -> str:
     pid = _read_pid()
     if pid and _is_pid_alive(pid):
         try:
-            os.kill(pid, signal.SIGTERM if sys.platform != "win32" else signal.CTRL_BREAK_EVENT)
+            if sys.platform == "win32":
+                # Windows: 使用 taskkill /PID /F 可靠终止独立进程
+                # DETACHED_PROCESS 进程没有控制台，无法接收 CTRL_BREAK_EVENT；
+                # signal.SIGTERM 在 Windows 上不受原生支持。
+                _kill_process_windows(pid)
+            else:
+                os.kill(pid, signal.SIGTERM)
             time.sleep(1)
             if _is_pid_alive(pid):
-                os.kill(pid, signal.SIGKILL if sys.platform != "win32" else signal.SIGTERM)
+                if sys.platform == "win32":
+                    _kill_process_windows(pid)
+                else:
+                    os.kill(pid, signal.SIGKILL)
             stopped = True
         except (ProcessLookupError, PermissionError):
             pass

@@ -170,14 +170,16 @@ def apply(app: QApplication):
 
     if qss_path.exists():
         qss_text = qss_path.read_text(encoding="utf-8")
-        qss_text = qss_text.replace("{{font_size}}", str(font_size))
-        qss_text = qss_text.replace("{{font_size_lg}}", str(font_size + 1))
-        qss_text = qss_text.replace("{{font_size_md}}", str(font_size + 1))
+        # Replace longer/more-specific template names first to avoid
+        # partial-match corruption (e.g. {{font_size}} inside {{font_size_lg}}).
         qss_text = qss_text.replace("{{font_size_brand}}", str(font_size + 8))
-        qss_text = qss_text.replace("{{font_size_sm}}", str(max(11, font_size - 2)))
         qss_text = qss_text.replace("{{font_size_title}}", str(font_size + 7))
         qss_text = qss_text.replace("{{font_size_subtitle}}", str(font_size + 2))
+        qss_text = qss_text.replace("{{font_size_lg}}", str(font_size + 1))
+        qss_text = qss_text.replace("{{font_size_md}}", str(font_size + 1))
+        qss_text = qss_text.replace("{{font_size_sm}}", str(max(11, font_size - 2)))
         qss_text = qss_text.replace("{{font_size_xs}}", str(max(10, font_size - 4)))
+        qss_text = qss_text.replace("{{font_size}}", str(font_size))
         qss_text = qss_text.replace("{{gradient_accent}}", _gradient_accent())
         qss_text = qss_text.replace("{{gradient_accent_v}}", _gradient_accent_v())
         app.setStyleSheet(qss_text)
