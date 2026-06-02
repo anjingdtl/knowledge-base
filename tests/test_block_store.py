@@ -94,3 +94,62 @@ class TestBlockStore:
 
         assert store.count() >= 1
         assert store.count_by_page("page-cnt") == 1
+
+
+class TestDatabaseBlockMethods:
+    def test_insert_blocks_and_search_fts(self):
+        """insert_blocks + insert_blocks_fts + search_blocks_fts 端到端"""
+        blocks = [
+            {
+                "id": "b-fts-1",
+                "parent_id": None,
+                "page_id": "p-fts-1",
+                "content": "这是一段关于机器学习的文本",
+                "block_type": "text",
+                "properties": '{"knowledge_id": "p-fts-1", "chunk_index": 0}',
+                "order_idx": 0,
+                "created_at": "2026-01-01",
+                "updated_at": "2026-01-01",
+            },
+            {
+                "id": "b-fts-2",
+                "parent_id": None,
+                "page_id": "p-fts-1",
+                "content": "深度学习是机器学习的子领域",
+                "block_type": "text",
+                "properties": '{"knowledge_id": "p-fts-1", "chunk_index": 1}',
+                "order_idx": 1,
+                "created_at": "2026-01-01",
+                "updated_at": "2026-01-01",
+            },
+        ]
+        Database.insert_blocks(blocks)
+        Database.insert_blocks_fts(blocks)
+
+        results = Database.search_blocks_fts("机器学习", limit=5)
+        assert len(results) >= 1
+        assert any(r["id"] == "b-fts-1" for r in results)
+
+    def test_delete_blocks_by_page(self):
+        """delete_blocks_by_page 清理 blocks + block_fts + block_property_index"""
+        blocks = [
+            {
+                "id": "b-del-1",
+                "parent_id": None,
+                "page_id": "p-del",
+                "content": "待删除内容",
+                "block_type": "text",
+                "properties": '{"knowledge_id": "p-del", "chunk_index": 0}',
+                "order_idx": 0,
+                "created_at": "2026-01-01",
+                "updated_at": "2026-01-01",
+            },
+        ]
+        Database.insert_blocks(blocks)
+        Database.insert_blocks_fts(blocks)
+
+        Database.delete_blocks_by_page("p-del")
+
+        conn = Database.get_conn()
+        row = conn.execute("SELECT count(*) FROM blocks WHERE page_id = ?", ("p-del",)).fetchone()
+        assert row[0] == 0

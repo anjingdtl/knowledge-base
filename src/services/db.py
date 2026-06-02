@@ -97,6 +97,13 @@ CREATE VIRTUAL TABLE IF NOT EXISTS chunk_fts USING fts5(
     tokenize='unicode61'
 );
 
+CREATE VIRTUAL TABLE IF NOT EXISTS block_fts USING fts5(
+    fts_segmented,
+    page_id UNINDEXED,
+    block_id UNINDEXED,
+    tokenize='unicode61'
+);
+
 CREATE TABLE IF NOT EXISTS categories (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -812,6 +819,113 @@ class Database:
     def get_chunk(cls, chunk_id: str) -> Optional[dict]:
         row = cls.get_conn().execute("SELECT * FROM knowledge_chunks WHERE id = ?", (chunk_id,)).fetchone()
         return dict(row) if row else None
+
+    # ---- Block-level methods (Block-First architecture) ----
+
+    @classmethod
+    def insert_blocks(cls, blocks: list[dict]):
+        """写入 blocks 表 + block_property_index（原子事务）"""
+        with cls._write_lock:
+            conn = cls.get_conn()
+            conn.executemany(
+                """INSERT OR REPLACE INTO blocks
+                   (id, parent_id, page_id, content, block_type, properties, order_idx, created_at, updated_at)
+                   VALUES (:id, :parent_id, :page_id, :content, :block_type, :properties, :order_idx, :created_at, :updated_at)""",
+                blocks,
+            )
+            prop_rows = []
+            for block in blocks:
+                try:
+                    props = json.loads(block.get("properties", "{}"))
+                except (json.JSONDecodeError, TypeError):
+                    props = {}
+                for key, value in props.items():
+                    prop_rows.append({
+                        "block_id": block["id"],
+                        "prop_key": key,
+                        "prop_value": str(value),
+                        "value_type": "ref" if key == "knowledge_id" else "str",
+                    })
+            if prop_rows:
+                conn.executemany(
+                    """INSERT OR REPLACE INTO block_property_index
+                       (block_id, prop_key, prop_value, value_type)
+                       VALUES (:block_id, :prop_key, :prop_value, :value_type)""",
+                    prop_rows,
+                )
+            conn.commit()
+
+    @classmethod
+    def insert_blocks_fts(cls, blocks: list[dict]):
+        """将 block 文本用 jieba 全模式分词后写入 block_fts"""
+        from src.utils.chinese_tokenizer import tokenize_chinese_full
+        conn = cls.get_conn()
+        for b in blocks:
+            segmented = tokenize_chinese_full(b.get("content", ""))
+            conn.execute(
+                "INSERT INTO block_fts(fts_segmented, page_id, block_id) VALUES (?, ?, ?)",
+                (segmented, b["page_id"], b["id"]),
+            )
+        conn.commit()
+
+    @classmethod
+    def search_blocks_fts(cls, query: str, limit: int = 10) -> list[dict]:
+        """Block 级 FTS 搜索"""
+        from src.utils.chinese_tokenizer import tokenize_chinese_full
+        sanitized = tokenize_chinese_full(query)
+        if not sanitized.strip():
+            return []
+        rows = cls.get_conn().execute(
+            """SELECT b.id, b.page_id, b.content, b.block_type, b.properties,
+                      bf.rank
+               FROM block_fts bf
+               JOIN blocks b ON b.id = bf.block_id
+               WHERE block_fts MATCH ?
+               ORDER BY bf.rank
+               LIMIT ?""",
+            (sanitized, limit),
+        ).fetchall()
+        results = []
+        for r in rows:
+            try:
+                properties = json.loads(r[4]) if r[4] else {}
+            except (json.JSONDecodeError, TypeError):
+                properties = {}
+            results.append({
+                "id": r[0],
+                "page_id": r[1],
+                "content": r[2],
+                "block_type": r[3],
+                "properties": properties,
+                "fts_rank": r[5],
+            })
+        return results
+
+    @classmethod
+    def delete_blocks_fts(cls, page_id: str):
+        """删除指定 page 的 block FTS 记录"""
+        with cls._write_lock:
+            cls.get_conn().execute(
+                "DELETE FROM block_fts WHERE page_id = ?", (page_id,)
+            )
+            cls.get_conn().commit()
+
+    @classmethod
+    def delete_blocks_by_page(cls, page_id: str):
+        """删除指定 page 的所有 block 数据（blocks + block_fts + block_property_index + block_refs）"""
+        with cls._write_lock:
+            conn = cls.get_conn()
+            conn.execute(
+                "DELETE FROM block_property_index WHERE block_id IN (SELECT id FROM blocks WHERE page_id = ?)",
+                (page_id,),
+            )
+            conn.execute(
+                "DELETE FROM block_refs WHERE source_id IN (SELECT id FROM blocks WHERE page_id = ?) OR target_id IN (SELECT id FROM blocks WHERE page_id = ?)",
+                (page_id, page_id),
+            )
+            conn.execute("DELETE FROM block_fts WHERE page_id = ?", (page_id,))
+            conn.execute("DELETE FROM blocks WHERE page_id = ?", (page_id,))
+            conn.commit()
 
     # ---- Chunk FTS (jieba 分词) ----
 
