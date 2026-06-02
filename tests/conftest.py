@@ -27,11 +27,17 @@ def setup_db(tmp_path):
     from src.services.vectorstore import VectorStore
     VectorStore._instance = None
     VectorStore._initialized = False
+    # Reset BlockStore singleton so each test gets fresh state
+    from src.services.block_store import BlockStore
+    BlockStore._instance = None
+    BlockStore._initialized = False
     yield
     Database.close()
     Database._instance = None
     VectorStore._instance = None
     VectorStore._initialized = False
+    BlockStore._instance = None
+    BlockStore._initialized = False
 
 
 @pytest.fixture
