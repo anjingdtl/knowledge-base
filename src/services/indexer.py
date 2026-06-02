@@ -1,14 +1,19 @@
-"""知识条目索引 — 分块 + 向量化 + 全文索引（原子同步写入）"""
+"""知识条目索引 — Block-First 管线（分块 + 向量化 + 全文索引）"""
+import json
 import logging
+import uuid
+from datetime import datetime
+
 from src.utils.config import Config
 from src.models.knowledge import KnowledgeItem, KnowledgeChunk
 from src.services.db import Database
 from src.services.text_splitter import split_text, split_markdown, split_code
+from src.services.block_store import BlockStore
 from src.services.vectorstore import VectorStore
 
 
 def index_knowledge_item(item: KnowledgeItem):
-    """将知识条目分块并存入 DB + 向量库 + 全文索引（同步写入）"""
+    """将知识条目分块并存入 DB + 向量库 + 全文索引（Block-First 管线）"""
     tags_str = ",".join(item.tags)
     chunk_size = Config.get("rag.chunk_size", 500)
     chunk_overlap = Config.get("rag.chunk_overlap", 50)
@@ -27,19 +32,42 @@ def index_knowledge_item(item: KnowledgeItem):
     if not chunks:
         return
 
+    now = datetime.now().isoformat()
+
+    block_rows = []
     chunk_rows = []
     for c in chunks:
-        chunk = KnowledgeChunk(knowledge_id=item.id, chunk_index=c.index, chunk_text=c.text)
-        chunk_rows.append(chunk.to_row())
+        block_id = str(uuid.uuid4())
+        block_rows.append({
+            "id": block_id,
+            "parent_id": None,
+            "page_id": item.id,
+            "content": c.text,
+            "block_type": "text",
+            "properties": json.dumps({
+                "knowledge_id": item.id,
+                "chunk_index": c.index,
+            }, ensure_ascii=False),
+            "order_idx": c.index,
+            "created_at": now,
+            "updated_at": now,
+        })
+        chunk = KnowledgeChunk(
+            knowledge_id=item.id, chunk_index=c.index, chunk_text=c.text
+        )
+        row = chunk.to_row()
+        row["id"] = block_id
+        chunk_rows.append(row)
+
+    Database.insert_blocks(block_rows)
 
     Database.insert_chunks(chunk_rows)
 
-    # 计算所有 chunk 的 embedding（批量调用 API）
-    texts = [c.text for c in chunks]
+    texts = [b["content"] for b in block_rows]
     embeddings = [None] * len(texts)
     try:
         from src.services.embedding import EmbeddingService
-        embeddings = EmbeddingService().embed_batch(texts)
+        embeddings = EmbeddingService().embed_batch_with_cache(texts)
         if len(embeddings) != len(texts):
             logging.warning(
                 "Embedding count mismatch for %s: expected %d, got %d. "
@@ -49,27 +77,36 @@ def index_knowledge_item(item: KnowledgeItem):
     except Exception as e:
         logging.error(f"Embedding failed for {item.id}: {e}")
 
-    # 写入 vec_chunks（向量）
-    for i, c in enumerate(chunks):
+    for i, block in enumerate(block_rows):
         emb = embeddings[i] if i < len(embeddings) else None
         if emb:
             try:
+                BlockStore().add_block_embedding(block["id"], emb)
+            except Exception as e:
+                logging.error(f"Vec insert failed for block {block['id']}: {e}")
+            try:
                 VectorStore().add_chunk_embedding(chunk_rows[i]["id"], item.id, emb)
             except Exception as e:
-                logging.error(f"Vec insert failed for chunk {chunk_rows[i]['id']}: {e}")
+                logging.error(f"Legacy vec insert failed for chunk {chunk_rows[i]['id']}: {e}")
 
-    # 写入 chunk_fts（全文索引）
+    try:
+        Database.insert_blocks_fts(block_rows)
+    except Exception as e:
+        logging.error(f"Block FTS insert failed for {item.id}: {e}")
+
     chunk_dicts = [{"id": chunk_rows[i]["id"], "knowledge_id": item.id,
                     "chunk_text": c.text} for i, c in enumerate(chunks)]
     try:
         Database.insert_chunks_fts(chunk_dicts)
     except Exception as e:
-        logging.error(f"FTS insert failed for {item.id}: {e}")
+        logging.error(f"Legacy chunk FTS insert failed for {item.id}: {e}")
 
 
 def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
     """删除旧索引，重新分块索引"""
+    BlockStore().delete_by_page(item_id)
     VectorStore().delete_by_knowledge(item_id)
+    Database.delete_blocks_by_page(item_id)
     Database.delete_chunks_fts(item_id)
     Database.delete_chunks(item_id)
     index_knowledge_item(item)
