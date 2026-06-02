@@ -72,8 +72,8 @@ def api_client(setup_db, monkeypatch):
 
     register_user("testuser", "testpass123")
     app = create_app()
-    client = TestClient(app)
-    login = client.post("/api/auth/login", json={"username": "testuser", "password": "testpass123"})
-    token = login.json()["access_token"]
-    client.headers["Authorization"] = f"Bearer {token}"
-    return client
+    with TestClient(app) as client:
+        login = client.post("/api/auth/login", json={"username": "testuser", "password": "testpass123"})
+        token = login.json()["access_token"]
+        client.headers["Authorization"] = f"Bearer {token}"
+        yield client
