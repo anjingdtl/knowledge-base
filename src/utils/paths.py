@@ -71,6 +71,7 @@ def _generate_default_config(path: Path):
         "storage": {
             "data_dir": "data",
             "db_name": "kb.db",
+            "graph_dir": "graph",
         },
     }
     with open(path, "w", encoding="utf-8") as f:

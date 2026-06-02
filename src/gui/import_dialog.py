@@ -12,12 +12,13 @@ import os
 from datetime import datetime
 
 from src.services.file_parser import parse_file
-from src.services.indexer import index_knowledge_item
 from src.services.db import Database
+from src.services.block_store import BlockStore
+from src.services.file_graph import FileGraphService
 from src.services.llm import LLMService
-from src.models.knowledge import KnowledgeItem
 from src.gui.icons import set_named_icon
 from src.gui.theme import get_color
+from src.utils.config import Config
 
 TITLE_PROMPT = """你是一个标题生成助手。请根据文件名和文件内容判断文件名是否已能准确概括内容。
 
@@ -72,6 +73,10 @@ def generate_title(content: str, filename: str = None) -> str:
         return filename[:60]
     except Exception:
         return filename[:60]
+
+
+def _file_graph_service() -> FileGraphService:
+    return FileGraphService(Config, Database, BlockStore(db=Database), embedding=None)
 
 
 def _strip_think(text: str) -> str:
@@ -152,20 +157,7 @@ class ImportWorker(QThread):
                     except OSError:
                         pass
 
-                    item = KnowledgeItem(
-                        title=title,
-                        content=parsed.content,
-                        source_type="file",
-                        source_path=parsed.source_path,
-                        file_type=parsed.file_type,
-                        file_size=file_size,
-                        content_hash=content_hash,
-                        file_created_at=file_created_at,
-                        file_modified_at=file_modified_at,
-                        tags=tags,
-                    )
-
-                    # 写入 DB + 索引（二次去重：防止并发导入同内容）
+                    # 写入本地 Markdown graph + 重建 DB/index cache（二次去重：防止并发导入同内容）
                     with lock:
                         existing2 = Database.get_knowledge_by_hash(content_hash)
                         if existing2:
@@ -175,9 +167,19 @@ class ImportWorker(QThread):
                             sheet_info = f" ({parsed.metadata.get('sheet_name', '')})" if len(parsed_list) > 1 else ""
                             self.file_done.emit(f"{basename}{sheet_info}", "skipped", f"内容已存在：《{existing2.get('title', '')}》")
                         else:
-                            Database.insert_knowledge(item.to_row())
-                            index_knowledge_item(item)
-                            inserted_ids.append(item.id)
+                            item_id = _file_graph_service().create_page(
+                                title,
+                                parsed.content,
+                                tags=tags,
+                                metadata={
+                                    "source_type": "file",
+                                    "source_path": parsed.source_path,
+                                    "file_type": parsed.file_type,
+                                    "file_created_at": file_created_at,
+                                    "file_modified_at": file_modified_at,
+                                },
+                            )
+                            inserted_ids.append(item_id)
                             counters["success"] += 1
                             sheet_info = f" ({parsed.metadata.get('sheet_name', '')})" if len(parsed_list) > 1 else ""
                             self.file_done.emit(f"{basename}{sheet_info}", "success", "导入成功")
@@ -251,18 +253,13 @@ class UrlImportWorker(QThread):
                     url_title = parsed.title or urlparse(url).netloc
                     title = generate_title(parsed.content, filename=url_title)
 
-                    item = KnowledgeItem(
-                        title=title,
-                        content=parsed.content,
-                        source_type="web",
-                        source_path=parsed.source_path,
-                        file_type=parsed.file_type,
-                        content_hash=content_hash,
+                    item_id = _file_graph_service().create_page(
+                        title,
+                        parsed.content,
                         tags=self.tags,
+                        metadata={"source_type": "web", "source_path": parsed.source_path, "file_type": parsed.file_type},
                     )
-                    Database.insert_knowledge(item.to_row())
-                    index_knowledge_item(item)
-                    inserted_ids.append(item.id)
+                    inserted_ids.append(item_id)
                     counters["success"] += 1
                     self.file_done.emit(url, "success", "导入成功")
 
@@ -605,23 +602,18 @@ class ImportDialog(QDialog):
             QMessageBox.information(self, "提示", f"内容已存在：《{existing.get('title', '')}》")
             return
 
-        item = KnowledgeItem(
-            title=title,
-            content=content,
-            source_type="web" if source_url else "manual",
-            source_path=source_url,
-            file_type="txt",
-            content_hash=content_hash,
+        item_id = _file_graph_service().create_page(
+            title,
+            content,
             tags=tags,
+            metadata={"source_type": "web" if source_url else "manual", "source_path": source_url, "file_type": "txt"},
         )
-        Database.insert_knowledge(item.to_row())
-        index_knowledge_item(item)
 
         from src.utils.config import Config
         if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", True):
             try:
                 from src.services.wiki_compiler import WikiCompiler
-                WikiCompiler().ingest(item.id)
+                WikiCompiler().ingest(item_id)
             except Exception:
                 pass
 

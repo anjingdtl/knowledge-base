@@ -7,7 +7,7 @@ import os
 from PySide6.QtWidgets import (
     QWidget, QFrame, QVBoxLayout, QHBoxLayout, QLineEdit,
     QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView,
-    QLabel, QTextEdit,
+    QLabel, QTextEdit, QTreeWidget, QTreeWidgetItem, QTabWidget,
     QPushButton, QComboBox, QFileDialog, QMenu,
     QSplitter, QMessageBox, QInputDialog, QProgressDialog,
     QStackedWidget, QToolButton,
@@ -20,6 +20,12 @@ from src.gui.icons import NAV, icon as make_icon, set_named_icon
 from src.gui.theme import get_color
 from src.utils.config import Config
 from src.gui.empty_state import EmptyState
+
+
+def _file_graph_service():
+    from src.services.block_store import BlockStore
+    from src.services.file_graph import FileGraphService
+    return FileGraphService(Config, Database, BlockStore(db=Database), embedding=None)
 
 
 def _check_garbled(content: str) -> bool:
@@ -59,7 +65,6 @@ class DedupWorker(QThread):
     finished = Signal(int, int)  # groups_found, removed_count
 
     def run(self):
-        from src.services.vectorstore import VectorStore
         groups = Database.find_duplicates()
         if not groups:
             self.finished.emit(0, 0)
@@ -70,8 +75,7 @@ class DedupWorker(QThread):
         for i, group in enumerate(groups):
             # 保留第一条（最新的），删除其余
             for item in group[1:]:
-                VectorStore().delete_by_knowledge(item["id"])
-                Database.delete_knowledge(item["id"])
+                _file_graph_service().delete_page(item["id"])
                 removed += 1
                 self.progress.emit(
                     int(removed / max(total, 1) * 100),
@@ -122,7 +126,6 @@ class QualityWorker(QThread):
 
     def _try_repair(self, item: dict) -> bool:
         """尝试修复乱码条目：源文件重读 → LLM 修复"""
-        from src.models.knowledge import KnowledgeItem
         from src.services.llm import LLMService
         from src.gui.import_dialog import _strip_think
         source_path = item.get("source_path", "")
@@ -135,25 +138,17 @@ class QualityWorker(QThread):
                 parsed = parse_file(source_path)
                 if parsed.content and not _check_garbled(parsed.content):
                     content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
-                    Database.update_knowledge(
+                    _file_graph_service().update_page(
                         item["id"],
-                        content=parsed.content,
-                        source_path=parsed.source_path,
-                        file_type=parsed.file_type,
-                        content_hash=content_hash,
-                        quality="ok",
+                        parsed.content,
+                        metadata={
+                            "title": item["title"],
+                            "source-type": "file",
+                            "source-path": parsed.source_path,
+                            "file-type": parsed.file_type,
+                            "quality": "ok",
+                        },
                     )
-                    ki = KnowledgeItem(
-                        id=item["id"],
-                        title=item["title"],
-                        content=parsed.content,
-                        source_type="file",
-                        source_path=parsed.source_path,
-                        file_type=parsed.file_type,
-                        content_hash=content_hash,
-                    )
-                    from src.services.indexer import reindex_knowledge_item
-                    reindex_knowledge_item(item["id"], ki)
                     return True
             except Exception:
                 import logging
@@ -178,15 +173,11 @@ class QualityWorker(QThread):
                 fixed = llm.chat([{"role": "user", "content": prompt}], silent=True)
                 fixed = _strip_think(fixed).strip()
                 if fixed and not _check_garbled(fixed) and len(fixed) > len(content[:3000]) * 0.3:
-                    Database.update_knowledge(item["id"], content=fixed, quality="ok")
-                    ki = KnowledgeItem(
-                        id=item["id"],
-                        title=item["title"],
-                        content=fixed,
-                        source_type=item.get("source_type", "file"),
+                    _file_graph_service().update_page(
+                        item["id"],
+                        fixed,
+                        metadata={"title": item["title"], "source-type": item.get("source_type", "file"), "quality": "ok"},
                     )
-                    from src.services.indexer import reindex_knowledge_item
-                    reindex_knowledge_item(item["id"], ki)
                     return True
             except Exception:
                 import logging
@@ -464,9 +455,33 @@ class KnowledgeView(QWidget):
         self.detail_refs.setWordWrap(True)
         detail_layout.addWidget(self.detail_refs)
 
+        self.detail_tabs = QTabWidget()
+        self.outline_tree = QTreeWidget()
+        self.outline_tree.setHeaderLabels(["大纲块"])
+        self.outline_tree.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.SelectedClicked)
+        self.outline_tree.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.detail_tabs.addTab(self.outline_tree, "大纲")
+
         self.detail_content = QTextEdit()
         self.detail_content.setReadOnly(True)
-        detail_layout.addWidget(self.detail_content, 1)
+        self.detail_tabs.addTab(self.detail_content, "原文")
+        detail_layout.addWidget(self.detail_tabs, 1)
+
+        outline_actions = QHBoxLayout()
+        btn_add_sibling = QPushButton("新增同级")
+        btn_add_sibling.clicked.connect(self._outline_add_sibling)
+        btn_add_child = QPushButton("新增子块")
+        btn_add_child.clicked.connect(self._outline_add_child)
+        btn_delete_block = QPushButton("删除块")
+        btn_delete_block.clicked.connect(self._outline_delete)
+        btn_save_outline = QPushButton("保存大纲")
+        btn_save_outline.setObjectName("accentBtn")
+        btn_save_outline.clicked.connect(self._save_outline)
+        btn_reload_outline = QPushButton("从文件重载")
+        btn_reload_outline.clicked.connect(self._reload_outline)
+        for btn in (btn_add_sibling, btn_add_child, btn_delete_block, btn_save_outline, btn_reload_outline):
+            outline_actions.addWidget(btn)
+        detail_layout.addLayout(outline_actions)
 
         self.detail_chars = QLabel("")
         self.detail_chars.setWordWrap(True)
@@ -719,6 +734,7 @@ class KnowledgeView(QWidget):
         self._show_detail_panel(item)
 
     def _show_detail(self, item: dict):
+        self._current_detail_item = item
         self.detail_title.setText(item["title"])
 
         # 结构化元信息：基本信息行
@@ -758,6 +774,7 @@ class KnowledgeView(QWidget):
 
         content = item.get("content", "")
         self.detail_content.setPlainText(content[:10000] if len(content) > 10000 else content)
+        self._load_outline(item.get("id", ""))
 
         # 底部字数统计
         total_chars = len(content)
@@ -768,6 +785,109 @@ class KnowledgeView(QWidget):
             + '</span>'
         )
 
+    def _file_graph_service(self):
+        from src.services.block_store import BlockStore
+        from src.services.file_graph import FileGraphService
+        return FileGraphService(Config, Database, BlockStore(db=Database), embedding=None)
+
+    def _load_outline(self, item_id: str):
+        self.outline_tree.clear()
+        if not item_id:
+            return
+        try:
+            page = self._file_graph_service().read_page(item_id)
+            for block in page.blocks:
+                self._add_outline_item(None, block)
+        except Exception:
+            from src.repositories.block_repo import BlockRepository
+            for block in BlockRepository(db=Database).list_by_page(item_id, limit=1000):
+                node = QTreeWidgetItem([block.content or ""])
+                node.setData(0, Qt.UserRole, block.id)
+                node.setFlags(node.flags() | Qt.ItemIsEditable)
+                self.outline_tree.addTopLevelItem(node)
+        self.outline_tree.expandAll()
+
+    def _add_outline_item(self, parent, block):
+        node = QTreeWidgetItem([block.content or ""])
+        node.setData(0, Qt.UserRole, getattr(block, "id", ""))
+        node.setFlags(node.flags() | Qt.ItemIsEditable)
+        if parent is None:
+            self.outline_tree.addTopLevelItem(node)
+        else:
+            parent.addChild(node)
+        for child in getattr(block, "children", []):
+            self._add_outline_item(node, child)
+        return node
+
+    def _outline_add_sibling(self):
+        current = self.outline_tree.currentItem()
+        node = QTreeWidgetItem(["新块"])
+        node.setFlags(node.flags() | Qt.ItemIsEditable)
+        if current and current.parent():
+            current.parent().insertChild(current.parent().indexOfChild(current) + 1, node)
+        elif current:
+            self.outline_tree.insertTopLevelItem(self.outline_tree.indexOfTopLevelItem(current) + 1, node)
+        else:
+            self.outline_tree.addTopLevelItem(node)
+        self.outline_tree.setCurrentItem(node)
+        self.outline_tree.editItem(node, 0)
+
+    def _outline_add_child(self):
+        current = self.outline_tree.currentItem()
+        if current is None:
+            self._outline_add_sibling()
+            return
+        node = QTreeWidgetItem(["新子块"])
+        node.setFlags(node.flags() | Qt.ItemIsEditable)
+        current.addChild(node)
+        current.setExpanded(True)
+        self.outline_tree.setCurrentItem(node)
+        self.outline_tree.editItem(node, 0)
+
+    def _outline_delete(self):
+        current = self.outline_tree.currentItem()
+        if current is None:
+            return
+        parent = current.parent()
+        if parent:
+            parent.takeChild(parent.indexOfChild(current))
+        else:
+            self.outline_tree.takeTopLevelItem(self.outline_tree.indexOfTopLevelItem(current))
+
+    def _reload_outline(self):
+        item = getattr(self, "_current_detail_item", None)
+        if item:
+            self._load_outline(item.get("id", ""))
+
+    def _save_outline(self):
+        item = getattr(self, "_current_detail_item", None)
+        if not item:
+            return
+        try:
+            blocks = [self._outline_item_to_dict(self.outline_tree.topLevelItem(i))
+                      for i in range(self.outline_tree.topLevelItemCount())]
+            tags = json.loads(item.get("tags", "[]")) if isinstance(item.get("tags"), str) else item.get("tags", [])
+            self._file_graph_service().update_page(
+                item["id"],
+                blocks,
+                metadata={"title": item.get("title", ""), "tags": tags},
+            )
+            refreshed = Database.get_knowledge(item["id"])
+            if refreshed:
+                self._current_detail_item = refreshed
+                self._show_detail(refreshed)
+            self._load_knowledge()
+            QMessageBox.information(self, "已保存", "大纲已写入本地 Markdown 并重建索引。")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", str(e))
+
+    def _outline_item_to_dict(self, item):
+        return {
+            "id": item.data(0, Qt.UserRole) or "",
+            "content": item.text(0),
+            "children": [self._outline_item_to_dict(item.child(i)) for i in range(item.childCount())],
+        }
+
     def _build_block_status(self, item_id: str) -> str:
         dim = get_color("text_dim")
         primary = get_color("primary")
@@ -775,10 +895,10 @@ class KnowledgeView(QWidget):
         font = max(10, Config.get("appearance.font_size", 13) - 2)
         try:
             from src.repositories.block_repo import BlockRepository
-            from src.services.vectorstore import VectorStore
+            from src.services.block_store import BlockStore
             blocks = BlockRepository(db=Database).list_by_page(item_id, limit=3)
             block_count = BlockRepository(db=Database).count_by_page(item_id)
-            vector_count = VectorStore().count_by_knowledge(item_id)
+            vector_count = BlockStore(db=Database).count_by_page(item_id)
         except Exception:
             chunks = Database.get_chunks_by_knowledge(item_id)
             blocks = []
@@ -851,7 +971,6 @@ class KnowledgeView(QWidget):
         if not files:
             return
         from src.services.file_parser import parse_file
-        from src.models.knowledge import KnowledgeItem
         path = files[0]
         try:
             parsed_list = parse_file(path)
@@ -868,28 +987,17 @@ class KnowledgeView(QWidget):
                 file_size = os.path.getsize(path)
             except OSError:
                 pass
-            Database.update_knowledge(
+            self._file_graph_service().update_page(
                 data["id"],
-                title=new_title,
-                content=parsed.content,
-                source_path=parsed.source_path,
-                file_type=parsed.file_type,
-                file_size=file_size,
-                content_hash=content_hash,
-                quality="ok",
+                parsed.content,
+                metadata={
+                    "title": new_title,
+                    "source-type": "file",
+                    "source-path": parsed.source_path,
+                    "file-type": parsed.file_type,
+                    "quality": "ok",
+                },
             )
-            ki = KnowledgeItem(
-                id=data["id"],
-                title=new_title,
-                content=parsed.content,
-                source_type="file",
-                source_path=parsed.source_path,
-                file_type=parsed.file_type,
-                file_size=file_size,
-                content_hash=content_hash,
-            )
-            from src.services.indexer import reindex_knowledge_item
-            reindex_knowledge_item(data["id"], ki)
             self._load_knowledge()
             QMessageBox.information(self, "成功", f"已替换: {new_title}")
         except Exception as e:
@@ -902,7 +1010,8 @@ class KnowledgeView(QWidget):
         )
         if ok:
             new_tags = [t.strip() for t in text.split(",") if t.strip()]
-            Database.update_knowledge(data["id"], tags=json.dumps(new_tags, ensure_ascii=False))
+            page = self._file_graph_service().read_page(data["id"])
+            self._file_graph_service().update_page(data["id"], page.blocks, metadata={"tags": new_tags})
             self._load_knowledge()
 
     def _delete_item(self, data: dict):
@@ -911,9 +1020,7 @@ class KnowledgeView(QWidget):
             QMessageBox.Yes | QMessageBox.No,
         )
         if reply == QMessageBox.Yes:
-            from src.services.vectorstore import VectorStore
-            VectorStore().delete_by_knowledge(data["id"])
-            Database.delete_knowledge(data["id"])
+            self._file_graph_service().delete_page(data["id"])
             self._load_knowledge()
 
     def _import_files(self):
@@ -954,15 +1061,12 @@ class KnowledgeView(QWidget):
 
         if dialog.exec() == QDialog.Accepted:
             tags = [t.strip() for t in tags_input.text().split(",") if t.strip()]
-            item = KnowledgeItem(
-                title=title_input.text(),
-                content=content_edit.toPlainText(),
-                source_type="manual",
+            self._file_graph_service().create_page(
+                title_input.text(),
+                content_edit.toPlainText(),
                 tags=tags,
+                metadata={"source_type": "manual"},
             )
-            Database.insert_knowledge(item.to_row())
-            from src.services.indexer import index_knowledge_item
-            index_knowledge_item(item)
             self._load_knowledge()
 
     def _quality_check(self):

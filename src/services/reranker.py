@@ -10,10 +10,11 @@ logger = logging.getLogger(__name__)
 
 
 class LLMReranker:
-    def __init__(self):
-        self._llm = LLMService()
-        self._enabled = Config.get("reranker.enabled", True)
-        self._use_llm_fallback = Config.get("reranker.use_llm_fallback", True)
+    def __init__(self, llm=None, config=None):
+        self._llm = llm or LLMService()
+        self._config = config or Config
+        self._enabled = self._config.get("reranker.enabled", True)
+        self._use_llm_fallback = self._config.get("reranker.use_llm_fallback", True)
 
     def rerank(self, query: str, candidates: list[dict], top_n: int = 5) -> list[dict]:
         """对候选结果重排，返回 top_n 结果"""
@@ -23,10 +24,10 @@ class LLMReranker:
         if not candidates:
             return []
 
-        min_score = Config.get("rag.rerank.min_score", 0.3)
+        min_score = self._config.get("rag.rerank.min_score", 0.3)
 
         # 优先使用专用重排序模型
-        reranker_model = Config.get("reranker.model", "")
+        reranker_model = self._config.get("reranker.model", "")
         if reranker_model:
             try:
                 scores = self._rerank_with_model(query, candidates, reranker_model)
@@ -59,13 +60,13 @@ class LLMReranker:
         import httpx
 
         # 获取重排序模型配置
-        base_url = Config.get("reranker.base_url", "")
-        api_key = Config.get("reranker.api_key", "")
+        base_url = self._config.get("reranker.base_url", "")
+        api_key = self._config.get("reranker.api_key", "")
 
         if not base_url or not api_key:
             # 尝试复用 embedding 配置
-            base_url = Config.get("embedding.base_url", "")
-            api_key = Config.get("embedding.api_key", "")
+            base_url = self._config.get("embedding.base_url", "")
+            api_key = self._config.get("embedding.api_key", "")
 
         if not base_url or not api_key:
             raise ValueError("No API key or base URL configured for reranker")

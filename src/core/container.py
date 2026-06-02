@@ -64,6 +64,7 @@ class AppContainer:
     _graph_builder: Optional[object] = field(default=None, repr=False)
     _librarian: Optional[object] = field(default=None, repr=False)
     _search_service: Optional[object] = field(default=None, repr=False)
+    _file_graph_service: Optional[object] = field(default=None, repr=False)
 
     @property
     def indexer(self):
@@ -82,8 +83,8 @@ class AppContainer:
     @property
     def rag_pipeline(self):
         if self._rag_pipeline is None:
-            from src.services.rag_pipeline import RagPipeline
-            self._rag_pipeline = RagPipeline(self)
+            from src.services.rag_pipeline import RAGService
+            self._rag_pipeline = RAGService()
         return self._rag_pipeline
 
     @property
@@ -136,6 +137,15 @@ class AppContainer:
                 self.config, self.db, self.block_store, self.embedding, self.llm
             )
         return self._search_service
+
+    @property
+    def file_graph_service(self):
+        if self._file_graph_service is None:
+            from src.services.file_graph import FileGraphService
+            self._file_graph_service = FileGraphService(
+                self.config, self.db, self.block_store, self.embedding
+            )
+        return self._file_graph_service
 
 
 def create_container(config_path: str | None = None) -> AppContainer:

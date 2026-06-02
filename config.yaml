@@ -68,6 +68,7 @@ storage:
   chroma_dir: chroma
   data_dir: data
   db_name: kb.db
+  graph_dir: graph
 web:
   timeout: 30
 wiki:

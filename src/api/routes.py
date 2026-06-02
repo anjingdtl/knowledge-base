@@ -153,14 +153,14 @@ def get_knowledge_blocks(item_id: str,
 
 @kb_router.post("", status_code=201)
 def create_knowledge(data: KnowledgeCreate, container: AppContainer = Depends(get_container)):
-    item = KnowledgeItem(
-        title=data.title, content=data.content, tags=data.tags,
-        source_type=data.source_type, file_type=data.file_type,
+    item_id = container.file_graph_service.create_page(
+        data.title,
+        data.content,
+        tags=data.tags,
+        metadata={"source_type": data.source_type, "file_type": data.file_type},
     )
-    container.db.insert_knowledge(item.to_row())
-    index_knowledge_item(item)
-    _try_wiki_compile(item.id)
-    return {"id": item.id, "message": "创建成功"}
+    _try_wiki_compile(item_id)
+    return {"id": item_id, "message": "创建成功"}
 
 
 @kb_router.put("/{item_id}")
@@ -170,12 +170,10 @@ def update_knowledge(item_id: str, data: KnowledgeUpdate,
     if not existing:
         raise HTTPException(404, "知识条目不存在")
     fields = {k: v for k, v in data.model_dump().items() if v is not None}
-    if "tags" in fields:
-        fields["tags"] = json.dumps(fields["tags"], ensure_ascii=False)
-    container.db.update_knowledge(item_id, **fields)
+    if fields:
+        blocks = fields["content"] if "content" in fields else container.file_graph_service.read_page(item_id).blocks
+        container.file_graph_service.update_page(item_id, blocks, metadata=fields)
     if "content" in fields:
-        item = KnowledgeItem.from_row({**existing, **fields})
-        reindex_knowledge_item(item_id, item)
         _try_wiki_compile(item_id)
     return {"message": "更新成功"}
 
@@ -185,11 +183,7 @@ def delete_knowledge(item_id: str, container: AppContainer = Depends(get_contain
     existing = container.db.get_knowledge(item_id)
     if not existing:
         raise HTTPException(404, "知识条目不存在")
-    container.db.delete_knowledge(item_id)
-    try:
-        container.block_store.delete_by_page(item_id)
-    except Exception:
-        pass  # Block cleanup best-effort; DB record already deleted
+    container.file_graph_service.delete_page(item_id)
     return {"message": "删除成功"}
 
 
@@ -256,8 +250,7 @@ class QuestionReq(BaseModel):
 
 @chat_router.post("/ask")
 def ask_question(data: QuestionReq, container: AppContainer = Depends(get_container)):
-    rag = RAGService()
-    result = rag.query(data.question)
+    result = container.rag_pipeline.query(data.question)
     sources = _normalize_sources(result.get("sources", []))
     conv_id = data.conversation_id
     if not conv_id:

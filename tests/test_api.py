@@ -197,8 +197,6 @@ class TestBlockGraphAPI:
 
 class TestChatSourceContract:
     def test_chat_sources_include_block_contract(self, api_client, monkeypatch):
-        import src.api.routes as routes_mod
-
         class StubRag:
             def query(self, question):
                 return {
@@ -212,7 +210,7 @@ class TestChatSourceContract:
                     }],
                 }
 
-        monkeypatch.setattr(routes_mod, "RAGService", lambda: StubRag())
+        api_client.app.state.container._rag_pipeline = StubRag()
         resp = api_client.post("/api/chat/ask", json={"question": "question"})
         assert resp.status_code == 200
         source = resp.json()["sources"][0]
