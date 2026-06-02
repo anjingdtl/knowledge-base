@@ -498,6 +498,27 @@ class RAGService:
             phase_callback("generating", "生成回答")
 
         if not results:
+            # 回退：知识级 FTS + LIKE 搜索（兜底 block 级搜索遗漏的结果）
+            try:
+                fts_results = Database.search_knowledge(question, limit=top_k)
+                if fts_results:
+                    results = [
+                        {
+                            "text": r.get("content", ""),
+                            "metadata": {
+                                "page_id": r.get("id", ""),
+                                "knowledge_id": r.get("id", ""),
+                                "title": r.get("title", ""),
+                            },
+                            "distance": 0,
+                            "rerank_score": 0.5,
+                        }
+                        for r in fts_results
+                    ]
+            except Exception as e:
+                logger.warning("Knowledge FTS fallback failed: %s", e)
+
+        if not results:
             def _empty_gen():
                 yield "抱歉，知识库中未找到与您的问题相关的内容，请尝试换个方式提问。"
             return _empty_gen(), []
