@@ -1,9 +1,9 @@
-"""混合检索模块 — 三种搜索模式（embedding/keywords/blend）+ 加分融合"""
+"""混合检索模块 — Block-First 架构（embedding/keywords/blend）+ 加分融合"""
 import hashlib
 import logging
 
 from src.utils.config import Config
-from src.services.vectorstore import VectorStore
+from src.services.block_store import BlockStore
 from src.services.db import Database
 
 
@@ -22,7 +22,7 @@ class HybridSearcher:
         seen = set()
         for query in queries:
             try:
-                vec_results = VectorStore().search(query, top_k=top_k * 2)
+                vec_results = BlockStore().search(query, top_k=top_k * 2)
                 for r in vec_results:
                     cid = r["id"]
                     if cid not in seen:
@@ -34,9 +34,6 @@ class HybridSearcher:
                         })
             except Exception as e:
                 logging.warning(f"Vector search failed: {e}")
-        # Sort by a relevance score derived from distance rather than raw distance,
-        # so that items with identical distance values (e.g. exact matches at 0)
-        # are still ordered predictably.
         results.sort(key=lambda x: (1 - x["distance"] / 2, -len(x.get("text", ""))), reverse=True)
         return results[:top_k * 2]
 
@@ -45,16 +42,17 @@ class HybridSearcher:
         seen = set()
         for query in queries:
             try:
-                fts_results = Database.search_chunks_fts(query, limit=top_k * 2)
+                fts_results = Database.search_blocks_fts(query, limit=top_k * 2)
                 for r in fts_results:
                     cid = r["id"]
                     if cid not in seen:
                         seen.add(cid)
                         results.append({
-                            "text": r.get("chunk_text", ""),
+                            "text": r.get("content", ""),
                             "metadata": {
-                                "knowledge_id": r.get("knowledge_id", ""),
-                                "chunk_index": r.get("chunk_index", 0),
+                                "page_id": r.get("page_id", ""),
+                                "block_type": r.get("block_type", ""),
+                                "properties": r.get("properties", {}),
                             },
                             "distance": 0,
                             "fts_rank": r.get("fts_rank", 0),
@@ -105,7 +103,6 @@ class HybridSearcher:
 
     @staticmethod
     def _normalize_fts_rank(raw_rank: float) -> float:
-        """FTS5 bm25 rank is usually negative; lower means more relevant."""
         try:
             rank = float(raw_rank)
         except (TypeError, ValueError):
@@ -117,18 +114,19 @@ class HybridSearcher:
 
     @staticmethod
     def _candidate_id(item: dict) -> str:
+        page_id = item.get("metadata", {}).get("page_id", "")
+        block_id = item.get("id", "")
+        if page_id and block_id:
+            return page_id + ":" + block_id
         kid = item.get("metadata", {}).get("knowledge_id", "")
         cidx = str(item.get("metadata", {}).get("chunk_index", 0))
         if kid:
             return kid + ":" + cidx
-        # Use a hash of the full text to avoid collisions when different chunks
-        # share the same leading characters.
         text = item.get("text", "")
         text_hash = hashlib.md5(text.encode("utf-8", errors="replace")).hexdigest()[:12]
         return "text_" + text_hash
 
     def _preserve_keyword_hits(self, sorted_items: list[dict], top_k: int) -> list[dict]:
-        """Keep strongest lexical hits in the final hybrid candidate set."""
         limit = top_k * 2
         selected = list(sorted_items[:limit])
         keyword_items = [
