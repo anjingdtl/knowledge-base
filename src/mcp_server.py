@@ -16,25 +16,31 @@ logger = logging.getLogger(__name__)
 
 from fastmcp import FastMCP
 
+from src.core.container import create_container, shutdown_container, AppContainer
 from src.models.knowledge import KnowledgeItem
-from src.services.db import Database
-from src.services.hybrid_search import HybridSearcher
-from src.services.llm import LLMService
 from src.services.mcp_heartbeat import beat
-from src.services.query_rewriter import QueryRewriter
 from src.services.rag import RAGService
-from src.services.reranker import LLMReranker
 from src.services.file_parser import parse_file, parse_url
 from src.services.indexer import index_knowledge_item
-from src.services.vectorstore import VectorStore
 from src.utils.config import Config
-from src.utils.llm_text import strip_think
 from src.version import VERSION
 
 
 # ---- 心跳后台任务 ----
 
 _heartbeat_task: asyncio.Task | None = None
+
+# ---- Container ----
+
+_container: AppContainer | None = None
+
+
+def _get_container() -> AppContainer:
+    """获取 Container 实例（lifespan 未触发时延迟创建，主要用于测试）"""
+    global _container
+    if _container is None:
+        _container = create_container()
+    return _container
 
 
 async def _heartbeat_loop():
@@ -48,14 +54,13 @@ async def _heartbeat_loop():
 
 @asynccontextmanager
 async def server_lifespan(server: FastMCP):
-    global _heartbeat_task
-    Config.load()
-    Database.connect()
+    global _heartbeat_task, _container
+    _container = create_container()
     beat()
     _heartbeat_task = asyncio.create_task(_heartbeat_loop())
     yield {}
     _heartbeat_task.cancel()
-    Database.close()
+    shutdown_container(_container)
 
 
 mcp = FastMCP(
@@ -92,76 +97,7 @@ def search(query: str, top_k: int = 5) -> list[dict]:
         query: 搜索查询文本，支持自然语言描述
         top_k: 返回结果数量，默认5条
     """
-    return _do_search(query, top_k)
-
-
-def _do_search(query: str, top_k: int) -> list[dict]:
-    """同步执行的搜索逻辑：查询改写 → 混合检索 → 重排序 → Wiki 优先"""
-    output = []
-
-    # 1. 查询改写
-    queries = [query]
-    if Config.get("rag.enable_query_rewriting", False):
-        try:
-            rewriter = QueryRewriter()
-            queries = rewriter.rewrite(query)
-        except Exception as e:
-            logger.warning("Query rewrite in search failed: %s", e)
-
-    # 2. 混合检索（HybridSearcher: 向量 + 关键词 blend + RRF 融合）
-    candidates = []
-    try:
-        searcher = HybridSearcher()
-        candidates = searcher.search(queries, top_k=top_k)
-    except Exception as e:
-        logger.warning("Hybrid search failed, falling back to vector only: %s", e)
-        try:
-            candidates = VectorStore().search(query, top_k=top_k)
-        except Exception as e2:
-            logger.warning("Vector search also failed: %s", e2)
-
-    # 3. 重排序（专用 reranker 模型或 LLM 打分）
-    if candidates:
-        try:
-            reranker = LLMReranker()
-            candidates = reranker.rerank(query, candidates, top_n=top_k)
-        except Exception as e:
-            logger.warning("Rerank in search failed, using raw order: %s", e)
-
-    # 4. Wiki 结构化知识优先
-    seen_kids = set()
-    try:
-        wiki_results = Database.search_wiki_fts(query, limit=WIKI_SEARCH_LIMIT)
-        for wr in wiki_results:
-            summary = wr.get("concept_summary", "")
-            content_preview = (wr.get("content", "") or "")[:300]
-            output.append({
-                "source": "wiki",
-                "title": wr["title"],
-                "summary": summary,
-                "text": f"[Wiki] {wr['title']}: {summary}\n{content_preview}",
-                "score": wr.get("fts_rank", 0),
-            })
-    except Exception as e:
-        logger.warning("Wiki FTS search failed: %s", e)
-
-    # 5. 组装检索+重排结果
-    for r in candidates:
-        kid = (r.get("metadata") or {}).get("knowledge_id", "")
-        if kid:
-            seen_kids.add(kid)
-        item = Database.get_knowledge(kid) if kid else None
-        score = r.get("rerank_score", r.get("rrf_score", r.get("score", r.get("distance", 0))))
-        output.append({
-            "source": "knowledge",
-            "chunk_id": r.get("id", ""),
-            "knowledge_id": kid,
-            "title": item["title"] if item else "未知",
-            "text": r.get("text", ""),
-            "score": score,
-        })
-
-    return output
+    return _get_container().search_service.search(query, top_k=top_k)
 
 
 @mcp.tool(
@@ -177,10 +113,11 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> list[dict]:
         limit: 返回结果数量上限，默认20
         offset: 分页偏移量，默认0
     """
+    db = _get_container().db
     output = []
 
     # Wiki 结构化知识优先
-    wiki_results = Database.search_wiki_fts(query, limit=3)
+    wiki_results = db.search_wiki_fts(query, limit=3)
     for wr in wiki_results:
         summary = wr.get("concept_summary", "")
         content_preview = (wr.get("content", "") or "")[:300]
@@ -192,7 +129,7 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> list[dict]:
         })
 
     # FTS5 知识搜索
-    kb_results = Database.search_knowledge(query, limit=limit, offset=offset)
+    kb_results = db.search_knowledge(query, limit=limit, offset=offset)
     for item in kb_results:
         item["source"] = "knowledge"
         output.append(item)
@@ -239,10 +176,11 @@ def create(
         source_type: 来源类型 - manual（手动）、file（文件）、web（网页）
     """
     tags = tags or []
+    db = _get_container().db
     # 哈希去重
     import hashlib
     content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
-    existing = Database.get_knowledge_by_hash(content_hash)
+    existing = db.get_knowledge_by_hash(content_hash)
     if existing:
         return {"id": existing["id"], "title": existing["title"], "message": "内容已存在，跳过导入"}
 
@@ -251,7 +189,7 @@ def create(
         source_type=source_type, file_type=file_type,
         content_hash=content_hash,
     )
-    Database.insert_knowledge(item.to_row())
+    db.insert_knowledge(item.to_row())
     index_knowledge_item(item)
     # Wiki 编译
     _try_wiki_compile(item.id)
@@ -269,7 +207,7 @@ def read(item_id: str) -> dict:
     Args:
         item_id: 知识条目的唯一 ID
     """
-    item = Database.get_knowledge(item_id)
+    item = _get_container().db.get_knowledge(item_id)
     if not item:
         raise ValueError(f"知识条目不存在: {item_id}")
     return item
@@ -293,7 +231,8 @@ def update(
         content: 新内容（可选）
         tags: 新标签列表（可选）
     """
-    existing = Database.get_knowledge(item_id)
+    db = _get_container().db
+    existing = db.get_knowledge(item_id)
     if not existing:
         raise ValueError(f"知识条目不存在: {item_id}")
     fields = {}
@@ -305,7 +244,7 @@ def update(
         fields["tags"] = json.dumps(tags, ensure_ascii=False)
     if not fields:
         return {"message": "未提供需要更新的字段"}
-    Database.update_knowledge(item_id, **fields)
+    db.update_knowledge(item_id, **fields)
     return {"message": "知识更新成功", "updated_fields": list(fields.keys())}
 
 
@@ -320,11 +259,12 @@ def delete(item_id: str) -> dict:
     Args:
         item_id: 要删除的知识条目 ID
     """
-    existing = Database.get_knowledge(item_id)
+    container = _get_container()
+    existing = container.db.get_knowledge(item_id)
     if not existing:
         raise ValueError(f"知识条目不存在: {item_id}")
-    VectorStore().delete_by_knowledge(item_id)
-    Database.delete_knowledge(item_id)
+    container.block_store.delete_by_page(item_id)
+    container.db.delete_knowledge(item_id)
     return {"message": "知识删除成功", "id": item_id}
 
 
@@ -361,11 +301,12 @@ def list_knowledge(
         limit: 每页数量，默认20
         offset: 分页偏移量，默认0
     """
-    items = Database.list_knowledge(
+    db = _get_container().db
+    items = db.list_knowledge(
         tag=tag, file_type=file_type, sort_by=sort_by,
         sort_order=sort_order, limit=limit, offset=offset,
     )
-    total = Database.count_knowledge(tag=tag)
+    total = db.count_knowledge(tag=tag)
     return {"items": items, "total": total, "limit": limit, "offset": offset}
 
 
@@ -376,7 +317,7 @@ def list_knowledge(
 @_heartbeat
 def tags() -> list[str]:
     """返回知识库中所有标签的排序列表。"""
-    return Database.get_all_tags()
+    return _get_container().db.get_all_tags()
 
 
 @mcp.tool(
@@ -480,9 +421,10 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
         pass
 
     results = []
+    db = _get_container().db
     for parsed in parsed_list:
         content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
-        existing = Database.get_knowledge_by_hash(content_hash)
+        existing = db.get_knowledge_by_hash(content_hash)
         if existing:
             results.append({
                 "id": existing["id"],
@@ -504,7 +446,7 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
             file_created_at=file_created_at,
             file_modified_at=file_modified_at,
         )
-        Database.insert_knowledge(item.to_row())
+        db.insert_knowledge(item.to_row())
         index_knowledge_item(item)
         _try_wiki_compile(item.id)
         results.append({
@@ -539,10 +481,11 @@ def ingest_url(url: str, tags: list[str] | None = None) -> dict:
 def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
     tags = tags or []
     parsed = parse_url(url)
+    db = _get_container().db
 
     import hashlib
     content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
-    existing = Database.get_knowledge_by_hash(content_hash)
+    existing = db.get_knowledge_by_hash(content_hash)
     if existing:
         return {
             "id": existing["id"],
@@ -560,7 +503,7 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
         file_type=parsed.file_type,
         content_hash=content_hash,
     )
-    Database.insert_knowledge(item.to_row())
+    db.insert_knowledge(item.to_row())
     index_knowledge_item(item)
     _try_wiki_compile(item.id)
     return {
@@ -652,7 +595,7 @@ def wiki_workflow_history(page_id: str) -> dict:
 @mcp.tool(description="获取 Wiki 页面版本列表")
 def wiki_list_versions(page_id: str) -> dict:
     """列出页面所有版本"""
-    versions = Database.list_wiki_versions(page_id)
+    versions = _get_container().db.list_wiki_versions(page_id)
     return {"versions": versions}
 
 
@@ -705,7 +648,7 @@ def cancel_async_job(job_id: str) -> dict:
 @mcp.resource("kb://knowledge/{item_id}")
 def get_knowledge_resource(item_id: str) -> str:
     """获取指定知识条目的完整内容。"""
-    item = Database.get_knowledge(item_id)
+    item = _get_container().db.get_knowledge(item_id)
     if not item:
         raise ValueError(f"知识条目不存在: {item_id}")
     return json.dumps(item, ensure_ascii=False, indent=2)
@@ -714,17 +657,18 @@ def get_knowledge_resource(item_id: str) -> str:
 @mcp.resource("kb://tags")
 def get_tags_resource() -> str:
     """获取知识库中所有标签。"""
-    tags = Database.get_all_tags()
+    tags = _get_container().db.get_all_tags()
     return json.dumps({"tags": tags, "count": len(tags)}, ensure_ascii=False, indent=2)
 
 
 @mcp.resource("kb://stats")
 def get_stats_resource() -> str:
     """获取知识库统计信息。"""
+    c = _get_container()
     return json.dumps({
-        "knowledge_items": Database.count_knowledge(),
-        "vector_chunks": VectorStore().count(),
-        "tags": len(Database.get_all_tags()),
+        "knowledge_items": c.db.count_knowledge(),
+        "vector_chunks": c.block_store.count(),
+        "tags": len(c.db.get_all_tags()),
     }, ensure_ascii=False, indent=2)
 
 

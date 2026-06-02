@@ -15,23 +15,38 @@ from src.services.db import Database
 
 @pytest.fixture
 def mcp_env(setup_db, monkeypatch):
-    """Mock VectorStore 避免 embedding API 调用"""
-    stored_chunks = []
+    """Mock BlockStore 和 VectorStore 避免 embedding API 调用"""
 
     class MockVS:
+        def __init__(self, db=None):
+            pass
         def search(self, query, top_k=5):
             return [
                 {"id": "chunk-1", "text": "测试内容", "metadata": {"knowledge_id": ""}, "distance": 0.85}
             ]
         def add_chunks(self, chunks):
-            stored_chunks.extend(chunks)
+            pass
         def delete_by_knowledge(self, kid):
             pass
         def count(self):
-            return len(stored_chunks)
+            return 0
 
-    monkeypatch.setattr(mcp_mod, "VectorStore", MockVS)
-    return stored_chunks
+    class MockBS:
+        def __init__(self, db=None):
+            pass
+        def search(self, query, top_k=5):
+            return [
+                {"id": "block-1", "text": "测试内容", "page_id": "", "distance": 0.85}
+            ]
+        def add_block_embedding(self, block_id, embedding):
+            pass
+        def delete_by_page(self, page_id):
+            pass
+        def count(self):
+            return 0
+
+    monkeypatch.setattr("src.services.vectorstore.VectorStore", MockVS)
+    monkeypatch.setattr("src.services.block_store.BlockStore", MockBS)
 
 
 def _insert_sample(title="测试知识", content="测试内容", tags=None, file_type="txt"):
