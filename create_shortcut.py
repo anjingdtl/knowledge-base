@@ -1,61 +1,70 @@
-"""生成 Windows 桌面快捷方式 (.lnk)
+"""Create root Windows shortcuts for ShineHeKnowledge.
 
-运行此脚本后，项目目录下会生成 ShineHeKnowledge.lnk，
-复制到桌面即可双击启动泰坦知识库。
+The app shortcut is written to the project root and replaces the old
+"泰坦知识库.lnk" shortcut when present.
 """
+from __future__ import annotations
+
+import argparse
+import subprocess
 import sys
-import os
 from pathlib import Path
-from ctypes import windll, c_buffer, sizeof, byref
-from ctypes.wintypes import DWORD, HANDLE, BOOL, HRESULT
-import pythoncom
-from win32com.shell import shell, shellcon
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
 ICON_PATH = PROJECT_DIR / "icon" / "knolege.ico"
-MAIN_PY = PROJECT_DIR / "main.py"
-SHORTCUT_NAME = "ShineHeKnowledge.lnk"
-SHORTCUT_PATH = PROJECT_DIR / SHORTCUT_NAME
+APP_TARGET = PROJECT_DIR / "start_app.bat"
+MCP_TARGET = PROJECT_DIR / "start_mcp.bat"
+APP_SHORTCUT = PROJECT_DIR / "ShineHeKnowledge 一键启动.lnk"
+MCP_SHORTCUT = PROJECT_DIR / "ShineHeKnowledge MCP服务.lnk"
+OLD_SHORTCUT = PROJECT_DIR / "泰坦知识库.lnk"
 
 
-def create_shortcut():
+def _ps_quote(value: Path | str) -> str:
+    return str(value).replace("'", "''")
+
+
+def create_shortcut(target: Path, shortcut: Path, description: str) -> None:
+    if sys.platform != "win32":
+        raise RuntimeError("Windows .lnk shortcuts can only be created on Windows.")
+    if not target.exists():
+        raise FileNotFoundError(target)
     if not ICON_PATH.exists():
-        print(f"错误: 图标文件不存在: {ICON_PATH}")
-        sys.exit(1)
+        raise FileNotFoundError(ICON_PATH)
 
-    if not MAIN_PY.exists():
-        print(f"错误: 入口文件不存在: {MAIN_PY}")
-        sys.exit(1)
-
-    # 使用 pythonw.exe 避免 Windows 弹出终端窗口
-    python_exe = sys.executable.replace("python.exe", "pythonw.exe")
-
-    # 使用 Windows Shell API 创建快捷方式
-    shell_link = pythoncom.CoCreateInstance(
-        shell.CLSID_ShellLink,
-        None,
-        pythoncom.CLSCTX_INPROC_SERVER,
-        shell.IID_IShellLink,
+    script = f"""
+$shell = New-Object -ComObject WScript.Shell
+$shortcut = $shell.CreateShortcut('{_ps_quote(shortcut)}')
+$shortcut.TargetPath = '{_ps_quote(target)}'
+$shortcut.WorkingDirectory = '{_ps_quote(PROJECT_DIR)}'
+$shortcut.IconLocation = '{_ps_quote(ICON_PATH)},0'
+$shortcut.Description = '{description.replace("'", "''")}'
+$shortcut.Save()
+"""
+    subprocess.run(
+        ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", script],
+        check=True,
     )
 
-    # 设置快捷方式属性
-    shell_link.SetPath(python_exe)
-    shell_link.SetArguments(str(MAIN_PY))
-    shell_link.SetWorkingDirectory(str(PROJECT_DIR))
-    shell_link.SetDescription("泰坦知识库 - ShineHeKnowledge")
-    shell_link.SetIconLocation(str(ICON_PATH), 0)
 
-    # 保存 .lnk 文件
-    persist_file = shell_link.QueryInterface(pythoncom.IID_IPersistFile)
-    persist_file.Save(str(SHORTCUT_PATH), True)
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Create ShineHeKnowledge Windows shortcuts.")
+    parser.add_argument(
+        "--mcp",
+        action="store_true",
+        help="Also create a shortcut for the streamable-http MCP service.",
+    )
+    args = parser.parse_args()
 
-    print(f"快捷方式已生成: {SHORTCUT_PATH}")
-    print(f"  目标: {python_exe} main.py")
-    print(f"  图标: {ICON_PATH}")
-    print(f"  工作目录: {PROJECT_DIR}")
-    print(f"\n将 {SHORTCUT_NAME} 复制到桌面即可使用。")
+    create_shortcut(APP_TARGET, APP_SHORTCUT, "ShineHeKnowledge desktop app")
+    if OLD_SHORTCUT.exists():
+        OLD_SHORTCUT.unlink()
+    print(f"Created: {APP_SHORTCUT}")
+
+    if args.mcp:
+        create_shortcut(MCP_TARGET, MCP_SHORTCUT, "ShineHeKnowledge MCP service")
+        print(f"Created: {MCP_SHORTCUT}")
 
 
 if __name__ == "__main__":
-    create_shortcut()
+    main()

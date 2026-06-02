@@ -234,7 +234,48 @@ class KnowledgeRepository:
                VALUES (:id, :knowledge_id, :chunk_index, :chunk_text, :created_at)""",
             chunks,
         )
+        self._upsert_blocks_from_chunks(chunks)
         conn.commit()
+
+    def _upsert_blocks_from_chunks(self, chunks: list[dict]):
+        if not chunks:
+            return
+        block_rows = []
+        prop_rows = []
+        for chunk in chunks:
+            block_rows.append({
+                "id": chunk["id"],
+                "parent_id": None,
+                "page_id": chunk["knowledge_id"],
+                "content": chunk.get("chunk_text", ""),
+                "block_type": "text",
+                "properties": json.dumps({
+                    "knowledge_id": chunk["knowledge_id"],
+                    "chunk_index": chunk.get("chunk_index", 0),
+                }, ensure_ascii=False),
+                "order_idx": chunk.get("chunk_index", 0),
+                "created_at": chunk.get("created_at", ""),
+                "updated_at": chunk.get("created_at", ""),
+            })
+            prop_rows.append({
+                "block_id": chunk["id"],
+                "prop_key": "knowledge_id",
+                "prop_value": chunk["knowledge_id"],
+                "value_type": "ref",
+            })
+        conn = self._conn()
+        conn.executemany(
+            """INSERT OR REPLACE INTO blocks
+               (id, parent_id, page_id, content, block_type, properties, order_idx, created_at, updated_at)
+               VALUES (:id, :parent_id, :page_id, :content, :block_type, :properties, :order_idx, :created_at, :updated_at)""",
+            block_rows,
+        )
+        conn.executemany(
+            """INSERT OR REPLACE INTO block_property_index
+               (block_id, prop_key, prop_value, value_type)
+               VALUES (:block_id, :prop_key, :prop_value, :value_type)""",
+            prop_rows,
+        )
 
     def get_chunks_by_knowledge(self, knowledge_id: str) -> list[dict]:
         rows = self._conn().execute(

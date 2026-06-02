@@ -254,6 +254,68 @@ CREATE TABLE IF NOT EXISTS knowledge_graph_relations (
 
 CREATE INDEX IF NOT EXISTS idx_graph_rel_src ON knowledge_graph_relations(graph_id, source_knowledge_id);
 CREATE INDEX IF NOT EXISTS idx_graph_rel_tgt ON knowledge_graph_relations(graph_id, target_knowledge_id);
+
+-- === Block graph model ===
+CREATE TABLE IF NOT EXISTS blocks (
+    id TEXT PRIMARY KEY,
+    parent_id TEXT REFERENCES blocks(id) ON DELETE CASCADE,
+    page_id TEXT,
+    content TEXT,
+    block_type TEXT DEFAULT 'text',
+    properties TEXT DEFAULT '{}',
+    order_idx INTEGER DEFAULT 0,
+    created_at TEXT,
+    updated_at TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_blocks_page ON blocks(page_id);
+CREATE INDEX IF NOT EXISTS idx_blocks_parent ON blocks(parent_id);
+
+CREATE TABLE IF NOT EXISTS block_refs (
+    source_id TEXT REFERENCES blocks(id) ON DELETE CASCADE,
+    target_id TEXT REFERENCES blocks(id) ON DELETE CASCADE,
+    ref_type TEXT DEFAULT 'link',
+    PRIMARY KEY (source_id, target_id, ref_type)
+);
+
+CREATE TABLE IF NOT EXISTS entity_refs (
+    id TEXT PRIMARY KEY,
+    source_type TEXT NOT NULL,
+    source_id TEXT NOT NULL,
+    target_type TEXT NOT NULL,
+    target_id TEXT NOT NULL,
+    ref_type TEXT DEFAULT 'mention',
+    weight REAL DEFAULT 1.0,
+    created_at TEXT,
+    UNIQUE(source_type, source_id, target_type, target_id, ref_type)
+);
+
+CREATE INDEX IF NOT EXISTS idx_entity_refs_source ON entity_refs(source_type, source_id);
+CREATE INDEX IF NOT EXISTS idx_entity_refs_target ON entity_refs(target_type, target_id);
+
+CREATE TABLE IF NOT EXISTS block_property_index (
+    block_id TEXT REFERENCES blocks(id) ON DELETE CASCADE,
+    prop_key TEXT,
+    prop_value TEXT,
+    value_type TEXT DEFAULT 'string',
+    PRIMARY KEY (block_id, prop_key)
+);
+
+CREATE INDEX IF NOT EXISTS idx_prop_key_val ON block_property_index(prop_key, prop_value);
+
+CREATE TABLE IF NOT EXISTS embedding_cache (
+    content_hash TEXT NOT NULL,
+    model TEXT NOT NULL,
+    embedding BLOB NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (content_hash, model)
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    username TEXT PRIMARY KEY,
+    hashed TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 """
 
 
@@ -523,6 +585,19 @@ class Database:
         with cls._write_lock:
             conn = cls.get_conn()
             cls._delete_chunks_fts_unlocked(item_id)
+            conn.execute(
+                "DELETE FROM block_property_index WHERE block_id IN (SELECT id FROM blocks WHERE page_id = ?)",
+                (item_id,),
+            )
+            conn.execute(
+                "DELETE FROM block_refs WHERE source_id IN (SELECT id FROM blocks WHERE page_id = ?) OR target_id IN (SELECT id FROM blocks WHERE page_id = ?)",
+                (item_id, item_id),
+            )
+            conn.execute("DELETE FROM blocks WHERE page_id = ?", (item_id,))
+            conn.execute(
+                "DELETE FROM entity_refs WHERE (source_type = 'knowledge' AND source_id = ?) OR (target_type = 'knowledge' AND target_id = ?)",
+                (item_id, item_id),
+            )
             conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
             conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
             conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
@@ -658,7 +733,51 @@ class Database:
                VALUES (:id, :knowledge_id, :chunk_index, :chunk_text, :created_at)""",
             chunks,
         )
+        cls._upsert_blocks_from_chunks_unlocked(chunks)
         conn.commit()
+
+    @classmethod
+    def _upsert_blocks_from_chunks_unlocked(cls, chunks: list[dict]):
+        if not chunks:
+            return
+        now = datetime.now().isoformat()
+        block_rows = []
+        prop_rows = []
+        for chunk in chunks:
+            created_at = chunk.get("created_at") or now
+            block_rows.append({
+                "id": chunk["id"],
+                "parent_id": None,
+                "page_id": chunk["knowledge_id"],
+                "content": chunk.get("chunk_text", ""),
+                "block_type": "text",
+                "properties": json.dumps({
+                    "knowledge_id": chunk["knowledge_id"],
+                    "chunk_index": chunk.get("chunk_index", 0),
+                }, ensure_ascii=False),
+                "order_idx": chunk.get("chunk_index", 0),
+                "created_at": created_at,
+                "updated_at": created_at,
+            })
+            prop_rows.append({
+                "block_id": chunk["id"],
+                "prop_key": "knowledge_id",
+                "prop_value": chunk["knowledge_id"],
+                "value_type": "ref",
+            })
+        conn = cls.get_conn()
+        conn.executemany(
+            """INSERT OR REPLACE INTO blocks
+               (id, parent_id, page_id, content, block_type, properties, order_idx, created_at, updated_at)
+               VALUES (:id, :parent_id, :page_id, :content, :block_type, :properties, :order_idx, :created_at, :updated_at)""",
+            block_rows,
+        )
+        conn.executemany(
+            """INSERT OR REPLACE INTO block_property_index
+               (block_id, prop_key, prop_value, value_type)
+               VALUES (:block_id, :prop_key, :prop_value, :value_type)""",
+            prop_rows,
+        )
 
     @classmethod
     def delete_chunks(cls, knowledge_id: str):
@@ -669,6 +788,15 @@ class Database:
         """
         with cls._write_lock:
             conn = cls.get_conn()
+            conn.execute(
+                "DELETE FROM block_property_index WHERE block_id IN (SELECT id FROM blocks WHERE page_id = ?)",
+                (knowledge_id,),
+            )
+            conn.execute(
+                "DELETE FROM block_refs WHERE source_id IN (SELECT id FROM blocks WHERE page_id = ?) OR target_id IN (SELECT id FROM blocks WHERE page_id = ?)",
+                (knowledge_id, knowledge_id),
+            )
+            conn.execute("DELETE FROM blocks WHERE page_id = ?", (knowledge_id,))
             conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (knowledge_id,))
             conn.commit()
 

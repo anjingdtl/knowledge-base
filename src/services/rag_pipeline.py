@@ -417,59 +417,35 @@ class RAGService:
 
     def query(self, question: str, conversation_history: list[dict] | None = None,
               phase_callback=None) -> dict:
-        """同步查询（非流式）— 通过管线执行"""
+        """同步查询（非流式）— 直接通过管线执行，无冗余预处理"""
         import asyncio
 
-        if phase_callback:
-            phase_callback("rewriting", "查询改写")
-
         try:
-            ctx = RagContext(question=question, conversation_history=conversation_history or [])
-
-            # 阶段 1: 查询改写 + Wiki 检索并发
-            rewriter = QueryRewriter()
-            with ThreadPoolExecutor(max_workers=2) as pool:
-                rewrite_future = pool.submit(rewriter.rewrite, question)
-                wiki_future = pool.submit(self._get_wiki_context, question)
-                try:
-                    ctx.rewritten_queries = rewrite_future.result()
-                except Exception as e:
-                    logger.warning("Query rewrite failed, using original question: %s", e)
-                    ctx.rewritten_queries = [question]
-                try:
-                    ctx.wiki_context = wiki_future.result()
-                except Exception as e:
-                    logger.warning("Wiki context retrieval failed: %s", e)
-                    ctx.wiki_context = ""
-
-            # 阶段 2-6: 通过管线执行后续阶段
+            # 直接走管线，管线内部会依次执行全部阶段
+            # （query_rewrite → wiki_retrieval → vector_search → rerank → generate → postprocess）
             if phase_callback:
-                phase_callback("searching", "混合检索")
+                phase_callback("searching", "RAG 管线执行中")
+
             try:
-                # 尝试在已有事件循环中运行，若无则创建新的
-                try:
-                    loop = asyncio.get_running_loop()
-                except RuntimeError:
-                    loop = None
-                if loop and loop.is_running():
-                    # 已有事件循环运行中，用线程执行
-                    import concurrent.futures
-                    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
-                        result = ex.submit(asyncio.run, self._pipeline.execute(
-                            question, conversation_history
-                        )).result()
-                else:
-                    result = asyncio.run(self._pipeline.execute(
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = None
+            if loop and loop.is_running():
+                import concurrent.futures
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+                    result = ex.submit(asyncio.run, self._pipeline.execute(
                         question, conversation_history
-                    ))
-                return result
-            except Exception as e:
-                logger.error("Pipeline execution failed, falling back to direct query: %s", e)
-                # fallback 到直接生成
-                return self._direct_query(question, conversation_history, ctx)
+                    )).result()
+            else:
+                result = asyncio.run(self._pipeline.execute(
+                    question, conversation_history
+                ))
+            return result
         except Exception as e:
-            logger.error("Query failed: %s", e)
-            return {"answer": f"抱歉，查询过程中发生错误：{str(e)}", "sources": []}
+            logger.error("Pipeline execution failed, falling back to direct query: %s", e)
+            # fallback：仅用 Wiki 上下文 + LLM 直接生成
+            ctx = RagContext(question=question, conversation_history=conversation_history or [])
+            return self._direct_query(question, conversation_history, ctx)
 
     def query_stream(self, question: str, conversation_history: list[dict] | None = None,
                      phase_callback=None):

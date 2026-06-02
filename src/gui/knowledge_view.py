@@ -1,5 +1,6 @@
 """知识浏览/管理界面"""
 import hashlib
+import html
 import json
 import os
 
@@ -453,6 +454,16 @@ class KnowledgeView(QWidget):
         self.detail_tags.setWordWrap(True)
         detail_layout.addWidget(self.detail_tags)
 
+        self.detail_blocks = QLabel("")
+        self.detail_blocks.setObjectName("hintLabel")
+        self.detail_blocks.setWordWrap(True)
+        detail_layout.addWidget(self.detail_blocks)
+
+        self.detail_refs = QLabel("")
+        self.detail_refs.setObjectName("hintLabel")
+        self.detail_refs.setWordWrap(True)
+        detail_layout.addWidget(self.detail_refs)
+
         self.detail_content = QTextEdit()
         self.detail_content.setReadOnly(True)
         detail_layout.addWidget(self.detail_content, 1)
@@ -742,6 +753,8 @@ class KnowledgeView(QWidget):
             + '</div>'
         )
         self.detail_tags.setText(tag_html)
+        self.detail_blocks.setText(self._build_block_status(item.get("id", "")))
+        self.detail_refs.setText(self._build_ref_status(item.get("id", "")))
 
         content = item.get("content", "")
         self.detail_content.setPlainText(content[:10000] if len(content) > 10000 else content)
@@ -753,6 +766,54 @@ class KnowledgeView(QWidget):
             f'共 {total_chars} 字'
             + (f'（已截断显示前 10000 字）' if total_chars > 10000 else '')
             + '</span>'
+        )
+
+    def _build_block_status(self, item_id: str) -> str:
+        dim = get_color("text_dim")
+        primary = get_color("primary")
+        accent = get_color("accent")
+        font = max(10, Config.get("appearance.font_size", 13) - 2)
+        try:
+            from src.repositories.block_repo import BlockRepository
+            from src.services.vectorstore import VectorStore
+            blocks = BlockRepository(db=Database).list_by_page(item_id, limit=3)
+            block_count = BlockRepository(db=Database).count_by_page(item_id)
+            vector_count = VectorStore().count_by_knowledge(item_id)
+        except Exception:
+            chunks = Database.get_chunks_by_knowledge(item_id)
+            blocks = []
+            block_count = len(chunks)
+            vector_count = 0
+        preview = "".join(
+            f'<div style="margin-top:4px;color:{dim};">#{i + 1} {html.escape((b.content or "")[:90])}</div>'
+            for i, b in enumerate(blocks)
+        )
+        vector_note = "complete" if block_count and vector_count >= block_count else "partial"
+        return (
+            f'<div style="border:1px solid {accent};border-radius:8px;padding:8px;margin-top:8px;">'
+            f'<b style="color:{primary};font-size:{font}px;">Block graph</b>'
+            f'<span style="color:{dim};font-size:{font}px;"> · blocks {block_count} · vectors {vector_count} · {vector_note}</span>'
+            f'{preview}'
+            f'</div>'
+        )
+
+    def _build_ref_status(self, item_id: str) -> str:
+        dim = get_color("text_dim")
+        primary = get_color("primary")
+        font = max(10, Config.get("appearance.font_size", 13) - 2)
+        try:
+            from src.repositories.entity_ref_repo import EntityRefRepository
+            repo = EntityRefRepository(db=Database)
+            outgoing = repo.list_for_source("knowledge", item_id)
+            incoming = repo.list_for_target("knowledge", item_id)
+        except Exception:
+            outgoing = []
+            incoming = []
+        return (
+            f'<div style="color:{dim};font-size:{font}px;margin:6px 0 8px 0;">'
+            f'<span style="color:{primary};font-weight:600;">Relations</span>'
+            f' · outgoing {len(outgoing)} · backlinks {len(incoming)}'
+            f'</div>'
         )
 
     def _show_context_menu(self, pos):

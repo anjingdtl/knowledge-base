@@ -19,8 +19,6 @@ from src.services.db import Database
 from src.services.llm import register_llm_status_callback
 from src.version import VERSION
 
-ICON_PATH = Path(__file__).resolve().parent.parent.parent / "icon" / "knolege.ico"
-
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -28,8 +26,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"泰坦知识库 v{VERSION}")
         self.setMinimumSize(1100, 700)
         self._restore_geometry()
-        if ICON_PATH.exists():
-            self.setWindowIcon(QIcon(str(ICON_PATH)))
         self._init_database()
         self._setup_ui()
 

@@ -375,13 +375,16 @@ class LibrarianService:
 
         # 构建 code -> schema 信息的映射
         code_to_info = {}
-        for cat_code, cat_info in CLASSIFICATION_SCHEMA.items():
+        for cat in CLASSIFICATION_SCHEMA:
+            cat_code = cat["code"]
             code_to_info[cat_code] = {
                 "code": cat_code,
-                "name": cat_info["name"],
-                "description": "",
+                "name": cat["name"],
+                "description": cat.get("description", ""),
             }
-            for child_code, child_name in cat_info.get("children", []):
+            for sub in cat.get("subcategories", []):
+                child_code = sub["code"]
+                child_name = sub["name"]
                 code_to_info[child_code] = {
                     "code": child_code,
                     "name": child_name,
@@ -577,11 +580,13 @@ class LibrarianService:
         code_to_db_id = {}
         for cat in existing_cats:
             name = cat["name"]
-            for schema_code, schema_info in CLASSIFICATION_SCHEMA.items():
+            for schema_cat in CLASSIFICATION_SCHEMA:
+                schema_code = schema_cat["code"]
                 if name.startswith(schema_code):
                     code_to_db_id[schema_code] = cat["id"]
                     break
-                for child_code, _ in schema_info.get("children", []):
+                for sub in schema_cat.get("subcategories", []):
+                    child_code = sub["code"]
                     if name.startswith(child_code):
                         code_to_db_id[child_code] = cat["id"]
                         break
@@ -641,12 +646,15 @@ class LibrarianService:
                 code_to_db_id[code] = c["id"]
 
         # 先写入所有预设大类
-        for cat_code, cat_info in CLASSIFICATION_SCHEMA.items():
+        for schema_cat in CLASSIFICATION_SCHEMA:
+            cat_code = schema_cat["code"]
             cat_id = str(uuid.uuid4())
             code_to_db_id[cat_code] = cat_id
-            Database.insert_category(cat_id, f"{cat_code} {cat_info['name']}", cat_info.get("description", ""))
+            Database.insert_category(cat_id, f"{cat_code} {schema_cat['name']}", schema_cat.get("description", ""))
 
-            for child_code, child_name in cat_info.get("children", []):
+            for sub in schema_cat.get("subcategories", []):
+                child_code = sub["code"]
+                child_name = sub["name"]
                 sub_id = str(uuid.uuid4())
                 code_to_db_id[child_code] = sub_id
                 Database.insert_category(sub_id, f"{child_code} {child_name}", "", parent_id=cat_id)

@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { apiPost } from '../api'
 
 interface Message {
   role: 'user' | 'assistant'
   content: string
-  sources?: { title: string; knowledge_id: string }[]
+  sources?: { title: string; knowledge_id: string; block_id?: string; snippet?: string; score?: number }[]
 }
 
 export default function ChatView() {
@@ -24,12 +25,7 @@ export default function ChatView() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
-      })
-      const data = await res.json()
+      const data = await apiPost<{ answer?: string; sources?: Message['sources'] }>('/api/chat/ask', { question })
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: data.answer || '未找到相关信息',
@@ -64,9 +60,10 @@ export default function ChatView() {
                 <div className="mt-2 pt-2 border-t border-[var(--color-border)]">
                   <p className="text-xs text-[var(--color-text-muted)] mb-1">引用来源：</p>
                   {msg.sources.map((s, j) => (
-                    <span key={j} className="text-xs px-2 py-0.5 mr-1 bg-[var(--color-primary)]/20 text-[var(--color-accent)] rounded">
-                      {s.title}
-                    </span>
+                    <div key={j} className="mb-1 rounded border border-[var(--color-border)] bg-[var(--color-primary-soft)] px-2 py-1">
+                      <div className="text-xs text-[var(--color-primary)]">{s.title || s.knowledge_id}</div>
+                      {s.snippet && <div className="mt-0.5 text-xs text-[var(--color-text-muted)] line-clamp-2">{s.snippet}</div>}
+                    </div>
                   ))}
                 </div>
               )}

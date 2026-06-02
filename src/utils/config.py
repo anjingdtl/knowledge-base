@@ -162,6 +162,7 @@ class Config:
 
     @_dualmethod
     def save(self, config_path: str | None = None):
+        stored_in_keyring = set()
         """持久化配置到文件。敏感凭据写入 OS keychain，不落盘 config.yaml"""
         if config_path is None:
             config_path = str(get_config_path())
@@ -174,12 +175,14 @@ class Config:
                 try:
                     if secret_val:
                         keyring.set_password(_KEYRING_SERVICE, kr_key, secret_val)
+                        stored_in_keyring.add(secret_key)
                     else:
                         # 值为空则清除 keychain 中对应条目
                         try:
                             keyring.delete_password(_KEYRING_SERVICE, kr_key)
                         except keyring.errors.PasswordDeleteError:
                             pass
+                        stored_in_keyring.add(secret_key)
                 except Exception as exc:
                     logger.warning("写入 keyring %s 失败，将回退到文件存储: %s", secret_key, exc)
         else:
@@ -190,8 +193,8 @@ class Config:
         # 写入 YAML 文件时，剥离已通过 keyring 存储的敏感字段
         import copy
         data_to_dump = copy.deepcopy(self._data)
-        if _keyring_available:
-            self._strip_nested(data_to_dump, (secret_key for secret_key in _SECRET_KEYS))
+        if stored_in_keyring:
+            self._strip_nested(data_to_dump, stored_in_keyring)
         with open(config_path, "w", encoding="utf-8") as f:
             yaml.dump(data_to_dump, f, allow_unicode=True, default_flow_style=False)
 

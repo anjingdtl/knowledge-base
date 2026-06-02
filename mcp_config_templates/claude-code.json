@@ -1,52 +1,27 @@
 {
-    "_说明": "Claude Code MCP 配置",
-    "_推荐方式_stdio": "最稳定，Claude Code 自动管理进程生命周期，无需手动启动",
-    "_手动配置位置": "~/.claude.json 或项目 .claude/settings.json 的 mcpServers 字段",
-    "_Windows注意事项": [
-        "1. 不要用 cmd /c 包装 Python 命令 — cmd.exe 会拦截 stdin，破坏 JSON-RPC 协议",
-        "2. 使用 Python 绝对路径 — Claude Code 子进程 PATH 中可能找不到 python",
-        "3. 必须设置 cwd 字段 — 确保 config.yaml 等配置文件能被找到",
-        "4. 不要用 python3 — Windows 上可能指向 Microsoft Store shim"
-    ],
-
-    "_CLI快捷命令": {
-        "_stdio_已安装": "claude mcp add shinehe-kb -- shinehe-mcp",
-        "_stdio_源码(Windows)": "claude mcp add-json shinehe-kb '{\"command\":\"C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe\",\"args\":[\"run_mcp.py\"],\"cwd\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\",\"type\":\"stdio\"}' -s user",
-        "_http_远程": "先启动: shinehe-mcp -t streamable-http --port 9000，然后: claude mcp add -t http shinehe-kb http://127.0.0.1:9000/mcp"
-    },
-
-    "stdio_源码模式_Windows(推荐)": {
-        "shinehe-kb": {
-            "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
-            "args": ["run_mcp.py"],
-            "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base",
-            "type": "stdio"
-        }
-    },
-
-    "stdio_源码模式_macOS_Linux": {
-        "shinehe-kb": {
-            "command": "python",
-            "args": ["你的路径/knowledge-base/run_mcp.py"],
-            "cwd": "你的路径/knowledge-base",
-            "type": "stdio"
-        }
-    },
-
-    "stdio_已安装(pip_install)": {
-        "shinehe-kb": {
-            "command": "shinehe-mcp",
-            "args": [],
-            "env": {
-                "SHINEHE_HOME": "你的知识库项目路径"
-            }
-        }
-    },
-
-    "http_远程": {
-        "shinehe-kb": {
-            "type": "http",
-            "url": "http://127.0.0.1:9000/mcp"
-        }
+  "_说明": "Claude Code MCP 配置。推荐 stdio 模式，由 Claude Code 自动启动 run_mcp.py。",
+  "_配置位置": "~/.claude.json 或项目 .claude/settings.json 的 mcpServers 字段",
+  "_Windows注意": [
+    "不要使用 cmd /c 包装命令，避免破坏 stdin JSON-RPC",
+    "推荐使用 python.exe 绝对路径",
+    "必须设置 cwd 或 SHINEHE_HOME"
+  ],
+  "_CLI导入命令": {
+    "源码stdio推荐": "claude mcp add-json shinehe-kb \"{\\\"command\\\":\\\"C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe\\\",\\\"args\\\":[\\\"D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py\\\"],\\\"cwd\\\":\\\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\\\",\\\"env\\\":{\\\"SHINEHE_HOME\\\":\\\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\\\"},\\\"type\\\":\\\"stdio\\\"}\" -s user",
+    "已安装命令": "claude mcp add shinehe-kb -- shinehe-mcp",
+    "HTTP模式": "claude mcp add -t http shinehe-kb http://127.0.0.1:9000/mcp"
+  },
+  "mcpServers": {
+    "shinehe-kb": {
+      "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
+      "args": [
+        "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
+      ],
+      "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base",
+      "env": {
+        "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
+      },
+      "type": "stdio"
     }
+  }
 }
