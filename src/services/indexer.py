@@ -7,7 +7,7 @@ from datetime import datetime
 from src.utils.config import Config
 from src.models.knowledge import KnowledgeItem, KnowledgeChunk
 from src.services.db import Database
-from src.services.text_splitter import split_text, split_markdown, split_code
+from src.services.text_splitter import TextChunk, split_text, split_markdown, split_code
 from src.services.block_store import BlockStore
 from src.services.vectorstore import VectorStore
 
@@ -29,6 +29,13 @@ def index_knowledge_item(item: KnowledgeItem):
     else:
         chunks = split_text(item.content, chunk_size=chunk_size,
                             chunk_overlap=chunk_overlap, metadata=base_meta)
+        # 非 Markdown 文件：在分块文本前注入标题，确保 FTS 能匹配到标题关键词
+        if item.title and chunks:
+            title_prefix = f"[标题: {item.title}]\n"
+            chunks = [
+                TextChunk(text=f"{title_prefix}{c.text}", index=c.index, metadata=c.metadata)
+                for c in chunks
+            ]
     if not chunks:
         return
 

@@ -40,7 +40,7 @@ rag:
       stage: vector_search
       top_k: 10
     - enabled: true
-      min_score: 0.3
+      min_score: 0.15
       stage: rerank
       top_n: 5
     - enabled: true
@@ -52,7 +52,7 @@ rag:
       max_context_length: 8000
       stage: postprocess
   rerank:
-    min_score: 0.3
+    min_score: 0.15
     top_n: 5
   score_threshold: 0.35
   search_mode: blend

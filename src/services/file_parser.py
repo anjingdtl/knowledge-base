@@ -207,20 +207,51 @@ def _parse_pptx(path: Path) -> ParsedFile:
 
 
 def _parse_pdf(path: Path) -> ParsedFile:
+    from io import BytesIO
     from PyPDF2 import PdfReader
+
     reader = PdfReader(str(path))
+
+    if reader.is_encrypted:
+        # 先尝试 PyPDF2 空密码解密（大多数 owner-only 加密场景）
+        decrypt_result = reader.decrypt("")
+        if decrypt_result == 0:
+            # PyPDF2 解密失败，尝试 pikepdf 解密
+            try:
+                import pikepdf
+                with pikepdf.open(str(path)) as pdf:
+                    buf = BytesIO()
+                    pdf.save(buf)
+                    buf.seek(0)
+                reader = PdfReader(buf)
+            except ImportError:
+                raise ValueError(
+                    f"PDF 文件已加密 ({path.name})，"
+                    f"需要安装 pikepdf 才能导入: pip install pikepdf"
+                )
+            except Exception:
+                raise ValueError(
+                    f"PDF 文件已加密且需要密码才能打开 ({path.name})，"
+                    f"请先解密或提供密码后重试"
+                )
+
     pages = []
     for i, page in enumerate(reader.pages):
         text = page.extract_text()
         if text:
             pages.append(f"[第{i+1}页]\n{text}")
     content = "\n\n".join(pages)
+
+    metadata = {"pages": len(reader.pages)}
+    if reader.is_encrypted:
+        metadata["encrypted"] = True
+
     return ParsedFile(
         title=path.stem,
         content=content,
         file_type="pdf",
         source_path=str(path),
-        metadata={"pages": len(reader.pages)},
+        metadata=metadata,
     )
 
 

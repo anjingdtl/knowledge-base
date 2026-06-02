@@ -15,6 +15,26 @@ from src.gui.theme import get_color
 from src.gui.empty_state import EmptyState
 
 
+def _schema_items() -> list[dict]:
+    if isinstance(CLASSIFICATION_SCHEMA, dict):
+        items = []
+        for code, info in CLASSIFICATION_SCHEMA.items():
+            children = info.get("children", []) if isinstance(info, dict) else []
+            items.append({
+                "code": code,
+                "name": info.get("name", code) if isinstance(info, dict) else str(info),
+                "description": info.get("description", "") if isinstance(info, dict) else "",
+                "subcategories": [
+                    {"code": child[0], "name": child[1], "description": ""}
+                    if isinstance(child, (tuple, list)) and len(child) >= 2
+                    else {"code": str(child), "name": str(child), "description": ""}
+                    for child in children
+                ],
+            })
+        return items
+    return CLASSIFICATION_SCHEMA
+
+
 def _format_size(size_bytes: int) -> str:
     if size_bytes < 1024:
         return f"{size_bytes} B"
@@ -207,7 +227,7 @@ class CatalogView(QWidget):
         self.stat_size.setText(_format_size(stats["total_size"]))
         total_cats = 1 + sum(
             1 + len(info.get("subcategories", []))
-            for info in CLASSIFICATION_SCHEMA
+            for info in _schema_items()
         )
         self.stat_cats.setText(f"{stats['category_coverage']} / {total_cats} 分类")
 
@@ -219,7 +239,7 @@ class CatalogView(QWidget):
 
         # 预设分类的 code 集合，用于识别动态分类
         schema_codes = set()
-        for cat in CLASSIFICATION_SCHEMA:
+        for cat in _schema_items():
             schema_codes.add(cat["code"])
             for sub in cat.get("subcategories", []):
                 schema_codes.add(sub["code"])
@@ -228,7 +248,7 @@ class CatalogView(QWidget):
         # 已匹配到预设分类的 DB category ID 集合
         matched_db_ids = set()
 
-        for schema_cat in CLASSIFICATION_SCHEMA:
+        for schema_cat in _schema_items():
             code = schema_cat["code"]
             cat_db = None
             for c in categories:
@@ -520,7 +540,8 @@ class CatalogView(QWidget):
 
         self.btn_classify.setEnabled(False)
         self.progress_bar.setVisible(True)
-        self.progress_bar.setRange(0, 0)
+        self.progress_bar.setRange(0, unclassified_count)
+        self.progress_bar.setValue(0)
         mode_text = "新增" if incremental else "全量"
         self.status_label.setText(f"正在分类 {unclassified_count} 条{mode_text}知识...")
 
@@ -535,6 +556,9 @@ class CatalogView(QWidget):
 
     def _on_progress(self, phase, current, total):
         self.status_label.setText(f"{phase} ({current}/{total})")
+        if total > 0:
+            self.progress_bar.setMaximum(total)
+            self.progress_bar.setValue(min(current, total))
 
     def _on_classify_finished(self, categories):
         self.btn_classify.setEnabled(True)
@@ -553,8 +577,27 @@ class CatalogView(QWidget):
         QMessageBox.warning(self, "分类失败", f"知识库整理失败:\n{error_msg}")
 
     def _generate_catalog(self):
-        librarian = LibrarianService()
-        catalog = librarian.generate_catalog()
-        self.detail_title.setText("知识库目录")
-        self.detail_meta.setText("自动生成的图书馆式目录")
-        self.detail_content.setPlainText(catalog)
+        try:
+            librarian = LibrarianService()
+            catalog = librarian.generate_catalog()
+            self.detail_title.setText("知识库目录")
+            self.detail_meta.setText("自动生成的图书馆式目录")
+            self.detail_content.setPlainText(catalog)
+            # 显示详情面板（带滑入动画）
+            self.detail_panel.setFixedHeight(self.height())
+            self.detail_panel.setVisible(True)
+            self.detail_panel.raise_()
+            target_x = self.width() - self._detail_width
+            if self._detail_anim is not None:
+                self._detail_anim.stop()
+                self._detail_anim = None
+            anim = QPropertyAnimation(self.detail_panel, b"pos")
+            anim.setDuration(220)
+            anim.setStartValue(QPoint(self.width(), 0))
+            anim.setEndValue(QPoint(target_x, 0))
+            anim.setEasingCurve(QEasingCurve.Type.OutCubic)
+            anim.start()
+            self._detail_anim = anim
+            self._detail_open = True
+        except Exception as e:
+            QMessageBox.warning(self, "生成目录失败", f"无法生成知识库目录:\n{str(e)}")

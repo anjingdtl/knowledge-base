@@ -17,7 +17,11 @@ APP_TARGET = PROJECT_DIR / "start_app.bat"
 MCP_TARGET = PROJECT_DIR / "start_mcp.bat"
 APP_SHORTCUT = PROJECT_DIR / "ShineHeKnowledge 一键启动.lnk"
 MCP_SHORTCUT = PROJECT_DIR / "ShineHeKnowledge MCP服务.lnk"
-OLD_SHORTCUT = PROJECT_DIR / "泰坦知识库.lnk"
+OLD_SHORTCUTS = [
+    PROJECT_DIR / "泰坦知识库.lnk",
+    PROJECT_DIR / "ShineHeKnowledge 涓€閿惎鍔?lnk",
+    PROJECT_DIR / "ShineHeKnowledge MCP鏈嶅姟.lnk",
+]
 
 
 def _ps_quote(value: Path | str) -> str:
@@ -56,13 +60,14 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    create_shortcut(APP_TARGET, APP_SHORTCUT, "ShineHeKnowledge desktop app")
-    if OLD_SHORTCUT.exists():
-        OLD_SHORTCUT.unlink()
+    create_shortcut(APP_TARGET, APP_SHORTCUT, "ShineHeKnowledge 一键启动")
+    for old_shortcut in OLD_SHORTCUTS:
+        if old_shortcut.exists():
+            old_shortcut.unlink()
     print(f"Created: {APP_SHORTCUT}")
 
     if args.mcp:
-        create_shortcut(MCP_TARGET, MCP_SHORTCUT, "ShineHeKnowledge MCP service")
+        create_shortcut(MCP_TARGET, MCP_SHORTCUT, "ShineHeKnowledge MCP服务")
         print(f"Created: {MCP_SHORTCUT}")
 
 

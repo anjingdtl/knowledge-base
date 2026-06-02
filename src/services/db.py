@@ -871,9 +871,12 @@ class Database:
     @classmethod
     def search_blocks_fts(cls, query: str, limit: int = 10) -> list[dict]:
         """Block 级 FTS 搜索"""
-        from src.utils.chinese_tokenizer import tokenize_chinese_full
+        from src.utils.chinese_tokenizer import tokenize_chinese_full, sanitize_fts_query
         sanitized = tokenize_chinese_full(query)
         if not sanitized.strip():
+            return []
+        safe_query = sanitize_fts_query(sanitized, is_tokenized=True)
+        if not safe_query:
             return []
         rows = cls.get_conn().execute(
             """SELECT b.id, b.page_id, b.content, b.block_type, b.properties,
@@ -883,7 +886,7 @@ class Database:
                WHERE block_fts MATCH ?
                ORDER BY bf.rank
                LIMIT ?""",
-            (sanitized, limit),
+            (safe_query, limit),
         ).fetchall()
         results = []
         for r in rows:

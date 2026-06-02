@@ -56,6 +56,7 @@ class KnowledgeBaseApp:
         self._apply_theme()
         from src.gui.main_window import MainWindow
         self.window = MainWindow()
+        self.window.setWindowIcon(self.app.windowIcon())
 
     def _apply_theme(self):
         from src.gui.theme import apply

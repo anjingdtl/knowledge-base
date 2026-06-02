@@ -25,6 +25,29 @@ def split_text(
     return [TextChunk(text=c, index=i, metadata={**base_meta, "chunk_index": i}) for i, c in enumerate(chunks)]
 
 
+def _force_split_long_text(text: str, chunk_size: int, overlap: int) -> list[str]:
+    """对超长文本强制按 chunk_size 切分（按句子或固定长度）"""
+    if len(text) <= chunk_size:
+        return [text]
+    chunks = []
+    # 优先按句子切分
+    sentences = re.split(r'(?<=[。！？；\n])', text)
+    current = ""
+    for s in sentences:
+        if len(current) + len(s) > chunk_size and current:
+            chunks.append(current)
+            # overlap: 保留末尾部分
+            current = current[-overlap:] if overlap > 0 else ""
+        current += s
+        # 如果单句超长，强制按 chunk_size 切
+        while len(current) > chunk_size * 1.5:
+            chunks.append(current[:chunk_size])
+            current = current[chunk_size - overlap:] if overlap > 0 else current[chunk_size:]
+    if current.strip():
+        chunks.append(current)
+    return chunks
+
+
 def split_markdown(
     text: str,
     chunk_size: int = 500,
@@ -111,6 +134,17 @@ def _merge_paragraphs(paragraphs: list[str], chunk_size: int, overlap: int) -> l
 
     for para in paragraphs:
         para_len = len(para)
+        # 单段落超长时强制切分
+        if para_len > chunk_size * 1.5:
+            # 先 flush 已有内容
+            if current_parts:
+                chunks.append("\n\n".join(current_parts))
+                current_parts = []
+                current_len = 0
+            # 强制切分长段落
+            sub_chunks = _force_split_long_text(para, chunk_size, overlap)
+            chunks.extend(sub_chunks)
+            continue
         if current_len + para_len + 1 > chunk_size and current_parts:
             chunks.append("\n\n".join(current_parts))
             tail = "\n\n".join(current_parts)
