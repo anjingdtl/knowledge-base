@@ -8,8 +8,16 @@ from src.services.db import Database
 
 
 class HybridSearcher:
+    def __init__(self, db=None, block_store=None, config=None):
+        self._db = db or Database
+        self._block_store = block_store or BlockStore()
+        self._config = config or Config
+
+    def _get_config(self, key: str, default=None):
+        return self._config.get(key, default)
+
     def search(self, queries: list[str], top_k: int = 5) -> list[dict]:
-        mode = Config.get("rag.search_mode", "blend")
+        mode = self._get_config("rag.search_mode", "blend")
         if mode == "embedding":
             return self._vector_search(queries, top_k)
         elif mode == "keywords":
@@ -22,7 +30,7 @@ class HybridSearcher:
         seen = set()
         for query in queries:
             try:
-                vec_results = BlockStore().search(query, top_k=top_k * 2)
+                vec_results = self._block_store.search(query, top_k=top_k * 2)
                 for r in vec_results:
                     cid = r["id"]
                     if cid not in seen:
@@ -42,7 +50,7 @@ class HybridSearcher:
         seen = set()
         for query in queries:
             try:
-                fts_results = Database.search_blocks_fts(query, limit=top_k * 2)
+                fts_results = self._db.search_blocks_fts(query, limit=top_k * 2)
                 for r in fts_results:
                     cid = r["id"]
                     if cid not in seen:
@@ -62,8 +70,8 @@ class HybridSearcher:
         return results[:top_k * 2]
 
     def _blend_search(self, queries: list[str], top_k: int) -> list[dict]:
-        w_v = Config.get("rag.hybrid_search.vector_weight", 0.7)
-        w_k = Config.get("rag.hybrid_search.keyword_weight", 0.3)
+        w_v = self._get_config("rag.hybrid_search.vector_weight", 0.7)
+        w_k = self._get_config("rag.hybrid_search.keyword_weight", 0.3)
 
         vec_results = self._vector_search(queries, top_k * 3)
         fts_results = self._keyword_search(queries, top_k * 3)

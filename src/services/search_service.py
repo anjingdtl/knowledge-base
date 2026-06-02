@@ -34,6 +34,9 @@ class SearchService:
             logger.warning("Hybrid search failed, falling back to BlockStore: %s", e)
             candidates = self._block_store.search(query, top_k=top_k)
 
+        if not candidates:
+            candidates = self._knowledge_fts_search(query, top_k)
+
         # 3. 重排序（专用 reranker 模型或 LLM 打分）
         if candidates:
             candidates = self._rerank(query, candidates, top_k)
@@ -68,7 +71,7 @@ class SearchService:
         if not self._config.get("rag.enable_query_rewriting", False):
             return [query]
         try:
-            rewriter = QueryRewriter()
+            rewriter = QueryRewriter(self._llm, self._config)
             return rewriter.rewrite(query)
         except Exception as e:
             logger.warning("Query rewrite failed: %s", e)
@@ -76,7 +79,7 @@ class SearchService:
 
     def _hybrid_search(self, queries: list[str], top_k: int) -> list[dict]:
         """混合检索"""
-        searcher = HybridSearcher()
+        searcher = HybridSearcher(self._db, self._block_store, self._config)
         return searcher.search(queries, top_k=top_k)
 
     def _rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
@@ -84,11 +87,36 @@ class SearchService:
         if not self._config.get("rag.enable_rerank", False):
             return candidates
         try:
-            reranker = LLMReranker()
+            reranker = LLMReranker(self._llm, self._config)
             return reranker.rerank(query, candidates, top_n=top_k)
         except Exception as e:
             logger.warning("Rerank failed: %s", e)
             return candidates
+
+    def _knowledge_fts_search(self, query: str, top_k: int) -> list[dict]:
+        """Fallback to item-level FTS when block/vector search yields nothing."""
+        try:
+            rows = self._db.search_knowledge(query, limit=top_k, offset=0)
+        except Exception as e:
+            logger.warning("Knowledge FTS fallback failed: %s", e)
+            return []
+
+        results = []
+        for row in rows:
+            kid = row.get("id", "")
+            results.append({
+                "id": "",
+                "text": row.get("content", ""),
+                "metadata": {
+                    "page_id": kid,
+                    "knowledge_id": kid,
+                    "title": row.get("title", ""),
+                    "block_type": "knowledge",
+                    "properties": {},
+                },
+                "score": row.get("fts_rank", 0),
+            })
+        return results
 
     def _wiki_search(self, query: str) -> list[dict]:
         """Wiki 搜索（FTS5 全文检索）"""

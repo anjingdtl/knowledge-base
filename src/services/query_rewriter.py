@@ -6,12 +6,13 @@ from src.utils.llm_text import strip_think
 
 
 class QueryRewriter:
-    def __init__(self):
-        self.llm = LLMService()
+    def __init__(self, llm=None, config=None):
+        self.llm = llm or LLMService()
+        self._config = config or Config
 
-    def rewrite(self, query: str) -> list[str]:
+    def rewrite(self, query: str, num_variations: int = 3) -> list[str]:
         """返回 [原始query, 改写query1, 改写query2, ...]"""
-        if not Config.get("rag.enable_query_rewriting", False):
+        if not self._config.get("rag.enable_query_rewriting", False):
             return [query]
 
         prompt = (
@@ -33,6 +34,6 @@ class QueryRewriter:
                     queries.append(line)
                 elif len(line) < 50:
                     queries.append(line)
-            return [query] + queries[:3]
+            return [query] + queries[:num_variations]
         except Exception:
             return [query]

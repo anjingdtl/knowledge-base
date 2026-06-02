@@ -560,7 +560,7 @@ class Database:
     def update_knowledge(cls, item_id: str, **fields):
         if not fields:
             return
-        allowed = {"title", "content", "source_type", "source_path", "file_type", "file_size", "file_created_at", "file_modified_at", "tags", "quality"}
+        allowed = {"title", "content", "source_type", "source_path", "file_type", "file_size", "content_hash", "file_created_at", "file_modified_at", "tags", "quality"}
         invalid = set(fields) - allowed
         if invalid:
             raise ValueError(f"Invalid fields: {invalid}")

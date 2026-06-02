@@ -113,7 +113,8 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> list[dict]:
         limit: 返回结果数量上限，默认20
         offset: 分页偏移量，默认0
     """
-    db = _get_container().db
+    container = _get_container()
+    db = container.db
     output = []
 
     # Wiki 结构化知识优先
@@ -151,8 +152,7 @@ def ask(question: str) -> dict:
 
 
 def _do_ask(question: str) -> dict:
-    rag = RAGService()
-    return rag.query(question)
+    return _get_container().rag_pipeline.query(question)
 
 
 @mcp.tool(
@@ -176,7 +176,8 @@ def create(
         source_type: 来源类型 - manual（手动）、file（文件）、web（网页）
     """
     tags = tags or []
-    db = _get_container().db
+    container = _get_container()
+    db = container.db
     # 哈希去重
     import hashlib
     content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
@@ -184,16 +185,16 @@ def create(
     if existing:
         return {"id": existing["id"], "title": existing["title"], "message": "内容已存在，跳过导入"}
 
-    item = KnowledgeItem(
-        title=title, content=content, tags=tags,
-        source_type=source_type, file_type=file_type,
-        content_hash=content_hash,
+    item_id = container.file_graph_service.create_page(
+        title,
+        content,
+        tags=tags,
+        metadata={"source_type": source_type, "file_type": file_type},
     )
-    db.insert_knowledge(item.to_row())
-    index_knowledge_item(item)
     # Wiki 编译
-    _try_wiki_compile(item.id)
-    return {"id": item.id, "title": item.title, "message": "知识创建成功并已完成索引"}
+    _try_wiki_compile(item_id)
+    item = db.get_knowledge(item_id) or {"title": title}
+    return {"id": item_id, "title": item["title"], "path": item.get("source_path", ""), "message": "知识创建成功并已完成索引"}
 
 
 @mcp.tool(
@@ -231,7 +232,8 @@ def update(
         content: 新内容（可选）
         tags: 新标签列表（可选）
     """
-    db = _get_container().db
+    container = _get_container()
+    db = container.db
     existing = db.get_knowledge(item_id)
     if not existing:
         raise ValueError(f"知识条目不存在: {item_id}")
@@ -241,10 +243,11 @@ def update(
     if content is not None:
         fields["content"] = content
     if tags is not None:
-        fields["tags"] = json.dumps(tags, ensure_ascii=False)
+        fields["tags"] = tags
     if not fields:
         return {"message": "未提供需要更新的字段"}
-    db.update_knowledge(item_id, **fields)
+    blocks = fields["content"] if "content" in fields else container.file_graph_service.read_page(item_id).blocks
+    container.file_graph_service.update_page(item_id, blocks, metadata=fields)
     return {"message": "知识更新成功", "updated_fields": list(fields.keys())}
 
 
@@ -263,8 +266,7 @@ def delete(item_id: str) -> dict:
     existing = container.db.get_knowledge(item_id)
     if not existing:
         raise ValueError(f"知识条目不存在: {item_id}")
-    container.block_store.delete_by_page(item_id)
-    container.db.delete_knowledge(item_id)
+    container.file_graph_service.delete_page(item_id)
     return {"message": "知识删除成功", "id": item_id}
 
 
@@ -434,25 +436,25 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
             })
             continue
 
-        item = KnowledgeItem(
-            title=parsed.title,
-            content=parsed.content,
+        item_id = container.file_graph_service.create_page(
+            parsed.title,
+            parsed.content,
             tags=tags,
-            source_type="file",
-            source_path=parsed.source_path,
-            file_type=parsed.file_type,
-            file_size=file_size,
-            content_hash=content_hash,
-            file_created_at=file_created_at,
-            file_modified_at=file_modified_at,
+            metadata={
+                "source_type": "file",
+                "source_path": parsed.source_path,
+                "file_type": parsed.file_type,
+                "file_created_at": file_created_at,
+                "file_modified_at": file_modified_at,
+            },
         )
-        db.insert_knowledge(item.to_row())
-        index_knowledge_item(item)
-        _try_wiki_compile(item.id)
+        item = db.get_knowledge(item_id) or {"title": parsed.title, "file_type": parsed.file_type}
+        _try_wiki_compile(item_id)
         results.append({
-            "id": item.id,
-            "title": item.title,
-            "file_type": item.file_type,
+            "id": item_id,
+            "title": item["title"],
+            "file_type": item.get("file_type", parsed.file_type),
+            "path": item.get("source_path", ""),
             "message": "文件解析并索引成功",
         })
 
@@ -481,7 +483,8 @@ def ingest_url(url: str, tags: list[str] | None = None) -> dict:
 def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
     tags = tags or []
     parsed = parse_url(url)
-    db = _get_container().db
+    container = _get_container()
+    db = container.db
 
     import hashlib
     content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
@@ -494,22 +497,19 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
             "message": "网页内容已存在，跳过导入",
         }
 
-    item = KnowledgeItem(
-        title=parsed.title,
-        content=parsed.content,
+    item_id = container.file_graph_service.create_page(
+        parsed.title,
+        parsed.content,
         tags=tags,
-        source_type="web",
-        source_path=parsed.source_path,
-        file_type=parsed.file_type,
-        content_hash=content_hash,
+        metadata={"source_type": "web", "source_path": parsed.source_path, "file_type": parsed.file_type},
     )
-    db.insert_knowledge(item.to_row())
-    index_knowledge_item(item)
-    _try_wiki_compile(item.id)
+    item = db.get_knowledge(item_id) or {"title": parsed.title, "file_type": parsed.file_type}
+    _try_wiki_compile(item_id)
     return {
-        "id": item.id,
-        "title": item.title,
-        "file_type": item.file_type,
+        "id": item_id,
+        "title": item["title"],
+        "file_type": item.get("file_type", parsed.file_type),
+        "path": item.get("source_path", ""),
         "message": "网页解析并索引成功",
     }
 
