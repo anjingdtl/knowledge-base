@@ -142,22 +142,21 @@ class VectorSearchStage(PipelineStage):
     async def execute(self, ctx, config):
         if not self.is_enabled(config):
             return ctx
-        mode = config.get("mode", "blend")
         top_k = config.get("top_k", 10)
         try:
             searcher = HybridSearcher()
             all_results = []
             for query in ctx.rewritten_queries:
-                results = searcher.search(query, limit=top_k, mode=mode)
+                results = searcher.search([query], top_k=top_k)
                 all_results.extend(results)
             seen = set()
             unique = []
             for r in all_results:
-                kid = r.get("knowledge_id")
-                if kid and kid not in seen:
-                    seen.add(kid)
+                rid = r.get("id", r.get("metadata", {}).get("page_id", ""))
+                if rid and rid not in seen:
+                    seen.add(rid)
                     unique.append(r)
-            unique.sort(key=lambda x: x.get("score", 0), reverse=True)
+            unique.sort(key=lambda x: x.get("rrf_score", x.get("vec_score", 0)), reverse=True)
             ctx.candidates = unique[:top_k]
         except Exception as e:
             logger.warning("Vector search failed: %s", e)
@@ -243,10 +242,13 @@ class GenerateStage(PipelineStage):
         pass  # 实际构建在 _build_context_from_filtered
 
     def _build_context_from_filtered(self, filtered):
-        """批量查询标题，组装上下文和来源列表（从旧版 rag.py 合并）"""
+        """批量查询标题，组装上下文和来源列表"""
         kid_map = {}
         for r in filtered:
-            kid = r.get("metadata", {}).get("knowledge_id", "") if isinstance(r.get("metadata"), dict) else r.get("knowledge_id", "")
+            meta = r.get("metadata", {}) if isinstance(r.get("metadata"), dict) else {}
+            kid = meta.get("page_id", meta.get("knowledge_id", ""))
+            if not kid:
+                kid = r.get("knowledge_id", "")
             if kid:
                 kid_map[kid] = True
         items = Database.get_knowledge_batch(list(kid_map.keys())) if kid_map else {}
@@ -255,9 +257,12 @@ class GenerateStage(PipelineStage):
         for i, result in enumerate(filtered):
             text = result.get("text", result.get("chunk_text", ""))
             context_parts.append(f"[来源{i+1}]\n{text}")
-            kid = result.get("metadata", {}).get("knowledge_id", "") if isinstance(result.get("metadata"), dict) else result.get("knowledge_id", "")
+            meta = result.get("metadata", {}) if isinstance(result.get("metadata"), dict) else {}
+            kid = meta.get("page_id", meta.get("knowledge_id", ""))
+            if not kid:
+                kid = result.get("knowledge_id", "")
             item = items.get(kid)
-            title = result.get("metadata", {}).get("title") if isinstance(result.get("metadata"), dict) else result.get("title")
+            title = meta.get("title") if isinstance(meta, dict) else result.get("title")
             if not title and item:
                 title = item.get("title", "未知")
             if not title:
@@ -267,7 +272,7 @@ class GenerateStage(PipelineStage):
                 "knowledge_id": kid,
                 "title": title,
                 "text_preview": text[:200],
-                "score": result.get("rerank_score", result.get("score", result.get("distance", 0))),
+                "score": result.get("rerank_score", result.get("rrf_score", result.get("score", result.get("distance", 0)))),
             })
         return context_parts, sources
 
