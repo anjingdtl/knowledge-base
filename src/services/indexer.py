@@ -153,3 +153,23 @@ def reindex_all(progress_callback: callable = None) -> dict:
             logging.error(f"Reindex failed for {row.get('title', '')}: {e}")
 
     return {"total": total, "success": success, "failed": failed, "errors": errors[:10]}
+
+
+class IndexerService:
+    """Indexer 服务类 — 封装 indexer 函数，供 Container DI 使用"""
+
+    def __init__(self, db, vectorstore, embedding, config):
+        self._db = db
+        self._vectorstore = vectorstore
+        self._embedding = embedding
+        self._config = config
+
+    def index(self, item):
+        from src.models.knowledge import KnowledgeItem
+        index_knowledge_item(item)
+
+    def reindex(self, item_id: str, item):
+        reindex_knowledge_item(item_id, item)
+
+    def reindex_all(self, progress_callback=None):
+        return reindex_all(progress_callback)
