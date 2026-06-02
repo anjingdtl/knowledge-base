@@ -63,6 +63,7 @@ class AppContainer:
     _wiki_workflow: Optional[object] = field(default=None, repr=False)
     _graph_builder: Optional[object] = field(default=None, repr=False)
     _librarian: Optional[object] = field(default=None, repr=False)
+    _search_service: Optional[object] = field(default=None, repr=False)
 
     @property
     def indexer(self):
@@ -126,6 +127,15 @@ class AppContainer:
             from src.services.librarian import LibrarianService
             self._librarian = LibrarianService()
         return self._librarian
+
+    @property
+    def search_service(self):
+        if self._search_service is None:
+            from src.services.search_service import SearchService
+            self._search_service = SearchService(
+                self.config, self.db, self.block_store, self.embedding, self.llm
+            )
+        return self._search_service
 
 
 def create_container(config_path: str | None = None) -> AppContainer:

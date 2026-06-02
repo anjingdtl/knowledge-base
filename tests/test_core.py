@@ -358,3 +358,12 @@ class TestRepositories:
         assert graph["name"] == "测试图谱"
         graphs = repo.list_graphs()
         assert len(graphs) == 1
+
+
+class TestSearchServiceIntegration:
+    def test_container_search_service_accessible(self):
+        """search_service 属性可访问"""
+        from src.core.container import create_container
+        container = create_container()
+        assert container.search_service is not None
+        assert hasattr(container.search_service, 'search')
