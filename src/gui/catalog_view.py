@@ -206,8 +206,8 @@ class CatalogView(QWidget):
         self.stat_files.setText(f"{stats['total_files']} 个文件")
         self.stat_size.setText(_format_size(stats["total_size"]))
         total_cats = 1 + sum(
-            1 + len(info.get("children", []))
-            for info in CLASSIFICATION_SCHEMA.values()
+            1 + len(info.get("subcategories", []))
+            for info in CLASSIFICATION_SCHEMA
         )
         self.stat_cats.setText(f"{stats['category_coverage']} / {total_cats} 分类")
 

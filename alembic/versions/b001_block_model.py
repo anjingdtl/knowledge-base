@@ -33,7 +33,7 @@ def upgrade() -> None:
         "block_refs",
         sa.Column("source_id", sa.Text, sa.ForeignKey("blocks.id", ondelete="CASCADE"), primary_key=True),
         sa.Column("target_id", sa.Text, sa.ForeignKey("blocks.id", ondelete="CASCADE"), primary_key=True),
-        sa.Column("ref_type", sa.Text, server_default="link"),
+        sa.Column("ref_type", sa.Text, server_default="link", primary_key=True),
     )
 
     op.create_table(

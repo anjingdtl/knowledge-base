@@ -153,3 +153,15 @@ class VectorStore:
         conn = self._get_conn()
         row = conn.execute("SELECT count(*) FROM vec_chunks").fetchone()
         return row[0] if row else 0
+
+    def count_by_knowledge(self, knowledge_id: str) -> int:
+        self._ensure_table()
+        conn = self._get_conn()
+        row = conn.execute(
+            """SELECT COUNT(*)
+               FROM vec_chunks vc
+               JOIN knowledge_chunks kc ON kc.rowid = vc.rowid
+               WHERE kc.knowledge_id = ?""",
+            (knowledge_id,),
+        ).fetchone()
+        return row[0] if row else 0

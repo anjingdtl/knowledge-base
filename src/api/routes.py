@@ -73,6 +73,7 @@ def _check_auth(authorization: str = Header(default="")) -> str:
 # ---- Knowledge ----
 
 kb_router = APIRouter(prefix="/knowledge", tags=["knowledge"], dependencies=[Depends(_check_auth)])
+refs_router = APIRouter(prefix="/refs", tags=["refs"], dependencies=[Depends(_check_auth)])
 
 
 class KnowledgeCreate(BaseModel):
@@ -113,7 +114,7 @@ def list_knowledge(
 @kb_router.get("/search")
 def search_knowledge(q: str, limit: int = 20, offset: int = 0):
     results = Database.search_knowledge(q, limit=limit, offset=offset)
-    return {"results": results, "total": len(results)}
+    return {"results": results, "items": results, "total": len(results)}
 
 
 @kb_router.get("/tags")
@@ -127,6 +128,21 @@ def get_knowledge(item_id: str):
     if not item:
         raise HTTPException(404, "知识条目不存在")
     return item
+
+
+@kb_router.get("/{item_id}/blocks")
+def get_knowledge_blocks(item_id: str, limit: int = Query(1000, ge=1, le=5000), offset: int = Query(0, ge=0)):
+    item = Database.get_knowledge(item_id)
+    if not item:
+        raise HTTPException(404, "Knowledge item not found")
+    from src.repositories.block_repo import BlockRepository
+    repo = BlockRepository(db=Database)
+    blocks = repo.list_by_page(item_id, limit=limit, offset=offset)
+    return {
+        "page_id": item_id,
+        "total": repo.count_by_page(item_id),
+        "blocks": [_block_to_api(block) for block in blocks],
+    }
 
 
 @kb_router.post("", status_code=201)
@@ -193,6 +209,32 @@ def export_knowledge(data: KnowledgeBatchExport):
     return {"items": items, "count": len(items)}
 
 
+def _block_to_api(block):
+    row = block.to_row()
+    row["properties"] = block.properties
+    return row
+
+
+@refs_router.get("")
+def list_entity_refs(
+    source_type: Optional[str] = None,
+    source_id: Optional[str] = None,
+    target_type: Optional[str] = None,
+    target_id: Optional[str] = None,
+    limit: int = Query(200, ge=1, le=1000),
+):
+    from src.repositories.entity_ref_repo import EntityRefRepository
+    repo = EntityRefRepository(db=Database)
+    refs = repo.list_refs(
+        source_type=source_type,
+        source_id=source_id,
+        target_type=target_type,
+        target_id=target_id,
+        limit=limit,
+    )
+    return {"refs": [ref.to_row() for ref in refs], "total": len(refs)}
+
+
 # ---- Chat / RAG ----
 
 chat_router = APIRouter(prefix="/chat", tags=["chat"], dependencies=[Depends(_check_auth)])
@@ -207,6 +249,7 @@ class QuestionReq(BaseModel):
 def ask_question(data: QuestionReq):
     rag = RAGService()
     result = rag.query(data.question)
+    sources = _normalize_sources(result.get("sources", []))
     conv_id = data.conversation_id
     if not conv_id:
         conv = Conversation(title=data.question[:30])
@@ -215,9 +258,32 @@ def ask_question(data: QuestionReq):
     user_msg = ChatMessage(conversation_id=conv_id, role="user", content=data.question)
     Database.insert_message(user_msg.to_row())
     ai_msg = ChatMessage(conversation_id=conv_id, role="assistant",
-                         content=result["answer"], sources=result["sources"])
+                         content=result["answer"], sources=sources)
     Database.insert_message(ai_msg.to_row())
-    return {"conversation_id": conv_id, "answer": result["answer"], "sources": result["sources"]}
+    return {"conversation_id": conv_id, "answer": result["answer"], "sources": sources}
+
+
+def _normalize_sources(sources: list[dict]) -> list[dict]:
+    normalized = []
+    for source in sources or []:
+        metadata = source.get("metadata") or {}
+        block_id = (
+            source.get("block_id")
+            or source.get("chunk_id")
+            or metadata.get("block_id")
+            or source.get("id")
+        )
+        knowledge_id = source.get("knowledge_id") or metadata.get("knowledge_id")
+        snippet = source.get("snippet") or source.get("text") or source.get("content") or ""
+        normalized.append({
+            **source,
+            "block_id": block_id,
+            "knowledge_id": knowledge_id,
+            "title": source.get("title") or metadata.get("title") or "",
+            "snippet": snippet,
+            "score": source.get("score", source.get("distance")),
+        })
+    return normalized
 
 
 @chat_router.get("/conversations")

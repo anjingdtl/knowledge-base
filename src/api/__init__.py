@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.services.db import Database
 from src.utils.config import Config
 from src.version import APP_NAME, VERSION
-from src.api.routes import auth_router, kb_router, chat_router, wiki_router, jobs_router
+from src.api.routes import auth_router, kb_router, chat_router, wiki_router, jobs_router, refs_router
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +59,7 @@ def create_app() -> FastAPI:
 
     app.include_router(auth_router, prefix="/api")
     app.include_router(kb_router, prefix="/api")
+    app.include_router(refs_router, prefix="/api")
     app.include_router(chat_router, prefix="/api")
     app.include_router(wiki_router, prefix="/api")
     app.include_router(jobs_router, prefix="/api")

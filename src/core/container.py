@@ -43,6 +43,8 @@ class AppContainer:
     conversation_repo: "ConversationRepository" = field(default=None, repr=False)  # noqa: F821
     wiki_repo: "WikiRepository" = field(default=None, repr=False)  # noqa: F821
     graph_repo: "GraphRepository" = field(default=None, repr=False)  # noqa: F821
+    block_repo: "BlockRepository" = field(default=None, repr=False)  # noqa: F821
+    entity_ref_repo: "EntityRefRepository" = field(default=None, repr=False)  # noqa: F821
     category_repo: "CategoryRepository" = field(default=None, repr=False)  # noqa: F821
     job_repo: "JobRepository" = field(default=None, repr=False)  # noqa: F821
 
@@ -171,12 +173,16 @@ def create_container(config_path: str | None = None) -> AppContainer:
     from src.repositories.conversation_repo import ConversationRepository
     from src.repositories.wiki_repo import WikiRepository
     from src.repositories.graph_repo import GraphRepository
+    from src.repositories.block_repo import BlockRepository
+    from src.repositories.entity_ref_repo import EntityRefRepository
     from src.repositories.category_repo import CategoryRepository
     from src.repositories.job_repo import JobRepository
     container.knowledge_repo = KnowledgeRepository(db=Database)
     container.conversation_repo = ConversationRepository(db=Database)
     container.wiki_repo = WikiRepository(db=Database)
     container.graph_repo = GraphRepository(db=Database)
+    container.block_repo = BlockRepository(db=Database)
+    container.entity_ref_repo = EntityRefRepository(db=Database)
     container.category_repo = CategoryRepository(db=Database)
     container.job_repo = JobRepository(db=Database)
     logger.info("Repositories initialized")

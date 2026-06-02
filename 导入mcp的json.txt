@@ -1,88 +1,139 @@
-==========================================================
-  ShineHeKnowledge MCP Server 配置指南
-==========================================================
+============================================================
+  ShineHeKnowledge MCP Server 导入配置指南
+============================================================
 
-一、启动模式说明
-----------------------------------------------------------
+用途
+----
+本项目主要面向 Agent 通过 MCP 调用本地知识库。推荐优先使用 stdio 模式：
+由 Claude Code、Cursor、Cline、Roo Code、Windsurf、TeleClaw 等 Agent 自动启动
+run_mcp.py，不需要手动常驻服务，稳定性最高。
 
-  【stdio 模式 — 推荐】
-  由宿主 Agent（Claude Code / Cursor / Cline 等）自动启动和管理进程，
-  无需手动启动服务器，最稳定可靠。
+当前项目路径
+------------
+D:/ClaudeCodeWorkSpace/projects/knowledge-base
 
-  【HTTP 模式 — 远程/局域网共享】
-  需要先手动启动服务器：
-    shinehe-mcp -t streamable-http --host 0.0.0.0 --port 9000
-  然后各 Agent 通过 http://<IP>:9000/mcp 接入。
-  适合局域网内多 Agent 共享同一个知识库。
+推荐 Python 路径
+---------------
+C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe
 
+Windows 关键注意事项
+--------------------
+1. 不要用 cmd /c 包装 MCP 命令；cmd 会占用 stdin，破坏 MCP JSON-RPC 握手。
+2. 推荐使用 python.exe 的绝对路径，不要依赖 Agent 子进程里的 PATH。
+3. 必须设置 cwd 或 SHINEHE_HOME，确保 config.yaml、data/kb.db 能被正确找到。
+4. stdio 模式不需要手动执行 start_mcp.bat；Agent 会按 JSON 配置自动启动。
+5. HTTP 模式只用于多个 Agent 共享一个常驻服务，需先运行 start_mcp.bat。
 
-二、Windows 环境重要注意事项（踩坑记录）
-----------------------------------------------------------
+Claude Code 快速导入
+--------------------
+方式一：源码 stdio 模式，推荐
 
-  1. 【不要用 cmd /c 包装 Python 命令】
-     cmd.exe 会拦截 stdin，把 JSON-RPC 消息当作 cmd 命令执行，
-     导致 MCP 握手失败。直接用 Python 可执行文件路径。
+claude mcp add-json shinehe-kb "{\"command\":\"C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe\",\"args\":[\"D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py\"],\"cwd\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\",\"env\":{\"SHINEHE_HOME\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\"},\"type\":\"stdio\"}" -s user
 
-  2. 【使用 Python 绝对路径】
-     Agent 启动 MCP 子进程时，PATH 中可能找不到 python。
-     推荐使用绝对路径，例如：
-     "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe"
+方式二：已执行 pip install -e . 后
 
-  3. 【设置 cwd 字段】
-     确保 config.yaml 等配置文件能被正确找到：
-     "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
+claude mcp add shinehe-kb -- shinehe-mcp
 
-  4. 【不要用 python3】
-     Windows 上 python3 可能指向 Microsoft Store 的 shim，
-     统一使用 python 或绝对路径。
+方式三：HTTP 模式，需先双击 start_mcp.bat 或执行下列命令
 
+python run_mcp.py -t streamable-http --host 127.0.0.1 --port 9000
+claude mcp add -t http shinehe-kb http://127.0.0.1:9000/mcp
 
-三、各 Agent 配置模板
-----------------------------------------------------------
-  详细 JSON 模板见 mcp_config_templates/ 目录：
+通用 mcpServers JSON
+--------------------
+把下面片段放入支持 mcpServers 的 Agent 配置文件：
 
-  claude-code.json  — Claude Code（CLI）
-  cursor.json       — Cursor
-  cline.json        — Cline（VS Code 扩展）
-  windsurf.json     — Windsurf
-  roo-code.json     — Roo Code（VS Code 扩展）
-  opencode.json     — OpenCode（CLI，https://opencode.ai）
-  teleclaw.json     — TeleClaw 星辰超级智能体桌面版（中国电信）
-  http-remote.json  — HTTP 远程接入模板
+{
+  "mcpServers": {
+    "shinehe-kb": {
+      "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
+      "args": [
+        "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
+      ],
+      "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base",
+      "env": {
+        "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
+      },
+      "type": "stdio"
+    }
+  }
+}
 
+OpenCode JSON
+-------------
+OpenCode 使用 mcp 字段，不是 mcpServers：
 
-四、Claude Code 快速配置
-----------------------------------------------------------
+{
+  "mcp": {
+    "shinehe-kb": {
+      "type": "local",
+      "command": [
+        "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
+        "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
+      ],
+      "environment": {
+        "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
+      },
+      "enabled": true
+    }
+  }
+}
 
-  方式一：CLI 命令（推荐）
+HTTP 远程接入 JSON
+------------------
+先启动：
+python run_mcp.py -t streamable-http --host 0.0.0.0 --port 9000
 
-    # 源码模式（Windows）
-    claude mcp add-json shinehe-kb "{\"command\":\"C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe\",\"args\":[\"run_mcp.py\"],\"cwd\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\",\"type\":\"stdio\"}" -s user
+再配置：
 
-    # 已安装模式（pip install -e . 后可用）
-    claude mcp add shinehe-kb -- shinehe-mcp
+{
+  "mcpServers": {
+    "shinehe-kb": {
+      "type": "http",
+      "url": "http://127.0.0.1:9000/mcp"
+    }
+  }
+}
 
-    # HTTP 远程模式
-    claude mcp add -t http shinehe-kb http://127.0.0.1:9000/mcp
+一键写入 Agent 配置
+-------------------
+也可以运行交互式脚本：
 
-  方式二：手动编辑 ~/.claude.json
+python scripts/setup_mcp.py
 
-    在 "mcpServers" 字段中添加配置（参考 claude-code.json 模板）
+脚本会自动生成 stdio 配置，并写入所选 Agent 的配置文件。
 
+验证命令
+--------
+Claude Code:
+claude mcp list
+claude mcp get shinehe-kb
 
-五、一键配置脚本
-----------------------------------------------------------
+本地代码测试:
+python -m pytest tests/test_mcp_server.py -q
 
-    python scripts/setup_mcp.py
+可用 MCP 工具
+-------------
+search            语义搜索知识库
+search_fulltext   FTS5 全文搜索
+ask               RAG 问答
+create            创建知识
+read              读取知识详情
+update            更新知识
+delete            删除知识
+list_knowledge    列出知识条目
+tags              获取标签
+ingest_file       导入本地文件
+ingest_url        导入网页
+reindex_all       重建索引
 
-  自动检测 shinehe-mcp 是否已安装，交互式选择要配置的 Agent。
-
-
-六、验证连接
-----------------------------------------------------------
-
-    claude mcp list          # 查看所有 MCP 服务器状态
-    claude mcp get shinehe-kb  # 查看单个服务器详情
-
-
-==========================================================
+更多模板
+--------
+mcp_config_templates/claude-code.json
+mcp_config_templates/cursor.json
+mcp_config_templates/cline.json
+mcp_config_templates/windsurf.json
+mcp_config_templates/roo-code.json
+mcp_config_templates/opencode.json
+mcp_config_templates/teleclaw.json
+mcp_config_templates/http-remote.json

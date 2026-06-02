@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { apiGet } from '../api'
 
 interface KnowledgeItem {
   id: string
@@ -21,9 +22,8 @@ export default function KnowledgeView() {
 
   const fetchItems = async () => {
     try {
-      const res = await fetch('/api/knowledge?limit=50')
-      const data = await res.json()
-      setItems(data.items || data || [])
+      const data = await apiGet<{ items?: KnowledgeItem[] } | KnowledgeItem[]>('/api/knowledge?page=1&page_size=50')
+      setItems(Array.isArray(data) ? data : data.items || [])
     } catch (err) {
       console.error('Failed to fetch knowledge:', err)
     } finally {
@@ -35,9 +35,8 @@ export default function KnowledgeView() {
     if (!search.trim()) return fetchItems()
     setLoading(true)
     try {
-      const res = await fetch(`/api/knowledge/search?q=${encodeURIComponent(search)}`)
-      const data = await res.json()
-      setItems(data.items || data || [])
+      const data = await apiGet<{ items?: KnowledgeItem[]; results?: KnowledgeItem[] } | KnowledgeItem[]>(`/api/knowledge/search?q=${encodeURIComponent(search)}`)
+      setItems(Array.isArray(data) ? data : data.items || data.results || [])
     } catch (err) {
       console.error('Search failed:', err)
     } finally {
@@ -86,7 +85,7 @@ export default function KnowledgeView() {
               </p>
               {item.tags && (
                 <div className="mt-2 flex gap-1 flex-wrap">
-                  {JSON.parse(item.tags || '[]').map((tag: string) => (
+                  {safeTags(item.tags).map((tag: string) => (
                     <span key={tag} className="text-xs px-2 py-0.5 bg-[var(--color-primary)]/20 text-[var(--color-accent)] rounded">
                       {tag}
                     </span>
@@ -99,4 +98,12 @@ export default function KnowledgeView() {
       )}
     </div>
   )
+}
+
+function safeTags(raw: string): string[] {
+  try {
+    return JSON.parse(raw || '[]')
+  } catch {
+    return []
+  }
 }

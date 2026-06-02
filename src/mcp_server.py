@@ -18,12 +18,17 @@ from fastmcp import FastMCP
 
 from src.models.knowledge import KnowledgeItem
 from src.services.db import Database
+from src.services.hybrid_search import HybridSearcher
+from src.services.llm import LLMService
 from src.services.mcp_heartbeat import beat
+from src.services.query_rewriter import QueryRewriter
 from src.services.rag import RAGService
+from src.services.reranker import LLMReranker
 from src.services.file_parser import parse_file, parse_url
 from src.services.indexer import index_knowledge_item
 from src.services.vectorstore import VectorStore
 from src.utils.config import Config
+from src.utils.llm_text import strip_think
 from src.version import VERSION
 
 
@@ -91,11 +96,40 @@ def search(query: str, top_k: int = 5) -> list[dict]:
 
 
 def _do_search(query: str, top_k: int) -> list[dict]:
-    """同步执行的搜索逻辑：向量 + FTS 合并去重"""
+    """同步执行的搜索逻辑：查询改写 → 混合检索 → 重排序 → Wiki 优先"""
     output = []
-    seen_kids = set()
 
-    # Wiki 结构化知识优先
+    # 1. 查询改写
+    queries = [query]
+    if Config.get("rag.enable_query_rewriting", False):
+        try:
+            rewriter = QueryRewriter()
+            queries = rewriter.rewrite(query)
+        except Exception as e:
+            logger.warning("Query rewrite in search failed: %s", e)
+
+    # 2. 混合检索（HybridSearcher: 向量 + 关键词 blend + RRF 融合）
+    candidates = []
+    try:
+        searcher = HybridSearcher()
+        candidates = searcher.search(queries, top_k=top_k)
+    except Exception as e:
+        logger.warning("Hybrid search failed, falling back to vector only: %s", e)
+        try:
+            candidates = VectorStore().search(query, top_k=top_k)
+        except Exception as e2:
+            logger.warning("Vector search also failed: %s", e2)
+
+    # 3. 重排序（专用 reranker 模型或 LLM 打分）
+    if candidates:
+        try:
+            reranker = LLMReranker()
+            candidates = reranker.rerank(query, candidates, top_n=top_k)
+        except Exception as e:
+            logger.warning("Rerank in search failed, using raw order: %s", e)
+
+    # 4. Wiki 结构化知识优先
+    seen_kids = set()
     try:
         wiki_results = Database.search_wiki_fts(query, limit=WIKI_SEARCH_LIMIT)
         for wr in wiki_results:
@@ -111,41 +145,21 @@ def _do_search(query: str, top_k: int) -> list[dict]:
     except Exception as e:
         logger.warning("Wiki FTS search failed: %s", e)
 
-    # 向量搜索
-    try:
-        vec_results = VectorStore().search(query, top_k=top_k)
-        for r in vec_results:
-            kid = (r.get("metadata") or {}).get("knowledge_id", "")
-            if kid:
-                seen_kids.add(kid)
-            item = Database.get_knowledge(kid) if kid else None
-            output.append({
-                "source": "knowledge",
-                "chunk_id": r["id"],
-                "knowledge_id": kid,
-                "title": item["title"] if item else "未知",
-                "text": r["text"],
-                "score": r["distance"],
-            })
-    except Exception as e:
-        logger.warning("Vector search failed: %s", e)
-
-    # FTS 补充搜索（合并去重：补充向量搜索未命中的知识条目）
-    try:
-        fts_results = Database.search_knowledge(query, limit=top_k)
-        for item in fts_results:
-            kid = item.get("id", "")
-            if kid not in seen_kids:
-                seen_kids.add(kid)
-                output.append({
-                    "source": "knowledge_fts",
-                    "knowledge_id": kid,
-                    "title": item["title"],
-                    "text": (item.get("content", "") or "")[:500],
-                    "score": item.get("fts_rank", 0),
-                })
-    except Exception as e:
-        logger.warning("FTS search failed: %s", e)
+    # 5. 组装检索+重排结果
+    for r in candidates:
+        kid = (r.get("metadata") or {}).get("knowledge_id", "")
+        if kid:
+            seen_kids.add(kid)
+        item = Database.get_knowledge(kid) if kid else None
+        score = r.get("rerank_score", r.get("rrf_score", r.get("score", r.get("distance", 0))))
+        output.append({
+            "source": "knowledge",
+            "chunk_id": r.get("id", ""),
+            "knowledge_id": kid,
+            "title": item["title"] if item else "未知",
+            "text": r.get("text", ""),
+            "score": score,
+        })
 
     return output
 

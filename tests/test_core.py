@@ -39,6 +39,34 @@ class TestDualMethodConfig:
         c.set("test.share", "shared")
         assert Config.get("test.share") == "shared"
 
+    def test_save_keeps_secret_when_keyring_write_fails(self, tmp_path, monkeypatch):
+        import yaml
+        import src.utils.config as config_mod
+
+        class BrokenKeyring:
+            class errors:
+                class PasswordDeleteError(Exception):
+                    pass
+
+            @staticmethod
+            def set_password(*args, **kwargs):
+                raise RuntimeError("keyring unavailable")
+
+            @staticmethod
+            def delete_password(*args, **kwargs):
+                raise BrokenKeyring.errors.PasswordDeleteError()
+
+        cfg = Config()
+        cfg._data = {"llm": {"api_key": "secret-key", "model": "test"}}
+        monkeypatch.setattr(config_mod, "_keyring_available", True)
+        monkeypatch.setattr(config_mod, "keyring", BrokenKeyring)
+
+        out = tmp_path / "config.yaml"
+        cfg.save(str(out))
+
+        saved = yaml.safe_load(out.read_text(encoding="utf-8"))
+        assert saved["llm"]["api_key"] == "secret-key"
+
 
 class TestDIContainer:
     def test_create_container(self):
@@ -139,6 +167,20 @@ class TestQueryBuilder:
 
 
 class TestBlockModel:
+    def test_runtime_schema_creates_block_graph_tables(self):
+        rows = Database.get_conn().execute(
+            "SELECT name FROM sqlite_master WHERE type='table'"
+        ).fetchall()
+        names = {row["name"] for row in rows}
+        assert {
+            "blocks",
+            "block_refs",
+            "entity_refs",
+            "block_property_index",
+            "embedding_cache",
+            "users",
+        }.issubset(names)
+
     def test_block_crud(self):
         from src.models.block import Block
         b = Block(id="blk-1", page_id="page-1", content="Hello", block_type="text")
@@ -159,6 +201,38 @@ class TestBlockModel:
         row = ref.to_row()
         assert row["source_type"] == "knowledge"
         assert row["ref_type"] == "link"
+
+    def test_block_repository_crud_properties_and_refs(self):
+        from src.models.block import Block, EntityRef
+        from src.repositories.block_repo import BlockRepository
+        from src.repositories.entity_ref_repo import EntityRefRepository
+
+        blocks = BlockRepository(db=Database)
+        refs = EntityRefRepository(db=Database)
+
+        blocks.upsert(Block(
+            id="chunk-1",
+            page_id="knowledge-1",
+            content="Block content",
+            properties={"priority": "high"},
+            order_idx=1,
+        ))
+        got = blocks.get("chunk-1")
+        assert got is not None
+        assert got.content == "Block content"
+        assert got.properties["priority"] == "high"
+        assert blocks.list_by_page("knowledge-1")[0].id == "chunk-1"
+
+        refs.upsert(EntityRef(
+            id="ref-1",
+            source_type="knowledge",
+            source_id="knowledge-1",
+            target_type="wiki",
+            target_id="wiki-1",
+            ref_type="derived_from",
+        ))
+        assert refs.list_for_source("knowledge", "knowledge-1")[0].target_id == "wiki-1"
+        assert refs.list_for_target("wiki", "wiki-1")[0].source_id == "knowledge-1"
 
 
 class TestDSL:
