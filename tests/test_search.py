@@ -121,3 +121,35 @@ class TestHybridSearch:
         results = searcher._blend_search(["管理制度"], top_k=5)
 
         assert any(r["metadata"]["knowledge_id"] == "fts" for r in results)
+
+    def test_blend_search_returns_block_level_results(self, monkeypatch):
+        """混合搜索返回 block 级结果，metadata 包含 page_id"""
+        searcher = HybridSearcher()
+
+        monkeypatch.setattr(
+            searcher,
+            "_vector_search",
+            lambda queries, top_k: [
+                {
+                    "text": "向量搜索结果",
+                    "metadata": {"page_id": "p-vec", "block_type": "text", "properties": {"chunk_index": 0}},
+                    "distance": 0.3,
+                }
+            ],
+        )
+        monkeypatch.setattr(
+            searcher,
+            "_keyword_search",
+            lambda queries, top_k: [
+                {
+                    "text": "关键词搜索结果",
+                    "metadata": {"page_id": "p-fts", "block_type": "text", "properties": {"chunk_index": 1}},
+                    "distance": 0,
+                    "fts_rank": -10.0,
+                }
+            ],
+        )
+
+        results = searcher._blend_search(["测试查询"], top_k=5)
+        assert len(results) >= 1
+        assert any(r["metadata"].get("page_id") for r in results)
