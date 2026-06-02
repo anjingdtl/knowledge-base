@@ -26,6 +26,7 @@ class ChatWorker(QThread):
     chunk_received = Signal(str)
     phase_changed = Signal(str, str)
     finished = Signal(str, list)
+    error = Signal(str)
 
     def __init__(self, question: str, conversation_id: str, history: list):
         super().__init__()
@@ -91,7 +92,7 @@ class ChatWorker(QThread):
             self.finished.emit(full_text, sources)
         except Exception as e:
             _notify_status("error", str(e)[:100])
-            self.finished.emit(f"发生错误: {str(e)}", [])
+            self.error.emit(str(e))
         finally:
             _notify_status("idle")
 
@@ -452,12 +453,13 @@ class ChatView(QWidget):
         self._worker.phase_changed.connect(self._on_phase)
         self._worker.chunk_received.connect(self._on_chunk)
         self._worker.finished.connect(self._on_response_finished)
+        self._worker.error.connect(self._on_worker_error)
         self._worker.start()
 
         if self._current_conv_id:
             Database.get_conn().execute(
-                "UPDATE conversations SET title = ? WHERE id = ? AND title = '新对话'",
-                (question[:30], self._current_conv_id),
+                "UPDATE conversations SET title = ? WHERE id = ? AND title = ?",
+                (question[:30], self._current_conv_id, '新对话'),
             )
             Database.get_conn().commit()
             current_item = self.conv_list.currentItem()
@@ -511,6 +513,15 @@ class ChatView(QWidget):
         cursor.insertText(chunk)
         self.chat_output.setTextCursor(cursor)
         self.chat_output.ensureCursorVisible()
+
+    def _on_worker_error(self, error_msg: str):
+        """Handle errors from ChatWorker without saving to database."""
+        self._stop_thinking()
+        self.btn_send.setEnabled(True)
+        if self._llm_indicator:
+            self._llm_indicator.set_status("idle")
+        self._display_messages()
+        QMessageBox.warning(self, "错误", f"生成回答时出错: {error_msg}")
 
     def _on_response_finished(self, full_text: str, sources: list):
         self._stop_thinking()

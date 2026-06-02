@@ -5,32 +5,63 @@ import threading
 
 import sqlite_vec
 
-from src.utils.config import Config
-
 _lock = threading.Lock()
 _VEC_DIM = 1024  # bge-m3 输出维度
 
 
 class VectorStore:
+    """向量存储服务
+
+    支持两种模式:
+    1. DI 注入模式: VectorStore.__new__ + 手动设置 _db
+    2. 单例模式（兼容）: VectorStore() 自动获取 Database 单例
+    """
     _instance = None
 
-    def __new__(cls):
+    def __new__(cls, db=None):
+        if db is not None:
+            # DI 模式：创建独立实例
+            inst = super().__new__(cls)
+            inst._initialized = False
+            inst._db = db
+            return inst
+        # 兼容模式：返回全局单例
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
+            cls._instance._db = None
         return cls._instance
 
+    def _check_db_changed(self):
+        """检测数据库连接是否发生变化，若变化则重置初始化状态"""
+        if self._db is not None:
+            return
+        from src.services.db import Database
+        current_db = Database._instance if hasattr(Database, '_instance') else None
+        if current_db is not None and current_db is not getattr(self, '_last_db_instance', None):
+            self._last_db_instance = current_db
+            self._initialized = False
+
+    def _get_conn(self):
+        """获取数据库连接，优先使用注入的 db，回退到 Database 单例"""
+        if self._db is not None:
+            return self._db.get_conn()
+        from src.services.db import Database
+        return Database.get_conn()
+
     def _ensure_table(self):
+        self._check_db_changed()
         if self._initialized:
             return
         with _lock:
             if self._initialized:
                 return
-            from src.services.db import Database
-            conn = Database.get_conn()
-            conn.enable_load_extension(True)
-            sqlite_vec.load(conn)
-            conn.enable_load_extension(False)
+            conn = self._get_conn()
+            try:
+                conn.enable_load_extension(True)
+                sqlite_vec.load(conn)
+            finally:
+                conn.enable_load_extension(False)
             conn.execute(
                 f"CREATE VIRTUAL TABLE IF NOT EXISTS vec_chunks USING vec0("
                 f"embedding float[{_VEC_DIM}] distance_metric=cosine)"
@@ -44,8 +75,7 @@ class VectorStore:
     def add_chunk_embedding(self, chunk_id: str, knowledge_id: str,
                             embedding: list[float], metadata: dict | None = None):
         self._ensure_table()
-        from src.services.db import Database
-        conn = Database.get_conn()
+        conn = self._get_conn()
         row = conn.execute(
             "SELECT rowid FROM knowledge_chunks WHERE id = ?", (chunk_id,)
         ).fetchone()
@@ -76,8 +106,7 @@ class VectorStore:
             from src.services.embedding import EmbeddingService
             query_embedding = EmbeddingService().embed(query)
 
-        from src.services.db import Database
-        conn = Database.get_conn()
+        conn = self._get_conn()
         packed = self._pack_embedding(query_embedding)
         rows = conn.execute(
             """SELECT kc.id, kc.knowledge_id, kc.chunk_text,
@@ -101,20 +130,38 @@ class VectorStore:
 
     def delete_by_knowledge(self, knowledge_id: str):
         self._ensure_table()
-        from src.services.db import Database
-        conn = Database.get_conn()
-        rows = conn.execute(
-            "SELECT rowid FROM knowledge_chunks WHERE knowledge_id = ?",
-            (knowledge_id,),
-        ).fetchall()
-        if rows:
-            rowids = ",".join(str(r[0]) for r in rows)
-            conn.execute(f"DELETE FROM vec_chunks WHERE rowid IN ({rowids})")
-            conn.commit()
+        conn = self._get_conn()
+        conn.execute("BEGIN")
+        try:
+            rows = conn.execute(
+                "SELECT rowid FROM knowledge_chunks WHERE knowledge_id = ?",
+                (knowledge_id,),
+            ).fetchall()
+            if rows:
+                placeholders = ",".join("?" for _ in rows)
+                conn.execute(
+                    f"DELETE FROM vec_chunks WHERE rowid IN ({placeholders})",
+                    [r[0] for r in rows],
+                )
+            conn.execute("COMMIT")
+        except Exception:
+            conn.execute("ROLLBACK")
+            raise
 
     def count(self) -> int:
         self._ensure_table()
-        from src.services.db import Database
-        conn = Database.get_conn()
+        conn = self._get_conn()
         row = conn.execute("SELECT count(*) FROM vec_chunks").fetchone()
+        return row[0] if row else 0
+
+    def count_by_knowledge(self, knowledge_id: str) -> int:
+        self._ensure_table()
+        conn = self._get_conn()
+        row = conn.execute(
+            """SELECT COUNT(*)
+               FROM vec_chunks vc
+               JOIN knowledge_chunks kc ON kc.rowid = vc.rowid
+               WHERE kc.knowledge_id = ?""",
+            (knowledge_id,),
+        ).fetchone()
         return row[0] if row else 0

@@ -33,7 +33,17 @@ class RegisterReq(BaseModel):
 
 
 @auth_router.post("/register")
-def api_register(req: RegisterReq):
+def api_register(req: RegisterReq, authorization: str = Header(default="")):
+    from src.api.auth import get_users_db
+    users = get_users_db()
+    # First user can register without auth (bootstrap)
+    if users:
+        # Subsequent registrations require admin authentication
+        if not authorization.startswith("Bearer "):
+            raise HTTPException(401, "需要管理员认证才能注册新用户")
+        user = decode_token(authorization[7:])
+        if not user:
+            raise HTTPException(401, "令牌无效或已过期")
     try:
         token = register_user(req.username, req.password)
         return {"access_token": token, "token_type": "bearer"}
@@ -63,6 +73,7 @@ def _check_auth(authorization: str = Header(default="")) -> str:
 # ---- Knowledge ----
 
 kb_router = APIRouter(prefix="/knowledge", tags=["knowledge"], dependencies=[Depends(_check_auth)])
+refs_router = APIRouter(prefix="/refs", tags=["refs"], dependencies=[Depends(_check_auth)])
 
 
 class KnowledgeCreate(BaseModel):
@@ -88,8 +99,8 @@ class KnowledgeBatchExport(BaseModel):
 def list_knowledge(
     tag: Optional[str] = None,
     file_type: Optional[str] = None,
-    sort_by: str = "updated_at",
-    sort_order: str = "DESC",
+    sort_by: str = Query("updated_at", pattern="^(updated_at|created_at|title)$"),
+    sort_order: str = Query("DESC", pattern="^(ASC|DESC)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=200),
 ):
@@ -103,7 +114,7 @@ def list_knowledge(
 @kb_router.get("/search")
 def search_knowledge(q: str, limit: int = 20, offset: int = 0):
     results = Database.search_knowledge(q, limit=limit, offset=offset)
-    return {"results": results, "total": len(results)}
+    return {"results": results, "items": results, "total": len(results)}
 
 
 @kb_router.get("/tags")
@@ -117,6 +128,21 @@ def get_knowledge(item_id: str):
     if not item:
         raise HTTPException(404, "知识条目不存在")
     return item
+
+
+@kb_router.get("/{item_id}/blocks")
+def get_knowledge_blocks(item_id: str, limit: int = Query(1000, ge=1, le=5000), offset: int = Query(0, ge=0)):
+    item = Database.get_knowledge(item_id)
+    if not item:
+        raise HTTPException(404, "Knowledge item not found")
+    from src.repositories.block_repo import BlockRepository
+    repo = BlockRepository(db=Database)
+    blocks = repo.list_by_page(item_id, limit=limit, offset=offset)
+    return {
+        "page_id": item_id,
+        "total": repo.count_by_page(item_id),
+        "blocks": [_block_to_api(block) for block in blocks],
+    }
 
 
 @kb_router.post("", status_code=201)
@@ -149,8 +175,14 @@ def update_knowledge(item_id: str, data: KnowledgeUpdate):
 
 @kb_router.delete("/{item_id}")
 def delete_knowledge(item_id: str):
-    VectorStore().delete_by_knowledge(item_id)
+    existing = Database.get_knowledge(item_id)
+    if not existing:
+        raise HTTPException(404, "知识条目不存在")
     Database.delete_knowledge(item_id)
+    try:
+        VectorStore().delete_by_knowledge(item_id)
+    except Exception:
+        pass  # Vector cleanup best-effort; DB record already deleted
     return {"message": "删除成功"}
 
 
@@ -177,6 +209,32 @@ def export_knowledge(data: KnowledgeBatchExport):
     return {"items": items, "count": len(items)}
 
 
+def _block_to_api(block):
+    row = block.to_row()
+    row["properties"] = block.properties
+    return row
+
+
+@refs_router.get("")
+def list_entity_refs(
+    source_type: Optional[str] = None,
+    source_id: Optional[str] = None,
+    target_type: Optional[str] = None,
+    target_id: Optional[str] = None,
+    limit: int = Query(200, ge=1, le=1000),
+):
+    from src.repositories.entity_ref_repo import EntityRefRepository
+    repo = EntityRefRepository(db=Database)
+    refs = repo.list_refs(
+        source_type=source_type,
+        source_id=source_id,
+        target_type=target_type,
+        target_id=target_id,
+        limit=limit,
+    )
+    return {"refs": [ref.to_row() for ref in refs], "total": len(refs)}
+
+
 # ---- Chat / RAG ----
 
 chat_router = APIRouter(prefix="/chat", tags=["chat"], dependencies=[Depends(_check_auth)])
@@ -191,6 +249,7 @@ class QuestionReq(BaseModel):
 def ask_question(data: QuestionReq):
     rag = RAGService()
     result = rag.query(data.question)
+    sources = _normalize_sources(result.get("sources", []))
     conv_id = data.conversation_id
     if not conv_id:
         conv = Conversation(title=data.question[:30])
@@ -199,9 +258,32 @@ def ask_question(data: QuestionReq):
     user_msg = ChatMessage(conversation_id=conv_id, role="user", content=data.question)
     Database.insert_message(user_msg.to_row())
     ai_msg = ChatMessage(conversation_id=conv_id, role="assistant",
-                         content=result["answer"], sources=result["sources"])
+                         content=result["answer"], sources=sources)
     Database.insert_message(ai_msg.to_row())
-    return {"conversation_id": conv_id, "answer": result["answer"], "sources": result["sources"]}
+    return {"conversation_id": conv_id, "answer": result["answer"], "sources": sources}
+
+
+def _normalize_sources(sources: list[dict]) -> list[dict]:
+    normalized = []
+    for source in sources or []:
+        metadata = source.get("metadata") or {}
+        block_id = (
+            source.get("block_id")
+            or source.get("chunk_id")
+            or metadata.get("block_id")
+            or source.get("id")
+        )
+        knowledge_id = source.get("knowledge_id") or metadata.get("knowledge_id")
+        snippet = source.get("snippet") or source.get("text") or source.get("content") or ""
+        normalized.append({
+            **source,
+            "block_id": block_id,
+            "knowledge_id": knowledge_id,
+            "title": source.get("title") or metadata.get("title") or "",
+            "snippet": snippet,
+            "score": source.get("score", source.get("distance")),
+        })
+    return normalized
 
 
 @chat_router.get("/conversations")
@@ -342,10 +424,22 @@ def restore_wiki_version(page_id: str, version: int):
 
 
 # ---- Async Jobs Endpoints ----
+ALLOWED_JOB_TYPES = {"reindex_all", "wiki_compile", "wiki_lint", "wiki_site_generate"}
+
+
+class JobCreateReq(BaseModel):
+    job_type: str
+    params: dict = {}
+    priority: int = 1
+    max_retries: int = 3
+
+
 @jobs_router.post("")
-def create_job(job_type: str, params: dict = None, priority: int = 1, max_retries: int = 3):
+def create_job(data: JobCreateReq):
+    if data.job_type not in ALLOWED_JOB_TYPES:
+        raise HTTPException(400, f"不支持的任务类型: {data.job_type}，允许的类型: {', '.join(sorted(ALLOWED_JOB_TYPES))}")
     from src.services.async_task import AsyncTaskService
-    job_id = AsyncTaskService.create_job(job_type, params, priority, max_retries)
+    job_id = AsyncTaskService.create_job(data.job_type, data.params, data.priority, data.max_retries)
     return {"job_id": job_id, "status": "pending"}
 
 
@@ -354,6 +448,12 @@ def list_jobs(status: str = None, job_type: str = None, limit: int = 50, offset:
     from src.services.async_task import AsyncTaskService
     jobs = AsyncTaskService.list_jobs(status, job_type, limit, offset)
     return {"jobs": [j.__dict__ for j in jobs]}
+
+
+@jobs_router.get("/stats")
+def get_job_stats():
+    from src.services.async_task import AsyncTaskService
+    return AsyncTaskService.get_stats()
 
 
 @jobs_router.get("/{job_id}")
@@ -381,9 +481,3 @@ def delete_job(job_id: str):
     if not success:
         raise HTTPException(400, "只能删除已完成/失败的任务")
     return {"message": "任务已删除"}
-
-
-@jobs_router.get("/stats")
-def get_job_stats():
-    from src.services.async_task import AsyncTaskService
-    return AsyncTaskService.get_stats()

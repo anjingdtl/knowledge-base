@@ -167,8 +167,9 @@ def apply_force_layout(
         if max_movement < 0.5:
             break
 
-    for n in nodes:
-        Database.update_node_position(n.node_id, n.pos().x(), n.pos().y())
+    # Batch-write final positions to DB in a single transaction.
+    positions = [(n.pos().x(), n.pos().y(), n.node_id) for n in nodes]
+    Database.batch_update_node_positions(positions)
 
 
 # ---- 图形节点 ----
@@ -325,7 +326,7 @@ class GraphNodeItem(QGraphicsItem):
     def itemChange(self, change, value):
         if change == QGraphicsItem.GraphicsItemChange.ItemPositionHasChanged:
             for edge in self._edges:
-                edge.update_path()
+                edge.notify_geometry_changed()
         return super().itemChange(change, value)
 
     def mouseReleaseEvent(self, event) -> None:
@@ -470,7 +471,13 @@ class GraphEdgeItem(QGraphicsItem):
                 label,
             )
 
-    def update_path(self) -> None:
+    def notify_geometry_changed(self) -> None:
+        """Notify Qt that edge geometry may have changed.
+
+        Does not store a path — ``boundingRect`` and ``paint`` compute
+        geometry dynamically from source/target node positions each frame.
+        Calling ``prepareGeometryChange`` prevents stale cached painting.
+        """
         self.prepareGeometryChange()
         self.update()
 
