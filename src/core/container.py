@@ -154,10 +154,14 @@ def create_container(config_path: str | None = None) -> AppContainer:
     logger.info("Config loaded")
 
     # 2. Database（使用类方法连接，cls._conn 全局共享）
+    # 如果已有活跃连接（如测试 fixture 已 connect），保留现有连接，不覆盖
     from src.services.db import Database
-    db_path = config.get_db_path()
-    Database.connect(str(db_path))
-    logger.info("Database connected: %s", db_path)
+    if Database._conn is None:
+        db_path = config.get_db_path()
+        Database.connect(str(db_path))
+        logger.info("Database connected: %s", db_path)
+    else:
+        logger.info("Database already connected, reusing existing connection")
 
     # 3. VectorStore（注入 Database 实例）
     from src.services.vectorstore import VectorStore
