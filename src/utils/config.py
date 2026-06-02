@@ -226,8 +226,4 @@ class Config:
     def get_db_path(self) -> Path:
         return self.get_data_dir() / self.get("storage.db_name", "kb.db")
 
-    @_dualmethod
-    def get_chroma_dir(self) -> Path:
-        path = self.get_data_dir() / self.get("storage.chroma_dir", "chroma")
-        path.mkdir(parents=True, exist_ok=True)
-        return path
+
