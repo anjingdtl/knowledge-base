@@ -67,5 +67,34 @@ class EmbeddingService:
                 time.sleep(0.5)
         return all_embeddings
 
+    def embed_batch_with_cache(self, texts: list[str], batch_size: int = 20) -> list[list[float]]:
+        """批量生成 embedding，带 SQLite 缓存"""
+        import hashlib
+        from src.core.embedding_cache import EmbeddingCache
+
+        cache = EmbeddingCache()
+        model = self._cfg("embedding.model", "")
+
+        results = [None] * len(texts)
+        to_embed = []
+
+        for i, text in enumerate(texts):
+            content_hash = hashlib.sha256(text.encode()).hexdigest()
+            cached = cache.get(content_hash, model)
+            if cached is not None:
+                results[i] = cached
+            else:
+                to_embed.append((i, text))
+
+        if to_embed:
+            texts_to_embed = [t for _, t in to_embed]
+            embeddings = self.embed_batch(texts_to_embed, batch_size)
+            for (i, text), emb in zip(to_embed, embeddings):
+                content_hash = hashlib.sha256(text.encode()).hexdigest()
+                cache.put(content_hash, model, emb)
+                results[i] = emb
+
+        return results
+
     def reset_client(self):
         self._client = None
