@@ -69,7 +69,6 @@ def _generate_default_config(path: Path):
             "top_k": 5,
         },
         "storage": {
-            "chroma_dir": "chroma",
             "data_dir": "data",
             "db_name": "kb.db",
         },
