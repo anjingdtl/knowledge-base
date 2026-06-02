@@ -8,6 +8,7 @@ import asyncio
 import functools
 import json
 import logging
+import os
 from contextlib import asynccontextmanager
 
 WIKI_SEARCH_LIMIT = 3  # Wiki 结构化知识搜索结果上限，可通过配置覆盖
@@ -17,12 +18,17 @@ from fastmcp import FastMCP
 
 from src.models.knowledge import KnowledgeItem
 from src.services.db import Database
+from src.services.hybrid_search import HybridSearcher
+from src.services.llm import LLMService
 from src.services.mcp_heartbeat import beat
+from src.services.query_rewriter import QueryRewriter
 from src.services.rag import RAGService
+from src.services.reranker import LLMReranker
 from src.services.file_parser import parse_file, parse_url
 from src.services.indexer import index_knowledge_item
 from src.services.vectorstore import VectorStore
 from src.utils.config import Config
+from src.utils.llm_text import strip_think
 from src.version import VERSION
 
 
@@ -90,11 +96,40 @@ def search(query: str, top_k: int = 5) -> list[dict]:
 
 
 def _do_search(query: str, top_k: int) -> list[dict]:
-    """同步执行的搜索逻辑：向量 + FTS 合并去重"""
+    """同步执行的搜索逻辑：查询改写 → 混合检索 → 重排序 → Wiki 优先"""
     output = []
-    seen_kids = set()
 
-    # Wiki 结构化知识优先
+    # 1. 查询改写
+    queries = [query]
+    if Config.get("rag.enable_query_rewriting", False):
+        try:
+            rewriter = QueryRewriter()
+            queries = rewriter.rewrite(query)
+        except Exception as e:
+            logger.warning("Query rewrite in search failed: %s", e)
+
+    # 2. 混合检索（HybridSearcher: 向量 + 关键词 blend + RRF 融合）
+    candidates = []
+    try:
+        searcher = HybridSearcher()
+        candidates = searcher.search(queries, top_k=top_k)
+    except Exception as e:
+        logger.warning("Hybrid search failed, falling back to vector only: %s", e)
+        try:
+            candidates = VectorStore().search(query, top_k=top_k)
+        except Exception as e2:
+            logger.warning("Vector search also failed: %s", e2)
+
+    # 3. 重排序（专用 reranker 模型或 LLM 打分）
+    if candidates:
+        try:
+            reranker = LLMReranker()
+            candidates = reranker.rerank(query, candidates, top_n=top_k)
+        except Exception as e:
+            logger.warning("Rerank in search failed, using raw order: %s", e)
+
+    # 4. Wiki 结构化知识优先
+    seen_kids = set()
     try:
         wiki_results = Database.search_wiki_fts(query, limit=WIKI_SEARCH_LIMIT)
         for wr in wiki_results:
@@ -110,41 +145,21 @@ def _do_search(query: str, top_k: int) -> list[dict]:
     except Exception as e:
         logger.warning("Wiki FTS search failed: %s", e)
 
-    # 向量搜索
-    try:
-        vec_results = VectorStore().search(query, top_k=top_k)
-        for r in vec_results:
-            kid = (r.get("metadata") or {}).get("knowledge_id", "")
-            if kid:
-                seen_kids.add(kid)
-            item = Database.get_knowledge(kid) if kid else None
-            output.append({
-                "source": "knowledge",
-                "chunk_id": r["id"],
-                "knowledge_id": kid,
-                "title": item["title"] if item else "未知",
-                "text": r["text"],
-                "score": r["distance"],
-            })
-    except Exception as e:
-        logger.warning("Vector search failed: %s", e)
-
-    # FTS 补充搜索（合并去重：补充向量搜索未命中的知识条目）
-    try:
-        fts_results = Database.search_knowledge(query, limit=top_k)
-        for item in fts_results:
-            kid = item.get("id", "")
-            if kid not in seen_kids:
-                seen_kids.add(kid)
-                output.append({
-                    "source": "knowledge_fts",
-                    "knowledge_id": kid,
-                    "title": item["title"],
-                    "text": (item.get("content", "") or "")[:500],
-                    "score": item.get("fts_rank", 0),
-                })
-    except Exception as e:
-        logger.warning("FTS search failed: %s", e)
+    # 5. 组装检索+重排结果
+    for r in candidates:
+        kid = (r.get("metadata") or {}).get("knowledge_id", "")
+        if kid:
+            seen_kids.add(kid)
+        item = Database.get_knowledge(kid) if kid else None
+        score = r.get("rerank_score", r.get("rrf_score", r.get("score", r.get("distance", 0))))
+        output.append({
+            "source": "knowledge",
+            "chunk_id": r.get("id", ""),
+            "knowledge_id": kid,
+            "title": item["title"] if item else "未知",
+            "text": r.get("text", ""),
+            "score": score,
+        })
 
     return output
 
@@ -378,35 +393,89 @@ def ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     return _do_ingest_file(file_path, tags)
 
 
+def _validate_file_path(file_path: str) -> str:
+    """验证文件路径在允许的目录范围内，防止路径遍历攻击。
+
+    允许的目录包括:
+    1. config.yaml 中 security.allowed_ingest_dirs 配置的目录
+    2. SHINEHE_HOME 环境变量指向的目录
+    3. 项目数据目录
+    """
+    from src.utils.paths import get_data_dir
+
+    resolved = os.path.realpath(file_path)
+
+    # 检查文件是否存在
+    if not os.path.isfile(resolved):
+        raise FileNotFoundError(f"文件不存在: {file_path}")
+
+    # 构建允许的目录白名单
+    allowed_dirs: list[str] = []
+
+    # 配置文件中的显式白名单
+    configured_dirs = Config.get("security.allowed_ingest_dirs", [])
+    if configured_dirs:
+        for d in configured_dirs:
+            allowed_dirs.append(os.path.realpath(d))
+
+    # SHINEHE_HOME 或项目根目录
+    env_root = os.environ.get("SHINEHE_HOME")
+    if env_root:
+        allowed_dirs.append(os.path.realpath(env_root))
+
+    # 项目数据目录
+    allowed_dirs.append(str(get_data_dir()))
+
+    # 项目根目录（源码模式下）
+    from src.utils.paths import get_project_root
+    allowed_dirs.append(str(get_project_root()))
+
+    # 用户主目录（作为常见导入来源）
+    home = os.path.expanduser("~")
+    allowed_dirs.append(os.path.realpath(home))
+
+    # 检查文件是否在任一允许的目录下
+    for allowed in allowed_dirs:
+        if resolved.startswith(allowed + os.sep) or resolved == allowed:
+            return resolved
+
+    raise PermissionError(
+        f"文件路径不在允许的目录范围内: {file_path}。"
+        f"请在 config.yaml 的 security.allowed_ingest_dirs 中添加允许的目录。"
+    )
+
+
 def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     tags = tags or []
-    parsed_list = parse_file(file_path)
+
+    # 安全校验：路径规范化 + 白名单验证
+    validated_path = _validate_file_path(file_path)
+    parsed_list = parse_file(validated_path)
 
     import hashlib
-    import os
-    from datetime import datetime
+    from datetime import datetime, timezone
 
-    # 读取文件创建时间戳
+    # 读取文件创建时间戳（使用 UTC 时区避免 naive datetime）
     file_created_at = ""
     try:
         file_created_at = datetime.fromtimestamp(
-            os.path.getctime(file_path)
+            os.path.getctime(validated_path), tz=timezone.utc
         ).isoformat()
     except OSError:
         pass
 
-    # 读取文件修改时间戳
+    # 读取文件修改时间戳（使用 UTC 时区避免 naive datetime）
     file_modified_at = ""
     try:
         file_modified_at = datetime.fromtimestamp(
-            os.path.getmtime(file_path)
+            os.path.getmtime(validated_path), tz=timezone.utc
         ).isoformat()
     except OSError:
         pass
 
     file_size = 0
     try:
-        file_size = os.path.getsize(file_path)
+        file_size = os.path.getsize(validated_path)
     except OSError:
         pass
 

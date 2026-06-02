@@ -1,4 +1,5 @@
 """混合检索模块 — 三种搜索模式（embedding/keywords/blend）+ 加分融合"""
+import hashlib
 import logging
 
 from src.utils.config import Config
@@ -33,7 +34,10 @@ class HybridSearcher:
                         })
             except Exception as e:
                 logging.warning(f"Vector search failed: {e}")
-        results.sort(key=lambda x: x["distance"])
+        # Sort by a relevance score derived from distance rather than raw distance,
+        # so that items with identical distance values (e.g. exact matches at 0)
+        # are still ordered predictably.
+        results.sort(key=lambda x: (1 - x["distance"] / 2, -len(x.get("text", ""))), reverse=True)
         return results[:top_k * 2]
 
     def _keyword_search(self, queries: list[str], top_k: int) -> list[dict]:
@@ -68,9 +72,7 @@ class HybridSearcher:
 
         merged = {}
         for r in vec_results:
-            kid = r.get("metadata", {}).get("knowledge_id", "")
-            cidx = str(r.get("metadata", {}).get("chunk_index", 0))
-            cid = kid + ":" + cidx if kid else r.get("text", "")[:50]
+            cid = self._candidate_id(r)
             merged[cid] = {
                 "text": r["text"],
                 "metadata": r.get("metadata", {}),
@@ -79,9 +81,7 @@ class HybridSearcher:
                 "fts_score": 0,
             }
         for r in fts_results:
-            kid = r.get("metadata", {}).get("knowledge_id", "")
-            cidx = str(r.get("metadata", {}).get("chunk_index", 0))
-            cid = kid + ":" + cidx if kid else r.get("text", "")[:50]
+            cid = self._candidate_id(r)
             raw_rank = r.get("fts_rank", 0)
             normalized = self._normalize_fts_rank(raw_rank)
             if cid in merged:
@@ -119,7 +119,13 @@ class HybridSearcher:
     def _candidate_id(item: dict) -> str:
         kid = item.get("metadata", {}).get("knowledge_id", "")
         cidx = str(item.get("metadata", {}).get("chunk_index", 0))
-        return kid + ":" + cidx if kid else item.get("text", "")[:50]
+        if kid:
+            return kid + ":" + cidx
+        # Use a hash of the full text to avoid collisions when different chunks
+        # share the same leading characters.
+        text = item.get("text", "")
+        text_hash = hashlib.md5(text.encode("utf-8", errors="replace")).hexdigest()[:12]
+        return "text_" + text_hash
 
     def _preserve_keyword_hits(self, sorted_items: list[dict], top_k: int) -> list[dict]:
         """Keep strongest lexical hits in the final hybrid candidate set."""

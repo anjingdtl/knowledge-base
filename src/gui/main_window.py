@@ -1,8 +1,15 @@
 """主窗口"""
+import sqlite3
+import sys
+import logging
+
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QStackedWidget, QLabel, QGraphicsDropShadowEffect, QFrame,
+    QMessageBox,
 )
+
+logger = logging.getLogger(__name__)
 from PySide6.QtCore import Qt, QTimer, QSettings
 from PySide6.QtGui import QIcon, QColor
 from pathlib import Path
@@ -12,8 +19,6 @@ from src.services.db import Database
 from src.services.llm import register_llm_status_callback
 from src.version import VERSION
 
-ICON_PATH = Path(__file__).resolve().parent.parent.parent / "icon" / "knolege.ico"
-
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -21,8 +26,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"泰坦知识库 v{VERSION}")
         self.setMinimumSize(1100, 700)
         self._restore_geometry()
-        if ICON_PATH.exists():
-            self.setWindowIcon(QIcon(str(ICON_PATH)))
         self._init_database()
         self._setup_ui()
 
@@ -45,7 +48,16 @@ class MainWindow(QMainWindow):
         super().closeEvent(event)
 
     def _init_database(self):
-        Database.connect()
+        try:
+            Database.connect()
+        except (sqlite3.Error, OSError) as exc:
+            logger.exception("数据库连接失败")
+            QMessageBox.critical(
+                self,
+                "数据库错误",
+                f"无法连接数据库，请检查数据文件是否损坏或被占用。\n\n{exc}",
+            )
+            sys.exit(1)
 
     def _setup_ui(self):
         central = QWidget()

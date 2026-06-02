@@ -133,3 +133,90 @@ class TestHealthAPI:
         resp = api_client.get("/api/health")
         assert resp.status_code == 200
         assert resp.json()["status"] == "online"
+
+
+class TestBlockGraphAPI:
+    def test_blocks_endpoint_returns_page_blocks(self, api_client):
+        from src.services.db import Database
+
+        item_id = "api-block-page"
+        Database.insert_knowledge({
+            "id": item_id,
+            "title": "Block page",
+            "content": "Block source",
+            "source_type": "manual",
+            "source_path": "",
+            "file_type": "txt",
+            "file_size": 0,
+            "content_hash": "",
+            "file_created_at": "",
+            "file_modified_at": "",
+            "tags": "[]",
+            "version": 1,
+            "created_at": "2026-01-01",
+            "updated_at": "2026-01-01",
+        })
+        Database.insert_chunks([{
+            "id": "api-block-1",
+            "knowledge_id": item_id,
+            "chunk_index": 0,
+            "chunk_text": "First block",
+            "created_at": "2026-01-01",
+        }])
+
+        resp = api_client.get(f"/api/knowledge/{item_id}/blocks")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["page_id"] == item_id
+        assert data["total"] == 1
+        assert data["blocks"][0]["id"] == "api-block-1"
+
+    def test_entity_refs_endpoint_filters_source_and_target(self, api_client):
+        from src.models.block import EntityRef
+        from src.repositories.entity_ref_repo import EntityRefRepository
+        from src.services.db import Database
+
+        repo = EntityRefRepository(db=Database)
+        repo.upsert(EntityRef(
+            id="api-ref-1",
+            source_type="knowledge",
+            source_id="k1",
+            target_type="wiki",
+            target_id="w1",
+            ref_type="derived_from",
+        ))
+
+        by_source = api_client.get("/api/refs?source_type=knowledge&source_id=k1")
+        assert by_source.status_code == 200
+        assert by_source.json()["refs"][0]["target_id"] == "w1"
+
+        by_target = api_client.get("/api/refs?target_type=wiki&target_id=w1")
+        assert by_target.status_code == 200
+        assert by_target.json()["refs"][0]["source_id"] == "k1"
+
+
+class TestChatSourceContract:
+    def test_chat_sources_include_block_contract(self, api_client, monkeypatch):
+        import src.api.routes as routes_mod
+
+        class StubRag:
+            def query(self, question):
+                return {
+                    "answer": "answer",
+                    "sources": [{
+                        "title": "Source title",
+                        "knowledge_id": "kid-1",
+                        "id": "block-1",
+                        "text": "source snippet",
+                        "score": 0.75,
+                    }],
+                }
+
+        monkeypatch.setattr(routes_mod, "RAGService", lambda: StubRag())
+        resp = api_client.post("/api/chat/ask", json={"question": "question"})
+        assert resp.status_code == 200
+        source = resp.json()["sources"][0]
+        assert source["knowledge_id"] == "kid-1"
+        assert source["block_id"] == "block-1"
+        assert source["snippet"] == "source snippet"
+        assert source["score"] == 0.75

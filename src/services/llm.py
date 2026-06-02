@@ -21,28 +21,39 @@ def _notify_status(status: str, detail: str = ""):
 
 
 class LLMService:
-    def __init__(self):
+    def __init__(self, config=None):
+        """初始化 LLM 服务
+
+        Args:
+            config: Config 实例（DI 注入），为 None 时回退到全局单例（兼容旧代码）
+        """
+        self._config = config
         self._client = None
+
+    def _cfg(self, key: str, default=None):
+        """读取配置，优先使用注入的 config，回退到全局单例"""
+        if self._config is not None:
+            return self._config.get(key, default)
+        return Config.get(key, default)
 
     def _get_client(self):
         if self._client is not None:
             return self._client
         from openai import OpenAI
         self._client = OpenAI(
-            api_key=Config.get("llm.api_key", "") or "no-key",
-            base_url=Config.get("llm.base_url") or None,
+            api_key=self._cfg("llm.api_key", "") or "no-key",
+            base_url=self._cfg("llm.base_url") or None,
         )
         return self._client
 
     def chat(self, messages: list[dict], silent: bool = False, max_tokens_override: int | None = None) -> str:
         if not silent:
             _notify_status("running", "LLM 推理")
-        start = time.time()
         try:
             client = self._get_client()
-            model = Config.get("llm.model", "")
-            temperature = Config.get("llm.temperature", 0.7)
-            max_tokens = max_tokens_override or Config.get("llm.max_tokens", 2048)
+            model = self._cfg("llm.model", "")
+            temperature = self._cfg("llm.temperature", 0.7)
+            max_tokens = max_tokens_override or self._cfg("llm.max_tokens", 2048)
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,
@@ -63,9 +74,9 @@ class LLMService:
             _notify_status("running", "LLM 流式推理")
         try:
             client = self._get_client()
-            model = Config.get("llm.model", "")
-            temperature = Config.get("llm.temperature", 0.7)
-            max_tokens = max_tokens_override or Config.get("llm.max_tokens", 2048)
+            model = self._cfg("llm.model", "")
+            temperature = self._cfg("llm.temperature", 0.7)
+            max_tokens = max_tokens_override or self._cfg("llm.max_tokens", 2048)
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,

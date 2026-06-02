@@ -1,8 +1,7 @@
 appearance:
   font_size: 14
-  theme: light
+  theme: dark
 embedding:
-  api_key: REDACTED_SILICONFLOW_API_KEY
   base_url: https://api.siliconflow.cn/v1
   model: BAAI/bge-m3
   provider: 硅基流动
@@ -10,15 +9,14 @@ embedding:
 librarian:
   batch_size: 5
 llm:
-  api_key: REDACTED_MINIMAX_API_KEY
-  base_url: https://api.minimaxi.com/v1
+  base_url: https://api.deepseek.com
   max_tokens: 2048
-  model: MiniMax-M2.7
-  provider: Minimax
+  model: deepseek-v4-flash
+  provider: deepseek
   temperature: 0.7
 rag:
-  chunk_overlap: 150
-  chunk_size: 1000
+  chunk_overlap: 180
+  chunk_size: 1200
   custom_stages: []
   enable_query_rewriting: true
   enable_rerank: true
@@ -28,7 +26,7 @@ rag:
     keyword_weight: 0.3
     vector_weight: 0.7
   pipeline:
-    enabled: false
+    enabled: true
     stages:
     - enabled: true
       mode: llm
@@ -58,9 +56,8 @@ rag:
     top_n: 5
   score_threshold: 0.35
   search_mode: blend
-  top_k: 5
+  top_k: 8
 reranker:
-  api_key: REDACTED_SILICONFLOW_API_KEY
   base_url: https://api.siliconflow.cn/v1
   enabled: true
   model: BAAI/bge-reranker-v2-m3

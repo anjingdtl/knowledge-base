@@ -45,7 +45,10 @@ class KnowledgeItem:
     def from_row(cls, row: dict) -> "KnowledgeItem":
         tags = row.get("tags", "[]")
         if isinstance(tags, str):
-            tags = json.loads(tags)
+            try:
+                tags = json.loads(tags)
+            except (json.JSONDecodeError, ValueError):
+                tags = []
         return cls(
             id=row["id"],
             title=row["title"],

@@ -1,58 +1,18 @@
 {
-    "_说明": "OpenCode MCP 配置（https://opencode.ai）",
-    "_配置文件位置_全局": "~/.config/opencode/opencode.json",
-    "_配置文件位置_项目": "项目根目录 opencode.json",
-    "_CLI管理": "opencode mcp add（交互式添加）、opencode mcp list（查看状态）",
-    "_注意事项": [
-        "1. MCP 配置放在 mcp 字段下（不是 mcpServers）",
-        "2. 本地服务器 type 为 local，command 是数组格式（含命令和参数）",
-        "3. 环境变量字段为 environment（不是 env）",
-        "4. 支持变量替换：{env:VARIABLE_NAME} 引用系统环境变量",
-        "5. Windows 上使用 Python 绝对路径"
-    ],
-
-    "完整配置示例_Windows": {
-        "$schema": "https://opencode.ai/config.json",
-        "mcp": {
-            "shinehe-kb": {
-                "type": "local",
-                "command": [
-                    "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
-                    "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
-                ],
-                "environment": {
-                    "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
-                },
-                "enabled": true
-            }
-        }
-    },
-
-    "完整配置示例_macOS_Linux": {
-        "$schema": "https://opencode.ai/config.json",
-        "mcp": {
-            "shinehe-kb": {
-                "type": "local",
-                "command": [
-                    "python",
-                    "你的路径/knowledge-base/run_mcp.py"
-                ],
-                "environment": {
-                    "SHINEHE_HOME": "你的路径/knowledge-base"
-                },
-                "enabled": true
-            }
-        }
-    },
-
-    "远程HTTP模式": {
-        "$schema": "https://opencode.ai/config.json",
-        "mcp": {
-            "shinehe-kb": {
-                "type": "remote",
-                "url": "http://127.0.0.1:9000/mcp",
-                "enabled": true
-            }
-        }
+  "_说明": "OpenCode MCP 配置。OpenCode 使用 mcp 字段，不使用 mcpServers。",
+  "_配置位置": "~/.config/opencode/opencode.json 或项目根目录 opencode.json",
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "shinehe-kb": {
+      "type": "local",
+      "command": [
+        "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
+        "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
+      ],
+      "environment": {
+        "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
+      },
+      "enabled": true
     }
+  }
 }
