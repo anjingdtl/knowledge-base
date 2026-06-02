@@ -37,6 +37,7 @@ class AppContainer:
 
     # --- 存储 ---
     vectorstore: "VectorStore" = field(default=None)  # noqa: F821
+    block_store: "BlockStore" = field(default=None)  # noqa: F821
 
     # --- 仓库层（Phase 1.2 新增） ---
     knowledge_repo: "KnowledgeRepository" = field(default=None, repr=False)  # noqa: F821
@@ -123,7 +124,7 @@ class AppContainer:
     def librarian(self):
         if self._librarian is None:
             from src.services.librarian import LibrarianService
-            self._librarian = LibrarianService(self.db, self.llm, self.config)
+            self._librarian = LibrarianService()
         return self._librarian
 
 
@@ -153,6 +154,10 @@ def create_container(config_path: str | None = None) -> AppContainer:
     vectorstore = VectorStore(db=Database)
     logger.info("VectorStore ready")
 
+    from src.services.block_store import BlockStore
+    block_store = BlockStore(db=Database)
+    logger.info("BlockStore ready")
+
     # 4. Embedding / LLM
     from src.services.embedding import EmbeddingService
     from src.services.llm import LLMService
@@ -164,6 +169,7 @@ def create_container(config_path: str | None = None) -> AppContainer:
         config=config,
         db=Database,
         vectorstore=vectorstore,
+        block_store=block_store,
         embedding=embedding,
         llm=llm,
     )
