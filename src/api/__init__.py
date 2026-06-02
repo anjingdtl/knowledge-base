@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.services.db import Database
 from src.utils.config import Config
+from src.core.container import create_container, shutdown_container
 from src.version import APP_NAME, VERSION
 from src.api.routes import auth_router, kb_router, chat_router, wiki_router, jobs_router, refs_router
 
@@ -15,12 +16,10 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    Config.load()
-    Database.connect()
-    Database._shutdown = False  # mark as active
+    container = create_container()
+    app.state.container = container
     yield
-    Database._shutdown = True  # prevent silent reconnect after shutdown
-    Database.close()
+    shutdown_container(container)
 
 
 def create_app() -> FastAPI:
