@@ -25,10 +25,7 @@ class Condition:
         if self.type == "not":
             return {"not": self.child.to_json()}
         if self.type == "tag":
-            result = {"tag": self.value}
-            if self.expand_descendants:
-                result["expand_descendants"] = True
-            return result
+            return {"tag": self.value, "expand_descendants": self.expand_descendants}
         if self.type == "property":
             return {"property": {"key": self.key, "op": self.op, "value": self.value}}
         if self.type == "fulltext":
