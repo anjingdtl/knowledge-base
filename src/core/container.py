@@ -49,6 +49,10 @@ class AppContainer:
     category_repo: "CategoryRepository" = field(default=None, repr=False)  # noqa: F821
     job_repo: "JobRepository" = field(default=None, repr=False)  # noqa: F821
 
+    # --- 仓库层（Phase 2 新增） ---
+    tag_relation_repo: "TagRelationRepository" = field(default=None, repr=False)  # noqa: F821
+    property_schema_repo: "PropertySchemaRepository" = field(default=None, repr=False)  # noqa: F821
+
     # --- AI 服务 ---
     embedding: "EmbeddingService" = field(default=None)  # noqa: F821
     llm: "LLMService" = field(default=None)  # noqa: F821
@@ -65,6 +69,15 @@ class AppContainer:
     _librarian: Optional[object] = field(default=None, repr=False)
     _search_service: Optional[object] = field(default=None, repr=False)
     _file_graph_service: Optional[object] = field(default=None, repr=False)
+
+    # --- Phase 2 业务服务 (lazy init) ---
+    _unified_graph: Optional[object] = field(default=None, repr=False)
+    _tag_hierarchy: Optional[object] = field(default=None, repr=False)
+    _property_schema: Optional[object] = field(default=None, repr=False)
+    _effective_properties: Optional[object] = field(default=None, repr=False)
+
+    # --- Phase 3 业务服务 (lazy init) ---
+    _query_executor: Optional[object] = field(default=None, repr=False)
 
     @property
     def indexer(self):
@@ -147,6 +160,43 @@ class AppContainer:
             )
         return self._file_graph_service
 
+    # --- Phase 2 lazy services ---
+
+    @property
+    def unified_graph(self):
+        if self._unified_graph is None:
+            from src.services.unified_graph import UnifiedGraphService
+            self._unified_graph = UnifiedGraphService(db=self.db)
+        return self._unified_graph
+
+    @property
+    def tag_hierarchy(self):
+        if self._tag_hierarchy is None:
+            from src.services.tag_hierarchy import TagHierarchyService
+            self._tag_hierarchy = TagHierarchyService(db=self.db, repo=self.tag_relation_repo)
+        return self._tag_hierarchy
+
+    @property
+    def property_schema(self):
+        if self._property_schema is None:
+            from src.services.property_schema import PropertySchemaService
+            self._property_schema = PropertySchemaService(db=self.db, repo=self.property_schema_repo)
+        return self._property_schema
+
+    @property
+    def effective_properties(self):
+        if self._effective_properties is None:
+            from src.services.effective_properties import EffectivePropertyService
+            self._effective_properties = EffectivePropertyService(db=self.db, schema_service=self.property_schema)
+        return self._effective_properties
+
+    @property
+    def query_executor(self):
+        if self._query_executor is None:
+            from src.services.query_executor import QueryExecutor
+            self._query_executor = QueryExecutor(db=self.db)
+        return self._query_executor
+
 
 def create_container(config_path: str | None = None) -> AppContainer:
     """创建并初始化应用容器
@@ -215,6 +265,13 @@ def create_container(config_path: str | None = None) -> AppContainer:
     container.entity_ref_repo = EntityRefRepository(db=Database)
     container.category_repo = CategoryRepository(db=Database)
     container.job_repo = JobRepository(db=Database)
+
+    # Phase 2 仓库
+    from src.repositories.tag_relation_repo import TagRelationRepository
+    from src.repositories.property_schema_repo import PropertySchemaRepository
+    container.tag_relation_repo = TagRelationRepository(db=Database)
+    container.property_schema_repo = PropertySchemaRepository(db=Database)
+
     logger.info("Repositories initialized")
 
     # 将容器注入 Database 类，保持旧代码兼容
