@@ -119,6 +119,47 @@ def _content_preview(text, max_len=200):
     return text[:max_len] + ("..." if len(text) > max_len else "")
 
 
+def _load_json_dict(value) -> dict:
+    if isinstance(value, dict):
+        return value
+    try:
+        parsed = json.loads(value or "{}")
+        return parsed if isinstance(parsed, dict) else {}
+    except (TypeError, ValueError):
+        return {}
+
+
+def _list_blocks_for_page(page_id: str) -> list[dict]:
+    rows = _get_container().db.get_conn().execute(
+        """SELECT id, parent_id, page_id, content, block_type, properties, order_idx,
+                  created_at, updated_at
+           FROM blocks
+           WHERE page_id = ?
+           ORDER BY order_idx ASC, created_at ASC""",
+        (page_id,),
+    ).fetchall()
+    blocks = []
+    for row in rows:
+        block = dict(row)
+        block["properties"] = _load_json_dict(block.get("properties"))
+        blocks.append(block)
+    return blocks
+
+
+def _embedding_context_config() -> dict:
+    return {
+        "enabled": bool(Config.get("rag.embedding_context.enabled", False)),
+        "include_parent_chain": bool(
+            Config.get("rag.embedding_context.include_parent_chain", True)
+        ),
+        "include_links": bool(Config.get("rag.embedding_context.include_links", True)),
+        "include_siblings": bool(
+            Config.get("rag.embedding_context.include_siblings", False)
+        ),
+        "max_chars": int(Config.get("rag.embedding_context.max_chars", 1200) or 1200),
+    }
+
+
 # ---- Tools ----
 
 from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
@@ -191,7 +232,13 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
     "block_contexts / warnings。",
 )
 @_heartbeat
-def ask(question: str) -> dict:
+def ask(
+    question: str,
+    include_graph: bool = True,
+    include_context: bool = True,
+    max_sources: int = 5,
+    max_graph_nodes: int = 50,
+) -> dict:
     """基于知识库的智能问答，返回 7 字段结构化 RAG payload。
 
     Args:
@@ -209,6 +256,19 @@ def ask(question: str) -> dict:
             - wiki_context: Wiki 知识上下文（仅当 wiki.enabled=true）
     """
     result = _do_ask(question)
+    if max_sources and max_sources > 0:
+        result["sources"] = list(result.get("sources", []))[:max_sources]
+    if include_graph:
+        from src.services.source_graph import build_source_graph
+        result["source_graph"] = build_source_graph(
+            result.get("sources", []),
+            db=_get_container().db,
+            max_nodes=max_graph_nodes,
+        )
+    else:
+        result["source_graph"] = {"nodes": [], "edges": [], "truncated": False, "node_count": 0}
+    if not include_context:
+        result["block_contexts"] = {}
     return ok(
         result,
         source_count=len(result.get("sources", [])),
@@ -299,15 +359,52 @@ def create(
     annotations={"readOnlyHint": True, "idempotentHint": True},
 )
 @_heartbeat
-def read(item_id: str) -> dict:
+def read(
+    item_id: str,
+    include_blocks: bool = False,
+    include_embedding_preview: bool = False,
+    include_effective_properties: bool = False,
+    include_linked_summaries: bool = False,
+) -> dict:
     """读取指定 ID 的知识条目。
 
     Args:
         item_id: 知识条目的唯一 ID
     """
-    item = _get_container().db.get_knowledge(item_id)
+    container = _get_container()
+    item = container.db.get_knowledge(item_id)
     if not item:
         return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {item_id}", item_id=item_id)
+    if include_blocks or include_embedding_preview or include_effective_properties or include_linked_summaries:
+        blocks = _list_blocks_for_page(item_id)
+        if include_embedding_preview:
+            from src.services.embedding import EmbeddingService
+            embedding_service = EmbeddingService(container.config)
+            config_snapshot = _embedding_context_config()
+            for block in blocks:
+                text = embedding_service.build_embedding_text(block)
+                block["embedding_preview"] = {
+                    "enabled": config_snapshot["enabled"],
+                    "text": text,
+                    "char_count": len(text),
+                    "config": config_snapshot,
+                }
+        if include_effective_properties:
+            service = container.effective_properties
+            compute = getattr(service, "_compute_effective_for_block", None)
+            for block in blocks:
+                block["effective_properties"] = (
+                    compute(block["id"]) if compute else service.refresh_block(block["id"])
+                )
+        if include_linked_summaries:
+            from src.services.block_context import BlockContextService
+            context_service = BlockContextService(db=container.db, config=container.config)
+            max_links = int(Config.get("rag.link_expansion.max_links", 3) or 3)
+            get_links = getattr(context_service, "_get_linked_summaries")
+            for block in blocks:
+                block["linked_summaries"] = get_links(block["id"], max_links)
+        item = dict(item)
+        item["blocks"] = blocks
     return ok(item)
 
 
@@ -529,8 +626,20 @@ def reindex_all(dry_run: bool = False) -> dict:
     container = _get_container()
     count = container.db.count_knowledge()
     if dry_run:
-        return dry_run_preview({"item_count": count, "would_reindex": count},
-                               item_count=count)
+        from src.services.indexer import reindex_all as _reindex_all
+        estimate = _reindex_all(dry_run=True)
+        return dry_run_preview(
+            {
+                "item_count": count,
+                "would_reindex": count,
+                **estimate,
+            },
+            item_count=count,
+            affected_items=estimate["affected_items"],
+            affected_blocks=estimate["affected_blocks"],
+            embedding_context_enabled=estimate["embedding_context_enabled"],
+            estimated_batches=estimate["estimated_batches"],
+        )
     log_id = _op_log("reindex", "system", "all", metadata={"count": count})
     from src.services.indexer import reindex_all as _reindex_all
     result = _reindex_all()
@@ -1461,6 +1570,121 @@ def ask_with_query(
         return fail(ErrorCode.INTERNAL_ERROR, str(exc), question=question)
 
 
+@mcp.tool(
+    description="根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+@_heartbeat
+def get_source_graph(
+    sources: list[dict] | str | None = None,
+    block_ids: list[str] | str | None = None,
+    knowledge_ids: list[str] | str | None = None,
+    max_nodes: int = 50,
+) -> dict:
+    """Build a local source graph from RAG sources or explicit IDs."""
+    def parse_list(value):
+        if value is None:
+            return []
+        if isinstance(value, str):
+            try:
+                parsed = json.loads(value)
+                return parsed if isinstance(parsed, list) else [value]
+            except json.JSONDecodeError:
+                return [value]
+        return value if isinstance(value, list) else [value]
+
+    source_rows = parse_list(sources)
+    if any(not isinstance(row, dict) for row in source_rows):
+        return fail(ErrorCode.VALIDATION_ERROR, "sources must be a list of objects")
+
+    for block_id in parse_list(block_ids):
+        source_rows.append({"block_id": block_id})
+    for knowledge_id in parse_list(knowledge_ids):
+        source_rows.append({"knowledge_id": knowledge_id})
+
+    if not source_rows:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "get_source_graph requires sources, block_ids, or knowledge_ids",
+        )
+
+    from src.services.source_graph import build_source_graph
+    graph = build_source_graph(
+        source_rows,
+        db=_get_container().db,
+        max_nodes=max(1, int(max_nodes or 50)),
+    )
+
+
+@mcp.prompt(name="kb_agent_research", description="Standard MCP-first research workflow.")
+def kb_agent_research(question: str) -> str:
+    return (
+        "Use the knowledge base through MCP tools only. Treat every tool result as an envelope.\n\n"
+        f"Research question: {question}\n\n"
+        "Required flow:\n"
+        "1. Call kb_capabilities and inspect recommended_flows and limits.\n"
+        "2. Call route_query with the research question.\n"
+        "3. If route_query returns structured or graph intent, call execute_query with the returned query_spec; otherwise call ask.\n"
+        "4. Call get_source_graph with the returned sources or block_ids.\n"
+        "5. Call read for the most important knowledge_id values, using include_blocks=true when block evidence matters.\n"
+        "6. Answer with source titles, block ids, warnings, and any truncation noted in meta.\n"
+    )
+
+
+@mcp.prompt(name="kb_safe_update", description="Safe audited update workflow.")
+def kb_safe_update(item_id: str, fields: dict) -> str:
+    fields_json = json.dumps(fields or {}, ensure_ascii=False, indent=2)
+    return (
+        "Perform a safe knowledge-base update. Do not write before previewing.\n\n"
+        f"Target item_id: {item_id}\n"
+        f"Requested fields:\n{fields_json}\n\n"
+        "Required flow:\n"
+        "1. Call read(item_id, include_blocks=true, include_embedding_preview=true).\n"
+        "2. Call preview_operation(operation=\"update\", item_id=item_id, ...fields).\n"
+        "3. Call update(item_id=item_id, ...fields, dry_run=true) and compare would_change with the request.\n"
+        "4. If the preview is acceptable, call update(item_id=item_id, ...fields).\n"
+        "5. Store the returned operation_id and call get_operation_log(operation_id).\n"
+        "6. Report the operation_id and tell the user undo_operation(operation_id) can revert supported changes.\n"
+    )
+
+
+@mcp.prompt(name="kb_import_and_verify", description="Import a file and verify indexed evidence.")
+def kb_import_and_verify(file_path: str) -> str:
+    return (
+        "Import a file into the knowledge base and verify it before answering.\n\n"
+        f"File path: {file_path}\n\n"
+        "Required flow:\n"
+        "1. Call kb_capabilities and inspect ingest limits.\n"
+        "2. Call ingest_file(file_path, dry_run=true) when a preview is useful.\n"
+        "3. For large files, call create_ingest_job(file_path=file_path); for small files, call ingest_file(file_path=file_path).\n"
+        "4. If a job_id is returned, poll get_job(job_id) until completed, failed, or cancelled. Use list_jobs if the job id is lost.\n"
+        "5. Use cancel_job only when the user asks to stop an active job.\n"
+        "6. Verify imported content with structured_query, then ask with sources.\n"
+        "7. Report created_items, skipped_items, failed_items, block_count, and operation_id when present.\n"
+    )
+
+
+@mcp.prompt(name="kb_query_with_sources", description="Answer with block-level sources and graph provenance.")
+def kb_query_with_sources(question: str) -> str:
+    return (
+        "Answer the question with explicit source evidence.\n\n"
+        f"Question: {question}\n\n"
+        "Required flow:\n"
+        "1. Call route_query(question).\n"
+        "2. Call ask(question, include_graph=true, include_context=true).\n"
+        "3. Call get_source_graph with ask.data.sources or their block_id values.\n"
+        "4. Call read for the cited knowledge_id values, using include_blocks=true and include_embedding_preview=true when useful.\n"
+        "5. Final answer must mention source titles and block_id values. If sources are weak or warnings are present, say so.\n"
+    )
+    return ok(
+        graph,
+        node_count=graph.get("node_count", 0),
+        edge_count=len(graph.get("edges", [])),
+        truncated=graph.get("truncated", False),
+        max_nodes=max_nodes,
+    )
+
+
 # ---- Resources ----
 
 @mcp.resource("kb://knowledge/{item_id}")
@@ -1559,11 +1783,11 @@ def kb_capabilities() -> dict:
         },
         "tools": tool_summaries,
         "recommended_flows": {
-            "research": ["kb_capabilities", "route_query", "ask", "read"],
-            "safe_update": ["read", "update(dry_run=true)", "update", "get_operation_log"],
-            "import": ["kb_capabilities", "ingest_file", "get_job", "structured_query", "ask"],
+            "research": ["kb_capabilities", "route_query", "execute_query|ask", "get_source_graph", "read"],
+            "safe_update": ["read", "preview_operation", "update(dry_run=true)", "update", "get_operation_log"],
+            "import": ["kb_capabilities", "create_ingest_job|ingest_file", "get_job", "structured_query", "ask"],
             "import_large": ["kb_capabilities", "create_ingest_job", "get_job", "structured_query", "ask"],
-            "qna": ["route_query", "ask", "read"],
+            "qna": ["route_query", "ask(include_graph=true, include_context=true)", "get_source_graph", "read"],
         },
     })
 

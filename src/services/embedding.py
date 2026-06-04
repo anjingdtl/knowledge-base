@@ -19,6 +19,39 @@ class EmbeddingService:
             return self._config.get(key, default)
         return Config.get(key, default)
 
+    def build_embedding_text(self, block: dict | str | None) -> str:
+        """Build text for embedding without mutating stored block content."""
+        if not block:
+            return ""
+        if isinstance(block, str):
+            from src.services.db import Database
+            block = Database.get_block(block)
+        if not block:
+            return ""
+
+        content = (block.get("content") or "").strip()
+        if not bool(self._cfg("rag.embedding_context.enabled", False)):
+            return content
+
+        include_parent = bool(self._cfg("rag.embedding_context.include_parent_chain", True))
+        include_links = bool(self._cfg("rag.embedding_context.include_links", True))
+        include_siblings = bool(self._cfg("rag.embedding_context.include_siblings", False))
+        max_chars = int(self._cfg("rag.embedding_context.max_chars", 1200) or 1200)
+        max_depth = int(self._cfg("rag.context_trace_depth", 3) or 3) if include_parent else 0
+        sibling_window = int(self._cfg("rag.context_sibling_window", 1) or 1) if include_siblings else 0
+        max_links = int(self._cfg("rag.link_expansion.max_links", 3) or 3) if include_links else 0
+
+        from src.services.block_context import BlockContextService
+        text = BlockContextService(config=self._config or Config).build_context(
+            block["id"],
+            max_depth=max_depth,
+            sibling_window=sibling_window,
+            max_links=max_links,
+        ).strip() or content
+        if max_chars > 0 and len(text) > max_chars:
+            return text[:max_chars]
+        return text
+
     def _get_client(self):
         if self._client is not None:
             return self._client

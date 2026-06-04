@@ -74,7 +74,9 @@ def index_knowledge_item(item: KnowledgeItem):
     embeddings = [None] * len(texts)
     try:
         from src.services.embedding import EmbeddingService
-        embeddings = EmbeddingService().embed_batch_with_cache(texts)
+        embedding_service = EmbeddingService()
+        texts = [embedding_service.build_embedding_text(b) for b in block_rows]
+        embeddings = embedding_service.embed_batch_with_cache(texts)
         if len(embeddings) != len(texts):
             logging.warning(
                 "Embedding count mismatch for %s: expected %d, got %d. "
@@ -119,10 +121,29 @@ def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
     index_knowledge_item(item)
 
 
-def reindex_all(progress_callback: callable = None) -> dict:
+def reindex_all(progress_callback: callable = None, dry_run: bool = False) -> dict:
     """重建所有知识条目的索引（向量 + FTS）"""
     items = Database.list_knowledge(limit=100000)
     total = len(items)
+    if dry_run:
+        rows = Database.get_conn().execute(
+            "SELECT page_id, COUNT(*) AS cnt FROM blocks GROUP BY page_id"
+        ).fetchall()
+        block_counts = {row["page_id"]: row["cnt"] for row in rows}
+        affected_blocks = sum(block_counts.get(row["id"], 0) for row in items)
+        batch_size = int(Config.get("embedding.batch_size", 20) or 20)
+        estimated_batches = (
+            (affected_blocks + batch_size - 1) // batch_size
+            if affected_blocks else 0
+        )
+        return {
+            "affected_items": total,
+            "affected_blocks": affected_blocks,
+            "embedding_context_enabled": bool(
+                Config.get("rag.embedding_context.enabled", False)
+            ),
+            "estimated_batches": estimated_batches,
+        }
     success = 0
     failed = 0
     errors = []
@@ -178,5 +199,5 @@ class IndexerService:
     def reindex(self, item_id: str, item):
         reindex_knowledge_item(item_id, item)
 
-    def reindex_all(self, progress_callback=None):
-        return reindex_all(progress_callback)
+    def reindex_all(self, progress_callback=None, dry_run: bool = False):
+        return reindex_all(progress_callback, dry_run=dry_run)

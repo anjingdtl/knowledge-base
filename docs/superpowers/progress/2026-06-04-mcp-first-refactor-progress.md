@@ -6,7 +6,7 @@
 
 ## 总览
 
-6 个 Sprint（严格顺序），已完成 4 个，剩余 2 个。
+6 个 Sprint（严格顺序），已完成 6 个，剩余 0 个。
 
 | Sprint | Phase | 目标 | Commit | 状态 |
 |--------|-------|------|--------|------|
@@ -14,8 +14,8 @@
 | 2 | 2+3 | RAG 完全体 + Agentic Query 入口 | `ee98e07` | ✅ |
 | 3 | 4 | 写操作安全闭环（soft delete + undo） | `b55bb37` | ✅ |
 | 4 | 5 | 大文件异步任务（auto-routing to job） | `0b20777` | ✅ |
-| 5 | 6 | Embedding-time Contextual Headers | — | 🔲 |
-| 6 | 7 | MCP 文档 + Prompt 契约 | — | 🔲 |
+| 5 | 6 | Embedding-time Contextual Headers | working tree | ✅ |
+| 6 | 7 | MCP 文档 + Prompt 契约 | working tree | ✅ |
 
 ## 已完成的功能清单
 
@@ -59,6 +59,39 @@
 
 **新增文件**: `tests/test_async_ingest.py`
 
+### Sprint 5: Embedding-time Contextual Headers
+
+- `config.yaml` 新增 `rag.embedding_context.*` 配置块:
+  `enabled / include_parent_chain / include_links / include_siblings / max_chars`
+- `EmbeddingService.build_embedding_text(block)` 上线，embedding-time 动态拼装父链、链接摘要、可选相邻块上下文
+- `index_knowledge_item()` 向量化时使用 contextual embedding text，`blocks.content` 和 FTS 仍保持原文
+- `reindex_all(dry_run=True)` 返回 `affected_items / affected_blocks / embedding_context_enabled / estimated_batches`
+- `read` 工具新增可选参数:
+  `include_blocks / include_embedding_preview / include_effective_properties / include_linked_summaries`
+- `include_embedding_preview=True` 时在 block 级返回 `{enabled, text, char_count, config}`
+
+**新增文件**: `tests/test_embedding_context.py`
+
+### Sprint 6: MCP 文档 + Prompt 契约
+
+- 新增 5 份 MCP-first Agent 文档:
+  `docs/mcp/agent-usage.md`,
+  `docs/mcp/tool-contract.md`,
+  `docs/mcp/query-dsl.md`,
+  `docs/mcp/safety-and-undo.md`,
+  `docs/mcp/ingest-jobs.md`
+- 新增 4 个 MCP prompt 模板:
+  `kb_agent_research`,
+  `kb_safe_update`,
+  `kb_import_and_verify`,
+  `kb_query_with_sources`
+- 保留旧 prompt `kb_qa`，向后兼容既有客户端
+- 新增只读工具 `get_source_graph`，让 research/qna flow 中的溯源步骤指向真实 MCP 工具
+- `ask` 支持 `include_graph / include_context / max_sources / max_graph_nodes` 可选参数
+- `kb_capabilities.recommended_flows` 与文档中的 research/safe_update/import/qna 流程保持一致
+
+**新增文件**: `tests/test_mcp_docs_prompts.py`
+
 ## 测试状态
 
 ```
@@ -67,61 +100,28 @@
 
 3 个 `test_librarian_schema.py` 失败是**预存 bug**（中文 schema normalization），从 Sprint 1 起就存在，与本次改造无关。
 
+本轮 Sprint 5 验证:
+
+```bash
+pytest tests/test_embedding_context.py -q
+pytest tests/test_mcp_contract.py -q
+pytest tests/test_operation_safety.py -q
+pytest tests/test_mcp_rag_full.py -q
+pytest tests/test_mcp_server.py -q
+pytest tests/test_full_pipeline_e2e.py -q
+```
+
+本轮 Sprint 6 验证:
+
+```bash
+pytest tests/test_mcp_docs_prompts.py tests/test_mcp_server.py tests/test_mcp_contract.py tests/test_mcp_rag_full.py tests/test_operation_safety.py tests/test_embedding_context.py -q
+```
+
 ---
 
 ## 待完成工作
 
-### Sprint 5: Phase 6 — Embedding-time Contextual Headers
-
-**目标**: Block 向量索引时动态拼装父链上下文，提升检索质量。`blocks.content` 保持原文不被污染。
-
-**需要修改的文件**:
-
-| 文件 | 改动 |
-|------|------|
-| `config.yaml` | 新增 `rag.embedding_context.*` 配置块 |
-| `src/services/embedding.py` | 新增 `build_embedding_text(block)` 方法，调用 `BlockContextService.build_context()` 拼装 embedding 文本 |
-| `src/services/indexer.py` | `reindex_all(dry_run=True)` 返回 `affected_items / affected_blocks / estimated_batches`；正式 reindex 使用新 embedding 文本 |
-| `src/mcp_server.py` | `read` 工具新增参数 `include_blocks / include_embedding_preview / include_effective_properties / include_linked_summaries` |
-
-**config.yaml 新增配置**（参考计划文件）:
-```yaml
-rag:
-  embedding_context:
-    enabled: true
-    include_parent_chain: true
-    include_links: true
-    include_siblings: false
-    max_chars: 1200
-```
-
-**验收标准**:
-- `blocks.content` 不被 contextual header 污染
-- `embedding_text` 含父链 + 链接摘要
-- `reindex_all(dry_run=True)` 不动 DB
-- 新增 `tests/test_embedding_context.py`
-
-### Sprint 6: Phase 7 — MCP 文档 + Prompt 契约
-
-**目标**: 围绕 Agent 工作流重写 MCP 使用文档和 prompt 模板。
-
-**新增文件**:
-- `docs/mcp/agent-usage.md`
-- `docs/mcp/tool-contract.md`
-- `docs/mcp/query-dsl.md`
-- `docs/mcp/safety-and-undo.md`
-- `docs/mcp/ingest-jobs.md`
-
-**mcp_server.py 新增 4 个 prompt 模板**:
-- `kb_agent_research(question)` — 知识库研究标准流程
-- `kb_safe_update(item_id, fields)` — 安全更新流程
-- `kb_import_and_verify(file_path)` — 导入并校验流程
-- `kb_query_with_sources(question)` — 带溯源问答流程
-
-**验收标准**:
-- 5 个文档齐全
-- 4 个 prompt 模板注册成功
-- `kb_capabilities.recommended_flows` 与文档一致
+当前规范内 6 个 Sprint 已全部完成。剩余已知风险是 `test_librarian_schema.py` 的 3 个预存失败（中文 schema normalization），与 MCP-first 改造无关。
 
 ## 关键架构信息
 
@@ -137,7 +137,7 @@ Container 位于 `src/core/container.py`，每个业务服务通过 `@property` 
 
 ### MCP 工具总数
 
-当前约 **40+ 工具**、**3 个资源**、**1 个 prompt 模板**。Sprint 6 将新增 4 个 prompt。
+当前约 **40+ 工具**、**3 个资源**、**5 个 prompt 模板**。
 
 ### Envelope 工具函数
 
