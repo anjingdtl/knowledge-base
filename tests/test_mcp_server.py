@@ -140,8 +140,14 @@ class TestDelete:
         item = _insert_sample()
         result = delete(item_id=item.id)
         assert result["ok"] is True
-        assert "成功" in result["data"]["message"]
+        # Phase 4：软删除 — 消息体现"软删除/可恢复"
+        assert "软删除" in result["data"]["message"] or "成功" in result["data"]["message"]
+        assert result["data"]["soft_deleted"] is True
         assert "operation_id" in result
+        # 二次 read 应返 NOT_FOUND（默认过滤 deleted_at）
+        read_result = read(item_id=item.id)
+        assert read_result["ok"] is False
+        assert read_result["error"]["code"] == "NOT_FOUND"
 
     def test_nonexistent_returns_envelope_fail(self, mcp_env):
         result = delete(item_id="nonexistent")
@@ -156,6 +162,7 @@ class TestDelete:
         assert "would_delete" in result["data"]["would_change"]
         # 数据仍在
         assert Database.get_knowledge(item.id) is not None
+        assert Database.get_knowledge(item.id)["deleted_at"] is None
 
 
 class TestList:

@@ -25,8 +25,10 @@ CREATE TABLE IF NOT EXISTS knowledge_items (
     file_created_at TEXT DEFAULT '',
     file_modified_at TEXT DEFAULT '',
     created_at TIMESTAMP,
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP,
+    deleted_at TEXT DEFAULT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_kb_deleted ON knowledge_items(deleted_at);
 
 CREATE TABLE IF NOT EXISTS knowledge_versions (
     id TEXT PRIMARY KEY,
@@ -436,6 +438,10 @@ class Database:
             cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_created_at TEXT DEFAULT ''")
         if "file_modified_at" not in cols:
             cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_modified_at TEXT DEFAULT ''")
+        if "deleted_at" not in cols:
+            # Sprint 3 / Phase 4: 软删除列
+            cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN deleted_at TEXT DEFAULT NULL")
+            cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_kb_deleted ON knowledge_items(deleted_at)")
 
         msg_cols = {row[1] for row in cls._conn.execute("PRAGMA table_info(chat_messages)").fetchall()}
         if "source_graph" not in msg_cols:
@@ -593,26 +599,43 @@ class Database:
         return item["id"]
 
     @classmethod
-    def get_knowledge(cls, item_id: str) -> Optional[dict]:
-        row = cls.get_conn().execute("SELECT * FROM knowledge_items WHERE id = ?", (item_id,)).fetchone()
+    def get_knowledge(cls, item_id: str, include_deleted: bool = False) -> Optional[dict]:
+        """按 ID 查询知识条目。
+
+        Args:
+            item_id: 知识条目 ID
+            include_deleted: 是否包含已软删除条目（默认过滤，Phase 4 / Sprint 3）
+        """
+        conn = cls.get_conn()
+        if include_deleted:
+            row = conn.execute("SELECT * FROM knowledge_items WHERE id = ?", (item_id,)).fetchone()
+        else:
+            row = conn.execute(
+                "SELECT * FROM knowledge_items WHERE id = ? AND deleted_at IS NULL",
+                (item_id,),
+            ).fetchone()
         return dict(row) if row else None
 
     @classmethod
-    def get_knowledge_by_hash(cls, content_hash: str) -> Optional[dict]:
+    def get_knowledge_by_hash(cls, content_hash: str, include_deleted: bool = False) -> Optional[dict]:
         """按内容哈希查重，返回第一条匹配记录"""
-        row = cls.get_conn().execute(
-            "SELECT * FROM knowledge_items WHERE content_hash = ? LIMIT 1", (content_hash,)
+        conn = cls.get_conn()
+        clause = "AND deleted_at IS NULL" if not include_deleted else ""
+        row = conn.execute(
+            f"SELECT * FROM knowledge_items WHERE content_hash = ? {clause} LIMIT 1",
+            (content_hash,),
         ).fetchone()
         return dict(row) if row else None
 
     @classmethod
-    def get_knowledge_batch(cls, ids: list[str]) -> dict[str, dict]:
+    def get_knowledge_batch(cls, ids: list[str], include_deleted: bool = False) -> dict[str, dict]:
         """批量查询知识条目，返回 {id: row_dict}"""
         if not ids:
             return {}
         placeholders = ",".join("?" for _ in ids)
+        clause = "AND deleted_at IS NULL" if not include_deleted else ""
         rows = cls.get_conn().execute(
-            f"SELECT * FROM knowledge_items WHERE id IN ({placeholders})", ids
+            f"SELECT * FROM knowledge_items WHERE id IN ({placeholders}) {clause}", ids
         ).fetchall()
         return {row["id"]: dict(row) for row in rows}
 
@@ -620,10 +643,14 @@ class Database:
     def list_knowledge(cls, tag: str | None = None, file_type: str | None = None,
                        quality: str | None = None,
                        sort_by: str = "updated_at", sort_order: str = "DESC",
-                       limit: int = 100, offset: int = 0) -> list[dict]:
+                       limit: int = 100, offset: int = 0,
+                       include_deleted: bool = False) -> list[dict]:
+        """列出知识条目。默认过滤已软删除条目。"""
         conn = cls.get_conn()
         conditions = []
         params = []
+        if not include_deleted:
+            conditions.append("deleted_at IS NULL")
         if tag:
             conditions.append("tags LIKE ?")
             params.append(f'%"{tag}"%')
@@ -644,16 +671,19 @@ class Database:
         return [dict(r) for r in rows]
 
     @classmethod
-    def search_knowledge(cls, query: str, limit: int = 20, offset: int = 0) -> list[dict]:
+    def search_knowledge(cls, query: str, limit: int = 20, offset: int = 0,
+                         include_deleted: bool = False) -> list[dict]:
         from src.utils.chinese_tokenizer import sanitize_fts_query
         conn = cls.get_conn()
+        deleted_clause = "" if include_deleted else " AND ki.deleted_at IS NULL"
         try:
             safe_query = sanitize_fts_query(query)
             if safe_query:
                 fts_rows = conn.execute(
-                    """SELECT ki.*, rank as fts_rank FROM knowledge_fts kf
-                       JOIN knowledge_items ki ON ki.rowid = kf.rowid
-                       WHERE knowledge_fts MATCH ? ORDER BY fts_rank LIMIT ? OFFSET ?""",
+                    f"""SELECT ki.*, rank as fts_rank FROM knowledge_fts kf
+                        JOIN knowledge_items ki ON ki.rowid = kf.rowid
+                        WHERE knowledge_fts MATCH ?{deleted_clause}
+                        ORDER BY fts_rank LIMIT ? OFFSET ?""",
                     (safe_query, limit, offset),
                 ).fetchall()
                 if fts_rows:
@@ -662,9 +692,10 @@ class Database:
             logger.warning("FTS search failed, falling back to LIKE: %s", e)
         # 转义 LIKE 通配符，防止用户输入 % 或 _ 影响搜索行为
         escaped = query.replace('%', '\\%').replace('_', '\\_')
+        deleted_clause2 = "" if include_deleted else " AND deleted_at IS NULL"
         try:
             rows = conn.execute(
-                "SELECT * FROM knowledge_items WHERE title LIKE ? ESCAPE '\\' OR content LIKE ? ESCAPE '\\' ORDER BY updated_at DESC LIMIT ? OFFSET ?",
+                f"SELECT * FROM knowledge_items WHERE (title LIKE ? ESCAPE '\\' OR content LIKE ? ESCAPE '\\'){deleted_clause2} ORDER BY updated_at DESC LIMIT ? OFFSET ?",
                 (f"%{escaped}%", f"%{escaped}%", limit, offset),
             ).fetchall()
         except sqlite3.OperationalError as e:
@@ -692,29 +723,77 @@ class Database:
             conn = cls.get_conn()
             conn.execute("BEGIN IMMEDIATE")
             try:
-                old = cls.get_knowledge(item_id)
-                if old:
-                    _version_fields = {"title", "content", "tags"}
-                    if _version_fields & set(fields):
-                        cls._save_version(item_id, old)
+                # Phase 4: 默认过滤已软删除条目（不更新已删条目）
+                old = cls.get_knowledge(item_id, include_deleted=False)
+                if not old:
+                    raise ValueError(f"Knowledge item {item_id} not found or has been deleted")
+                _version_fields = {"title", "content", "tags"}
+                if _version_fields & set(fields):
+                    cls._save_version(item_id, old)
                 sets = ", ".join(f"{k} = ?" for k in fields)
                 values = list(fields.values()) + [datetime.now().isoformat(), item_id]
-                conn.execute(
-                    f"UPDATE knowledge_items SET {sets}, version = version + 1, updated_at = ? WHERE id = ?",
+                cursor = conn.execute(
+                    f"UPDATE knowledge_items SET {sets}, version = version + 1, updated_at = ? "
+                    f"WHERE id = ? AND deleted_at IS NULL",
                     values,
                 )
+                if cursor.rowcount == 0:
+                    raise ValueError(f"Knowledge item {item_id} not found or has been deleted")
                 conn.commit()
             except Exception:
                 conn.rollback()
                 raise
 
     @classmethod
-    def delete_knowledge(cls, item_id: str):
-        """删除知识条目及其关联数据（chunks、versions、FTS）。
+    def soft_delete_knowledge(cls, item_id: str, when: str | None = None) -> bool:
+        """Phase 4 / Sprint 3：软删除 — 设置 deleted_at。
+
+        Args:
+            item_id: 知识条目 ID
+            when: ISO 时间戳，缺省取当前时间
+
+        Returns:
+            True 如果条目存在并已标记为删除；False 如果条目不存在或已删除
+        """
+        when = when or datetime.now().isoformat()
+        with cls._write_lock:
+            cursor = cls.get_conn().execute(
+                "UPDATE knowledge_items SET deleted_at = ? WHERE id = ? AND deleted_at IS NULL",
+                (when, item_id),
+            )
+            cls.get_conn().commit()
+            return cursor.rowcount > 0
+
+    @classmethod
+    def restore_knowledge(cls, item_id: str) -> bool:
+        """Phase 4 / Sprint 3：恢复 — 清除 deleted_at。
+
+        Returns:
+            True 如果条目存在并已恢复（之前是软删状态）；False 如果条目不存在或未删
+        """
+        with cls._write_lock:
+            cursor = cls.get_conn().execute(
+                "UPDATE knowledge_items SET deleted_at = NULL WHERE id = ? AND deleted_at IS NOT NULL",
+                (item_id,),
+            )
+            cls.get_conn().commit()
+            return cursor.rowcount > 0
+
+    @classmethod
+    def delete_knowledge(cls, item_id: str, hard: bool = False):
+        """删除知识条目。
+
+        Args:
+            item_id: 知识条目 ID
+            hard: True=硬删（彻底删除所有关联数据），False=软删（设置 deleted_at）
 
         注意：调用方需自行负责向量存储清理（VectorStore().delete_by_knowledge），
         以避免 db ↔ vectorstore 循环导入。
         """
+        if not hard:
+            # Phase 4: 软删除是默认行为
+            cls.soft_delete_knowledge(item_id)
+            return
         with cls._write_lock:
             conn = cls.get_conn()
             cls._delete_chunks_fts_unlocked(item_id)
@@ -735,6 +814,40 @@ class Database:
             conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
             conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
             conn.commit()
+
+    @classmethod
+    def purge_knowledge(cls, item_id: str) -> bool:
+        """Phase 4: 硬删 — 彻底删除条目及其所有关联数据。
+
+        Returns:
+            True 如果条目存在并被删除；False 如果条目不存在
+        """
+        with cls._write_lock:
+            conn = cls.get_conn()
+            existing = conn.execute(
+                "SELECT id FROM knowledge_items WHERE id = ?", (item_id,),
+            ).fetchone()
+            if not existing:
+                return False
+            cls._delete_chunks_fts_unlocked(item_id)
+            conn.execute(
+                "DELETE FROM block_property_index WHERE block_id IN (SELECT id FROM blocks WHERE page_id = ?)",
+                (item_id,),
+            )
+            conn.execute(
+                "DELETE FROM block_refs WHERE source_id IN (SELECT id FROM blocks WHERE page_id = ?) OR target_id IN (SELECT id FROM blocks WHERE page_id = ?)",
+                (item_id, item_id),
+            )
+            conn.execute("DELETE FROM blocks WHERE page_id = ?", (item_id,))
+            conn.execute(
+                "DELETE FROM entity_refs WHERE (source_type = 'knowledge' AND source_id = ?) OR (target_type = 'knowledge' AND target_id = ?)",
+                (item_id, item_id),
+            )
+            conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
+            conn.commit()
+            return True
 
     @classmethod
     def find_duplicates(cls) -> list[list[dict]]:
@@ -763,14 +876,17 @@ class Database:
         return result
 
     @classmethod
-    def count_knowledge(cls, tag: str | None = None) -> int:
+    def count_knowledge(cls, tag: str | None = None, include_deleted: bool = False) -> int:
+        deleted_clause = "" if include_deleted else " AND deleted_at IS NULL"
         if tag:
             row = cls.get_conn().execute(
-                "SELECT COUNT(*) as cnt FROM knowledge_items WHERE tags LIKE ?",
+                f"SELECT COUNT(*) as cnt FROM knowledge_items WHERE tags LIKE ?{deleted_clause}",
                 (f'%"{tag}"%',),
             ).fetchone()
         else:
-            row = cls.get_conn().execute("SELECT COUNT(*) as cnt FROM knowledge_items").fetchone()
+            row = cls.get_conn().execute(
+                f"SELECT COUNT(*) as cnt FROM knowledge_items WHERE 1=1{deleted_clause}",
+            ).fetchone()
         return row["cnt"]
 
     @classmethod
