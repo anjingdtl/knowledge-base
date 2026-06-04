@@ -119,11 +119,15 @@ class QueryExecutor:
             )
         if op in ("gt", "gte", "lt", "lte"):
             op_map = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<="}
+            try:
+                numeric_value = float(value)
+            except (TypeError, ValueError):
+                return "", [], False
             return (
                 f"EXISTS (SELECT 1 FROM effective_property_index epi "
                 f"WHERE epi.block_id IN (SELECT id FROM blocks WHERE page_id = ki.id) "
                 f"AND epi.prop_key = ? AND CAST(epi.prop_value AS REAL) {op_map[op]} ?)",
-                [key, float(value)],
+                [key, numeric_value],
                 False,
             )
         if op == "in":
