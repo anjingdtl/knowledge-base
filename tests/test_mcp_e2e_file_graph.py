@@ -79,24 +79,30 @@ def test_mcp_process_file_graph_round_trip(tmp_path):
                     "content": "端到端唯一搜索词",
                     "tags": ["e2e"],
                 })
-                page_id = created.data["id"]
-                page_path = Path(created.data["path"])
+                # Sprint 1 envelope: 工具返回 {"ok": true, "data": {...}, "operation_id": ...}
+                assert created.data["ok"] is True
+                page_id = created.data["data"]["id"]
+                page_path = Path(created.data["data"]["path"])
                 assert page_path.exists()
                 assert "id::" in page_path.read_text(encoding="utf-8")
 
                 read = await client.call_tool("read", {"item_id": page_id})
-                assert read.data["id"] == page_id
-                assert "端到端唯一搜索词" in read.data["content"]
+                assert read.data["ok"] is True
+                assert read.data["data"]["id"] == page_id
+                assert "端到端唯一搜索词" in read.data["data"]["content"]
 
                 search = await client.call_tool("search", {"query": "端到端唯一搜索词", "top_k": 5})
-                assert any(item.get("knowledge_id") == page_id for item in search.data)
+                assert search.data["ok"] is True
+                assert any(item.get("knowledge_id") == page_id for item in search.data["data"])
 
                 updated = await client.call_tool("update", {"item_id": page_id, "content": "更新后的端到端搜索词"})
-                assert "content" in updated.data["updated_fields"]
+                assert updated.data["ok"] is True
+                assert "content" in updated.data["data"]["updated_fields"]
                 assert "更新后的端到端搜索词" in page_path.read_text(encoding="utf-8")
 
                 deleted = await client.call_tool("delete", {"item_id": page_id})
-                assert deleted.data["id"] == page_id
+                assert deleted.data["ok"] is True
+                assert deleted.data["data"]["id"] == page_id
                 assert not page_path.exists()
 
         asyncio.run(run_client())

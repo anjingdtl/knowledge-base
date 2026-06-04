@@ -3,7 +3,13 @@
 安全说明：MCP 工具通过 stdio 或本地 HTTP 传输运行，信任调用方（如 Claude Desktop）。
 所有写操作（create/update/delete/wiki_*）不做额外认证，依赖 MCP 传输层的信任模型。
 REST API 层（routes.py）则需要 Bearer Token 认证。
+
+Phase 0+1 重构（Sprint 1）：所有 MCP 工具统一返回 envelope：
+    {"ok": true, "data": ..., "meta": ..., "operation_id": "..."}
+    {"ok": false, "error": {"code": "NOT_FOUND", "message": "..."}}
 """
+from __future__ import annotations
+
 import asyncio
 import functools
 import json
@@ -23,6 +29,13 @@ from src.services.rag import RAGService
 from src.services.file_parser import parse_file, parse_url
 from src.services.indexer import index_knowledge_item
 from src.utils.config import Config
+from src.utils.envelope import (
+    ErrorCode,
+    attach_operation_id,
+    dry_run_preview,
+    fail,
+    ok,
+)
 from src.version import VERSION
 
 
@@ -82,16 +95,22 @@ def _heartbeat(fn):
 
 
 def _op_log(operation, target_type, target_id, operator="system", source="mcp",
-            before=None, after=None, metadata=None):
-    """便捷操作日志记录"""
+            before=None, after=None, metadata=None) -> str:
+    """便捷操作日志记录。
+
+    Returns:
+        log_id（写入成功）或空字符串（失败/未启用）。调用方可塞进 envelope 的
+        ``operation_id`` 字段，便于 ``get_operation_log`` 反查。
+    """
     try:
-        _get_container().operation_log.log(
+        return _get_container().operation_log.log(
             operation=operation, target_type=target_type, target_id=target_id,
             operator=operator, source=source,
             before=before, after=after, metadata=metadata,
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("operation_log failed: %s", exc)
+        return ""
 
 
 def _content_preview(text, max_len=200):
@@ -109,14 +128,15 @@ from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
     annotations={"readOnlyHint": True, "openWorldHint": False},
 )
 @_heartbeat
-def search(query: str, top_k: int = 5) -> list[dict]:
+def search(query: str, top_k: int = 5) -> dict:
     """基于语义的向量搜索，查找与查询含义最相关的知识内容。
 
     Args:
         query: 搜索查询文本，支持自然语言描述
         top_k: 返回结果数量，默认5条
     """
-    return _get_container().search_service.search(query, top_k=top_k)
+    results = _get_container().search_service.search(query, top_k=top_k)
+    return ok(results, total_estimate=len(results), top_k=top_k)
 
 
 @mcp.tool(
@@ -124,7 +144,7 @@ def search(query: str, top_k: int = 5) -> list[dict]:
     annotations={"readOnlyHint": True, "openWorldHint": False},
 )
 @_heartbeat
-def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> list[dict]:
+def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
     """使用 FTS5 全文索引搜索知识库。
 
     Args:
@@ -154,7 +174,15 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> list[dict]:
         item["source"] = "knowledge"
         output.append(item)
 
-    return output
+    has_more = len(kb_results) == limit
+    return ok(
+        output,
+        limit=limit,
+        offset=offset,
+        next_offset=offset + len(output) if has_more else None,
+        truncated=has_more,
+        total_estimate=len(output),
+    )
 
 
 @mcp.tool(
@@ -167,7 +195,7 @@ def ask(question: str) -> dict:
     Args:
         question: 用户的问题
     """
-    return _do_ask(question)
+    return ok(_do_ask(question))
 
 
 def _do_ask(question: str) -> dict:
@@ -184,6 +212,7 @@ def create(
     tags: list[str] | None = None,
     file_type: str = "txt",
     source_type: str = "manual",
+    dry_run: bool = False,
 ) -> dict:
     """创建一条知识并自动建立向量索引。
 
@@ -193,6 +222,7 @@ def create(
         tags: 标签列表
         file_type: 内容类型 - txt（纯文本）、md（Markdown）、code（代码）
         source_type: 来源类型 - manual（手动）、file（文件）、web（网页）
+        dry_run: 设为 True 时只预览不执行
     """
     tags = tags or []
     container = _get_container()
@@ -202,7 +232,25 @@ def create(
     content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
     existing = db.get_knowledge_by_hash(content_hash)
     if existing:
-        return {"id": existing["id"], "title": existing["title"], "message": "内容已存在，跳过导入"}
+        return ok(
+            {
+                "id": existing["id"],
+                "title": existing["title"],
+                "message": "内容已存在，跳过导入",
+                "skipped": True,
+            }
+        )
+
+    if dry_run:
+        return dry_run_preview(
+            {
+                "title": title,
+                "content_preview": _content_preview(content),
+                "tags": tags,
+                "source_type": source_type,
+                "file_type": file_type,
+            }
+        )
 
     item_id = container.file_graph_service.create_page(
         title,
@@ -213,11 +261,17 @@ def create(
     # Wiki 编译
     _try_wiki_compile(item_id)
     item = db.get_knowledge(item_id) or {"title": title}
-    _op_log("create", "knowledge", item_id, after={
+    log_id = _op_log("create", "knowledge", item_id, after={
         "title": item["title"], "content_preview": _content_preview(content),
         "tags": tags, "source_type": source_type, "file_type": file_type,
     })
-    return {"id": item_id, "title": item["title"], "path": item.get("source_path", ""), "message": "知识创建成功并已完成索引"}
+    envelope = ok({
+        "id": item_id,
+        "title": item["title"],
+        "path": item.get("source_path", ""),
+        "message": "知识创建成功并已完成索引",
+    })
+    return attach_operation_id(envelope, log_id)
 
 
 @mcp.tool(
@@ -233,8 +287,8 @@ def read(item_id: str) -> dict:
     """
     item = _get_container().db.get_knowledge(item_id)
     if not item:
-        raise ValueError(f"知识条目不存在: {item_id}")
-    return item
+        return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {item_id}", item_id=item_id)
+    return ok(item)
 
 
 @mcp.tool(
@@ -261,8 +315,8 @@ def update(
     db = container.db
     existing = db.get_knowledge(item_id)
     if not existing:
-        raise ValueError(f"知识条目不存在: {item_id}")
-    fields = {}
+        return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {item_id}", item_id=item_id)
+    fields: dict = {}
     if title is not None:
         fields["title"] = title
     if content is not None:
@@ -270,10 +324,10 @@ def update(
     if tags is not None:
         fields["tags"] = tags
     if not fields:
-        return {"message": "未提供需要更新的字段"}
+        return ok({"message": "未提供需要更新的字段", "no_op": True})
 
     import json as _json
-    changes = {}
+    changes: dict = {}
     for k, v in fields.items():
         old_val = existing.get(k)
         if isinstance(old_val, str) and k == "tags":
@@ -290,22 +344,23 @@ def update(
             changes[k] = {"before": old_val, "after": v}
 
     if dry_run:
-        return {"dry_run": True, "would_change": changes, "item_id": item_id}
+        return dry_run_preview({"item_id": item_id, "changes": changes}, item_id=item_id)
 
     blocks = fields["content"] if "content" in fields else container.file_graph_service.read_page(item_id).blocks
     container.file_graph_service.update_page(item_id, blocks, metadata=fields)
     updated = db.get_knowledge(item_id) or {}
-    _op_log("update", "knowledge", item_id, before={
+    log_id = _op_log("update", "knowledge", item_id, before={
         k: v["before"] for k, v in changes.items()
     }, after={
         k: v["after"] for k, v in changes.items()
     })
-    return {
+    envelope = ok({
         "message": "知识更新成功",
         "updated_fields": list(fields.keys()),
         "changes": changes,
         "version": updated.get("version"),
-    }
+    })
+    return attach_operation_id(envelope, log_id)
 
 
 @mcp.tool(
@@ -323,7 +378,7 @@ def delete(item_id: str, dry_run: bool = False) -> dict:
     container = _get_container()
     existing = container.db.get_knowledge(item_id)
     if not existing:
-        raise ValueError(f"知识条目不存在: {item_id}")
+        return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {item_id}", item_id=item_id)
 
     import json as _json
     deleted_tags = existing.get("tags", "[]")
@@ -350,22 +405,24 @@ def delete(item_id: str, dry_run: bool = False) -> dict:
             block_count = rows["cnt"]
         except Exception:
             pass
-        return {
-            "dry_run": True,
-            "would_delete": {**deleted_item, "block_count": block_count},
-            "warning": "此操作不可逆",
-        }
+        envelope = dry_run_preview(
+            {"item_id": item_id, "would_delete": {**deleted_item, "block_count": block_count},
+             "warning": "此操作不可逆"},
+            item_id=item_id,
+        )
+        return envelope
 
-    _op_log("delete", "knowledge", item_id, before=deleted_item, metadata={
+    log_id = _op_log("delete", "knowledge", item_id, before=deleted_item, metadata={
         "version": existing.get("version"),
     })
     container.file_graph_service.delete_page(item_id)
-    return {
+    envelope = ok({
         "message": "知识删除成功",
         "id": item_id,
         "deleted_item": deleted_item,
         "version": existing.get("version"),
-    }
+    })
+    return attach_operation_id(envelope, log_id)
 
 
 @mcp.tool(
@@ -381,10 +438,16 @@ def reindex_all(dry_run: bool = False) -> dict:
     container = _get_container()
     count = container.db.count_knowledge()
     if dry_run:
-        return {"dry_run": True, "would_reindex": count}
-    _op_log("reindex", "system", "all", metadata={"count": count})
+        return dry_run_preview({"item_count": count, "would_reindex": count},
+                               item_count=count)
+    log_id = _op_log("reindex", "system", "all", metadata={"count": count})
     from src.services.indexer import reindex_all as _reindex_all
-    return _reindex_all()
+    result = _reindex_all()
+    envelope = ok({
+        "message": "索引重建完成",
+        "result": result,
+    })
+    return attach_operation_id(envelope, log_id)
 
 
 @mcp.tool(
@@ -416,7 +479,15 @@ def list_knowledge(
         sort_order=sort_order, limit=limit, offset=offset,
     )
     total = db.count_knowledge(tag=tag)
-    return {"items": items, "total": total, "limit": limit, "offset": offset}
+    has_more = (offset + len(items)) < total
+    return ok(
+        items,
+        total=total,
+        limit=limit,
+        offset=offset,
+        next_offset=offset + limit if has_more else None,
+        truncated=has_more,
+    )
 
 
 @mcp.tool(
@@ -424,23 +495,66 @@ def list_knowledge(
     annotations={"readOnlyHint": True},
 )
 @_heartbeat
-def tags() -> list[str]:
+def tags() -> dict:
     """返回知识库中所有标签的排序列表。"""
-    return _get_container().db.get_all_tags()
+    all_tags = _get_container().db.get_all_tags()
+    return ok(all_tags, count=len(all_tags))
 
 
 @mcp.tool(
     description="解析本地文件并将其内容导入知识库。支持 PDF、DOCX、TXT、Markdown、HTML、图片及代码文件。Excel 文件的每个工作表独立导入。",
 )
 @_heartbeat
-def ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
+def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = False) -> dict:
     """解析本地文件并创建知识条目。
 
     Args:
         file_path: 本地文件的绝对路径
         tags: 要附加的标签列表
+        dry_run: 设为 True 时只预览将解析的文件信息不执行
     """
-    return _do_ingest_file(file_path, tags)
+    try:
+        validated_path = _validate_file_path(file_path)
+    except (FileNotFoundError, PermissionError) as exc:
+        return fail(
+            ErrorCode.INGEST_FAILED if isinstance(exc, FileNotFoundError)
+            else ErrorCode.PERMISSION_DENIED,
+            str(exc),
+            file_path=file_path,
+        )
+
+    if dry_run:
+        return dry_run_preview({
+            "file_path": validated_path,
+            "size_bytes": os.path.getsize(validated_path) if os.path.exists(validated_path) else 0,
+            "would_parse": True,
+        }, file_path=validated_path)
+
+    try:
+        result = _do_ingest_file(validated_path, tags)
+    except Exception as exc:
+        logger.exception("ingest_file failed: %s", file_path)
+        return fail(ErrorCode.INGEST_FAILED, str(exc), file_path=file_path)
+    return ok(result)
+
+
+@mcp.tool(
+    description="解析网页 URL 并将其内容导入知识库。支持 HTTP/HTTPS 网页，自动提取正文文本。",
+)
+@_heartbeat
+def ingest_url(url: str, tags: list[str] | None = None) -> dict:
+    """抓取网页并创建知识条目。
+
+    Args:
+        url: 要导入的网页 URL（HTTP 或 HTTPS）
+        tags: 要附加的标签列表
+    """
+    try:
+        result = _do_ingest_url(url, tags)
+    except Exception as exc:
+        logger.exception("ingest_url failed: %s", url)
+        return fail(ErrorCode.INGEST_FAILED, str(exc), url=url)
+    return ok(result)
 
 
 def _validate_file_path(file_path: str) -> str:
@@ -541,6 +655,7 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
                 "title": existing["title"],
                 "file_type": existing.get("file_type", ""),
                 "message": "内容已存在，跳过导入",
+                "skipped": True,
             })
             continue
 
@@ -578,20 +693,6 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     }
 
 
-@mcp.tool(
-    description="解析网页 URL 并将其内容导入知识库。支持 HTTP/HTTPS 网页，自动提取正文文本。",
-)
-@_heartbeat
-def ingest_url(url: str, tags: list[str] | None = None) -> dict:
-    """抓取网页并创建知识条目。
-
-    Args:
-        url: 要导入的网页 URL（HTTP 或 HTTPS）
-        tags: 要附加的标签列表
-    """
-    return _do_ingest_url(url, tags)
-
-
 def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
     tags = tags or []
     parsed = parse_url(url)
@@ -607,6 +708,7 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
             "title": existing["title"],
             "file_type": existing.get("file_type", ""),
             "message": "网页内容已存在，跳过导入",
+            "skipped": True,
         }
 
     blocks = parsed.structured if parsed.structured else parsed.content
@@ -643,16 +745,17 @@ def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None
         source_ids: 引用的知识条目 ID 列表
     """
     if not Config.get("wiki.enabled", False):
-        return {"error": "Wiki 功能未启用"}
+        return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
     from src.services.wiki_compiler import WikiCompiler
     compiler = WikiCompiler()
     page_id = compiler.save_answer(question, answer, source_ids)
     if page_id:
-        _op_log("wiki_create", "wiki_page", page_id, after={
+        log_id = _op_log("wiki_create", "wiki_page", page_id, after={
             "question": question[:100], "source_ids": source_ids,
         })
-        return {"page_id": page_id, "message": "回答已保存为 Wiki 页面"}
-    return {"message": "回答内容过短，未达到保存阈值"}
+        envelope = ok({"page_id": page_id, "message": "回答已保存为 Wiki 页面"})
+        return attach_operation_id(envelope, log_id)
+    return ok({"message": "回答内容过短，未达到保存阈值", "no_op": True})
 
 
 @mcp.tool(
@@ -662,134 +765,165 @@ def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None
 def wiki_lint() -> dict:
     """运行 Wiki 体检，返回健康报告。"""
     if not Config.get("wiki.enabled", False):
-        return {"error": "Wiki 功能未启用"}
+        return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
     from src.services.wiki_lint import WikiLint
     linter = WikiLint()
     report = linter.run()
-    return report
+    return ok(report)
 
 
 # ---- Wiki Workflow MCP Tools ----
 
 @mcp.tool(description="提交 Wiki 页面进行审核（draft -> review）")
+@_heartbeat
 def wiki_submit_review(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """提交页面审核"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.submit_for_review(page_id, operator, comment)
     if result.success:
-        _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
-                before={"status": "draft"}, after={"status": "review"},
-                metadata={"comment": comment})
-    return {"success": result.success, "message": result.message}
+        log_id = _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
+                         before={"status": "draft"}, after={"status": "review"},
+                         metadata={"comment": comment})
+        envelope = ok({"success": result.success, "message": result.message,
+                       "page_id": page_id, "from": "draft", "to": "review"})
+        return attach_operation_id(envelope, log_id)
+    return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
 @mcp.tool(description="审批通过 Wiki 页面（review -> published）")
+@_heartbeat
 def wiki_approve(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """审批通过"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.approve(page_id, operator, comment)
     if result.success:
-        _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
-                before={"status": "review"}, after={"status": "published"},
-                metadata={"comment": comment})
-    return {"success": result.success, "message": result.message}
+        log_id = _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
+                         before={"status": "review"}, after={"status": "published"},
+                         metadata={"comment": comment})
+        envelope = ok({"success": result.success, "message": result.message,
+                       "page_id": page_id, "from": "review", "to": "published"})
+        return attach_operation_id(envelope, log_id)
+    return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
 @mcp.tool(description="驳回 Wiki 页面（review -> draft）")
+@_heartbeat
 def wiki_reject(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """驳回页面"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.reject(page_id, operator, comment)
     if result.success:
-        _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
-                before={"status": "review"}, after={"status": "draft"},
-                metadata={"comment": comment})
-    return {"success": result.success, "message": result.message}
+        log_id = _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
+                         before={"status": "review"}, after={"status": "draft"},
+                         metadata={"comment": comment})
+        envelope = ok({"success": result.success, "message": result.message,
+                       "page_id": page_id, "from": "review", "to": "draft"})
+        return attach_operation_id(envelope, log_id)
+    return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
 @mcp.tool(description="弃用 Wiki 页面（published -> deprecated）")
+@_heartbeat
 def wiki_deprecate(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """弃用页面"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.deprecate(page_id, operator, comment)
     if result.success:
-        _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
-                before={"status": "published"}, after={"status": "deprecated"},
-                metadata={"comment": comment})
-    return {"success": result.success, "message": result.message}
+        log_id = _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
+                         before={"status": "published"}, after={"status": "deprecated"},
+                         metadata={"comment": comment})
+        envelope = ok({"success": result.success, "message": result.message,
+                       "page_id": page_id, "from": "published", "to": "deprecated"})
+        return attach_operation_id(envelope, log_id)
+    return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
 @mcp.tool(description="获取 Wiki 页面工作流历史")
+@_heartbeat
 def wiki_workflow_history(page_id: str) -> dict:
     """获取工作流历史"""
     from src.services.wiki_workflow import WikiWorkflow
     history = WikiWorkflow.get_history(page_id)
-    return {"history": history}
+    return ok({"history": history}, page_id=page_id, count=len(history))
 
 
 @mcp.tool(description="获取 Wiki 页面版本列表")
+@_heartbeat
 def wiki_list_versions(page_id: str) -> dict:
     """列出页面所有版本"""
     versions = _get_container().db.list_wiki_versions(page_id)
-    return {"versions": versions}
+    return ok({"versions": versions}, page_id=page_id, count=len(versions))
 
 
 @mcp.tool(description="恢复到指定版本的 Wiki 页面")
+@_heartbeat
 def wiki_restore_version(page_id: str, version: int) -> dict:
     """恢复到指定版本"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.restore_version(page_id, version)
     if result.success:
-        _op_log("wiki_update", "wiki_page", page_id, after={"restored_version": version})
-    return {"success": result.success, "message": result.message}
+        log_id = _op_log("wiki_update", "wiki_page", page_id,
+                         after={"restored_version": version})
+        envelope = ok({"success": result.success, "message": result.message,
+                       "page_id": page_id, "restored_version": version})
+        return attach_operation_id(envelope, log_id)
+    return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
 # ---- Async Jobs MCP Tools ----
 
 @mcp.tool(description="创建异步任务")
+@_heartbeat
 def create_async_job(job_type: str, params: dict = None, priority: int = 1, max_retries: int = 3) -> dict:
     """创建异步任务"""
     from src.services.async_task import AsyncTaskService
     job_id = AsyncTaskService.create_job(job_type, params or {}, priority, max_retries)
-    return {"job_id": job_id, "status": "pending"}
+    return ok({"job_id": job_id, "status": "pending"})
 
 
 @mcp.tool(description="获取异步任务状态")
+@_heartbeat
 def get_async_job(job_id: str) -> dict:
     """获取任务状态"""
     from src.services.async_task import AsyncTaskService
     job = AsyncTaskService.get_job(job_id)
     if not job:
-        return {"error": "任务不存在"}
-    return job.__dict__
+        return fail(ErrorCode.JOB_NOT_FOUND, f"任务不存在: {job_id}", job_id=job_id)
+    return ok(job.__dict__)
 
 
 @mcp.tool(description="列出异步任务")
+@_heartbeat
 def list_async_jobs(status: str = None, job_type: str = None, limit: int = 20) -> dict:
     """列出任务"""
     from src.services.async_task import AsyncTaskService
     jobs = AsyncTaskService.list_jobs(status, job_type, limit)
-    return {"jobs": [j.__dict__ for j in jobs]}
+    return ok([j.__dict__ for j in jobs], count=len(jobs), limit=limit)
 
 
 @mcp.tool(description="取消异步任务")
+@_heartbeat
 def cancel_async_job(job_id: str) -> dict:
     """取消任务"""
     from src.services.async_task import AsyncTaskService
     success = AsyncTaskService.cancel_job(job_id)
-    return {"success": success, "message": "任务已取消" if success else "无法取消"}
+    if success:
+        return ok({"success": True, "message": "任务已取消", "job_id": job_id})
+    return ok({"success": False, "message": "无法取消（可能已完成或不存在）", "job_id": job_id})
 
 
-@mcp.tool()
-def structured_query(query_dsl: str, limit: int = 100) -> str:
+@mcp.tool(description="执行结构化查询 DSL，返回知识条目列表")
+@_heartbeat
+def structured_query(query_dsl: str, limit: int = 100, offset: int = 0) -> dict:
     """Execute a structured JSON DSL query against the knowledge base.
 
     The DSL supports tag, property, fulltext, link, file_type, source_type filters
     combined with and/or/not groups.
 
     Args:
-        query_dsl: JSON string with the query DSL
+        query_dsl: JSON string with the query DSL（也接受 dict）
         limit: Maximum results to return
+        offset: 分页偏移量
     """
     from src.models.query_dsl import QuerySpec
     from src.services.query_executor import QueryExecutor
@@ -799,19 +933,30 @@ def structured_query(query_dsl: str, limit: int = 100) -> str:
         dsl = json.loads(query_dsl) if isinstance(query_dsl, str) else query_dsl
         spec = QuerySpec.from_json(dsl)
         spec.limit = min(spec.limit, limit)
+        spec.offset = offset
         executor = QueryExecutor(db=container.db)
         results = executor.execute(spec)
-        return json.dumps(results, ensure_ascii=False, default=str)
-    except Exception as e:
-        return json.dumps({"error": str(e)}, ensure_ascii=False)
+        results_list = list(results) if not isinstance(results, list) else results
+        has_more = len(results_list) == limit
+        return ok(
+            results_list,
+            limit=limit,
+            offset=offset,
+            next_offset=offset + len(results_list) if has_more else None,
+            truncated=has_more,
+        )
+    except Exception as exc:
+        logger.exception("structured_query failed: %s", exc)
+        return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
 
 
-@mcp.tool()
-def explain_query(query_dsl: str) -> str:
+@mcp.tool(description="解释结构化查询的执行计划与匹配条件")
+@_heartbeat
+def explain_query(query_dsl: str) -> dict:
     """Explain a structured query: show human-readable summary, execution plan, and condition tree.
 
     Args:
-        query_dsl: JSON string with the query DSL
+        query_dsl: JSON string with the query DSL（也接受 dict）
     """
     from src.models.query_dsl import QuerySpec
     from src.services.query_explainer import QueryExplainer
@@ -820,19 +965,29 @@ def explain_query(query_dsl: str) -> str:
         dsl = json.loads(query_dsl) if isinstance(query_dsl, str) else query_dsl
         spec = QuerySpec.from_json(dsl)
         explainer = QueryExplainer()
-        return json.dumps(explainer.explain(spec), ensure_ascii=False, default=str)
-    except Exception as e:
-        return json.dumps({"error": str(e)}, ensure_ascii=False)
+        return ok(explainer.explain(spec))
+    except Exception as exc:
+        logger.exception("explain_query failed: %s", exc)
+        return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
 
 
-@mcp.tool()
-def graph_traverse(start_ids: str, max_depth: int = 2, start_type: str = "knowledge") -> str:
+@mcp.tool(description="从给定节点遍历知识图谱（多跳、限深度、限节点数）")
+@_heartbeat
+def graph_traverse(
+    start_ids: str,
+    max_depth: int = 2,
+    start_type: str = "knowledge",
+    limit: int = 100,
+    offset: int = 0,
+) -> dict:
     """Traverse the knowledge graph starting from given page/block IDs.
 
     Args:
         start_ids: JSON array of starting node IDs (e.g. '["page-id-1", "page-id-2"]')
         max_depth: Maximum traversal depth
         start_type: Type of start nodes (knowledge or block)
+        limit: 节点数上限
+        offset: 分页偏移
     """
     from src.services.graph_traversal import GraphTraversalService
 
@@ -841,9 +996,26 @@ def graph_traverse(start_ids: str, max_depth: int = 2, start_type: str = "knowle
         ids = json.loads(start_ids) if isinstance(start_ids, str) else start_ids
         service = GraphTraversalService(db=container.db)
         result = service.traverse(start_ids=ids, start_type=start_type, max_depth=max_depth)
-        return json.dumps(result, ensure_ascii=False, default=str)
-    except Exception as e:
-        return json.dumps({"error": str(e)}, ensure_ascii=False)
+        # 截断节点数
+        nodes = result.get("nodes", [])
+        edges = result.get("edges", [])
+        truncated = len(nodes) > limit
+        if truncated:
+            nodes = nodes[offset:offset + limit]
+        return ok(
+            {
+                "nodes": nodes,
+                "edges": edges,
+                "paths": result.get("paths", []),
+                "truncated": truncated or result.get("truncated", False),
+            },
+            limit=limit,
+            offset=offset,
+            max_depth=max_depth,
+        )
+    except Exception as exc:
+        logger.exception("graph_traverse failed: %s", exc)
+        return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
 
 
 # ---- Resources ----
@@ -853,15 +1025,23 @@ def get_knowledge_resource(item_id: str) -> str:
     """获取指定知识条目的完整内容。"""
     item = _get_container().db.get_knowledge(item_id)
     if not item:
-        raise ValueError(f"知识条目不存在: {item_id}")
-    return json.dumps(item, ensure_ascii=False, indent=2)
+        return json.dumps(
+            {"ok": False, "error": {"code": ErrorCode.NOT_FOUND,
+                                    "message": f"知识条目不存在: {item_id}",
+                                    "details": {"item_id": item_id}}},
+            ensure_ascii=False,
+        )
+    return json.dumps({"ok": True, "data": item}, ensure_ascii=False, indent=2)
 
 
 @mcp.resource("kb://tags")
 def get_tags_resource() -> str:
     """获取知识库中所有标签。"""
-    tags = _get_container().db.get_all_tags()
-    return json.dumps({"tags": tags, "count": len(tags)}, ensure_ascii=False, indent=2)
+    tags_list = _get_container().db.get_all_tags()
+    return json.dumps(
+        {"ok": True, "data": {"tags": tags_list, "count": len(tags_list)}},
+        ensure_ascii=False, indent=2,
+    )
 
 
 @mcp.resource("kb://stats")
@@ -872,14 +1052,79 @@ def get_stats_resource() -> str:
         chunk_count = c.block_store.count()
     except Exception:
         chunk_count = 0
-    return json.dumps({
-        "knowledge_items": c.db.count_knowledge(),
-        "vector_chunks": chunk_count,
-        "tags": len(c.db.get_all_tags()),
-    }, ensure_ascii=False, indent=2)
+    payload = {
+        "ok": True,
+        "data": {
+            "knowledge_items": c.db.count_knowledge(),
+            "vector_chunks": chunk_count,
+            "tags": len(c.db.get_all_tags()),
+        },
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
-# ---- Prompts ----
+# ---- Capabilities (Sprint 1 新增) ----
+
+@mcp.tool(
+    description="查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+@_heartbeat
+def kb_capabilities() -> dict:
+    """返回当前 MCP 服务的能力、限制和推荐调用流程。"""
+    # 工具签名从 FastMCP 实例动态生成（避免与实际注册的工具不一致）
+    tool_summaries: list[dict] = []
+    try:
+        # FastMCP >= 0.4 通过 mcp._tool_manager._tools 暴露注册表
+        registry = getattr(mcp, "_tool_manager", None) or getattr(mcp, "tool_manager", None)
+        if registry is not None:
+            tools = getattr(registry, "_tools", None) or getattr(registry, "tools", {}) or {}
+            for name, tool in tools.items():
+                tool_summaries.append({
+                    "name": name,
+                    "description": getattr(tool, "description", ""),
+                })
+    except Exception as exc:
+        logger.debug("tool registry introspection failed: %s", exc)
+
+    return ok({
+        "name": "ShineHeKnowledge",
+        "version": VERSION,
+        "envelope": {
+            "ok": "bool — 成功/失败判断字段",
+            "data": "any — 成功时的负载",
+            "error": "{code, message, details} — 失败时的稳定错误码",
+            "meta": "分页/截断/计数等元信息",
+            "operation_id": "写操作的 audit log id（与 get_operation_log 配合）",
+            "dry_run": "预览变更不执行",
+        },
+        "error_codes": {
+            "NOT_FOUND": "资源不存在",
+            "VALIDATION_ERROR": "参数校验失败",
+            "PERMISSION_DENIED": "路径越权",
+            "INGEST_FAILED": "文件/URL 导入失败",
+            "INTERNAL_ERROR": "内部异常",
+            "WIKI_DISABLED": "Wiki 未启用",
+            "JOB_NOT_FOUND": "任务不存在",
+            "QUERY_PARSE_ERROR": "DSL/JSON 解析失败",
+        },
+        "limits": {
+            "default_page_size": int(Config.get("mcp.default_page_size", 20)),
+            "max_payload_bytes": int(Config.get("mcp.max_payload_bytes", 1_000_000)),
+            "max_graph_nodes": int(Config.get("rag.max_graph_nodes", 200)),
+            "max_graph_depth": int(Config.get("rag.max_graph_depth", 3)),
+        },
+        "tools": tool_summaries,
+        "recommended_flows": {
+            "research": ["kb_capabilities", "route_query", "ask", "read"],
+            "safe_update": ["read", "update(dry_run=true)", "update", "get_operation_log"],
+            "import": ["kb_capabilities", "ingest_file", "structured_query", "ask"],
+            "qna": ["route_query", "ask", "read"],
+        },
+    })
+
+
+# ---- Operation Log Query ----
 
 @mcp.tool(
     description="查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。",
@@ -904,12 +1149,24 @@ def query_operation_logs(
         limit: 返回数量上限
         offset: 分页偏移量
     """
-    logs = _get_container().operation_log.query(
+    logs = _get_container().operation_log_repo.query(
         target_type=target_type, target_id=target_id,
         operation=operation, source=source,
         limit=limit, offset=offset,
     )
-    return {"logs": logs, "count": len(logs)}
+    total = _get_container().operation_log_repo.count(
+        target_type=target_type, operation=operation,
+    )
+    has_more = (offset + len(logs)) < total
+    return ok(
+        logs,
+        count=len(logs),
+        total_estimate=total,
+        limit=limit,
+        offset=offset,
+        next_offset=offset + limit if has_more else None,
+        truncated=has_more,
+    )
 
 
 # ---- Prompts ----

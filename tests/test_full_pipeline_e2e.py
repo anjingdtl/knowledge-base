@@ -396,12 +396,15 @@ class TestMCPToolIntegration:
             tags=["mcp-test", "集成测试"],
             file_type="txt",
         )
-        assert "id" in result
-        item_id = result["id"]
+        # Sprint 1 envelope: {"ok": true, "data": {...}, "operation_id": "..."}
+        assert result["ok"] is True
+        assert "id" in result["data"]
+        item_id = result["data"]["id"]
 
         read_result = read(item_id=item_id)
-        assert read_result["title"] == "MCP 集成测试知识"
-        assert "mcp-test" in json.loads(read_result.get("tags", "[]"))
+        assert read_result["ok"] is True
+        assert read_result["data"]["title"] == "MCP 集成测试知识"
+        assert "mcp-test" in json.loads(read_result["data"].get("tags", "[]"))
 
     def test_mcp_list_and_tags(self):
         from src.mcp_server import create, list_knowledge, tags as get_tags
@@ -410,12 +413,15 @@ class TestMCPToolIntegration:
         create(title="标签测试 B", content="内容 B", tags=["e2e-tag-y"])
 
         listing = list_knowledge(limit=50)
-        titles = {item["title"] for item in listing.get("items", [])}
+        assert listing["ok"] is True
+        titles = {item["title"] for item in listing["data"]}
         assert "标签测试 A" in titles
         assert "标签测试 B" in titles
 
         all_tags = get_tags()
-        assert "e2e-tag-x" in all_tags or "e2e-tag-y" in all_tags
+        assert all_tags["ok"] is True
+        tag_set = set(all_tags["data"])
+        assert "e2e-tag-x" in tag_set or "e2e-tag-y" in tag_set
 
     def test_mcp_structured_query_tool(self):
         from src.mcp_server import structured_query
@@ -427,8 +433,10 @@ class TestMCPToolIntegration:
             "filter": {"tag": "sq-test"},
             "limit": 10,
         })
-        result_json = structured_query(query_dsl=dsl, limit=10)
-        results = json.loads(result_json)
+        result = structured_query(query_dsl=dsl, limit=10)
+        # Sprint 1 envelope：返回 dict 而非 JSON 字符串
+        assert result["ok"] is True
+        results = result["data"]
 
         assert isinstance(results, list)
         assert any(r["id"] == "p-sq-test" for r in results)
@@ -444,8 +452,9 @@ class TestMCPToolIntegration:
                 ]
             }
         })
-        result_json = explain_query(query_dsl=dsl)
-        explanation = json.loads(result_json)
+        result = explain_query(query_dsl=dsl)
+        assert result["ok"] is True
+        explanation = result["data"]
 
         assert "summary" in explanation
         assert "plan" in explanation
@@ -457,12 +466,14 @@ class TestMCPToolIntegration:
         _make_page("p-traverse-mcp", "MCP 遍历起点", tags=["traverse-mcp"])
 
         start_ids = json.dumps(["p-traverse-mcp"])
-        result_json = graph_traverse(start_ids=start_ids, max_depth=1, start_type="knowledge")
-        result = json.loads(result_json)
+        result = graph_traverse(start_ids=start_ids, max_depth=1, start_type="knowledge")
+        # Sprint 1 envelope：data 内是 {nodes, edges, paths, truncated}
+        assert result["ok"] is True
+        payload = result["data"]
 
-        assert "nodes" in result
-        assert "edges" in result
-        node_ids = {n["id"] for n in result["nodes"]}
+        assert "nodes" in payload
+        assert "edges" in payload
+        node_ids = {n["id"] for n in payload["nodes"]}
         assert "p-traverse-mcp" in node_ids
 
 
