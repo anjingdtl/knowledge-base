@@ -80,6 +80,7 @@ class AppContainer:
     _query_executor: Optional[object] = field(default=None, repr=False)
     _graph_traversal: Optional[object] = field(default=None, repr=False)
     _query_explainer: Optional[object] = field(default=None, repr=False)
+    _agentic_router: Optional[object] = field(default=None, repr=False)
 
     @property
     def indexer(self):
@@ -212,6 +213,13 @@ class AppContainer:
             from src.services.query_explainer import QueryExplainer
             self._query_explainer = QueryExplainer()
         return self._query_explainer
+
+    @property
+    def agentic_router(self):
+        if self._agentic_router is None:
+            from src.services.agentic_router import AgenticRouter
+            self._agentic_router = AgenticRouter(db=self.db, llm=self.llm)
+        return self._agentic_router
 
 
 def create_container(config_path: str | None = None) -> AppContainer:
