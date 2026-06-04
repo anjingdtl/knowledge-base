@@ -30,6 +30,12 @@ rag:
   chunk_size: 1200
   context_sibling_window: 1
   context_trace_depth: 3
+  embedding_context:
+    enabled: true
+    include_parent_chain: true
+    include_links: true
+    include_siblings: false
+    max_chars: 1200
   custom_stages: []
   enable_query_rewriting: true
   enable_rerank: true
