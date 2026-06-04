@@ -22,19 +22,34 @@ logger = logging.getLogger(__name__)
 
 # ---- 统一的 prompt 模板 ----
 
-RAG_SYSTEM_PROMPT = """你是一个知识库助手。请基于以下知识库内容回答用户的问题。
+RAG_SYSTEM_PROMPT = """你是一个严谨的知识库问答助手。请基于检索到的知识库内容回答用户问题。
 
 要求：
-1. 优先使用知识库中的内容进行回答
+1. 先理解问题需要哪些事实，再从多个来源中组合推理，不要只做关键词有/无判断
 2. 如果同时有「Wiki 结构化知识」和「原始文档片段」，优先采纳 Wiki 中已综合验证的知识
-3. 如果知识库中没有相关信息，请明确说明，不要编造
-4. 在回答中标注引用的知识来源
-5. 用中文回答"""
+3. 可以进行组合推理和简单计算，但每一步都必须能从给定来源得到依据
+4. 证据不足时，说明已找到的相关线索和缺少的关键事实；不要编造
+5. 回答中标注引用的知识来源，例如「依据来源1、来源3」
+6. 用中文回答，语气自然、直接"""
 
-RAG_USER_TEMPLATE = """知识库内容：
+RAG_USER_TEMPLATE = """请先拆解问题，再基于知识库内容组合推理并回答。
+
+知识库内容：
 {context}
 
 用户问题：{question}"""
+
+
+def build_rag_messages(question: str, context: str, conversation_history: list[dict] | None = None) -> list[dict]:
+    """Build chat messages for grounded RAG generation."""
+    messages = [{"role": "system", "content": RAG_SYSTEM_PROMPT}]
+    if conversation_history:
+        messages.extend(conversation_history[-6:])
+    messages.append({
+        "role": "user",
+        "content": RAG_USER_TEMPLATE.format(context=context, question=question),
+    })
+    return messages
 
 
 # ---- 管线上下文 ----
@@ -50,6 +65,7 @@ class RagContext:
     context_text: str = ""
     answer: str = ""
     sources: list[dict] = field(default_factory=list)
+    source_graph: dict = field(default_factory=lambda: {"nodes": [], "edges": []})
     conversation_history: list[dict] = field(default_factory=list)
     stream_generator: Any = None  # 流式生成时的 generator
     metadata: dict = field(default_factory=dict)
@@ -144,6 +160,39 @@ class VectorSearchStage(PipelineStage):
             return ctx
         top_k = config.get("top_k", 10)
         try:
+            try:
+                from src.services.agentic_router import AgenticRouter
+                agentic = AgenticRouter(db=Database)
+                routing = agentic.route(ctx.question)
+                if routing["mode"] == "structured" and routing.get("query_spec"):
+                    from src.services.query_executor import QueryExecutor
+                    executor = QueryExecutor(db=Database)
+                    ctx.candidates = executor.execute(routing["query_spec"])
+                    if ctx.candidates:
+                        return ctx
+                elif routing["mode"] == "graph" and routing.get("query_spec"):
+                    from src.services.query_executor import QueryExecutor
+                    from src.services.graph_traversal import GraphTraversalService
+                    executor = QueryExecutor(db=Database)
+                    start_pages = executor.execute(routing["query_spec"])
+                    start_ids = [p["id"] for p in start_pages]
+                    traverse_config = routing.get("traverse", {"max_depth": 2})
+                    traversal = GraphTraversalService(db=Database).traverse(
+                        start_ids=start_ids, start_type="knowledge",
+                        max_depth=traverse_config.get("max_depth", 2),
+                    )
+                    ctx.candidates = start_pages
+                    ctx.metadata["graph_traversal"] = traversal
+                    if ctx.candidates:
+                        return ctx
+            except Exception:
+                pass
+
+            from src.services.query_router import QueryRouter
+            router = QueryRouter(db=Database)
+            if router.route(ctx.question).mode == "logic":
+                ctx.candidates = router.search(ctx.question, top_k=top_k)
+                return ctx
             searcher = HybridSearcher()
             all_results = []
             for query in ctx.rewritten_queries:
@@ -220,11 +269,7 @@ class GenerateStage(PipelineStage):
         context = "\n\n".join(context_parts) if context_parts else "（知识库中未找到相关内容）"
         ctx.sources = sources
 
-        user_msg = RAG_USER_TEMPLATE.format(context=context, question=ctx.question)
-        messages = [{"role": "system", "content": RAG_SYSTEM_PROMPT}]
-        if ctx.conversation_history:
-            messages.extend(ctx.conversation_history[-6:])
-        messages.append({"role": "user", "content": user_msg})
+        messages = build_rag_messages(ctx.question, context, ctx.conversation_history)
 
         try:
             llm = LLMService()
@@ -242,7 +287,7 @@ class GenerateStage(PipelineStage):
         pass  # 实际构建在 _build_context_from_filtered
 
     def _build_context_from_filtered(self, filtered):
-        """批量查询标题，组装上下文和来源列表"""
+        """批量查询标题，组装上下文和来源列表（含 Block 父链上下文）"""
         kid_map = {}
         for r in filtered:
             meta = r.get("metadata", {}) if isinstance(r.get("metadata"), dict) else {}
@@ -256,7 +301,12 @@ class GenerateStage(PipelineStage):
         sources = []
         for i, result in enumerate(filtered):
             text = result.get("text", result.get("chunk_text", ""))
-            context_parts.append(f"[来源{i+1}]\n{text}")
+            # 附加 Block 父链上下文
+            block_ctx = result.get("block_context", "")
+            if block_ctx:
+                context_parts.append(f"[来源{i+1}] (上下文: {block_ctx})\n{text}")
+            else:
+                context_parts.append(f"[来源{i+1}]\n{text}")
             meta = result.get("metadata", {}) if isinstance(result.get("metadata"), dict) else {}
             kid = meta.get("page_id", meta.get("knowledge_id", ""))
             if not kid:
@@ -363,7 +413,8 @@ DEFAULT_PIPELINE_CONFIG = [
 class RagPipeline:
     """RAG 管线编排器 — 统一入口"""
 
-    def __init__(self, pipeline_config: list[dict] | None = None):
+    def __init__(self, pipeline_config: list[dict] | None = None, llm=None):
+        self._llm = llm
         self._stages: list[tuple[PipelineStage, dict]] = []
         self._build_from_config(pipeline_config or DEFAULT_PIPELINE_CONFIG)
 
@@ -387,7 +438,14 @@ class RagPipeline:
                     ctx = await stage.execute(ctx, config)
                 except Exception as e:
                     logger.error("Stage %s failed: %s", stage.name, e)
-        return {"answer": ctx.answer, "sources": ctx.sources, "wiki_context": ctx.wiki_context}
+        from src.services.source_graph import build_source_graph
+        ctx.source_graph = build_source_graph(ctx.sources)
+        return {
+            "answer": ctx.answer,
+            "sources": ctx.sources,
+            "wiki_context": ctx.wiki_context,
+            "source_graph": ctx.source_graph,
+        }
 
 
 def create_pipeline_from_config():
@@ -445,6 +503,9 @@ class RAGService:
                 result = asyncio.run(self._pipeline.execute(
                     question, conversation_history
                 ))
+            if "source_graph" not in result:
+                from src.services.source_graph import build_source_graph
+                result["source_graph"] = build_source_graph(result.get("sources", []))
             return result
         except Exception as e:
             logger.error("Pipeline execution failed, falling back to direct query: %s", e)
@@ -485,7 +546,12 @@ class RAGService:
 
         # 阶段 2: 混合检索
         searcher = HybridSearcher()
-        candidates = searcher.search(queries, top_k=top_k)
+        from src.services.query_router import QueryRouter
+        router = QueryRouter(db=Database, hybrid_searcher=searcher)
+        if router.route(question).mode == "logic":
+            candidates = router.search(question, top_k=top_k)
+        else:
+            candidates = searcher.search(queries, top_k=top_k)
 
         if phase_callback:
             phase_callback("reranking", "结果重排序")
@@ -521,7 +587,7 @@ class RAGService:
         if not results:
             def _empty_gen():
                 yield "抱歉，知识库中未找到与您的问题相关的内容，请尝试换个方式提问。"
-            return _empty_gen(), []
+            return _empty_gen(), [], {"nodes": [], "edges": []}
 
         if "rerank_score" in results[0]:
             filtered = results
@@ -535,33 +601,32 @@ class RAGService:
             context_parts.insert(0, f"【Wiki 结构化知识】\n{wiki_context}")
 
         context = "\n\n".join(context_parts) if context_parts else "（知识库中未找到相关内容）"
-        user_msg = RAG_USER_TEMPLATE.format(context=context, question=question)
-        messages = [{"role": "system", "content": RAG_SYSTEM_PROMPT}]
-        if conversation_history:
-            messages.extend(conversation_history[-6:])
-        messages.append({"role": "user", "content": user_msg})
+        messages = build_rag_messages(question, context, conversation_history)
 
         llm = LLMService()
-        return llm.chat_stream(messages, silent=True), sources
+        from src.services.source_graph import build_source_graph
+        source_graph = build_source_graph(sources)
+        return llm.chat_stream(messages, silent=True), sources, source_graph
 
     def _direct_query(self, question: str, conversation_history: list[dict] | None,
                       ctx: RagContext) -> dict:
         """当管线执行失败时的直接查询 fallback"""
         try:
-            user_msg = RAG_USER_TEMPLATE.format(
-                context=ctx.wiki_context or "（知识库中未找到相关内容）",
-                question=question,
+            messages = build_rag_messages(
+                question,
+                ctx.wiki_context or "（知识库中未找到相关内容）",
+                conversation_history,
             )
-            messages = [{"role": "system", "content": RAG_SYSTEM_PROMPT}]
-            if conversation_history:
-                messages.extend(conversation_history[-6:])
-            messages.append({"role": "user", "content": user_msg})
             llm = LLMService()
             answer = strip_think(llm.chat(messages))
-            return {"answer": answer, "sources": []}
+            return {"answer": answer, "sources": [], "source_graph": {"nodes": [], "edges": []}}
         except Exception as e:
             logger.error("Direct query fallback also failed: %s", e)
-            return {"answer": f"抱歉，查询过程中发生错误：{str(e)}", "sources": []}
+            return {
+                "answer": f"抱歉，查询过程中发生错误：{str(e)}",
+                "sources": [],
+                "source_graph": {"nodes": [], "edges": []},
+            }
 
     def _get_wiki_context(self, query: str) -> str:
         if not Config.get("wiki.enabled", False):
@@ -596,7 +661,12 @@ class RAGService:
         sources = []
         for i, result in enumerate(filtered):
             text = result.get("text", result.get("chunk_text", ""))
-            context_parts.append(f"[来源{i+1}]\n{text}")
+            # 附加 Block 父链上下文
+            block_ctx = result.get("block_context", "")
+            if block_ctx:
+                context_parts.append(f"[来源{i+1}] (上下文: {block_ctx})\n{text}")
+            else:
+                context_parts.append(f"[来源{i+1}]\n{text}")
             metadata = result.get("metadata", {})
             kid = metadata.get("knowledge_id", "") if isinstance(metadata, dict) else result.get("knowledge_id", "")
             item = items.get(kid)

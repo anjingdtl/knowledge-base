@@ -13,15 +13,33 @@ class SearchService:
     管线流程：查询改写 → 混合检索 → 重排序 → Wiki 优先
     """
 
-    def __init__(self, config, db, block_store, embedding, llm):
-        self._config = config
+    def __init__(self, config=None, db=None, block_store=None, embedding=None, llm=None):
+        self._config = config or {}
         self._db = db
         self._block_store = block_store
         self._embedding = embedding
         self._llm = llm
 
-    def search(self, query: str, top_k: int = 5) -> list[dict]:
+    def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
         """完整搜索管线"""
+        if query_spec is not None:
+            from src.services.query_executor import QueryExecutor
+            from src.services.db import Database
+            executor = QueryExecutor(db=self._db or Database)
+            spec_results = executor.execute(query_spec)
+            structured = []
+            for row in spec_results[:top_k]:
+                structured.append({
+                    "source": "knowledge",
+                    "block_id": None,
+                    "knowledge_id": row["id"],
+                    "title": row.get("title", ""),
+                    "text": row.get("content", ""),
+                    "score": 1.0,
+                })
+            if structured:
+                return structured
+
         output = []
 
         # 1. 查询改写
