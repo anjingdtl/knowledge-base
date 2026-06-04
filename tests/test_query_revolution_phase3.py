@@ -290,3 +290,35 @@ def test_query_executor_include_blocks():
     results = executor.execute(spec)
     assert len(results) == 1
     assert len(results[0]["blocks"]) == 2
+
+
+def test_query_builder_or_and_not_clauses():
+    from src.core.query_builder import HasTag, Or, Not, query
+
+    _insert_page("qb1", "QB Bug Frontend", tags=["bug", "frontend"])
+    _insert_page("qb2", "QB Bug Backend", tags=["bug", "backend"])
+    _insert_page("qb3", "QB Feature", tags=["feature", "frontend"])
+
+    results = query(
+        HasTag("bug"),
+        Or(HasTag("frontend"), HasTag("backend")),
+        Not(HasTag("wontfix")),
+    )
+    ids = {r["id"] for r in results}
+    assert "qb1" in ids
+    assert "qb2" in ids
+    assert "qb3" not in ids
+
+
+def test_query_builder_to_query_spec():
+    from src.core.query_builder import HasTag, HasProperty, Or, Not, FullText, to_query_spec
+
+    spec = to_query_spec(
+        HasTag("bug"),
+        Or(HasProperty("status", "open"), HasProperty("priority", "high")),
+        Not(FullText("deprecated")),
+    )
+    assert spec.filter_condition.type == "and"
+    assert spec.filter_condition.children[0].type == "tag"
+    assert spec.filter_condition.children[1].type == "or"
+    assert spec.filter_condition.children[2].type == "not"

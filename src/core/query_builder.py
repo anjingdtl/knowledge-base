@@ -47,9 +47,9 @@ class HasProperty(QueryClause):
 
     def to_sql(self):
         return (
-            "EXISTS (SELECT 1 FROM block_property_index bpi "
-            "JOIN blocks b ON b.id = bpi.block_id AND b.page_id = ki.id "
-            "WHERE bpi.prop_key = ? AND bpi.prop_value = ?)",
+            "EXISTS (SELECT 1 FROM effective_property_index epi "
+            "JOIN blocks b ON b.id = epi.block_id AND b.page_id = ki.id "
+            "WHERE epi.prop_key = ? AND epi.prop_value = ?)",
             [self.key, self.value],
         )
 
@@ -97,6 +97,38 @@ class SourceType(QueryClause):
 
     def to_sql(self):
         return "ki.source_type = ?", [self.source_type]
+
+
+class Or(QueryClause):
+    def __init__(self, *clauses: QueryClause):
+        self.clauses = list(clauses)
+
+    def to_sql(self):
+        parts = []
+        all_params = []
+        for clause in self.clauses:
+            if hasattr(clause, 'is_fts') and clause.is_fts():
+                continue
+            sql, params = clause.to_sql()
+            if sql:
+                parts.append(sql)
+                all_params.extend(params)
+        if not parts:
+            return "", []
+        return "(" + " OR ".join(parts) + ")", all_params
+
+
+class Not(QueryClause):
+    def __init__(self, clause: QueryClause):
+        self.clause = clause
+
+    def to_sql(self):
+        if hasattr(self.clause, 'is_fts') and self.clause.is_fts():
+            return "", []
+        sql, params = self.clause.to_sql()
+        if not sql:
+            return "", []
+        return f"NOT ({sql})", params
 
 
 # ---- 便捷构造函数 ----
@@ -192,3 +224,41 @@ def query(*clauses: QueryClause, limit: int = 100, offset: int = 0,
         except Exception as e:
             logger.error("Query failed: %s SQL: %s", e, sql)
             return []
+
+
+def to_query_spec(*clauses: QueryClause, limit: int = 100, offset: int = 0,
+                  sort_by: str = "updated_at", sort_order: str = "desc"):
+    from src.models.query_dsl import Condition, QuerySpec
+
+    def clause_to_condition(clause):
+        if isinstance(clause, Or):
+            return Condition(type="or", children=[clause_to_condition(c) for c in clause.clauses])
+        if isinstance(clause, Not):
+            return Condition(type="not", child=clause_to_condition(clause.clause))
+        if isinstance(clause, HasTag):
+            return Condition(type="tag", value=clause.tag, expand_descendants=True)
+        if isinstance(clause, HasProperty):
+            return Condition(type="property", key=clause.key, op="eq", value=clause.value)
+        if isinstance(clause, FullText):
+            return Condition(type="fulltext", value=clause.query_text)
+        if isinstance(clause, HasRefTo):
+            return Condition(type="link", value=clause.target_id)
+        if isinstance(clause, FileType):
+            return Condition(type="file_type", value=clause.file_type)
+        if isinstance(clause, SourceType):
+            return Condition(type="source_type", value=clause.source_type)
+        return Condition(type="and", children=[])
+
+    conditions = [clause_to_condition(c) for c in clauses]
+    if len(conditions) == 1:
+        root = conditions[0]
+    else:
+        root = Condition(type="and", children=conditions)
+
+    return QuerySpec(
+        filter_condition=root,
+        limit=limit,
+        offset=offset,
+        sort_by=sort_by,
+        sort_order=sort_order,
+    )
