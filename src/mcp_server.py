@@ -734,9 +734,13 @@ def get_tags_resource() -> str:
 def get_stats_resource() -> str:
     """获取知识库统计信息。"""
     c = _get_container()
+    try:
+        chunk_count = c.block_store.count()
+    except Exception:
+        chunk_count = 0
     return json.dumps({
         "knowledge_items": c.db.count_knowledge(),
-        "vector_chunks": c.block_store.count(),
+        "vector_chunks": chunk_count,
         "tags": len(c.db.get_all_tags()),
     }, ensure_ascii=False, indent=2)
 
