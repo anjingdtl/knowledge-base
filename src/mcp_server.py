@@ -593,11 +593,15 @@ def tags() -> dict:
 
 
 @mcp.tool(
-    description="解析本地文件并将其内容导入知识库。支持 PDF、DOCX、TXT、Markdown、HTML、图片及代码文件。Excel 文件的每个工作表独立导入。",
+    description="解析本地文件并将其内容导入知识库。支持 PDF、DOCX、TXT、Markdown、HTML、图片及代码文件。"
+    "Excel 文件的每个工作表独立导入。大文件自动转异步任务（返回 job_id）。",
 )
 @_heartbeat
 def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = False) -> dict:
     """解析本地文件并创建知识条目。
+
+    大文件（文件大小/sheet数/页数/段落数超过配置阈值）自动转异步任务，
+    返回 job_id 供 get_job 轮询进度。小文件仍同步返回。
 
     Args:
         file_path: 本地文件的绝对路径
@@ -614,12 +618,36 @@ def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = F
             file_path=file_path,
         )
 
+    # 估算文件复杂度
+    from src.services.async_tasks import _estimate_file_complexity
+    complexity = _estimate_file_complexity(validated_path)
+
     if dry_run:
         return dry_run_preview({
             "file_path": validated_path,
-            "size_bytes": os.path.getsize(validated_path) if os.path.exists(validated_path) else 0,
+            "size_bytes": complexity.get("size_bytes", 0),
+            "sheet_count": complexity.get("sheet_count", 0),
+            "page_count": complexity.get("page_count", 0),
+            "paragraph_count": complexity.get("paragraph_count", 0),
+            "would_route_async": complexity.get("needs_async", False),
             "would_parse": True,
         }, file_path=validated_path)
+
+    # 大文件自动路由到异步
+    if complexity.get("needs_async", False):
+        from src.services.async_task import AsyncTaskService
+        job_id = AsyncTaskService.create_job(
+            "file_ingest",
+            {"file_path": validated_path, "tags": tags or []},
+        )
+        return ok({
+            "job_id": job_id,
+            "status": "pending",
+            "routed_async": True,
+            "reason": complexity.get("reason", "大文件自动转异步"),
+            "size_bytes": complexity.get("size_bytes", 0),
+            "message": f"大文件已创建异步导入任务，请用 get_job 查询进度: {job_id}",
+        })
 
     try:
         result = _do_ingest_file(validated_path, tags)
@@ -821,6 +849,161 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
         "path": item.get("source_path", ""),
         "message": "网页解析并索引成功",
     }
+
+
+# ---- Phase 5 / Sprint 4: 大文件异步任务 ----
+
+@mcp.tool(
+    description="创建异步文件/URL导入任务。大文件自动走此路径（也可手动调用强制异步）。"
+    "返回 job_id 供 get_job 轮询。",
+)
+@_heartbeat
+def create_ingest_job(
+    file_path: str | None = None,
+    url: str | None = None,
+    tags: list[str] | None = None,
+) -> dict:
+    """创建异步导入任务。
+
+    至少提供 file_path 或 url 其中之一。file_path 和 url 同时提供时优先 file_path。
+
+    Args:
+        file_path: 本地文件路径（与 url 二选一）
+        url: 网页 URL（与 file_path 二选一）
+        tags: 附加标签列表
+    """
+    from src.services.async_task import AsyncTaskService
+
+    tags = tags or []
+
+    if file_path:
+        # 验证路径
+        try:
+            validated_path = _validate_file_path(file_path)
+        except (FileNotFoundError, PermissionError) as exc:
+            return fail(
+                ErrorCode.INGEST_FAILED if isinstance(exc, FileNotFoundError)
+                else ErrorCode.PERMISSION_DENIED,
+                str(exc),
+                file_path=file_path,
+            )
+        job_id = AsyncTaskService.create_job(
+            "file_ingest",
+            {"file_path": validated_path, "tags": tags},
+        )
+        return ok({
+            "job_id": job_id,
+            "status": "pending",
+            "job_type": "file_ingest",
+            "file_path": validated_path,
+            "message": f"文件导入任务已创建，请用 get_job 查询进度: {job_id}",
+        })
+
+    if url:
+        job_id = AsyncTaskService.create_job(
+            "url_ingest",
+            {"url": url, "tags": tags},
+        )
+        return ok({
+            "job_id": job_id,
+            "status": "pending",
+            "job_type": "url_ingest",
+            "url": url,
+            "message": f"URL 导入任务已创建，请用 get_job 查询进度: {job_id}",
+        })
+
+    return fail(
+        ErrorCode.VALIDATION_ERROR,
+        "必须提供 file_path 或 url 其中之一",
+        hint="file_path 和 url 至少提供一个",
+    )
+
+
+@mcp.tool(
+    description="查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+@_heartbeat
+def get_job(job_id: str) -> dict:
+    """查询异步任务状态（get_async_job 的 Agent 友好别名）。
+
+    Args:
+        job_id: 任务 ID
+    """
+    from src.services.async_task import AsyncTaskService
+    job = AsyncTaskService.get_job(job_id)
+    if not job:
+        return fail(ErrorCode.JOB_NOT_FOUND, f"任务不存在: {job_id}", job_id=job_id)
+    # 返回核心字段，排除内部实现细节
+    return ok({
+        "id": job.id,
+        "job_type": job.job_type,
+        "status": job.status,
+        "progress": job.progress,
+        "progress_message": job.progress_message,
+        "result": job.result,
+        "error_message": job.error_message,
+        "created_at": job.created_at,
+        "completed_at": job.completed_at,
+    })
+
+
+@mcp.tool(
+    description="列出异步任务，可按状态/类型筛选。",
+    annotations={"readOnlyHint": True},
+)
+@_heartbeat
+def list_jobs(
+    status: str | None = None,
+    job_type: str | None = None,
+    limit: int = 20,
+    offset: int = 0,
+) -> dict:
+    """列出异步任务（list_async_jobs 的 Agent 友好别名）。
+
+    Args:
+        status: 状态筛选 (pending/running/completed/failed/cancelled)
+        job_type: 类型筛选 (file_ingest/url_ingest/reindex_all/wiki_compile/...)
+        limit: 返回数量上限
+        offset: 分页偏移
+    """
+    from src.services.async_task import AsyncTaskService
+    jobs = AsyncTaskService.list_jobs(status, job_type, limit, offset)
+    items = [{
+        "id": j.id,
+        "job_type": j.job_type,
+        "status": j.status,
+        "progress": j.progress,
+        "progress_message": j.progress_message,
+        "created_at": j.created_at,
+    } for j in jobs]
+    return ok(items, count=len(items), limit=limit, offset=offset)
+
+
+@mcp.tool(
+    description="取消异步任务。仅 pending/running 状态的任务可取消。",
+    annotations={"destructiveHint": True},
+)
+@_heartbeat
+def cancel_job(job_id: str) -> dict:
+    """取消异步任务（cancel_async_job 的 Agent 友好别名）。
+
+    Args:
+        job_id: 任务 ID
+    """
+    from src.services.async_task import AsyncTaskService
+    from src.services.async_worker import TaskRegistry
+    # 1) 在 TaskRegistry 中标记取消（让运行中的 handler 能检查到）
+    TaskRegistry.cancel_job(job_id)
+    # 2) 更新 DB 状态
+    success = AsyncTaskService.cancel_job(job_id)
+    if success:
+        return ok({"success": True, "message": "任务已取消", "job_id": job_id})
+    return fail(
+        ErrorCode.PRECONDITION_FAILED,
+        "无法取消（可能已完成或不存在）",
+        job_id=job_id,
+    )
 
 
 @mcp.tool(
@@ -1378,7 +1561,8 @@ def kb_capabilities() -> dict:
         "recommended_flows": {
             "research": ["kb_capabilities", "route_query", "ask", "read"],
             "safe_update": ["read", "update(dry_run=true)", "update", "get_operation_log"],
-            "import": ["kb_capabilities", "ingest_file", "structured_query", "ask"],
+            "import": ["kb_capabilities", "ingest_file", "get_job", "structured_query", "ask"],
+            "import_large": ["kb_capabilities", "create_ingest_job", "get_job", "structured_query", "ask"],
             "qna": ["route_query", "ask", "read"],
         },
     })

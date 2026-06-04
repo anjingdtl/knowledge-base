@@ -40,16 +40,27 @@ class AsyncJob:
     completed_at: Optional[str] = None
 
     @classmethod
+    def _safe_json_parse(cls, value) -> dict | list | None:
+        """安全 JSON 解析 — 跳过已解析的 dict/list/None。"""
+        if value is None:
+            return None
+        if isinstance(value, (dict, list)):
+            return value
+        if isinstance(value, str):
+            return json.loads(value)
+        return value
+
+    @classmethod
     def from_db(cls, row: dict) -> "AsyncJob":
         """从数据库行转换为 AsyncJob"""
         return cls(
             id=row["id"],
             job_type=row["job_type"],
             status=row["status"],
-            params=json.loads(row.get("params", "{}")),
+            params=cls._safe_json_parse(row.get("params", "{}")) or {},
             progress=row.get("progress", 0),
             progress_message=row.get("progress_message", ""),
-            result=json.loads(row["result"]) if row.get("result") else None,
+            result=cls._safe_json_parse(row.get("result")),
             error_message=row.get("error_message", ""),
             retry_count=row.get("retry_count", 0),
             max_retries=row.get("max_retries", 3),
