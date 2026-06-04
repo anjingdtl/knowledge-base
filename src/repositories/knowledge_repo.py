@@ -32,30 +32,46 @@ class KnowledgeRepository:
         self._conn().commit()
         return item["id"]
 
-    def get(self, item_id: str) -> Optional[dict]:
-        row = self._conn().execute("SELECT * FROM knowledge_items WHERE id = ?", (item_id,)).fetchone()
+    def get(self, item_id: str, include_deleted: bool = False) -> Optional[dict]:
+        """按 ID 查询；默认过滤已软删除条目（Phase 4 / Sprint 3）。"""
+        conn = self._conn()
+        if include_deleted:
+            row = conn.execute("SELECT * FROM knowledge_items WHERE id = ?", (item_id,)).fetchone()
+        else:
+            row = conn.execute(
+                "SELECT * FROM knowledge_items WHERE id = ? AND deleted_at IS NULL",
+                (item_id,),
+            ).fetchone()
         return dict(row) if row else None
 
-    def get_by_hash(self, content_hash: str) -> Optional[dict]:
-        row = self._conn().execute(
-            "SELECT * FROM knowledge_items WHERE content_hash = ? LIMIT 1", (content_hash,)
+    def get_by_hash(self, content_hash: str, include_deleted: bool = False) -> Optional[dict]:
+        conn = self._conn()
+        clause = "AND deleted_at IS NULL" if not include_deleted else ""
+        row = conn.execute(
+            f"SELECT * FROM knowledge_items WHERE content_hash = ? {clause} LIMIT 1",
+            (content_hash,),
         ).fetchone()
         return dict(row) if row else None
 
-    def get_batch(self, ids: list[str]) -> dict[str, dict]:
+    def get_batch(self, ids: list[str], include_deleted: bool = False) -> dict[str, dict]:
         if not ids:
             return {}
         placeholders = ",".join("?" for _ in ids)
+        clause = "AND deleted_at IS NULL" if not include_deleted else ""
         rows = self._conn().execute(
-            f"SELECT * FROM knowledge_items WHERE id IN ({placeholders})", ids
+            f"SELECT * FROM knowledge_items WHERE id IN ({placeholders}) {clause}", ids
         ).fetchall()
         return {row["id"]: dict(row) for row in rows}
 
     def list(self, tag: str | None = None, file_type: str | None = None,
              quality: str | None = None,
              sort_by: str = "updated_at", sort_order: str = "DESC",
-             limit: int = 100, offset: int = 0) -> list[dict]:
+             limit: int = 100, offset: int = 0,
+             include_deleted: bool = False) -> list[dict]:
+        """列出知识条目；默认过滤已软删除条目。"""
         conditions, params = [], []
+        if not include_deleted:
+            conditions.append("deleted_at IS NULL")
         if tag:
             # NOTE: LIKE matching on JSON-encoded tags. Pattern '%"tag_name"%'
             # prevents partial matches on unquoted text but can still produce
@@ -88,29 +104,61 @@ class KnowledgeRepository:
         if invalid:
             raise ValueError(f"Invalid fields: {invalid}")
         with self._write_lock:
-            old = self.get(item_id)
-            if old:
-                _version_fields = {"title", "content", "tags"}
-                if _version_fields & set(fields):
-                    self._save_version(item_id, old)
+            # Phase 4: 默认过滤已软删除条目
+            old = self.get(item_id, include_deleted=False)
+            if not old:
+                raise ValueError(f"Knowledge item {item_id} not found or has been deleted")
+            _version_fields = {"title", "content", "tags"}
+            if _version_fields & set(fields):
+                self._save_version(item_id, old)
             sets = ", ".join(f'"{k}" = ?' for k in fields)
             values = list(fields.values()) + [datetime.now().isoformat(), item_id]
             cursor = self._conn().execute(
-                f'UPDATE knowledge_items SET {sets}, version = version + 1, updated_at = ? WHERE id = ?',
+                f'UPDATE knowledge_items SET {sets}, version = version + 1, updated_at = ? '
+                f'WHERE id = ? AND deleted_at IS NULL',
                 values,
             )
             self._conn().commit()
             if cursor.rowcount == 0:
-                raise ValueError(f"Knowledge item {item_id} not found")
+                raise ValueError(f"Knowledge item {item_id} not found or has been deleted")
 
-    def delete(self, item_id: str):
+    def delete(self, item_id: str, hard: bool = False) -> None:
+        """Phase 4 / Sprint 3: 软删除（默认）。
+
+        Args:
+            item_id: 知识条目 ID
+            hard: True=硬删（彻底删除所有关联数据），False=软删（设置 deleted_at）
+        """
         with self._write_lock:
-            conn = self._conn()
-            conn.execute("DELETE FROM chunk_fts WHERE knowledge_id = ?", (item_id,))
-            conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
-            conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
-            conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
-            conn.commit()
+            if hard:
+                self._hard_delete_unlocked(item_id)
+            else:
+                self._conn().execute(
+                    "UPDATE knowledge_items SET deleted_at = ? "
+                    "WHERE id = ? AND deleted_at IS NULL",
+                    (datetime.now().isoformat(), item_id),
+                )
+                self._conn().commit()
+
+    def _hard_delete_unlocked(self, item_id: str) -> None:
+        """硬删 — 彻底清理 knowledge_items + 关联表。"""
+        conn = self._conn()
+        conn.execute("DELETE FROM chunk_fts WHERE knowledge_id = ?", (item_id,))
+        conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
+        conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
+        conn.execute(
+            "DELETE FROM block_property_index WHERE block_id IN "
+            "(SELECT id FROM blocks WHERE page_id = ?)",
+            (item_id,),
+        )
+        conn.execute(
+            "DELETE FROM entity_refs WHERE (source_type = 'knowledge' AND source_id = ?) "
+            "OR (target_type = 'knowledge' AND target_id = ?)",
+            (item_id, item_id),
+        )
+        conn.execute("DELETE FROM blocks WHERE page_id = ?", (item_id,))
+        conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
+        conn.commit()
         try:
             from src.services.vectorstore import VectorStore
             VectorStore().delete_by_knowledge(item_id)
@@ -119,6 +167,32 @@ class KnowledgeRepository:
             logging.getLogger(__name__).warning(
                 "VectorStore deletion failed for item %s; proceeding with DB cleanup", item_id, exc_info=True
             )
+
+    def restore(self, item_id: str) -> bool:
+        """Phase 4: 恢复软删除条目（清除 deleted_at）。"""
+        with self._write_lock:
+            cursor = self._conn().execute(
+                "UPDATE knowledge_items SET deleted_at = NULL "
+                "WHERE id = ? AND deleted_at IS NOT NULL",
+                (item_id,),
+            )
+            self._conn().commit()
+            return cursor.rowcount > 0
+
+    def purge(self, item_id: str) -> bool:
+        """Phase 4: 硬删（彻底清理所有关联数据）。
+
+        Returns:
+            True 如果条目存在并被删除；False 如果条目不存在
+        """
+        with self._write_lock:
+            existing = self._conn().execute(
+                "SELECT id FROM knowledge_items WHERE id = ?", (item_id,),
+            ).fetchone()
+            if not existing:
+                return False
+            self._hard_delete_unlocked(item_id)
+            return True
 
     def count(self, tag: str | None = None) -> int:
         if tag:

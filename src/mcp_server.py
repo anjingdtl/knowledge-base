@@ -384,21 +384,26 @@ def update(
 
 
 @mcp.tool(
-    description="删除指定的知识条目及其所有关联数据。此操作不可逆。",
+    description="删除指定的知识条目（Phase 4 默认软删除，可通过 restore_knowledge 或 undo_operation 恢复）。",
     annotations={"destructiveHint": True},
 )
 @_heartbeat
 def delete(item_id: str, dry_run: bool = False) -> dict:
-    """删除指定 ID 的知识条目。
+    """删除指定 ID 的知识条目（Phase 4：默认软删除，可恢复）。
 
     Args:
         item_id: 要删除的知识条目 ID
         dry_run: 设为 True 时只预览将删除的数据不执行
     """
     container = _get_container()
-    existing = container.db.get_knowledge(item_id)
+    # 默认过滤已软删除条目 — 二次删除返 NOT_FOUND
+    existing = container.db.get_knowledge(item_id, include_deleted=False)
     if not existing:
-        return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {item_id}", item_id=item_id)
+        return fail(
+            ErrorCode.NOT_FOUND,
+            f"知识条目不存在或已删除: {item_id}",
+            item_id=item_id,
+        )
 
     import json as _json
     deleted_tags = existing.get("tags", "[]")
@@ -426,21 +431,87 @@ def delete(item_id: str, dry_run: bool = False) -> dict:
         except Exception:
             pass
         envelope = dry_run_preview(
-            {"item_id": item_id, "would_delete": {**deleted_item, "block_count": block_count},
-             "warning": "此操作不可逆"},
+            {"item_id": item_id,
+             "would_delete": {**deleted_item, "block_count": block_count},
+             "warning": "软删除可通过 restore_knowledge 或 undo_operation 恢复"},
             item_id=item_id,
+            soft_deleted=True,
         )
         return envelope
 
     log_id = _op_log("delete", "knowledge", item_id, before=deleted_item, metadata={
         "version": existing.get("version"),
+        "soft_delete": True,
     })
-    container.file_graph_service.delete_page(item_id)
+    # 1) DB 层软删除（设置 deleted_at）
+    container.db.soft_delete_knowledge(item_id)
+    # 2) MD 文件移到 .trash（幂等，文件不存在不抛错）
+    try:
+        container.file_graph_service.delete_page(item_id, move_to_trash=True)
+    except Exception as exc:
+        logger.warning("file_graph delete_page failed for %s: %s", item_id, exc)
     envelope = ok({
-        "message": "知识删除成功",
+        "message": "知识已软删除（可恢复）",
         "id": item_id,
         "deleted_item": deleted_item,
         "version": existing.get("version"),
+        "soft_deleted": True,
+        "restore_via": "restore_knowledge 或 undo_operation",
+    })
+    return attach_operation_id(envelope, log_id)
+
+
+@mcp.tool(
+    description="恢复已软删除的知识条目。清除 deleted_at 并将 MD 文件从 .trash 移回 pages/。",
+)
+@_heartbeat
+def restore_knowledge(item_id: str) -> dict:
+    """恢复软删除的知识条目（Phase 4）。
+
+    Args:
+        item_id: 要恢复的知识条目 ID
+    """
+    container = _get_container()
+    # 必须看到 deleted_at 非空
+    existing = container.db.get_knowledge(item_id, include_deleted=True)
+    if not existing:
+        return fail(
+            ErrorCode.NOT_FOUND,
+            f"知识条目不存在: {item_id}",
+            item_id=item_id,
+        )
+    if not existing.get("deleted_at"):
+        return fail(
+            ErrorCode.PRECONDITION_FAILED,
+            f"知识条目未处于删除状态，无需恢复: {item_id}",
+            item_id=item_id,
+        )
+
+    # 1) DB 层恢复
+    container.db.restore_knowledge(item_id)
+    # 2) MD 文件恢复（从 .trash 找）
+    try:
+        trash_dir = container.file_graph_service.ensure_graph() / ".trash"
+        restored_file = None
+        for path in sorted(trash_dir.glob(f"*{item_id[:8]}*.md"), reverse=True):
+            try:
+                container.file_graph_service.restore_page(path.name)
+                restored_file = path.name
+                break
+            except Exception:
+                continue
+    except Exception as exc:
+        logger.warning("MD restore from trash failed for %s: %s", item_id, exc)
+        restored_file = None
+
+    log_id = _op_log("restore", "knowledge", item_id, after={
+        "restored_from": "soft_delete",
+        "restored_file": restored_file,
+    })
+    envelope = ok({
+        "message": "知识已恢复",
+        "id": item_id,
+        "restored_file": restored_file,
     })
     return attach_operation_id(envelope, log_id)
 
@@ -1355,6 +1426,158 @@ def query_operation_logs(
         offset=offset,
         next_offset=offset + limit if has_more else None,
         truncated=has_more,
+    )
+
+
+# ---- Phase 4 / Sprint 3: 写操作安全闭环 ----
+
+@mcp.tool(
+    description="预览写操作而不实际执行。支持 update / create / delete / ingest_file / "
+    "reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+@_heartbeat
+def preview_operation(
+    operation: str,
+    item_id: str | None = None,
+    title: str | None = None,
+    content: str | None = None,
+    tags: list[str] | None = None,
+    file_path: str | None = None,
+    file_type: str = "txt",
+    source_type: str = "manual",
+) -> dict:
+    """预览写操作。
+
+    Args:
+        operation: 操作类型 — update / create / delete / ingest_file / reindex_all
+        item_id: 目标 ID（update/delete 时必填）
+        title / content / tags: update / create 时使用
+        file_path: ingest_file 时使用
+        file_type / source_type: create / ingest_file 时使用
+    """
+    op = (operation or "").lower()
+    if op in ("update",):
+        if not item_id:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "preview_operation: update 需要 item_id",
+                operation=op,
+            )
+        return update(item_id=item_id, title=title, content=content, tags=tags, dry_run=True)
+    if op in ("create",):
+        if title is None or content is None:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "preview_operation: create 需要 title 和 content",
+                operation=op,
+            )
+        return create(
+            title=title, content=content, tags=tags,
+            file_type=file_type, source_type=source_type, dry_run=True,
+        )
+    if op in ("delete",):
+        if not item_id:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "preview_operation: delete 需要 item_id",
+                operation=op,
+            )
+        return delete(item_id=item_id, dry_run=True)
+    if op in ("ingest_file", "ingest"):
+        if not file_path:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "preview_operation: ingest_file 需要 file_path",
+                operation=op,
+            )
+        return ingest_file(file_path=file_path, tags=tags, dry_run=True)
+    if op in ("reindex_all", "reindex"):
+        return reindex_all(dry_run=True)
+    return fail(
+        ErrorCode.VALIDATION_ERROR,
+        f"preview_operation: 不支持的操作 {operation}",
+        operation=operation,
+        supported=["update", "create", "delete", "ingest_file", "reindex_all"],
+    )
+
+
+@mcp.tool(
+    description="按 ID 查询单条操作日志的完整记录。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+@_heartbeat
+def get_operation_log(operation_id: str) -> dict:
+    """按 ID 查询操作日志。
+
+    Args:
+        operation_id: operation_log.id（envelope.operation_id 字段）
+    """
+    if not operation_id:
+        return fail(ErrorCode.VALIDATION_ERROR, "operation_id 必填")
+    entry = _get_container().operation_log_repo.get_by_id(operation_id)
+    if not entry:
+        return fail(
+            ErrorCode.NOT_FOUND,
+            f"operation_log 不存在: {operation_id}",
+            operation_id=operation_id,
+        )
+    can_undo = _get_container().operation_log.can_undo(operation_id)
+    return ok({**entry, "can_undo": can_undo})
+
+
+@mcp.tool(
+    description="撤销某条操作。支持 update（恢复字段）/ create（软删新条目）/ "
+    "delete（恢复软删条目）/ ingest（恢复）。返回 undone_log_id。",
+    annotations={"idempotentHint": False, "destructiveHint": False},
+)
+@_heartbeat
+def undo_operation(operation_id: str, operator: str = "system") -> dict:
+    """撤销 operation。
+
+    Args:
+        operation_id: 要撤销的 operation_log.id
+        operator: 撤销操作的操作者标识
+    """
+    if not operation_id:
+        return fail(ErrorCode.VALIDATION_ERROR, "operation_id 必填")
+    container = _get_container()
+    result = container.operation_log.undo(operation_id, operator=operator)
+    if result.get("ok"):
+        return ok(result.get("data") or {}, undone_log_id=result.get("data", {}).get("undone_log_id"))
+    err = result.get("error") or {"code": "INTERNAL_ERROR", "message": "unknown"}
+    return fail(err.get("code", "INTERNAL_ERROR"),
+                err.get("message", "undo failed"),
+                operation_id=operation_id,
+                details=err.get("details"))
+
+
+@mcp.tool(
+    description="列出最近的操作日志（query_operation_logs 的便捷别名）。"
+    "按 created_at DESC 排序，缺省 limit=20。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+@_heartbeat
+def list_recent_operations(
+    limit: int = 20,
+    source: str | None = None,
+    target_type: str | None = None,
+    operation: str | None = None,
+    offset: int = 0,
+) -> dict:
+    """列出最近的操作日志。
+
+    Args:
+        limit: 返回数量上限（默认 20）
+        source: 来源筛选 (mcp/api/gui)
+        target_type: 目标类型 (knowledge/wiki_page/...)
+        operation: 操作类型 (create/update/delete/ingest/reindex/...)
+        offset: 分页偏移
+    """
+    return query_operation_logs(
+        target_type=target_type, target_id=None,
+        operation=operation, source=source,
+        limit=limit, offset=offset,
     )
 
 

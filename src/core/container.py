@@ -254,7 +254,10 @@ class AppContainer:
     def operation_log(self):
         if self._operation_log is None:
             from src.services.operation_log import OperationLogService
-            self._operation_log = OperationLogService(repo=self.operation_log_repo)
+            self._operation_log = OperationLogService(
+                repo=self.operation_log_repo,
+                knowledge_repo=self.knowledge_repo,
+            )
             self._track_service("_operation_log")
         return self._operation_log
 
