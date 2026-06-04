@@ -17,6 +17,8 @@ llm:
 rag:
   chunk_overlap: 180
   chunk_size: 1200
+  context_sibling_window: 1
+  context_trace_depth: 3
   custom_stages: []
   enable_query_rewriting: true
   enable_rerank: true
@@ -25,6 +27,18 @@ rag:
     enabled: true
     keyword_weight: 0.3
     vector_weight: 0.7
+  link_expansion:
+    max_links: 3
+  import:
+    docx:
+      respect_styles: true
+      table_structured: true
+    excel:
+      max_rows_per_sheet: 500
+      row_naming: first_column
+    pdf:
+      heading_detection: true
+      page_as_block: true
   pipeline:
     enabled: true
     stages:
@@ -57,6 +71,10 @@ rag:
   score_threshold: 0.35
   search_mode: blend
   top_k: 8
+  agentic_router:
+    enabled: true
+    prefer_llm: false
+    system_prompt_max_tokens: 2000
 reranker:
   base_url: https://api.siliconflow.cn/v1
   enabled: true

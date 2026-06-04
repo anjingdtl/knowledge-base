@@ -468,3 +468,57 @@ def test_query_explainer_condition_tree():
     assert len(tree["children"]) == 2
     assert tree["children"][0]["type"] == "tag"
     assert tree["children"][1]["type"] == "and"
+
+
+def test_agentic_router_converts_nl_to_dsl():
+    from src.services.agentic_router import AgenticRouter
+
+    router = AgenticRouter()
+    result = router.route("找出所有标记为 bug 且状态为 open 的问题")
+
+    assert result["mode"] == "structured"
+    spec = result["query_spec"]
+    assert spec.filter_condition.type == "and"
+    tag_found = False
+    prop_found = False
+    for child in spec.filter_condition.children:
+        if child.type == "tag" and child.value == "bug":
+            tag_found = True
+        if child.type == "property" and child.key == "status":
+            prop_found = True
+    assert tag_found
+    assert prop_found
+
+
+def test_agentic_router_falls_back_to_hybrid():
+    from src.services.agentic_router import AgenticRouter
+
+    router = AgenticRouter()
+    result = router.route("Python 异步编程的最佳实践是什么")
+
+    assert result["mode"] == "hybrid"
+    assert result["query_spec"] is None
+
+
+def test_agentic_router_handles_graph_query():
+    from src.services.agentic_router import AgenticRouter
+
+    router = AgenticRouter()
+    result = router.route("显示与 Architecture 页面相关的所有链接关系")
+
+    assert result["mode"] in ("structured", "graph")
+
+
+def test_agentic_router_with_mock_llm():
+    from unittest.mock import MagicMock
+    from src.services.agentic_router import AgenticRouter
+
+    mock_llm = MagicMock()
+    mock_llm.chat.return_value = '{"mode": "structured", "query": {"filter": {"and": [{"tag": "bug"}, {"property": {"key": "status", "op": "eq", "value": "open"}}]}, "limit": 10}}'
+
+    router = AgenticRouter(llm=mock_llm)
+    result = router.route("find all open bugs")
+
+    assert result["mode"] == "structured"
+    spec = result["query_spec"]
+    assert spec.filter_condition.type == "and"
