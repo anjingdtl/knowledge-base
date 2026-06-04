@@ -69,6 +69,9 @@ class RagContext:
     conversation_history: list[dict] = field(default_factory=list)
     stream_generator: Any = None  # 流式生成时的 generator
     metadata: dict = field(default_factory=dict)
+    # Sprint 2：ask_with_query 入口可显式指定检索阶段的 QuerySpec 与 top_k
+    query_spec_override: object = None
+    top_k: int = 10
 
 
 # ---- 阶段抽象基类 ----
@@ -159,11 +162,24 @@ class VectorSearchStage(PipelineStage):
         if not self.is_enabled(config):
             return ctx
         top_k = config.get("top_k", 10)
+        # 外部已显式指定 query_spec 时（如 ask_with_query）跳过自动路由
+        override_spec = ctx.metadata.get("query_spec_override")
         try:
             try:
-                from src.services.agentic_router import AgenticRouter
+                from src.services.agentic_router import AgenticRouter, serialize_route
                 agentic = AgenticRouter(db=Database)
-                routing = agentic.route(ctx.question)
+                routing = agentic.route(ctx.question) if override_spec is None else {
+                    "mode": "structured", "query_spec": override_spec,
+                    "explanation": "explicit query_spec override",
+                }
+                # Sprint 2：把路由决策写入 ctx.metadata，供 ask 工具暴露给 Agent
+                ctx.metadata["route"] = serialize_route(routing)
+                if routing.get("query_spec") is not None:
+                    ctx.metadata["query_plan"] = serialize_route(routing).get(
+                        "query_spec", {}
+                    )
+                else:
+                    ctx.metadata.setdefault("query_plan", {})
                 if routing["mode"] == "structured" and routing.get("query_spec"):
                     from src.services.query_executor import QueryExecutor
                     executor = QueryExecutor(db=Database)
@@ -187,6 +203,12 @@ class VectorSearchStage(PipelineStage):
                         return ctx
             except Exception as e:
                 logger.warning("Agentic routing failed, falling back: %s", e)
+                ctx.metadata.setdefault("warnings", []).append(
+                    f"agentic_router_failed: {e}"
+                )
+                ctx.metadata.setdefault("route", {
+                    "mode": "hybrid", "explanation": "fallback after router error",
+                })
 
             from src.services.query_router import QueryRouter
             router = QueryRouter(db=Database)
@@ -210,6 +232,7 @@ class VectorSearchStage(PipelineStage):
         except Exception as e:
             logger.warning("Vector search failed: %s", e)
             ctx.candidates = []
+            ctx.metadata.setdefault("warnings", []).append(f"vector_search_failed: {e}")
         return ctx
 
 
@@ -231,6 +254,7 @@ class RerankStage(PipelineStage):
             ctx.reranked_results = [r for r in reranked if r.get("score", 0) >= min_score][:top_n]
         except Exception as e:
             logger.warning("Rerank failed: %s", e)
+            ctx.metadata.setdefault("warnings", []).append(f"rerank_failed: {e}")
             ctx.reranked_results = ctx.candidates[:top_n]
         return ctx
 
@@ -268,6 +292,14 @@ class GenerateStage(PipelineStage):
             context_parts.insert(0, f"【Wiki 结构化知识】\n{ctx.wiki_context}")
         context = "\n\n".join(context_parts) if context_parts else "（知识库中未找到相关内容）"
         ctx.sources = sources
+        # Sprint 2：构建 block_id → block_context 映射，供 Agent 端溯源
+        block_contexts = {
+            s.get("block_id"): s.get("block_context", "")
+            for s in sources
+            if s.get("block_id") and s.get("block_context")
+        }
+        if block_contexts:
+            ctx.metadata["block_contexts"] = block_contexts
 
         messages = build_rag_messages(ctx.question, context, ctx.conversation_history)
 
@@ -279,6 +311,7 @@ class GenerateStage(PipelineStage):
                 ctx.answer = strip_think(llm.chat(messages))
         except Exception as e:
             logger.error("LLM generate failed: %s", e)
+            ctx.metadata.setdefault("warnings", []).append(f"generate_failed: {e}")
             ctx.answer = f"抱歉，生成回答时发生错误：{str(e)}"
         return ctx
 
@@ -287,7 +320,14 @@ class GenerateStage(PipelineStage):
         pass  # 实际构建在 _build_context_from_filtered
 
     def _build_context_from_filtered(self, filtered):
-        """批量查询标题，组装上下文和来源列表（含 Block 父链上下文）"""
+        """批量查询标题，组装上下文和来源列表（含 Block 父链上下文）。
+
+        返回:
+            context_parts: LLM prompt 的字符串片段
+            sources: 每条 source 必含 ``block_id`` / ``knowledge_id`` / ``title`` /
+                     ``text_preview`` / ``score`` / ``block_context``，供 Agent
+                     端做溯源 + 反查。
+        """
         kid_map = {}
         for r in filtered:
             meta = r.get("metadata", {}) if isinstance(r.get("metadata"), dict) else {}
@@ -317,11 +357,20 @@ class GenerateStage(PipelineStage):
                 title = item.get("title", "未知")
             if not title:
                 title = "未知"
+            # block_id：Block-first RAG 下 chunk_id 等于 block_id；优先用显式字段
+            block_id = (
+                result.get("block_id")
+                or meta.get("block_id")
+                or result.get("chunk_id")
+                or result.get("id", "")
+            )
             sources.append({
+                "block_id": block_id,
                 "chunk_id": result.get("id", result.get("chunk_id", "")),
                 "knowledge_id": kid,
                 "title": title,
                 "text_preview": text[:200],
+                "block_context": block_ctx,
                 "score": result.get("rerank_score", result.get("rrf_score", result.get("score", result.get("distance", 0)))),
             })
         return context_parts, sources
@@ -347,6 +396,7 @@ class PostProcessStage(PipelineStage):
         max_len = config.get("max_context_length", 8000)
         if len(ctx.answer) > max_len:
             ctx.answer = ctx.answer[:max_len] + "...(已截断)"
+            ctx.metadata.setdefault("warnings", []).append("answer_truncated")
         return ctx
 
 
@@ -440,11 +490,21 @@ class RagPipeline:
                     logger.error("Stage %s failed: %s", stage.name, e)
         from src.services.source_graph import build_source_graph
         ctx.source_graph = build_source_graph(ctx.sources)
+        # Sprint 2：构造结构化 RAG payload（ask 工具 7 字段）
+        default_route = {"mode": "hybrid", "explanation": "no router decision recorded"}
+        route = ctx.metadata.get("route", default_route)
+        query_plan = ctx.metadata.get("query_plan", {})
+        block_contexts = ctx.metadata.get("block_contexts", {})
+        warnings = ctx.metadata.get("warnings", [])
         return {
             "answer": ctx.answer,
             "sources": ctx.sources,
-            "wiki_context": ctx.wiki_context,
             "source_graph": ctx.source_graph,
+            "route": route,
+            "query_plan": query_plan,
+            "block_contexts": block_contexts,
+            "warnings": warnings,
+            "wiki_context": ctx.wiki_context,
         }
 
 
