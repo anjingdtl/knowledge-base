@@ -568,3 +568,58 @@ def test_mcp_structured_query_tool_exists():
     assert "structured_query" in tool_names
     assert "explain_query" in tool_names
     assert "graph_traverse" in tool_names
+
+
+def test_end_to_end_structured_query_through_rag():
+    from unittest.mock import MagicMock
+    from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
+
+    _insert_page("e2e1", "E2E Bug Report", tags=["bug", "e2e-test"])
+    _insert_block("e2eb1", "e2e1", "Login fails on Chrome", properties={"status": "open"})
+
+    from src.services.effective_properties import EffectivePropertyService
+    EffectivePropertyService().refresh_page("e2e1")
+
+    mock_llm = MagicMock()
+    mock_llm.chat.side_effect = [
+        '{"mode": "structured", "query": {"filter": {"and": [{"tag": "bug"}, {"property": {"key": "status", "op": "eq", "value": "open"}}]}}}',
+        '[]',
+        'The answer is about open bugs.',
+    ]
+
+    import asyncio
+    pipeline = RagPipeline(pipeline_config=DEFAULT_PIPELINE_CONFIG, llm=mock_llm)
+    result = asyncio.run(pipeline.execute("找出所有标记为 bug 且状态为 open 的问题"))
+
+    assert "answer" in result
+    assert "sources" in result
+
+
+def test_end_to_end_query_explanation_in_api():
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_explainer import QueryExplainer
+
+    spec = QuerySpec.from_json({
+        "filter": {
+            "and": [
+                {"tag": "bug"},
+                {"or": [
+                    {"property": {"key": "status", "op": "eq", "value": "open"}},
+                    {"property": {"key": "priority", "op": "gte", "value": 3}},
+                ]},
+                {"not": {"tag": "wontfix"}},
+                {"fulltext": "login error"},
+            ]
+        },
+        "include_blocks": True,
+        "sort": {"by": "created_at", "order": "desc"},
+    })
+    explanation = QueryExplainer().explain(spec)
+
+    assert "AND" in explanation["summary"]
+    assert "OR" in explanation["summary"]
+    assert "NOT" in explanation["summary"]
+    assert "knowledge_fts" in explanation["plan"]["tables_used"]
+    assert "effective_property_index" in explanation["plan"]["tables_used"]
+    assert explanation["plan"]["estimated_complexity"] in ("medium", "high")
+    assert explanation["condition_tree"]["type"] == "and"
