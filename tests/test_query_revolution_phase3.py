@@ -218,13 +218,15 @@ def test_query_executor_property_operators():
         "filter": {"property": {"key": "priority", "op": "gte", "value": 3}}
     })
     results = executor.execute(spec_gte)
-    assert len(results) >= 2
+    gte_ids = {r["id"] for r in results}
+    assert gte_ids == {"p11", "p12"}
 
     spec_in = QuerySpec.from_json({
         "filter": {"property": {"key": "priority", "op": "in", "value": [1, 5]}}
     })
     results = executor.execute(spec_in)
-    assert len(results) >= 2
+    in_ids = {r["id"] for r in results}
+    assert in_ids == {"p10", "p11"}
 
 
 def test_query_executor_fulltext_filter():
