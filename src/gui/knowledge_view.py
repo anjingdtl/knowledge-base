@@ -3,6 +3,9 @@ import hashlib
 import html
 import json
 import os
+import re
+from dataclasses import dataclass
+from pathlib import Path
 
 from PySide6.QtWidgets import (
     QWidget, QFrame, QVBoxLayout, QHBoxLayout, QLineEdit,
@@ -20,6 +23,19 @@ from src.gui.icons import NAV, icon as make_icon, set_named_icon
 from src.gui.theme import get_color
 from src.utils.config import Config
 from src.gui.empty_state import EmptyState
+
+
+OUTLINE_RENDER_LIMIT = 500
+
+
+@dataclass(frozen=True)
+class OutlineRenderPolicy:
+    limit: int
+    is_partial: bool
+
+
+def _outline_render_policy(block_count: int, limit: int = OUTLINE_RENDER_LIMIT) -> OutlineRenderPolicy:
+    return OutlineRenderPolicy(limit=limit, is_partial=block_count > limit)
 
 
 def _file_graph_service():
@@ -245,13 +261,59 @@ class RenameWorker(QThread):
                 self.progress.emit(int((i + 1) / total * 100), f"已处理 {i + 1}/{total}")
 
 
+def _safe_md_filename(title: str, item_id: str) -> str:
+    """Return a Windows-safe Markdown filename for an exported knowledge item."""
+    base = re.sub(r'[<>:"/\\|?*]', "_", (title or "").strip())
+    base = re.sub(r"_+", "_", base).strip(" ._")
+    if not base:
+        base = f"untitled-{(item_id or '')[:8]}"
+    return f"{base[:120]}.md"
+
+
+def _parse_tags(value) -> list[str]:
+    if isinstance(value, list):
+        return [str(t) for t in value if str(t).strip()]
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+            if isinstance(parsed, list):
+                return [str(t) for t in parsed if str(t).strip()]
+        except (json.JSONDecodeError, ValueError):
+            return [t.strip() for t in value.split(",") if t.strip()]
+    return []
+
+
+def _knowledge_to_markdown(item: dict) -> str:
+    title = item.get("title") or "未命名知识"
+    tags = _parse_tags(item.get("tags", []))
+    source = item.get("source_path") or item.get("source_type") or ""
+    lines = [
+        f"# {title}",
+        "",
+        "## 元数据",
+        "",
+        f"- ID: {item.get('id', '')}",
+        f"- 格式: {item.get('file_type', '')}",
+        f"- 来源: {source}",
+        f"- 导入时间: {item.get('created_at', '')}",
+        f"- 标签: {', '.join(tags)}",
+        "",
+        "## 内容",
+        "",
+        item.get("content") or "",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 # 表格列定义
-COL_TITLE = 0
-COL_FORMAT = 1
-COL_IMPORTED = 2
-COL_FILE_CREATED = 3
-COL_TAGS = 4
-TABLE_HEADERS = ["标题", "格式", "导入时间", "文件创建时间", "标签"]
+COL_SELECT = 0
+COL_TITLE = 1
+COL_FORMAT = 2
+COL_IMPORTED = 3
+COL_FILE_CREATED = 4
+COL_TAGS = 5
+TABLE_HEADERS = ["选择", "标题", "格式", "导入时间", "文件创建时间", "标签"]
 
 FILE_TYPE_COLORS = {
     "pdf": "#e8eff5", "docx": "#ede8ef", "xlsx": "#e6efe7",
@@ -263,71 +325,76 @@ FILE_TYPE_COLORS = {
 class KnowledgeView(QWidget):
     def __init__(self):
         super().__init__()
+        self._search_mode = False
+        self._search_timer = None
+        self._selected_ids: set[str] = set()
+        self._bulk_actions: list[QPushButton] = []
         self._setup_ui()
         self._load_knowledge()
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         self.setObjectName("pageSurface")
-        layout.setContentsMargins(18, 16, 18, 16)
-        layout.setSpacing(12)
+        layout.setContentsMargins(12, 10, 12, 10)
+        layout.setSpacing(8)
 
         header_card = QFrame()
-        header_card.setObjectName("pageHeader")
-        header_layout = QHBoxLayout(header_card)
-        header_layout.setContentsMargins(16, 12, 16, 12)
+        header_card.setObjectName("toolbarCard")
+        header_layout = QVBoxLayout(header_card)
+        header_layout.setContentsMargins(12, 8, 12, 8)
+        header_layout.setSpacing(6)
+
+        top_row = QHBoxLayout()
+        top_row.setSpacing(8)
         title_col = QVBoxLayout()
+        title_col.setSpacing(0)
         title = QLabel("知识库")
         title.setObjectName("pageTitle")
+        title.setMinimumWidth(92)
         subtitle = QLabel("管理本地文档、网页内容和手动沉淀的知识条目")
         subtitle.setObjectName("pageSubtitle")
+        subtitle.setMinimumWidth(210)
         title_col.addWidget(title)
         title_col.addWidget(subtitle)
-        header_layout.addLayout(title_col)
-        header_layout.addStretch()
-        layout.addWidget(header_card)
-
-        # 顶部工具栏：左半搜索/筛选，右半操作按钮
-        toolbar_card = QFrame()
-        toolbar_card.setObjectName("toolbarCard")
-        toolbar = QHBoxLayout(toolbar_card)
-        toolbar.setContentsMargins(12, 10, 12, 10)
-        toolbar.setSpacing(8)
+        top_row.addLayout(title_col)
 
         self.search_input = QLineEdit()
         self.search_input.setProperty("search", True)
         self.search_input.setPlaceholderText("搜索标题、正文或标签...")
+        self.search_input.setMinimumWidth(260)
         self.search_input.textChanged.connect(self._on_search)
-        toolbar.addWidget(self.search_input, 1)
+        top_row.addWidget(self.search_input, 2)
 
         self.tag_filter = QComboBox()
+        self.tag_filter.setMinimumWidth(118)
         self.tag_filter.addItem("全部标签")
         self.tag_filter.currentTextChanged.connect(self._on_tag_filter)
-        toolbar.addWidget(self.tag_filter)
+        top_row.addWidget(self.tag_filter)
 
         self.format_filter = QComboBox()
+        self.format_filter.setMinimumWidth(108)
         self.format_filter.addItem("全部格式")
         self.format_filter.currentTextChanged.connect(self._on_format_filter)
-        toolbar.addWidget(self.format_filter)
-
-        # 分隔间距
-        toolbar.addSpacing(8)
+        top_row.addWidget(self.format_filter)
 
         # 高频操作：主要按钮
         btn_import = QPushButton("导入文件")
         btn_import.setObjectName("accentBtn")
+        btn_import.setMinimumWidth(90)
         set_named_icon(btn_import, "import", "on_accent", 16)
         btn_import.clicked.connect(self._import_files)
-        toolbar.addWidget(btn_import)
+        top_row.addWidget(btn_import)
 
         btn_add = QPushButton("手动添加")
+        btn_add.setMinimumWidth(82)
         set_named_icon(btn_add, "add", "text_dim", 15)
         btn_add.clicked.connect(self._add_manual)
-        toolbar.addWidget(btn_add)
+        top_row.addWidget(btn_add)
 
         # 低频操作：收入"更多"菜单
         self.btn_more = QToolButton()
         self.btn_more.setText("更多")
+        self.btn_more.setMinimumWidth(58)
         set_named_icon(self.btn_more, "more", "text_dim", 15)
         self.btn_more.setPopupMode(QToolButton.InstantPopup)
         more_menu = QMenu(self.btn_more)
@@ -347,9 +414,45 @@ class KnowledgeView(QWidget):
         self.act_dedup.triggered.connect(self._deduplicate)
 
         self.btn_more.setMenu(more_menu)
-        toolbar.addWidget(self.btn_more)
+        top_row.addWidget(self.btn_more)
+        header_layout.addLayout(top_row)
 
-        layout.addWidget(toolbar_card)
+        bulk = QHBoxLayout()
+        bulk.setContentsMargins(0, 0, 0, 0)
+        bulk.setSpacing(6)
+
+        self.selection_label = QLabel("已选择 0 条")
+        self.selection_label.setObjectName("hintLabel")
+        self.selection_label.setMinimumWidth(82)
+        bulk.addWidget(self.selection_label)
+        bulk.addStretch()
+
+        btn_select_all = QPushButton("全选当前列表")
+        btn_select_all.setMinimumWidth(104)
+        set_named_icon(btn_select_all, "approve", "text_dim", 14)
+        btn_select_all.clicked.connect(self._select_all_visible)
+        bulk.addWidget(btn_select_all)
+
+        btn_clear_selection = QPushButton("清空选择")
+        btn_clear_selection.setMinimumWidth(82)
+        set_named_icon(btn_clear_selection, "close", "text_dim", 13)
+        btn_clear_selection.clicked.connect(self._clear_selection)
+        bulk.addWidget(btn_clear_selection)
+
+        self.btn_export_selected = QPushButton("导出 MD")
+        self.btn_export_selected.setMinimumWidth(74)
+        set_named_icon(self.btn_export_selected, "export", "text_dim", 14)
+        self.btn_export_selected.clicked.connect(self._export_selected_md)
+        bulk.addWidget(self.btn_export_selected)
+
+        self.btn_delete_selected = QPushButton("删除选中")
+        self.btn_delete_selected.setMinimumWidth(82)
+        set_named_icon(self.btn_delete_selected, "delete", "danger", 14)
+        self.btn_delete_selected.clicked.connect(self._bulk_delete_selected)
+        bulk.addWidget(self.btn_delete_selected)
+        self._bulk_actions = [self.btn_export_selected, self.btn_delete_selected]
+        header_layout.addLayout(bulk)
+        layout.addWidget(header_card)
 
         # 主内容区（表格 + 空状态）
         self.list_stack = QStackedWidget()
@@ -357,20 +460,21 @@ class KnowledgeView(QWidget):
         self.table_widget = QTableWidget(0, len(TABLE_HEADERS))
         self.table_widget.setHorizontalHeaderLabels(TABLE_HEADERS)
         self.table_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.table_widget.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.table_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.table_widget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_widget.setSortingEnabled(True)
         self.table_widget.setAlternatingRowColors(False)
         self.table_widget.verticalHeader().setVisible(False)
-        self.table_widget.verticalHeader().setDefaultSectionSize(42)
+        self.table_widget.verticalHeader().setDefaultSectionSize(34)
         self.table_widget.setContextMenuPolicy(Qt.CustomContextMenu)
         self.table_widget.customContextMenuRequested.connect(self._show_context_menu)
         self.table_widget.currentCellChanged.connect(self._on_row_selected)
         self.table_widget.cellDoubleClicked.connect(self._on_row_double_clicked)
+        self.table_widget.itemChanged.connect(self._on_table_item_changed)
 
         # 列宽设置 — 全部可交互拖拽调整，从 QSettings 恢复上次的宽度
         header = self.table_widget.horizontalHeader()
-        default_widths = {COL_TITLE: 300, COL_FORMAT: 70, COL_IMPORTED: 140,
+        default_widths = {COL_SELECT: 58, COL_TITLE: 300, COL_FORMAT: 70, COL_IMPORTED: 140,
                           COL_FILE_CREATED: 140, COL_TAGS: 150}
         for col, default_w in default_widths.items():
             header.setSectionResizeMode(col, QHeaderView.Interactive)
@@ -380,6 +484,11 @@ class KnowledgeView(QWidget):
         saved_state = col_settings.value("header_state")
         if saved_state:
             header.restoreState(saved_state)
+        min_widths = {COL_SELECT: 48, COL_TITLE: 220, COL_FORMAT: 64, COL_IMPORTED: 132,
+                      COL_FILE_CREATED: 132, COL_TAGS: 120}
+        for col, min_w in min_widths.items():
+            if self.table_widget.columnWidth(col) < min_w:
+                self.table_widget.setColumnWidth(col, min_w)
 
         # 空状态
         self.empty_state = EmptyState(
@@ -403,9 +512,10 @@ class KnowledgeView(QWidget):
         layout.addWidget(self.list_stack, 1)
 
         # 右侧弹出式详情面板（覆盖在主内容之上）
-        self._detail_width = 450
+        self._detail_width = 520
         self._detail_open = False
         self._detail_anim = None
+        self._outline_partial = False
 
         self.detail_panel = QFrame(self)
         self.detail_panel.setObjectName("detailCard")
@@ -420,13 +530,16 @@ class KnowledgeView(QWidget):
         self.detail_panel.setGraphicsEffect(detail_shadow)
 
         detail_layout = QVBoxLayout(self.detail_panel)
-        detail_layout.setContentsMargins(16, 12, 16, 12)
+        detail_layout.setContentsMargins(12, 8, 12, 8)
+        detail_layout.setSpacing(6)
 
         # 顶部：关闭按钮 + 标题
         detail_header = QHBoxLayout()
+        detail_header.setSpacing(6)
         self.detail_title = QLabel("")
-        self.detail_title.setObjectName("sectionLabel")
+        self.detail_title.setObjectName("detailTitle")
         self.detail_title.setWordWrap(True)
+        self.detail_title.setMaximumHeight(44)
         detail_header.addWidget(self.detail_title, 1)
         btn_close = QPushButton("✕")
         btn_close.setFixedSize(28, 28)
@@ -438,7 +551,7 @@ class KnowledgeView(QWidget):
 
         self.detail_meta = QLabel("")
         self.detail_meta.setObjectName("hintLabel")
-        self.detail_meta.setWordWrap(True)
+        self.detail_meta.setWordWrap(False)
         detail_layout.addWidget(self.detail_meta)
 
         self.detail_tags = QLabel("")
@@ -453,21 +566,29 @@ class KnowledgeView(QWidget):
         self.detail_refs = QLabel("")
         self.detail_refs.setObjectName("hintLabel")
         self.detail_refs.setWordWrap(True)
+        self.detail_refs.setVisible(False)
         detail_layout.addWidget(self.detail_refs)
 
         self.detail_tabs = QTabWidget()
+        self.detail_tabs.setObjectName("detailTabs")
         self.outline_tree = QTreeWidget()
+        self.outline_tree.setObjectName("detailOutline")
         self.outline_tree.setHeaderLabels(["大纲块"])
         self.outline_tree.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.SelectedClicked)
         self.outline_tree.setSelectionMode(QAbstractItemView.SingleSelection)
         self.detail_tabs.addTab(self.outline_tree, "大纲")
 
         self.detail_content = QTextEdit()
+        self.detail_content.setObjectName("detailContent")
         self.detail_content.setReadOnly(True)
+        self.detail_content.setAcceptRichText(False)
+        self.detail_content.setLineWrapMode(QTextEdit.WidgetWidth)
+        self.detail_content.setMinimumHeight(160)
         self.detail_tabs.addTab(self.detail_content, "原文")
         detail_layout.addWidget(self.detail_tabs, 1)
 
         outline_actions = QHBoxLayout()
+        outline_actions.setSpacing(6)
         btn_add_sibling = QPushButton("新增同级")
         btn_add_sibling.clicked.connect(self._outline_add_sibling)
         btn_add_child = QPushButton("新增子块")
@@ -480,6 +601,7 @@ class KnowledgeView(QWidget):
         btn_reload_outline = QPushButton("从文件重载")
         btn_reload_outline.clicked.connect(self._reload_outline)
         for btn in (btn_add_sibling, btn_add_child, btn_delete_block, btn_save_outline, btn_reload_outline):
+            btn.setProperty("compact", True)
             outline_actions.addWidget(btn)
         detail_layout.addLayout(outline_actions)
 
@@ -487,9 +609,8 @@ class KnowledgeView(QWidget):
         self.detail_chars.setWordWrap(True)
         detail_layout.addWidget(self.detail_chars)
 
-    # 当前是否处于搜索模式
-    _search_mode: bool = False
-    _search_timer: QTimer = None
+    def _effective_detail_width(self) -> int:
+        return max(460, min(640, int(self.width() * 0.46)))
 
     # ---- 详情面板弹出/收回 ----
 
@@ -501,11 +622,13 @@ class KnowledgeView(QWidget):
             self._detail_anim = None
 
         self._show_detail(item)
+        detail_width = self._effective_detail_width()
+        self.detail_panel.setFixedWidth(detail_width)
         self.detail_panel.setFixedHeight(self.height())
         self.detail_panel.setVisible(True)
         self.detail_panel.raise_()
 
-        target_x = self.width() - self._detail_width
+        target_x = self.width() - detail_width
         self.detail_panel.move(self.width(), 0)
 
         anim = QPropertyAnimation(self.detail_panel, b"pos")
@@ -549,8 +672,10 @@ class KnowledgeView(QWidget):
         super().resizeEvent(event)
         if self._detail_open:
             try:
+                detail_width = self._effective_detail_width()
+                self.detail_panel.setFixedWidth(detail_width)
                 self.detail_panel.setFixedHeight(self.height())
-                self.detail_panel.move(self.width() - self._detail_width, 0)
+                self.detail_panel.move(self.width() - detail_width, 0)
             except RuntimeError:
                 pass
 
@@ -588,12 +713,23 @@ class KnowledgeView(QWidget):
 
     def _populate_table(self, items: list[dict]):
         """通用表格填充方法"""
+        self._selected_ids.clear()
         self.table_widget.setSortingEnabled(False)
+        self.table_widget.blockSignals(True)
         self.table_widget.setRowCount(0)
 
         for item in items:
             row = self.table_widget.rowCount()
             self.table_widget.insertRow(row)
+
+            select_item = QTableWidgetItem("")
+            select_item.setFlags(
+                Qt.ItemIsUserCheckable | Qt.ItemIsEnabled | Qt.ItemIsSelectable
+            )
+            select_item.setCheckState(Qt.Unchecked)
+            select_item.setData(Qt.UserRole, item)
+            select_item.setTextAlignment(Qt.AlignCenter)
+            self.table_widget.setItem(row, COL_SELECT, select_item)
 
             # 标题
             quality = item.get("quality", "")
@@ -626,10 +762,12 @@ class KnowledgeView(QWidget):
             self.table_widget.setItem(row, COL_FILE_CREATED, QTableWidgetItem(file_created))
 
             # 标签
-            tags = json.loads(item.get("tags", "[]")) if isinstance(item.get("tags"), str) else item.get("tags", [])
+            tags = _parse_tags(item.get("tags", []))
             self.table_widget.setItem(row, COL_TAGS, QTableWidgetItem(" · ".join(tags)))
 
+        self.table_widget.blockSignals(False)
         self.table_widget.setSortingEnabled(True)
+        self._update_selection_state()
 
         # 空状态切换
         if len(items) == 0:
@@ -639,6 +777,66 @@ class KnowledgeView(QWidget):
                 self.list_stack.setCurrentIndex(1)
         else:
             self.list_stack.setCurrentIndex(0)
+
+    def _on_table_item_changed(self, item: QTableWidgetItem):
+        if item.column() != COL_SELECT:
+            return
+        data = item.data(Qt.UserRole)
+        if not data:
+            return
+        item_id = data.get("id", "")
+        if not item_id:
+            return
+        if item.checkState() == Qt.Checked:
+            self._selected_ids.add(item_id)
+        else:
+            self._selected_ids.discard(item_id)
+        self._update_selection_state()
+
+    def _visible_select_items(self) -> list[QTableWidgetItem]:
+        items = []
+        for row in range(self.table_widget.rowCount()):
+            item = self.table_widget.item(row, COL_SELECT)
+            if item is not None:
+                items.append(item)
+        return items
+
+    def _select_all_visible(self):
+        self.table_widget.blockSignals(True)
+        self._selected_ids.clear()
+        for item in self._visible_select_items():
+            data = item.data(Qt.UserRole) or {}
+            if data.get("id"):
+                self._selected_ids.add(data["id"])
+                item.setCheckState(Qt.Checked)
+        self.table_widget.blockSignals(False)
+        self._update_selection_state()
+
+    def _clear_selection(self):
+        self.table_widget.blockSignals(True)
+        self._selected_ids.clear()
+        for item in self._visible_select_items():
+            item.setCheckState(Qt.Unchecked)
+        self.table_widget.blockSignals(False)
+        self._update_selection_state()
+
+    def _selected_items(self) -> list[dict]:
+        selected = []
+        seen = set()
+        for item in self._visible_select_items():
+            data = item.data(Qt.UserRole) or {}
+            item_id = data.get("id", "")
+            if item_id and item_id in self._selected_ids and item_id not in seen:
+                selected.append(data)
+                seen.add(item_id)
+        return selected
+
+    def _update_selection_state(self):
+        count = len(self._selected_ids)
+        if hasattr(self, "selection_label"):
+            self.selection_label.setText(f"已选择 {count} 条")
+        for button in getattr(self, "_bulk_actions", []):
+            button.setEnabled(count > 0)
 
     def _load_knowledge(self):
         self._populate_table(Database.list_knowledge(limit=200))
@@ -736,41 +934,50 @@ class KnowledgeView(QWidget):
     def _show_detail(self, item: dict):
         self._current_detail_item = item
         self.detail_title.setText(item["title"])
+        self.detail_title.setToolTip(item["title"])
 
         # 结构化元信息：基本信息行
         dim = get_color("text_dim")
         accent = get_color("accent")
         file_type = item.get("file_type", "未知")
-        source = item.get("source_path", "手动创建")
+        source = item.get("source_path") or item.get("source_type") or "手动创建"
+        source_label = os.path.basename(source) if source and os.path.exists(source) else source
         created = item.get("created_at", "")[:16].replace("T", " ")
         quality = item.get("quality", "")
         quality_text = "正常" if quality == "ok" else "乱码" if quality == "garbled" else "未审查"
 
+        self.detail_meta.setToolTip(source)
         self.detail_meta.setText(
             f'<span style="color:{dim};font-size:{max(10, Config.get("appearance.font_size", 13) - 2)}px;">'
-            f'格式 {file_type} &nbsp;|&nbsp; 来源 {source} &nbsp;|&nbsp; 导入 {created}'
+            f'格式 {html.escape(str(file_type))} &nbsp;|&nbsp; 来源 {html.escape(str(source_label))} &nbsp;|&nbsp; 导入 {html.escape(str(created))}'
             f'</span>'
         )
 
         # 标签 flex 布局
-        tags = json.loads(item.get("tags", "[]")) if isinstance(item.get("tags"), str) else item.get("tags", [])
+        tags = _parse_tags(item.get("tags", []))
         tag_bg = get_color("tag_bg")
         tag_text_color = get_color("tag_text")
         tag_sm = max(10, Config.get("appearance.font_size", 13) - 2)
+        visible_tags = tags[:6]
+        hidden_count = max(0, len(tags) - len(visible_tags))
         tag_html = (
-            f'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">'
+            f'<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">'
             + "".join(
-                f'<span style="background:{tag_bg};color:{tag_text_color};padding:3px 12px;'
-                f'border-radius:8px;font-size:{tag_sm}px;'
-                f'border:1px solid {get_color("accent")}30;">{t}</span>'
-                for t in tags
+                f'<span style="background:{tag_bg};color:{tag_text_color};padding:2px 8px;'
+                f'border-radius:6px;font-size:{tag_sm}px;'
+                f'border:1px solid {get_color("accent")}30;">{html.escape(t)}</span>'
+                for t in visible_tags
             )
-            + f'<span style="color:{dim};font-size:{tag_sm}px;margin-left:6px;">质量：{quality_text}</span>'
+            + (f'<span style="color:{dim};font-size:{tag_sm}px;">+{hidden_count}</span>' if hidden_count else '')
+            + f'<span style="color:{dim};font-size:{tag_sm}px;margin-left:4px;">质量：{quality_text}</span>'
             + '</div>'
         )
+        self.detail_tags.setToolTip(" · ".join(tags))
         self.detail_tags.setText(tag_html)
-        self.detail_blocks.setText(self._build_block_status(item.get("id", "")))
-        self.detail_refs.setText(self._build_ref_status(item.get("id", "")))
+        self.detail_blocks.setText(
+            self._build_block_status(item.get("id", "")) + self._build_ref_status(item.get("id", ""))
+        )
+        self.detail_refs.clear()
 
         content = item.get("content", "")
         self.detail_content.setPlainText(content[:10000] if len(content) > 10000 else content)
@@ -792,9 +999,27 @@ class KnowledgeView(QWidget):
 
     def _load_outline(self, item_id: str):
         self.outline_tree.clear()
+        self._outline_partial = False
         if not item_id:
             return
+        self.outline_tree.setUpdatesEnabled(False)
         try:
+            from src.repositories.block_repo import BlockRepository
+            repo = BlockRepository(db=Database)
+            block_count = repo.count_by_page(item_id)
+            policy = _outline_render_policy(block_count)
+            self._outline_partial = policy.is_partial
+            if policy.is_partial:
+                for block in repo.list_by_page(item_id, limit=policy.limit):
+                    node = QTreeWidgetItem([block.content or ""])
+                    node.setData(0, Qt.UserRole, block.id)
+                    node.setFlags(node.flags() | Qt.ItemIsEditable)
+                    self.outline_tree.addTopLevelItem(node)
+                more = QTreeWidgetItem([f"... only first {policy.limit} of {block_count} blocks shown"])
+                more.setFlags(more.flags() & ~Qt.ItemIsEditable)
+                self.outline_tree.addTopLevelItem(more)
+                return
+
             page = self._file_graph_service().read_page(item_id)
             for block in page.blocks:
                 self._add_outline_item(None, block)
@@ -805,7 +1030,9 @@ class KnowledgeView(QWidget):
                 node.setData(0, Qt.UserRole, block.id)
                 node.setFlags(node.flags() | Qt.ItemIsEditable)
                 self.outline_tree.addTopLevelItem(node)
-        self.outline_tree.expandAll()
+        finally:
+            self.outline_tree.setUpdatesEnabled(True)
+        self.outline_tree.expandToDepth(1)
 
     def _add_outline_item(self, parent, block):
         node = QTreeWidgetItem([block.content or ""])
@@ -863,6 +1090,13 @@ class KnowledgeView(QWidget):
         item = getattr(self, "_current_detail_item", None)
         if not item:
             return
+        if getattr(self, "_outline_partial", False):
+            QMessageBox.warning(
+                self,
+                "Outline too large",
+                "Only part of this outline is loaded. Saving is disabled to avoid overwriting the full document.",
+            )
+            return
         try:
             blocks = [self._outline_item_to_dict(self.outline_tree.topLevelItem(i))
                       for i in range(self.outline_tree.topLevelItemCount())]
@@ -896,24 +1130,17 @@ class KnowledgeView(QWidget):
         try:
             from src.repositories.block_repo import BlockRepository
             from src.services.block_store import BlockStore
-            blocks = BlockRepository(db=Database).list_by_page(item_id, limit=3)
             block_count = BlockRepository(db=Database).count_by_page(item_id)
             vector_count = BlockStore(db=Database).count_by_page(item_id)
         except Exception:
             chunks = Database.get_chunks_by_knowledge(item_id)
-            blocks = []
             block_count = len(chunks)
             vector_count = 0
-        preview = "".join(
-            f'<div style="margin-top:4px;color:{dim};">#{i + 1} {html.escape((b.content or "")[:90])}</div>'
-            for i, b in enumerate(blocks)
-        )
         vector_note = "complete" if block_count and vector_count >= block_count else "partial"
         return (
-            f'<div style="border:1px solid {accent};border-radius:8px;padding:8px;margin-top:8px;">'
+            f'<div style="border:1px solid {accent};border-radius:6px;padding:4px 6px;margin-top:4px;">'
             f'<b style="color:{primary};font-size:{font}px;">Block graph</b>'
             f'<span style="color:{dim};font-size:{font}px;"> · blocks {block_count} · vectors {vector_count} · {vector_note}</span>'
-            f'{preview}'
             f'</div>'
         )
 
@@ -930,7 +1157,7 @@ class KnowledgeView(QWidget):
             outgoing = []
             incoming = []
         return (
-            f'<div style="color:{dim};font-size:{font}px;margin:6px 0 8px 0;">'
+            f'<div style="color:{dim};font-size:{font}px;margin:3px 0 4px 0;">'
             f'<span style="color:{primary};font-weight:600;">Relations</span>'
             f' · outgoing {len(outgoing)} · backlinks {len(incoming)}'
             f'</div>'
@@ -1022,6 +1249,63 @@ class KnowledgeView(QWidget):
         if reply == QMessageBox.Yes:
             self._file_graph_service().delete_page(data["id"])
             self._load_knowledge()
+
+    def _bulk_delete_selected(self):
+        items = self._selected_items()
+        if not items:
+            return
+        reply = QMessageBox.question(
+            self,
+            "确认批量删除",
+            f"确定删除选中的 {len(items)} 条知识吗？此操作会将对应 Markdown 移入回收区。",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+        failed = []
+        service = self._file_graph_service()
+        for item in items:
+            try:
+                service.delete_page(item["id"])
+            except Exception as exc:
+                failed.append(f"{item.get('title', item.get('id'))}: {exc}")
+        self._load_knowledge()
+        if failed:
+            QMessageBox.warning(self, "批量删除完成", "部分条目删除失败：\n" + "\n".join(failed[:10]))
+        else:
+            QMessageBox.information(self, "批量删除完成", f"已删除 {len(items)} 条知识。")
+
+    def _export_selected_md(self):
+        items = self._selected_items()
+        if not items:
+            return
+        folder = QFileDialog.getExistingDirectory(self, "选择导出目录")
+        if not folder:
+            return
+        out_dir = Path(folder)
+        failed = []
+        exported = 0
+        used_names = set()
+        for item in items:
+            item_id = item.get("id", "")
+            filename = _safe_md_filename(item.get("title", ""), item_id)
+            if filename in used_names or (out_dir / filename).exists():
+                stem = Path(filename).stem
+                filename = f"{stem}-{item_id[:8]}.md"
+            used_names.add(filename)
+            try:
+                (out_dir / filename).write_text(_knowledge_to_markdown(item), encoding="utf-8")
+                exported += 1
+            except Exception as exc:
+                failed.append(f"{item.get('title', item_id)}: {exc}")
+        if failed:
+            QMessageBox.warning(
+                self,
+                "导出完成",
+                f"已导出 {exported} 条，{len(failed)} 条失败：\n" + "\n".join(failed[:10]),
+            )
+        else:
+            QMessageBox.information(self, "导出完成", f"已导出 {exported} 个 Markdown 文件。")
 
     def _import_files(self):
         from src.gui.import_dialog import ImportDialog

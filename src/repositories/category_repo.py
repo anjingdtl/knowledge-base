@@ -50,17 +50,31 @@ class CategoryRepository:
 
     def clear_categories(self, keep_dynamic=False):
         conn = self._conn()
-        conn.execute("DELETE FROM knowledge_categories")
         if keep_dynamic:
             if get_all_codes is None:
                 raise RuntimeError(
                     "classification_schema 模块不可用，无法按动态分类清理；"
                     "请安装 src.data.classification_schema 后重试"
                 )
-            for code in get_all_codes():
-                conn.execute("DELETE FROM categories WHERE name LIKE ?", (f"{code} %",))
-                conn.execute("DELETE FROM categories WHERE name = ?", (f"{code}",))
+            codes = get_all_codes()
+            if not codes:
+                conn.commit()
+                return
+            conditions = " OR ".join("c.name LIKE ?" for _ in codes)
+            like_params = [f"{code} %" for code in codes]
+            eq_conditions = " OR ".join("c.name = ?" for _ in codes)
+            eq_params = list(codes)
+            conn.execute(
+                f"DELETE FROM knowledge_categories WHERE category_id IN "
+                f"(SELECT id FROM categories c WHERE {conditions} OR {eq_conditions})",
+                like_params + eq_params,
+            )
+            conn.execute(
+                f"DELETE FROM categories WHERE {conditions} OR {eq_conditions}",
+                like_params + eq_params,
+            )
         else:
+            conn.execute("DELETE FROM knowledge_categories")
             conn.execute("DELETE FROM categories")
         conn.commit()
 

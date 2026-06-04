@@ -61,13 +61,15 @@ class EntityRef:
     target_id: str
     ref_type: str = "mention"  # mention, link, embed, contains
     weight: float = 1.0
+    auto_discovered: int = 0
     created_at: str = ""
 
     def to_row(self) -> dict:
         return {
             "id": self.id, "source_type": self.source_type, "source_id": self.source_id,
             "target_type": self.target_type, "target_id": self.target_id,
-            "ref_type": self.ref_type, "weight": self.weight, "created_at": self.created_at,
+            "ref_type": self.ref_type, "weight": self.weight,
+            "auto_discovered": self.auto_discovered, "created_at": self.created_at,
         }
 
 

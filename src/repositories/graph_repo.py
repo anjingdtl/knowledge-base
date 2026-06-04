@@ -108,15 +108,18 @@ class GraphRepository:
 
     def insert_relations(self, graph_id: str, relations: list[dict]):
         conn = self._conn()
-        for rel in relations:
-            conn.execute(
-                """INSERT OR REPLACE INTO knowledge_graph_relations
-                   (id, graph_id, source_knowledge_id, target_knowledge_id, relation_type, description, weight)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                (str(uuid.uuid4()), graph_id,
-                 rel["source_knowledge_id"], rel["target_knowledge_id"],
-                 rel.get("relation_type", "related"), rel.get("description", ""), rel.get("weight", 1.0)),
-            )
+        rows = [
+            (str(uuid.uuid4()), graph_id,
+             rel["source_knowledge_id"], rel["target_knowledge_id"],
+             rel.get("relation_type", "related"), rel.get("description", ""), rel.get("weight", 1.0))
+            for rel in relations
+        ]
+        conn.executemany(
+            """INSERT OR REPLACE INTO knowledge_graph_relations
+               (id, graph_id, source_knowledge_id, target_knowledge_id, relation_type, description, weight)
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            rows,
+        )
         conn.commit()
 
     def get_relations(self, graph_id: str) -> list[dict]:

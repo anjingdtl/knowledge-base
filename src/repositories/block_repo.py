@@ -1,5 +1,6 @@
 """Block repository for the Logseq-style block graph model."""
 import json
+import threading
 from datetime import datetime
 from typing import Optional
 
@@ -10,6 +11,7 @@ class BlockRepository:
     def __init__(self, db=None):
         from src.services.db import Database
         self._db = db or Database
+        self._write_lock = threading.Lock()
 
     def _conn(self):
         return self._db.get_conn()
@@ -47,21 +49,22 @@ class BlockRepository:
         return row["cnt"] if row else 0
 
     def delete_by_page(self, page_id: str) -> int:
-        rows = self._conn().execute("SELECT id FROM blocks WHERE page_id = ?", (page_id,)).fetchall()
-        ids = [row["id"] for row in rows]
-        if not ids:
-            return 0
-        placeholders = ",".join("?" for _ in ids)
-        self._conn().execute(
-            f"DELETE FROM block_property_index WHERE block_id IN ({placeholders})", ids,
-        )
-        self._conn().execute(
-            f"DELETE FROM block_refs WHERE source_id IN ({placeholders}) OR target_id IN ({placeholders})",
-            ids + ids,
-        )
-        self._conn().execute(f"DELETE FROM blocks WHERE id IN ({placeholders})", ids)
-        self._conn().commit()
-        return len(ids)
+        with self._write_lock:
+            rows = self._conn().execute("SELECT id FROM blocks WHERE page_id = ?", (page_id,)).fetchall()
+            ids = [row["id"] for row in rows]
+            if not ids:
+                return 0
+            placeholders = ",".join("?" for _ in ids)
+            self._conn().execute(
+                f"DELETE FROM block_property_index WHERE block_id IN ({placeholders})", ids,
+            )
+            self._conn().execute(
+                f"DELETE FROM block_refs WHERE source_id IN ({placeholders}) OR target_id IN ({placeholders})",
+                ids + ids,
+            )
+            self._conn().execute(f"DELETE FROM blocks WHERE id IN ({placeholders})", ids)
+            self._conn().commit()
+            return len(ids)
 
     def replace_properties(self, block_id: str, properties: dict) -> None:
         conn = self._conn()

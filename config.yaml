@@ -87,6 +87,10 @@ storage:
   data_dir: data
   db_name: kb.db
   graph_dir: graph
+safety:
+  operation_log:
+    enabled: true
+    retention_days: 90
 web:
   timeout: 30
 wiki:

@@ -3,6 +3,11 @@ from src.services.db import Database
 
 
 class QueryExecutor:
+    VALID_CONDITION_TYPES = frozenset({
+        "and", "or", "not", "tag", "property", "fulltext",
+        "link", "file_type", "source_type",
+    })
+
     def __init__(self, db=None):
         self._db = db or Database
 
@@ -42,6 +47,8 @@ class QueryExecutor:
         return rows
 
     def _compile(self, condition: Condition) -> tuple[str, list, bool]:
+        if condition.type not in self.VALID_CONDITION_TYPES:
+            return "", [], False
         handler = getattr(self, f"_compile_{condition.type}", None)
         if handler is None:
             return "", [], False
@@ -141,11 +148,12 @@ class QueryExecutor:
                 False,
             )
         if op == "contains":
+            escaped = str(value).replace("%", "\\%").replace("_", "\\_")
             return (
                 "EXISTS (SELECT 1 FROM effective_property_index epi "
                 "WHERE epi.block_id IN (SELECT id FROM blocks WHERE page_id = ki.id) "
-                "AND epi.prop_key = ? AND epi.prop_value LIKE ?)",
-                [key, f"%{value}%"],
+                "AND epi.prop_key = ? AND epi.prop_value LIKE ? ESCAPE '\\')",
+                [key, f"%{escaped}%"],
                 False,
             )
         if op == "like":

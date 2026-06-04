@@ -52,6 +52,7 @@ class AppContainer:
     # --- 仓库层（Phase 2 新增） ---
     tag_relation_repo: "TagRelationRepository" = field(default=None, repr=False)  # noqa: F821
     property_schema_repo: "PropertySchemaRepository" = field(default=None, repr=False)  # noqa: F821
+    operation_log_repo: "OperationLogRepository" = field(default=None, repr=False)  # noqa: F821
 
     # --- AI 服务 ---
     embedding: "EmbeddingService" = field(default=None)  # noqa: F821
@@ -82,11 +83,21 @@ class AppContainer:
     _query_explainer: Optional[object] = field(default=None, repr=False)
     _agentic_router: Optional[object] = field(default=None, repr=False)
 
+    # --- 操作安全服务 (lazy init) ---
+    _operation_log: Optional[object] = field(default=None, repr=False)
+
+    _initialized_services: list = field(default_factory=list, repr=False)
+
+    def _track_service(self, attr_name: str):
+        if attr_name not in self._initialized_services:
+            self._initialized_services.append(attr_name)
+
     @property
     def indexer(self):
         if self._indexer is None:
             from src.services.indexer import IndexerService
             self._indexer = IndexerService(self.db, self.vectorstore, self.embedding, self.config)
+            self._track_service("_indexer")
         return self._indexer
 
     @property
@@ -94,6 +105,7 @@ class AppContainer:
         if self._hybrid_search is None:
             from src.services.hybrid_search import HybridSearcher
             self._hybrid_search = HybridSearcher(self.db, self.vectorstore, self.config)
+            self._track_service("_hybrid_search")
         return self._hybrid_search
 
     @property
@@ -101,6 +113,7 @@ class AppContainer:
         if self._rag_pipeline is None:
             from src.services.rag_pipeline import RAGService
             self._rag_pipeline = RAGService()
+            self._track_service("_rag_pipeline")
         return self._rag_pipeline
 
     @property
@@ -108,6 +121,7 @@ class AppContainer:
         if self._query_rewriter is None:
             from src.services.query_rewriter import QueryRewriter
             self._query_rewriter = QueryRewriter(self.llm, self.config)
+            self._track_service("_query_rewriter")
         return self._query_rewriter
 
     @property
@@ -115,6 +129,7 @@ class AppContainer:
         if self._reranker is None:
             from src.services.reranker import LLMReranker
             self._reranker = LLMReranker(self.llm, self.config)
+            self._track_service("_reranker")
         return self._reranker
 
     @property
@@ -122,6 +137,7 @@ class AppContainer:
         if self._wiki_compiler is None:
             from src.services.wiki_compiler import WikiCompiler
             self._wiki_compiler = WikiCompiler(self.db, self.llm, self.config)
+            self._track_service("_wiki_compiler")
         return self._wiki_compiler
 
     @property
@@ -129,6 +145,7 @@ class AppContainer:
         if self._wiki_workflow is None:
             from src.services.wiki_workflow import WikiWorkflowService
             self._wiki_workflow = WikiWorkflowService(self.db)
+            self._track_service("_wiki_workflow")
         return self._wiki_workflow
 
     @property
@@ -136,6 +153,7 @@ class AppContainer:
         if self._graph_builder is None:
             from src.services.graph_builder import GraphBuilder
             self._graph_builder = GraphBuilder(self.db, self.llm, self.config)
+            self._track_service("_graph_builder")
         return self._graph_builder
 
     @property
@@ -143,6 +161,7 @@ class AppContainer:
         if self._librarian is None:
             from src.services.librarian import LibrarianService
             self._librarian = LibrarianService()
+            self._track_service("_librarian")
         return self._librarian
 
     @property
@@ -152,6 +171,7 @@ class AppContainer:
             self._search_service = SearchService(
                 self.config, self.db, self.block_store, self.embedding, self.llm
             )
+            self._track_service("_search_service")
         return self._search_service
 
     @property
@@ -161,6 +181,7 @@ class AppContainer:
             self._file_graph_service = FileGraphService(
                 self.config, self.db, self.block_store, self.embedding
             )
+            self._track_service("_file_graph_service")
         return self._file_graph_service
 
     # --- Phase 2 lazy services ---
@@ -170,6 +191,7 @@ class AppContainer:
         if self._unified_graph is None:
             from src.services.unified_graph import UnifiedGraphService
             self._unified_graph = UnifiedGraphService(db=self.db)
+            self._track_service("_unified_graph")
         return self._unified_graph
 
     @property
@@ -177,6 +199,7 @@ class AppContainer:
         if self._tag_hierarchy is None:
             from src.services.tag_hierarchy import TagHierarchyService
             self._tag_hierarchy = TagHierarchyService(db=self.db, repo=self.tag_relation_repo)
+            self._track_service("_tag_hierarchy")
         return self._tag_hierarchy
 
     @property
@@ -184,6 +207,7 @@ class AppContainer:
         if self._property_schema is None:
             from src.services.property_schema import PropertySchemaService
             self._property_schema = PropertySchemaService(db=self.db, repo=self.property_schema_repo)
+            self._track_service("_property_schema")
         return self._property_schema
 
     @property
@@ -191,6 +215,7 @@ class AppContainer:
         if self._effective_properties is None:
             from src.services.effective_properties import EffectivePropertyService
             self._effective_properties = EffectivePropertyService(db=self.db, schema_service=self.property_schema)
+            self._track_service("_effective_properties")
         return self._effective_properties
 
     @property
@@ -198,6 +223,7 @@ class AppContainer:
         if self._query_executor is None:
             from src.services.query_executor import QueryExecutor
             self._query_executor = QueryExecutor(db=self.db)
+            self._track_service("_query_executor")
         return self._query_executor
 
     @property
@@ -205,6 +231,7 @@ class AppContainer:
         if self._graph_traversal is None:
             from src.services.graph_traversal import GraphTraversalService
             self._graph_traversal = GraphTraversalService(db=self.db)
+            self._track_service("_graph_traversal")
         return self._graph_traversal
 
     @property
@@ -212,6 +239,7 @@ class AppContainer:
         if self._query_explainer is None:
             from src.services.query_explainer import QueryExplainer
             self._query_explainer = QueryExplainer()
+            self._track_service("_query_explainer")
         return self._query_explainer
 
     @property
@@ -219,7 +247,16 @@ class AppContainer:
         if self._agentic_router is None:
             from src.services.agentic_router import AgenticRouter
             self._agentic_router = AgenticRouter(db=self.db, llm=self.llm)
+            self._track_service("_agentic_router")
         return self._agentic_router
+
+    @property
+    def operation_log(self):
+        if self._operation_log is None:
+            from src.services.operation_log import OperationLogService
+            self._operation_log = OperationLogService(repo=self.operation_log_repo)
+            self._track_service("_operation_log")
+        return self._operation_log
 
 
 def create_container(config_path: str | None = None) -> AppContainer:
@@ -240,12 +277,13 @@ def create_container(config_path: str | None = None) -> AppContainer:
     # 2. Database（使用类方法连接，cls._conn 全局共享）
     # 如果已有活跃连接（如测试 fixture 已 connect），保留现有连接，不覆盖
     from src.services.db import Database
-    if Database._conn is None:
+    try:
+        Database.get_conn()
+        logger.info("Database already connected, reusing existing connection")
+    except Exception:
         db_path = config.get_db_path()
         Database.connect(str(db_path))
         logger.info("Database connected: %s", db_path)
-    else:
-        logger.info("Database already connected, reusing existing connection")
 
     # 3. VectorStore（注入 Database 实例）
     from src.services.vectorstore import VectorStore
@@ -293,8 +331,10 @@ def create_container(config_path: str | None = None) -> AppContainer:
     # Phase 2 仓库
     from src.repositories.tag_relation_repo import TagRelationRepository
     from src.repositories.property_schema_repo import PropertySchemaRepository
+    from src.repositories.operation_log_repo import OperationLogRepository
     container.tag_relation_repo = TagRelationRepository(db=Database)
     container.property_schema_repo = PropertySchemaRepository(db=Database)
+    container.operation_log_repo = OperationLogRepository(db=Database)
 
     logger.info("Repositories initialized")
 
@@ -307,8 +347,15 @@ def create_container(config_path: str | None = None) -> AppContainer:
 def shutdown_container(container: AppContainer):
     """关闭容器，释放资源"""
     try:
+        for attr_name in getattr(container, '_initialized_services', []):
+            svc = getattr(container, attr_name, None)
+            if svc and hasattr(svc, 'close'):
+                try:
+                    svc.close()
+                except Exception:
+                    pass
         if container.db is not None:
             container.db.close()
             logger.info("Database closed")
     except Exception as e:
-        logger.warning("Error closing database: %s", e)
+        logger.warning("Error during container shutdown: %s", e)

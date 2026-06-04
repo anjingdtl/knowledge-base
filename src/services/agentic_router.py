@@ -149,7 +149,8 @@ class AgenticRouter:
             try:
                 from src.core.container import create_container
                 container = create_container()
-                llm = container.llm
+                self._llm = container.llm
+                llm = self._llm
             except Exception:
                 return None
         if llm is None:

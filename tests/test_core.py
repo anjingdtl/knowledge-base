@@ -10,20 +10,6 @@ from src.utils.config import Config
 from src.services.db import Database
 
 
-@pytest.fixture(autouse=True)
-def setup_db(tmp_path):
-    db_path = tmp_path / "test.db"
-    Config.load()
-    Config.set("storage.data_dir", str(tmp_path))
-    Config.set("storage.db_name", "test.db")
-    Database._conn = None
-    Database._instance = None
-    Database.connect(str(db_path))
-    yield
-    Database.close()
-    Database._instance = None
-
-
 class TestDualMethodConfig:
     def test_class_mode(self):
         Config.set("test.key", "class_value")

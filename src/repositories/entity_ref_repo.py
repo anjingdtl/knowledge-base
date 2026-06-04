@@ -17,9 +17,11 @@ class EntityRefRepository:
         row = ref.to_row()
         row["created_at"] = row.get("created_at") or datetime.now().isoformat()
         self._conn().execute(
-            """INSERT OR REPLACE INTO entity_refs
-               (id, source_type, source_id, target_type, target_id, ref_type, weight, created_at)
-               VALUES (:id, :source_type, :source_id, :target_type, :target_id, :ref_type, :weight, :created_at)""",
+            """INSERT INTO entity_refs
+               (id, source_type, source_id, target_type, target_id, ref_type, weight, auto_discovered, created_at)
+               VALUES (:id, :source_type, :source_id, :target_type, :target_id, :ref_type, :weight, :auto_discovered, :created_at)
+               ON CONFLICT(source_type, source_id, target_type, target_id, ref_type)
+               DO UPDATE SET weight=excluded.weight""",
             row,
         )
         self._conn().commit()
@@ -66,6 +68,15 @@ class EntityRefRepository:
                WHERE (source_type = ? AND source_id = ?)
                   OR (target_type = ? AND target_id = ?)""",
             (entity_type, entity_id, entity_type, entity_id),
+        )
+        self._conn().commit()
+        return cursor.rowcount
+
+    def delete_auto_discovered_for_source(self, source_type: str, source_id: str) -> int:
+        cursor = self._conn().execute(
+            """DELETE FROM entity_refs
+               WHERE source_type = ? AND source_id = ? AND auto_discovered = 1""",
+            (source_type, source_id),
         )
         self._conn().commit()
         return cursor.rowcount

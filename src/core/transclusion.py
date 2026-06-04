@@ -18,13 +18,14 @@ logger = logging.getLogger(__name__)
 _EMBED_PATTERN = re.compile(r'\{\{embed:(block|wiki|knowledge):([^}|]+?)(?:\|([^}]*))?\}\}')
 
 
-def resolve_transclusions(text: str, max_depth: int = 3, _depth: int = 0) -> str:
+def resolve_transclusions(text: str, max_depth: int = 3, _depth: int = 0, db=None) -> str:
     """解析文本中的嵌入标记，替换为实际内容
 
     Args:
         text: 包含嵌入标记的文本
         max_depth: 最大递归深度（防止循环引用）
         _depth: 当前递归深度（内部使用）
+        db: Database 实例（可选，默认使用全局单例）
 
     Returns:
         解析后的文本
@@ -37,13 +38,12 @@ def resolve_transclusions(text: str, max_depth: int = 3, _depth: int = 0) -> str
         embed_id = match.group(2).strip()
         display_text = match.group(3)
 
-        content = _fetch_content(embed_type, embed_id)
+        content = _fetch_content(embed_type, embed_id, db=db)
         if content is None:
-            return match.group(0)  # 找不到就保留原始标记
+            return match.group(0)
 
-        # 递归解析嵌入内容中的嵌入
         if _depth < max_depth - 1:
-            content = resolve_transclusions(content, max_depth, _depth + 1)
+            content = resolve_transclusions(content, max_depth, _depth + 1, db=db)
 
         if display_text:
             return f"【{display_text}】\n{content}"
@@ -52,14 +52,14 @@ def resolve_transclusions(text: str, max_depth: int = 3, _depth: int = 0) -> str
     return _EMBED_PATTERN.sub(_replace, text)
 
 
-def _fetch_content(embed_type: str, embed_id: str) -> Optional[str]:
+def _fetch_content(embed_type: str, embed_id: str, db=None) -> Optional[str]:
     """根据类型和 ID 获取嵌入内容"""
     from src.services.db import Database
+    database = db or Database
 
     try:
         if embed_type == "block":
-            # 从 blocks 表获取（精确匹配 ID）
-            conn = Database.get_conn()
+            conn = database.get_conn()
             row = conn.execute(
                 "SELECT content FROM blocks WHERE id = ?",
                 (embed_id,),
@@ -67,10 +67,9 @@ def _fetch_content(embed_type: str, embed_id: str) -> Optional[str]:
             return row["content"] if row else None
 
         elif embed_type == "wiki":
-            # 从 wiki_pages 表获取（支持按标题查找）
-            page = Database.get_wiki_page(embed_id)
+            page = database.get_wiki_page(embed_id)
             if not page:
-                page = Database.get_wiki_page_by_title(embed_id)
+                page = database.get_wiki_page_by_title(embed_id)
             if page:
                 parts = []
                 if page.get("concept_summary"):
@@ -81,8 +80,7 @@ def _fetch_content(embed_type: str, embed_id: str) -> Optional[str]:
             return None
 
         elif embed_type == "knowledge":
-            # 从 knowledge_items 表获取
-            item = Database.get_knowledge(embed_id)
+            item = database.get_knowledge(embed_id)
             if item:
                 return item.get("content", "")[:1000]
             return None

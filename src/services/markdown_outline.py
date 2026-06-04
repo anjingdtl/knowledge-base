@@ -50,21 +50,20 @@ class MarkdownOutlineParser:
                         self._apply_page_property(page, prop_match.group(1), prop_match.group(2))
                     continue
 
-            prop_match = self._PROP_RE.match(line.strip())
-            if prop_match and line.startswith("  "):
-                depth = max((len(line) - len(line.lstrip(" "))) // 2 - 1, 0)
-                target = last_block_at_depth.get(depth)
-                if target:
-                    key = prop_match.group(1)
-                    value = prop_match.group(2)
-                    if key == "id":
-                        target.id = value
-                    else:
-                        target.properties[key] = value
-                continue
-
             block_match = self._BLOCK_RE.match(line)
             if not block_match:
+                prop_match = self._PROP_RE.match(line.strip())
+                if prop_match and line.startswith("  "):
+                    depth = max((len(line) - len(line.lstrip(" "))) // 2 - 1, 0)
+                    target = last_block_at_depth.get(depth)
+                    if target:
+                        key = prop_match.group(1)
+                        value = prop_match.group(2)
+                        if key == "id":
+                            target.id = value
+                        else:
+                            target.properties[key] = value
+                    continue
                 if stack and line.strip():
                     stack[-1][1].content += "\n" + line.strip()
                 continue

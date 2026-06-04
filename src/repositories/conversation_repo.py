@@ -1,4 +1,5 @@
 """对话仓库 — conversations / chat_messages"""
+import json
 from typing import Optional
 
 
@@ -47,10 +48,12 @@ class ConversationRepository:
 
     def insert_message(self, msg: dict) -> str:
         _require_keys(msg, ("id", "conversation_id", "role", "content", "created_at"))
+        msg = {**msg}
+        msg.setdefault("source_graph", json.dumps({"nodes": [], "edges": []}, ensure_ascii=False))
         conn = self._conn()
         conn.execute(
-            """INSERT INTO chat_messages (id, conversation_id, role, content, sources, created_at)
-               VALUES (:id, :conversation_id, :role, :content, :sources, :created_at)""",
+            """INSERT INTO chat_messages (id, conversation_id, role, content, sources, source_graph, created_at)
+               VALUES (:id, :conversation_id, :role, :content, :sources, :source_graph, :created_at)""",
             msg,
         )
         conn.commit()

@@ -163,7 +163,7 @@ class JobRepository:
         self._conn().execute(
             """DELETE FROM async_jobs
                WHERE status IN ('completed', 'failed', 'cancelled')
-               AND completed_at < datetime('now', '-' || ? || ' days')""",
+               AND completed_at < datetime('now', 'localtime', '-' || ? || ' days')""",
             (retention_days,),
         )
         self._conn().commit()

@@ -131,6 +131,11 @@ class FileGraphService:
             self._db.insert_knowledge(item.to_row())
 
         self._rebuild_page_cache(page, item)
+        try:
+            from src.services.link_discovery import LinkDiscoveryService
+            LinkDiscoveryService(db=self._db).discover_links(page.id)
+        except Exception:
+            pass
         manifest = self._read_manifest()
         manifest[page.id] = {"path": str(path), "mtime": stat.st_mtime}
         self._write_manifest(manifest)
@@ -186,6 +191,69 @@ class FileGraphService:
         manifest.pop(page_id, None)
         self._write_manifest(manifest)
 
+    # ---- 回收站管理 ----
+
+    def list_trash(self) -> list[dict]:
+        """列出回收站中的所有 MD 文件"""
+        trash_dir = self.ensure_graph() / ".trash"
+        items = []
+        for path in sorted(trash_dir.glob("*.md"), key=lambda p: p.stat().st_mtime, reverse=True):
+            stat = path.stat()
+            # 从文件内容读取真实标题（title:: 行）
+            title = self._read_title_from_file(path)
+            items.append({
+                "filename": path.name,
+                "title": title,
+                "size": stat.st_size,
+                "deleted_at": datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M"),
+            })
+        return items
+
+    def _read_title_from_file(self, path: Path) -> str:
+        """从 MD 文件前几行中提取 title:: 值，回退到文件名解析"""
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("title::"):
+                        return line[len("title::"):].strip()
+                    # 遇到正文区（非 key:: 行且非空行）时停止扫描
+                    if line and not line.endswith("::") and ":: " not in line and not line.startswith("#"):
+                        break
+        except Exception:
+            pass
+        # 回退：从文件名解析
+        stem = path.stem
+        return stem.split("--", 1)[0] if "--" in stem else stem
+
+    def restore_page(self, trash_filename: str) -> dict:
+        """从回收站恢复单条知识（完整索引重建）"""
+        trash_path = self.ensure_graph() / ".trash" / trash_filename
+        if not trash_path.exists():
+            raise FileNotFoundError(f"回收站文件不存在: {trash_filename}")
+        dest = self.graph_dir / "pages" / trash_filename
+        if dest.exists():
+            stem = dest.stem
+            dest = dest.with_name(f"{stem}-{int(datetime.now().timestamp())}{dest.suffix}")
+        shutil.move(str(trash_path), str(dest))
+        result = self.sync_page(str(dest))
+        return {"restored": True, **result}
+
+    def purge_page(self, trash_filename: str) -> None:
+        """永久删除回收站中的文件"""
+        trash_path = self.ensure_graph() / ".trash" / trash_filename
+        if trash_path.exists():
+            trash_path.unlink()
+
+    def empty_trash(self) -> int:
+        """清空回收站，返回删除的文件数"""
+        trash_dir = self.ensure_graph() / ".trash"
+        count = 0
+        for path in trash_dir.glob("*.md"):
+            path.unlink()
+            count += 1
+        return count
+
     def read_page(self, page_id: str) -> PageDocument:
         path = self._resolve_page_path(page_id)
         page = self._parser.parse(path.read_text(encoding="utf-8"))
@@ -233,8 +301,8 @@ class FileGraphService:
 
         if not block_rows:
             return
-        self._db.insert_blocks(block_rows)
         self._db.insert_chunks(chunk_rows)
+        self._db.insert_blocks(block_rows)
         self._db.insert_blocks_fts(block_rows)
         self._db.insert_chunks_fts([
             {"id": row["id"], "knowledge_id": page.id, "chunk_text": row["chunk_text"]}
@@ -314,9 +382,24 @@ class FileGraphService:
                     properties=block.get("properties", {}),
                     children=self._coerce_blocks(block.get("children", [])),
                 ))
+            elif hasattr(block, "children") and hasattr(block, "block_type") and hasattr(block, "content"):
+                # StructuredBlock — 保留层级关系转换为 OutlineBlock 树
+                result.append(self._structured_to_outline(block))
             else:
                 result.append(OutlineBlock(content=str(block)))
         return result
+
+    def _structured_to_outline(self, sb) -> OutlineBlock:
+        """将 StructuredBlock 转换为 OutlineBlock，递归保留 children 层级"""
+        props = dict(sb.properties) if sb.properties else {}
+        props["block_type"] = sb.block_type
+        block = OutlineBlock(
+            content=sb.content,
+            properties=props,
+        )
+        if sb.children:
+            block.children = [self._structured_to_outline(child) for child in sb.children]
+        return block
 
     def _page_path(self, title: str, page_id: str) -> Path:
         self.ensure_graph()

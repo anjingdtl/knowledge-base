@@ -54,6 +54,17 @@ class GraphBuilder:
         self._llm = LLMService()
         self._progress = progress_callback  # signature: (message: str) -> None
 
+    def _emit_progress(self, message: str, current: int | None = None, total: int | None = None) -> None:
+        if not self._progress:
+            return
+        try:
+            if current is not None and total is not None:
+                self._progress(message, current, total)
+            else:
+                self._progress(message)
+        except TypeError:
+            self._progress(message)
+
     def build_from_knowledge(self, graph_id: str, knowledge_ids: list[str]) -> list[dict]:
         """分析指定知识条目之间的关系，并将结果写入数据库。返回生成的关系列表。"""
         if len(knowledge_ids) < 2:
@@ -68,14 +79,21 @@ class GraphBuilder:
 
         all_relations = []
         batch_size = self.MAX_ITEMS_PER_ANALYSIS
+
+        if len(knowledge_ids) > batch_size:
+            Database.delete_graph_relations(graph_id)
+
         for i in range(0, len(knowledge_ids), batch_size):
             batch = knowledge_ids[i:i + batch_size]
             batch_num = i // batch_size + 1
             total_batches = (len(knowledge_ids) + batch_size - 1) // batch_size
-            if self._progress and total_batches > 1:
-                self._progress(f"分析批次 {batch_num}/{total_batches}...")
-            relations = self._analyze_batch(graph_id, batch)
+            if total_batches > 1:
+                self._emit_progress(f"分析批次 {batch_num}/{total_batches}...", batch_num, total_batches)
+            relations = self._analyze_batch(graph_id, batch, skip_delete=True)
             all_relations.extend(relations)
+
+        if all_relations:
+            Database.insert_graph_relations(graph_id, all_relations)
         return all_relations
 
     def _analyze_batch(self, graph_id: str, knowledge_ids: list[str]) -> list[dict]:
@@ -140,14 +158,13 @@ class GraphBuilder:
                 valid_cats.append((cat, [it["id"] for it in items]))
 
         total = len(valid_cats)
-        if self._progress and total > 0:
-            self._progress(f"共 {total} 个分类待分析...")
+        if total > 0:
+            self._emit_progress(f"共 {total} 个分类待分析...", 0, total)
 
         for idx, (cat, knowledge_ids) in enumerate(valid_cats):
             cat_id = cat["id"]
             cat_name = cat["name"]
-            if self._progress:
-                self._progress(f"正在分析 [{idx + 1}/{total}]: {cat_name} ({len(knowledge_ids)}条)")
+            self._emit_progress(f"正在分析 [{idx + 1}/{total}]: {cat_name} ({len(knowledge_ids)}条)", idx + 1, total)
 
             # 查找是否已有同名的 auto 类型图谱
             existing = None
@@ -190,8 +207,7 @@ class GraphBuilder:
 
     def auto_generate_all(self) -> list[str]:
         """无分类时回退：取全部知识生成单图谱。"""
-        if self._progress:
-            self._progress("未找到有效分类，正在分析全部知识...")
+        self._emit_progress("未找到有效分类，正在分析全部知识...", 0, 1)
         all_items = Database.list_knowledge(limit=500)
         knowledge_ids = [it["id"] for it in all_items]
         if len(knowledge_ids) < 2:

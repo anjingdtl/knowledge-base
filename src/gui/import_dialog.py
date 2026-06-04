@@ -88,7 +88,7 @@ def _strip_think(text: str) -> str:
 class ImportWorker(QThread):
     progress = Signal(int, str)
     file_done = Signal(str, str, str)  # (filename, status, detail)
-    finished = Signal(int, int, int, list)  # success, skipped, failed, errors
+    import_finished = Signal(int, int, int, list)  # success, skipped, failed, errors
 
     def __init__(self, file_paths: list[str], tags: list[str]):
         super().__init__()
@@ -167,9 +167,10 @@ class ImportWorker(QThread):
                             sheet_info = f" ({parsed.metadata.get('sheet_name', '')})" if len(parsed_list) > 1 else ""
                             self.file_done.emit(f"{basename}{sheet_info}", "skipped", f"内容已存在：《{existing2.get('title', '')}》")
                         else:
+                            blocks = parsed.structured if parsed.structured else parsed.content
                             item_id = _file_graph_service().create_page(
                                 title,
-                                parsed.content,
+                                blocks,
                                 tags=tags,
                                 metadata={
                                     "source_type": "file",
@@ -194,35 +195,40 @@ class ImportWorker(QThread):
                         pct = int(counters["done"] / total * 100)
                         self.progress.emit(min(pct, 99), f"已处理 {counters['done']}/{total}")
 
-        with ThreadPoolExecutor(max_workers=5) as pool:
-            futures = {pool.submit(process, p): p for p in self.file_paths}
-            for future in as_completed(futures):
-                basename, status, err = future.result()
-                if status == "failed":
-                    errors.append(f"  {basename}: {err}")
-                    self.file_done.emit(basename, "failed", err or "导入失败")
+        try:
+            with ThreadPoolExecutor(max_workers=5) as pool:
+                futures = {pool.submit(process, p): p for p in self.file_paths}
+                for future in as_completed(futures):
+                    basename, status, err = future.result()
+                    if status == "failed":
+                        errors.append(f"  {basename}: {err}")
+                        self.file_done.emit(basename, "failed", err or "导入失败")
 
-        # Wiki 编译（导入完成后统一触发）
-        if inserted_ids:
-            from src.utils.config import Config
-            if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", True):
-                try:
-                    from src.services.wiki_compiler import WikiCompiler
-                    compiler = WikiCompiler()
-                    for kid in inserted_ids:
-                        compiler.ingest(kid)
-                except Exception as e:
-                    from src.services.llm import _notify_status
-                    _notify_status("error", f"Wiki 编译失败: {str(e)[:80]}")
+            # Wiki 编译（导入完成后统一触发）
+            if inserted_ids:
+                from src.utils.config import Config
+                if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", True):
+                    try:
+                        from src.services.wiki_compiler import WikiCompiler
+                        compiler = WikiCompiler()
+                        for kid in inserted_ids:
+                            compiler.ingest(kid)
+                    except Exception as e:
+                        from src.services.llm import _notify_status
+                        _notify_status("error", f"Wiki 编译失败: {str(e)[:80]}")
 
-        self.progress.emit(100, "导入完成")
-        self.finished.emit(counters["success"], counters["skipped"], counters["failed"], errors)
+            self.progress.emit(100, "导入完成")
+        except Exception as e:
+            errors.append(f"导入过程发生异常: {e}")
+        finally:
+            # 确保信号始终触发，避免 UI 卡死
+            self.import_finished.emit(counters["success"], counters["skipped"], counters["failed"], errors)
 
 
 class UrlImportWorker(QThread):
     progress = Signal(int, str)
     file_done = Signal(str, str, str)  # (url, status, detail)
-    finished = Signal(int, int, int, list)
+    import_finished = Signal(int, int, int, list)
 
     def __init__(self, urls: list[str], tags: list[str]):
         super().__init__()
@@ -239,51 +245,57 @@ class UrlImportWorker(QThread):
         errors = []
         inserted_ids = []
 
-        for i, url in enumerate(self.urls):
-            url = url.strip()
-            try:
-                parsed = parse_url(url)
-                content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
-
-                existing = Database.get_knowledge_by_hash(content_hash)
-                if existing:
-                    counters["skipped"] += 1
-                    self.file_done.emit(url, "skipped", f"内容已存在：《{existing.get('title', '')}》")
-                else:
-                    url_title = parsed.title or urlparse(url).netloc
-                    title = generate_title(parsed.content, filename=url_title)
-
-                    item_id = _file_graph_service().create_page(
-                        title,
-                        parsed.content,
-                        tags=self.tags,
-                        metadata={"source_type": "web", "source_path": parsed.source_path, "file_type": parsed.file_type},
-                    )
-                    inserted_ids.append(item_id)
-                    counters["success"] += 1
-                    self.file_done.emit(url, "success", "导入成功")
-
-            except Exception as e:
-                counters["failed"] += 1
-                errors.append(f"  {url}: {e}")
-                self.file_done.emit(url, "failed", str(e)[:100])
-
-            pct = int((i + 1) / total * 100)
-            self.progress.emit(pct, f"已处理 {i + 1}/{total}")
-
-        if inserted_ids:
-            from src.utils.config import Config
-            if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", True):
+        try:
+            for i, url in enumerate(self.urls):
+                url = url.strip()
                 try:
-                    from src.services.wiki_compiler import WikiCompiler
-                    compiler = WikiCompiler()
-                    for kid in inserted_ids:
-                        compiler.ingest(kid)
-                except Exception:
-                    pass
+                    parsed = parse_url(url)
+                    content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
 
-        self.progress.emit(100, "导入完成")
-        self.finished.emit(counters["success"], counters["skipped"], counters["failed"], errors)
+                    existing = Database.get_knowledge_by_hash(content_hash)
+                    if existing:
+                        counters["skipped"] += 1
+                        self.file_done.emit(url, "skipped", f"内容已存在：《{existing.get('title', '')}》")
+                    else:
+                        url_title = parsed.title or urlparse(url).netloc
+                        title = generate_title(parsed.content, filename=url_title)
+
+                        blocks = parsed.structured if parsed.structured else parsed.content
+                        item_id = _file_graph_service().create_page(
+                            title,
+                            blocks,
+                            tags=self.tags,
+                            metadata={"source_type": "web", "source_path": parsed.source_path, "file_type": parsed.file_type},
+                        )
+                        inserted_ids.append(item_id)
+                        counters["success"] += 1
+                        self.file_done.emit(url, "success", "导入成功")
+
+                except Exception as e:
+                    counters["failed"] += 1
+                    errors.append(f"  {url}: {e}")
+                    self.file_done.emit(url, "failed", str(e)[:100])
+
+                pct = int((i + 1) / total * 100)
+                self.progress.emit(pct, f"已处理 {i + 1}/{total}")
+
+            if inserted_ids:
+                from src.utils.config import Config
+                if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", True):
+                    try:
+                        from src.services.wiki_compiler import WikiCompiler
+                        compiler = WikiCompiler()
+                        for kid in inserted_ids:
+                            compiler.ingest(kid)
+                    except Exception:
+                        pass
+
+            self.progress.emit(100, "导入完成")
+        except Exception as e:
+            errors.append(f"URL 导入过程发生异常: {e}")
+        finally:
+            # 确保信号始终触发，避免 UI 卡死
+            self.import_finished.emit(counters["success"], counters["skipped"], counters["failed"], errors)
 
 
 SUPPORTED_EXT = {".pdf", ".pptx", ".ppt", ".docx", ".txt", ".md", ".html", ".py", ".js", ".ts", ".java", ".c", ".cpp", ".go", ".rs", ".json", ".yaml", ".yml", ".xlsx", ".xls", ".csv"}
@@ -571,14 +583,17 @@ class ImportDialog(QDialog):
         rlayout.addLayout(btn_row)
 
         self._result_counts = {"success": 0, "skipped": 0, "failed": 0}
+        self._import_completed_successfully = False
 
         self._url_worker = UrlImportWorker(urls, tags)
         self._url_worker.file_done.connect(self._on_file_done)
         self._url_worker.progress.connect(self._on_import_progress)
-        self._url_worker.finished.connect(self._on_import_finished)
+        self._url_worker.import_finished.connect(self._on_import_finished)
         self._url_worker.start()
 
         self._result_dlg.exec()
+        if self._import_completed_successfully:
+            self.accept()
 
     def _start_paste_import(self):
         content = self.paste_content_input.toPlainText().strip()
@@ -672,16 +687,19 @@ class ImportDialog(QDialog):
         # 计数器
         total_files = len(self._selected_files)
         self._result_counts = {"success": 0, "skipped": 0, "failed": 0}
+        self._import_completed_successfully = False
         self._result_progress.setRange(0, total_files)
         self._result_progress.setValue(0)
 
         self._worker = ImportWorker(self._selected_files, tags)
         self._worker.file_done.connect(self._on_file_done)
         self._worker.progress.connect(self._on_import_progress)
-        self._worker.finished.connect(self._on_import_finished)
+        self._worker.import_finished.connect(self._on_import_finished)
         self._worker.start()
 
         self._result_dlg.exec()
+        if self._import_completed_successfully:
+            self.accept()
 
     def _on_file_done(self, filename: str, status: str, detail: str):
         self._result_counts[status] = self._result_counts.get(status, 0) + 1
@@ -719,8 +737,9 @@ class ImportDialog(QDialog):
         if failed > 0:
             parts.append(f"失败 {failed}")
         total = success + skipped + failed
+        self._result_progress.setMaximum(max(total, 1))
+        self._result_progress.setValue(total)
         self._result_header.setText(f"导入完成（共 {total} 个文件）")
         self._result_summary.setText("  |  ".join(parts))
         self._result_btn.setEnabled(True)
-        if success > 0:
-            self.accept()
+        self._import_completed_successfully = success > 0

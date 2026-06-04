@@ -1,5 +1,6 @@
 """知识条目仓库 — knowledge_items / knowledge_versions / knowledge_chunks / FTS"""
 import json
+import threading
 import uuid
 from datetime import datetime
 from typing import Optional
@@ -12,6 +13,7 @@ class KnowledgeRepository:
 
     def __init__(self, db=None):
         self._db = db or Database
+        self._write_lock = threading.Lock()
 
     def _conn(self):
         return self._db.get_conn()
@@ -85,22 +87,30 @@ class KnowledgeRepository:
         invalid = set(fields) - allowed
         if invalid:
             raise ValueError(f"Invalid fields: {invalid}")
-        old = self.get(item_id)
-        if old and old.get("content") != fields.get("content"):
-            self._save_version(item_id, old)
-        sets = ", ".join(f'"{k}" = ?' for k in fields)
-        values = list(fields.values()) + [datetime.now().isoformat(), item_id]
-        cursor = self._conn().execute(
-            f'UPDATE knowledge_items SET {sets}, version = version + 1, updated_at = ? WHERE id = ?',
-            values,
-        )
-        self._conn().commit()
-        if cursor.rowcount == 0:
-            raise ValueError(f"Knowledge item {item_id} not found")
+        with self._write_lock:
+            old = self.get(item_id)
+            if old:
+                _version_fields = {"title", "content", "tags"}
+                if _version_fields & set(fields):
+                    self._save_version(item_id, old)
+            sets = ", ".join(f'"{k}" = ?' for k in fields)
+            values = list(fields.values()) + [datetime.now().isoformat(), item_id]
+            cursor = self._conn().execute(
+                f'UPDATE knowledge_items SET {sets}, version = version + 1, updated_at = ? WHERE id = ?',
+                values,
+            )
+            self._conn().commit()
+            if cursor.rowcount == 0:
+                raise ValueError(f"Knowledge item {item_id} not found")
 
     def delete(self, item_id: str):
-        # VectorStore deletion is best-effort: DB cleanup must succeed even if
-        # ChromaDB is unavailable or VectorStore initialization fails.
+        with self._write_lock:
+            conn = self._conn()
+            conn.execute("DELETE FROM chunk_fts WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
+            conn.commit()
         try:
             from src.services.vectorstore import VectorStore
             VectorStore().delete_by_knowledge(item_id)
@@ -109,12 +119,6 @@ class KnowledgeRepository:
             logging.getLogger(__name__).warning(
                 "VectorStore deletion failed for item %s; proceeding with DB cleanup", item_id, exc_info=True
             )
-        self.delete_chunks_fts(item_id)
-        conn = self._conn()
-        conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
-        conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
-        conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
-        conn.commit()
 
     def count(self, tag: str | None = None) -> int:
         if tag:
@@ -184,11 +188,10 @@ class KnowledgeRepository:
     # ---- Version Control ----
 
     def _save_version(self, knowledge_id: str, snapshot: dict):
-        version = snapshot.get("version", 1)
         self._conn().execute(
             """INSERT INTO knowledge_versions (id, knowledge_id, version, title, content, tags, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (str(uuid.uuid4()), knowledge_id, version, snapshot["title"],
+               VALUES (?, ?, (SELECT COALESCE(MAX(version), 0) + 1 FROM knowledge_versions WHERE knowledge_id = ?), ?, ?, ?, ?)""",
+            (str(uuid.uuid4()), knowledge_id, knowledge_id, snapshot["title"],
              snapshot.get("content", ""), snapshot.get("tags", "[]"), datetime.now().isoformat()),
         )
         self._conn().commit()

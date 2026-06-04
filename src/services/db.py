@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     role TEXT,
     content TEXT,
     sources TEXT,
+    source_graph TEXT DEFAULT '{"nodes":[],"edges":[]}',
     created_at TIMESTAMP
 );
 
@@ -293,6 +294,7 @@ CREATE TABLE IF NOT EXISTS entity_refs (
     target_id TEXT NOT NULL,
     ref_type TEXT DEFAULT 'mention',
     weight REAL DEFAULT 1.0,
+    auto_discovered INTEGER DEFAULT 0,
     created_at TEXT,
     UNIQUE(source_type, source_id, target_type, target_id, ref_type)
 );
@@ -310,6 +312,48 @@ CREATE TABLE IF NOT EXISTS block_property_index (
 
 CREATE INDEX IF NOT EXISTS idx_prop_key_val ON block_property_index(prop_key, prop_value);
 
+-- === Phase 2: Tag DAG, Property Schema, Effective Properties ===
+CREATE TABLE IF NOT EXISTS tag_relations (
+    parent_tag TEXT NOT NULL,
+    child_tag TEXT NOT NULL,
+    created_at TEXT,
+    PRIMARY KEY (parent_tag, child_tag),
+    CHECK(parent_tag <> child_tag)
+);
+
+CREATE INDEX IF NOT EXISTS idx_tag_relations_parent ON tag_relations(parent_tag);
+CREATE INDEX IF NOT EXISTS idx_tag_relations_child ON tag_relations(child_tag);
+
+CREATE TABLE IF NOT EXISTS property_schemas (
+    id TEXT PRIMARY KEY,
+    scope_type TEXT NOT NULL,
+    scope_id TEXT DEFAULT '',
+    property_name TEXT NOT NULL,
+    property_type TEXT NOT NULL,
+    required INTEGER DEFAULT 0,
+    default_value TEXT,
+    choices TEXT,
+    constraints TEXT,
+    created_at TEXT,
+    UNIQUE(scope_type, scope_id, property_name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_property_schemas_scope ON property_schemas(scope_type, scope_id);
+
+CREATE TABLE IF NOT EXISTS effective_property_index (
+    block_id TEXT REFERENCES blocks(id) ON DELETE CASCADE,
+    prop_key TEXT NOT NULL,
+    prop_value TEXT,
+    value_type TEXT DEFAULT 'string',
+    source_type TEXT NOT NULL,
+    source_id TEXT DEFAULT '',
+    inherited INTEGER DEFAULT 0,
+    updated_at TEXT,
+    PRIMARY KEY (block_id, prop_key)
+);
+
+CREATE INDEX IF NOT EXISTS idx_effective_prop_key_val ON effective_property_index(prop_key, prop_value);
+
 CREATE TABLE IF NOT EXISTS embedding_cache (
     content_hash TEXT NOT NULL,
     model TEXT NOT NULL,
@@ -323,6 +367,23 @@ CREATE TABLE IF NOT EXISTS users (
     hashed TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS operation_logs (
+    id TEXT PRIMARY KEY,
+    operation TEXT NOT NULL,
+    target_type TEXT NOT NULL,
+    target_id TEXT NOT NULL,
+    operator TEXT NOT NULL DEFAULT 'system',
+    source TEXT NOT NULL DEFAULT 'mcp',
+    snapshot_before TEXT,
+    snapshot_after TEXT,
+    metadata TEXT DEFAULT '{}',
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_oplog_target ON operation_logs(target_type, target_id);
+CREATE INDEX IF NOT EXISTS idx_oplog_time ON operation_logs(created_at);
+CREATE INDEX IF NOT EXISTS idx_oplog_operation ON operation_logs(operation);
 """
 
 
@@ -375,6 +436,16 @@ class Database:
             cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_created_at TEXT DEFAULT ''")
         if "file_modified_at" not in cols:
             cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_modified_at TEXT DEFAULT ''")
+
+        msg_cols = {row[1] for row in cls._conn.execute("PRAGMA table_info(chat_messages)").fetchall()}
+        if "source_graph" not in msg_cols:
+            cls._conn.execute(
+                "ALTER TABLE chat_messages ADD COLUMN source_graph TEXT DEFAULT '{\"nodes\":[],\"edges\":[]}'"
+            )
+
+        ref_cols = {row[1] for row in cls._conn.execute("PRAGMA table_info(entity_refs)").fetchall()}
+        if "auto_discovered" not in ref_cols:
+            cls._conn.execute("ALTER TABLE entity_refs ADD COLUMN auto_discovered INTEGER DEFAULT 0")
 
         # 去重索引
         cls._conn.execute(
@@ -437,6 +508,43 @@ class Database:
             cls._conn.commit()
             _logging.getLogger(__name__).info("knowledge_graph_relations: added UNIQUE constraint")
 
+        # Phase 2: 为旧数据库补建 tag_relations / property_schemas / effective_property_index
+        cls._conn.execute("""CREATE TABLE IF NOT EXISTS tag_relations (
+            parent_tag TEXT NOT NULL,
+            child_tag TEXT NOT NULL,
+            created_at TEXT,
+            PRIMARY KEY (parent_tag, child_tag),
+            CHECK(parent_tag <> child_tag)
+        )""")
+        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_tag_relations_parent ON tag_relations(parent_tag)")
+        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_tag_relations_child ON tag_relations(child_tag)")
+        cls._conn.execute("""CREATE TABLE IF NOT EXISTS property_schemas (
+            id TEXT PRIMARY KEY,
+            scope_type TEXT NOT NULL,
+            scope_id TEXT DEFAULT '',
+            property_name TEXT NOT NULL,
+            property_type TEXT NOT NULL,
+            required INTEGER DEFAULT 0,
+            default_value TEXT,
+            choices TEXT,
+            constraints TEXT,
+            created_at TEXT,
+            UNIQUE(scope_type, scope_id, property_name)
+        )""")
+        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_property_schemas_scope ON property_schemas(scope_type, scope_id)")
+        cls._conn.execute("""CREATE TABLE IF NOT EXISTS effective_property_index (
+            block_id TEXT REFERENCES blocks(id) ON DELETE CASCADE,
+            prop_key TEXT NOT NULL,
+            prop_value TEXT,
+            value_type TEXT DEFAULT 'string',
+            source_type TEXT NOT NULL,
+            source_id TEXT DEFAULT '',
+            inherited INTEGER DEFAULT 0,
+            updated_at TEXT,
+            PRIMARY KEY (block_id, prop_key)
+        )""")
+        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_effective_prop_key_val ON effective_property_index(prop_key, prop_value)")
+
     @classmethod
     def get_conn(cls) -> sqlite3.Connection:
         if cls._shutdown:
@@ -452,6 +560,22 @@ class Database:
             cls._conn = None
         # Note: _shutdown is NOT reset here — it is reset on the next connect()
         # call (via lifespan startup), preventing silent reconnects during shutdown.
+
+    @classmethod
+    def transaction(cls):
+        """返回一个事务上下文管理器，用于包裹多步写操作。"""
+        import contextlib
+        @contextlib.contextmanager
+        def _tx():
+            conn = cls.get_conn()
+            conn.execute("BEGIN IMMEDIATE")
+            try:
+                yield conn
+                conn.commit()
+            except Exception:
+                conn.rollback()
+                raise
+        return _tx()
 
     # ---- Knowledge Items ----
 
@@ -569,8 +693,10 @@ class Database:
             conn.execute("BEGIN IMMEDIATE")
             try:
                 old = cls.get_knowledge(item_id)
-                if old and old.get("content") != fields.get("content"):
-                    cls._save_version(item_id, old)
+                if old:
+                    _version_fields = {"title", "content", "tags"}
+                    if _version_fields & set(fields):
+                        cls._save_version(item_id, old)
                 sets = ", ".join(f"{k} = ?" for k in fields)
                 values = list(fields.values()) + [datetime.now().isoformat(), item_id]
                 conn.execute(
@@ -914,6 +1040,40 @@ class Database:
             cls.get_conn().commit()
 
     @classmethod
+    def get_block(cls, block_id: str) -> dict | None:
+        """按 ID 查询单个 block，返回 dict 或 None"""
+        conn = cls.get_conn()
+        row = conn.execute(
+            "SELECT id, parent_id, page_id, content, block_type, properties, order_idx FROM blocks WHERE id = ?",
+            (block_id,),
+        ).fetchone()
+        if not row:
+            return None
+        cols = ["id", "parent_id", "page_id", "content", "block_type", "properties", "order_idx"]
+        return dict(zip(cols, row))
+
+    @classmethod
+    def get_block_ancestors(cls, block_id: str, max_depth: int = 3) -> list[dict]:
+        """回溯 Block 的父链，返回从父到祖先的有序列表（不含自身）
+
+        用于 RAG 检索时补充上下文。例如命中 Excel 某行的属性子 Block 时，
+        回溯到行 Block 和表头信息。
+        """
+        ancestors = []
+        current_id = block_id
+        for _ in range(max_depth):
+            block = cls.get_block(current_id)
+            if not block or not block.get("parent_id"):
+                break
+            parent = cls.get_block(block["parent_id"])
+            if parent:
+                ancestors.append(parent)
+                current_id = parent["id"]
+            else:
+                break
+        return ancestors
+
+    @classmethod
     def delete_blocks_by_page(cls, page_id: str):
         """删除指定 page 的所有 block 数据（blocks + block_fts + block_property_index + block_refs）"""
         with cls._write_lock:
@@ -1019,9 +1179,11 @@ class Database:
 
     @classmethod
     def insert_message(cls, msg: dict) -> str:
+        msg = {**msg}
+        msg.setdefault("source_graph", json.dumps({"nodes": [], "edges": []}, ensure_ascii=False))
         cls.get_conn().execute(
-            """INSERT INTO chat_messages (id, conversation_id, role, content, sources, created_at)
-               VALUES (:id, :conversation_id, :role, :content, :sources, :created_at)""",
+            """INSERT INTO chat_messages (id, conversation_id, role, content, sources, source_graph, created_at)
+               VALUES (:id, :conversation_id, :role, :content, :sources, :source_graph, :created_at)""",
             msg,
         )
         cls.get_conn().commit()
@@ -1173,8 +1335,26 @@ class Database:
     @classmethod
     def delete_wiki_page(cls, page_id: str):
         conn = cls.get_conn()
+        conn.execute(
+            "UPDATE wiki_pages SET status = 'deleted', updated_at = ? WHERE id = ?",
+            (datetime.now().isoformat(), page_id),
+        )
+        conn.commit()
+
+    @classmethod
+    def purge_wiki_page(cls, page_id: str):
+        conn = cls.get_conn()
         conn.execute("DELETE FROM wiki_links WHERE source_page_id = ? OR target_page_id = ?", (page_id, page_id))
         conn.execute("DELETE FROM wiki_pages WHERE id = ?", (page_id,))
+        conn.commit()
+
+    @classmethod
+    def restore_wiki_page(cls, page_id: str, status: str = "draft"):
+        conn = cls.get_conn()
+        conn.execute(
+            "UPDATE wiki_pages SET status = ?, updated_at = ? WHERE id = ?",
+            (status, datetime.now().isoformat(), page_id),
+        )
         conn.commit()
 
     @classmethod
@@ -1185,14 +1365,17 @@ class Database:
         conditions = []
         params = []
         if status:
-            # 向后兼容：active -> published
             if status == "active":
                 status = "published"
             conditions.append("status = ?")
             params.append(status)
+        else:
+            conditions.append("status != ?")
+            params.append("deleted")
         if search:
-            conditions.append("title LIKE ?")
-            params.append(f"%{search}%")
+            conditions.append("title LIKE ? ESCAPE '\\'")
+            escaped = search.replace('%', '\\%').replace('_', '\\_')
+            params.append(f"%{escaped}%")
         where = " WHERE " + " AND ".join(conditions) if conditions else ""
         valid_sorts = {"updated_at", "created_at", "title", "lint_score"}
         sort_by = sort_by if sort_by in valid_sorts else "updated_at"

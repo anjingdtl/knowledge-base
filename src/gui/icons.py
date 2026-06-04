@@ -34,6 +34,8 @@ NAV = {
     "lint": "fa5s.heartbeat",
     "close": "fa5s.times",
     "delete": "fa5s.trash",
+    "trash": "fa5s.trash-alt",
+    "restore": "fa5s.trash-restore",
     "approve": "fa5s.check",
     "reject": "fa5s.undo",
     "upload": "fa5s.cloud-upload-alt",

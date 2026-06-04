@@ -4,7 +4,7 @@ import pytest
 
 class TestAuthAPI:
     def test_register(self, api_client):
-        resp = api_client.post("/api/auth/register", json={"username": "newuser", "password": "pass123"})
+        resp = api_client.post("/api/auth/register", json={"username": "newuser", "password": "newpass123"})
         assert resp.status_code == 200
         assert "access_token" in resp.json()
 

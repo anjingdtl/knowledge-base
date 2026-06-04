@@ -81,6 +81,25 @@ def _heartbeat(fn):
     return wrapper
 
 
+def _op_log(operation, target_type, target_id, operator="system", source="mcp",
+            before=None, after=None, metadata=None):
+    """便捷操作日志记录"""
+    try:
+        _get_container().operation_log.log(
+            operation=operation, target_type=target_type, target_id=target_id,
+            operator=operator, source=source,
+            before=before, after=after, metadata=metadata,
+        )
+    except Exception:
+        pass
+
+
+def _content_preview(text, max_len=200):
+    if not text:
+        return ""
+    return text[:max_len] + ("..." if len(text) > max_len else "")
+
+
 # ---- Tools ----
 
 from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
@@ -194,6 +213,10 @@ def create(
     # Wiki 编译
     _try_wiki_compile(item_id)
     item = db.get_knowledge(item_id) or {"title": title}
+    _op_log("create", "knowledge", item_id, after={
+        "title": item["title"], "content_preview": _content_preview(content),
+        "tags": tags, "source_type": source_type, "file_type": file_type,
+    })
     return {"id": item_id, "title": item["title"], "path": item.get("source_path", ""), "message": "知识创建成功并已完成索引"}
 
 
@@ -223,6 +246,7 @@ def update(
     title: str | None = None,
     content: str | None = None,
     tags: list[str] | None = None,
+    dry_run: bool = False,
 ) -> dict:
     """更新指定知识条目。
 
@@ -231,6 +255,7 @@ def update(
         title: 新标题（可选）
         content: 新内容（可选）
         tags: 新标签列表（可选）
+        dry_run: 设为 True 时只预览变更不执行
     """
     container = _get_container()
     db = container.db
@@ -246,9 +271,41 @@ def update(
         fields["tags"] = tags
     if not fields:
         return {"message": "未提供需要更新的字段"}
+
+    import json as _json
+    changes = {}
+    for k, v in fields.items():
+        old_val = existing.get(k)
+        if isinstance(old_val, str) and k == "tags":
+            try:
+                old_val = _json.loads(old_val)
+            except Exception:
+                pass
+        if k == "content":
+            changes["content"] = {
+                "before": _content_preview(old_val or ""),
+                "after": _content_preview(v or ""),
+            }
+        else:
+            changes[k] = {"before": old_val, "after": v}
+
+    if dry_run:
+        return {"dry_run": True, "would_change": changes, "item_id": item_id}
+
     blocks = fields["content"] if "content" in fields else container.file_graph_service.read_page(item_id).blocks
     container.file_graph_service.update_page(item_id, blocks, metadata=fields)
-    return {"message": "知识更新成功", "updated_fields": list(fields.keys())}
+    updated = db.get_knowledge(item_id) or {}
+    _op_log("update", "knowledge", item_id, before={
+        k: v["before"] for k, v in changes.items()
+    }, after={
+        k: v["after"] for k, v in changes.items()
+    })
+    return {
+        "message": "知识更新成功",
+        "updated_fields": list(fields.keys()),
+        "changes": changes,
+        "version": updated.get("version"),
+    }
 
 
 @mcp.tool(
@@ -256,26 +313,76 @@ def update(
     annotations={"destructiveHint": True},
 )
 @_heartbeat
-def delete(item_id: str) -> dict:
+def delete(item_id: str, dry_run: bool = False) -> dict:
     """删除指定 ID 的知识条目。
 
     Args:
         item_id: 要删除的知识条目 ID
+        dry_run: 设为 True 时只预览将删除的数据不执行
     """
     container = _get_container()
     existing = container.db.get_knowledge(item_id)
     if not existing:
         raise ValueError(f"知识条目不存在: {item_id}")
+
+    import json as _json
+    deleted_tags = existing.get("tags", "[]")
+    if isinstance(deleted_tags, str):
+        try:
+            deleted_tags = _json.loads(deleted_tags)
+        except Exception:
+            deleted_tags = []
+
+    deleted_item = {
+        "title": existing.get("title", ""),
+        "tags": deleted_tags,
+        "content_preview": _content_preview(existing.get("content", "")),
+        "source_type": existing.get("source_type", ""),
+        "file_type": existing.get("file_type", ""),
+    }
+
+    if dry_run:
+        block_count = 0
+        try:
+            rows = container.db.get_conn().execute(
+                "SELECT COUNT(*) as cnt FROM blocks WHERE page_id = ?", (item_id,)
+            ).fetchone()
+            block_count = rows["cnt"]
+        except Exception:
+            pass
+        return {
+            "dry_run": True,
+            "would_delete": {**deleted_item, "block_count": block_count},
+            "warning": "此操作不可逆",
+        }
+
+    _op_log("delete", "knowledge", item_id, before=deleted_item, metadata={
+        "version": existing.get("version"),
+    })
     container.file_graph_service.delete_page(item_id)
-    return {"message": "知识删除成功", "id": item_id}
+    return {
+        "message": "知识删除成功",
+        "id": item_id,
+        "deleted_item": deleted_item,
+        "version": existing.get("version"),
+    }
 
 
 @mcp.tool(
     description="重建所有知识条目的索引（向量索引、全文索引、分块索引）。当搜索结果异常时使用。",
 )
 @_heartbeat
-def reindex_all() -> dict:
-    """重建全部知识条目的索引。包括分块、向量化和全文索引。"""
+def reindex_all(dry_run: bool = False) -> dict:
+    """重建全部知识条目的索引。包括分块、向量化和全文索引。
+
+    Args:
+        dry_run: 设为 True 时只返回将重建的数量不执行
+    """
+    container = _get_container()
+    count = container.db.count_knowledge()
+    if dry_run:
+        return {"dry_run": True, "would_reindex": count}
+    _op_log("reindex", "system", "all", metadata={"count": count})
     from src.services.indexer import reindex_all as _reindex_all
     return _reindex_all()
 
@@ -452,6 +559,9 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
         )
         item = db.get_knowledge(item_id) or {"title": parsed.title, "file_type": parsed.file_type}
         _try_wiki_compile(item_id)
+        _op_log("ingest", "knowledge", item_id, after={
+            "title": item["title"], "file_type": item.get("file_type", parsed.file_type),
+        }, metadata={"source": "file", "path": validated_path})
         results.append({
             "id": item_id,
             "title": item["title"],
@@ -508,6 +618,9 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
     )
     item = db.get_knowledge(item_id) or {"title": parsed.title, "file_type": parsed.file_type}
     _try_wiki_compile(item_id)
+    _op_log("ingest", "knowledge", item_id, after={
+        "title": item["title"], "file_type": item.get("file_type", parsed.file_type),
+    }, metadata={"source": "url", "url": url})
     return {
         "id": item_id,
         "title": item["title"],
@@ -535,6 +648,9 @@ def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None
     compiler = WikiCompiler()
     page_id = compiler.save_answer(question, answer, source_ids)
     if page_id:
+        _op_log("wiki_create", "wiki_page", page_id, after={
+            "question": question[:100], "source_ids": source_ids,
+        })
         return {"page_id": page_id, "message": "回答已保存为 Wiki 页面"}
     return {"message": "回答内容过短，未达到保存阈值"}
 
@@ -560,6 +676,10 @@ def wiki_submit_review(page_id: str, operator: str = "system", comment: str = ""
     """提交页面审核"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.submit_for_review(page_id, operator, comment)
+    if result.success:
+        _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
+                before={"status": "draft"}, after={"status": "review"},
+                metadata={"comment": comment})
     return {"success": result.success, "message": result.message}
 
 
@@ -568,6 +688,10 @@ def wiki_approve(page_id: str, operator: str = "system", comment: str = "") -> d
     """审批通过"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.approve(page_id, operator, comment)
+    if result.success:
+        _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
+                before={"status": "review"}, after={"status": "published"},
+                metadata={"comment": comment})
     return {"success": result.success, "message": result.message}
 
 
@@ -576,6 +700,10 @@ def wiki_reject(page_id: str, operator: str = "system", comment: str = "") -> di
     """驳回页面"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.reject(page_id, operator, comment)
+    if result.success:
+        _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
+                before={"status": "review"}, after={"status": "draft"},
+                metadata={"comment": comment})
     return {"success": result.success, "message": result.message}
 
 
@@ -584,6 +712,10 @@ def wiki_deprecate(page_id: str, operator: str = "system", comment: str = "") ->
     """弃用页面"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.deprecate(page_id, operator, comment)
+    if result.success:
+        _op_log("workflow_transition", "wiki_page", page_id, operator=operator,
+                before={"status": "published"}, after={"status": "deprecated"},
+                metadata={"comment": comment})
     return {"success": result.success, "message": result.message}
 
 
@@ -607,6 +739,8 @@ def wiki_restore_version(page_id: str, version: int) -> dict:
     """恢复到指定版本"""
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.restore_version(page_id, version)
+    if result.success:
+        _op_log("wiki_update", "wiki_page", page_id, after={"restored_version": version})
     return {"success": result.success, "message": result.message}
 
 
@@ -743,6 +877,39 @@ def get_stats_resource() -> str:
         "vector_chunks": chunk_count,
         "tags": len(c.db.get_all_tags()),
     }, ensure_ascii=False, indent=2)
+
+
+# ---- Prompts ----
+
+@mcp.tool(
+    description="查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。",
+    annotations={"readOnlyHint": True},
+)
+@_heartbeat
+def query_operation_logs(
+    target_type: str | None = None,
+    target_id: str | None = None,
+    operation: str | None = None,
+    source: str | None = None,
+    limit: int = 50,
+    offset: int = 0,
+) -> dict:
+    """查询操作日志。
+
+    Args:
+        target_type: 目标类型筛选 (knowledge/wiki_page/block/tag_relation)
+        target_id: 目标 ID 筛选
+        operation: 操作类型筛选 (create/update/delete/ingest/reindex/wiki_create/workflow_transition)
+        source: 来源筛选 (mcp/api/gui)
+        limit: 返回数量上限
+        offset: 分页偏移量
+    """
+    logs = _get_container().operation_log.query(
+        target_type=target_type, target_id=target_id,
+        operation=operation, source=source,
+        limit=limit, offset=offset,
+    )
+    return {"logs": logs, "count": len(logs)}
 
 
 # ---- Prompts ----

@@ -17,20 +17,20 @@ class VectorStore:
     2. 单例模式（兼容）: VectorStore() 自动获取 Database 单例
     """
     _instance = None
+    _lock = threading.Lock()
 
     def __new__(cls, db=None):
         if db is not None:
-            # DI 模式：创建独立实例
             inst = super().__new__(cls)
             inst._initialized = False
             inst._db = db
             return inst
-        # 兼容模式：返回全局单例
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._initialized = False
-            cls._instance._db = None
-        return cls._instance
+        with cls._lock:
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+                cls._instance._initialized = False
+                cls._instance._db = None
+            return cls._instance
 
     def _check_db_changed(self):
         """检测数据库连接是否发生变化，若变化则重置初始化状态"""
@@ -108,15 +108,23 @@ class VectorStore:
 
         conn = self._get_conn()
         packed = self._pack_embedding(query_embedding)
-        rows = conn.execute(
-            """SELECT kc.id, kc.knowledge_id, kc.chunk_text,
-                      vc.distance
-               FROM vec_chunks vc
-               JOIN knowledge_chunks kc ON kc.rowid = vc.rowid
-               WHERE vc.embedding MATCH ? AND k = ?
-               ORDER BY vc.distance""",
-            (packed, top_k),
-        ).fetchall()
+
+        sql = """SELECT kc.id, kc.knowledge_id, kc.chunk_text,
+                        vc.distance
+                 FROM vec_chunks vc
+                 JOIN knowledge_chunks kc ON kc.rowid = vc.rowid"""
+        params: list = [packed, top_k]
+
+        if tags:
+            sql += """ JOIN knowledge_items ki ON ki.id = kc.knowledge_id"""
+            tag_conditions = []
+            for tag in tags:
+                tag_conditions.append("ki.tags LIKE ?")
+                params.append(f'%"{tag}"%')
+            sql += " AND (" + " OR ".join(tag_conditions) + ")"
+
+        sql += " WHERE vc.embedding MATCH ? AND k = ? ORDER BY vc.distance"
+        rows = conn.execute(sql, params).fetchall()
 
         results = []
         for r in rows:

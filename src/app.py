@@ -2,7 +2,7 @@
 import sys
 import logging
 from pathlib import Path
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QPixmap
 
@@ -54,8 +54,12 @@ class KnowledgeBaseApp:
         self.app.setStyle("Fusion")
         self.app.setWindowIcon(_load_app_icon())
         self._apply_theme()
-        from src.gui.main_window import MainWindow
-        self.window = MainWindow()
+        from src.gui.main_window import MainWindow, DatabaseInitError
+        try:
+            self.window = MainWindow()
+        except DatabaseInitError as exc:
+            QMessageBox.critical(None, "数据库错误", f"无法连接数据库：\n\n{exc}")
+            sys.exit(1)
         self.window.setWindowIcon(self.app.windowIcon())
 
     def _apply_theme(self):
