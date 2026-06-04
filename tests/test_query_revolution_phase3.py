@@ -404,3 +404,67 @@ def test_graph_traversal_with_filter():
     node_ids = {n["id"] for n in result["nodes"]}
     assert "gt10" in node_ids
     assert "gt11" not in node_ids
+
+
+def test_query_explainer_simple_tag():
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_explainer import QueryExplainer
+
+    spec = QuerySpec.from_json({"filter": {"tag": "Python"}, "limit": 10})
+    explanation = QueryExplainer().explain(spec)
+
+    assert "tag" in explanation["summary"].lower()
+    assert "Python" in explanation["summary"]
+    assert explanation["plan"]["tables_used"] == ["knowledge_items"]
+    assert explanation["plan"]["estimated_complexity"] == "low"
+
+
+def test_query_explainer_complex_query():
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_explainer import QueryExplainer
+
+    spec = QuerySpec.from_json({
+        "filter": {
+            "and": [
+                {"tag": "bug"},
+                {"property": {"key": "status", "op": "eq", "value": "open"}},
+                {"fulltext": "login error"},
+                {"not": {"tag": "wontfix"}},
+            ]
+        },
+        "include_blocks": True,
+    })
+    explanation = QueryExplainer().explain(spec)
+
+    assert "AND" in explanation["summary"]
+    assert "NOT" in explanation["summary"]
+    tables = explanation["plan"]["tables_used"]
+    assert "knowledge_items" in tables
+    assert "effective_property_index" in tables
+    assert "knowledge_fts" in tables
+    assert "blocks" in tables
+    assert explanation["plan"]["estimated_complexity"] == "medium"
+
+
+def test_query_explainer_condition_tree():
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_explainer import QueryExplainer
+
+    spec = QuerySpec.from_json({
+        "filter": {
+            "or": [
+                {"tag": "bug"},
+                {"and": [
+                    {"tag": "feature"},
+                    {"property": {"key": "priority", "op": "gte", "value": 3}},
+                ]},
+            ]
+        }
+    })
+    explanation = QueryExplainer().explain(spec)
+    tree = explanation["condition_tree"]
+
+    assert tree["type"] == "or"
+    assert len(tree["children"]) == 2
+    assert tree["children"][0]["type"] == "tag"
+    assert tree["children"][1]["type"] == "and"
