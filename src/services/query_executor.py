@@ -42,7 +42,13 @@ class QueryExecutor:
                     "SELECT * FROM blocks WHERE page_id = ? ORDER BY order_idx",
                     (row["id"],),
                 ).fetchall()
-                row["blocks"] = [dict(b) for b in block_rows]
+                blocks_payload = []
+                for b in block_rows:
+                    bd = dict(b)
+                    # 显式暴露 block_id 别名，便于 Agent 消费
+                    bd["block_id"] = bd.get("id", "")
+                    blocks_payload.append(bd)
+                row["blocks"] = blocks_payload
 
         return rows
 

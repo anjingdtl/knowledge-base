@@ -6,15 +6,40 @@ import json
 from src.services.db import Database
 
 
-def build_source_graph(sources: list[dict] | None, db=None) -> dict:
+def build_source_graph(
+    sources: list[dict] | None,
+    db=None,
+    max_nodes: int | None = None,
+) -> dict:
+    """构造 RAG 答案的 source_graph payload。
+
+    Args:
+        sources: 来源列表，每条含 ``block_id`` / ``knowledge_id`` 字段
+        db: 数据库实例（默认使用 Database 单例）
+        max_nodes: 节点数上限；超过则截断并设 ``truncated=True``。
+                   缺省时从 config ``rag.max_graph_nodes`` 读取，再缺省 200。
+
+    Returns:
+        ``{"nodes": [...], "edges": [...], "truncated": bool, "node_count": int}``
+    """
+    if max_nodes is None:
+        from src.utils.config import Config
+        max_nodes = int(Config.get("rag.max_graph_nodes", 200))
     db = db or Database
     nodes: dict[str, dict] = {}
     edges: dict[tuple[str, str, str], dict] = {}
+    truncated = False
 
     def add_node(node_id: str, node_type: str, label: str, **extra):
+        nonlocal truncated
         if not node_id:
             return
-        nodes.setdefault(node_id, {"id": node_id, "type": node_type, "label": label, **extra})
+        if node_id in nodes:
+            return
+        if len(nodes) >= max_nodes:
+            truncated = True
+            return
+        nodes[node_id] = {"id": node_id, "type": node_type, "label": label, **extra}
 
     def add_edge(source: str, target: str, edge_type: str):
         if source and target:
@@ -157,4 +182,9 @@ def build_source_graph(sources: list[dict] | None, db=None) -> dict:
                         )
                 add_edge(block_id, target_id, ref["ref_type"] or "link")
 
-    return {"nodes": list(nodes.values()), "edges": list(edges.values())}
+    return {
+        "nodes": list(nodes.values()),
+        "edges": list(edges.values()),
+        "truncated": truncated,
+        "node_count": len(nodes),
+    }

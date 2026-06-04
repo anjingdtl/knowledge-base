@@ -4,6 +4,20 @@ import re
 from src.models.query_dsl import QuerySpec
 from src.services.db import Database
 
+
+def serialize_route(routing: dict) -> dict:
+    """把 AgenticRouter.route() 的结果转成 JSON-safe dict（QuerySpec → dict）。
+
+    Agent 客户端只能消费基本类型，所以 QuerySpec 必须序列化为 to_json()。
+    """
+    result = dict(routing)
+    spec = result.get("query_spec")
+    if spec is not None and hasattr(spec, "to_json"):
+        result["query_spec"] = spec.to_json()
+    elif spec is not None and not isinstance(spec, dict):
+        result["query_spec"] = dict(spec)
+    return result
+
 _SYSTEM_PROMPT = """You are a query translator. Convert the user's natural language question into a JSON query DSL.
 
 The DSL supports these filter types:

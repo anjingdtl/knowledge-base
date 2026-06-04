@@ -79,17 +79,28 @@ class GraphTraversalService:
                 (node_id,),
             ).fetchone()
             if row:
-                return {"id": row["id"], "type": "page", "label": row["title"],
-                        "properties": {"file_type": row["file_type"]}}
+                return {
+                    "id": row["id"],
+                    "type": "page",
+                    "label": row["title"],
+                    "properties": {"file_type": row["file_type"]},
+                }
         if node_type == "block":
             row = conn.execute(
                 "SELECT id, content, page_id FROM blocks WHERE id = ?",
                 (node_id,),
             ).fetchone()
             if row:
-                return {"id": row["id"], "type": "block",
-                        "label": (row["content"] or row["id"])[:80],
-                        "properties": {"page_id": row["page_id"]}}
+                return {
+                    "id": row["id"],
+                    "type": "block",
+                    "block_id": row["id"],
+                    "label": (row["content"] or row["id"])[:80],
+                    "properties": {
+                        "block_id": row["id"],
+                        "page_id": row["page_id"],
+                    },
+                }
         return None
 
     def _find_neighbors(self, node_id: str, node_type: str,

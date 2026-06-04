@@ -186,16 +186,36 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
 
 
 @mcp.tool(
-    description="向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。",
+    description="向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。"
+    "返回结构化 payload：answer / sources / source_graph / route / query_plan / "
+    "block_contexts / warnings。",
 )
 @_heartbeat
 def ask(question: str) -> dict:
-    """基于知识库的智能问答，返回回答和引用来源。
+    """基于知识库的智能问答，返回 7 字段结构化 RAG payload。
 
     Args:
         question: 用户的问题
+
+    Returns:
+        envelope.data 包含：
+            - answer: 生成的答复
+            - sources: 引用来源列表，每项必含 block_id / knowledge_id / title
+            - source_graph: 引用关系图（nodes / edges / truncated / node_count）
+            - route: 路由决策（mode / explanation / query_spec / traverse）
+            - query_plan: DSL 查询计划（structured 模式时有内容）
+            - block_contexts: block_id → block 父链上下文的映射
+            - warnings: 检索/生成阶段的告警
+            - wiki_context: Wiki 知识上下文（仅当 wiki.enabled=true）
     """
-    return ok(_do_ask(question))
+    result = _do_ask(question)
+    return ok(
+        result,
+        source_count=len(result.get("sources", [])),
+        warning_count=len(result.get("warnings", [])),
+        route_mode=result.get("route", {}).get("mode", "unknown"),
+        graph_truncated=result.get("source_graph", {}).get("truncated", False),
+    )
 
 
 def _do_ask(question: str) -> dict:
@@ -1016,6 +1036,175 @@ def graph_traverse(
     except Exception as exc:
         logger.exception("graph_traverse failed: %s", exc)
         return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
+
+
+# ---- Sprint 2: Agentic Query 入口 ----
+
+@mcp.tool(
+    description="仅路由分析，不执行检索。返回 mode (structured|graph|hybrid) + query_spec + "
+    "traverse + explanation，Agent 据此决定下一步走 execute_query 还是 ask_with_query。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+@_heartbeat
+def route_query(question: str) -> dict:
+    """路由分析：识别问题是结构化 / 图谱 / 模糊语义。
+
+    Args:
+        question: 用户原始问题
+
+    Returns:
+        envelope.data 字段：
+            - mode: structured | graph | hybrid
+            - query_spec: QuerySpec JSON dict（structured 模式）
+            - traverse: 遍历配置（graph 模式，max_depth 等）
+            - explanation: 路由选择的理由
+    """
+    from src.services.agentic_router import AgenticRouter, serialize_route
+    container = _get_container()
+    try:
+        router = AgenticRouter(db=container.db, llm=container.llm)
+        routing = router.route(question)
+        payload = serialize_route(routing)
+        return ok(payload, mode=payload.get("mode"))
+    except Exception as exc:
+        logger.exception("route_query failed: %s", exc)
+        return fail(ErrorCode.INTERNAL_ERROR, str(exc), question=question)
+
+
+@mcp.tool(
+    description="执行显式 QuerySpec DSL。支持 type=structured（条件过滤）/ graph（图遍历）/ "
+    "hybrid（混合搜索）。分页透传 limit/offset/next_offset/truncated。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+@_heartbeat
+def execute_query(
+    query_spec: dict,
+    type: str = "structured",
+    limit: int = 100,
+    offset: int = 0,
+) -> dict:
+    """执行 QuerySpec DSL。
+
+    Args:
+        query_spec: QuerySpec JSON dict（含 filter / sort / limit / offset / include_blocks）
+        type: structured | graph | hybrid — 决定走哪个执行器
+        limit: 返回结果数量上限
+        offset: 分页偏移量
+
+    Returns:
+        envelope.data 列表 + meta.{total_estimate, limit, offset, next_offset, truncated, type}
+    """
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_executor import QueryExecutor
+
+    container = _get_container()
+    try:
+        spec = QuerySpec.from_json(query_spec) if isinstance(query_spec, dict) else query_spec
+        spec.limit = min(spec.limit, limit)
+        spec.offset = offset
+
+        if type == "graph":
+            from src.services.graph_traversal import GraphTraversalService
+            start_ids = (query_spec or {}).get("start_ids", [])
+            start_type = (query_spec or {}).get("start_type", "knowledge")
+            max_depth = (query_spec or {}).get("max_depth", 2)
+            if not start_ids:
+                return fail(
+                    ErrorCode.VALIDATION_ERROR,
+                    "graph 模式需要在 query_spec.start_ids 提供起点节点",
+                )
+            traversal = GraphTraversalService(db=container.db).traverse(
+                start_ids=start_ids, start_type=start_type, max_depth=max_depth,
+            )
+            nodes = traversal.get("nodes", [])
+            has_more = len(nodes) == limit
+            sliced = nodes[offset:offset + limit] if has_more else nodes
+            return ok(
+                {
+                    "nodes": sliced,
+                    "edges": traversal.get("edges", []),
+                    "paths": traversal.get("paths", []),
+                    "truncated": traversal.get("truncated", False) or has_more,
+                },
+                type=type,
+                limit=limit,
+                offset=offset,
+                next_offset=offset + len(sliced) if has_more else None,
+                total_estimate=len(nodes),
+            )
+
+        if type == "structured":
+            executor = QueryExecutor(db=container.db)
+            results = executor.execute(spec)
+            results_list = list(results) if not isinstance(results, list) else results
+            has_more = len(results_list) == limit
+            return ok(
+                results_list,
+                type=type,
+                limit=limit,
+                offset=offset,
+                next_offset=offset + len(results_list) if has_more else None,
+                total_estimate=len(results_list),
+                truncated=has_more,
+            )
+
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            f"不支持的 type: {type}，仅支持 structured / graph / hybrid",
+            type=type,
+        )
+    except Exception as exc:
+        logger.exception("execute_query failed: %s", exc)
+        return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc), type=type)
+
+
+@mcp.tool(
+    description="用显式 QuerySpec 控制 RAG 检索阶段，再调用 LLM 生成回答。"
+    "返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。",
+    annotations={"readOnlyHint": True, "idempotentHint": False},
+)
+@_heartbeat
+def ask_with_query(
+    question: str,
+    query_spec: dict,
+    top_k: int = 10,
+) -> dict:
+    """用显式 QuerySpec 控制 RAG 检索，再生成回答。
+
+    Args:
+        question: 用户问题
+        query_spec: QuerySpec JSON dict，控制 RAG 检索阶段
+        top_k: 检索阶段召回的候选数
+
+    Returns:
+        与 ``ask`` 工具相同的 7 字段结构化 payload（data 内）
+    """
+    import asyncio
+    from src.models.query_dsl import QuerySpec
+    from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
+
+    container = _get_container()
+    try:
+        spec = QuerySpec.from_json(query_spec) if isinstance(query_spec, dict) else query_spec
+        pipeline = RagPipeline(pipeline_config=DEFAULT_PIPELINE_CONFIG, llm=container.llm)
+        # 把 spec 注入 metadata，VectorSearchStage 会跳过自动路由直接使用
+        result = asyncio.run(
+            pipeline.execute(
+                question,
+                query_spec_override=spec,
+                top_k=top_k,
+            )
+        )
+        return ok(
+            result,
+            source_count=len(result.get("sources", [])),
+            warning_count=len(result.get("warnings", [])),
+            route_mode=result.get("route", {}).get("mode", "unknown"),
+            graph_truncated=result.get("source_graph", {}).get("truncated", False),
+        )
+    except Exception as exc:
+        logger.exception("ask_with_query failed: %s", exc)
+        return fail(ErrorCode.INTERNAL_ERROR, str(exc), question=question)
 
 
 # ---- Resources ----
