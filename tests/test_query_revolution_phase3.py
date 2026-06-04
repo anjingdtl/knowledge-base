@@ -322,3 +322,85 @@ def test_query_builder_to_query_spec():
     assert spec.filter_condition.children[0].type == "tag"
     assert spec.filter_condition.children[1].type == "or"
     assert spec.filter_condition.children[2].type == "not"
+
+
+def test_graph_traversal_single_hop():
+    from src.models.block import EntityRef
+    from src.repositories.entity_ref_repo import EntityRefRepository
+    from src.services.graph_traversal import GraphTraversalService
+
+    _insert_page("gt1", "Page A")
+    _insert_page("gt2", "Page B")
+    _insert_page("gt3", "Page C")
+    _insert_block("gtb1", "gt1", "Link to B")
+    _insert_block("gtb2", "gt2", "Link to C")
+
+    repo = EntityRefRepository()
+    repo.upsert(EntityRef(id="gtr1", source_type="block", source_id="gtb1",
+                          target_type="knowledge", target_id="gt2", ref_type="link"))
+    repo.upsert(EntityRef(id="gtr2", source_type="block", source_id="gtb2",
+                          target_type="knowledge", target_id="gt3", ref_type="link"))
+
+    service = GraphTraversalService()
+    result = service.traverse(start_ids=["gt1"], start_type="knowledge", max_depth=1)
+
+    node_ids = {n["id"] for n in result["nodes"]}
+    assert "gt1" in node_ids
+    assert "gt2" in node_ids
+    assert "gt3" not in node_ids
+
+    edge_pairs = {(e["source"], e["target"]) for e in result["edges"]}
+    assert ("gt1", "gt2") in edge_pairs
+
+
+def test_graph_traversal_two_hops():
+    from src.models.block import EntityRef
+    from src.repositories.entity_ref_repo import EntityRefRepository
+    from src.services.graph_traversal import GraphTraversalService
+
+    _insert_page("gt1", "Page A")
+    _insert_page("gt2", "Page B")
+    _insert_page("gt3", "Page C")
+    _insert_block("gtb1", "gt1", "Link to B")
+    _insert_block("gtb2", "gt2", "Link to C")
+
+    repo = EntityRefRepository()
+    repo.upsert(EntityRef(id="gtr1", source_type="block", source_id="gtb1",
+                          target_type="knowledge", target_id="gt2", ref_type="link"))
+    repo.upsert(EntityRef(id="gtr2", source_type="block", source_id="gtb2",
+                          target_type="knowledge", target_id="gt3", ref_type="link"))
+
+    service = GraphTraversalService()
+    result = service.traverse(start_ids=["gt1"], start_type="knowledge", max_depth=2)
+
+    node_ids = {n["id"] for n in result["nodes"]}
+    assert "gt1" in node_ids
+    assert "gt2" in node_ids
+    assert "gt3" in node_ids
+
+
+def test_graph_traversal_with_filter():
+    from src.models.query_dsl import QuerySpec
+    from src.services.graph_traversal import GraphTraversalService
+
+    _insert_page("gt10", "Filtered A", tags=["important"])
+    _insert_page("gt11", "Filtered B", tags=["draft"])
+    _insert_block("gtb10", "gt10", "Link to B")
+
+    from src.models.block import EntityRef
+    from src.repositories.entity_ref_repo import EntityRefRepository
+    EntityRefRepository().upsert(EntityRef(
+        id="gtr10", source_type="block", source_id="gtb10",
+        target_type="knowledge", target_id="gt11", ref_type="link",
+    ))
+
+    service = GraphTraversalService()
+    filter_spec = QuerySpec.from_json({"filter": {"tag": "important"}})
+    result = service.traverse(
+        start_ids=["gt10"], start_type="knowledge",
+        max_depth=1, node_filter=filter_spec,
+    )
+
+    node_ids = {n["id"] for n in result["nodes"]}
+    assert "gt10" in node_ids
+    assert "gt11" not in node_ids
