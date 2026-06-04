@@ -522,3 +522,40 @@ def test_agentic_router_with_mock_llm():
     assert result["mode"] == "structured"
     spec = result["query_spec"]
     assert spec.filter_condition.type == "and"
+
+
+def test_query_router_accepts_dsl_json():
+    from src.services.query_router import QueryRouter
+
+    _insert_page("qr1", "DSL Page", tags=["test-dsl"])
+    _insert_block("qrb1", "qr1", "DSL block content")
+
+    router = QueryRouter()
+    results = router.search_dsl(
+        {"filter": {"tag": "test-dsl"}, "limit": 5}
+    )
+    assert len(results) >= 1
+    assert any(r["id"] == "qr1" for r in results)
+
+
+def test_rag_pipeline_uses_agentic_router():
+    from unittest.mock import MagicMock, patch
+    from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
+
+    mock_llm = MagicMock()
+    mock_llm.chat.return_value = '{"mode": "hybrid", "query": "test question"}'
+
+    pipeline = RagPipeline(pipeline_config=DEFAULT_PIPELINE_CONFIG, llm=mock_llm)
+    assert pipeline is not None
+
+
+def test_search_service_accepts_query_spec():
+    from src.models.query_dsl import QuerySpec
+    from src.services.search_service import SearchService
+
+    _insert_page("ss1", "Search Spec Page", tags=["search-test"])
+
+    service = SearchService()
+    spec = QuerySpec.from_json({"filter": {"tag": "search-test"}})
+    results = service.search("search-test", top_k=5, query_spec=spec)
+    assert isinstance(results, list)
