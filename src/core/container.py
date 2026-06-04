@@ -79,6 +79,7 @@ class AppContainer:
     # --- Phase 3 业务服务 (lazy init) ---
     _query_executor: Optional[object] = field(default=None, repr=False)
     _graph_traversal: Optional[object] = field(default=None, repr=False)
+    _query_explainer: Optional[object] = field(default=None, repr=False)
 
     @property
     def indexer(self):
@@ -204,6 +205,13 @@ class AppContainer:
             from src.services.graph_traversal import GraphTraversalService
             self._graph_traversal = GraphTraversalService(db=self.db)
         return self._graph_traversal
+
+    @property
+    def query_explainer(self):
+        if self._query_explainer is None:
+            from src.services.query_explainer import QueryExplainer
+            self._query_explainer = QueryExplainer()
+        return self._query_explainer
 
 
 def create_container(config_path: str | None = None) -> AppContainer:
