@@ -1,0 +1,160 @@
+"""Build source graph payloads for RAG answers."""
+from __future__ import annotations
+
+import json
+
+from src.services.db import Database
+
+
+def build_source_graph(sources: list[dict] | None, db=None) -> dict:
+    db = db or Database
+    nodes: dict[str, dict] = {}
+    edges: dict[tuple[str, str, str], dict] = {}
+
+    def add_node(node_id: str, node_type: str, label: str, **extra):
+        if not node_id:
+            return
+        nodes.setdefault(node_id, {"id": node_id, "type": node_type, "label": label, **extra})
+
+    def add_edge(source: str, target: str, edge_type: str):
+        if source and target:
+            edges.setdefault((source, target, edge_type), {
+                "source": source,
+                "target": target,
+                "type": edge_type,
+            })
+
+    sources = sources or []
+
+    knowledge_ids = set()
+    block_ids = set()
+    for source in sources:
+        metadata = source.get("metadata") or {}
+        bid = source.get("block_id") or source.get("chunk_id") or source.get("id") or metadata.get("block_id")
+        kid = source.get("knowledge_id") or metadata.get("knowledge_id") or metadata.get("page_id")
+        if kid:
+            knowledge_ids.add(kid)
+        if bid:
+            block_ids.add(bid)
+
+    knowledge_cache = {}
+    if knowledge_ids:
+        batch = db.get_knowledge_batch(list(knowledge_ids))
+        knowledge_cache.update(batch)
+
+    block_cache = {}
+    if block_ids:
+        conn = db.get_conn()
+        placeholders = ",".join("?" for _ in block_ids)
+        rows = conn.execute(
+            f"SELECT id, page_id, content FROM blocks WHERE id IN ({placeholders})",
+            list(block_ids),
+        ).fetchall()
+        for r in rows:
+            block_cache[r["id"]] = {"id": r["id"], "page_id": r["page_id"], "content": r["content"]}
+
+    ancestor_ids = set()
+    for bid in block_ids:
+        for ancestor in db.get_block_ancestors(bid, 10):
+            ancestor_ids.add(ancestor["id"])
+            block_cache.setdefault(ancestor["id"], {
+                "id": ancestor["id"],
+                "page_id": ancestor.get("page_id"),
+                "content": ancestor.get("content"),
+            })
+
+    all_block_ids_for_refs = block_ids | ancestor_ids
+    ref_map: dict[str, list[dict]] = {bid: [] for bid in all_block_ids_for_refs}
+    if all_block_ids_for_refs:
+        conn = db.get_conn()
+        placeholders = ",".join("?" for _ in all_block_ids_for_refs)
+        ref_rows = conn.execute(
+            f"""SELECT source_id, target_type, target_id, ref_type FROM entity_refs
+                WHERE source_type = 'block' AND source_id IN ({placeholders})""",
+            list(all_block_ids_for_refs),
+        ).fetchall()
+        for r in ref_rows:
+            ref_map.setdefault(r["source_id"], []).append({
+                "target_type": r["target_type"],
+                "target_id": r["target_id"],
+                "ref_type": r["ref_type"],
+            })
+
+    ref_target_kids = set()
+    ref_target_bids = set()
+    for refs in ref_map.values():
+        for ref in refs:
+            if ref["target_type"] == "knowledge":
+                ref_target_kids.add(ref["target_id"])
+            elif ref["target_type"] == "block":
+                ref_target_bids.add(ref["target_id"])
+    if ref_target_kids - knowledge_ids:
+        batch = db.get_knowledge_batch(list(ref_target_kids - knowledge_ids))
+        knowledge_cache.update(batch)
+    if ref_target_bids - block_cache.keys():
+        conn = db.get_conn()
+        placeholders = ",".join("?" for _ in (ref_target_bids - block_cache.keys()))
+        rows = conn.execute(
+            f"SELECT id, page_id, content FROM blocks WHERE id IN ({placeholders})",
+            list(ref_target_bids - block_cache.keys()),
+        ).fetchall()
+        for r in rows:
+            block_cache[r["id"]] = {"id": r["id"], "page_id": r["page_id"], "content": r["content"]}
+
+    for source in sources:
+        metadata = source.get("metadata") or {}
+        block_id = (
+            source.get("block_id")
+            or source.get("chunk_id")
+            or source.get("id")
+            or metadata.get("block_id")
+        )
+        knowledge_id = source.get("knowledge_id") or metadata.get("knowledge_id") or metadata.get("page_id")
+
+        if knowledge_id:
+            item = knowledge_cache.get(knowledge_id)
+            if item:
+                add_node(knowledge_id, "knowledge", item.get("title", knowledge_id))
+
+        if block_id:
+            block = block_cache.get(block_id)
+            if block:
+                label = (block.get("content") or block_id).replace("\n", " ")[:80]
+                add_node(block_id, "block", label, knowledge_id=block.get("page_id"))
+                if block.get("page_id"):
+                    item = knowledge_cache.get(block["page_id"])
+                    if item:
+                        add_node(block["page_id"], "knowledge", item.get("title", block["page_id"]))
+                        add_edge(block["page_id"], block_id, "contains")
+                current_id = block_id
+                for ancestor in db.get_block_ancestors(block_id, 10):
+                    a_block = block_cache.get(ancestor["id"])
+                    a_content = (a_block.get("content") if a_block else ancestor.get("content")) or ancestor["id"]
+                    add_node(
+                        ancestor["id"],
+                        "block",
+                        a_content.replace("\n", " ")[:80],
+                        knowledge_id=ancestor.get("page_id"),
+                    )
+                    add_edge(ancestor["id"], current_id, "parent")
+                    current_id = ancestor["id"]
+
+        if block_id:
+            for ref in ref_map.get(block_id, []):
+                target_type = ref["target_type"]
+                target_id = ref["target_id"]
+                if target_type == "knowledge":
+                    item = knowledge_cache.get(target_id)
+                    add_node(target_id, "knowledge", item.get("title", target_id) if item else target_id)
+                elif target_type == "block":
+                    target = block_cache.get(target_id)
+                    if target:
+                        add_node(
+                            target_id,
+                            "block",
+                            (target.get("content") or target_id)[:80],
+                            knowledge_id=target.get("page_id"),
+                        )
+                add_edge(block_id, target_id, ref["ref_type"] or "link")
+
+    return {"nodes": list(nodes.values()), "edges": list(edges.values())}

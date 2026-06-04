@@ -76,13 +76,11 @@ class LLMReranker:
 
         # 调用重排序 API
         try:
-            client = httpx.Client(timeout=60)
             headers = {
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
             }
 
-            # 硅基流动 rerank API 格式
             payload = {
                 "model": model,
                 "query": query,
@@ -90,15 +88,15 @@ class LLMReranker:
                 "top_n": min(len(texts), 10),
             }
 
-            resp = client.post(
-                f"{base_url}/rerank",
-                headers=headers,
-                json=payload,
-            )
-            resp.raise_for_status()
-            result = resp.json()
+            with httpx.Client(timeout=60) as client:
+                resp = client.post(
+                    f"{base_url}/rerank",
+                    headers=headers,
+                    json=payload,
+                )
+                resp.raise_for_status()
+                result = resp.json()
 
-            # 解析结果 - 硅基流动格式
             scores = []
             for item in result.get("results", []):
                 scores.append(item.get("relevance_score", 0.5))

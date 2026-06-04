@@ -1,19 +1,30 @@
 """LLM 统一接口 — 基于 OpenAI 兼容协议，支持任意供应商"""
-import time
+import threading
 
 from src.utils.config import Config
 
-# 全局状态回调，GUI 层注册后可接收 LLM 调用状态
-_status_callbacks = []
+_status_callbacks: set = set()
+_status_lock = threading.Lock()
 
 
 def register_llm_status_callback(callback):
-    """注册 LLM 状态回调函数 callback(status, detail)"""
-    _status_callbacks.append(callback)
+    if callback not in _status_callbacks:
+        with _status_lock:
+            _status_callbacks.add(callback)
+
+
+def unregister_llm_status_callback(callback):
+    """反注册 LLM 状态回调函数"""
+    try:
+        _status_callbacks.remove(callback)
+    except ValueError:
+        pass
 
 
 def _notify_status(status: str, detail: str = ""):
-    for cb in _status_callbacks:
+    with _status_lock:
+        callbacks = list(_status_callbacks)
+    for cb in callbacks:
         try:
             cb(status, detail)
         except Exception:
@@ -43,6 +54,7 @@ class LLMService:
         self._client = OpenAI(
             api_key=self._cfg("llm.api_key", "") or "no-key",
             base_url=self._cfg("llm.base_url") or None,
+            timeout=120,
         )
         return self._client
 
@@ -60,7 +72,7 @@ class LLMService:
                 temperature=temperature,
                 max_tokens=max_tokens,
             )
-            return response.choices[0].message.content
+            return response.choices[0].message.content or ""
         except Exception as e:
             if not silent:
                 _notify_status("error", str(e)[:100])

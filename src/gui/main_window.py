@@ -2,6 +2,8 @@
 import sqlite3
 import sys
 import logging
+import ctypes
+import ctypes.wintypes
 
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
@@ -10,21 +12,28 @@ from PySide6.QtWidgets import (
 )
 
 logger = logging.getLogger(__name__)
-from PySide6.QtCore import Qt, QTimer, QSettings
-from PySide6.QtGui import QIcon, QColor
+from PySide6.QtCore import Qt, QTimer, QSettings, QPoint
+from PySide6.QtGui import QIcon, QColor, QCursor
 from pathlib import Path
 
 from src.gui.icons import set_named_icon
 from src.services.db import Database
-from src.services.llm import register_llm_status_callback
+from src.services.llm import register_llm_status_callback, unregister_llm_status_callback
 from src.version import VERSION
+
+
+class DatabaseInitError(Exception):
+    pass
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle(f"泰坦知识库 v{VERSION}")
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Window)
         self.setMinimumSize(1100, 700)
+        self._drag_start_pos = QPoint()
+        self._drag_window_pos = QPoint()
         self._restore_geometry()
         self._init_database()
         self._setup_ui()
@@ -42,9 +51,10 @@ class MainWindow(QMainWindow):
         """关闭窗口时保存布局状态"""
         settings = QSettings("ShineHeKnowledge", "MainWindow")
         settings.setValue("geometry", self.saveGeometry())
-        # 保存知识库表格列宽
         if hasattr(self, 'knowledge_view'):
             self.knowledge_view._save_column_widths()
+        if hasattr(self, '_on_llm_status'):
+            unregister_llm_status_callback(self._on_llm_status)
         super().closeEvent(event)
 
     def _init_database(self):
@@ -57,12 +67,22 @@ class MainWindow(QMainWindow):
                 "数据库错误",
                 f"无法连接数据库，请检查数据文件是否损坏或被占用。\n\n{exc}",
             )
-            sys.exit(1)
+            raise DatabaseInitError(str(exc))
 
     def _setup_ui(self):
+        root = QWidget()
+        root.setObjectName("contentRoot")
+        self.setCentralWidget(root)
+        root_layout = QVBoxLayout(root)
+        root_layout.setContentsMargins(0, 0, 0, 0)
+        root_layout.setSpacing(0)
+
+        root_layout.addWidget(self._build_title_bar())
+
         central = QWidget()
-        central.setObjectName("contentRoot")
-        self.setCentralWidget(central)
+        central.setObjectName("mainContent")
+        root_layout.addWidget(central, 1)
+
         layout = QHBoxLayout(central)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
@@ -74,6 +94,7 @@ class MainWindow(QMainWindow):
         from src.gui.catalog_view import CatalogView
         from src.gui.wiki_view import WikiView
         from src.gui.graph_view import GraphView
+        from src.gui.trash_view import TrashView
 
         # ---- 侧边栏 ----
         sidebar = QWidget()
@@ -118,12 +139,14 @@ class MainWindow(QMainWindow):
         self.btn_catalog = nav_button("知识目录", "catalog", 2)
         self.btn_wiki = nav_button("知识 Wiki", "wiki", 3)
         self.btn_graph = nav_button("知识图谱", "graph", 4)
+        self.btn_trash = nav_button("回收站", "trash", 5)
 
         sidebar_layout.addWidget(self.btn_knowledge)
         sidebar_layout.addWidget(self.btn_chat)
         sidebar_layout.addWidget(self.btn_catalog)
         sidebar_layout.addWidget(self.btn_wiki)
         sidebar_layout.addWidget(self.btn_graph)
+        sidebar_layout.addWidget(self.btn_trash)
         sidebar_layout.addStretch()
         sidebar_layout.addSpacing(16)
 
@@ -188,12 +211,14 @@ class MainWindow(QMainWindow):
         self.catalog_view = CatalogView(llm_indicator=self.llm_indicator)
         self.wiki_view = WikiView()
         self.graph_view = GraphView(llm_indicator=self.llm_indicator)
+        self.trash_view = TrashView()
 
         self.stack.addWidget(self.knowledge_view)
         self.stack.addWidget(self.chat_view)
         self.stack.addWidget(self.catalog_view)
         self.stack.addWidget(self.wiki_view)
         self.stack.addWidget(self.graph_view)
+        self.stack.addWidget(self.trash_view)
 
         # 注册 LLM 状态回调
         register_llm_status_callback(self._on_llm_status)
@@ -207,6 +232,106 @@ class MainWindow(QMainWindow):
         self._mcp_timer.timeout.connect(self._check_mcp_status)
         self._mcp_timer.start(3000)
 
+    def _build_title_bar(self) -> QWidget:
+        title_bar = QFrame()
+        title_bar.setObjectName("titleBar")
+        title_bar.setFixedHeight(34)
+        title_bar.mousePressEvent = self._title_mouse_press
+        title_bar.mouseMoveEvent = self._title_mouse_move
+        title_bar.mouseDoubleClickEvent = self._title_mouse_double_click
+
+        row = QHBoxLayout(title_bar)
+        row.setContentsMargins(12, 0, 6, 0)
+        row.setSpacing(6)
+
+        title = QLabel(f"泰坦知识库 v{VERSION}")
+        title.setObjectName("windowTitleLabel")
+        title.setAlignment(Qt.AlignmentFlag.AlignVCenter)
+        row.addWidget(title)
+        row.addStretch()
+
+        self.btn_window_min = QPushButton("-")
+        self.btn_window_min.setObjectName("windowControl")
+        self.btn_window_min.setFixedSize(34, 26)
+        self.btn_window_min.clicked.connect(self.showMinimized)
+        row.addWidget(self.btn_window_min)
+
+        self.btn_window_max = QPushButton("[]")
+        self.btn_window_max.setObjectName("windowControl")
+        self.btn_window_max.setFixedSize(34, 26)
+        self.btn_window_max.clicked.connect(self._toggle_window_maximized)
+        row.addWidget(self.btn_window_max)
+
+        self.btn_window_close = QPushButton("x")
+        self.btn_window_close.setObjectName("windowClose")
+        self.btn_window_close.setFixedSize(34, 26)
+        self.btn_window_close.clicked.connect(self.close)
+        row.addWidget(self.btn_window_close)
+
+        return title_bar
+
+    def _title_mouse_press(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._drag_start_pos = event.globalPosition().toPoint()
+            self._drag_window_pos = self.frameGeometry().topLeft()
+            event.accept()
+
+    def _title_mouse_move(self, event):
+        if event.buttons() & Qt.MouseButton.LeftButton and not self.isMaximized():
+            delta = event.globalPosition().toPoint() - self._drag_start_pos
+            self.move(self._drag_window_pos + delta)
+            event.accept()
+
+    def _title_mouse_double_click(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._toggle_window_maximized()
+            event.accept()
+
+    def _toggle_window_maximized(self):
+        if self.isMaximized():
+            self.showNormal()
+            self.btn_window_max.setText("[]")
+        else:
+            self.showMaximized()
+            self.btn_window_max.setText("[ ]")
+
+    def nativeEvent(self, eventType, message):
+        if sys.platform != "win32" or self.isMaximized():
+            return super().nativeEvent(eventType, message)
+        if eventType not in ("windows_generic_MSG", "windows_dispatcher_MSG"):
+            return super().nativeEvent(eventType, message)
+
+        msg = ctypes.wintypes.MSG.from_address(int(message))
+        if msg.message != 0x0084:  # WM_NCHITTEST
+            return super().nativeEvent(eventType, message)
+
+        pos = self.mapFromGlobal(QCursor.pos())
+        x, y = pos.x(), pos.y()
+        w, h = self.width(), self.height()
+        margin = 8
+        left = x < margin
+        right = x > w - margin
+        top = y < margin
+        bottom = y > h - margin
+
+        if top and left:
+            return True, 13  # HTTOPLEFT
+        if top and right:
+            return True, 14  # HTTOPRIGHT
+        if bottom and left:
+            return True, 16  # HTBOTTOMLEFT
+        if bottom and right:
+            return True, 17  # HTBOTTOMRIGHT
+        if left:
+            return True, 10  # HTLEFT
+        if right:
+            return True, 11  # HTRIGHT
+        if top:
+            return True, 12  # HTTOP
+        if bottom:
+            return True, 15  # HTBOTTOM
+        return super().nativeEvent(eventType, message)
+
     def _switch_page(self, index: int):
         self.stack.setCurrentIndex(index)
         self.btn_knowledge.setChecked(index == 0)
@@ -214,9 +339,13 @@ class MainWindow(QMainWindow):
         self.btn_catalog.setChecked(index == 2)
         self.btn_wiki.setChecked(index == 3)
         self.btn_graph.setChecked(index == 4)
+        self.btn_trash.setChecked(index == 5)
         # 切换到知识目录时刷新，确保与知识库的标题修改同步
         if index == 2:
             self.catalog_view._load_catalog()
+        # 切换到回收站时刷新列表
+        if index == 5:
+            self.trash_view.refresh()
 
     def _open_settings(self):
         from src.gui.settings_dialog import SettingsDialog

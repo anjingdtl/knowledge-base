@@ -1,9 +1,12 @@
 """Wiki 页面浏览器视图"""
+from pathlib import Path
+
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout,
     QListWidget, QListWidgetItem, QLabel,
     QPushButton, QLineEdit, QTextEdit, QComboBox,
     QMessageBox, QStackedWidget, QFrame,
+    QFileDialog,
 )
 from PySide6.QtCore import Qt, QThread, Signal, QPropertyAnimation, QEasingCurve, QPoint
 from PySide6.QtGui import QColor
@@ -17,6 +20,44 @@ from src.utils.config import Config
 from src.gui.empty_state import EmptyState
 
 import json
+import re
+
+
+def _safe_wiki_filename(title: str) -> str:
+    """将 Wiki 标题转为安全的 Markdown 文件名"""
+    base = re.sub(r'[<>:"/\\|?*]', "_", (title or "").strip())
+    base = re.sub(r"_+", "_", base).strip(" ._")
+    if not base:
+        base = "untitled-wiki"
+    return f"{base[:120]}.md"
+
+
+def _wiki_to_markdown(page: dict) -> str:
+    """将 Wiki 页面数据转为 Markdown 文本"""
+    title = page.get("title") or "未命名 Wiki"
+    tags = json.loads(page.get("tags", "[]")) if isinstance(page.get("tags"), str) else page.get("tags", [])
+    source_ids = json.loads(page.get("source_ids", "[]")) if isinstance(page.get("source_ids"), str) else page.get("source_ids", [])
+    status = page.get("status", "active")
+    score = page.get("lint_score", 1.0)
+    summary = page.get("concept_summary", "")
+    content = page.get("content", "")
+
+    lines = [
+        f"# {title}",
+        "",
+        "## 元数据",
+        "",
+        f"- ID: {page.get('id', '')}",
+        f"- 状态: {status}",
+        f"- 健康分: {score:.0%}",
+        f"- 标签: {', '.join(tags) if tags else '无'}",
+        f"- 来源知识: {len(source_ids)} 条",
+        f"- 更新时间: {page.get('updated_at', '')}",
+    ]
+    if summary:
+        lines += ["", "## 摘要", "", summary]
+    lines += ["", "## 正文", "", content, ""]
+    return "\n".join(lines)
 
 
 class WikiLintWorker(QThread):
@@ -87,17 +128,51 @@ class WikiView(QWidget):
         self.btn_lint.clicked.connect(self._run_lint)
         toolbar.addWidget(self.btn_lint)
 
-        self.btn_batch_delete = QPushButton("批量删除")
-        set_named_icon(self.btn_batch_delete, "delete", "danger", 14)
-        self.btn_batch_delete.clicked.connect(self._batch_delete)
-        self.btn_batch_delete.setVisible(False)
-        toolbar.addWidget(self.btn_batch_delete)
-
         self.stats_label = QLabel("")
         self.stats_label.setObjectName("hintLabel")
         toolbar.addWidget(self.stats_label)
 
         layout.addWidget(toolbar_card)
+
+        # 批量操作栏（全选 / 清空 / 选择计数 / 导出 / 删除）
+        bulk_card = QFrame()
+        bulk_card.setObjectName("bulkBar")
+        bulk_row = QHBoxLayout(bulk_card)
+        bulk_row.setContentsMargins(16, 6, 16, 6)
+        bulk_row.setSpacing(8)
+
+        self.selection_label = QLabel("已选择 0 条")
+        self.selection_label.setObjectName("hintLabel")
+        bulk_row.addWidget(self.selection_label)
+
+        btn_select_all = QPushButton("全选")
+        btn_select_all.setFixedHeight(28)
+        btn_select_all.clicked.connect(self._select_all)
+        bulk_row.addWidget(btn_select_all)
+
+        btn_clear_sel = QPushButton("清空选择")
+        btn_clear_sel.setFixedHeight(28)
+        btn_clear_sel.clicked.connect(self._clear_selection)
+        bulk_row.addWidget(btn_clear_sel)
+
+        bulk_row.addStretch()
+
+        self.btn_export_md = QPushButton("导出 MD")
+        set_named_icon(self.btn_export_md, "export", "text_dim", 14)
+        self.btn_export_md.setFixedHeight(28)
+        self.btn_export_md.clicked.connect(self._export_selected_md)
+        self.btn_export_md.setEnabled(False)
+        bulk_row.addWidget(self.btn_export_md)
+
+        self.btn_batch_delete = QPushButton("批量删除")
+        set_named_icon(self.btn_batch_delete, "delete", "danger", 14)
+        self.btn_batch_delete.setFixedHeight(28)
+        self.btn_batch_delete.clicked.connect(self._batch_delete)
+        self.btn_batch_delete.setEnabled(False)
+        bulk_row.addWidget(self.btn_batch_delete)
+
+        self._bulk_actions = [self.btn_export_md, self.btn_batch_delete]
+        layout.addWidget(bulk_card)
 
         # 左侧页面列表（用 QStackedWidget 包裹，支持空状态切换）
         left = QWidget()
@@ -218,6 +293,7 @@ class WikiView(QWidget):
 
     def _load_pages(self):
         self.page_list.clear()
+        self._on_selection_changed()
         status = self.status_combo.currentData() or None
         pages = Database.list_wiki_pages(status=status, sort_by="updated_at", limit=200)
         for p in pages:
@@ -544,16 +620,60 @@ class WikiView(QWidget):
             self._load_pages()
 
     def _on_selection_changed(self):
-        """多选状态变化时更新批量删除按钮文字"""
+        """多选状态变化时更新批量操作按钮状态"""
         count = len(self.page_list.selectedItems())
-        if count > 0:
-            self.btn_batch_delete.setText(f"批量删除 ({count})")
-            self.btn_batch_delete.setVisible(True)
-        else:
-            self.btn_batch_delete.setText("批量删除")
-            # 如果没有体检结果，隐藏按钮
-            if not self._lint_findings:
-                self.btn_batch_delete.setVisible(False)
+        self.selection_label.setText(f"已选择 {count} 条")
+        for btn in self._bulk_actions:
+            btn.setEnabled(count > 0)
+
+    def _select_all(self):
+        """全选当前列表中所有 Wiki 页面"""
+        self.page_list.blockSignals(True)
+        for i in range(self.page_list.count()):
+            self.page_list.item(i).setSelected(True)
+        self.page_list.blockSignals(False)
+        self._on_selection_changed()
+
+    def _clear_selection(self):
+        """清空所有选择"""
+        self.page_list.blockSignals(True)
+        self.page_list.clearSelection()
+        self.page_list.blockSignals(False)
+        self._on_selection_changed()
+
+    def _export_selected_md(self):
+        """将选中的 Wiki 页面批量导出为 Markdown 文件"""
+        selected = self.page_list.selectedItems()
+        if not selected:
+            return
+        folder = QFileDialog.getExistingDirectory(self, "选择导出目录")
+        if not folder:
+            return
+        out_dir = Path(folder)
+        exported = 0
+        failed = []
+        used_names = set()
+        for item in selected:
+            page = item.data(Qt.UserRole)
+            if not page:
+                continue
+            title = page.get("title", "untitled")
+            # 安全文件名
+            filename = _safe_wiki_filename(title)
+            if filename in used_names or (out_dir / filename).exists():
+                stem = Path(filename).stem
+                filename = f"{stem}-{page['id'][:8]}.md"
+            used_names.add(filename)
+            try:
+                md = _wiki_to_markdown(page)
+                (out_dir / filename).write_text(md, encoding="utf-8")
+                exported += 1
+            except Exception as exc:
+                failed.append(f"{title}: {exc}")
+        msg = f"成功导出 {exported} 个 Wiki 页面到:\n{folder}"
+        if failed:
+            msg += f"\n\n失败 {len(failed)} 个:\n" + "\n".join(failed[:5])
+        QMessageBox.information(self, "导出完成", msg)
 
     def _batch_delete(self):
         """批量删除选中的 Wiki 页面"""
@@ -588,9 +708,9 @@ class WikiView(QWidget):
                 pass
         self._hide_detail_panel()
         self._lint_findings = {}
-        self.btn_batch_delete.setVisible(False)
         self._load_pages()
-        QMessageBox.information(self, "完成", f"已删除 {deleted} 个 Wiki 页面")
+        if deleted > 0:
+            QMessageBox.information(self, "完成", f"已删除 {deleted} 个 Wiki 页面")
 
     def _run_lint(self):
         if self._lint_worker and self._lint_worker.isRunning():

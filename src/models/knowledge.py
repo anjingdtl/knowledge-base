@@ -4,6 +4,8 @@ from datetime import datetime
 import json
 import uuid
 
+from src.utils.time_utils import utcnow_iso
+
 
 @dataclass
 class KnowledgeItem:
@@ -20,8 +22,8 @@ class KnowledgeItem:
     file_modified_at: str = ""    # 原始文件修改时间戳
     tags: list[str] = field(default_factory=list)
     version: int = 1
-    created_at: str = field(default_factory=lambda: datetime.now().isoformat())
-    updated_at: str = field(default_factory=lambda: datetime.now().isoformat())
+    created_at: str = field(default_factory=utcnow_iso)
+    updated_at: str = field(default_factory=utcnow_iso)
 
     def to_row(self) -> dict:
         return {
@@ -73,7 +75,7 @@ class KnowledgeChunk:
     knowledge_id: str = ""
     chunk_index: int = 0
     chunk_text: str = ""
-    created_at: str = field(default_factory=lambda: datetime.now().isoformat())
+    created_at: str = field(default_factory=utcnow_iso)
 
     def to_row(self) -> dict:
         return {

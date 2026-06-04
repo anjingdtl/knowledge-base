@@ -34,6 +34,7 @@ class ChatMessage:
     role: str = "user"            # user | assistant
     content: str = ""
     sources: list[dict] = field(default_factory=list)
+    source_graph: dict = field(default_factory=lambda: {"nodes": [], "edges": []})
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
     def to_row(self) -> dict:
@@ -43,6 +44,7 @@ class ChatMessage:
             "role": self.role,
             "content": self.content,
             "sources": json.dumps(self.sources, ensure_ascii=False),
+            "source_graph": json.dumps(self.source_graph, ensure_ascii=False),
             "created_at": self.created_at,
         }
 
@@ -54,11 +56,18 @@ class ChatMessage:
                 sources = json.loads(sources)
             except (json.JSONDecodeError, ValueError):
                 sources = []
+        source_graph = row.get("source_graph", '{"nodes":[],"edges":[]}')
+        if isinstance(source_graph, str):
+            try:
+                source_graph = json.loads(source_graph)
+            except (json.JSONDecodeError, ValueError):
+                source_graph = {"nodes": [], "edges": []}
         return cls(
             id=row["id"],
             conversation_id=row["conversation_id"],
             role=row["role"],
             content=row["content"],
             sources=sources,
+            source_graph=source_graph,
             created_at=row.get("created_at", ""),
         )

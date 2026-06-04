@@ -92,6 +92,86 @@ def _smart_summary(content: str, max_len: int = 300) -> str:
     return text[:max_len]
 
 
+def _normalize_subcategory(parent_code: str, child) -> dict:
+    if isinstance(child, dict):
+        code = str(child.get("code", "")).strip()
+        name = str(child.get("name", code)).strip()
+        description = str(child.get("description", "")).strip()
+    elif isinstance(child, (tuple, list)) and len(child) >= 2:
+        code = str(child[0]).strip()
+        name = str(child[1]).strip()
+        description = str(child[2]).strip() if len(child) >= 3 else ""
+    else:
+        code = str(child).strip()
+        name = code
+        description = ""
+    return {
+        "code": code,
+        "name": name,
+        "description": description,
+        "parent_code": parent_code,
+    }
+
+
+def iter_classification_schema(schema=None):
+    """Yield classification schema entries in a stable dict shape.
+
+    Supports both the current list based schema and the legacy dict format.
+    """
+    source = CLASSIFICATION_SCHEMA if schema is None else schema
+    if isinstance(source, dict):
+        iterable = []
+        for code, info in source.items():
+            if isinstance(info, dict):
+                iterable.append({
+                    "code": str(info.get("code", code)).strip(),
+                    "name": str(info.get("name", code)).strip(),
+                    "description": str(info.get("description", "")).strip(),
+                    "subcategories": info.get("subcategories", info.get("children", [])),
+                })
+            else:
+                iterable.append({
+                    "code": str(code).strip(),
+                    "name": str(info).strip(),
+                    "description": "",
+                    "subcategories": [],
+                })
+    else:
+        iterable = source
+
+    for cat in iterable:
+        if not isinstance(cat, dict):
+            continue
+        code = str(cat.get("code", "")).strip()
+        if not code:
+            continue
+        children = cat.get("subcategories", cat.get("children", [])) or []
+        yield {
+            "code": code,
+            "name": str(cat.get("name", code)).strip(),
+            "description": str(cat.get("description", "")).strip(),
+            "subcategories": [
+                child_info for child_info in (
+                    _normalize_subcategory(code, child) for child in children
+                )
+                if child_info["code"]
+            ],
+        }
+
+
+def _schema_code_map() -> dict[str, dict]:
+    code_to_info = {}
+    for cat in iter_classification_schema():
+        code_to_info[cat["code"]] = {
+            "code": cat["code"],
+            "name": cat["name"],
+            "description": cat["description"],
+        }
+        for child in cat["subcategories"]:
+            code_to_info[child["code"]] = child
+    return code_to_info
+
+
 class LibrarianService:
     def __init__(self):
         self.llm = LLMService()
@@ -374,21 +454,7 @@ class LibrarianService:
         matched_ids = set()
 
         # 构建 code -> schema 信息的映射
-        code_to_info = {}
-        for cat_code, cat_info in CLASSIFICATION_SCHEMA.items():
-            code_to_info[cat_code] = {
-                "code": cat_code,
-                "name": cat_info["name"],
-                "description": cat_info.get("description", ""),
-            }
-            for child in cat_info.get("children", []):
-                child_code, child_name = child[0], child[1]
-                code_to_info[child_code] = {
-                    "code": child_code,
-                    "name": child_name,
-                    "description": "",
-                    "parent_code": cat_code,
-                }
+        code_to_info = _schema_code_map()
 
         # 加载 DB 中动态分类的映射
         if db_cats:
@@ -576,21 +642,16 @@ class LibrarianService:
 
         # 构建 code -> db_id 映射
         code_to_db_id = {}
+        schema_codes = set(_schema_code_map())
         for cat in existing_cats:
             name = cat["name"]
-            for schema_code, schema_info in CLASSIFICATION_SCHEMA.items():
-                if name.startswith(schema_code):
-                    code_to_db_id[schema_code] = cat["id"]
-                    break
-                for child in schema_info.get("children", []):
-                    child_code = child[0]
-                    if name.startswith(child_code):
-                        code_to_db_id[child_code] = cat["id"]
-                        break
+            parts = name.split(" ", 1)
+            code = parts[0] if parts else ""
+            if code in schema_codes:
+                code_to_db_id[code] = cat["id"]
             if name.startswith(UNCATEGORIZED["code"]):
                 code_to_db_id[UNCATEGORIZED["code"]] = cat["id"]
             # 动态分类也加入映射
-            parts = name.split(" ", 1)
             if parts and parts[0] not in code_to_db_id:
                 code_to_db_id[parts[0]] = cat["id"]
 
@@ -643,16 +704,17 @@ class LibrarianService:
                 code_to_db_id[code] = c["id"]
 
         # 先写入所有预设大类
-        for cat_code, cat_info in CLASSIFICATION_SCHEMA.items():
+        for cat_info in iter_classification_schema():
+            cat_code = cat_info["code"]
             cat_id = str(uuid.uuid4())
             code_to_db_id[cat_code] = cat_id
             Database.insert_category(cat_id, f"{cat_code} {cat_info['name']}", cat_info.get("description", ""))
 
-            for child in cat_info.get("children", []):
-                child_code, child_name = child[0], child[1]
+            for child in cat_info.get("subcategories", []):
+                child_code, child_name = child["code"], child["name"]
                 sub_id = str(uuid.uuid4())
                 code_to_db_id[child_code] = sub_id
-                Database.insert_category(sub_id, f"{child_code} {child_name}", "", parent_id=cat_id)
+                Database.insert_category(sub_id, f"{child_code} {child_name}", child.get("description", ""), parent_id=cat_id)
 
         # 写入未分类
         z_id = str(uuid.uuid4())

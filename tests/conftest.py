@@ -67,8 +67,12 @@ def api_client(setup_db, monkeypatch):
     class MockVS:
         def delete_by_knowledge(self, kid): pass
         def add_chunks(self, chunks): pass
-    import src.api.routes as routes_mod
-    monkeypatch.setattr(routes_mod, "VectorStore", MockVS)
+    import src.api.routes.knowledge as knowledge_routes
+    monkeypatch.setattr(knowledge_routes, "VectorStore", MockVS)
+
+    # Reset rate limiter so test runs don't hit the 10/minute login cap
+    import src.api.routes.rate_limiter as rl_mod
+    rl_mod.login_limiter._requests.clear()
 
     register_user("testuser", "testpass123")
     app = create_app()
@@ -77,3 +81,76 @@ def api_client(setup_db, monkeypatch):
         token = login.json()["access_token"]
         client.headers["Authorization"] = f"Bearer {token}"
         yield client
+
+
+def _now():
+    from datetime import datetime
+    return datetime.now().isoformat()
+
+
+def insert_test_knowledge(title="Test", content="Content", tags=None, item_id=None, **kwargs):
+    """插入测试知识条目"""
+    import json
+    import uuid
+    from src.services.db import Database
+    kid = item_id or str(uuid.uuid4())
+    Database.insert_knowledge({
+        "id": kid,
+        "title": title,
+        "content": content,
+        "source_type": kwargs.get("source_type", "manual"),
+        "source_path": kwargs.get("source_path", ""),
+        "file_type": kwargs.get("file_type", "txt"),
+        "file_size": kwargs.get("file_size", 0),
+        "content_hash": kwargs.get("content_hash", ""),
+        "file_created_at": kwargs.get("file_created_at", ""),
+        "file_modified_at": kwargs.get("file_modified_at", ""),
+        "tags": json.dumps(tags or [], ensure_ascii=False),
+        "version": 1,
+        "created_at": _now(),
+        "updated_at": _now(),
+    })
+    return kid
+
+
+def insert_test_block(page_id, content="Block content", block_type="text",
+                      block_id=None, parent_id=None, order_idx=0, properties=None):
+    """插入测试 Block"""
+    import json
+    import uuid
+    from src.services.db import Database
+    bid = block_id or str(uuid.uuid4())
+    Database.insert_blocks([{
+        "id": bid,
+        "parent_id": parent_id,
+        "page_id": page_id,
+        "content": content,
+        "block_type": block_type,
+        "properties": json.dumps(properties or {}, ensure_ascii=False),
+        "order_idx": order_idx,
+        "created_at": _now(),
+        "updated_at": _now(),
+    }])
+    return bid
+
+
+def insert_test_wiki_page(title="Wiki Test", content="Wiki content", status="draft",
+                          page_id=None, tags=None, concept_summary=""):
+    """插入测试 Wiki 页面"""
+    import json
+    import uuid
+    from src.services.db import Database
+    pid = page_id or str(uuid.uuid4())
+    Database.insert_wiki_page({
+        "id": pid,
+        "title": title,
+        "content": content,
+        "source_ids": "[]",
+        "tags": json.dumps(tags or [], ensure_ascii=False),
+        "concept_summary": concept_summary,
+        "status": status,
+        "lint_score": 1.0,
+        "created_at": _now(),
+        "updated_at": _now(),
+    })
+    return pid

@@ -6,6 +6,7 @@ import random
 
 from PySide6.QtCore import (
     Qt, QThread, Signal, QPropertyAnimation, QEasingCurve, QPoint, QRectF,
+    QTimer,
 )
 from PySide6.QtGui import (
     QColor, QPen, QBrush, QFont, QPainterPath, QPainter, QWheelEvent,
@@ -15,7 +16,7 @@ from PySide6.QtWidgets import (
     QWidget, QFrame, QVBoxLayout, QHBoxLayout, QListWidget, QListWidgetItem,
     QPushButton, QLabel, QTextEdit, QSplitter, QStackedWidget,
     QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsDropShadowEffect,
-    QGraphicsEllipseItem, QMenu, QInputDialog, QMessageBox,
+    QGraphicsEllipseItem, QMenu, QInputDialog, QMessageBox, QProgressBar,
 )
 
 from src.services.db import Database
@@ -80,6 +81,30 @@ def _qcolor_from_role(role: str, alpha: int = 255) -> QColor:
     return _hex_to_qcolor(hex_str, alpha)
 
 
+def _style_for_unified_node(node: dict) -> dict:
+    node_type = node.get("type", "")
+    if node_type == "page":
+        return {"shape": "ellipse", "color": "#6a9edf"}
+    if node_type == "block":
+        return {"shape": "rounded_rect", "color": "#6db86d"}
+    if node_type == "tag":
+        return {"shape": "diamond", "color": "#d8a866"}
+    if node_type == "property":
+        return {"shape": "hex", "color": "#9a6ad4"}
+    return {"shape": "ellipse", "color": "#8e99a5"}
+
+
+def _unified_node_detail_text(node: dict) -> str:
+    lines = [
+        node.get("label", node.get("id", "")),
+        f"Type: {node.get('type', '')}",
+    ]
+    props = node.get("properties") or {}
+    for key, value in sorted(props.items()):
+        lines.append(f"{key}: {value}")
+    return "\n".join(lines)
+
+
 def _mix_qcolor(a: QColor, b: QColor, amount: float, alpha: int | None = None) -> QColor:
     """Linearly blend two colors; optional alpha overrides the blended alpha."""
     amount = max(0.0, min(1.0, amount))
@@ -103,6 +128,13 @@ _SPRING_LEN = 150.0
 _CENTER_K = 0.005
 _DAMPING = 0.9
 _MAX_ITERATIONS = 200
+_LARGE_GRAPH_LAYOUT_NODE_LIMIT = 1000
+
+
+def _layout_iterations_for_node_count(node_count: int) -> int:
+    if node_count >= _LARGE_GRAPH_LAYOUT_NODE_LIMIT:
+        return 0
+    return max(30, 200 - node_count)
 
 
 def apply_force_layout(
@@ -210,6 +242,10 @@ class GraphNodeItem(QGraphicsItem):
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
         self.setAcceptHoverEvents(True)
         self.setToolTip(knowledge_title)
+
+        self._pos_timer = QTimer()
+        self._pos_timer.setSingleShot(True)
+        self._pos_timer.timeout.connect(self._save_position)
 
     def add_edge(self, edge: GraphEdgeItem) -> None:
         self._edges.append(edge)
@@ -330,8 +366,14 @@ class GraphNodeItem(QGraphicsItem):
         return super().itemChange(change, value)
 
     def mouseReleaseEvent(self, event) -> None:
-        Database.update_node_position(self.node_id, self.pos().x(), self.pos().y())
+        self._pos_timer.start(2000)
         super().mouseReleaseEvent(event)
+
+    def _save_position(self) -> None:
+        try:
+            Database.update_node_position(self.node_id, self.pos().x(), self.pos().y())
+        except RuntimeError:
+            pass
 
 
 # ---- 图形边 ----
@@ -621,10 +663,55 @@ class GraphScene(QGraphicsScene):
         self._legend = None
         self._ensure_legend()
 
+    def load_unified_payload(self, payload: dict) -> None:
+        """Load unified graph payload with Page/Block/Tag nodes."""
+        self.clear_graph()
+        self._graph_id = "unified"
+        node_map: dict[str, GraphNodeItem] = {}
+
+        for idx, node in enumerate(payload.get("nodes", [])):
+            style = _style_for_unified_node(node)
+            item = GraphNodeItem(
+                node_id=node["id"],
+                knowledge_id=node.get("source_id") or node["id"],
+                knowledge_title=node.get("label") or node["id"],
+                file_type=node.get("type", "txt"),
+                is_pinned=False,
+            )
+            item._color_hex = style["color"]
+            item._unified_node = node
+            item.setToolTip(_unified_node_detail_text(node))
+            columns = max(10, int(math.sqrt(max(len(payload.get("nodes", [])), 1))))
+            item.setPos((idx % columns) * 120 - 300, (idx // columns) * 100 - 200)
+            node_map[node["id"]] = item
+            self.addItem(item)
+            self._nodes.append(item)
+
+        for edge in payload.get("edges", []):
+            source_node = node_map.get(edge.get("source"))
+            target_node = node_map.get(edge.get("target"))
+            if source_node is None or target_node is None:
+                continue
+            edge_item = GraphEdgeItem(
+                source_node=source_node,
+                target_node=target_node,
+                relation_type=edge.get("type", "related"),
+                description=str((edge.get("properties") or {}).get("description", "")),
+                weight=1.0,
+            )
+            self.addItem(edge_item)
+            self._edges.append(edge_item)
+
+        iterations = _layout_iterations_for_node_count(len(self._nodes))
+        if self._nodes and iterations > 0:
+            apply_force_layout(self._nodes, self._edges, iterations=iterations)
+
     def apply_layout(self) -> None:
         if not self._nodes:
             return
-        apply_force_layout(self._nodes, self._edges)
+        iterations = _layout_iterations_for_node_count(len(self._nodes))
+        if iterations > 0:
+            apply_force_layout(self._nodes, self._edges, iterations=iterations)
 
     def _circular_layout(self) -> None:
         n = len(self._nodes)
@@ -824,13 +911,15 @@ class GraphCanvas(QGraphicsView):
 
 class GraphGenerateWorker(QThread):
     """异步执行图谱生成（LLM 分析），避免阻塞 UI。"""
-    progress = Signal(str)
+    progress = Signal(str, int, int)
     done = Signal(list)
     error = Signal(str)
 
     def run(self) -> None:
         try:
-            builder = GraphBuilder(progress_callback=lambda msg: self.progress.emit(msg))
+            builder = GraphBuilder(
+                progress_callback=lambda msg, cur=0, total=0: self.progress.emit(msg, cur or 0, total or 0)
+            )
             ids = builder.auto_generate_by_categories()
             if not ids:
                 ids = builder.auto_generate_all()
@@ -857,6 +946,7 @@ class GraphView(QWidget):
         self._llm_indicator = llm_indicator
         self._worker = None
         self._current_graph_id: str | None = None
+        self._graph_mode = "legacy"
 
         self._setup_ui()
         self._load_graph_list()
@@ -903,6 +993,11 @@ class GraphView(QWidget):
         self.btn_generate.clicked.connect(self._on_auto_generate)
         toolbar.addWidget(self.btn_generate)
 
+        self.generate_progress = QProgressBar()
+        self.generate_progress.setMaximumHeight(18)
+        self.generate_progress.setVisible(False)
+        toolbar.addWidget(self.generate_progress)
+
         # 重新布局
         self.btn_layout = QPushButton("重新布局")
         set_named_icon(self.btn_layout, "layout", "text_dim", 15)
@@ -914,6 +1009,12 @@ class GraphView(QWidget):
         set_named_icon(self.btn_refresh, "refresh", "text_dim", 15)
         self.btn_refresh.clicked.connect(self._load_graph_list)
         toolbar.addWidget(self.btn_refresh)
+
+        # 统一图谱模式
+        self.btn_unified = QPushButton("统一图谱")
+        set_named_icon(self.btn_unified, "graph_generate", "text_dim", 15)
+        self.btn_unified.clicked.connect(self._load_unified_graph)
+        toolbar.addWidget(self.btn_unified)
 
         layout.addWidget(toolbar_card)
 
@@ -1105,7 +1206,7 @@ class GraphView(QWidget):
             return
 
         self.btn_generate.setEnabled(False)
-        self.status_label.setText("正在重新分析关系...")
+        self._start_graph_progress("正在重新分析关系...")
 
         if self._llm_indicator:
             self._llm_indicator.set_status("running", "图谱关系分析")
@@ -1144,7 +1245,7 @@ class GraphView(QWidget):
 
         self.btn_generate.setEnabled(False)
         self.btn_new.setEnabled(False)
-        self.status_label.setText("正在通过 AI 分析知识关系并生成图谱...")
+        self._start_graph_progress("正在通过 AI 分析知识关系并生成图谱...")
 
         if self._llm_indicator:
             self._llm_indicator.set_status("running", "知识图谱生成")
@@ -1155,12 +1256,28 @@ class GraphView(QWidget):
         self._worker.error.connect(self._on_worker_error)
         self._worker.start()
 
-    def _on_generate_progress(self, msg: str) -> None:
+    def _start_graph_progress(self, msg: str) -> None:
+        self.generate_progress.setVisible(True)
+        self.generate_progress.setRange(0, 0)
+        self.generate_progress.setValue(0)
         self.status_label.setText(msg)
+
+    def _finish_graph_progress(self) -> None:
+        self.generate_progress.setVisible(False)
+        self.generate_progress.setRange(0, 100)
+        self.generate_progress.setValue(0)
+
+    def _on_generate_progress(self, msg: str, current: int = 0, total: int = 0) -> None:
+        self.status_label.setText(msg)
+        if total > 0:
+            self.generate_progress.setVisible(True)
+            self.generate_progress.setRange(0, total)
+            self.generate_progress.setValue(min(max(current, 0), total))
 
     def _on_generate_finished(self, graph_ids: list) -> None:
         self.btn_generate.setEnabled(True)
         self.btn_new.setEnabled(True)
+        self._finish_graph_progress()
         if self._llm_indicator:
             self._llm_indicator.set_status("idle")
 
@@ -1185,6 +1302,7 @@ class GraphView(QWidget):
 
     def _on_regenerate_finished(self) -> None:
         self.btn_generate.setEnabled(True)
+        self._finish_graph_progress()
         self.status_label.setText("关系分析完成")
         if self._llm_indicator:
             self._llm_indicator.set_status("idle")
@@ -1202,6 +1320,7 @@ class GraphView(QWidget):
     def _on_worker_error(self, error_msg: str) -> None:
         self.btn_generate.setEnabled(True)
         self.btn_new.setEnabled(True)
+        self._finish_graph_progress()
         self.status_label.setText(f"错误: {error_msg}")
         if self._llm_indicator:
             self._llm_indicator.set_status("error", error_msg)
@@ -1228,7 +1347,28 @@ class GraphView(QWidget):
 
     # ---- 节点详情面板 ----
 
+    def _load_unified_graph(self) -> None:
+        """切换到统一图谱模式。"""
+        from src.services.unified_graph import UnifiedGraphService
+        self._graph_mode = "unified"
+        payload = UnifiedGraphService(db=Database).build(
+            include_blocks=True,
+            include_tags=True,
+            block_limit=400,
+        )
+        self.graph_scene.load_unified_payload(payload)
+        self._update_status(f"统一图谱 — {len(payload['nodes'])} 节点, {len(payload['edges'])} 条边")
+
     def _show_node_detail(self, node: GraphNodeItem) -> None:
+        unified = getattr(node, "_unified_node", None)
+        if unified:
+            self.detail_title.setText(unified.get("label", unified.get("id", "")))
+            node_type = unified.get("type", "")
+            self.detail_meta.setText(f"Type: {node_type}")
+            self.detail_content.setPlainText(_unified_node_detail_text(unified))
+            self._show_detail_panel()
+            return
+
         knowledge = Database.get_knowledge(node.knowledge_id)
         if not knowledge:
             return
@@ -1317,7 +1457,7 @@ class GraphView(QWidget):
 
 class _RegenerateWorker(QThread):
     """重新分析单个图谱关系的异步线程。"""
-    progress = Signal(str)
+    progress = Signal(str, int, int)
     done = Signal()
     error = Signal(str)
 
@@ -1328,7 +1468,9 @@ class _RegenerateWorker(QThread):
 
     def run(self) -> None:
         try:
-            builder = GraphBuilder(progress_callback=lambda msg: self.progress.emit(msg))
+            builder = GraphBuilder(
+                progress_callback=lambda msg, cur=0, total=0: self.progress.emit(msg, cur or 0, total or 0)
+            )
             builder.build_from_knowledge(self._graph_id, self._knowledge_ids)
             self.done.emit()
         except Exception as e:

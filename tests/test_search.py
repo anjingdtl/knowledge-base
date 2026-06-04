@@ -86,8 +86,11 @@ class TestHybridSearch:
 
         results = searcher._blend_search(["管理制度"], top_k=1)
 
-        assert results[0]["metadata"]["knowledge_id"] == "fts"
-        assert results[0]["fts_score"] > 0
+        # 混合搜索保留 top_k*2 候选以防挤出 keyword 命中
+        assert len(results) >= 1
+        assert "rrf_score" in results[0]
+        # keyword 命中（fts_rank != 0）必须保留在候选集中
+        assert any(r.get("fts_rank", 0) != 0 for r in results)
 
     def test_blend_search_preserves_keyword_hits_when_vectors_dominate(self, monkeypatch):
         """精确关键词命中不能被一批向量候选完全挤出 RAG 候选集。"""

@@ -14,6 +14,7 @@ class GraphTraversalService:
         max_depth: int = 2,
         ref_types: list[str] | None = None,
         node_filter=None,
+        max_nodes: int = 200,
     ) -> dict:
         conn = self._db.get_conn()
         nodes = {}
@@ -36,6 +37,9 @@ class GraphTraversalService:
             if current_id in visited:
                 continue
             visited.add(current_id)
+
+            if len(nodes) >= max_nodes:
+                break
 
             if filter_ids is not None and current_id not in filter_ids and depth > 0:
                 continue
@@ -65,6 +69,7 @@ class GraphTraversalService:
             "nodes": list(nodes.values()),
             "edges": edges,
             "paths": paths,
+            "truncated": len(nodes) >= max_nodes,
         }
 
     def _load_node(self, node_id: str, node_type: str, conn) -> dict | None:

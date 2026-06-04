@@ -185,8 +185,8 @@ class VectorSearchStage(PipelineStage):
                     ctx.metadata["graph_traversal"] = traversal
                     if ctx.candidates:
                         return ctx
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Agentic routing failed, falling back: %s", e)
 
             from src.services.query_router import QueryRouter
             router = QueryRouter(db=Database)
@@ -205,7 +205,7 @@ class VectorSearchStage(PipelineStage):
                 if rid and rid not in seen:
                     seen.add(rid)
                     unique.append(r)
-            unique.sort(key=lambda x: x.get("rrf_score", x.get("vec_score", 0)), reverse=True)
+            unique.sort(key=lambda x: x.get("rrf_score", x.get("vec_score", x.get("score", 0))), reverse=True)
             ctx.candidates = unique[:top_k]
         except Exception as e:
             logger.warning("Vector search failed: %s", e)
@@ -496,9 +496,10 @@ class RAGService:
             if loop and loop.is_running():
                 import concurrent.futures
                 with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
-                    result = ex.submit(asyncio.run, self._pipeline.execute(
-                        question, conversation_history
-                    )).result()
+                    future = asyncio.run_coroutine_threadsafe(
+                        self._pipeline.execute(question, conversation_history), loop
+                    )
+                    result = future.result(timeout=120)
             else:
                 result = asyncio.run(self._pipeline.execute(
                     question, conversation_history

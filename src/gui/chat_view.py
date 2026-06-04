@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QTextCursor
+import html
 import json
 
 from src.services.db import Database
@@ -25,7 +26,7 @@ def _font_sm() -> int:
 class ChatWorker(QThread):
     chunk_received = Signal(str)
     phase_changed = Signal(str, str)
-    finished = Signal(str, list)
+    finished = Signal(str, list, dict)
     error = Signal(str)
 
     def __init__(self, question: str, conversation_id: str, history: list):
@@ -41,9 +42,14 @@ class ChatWorker(QThread):
                 self.phase_changed.emit(status, detail)
                 _notify_status("running", detail)
 
-            stream, sources = self._rag.query_stream(
+            stream_result = self._rag.query_stream(
                 self.question, self.history, phase_callback=on_phase,
             )
+            if isinstance(stream_result, tuple) and len(stream_result) == 3:
+                stream, sources, source_graph = stream_result
+            else:
+                stream, sources = stream_result
+                source_graph = {"nodes": [], "edges": []}
             full_text = ""
             display_text = ""
             in_think = False
@@ -89,7 +95,7 @@ class ChatWorker(QThread):
             if not in_think and display_text:
                 self.chunk_received.emit(display_text)
 
-            self.finished.emit(full_text, sources)
+            self.finished.emit(full_text, sources, source_graph)
         except Exception as e:
             _notify_status("error", str(e)[:100])
             self.error.emit(str(e))
@@ -117,7 +123,28 @@ def _user_bubble_html(content: str) -> str:
     )
 
 
-def _ai_bubble_html(content: str, sources: list = None) -> str:
+def _source_graph_summary(source_graph: dict | None) -> str:
+    if not source_graph:
+        return ""
+    nodes = source_graph.get("nodes") or []
+    edges = source_graph.get("edges") or []
+    if not nodes and not edges:
+        return ""
+    labels = {node.get("id"): (node.get("label") or node.get("id") or "") for node in nodes}
+    edge_samples = []
+    for edge in edges[:3]:
+        source = labels.get(edge.get("source"), edge.get("source", ""))
+        target = labels.get(edge.get("target"), edge.get("target", ""))
+        rel = edge.get("type") or "link"
+        if source and target:
+            edge_samples.append(f"{source} -> {target} ({rel})")
+    summary = f"来源图谱: {len(nodes)} 个节点 / {len(edges)} 条关系"
+    if edge_samples:
+        summary += " · " + "；".join(edge_samples)
+    return summary
+
+
+def _ai_bubble_html(content: str, sources: list = None, source_graph: dict | None = None) -> str:
     text_color = get_color("text")
     dim = get_color("text_dim")
     bubble_bg = get_color("chat_ai_bubble")
@@ -142,6 +169,14 @@ def _ai_bubble_html(content: str, sources: list = None) -> str:
             f'{"".join(cards)}'
             f'</div>'
         )
+    graph_summary = _source_graph_summary(source_graph)
+    graph_text = ""
+    if graph_summary:
+        graph_text = (
+            f'<div style="margin-top:6px;color:{dim};font-size:{_font_sm()}px;">'
+            f'{html.escape(graph_summary)}'
+            f'</div>'
+        )
     return (
         f'<div style="padding:10px 14px;margin:6px 0;'
         f'line-height:1.6;border-radius:8px;'
@@ -149,7 +184,7 @@ def _ai_bubble_html(content: str, sources: list = None) -> str:
         f'<span style="color:{accent};font-size:{_font_sm()}px;">AI 助手</span>'
         f'<span style="color:{dim};font-size:{_font_sm() - 2}px;float:right;">{ts}</span><br>'
         f'<span style="color:{text_color};">{content}</span>'
-        f'{sources_text}</div>'
+        f'{sources_text}{graph_text}</div>'
     )
 
 
@@ -157,6 +192,7 @@ class ChatView(QWidget):
     def __init__(self, llm_indicator=None):
         self._last_ai_question = ""
         self._last_ai_sources: list = []
+        self._last_ai_source_graph: dict = {"nodes": [], "edges": []}
         super().__init__()
         self._llm_indicator = llm_indicator
         self._current_conv_id = None
@@ -356,13 +392,28 @@ class ChatView(QWidget):
         self._show_chat()
         for msg in messages:
             role = msg["role"]
-            content = msg["content"]
+            content = self._display_content(role, msg["content"])
             if role == "user":
                 self.chat_output.append(_user_bubble_html(self._escape(content)))
             else:
                 sources = json.loads(msg.get("sources", "[]")) if isinstance(msg.get("sources"), str) else msg.get("sources", [])
-                self.chat_output.append(_ai_bubble_html(self._escape(content), sources))
+                source_graph = msg.get("source_graph", {"nodes": [], "edges": []})
+                if isinstance(source_graph, str):
+                    try:
+                        source_graph = json.loads(source_graph)
+                    except (json.JSONDecodeError, ValueError):
+                        source_graph = {"nodes": [], "edges": []}
+                self.chat_output.append(_ai_bubble_html(self._escape(content), sources, source_graph))
         self.chat_output.moveCursor(QTextCursor.End)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        if self._worker and self._worker.isRunning():
+            return
+        if self._current_conv_id:
+            self._display_messages()
+        elif self.conv_list.count() > 0:
+            self.conv_list.setCurrentRow(0)
 
     def _new_conversation(self):
         conv = Conversation(title="新对话")
@@ -410,6 +461,8 @@ class ChatView(QWidget):
             QTextEdit.keyPressEvent(self.chat_input, event)
 
     def _send_message(self):
+        if self._worker and self._worker.isRunning():
+            return
         question = self.chat_input.toPlainText().strip()
         if not question:
             return
@@ -418,6 +471,8 @@ class ChatView(QWidget):
 
         self._last_user_question = question
         self.btn_save_wiki.setEnabled(False)
+
+        history = self._get_history()
 
         user_msg = ChatMessage(
             conversation_id=self._current_conv_id,
@@ -446,8 +501,6 @@ class ChatView(QWidget):
 
         self.chat_input.clear()
         self.btn_send.setEnabled(False)
-
-        history = self._get_history()
 
         self._worker = ChatWorker(question, self._current_conv_id, history)
         self._worker.phase_changed.connect(self._on_phase)
@@ -504,8 +557,22 @@ class ChatView(QWidget):
         messages = Database.get_messages(self._current_conv_id)
         history = []
         for msg in messages[-10:]:
-            history.append({"role": msg["role"], "content": msg["content"]})
+            role = msg.get("role")
+            content = (msg.get("content") or "").strip()
+            if role not in {"user", "assistant"}:
+                continue
+            if content.lower() in {"question", "answer"}:
+                continue
+            history.append({"role": role, "content": content})
         return history
+
+    def _display_content(self, role: str, content: str) -> str:
+        text = content or ""
+        if text.strip().lower() == "question" and role == "user":
+            return "（问题内容异常，未能恢复原始文本）"
+        if text.strip().lower() == "answer" and role == "assistant":
+            return "（回答内容异常，未能恢复原始文本）"
+        return text
 
     def _on_chunk(self, chunk: str):
         cursor = self.chat_output.textCursor()
@@ -523,14 +590,16 @@ class ChatView(QWidget):
         self._display_messages()
         QMessageBox.warning(self, "错误", f"生成回答时出错: {error_msg}")
 
-    def _on_response_finished(self, full_text: str, sources: list):
+    def _on_response_finished(self, full_text: str, sources: list, source_graph: dict | None = None):
         self._stop_thinking()
         self.btn_send.setEnabled(True)
         if self._llm_indicator:
             self._llm_indicator.set_status("idle")
 
+        source_graph = source_graph or {"nodes": [], "edges": []}
         self._last_ai_question = self._last_user_question if hasattr(self, '_last_user_question') else ""
         self._last_ai_sources = sources
+        self._last_ai_source_graph = source_graph
         self.btn_save_wiki.setEnabled(len(full_text) >= 100)
 
         ai_msg = ChatMessage(
@@ -538,6 +607,7 @@ class ChatView(QWidget):
             role="assistant",
             content=full_text,
             sources=sources,
+            source_graph=source_graph,
         )
         Database.insert_message(ai_msg.to_row())
 
@@ -546,6 +616,12 @@ class ChatView(QWidget):
         if sources:
             src_strs = [f"[{s.get('title', '未知')}] (score: {s.get('score', 0):.2f})" for s in sources]
             self.sources_label.setText("参考来源: " + " | ".join(src_strs))
+
+        graph_summary = _source_graph_summary(source_graph)
+        if graph_summary:
+            current = self.sources_label.text()
+            prefix = current + " | " if current else ""
+            self.sources_label.setText(prefix + graph_summary)
 
     def _save_to_wiki(self):
         from src.utils.config import Config

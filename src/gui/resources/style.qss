@@ -15,6 +15,40 @@ QWidget#pageSurface {
     background: #F5F1EB;
 }
 
+QWidget#mainContent {
+    background: #F5F1EB;
+}
+
+QFrame#titleBar {
+    background: #EDE8E0;
+    border-bottom: 1px solid rgba(0,0,0,10);
+}
+
+QLabel#windowTitleLabel {
+    color: #1F4A48;
+    font-size: {{font_size_sm}}px;
+    font-weight: 600;
+}
+
+QPushButton#windowControl,
+QPushButton#windowClose {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #5C5C5C;
+    padding: 0;
+}
+
+QPushButton#windowControl:hover {
+    background: rgba(31,74,72,9);
+    color: #1F4A48;
+}
+
+QPushButton#windowClose:hover {
+    background: #C45B5B;
+    color: #FFFFFF;
+}
+
 QFrame#pageHeader,
 QFrame#toolbarCard,
 QFrame#statsCard,
@@ -23,6 +57,12 @@ QFrame#sidePanel {
     background: #FFFFFF;
     border: 1px solid rgba(0,0,0,6);
     border-radius: 10px;
+}
+
+QFrame#bulkBar {
+    background: #F9F7F4;
+    border: 1px solid rgba(0,0,0,4);
+    border-radius: 6px;
 }
 
 QFrame#detailCard {
@@ -146,7 +186,7 @@ QPushButton#mcpToggle:checked {
 /* Typography */
 QLabel#pageTitle {
     color: #1A1A1A;
-    font-size: {{font_size_title}}px;
+    font-size: {{font_size_md}}px;
     font-weight: 700;
     background: transparent;
 }
@@ -163,6 +203,14 @@ QLabel#sectionLabel {
     font-weight: 500;
     background: transparent;
     padding-bottom: 4px;
+}
+
+QLabel#detailTitle {
+    color: #1A1A1A;
+    font-size: {{font_size}}px;
+    font-weight: 600;
+    background: transparent;
+    padding-bottom: 0;
 }
 
 QLabel#hintLabel {
@@ -193,10 +241,17 @@ QToolButton {
     background: #FFFFFF;
     color: #1A1A1A;
     border: 1px solid rgba(0,0,0,10);
-    border-radius: 8px;
-    padding: 8px 20px;
+    border-radius: 6px;
+    padding: 6px 12px;
     font-size: {{font_size}}px;
-    min-height: 18px;
+    min-height: 16px;
+}
+
+QPushButton[compact="true"],
+QToolButton[compact="true"] {
+    padding: 4px 8px;
+    font-size: {{font_size_sm}}px;
+    min-height: 14px;
 }
 
 QPushButton:hover,
@@ -271,7 +326,7 @@ QPlainTextEdit {
     color: #1A1A1A;
     border: 1px solid rgba(0,0,0,12);
     border-radius: 6px;
-    padding: 10px 14px;
+    padding: 7px 10px;
     selection-background-color: rgba(31,74,72,18);
 }
 
@@ -288,8 +343,8 @@ QPlainTextEdit:focus {
 }
 
 QLineEdit[search="true"] {
-    min-height: 22px;
-    padding-left: 14px;
+    min-height: 20px;
+    padding-left: 10px;
 }
 
 /* Combo and spin boxes */
@@ -299,7 +354,7 @@ QSpinBox {
     color: #1A1A1A;
     border: 1px solid rgba(0,0,0,12);
     border-radius: 6px;
-    padding: 10px 14px;
+    padding: 7px 10px;
     min-width: 80px;
 }
 
@@ -343,8 +398,8 @@ QTableWidget {
 QListWidget::item,
 QTreeWidget::item,
 QTableWidget::item {
-    padding: 10px 14px;
-    border-radius: 6px;
+    padding: 6px 10px;
+    border-radius: 5px;
 }
 
 QListWidget::item:hover,
@@ -369,24 +424,38 @@ QHeaderView::section {
     color: #5C5C5C;
     border: none;
     border-bottom: 1px solid rgba(0,0,0,10);
-    padding: 9px 12px;
+    padding: 6px 10px;
     font-weight: 500;
 }
 
 /* Tabs */
 QTabWidget::pane {
     border: 1px solid rgba(0,0,0,6);
-    border-radius: 10px;
+    border-radius: 8px;
     background: #FFFFFF;
-    padding: 8px;
+    padding: 4px;
 }
 
 QTabBar::tab {
     background: transparent;
     color: #8C8C8C;
-    padding: 10px 24px;
+    padding: 7px 16px;
     border: none;
     border-bottom: 2px solid transparent;
+}
+
+QTabWidget#detailTabs::pane {
+    padding: 3px;
+}
+
+QTextEdit#detailContent {
+    font-size: {{font_size}}px;
+    line-height: 1.35;
+    padding: 8px 10px;
+}
+
+QTreeWidget#detailOutline::item {
+    padding: 5px 8px;
 }
 
 QTabBar::tab:hover {

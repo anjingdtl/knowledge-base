@@ -70,15 +70,21 @@ class WikiWorkflow:
         page = Database.get_wiki_page(page_id)
         if not page:
             return WorkflowResult(False, "Wiki page not found")
-        from_status = page.get("status", "draft")
-        if from_status not in ("draft", "active"):
+        from_status = cls._normalize_status(page.get("status", "draft"))
+        if from_status not in ("draft",):
             return WorkflowResult(False, f"Cannot submit from status: {from_status}")
 
         # 检查是否配置了自动发布（跳过审核）
         if Config.get("wiki.auto_publish", True):
-            return cls._do_transition(page_id, "draft", "published", operator, comment or "Auto-published")
+            return cls._do_transition(page_id, from_status, "published", operator, comment or "Auto-published")
 
-        return cls._do_transition(page_id, "draft", "review", operator, comment or "Submitted for review")
+        return cls._do_transition(page_id, from_status, "review", operator, comment or "Submitted for review")
+
+    @staticmethod
+    def _normalize_status(status: str) -> str:
+        """将旧状态（active/orphan）映射到新状态。"""
+        legacy_map = {"active": "published", "orphan": "deprecated"}
+        return legacy_map.get(status, status)
 
     @classmethod
     def approve(cls, page_id: str, operator: str = "system", comment: str = "") -> WorkflowResult:
@@ -86,6 +92,9 @@ class WikiWorkflow:
         page = Database.get_wiki_page(page_id)
         if not page:
             return WorkflowResult(False, "Wiki page not found")
+        current = cls._normalize_status(page.get("status", "draft"))
+        if current != "review":
+            return WorkflowResult(False, f"Cannot approve: current status is '{current}', expected 'review'")
         return cls._do_transition(page_id, "review", "published", operator, comment or "Approved")
 
     @classmethod
@@ -94,6 +103,9 @@ class WikiWorkflow:
         page = Database.get_wiki_page(page_id)
         if not page:
             return WorkflowResult(False, "Wiki page not found")
+        current = cls._normalize_status(page.get("status", "draft"))
+        if current != "review":
+            return WorkflowResult(False, f"Cannot reject: current status is '{current}', expected 'review'")
         return cls._do_transition(page_id, "review", "draft", operator, comment or "Rejected")
 
     @classmethod
@@ -102,6 +114,9 @@ class WikiWorkflow:
         page = Database.get_wiki_page(page_id)
         if not page:
             return WorkflowResult(False, "Wiki page not found")
+        current = cls._normalize_status(page.get("status", "draft"))
+        if current != "published":
+            return WorkflowResult(False, f"Cannot deprecate: current status is '{current}', expected 'published'")
         return cls._do_transition(page_id, "published", "deprecated", operator, comment or "Deprecated")
 
     @classmethod
@@ -110,15 +125,23 @@ class WikiWorkflow:
         page = Database.get_wiki_page(page_id)
         if not page:
             return WorkflowResult(False, "Wiki page not found")
+        current = cls._normalize_status(page.get("status", "draft"))
+        if current != "deprecated":
+            return WorkflowResult(False, f"Cannot republish: current status is '{current}', expected 'deprecated'")
         return cls._do_transition(page_id, "deprecated", "published", operator, comment or "Republished")
 
     @classmethod
     def publish_direct(cls, page_id: str, operator: str = "system", comment: str = "") -> WorkflowResult:
-        """直接发布（管理员快捷操作）：任意��态 -> published"""
+        """直接发布（管理员快捷操作）：draft/review -> published"""
         page = Database.get_wiki_page(page_id)
         if not page:
             return WorkflowResult(False, "Wiki page not found")
-        return cls._do_transition(page_id, page.get("status", "draft"), "published", operator, comment or "Direct publish")
+        current = cls._normalize_status(page.get("status", "draft"))
+        if current == "published":
+            return WorkflowResult(True, "Already published", from_status=current, to_status="published")
+        if current not in ("draft", "review"):
+            return WorkflowResult(False, f"Cannot direct-publish from status: {current}")
+        return cls._do_transition(page_id, current, "published", operator, comment or "Direct publish")
 
     @classmethod
     def get_history(cls, page_id: str) -> list[dict]:
@@ -141,9 +164,11 @@ class WikiWorkflow:
             content=version_data["content"],
             concept_summary=version_data["concept_summary"],
             tags=version_data["tags"],
+            # 恢复后将状态改为 draft，标记需要重新审核
+            status="draft",
         )
-        logger.info("Wiki page %s restored to version %d", page_id, version)
-        return WorkflowResult(True, f"已恢复到版本 {version}")
+        logger.info("Wiki page %s restored to version %d, status reset to draft", page_id, version)
+        return WorkflowResult(True, f"已恢复到版本 {version}（状态已重置为 draft）")
 
     @classmethod
     def _do_transition(cls, page_id: str, from_status: str, to_status: str,

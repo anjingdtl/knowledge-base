@@ -1,13 +1,15 @@
 """Wiki 站点 Jinja2 渲染器"""
+import html as _html
 import logging
+import re
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-# 模板目录
 TEMPLATE_DIR = Path(__file__).parent.parent / "templates" / "wiki"
 
-# 尝试导入 Jinja2，如果不可用则使用简单渲染
+_jinja_env = None
+
 try:
     from jinja2 import Environment, FileSystemLoader, select_autoescape
     from markdown import markdown
@@ -16,6 +18,27 @@ try:
 except ImportError:
     JINJA_AVAILABLE = False
     logger.warning("Jinja2 or markdown not available, using simple renderer")
+
+
+def _get_jinja_env():
+    global _jinja_env
+    if _jinja_env is None:
+        _jinja_env = Environment(
+            loader=FileSystemLoader(str(TEMPLATE_DIR)),
+            autoescape=select_autoescape(["html", "xml"]),
+        )
+    return _jinja_env
+
+
+def _sanitize_html(html_content: str) -> str:
+    dangerous_tags = ['script', 'iframe', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button']
+    result = html_content
+    for tag in dangerous_tags:
+        result = re.sub(rf'<{tag}\b[^>]*>.*?</{tag}>', '', result, flags=re.IGNORECASE | re.DOTALL)
+        result = re.sub(rf'<{tag}\b[^>]*/?\s*>', '', result, flags=re.IGNORECASE)
+    result = re.sub(r'\bon\w+\s*=\s*["\'][^"\']*["\']', '', result, flags=re.IGNORECASE)
+    result = re.sub(r'\bjavascript\s*:', '', result, flags=re.IGNORECASE)
+    return result
 
 
 def render_wiki_page(page: dict, site_config: dict) -> str:
@@ -35,16 +58,12 @@ def render_landing_page(data: dict, base_url: str = "") -> str:
 def _render_jinja_page(page: dict, site_config: dict) -> str:
     """使用 Jinja2 渲染页面"""
     try:
-        env = Environment(
-            loader=FileSystemLoader(str(TEMPLATE_DIR)),
-            autoescape=select_autoescape(["html", "xml"]),
-        )
+        env = _get_jinja_env()
         template = env.get_template("page.html")
 
-        # 转换 Markdown 为 HTML
         content_html = markdown(page.get("content", ""), extensions=["extra", "codehilite"])
+        content_html = _sanitize_html(content_html)
 
-        # 生成 SEO 元数据
         from src.services.wiki_seo import SEOMetadataGenerator
         seo = SEOMetadataGenerator.generate_from_page(page, site_config.get("base_url", ""))
         meta_tags = SEOMetadataGenerator.generate_meta_tags(seo)
@@ -67,10 +86,7 @@ def _render_jinja_page(page: dict, site_config: dict) -> str:
 def _render_jinja_landing(data: dict, base_url: str) -> str:
     """使用 Jinja2 渲染首页"""
     try:
-        env = Environment(
-            loader=FileSystemLoader(str(TEMPLATE_DIR)),
-            autoescape=select_autoescape(["html", "xml"]),
-        )
+        env = _get_jinja_env()
         template = env.get_template("landing.html")
 
         return template.render(
@@ -145,13 +161,16 @@ def _render_simple_page(page: dict, site_config: dict) -> str:
 
 def _render_simple_landing(data: dict) -> str:
     """简单渲染首页"""
-    site_title = data.get("site_title", "Wiki")
+    site_title = _html.escape(data.get("site_title", "Wiki"))
+    site_description = _html.escape(data.get("site_description", ""))
     stats = data.get("stats", {})
     recent = data.get("recent_pages", [])
 
     recent_html = ""
     for p in recent:
-        recent_html += f'<li><a href="pages/{p["id"]}.html">{p["title"]}</a></li>'
+        pid = _html.escape(str(p.get("id", "")))
+        ptitle = _html.escape(str(p.get("title", "")))
+        recent_html += f'<li><a href="pages/{pid}.html">{ptitle}</a></li>'
 
     return f"""<!DOCTYPE html>
 <html>

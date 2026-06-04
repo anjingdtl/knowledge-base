@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS entity_refs (
     target_id TEXT NOT NULL,
     ref_type TEXT DEFAULT 'mention',
     weight REAL DEFAULT 1.0,
+    auto_discovered INTEGER DEFAULT 0,
     created_at TEXT,
     UNIQUE(source_type, source_id, target_type, target_id, ref_type)
 );
@@ -59,6 +60,45 @@ CREATE TABLE IF NOT EXISTS block_property_index (
     PRIMARY KEY (block_id, prop_key)
 );
 CREATE INDEX IF NOT EXISTS idx_prop_key_val ON block_property_index(prop_key, prop_value);
+
+-- Phase 2: Tag DAG, Property Schema, Effective Properties
+CREATE TABLE IF NOT EXISTS tag_relations (
+    parent_tag TEXT NOT NULL,
+    child_tag TEXT NOT NULL,
+    created_at TEXT,
+    PRIMARY KEY (parent_tag, child_tag),
+    CHECK(parent_tag <> child_tag)
+);
+CREATE INDEX IF NOT EXISTS idx_tag_relations_parent ON tag_relations(parent_tag);
+CREATE INDEX IF NOT EXISTS idx_tag_relations_child ON tag_relations(child_tag);
+
+CREATE TABLE IF NOT EXISTS property_schemas (
+    id TEXT PRIMARY KEY,
+    scope_type TEXT NOT NULL,
+    scope_id TEXT DEFAULT '',
+    property_name TEXT NOT NULL,
+    property_type TEXT NOT NULL,
+    required INTEGER DEFAULT 0,
+    default_value TEXT,
+    choices TEXT,
+    constraints TEXT,
+    created_at TEXT,
+    UNIQUE(scope_type, scope_id, property_name)
+);
+CREATE INDEX IF NOT EXISTS idx_property_schemas_scope ON property_schemas(scope_type, scope_id);
+
+CREATE TABLE IF NOT EXISTS effective_property_index (
+    block_id TEXT REFERENCES blocks(id) ON DELETE CASCADE,
+    prop_key TEXT NOT NULL,
+    prop_value TEXT,
+    value_type TEXT DEFAULT 'string',
+    source_type TEXT NOT NULL,
+    source_id TEXT DEFAULT '',
+    inherited INTEGER DEFAULT 0,
+    updated_at TEXT,
+    PRIMARY KEY (block_id, prop_key)
+);
+CREATE INDEX IF NOT EXISTS idx_effective_prop_key_val ON effective_property_index(prop_key, prop_value);
 
 CREATE TABLE IF NOT EXISTS embedding_cache (
     content_hash TEXT NOT NULL,
@@ -99,6 +139,7 @@ def migrate_database(
             return summary
 
         conn.executescript(BLOCK_GRAPH_SCHEMA)
+        _ensure_block_graph_columns(conn)
         conn.commit()
 
         created_blocks = _migrate_blocks(conn)
@@ -251,6 +292,13 @@ def _insert_entity_ref(
         ),
     )
     return int(conn.execute("SELECT changes()").fetchone()[0])
+
+
+def _ensure_block_graph_columns(conn: sqlite3.Connection) -> None:
+    if _table_exists(conn, "entity_refs"):
+        cols = {row[1] for row in conn.execute("PRAGMA table_info(entity_refs)").fetchall()}
+        if "auto_discovered" not in cols:
+            conn.execute("ALTER TABLE entity_refs ADD COLUMN auto_discovered INTEGER DEFAULT 0")
 
 
 def _backfill_missing_vectors(conn: sqlite3.Connection) -> int:

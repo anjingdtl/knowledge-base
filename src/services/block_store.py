@@ -20,6 +20,7 @@ class BlockStore:
     """
     _instance = None
     _initialized = False
+    _lock = threading.Lock()
 
     def __new__(cls, db=None):
         if db is not None:
@@ -27,11 +28,12 @@ class BlockStore:
             inst._initialized = False
             inst._db = db
             return inst
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._initialized = False
-            cls._instance._db = None
-        return cls._instance
+        with cls._lock:
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+                cls._instance._initialized = False
+                cls._instance._db = None
+            return cls._instance
 
     def _check_db_changed(self):
         if self._db is not None:
@@ -76,6 +78,9 @@ class BlockStore:
         return struct.pack(f"{len(embedding)}f", *embedding)
 
     def add_block_embedding(self, block_id: str, embedding: list[float]):
+        expected_dim = self._get_dimension()
+        if len(embedding) != expected_dim:
+            raise ValueError(f"Embedding dimension {len(embedding)} != expected {expected_dim}")
         self._ensure_table()
         conn = self._get_conn()
         row = conn.execute(
