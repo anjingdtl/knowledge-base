@@ -69,6 +69,13 @@ class OperationLogRepository:
         ).fetchall()
         return [dict(r) for r in rows]
 
+    def get_by_id(self, log_id: str) -> dict | None:
+        """按 log_id 查询单条记录。Phase 4 的 ``get_operation_log`` 工具使用。"""
+        row = self._conn().execute(
+            "SELECT * FROM operation_logs WHERE id = ?", (log_id,),
+        ).fetchone()
+        return dict(row) if row else None
+
     def count(self, target_type=None, operation=None) -> int:
         conditions, params = [], []
         if target_type:

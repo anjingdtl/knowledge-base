@@ -3,6 +3,8 @@ import json
 import uuid
 from datetime import datetime
 
+import pytest
+
 from src.services.db import Database
 from src.repositories.operation_log_repo import OperationLogRepository
 from src.services.operation_log import OperationLogService
@@ -190,3 +192,99 @@ class TestKnowledgeRepoVersionExtension:
 
         versions = repo.list_versions(kid)
         assert len(versions) >= 1
+
+
+# ---- Phase 0: MCP envelope + operation_log 闭环 ----
+
+class TestMcpWriteToolsEnvelopeAndLog:
+    """Phase 0 验收：每个 MCP 写工具返回 envelope.operation_id，且同步写入 operation_logs 表。"""
+
+    @pytest.fixture
+    def mcp_env(self, setup_db, monkeypatch):
+        """Mock 向量存储；测试 envelope 行为不依赖 embedding。"""
+        class MockVS:
+            def __init__(self, db=None): pass
+            def search(self, query, top_k=5): return []
+            def add_chunks(self, chunks): pass
+            def delete_by_knowledge(self, kid): pass
+            def count(self): return 0
+        class MockBS:
+            def __init__(self, db=None): pass
+            def search(self, query, top_k=5): return []
+            def add_block_embedding(self, block_id, embedding): pass
+            def delete_by_page(self, page_id): pass
+            def count(self): return 0
+
+        monkeypatch.setattr("src.services.vectorstore.VectorStore", MockVS)
+        monkeypatch.setattr("src.services.block_store.BlockStore", MockBS)
+
+    def test_create_envelope_has_operation_id_and_log_row(self, mcp_env):
+        from src.mcp_server import create
+        result = create(title="测试条目", content="内容")
+        assert result["ok"] is True
+        assert "operation_id" in result, "envelope 必须包含 operation_id"
+        log_id = result["operation_id"]
+        assert log_id
+        # operation_logs 表里能查到
+        from src.repositories.operation_log_repo import OperationLogRepository
+        entry = OperationLogRepository().get_by_id(log_id)
+        assert entry is not None
+        assert entry["operation"] == "create"
+        assert entry["target_type"] == "knowledge"
+        assert entry["source"] == "mcp"
+
+    def test_update_envelope_has_operation_id_and_log_row(self, mcp_env):
+        from src.mcp_server import create, update
+        created = create(title="原", content="c")
+        kid = created["data"]["id"]
+        result = update(item_id=kid, title="新")
+        assert result["ok"] is True
+        log_id = result["operation_id"]
+        from src.repositories.operation_log_repo import OperationLogRepository
+        entry = OperationLogRepository().get_by_id(log_id)
+        assert entry is not None
+        assert entry["operation"] == "update"
+        assert entry["target_id"] == kid
+
+    def test_delete_envelope_has_operation_id_and_log_row(self, mcp_env):
+        from src.mcp_server import create, delete
+        created = create(title="待删", content="c")
+        kid = created["data"]["id"]
+        result = delete(item_id=kid)
+        assert result["ok"] is True
+        log_id = result["operation_id"]
+        from src.repositories.operation_log_repo import OperationLogRepository
+        entry = OperationLogRepository().get_by_id(log_id)
+        assert entry is not None
+        assert entry["operation"] == "delete"
+        assert entry["target_id"] == kid
+
+    def test_dry_run_does_not_log(self, mcp_env):
+        from src.mcp_server import create, update
+        created = create(title="t", content="c")
+        kid = created["data"]["id"]
+        # 拿到 create 写入的 log 数
+        from src.services.db import Database
+        before = Database.get_conn().execute(
+            "SELECT COUNT(*) as c FROM operation_logs WHERE target_id = ?", (kid,)
+        ).fetchone()["c"]
+        result = update(item_id=kid, title="x", dry_run=True)
+        assert result["dry_run"] is True
+        # 不应新增
+        after = Database.get_conn().execute(
+            "SELECT COUNT(*) as c FROM operation_logs WHERE target_id = ?", (kid,)
+        ).fetchone()["c"]
+        assert after == before, "dry_run 不应写 operation_log"
+
+    def test_get_by_id_returns_full_record(self, mcp_env):
+        from src.mcp_server import create
+        from src.repositories.operation_log_repo import OperationLogRepository
+        result = create(title="t", content="c")
+        log_id = result["operation_id"]
+        entry = OperationLogRepository().get_by_id(log_id)
+        assert entry is not None
+        for key in ("id", "operation", "target_type", "target_id",
+                    "operator", "source", "created_at"):
+            assert key in entry
+        assert entry["source"] == "mcp"
+        assert entry["operator"] == "system"

@@ -1,4 +1,6 @@
-"""MCP Server 工具测试"""
+"""MCP Server 工具测试 — envelope-aware 形式（Sprint 1 适配）。"""
+from __future__ import annotations
+
 import json
 import pytest
 
@@ -61,66 +63,99 @@ class TestSearchFulltext:
     def test_returns_results(self, mcp_env):
         _insert_sample("Python 入门", "Python 是一种编程语言")
         _insert_sample("Java 入门", "Java 是一种编程语言")
-        results = search_fulltext("Python")
-        assert len(results) >= 1
-        assert any("Python" in r["title"] for r in results)
+        result = search_fulltext(query="Python")
+        assert result["ok"] is True
+        data = result["data"]
+        assert len(data) >= 1
+        assert any("Python" in r["title"] for r in data)
 
 
 class TestRead:
     def test_existing_item(self, mcp_env):
         item = _insert_sample()
         result = read(item_id=item.id)
-        assert result["id"] == item.id
-        assert result["title"] == "测试知识"
+        assert result["ok"] is True
+        assert result["data"]["id"] == item.id
+        assert result["data"]["title"] == "测试知识"
 
-    def test_nonexistent_raises(self, mcp_env):
-        with pytest.raises(ValueError, match="不存在"):
-            read(item_id="nonexistent-id")
+    def test_nonexistent_returns_envelope_fail(self, mcp_env):
+        """Phase 0+1 改造：read 不再抛 ValueError，改为 ok=false envelope。"""
+        result = read(item_id="nonexistent-id")
+        assert result["ok"] is False
+        assert result["error"]["code"] == "NOT_FOUND"
+        assert "nonexistent-id" in result["error"]["details"]["item_id"]
 
 
 class TestCreate:
     def test_basic(self, mcp_env):
         result = create(title="新知识", content="新内容", tags=["标签"])
-        assert "id" in result
-        assert result["title"] == "新知识"
-        assert Database.get_knowledge(result["id"]) is not None
+        assert result["ok"] is True
+        assert "id" in result["data"]
+        assert result["data"]["title"] == "新知识"
+        assert Database.get_knowledge(result["data"]["id"]) is not None
+        # Sprint 1：写工具必须返回 operation_id
+        assert "operation_id" in result
 
     def test_markdown(self, mcp_env):
         result = create(title="MD 文档", content="# 标题\n正文", file_type="md")
-        assert result["message"] == "知识创建成功并已完成索引"
+        assert result["data"]["message"] == "知识创建成功并已完成索引"
 
     def test_code(self, mcp_env):
         result = create(title="代码片段", content="print('hello')", file_type="code")
-        assert result["id"]
+        assert result["data"]["id"]
 
 
 class TestUpdate:
     def test_update_title(self, mcp_env):
         item = _insert_sample("原标题")
-        update(item_id=item.id, title="新标题")
+        result = update(item_id=item.id, title="新标题")
+        assert result["ok"] is True
         updated = Database.get_knowledge(item.id)
         assert updated["title"] == "新标题"
+        assert "operation_id" in result
 
-    def test_nonexistent_raises(self, mcp_env):
-        with pytest.raises(ValueError, match="不存在"):
-            update(item_id="nonexistent", title="x")
+    def test_nonexistent_returns_envelope_fail(self, mcp_env):
+        result = update(item_id="nonexistent", title="x")
+        assert result["ok"] is False
+        assert result["error"]["code"] == "NOT_FOUND"
 
     def test_no_fields(self, mcp_env):
         item = _insert_sample()
         result = update(item_id=item.id)
-        assert "未提供" in result["message"]
+        assert result["ok"] is True
+        assert "未提供" in result["data"]["message"]
+
+    def test_dry_run(self, mcp_env):
+        item = _insert_sample("原标题")
+        result = update(item_id=item.id, title="新标题", dry_run=True)
+        assert result["ok"] is True
+        assert result["dry_run"] is True
+        assert "would_change" in result["data"]
+        # 数据库未变
+        assert Database.get_knowledge(item.id)["title"] == "原标题"
 
 
 class TestDelete:
     def test_basic(self, mcp_env):
         item = _insert_sample()
         result = delete(item_id=item.id)
-        assert "成功" in result["message"]
-        assert Database.get_knowledge(item.id) is None
+        assert result["ok"] is True
+        assert "成功" in result["data"]["message"]
+        assert "operation_id" in result
 
-    def test_nonexistent_raises(self, mcp_env):
-        with pytest.raises(ValueError, match="不存在"):
-            delete(item_id="nonexistent")
+    def test_nonexistent_returns_envelope_fail(self, mcp_env):
+        result = delete(item_id="nonexistent")
+        assert result["ok"] is False
+        assert result["error"]["code"] == "NOT_FOUND"
+
+    def test_dry_run(self, mcp_env):
+        item = _insert_sample()
+        result = delete(item_id=item.id, dry_run=True)
+        assert result["ok"] is True
+        assert result["dry_run"] is True
+        assert "would_delete" in result["data"]["would_change"]
+        # 数据仍在
+        assert Database.get_knowledge(item.id) is not None
 
 
 class TestList:
@@ -128,14 +163,17 @@ class TestList:
         _insert_sample("知识A")
         _insert_sample("知识B")
         result = list_knowledge()
-        assert result["total"] >= 2
-        assert len(result["items"]) >= 2
+        assert result["ok"] is True
+        assert result["meta"]["total"] >= 2
+        assert len(result["data"]) >= 2
 
     def test_pagination(self, mcp_env):
         for i in range(5):
             _insert_sample(f"知识{i}")
         result = list_knowledge(limit=2, offset=0)
-        assert len(result["items"]) == 2
+        assert len(result["data"]) == 2
+        assert result["meta"]["limit"] == 2
+        assert result["meta"]["next_offset"] == 2
 
 
 class TestTags:
@@ -143,8 +181,10 @@ class TestTags:
         _insert_sample("A", tags=["Python", "教程"])
         _insert_sample("B", tags=["Python", "进阶"])
         result = get_tags()
-        assert "Python" in result
-        assert "教程" in result
+        assert result["ok"] is True
+        tag_list = result["data"]
+        assert "Python" in tag_list
+        assert "教程" in tag_list
 
 
 # ---- Resources ----
@@ -154,23 +194,28 @@ class TestResources:
         _insert_sample(tags=["AI"])
         result = get_tags_resource()
         data = json.loads(result)
-        assert "AI" in data["tags"]
+        assert data["ok"] is True
+        assert "AI" in data["data"]["tags"]
 
     def test_stats_resource(self, mcp_env):
         _insert_sample()
         result = get_stats_resource()
         data = json.loads(result)
-        assert data["knowledge_items"] >= 1
+        assert data["ok"] is True
+        assert data["data"]["knowledge_items"] >= 1
 
     def test_knowledge_resource(self, mcp_env):
         item = _insert_sample()
         result = get_knowledge_resource(item_id=item.id)
         data = json.loads(result)
-        assert data["title"] == "测试知识"
+        assert data["ok"] is True
+        assert data["data"]["title"] == "测试知识"
 
     def test_knowledge_resource_not_found(self, mcp_env):
-        with pytest.raises(ValueError, match="不存在"):
-            get_knowledge_resource(item_id="nonexistent")
+        result = get_knowledge_resource(item_id="nonexistent")
+        data = json.loads(result)
+        assert data["ok"] is False
+        assert data["error"]["code"] == "NOT_FOUND"
 
 
 # ---- Prompts ----

@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "generated_at": "2026-06-04",
+  "sprint": "Sprint 1 (Phase 0+1)",
+  "envelope_shape": {
+    "success": {"ok": true, "data": "<payload>", "meta": "{}", "operation_id": "<uuid>?"},
+    "failure": {"ok": false, "error": {"code": "<CODE>", "message": "...", "details": "{}"}},
+    "dry_run": {"ok": true, "dry_run": true, "data": {"would_change": "{}"}, "meta": "{}"}
+  },
+  "error_codes": [
+    "NOT_FOUND",
+    "VALIDATION_ERROR",
+    "PERMISSION_DENIED",
+    "INGEST_FAILED",
+    "INTERNAL_ERROR",
+    "PRECONDITION_FAILED",
+    "RATE_LIMITED",
+    "WIKI_DISABLED",
+    "JOB_NOT_FOUND",
+    "QUERY_PARSE_ERROR"
+  ],
+  "tools": [
+    {"name": "kb_capabilities", "kind": "read", "returns": "envelope(data=capabilities)"},
+    {"name": "search", "kind": "read", "returns": "envelope(data=list, meta={total_estimate, top_k})"},
+    {"name": "search_fulltext", "kind": "read", "returns": "envelope(data=list, meta={limit, offset, next_offset, truncated, total_estimate})"},
+    {"name": "ask", "kind": "read", "returns": "envelope(data={answer, sources, source_graph, wiki_context})"},
+    {"name": "read", "kind": "read", "returns": "envelope(data=item) | envelope(ok=false, NOT_FOUND)"},
+    {"name": "tags", "kind": "read", "returns": "envelope(data=list, meta={count})"},
+    {"name": "list_knowledge", "kind": "read", "returns": "envelope(data=list, meta={total, limit, offset, next_offset, truncated})"},
+    {"name": "structured_query", "kind": "read", "returns": "envelope(data=list, meta={limit, offset, next_offset, truncated}) | QUERY_PARSE_ERROR"},
+    {"name": "explain_query", "kind": "read", "returns": "envelope(data={summary, plan, ...}) | QUERY_PARSE_ERROR"},
+    {"name": "graph_traverse", "kind": "read", "returns": "envelope(data={nodes, edges, paths, truncated}, meta={limit, offset, max_depth})"},
+    {"name": "query_operation_logs", "kind": "read", "returns": "envelope(data=list, meta={count, total_estimate, limit, offset, next_offset, truncated})"},
+
+    {"name": "create", "kind": "write", "returns": "envelope(data={id, title, path, message}, operation_id) | dry_run"},
+    {"name": "update", "kind": "write", "returns": "envelope(data={message, updated_fields, changes, version}, operation_id) | dry_run | NOT_FOUND"},
+    {"name": "delete", "kind": "write", "returns": "envelope(data={message, id, deleted_item, version}, operation_id) | dry_run | NOT_FOUND"},
+    {"name": "reindex_all", "kind": "write", "returns": "envelope(data={message, result}, operation_id) | dry_run"},
+
+    {"name": "ingest_file", "kind": "write", "returns": "envelope(data={items}) | INGEST_FAILED | PERMISSION_DENIED | dry_run"},
+    {"name": "ingest_url", "kind": "write", "returns": "envelope(data={item}) | INGEST_FAILED"},
+
+    {"name": "save_to_wiki", "kind": "write", "returns": "envelope(data={page_id, message}, operation_id) | WIKI_DISABLED"},
+    {"name": "wiki_lint", "kind": "read", "returns": "envelope(data=report) | WIKI_DISABLED"},
+    {"name": "wiki_submit_review", "kind": "write", "returns": "envelope(data={success, message, from, to}, operation_id)"},
+    {"name": "wiki_approve", "kind": "write", "returns": "envelope(data={success, message, from, to}, operation_id)"},
+    {"name": "wiki_reject", "kind": "write", "returns": "envelope(data={success, message, from, to}, operation_id)"},
+    {"name": "wiki_deprecate", "kind": "write", "returns": "envelope(data={success, message, from, to}, operation_id)"},
+    {"name": "wiki_workflow_history", "kind": "read", "returns": "envelope(data={history}, meta={count})"},
+    {"name": "wiki_list_versions", "kind": "read", "returns": "envelope(data={versions}, meta={count})"},
+    {"name": "wiki_restore_version", "kind": "write", "returns": "envelope(data={success, message, restored_version}, operation_id)"},
+
+    {"name": "create_async_job", "kind": "write", "returns": "envelope(data={job_id, status})"},
+    {"name": "get_async_job", "kind": "read", "returns": "envelope(data=job.__dict__) | JOB_NOT_FOUND"},
+    {"name": "list_async_jobs", "kind": "read", "returns": "envelope(data=list, meta={count, limit})"},
+    {"name": "cancel_async_job", "kind": "write", "returns": "envelope(data={success, message, job_id})"}
+  ]
+}
