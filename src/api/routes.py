@@ -97,6 +97,37 @@ class KnowledgeBatchExport(BaseModel):
     tag: Optional[str] = None
 
 
+class TagRelationReq(BaseModel):
+    parent_tag: str
+    child_tag: str
+
+
+class PropertySchemaReq(BaseModel):
+    scope_type: str
+    scope_id: str = ""
+    property_name: str
+    property_type: str
+    required: int = 0
+    default_value: object = None
+    choices: list | None = None
+    constraints: dict | None = None
+
+
+class QueryDSLReq(BaseModel):
+    filter: dict
+    limit: int = 100
+    offset: int = 0
+    sort: dict | None = None
+    include_blocks: bool = False
+
+
+class GraphTraverseReq(BaseModel):
+    start_ids: list[str]
+    start_type: str = "knowledge"
+    max_depth: int = 2
+    ref_types: list[str] | None = None
+
+
 @kb_router.get("")
 def list_knowledge(
     tag: Optional[str] = None,
@@ -238,6 +269,64 @@ def list_entity_refs(
     return {"refs": [ref.to_row() for ref in refs], "total": len(refs)}
 
 
+# ---- Phase 2: Graph / Tags / Properties ----
+
+graph_router = APIRouter(prefix="/graph", tags=["graph"], dependencies=[Depends(_check_auth)])
+tags_router = APIRouter(prefix="/tags", tags=["tags"], dependencies=[Depends(_check_auth)])
+properties_router = APIRouter(prefix="/properties", tags=["properties"], dependencies=[Depends(_check_auth)])
+
+
+@graph_router.get("/unified")
+def get_unified_graph(
+    include_blocks: bool = True,
+    include_tags: bool = True,
+    container: AppContainer = Depends(get_container),
+):
+    return container.unified_graph.build(include_blocks=include_blocks, include_tags=include_tags)
+
+
+@graph_router.post("/traverse")
+def traverse_graph(data: GraphTraverseReq, container: AppContainer = Depends(get_container)):
+    return container.graph_traversal.traverse(
+        start_ids=data.start_ids,
+        start_type=data.start_type,
+        max_depth=data.max_depth,
+        ref_types=data.ref_types,
+    )
+
+
+@tags_router.post("/relations")
+def create_tag_relation(data: TagRelationReq, container: AppContainer = Depends(get_container)):
+    container.tag_hierarchy.add_relation(data.parent_tag, data.child_tag)
+    return {"parent_tag": data.parent_tag, "child_tag": data.child_tag}
+
+
+@tags_router.get("/hierarchy/{tag}")
+def get_tag_hierarchy(tag: str, container: AppContainer = Depends(get_container)):
+    return {
+        "tag": tag,
+        "ancestors": container.tag_hierarchy.ancestors(tag),
+        "descendants": container.tag_hierarchy.descendants(tag),
+    }
+
+
+@properties_router.post("/schemas")
+def upsert_property_schema(data: PropertySchemaReq, container: AppContainer = Depends(get_container)):
+    from src.models.property_schema import PropertySchema
+    schema = container.property_schema.upsert(PropertySchema(**data.model_dump()))
+    return schema.to_row()
+
+
+@properties_router.get("/schemas")
+def list_property_schemas(scope_type: str, scope_id: str = "", container: AppContainer = Depends(get_container)):
+    return {"schemas": [schema.to_row() for schema in container.property_schema._repo.list_for_scope(scope_type, scope_id)]}
+
+
+@properties_router.get("/effective/{block_id}")
+def get_effective_properties(block_id: str, container: AppContainer = Depends(get_container)):
+    return {"block_id": block_id, "properties": container.effective_properties.refresh_block(block_id)}
+
+
 # ---- Chat / RAG ----
 
 chat_router = APIRouter(prefix="/chat", tags=["chat"], dependencies=[Depends(_check_auth)])
@@ -259,10 +348,20 @@ def ask_question(data: QuestionReq, container: AppContainer = Depends(get_contai
         conv_id = conv.id
     user_msg = ChatMessage(conversation_id=conv_id, role="user", content=data.question)
     container.db.insert_message(user_msg.to_row())
-    ai_msg = ChatMessage(conversation_id=conv_id, role="assistant",
-                         content=result["answer"], sources=sources)
+    ai_msg = ChatMessage(
+        conversation_id=conv_id,
+        role="assistant",
+        content=result["answer"],
+        sources=sources,
+        source_graph=result.get("source_graph", {"nodes": [], "edges": []}),
+    )
     container.db.insert_message(ai_msg.to_row())
-    return {"conversation_id": conv_id, "answer": result["answer"], "sources": sources}
+    return {
+        "conversation_id": conv_id,
+        "answer": result["answer"],
+        "sources": sources,
+        "source_graph": result.get("source_graph", {"nodes": [], "edges": []}),
+    }
 
 
 def _normalize_sources(sources: list[dict]) -> list[dict]:
@@ -483,3 +582,30 @@ def delete_job(job_id: str):
     if not success:
         raise HTTPException(400, "只能删除已完成/失败的任务")
     return {"message": "任务已删除"}
+
+
+# ---- Phase 3: Query DSL ----
+
+query_router = APIRouter(prefix="/query", tags=["query"], dependencies=[Depends(_check_auth)])
+
+
+@query_router.post("")
+def execute_structured_query(data: QueryDSLReq, container: AppContainer = Depends(get_container)):
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_executor import QueryExecutor
+
+    dsl = data.model_dump(exclude_none=True)
+    spec = QuerySpec.from_json(dsl)
+    executor = QueryExecutor(db=container.db)
+    results = executor.execute(spec)
+    return {"results": results, "total": len(results)}
+
+
+@query_router.post("/explain")
+def explain_structured_query(data: QueryDSLReq, container: AppContainer = Depends(get_container)):
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_explainer import QueryExplainer
+
+    spec = QuerySpec.from_json(data.model_dump(exclude_none=True))
+    explainer = QueryExplainer()
+    return explainer.explain(spec)

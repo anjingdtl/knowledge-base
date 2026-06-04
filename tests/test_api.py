@@ -218,3 +218,141 @@ class TestChatSourceContract:
         assert source["block_id"] == "block-1"
         assert source["snippet"] == "source snippet"
         assert source["score"] == 0.75
+
+    def test_chat_ask_returns_and_persists_source_graph(self, api_client):
+        import json
+
+        graph = {
+            "nodes": [{"id": "block-1", "type": "block", "label": "Hit block"}],
+            "edges": [{"source": "page-1", "target": "block-1", "type": "contains"}],
+        }
+
+        class StubRag:
+            def query(self, question):
+                return {
+                    "answer": "answer",
+                    "sources": [],
+                    "source_graph": graph,
+                }
+
+        api_client.app.state.container._rag_pipeline = StubRag()
+        resp = api_client.post("/api/chat/ask", json={"question": "question"})
+
+        assert resp.status_code == 200
+        assert resp.json()["source_graph"] == graph
+
+        conv_id = resp.json()["conversation_id"]
+        messages = api_client.get(f"/api/chat/conversations/{conv_id}/messages").json()["messages"]
+        assistant_msg = next(msg for msg in messages if msg["role"] == "assistant")
+        assert json.loads(assistant_msg["source_graph"]) == graph
+
+
+class TestPhase2GraphAPI:
+    def test_unified_graph_endpoint_returns_nodes_and_edges(self, api_client):
+        from src.services.db import Database
+        Database.insert_knowledge({
+            "id": "api-page-1",
+            "title": "API Page",
+            "content": "content",
+            "source_type": "manual",
+            "source_path": "",
+            "file_type": "txt",
+            "file_size": 0,
+            "content_hash": "",
+            "file_created_at": "",
+            "file_modified_at": "",
+            "tags": '["bug"]',
+            "version": 1,
+            "created_at": "2026-06-04",
+            "updated_at": "2026-06-04",
+        })
+
+        resp = api_client.get("/api/graph/unified?include_blocks=false&include_tags=true")
+
+        assert resp.status_code == 200
+        ids = {node["id"] for node in resp.json()["nodes"]}
+        assert "page:api-page-1" in ids
+        assert "tag:bug" in ids
+
+    def test_tag_relation_and_property_schema_endpoints(self, api_client):
+        tag_resp = api_client.post("/api/tags/relations", json={"parent_tag": "frontend", "child_tag": "bug"})
+        assert tag_resp.status_code == 200
+        assert api_client.get("/api/tags/hierarchy/frontend").json()["descendants"] == ["bug"]
+
+        schema_resp = api_client.post("/api/properties/schemas", json={
+            "scope_type": "tag",
+            "scope_id": "bug",
+            "property_name": "status",
+            "property_type": "text",
+            "choices": ["open", "closed"],
+        })
+        assert schema_resp.status_code == 200
+        schemas = api_client.get("/api/properties/schemas?scope_type=tag&scope_id=bug").json()["schemas"]
+        assert schemas[0]["property_name"] == "status"
+
+
+class TestPhase3QueryAPI:
+    def test_structured_query_endpoint(self, api_client):
+        from src.services.db import Database
+        Database.insert_knowledge({
+            "id": "pq1",
+            "title": "Query Page",
+            "content": "content",
+            "source_type": "manual",
+            "source_path": "",
+            "file_type": "txt",
+            "file_size": 0,
+            "content_hash": "",
+            "file_created_at": "",
+            "file_modified_at": "",
+            "tags": '["query-test"]',
+            "version": 1,
+            "created_at": "2026-06-04",
+            "updated_at": "2026-06-04",
+        })
+
+        resp = api_client.post("/api/query", json={
+            "filter": {"tag": "query-test"},
+            "limit": 10,
+        })
+        assert resp.status_code == 200
+        results = resp.json()["results"]
+        assert any(r["id"] == "pq1" for r in results)
+
+    def test_explain_query_endpoint(self, api_client):
+        resp = api_client.post("/api/query/explain", json={
+            "filter": {"and": [{"tag": "bug"}, {"property": {"key": "status", "op": "eq", "value": "open"}}]},
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "summary" in data
+        assert "plan" in data
+        assert "condition_tree" in data
+
+    def test_graph_traverse_endpoint(self, api_client):
+        from src.services.db import Database
+        Database.insert_knowledge({
+            "id": "gtp1",
+            "title": "Traverse Start",
+            "content": "",
+            "source_type": "manual",
+            "source_path": "",
+            "file_type": "txt",
+            "file_size": 0,
+            "content_hash": "",
+            "file_created_at": "",
+            "file_modified_at": "",
+            "tags": "[]",
+            "version": 1,
+            "created_at": "2026-06-04",
+            "updated_at": "2026-06-04",
+        })
+
+        resp = api_client.post("/api/graph/traverse", json={
+            "start_ids": ["gtp1"],
+            "start_type": "knowledge",
+            "max_depth": 1,
+        })
+        assert resp.status_code == 200
+        assert "nodes" in resp.json()
+        assert "edges" in resp.json()

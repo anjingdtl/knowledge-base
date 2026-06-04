@@ -559,3 +559,12 @@ def test_search_service_accepts_query_spec():
     spec = QuerySpec.from_json({"filter": {"tag": "search-test"}})
     results = service.search("search-test", top_k=5, query_spec=spec)
     assert isinstance(results, list)
+
+
+def test_mcp_structured_query_tool_exists():
+    import asyncio
+    from src.mcp_server import mcp
+    tool_names = [t.name for t in asyncio.run(mcp.list_tools())]
+    assert "structured_query" in tool_names
+    assert "explain_query" in tool_names
+    assert "graph_traverse" in tool_names

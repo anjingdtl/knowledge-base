@@ -9,7 +9,10 @@ from src.services.db import Database
 from src.utils.config import Config
 from src.core.container import create_container, shutdown_container
 from src.version import APP_NAME, VERSION
-from src.api.routes import auth_router, kb_router, chat_router, wiki_router, jobs_router, refs_router
+from src.api.routes import (
+    auth_router, kb_router, chat_router, wiki_router, jobs_router, refs_router,
+    graph_router, tags_router, properties_router, query_router,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +65,10 @@ def create_app() -> FastAPI:
     app.include_router(chat_router, prefix="/api")
     app.include_router(wiki_router, prefix="/api")
     app.include_router(jobs_router, prefix="/api")
+    app.include_router(graph_router, prefix="/api")
+    app.include_router(tags_router, prefix="/api")
+    app.include_router(properties_router, prefix="/api")
+    app.include_router(query_router, prefix="/api")
 
     @app.get("/api/health")
     def health():

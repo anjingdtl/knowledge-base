@@ -423,7 +423,8 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
         pass
 
     results = []
-    db = _get_container().db
+    container = _get_container()
+    db = container.db
     for parsed in parsed_list:
         content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
         existing = db.get_knowledge_by_hash(content_hash)
@@ -436,9 +437,10 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
             })
             continue
 
+        blocks = parsed.structured if parsed.structured else parsed.content
         item_id = container.file_graph_service.create_page(
             parsed.title,
-            parsed.content,
+            blocks,
             tags=tags,
             metadata={
                 "source_type": "file",
@@ -497,9 +499,10 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
             "message": "网页内容已存在，跳过导入",
         }
 
+    blocks = parsed.structured if parsed.structured else parsed.content
     item_id = container.file_graph_service.create_page(
         parsed.title,
-        parsed.content,
+        blocks,
         tags=tags,
         metadata={"source_type": "web", "source_path": parsed.source_path, "file_type": parsed.file_type},
     )
@@ -641,6 +644,72 @@ def cancel_async_job(job_id: str) -> dict:
     from src.services.async_task import AsyncTaskService
     success = AsyncTaskService.cancel_job(job_id)
     return {"success": success, "message": "任务已取消" if success else "无法取消"}
+
+
+@mcp.tool()
+def structured_query(query_dsl: str, limit: int = 100) -> str:
+    """Execute a structured JSON DSL query against the knowledge base.
+
+    The DSL supports tag, property, fulltext, link, file_type, source_type filters
+    combined with and/or/not groups.
+
+    Args:
+        query_dsl: JSON string with the query DSL
+        limit: Maximum results to return
+    """
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_executor import QueryExecutor
+
+    container = _get_container()
+    try:
+        dsl = json.loads(query_dsl) if isinstance(query_dsl, str) else query_dsl
+        spec = QuerySpec.from_json(dsl)
+        spec.limit = min(spec.limit, limit)
+        executor = QueryExecutor(db=container.db)
+        results = executor.execute(spec)
+        return json.dumps(results, ensure_ascii=False, default=str)
+    except Exception as e:
+        return json.dumps({"error": str(e)}, ensure_ascii=False)
+
+
+@mcp.tool()
+def explain_query(query_dsl: str) -> str:
+    """Explain a structured query: show human-readable summary, execution plan, and condition tree.
+
+    Args:
+        query_dsl: JSON string with the query DSL
+    """
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_explainer import QueryExplainer
+
+    try:
+        dsl = json.loads(query_dsl) if isinstance(query_dsl, str) else query_dsl
+        spec = QuerySpec.from_json(dsl)
+        explainer = QueryExplainer()
+        return json.dumps(explainer.explain(spec), ensure_ascii=False, default=str)
+    except Exception as e:
+        return json.dumps({"error": str(e)}, ensure_ascii=False)
+
+
+@mcp.tool()
+def graph_traverse(start_ids: str, max_depth: int = 2, start_type: str = "knowledge") -> str:
+    """Traverse the knowledge graph starting from given page/block IDs.
+
+    Args:
+        start_ids: JSON array of starting node IDs (e.g. '["page-id-1", "page-id-2"]')
+        max_depth: Maximum traversal depth
+        start_type: Type of start nodes (knowledge or block)
+    """
+    from src.services.graph_traversal import GraphTraversalService
+
+    container = _get_container()
+    try:
+        ids = json.loads(start_ids) if isinstance(start_ids, str) else start_ids
+        service = GraphTraversalService(db=container.db)
+        result = service.traverse(start_ids=ids, start_type=start_type, max_depth=max_depth)
+        return json.dumps(result, ensure_ascii=False, default=str)
+    except Exception as e:
+        return json.dumps({"error": str(e)}, ensure_ascii=False)
 
 
 # ---- Resources ----
