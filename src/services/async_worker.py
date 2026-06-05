@@ -179,9 +179,9 @@ class AsyncWorker:
 
 
 # 全局 Worker 实例访问函数
-def get_worker() -> AsyncWorker:
+def get_worker(poll_interval: float = 1.0, max_workers: int = 2) -> AsyncWorker:
     """获取���局 Worker 实例"""
-    return AsyncWorker.get_instance()
+    return AsyncWorker.get_instance(poll_interval, max_workers)
 
 
 def start_worker(poll_interval: float = 1.0, max_workers: int = 2):

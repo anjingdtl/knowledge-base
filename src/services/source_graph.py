@@ -78,6 +78,16 @@ def build_source_graph(
         for r in rows:
             block_cache[r["id"]] = {"id": r["id"], "page_id": r["page_id"], "content": r["content"]}
 
+    # Explicit block_id inputs may not carry knowledge_id. Once blocks are loaded,
+    # fetch their owning pages so the graph can still expose page -> block provenance.
+    page_ids_from_blocks = {
+        block.get("page_id") for block in block_cache.values() if block.get("page_id")
+    }
+    missing_page_ids = page_ids_from_blocks - set(knowledge_cache.keys())
+    if missing_page_ids:
+        batch = db.get_knowledge_batch(list(missing_page_ids))
+        knowledge_cache.update(batch)
+
     ancestor_ids = set()
     for bid in block_ids:
         for ancestor in db.get_block_ancestors(bid, 10):

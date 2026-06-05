@@ -70,10 +70,18 @@ async def server_lifespan(server: FastMCP):
     global _heartbeat_task, _container
     _container = create_container()
     beat()
+    from src.services import async_worker
+    async_worker.start_worker(
+        poll_interval=float(Config.get("jobs.poll_interval", 1.0) or 1.0),
+        max_workers=int(Config.get("jobs.max_workers", 2) or 2),
+    )
     _heartbeat_task = asyncio.create_task(_heartbeat_loop())
-    yield {}
-    _heartbeat_task.cancel()
-    shutdown_container(_container)
+    try:
+        yield {}
+    finally:
+        _heartbeat_task.cancel()
+        async_worker.stop_worker()
+        shutdown_container(_container)
 
 
 mcp = FastMCP(
@@ -763,26 +771,40 @@ def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = F
     except Exception as exc:
         logger.exception("ingest_file failed: %s", file_path)
         return fail(ErrorCode.INGEST_FAILED, str(exc), file_path=file_path)
-    return ok(result)
+    operation_id = result.get("operation_id")
+    if not operation_id:
+        for row in result.get("sheets", []) if isinstance(result.get("sheets"), list) else []:
+            operation_id = row.get("operation_id")
+            if operation_id:
+                break
+    return ok(result, operation_id=operation_id)
 
 
 @mcp.tool(
     description="解析网页 URL 并将其内容导入知识库。支持 HTTP/HTTPS 网页，自动提取正文文本。",
 )
 @_heartbeat
-def ingest_url(url: str, tags: list[str] | None = None) -> dict:
+def ingest_url(url: str, tags: list[str] | None = None, dry_run: bool = False) -> dict:
     """抓取网页并创建知识条目。
 
     Args:
         url: 要导入的网页 URL（HTTP 或 HTTPS）
         tags: 要附加的标签列表
+        dry_run: 设为 True 时只预览将导入的 URL，不抓取网络
     """
+    if dry_run:
+        return dry_run_preview({
+            "url": url,
+            "tags": tags or [],
+            "would_fetch": True,
+            "would_parse": True,
+        }, url=url)
     try:
         result = _do_ingest_url(url, tags)
     except Exception as exc:
         logger.exception("ingest_url failed: %s", url)
         return fail(ErrorCode.INGEST_FAILED, str(exc), url=url)
-    return ok(result)
+    return ok(result, operation_id=result.get("operation_id"))
 
 
 def _validate_file_path(file_path: str) -> str:
@@ -902,7 +924,7 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
         )
         item = db.get_knowledge(item_id) or {"title": parsed.title, "file_type": parsed.file_type}
         _try_wiki_compile(item_id)
-        _op_log("ingest", "knowledge", item_id, after={
+        log_id = _op_log("ingest", "knowledge", item_id, after={
             "title": item["title"], "file_type": item.get("file_type", parsed.file_type),
         }, metadata={"source": "file", "path": validated_path})
         results.append({
@@ -910,6 +932,7 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
             "title": item["title"],
             "file_type": item.get("file_type", parsed.file_type),
             "path": item.get("source_path", ""),
+            "operation_id": log_id,
             "message": "文件解析并索引成功",
         })
 
@@ -918,6 +941,7 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     return {
         "message": f"共导入 {len(results)} 个工作表",
         "sheets": results,
+        "operation_ids": [r["operation_id"] for r in results if r.get("operation_id")],
     }
 
 
@@ -948,7 +972,7 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
     )
     item = db.get_knowledge(item_id) or {"title": parsed.title, "file_type": parsed.file_type}
     _try_wiki_compile(item_id)
-    _op_log("ingest", "knowledge", item_id, after={
+    log_id = _op_log("ingest", "knowledge", item_id, after={
         "title": item["title"], "file_type": item.get("file_type", parsed.file_type),
     }, metadata={"source": "url", "url": url})
     return {
@@ -956,6 +980,7 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
         "title": item["title"],
         "file_type": item.get("file_type", parsed.file_type),
         "path": item.get("source_path", ""),
+        "operation_id": log_id,
         "message": "网页解析并索引成功",
     }
 
@@ -1614,6 +1639,13 @@ def get_source_graph(
         db=_get_container().db,
         max_nodes=max(1, int(max_nodes or 50)),
     )
+    return ok(
+        graph,
+        node_count=graph.get("node_count", 0),
+        edge_count=len(graph.get("edges", [])),
+        truncated=graph.get("truncated", False),
+        max_nodes=max_nodes,
+    )
 
 
 @mcp.prompt(name="kb_agent_research", description="Standard MCP-first research workflow.")
@@ -1675,13 +1707,6 @@ def kb_query_with_sources(question: str) -> str:
         "3. Call get_source_graph with ask.data.sources or their block_id values.\n"
         "4. Call read for the cited knowledge_id values, using include_blocks=true and include_embedding_preview=true when useful.\n"
         "5. Final answer must mention source titles and block_id values. If sources are weak or warnings are present, say so.\n"
-    )
-    return ok(
-        graph,
-        node_count=graph.get("node_count", 0),
-        edge_count=len(graph.get("edges", [])),
-        truncated=graph.get("truncated", False),
-        max_nodes=max_nodes,
     )
 
 

@@ -161,7 +161,30 @@ class OperationLogService:
                     "soft_deleted": True,
                 }}
 
-            if undo_op in ("restore_delete", "undo_ingest"):
+            if undo_op == "undo_ingest":
+                # 导入的反向操作是软删导入产生的条目。
+                ok_flag = self._knowledge_repo.soft_delete_knowledge(target_id) \
+                    if hasattr(self._knowledge_repo, "soft_delete_knowledge") \
+                    else self._knowledge_repo.delete(target_id, hard=False)
+                if ok_flag is False:
+                    return {"ok": False, "error": {
+                        "code": "PRECONDITION_FAILED",
+                        "message": f"条目 {target_id} 已删除或不存在，无法撤销导入",
+                    }}
+                new_log_id = self.log(
+                    "undo_ingest", "knowledge", target_id, operator=operator,
+                    before=after_snapshot or {},
+                    metadata={"undone_log_id": log_id, "original_operation": op,
+                              "soft_deleted": True},
+                )
+                return {"ok": True, "data": {
+                    "undone_log_id": new_log_id,
+                    "operation": "undo_ingest",
+                    "target_id": target_id,
+                    "soft_deleted": True,
+                }}
+
+            if undo_op == "restore_delete":
                 # 软删 → 恢复（清除 deleted_at）
                 if not self._knowledge_repo.restore(target_id):
                     # 可能条目已被硬删或从未软删

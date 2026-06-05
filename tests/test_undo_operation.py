@@ -238,10 +238,9 @@ class TestOperationLogUndo:
         # 恢复后能 get 到
         assert repo.get(kid) is not None
 
-    def test_undo_ingest_restores(self):
+    def test_undo_ingest_soft_deletes_imported_item(self):
         kid = insert_test_knowledge(title="undo-ingest", content="c")
         repo = KnowledgeRepository()
-        repo.delete(kid)
         svc = _container_with_repo()
 
         log_id = svc.log("ingest", "knowledge", kid,
@@ -249,7 +248,10 @@ class TestOperationLogUndo:
 
         result = svc.undo(log_id)
         assert result["ok"] is True
-        assert repo.get(kid) is not None
+        assert result["data"]["operation"] == "undo_ingest"
+        assert result["data"]["soft_deleted"] is True
+        assert repo.get(kid) is None
+        assert repo.get(kid, include_deleted=True) is not None
 
     def test_undo_unknown_operation_returns_error(self):
         svc = _container_with_repo()

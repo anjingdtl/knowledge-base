@@ -21,8 +21,16 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     container = create_container()
     app.state.container = container
-    yield
-    shutdown_container(container)
+    from src.services import async_worker
+    async_worker.start_worker(
+        poll_interval=float(Config.get("jobs.poll_interval", 1.0) or 1.0),
+        max_workers=int(Config.get("jobs.max_workers", 2) or 2),
+    )
+    try:
+        yield
+    finally:
+        async_worker.stop_worker()
+        shutdown_container(container)
 
 
 def create_app() -> FastAPI:
