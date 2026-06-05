@@ -4,6 +4,7 @@ import os
 import pytest
 
 from src.services.file_parser import parse_file
+from src.services.file_parser import _remove_pdf_watermarks
 
 
 class TestTextParser:
@@ -48,3 +49,36 @@ class TestTextParser:
         result = results[0]
         assert result.file_type == "code"
         assert "key" in result.content
+
+    def test_pdf_watermark_keywords_are_removed_inside_content_lines(self):
+        pages = [
+            "CONFIDENTIAL Project Alpha revenue grew 20%",
+            "CONFIDENTIAL Project Beta churn fell 5%",
+            "CONFIDENTIAL Project Gamma launched in Q3",
+        ]
+
+        cleaned = _remove_pdf_watermarks(pages)
+
+        assert all("CONFIDENTIAL" not in page for page in cleaned)
+        assert "Project Alpha revenue grew 20%" in cleaned[0]
+
+    def test_excel_structured_row_keeps_full_row_context(self, tmp_path):
+        from openpyxl import Workbook
+
+        f = tmp_path / "sales.xlsx"
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Q1"
+        ws.append(["Product", "Revenue", "Owner"])
+        ws.append(["Alpha", 100, "Team A"])
+        wb.save(f)
+        wb.close()
+
+        result = parse_file(str(f))[0]
+
+        assert result.structured
+        row = result.structured[0]
+        assert "Product=Alpha" in row.content
+        assert "Revenue=100" in row.content
+        assert "Owner=Team A" in row.content
+        assert row.children
