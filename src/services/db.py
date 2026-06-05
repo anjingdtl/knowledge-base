@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS knowledge_items (
     updated_at TIMESTAMP,
     deleted_at TEXT DEFAULT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_kb_deleted ON knowledge_items(deleted_at);
 
 CREATE TABLE IF NOT EXISTS knowledge_versions (
     id TEXT PRIMARY KEY,
@@ -441,7 +440,7 @@ class Database:
         if "deleted_at" not in cols:
             # Sprint 3 / Phase 4: 软删除列
             cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN deleted_at TEXT DEFAULT NULL")
-            cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_kb_deleted ON knowledge_items(deleted_at)")
+        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_kb_deleted ON knowledge_items(deleted_at)")
 
         msg_cols = {row[1] for row in cls._conn.execute("PRAGMA table_info(chat_messages)").fetchall()}
         if "source_graph" not in msg_cols:
