@@ -1392,6 +1392,14 @@ class Database:
         cls.get_conn().commit()
 
     @classmethod
+    def unassign_category(cls, knowledge_id: str, category_id: str):
+        cls.get_conn().execute(
+            "DELETE FROM knowledge_categories WHERE knowledge_id = ? AND category_id = ?",
+            (knowledge_id, category_id),
+        )
+        cls.get_conn().commit()
+
+    @classmethod
     def get_knowledge_by_category(cls, category_id: str) -> list[dict]:
         rows = cls.get_conn().execute(
             """SELECT ki.* FROM knowledge_items ki

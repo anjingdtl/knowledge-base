@@ -163,7 +163,7 @@ class VectorSearchStage(PipelineStage):
             return ctx
         top_k = config.get("top_k", 10)
         # 外部已显式指定 query_spec 时（如 ask_with_query）跳过自动路由
-        override_spec = ctx.metadata.get("query_spec_override")
+        override_spec = ctx.metadata.get("query_spec_override") or ctx.query_spec_override
         try:
             try:
                 from src.services.agentic_router import AgenticRouter, serialize_route
@@ -714,7 +714,11 @@ class RAGService:
         kid_map = {}
         for r in filtered:
             metadata = r.get("metadata", {})
-            kid = metadata.get("knowledge_id", "") if isinstance(metadata, dict) else r.get("knowledge_id", "")
+            kid = (
+                (metadata.get("knowledge_id") or metadata.get("page_id") or "")
+                if isinstance(metadata, dict)
+                else r.get("knowledge_id", "")
+            )
             if kid:
                 kid_map[kid] = True
         items = Database.get_knowledge_batch(list(kid_map.keys())) if kid_map else {}
@@ -729,10 +733,20 @@ class RAGService:
             else:
                 context_parts.append(f"[来源{i+1}]\n{text}")
             metadata = result.get("metadata", {})
-            kid = metadata.get("knowledge_id", "") if isinstance(metadata, dict) else result.get("knowledge_id", "")
+            kid = (
+                (metadata.get("knowledge_id") or metadata.get("page_id") or "")
+                if isinstance(metadata, dict)
+                else result.get("knowledge_id", "")
+            )
             item = items.get(kid)
             title = (metadata.get("title") if isinstance(metadata, dict) else None) or (item.get("title", "未知") if item else "未知")
+            block_id = (
+                result.get("block_id")
+                or (metadata.get("block_id") if isinstance(metadata, dict) else "")
+                or result.get("id", "")
+            )
             sources.append({
+                "block_id": block_id,
                 "chunk_id": result.get("id", ""),
                 "knowledge_id": kid,
                 "title": title,

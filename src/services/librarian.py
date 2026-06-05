@@ -676,6 +676,13 @@ class LibrarianService:
             )
             code_to_db_id[code] = cat_id
 
+        uncat_db_id = code_to_db_id.get(UNCATEGORIZED["code"])
+
+        def assign_replacing_uncategorized(item_id: str, cat_db_id: str):
+            if uncat_db_id and cat_db_id != uncat_db_id:
+                Database.unassign_category(item_id, uncat_db_id)
+            Database.assign_category(item_id, cat_db_id)
+
         # 写入条目-分类关联
         for r in results:
             code = r.get("code", "")
@@ -683,13 +690,13 @@ class LibrarianService:
                 cat_db_id = code_to_db_id.get(code)
                 if cat_db_id:
                     for item_id in r["item_ids"]:
-                        Database.assign_category(item_id, cat_db_id)
+                        assign_replacing_uncategorized(item_id, cat_db_id)
             for child in r.get("children", []):
                 child_code = child.get("code", "")
                 child_db_id = code_to_db_id.get(child_code)
                 if child_db_id:
                     for item_id in child.get("item_ids", []):
-                        Database.assign_category(item_id, child_db_id)
+                        assign_replacing_uncategorized(item_id, child_db_id)
 
     def _save_with_schema(self, results: list[dict]):
         """按预设分类结构写入数据库，保留完整分类树，同时写入动态新分类"""

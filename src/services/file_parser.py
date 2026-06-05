@@ -170,6 +170,12 @@ def _table_rows_to_blocks(
             row_props["columns"] = " | ".join(col_names)
         if sheet_name:
             row_props["sheet"] = sheet_name
+        row_parts = []
+        for col_idx, val in non_empty:
+            header = col_names[col_idx] if col_idx < len(col_names) else f"col{col_idx + 1}"
+            row_parts.append(f"{header}={val}")
+        if row_parts:
+            row_content = f"{non_empty[0][1]}: " + " | ".join(row_parts)
 
         row_block = StructuredBlock(
             content=row_content,
@@ -367,52 +373,70 @@ def _pdf_pages_to_blocks(pdf_pages) -> list["StructuredBlock"]:
     return blocks
 
 
+_PDF_WATERMARK_TOKEN_RE = None
+
+
+def _pdf_watermark_token_re():
+    global _PDF_WATERMARK_TOKEN_RE
+    if _PDF_WATERMARK_TOKEN_RE is None:
+        import re
+        keywords = [
+            "confidential", "draft", "internal", "sample",
+            "unauthorized", "proprietary",
+            "\u6c34\u5370", "\u5185\u90e8\u6587\u4ef6", "\u4ec5\u4f9b\u53c2\u8003",
+            "\u673a\u5bc6", "\u6837\u672c", "\u4e25\u7981\u590d\u5236",
+            "\u4e0d\u5f97\u5916\u4f20", "\u672a\u7ecf\u6388\u6743",
+        ]
+        _PDF_WATERMARK_TOKEN_RE = re.compile(
+            r"(?<![\w\u4e00-\u9fff])(?:"
+            + "|".join(re.escape(k) for k in keywords)
+            + r")(?![\w\u4e00-\u9fff])",
+            re.IGNORECASE,
+        )
+    return _PDF_WATERMARK_TOKEN_RE
+
+
+def _pdf_line_norm(line: str) -> str:
+    return "".join(line.strip().lower().split())
+
+
+def _pdf_repeated_watermark_norms(pages_text: list[str]) -> set[str]:
+    if len(pages_text) < 3:
+        return set()
+    counts: dict[str, int] = {}
+    for text in pages_text:
+        seen = {_pdf_line_norm(line) for line in text.split("\n") if line.strip()}
+        for norm in seen:
+            if norm:
+                counts[norm] = counts.get(norm, 0) + 1
+    threshold = len(pages_text) * 0.8
+    return {norm for norm, count in counts.items() if count >= threshold}
+
+
+def _clean_pdf_watermark_line(line: str, repeated_norms: set[str] | None = None) -> str:
+    if not line.strip():
+        return ""
+    if repeated_norms and _pdf_line_norm(line) in repeated_norms:
+        return ""
+    cleaned = _pdf_watermark_token_re().sub("", line)
+    return " ".join(cleaned.split())
+
+
 def _remove_pdf_watermarks(pages_text: list[str]) -> list[str]:
     """去除 PDF 水印文本
 
     策略：出现在 >80% 页面的相同文本行，极大概率是水印或页眉页脚。
     """
-    import re
-
-    if len(pages_text) < 3:
-        # 页数太少无法可靠判断，仅过滤常见水印关键词
-        return [_filter_watermark_keywords(t) for t in pages_text]
-
-    # 按行拆分，统计每行在多少页中出现
-    page_line_sets = []
+    repeated_norms = _pdf_repeated_watermark_norms(pages_text)
+    cleaned_pages = []
     for text in pages_text:
-        lines = set(line.strip() for line in text.split("\n") if line.strip())
-        page_line_sets.append(lines)
-
-    line_page_count: dict[str, int] = {}
-    for lines in page_line_sets:
-        for line in lines:
-            line_page_count[line] = line_page_count.get(line, 0) + 1
-
-    threshold = len(pages_text) * 0.8
-    watermark_lines = {line for line, count in line_page_count.items() if count >= threshold}
-
-    # 常见水印关键词（单行匹配）
-    _WATERMARK_KEYWORDS = re.compile(
-        r'^(?:水印|confidential|draft|internal|内部文件|仅供参考|机密|样本|sample|'
-        r'严禁复制|不得外传|未经授权|unauthorized|proprietary)$',
-        re.IGNORECASE,
-    )
-
-    # 扩充：包含水印关键词的行也视为水印
-    for line in line_page_count:
-        if _WATERMARK_KEYWORDS.match(line):
-            watermark_lines.add(line)
-
-    if not watermark_lines:
-        return pages_text
-
-    result = []
-    for text in pages_text:
-        lines = text.split("\n")
-        filtered = [line for line in lines if line.strip() not in watermark_lines]
-        result.append("\n".join(filtered))
-    return result
+        lines = []
+        for line in text.split("\n"):
+            cleaned = _clean_pdf_watermark_line(line, repeated_norms)
+            if cleaned.strip():
+                lines.append(cleaned)
+        cleaned_pages.append("\n".join(lines))
+    return cleaned_pages
 
 
 def _filter_watermark_keywords(text: str) -> str:
