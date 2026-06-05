@@ -16,8 +16,14 @@ class UnifiedGraphService:
         self._db = db or Database
 
     def build(self, include_blocks: bool = True, include_tags: bool = True,
-              page_limit: int = 500, block_limit: int | None = 1000) -> dict:
+              page_limit: int = 500, block_limit: int | None = 1000,
+              ref_limit: int | None = 10000) -> dict:
         """构建统一图谱，返回 {"nodes": [...], "edges": [...]}"""
+
+        # 防止 entity_refs 在大量数据下加载所有行拖死内存。
+        # 历史上 entity_refs 没有 LIMIT，单库数十万行时直接 OOM。
+        if ref_limit is not None and ref_limit < 0:
+            ref_limit = None
         nodes: list[dict] = []
         edges: list[dict] = []
         node_ids: set[str] = set()
@@ -115,11 +121,18 @@ class UnifiedGraphService:
                         edge_type="parent",
                     ))
 
-        # 4. 加载 entity_refs 并创建边
+        # 4. 加载 entity_refs 并创建边 — 限制最大行数避免 OOM
         conn = self._db.get_conn()
-        ref_rows = conn.execute(
-            "SELECT source_type, source_id, target_type, target_id, ref_type FROM entity_refs"
-        ).fetchall()
+        ref_sql = (
+            "SELECT source_type, source_id, target_type, target_id, ref_type "
+            "FROM entity_refs"
+        )
+        ref_params: list = []
+        if ref_limit is not None:
+            ref_sql += " LIMIT ?"
+            ref_params.append(ref_limit)
+        ref_rows = conn.execute(ref_sql, ref_params).fetchall()
+        ref_truncated = bool(ref_limit is not None and len(ref_rows) >= ref_limit)
         for row in ref_rows:
             src = self._node_id(row["source_type"], row["source_id"])
             tgt = self._node_id(row["target_type"], row["target_id"])
@@ -130,12 +143,15 @@ class UnifiedGraphService:
                     edge_type=row["ref_type"] or "mention",
                 ))
 
-        # 5. 加载 tag_relations（标签 DAG）
+        # 5. 加载 tag_relations（标签 DAG）— 同样加保护
         if include_tags:
             try:
-                tag_rel_rows = conn.execute(
-                    "SELECT parent_tag, child_tag FROM tag_relations"
-                ).fetchall()
+                tag_sql = "SELECT parent_tag, child_tag FROM tag_relations"
+                tag_params: list = []
+                if ref_limit is not None:
+                    tag_sql += " LIMIT ?"
+                    tag_params.append(ref_limit)
+                tag_rel_rows = conn.execute(tag_sql, tag_params).fetchall()
                 for row in tag_rel_rows:
                     _add_edge(UnifiedEdge(
                         source=f"tag:{row['parent_tag']}",
@@ -145,7 +161,11 @@ class UnifiedGraphService:
             except Exception:
                 pass
 
-        return {"nodes": nodes, "edges": edges}
+        return {
+            "nodes": nodes,
+            "edges": edges,
+            "ref_truncated": ref_truncated,
+        }
 
     def _node_id(self, source_type: str, source_id: str) -> Optional[str]:
         """将 source_type/source_id 转换为带前缀的节点 ID

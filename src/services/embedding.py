@@ -1,5 +1,4 @@
 """Embedding 服务 — 基于 OpenAI 兼容协议，支持任意供应商"""
-import time
 from src.utils.config import Config
 
 
@@ -68,14 +67,36 @@ class EmbeddingService:
         return result[0]
 
     def embed_batch(self, texts: list[str], batch_size: int = 20) -> list[list[float]]:
+        """批量生成 embedding。
+
+        行为细节：
+        - 内部按 ``batch_size`` 切片，**并发**调用 Embedding API（用
+          ``ThreadPoolExecutor``），最后按原顺序拼回结果。
+        - 并发度由 ``embedding.max_concurrent_batches`` 配置控制（默认 4），
+          避免打爆上游限流。
+        - 移除了原实现的 ``time.sleep(0.5)`` 串行节流 — 并发模型下不再需要。
+        - 任一 batch 失败立即抛 ``RuntimeError``，保留旧版失败语义。
+        """
         import logging
+        from concurrent.futures import ThreadPoolExecutor, as_completed
         from openai import APIError
+
+        if not texts:
+            return []
+
         client = self._get_client()
         model = self._cfg("embedding.model", "")
+        max_concurrent = max(1, int(self._cfg("embedding.max_concurrent_batches", 4) or 4))
         logger = logging.getLogger(__name__)
-        all_embeddings = []
+
+        # 把 texts 切成定长 batch，保留 batch 在原列表中的索引以便拼回结果
+        batches: list[tuple[int, list[str]]] = []
         for i in range(0, len(texts), batch_size):
-            batch = texts[i:i + batch_size]
+            batches.append((i, texts[i:i + batch_size]))
+
+        results: list[list[float] | None] = [None] * len(batches)
+
+        def _embed_one(idx: int, batch: list[str]) -> tuple[int, list[list[float]]]:
             try:
                 response = client.embeddings.create(input=batch, model=model)
             except APIError as e:
@@ -94,11 +115,24 @@ class EmbeddingService:
                 raise RuntimeError(
                     f"Unexpected error during embedding (model={model}, batch_size={len(batch)}): {e}"
                 ) from e
-            for item in response.data:
-                all_embeddings.append(item.embedding)
-            if i + batch_size < len(texts):
-                time.sleep(0.5)
-        return all_embeddings
+            return idx, [item.embedding for item in response.data]
+
+        # 小批量（单 batch 就能装下）直接同步走，避免线程开销
+        if len(batches) == 1:
+            _, embs = _embed_one(0, batches[0][1])
+            return embs
+
+        with ThreadPoolExecutor(max_workers=min(max_concurrent, len(batches))) as pool:
+            futures = [pool.submit(_embed_one, idx, batch) for idx, batch in batches]
+            for fut in as_completed(futures):
+                idx, embs = fut.result()
+                results[idx] = embs
+
+        # 按原 batch 顺序拼成扁平结果（任一 batch 失败会在上面抛出，不会到这里）
+        flat: list[list[float]] = []
+        for embs in results:
+            flat.extend(embs)
+        return flat
 
     def embed_batch_with_cache(self, texts: list[str], batch_size: int = 20) -> list[list[float]]:
         """批量生成 embedding，带 SQLite 缓存"""

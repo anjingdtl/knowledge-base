@@ -40,9 +40,18 @@ class FileGraphService:
     def export_db_to_graph(self, dry_run: bool = True, backup: bool = True) -> dict:
         root = self.ensure_graph()
         items = self._db.list_knowledge(limit=100000)
+        # 一次性批量加载所有 knowledge 的 chunks — 替代逐条 get_chunks_by_knowledge
+        # 触发的 N+1（曾经 100 条 = 101 次 SQL，导出 1k 条时秒级变分钟级）。
+        knowledge_ids = [it["id"] for it in items]
+        chunks_by_kid = (
+            self._db.get_chunks_by_knowledge_batch(knowledge_ids)
+            if knowledge_ids and hasattr(self._db, "get_chunks_by_knowledge_batch")
+            else {}
+        )
+
         planned = []
         for item in items:
-            page = self._page_from_item(item)
+            page = self._page_from_item(item, chunks=chunks_by_kid.get(item["id"]))
             path = self._page_path(page.title, page.id)
             planned.append({"id": page.id, "title": page.title, "path": str(path)})
             if not dry_run:
@@ -341,7 +350,7 @@ class FileGraphService:
         walk(page.blocks, 0)
         return "\n".join(lines)
 
-    def _page_from_item(self, item: dict) -> PageDocument:
+    def _page_from_item(self, item: dict, chunks: list[dict] | None = None) -> PageDocument:
         tags_raw = item.get("tags", "[]")
         if isinstance(tags_raw, str):
             try:
@@ -350,7 +359,9 @@ class FileGraphService:
                 tags = []
         else:
             tags = tags_raw or []
-        chunks = self._db.get_chunks_by_knowledge(item["id"])
+        if chunks is None:
+            # 兼容老调用方：单独查询这条 item 的 chunks
+            chunks = self._db.get_chunks_by_knowledge(item["id"])
         blocks = [OutlineBlock(id=c["id"], content=c.get("chunk_text", "")) for c in chunks]
         if not blocks:
             blocks = [OutlineBlock(content=line.strip()) for line in item.get("content", "").splitlines() if line.strip()]

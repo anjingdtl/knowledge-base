@@ -88,9 +88,16 @@ def build_source_graph(
         batch = db.get_knowledge_batch(list(missing_page_ids))
         knowledge_cache.update(batch)
 
+    # 一次性批量回溯所有 block 的祖先链 — 替代之前两次循环里反复调用
+    # get_block_ancestors 触发的 N+1 查询（曾经是 knowledge 量大时主要的
+    # 卡顿源头之一）。
+    ancestors_by_block: dict[str, list[dict]] = {}
+    if block_ids and hasattr(db, "get_block_ancestors_batch"):
+        ancestors_by_block = db.get_block_ancestors_batch(list(block_ids), max_depth=10)
+
     ancestor_ids = set()
-    for bid in block_ids:
-        for ancestor in db.get_block_ancestors(bid, 10):
+    for ancestors in ancestors_by_block.values():
+        for ancestor in ancestors:
             ancestor_ids.add(ancestor["id"])
             block_cache.setdefault(ancestor["id"], {
                 "id": ancestor["id"],
@@ -161,8 +168,9 @@ def build_source_graph(
                     if item:
                         add_node(block["page_id"], "knowledge", item.get("title", block["page_id"]))
                         add_edge(block["page_id"], block_id, "contains")
+                # 直接复用前面批量查到的祖先链 — 避免再次触发 N+1。
                 current_id = block_id
-                for ancestor in db.get_block_ancestors(block_id, 10):
+                for ancestor in ancestors_by_block.get(block_id, []):
                     a_block = block_cache.get(ancestor["id"])
                     a_content = (a_block.get("content") if a_block else ancestor.get("content")) or ancestor["id"]
                     add_node(
