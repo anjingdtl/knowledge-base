@@ -811,6 +811,8 @@ class Database:
             )
             conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
             conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_graph_relations WHERE source_knowledge_id = ? OR target_knowledge_id = ?", (item_id, item_id))
+            conn.execute("DELETE FROM knowledge_graph_nodes WHERE knowledge_id = ?", (item_id,))
             conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
             conn.commit()
 
@@ -844,6 +846,8 @@ class Database:
             )
             conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
             conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
+            conn.execute("DELETE FROM knowledge_graph_relations WHERE source_knowledge_id = ? OR target_knowledge_id = ?", (item_id, item_id))
+            conn.execute("DELETE FROM knowledge_graph_nodes WHERE knowledge_id = ?", (item_id,))
             conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
             conn.commit()
             return True
@@ -1885,7 +1889,7 @@ class Database:
             """SELECT n.*, ki.title as knowledge_title, ki.file_type, ki.tags
                FROM knowledge_graph_nodes n
                JOIN knowledge_items ki ON ki.id = n.knowledge_id
-               WHERE n.graph_id = ?""",
+               WHERE n.graph_id = ? AND ki.deleted_at IS NULL""",
             (graph_id,),
         ).fetchall()
         return [dict(r) for r in rows]
@@ -1950,7 +1954,10 @@ class Database:
     @classmethod
     def get_graph_relations(cls, graph_id: str) -> list[dict]:
         rows = cls.get_conn().execute(
-            "SELECT * FROM knowledge_graph_relations WHERE graph_id = ?",
+            """SELECT r.* FROM knowledge_graph_relations r
+               JOIN knowledge_items ks ON ks.id = r.source_knowledge_id
+               JOIN knowledge_items kt ON kt.id = r.target_knowledge_id
+               WHERE r.graph_id = ? AND ks.deleted_at IS NULL AND kt.deleted_at IS NULL""",
             (graph_id,),
         ).fetchall()
         return [dict(r) for r in rows]
