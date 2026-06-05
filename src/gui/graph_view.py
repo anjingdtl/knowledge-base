@@ -137,67 +137,123 @@ def _layout_iterations_for_node_count(node_count: int) -> int:
     return max(30, 200 - node_count)
 
 
+def _compute_force_layout(
+    initial_positions: dict[int, tuple[float, float, bool]],
+    edge_pairs: list[tuple[int, int]],
+    iterations: int = _MAX_ITERATIONS,
+) -> dict[int, tuple[float, float]]:
+    """纯计算的力导向布局 — 输入/输出均为原生类型，可在线程中安全运行。
+
+    Args:
+        initial_positions: {node_key: (x, y, is_pinned)}，缺失坐标会被随机初始化。
+        edge_pairs: [(source_key, target_key), ...] 边连接的两端节点 key。
+        iterations: 最大迭代次数。
+
+    Returns:
+        {node_key: (final_x, final_y)}，is_pinned 节点坐标保持原值不动。
+    """
+    if not initial_positions:
+        return {}
+
+    positions: dict[int, list[float]] = {}
+    for key, (x, y, is_pinned) in initial_positions.items():
+        if is_pinned:
+            positions[key] = [x, y]
+        elif x == 0 and y == 0:
+            positions[key] = [random.uniform(-200, 200), random.uniform(-200, 200)]
+        else:
+            positions[key] = [x, y]
+
+    pinned_keys = {k for k, (_, _, p) in initial_positions.items() if p}
+    keys = list(positions.keys())
+    velocities: dict[int, list[float]] = {k: [0.0, 0.0] for k in keys}
+
+    for _ in range(iterations):
+        forces: dict[int, list[float]] = {k: [0.0, 0.0] for k in keys}
+
+        # 节点两两斥力 — O(n²) 纯数值运算，线程内安全
+        for i, k1 in enumerate(keys):
+            x1, y1 = positions[k1]
+            for k2 in keys[i + 1:]:
+                x2, y2 = positions[k2]
+                dx = x1 - x2
+                dy = y1 - y2
+                dist = max(math.sqrt(dx * dx + dy * dy), 1.0)
+                force = _REPULSION / (dist * dist)
+                fx = force * dx / dist
+                fy = force * dy / dist
+                forces[k1][0] += fx
+                forces[k1][1] += fy
+                forces[k2][0] -= fx
+                forces[k2][1] -= fy
+
+        # 边弹簧力
+        for src, tgt in edge_pairs:
+            if src not in positions or tgt not in positions:
+                continue
+            dx = positions[tgt][0] - positions[src][0]
+            dy = positions[tgt][1] - positions[src][1]
+            dist = max(math.sqrt(dx * dx + dy * dy), 1.0)
+            force = _SPRING_K * (dist - _SPRING_LEN)
+            fx = force * dx / dist
+            fy = force * dy / dist
+            forces[src][0] += fx
+            forces[src][1] += fy
+            forces[tgt][0] -= fx
+            forces[tgt][1] -= fy
+
+        # 中心引力
+        for k in keys:
+            forces[k][0] -= _CENTER_K * positions[k][0]
+            forces[k][1] -= _CENTER_K * positions[k][1]
+
+        max_movement = 0.0
+        for k in keys:
+            if k in pinned_keys:
+                continue
+            velocities[k][0] = (velocities[k][0] + forces[k][0]) * _DAMPING
+            velocities[k][1] = (velocities[k][1] + forces[k][1]) * _DAMPING
+            positions[k][0] += velocities[k][0]
+            positions[k][1] += velocities[k][1]
+            movement = abs(velocities[k][0]) + abs(velocities[k][1])
+            if movement > max_movement:
+                max_movement = movement
+
+        if max_movement < 0.5:
+            break
+
+    return {k: (v[0], v[1]) for k, v in positions.items()}
+
+
 def apply_force_layout(
     nodes: list[GraphNodeItem],
     edges: list[GraphEdgeItem],
     iterations: int = _MAX_ITERATIONS,
 ) -> None:
-    """弹簧-斥力-中心引力模型，原地更新节点位置。"""
+    """弹簧-斥力-中心引力模型，原地更新节点位置。
+
+    注意：此函数仍在主线程执行。当节点数 < _LARGE_GRAPH_LAYOUT_NODE_LIMIT 时
+    调用 _compute_force_layout 阻塞运行；超过阈值时跳过布局（返回前不更新位置）。
+    大图布局请改用 ``_ForceLayoutWorker`` 后台计算，避免 UI 冻结。
+    """
     if not nodes:
         return
 
+    if len(nodes) >= _LARGE_GRAPH_LAYOUT_NODE_LIMIT:
+        return
+
+    initial: dict[int, tuple[float, float, bool]] = {}
     for n in nodes:
-        if n.pos().x() == 0 and n.pos().y() == 0:
-            n.setPos(random.uniform(-200, 200), random.uniform(-200, 200))
+        initial[id(n)] = (n.pos().x(), n.pos().y(), n.is_pinned)
 
-    velocities: dict[int, list[float]] = {id(n): [0.0, 0.0] for n in nodes}
+    edge_pairs = [(id(e.source_node), id(e.target_node)) for e in edges]
 
-    for _ in range(iterations):
-        forces: dict[int, list[float]] = {id(n): [0.0, 0.0] for n in nodes}
+    final_positions = _compute_force_layout(initial, edge_pairs, iterations)
 
-        for i, n1 in enumerate(nodes):
-            for n2 in nodes[i + 1:]:
-                dx = n1.pos().x() - n2.pos().x()
-                dy = n1.pos().y() - n2.pos().y()
-                dist = max(math.sqrt(dx * dx + dy * dy), 1.0)
-                force = _REPULSION / (dist * dist)
-                fx = force * dx / dist
-                fy = force * dy / dist
-                forces[id(n1)][0] += fx
-                forces[id(n1)][1] += fy
-                forces[id(n2)][0] -= fx
-                forces[id(n2)][1] -= fy
-
-        for e in edges:
-            n1, n2 = e.source_node, e.target_node
-            dx = n2.pos().x() - n1.pos().x()
-            dy = n2.pos().y() - n1.pos().y()
-            dist = max(math.sqrt(dx * dx + dy * dy), 1.0)
-            force = _SPRING_K * (dist - _SPRING_LEN)
-            fx = force * dx / dist
-            fy = force * dy / dist
-            forces[id(n1)][0] += fx
-            forces[id(n1)][1] += fy
-            forces[id(n2)][0] -= fx
-            forces[id(n2)][1] -= fy
-
-        for n in nodes:
-            forces[id(n)][0] -= _CENTER_K * n.pos().x()
-            forces[id(n)][1] -= _CENTER_K * n.pos().y()
-
-        max_movement = 0.0
-        for n in nodes:
-            if n.is_pinned:
-                continue
-            vid = id(n)
-            velocities[vid][0] = (velocities[vid][0] + forces[vid][0]) * _DAMPING
-            velocities[vid][1] = (velocities[vid][1] + forces[vid][1]) * _DAMPING
-            n.moveBy(velocities[vid][0], velocities[vid][1])
-            movement = abs(velocities[vid][0]) + abs(velocities[vid][1])
-            max_movement = max(max_movement, movement)
-
-        if max_movement < 0.5:
-            break
+    for n in nodes:
+        pos = final_positions.get(id(n))
+        if pos is not None:
+            n.setPos(pos[0], pos[1])
 
     # Batch-write final positions to DB in a single transaction.
     positions = [(n.pos().x(), n.pos().y(), n.node_id) for n in nodes]
@@ -647,12 +703,60 @@ class GraphScene(QGraphicsScene):
             self.addItem(edge)
             self._edges.append(edge)
 
-        # 初始布局
+        # 初始布局 — 节点位置全为 0 时执行一次力导向计算。
+        # 大图（>= 1000 节点）跳过；中图改在 _ForceLayoutWorker 后台线程跑，
+        # 避免主线程 O(n²) 阻塞导致 UI 冻结。
         all_zero = all(n.pos().x() == 0 and n.pos().y() == 0 for n in self._nodes)
         if all_zero and self._nodes:
             self._circular_layout()
-            iters = max(30, 200 - len(self._nodes))
-            apply_force_layout(self._nodes, self._edges, iterations=iters)
+            if len(self._nodes) < _LARGE_GRAPH_LAYOUT_NODE_LIMIT:
+                self._run_force_layout_async()
+
+    def _run_force_layout_async(self) -> None:
+        """在后台线程执行力导向布局，完成后由 _on_layout_finished 回到主线程应用结果。"""
+        if not self._nodes:
+            return
+        # 主线程采集数据 — QGraphicsItem 只能在主线程访问
+        initial: dict[str, tuple[float, float, bool]] = {}
+        for n in self._nodes:
+            initial[n.node_id] = (n.pos().x(), n.pos().y(), n.is_pinned)
+        edge_pairs = [
+            (e.source_node.node_id, e.target_node.node_id)
+            for e in self._edges
+            if e.source_node.node_id in initial and e.target_node.node_id in initial
+        ]
+        iters = max(30, _MAX_ITERATIONS - len(self._nodes))
+
+        # 取消并清理旧 worker
+        if self._layout_worker is not None and self._layout_worker.isRunning():
+            self._layout_worker.quit()
+            self._layout_worker.wait(2000)
+
+        self._layout_worker = _ForceLayoutWorker(initial, edge_pairs, iters)
+        self._layout_worker.finished_with_positions.connect(self._on_layout_finished)
+        self._layout_worker.start()
+
+    def _on_layout_finished(self, positions: list) -> None:
+        """主线程应用后台线程算出的布局结果。"""
+        node_by_id = {n.node_id: n for n in self._nodes}
+        for node_id, x, y, is_pinned in positions:
+            node = node_by_id.get(node_id)
+            if node is None or is_pinned:
+                continue
+            node.setPos(x, y)
+
+        # 持久化到 DB（单次批量写）
+        rows = [(n.pos().x(), n.pos().y(), n.node_id) for n in self._nodes]
+        try:
+            Database.batch_update_node_positions(rows)
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning("Persist layout positions failed: %s", exc)
+
+        # 释放 worker 引用
+        if self._layout_worker is not None:
+            self._layout_worker.deleteLater()
+            self._layout_worker = None
 
     def clear_graph(self) -> None:
         self.clear()
@@ -945,6 +1049,7 @@ class GraphView(QWidget):
         super().__init__()
         self._llm_indicator = llm_indicator
         self._worker = None
+        self._layout_worker = None
         self._current_graph_id: str | None = None
         self._graph_mode = "legacy"
 
@@ -1475,3 +1580,40 @@ class _RegenerateWorker(QThread):
             self.done.emit()
         except Exception as e:
             self.error.emit(str(e))
+
+
+class _ForceLayoutWorker(QThread):
+    """后台线程执行力导向布局 — 避免主线程 O(n²) 阻塞导致 UI 冻结。
+
+    输入/输出均为原生 Python 类型（QGraphicsItem 仅在主线程创建/修改，
+    跨线程访问会触发 Qt 警告甚至段错误），通过 ``finished_with_positions``
+    信号把最终坐标发回主线程统一应用。
+    """
+    # 发出 [(node_id, x, y, is_pinned), ...]
+    finished_with_positions = Signal(list)
+
+    def __init__(
+        self,
+        initial_positions: dict[str, tuple[float, float, bool]],
+        edge_pairs: list[tuple[str, str]],
+        iterations: int,
+    ):
+        super().__init__()
+        # key 统一是 node_id 字符串（避开 Python id() 回收问题）
+        self._initial = initial_positions
+        self._edge_pairs = edge_pairs
+        self._iterations = iterations
+
+    def run(self) -> None:
+        try:
+            final = _compute_force_layout(self._initial, self._edge_pairs, self._iterations)
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning("Force layout worker failed: %s", exc)
+            final = {}
+
+        result = []
+        for node_id, (x, y, is_pinned) in self._initial.items():
+            fx, fy = final.get(node_id, (x, y))
+            result.append((node_id, fx, fy, is_pinned))
+        self.finished_with_positions.emit(result)

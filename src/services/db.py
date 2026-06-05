@@ -412,10 +412,14 @@ class Database:
     def connect(cls, db_path: str | Path | None = None):
         if db_path is None:
             db_path = Config.get_db_path()
-        cls._conn = sqlite3.connect(str(db_path), check_same_thread=False)
+        cls._conn = sqlite3.connect(str(db_path), check_same_thread=False, timeout=30.0)
         cls._conn.row_factory = sqlite3.Row
         cls._conn.execute("PRAGMA foreign_keys = ON")
         cls._conn.execute("PRAGMA journal_mode = WAL")
+        # busy_timeout: 在 WAL 模式下并发写锁默认只等 5 秒，导致 GUI 主线程
+        # 与 AsyncWorker 线程同时写数据库时随机抛 "database is locked" 闪退。
+        # 30 秒与连接 timeout 保持一致，并让 GUI 有机会重试。
+        cls._conn.execute("PRAGMA busy_timeout = 30000")
         cls._conn.executescript(_SCHEMA)
         cls._migrate()
         cls._conn.commit()
@@ -1061,6 +1065,28 @@ class Database:
         return [dict(r) for r in rows]
 
     @classmethod
+    def get_chunks_by_knowledge_batch(
+        cls, knowledge_ids: list[str]
+    ) -> dict[str, list[dict]]:
+        """批量查询多个 knowledge_id 的 chunks — 单次 SQL 替代 N+1。
+
+        返回 ``{knowledge_id: [chunk, ...]}``，按 ``chunk_index`` 升序排列。
+        """
+        if not knowledge_ids:
+            return {}
+        placeholders = ",".join("?" for _ in knowledge_ids)
+        rows = cls.get_conn().execute(
+            f"""SELECT * FROM knowledge_chunks
+                WHERE knowledge_id IN ({placeholders})
+                ORDER BY knowledge_id, chunk_index""",
+            list(knowledge_ids),
+        ).fetchall()
+        result: dict[str, list[dict]] = {kid: [] for kid in knowledge_ids}
+        for r in rows:
+            result.setdefault(r["knowledge_id"], []).append(dict(r))
+        return result
+
+    @classmethod
     def get_chunk(cls, chunk_id: str) -> Optional[dict]:
         row = cls.get_conn().execute("SELECT * FROM knowledge_chunks WHERE id = ?", (chunk_id,)).fetchone()
         return dict(row) if row else None
@@ -1191,6 +1217,58 @@ class Database:
             else:
                 break
         return ancestors
+
+    @classmethod
+    def get_block_ancestors_batch(
+        cls, block_ids: list[str], max_depth: int = 3
+    ) -> dict[str, list[dict]]:
+        """批量回溯多个 Block 的父链 — 单次递归 CTE，避免 N+1 查询。
+
+        返回 ``{block_id: [ancestor1, ancestor2, ...]}``，每个 list 从直接父到
+        最远祖先排序。block_ids 中不存在的 ID 不会出现在返回字典中。
+        """
+        if not block_ids:
+            return {}
+        conn = cls.get_conn()
+        depth = max(1, int(max_depth or 3))
+        # 用 UNION ALL 的递归 CTE 一次性遍历所有节点的父链。``path`` 字段用 ','
+        # 连接沿途 id 避免循环引用导致无限递归。``root_id`` 标记每个 block
+        # 所属的查询起点，多起点共享一次遍历。
+        placeholders = ",".join("?" for _ in block_ids)
+        rows = conn.execute(
+            f"""
+            WITH RECURSIVE chain(root_id, id, parent_id, page_id, content,
+                                 block_type, properties, order_idx, depth, path) AS (
+                SELECT b.id, b.id, b.parent_id, b.page_id, b.content,
+                       b.block_type, b.properties, b.order_idx, 0, ',' || b.id || ','
+                FROM blocks b
+                WHERE b.id IN ({placeholders})
+                UNION ALL
+                SELECT c.root_id, p.id, p.parent_id, p.page_id, p.content,
+                       p.block_type, p.properties, p.order_idx, c.depth + 1,
+                       c.path || p.id || ','
+                FROM blocks p
+                JOIN chain c ON p.id = c.parent_id
+                WHERE c.depth < ? AND instr(c.path, ',' || p.id || ',') = 0
+            )
+            SELECT root_id, id, parent_id, page_id, content,
+                   block_type, properties, order_idx, depth
+            FROM chain
+            WHERE depth > 0
+            ORDER BY root_id, depth
+            """,
+            [*block_ids, depth],
+        ).fetchall()
+
+        result: dict[str, list[dict]] = {bid: [] for bid in block_ids}
+        cols = ["id", "parent_id", "page_id", "content",
+                "block_type", "properties", "order_idx"]
+        for r in rows:
+            result.setdefault(r["root_id"], []).append(dict(zip(cols, [
+                r["id"], r["parent_id"], r["page_id"], r["content"],
+                r["block_type"], r["properties"], r["order_idx"],
+            ])))
+        return result
 
     @classmethod
     def delete_blocks_by_page(cls, page_id: str):
