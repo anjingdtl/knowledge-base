@@ -18,6 +18,8 @@ def setup_db(tmp_path):
     Database._conn = None
     Database._instance = None
     Database.connect(str(db_path))
+    if "src.mcp_server" in sys.modules:
+        sys.modules["src.mcp_server"]._container = None
     try:
         import src.api.auth as auth_mod
         auth_mod._users_db.clear()
@@ -32,6 +34,8 @@ def setup_db(tmp_path):
     BlockStore._instance = None
     BlockStore._initialized = False
     yield
+    if "src.mcp_server" in sys.modules:
+        sys.modules["src.mcp_server"]._container = None
     Database.close()
     Database._instance = None
     VectorStore._instance = None

@@ -12,7 +12,7 @@ class QueryExecutor:
         self._db = db or Database
 
     def execute(self, spec: QuerySpec) -> list[dict]:
-        where_parts = []
+        where_parts = ["ki.deleted_at IS NULL"]
         params = []
         needs_fts_join = False
 

@@ -75,7 +75,11 @@ def index_knowledge_item(item: KnowledgeItem):
     try:
         from src.services.embedding import EmbeddingService
         embedding_service = EmbeddingService()
-        texts = [embedding_service.build_embedding_text(b) for b in block_rows]
+        build_embedding_text = getattr(embedding_service, "build_embedding_text", None)
+        if callable(build_embedding_text):
+            texts = [build_embedding_text(b) for b in block_rows]
+        else:
+            texts = [b["content"] for b in block_rows]
         embeddings = embedding_service.embed_batch_with_cache(texts)
         if len(embeddings) != len(texts):
             logging.warning(
