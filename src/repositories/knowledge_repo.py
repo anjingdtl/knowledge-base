@@ -1,4 +1,5 @@
 """知识条目仓库 — knowledge_items / knowledge_versions / knowledge_chunks / FTS"""
+from __future__ import annotations
 import json
 import threading
 import uuid
@@ -223,7 +224,7 @@ class KnowledgeRepository:
         return {"total_files": total_files, "total_size": total_size,
                 "file_type_dist": file_type_dist, "category_coverage": cat_count}
 
-    def find_duplicates(self) -> list[list[dict]]:
+    def find_duplicates(self) -> list:
         rows = self._conn().execute(
             "SELECT id, title, source_path, file_size, file_created_at, file_modified_at, created_at FROM knowledge_items"
         ).fetchall()
