@@ -20,6 +20,20 @@ from src.utils.llm_text import strip_think
 
 logger = logging.getLogger(__name__)
 
+
+def _get_container_service(attr: str, fallback_factory):
+    """从 DI 容器获取服务实例，容器不可用时 fallback 到新建。"""
+    try:
+        from src.services.db import Database
+        container = Database._container
+        if container is not None:
+            svc = getattr(container, attr, None)
+            if svc is not None:
+                return svc
+    except Exception:
+        pass
+    return fallback_factory()
+
 # ---- 统一的 prompt 模板 ----
 
 RAG_SYSTEM_PROMPT = """你是一个严谨的知识库问答助手。请基于检索到的知识库内容回答用户问题。
@@ -106,7 +120,7 @@ class QueryRewriteStage(PipelineStage):
             return ctx
         num_variations = config.get("num_variations", 3)
         try:
-            rewriter = QueryRewriter()
+            rewriter = _get_container_service("query_rewriter", QueryRewriter)
             ctx.rewritten_queries = rewriter.rewrite(ctx.question, num_variations=num_variations)
         except Exception as e:
             logger.warning("Query rewrite failed: %s", e)
@@ -215,7 +229,7 @@ class VectorSearchStage(PipelineStage):
             if router.route(ctx.question).mode == "logic":
                 ctx.candidates = router.search(ctx.question, top_k=top_k)
                 return ctx
-            searcher = HybridSearcher()
+            searcher = _get_container_service("hybrid_search", HybridSearcher)
             all_results = []
             for query in ctx.rewritten_queries:
                 results = searcher.search([query], top_k=top_k)
@@ -248,7 +262,7 @@ class RerankStage(PipelineStage):
         top_n = config.get("top_n", 5)
         min_score = config.get("min_score", 0.3)
         try:
-            reranker = LLMReranker()
+            reranker = _get_container_service("reranker", LLMReranker)
             candidates_for_rerank = ctx.candidates[:top_n * 3]
             reranked = reranker.rerank(ctx.question, candidates_for_rerank)
             ctx.reranked_results = [r for r in reranked if r.get("score", 0) >= min_score][:top_n]
@@ -304,7 +318,12 @@ class GenerateStage(PipelineStage):
         messages = build_rag_messages(ctx.question, context, ctx.conversation_history)
 
         try:
-            llm = LLMService()
+            # 优先从 DI 容器获取 LLM 实例（复用连接和配置），fallback 到新实例
+            try:
+                from src.services.db import Database
+                llm = Database._container.llm if Database._container else LLMService()
+            except Exception:
+                llm = LLMService()
             if stream:
                 ctx.stream_generator = llm.chat_stream(messages, silent=True)
             else:
@@ -542,6 +561,7 @@ class RAGService:
               phase_callback=None) -> dict:
         """同步查询（非流式）— 直接通过管线执行，无冗余预处理"""
         import asyncio
+        import concurrent.futures
 
         try:
             # 直接走管线，管线内部会依次执行全部阶段
@@ -553,14 +573,15 @@ class RAGService:
                 loop = asyncio.get_running_loop()
             except RuntimeError:
                 loop = None
+
             if loop and loop.is_running():
-                import concurrent.futures
-                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
-                    future = asyncio.run_coroutine_threadsafe(
-                        self._pipeline.execute(question, conversation_history), loop
-                    )
-                    result = future.result(timeout=120)
+                # 已有事件循环（streamable-http 等场景）— 线程安全提交
+                future = asyncio.run_coroutine_threadsafe(
+                    self._pipeline.execute(question, conversation_history), loop
+                )
+                result = future.result(timeout=120)
             else:
+                # 无事件循环 → asyncio.run() 安全
                 result = asyncio.run(self._pipeline.execute(
                     question, conversation_history
                 ))
@@ -664,7 +685,7 @@ class RAGService:
         context = "\n\n".join(context_parts) if context_parts else "（知识库中未找到相关内容）"
         messages = build_rag_messages(question, context, conversation_history)
 
-        llm = LLMService()
+        llm = _get_container_service("llm", LLMService)
         from src.services.source_graph import build_source_graph
         source_graph = build_source_graph(sources)
         return llm.chat_stream(messages, silent=True), sources, source_graph
@@ -678,7 +699,7 @@ class RAGService:
                 ctx.wiki_context or "（知识库中未找到相关内容）",
                 conversation_history,
             )
-            llm = LLMService()
+            llm = _get_container_service("llm", LLMService)
             answer = strip_think(llm.chat(messages))
             return {"answer": answer, "sources": [], "source_graph": {"nodes": [], "edges": []}}
         except Exception as e:

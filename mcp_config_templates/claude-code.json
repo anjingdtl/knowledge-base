@@ -1,27 +1,16 @@
 {
-  "_说明": "Claude Code MCP 配置。推荐 stdio 模式，由 Claude Code 自动启动 run_mcp.py。",
+  "_说明": "Claude Code MCP 配置",
   "_配置位置": "~/.claude.json 或项目 .claude/settings.json 的 mcpServers 字段",
-  "_Windows注意": [
-    "不要使用 cmd /c 包装命令，避免破坏 stdin JSON-RPC",
-    "推荐使用 python.exe 绝对路径",
-    "必须设置 cwd 或 SHINEHE_HOME"
-  ],
+  "_推荐模式": "Streamable HTTP — 比 stdio 更稳定，不受管道断连影响",
+  "_前置条件": "先启动 HTTP 服务: python run_mcp.py -t streamable-http --port 9000",
   "_CLI导入命令": {
-    "源码stdio推荐": "claude mcp add-json shinehe-kb \"{\\\"command\\\":\\\"C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe\\\",\\\"args\\\":[\\\"D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py\\\"],\\\"cwd\\\":\\\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\\\",\\\"env\\\":{\\\"SHINEHE_HOME\\\":\\\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\\\"},\\\"type\\\":\\\"stdio\\\"}\" -s user",
-    "已安装命令": "claude mcp add shinehe-kb -- shinehe-mcp",
-    "HTTP模式": "claude mcp add -t http shinehe-kb http://127.0.0.1:9000/mcp"
+    "HTTP模式(推荐)": "claude mcp add -t http shinehe-kb http://127.0.0.1:9000/mcp -s user",
+    "stdio模式(备选)": "claude mcp add-json shinehe-kb '{\"command\":\"C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe\",\"args\":[\"D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py\"],\"cwd\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\",\"env\":{\"SHINEHE_HOME\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\"},\"type\":\"stdio\"}' -s user"
   },
   "mcpServers": {
     "shinehe-kb": {
-      "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
-      "args": [
-        "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
-      ],
-      "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base",
-      "env": {
-        "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
-      },
-      "type": "stdio"
+      "type": "http",
+      "url": "http://127.0.0.1:9000/mcp"
     }
   }
 }

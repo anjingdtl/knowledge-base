@@ -2,17 +2,12 @@
   "_说明": "Windsurf MCP 配置。",
   "_Windows配置位置": "%APPDATA%\\WindSurf\\mcp_settings.json",
   "_macOS配置位置": "~/.codeium/windsurf/mcp_config.json",
+  "_推荐模式": "Streamable HTTP — 比 stdio 更稳定",
+  "_前置条件": "先启动 HTTP 服务: python run_mcp.py -t streamable-http --port 9000",
   "mcpServers": {
     "shinehe-kb": {
-      "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
-      "args": [
-        "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
-      ],
-      "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base",
-      "env": {
-        "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
-      },
-      "type": "stdio"
+      "type": "http",
+      "url": "http://127.0.0.1:9000/mcp"
     }
   }
 }
