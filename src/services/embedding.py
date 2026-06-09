@@ -57,7 +57,8 @@ class EmbeddingService:
         from openai import OpenAI
         api_key = self._cfg("embedding.api_key") or self._cfg("llm.api_key", "") or "no-key"
         base_url = self._cfg("embedding.base_url") or self._cfg("llm.base_url") or None
-        self._client = OpenAI(api_key=api_key, base_url=base_url, timeout=30)
+        timeout = float(self._cfg("embedding.timeout", 15) or 15)
+        self._client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout)
         return self._client
 
     def embed(self, text: str) -> list[float]:

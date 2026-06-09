@@ -2,17 +2,12 @@
   "_说明": "TeleClaw 星辰超级智能体桌面版 MCP 配置。",
   "_配置入口": "设置 -> 工具设置 -> 从 JSON 导入/添加",
   "_格式": "根对象包含 mcpServers，每个 key 是服务唯一 ID。",
+  "_推荐模式": "Streamable HTTP — 比 stdio 更稳定，解决意外断连问题",
+  "_前置条件": "先启动 HTTP 服务: python run_mcp.py -t streamable-http --port 9000",
   "mcpServers": {
     "shinehe-kb": {
-      "command": "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
-      "args": [
-        "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
-      ],
-      "cwd": "D:/ClaudeCodeWorkSpace/projects/knowledge-base",
-      "env": {
-        "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
-      },
-      "type": "stdio"
+      "type": "http",
+      "url": "http://127.0.0.1:9000/mcp"
     }
   }
 }

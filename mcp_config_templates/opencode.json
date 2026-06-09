@@ -1,17 +1,13 @@
 {
   "_说明": "OpenCode MCP 配置。OpenCode 使用 mcp 字段，不使用 mcpServers。",
   "_配置位置": "~/.config/opencode/opencode.json 或项目根目录 opencode.json",
+  "_推荐模式": "Streamable HTTP — 比 stdio 更稳定",
+  "_前置条件": "先启动 HTTP 服务: python run_mcp.py -t streamable-http --port 9000",
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "shinehe-kb": {
-      "type": "local",
-      "command": [
-        "C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe",
-        "D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py"
-      ],
-      "environment": {
-        "SHINEHE_HOME": "D:/ClaudeCodeWorkSpace/projects/knowledge-base"
-      },
+      "type": "http",
+      "url": "http://127.0.0.1:9000/mcp",
       "enabled": true
     }
   }

@@ -51,10 +51,11 @@ class LLMService:
         if self._client is not None:
             return self._client
         from openai import OpenAI
+        timeout = float(self._cfg("llm.timeout", 60) or 60)
         self._client = OpenAI(
             api_key=self._cfg("llm.api_key", "") or "no-key",
             base_url=self._cfg("llm.base_url") or None,
-            timeout=120,
+            timeout=timeout,
         )
         return self._client
 

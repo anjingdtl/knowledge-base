@@ -399,6 +399,7 @@ class Database:
     """
     _instance = None
     _conn: Optional[sqlite3.Connection] = None
+    _db_path: Optional[str] = None  # 保存路径用于自动重连
     _container = None  # DI 容器引用（由 create_container 设置）
     _write_lock = threading.Lock()  # 写操作互斥锁
     _shutdown: bool = False  # True after intentional shutdown (prevents zombie reconnect)
@@ -412,7 +413,8 @@ class Database:
     def connect(cls, db_path: str | Path | None = None):
         if db_path is None:
             db_path = Config.get_db_path()
-        cls._conn = sqlite3.connect(str(db_path), check_same_thread=False, timeout=30.0)
+        cls._db_path = str(db_path)
+        cls._conn = sqlite3.connect(cls._db_path, check_same_thread=False, timeout=30.0)
         cls._conn.row_factory = sqlite3.Row
         cls._conn.execute("PRAGMA foreign_keys = ON")
         cls._conn.execute("PRAGMA journal_mode = WAL")
@@ -424,6 +426,34 @@ class Database:
         cls._migrate()
         cls._conn.commit()
         cls._shutdown = False  # allow operations after fresh connect
+
+    @classmethod
+    def get_conn(cls) -> sqlite3.Connection:
+        """获取数据库连接，自动检测并恢复断开的连接。
+
+        在 MCP 长时间运行场景中，SQLite 连接可能因磁盘 I/O 错误、
+        文件锁异常等原因断开。此方法在返回连接前执行轻量健康检查，
+        失败时自动重连。
+        """
+        if cls._shutdown:
+            raise RuntimeError("Database has been shut down")
+        if cls._conn is None:
+            raise RuntimeError("Database not connected")
+        # 轻量健康检查：尝试执行一个不涉及磁盘 I/O 的 SQL
+        try:
+            cls._conn.execute("SELECT 1").fetchone()
+        except Exception:
+            logger.warning("SQLite connection health check failed, attempting reconnect")
+            try:
+                if cls._db_path:
+                    cls.connect(cls._db_path)
+                    logger.info("SQLite reconnected successfully")
+                else:
+                    raise RuntimeError("Cannot reconnect: db_path unknown")
+            except Exception as reconn_exc:
+                logger.error("SQLite reconnect failed: %s", reconn_exc)
+                raise
+        return cls._conn
 
     @classmethod
     def _migrate(cls):

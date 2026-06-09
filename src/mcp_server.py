@@ -102,6 +102,41 @@ def _heartbeat(fn):
     return wrapper
 
 
+def _run_async(coro, timeout: float = 120):
+    """安全地运行异步协程，兼容已有/无事件循环两种场景。
+
+    FastMCP 同步工具在线程池中执行，此时无运行中的事件循环。
+    但某些传输模式（streamable-http）可能在有事件循环的上下文中
+    调用同步工具，因此需要做分支处理。
+
+    Args:
+        coro: 异步协程对象
+        timeout: 超时秒数（默认 120s）
+
+    Returns:
+        协程的返回值
+
+    Raises:
+        TimeoutError: 超时
+    """
+    import asyncio
+    import concurrent.futures
+
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
+    if loop and loop.is_running():
+        # 已有事件循环（streamable-http 等场景）
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+            future = asyncio.run_coroutine_threadsafe(coro, loop)
+            return future.result(timeout=timeout)
+    else:
+        # 无事件循环（stdio 线程池场景）
+        return asyncio.run(coro)
+
+
 def _op_log(operation, target_type, target_id, operator="system", source="mcp",
             before=None, after=None, metadata=None) -> str:
     """便捷操作日志记录。
@@ -237,7 +272,8 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
 @mcp.tool(
     description="向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。"
     "返回结构化 payload：answer / sources / source_graph / route / query_plan / "
-    "block_contexts / warnings。",
+    "block_contexts / warnings。"
+    "[耗时提示：通常 5-30 秒，首次调用可能更长，建议客户端超时 ≥ 60s]",
 )
 @_heartbeat
 def ask(
@@ -291,7 +327,8 @@ def _do_ask(question: str) -> dict:
 
 
 @mcp.tool(
-    description="创建新的知识条目。自动将内容分块并向量化索引，支持纯文本、Markdown 和代码。",
+    description="创建新的知识条目。自动将内容分块并向量化索引，支持纯文本、Markdown 和代码。"
+    "[耗时提示：短文本 2-5 秒，长文本可能 10-30 秒]",
 )
 @_heartbeat
 def create(
@@ -622,7 +659,8 @@ def restore_knowledge(item_id: str) -> dict:
 
 
 @mcp.tool(
-    description="重建所有知识条目的索引（向量索引、全文索引、分块索引）。当搜索结果异常时使用。",
+    description="重建所有知识条目的索引（向量索引、全文索引、分块索引）。当搜索结果异常时使用。"
+    "[耗时提示：可能数分钟，大量数据时建议客户端超时 ≥ 300s]",
 )
 @_heartbeat
 def reindex_all(dry_run: bool = False) -> dict:
@@ -711,7 +749,8 @@ def tags() -> dict:
 
 @mcp.tool(
     description="解析本地文件并将其内容导入知识库。支持 PDF、DOCX、TXT、Markdown、HTML、图片及代码文件。"
-    "Excel 文件的每个工作表独立导入。大文件自动转异步任务（返回 job_id）。",
+    "Excel 文件的每个工作表独立导入。大文件自动转异步任务（返回 job_id）。"
+    "[耗时提示：小文件 3-10 秒，大文件自动转异步]",
 )
 @_heartbeat
 def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = False) -> dict:
@@ -1154,8 +1193,8 @@ def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None
     """
     if not Config.get("wiki.enabled", False):
         return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
-    from src.services.wiki_compiler import WikiCompiler
-    compiler = WikiCompiler()
+    container = _get_container()
+    compiler = container.wiki_compiler
     page_id = compiler.save_answer(question, answer, source_ids)
     if page_id:
         log_id = _op_log("wiki_create", "wiki_page", page_id, after={
@@ -1548,7 +1587,8 @@ def execute_query(
 
 @mcp.tool(
     description="用显式 QuerySpec 控制 RAG 检索阶段，再调用 LLM 生成回答。"
-    "返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。",
+    "返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。"
+    "[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]",
     annotations={"readOnlyHint": True, "idempotentHint": False},
 )
 @_heartbeat
@@ -1567,7 +1607,6 @@ def ask_with_query(
     Returns:
         与 ``ask`` 工具相同的 7 字段结构化 payload（data 内）
     """
-    import asyncio
     from src.models.query_dsl import QuerySpec
     from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
 
@@ -1576,12 +1615,14 @@ def ask_with_query(
         spec = QuerySpec.from_json(query_spec) if isinstance(query_spec, dict) else query_spec
         pipeline = RagPipeline(pipeline_config=DEFAULT_PIPELINE_CONFIG, llm=container.llm)
         # 把 spec 注入 metadata，VectorSearchStage 会跳过自动路由直接使用
-        result = asyncio.run(
+        # 使用 _run_async 安全执行，避免在已有事件循环中调用 asyncio.run()
+        result = _run_async(
             pipeline.execute(
                 question,
                 query_spec_override=spec,
                 top_k=top_k,
-            )
+            ),
+            timeout=120,
         )
         return ok(
             result,

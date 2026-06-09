@@ -6,37 +6,43 @@ embedding:
   model: BAAI/bge-m3
   provider: 硅基流动
   reuse_llm: true
-librarian:
-  batch_size: 5
-llm:
-  base_url: https://api.deepseek.com
-  max_tokens: 2048
-  model: deepseek-v4-flash
-  provider: deepseek
-  temperature: 0.7
+  timeout: 15
 ingest:
-  size_threshold_bytes: 5000000
+  docx:
+    paragraph_count_threshold: 200
   excel:
     sheet_count_threshold: 5
   pdf:
     page_count_threshold: 50
-  docx:
-    paragraph_count_threshold: 200
+  size_threshold_bytes: 5000000
 jobs:
   max_workers: 2
   poll_interval: 1.0
+librarian:
+  batch_size: 5
+llm:
+  base_url: https://api.minimaxi.com/v1
+  max_tokens: 2048
+  model: MiniMax-M3
+  provider: Minimax
+  temperature: 0.7
+  timeout: 60
 rag:
+  agentic_router:
+    enabled: true
+    prefer_llm: false
+    system_prompt_max_tokens: 2000
   chunk_overlap: 180
   chunk_size: 1200
   context_sibling_window: 1
   context_trace_depth: 3
+  custom_stages: []
   embedding_context:
     enabled: true
-    include_parent_chain: true
     include_links: true
+    include_parent_chain: true
     include_siblings: false
     max_chars: 1200
-  custom_stages: []
   enable_query_rewriting: true
   enable_rerank: true
   hybrid_search:
@@ -44,8 +50,6 @@ rag:
     enabled: true
     keyword_weight: 0.3
     vector_weight: 0.7
-  link_expansion:
-    max_links: 3
   import:
     docx:
       respect_styles: true
@@ -56,6 +60,8 @@ rag:
     pdf:
       heading_detection: true
       page_as_block: true
+  link_expansion:
+    max_links: 3
   pipeline:
     enabled: true
     stages:
@@ -88,10 +94,6 @@ rag:
   score_threshold: 0.35
   search_mode: blend
   top_k: 8
-  agentic_router:
-    enabled: true
-    prefer_llm: false
-    system_prompt_max_tokens: 2000
 reranker:
   base_url: https://api.siliconflow.cn/v1
   enabled: true
@@ -99,15 +101,15 @@ reranker:
   provider: 硅基流动
   reuse_llm: false
   use_llm_fallback: true
+safety:
+  operation_log:
+    enabled: true
+    retention_days: 90
 storage:
   chroma_dir: chroma
   data_dir: data
   db_name: kb.db
   graph_dir: graph
-safety:
-  operation_log:
-    enabled: true
-    retention_days: 90
 web:
   timeout: 30
 wiki:
