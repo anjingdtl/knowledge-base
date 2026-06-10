@@ -161,10 +161,13 @@ class AgenticRouter:
         llm = self._llm
         if llm is None:
             try:
-                from src.core.container import create_container
-                container = create_container()
-                self._llm = container.llm
-                llm = self._llm
+                from src.services.db import Database
+                container = getattr(Database, "_container", None)
+                if container is not None and container.llm is not None:
+                    self._llm = container.llm
+                    llm = self._llm
+                else:
+                    return None
             except Exception:
                 return None
         if llm is None:

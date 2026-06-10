@@ -181,7 +181,8 @@ class VectorSearchStage(PipelineStage):
         try:
             try:
                 from src.services.agentic_router import AgenticRouter, serialize_route
-                agentic = AgenticRouter(db=Database)
+                agentic_llm = _get_container_service("llm", LLMService)
+                agentic = AgenticRouter(db=Database, llm=agentic_llm)
                 routing = agentic.route(ctx.question) if override_spec is None else {
                     "mode": "structured", "query_spec": override_spec,
                     "explanation": "explicit query_spec override",
@@ -243,6 +244,32 @@ class VectorSearchStage(PipelineStage):
                     unique.append(r)
             unique.sort(key=lambda x: x.get("rrf_score", x.get("vec_score", x.get("score", 0))), reverse=True)
             ctx.candidates = unique[:top_k]
+
+            # 兜底：hybrid_search 无结果时，用 knowledge 级 FTS 搜索（同 SearchService 策略）
+            if not ctx.candidates:
+                logger.info("Hybrid search returned empty, falling back to knowledge-level FTS")
+                ctx.metadata.setdefault("warnings", []).append("hybrid_search_empty_fallback_to_fts")
+                try:
+                    fts_results = Database.search_knowledge(ctx.question, limit=top_k)
+                    if fts_results:
+                        ctx.candidates = [
+                            {
+                                "id": "",
+                                "text": r.get("content", ""),
+                                "metadata": {
+                                    "page_id": r.get("id", ""),
+                                    "knowledge_id": r.get("id", ""),
+                                    "title": r.get("title", ""),
+                                    "block_type": "knowledge",
+                                    "properties": {},
+                                },
+                                "distance": 0,
+                                "score": r.get("fts_rank", 0),
+                            }
+                            for r in fts_results
+                        ]
+                except Exception as e:
+                    logger.warning("Knowledge FTS fallback failed: %s", e)
         except Exception as e:
             logger.warning("Vector search failed: %s", e)
             ctx.candidates = []
