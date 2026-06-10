@@ -43,7 +43,7 @@ export default function App() {
     <div className="flex h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       <nav className="w-56 bg-[var(--color-sidebar)] border-r border-[var(--color-border)] flex flex-col p-4 gap-2">
         <div className="px-2 py-3">
-          <h1 className="text-xl font-bold text-[var(--color-primary)]">泰坦知识库</h1>
+          <h1 className="text-xl font-bold text-[var(--color-primary)]">ShineHeKnowledge</h1>
           <p className="mt-1 text-xs text-[var(--color-text-muted)]">ShineHe Knowledge Engine</p>
           <div className="mt-3 h-0.5 rounded bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)]" />
         </div>
@@ -115,7 +115,7 @@ function LoginView({ onLogin }: { onLogin: () => void }) {
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex items-center justify-center px-4">
       <div className="w-full max-w-sm border border-[var(--color-border)] bg-[var(--color-surface)] rounded-lg p-6 shadow-sm">
-        <h1 className="text-xl font-bold text-[var(--color-primary)]">泰坦知识库</h1>
+        <h1 className="text-xl font-bold text-[var(--color-primary)]">ShineHeKnowledge</h1>
         <p className="mt-1 text-sm text-[var(--color-text-muted)]">登录后访问本地知识库 API</p>
 
         <div className="mt-5 space-y-3">

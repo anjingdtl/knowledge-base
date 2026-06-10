@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-ICON_PATH = PROJECT_DIR / "icon" / "knolege.ico"
+ICON_PATH = PROJECT_DIR / "icon" / "knowledge.ico"
 APP_TARGET = PROJECT_DIR / "start_app.bat"
 MCP_TARGET = PROJECT_DIR / "start_mcp.bat"
 APP_SHORTCUT = PROJECT_DIR / "ShineHeKnowledge 一键启动.lnk"
