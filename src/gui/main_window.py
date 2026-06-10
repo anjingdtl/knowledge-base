@@ -29,7 +29,7 @@ class DatabaseInitError(Exception):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(f"泰坦知识库 v{VERSION}")
+        self.setWindowTitle(f"ShineHeKnowledge v{VERSION}")
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Window)
         self.setMinimumSize(1100, 700)
         self._drag_start_pos = QPoint()
@@ -104,7 +104,7 @@ class MainWindow(QMainWindow):
         sidebar_layout.setSpacing(6)
 
         # 品牌标题（渐变文字）
-        brand = QLabel("泰坦知识库")
+        brand = QLabel("ShineHeKnowledge")
         brand.setObjectName("brandLabel")
         brand.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         brand.setFixedHeight(36)
@@ -244,7 +244,7 @@ class MainWindow(QMainWindow):
         row.setContentsMargins(12, 0, 6, 0)
         row.setSpacing(6)
 
-        title = QLabel(f"泰坦知识库 v{VERSION}")
+        title = QLabel(f"ShineHeKnowledge v{VERSION}")
         title.setObjectName("windowTitleLabel")
         title.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         row.addWidget(title)

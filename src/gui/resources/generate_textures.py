@@ -1,6 +1,6 @@
 """深海风格纹理生成脚本
 
-使用 Pillow 程序化生成泰坦知识库所需的装饰纹理图片。
+使用 Pillow 程序化生成 ShineHeKnowledge 所需的装饰纹理图片。
 运行: python src/gui/resources/generate_textures.py
 """
 import math

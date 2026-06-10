@@ -21,8 +21,8 @@ ICON_DIR = Path(__file__).resolve().parent.parent / "icon"
 
 def _load_app_icon() -> QIcon:
     """加载应用图标，优先 ICO，备用 PNG，多尺寸确保任务栏清晰"""
-    ico_path = ICON_DIR / "knolege.ico"
-    png_path = ICON_DIR / "knolege.png"
+    ico_path = ICON_DIR / "knowledge.ico"
+    png_path = ICON_DIR / "knowledge.png"
 
     # 尝试加载 ICO
     if ico_path.exists():
