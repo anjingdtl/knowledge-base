@@ -104,7 +104,7 @@ class AppContainer:
     def hybrid_search(self):
         if self._hybrid_search is None:
             from src.services.hybrid_search import HybridSearcher
-            self._hybrid_search = HybridSearcher(self.db, self.vectorstore, self.config)
+            self._hybrid_search = HybridSearcher(self.db, self.block_store, self.config)
             self._track_service("_hybrid_search")
         return self._hybrid_search
 
