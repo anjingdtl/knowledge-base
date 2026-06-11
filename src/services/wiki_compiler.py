@@ -8,7 +8,7 @@ from datetime import datetime
 from src.services.db import Database
 from src.services.llm import LLMService
 from src.utils.config import Config
-from src.data.wiki_schema import INGEST_PROMPT, MERGE_PROMPT, LINK_DISCOVERY_PROMPT, QUERY_SAVE_PROMPT
+from src.data.wiki_schema import INGEST_PROMPT, MERGE_PROMPT, LINK_DISCOVERY_PROMPT, QUERY_SAVE_PROMPT, DEAD_LINK_REPAIR_PROMPT
 
 logger = logging.getLogger(__name__)
 
@@ -417,3 +417,228 @@ class WikiCompiler:
         if key and isinstance(data, dict):
             return data.get(key)
         return data
+
+    def repair_dead_references(self, max_pages: int = 50) -> dict:
+        """LLM 驱动的死链修复。
+
+        扫描所有 Wiki 页面中的 [[...]] 死链，调用 LLM 分析上下文后
+        选择修复策略：redirect（重定向到已有页面）、stub（创建占位页面）
+        或 remove（移除引用标记）。
+
+        Args:
+            max_pages: 最多处理多少个含死链的页面（控制 LLM 成本）
+
+        Returns:
+            修复结果统计
+        """
+        pages = Database.list_wiki_pages(limit=500)
+        if not pages:
+            return {"status": "empty", "scanned": 0, "fixed": 0}
+
+        all_titles = {p["title"] for p in pages}
+        title_to_id = {p["title"]: p["id"] for p in pages}
+
+        # 第一步：收集所有含死链的页面
+        pages_with_dead = []  # [(page, [dead_ref_titles])]
+        for page in pages:
+            content = page.get("content", "") or ""
+            if not content:
+                continue
+            dead_refs = []
+            seen = set()
+            for match in _WIKI_LINK_RE.finditer(content):
+                ref_title = match.group(1).strip()
+                if ref_title not in seen and ref_title not in all_titles:
+                    seen.add(ref_title)
+                    dead_refs.append(ref_title)
+            if dead_refs:
+                pages_with_dead.append((page, dead_refs))
+
+        if not pages_with_dead:
+            return {"status": "clean", "scanned": len(pages),
+                    "pages_with_dead_refs": 0, "fixed": 0}
+
+        # 限制处理数量
+        pages_with_dead = pages_with_dead[:max_pages]
+
+        # 构建已有页面摘要（供 LLM 匹配）
+        existing_pages_text = self._get_existing_pages_summary()
+
+        total_redirects = 0
+        total_stubs = 0
+        total_removes = 0
+        total_errors = 0
+        fix_details = []
+
+        # 配置
+        auto_publish = Config.get("wiki.auto_publish", True)
+        initial_status = "published" if auto_publish else "draft"
+
+        # 第二步：逐页面调用 LLM 修复
+        for page, dead_refs in pages_with_dead:
+            content = page.get("content", "") or ""
+            source_title = page["title"]
+
+            dead_refs_text = "\n".join(f"- [[{r}]]" for r in dead_refs)
+
+            prompt = DEAD_LINK_REPAIR_PROMPT.format(
+                source_title=source_title,
+                source_content=content[:1500],
+                dead_refs=dead_refs_text,
+                existing_pages=existing_pages_text,
+            )
+
+            try:
+                response = self._llm.chat(
+                    [{"role": "user", "content": prompt}],
+                    silent=True,
+                )
+                result = self._parse_json_response(response, "fixes")
+            except Exception as e:
+                logger.warning("LLM dead link repair failed for [%s]: %s",
+                               source_title, e)
+                total_errors += 1
+                continue
+
+            if not result:
+                logger.warning("LLM returned no fixes for [%s]", source_title)
+                total_errors += 1
+                continue
+
+            # 第三步：应用修复
+            updated_content = content
+            page_fixes = []
+
+            for fix in result:
+                dead_ref = fix.get("dead_ref", "").strip()
+                action = fix.get("action", "remove")
+                reason = fix.get("reason", "")
+
+                if not dead_ref:
+                    continue
+
+                if action == "redirect":
+                    target_title = fix.get("target_title", "").strip()
+                    if target_title and target_title in all_titles:
+                        # 替换 [[死链]] 为 [[正确标题]]
+                        updated_content = updated_content.replace(
+                            f"[[{dead_ref}]]", f"[[{target_title}]]")
+                        # 创建 wiki_link
+                        target_id = title_to_id.get(target_title)
+                        if target_id and target_id != page["id"]:
+                            try:
+                                Database.add_wiki_link(
+                                    page["id"], target_id, "references", 1.0)
+                            except Exception:
+                                pass
+                        total_redirects += 1
+                        page_fixes.append({
+                            "dead_ref": dead_ref, "action": "redirect",
+                            "target": target_title, "reason": reason,
+                        })
+                    else:
+                        # redirect 目标不存在，降级为 remove
+                        updated_content = updated_content.replace(
+                            f"[[{dead_ref}]]", dead_ref)
+                        total_removes += 1
+                        page_fixes.append({
+                            "dead_ref": dead_ref, "action": "remove",
+                            "reason": f"redirect 目标不存在，降级移除: {reason}",
+                        })
+
+                elif action == "stub":
+                    new_title = fix.get("new_title", dead_ref).strip()
+                    summary = fix.get("summary", "")
+                    tags = fix.get("tags", [])
+
+                    if not summary:
+                        # 没有摘要，降级为 remove
+                        updated_content = updated_content.replace(
+                            f"[[{dead_ref}]]", dead_ref)
+                        total_removes += 1
+                        page_fixes.append({
+                            "dead_ref": dead_ref, "action": "remove",
+                            "reason": "stub 缺少摘要，降级移除",
+                        })
+                        continue
+
+                    # 创建占位页面
+                    stub_page = {
+                        "id": str(uuid.uuid4()),
+                        "title": new_title,
+                        "content": (
+                            f"> 此页面为自动创建的占位页面，内容待补充。\n\n"
+                            f"## {new_title}\n\n{summary}\n\n"
+                            f"---\n*由死链修复工具自动创建于 "
+                            f"{datetime.now().strftime('%Y-%m-%d')}*"
+                        ),
+                        "source_ids": json.dumps(
+                            [page["id"]], ensure_ascii=False),
+                        "tags": json.dumps(tags, ensure_ascii=False),
+                        "concept_summary": summary,
+                        "status": "draft",  # 占位页面始终为 draft
+                        "lint_score": 0.5,
+                        "created_at": datetime.now().isoformat(),
+                        "updated_at": datetime.now().isoformat(),
+                    }
+                    Database.insert_wiki_page(stub_page)
+
+                    # 替换内容中的引用（如果标题变了）
+                    if new_title != dead_ref:
+                        updated_content = updated_content.replace(
+                            f"[[{dead_ref}]]", f"[[{new_title}]]")
+
+                    # 创建 wiki_link
+                    try:
+                        Database.add_wiki_link(
+                            page["id"], stub_page["id"], "references", 1.0)
+                    except Exception:
+                        pass
+
+                    # 更新全局标题集合（避免后续修复重复创建）
+                    all_titles.add(new_title)
+                    title_to_id[new_title] = stub_page["id"]
+
+                    total_stubs += 1
+                    page_fixes.append({
+                        "dead_ref": dead_ref, "action": "stub",
+                        "new_page_id": stub_page["id"],
+                        "new_title": new_title, "reason": reason,
+                    })
+
+                else:  # remove
+                    updated_content = updated_content.replace(
+                        f"[[{dead_ref}]]", dead_ref)
+                    total_removes += 1
+                    page_fixes.append({
+                        "dead_ref": dead_ref, "action": "remove",
+                        "reason": reason,
+                    })
+
+            # 更新页面内容
+            if updated_content != content:
+                Database.update_wiki_page(page["id"], content=updated_content)
+
+            if page_fixes:
+                fix_details.append({
+                    "source_page": source_title,
+                    "fixes": page_fixes,
+                })
+
+        # 记录操作日志
+        summary = {
+            "pages_processed": len(pages_with_dead),
+            "redirects": total_redirects,
+            "stubs_created": total_stubs,
+            "removed": total_removes,
+            "errors": total_errors,
+        }
+        Database.insert_wiki_op("repair_dead_references", "", summary)
+
+        return {
+            "status": "success",
+            "scanned": len(pages),
+            "pages_with_dead_refs": len(pages_with_dead),
+            **summary,
+            "details": fix_details,
+        }

@@ -9,7 +9,7 @@ dist/
 build/
 chroma_db/
 chroma/
-data/
+/data/
 *.db
 *.db-shm
 *.db-wal
