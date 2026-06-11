@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.api.deps import get_container
 from src.api.routes.auth import _check_auth, _get_current_user
@@ -14,6 +14,11 @@ class SaveAnswerReq(BaseModel):
     question: str
     answer: str
     source_ids: Optional[list[str]] = None
+
+
+class FixDeadLinksReq(BaseModel):
+    max_pages: int = Field(default=50, ge=1, le=200, description="最多处理多少个含死链的页面")
+    dry_run: bool = Field(default=False, description="仅预览修复方案，不实际写入")
 
 
 @wiki_router.post("/save-answer")
@@ -92,6 +97,48 @@ def run_wiki_lint(container: AppContainer = Depends(get_container)):
     from src.services.wiki_lint import WikiLint
     linter = WikiLint()
     return linter.run()
+
+
+@wiki_router.post("/fix-dead-links")
+def fix_dead_links(data: FixDeadLinksReq, container: AppContainer = Depends(get_container)):
+    """使用 LLM 智能修复 Wiki 页面中的 [[死链]]。
+
+    - dry_run=true 时仅返回修复方案预览，不实际修改数据库
+    - max_pages 控制单次最多处理页面数（默认 50），防止 LLM 调用过多
+    """
+    from src.utils.config import Config
+    if not Config.get("wiki.enabled", False):
+        raise HTTPException(400, "Wiki 功能未启用")
+    from src.services.wiki_compiler import WikiCompiler
+    compiler = WikiCompiler()
+    if data.dry_run:
+        # dry_run: 仅扫描死链，不调用 LLM
+        from src.services.wiki_compiler import _WIKI_LINK_RE
+        from src.services.db import Database
+        pages = Database.list_wiki_pages(limit=500)
+        if not pages:
+            return {"status": "empty", "scanned": 0, "dead_links": []}
+        all_titles = {p["title"] for p in pages}
+        dead_links = []
+        for page in pages[:data.max_pages]:
+            content = page.get("content", "") or ""
+            for m in _WIKI_LINK_RE.finditer(content):
+                ref = m.group(1).strip()
+                if ref not in all_titles:
+                    dead_links.append({
+                        "source_page_id": page["id"],
+                        "source_title": page["title"],
+                        "dead_ref": ref,
+                    })
+        return {
+            "status": "preview",
+            "scanned": min(len(pages), data.max_pages),
+            "total_dead_links": len(dead_links),
+            "dead_links": dead_links,
+        }
+    else:
+        result = compiler.repair_dead_references(max_pages=data.max_pages)
+        return result
 
 
 @wiki_router.get("/ops")
