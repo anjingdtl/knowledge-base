@@ -403,6 +403,7 @@ class Database:
     _container = None  # DI 容器引用（由 create_container 设置）
     _write_lock = threading.Lock()  # 写操作互斥锁
     _shutdown: bool = False  # True after intentional shutdown (prevents zombie reconnect)
+    _local = threading.local()  # 线程本地存储 — 每线程独立 SQLite 连接
 
     def __new__(cls):
         if cls._instance is None:
@@ -410,50 +411,28 @@ class Database:
         return cls._instance
 
     @classmethod
+    def _configure_connection(cls, conn: sqlite3.Connection) -> sqlite3.Connection:
+        """为新创建的 SQLite 连接设置标准 PRAGMA 和 row_factory。"""
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA foreign_keys = ON")
+        conn.execute("PRAGMA journal_mode = WAL")
+        conn.execute("PRAGMA busy_timeout = 30000")
+        return conn
+
+    @classmethod
     def connect(cls, db_path: str | Path | None = None):
         if db_path is None:
             db_path = Config.get_db_path()
         cls._db_path = str(db_path)
         cls._conn = sqlite3.connect(cls._db_path, check_same_thread=False, timeout=30.0)
-        cls._conn.row_factory = sqlite3.Row
-        cls._conn.execute("PRAGMA foreign_keys = ON")
-        cls._conn.execute("PRAGMA journal_mode = WAL")
-        # busy_timeout: 在 WAL 模式下并发写锁默认只等 5 秒，导致 GUI 主线程
-        # 与 AsyncWorker 线程同时写数据库时随机抛 "database is locked" 闪退。
-        # 30 秒与连接 timeout 保持一致，并让 GUI 有机会重试。
-        cls._conn.execute("PRAGMA busy_timeout = 30000")
+        cls._configure_connection(cls._conn)
         cls._conn.executescript(_SCHEMA)
         cls._migrate()
         cls._conn.commit()
         cls._shutdown = False  # allow operations after fresh connect
 
-    @classmethod
-    def get_conn(cls) -> sqlite3.Connection:
-        """获取数据库连接，自动检测并恢复断开的连接。
-
-        在 MCP 长时间运行场景中，SQLite 连接可能因磁盘 I/O 错误、
-        文件锁异常等原因断开。此方法在返回连接前执行轻量健康检查，
-        失败时自动重连。
-        """
-        if cls._shutdown:
-            raise RuntimeError("Database has been shut down")
-        if cls._conn is None:
-            raise RuntimeError("Database not connected")
-        # 轻量健康检查：尝试执行一个不涉及磁盘 I/O 的 SQL
-        try:
-            cls._conn.execute("SELECT 1").fetchone()
-        except Exception:
-            logger.warning("SQLite connection health check failed, attempting reconnect")
-            try:
-                if cls._db_path:
-                    cls.connect(cls._db_path)
-                    logger.info("SQLite reconnected successfully")
-                else:
-                    raise RuntimeError("Cannot reconnect: db_path unknown")
-            except Exception as reconn_exc:
-                logger.error("SQLite reconnect failed: %s", reconn_exc)
-                raise
-        return cls._conn
+    # NOTE: get_conn() 使用线程本地连接（threading.local），定义在 _migrate() 之后。
+    # 每个线程拥有独立的 SQLite 连接，避免 SQLITE_MISUSE 并发错误。
 
     @classmethod
     def _migrate(cls):
@@ -586,23 +565,74 @@ class Database:
 
     @classmethod
     def get_conn(cls) -> sqlite3.Connection:
+        """获取当前线程的数据库连接（线程本地模式）。
+
+        每个线程维护独立的 SQLite 连接，避免多线程共享单连接导致的
+        SQLITE_MISUSE 错误（"bad parameter or other API misuse"）。
+        WAL 模式下多连接并发读不会互相阻塞，写操作通过 busy_timeout
+        自动等待锁释放。
+
+        首次调用时创建新连接；后续调用复用同线程的连接。
+        包含轻量健康检查，断开时自动重连。
+        """
         if cls._shutdown:
             raise RuntimeError("Database is shut down — connection no longer available")
-        if cls._conn is None:
+
+        conn = getattr(cls._local, 'conn', None)
+        if conn is not None:
+            # 健康检查：轻量 SELECT 验证连接存活
+            try:
+                conn.execute("SELECT 1").fetchone()
+                return conn
+            except Exception:
+                logger.warning("Thread-local SQLite connection stale, reconnecting")
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+                cls._local.conn = None
+
+        # 创建新的线程本地连接
+        if cls._db_path is None:
+            if cls._conn is not None:
+                # 主连接存在但线程本地连接不存在（首次在此线程调用）
+                # 回退到主连接（兼容旧行为）
+                return cls._conn
             cls.connect()
-        return cls._conn
+        if cls._db_path is None:
+            raise RuntimeError("Database not connected and db_path unknown")
+
+        conn = sqlite3.connect(cls._db_path, check_same_thread=False, timeout=30.0)
+        cls._configure_connection(conn)
+        cls._local.conn = conn
+        return conn
 
     @classmethod
     def close(cls):
+        # 关闭当前线程的本地连接
+        local_conn = getattr(cls._local, 'conn', None)
+        if local_conn:
+            try:
+                local_conn.close()
+            except Exception:
+                pass
+            cls._local.conn = None
+        # 关闭主连接
         if cls._conn:
-            cls._conn.close()
+            try:
+                cls._conn.close()
+            except Exception:
+                pass
             cls._conn = None
         # Note: _shutdown is NOT reset here — it is reset on the next connect()
         # call (via lifespan startup), preventing silent reconnects during shutdown.
 
     @classmethod
     def transaction(cls):
-        """返回一个事务上下文管理器，用于包裹多步写操作。"""
+        """返回一个事务上下文管理器，用于包裹多步写操作。
+
+        使用当前线程的本地连接，确保事务内的所有操作在同一连接上执行。
+        """
         import contextlib
         @contextlib.contextmanager
         def _tx():

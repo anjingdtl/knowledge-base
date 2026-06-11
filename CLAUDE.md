@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目速查: ShineHeKnowledge
 
-本地知识库系统（v1.1.0），支持多模态文档管理、RAG 智能问答。三种运行模式共享同一服务层，通过 AppContainer 依赖注入。
+本地知识库系统（v1.2.0），支持多模态文档管理、RAG 智能问答。三种运行模式共享同一服务层，通过 AppContainer 依赖注入。
 
 ## 运行命令
 
