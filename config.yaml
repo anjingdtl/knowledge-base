@@ -6,7 +6,7 @@ embedding:
   model: BAAI/bge-m3
   provider: 硅基流动
   reuse_llm: true
-  timeout: 15
+  timeout: 30
 ingest:
   docx:
     paragraph_count_threshold: 200
@@ -93,6 +93,11 @@ rag:
     top_n: 5
   score_threshold: 0.35
   search_mode: blend
+  stage_timeout:
+    hybrid_search: 25
+    query_rewrite: 15
+    rerank: 20
+    wiki_search: 5
   top_k: 8
 reranker:
   base_url: https://api.siliconflow.cn/v1

@@ -1,16 +1,28 @@
 """统一搜索服务 — MCP 和 API 共用"""
 import logging
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeout
+
 from src.services.query_rewriter import QueryRewriter
 from src.services.hybrid_search import HybridSearcher
 from src.services.reranker import LLMReranker
 
 logger = logging.getLogger(__name__)
 
+# 各阶段超时（秒），可通过 config 覆盖
+_STAGE_TIMEOUTS = {
+    "query_rewrite": 15,   # LLM 改写查询
+    "hybrid_search": 25,   # 向量 + 关键词检索
+    "rerank": 20,          # 重排序
+    "wiki_search": 5,      # Wiki FTS5 搜索
+}
+
 
 class SearchService:
     """统一搜索服务 — 封装完整搜索管线
 
     管线流程：查询改写 → 混合检索 → 重排序 → Wiki 优先
+    优化：查询改写与 Wiki 搜索并行执行；各阶段有独立超时保护。
     """
 
     def __init__(self, config=None, db=None, block_store=None, embedding=None, llm=None):
@@ -20,8 +32,29 @@ class SearchService:
         self._embedding = embedding
         self._llm = llm
 
+    def _stage_timeout(self, stage: str) -> float:
+        """获取阶段超时时间，支持 config 覆盖"""
+        cfg_key = f"rag.stage_timeout.{stage}"
+        custom = None
+        if isinstance(self._config, dict):
+            # 从嵌套 dict 中读取
+            parts = cfg_key.split(".")
+            obj = self._config
+            for p in parts:
+                if isinstance(obj, dict):
+                    obj = obj.get(p)
+                else:
+                    obj = None
+                    break
+            custom = obj
+        else:
+            custom = self._config.get(cfg_key)
+        return float(custom or _STAGE_TIMEOUTS.get(stage, 30))
+
     def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
-        """完整搜索管线"""
+        """完整搜索管线（带阶段超时保护）"""
+        t0 = time.monotonic()
+
         if query_spec is not None:
             from src.services.query_executor import QueryExecutor
             from src.services.db import Database
@@ -42,28 +75,61 @@ class SearchService:
 
         output = []
 
-        # 1. 查询改写
-        queries = self._rewrite_query(query)
+        # ── 阶段 1: 查询改写 + Wiki 搜索（并行） ──
+        queries = [query]  # 默认：不改写
+        wiki_results = []
 
-        # 2. 混合检索（HybridSearcher: 向量 + 关键词 blend + RRF 融合）
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            # 提交查询改写
+            rewrite_future = pool.submit(self._rewrite_query, query)
+            # 提交 Wiki 搜索
+            wiki_future = pool.submit(self._safe_wiki_search, query)
+
+            # 收集查询改写结果
+            try:
+                queries = rewrite_future.result(timeout=self._stage_timeout("query_rewrite"))
+            except FuturesTimeout:
+                logger.warning("Query rewrite timed out, using original query")
+                queries = [query]
+            except Exception as e:
+                logger.warning("Query rewrite failed: %s", e)
+                queries = [query]
+
+            # 收集 Wiki 搜索结果
+            try:
+                wiki_results = wiki_future.result(timeout=self._stage_timeout("wiki_search"))
+            except FuturesTimeout:
+                logger.warning("Wiki search timed out")
+                wiki_results = []
+            except Exception as e:
+                logger.warning("Wiki search failed: %s", e)
+                wiki_results = []
+
+        # ── 阶段 2: 混合检索（带超时保护） ──
         try:
-            candidates = self._hybrid_search(queries, top_k)
+            candidates = self._timed_hybrid_search(queries, top_k)
         except Exception as e:
             logger.warning("Hybrid search failed, falling back to BlockStore: %s", e)
-            candidates = self._block_store.search(query, top_k=top_k)
+            try:
+                candidates = self._block_store.search(query, top_k=top_k)
+            except Exception:
+                candidates = []
 
         if not candidates:
             candidates = self._knowledge_fts_search(query, top_k)
 
-        # 3. 重排序（专用 reranker 模型或 LLM 打分）
+        # ── 阶段 3: 重排序（带超时保护） ──
         if candidates:
-            candidates = self._rerank(query, candidates, top_k)
+            try:
+                candidates = self._timed_rerank(query, candidates, top_k)
+            except FuturesTimeout:
+                logger.warning("Rerank timed out, keeping original order")
+            except Exception as e:
+                logger.warning("Rerank failed: %s", e)
 
-        # 4. Wiki 结构化知识优先
-        wiki_results = self._wiki_search(query)
+        # ── 阶段 4: 组装结果 ──
         output.extend(wiki_results)
 
-        # 5. 组装检索+重排结果
         seen_kids = {w.get("knowledge_id") for w in wiki_results}
         for r in candidates:
             kid = (r.get("metadata") or {}).get("page_id",
@@ -82,11 +148,36 @@ class SearchService:
                     "score": score,
                 })
 
+        elapsed = time.monotonic() - t0
+        logger.info("Search completed in %.2fs: %d results for query=%r", elapsed, len(output), query[:50])
         return output
+
+    def _timed_hybrid_search(self, queries: list[str], top_k: int) -> list[dict]:
+        """带超时保护的混合检索"""
+        timeout = self._stage_timeout("hybrid_search")
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(self._hybrid_search, queries, top_k)
+            return future.result(timeout=timeout)
+
+    def _timed_rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
+        """带超时保护的重排序"""
+        if not self._config.get("rag.enable_rerank", False) if isinstance(self._config, dict) else not self._config.get("rag.enable_rerank", False):
+            return candidates
+        timeout = self._stage_timeout("rerank")
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(self._rerank, query, candidates, top_k)
+            return future.result(timeout=timeout)
+
+    def _safe_wiki_search(self, query: str) -> list[dict]:
+        """包装 wiki 搜索以便在 ThreadPoolExecutor 中安全调用"""
+        return self._wiki_search(query)
 
     def _rewrite_query(self, query: str) -> list[str]:
         """查询改写，失败回退 [query]"""
-        if not self._config.get("rag.enable_query_rewriting", False):
+        enabled = (self._config.get("rag.enable_query_rewriting", False)
+                   if isinstance(self._config, dict)
+                   else self._config.get("rag.enable_query_rewriting", False))
+        if not enabled:
             return [query]
         try:
             rewriter = QueryRewriter(self._llm, self._config)
@@ -102,7 +193,10 @@ class SearchService:
 
     def _rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
         """重排序，失败保留原序"""
-        if not self._config.get("rag.enable_rerank", False):
+        enabled = (self._config.get("rag.enable_rerank", False)
+                   if isinstance(self._config, dict)
+                   else self._config.get("rag.enable_rerank", False))
+        if not enabled:
             return candidates
         try:
             reranker = LLMReranker(self._llm, self._config)

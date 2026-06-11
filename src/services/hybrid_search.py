@@ -1,6 +1,7 @@
 """混合检索模块 — Block-First 架构（embedding/keywords/blend）+ RRF 融合"""
 import hashlib
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
 from src.utils.config import Config
 from src.services.block_store import BlockStore
@@ -80,8 +81,12 @@ class HybridSearcher:
         return results[:top_k * 2]
 
     def _blend_search(self, queries: list[str], top_k: int) -> list[dict]:
-        vec_results = self._vector_search(queries, top_k * 3)
-        fts_results = self._keyword_search(queries, top_k * 3)
+        # 向量搜索和关键词搜索并行执行，减少总耗时
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            vec_future = pool.submit(self._vector_search, queries, top_k * 3)
+            fts_future = pool.submit(self._keyword_search, queries, top_k * 3)
+            vec_results = vec_future.result()
+            fts_results = fts_future.result()
 
         k = 60
         rrf_scores = {}

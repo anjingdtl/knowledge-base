@@ -1,6 +1,7 @@
 """Wiki 知识库健康检查引擎 — 孤立页面、过时信息、损坏链接等"""
 import json
 import logging
+import re
 from dataclasses import dataclass, field
 
 from src.services.db import Database
@@ -8,11 +9,14 @@ from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
 
+# 匹配 wiki 页面 content 中的 [[标题]] 或 [[标题#锚点]] 引用
+_WIKI_LINK_RE = re.compile(r"\[\[([^]\n#]+)(?:#([^]\n]+))?\]\]")
+
 
 @dataclass
 class LintFinding:
     severity: str          # error | warning | info
-    category: str          # orphan | stale | empty | duplicate | broken_link | contradiction
+    category: str          # orphan | stale | empty | duplicate | broken_link | dead_reference | contradiction
     page_id: str
     page_title: str
     message: str
@@ -126,7 +130,32 @@ class WikiLint:
                     },
                 ))
 
-        # 6. 矛盾检测（可选，高成本）
+        # 6. 内容死链 — content 中的 [[...]] 引用指向不存在的页面
+        all_titles = {p["title"] for p in pages}
+        title_to_id = {p["title"]: p["id"] for p in pages}
+        for page in pages:
+            content = page.get("content", "") or ""
+            dead_refs = []
+            for match in _WIKI_LINK_RE.finditer(content):
+                ref_title = match.group(1).strip()
+                if ref_title not in all_titles:
+                    dead_refs.append(ref_title)
+            if dead_refs:
+                # 去重但保留顺序
+                seen = set()
+                unique_dead = []
+                for ref in dead_refs:
+                    if ref not in seen:
+                        seen.add(ref)
+                        unique_dead.append(ref)
+                report.findings.append(LintFinding(
+                    severity="error", category="dead_reference",
+                    page_id=page["id"], page_title=page["title"],
+                    message=f"内容中有 {len(unique_dead)} 个引用指向不存在的页面: {', '.join(unique_dead[:5])}",
+                    detail={"missing_titles": unique_dead},
+                ))
+
+        # 7. 矛盾检测（可选，高成本）
         if Config.get("wiki.lint_contradictions", False):
             self._check_contradictions(pages, report, all_links)
 

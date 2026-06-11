@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 
 LABEL name="ShineHeKnowledge" \
-      version="1.0.0" \
+      version="1.2.0" \
       description="本地知识库系统 - 多模态文档管理 + RAG 智能问答"
 
 WORKDIR /app

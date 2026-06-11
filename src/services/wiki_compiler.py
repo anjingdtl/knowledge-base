@@ -1,5 +1,6 @@
 """Wiki 知识编译引擎 — Ingest 编译 + 交叉引用 + Query 回存"""
 import json
+import re
 import uuid
 import logging
 from datetime import datetime
@@ -11,6 +12,9 @@ from src.data.wiki_schema import INGEST_PROMPT, MERGE_PROMPT, LINK_DISCOVERY_PRO
 
 logger = logging.getLogger(__name__)
 
+# 匹配 wiki 页面 content 中的 [[标题]] 或 [[标题#锚点]] 引用
+_WIKI_LINK_RE = re.compile(r"\[\[([^]\n#]+)(?:#([^]\n]+))?\]\]")
+
 
 def try_wiki_compile(knowledge_id: str):
     """尝试对已导入的知识条目执行 Wiki 编译（供 MCP/API 层共享调用）"""
@@ -20,6 +24,62 @@ def try_wiki_compile(knowledge_id: str):
         WikiCompiler().ingest(knowledge_id)
     except Exception as e:
         logger.warning("Wiki compile failed for %s: %s", knowledge_id, e)
+
+
+def resolve_all_content_links() -> dict:
+    """扫描所有 Wiki 页面的 content，解析 [[...]] 引用并创建 wiki_links。
+
+    返回处理结果统计，供 MCP 工具或管理脚本调用。
+    """
+    pages = Database.list_wiki_pages(limit=500)
+    if not pages:
+        return {"scanned": 0, "links_created": 0, "dead_refs": []}
+
+    total_links = 0
+    all_dead_refs = []
+    compiler = WikiCompiler()
+
+    for page in pages:
+        page_id = page["id"]
+        content = page.get("content", "") or ""
+        if not content:
+            continue
+
+        seen_targets = set()
+        for match in _WIKI_LINK_RE.finditer(content):
+            ref_title = match.group(1).strip()
+            if ref_title in seen_targets or ref_title == page.get("title", ""):
+                continue
+            seen_targets.add(ref_title)
+
+            target = Database.get_wiki_page_by_title(ref_title)
+            if target and target["id"] != page_id:
+                try:
+                    Database.add_wiki_link(page_id, target["id"], "references", 1.0)
+                    total_links += 1
+                except Exception as e:
+                    logger.warning("Failed to add content link: %s", e)
+            elif not target:
+                all_dead_refs.append({
+                    "source_page_id": page_id,
+                    "source_title": page["title"],
+                    "missing_title": ref_title,
+                })
+
+    # 汇总死链
+    unique_dead = {}
+    for d in all_dead_refs:
+        key = d["missing_title"]
+        if key not in unique_dead:
+            unique_dead[key] = {"missing_title": key, "referenced_by": []}
+        unique_dead[key]["referenced_by"].append(d["source_title"])
+
+    return {
+        "scanned": len(pages),
+        "links_created": total_links,
+        "dead_references": list(unique_dead.values()),
+        "dead_reference_count": len(unique_dead),
+    }
 
 
 def parse_tags(raw) -> list[str]:
@@ -108,6 +168,11 @@ class WikiCompiler:
             all_pids = created_ids + updated_ids
             for pid in all_pids:
                 self._discover_links(pid)
+
+        # 后处理：解析 content 中的 [[...]] 引用，创建 wiki_links
+        all_affected_ids = created_ids + updated_ids
+        for pid in all_affected_ids:
+            self._resolve_content_links(pid)
 
         Database.insert_wiki_op("ingest", knowledge_id, {
             "title": item["title"],
@@ -286,6 +351,41 @@ class WikiCompiler:
             full_id = self._resolve_page_id(target_id)
             if full_id and full_id != page_id:
                 Database.add_wiki_link(page_id, full_id, link.get("link_type", "related"), 1.0)
+
+    def _resolve_content_links(self, page_id: str):
+        """扫描页面 content 中的 [[...]] 引用，创建 wiki_links 记录。
+
+        对于引用了不存在页面的链接，记录日志但不创建占位页面
+        （占位页面应由 wiki_lint 报告后人工决定是否创建）。
+        """
+        page = Database.get_wiki_page(page_id)
+        if not page:
+            return
+        content = page.get("content", "") or ""
+        if not content:
+            return
+
+        seen_targets = set()
+        for match in _WIKI_LINK_RE.finditer(content):
+            ref_title = match.group(1).strip()
+            if ref_title in seen_targets:
+                continue
+            seen_targets.add(ref_title)
+
+            # 跳过自引用
+            if ref_title == page.get("title", ""):
+                continue
+
+            target = Database.get_wiki_page_by_title(ref_title)
+            if target and target["id"] != page_id:
+                try:
+                    Database.add_wiki_link(page_id, target["id"], "references", 1.0)
+                except Exception as e:
+                    logger.warning("Failed to add content link %s -> %s: %s",
+                                   page["title"], ref_title, e)
+            elif not target:
+                logger.info("Dead reference in [%s]: [[%s]] — target page not found",
+                            page["title"], ref_title)
 
     def _resolve_page_id(self, partial_or_full: str) -> str | None:
         """解析可能是截断的页面 ID"""

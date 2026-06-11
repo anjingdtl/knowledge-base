@@ -207,6 +207,23 @@ def _embedding_context_config() -> dict:
 
 from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
 
+
+@mcp.tool(
+    description="轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，"
+    "无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+)
+def ping() -> dict:
+    """轻量级连通性检测，返回服务状态和时间戳。"""
+    import time
+    return ok({
+        "status": "alive",
+        "timestamp": time.time(),
+        "version": VERSION,
+        "uptime_hint": "ok",
+    })
+
+
 @mcp.tool(
     description="基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。",
     annotations={"readOnlyHint": True, "openWorldHint": False},
@@ -1217,6 +1234,24 @@ def wiki_lint() -> dict:
     linter = WikiLint()
     report = linter.run()
     return ok(report)
+
+
+@mcp.tool(
+    description="扫描所有 Wiki 页面 content 中的 [[...]] 交叉引用，"
+    "将有效引用写入 wiki_links 表，并报告指向不存在页面的死链。"
+    "用于修复因文档导入时引用关系不完整导致的死链问题。",
+)
+@_heartbeat
+def fix_dead_references() -> dict:
+    """扫描并修复 Wiki 内容中的 [[...]] 交叉引用。"""
+    if not Config.get("wiki.enabled", False):
+        return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
+    from src.services.wiki_compiler import resolve_all_content_links
+    result = resolve_all_content_links()
+    log_id = _op_log("fix_dead_references", "wiki", "",
+                     metadata=result)
+    envelope = ok(result)
+    return attach_operation_id(envelope, log_id)
 
 
 # ---- Wiki Workflow MCP Tools ----
