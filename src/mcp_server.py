@@ -1237,20 +1237,51 @@ def wiki_lint() -> dict:
 
 
 @mcp.tool(
-    description="扫描所有 Wiki 页面 content 中的 [[...]] 交叉引用，"
-    "将有效引用写入 wiki_links 表，并报告指向不存在页面的死链。"
-    "用于修复因文档导入时引用关系不完整导致的死链问题。",
+    description="使用 LLM 智能修复 Wiki 页面中 [[...]] 死链。"
+    "对每个死链分析上下文后选择修复策略：重定向到已有页面、创建占位页面或移除引用。"
+    "修复前会先尝试解析有效引用写入 wiki_links 表。"
+    "注意：会消耗 LLM 调用次数（每个含死链的页面约 1 次 LLM 调用）。",
 )
 @_heartbeat
-def fix_dead_references() -> dict:
-    """扫描并修复 Wiki 内容中的 [[...]] 交叉引用。"""
+def fix_dead_references(max_pages: int = 50, dry_run: bool = False) -> dict:
+    """LLM 驱动的 Wiki 死链智能修复。
+
+    Args:
+        max_pages: 最多处理多少个含死链的页面（默认 50，控制 LLM 成本）
+        dry_run: 仅扫描报告死链，不执行修复（默认 false）
+    """
     if not Config.get("wiki.enabled", False):
         return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
-    from src.services.wiki_compiler import resolve_all_content_links
-    result = resolve_all_content_links()
+
+    # 第一步：先解析有效引用
+    from src.services.wiki_compiler import resolve_all_content_links, WikiCompiler
+    link_result = resolve_all_content_links()
+
+    if dry_run:
+        # 仅报告，不修复
+        return ok({
+            "mode": "dry_run",
+            "links_created": link_result["links_created"],
+            "dead_reference_count": link_result["dead_reference_count"],
+            "dead_references": link_result["dead_references"],
+        })
+
+    # 第二步：LLM 修复
+    compiler = WikiCompiler()
+    repair_result = compiler.repair_dead_references(max_pages=max_pages)
+
     log_id = _op_log("fix_dead_references", "wiki", "",
-                     metadata=result)
-    envelope = ok(result)
+                     metadata={
+                         "link_scan": link_result,
+                         "repair": repair_result,
+                     })
+    envelope = ok({
+        "link_scan": {
+            "scanned": link_result["scanned"],
+            "links_created": link_result["links_created"],
+        },
+        "repair": repair_result,
+    })
     return attach_operation_id(envelope, log_id)
 
 
