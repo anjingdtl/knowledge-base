@@ -73,11 +73,30 @@ class WikiLintWorker(QThread):
             self.error.emit(str(e))
 
 
+class WikiRepairWorker(QThread):
+    """后台线程：调用 LLM 修复 Wiki 死链"""
+    finished = Signal(dict)
+    error = Signal(str)
+
+    def __init__(self, max_pages: int = 50, parent=None):
+        super().__init__(parent)
+        self._max_pages = max_pages
+
+    def run(self):
+        try:
+            compiler = WikiCompiler()
+            result = compiler.repair_dead_references(max_pages=self._max_pages)
+            self.finished.emit(result)
+        except Exception as e:
+            self.error.emit(str(e))
+
+
 class WikiView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._compiler = WikiCompiler()
         self._lint_worker = None
+        self._repair_worker = None
         self._lint_findings = {}  # page_id → [findings]
         self._setup_ui()
         self._load_pages()
@@ -127,6 +146,12 @@ class WikiView(QWidget):
         set_named_icon(self.btn_lint, "lint", "text_dim", 15)
         self.btn_lint.clicked.connect(self._run_lint)
         toolbar.addWidget(self.btn_lint)
+
+        self.btn_repair = QPushButton("修复死链")
+        set_named_icon(self.btn_repair, "link", "text_dim", 15)
+        self.btn_repair.setToolTip("使用 LLM 智能修复 Wiki 页面中的 [[死链]] 引用")
+        self.btn_repair.clicked.connect(self._run_repair)
+        toolbar.addWidget(self.btn_repair)
 
         self.stats_label = QLabel("")
         self.stats_label.setObjectName("hintLabel")
@@ -756,3 +781,87 @@ class WikiView(QWidget):
             QMessageBox.information(self, "知识体检报告", "所有 Wiki 页面健康，未发现问题！")
 
         self._load_pages()
+
+    def _run_repair(self):
+        """启动 LLM 死链修复（后台线程）"""
+        if self._repair_worker and self._repair_worker.isRunning():
+            return
+        if not Config.get("wiki.enabled", False):
+            QMessageBox.warning(self, "提示", "Wiki 功能未启用")
+            return
+
+        # 先快速扫描死链数量，让用户确认
+        from src.services.wiki_compiler import _WIKI_LINK_RE
+        pages = Database.list_wiki_pages(limit=500)
+        if not pages:
+            QMessageBox.information(self, "修复死链", "当前没有 Wiki 页面，无需修复。")
+            return
+
+        all_titles = {p["title"] for p in pages}
+        dead_count = 0
+        for page in pages:
+            content = page.get("content", "") or ""
+            for m in _WIKI_LINK_RE.finditer(content):
+                if m.group(1).strip() not in all_titles:
+                    dead_count += 1
+
+        if dead_count == 0:
+            QMessageBox.information(self, "修复死链",
+                                    f"扫描了 {len(pages)} 个 Wiki 页面，未发现死链，所有引用均有效！")
+            return
+
+        reply = QMessageBox.question(
+            self, "确认修复",
+            f"扫描到 {len(pages)} 个页面中共有 {dead_count} 个死链。\n\n"
+            f"将调用 LLM 智能分析并修复（重定向、创建占位页或移除标记）。\n"
+            f"确定开始修复？",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+
+        self.btn_repair.setEnabled(False)
+        self.stats_label.setText(f"正在修复 {dead_count} 个死链...")
+        self._repair_worker = WikiRepairWorker(max_pages=50)
+        self._repair_worker.finished.connect(self._on_repair_done)
+        self._repair_worker.error.connect(self._on_repair_error)
+        self._repair_worker.start()
+
+    def _on_repair_done(self, result: dict):
+        self.btn_repair.setEnabled(True)
+        status = result.get("status", "")
+        scanned = result.get("scanned", 0)
+
+        if status == "clean":
+            self.stats_label.setText("修复完成: 无死链")
+            QMessageBox.information(self, "修复死链",
+                                    f"扫描了 {scanned} 个页面，未发现死链。")
+        elif status == "empty":
+            self.stats_label.setText("修复完成: 无页面")
+            QMessageBox.information(self, "修复死链", "当前没有 Wiki 页面。")
+        else:
+            redirects = result.get("redirects", 0)
+            stubs = result.get("stubs", 0)
+            removes = result.get("removes", 0)
+            errors = result.get("errors", 0)
+            fixed = result.get("fixed", 0)
+            self.stats_label.setText(f"修复完成: {fixed} 处死链已修复")
+
+            lines = [
+                f"修复完成！共处理 {fixed} 处死链：\n",
+                f"  · 重定向到已有页面: {redirects}",
+                f"  · 创建占位页面: {stubs}",
+                f"  · 移除引用标记: {removes}",
+            ]
+            if errors:
+                lines.append(f"\n  ⚠ 失败: {errors} 处（可稍后重试）")
+            QMessageBox.information(self, "修复死链", "\n".join(lines))
+
+        # 清空旧的 lint 结果并重新加载页面
+        self._lint_findings = {}
+        self._load_pages()
+
+    def _on_repair_error(self, error_msg: str):
+        self.btn_repair.setEnabled(True)
+        self.stats_label.setText(f"修复失败: {error_msg[:50]}")
+        QMessageBox.warning(self, "修复失败", f"LLM 修复过程出错：\n\n{error_msg}")
