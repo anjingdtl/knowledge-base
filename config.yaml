@@ -111,13 +111,13 @@ safety:
     enabled: true
     retention_days: 90
 graph_backend:
-  provider: sqlite          # sqlite | neo4j
+  provider: neo4j          # sqlite | neo4j
   # Neo4j 配置（provider=neo4j 时生效）:
-  # uri: bolt://localhost:7687
-  # user: neo4j
-  # password: ""
-  # database: neo4j
-  # max_connection_pool_size: 50
+  uri: bolt://localhost:7687
+  user: neo4j
+  password: neo4j123
+  database: neo4j
+  max_connection_pool_size: 50
 storage:
   chroma_dir: chroma
   data_dir: data

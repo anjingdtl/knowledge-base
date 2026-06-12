@@ -49,6 +49,11 @@ NAV = {
     "graph_generate": "fa5s.magic",
     "layout": "fa5s.th",
     "fullscreen": "fa5s.expand",
+    "play": "fa5s.play",
+    "stop": "fa5s.stop",
+    "database": "fa5s.database",
+    "sync": "fa5s.sync",
+    "exchange": "fa5s.exchange-alt",
 }
 
 

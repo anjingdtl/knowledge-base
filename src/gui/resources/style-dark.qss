@@ -146,12 +146,14 @@ QLabel#indicatorDot {
 }
 
 QLabel#mcpLight[status="online"],
-QLabel#indicatorDot[status="idle"] {
+QLabel#indicatorDot[status="idle"],
+QLabel#indicatorDot[status="online"] {
     color: #4CAF82;
 }
 
 QLabel#mcpLight[status="offline"],
-QLabel#indicatorDot[status="error"] {
+QLabel#indicatorDot[status="error"],
+QLabel#indicatorDot[status="offline"] {
     color: #E55D7D;
 }
 
