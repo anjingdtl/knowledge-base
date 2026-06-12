@@ -117,6 +117,11 @@ safety:
   operation_log:
     enabled: true
     retention_days: 90
+mcp:
+  write_policy: ""          # 写操作安全策略: "" | preview_only | local_confirm | token_required | disabled
+  allow_http_write: false   # HTTP 模式是否允许写操作
+  bind_host: 127.0.0.1     # MCP HTTP 服务绑定地址
+  auth_token: ""            # write_policy=token_required 时使用的认证 token
 graph_backend:
   provider: sqlite          # sqlite | neo4j
   # Neo4j 配置（provider=neo4j 时生效）:
