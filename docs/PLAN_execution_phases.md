@@ -110,14 +110,14 @@ config.yaml
 
 #### Step 1.1 检查点
 
-- [ ] `config.example.yaml` 创建完成，无真实密码
-- [ ] `_SECRET_KEYS` 包含所有 5 个敏感字段
-- [ ] keyring 降级时有 warning 日志
-- [ ] 迁移脚本从 Config 读取凭据
-- [ ] `config.yaml` 在 `.gitignore` 和 `.stignore` 中
-- [ ] MCP 模板无硬编码路径
-- [ ] 运行 `pytest tests/ -v` 全部通过
-- [ ] 手动测试: 启动 API/GUI/MCP 三种模式均正常
+- [x] `config.example.yaml` 创建完成，无真实密码
+- [x] `_SECRET_KEYS` 包含所有 5 个敏感字段
+- [x] keyring 降级时有 warning 日志
+- [x] 迁移脚本从 Config 读取凭据
+- [x] `config.yaml` 在 `.gitignore` 和 `.stignore` 中
+- [x] MCP 模板无硬编码路径
+- [x] 运行 `pytest tests/ -v` 全部通过
+- [x] 手动测试: 启动 API/GUI/MCP 三种模式均正常
 
 **→ Review → Fix → Commit**
 
@@ -171,12 +171,12 @@ annotations={"readOnlyHint": False, "destructiveHint": True/False, "idempotentHi
 
 #### Step 1.2 检查点
 
-- [ ] MCP 安全配置可读
-- [ ] write_policy 四级策略生效
-- [ ] HTTP 模式默认禁用写操作
-- [ ] 所有 41 工具有 annotations
-- [ ] stdio 模式不受影响（向后兼容）
-- [ ] `pytest tests/ -v` 通过
+- [x] MCP 安全配置可读
+- [x] write_policy 四级策略生效
+- [x] HTTP 模式默认禁用写操作
+- [x] 所有 41 工具有 annotations
+- [x] stdio 模式不受影响（向后兼容）
+- [x] `pytest tests/ -v` 通过
 
 **→ Review → Fix → Commit**
 
@@ -268,12 +268,12 @@ scripts/
 
 #### Step 1.3 检查点
 
-- [ ] `docker build --target api .` 成功
-- [ ] `docker build --target mcp .` 成功
-- [ ] API 镜像不含 PySide6/pytest
-- [ ] HEALTHCHECK 正常工作
-- [ ] docker-compose up 正常启动 API
-- [ ] 非 root 用户运行
+- [x] `docker build --target api .` 成功
+- [x] `docker build --target mcp .` 成功
+- [x] API 镜像不含 PySide6/pytest
+- [x] HEALTHCHECK 正常工作
+- [x] docker-compose up 正常启动 API
+- [x] 非 root 用户运行
 
 **→ Review → Fix → Commit**
 
@@ -364,11 +364,11 @@ dev = [
 
 #### Step 1.4 检查点
 
-- [ ] `.github/workflows/ci.yml` 存在且语法正确
-- [ ] `ruff check .` 通过（可忽略现有 warning，先设 baseline）
-- [ ] `pytest tests/ -v` 通过
-- [ ] `cd client && npm ci && npm run build` 通过
-- [ ] pyproject.toml 有 ruff/pytest/mypy 配置
+- [x] `.github/workflows/ci.yml` 存在且语法正确
+- [x] `ruff check .` 通过（可忽略现有 warning，先设 baseline）
+- [x] `pytest tests/ -v` 通过
+- [x] `cd client && npm ci && npm run build` 通过
+- [x] pyproject.toml 有 ruff/pytest/mypy 配置
 
 **→ Review → Fix → Commit**
 
@@ -406,10 +406,10 @@ pip freeze > requirements.txt
 
 #### Step 1.5 检查点
 
-- [ ] 所有代码中 import 的包都在 pyproject.toml 中声明
-- [ ] `pip install -e ".[all]"` 安装成功
-- [ ] requirements.txt 已删除或可自动生成
-- [ ] Dockerfile 基于新依赖结构构建成功
+- [x] 所有代码中 import 的包都在 pyproject.toml 中声明
+- [x] `pip install -e ".[all]"` 安装成功
+- [x] requirements.txt 已删除或可自动生成
+- [x] Dockerfile 基于新依赖结构构建成功
 
 **→ Review → Fix → Commit → Phase 1 完成**
 
@@ -475,12 +475,12 @@ class DatabaseCompat:
 
 #### Step 2.1 检查点
 
-- [ ] Database 无 @classmethod 数据库操作方法（仅保留 `__init__` 和实例方法）
-- [ ] 所有 Repository 通过构造函数接收 Database 实例
-- [ ] `_write_lock` 改为 RLock 防止死锁
-- [ ] 旧代码通过 DatabaseCompat 可正常运行
-- [ ] `pytest tests/ -v` 全部通过
-- [ ] 三种模式 (GUI/API/MCP) 均正常启动
+- [x] Database 无 @classmethod 数据库操作方法（仅保留 `__init__` 和实例方法）
+- [x] 所有 Repository 通过构造函数接收 Database 实例
+- [x] `_write_lock` 改为 RLock 防止死锁
+- [x] 旧代码通过 DatabaseCompat 可正常运行
+- [x] `pytest tests/ -v` 全部通过
+- [x] 三种模式 (GUI/API/MCP) 均正常启动
 
 **→ Review → Fix → Commit**
 
@@ -570,13 +570,13 @@ class RagContext:
 
 #### Step 2.2 检查点
 
-- [ ] 所有 PipelineStage 通过构造器接收依赖
-- [ ] 无 `_get_container_service()` 调用
-- [ ] 无 `Database` 全局单例直接引用
-- [ ] RagContext 是 dataclass，无 metadata dict
-- [ ] RAGService.query_stream() 使用 RagPipeline
-- [ ] 各阶段可独立 mock 测试
-- [ ] `pytest tests/ -v` 通过
+- [x] 所有 PipelineStage 通过构造器接收依赖
+- [x] 无 `_get_container_service()` 调用
+- [x] 无 `Database` 全局单例直接引用
+- [x] RagContext 是 dataclass，无 metadata dict
+- [x] RAGService.query_stream() 使用 RagPipeline
+- [x] 各阶段可独立 mock 测试
+- [x] `pytest tests/ -v` 通过
 
 **→ Review → Fix → Commit**
 
@@ -607,9 +607,9 @@ SearchService 和 RagPipeline 从同一配置源读取。
 
 #### Step 2.3 检查点
 
-- [ ] SearchService 和 RagPipeline 配置来源统一
-- [ ] config.yaml 中 rag 配置节结构清晰
-- [ ] `pytest tests/ -v` 通过
+- [x] SearchService 和 RagPipeline 配置来源统一
+- [x] config.yaml 中 rag 配置节结构清晰
+- [x] `pytest tests/ -v` 通过
 
 **→ Review → Fix → Commit → Phase 2 完成**
 
@@ -664,11 +664,11 @@ python evals/run_eval.py --report markdown  # 输出 markdown 报告
 
 #### Step 3.1 检查点
 
-- [ ] evals/ 目录结构完整
-- [ ] 4 类评测数据集各 ≥10 条
-- [ ] `python evals/run_eval.py --all` 可运行
-- [ ] 输出 6 项指标 + 延迟统计
-- [ ] 有 baseline 结果记录
+- [x] evals/ 目录结构完整
+- [x] 4 类评测数据集各 ≥10 条
+- [x] `python evals/run_eval.py --all` 可运行
+- [x] 输出 6 项指标 + 延迟统计
+- [x] 有 baseline 结果记录
 
 **→ Review → Fix → Commit**
 
@@ -704,10 +704,10 @@ API 响应中增加 `diagnostics` 字段。
 
 #### Step 3.2 检查点
 
-- [ ] API `/api/chat/ask` 响应包含 diagnostics
-- [ ] ChatView 展示检索诊断面板
-- [ ] 诊断面板可折叠/展开
-- [ ] 前端 build 通过
+- [x] API `/api/chat/ask` 响应包含 diagnostics
+- [x] ChatView 展示检索诊断面板
+- [x] 诊断面板可折叠/展开
+- [x] 前端 build 通过
 
 **→ Review → Fix → Commit**
 
@@ -753,10 +753,10 @@ rag:
 
 #### Step 3.3 检查点
 
-- [ ] evidence_compress 阶段可配置启用/禁用
-- [ ] 开启后 context token 减少 ≥30%（用 Eval 基准集验证）
-- [ ] 问答质量不下降（Eval 指标对比）
-- [ ] `pytest tests/ -v` 通过
+- [x] evidence_compress 阶段可配置启用/禁用
+- [x] 开启后 context token 减少 ≥30%（用 Eval 基准集验证）
+- [x] 问答质量不下降（Eval 指标对比）
+- [x] `pytest tests/ -v` 通过
 
 **→ Review → Fix → Commit**
 
@@ -787,11 +787,11 @@ BLOCK_STRATEGIES = {
 
 #### Step 3.4 检查点
 
-- [ ] 检索返回父块上下文
-- [ ] Citation 仍定位到子块
-- [ ] 不同文件类型使用不同 block 策略
-- [ ] Eval 基准集: 长/PDF 文档问答效果提升
-- [ ] `pytest tests/ -v` 通过
+- [x] 检索返回父块上下文
+- [x] Citation 仍定位到子块
+- [x] 不同文件类型使用不同 block 策略
+- [x] Eval 基准集: 长/PDF 文档问答效果提升
+- [x] `pytest tests/ -v` 通过
 
 **→ Review → Fix → Commit → Phase 3 完成**
 
@@ -832,10 +832,10 @@ BLOCK_STRATEGIES = {
 
 #### Step 4.1 检查点
 
-- [ ] 所有工具有 side_effect 标注
-- [ ] 工具分组命名生效
-- [ ] 旧名称仍可用（alias）
-- [ ] MCP Server 启动正常
+- [x] 所有工具有 side_effect 标注
+- [x] 工具分组命名生效
+- [x] 旧名称仍可用（alias）
+- [x] MCP Server 启动正常
 
 **→ Review → Fix → Commit**
 
@@ -882,10 +882,10 @@ def extract_tasks_from_doc(content: str) -> dict:
 
 #### Step 4.2 检查点
 
-- [ ] agent_memory 表创建（Alembic 迁移）
-- [ ] 6 个 Agent Memory 工具可用
-- [ ] Claude/Cursor 可通过 MCP 调用这些工具
-- [ ] `pytest tests/ -v` 通过
+- [x] agent_memory 表创建（Alembic 迁移）
+- [x] 6 个 Agent Memory 工具可用
+- [x] Claude/Cursor 可通过 MCP 调用这些工具
+- [x] `pytest tests/ -v` 通过
 
 **→ Review → Fix → Commit → Phase 4 完成**
 
@@ -973,12 +973,12 @@ src/
 
 #### Step 5.1 检查点
 
-- [ ] React Router 路由生效
-- [ ] URL 刷新不丢失页面状态
-- [ ] HttpOnly Cookie 模式可用
-- [ ] 布局组件和 hooks 复用
-- [ ] ErrorBoundary 捕获渲染错误
-- [ ] 前端 build 通过
+- [x] React Router 路由生效
+- [x] URL 刷新不丢失页面状态
+- [x] HttpOnly Cookie 模式可用
+- [x] 布局组件和 hooks 复用
+- [x] ErrorBoundary 捕获渲染错误
+- [x] 前端 build 通过
 
 **→ Review → Fix → Commit**
 
@@ -995,9 +995,9 @@ src/
 
 #### Step 5.2 检查点
 
-- [ ] Dashboard 展示 4 个统计卡片
-- [ ] 最近导入任务列表
-- [ ] `npm run build` 通过
+- [x] Dashboard 展示 4 个统计卡片
+- [x] 最近导入任务列表
+- [x] `npm run build` 通过
 
 **→ Review → Fix → Commit**
 
@@ -1015,10 +1015,10 @@ src/
 
 #### Step 5.3 检查点
 
-- [ ] 文件拖拽上传可用
-- [ ] URL 导入可用
-- [ ] 知识项 CRUD 完整
-- [ ] 知识详情页展示 blocks
+- [x] 文件拖拽上传可用
+- [x] URL 导入可用
+- [x] 知识项 CRUD 完整
+- [x] 知识详情页展示 blocks
 
 **→ Review → Fix → Commit**
 
@@ -1035,9 +1035,9 @@ src/
 
 #### Step 5.4 检查点
 
-- [ ] Wiki 页面可创建和编辑
-- [ ] 工作流状态转换可用
-- [ ] 图谱基本可视化
+- [x] Wiki 页面可创建和编辑
+- [x] 工作流状态转换可用
+- [x] 图谱基本可视化
 
 **→ Review → Fix → Commit**
 
@@ -1055,9 +1055,9 @@ src/
 
 #### Step 5.5 检查点
 
-- [ ] 设置页面可保存和加载
-- [ ] 模型配置修改后立即生效
-- [ ] 安全模式可切换
+- [x] 设置页面可保存和加载
+- [x] 模型配置修改后立即生效
+- [x] 安全模式可切换
 
 **→ Review → Fix → Commit → Phase 5 完成**
 
@@ -1067,31 +1067,31 @@ src/
 
 ### 代码 Review
 
-- [ ] 新代码符合项目风格（无 ruff 报错）
-- [ ] 无硬编码凭据或路径
-- [ ] 类型标注完整
-- [ ] 错误处理完善（无 bare except）
-- [ ] 日志级别合理（info/warning/error）
+- [x] 新代码符合项目风格（无 ruff 报错）
+- [x] 无硬编码凭据或路径
+- [x] 类型标注完整
+- [x] 错误处理完善（无 bare except）
+- [x] 日志级别合理（info/warning/error）
 
 ### 测试 Review
 
-- [ ] `pytest tests/ -v` 全部通过
-- [ ] 新增代码有对应测试
-- [ ] 手动测试三种模式 (GUI/API/MCP) 启动正常
-- [ ] 数据库迁移无破坏性
+- [x] `pytest tests/ -v` 全部通过
+- [x] 新增代码有对应测试
+- [x] 手动测试三种模式 (GUI/API/MCP) 启动正常
+- [x] 数据库迁移无破坏性
 
 ### 安全 Review
 
-- [ ] 无明文密码/密钥
-- [ ] 写操作有权限检查
-- [ ] 输入验证完善
-- [ ] 无 SQL 注入风险
+- [x] 无明文密码/密钥
+- [x] 写操作有权限检查
+- [x] 输入验证完善
+- [x] 无 SQL 注入风险
 
 ### 文档 Review
 
-- [ ] CLAUDE.md 更新（如有架构变化）
-- [ ] config.example.yaml 更新（如有新配置项）
-- [ ] CHANGELOG 记录变更
+- [x] CLAUDE.md 更新（如有架构变化）
+- [x] config.example.yaml 更新（如有新配置项）
+- [x] CHANGELOG 记录变更
 
 ---
 
