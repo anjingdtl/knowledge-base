@@ -12,8 +12,13 @@ Database.connect(str(config.get_db_path()))
 
 from neo4j import GraphDatabase as Neo4jDriver
 
-driver = Neo4jDriver.driver("bolt://localhost:7687", auth=("neo4j", "neo4j123"))
-DB = "neo4j"
+# 从配置读取 Neo4j 连接信息，不再硬编码凭据
+graph_cfg = config.get("graph_backend", {})
+driver = Neo4jDriver.driver(
+    graph_cfg.get("uri", "bolt://localhost:7687"),
+    auth=(graph_cfg.get("user", "neo4j"), graph_cfg.get("password", ""))
+)
+DB = graph_cfg.get("database", "neo4j")
 
 # 1. 清空 Neo4j
 print("Step 1: Clearing Neo4j...", flush=True)

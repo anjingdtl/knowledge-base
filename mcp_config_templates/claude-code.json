@@ -5,7 +5,7 @@
   "_前置条件": "先启动 HTTP 服务: python run_mcp.py -t streamable-http --port 9000",
   "_CLI导入命令": {
     "HTTP模式(推荐)": "claude mcp add -t http shinehe-kb http://127.0.0.1:9000/mcp -s user",
-    "stdio模式(备选)": "claude mcp add-json shinehe-kb '{\"command\":\"C:/Users/Administrator/AppData/Local/Programs/Python/Python314/python.exe\",\"args\":[\"D:/ClaudeCodeWorkSpace/projects/knowledge-base/run_mcp.py\"],\"cwd\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\",\"env\":{\"SHINEHE_HOME\":\"D:/ClaudeCodeWorkSpace/projects/knowledge-base\"},\"type\":\"stdio\"}' -s user"
+    "stdio模式(备选)": "claude mcp add-json shinehe-kb '{\"command\":\"<PYTHON_PATH>\",\"args\":[\"<PROJECT_PATH>/run_mcp.py\"],\"cwd\":\"<PROJECT_PATH>\",\"env\":{\"SHINEHE_HOME\":\"<PROJECT_PATH>\"},\"type\":\"stdio\"}' -s user"
   },
   "mcpServers": {
     "shinehe-kb": {
