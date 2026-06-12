@@ -174,6 +174,7 @@ _WRITE_TOOLS = {
     "create_async_job",
     "undo_operation", "fix_dead_references",
     "cancel_job", "cancel_async_job", "reindex_all",
+    "remember_fact", "update_project_context", "extract_tasks_from_doc",
 }
 
 # 破坏性操作（更严格）
@@ -2020,6 +2021,8 @@ def kb_capabilities() -> dict:
             "max_graph_nodes": int(Config.get("rag.max_graph_nodes", 200)),
             "max_graph_depth": int(Config.get("rag.max_graph_depth", 3)),
         },
+        "tool_metadata": _TOOL_METADATA,
+        "tool_aliases": _TOOL_ALIASES,
         "tools": tool_summaries,
         "recommended_flows": {
             "research": ["kb_capabilities", "route_query", "execute_query|ask", "get_source_graph", "read"],
@@ -2027,6 +2030,7 @@ def kb_capabilities() -> dict:
             "import": ["kb_capabilities", "create_ingest_job|ingest_file", "get_job", "structured_query", "ask"],
             "import_large": ["kb_capabilities", "create_ingest_job", "get_job", "structured_query", "ask"],
             "qna": ["route_query", "ask(include_graph=true, include_context=true)", "get_source_graph", "read"],
+            "agent_memory": ["remember_fact", "recall_facts", "update_project_context", "search_decisions", "summarize_recent_changes"],
         },
     })
 
@@ -2229,6 +2233,276 @@ def list_recent_operations(
         operation=operation, source=source,
         limit=limit, offset=offset,
     )
+
+
+# ---- Phase 4: Tool Schema 标准化 ----
+
+_TOOL_METADATA = {
+    # --- ops.* ---
+    "ping":            {"group": "ops",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "连通性检测"},
+    "kb_capabilities":  {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "能力清单"},
+    # --- kb.* ---
+    "search":           {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "语义搜索"},
+    "search_fulltext":  {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "全文搜索"},
+    "ask":              {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "RAG 问答"},
+    "ask_with_query":   {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "QuerySpec RAG"},
+    "create":           {"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "创建知识"},
+    "read":             {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "读取知识"},
+    "update":           {"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "更新知识"},
+    "delete":           {"group": "kb",  "side_effect": "destructive","requires_confirmation": True,  "short_desc": "删除知识"},
+    "restore_knowledge":{"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "恢复知识"},
+    "reindex_all":      {"group": "kb",  "side_effect": "destructive","requires_confirmation": True,  "short_desc": "重建索引"},
+    "list_knowledge":   {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "列出知识"},
+    "tags":             {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "列出标签"},
+    "ingest_file":      {"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "导入文件"},
+    "ingest_url":       {"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "导入网页"},
+    "create_ingest_job":{"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "创建导入任务"},
+    "get_job":          {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "查询任务"},
+    "list_jobs":        {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "列出任务"},
+    "cancel_job":       {"group": "kb",  "side_effect": "destructive","requires_confirmation": True,  "short_desc": "取消任务"},
+    "route_query":      {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "路由分析"},
+    "execute_query":    {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "执行 DSL"},
+    "structured_query": {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "结构化查询"},
+    "explain_query":    {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "查询解释"},
+    "get_source_graph": {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "来源图谱"},
+    "preview_operation":{"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "预览操作"},
+    # --- wiki.* ---
+    "save_to_wiki":         {"group": "wiki", "side_effect": "write", "requires_confirmation": False, "short_desc": "保存到 Wiki"},
+    "wiki_lint":            {"group": "wiki", "side_effect": "read",  "requires_confirmation": False, "short_desc": "Wiki 体检"},
+    "fix_dead_references":  {"group": "wiki", "side_effect": "write", "requires_confirmation": False, "short_desc": "修复死链"},
+    "wiki_submit_review":   {"group": "wiki", "side_effect": "write", "requires_confirmation": False, "short_desc": "提交审核"},
+    "wiki_approve":         {"group": "wiki", "side_effect": "write", "requires_confirmation": False, "short_desc": "审批通过"},
+    "wiki_reject":          {"group": "wiki", "side_effect": "write", "requires_confirmation": False, "short_desc": "驳回"},
+    "wiki_deprecate":       {"group": "wiki", "side_effect": "write", "requires_confirmation": False, "short_desc": "弃用"},
+    "wiki_workflow_history":{"group": "wiki", "side_effect": "read",  "requires_confirmation": False, "short_desc": "工作流历史"},
+    "wiki_list_versions":   {"group": "wiki", "side_effect": "read",  "requires_confirmation": False, "short_desc": "版本列表"},
+    "wiki_restore_version": {"group": "wiki", "side_effect": "write", "requires_confirmation": False, "short_desc": "恢复版本"},
+    # --- graph.* ---
+    "graph_traverse":       {"group": "graph", "side_effect": "read", "requires_confirmation": False, "short_desc": "图遍历"},
+    # --- ops.* ---
+    "query_operation_logs": {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "查询日志"},
+    "get_operation_log":    {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "获取日志"},
+    "undo_operation":       {"group": "ops", "side_effect": "write",      "requires_confirmation": False, "short_desc": "撤销操作"},
+    "list_recent_operations":{"group": "ops", "side_effect": "read",      "requires_confirmation": False, "short_desc": "最近操作"},
+    "create_async_job":     {"group": "ops", "side_effect": "write",      "requires_confirmation": False, "short_desc": "创建任务"},
+    "get_async_job":        {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "获取任务"},
+    "list_async_jobs":      {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "列出任务"},
+    "cancel_async_job":     {"group": "ops", "side_effect": "destructive","requires_confirmation": True,  "short_desc": "取消任务"},
+    # --- memory.* (Phase 4.2) ---
+    "remember_fact":        {"group": "memory", "side_effect": "write", "requires_confirmation": False, "short_desc": "记住事实"},
+    "recall_facts":         {"group": "memory", "side_effect": "read",  "requires_confirmation": False, "short_desc": "搜索记忆"},
+    "update_project_context":{"group": "memory", "side_effect": "write", "requires_confirmation": False, "short_desc": "更新项目上下文"},
+    "search_decisions":     {"group": "memory", "side_effect": "read",  "requires_confirmation": False, "short_desc": "搜索决策"},
+    "summarize_recent_changes":{"group": "memory", "side_effect": "read","requires_confirmation": False, "short_desc": "变更总结"},
+    "extract_tasks_from_doc":{"group": "memory", "side_effect": "write", "requires_confirmation": False, "short_desc": "提取任务"},
+}
+
+# 工具分组别名映射: namespaced_name → original_function_name
+_TOOL_ALIASES = {
+    # kb.* — Core knowledge base operations
+    "kb.search": "search",
+    "kb.search_fulltext": "search_fulltext",
+    "kb.ask": "ask",
+    "kb.ask_with_query": "ask_with_query",
+    "kb.create": "create",
+    "kb.read": "read",
+    "kb.update": "update",
+    "kb.delete": "delete",
+    "kb.restore": "restore_knowledge",
+    "kb.reindex": "reindex_all",
+    "kb.list": "list_knowledge",
+    "kb.tags": "tags",
+    "kb.ingest_file": "ingest_file",
+    "kb.ingest_url": "ingest_url",
+    "kb.preview": "preview_operation",
+    "kb.capabilities": "kb_capabilities",
+    "kb.route_query": "route_query",
+    "kb.execute_query": "execute_query",
+    "kb.structured_query": "structured_query",
+    "kb.explain_query": "explain_query",
+    "kb.get_source_graph": "get_source_graph",
+    "kb.get_job": "get_job",
+    "kb.list_jobs": "list_jobs",
+    "kb.cancel_job": "cancel_job",
+    "kb.create_ingest_job": "create_ingest_job",
+    # wiki.*
+    "wiki.save": "save_to_wiki",
+    "wiki.lint": "wiki_lint",
+    "wiki.fix_dead_refs": "fix_dead_references",
+    "wiki.submit_review": "wiki_submit_review",
+    "wiki.approve": "wiki_approve",
+    "wiki.reject": "wiki_reject",
+    "wiki.deprecate": "wiki_deprecate",
+    "wiki.history": "wiki_workflow_history",
+    "wiki.list_versions": "wiki_list_versions",
+    "wiki.restore_version": "wiki_restore_version",
+    # graph.*
+    "graph.traverse": "graph_traverse",
+    # ops.* — Operations
+    "ops.ping": "ping",
+    "ops.query_logs": "query_operation_logs",
+    "ops.get_log": "get_operation_log",
+    "ops.undo": "undo_operation",
+    "ops.list_recent": "list_recent_operations",
+    "ops.create_job": "create_async_job",
+    "ops.get_job": "get_async_job",
+    "ops.list_jobs": "list_async_jobs",
+    "ops.cancel_job": "cancel_async_job",
+    # memory.* — Agent Memory tools
+    "memory.remember": "remember_fact",
+    "memory.recall": "recall_facts",
+    "memory.update_context": "update_project_context",
+    "memory.search_decisions": "search_decisions",
+    "memory.summarize_changes": "summarize_recent_changes",
+    "memory.extract_tasks": "extract_tasks_from_doc",
+}
+
+
+def _register_tool_aliases():
+    """注册 namespaced 工具别名（kb.*, wiki.*, graph.*, ops.*）。
+    保留原始工具名不变，别名调用相同的底层函数。
+    """
+    import sys
+    current_module = sys.modules[__name__]
+
+    for alias_name, original_name in _TOOL_ALIASES.items():
+        original_fn = getattr(current_module, original_name, None)
+        if not original_fn:
+            logger.debug("Alias %s → %s: original not found, skipping", alias_name, original_name)
+            continue
+
+        meta = _TOOL_METADATA.get(original_name, {})
+        side = meta.get("side_effect", "read")
+
+        # 创建独立函数对象（保留原始签名）
+        @functools.wraps(original_fn)
+        def _alias(*args, _fn=original_fn, **kwargs):
+            return _fn(*args, **kwargs)
+
+        try:
+            mcp.tool(
+                _alias,
+                name=alias_name,
+                description=f"[→ {original_name}] {meta.get('short_desc', '')}",
+                annotations={
+                    "readOnlyHint": side == "read",
+                    "destructiveHint": side == "destructive",
+                    "idempotentHint": side == "read",
+                    "openWorldHint": False,
+                },
+            )
+        except Exception as exc:
+            logger.debug("Alias registration failed for %s: %s", alias_name, exc)
+
+
+# 注册别名
+_register_tool_aliases()
+
+
+# ---- Phase 4.2: Agent Memory Tools ----
+
+@mcp.tool(
+    description="记住一个事实、决策、上下文或任务，持久化到知识库。"
+    "相同 key 会覆盖已有记忆。category: fact | decision | context | task。",
+    annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+)
+@_heartbeat
+def remember_fact(key: str, value: str, category: str = "fact") -> dict:
+    """记住一个事实/决策/上下文/任务。
+
+    Args:
+        key: 记忆键名（唯一标识，相同 key 会覆盖）
+        value: 记忆内容
+        category: 分类 — fact（事实）、decision（决策）、context（上下文）、task（任务）
+    """
+    result = _get_container().agent_memory.remember_fact(key, value, category)
+    log_id = _op_log("remember", "agent_memory", result.get("id", ""), after={
+        "key": key, "category": category, "value_preview": _content_preview(value),
+    })
+    return attach_operation_id(ok(result), log_id)
+
+
+@mcp.tool(
+    description="搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。",
+    annotations={"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False},
+)
+@_heartbeat
+def recall_facts(query: str, category: str | None = None, limit: int = 5) -> dict:
+    """搜索已记住的事实/决策。
+
+    Args:
+        query: 搜索关键词
+        category: 可选分类过滤 (fact | decision | context | task)
+        limit: 返回数量上限
+    """
+    results = _get_container().agent_memory.recall_facts(query, category=category, limit=limit)
+    return ok(results, count=len(results), query=query)
+
+
+@mcp.tool(
+    description="更新项目整体上下文描述。Agent 可通过此工具记住项目的全局背景信息，"
+    "在后续会话中通过 recall_facts(query='project_context') 回忆。",
+    annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+)
+@_heartbeat
+def update_project_context(summary: str) -> dict:
+    """更新项目整体上下文描述。
+
+    Args:
+        summary: 项目上下文描述（会覆盖之前的内容）
+    """
+    result = _get_container().agent_memory.update_project_context(summary)
+    log_id = _op_log("update_context", "agent_memory", "", after={
+        "summary_preview": _content_preview(summary),
+    })
+    return attach_operation_id(ok(result), log_id)
+
+
+@mcp.tool(
+    description="搜索架构/技术决策记录（category=decision 的记忆）。",
+    annotations={"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False},
+)
+@_heartbeat
+def search_decisions(query: str, limit: int = 5) -> dict:
+    """搜索决策记录。
+
+    Args:
+        query: 搜索关键词
+        limit: 返回数量上限
+    """
+    results = _get_container().agent_memory.search_decisions(query, limit=limit)
+    return ok(results, count=len(results), query=query)
+
+
+@mcp.tool(
+    description="总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。",
+    annotations={"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False},
+)
+@_heartbeat
+def summarize_recent_changes(since_hours: int = 24) -> dict:
+    """总结近期知识库变更。
+
+    Args:
+        since_hours: 统计最近多少小时的变更（默认 24）
+    """
+    result = _get_container().agent_memory.summarize_recent_changes(since_hours=since_hours)
+    return ok(result)
+
+
+@mcp.tool(
+    description="从文档内容中提取待办任务。使用 LLM 智能提取（如可用），否则启发式匹配。"
+    "自动将提取结果存为 category=task 的记忆。",
+    annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False},
+)
+@_heartbeat
+def extract_tasks_from_doc(content: str) -> dict:
+    """从文档中提取待办任务并存储。
+
+    Args:
+        content: 文档内容文本
+    """
+    result = _get_container().agent_memory.extract_tasks_from_doc(content)
+    return ok(result, tasks_found=result.get("total_found", 0), stored=result.get("stored", 0))
 
 
 # ---- Prompts ----
