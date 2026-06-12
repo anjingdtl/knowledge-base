@@ -33,6 +33,9 @@ _SEARCH_PATHS = [
     Path(os.environ.get("LOCALAPPDATA", "")) / "neo4j" if os.environ.get("LOCALAPPDATA") else None,
 ]
 
+# 缓存 find_neo4j_home() 结果，避免每次构造 Neo4jManager 都扫盘（涉及 C:/Program Files 等目录 iterdir）
+_neo4j_home_cache: object = "__UNRESOLVED__"
+
 
 def _port_is_open(host: str, port: int) -> bool:
     """检测 TCP 端口是否在监听"""
@@ -45,42 +48,57 @@ def _port_is_open(host: str, port: int) -> bool:
 
 
 def find_neo4j_home() -> Path | None:
-    """自动检测 Neo4j 安装目录
+    """自动检测 Neo4j 安装目录（结果会被缓存，环境变量变更后可调用 clear_neo4j_home_cache）
 
     搜索策略:
         1. 环境变量 NEO4J_HOME
         2. PATH 中的 neo4j 命令反推
         3. 常见安装路径 (C:/neo4j/neo4j-community-*, C:/Program Files/neo4j)
     """
+    global _neo4j_home_cache
+    if _neo4j_home_cache != "__UNRESOLVED__":
+        return _neo4j_home_cache  # type: ignore[return-value]
+
+    result: Path | None = None
     # 1. 环境变量
     env_home = os.environ.get("NEO4J_HOME")
     if env_home:
         p = Path(env_home)
         if (p / "bin" / "neo4j.bat").exists():
-            return p
+            result = p
 
     # 2. 从 PATH 中的 neo4j 命令反推
-    neo4j_bin = shutil.which("neo4j")
-    if neo4j_bin:
-        bin_dir = Path(neo4j_bin).resolve().parent
-        # bin 目录的父目录就是 NEO4J_HOME
-        candidate = bin_dir.parent
-        if (candidate / "bin" / "neo4j.bat").exists():
-            return candidate
+    if result is None:
+        neo4j_bin = shutil.which("neo4j")
+        if neo4j_bin:
+            bin_dir = Path(neo4j_bin).resolve().parent
+            candidate = bin_dir.parent
+            if (candidate / "bin" / "neo4j.bat").exists():
+                result = candidate
 
     # 3. 常见路径
-    for base in _SEARCH_PATHS:
-        if base is None or not base.exists():
-            continue
-        # 精确匹配 (base 本身就是 NEO4J_HOME)
-        if (base / "bin" / "neo4j.bat").exists():
-            return base
-        # 搜索子目录 (如 C:/neo4j/neo4j-community-5.26.0/)
-        for child in sorted(base.iterdir(), reverse=True):
-            if child.is_dir() and (child / "bin" / "neo4j.bat").exists():
-                return child
+    if result is None:
+        for base in _SEARCH_PATHS:
+            if base is None or not base.exists():
+                continue
+            if (base / "bin" / "neo4j.bat").exists():
+                result = base
+                break
+            for child in sorted(base.iterdir(), reverse=True):
+                if child.is_dir() and (child / "bin" / "neo4j.bat").exists():
+                    result = child
+                    break
+            if result is not None:
+                break
 
-    return None
+    _neo4j_home_cache = result
+    return result
+
+
+def clear_neo4j_home_cache():
+    """清除 find_neo4j_home 缓存（用于测试或环境变量变更后强制重检）"""
+    global _neo4j_home_cache
+    _neo4j_home_cache = "__UNRESOLVED__"
 
 
 class Neo4jManager:

@@ -94,12 +94,20 @@ class WikiRepairWorker(QThread):
 class WikiView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._compiler = WikiCompiler()
+        self._compiler = None  # 首次 showEvent 时再实例化（避免启动期重活）
         self._lint_worker = None
         self._repair_worker = None
         self._lint_findings = {}  # page_id → [findings]
         self._setup_ui()
-        self._load_pages()
+        self._pages_loaded = False
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not self._pages_loaded:
+            if self._compiler is None:
+                self._compiler = WikiCompiler()
+            self._load_pages()
+            self._pages_loaded = True
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)

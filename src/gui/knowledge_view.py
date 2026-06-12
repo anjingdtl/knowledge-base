@@ -712,10 +712,12 @@ class KnowledgeView(QWidget):
             self._populate_table(Database.search_knowledge(text))
 
     def _populate_table(self, items: list[dict]):
-        """通用表格填充方法"""
+        """通用表格填充方法（整批插入，禁止中间重绘）"""
         self._selected_ids.clear()
         self.table_widget.setSortingEnabled(False)
         self.table_widget.blockSignals(True)
+        # 整批操作期间关闭更新，避免 insertRow * N 次触发重绘
+        self.table_widget.setUpdatesEnabled(False)
         self.table_widget.setRowCount(0)
 
         for item in items:
@@ -767,6 +769,9 @@ class KnowledgeView(QWidget):
 
         self.table_widget.blockSignals(False)
         self.table_widget.setSortingEnabled(True)
+        self.table_widget.setUpdatesEnabled(True)
+        # 强制一次性重绘，避免 setUpdatesEnabled 关闭期间的视觉无变化
+        self.table_widget.viewport().update()
         self._update_selection_state()
 
         # 空状态切换

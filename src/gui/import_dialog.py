@@ -318,17 +318,14 @@ class DropArea(QLabel):
         if event.mimeData().hasUrls():
             event.acceptProposedAction()
             self.setProperty("hover", "true")
-            self.style().unpolish(self)
             self.style().polish(self)
 
     def dragLeaveEvent(self, event):
         self.setProperty("hover", "false")
-        self.style().unpolish(self)
         self.style().polish(self)
 
     def dropEvent(self, event: QDropEvent):
         self.setProperty("hover", "false")
-        self.style().unpolish(self)
         self.style().polish(self)
         paths = []
         for url in event.mimeData().urls():

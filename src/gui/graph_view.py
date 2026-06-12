@@ -1054,19 +1054,36 @@ class GraphView(QWidget):
         self._graph_mode = "legacy"
 
         self._setup_ui()
-        self._load_graph_list()
         self._setup_backend_indicator()
+        # 首次列表加载延后到 showEvent，避免启动期一次性把 ~GraphView(1675 行)
+        # 的数据库查询跑完。后续刷新由用户操作触发。
+        self._graph_list_loaded = False
 
     def _setup_backend_indicator(self):
-        """初始化后端状态定时刷新"""
+        """初始化后端状态定时刷新 — 延迟到 showEvent 启动 timer"""
         self._backend_timer = QTimer(self)
         self._backend_timer.timeout.connect(self._refresh_backend_indicator)
-        self._backend_timer.start(5000)
-        # 立即刷新一次
-        self._refresh_backend_indicator()
+        # 缓存上次状态，避免 5s 一次无变化的 polish 浪费
+        self._backend_last_status: str | None = None
+        self._backend_last_text: str | None = None
+
+    def showEvent(self, event):
+        """首次显示时立即刷新一次 + 启动定时器；隐藏时停掉以释放 CPU/IO"""
+        super().showEvent(event)
+        if not self._graph_list_loaded:
+            self._load_graph_list()
+            self._graph_list_loaded = True
+        if self._backend_timer is not None and not self._backend_timer.isActive():
+            self._refresh_backend_indicator()
+            self._backend_timer.start(5000)
+
+    def hideEvent(self, event):
+        super().hideEvent(event)
+        if self._backend_timer is not None and self._backend_timer.isActive():
+            self._backend_timer.stop()
 
     def _refresh_backend_indicator(self):
-        """刷新工具栏上的后端状态指示器"""
+        """刷新工具栏上的后端状态指示器（仅在状态真变化时调 polish）"""
         try:
             from src.utils.config import Config
             provider = Config.get("graph_backend.provider", "sqlite")
@@ -1096,11 +1113,21 @@ class GraphView(QWidget):
             status_prop = "online"
             tooltip = "SQLite 后端（默认）"
 
+        # 仅在状态/文字真变化时触碰 widget — SQLite 后端永远 online/text 一样，跳过 polish
+        changed = (
+            status_prop != self._backend_last_status
+            or label_text != self._backend_last_text
+        )
+        if not changed:
+            return
+
         self._backend_dot.setProperty("status", status_prop)
         self._backend_dot.setText(label_text)
         self._backend_dot.setToolTip(tooltip)
-        self._backend_dot.style().unpolish(self._backend_dot)
+        # polish 单次即可，无需 unpolish
         self._backend_dot.style().polish(self._backend_dot)
+        self._backend_last_status = status_prop
+        self._backend_last_text = label_text
 
     def _setup_ui(self) -> None:
         layout = QVBoxLayout(self)
@@ -1273,24 +1300,30 @@ class GraphView(QWidget):
     # ---- 图谱列表操作 ----
 
     def _load_graph_list(self) -> None:
-        self.graph_list.clear()
-        graphs = Database.list_graphs()
+        # 整批添加期间关闭更新，避免 N 次 addItem 触发重绘
+        self.graph_list.setUpdatesEnabled(False)
+        try:
+            self.graph_list.clear()
+            graphs = Database.list_graphs()
 
-        for g in graphs:
-            graph_id = g["id"]
-            nodes = Database.get_graph_nodes(graph_id)
-            rels = Database.get_graph_relations(graph_id)
-            label = f"{g['name']} ({len(nodes)}节点 {len(rels)}关系)"
-            item = QListWidgetItem(label)
-            item.setData(Qt.ItemDataRole.UserRole, g)
-            self.graph_list.addItem(item)
+            for g in graphs:
+                graph_id = g["id"]
+                nodes = Database.get_graph_nodes(graph_id)
+                rels = Database.get_graph_relations(graph_id)
+                label = f"{g['name']} ({len(nodes)}节点 {len(rels)}关系)"
+                item = QListWidgetItem(label)
+                item.setData(Qt.ItemDataRole.UserRole, g)
+                self.graph_list.addItem(item)
 
-        if graphs:
-            self.graph_list.setCurrentRow(0)
-        else:
-            self.canvas_stack.setCurrentIndex(0)
-            self._current_graph_id = None
-            self._update_status("")
+            if graphs:
+                self.graph_list.setCurrentRow(0)
+            else:
+                self.canvas_stack.setCurrentIndex(0)
+                self._current_graph_id = None
+                self._update_status("")
+        finally:
+            self.graph_list.setUpdatesEnabled(True)
+            self.graph_list.viewport().update()
 
     def _on_graph_selected(self, row: int) -> None:
         item = self.graph_list.item(row)
