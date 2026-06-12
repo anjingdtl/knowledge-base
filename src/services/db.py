@@ -388,30 +388,70 @@ CREATE INDEX IF NOT EXISTS idx_oplog_operation ON operation_logs(operation);
 """
 
 
-class Database:
-    """SQLite 数据库操作层
+class _DatabaseMeta(type):
+    """元类：自动将 Database.xxx() 类级调用委托到 Database._instance。
 
-    支持两种使用模式:
-    1. 类方法模式（兼容旧代码）: Database.connect(); Database.list_knowledge()
-    2. 实例模式（DI 注入）: db = Database.__new__(Database); db.connect(path)
-
-    所有数据操作方法保持 @classmethod，两种模式共享 cls._conn。
+    Database.count_knowledge()  →  Database._instance.count_knowledge()
+    db.count_knowledge()        →  正常实例方法调用（不经过此元类）
     """
-    _instance = None
-    _conn: Optional[sqlite3.Connection] = None
-    _db_path: Optional[str] = None  # 保存路径用于自动重连
-    _container = None  # DI 容器引用（由 create_container 设置）
-    _write_lock = threading.Lock()  # 写操作互斥锁
-    _shutdown: bool = False  # True after intentional shutdown (prevents zombie reconnect)
-    _local = threading.local()  # 线程本地存储 — 每线程独立 SQLite 连接
 
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
+    def __getattribute__(cls, name):
+        # dunder / 元类内部属性 → 直接解析（避免无限递归）
+        if name.startswith('__') or name.startswith('_DatabaseMeta'):
+            return type.__getattribute__(cls, name)
 
-    @classmethod
-    def _configure_connection(cls, conn: sqlite3.Connection) -> sqlite3.Connection:
+        # _instance 和 @classmethod（connect）→ 直接解析
+        cls_dict = type.__getattribute__(cls, '__dict__')
+        if name == '_instance':
+            return cls_dict.get('_instance')
+        raw = cls_dict.get(name)
+        if raw is not None and isinstance(raw, classmethod):
+            return type.__getattribute__(cls, name)
+
+        # 其他属性（实例方法等）→ 委托到 _instance
+        inst = cls_dict.get('_instance')
+        if inst is not None:
+            return getattr(inst, name)
+
+        return type.__getattribute__(cls, name)
+
+
+class Database(metaclass=_DatabaseMeta):
+    """SQLite 数据库操作层 — 实例模式 + 向后兼容委托
+
+    推荐用法:
+        db = Database(db_path)           # 创建实例
+        db.list_knowledge()              # 调用实例方法
+
+    向后兼容（通过 _bind_to_instance 描述符自动委托到 _instance）:
+        Database.connect(db_path)        # 创建全局实例
+        Database.list_knowledge()        # 委托到 Database._instance
+
+    DI 注入:
+        container.db.list_knowledge()    # 通过 Container
+    """
+    _instance: "Database | None" = None  # 全局实例引用（向后兼容入口）
+
+    def __init__(self, db_path: str | Path):
+        self._db_path = str(db_path)
+        self._local = threading.local()
+        self._write_lock = threading.RLock()  # 可重入锁，防止嵌套调用死锁
+        self._shutdown: bool = False
+        self._base_conn: Optional[sqlite3.Connection] = None
+        self._connect_internal()
+
+    def _connect_internal(self):
+        """内部：初始化连接和 schema"""
+        self._base_conn = sqlite3.connect(self._db_path, check_same_thread=False, timeout=30.0)
+        self._configure_connection(self._base_conn)
+        self._base_conn.executescript(_SCHEMA)
+        self._migrate()
+        self._base_conn.commit()
+        self._shutdown = False
+        Database._instance = self  # 设置全局引用
+
+
+    def _configure_connection(self, conn: sqlite3.Connection) -> sqlite3.Connection:
         """为新创建的 SQLite 连接设置标准 PRAGMA 和 row_factory。"""
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON")
@@ -421,58 +461,52 @@ class Database:
 
     @classmethod
     def connect(cls, db_path: str | Path | None = None):
+        """向后兼容：创建全局 Database 实例。新代码建议直接 Database(db_path)。"""
         if db_path is None:
             db_path = Config.get_db_path()
-        cls._db_path = str(db_path)
-        cls._conn = sqlite3.connect(cls._db_path, check_same_thread=False, timeout=30.0)
-        cls._configure_connection(cls._conn)
-        cls._conn.executescript(_SCHEMA)
-        cls._migrate()
-        cls._conn.commit()
-        cls._shutdown = False  # allow operations after fresh connect
+        cls._instance = cls(str(db_path))
 
     # NOTE: get_conn() 使用线程本地连接（threading.local），定义在 _migrate() 之后。
     # 每个线程拥有独立的 SQLite 连接，避免 SQLITE_MISUSE 并发错误。
 
-    @classmethod
-    def _migrate(cls):
+    def _migrate(self):
         """检查并补齐旧数据库缺失的列"""
-        cols = {row[1] for row in cls._conn.execute("PRAGMA table_info(knowledge_items)").fetchall()}
+        cols = {row[1] for row in self._base_conn.execute("PRAGMA table_info(knowledge_items)").fetchall()}
         if "version" not in cols:
-            cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN version INTEGER DEFAULT 1")
+            self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN version INTEGER DEFAULT 1")
         if "file_size" not in cols:
-            cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_size INTEGER DEFAULT 0")
+            self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_size INTEGER DEFAULT 0")
         if "content_hash" not in cols:
-            cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN content_hash TEXT DEFAULT ''")
+            self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN content_hash TEXT DEFAULT ''")
         if "quality" not in cols:
-            cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN quality TEXT DEFAULT ''")
+            self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN quality TEXT DEFAULT ''")
         if "file_created_at" not in cols:
-            cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_created_at TEXT DEFAULT ''")
+            self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_created_at TEXT DEFAULT ''")
         if "file_modified_at" not in cols:
-            cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_modified_at TEXT DEFAULT ''")
+            self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN file_modified_at TEXT DEFAULT ''")
         if "deleted_at" not in cols:
             # Sprint 3 / Phase 4: 软删除列
-            cls._conn.execute("ALTER TABLE knowledge_items ADD COLUMN deleted_at TEXT DEFAULT NULL")
-        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_kb_deleted ON knowledge_items(deleted_at)")
+            self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN deleted_at TEXT DEFAULT NULL")
+        self._base_conn.execute("CREATE INDEX IF NOT EXISTS idx_kb_deleted ON knowledge_items(deleted_at)")
 
-        msg_cols = {row[1] for row in cls._conn.execute("PRAGMA table_info(chat_messages)").fetchall()}
+        msg_cols = {row[1] for row in self._base_conn.execute("PRAGMA table_info(chat_messages)").fetchall()}
         if "source_graph" not in msg_cols:
-            cls._conn.execute(
+            self._base_conn.execute(
                 "ALTER TABLE chat_messages ADD COLUMN source_graph TEXT DEFAULT '{\"nodes\":[],\"edges\":[]}'"
             )
 
-        ref_cols = {row[1] for row in cls._conn.execute("PRAGMA table_info(entity_refs)").fetchall()}
+        ref_cols = {row[1] for row in self._base_conn.execute("PRAGMA table_info(entity_refs)").fetchall()}
         if "auto_discovered" not in ref_cols:
-            cls._conn.execute("ALTER TABLE entity_refs ADD COLUMN auto_discovered INTEGER DEFAULT 0")
+            self._base_conn.execute("ALTER TABLE entity_refs ADD COLUMN auto_discovered INTEGER DEFAULT 0")
 
         # 去重索引
-        cls._conn.execute(
+        self._base_conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_knowledge_hash ON knowledge_items(content_hash)"
         )
 
         # chunk_fts 重建：检测旧 schema（含 content=knowledge_chunks 或缺少 chunk_id）
         import logging as _logging
-        chunk_fts_sql = cls._conn.execute(
+        chunk_fts_sql = self._base_conn.execute(
             "SELECT sql FROM sqlite_master WHERE name='chunk_fts'"
         ).fetchone()
         needs_rebuild = False
@@ -483,22 +517,22 @@ class Database:
             elif 'chunk_id UNINDEXED' not in sql:
                 needs_rebuild = True
         if needs_rebuild:
-            cls._conn.execute("DROP TABLE IF EXISTS chunk_fts")
-            cls._conn.execute(
+            self._base_conn.execute("DROP TABLE IF EXISTS chunk_fts")
+            self._base_conn.execute(
                 "CREATE VIRTUAL TABLE IF NOT EXISTS chunk_fts USING fts5("
                 "fts_segmented, knowledge_id UNINDEXED, chunk_id UNINDEXED, tokenize='unicode61')"
             )
-            cls._conn.commit()
+            self._base_conn.commit()
             _logging.getLogger(__name__).info("chunk_fts schema migrated, reindex needed")
 
         # 为 knowledge_graph_relations 添加 UNIQUE 约束（如旧表缺失）
-        rel_sql = cls._conn.execute(
+        rel_sql = self._base_conn.execute(
             "SELECT sql FROM sqlite_master WHERE name='knowledge_graph_relations'"
         ).fetchone()
         if rel_sql and 'UNIQUE' not in (rel_sql[0] or ''):
             # 重建表以添加唯一约束
-            cls._conn.execute("ALTER TABLE knowledge_graph_relations RENAME TO _old_graph_relations")
-            cls._conn.execute(
+            self._base_conn.execute("ALTER TABLE knowledge_graph_relations RENAME TO _old_graph_relations")
+            self._base_conn.execute(
                 """CREATE TABLE knowledge_graph_relations (
                     id TEXT PRIMARY KEY,
                     graph_id TEXT REFERENCES knowledge_graphs(id) ON DELETE CASCADE,
@@ -510,33 +544,33 @@ class Database:
                     UNIQUE(graph_id, source_knowledge_id, target_knowledge_id)
                 )"""
             )
-            cls._conn.execute(
+            self._base_conn.execute(
                 """INSERT OR IGNORE INTO knowledge_graph_relations
                    SELECT id, graph_id, source_knowledge_id, target_knowledge_id,
                           relation_type, description, weight
                    FROM _old_graph_relations"""
             )
-            cls._conn.execute("DROP TABLE _old_graph_relations")
-            cls._conn.execute(
+            self._base_conn.execute("DROP TABLE _old_graph_relations")
+            self._base_conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_graph_rel_src ON knowledge_graph_relations(graph_id, source_knowledge_id)"
             )
-            cls._conn.execute(
+            self._base_conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_graph_rel_tgt ON knowledge_graph_relations(graph_id, target_knowledge_id)"
             )
-            cls._conn.commit()
+            self._base_conn.commit()
             _logging.getLogger(__name__).info("knowledge_graph_relations: added UNIQUE constraint")
 
         # Phase 2: 为旧数据库补建 tag_relations / property_schemas / effective_property_index
-        cls._conn.execute("""CREATE TABLE IF NOT EXISTS tag_relations (
+        self._base_conn.execute("""CREATE TABLE IF NOT EXISTS tag_relations (
             parent_tag TEXT NOT NULL,
             child_tag TEXT NOT NULL,
             created_at TEXT,
             PRIMARY KEY (parent_tag, child_tag),
             CHECK(parent_tag <> child_tag)
         )""")
-        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_tag_relations_parent ON tag_relations(parent_tag)")
-        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_tag_relations_child ON tag_relations(child_tag)")
-        cls._conn.execute("""CREATE TABLE IF NOT EXISTS property_schemas (
+        self._base_conn.execute("CREATE INDEX IF NOT EXISTS idx_tag_relations_parent ON tag_relations(parent_tag)")
+        self._base_conn.execute("CREATE INDEX IF NOT EXISTS idx_tag_relations_child ON tag_relations(child_tag)")
+        self._base_conn.execute("""CREATE TABLE IF NOT EXISTS property_schemas (
             id TEXT PRIMARY KEY,
             scope_type TEXT NOT NULL,
             scope_id TEXT DEFAULT '',
@@ -549,8 +583,8 @@ class Database:
             created_at TEXT,
             UNIQUE(scope_type, scope_id, property_name)
         )""")
-        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_property_schemas_scope ON property_schemas(scope_type, scope_id)")
-        cls._conn.execute("""CREATE TABLE IF NOT EXISTS effective_property_index (
+        self._base_conn.execute("CREATE INDEX IF NOT EXISTS idx_property_schemas_scope ON property_schemas(scope_type, scope_id)")
+        self._base_conn.execute("""CREATE TABLE IF NOT EXISTS effective_property_index (
             block_id TEXT REFERENCES blocks(id) ON DELETE CASCADE,
             prop_key TEXT NOT NULL,
             prop_value TEXT,
@@ -561,10 +595,9 @@ class Database:
             updated_at TEXT,
             PRIMARY KEY (block_id, prop_key)
         )""")
-        cls._conn.execute("CREATE INDEX IF NOT EXISTS idx_effective_prop_key_val ON effective_property_index(prop_key, prop_value)")
+        self._base_conn.execute("CREATE INDEX IF NOT EXISTS idx_effective_prop_key_val ON effective_property_index(prop_key, prop_value)")
 
-    @classmethod
-    def get_conn(cls) -> sqlite3.Connection:
+    def get_conn(self) -> sqlite3.Connection:
         """获取当前线程的数据库连接（线程本地模式）。
 
         每个线程维护独立的 SQLite 连接，避免多线程共享单连接导致的
@@ -575,10 +608,10 @@ class Database:
         首次调用时创建新连接；后续调用复用同线程的连接。
         包含轻量健康检查，断开时自动重连。
         """
-        if cls._shutdown:
+        if self._shutdown:
             raise RuntimeError("Database is shut down — connection no longer available")
 
-        conn = getattr(cls._local, 'conn', None)
+        conn = getattr(self._local, 'conn', None)
         if conn is not None:
             # 健康检查：轻量 SELECT 验证连接存活
             try:
@@ -590,45 +623,43 @@ class Database:
                     conn.close()
                 except Exception:
                     pass
-                cls._local.conn = None
+                self._local.conn = None
 
         # 创建新的线程本地连接
-        if cls._db_path is None:
-            if cls._conn is not None:
+        if self._db_path is None:
+            if self._base_conn is not None:
                 # 主连接存在但线程本地连接不存在（首次在此线程调用）
                 # 回退到主连接（兼容旧行为）
-                return cls._conn
-            cls.connect()
-        if cls._db_path is None:
+                return self._base_conn
+            Database.connect()
+        if self._db_path is None:
             raise RuntimeError("Database not connected and db_path unknown")
 
-        conn = sqlite3.connect(cls._db_path, check_same_thread=False, timeout=30.0)
-        cls._configure_connection(conn)
-        cls._local.conn = conn
+        conn = sqlite3.connect(self._db_path, check_same_thread=False, timeout=30.0)
+        self._configure_connection(conn)
+        self._local.conn = conn
         return conn
 
-    @classmethod
-    def close(cls):
+    def close(self):
         # 关闭当前线程的本地连接
-        local_conn = getattr(cls._local, 'conn', None)
+        local_conn = getattr(self._local, 'conn', None)
         if local_conn:
             try:
                 local_conn.close()
             except Exception:
                 pass
-            cls._local.conn = None
+            self._local.conn = None
         # 关闭主连接
-        if cls._conn:
+        if self._base_conn:
             try:
-                cls._conn.close()
+                self._base_conn.close()
             except Exception:
                 pass
-            cls._conn = None
+            self._base_conn = None
         # Note: _shutdown is NOT reset here — it is reset on the next connect()
         # call (via lifespan startup), preventing silent reconnects during shutdown.
 
-    @classmethod
-    def transaction(cls):
+    def transaction(self):
         """返回一个事务上下文管理器，用于包裹多步写操作。
 
         使用当前线程的本地连接，确保事务内的所有操作在同一连接上执行。
@@ -636,7 +667,7 @@ class Database:
         import contextlib
         @contextlib.contextmanager
         def _tx():
-            conn = cls.get_conn()
+            conn = self.get_conn()
             conn.execute("BEGIN IMMEDIATE")
             try:
                 yield conn
@@ -648,10 +679,9 @@ class Database:
 
     # ---- Knowledge Items ----
 
-    @classmethod
-    def insert_knowledge(cls, item: dict) -> str:
-        with cls._write_lock:
-            conn = cls.get_conn()
+    def insert_knowledge(self, item: dict) -> str:
+        with self._write_lock:
+            conn = self.get_conn()
             conn.execute(
                 """INSERT INTO knowledge_items
                    (id, title, content, source_type, source_path, file_type, file_size, content_hash, file_created_at, file_modified_at, tags, version, created_at, updated_at)
@@ -661,15 +691,14 @@ class Database:
             conn.commit()
         return item["id"]
 
-    @classmethod
-    def get_knowledge(cls, item_id: str, include_deleted: bool = False) -> Optional[dict]:
+    def get_knowledge(self, item_id: str, include_deleted: bool = False) -> Optional[dict]:
         """按 ID 查询知识条目。
 
         Args:
             item_id: 知识条目 ID
             include_deleted: 是否包含已软删除条目（默认过滤，Phase 4 / Sprint 3）
         """
-        conn = cls.get_conn()
+        conn = self.get_conn()
         if include_deleted:
             row = conn.execute("SELECT * FROM knowledge_items WHERE id = ?", (item_id,)).fetchone()
         else:
@@ -679,10 +708,9 @@ class Database:
             ).fetchone()
         return dict(row) if row else None
 
-    @classmethod
-    def get_knowledge_by_hash(cls, content_hash: str, include_deleted: bool = False) -> Optional[dict]:
+    def get_knowledge_by_hash(self, content_hash: str, include_deleted: bool = False) -> Optional[dict]:
         """按内容哈希查重，返回第一条匹配记录"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         clause = "AND deleted_at IS NULL" if not include_deleted else ""
         row = conn.execute(
             f"SELECT * FROM knowledge_items WHERE content_hash = ? {clause} LIMIT 1",
@@ -690,26 +718,24 @@ class Database:
         ).fetchone()
         return dict(row) if row else None
 
-    @classmethod
-    def get_knowledge_batch(cls, ids: list[str], include_deleted: bool = False) -> dict[str, dict]:
+    def get_knowledge_batch(self, ids: list[str], include_deleted: bool = False) -> dict[str, dict]:
         """批量查询知识条目，返回 {id: row_dict}"""
         if not ids:
             return {}
         placeholders = ",".join("?" for _ in ids)
         clause = "AND deleted_at IS NULL" if not include_deleted else ""
-        rows = cls.get_conn().execute(
+        rows = self.get_conn().execute(
             f"SELECT * FROM knowledge_items WHERE id IN ({placeholders}) {clause}", ids
         ).fetchall()
         return {row["id"]: dict(row) for row in rows}
 
-    @classmethod
-    def list_knowledge(cls, tag: str | None = None, file_type: str | None = None,
+    def list_knowledge(self, tag: str | None = None, file_type: str | None = None,
                        quality: str | None = None,
                        sort_by: str = "updated_at", sort_order: str = "DESC",
                        limit: int = 100, offset: int = 0,
                        include_deleted: bool = False) -> list[dict]:
         """列出知识条目。默认过滤已软删除条目。"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         conditions = []
         params = []
         if not include_deleted:
@@ -733,11 +759,10 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def search_knowledge(cls, query: str, limit: int = 20, offset: int = 0,
+    def search_knowledge(self, query: str, limit: int = 20, offset: int = 0,
                          include_deleted: bool = False) -> list[dict]:
         from src.utils.chinese_tokenizer import sanitize_fts_query
-        conn = cls.get_conn()
+        conn = self.get_conn()
         deleted_clause = "" if include_deleted else " AND ki.deleted_at IS NULL"
         try:
             safe_query = sanitize_fts_query(query)
@@ -766,33 +791,31 @@ class Database:
             return []
         return [dict(r) for r in rows]
 
-    @classmethod
-    def get_all_classified_ids(cls) -> set[str]:
+    def get_all_classified_ids(self) -> set[str]:
         """返回所有已分类条目的 ID 集合"""
-        rows = cls.get_conn().execute(
+        rows = self.get_conn().execute(
             "SELECT DISTINCT knowledge_id FROM knowledge_categories"
         ).fetchall()
         return {row[0] for row in rows}
 
-    @classmethod
-    def update_knowledge(cls, item_id: str, **fields):
+    def update_knowledge(self, item_id: str, **fields):
         if not fields:
             return
         allowed = {"title", "content", "source_type", "source_path", "file_type", "file_size", "content_hash", "file_created_at", "file_modified_at", "tags", "quality"}
         invalid = set(fields) - allowed
         if invalid:
             raise ValueError(f"Invalid fields: {invalid}")
-        with cls._write_lock:
-            conn = cls.get_conn()
+        with self._write_lock:
+            conn = self.get_conn()
             conn.execute("BEGIN IMMEDIATE")
             try:
                 # Phase 4: 默认过滤已软删除条目（不更新已删条目）
-                old = cls.get_knowledge(item_id, include_deleted=False)
+                old = self.get_knowledge(item_id, include_deleted=False)
                 if not old:
                     raise ValueError(f"Knowledge item {item_id} not found or has been deleted")
                 _version_fields = {"title", "content", "tags"}
                 if _version_fields & set(fields):
-                    cls._save_version(item_id, old)
+                    self._save_version(item_id, old)
                 sets = ", ".join(f"{k} = ?" for k in fields)
                 values = list(fields.values()) + [datetime.now().isoformat(), item_id]
                 cursor = conn.execute(
@@ -807,8 +830,7 @@ class Database:
                 conn.rollback()
                 raise
 
-    @classmethod
-    def soft_delete_knowledge(cls, item_id: str, when: str | None = None) -> bool:
+    def soft_delete_knowledge(self, item_id: str, when: str | None = None) -> bool:
         """Phase 4 / Sprint 3：软删除 — 设置 deleted_at。
 
         Args:
@@ -819,31 +841,29 @@ class Database:
             True 如果条目存在并已标记为删除；False 如果条目不存在或已删除
         """
         when = when or datetime.now().isoformat()
-        with cls._write_lock:
-            cursor = cls.get_conn().execute(
+        with self._write_lock:
+            cursor = self.get_conn().execute(
                 "UPDATE knowledge_items SET deleted_at = ? WHERE id = ? AND deleted_at IS NULL",
                 (when, item_id),
             )
-            cls.get_conn().commit()
+            self.get_conn().commit()
             return cursor.rowcount > 0
 
-    @classmethod
-    def restore_knowledge(cls, item_id: str) -> bool:
+    def restore_knowledge(self, item_id: str) -> bool:
         """Phase 4 / Sprint 3：恢复 — 清除 deleted_at。
 
         Returns:
             True 如果条目存在并已恢复（之前是软删状态）；False 如果条目不存在或未删
         """
-        with cls._write_lock:
-            cursor = cls.get_conn().execute(
+        with self._write_lock:
+            cursor = self.get_conn().execute(
                 "UPDATE knowledge_items SET deleted_at = NULL WHERE id = ? AND deleted_at IS NOT NULL",
                 (item_id,),
             )
-            cls.get_conn().commit()
+            self.get_conn().commit()
             return cursor.rowcount > 0
 
-    @classmethod
-    def delete_knowledge(cls, item_id: str, hard: bool = False):
+    def delete_knowledge(self, item_id: str, hard: bool = False):
         """删除知识条目。
 
         Args:
@@ -855,11 +875,11 @@ class Database:
         """
         if not hard:
             # Phase 4: 软删除是默认行为
-            cls.soft_delete_knowledge(item_id)
+            self.soft_delete_knowledge(item_id)
             return
-        with cls._write_lock:
-            conn = cls.get_conn()
-            cls._delete_chunks_fts_unlocked(item_id)
+        with self._write_lock:
+            conn = self.get_conn()
+            self._delete_chunks_fts_unlocked(item_id)
             conn.execute(
                 "DELETE FROM block_property_index WHERE block_id IN (SELECT id FROM blocks WHERE page_id = ?)",
                 (item_id,),
@@ -880,21 +900,20 @@ class Database:
             conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
             conn.commit()
 
-    @classmethod
-    def purge_knowledge(cls, item_id: str) -> bool:
+    def purge_knowledge(self, item_id: str) -> bool:
         """Phase 4: 硬删 — 彻底删除条目及其所有关联数据。
 
         Returns:
             True 如果条目存在并被删除；False 如果条目不存在
         """
-        with cls._write_lock:
-            conn = cls.get_conn()
+        with self._write_lock:
+            conn = self.get_conn()
             existing = conn.execute(
                 "SELECT id FROM knowledge_items WHERE id = ?", (item_id,),
             ).fetchone()
             if not existing:
                 return False
-            cls._delete_chunks_fts_unlocked(item_id)
+            self._delete_chunks_fts_unlocked(item_id)
             conn.execute(
                 "DELETE FROM block_property_index WHERE block_id IN (SELECT id FROM blocks WHERE page_id = ?)",
                 (item_id,),
@@ -916,11 +935,10 @@ class Database:
             conn.commit()
             return True
 
-    @classmethod
-    def find_duplicates(cls) -> list[list[dict]]:
+    def find_duplicates(self) -> list[list[dict]]:
         """查找重复条目组：按 source_path + file_size + file_created_at + file_modified_at 四项完全一致判定重复。
         每组按 created_at 降序（最新在前）。"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         rows = conn.execute(
             "SELECT id, title, source_path, file_size, file_created_at, file_modified_at, created_at FROM knowledge_items"
         ).fetchall()
@@ -942,24 +960,22 @@ class Database:
                 result.append(g)
         return result
 
-    @classmethod
-    def count_knowledge(cls, tag: str | None = None, include_deleted: bool = False) -> int:
+    def count_knowledge(self, tag: str | None = None, include_deleted: bool = False) -> int:
         deleted_clause = "" if include_deleted else " AND deleted_at IS NULL"
         if tag:
-            row = cls.get_conn().execute(
+            row = self.get_conn().execute(
                 f"SELECT COUNT(*) as cnt FROM knowledge_items WHERE tags LIKE ?{deleted_clause}",
                 (f'%"{tag}"%',),
             ).fetchone()
         else:
-            row = cls.get_conn().execute(
+            row = self.get_conn().execute(
                 f"SELECT COUNT(*) as cnt FROM knowledge_items WHERE 1=1{deleted_clause}",
             ).fetchone()
         return row["cnt"]
 
-    @classmethod
-    def get_stats(cls) -> dict:
+    def get_stats(self) -> dict:
         """返回知识库统计汇总：文件数、存储占用、类型分布、分类覆盖"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         total_files = conn.execute("SELECT COUNT(*) as cnt FROM knowledge_items").fetchone()["cnt"]
         total_size = conn.execute(
             "SELECT COALESCE(SUM(file_size), 0) as sz FROM knowledge_items"
@@ -990,70 +1006,64 @@ class Database:
 
     # ---- Version Control ----
 
-    @classmethod
-    def _save_version(cls, knowledge_id: str, snapshot: dict):
+    def _save_version(self, knowledge_id: str, snapshot: dict):
         version = snapshot.get("version", 1)
-        cls.get_conn().execute(
+        self.get_conn().execute(
             """INSERT INTO knowledge_versions (id, knowledge_id, version, title, content, tags, created_at)
                VALUES (?, ?, ?, ?, ?, ?, ?)""",
             (str(uuid.uuid4()), knowledge_id, version, snapshot["title"],
              snapshot.get("content", ""), snapshot.get("tags", "[]"), datetime.now().isoformat()),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def list_versions(cls, knowledge_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def list_versions(self, knowledge_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             "SELECT * FROM knowledge_versions WHERE knowledge_id = ? ORDER BY version DESC",
             (knowledge_id,),
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def get_version(cls, knowledge_id: str, version: int) -> Optional[dict]:
-        row = cls.get_conn().execute(
+    def get_version(self, knowledge_id: str, version: int) -> Optional[dict]:
+        row = self.get_conn().execute(
             "SELECT * FROM knowledge_versions WHERE knowledge_id = ? AND version = ?",
             (knowledge_id, version),
         ).fetchone()
         return dict(row) if row else None
 
-    @classmethod
-    def restore_version(cls, knowledge_id: str, version: int):
-        with cls._write_lock:
-            ver = cls.get_version(knowledge_id, version)
+    def restore_version(self, knowledge_id: str, version: int):
+        with self._write_lock:
+            ver = self.get_version(knowledge_id, version)
             if not ver:
                 raise ValueError(f"版本 {version} 不存在")
-            old = cls.get_knowledge(knowledge_id)
+            old = self.get_knowledge(knowledge_id)
             if old:
                 # 使用 MAX(version)+1 确保版本号严格递增，避免重复
-                row = cls.get_conn().execute(
+                row = self.get_conn().execute(
                     "SELECT MAX(version) as max_ver FROM knowledge_versions WHERE knowledge_id = ?",
                     (knowledge_id,),
                 ).fetchone()
                 next_ver = (row["max_ver"] or 0) + 1
                 old["version"] = next_ver
-                cls._save_version(knowledge_id, old)
-            cls.get_conn().execute(
+                self._save_version(knowledge_id, old)
+            self.get_conn().execute(
                 "UPDATE knowledge_items SET title = ?, content = ?, tags = ?, version = version + 1, updated_at = ? WHERE id = ?",
                 (ver["title"], ver["content"], ver["tags"], datetime.now().isoformat(), knowledge_id),
             )
-            cls.get_conn().commit()
+            self.get_conn().commit()
 
     # ---- Knowledge Chunks ----
 
-    @classmethod
-    def insert_chunks(cls, chunks: list[dict]):
-        conn = cls.get_conn()
+    def insert_chunks(self, chunks: list[dict]):
+        conn = self.get_conn()
         conn.executemany(
             """INSERT INTO knowledge_chunks (id, knowledge_id, chunk_index, chunk_text, created_at)
                VALUES (:id, :knowledge_id, :chunk_index, :chunk_text, :created_at)""",
             chunks,
         )
-        cls._upsert_blocks_from_chunks_unlocked(chunks)
+        self._upsert_blocks_from_chunks_unlocked(chunks)
         conn.commit()
 
-    @classmethod
-    def _upsert_blocks_from_chunks_unlocked(cls, chunks: list[dict]):
+    def _upsert_blocks_from_chunks_unlocked(self, chunks: list[dict]):
         if not chunks:
             return
         now = datetime.now().isoformat()
@@ -1081,7 +1091,7 @@ class Database:
                 "prop_value": chunk["knowledge_id"],
                 "value_type": "ref",
             })
-        conn = cls.get_conn()
+        conn = self.get_conn()
         conn.executemany(
             """INSERT OR REPLACE INTO blocks
                (id, parent_id, page_id, content, block_type, properties, order_idx, created_at, updated_at)
@@ -1095,15 +1105,14 @@ class Database:
             prop_rows,
         )
 
-    @classmethod
-    def delete_chunks(cls, knowledge_id: str):
+    def delete_chunks(self, knowledge_id: str):
         """删除指定知识的所有 chunk 行（knowledge_chunks 表）。
 
         仅删除 knowledge_chunks 表的行，不涉及 chunk_fts 和向量存储。
         调用方需自行负责 VectorStore 和 chunk_fts 的清理。
         """
-        with cls._write_lock:
-            conn = cls.get_conn()
+        with self._write_lock:
+            conn = self.get_conn()
             conn.execute(
                 "DELETE FROM block_property_index WHERE block_id IN (SELECT id FROM blocks WHERE page_id = ?)",
                 (knowledge_id,),
@@ -1116,17 +1125,15 @@ class Database:
             conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (knowledge_id,))
             conn.commit()
 
-    @classmethod
-    def get_chunks_by_knowledge(cls, knowledge_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_chunks_by_knowledge(self, knowledge_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             "SELECT * FROM knowledge_chunks WHERE knowledge_id = ? ORDER BY chunk_index",
             (knowledge_id,),
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
     def get_chunks_by_knowledge_batch(
-        cls, knowledge_ids: list[str]
+        self, knowledge_ids: list[str]
     ) -> dict[str, list[dict]]:
         """批量查询多个 knowledge_id 的 chunks — 单次 SQL 替代 N+1。
 
@@ -1135,7 +1142,7 @@ class Database:
         if not knowledge_ids:
             return {}
         placeholders = ",".join("?" for _ in knowledge_ids)
-        rows = cls.get_conn().execute(
+        rows = self.get_conn().execute(
             f"""SELECT * FROM knowledge_chunks
                 WHERE knowledge_id IN ({placeholders})
                 ORDER BY knowledge_id, chunk_index""",
@@ -1146,18 +1153,16 @@ class Database:
             result.setdefault(r["knowledge_id"], []).append(dict(r))
         return result
 
-    @classmethod
-    def get_chunk(cls, chunk_id: str) -> Optional[dict]:
-        row = cls.get_conn().execute("SELECT * FROM knowledge_chunks WHERE id = ?", (chunk_id,)).fetchone()
+    def get_chunk(self, chunk_id: str) -> Optional[dict]:
+        row = self.get_conn().execute("SELECT * FROM knowledge_chunks WHERE id = ?", (chunk_id,)).fetchone()
         return dict(row) if row else None
 
     # ---- Block-level methods (Block-First architecture) ----
 
-    @classmethod
-    def insert_blocks(cls, blocks: list[dict]):
+    def insert_blocks(self, blocks: list[dict]):
         """写入 blocks 表 + block_property_index（原子事务）"""
-        with cls._write_lock:
-            conn = cls.get_conn()
+        with self._write_lock:
+            conn = self.get_conn()
             conn.executemany(
                 """INSERT OR REPLACE INTO blocks
                    (id, parent_id, page_id, content, block_type, properties, order_idx, created_at, updated_at)
@@ -1186,11 +1191,10 @@ class Database:
                 )
             conn.commit()
 
-    @classmethod
-    def insert_blocks_fts(cls, blocks: list[dict]):
+    def insert_blocks_fts(self, blocks: list[dict]):
         """将 block 文本用 jieba 全模式分词后写入 block_fts"""
         from src.utils.chinese_tokenizer import tokenize_chinese_full
-        conn = cls.get_conn()
+        conn = self.get_conn()
         for b in blocks:
             segmented = tokenize_chinese_full(b.get("content", ""))
             conn.execute(
@@ -1199,8 +1203,7 @@ class Database:
             )
         conn.commit()
 
-    @classmethod
-    def search_blocks_fts(cls, query: str, limit: int = 10) -> list[dict]:
+    def search_blocks_fts(self, query: str, limit: int = 10) -> list[dict]:
         """Block 级 FTS 搜索"""
         from src.utils.chinese_tokenizer import tokenize_chinese_full, sanitize_fts_query
         sanitized = tokenize_chinese_full(query)
@@ -1209,7 +1212,7 @@ class Database:
         safe_query = sanitize_fts_query(sanitized, is_tokenized=True)
         if not safe_query:
             return []
-        rows = cls.get_conn().execute(
+        rows = self.get_conn().execute(
             """SELECT b.id, b.page_id, b.content, b.block_type, b.properties,
                       bf.rank
                FROM block_fts bf
@@ -1235,19 +1238,17 @@ class Database:
             })
         return results
 
-    @classmethod
-    def delete_blocks_fts(cls, page_id: str):
+    def delete_blocks_fts(self, page_id: str):
         """删除指定 page 的 block FTS 记录"""
-        with cls._write_lock:
-            cls.get_conn().execute(
+        with self._write_lock:
+            self.get_conn().execute(
                 "DELETE FROM block_fts WHERE page_id = ?", (page_id,)
             )
-            cls.get_conn().commit()
+            self.get_conn().commit()
 
-    @classmethod
-    def get_block(cls, block_id: str) -> dict | None:
+    def get_block(self, block_id: str) -> dict | None:
         """按 ID 查询单个 block，返回 dict 或 None"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         row = conn.execute(
             "SELECT id, parent_id, page_id, content, block_type, properties, order_idx FROM blocks WHERE id = ?",
             (block_id,),
@@ -1257,8 +1258,7 @@ class Database:
         cols = ["id", "parent_id", "page_id", "content", "block_type", "properties", "order_idx"]
         return dict(zip(cols, row))
 
-    @classmethod
-    def get_block_ancestors(cls, block_id: str, max_depth: int = 3) -> list[dict]:
+    def get_block_ancestors(self, block_id: str, max_depth: int = 3) -> list[dict]:
         """回溯 Block 的父链，返回从父到祖先的有序列表（不含自身）
 
         用于 RAG 检索时补充上下文。例如命中 Excel 某行的属性子 Block 时，
@@ -1267,10 +1267,10 @@ class Database:
         ancestors = []
         current_id = block_id
         for _ in range(max_depth):
-            block = cls.get_block(current_id)
+            block = self.get_block(current_id)
             if not block or not block.get("parent_id"):
                 break
-            parent = cls.get_block(block["parent_id"])
+            parent = self.get_block(block["parent_id"])
             if parent:
                 ancestors.append(parent)
                 current_id = parent["id"]
@@ -1278,9 +1278,8 @@ class Database:
                 break
         return ancestors
 
-    @classmethod
     def get_block_ancestors_batch(
-        cls, block_ids: list[str], max_depth: int = 3
+        self, block_ids: list[str], max_depth: int = 3
     ) -> dict[str, list[dict]]:
         """批量回溯多个 Block 的父链 — 单次递归 CTE，避免 N+1 查询。
 
@@ -1289,7 +1288,7 @@ class Database:
         """
         if not block_ids:
             return {}
-        conn = cls.get_conn()
+        conn = self.get_conn()
         depth = max(1, int(max_depth or 3))
         # 用 UNION ALL 的递归 CTE 一次性遍历所有节点的父链。``path`` 字段用 ','
         # 连接沿途 id 避免循环引用导致无限递归。``root_id`` 标记每个 block
@@ -1330,11 +1329,10 @@ class Database:
             ])))
         return result
 
-    @classmethod
-    def delete_blocks_by_page(cls, page_id: str):
+    def delete_blocks_by_page(self, page_id: str):
         """删除指定 page 的所有 block 数据（blocks + block_fts + block_property_index + block_refs）"""
-        with cls._write_lock:
-            conn = cls.get_conn()
+        with self._write_lock:
+            conn = self.get_conn()
             conn.execute(
                 "DELETE FROM block_property_index WHERE block_id IN (SELECT id FROM blocks WHERE page_id = ?)",
                 (page_id,),
@@ -1349,11 +1347,10 @@ class Database:
 
     # ---- Chunk FTS (jieba 分词) ----
 
-    @classmethod
-    def insert_chunks_fts(cls, chunks: list[dict]):
+    def insert_chunks_fts(self, chunks: list[dict]):
         """将 chunk 文本用 jieba 全模式分词后写入 chunk_fts（独立表）"""
         from src.utils.chinese_tokenizer import tokenize_chinese_full
-        conn = cls.get_conn()
+        conn = self.get_conn()
         for c in chunks:
             segmented = tokenize_chinese_full(c["chunk_text"])
             conn.execute(
@@ -1362,22 +1359,19 @@ class Database:
             )
         conn.commit()
 
-    @classmethod
-    def delete_chunks_fts(cls, knowledge_id: str):
+    def delete_chunks_fts(self, knowledge_id: str):
         """删除指定知识的 chunk FTS 记录"""
-        with cls._write_lock:
-            cls._delete_chunks_fts_unlocked(knowledge_id)
+        with self._write_lock:
+            self._delete_chunks_fts_unlocked(knowledge_id)
 
-    @classmethod
-    def _delete_chunks_fts_unlocked(cls, knowledge_id: str):
+    def _delete_chunks_fts_unlocked(self, knowledge_id: str):
         """内部方法：删除 chunk FTS 记录（调用方需持锁）"""
-        cls.get_conn().execute(
+        self.get_conn().execute(
             "DELETE FROM chunk_fts WHERE knowledge_id = ?", (knowledge_id,)
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def search_chunks_fts(cls, query: str, limit: int = 20) -> list[dict]:
+    def search_chunks_fts(self, query: str, limit: int = 20) -> list[dict]:
         """使用 jieba 全模式分词后的 chunk 级 FTS 搜索"""
         from src.utils.chinese_tokenizer import tokenize_chinese_full, sanitize_fts_query
         tokenized_query = tokenize_chinese_full(query)
@@ -1386,7 +1380,7 @@ class Database:
         safe_query = sanitize_fts_query(tokenized_query, is_tokenized=True)
         if not safe_query:
             return []
-        conn = cls.get_conn()
+        conn = self.get_conn()
         try:
             rows = conn.execute(
                 """SELECT cf.chunk_id, cf.knowledge_id, rank as fts_rank
@@ -1409,46 +1403,41 @@ class Database:
 
     # ---- Conversations ----
 
-    @classmethod
-    def insert_conversation(cls, conv: dict) -> str:
-        cls.get_conn().execute(
+    def insert_conversation(self, conv: dict) -> str:
+        self.get_conn().execute(
             "INSERT INTO conversations (id, title, created_at) VALUES (:id, :title, :created_at)",
             conv,
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
         return conv["id"]
 
-    @classmethod
-    def list_conversations(cls, limit: int = 50) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def list_conversations(self, limit: int = 50) -> list[dict]:
+        rows = self.get_conn().execute(
             "SELECT * FROM conversations ORDER BY created_at DESC LIMIT ?", (limit,)
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def delete_conversation(cls, conv_id: str):
-        conn = cls.get_conn()
+    def delete_conversation(self, conv_id: str):
+        conn = self.get_conn()
         conn.execute("DELETE FROM chat_messages WHERE conversation_id = ?", (conv_id,))
         conn.execute("DELETE FROM conversations WHERE id = ?", (conv_id,))
         conn.commit()
 
     # ---- Chat Messages ----
 
-    @classmethod
-    def insert_message(cls, msg: dict) -> str:
+    def insert_message(self, msg: dict) -> str:
         msg = {**msg}
         msg.setdefault("source_graph", json.dumps({"nodes": [], "edges": []}, ensure_ascii=False))
-        cls.get_conn().execute(
+        self.get_conn().execute(
             """INSERT INTO chat_messages (id, conversation_id, role, content, sources, source_graph, created_at)
                VALUES (:id, :conversation_id, :role, :content, :sources, :source_graph, :created_at)""",
             msg,
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
         return msg["id"]
 
-    @classmethod
-    def get_messages(cls, conversation_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_messages(self, conversation_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             "SELECT * FROM chat_messages WHERE conversation_id = ? ORDER BY created_at",
             (conversation_id,),
         ).fetchall()
@@ -1456,9 +1445,8 @@ class Database:
 
     # ---- Tags ----
 
-    @classmethod
-    def get_all_tags(cls) -> list[str]:
-        rows = cls.get_conn().execute("SELECT tags FROM knowledge_items WHERE tags IS NOT NULL").fetchall()
+    def get_all_tags(self) -> list[str]:
+        rows = self.get_conn().execute("SELECT tags FROM knowledge_items WHERE tags IS NOT NULL").fetchall()
         tags_set = set()
         for row in rows:
             try:
@@ -1468,40 +1456,35 @@ class Database:
                 pass
         return sorted(tags_set)
 
-    @classmethod
-    def get_all_file_types(cls) -> list[str]:
+    def get_all_file_types(self) -> list[str]:
         """返回知识库中所有已使用的文件类型"""
-        rows = cls.get_conn().execute(
+        rows = self.get_conn().execute(
             "SELECT DISTINCT file_type FROM knowledge_items WHERE file_type IS NOT NULL AND file_type != '' ORDER BY file_type"
         ).fetchall()
         return [row["file_type"] for row in rows]
 
     # ---- Categories ----
 
-    @classmethod
-    def insert_category(cls, cat_id: str, name: str, description: str = "", parent_id: str | None = None) -> str:
-        cls.get_conn().execute(
+    def insert_category(self, cat_id: str, name: str, description: str = "", parent_id: str | None = None) -> str:
+        self.get_conn().execute(
             "INSERT INTO categories (id, name, description, parent_id, created_at) VALUES (?, ?, ?, ?, ?)",
             (cat_id, name, description, parent_id, datetime.now().isoformat()),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
         return cat_id
 
-    @classmethod
-    def get_all_categories(cls) -> list[dict]:
-        rows = cls.get_conn().execute("SELECT * FROM categories ORDER BY name").fetchall()
+    def get_all_categories(self) -> list[dict]:
+        rows = self.get_conn().execute("SELECT * FROM categories ORDER BY name").fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def delete_category(cls, cat_id: str):
-        conn = cls.get_conn()
+    def delete_category(self, cat_id: str):
+        conn = self.get_conn()
         conn.execute("DELETE FROM knowledge_categories WHERE category_id = ?", (cat_id,))
         conn.execute("DELETE FROM categories WHERE id = ?", (cat_id,))
         conn.commit()
 
-    @classmethod
-    def clear_categories(cls, keep_dynamic=False):
-        conn = cls.get_conn()
+    def clear_categories(self, keep_dynamic=False):
+        conn = self.get_conn()
         if keep_dynamic:
             # 只删除预设分类（名称以 schema code 开头的），保留动态分类及其关联
             from src.data.classification_schema import get_all_codes
@@ -1521,25 +1504,22 @@ class Database:
             conn.execute("DELETE FROM categories")
         conn.commit()
 
-    @classmethod
-    def assign_category(cls, knowledge_id: str, category_id: str):
-        cls.get_conn().execute(
+    def assign_category(self, knowledge_id: str, category_id: str):
+        self.get_conn().execute(
             "INSERT OR IGNORE INTO knowledge_categories (knowledge_id, category_id) VALUES (?, ?)",
             (knowledge_id, category_id),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def unassign_category(cls, knowledge_id: str, category_id: str):
-        cls.get_conn().execute(
+    def unassign_category(self, knowledge_id: str, category_id: str):
+        self.get_conn().execute(
             "DELETE FROM knowledge_categories WHERE knowledge_id = ? AND category_id = ?",
             (knowledge_id, category_id),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def get_knowledge_by_category(cls, category_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_knowledge_by_category(self, category_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             """SELECT ki.* FROM knowledge_items ki
                JOIN knowledge_categories kc ON kc.knowledge_id = ki.id
                WHERE kc.category_id = ? ORDER BY ki.title""",
@@ -1547,9 +1527,8 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def get_categories_for_knowledge(cls, knowledge_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_categories_for_knowledge(self, knowledge_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             """SELECT c.* FROM categories c
                JOIN knowledge_categories kc ON kc.category_id = c.id
                WHERE kc.knowledge_id = ?""",
@@ -1559,9 +1538,8 @@ class Database:
 
     # ---- Wiki Pages ----
 
-    @classmethod
-    def insert_wiki_page(cls, page: dict) -> str:
-        conn = cls.get_conn()
+    def insert_wiki_page(self, page: dict) -> str:
+        conn = self.get_conn()
         conn.execute(
             """INSERT INTO wiki_pages
                (id, title, content, source_ids, tags, concept_summary, status, lint_score, created_at, updated_at)
@@ -1571,18 +1549,15 @@ class Database:
         conn.commit()
         return page["id"]
 
-    @classmethod
-    def get_wiki_page(cls, page_id: str) -> Optional[dict]:
-        row = cls.get_conn().execute("SELECT * FROM wiki_pages WHERE id = ?", (page_id,)).fetchone()
+    def get_wiki_page(self, page_id: str) -> Optional[dict]:
+        row = self.get_conn().execute("SELECT * FROM wiki_pages WHERE id = ?", (page_id,)).fetchone()
         return dict(row) if row else None
 
-    @classmethod
-    def get_wiki_page_by_title(cls, title: str) -> Optional[dict]:
-        row = cls.get_conn().execute("SELECT * FROM wiki_pages WHERE title = ?", (title,)).fetchone()
+    def get_wiki_page_by_title(self, title: str) -> Optional[dict]:
+        row = self.get_conn().execute("SELECT * FROM wiki_pages WHERE title = ?", (title,)).fetchone()
         return dict(row) if row else None
 
-    @classmethod
-    def update_wiki_page(cls, page_id: str, **fields):
+    def update_wiki_page(self, page_id: str, **fields):
         if not fields:
             return
         allowed = {"title", "content", "source_ids", "tags", "concept_summary", "status", "lint_score"}
@@ -1591,42 +1566,38 @@ class Database:
             raise ValueError(f"Invalid fields: {invalid}")
         sets = ", ".join(f"{k} = ?" for k in fields)
         values = list(fields.values()) + [datetime.now().isoformat(), page_id]
-        cls.get_conn().execute(
+        self.get_conn().execute(
             f"UPDATE wiki_pages SET {sets}, updated_at = ? WHERE id = ?",
             values,
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def delete_wiki_page(cls, page_id: str):
-        conn = cls.get_conn()
+    def delete_wiki_page(self, page_id: str):
+        conn = self.get_conn()
         conn.execute(
             "UPDATE wiki_pages SET status = 'deleted', updated_at = ? WHERE id = ?",
             (datetime.now().isoformat(), page_id),
         )
         conn.commit()
 
-    @classmethod
-    def purge_wiki_page(cls, page_id: str):
-        conn = cls.get_conn()
+    def purge_wiki_page(self, page_id: str):
+        conn = self.get_conn()
         conn.execute("DELETE FROM wiki_links WHERE source_page_id = ? OR target_page_id = ?", (page_id, page_id))
         conn.execute("DELETE FROM wiki_pages WHERE id = ?", (page_id,))
         conn.commit()
 
-    @classmethod
-    def restore_wiki_page(cls, page_id: str, status: str = "draft"):
-        conn = cls.get_conn()
+    def restore_wiki_page(self, page_id: str, status: str = "draft"):
+        conn = self.get_conn()
         conn.execute(
             "UPDATE wiki_pages SET status = ?, updated_at = ? WHERE id = ?",
             (status, datetime.now().isoformat(), page_id),
         )
         conn.commit()
 
-    @classmethod
-    def list_wiki_pages(cls, status: str | None = None, search: str | None = None,
+    def list_wiki_pages(self, status: str | None = None, search: str | None = None,
                         sort_by: str = "updated_at", sort_order: str = "DESC",
                         limit: int = 100, offset: int = 0) -> list[dict]:
-        conn = cls.get_conn()
+        conn = self.get_conn()
         conditions = []
         params = []
         if status:
@@ -1651,22 +1622,20 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def count_wiki_pages(cls, status: str | None = None) -> int:
+    def count_wiki_pages(self, status: str | None = None) -> int:
         if status:
-            row = cls.get_conn().execute("SELECT COUNT(*) as cnt FROM wiki_pages WHERE status = ?", (status,)).fetchone()
+            row = self.get_conn().execute("SELECT COUNT(*) as cnt FROM wiki_pages WHERE status = ?", (status,)).fetchone()
         else:
-            row = cls.get_conn().execute("SELECT COUNT(*) as cnt FROM wiki_pages").fetchone()
+            row = self.get_conn().execute("SELECT COUNT(*) as cnt FROM wiki_pages").fetchone()
         return row["cnt"]
 
-    @classmethod
-    def search_wiki_fts(cls, query: str, limit: int = 10) -> list[dict]:
+    def search_wiki_fts(self, query: str, limit: int = 10) -> list[dict]:
         from src.utils.chinese_tokenizer import sanitize_fts_query
         try:
             safe_query = sanitize_fts_query(query)
             if not safe_query:
                 return []
-            rows = cls.get_conn().execute(
+            rows = self.get_conn().execute(
                 """SELECT wp.*, rank as fts_rank FROM wiki_fts wf
                    JOIN wiki_pages wp ON wp.rowid = wf.rowid
                    WHERE wiki_fts MATCH ? AND wp.status = 'published'
@@ -1679,26 +1648,23 @@ class Database:
 
     # ---- Wiki Links ----
 
-    @classmethod
-    def add_wiki_link(cls, source_page_id: str, target_page_id: str,
+    def add_wiki_link(self, source_page_id: str, target_page_id: str,
                       link_type: str = "related", weight: float = 1.0):
-        cls.get_conn().execute(
+        self.get_conn().execute(
             "INSERT OR REPLACE INTO wiki_links (source_page_id, target_page_id, link_type, weight) VALUES (?, ?, ?, ?)",
             (source_page_id, target_page_id, link_type, weight),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def remove_wiki_link(cls, source_page_id: str, target_page_id: str):
-        cls.get_conn().execute(
+    def remove_wiki_link(self, source_page_id: str, target_page_id: str):
+        self.get_conn().execute(
             "DELETE FROM wiki_links WHERE source_page_id = ? AND target_page_id = ?",
             (source_page_id, target_page_id),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def get_links_for_page(cls, page_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_links_for_page(self, page_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             """SELECT wl.*, wp.title as target_title FROM wiki_links wl
                JOIN wiki_pages wp ON wp.id = wl.target_page_id
                WHERE wl.source_page_id = ?""",
@@ -1706,9 +1672,8 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def get_backlinks(cls, page_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_backlinks(self, page_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             """SELECT wl.*, wp.title as source_title FROM wiki_links wl
                JOIN wiki_pages wp ON wp.id = wl.source_page_id
                WHERE wl.target_page_id = ?""",
@@ -1716,9 +1681,8 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def get_all_wiki_links(cls) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_all_wiki_links(self) -> list[dict]:
+        rows = self.get_conn().execute(
             """SELECT wl.*, sp.title as source_title, tp.title as target_title
                FROM wiki_links wl
                JOIN wiki_pages sp ON sp.id = wl.source_page_id
@@ -1728,32 +1692,29 @@ class Database:
 
     # ---- Wiki Ops Log ----
 
-    @classmethod
-    def insert_wiki_op(cls, op_type: str, target_id: str, detail: dict | None = None) -> str:
+    def insert_wiki_op(self, op_type: str, target_id: str, detail: dict | None = None) -> str:
         op_id = str(uuid.uuid4())
-        cls.get_conn().execute(
+        self.get_conn().execute(
             "INSERT INTO wiki_ops_log (id, op_type, target_id, detail, created_at) VALUES (?, ?, ?, ?, ?)",
             (op_id, op_type, target_id, json.dumps(detail or {}, ensure_ascii=False), datetime.now().isoformat()),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
         return op_id
 
-    @classmethod
-    def list_wiki_ops(cls, limit: int = 50) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def list_wiki_ops(self, limit: int = 50) -> list[dict]:
+        rows = self.get_conn().execute(
             "SELECT * FROM wiki_ops_log ORDER BY created_at DESC LIMIT ?", (limit,)
         ).fetchall()
         return [dict(r) for r in rows]
 
     # ---- Async Jobs ----
 
-    @classmethod
-    def create_job(cls, job_type: str, params: dict | None = None, priority: int = 1, max_retries: int = 3) -> str:
+    def create_job(self, job_type: str, params: dict | None = None, priority: int = 1, max_retries: int = 3) -> str:
         """创建新任务"""
         import uuid as _uuid
         job_id = str(_uuid.uuid4())
         now = datetime.now().isoformat()
-        conn = cls.get_conn()
+        conn = self.get_conn()
         conn.execute(
             """INSERT INTO async_jobs
                (id, job_type, status, params, priority, max_retries, created_at)
@@ -1763,10 +1724,9 @@ class Database:
         conn.commit()
         return job_id
 
-    @classmethod
-    def get_job(cls, job_id: str) -> Optional[dict]:
+    def get_job(self, job_id: str) -> Optional[dict]:
         """获取任务详情"""
-        row = cls.get_conn().execute("SELECT * FROM async_jobs WHERE id = ?", (job_id,)).fetchone()
+        row = self.get_conn().execute("SELECT * FROM async_jobs WHERE id = ?", (job_id,)).fetchone()
         if not row:
             return None
         result = dict(row)
@@ -1774,11 +1734,10 @@ class Database:
         result["result"] = json.loads(result["result"]) if result.get("result") else None
         return result
 
-    @classmethod
-    def list_jobs(cls, status: str | None = None, job_type: str | None = None,
+    def list_jobs(self, status: str | None = None, job_type: str | None = None,
                   limit: int = 50, offset: int = 0) -> list[dict]:
         """列出任务"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         conditions = []
         params = []
         if status:
@@ -1794,23 +1753,21 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def update_job_progress(cls, job_id: str, progress: int, message: str = ""):
+    def update_job_progress(self, job_id: str, progress: int, message: str = ""):
         """更新任务进度"""
-        cls.get_conn().execute(
+        self.get_conn().execute(
             "UPDATE async_jobs SET progress = ?, progress_message = ? WHERE id = ?",
             (progress, message, job_id),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def update_job_status(cls, job_id: str, status: str, result: dict | None = None, error: str = ""):
+    def update_job_status(self, job_id: str, status: str, result: dict | None = None, error: str = ""):
         """更新任务状态"""
-        job = cls.get_job(job_id)
+        job = self.get_job(job_id)
         if not job:
             raise ValueError(f"Job {job_id} not found")
         now = datetime.now().isoformat()
-        conn = cls.get_conn()
+        conn = self.get_conn()
         if status == "running" and not job.get("started_at"):
             conn.execute(
                 "UPDATE async_jobs SET status = ?, started_at = ?, progress = ? WHERE id = ?",
@@ -1825,10 +1782,9 @@ class Database:
             conn.execute("UPDATE async_jobs SET status = ? WHERE id = ?", (status, job_id))
         conn.commit()
 
-    @classmethod
-    def claim_next_pending_job(cls) -> Optional[dict]:
+    def claim_next_pending_job(self) -> Optional[dict]:
         """认领下一个待处理任务（原子操作）"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         row = conn.execute(
             """UPDATE async_jobs
                SET status = 'running', started_at = ?
@@ -1844,31 +1800,28 @@ class Database:
         conn.commit()
         return dict(row) if row else None
 
-    @classmethod
-    def cancel_job(cls, job_id: str) -> bool:
+    def cancel_job(self, job_id: str) -> bool:
         """取消任务"""
-        job = cls.get_job(job_id)
+        job = self.get_job(job_id)
         if not job:
             return False
         if job["status"] in ("pending", "running"):
-            cls.update_job_status(job_id, "cancelled")
+            self.update_job_status(job_id, "cancelled")
             return True
         return False
 
-    @classmethod
-    def delete_job(cls, job_id: str) -> bool:
+    def delete_job(self, job_id: str) -> bool:
         """删除已完成/失败的任务"""
-        job = cls.get_job(job_id)
+        job = self.get_job(job_id)
         if not job or job["status"] not in ("completed", "failed", "cancelled"):
             return False
-        cls.get_conn().execute("DELETE FROM async_jobs WHERE id = ?", (job_id,))
-        cls.get_conn().commit()
+        self.get_conn().execute("DELETE FROM async_jobs WHERE id = ?", (job_id,))
+        self.get_conn().commit()
         return True
 
-    @classmethod
-    def cleanup_old_jobs(cls, retention_days: int = 7):
+    def cleanup_old_jobs(self, retention_days: int = 7):
         """清理超过指定天数的已完成/失败任务"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         conn.execute(
             """DELETE FROM async_jobs
                WHERE status IN ('completed', 'failed', 'cancelled')
@@ -1877,10 +1830,9 @@ class Database:
         )
         conn.commit()
 
-    @classmethod
-    def get_job_stats(cls) -> dict:
+    def get_job_stats(self) -> dict:
         """获取任务统计"""
-        conn = cls.get_conn()
+        conn = self.get_conn()
         rows = conn.execute(
             "SELECT status, COUNT(*) as count FROM async_jobs GROUP BY status"
         ).fetchall()
@@ -1888,25 +1840,23 @@ class Database:
 
     # ---- Wiki Workflow ----
 
-    @classmethod
-    def insert_workflow(cls, page_id: str, from_status: str, to_status: str,
+    def insert_workflow(self, page_id: str, from_status: str, to_status: str,
                         operator: str = "system", comment: str = "") -> str:
         """记录工作流状态转换"""
         import uuid as _uuid
         wf_id = str(_uuid.uuid4())
         now = datetime.now().isoformat()
-        cls.get_conn().execute(
+        self.get_conn().execute(
             """INSERT INTO wiki_workflow (id, page_id, from_status, to_status, operator, comment, created_at)
                VALUES (?, ?, ?, ?, ?, ?, ?)""",
             (wf_id, page_id, from_status, to_status, operator, comment, now),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
         return wf_id
 
-    @classmethod
-    def get_workflow_history(cls, page_id: str) -> list[dict]:
+    def get_workflow_history(self, page_id: str) -> list[dict]:
         """获取页面的工作流历史"""
-        rows = cls.get_conn().execute(
+        rows = self.get_conn().execute(
             "SELECT * FROM wiki_workflow WHERE page_id = ? ORDER BY created_at DESC",
             (page_id,),
         ).fetchall()
@@ -1914,19 +1864,18 @@ class Database:
 
     # ---- Wiki Page Versions ----
 
-    @classmethod
-    def save_wiki_version(cls, page_id: str, page_data: dict) -> str:
+    def save_wiki_version(self, page_id: str, page_data: dict) -> str:
         """保存 Wiki 页面版本快照"""
         import uuid as _uuid
         version_id = str(_uuid.uuid4())
         now = datetime.now().isoformat()
         # 获取当前最大版本号
-        row = cls.get_conn().execute(
+        row = self.get_conn().execute(
             "SELECT MAX(version) as max_ver FROM wiki_page_versions WHERE page_id = ?",
             (page_id,),
         ).fetchone()
         next_version = (row["max_ver"] or 0) + 1
-        cls.get_conn().execute(
+        self.get_conn().execute(
             """INSERT INTO wiki_page_versions
                (id, page_id, version, title, content, concept_summary, tags, created_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -1934,31 +1883,28 @@ class Database:
              page_data.get("content", ""), page_data.get("concept_summary", ""),
              page_data.get("tags", "[]"), now),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
         return version_id
 
-    @classmethod
-    def list_wiki_versions(cls, page_id: str) -> list[dict]:
+    def list_wiki_versions(self, page_id: str) -> list[dict]:
         """列出页面所有版本"""
-        rows = cls.get_conn().execute(
+        rows = self.get_conn().execute(
             "SELECT * FROM wiki_page_versions WHERE page_id = ? ORDER BY version DESC",
             (page_id,),
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def get_wiki_version(cls, page_id: str, version: int) -> Optional[dict]:
+    def get_wiki_version(self, page_id: str, version: int) -> Optional[dict]:
         """获取指定版本"""
-        row = cls.get_conn().execute(
+        row = self.get_conn().execute(
             "SELECT * FROM wiki_page_versions WHERE page_id = ? AND version = ?",
             (page_id, version),
         ).fetchone()
         return dict(row) if row else None
 
-    @classmethod
-    def get_latest_wiki_version(cls, page_id: str) -> Optional[dict]:
+    def get_latest_wiki_version(self, page_id: str) -> Optional[dict]:
         """获取最新版本"""
-        row = cls.get_conn().execute(
+        row = self.get_conn().execute(
             "SELECT * FROM wiki_page_versions WHERE page_id = ? ORDER BY version DESC LIMIT 1",
             (page_id,),
         ).fetchone()
@@ -1966,25 +1912,22 @@ class Database:
 
     # ---- Knowledge Graphs ----
 
-    @classmethod
-    def insert_graph(cls, name: str, description: str = "", source_type: str = "manual") -> str:
+    def insert_graph(self, name: str, description: str = "", source_type: str = "manual") -> str:
         graph_id = str(uuid.uuid4())
         now = datetime.now().isoformat()
-        cls.get_conn().execute(
+        self.get_conn().execute(
             "INSERT INTO knowledge_graphs (id, name, description, source_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
             (graph_id, name, description, source_type, now, now),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
         return graph_id
 
-    @classmethod
-    def get_graph(cls, graph_id: str) -> Optional[dict]:
-        row = cls.get_conn().execute("SELECT * FROM knowledge_graphs WHERE id = ?", (graph_id,)).fetchone()
+    def get_graph(self, graph_id: str) -> Optional[dict]:
+        row = self.get_conn().execute("SELECT * FROM knowledge_graphs WHERE id = ?", (graph_id,)).fetchone()
         return dict(row) if row else None
 
-    @classmethod
-    def list_graphs(cls, source_type: str | None = None) -> list[dict]:
-        conn = cls.get_conn()
+    def list_graphs(self, source_type: str | None = None) -> list[dict]:
+        conn = self.get_conn()
         if source_type:
             rows = conn.execute(
                 "SELECT * FROM knowledge_graphs WHERE source_type = ? ORDER BY updated_at DESC",
@@ -1994,15 +1937,13 @@ class Database:
             rows = conn.execute("SELECT * FROM knowledge_graphs ORDER BY updated_at DESC").fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def delete_graph(cls, graph_id: str):
+    def delete_graph(self, graph_id: str):
         # 级联删除由外键约束自动处理
-        conn = cls.get_conn()
+        conn = self.get_conn()
         conn.execute("DELETE FROM knowledge_graphs WHERE id = ?", (graph_id,))
         conn.commit()
 
-    @classmethod
-    def update_graph(cls, graph_id: str, **fields):
+    def update_graph(self, graph_id: str, **fields):
         allowed = {"name", "description"}
         invalid = set(fields) - allowed
         if invalid:
@@ -2011,17 +1952,16 @@ class Database:
             return
         sets = ", ".join(f"{k} = ?" for k in fields)
         values = list(fields.values()) + [datetime.now().isoformat(), graph_id]
-        cls.get_conn().execute(
+        self.get_conn().execute(
             f"UPDATE knowledge_graphs SET {sets}, updated_at = ? WHERE id = ?",
             values,
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
     # ---- Knowledge Graph Nodes ----
 
-    @classmethod
-    def insert_graph_nodes(cls, graph_id: str, knowledge_ids: list[str]):
-        conn = cls.get_conn()
+    def insert_graph_nodes(self, graph_id: str, knowledge_ids: list[str]):
+        conn = self.get_conn()
         for knowledge_id in knowledge_ids:
             conn.execute(
                 "INSERT OR IGNORE INTO knowledge_graph_nodes (id, graph_id, knowledge_id, x, y, is_pinned) VALUES (?, ?, ?, ?, ?, ?)",
@@ -2029,9 +1969,8 @@ class Database:
             )
         conn.commit()
 
-    @classmethod
-    def get_graph_nodes(cls, graph_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_graph_nodes(self, graph_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             """SELECT n.*, ki.title as knowledge_title, ki.file_type, ki.tags
                FROM knowledge_graph_nodes n
                JOIN knowledge_items ki ON ki.id = n.knowledge_id
@@ -2040,16 +1979,14 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def update_node_position(cls, node_id: str, x: float, y: float):
-        cls.get_conn().execute(
+    def update_node_position(self, node_id: str, x: float, y: float):
+        self.get_conn().execute(
             "UPDATE knowledge_graph_nodes SET x = ?, y = ? WHERE id = ?",
             (x, y, node_id),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def batch_update_node_positions(cls, positions: list[tuple[float, float, str]]):
+    def batch_update_node_positions(self, positions: list[tuple[float, float, str]]):
         """Batch-update node positions in a single transaction.
 
         Args:
@@ -2057,29 +1994,27 @@ class Database:
         """
         if not positions:
             return
-        conn = cls.get_conn()
+        conn = self.get_conn()
         conn.executemany(
             "UPDATE knowledge_graph_nodes SET x = ?, y = ? WHERE id = ?",
             positions,
         )
         conn.commit()
 
-    @classmethod
-    def delete_graph_nodes(cls, graph_id: str, knowledge_ids: list[str]):
+    def delete_graph_nodes(self, graph_id: str, knowledge_ids: list[str]):
         if not knowledge_ids:
             return
         placeholders = ",".join("?" for _ in knowledge_ids)
-        cls.get_conn().execute(
+        self.get_conn().execute(
             f"DELETE FROM knowledge_graph_nodes WHERE graph_id = ? AND knowledge_id IN ({placeholders})",
             (graph_id, *knowledge_ids),
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
     # ---- Knowledge Graph Relations ----
 
-    @classmethod
-    def insert_graph_relations(cls, graph_id: str, relations: list[dict]):
-        conn = cls.get_conn()
+    def insert_graph_relations(self, graph_id: str, relations: list[dict]):
+        conn = self.get_conn()
         for rel in relations:
             conn.execute(
                 """INSERT INTO knowledge_graph_relations
@@ -2097,9 +2032,8 @@ class Database:
             )
         conn.commit()
 
-    @classmethod
-    def get_graph_relations(cls, graph_id: str) -> list[dict]:
-        rows = cls.get_conn().execute(
+    def get_graph_relations(self, graph_id: str) -> list[dict]:
+        rows = self.get_conn().execute(
             """SELECT r.* FROM knowledge_graph_relations r
                JOIN knowledge_items ks ON ks.id = r.source_knowledge_id
                JOIN knowledge_items kt ON kt.id = r.target_knowledge_id
@@ -2108,20 +2042,25 @@ class Database:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    @classmethod
-    def delete_graph_relations(cls, graph_id: str):
-        cls.get_conn().execute(
+    def delete_graph_relations(self, graph_id: str):
+        self.get_conn().execute(
             "DELETE FROM knowledge_graph_relations WHERE graph_id = ?", (graph_id,)
         )
-        cls.get_conn().commit()
+        self.get_conn().commit()
 
-    @classmethod
-    def get_graph_for_knowledge(cls, knowledge_id: str) -> list[dict]:
+    def get_graph_for_knowledge(self, knowledge_id: str) -> list[dict]:
         """获取包含指定知识的所有图谱"""
-        rows = cls.get_conn().execute(
+        rows = self.get_conn().execute(
             """SELECT g.* FROM knowledge_graphs g
                JOIN knowledge_graph_nodes n ON n.graph_id = g.id
                WHERE n.knowledge_id = ?""",
             (knowledge_id,),
         ).fetchall()
         return [dict(r) for r in rows]
+
+
+# ---- 向后兼容层 ----
+# 旧代码通过 Database.xxx() 调用时，_bind_to_instance 描述符自动委托到
+# Database._instance（由 connect() 或 __init__ 设置）。
+# 新代码应通过 Container 注入的 db 实例调用：container.db.list_knowledge()
+# 或者构造 Database 实例：db = Database(db_path); db.list_knowledge()

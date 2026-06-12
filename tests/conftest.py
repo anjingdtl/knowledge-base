@@ -15,7 +15,7 @@ def setup_db(tmp_path):
     Config.load()
     Config.set("storage.data_dir", str(tmp_path))
     Config.set("storage.db_name", "test.db")
-    Database._conn = None
+    # 重置 Database 实例
     Database._instance = None
     Database.connect(str(db_path))
     if "src.mcp_server" in sys.modules:

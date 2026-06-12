@@ -39,18 +39,24 @@ def create_graph_backend(config, db=None) -> GraphBackend:
         return backend
 
     if provider == "neo4j":
-        from src.services.graph_backend.neo4j_backend import Neo4jGraphBackend
-        backend = Neo4jGraphBackend(
-            uri=config.get("graph_backend.uri", "bolt://localhost:7687"),
-            user=config.get("graph_backend.user", "neo4j"),
-            password=config.get("graph_backend.password", ""),
-            database=config.get("graph_backend.database", "neo4j"),
-            max_connection_pool_size=int(
-                config.get("graph_backend.max_connection_pool_size", 50)
-            ),
-        )
-        logger.info("Graph backend: Neo4j (%s)", config.get("graph_backend.uri", "bolt://localhost:7687"))
-        return backend
+        try:
+            from src.services.graph_backend.neo4j_backend import Neo4jGraphBackend
+            backend = Neo4jGraphBackend(
+                uri=config.get("graph_backend.uri", "bolt://localhost:7687"),
+                user=config.get("graph_backend.user", "neo4j"),
+                password=config.get("graph_backend.password", ""),
+                database=config.get("graph_backend.database", "neo4j"),
+                max_connection_pool_size=int(
+                    config.get("graph_backend.max_connection_pool_size", 50)
+                ),
+            )
+            logger.info("Graph backend: Neo4j (%s)", config.get("graph_backend.uri", "bolt://localhost:7687"))
+            return backend
+        except (ImportError, Exception) as e:
+            logger.warning("Neo4j backend unavailable (%s), falling back to SQLite", e)
+            from src.services.graph_backend.sqlite_backend import SQLiteGraphBackend
+            backend = SQLiteGraphBackend(db=db)
+            return backend
 
     raise ValueError(
         f"Unknown graph_backend provider: {provider!r}. "
