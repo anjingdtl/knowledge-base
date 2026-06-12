@@ -3,9 +3,9 @@ from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QFormLayout,
     QLineEdit, QSpinBox, QPushButton, QMessageBox,
     QTabWidget, QWidget, QLabel, QCheckBox, QComboBox,
-    QGroupBox, QGridLayout,
+    QGroupBox, QGridLayout, QProgressBar,
 )
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from PySide6.QtGui import QFont
 from src.gui.icons import set_named_icon
 from src.utils.config import Config
@@ -170,6 +170,121 @@ class SettingsDialog(QDialog):
         appearance_form.addRow(hint_appearance)
         tabs.addTab(appearance_tab, "外观")
 
+        # ---- 图谱后端设置 ----
+        graph_tab = QWidget()
+        graph_layout = QVBoxLayout(graph_tab)
+
+        # Provider 选择
+        provider_group = QGroupBox("图存储后端")
+        provider_form = QFormLayout(provider_group)
+
+        self.graph_provider = QComboBox()
+        self.graph_provider.addItem("SQLite（默认，零迁移成本）", "sqlite")
+        self.graph_provider.addItem("Neo4j（高性能图遍历，需部署服务）", "neo4j")
+        self.graph_provider.currentIndexChanged.connect(self._on_graph_provider_changed)
+        provider_form.addRow("后端选择：", self.graph_provider)
+
+        graph_layout.addWidget(provider_group)
+
+        # Neo4j 连接配置
+        self._neo4j_group = QGroupBox("Neo4j 连接配置")
+        neo4j_form = QFormLayout(self._neo4j_group)
+
+        self.neo4j_uri = QLineEdit()
+        self.neo4j_uri.setPlaceholderText("bolt://localhost:7687")
+        self.neo4j_user = QLineEdit()
+        self.neo4j_user.setPlaceholderText("neo4j")
+        self.neo4j_password = QLineEdit()
+        self.neo4j_password.setEchoMode(QLineEdit.Password)
+        self.neo4j_database = QLineEdit()
+        self.neo4j_database.setPlaceholderText("neo4j")
+
+        neo4j_form.addRow("Bolt URI：", self.neo4j_uri)
+        neo4j_form.addRow("用户名：", self.neo4j_user)
+        neo4j_form.addRow("密码：", self.neo4j_password)
+        neo4j_form.addRow("数据库：", self.neo4j_database)
+
+        graph_layout.addWidget(self._neo4j_group)
+
+        # Neo4j 服务管理
+        self._neo4j_svc_group = QGroupBox("Neo4j 服务管理")
+        neo4j_svc_grid = QGridLayout(self._neo4j_svc_group)
+
+        self._neo4j_status_label = QLabel("检测中...")
+        self._neo4j_status_label.setFont(QFont("", -1, QFont.Bold))
+        neo4j_svc_grid.addWidget(QLabel("服务状态："), 0, 0)
+        neo4j_svc_grid.addWidget(self._neo4j_status_label, 0, 1)
+
+        self._neo4j_home_label = QLabel("—")
+        self._neo4j_home_label.setWordWrap(True)
+        neo4j_svc_grid.addWidget(QLabel("安装路径："), 1, 0)
+        neo4j_svc_grid.addWidget(self._neo4j_home_label, 1, 1)
+
+        neo4j_btn_row = QHBoxLayout()
+        self._btn_neo4j_start = QPushButton("启动 Neo4j")
+        self._btn_neo4j_start.setMinimumHeight(32)
+        self._btn_neo4j_start.clicked.connect(self._on_neo4j_start)
+        self._btn_neo4j_stop = QPushButton("停止 Neo4j")
+        self._btn_neo4j_stop.setMinimumHeight(32)
+        self._btn_neo4j_stop.clicked.connect(self._on_neo4j_stop)
+        self._btn_neo4j_refresh = QPushButton("刷新状态")
+        self._btn_neo4j_refresh.setMinimumHeight(32)
+        self._btn_neo4j_refresh.clicked.connect(self._refresh_neo4j_status)
+        neo4j_btn_row.addWidget(self._btn_neo4j_start)
+        neo4j_btn_row.addWidget(self._btn_neo4j_stop)
+        neo4j_btn_row.addWidget(self._btn_neo4j_refresh)
+        neo4j_svc_grid.addLayout(neo4j_btn_row, 2, 0, 1, 2)
+
+        graph_layout.addWidget(self._neo4j_svc_group)
+
+        # 数据迁移
+        migrate_group = QGroupBox("数据迁移")
+        migrate_layout = QVBoxLayout(migrate_group)
+
+        migrate_desc = QLabel("将 SQLite 中的图谱数据迁移到当前配置的图后端。\n"
+                              "首次迁移或切换后端时使用「全量迁移」，日常更新使用「增量同步」。")
+        migrate_desc.setObjectName("hintLabel")
+        migrate_desc.setWordWrap(True)
+        migrate_layout.addWidget(migrate_desc)
+
+        self._migrate_progress = QProgressBar()
+        self._migrate_progress.setMaximumHeight(18)
+        self._migrate_progress.setVisible(False)
+        migrate_layout.addWidget(self._migrate_progress)
+
+        self._migrate_status_label = QLabel("")
+        self._migrate_status_label.setObjectName("hintLabel")
+        migrate_layout.addWidget(self._migrate_status_label)
+
+        migrate_btn_row = QHBoxLayout()
+        self._btn_migrate = QPushButton("全量迁移")
+        self._btn_migrate.setMinimumHeight(32)
+        self._btn_migrate.clicked.connect(self._on_migrate)
+        self._btn_sync = QPushButton("增量同步")
+        self._btn_sync.setMinimumHeight(32)
+        self._btn_sync.clicked.connect(self._on_incremental_sync)
+        migrate_btn_row.addWidget(self._btn_migrate)
+        migrate_btn_row.addWidget(self._btn_sync)
+        migrate_layout.addLayout(migrate_btn_row)
+
+        graph_layout.addWidget(migrate_group)
+
+        hint_graph = QLabel(
+            "说明：SQLite 后端从现有数据表动态构建图视图，无需额外部署。\n"
+            "Neo4j 后端支持原生 Cypher 遍历，适合大规模图谱场景。\n"
+            "切换到 Neo4j 后需先执行「全量迁移」将数据导入。"
+        )
+        hint_graph.setObjectName("hintLabel")
+        hint_graph.setWordWrap(True)
+        graph_layout.addWidget(hint_graph)
+        graph_layout.addStretch()
+
+        tabs.addTab(graph_tab, "图谱后端")
+
+        # 初始化图谱后端状态
+        self._refresh_neo4j_status()
+        self._on_graph_provider_changed()
+
         # ---- 服务设置 ----
         service_tab = QWidget()
         service_layout = QVBoxLayout(service_tab)
@@ -299,6 +414,16 @@ class SettingsDialog(QDialog):
             self.theme_combo.setCurrentIndex(idx)
         self.font_size.setValue(Config.get("appearance.font_size", 14))
 
+        # 图谱后端配置
+        provider = Config.get("graph_backend.provider", "sqlite")
+        pidx = self.graph_provider.findData(provider)
+        if pidx >= 0:
+            self.graph_provider.setCurrentIndex(pidx)
+        self.neo4j_uri.setText(Config.get("graph_backend.uri", "bolt://localhost:7687"))
+        self.neo4j_user.setText(Config.get("graph_backend.user", "neo4j"))
+        self.neo4j_password.setText(Config.get("graph_backend.password", ""))
+        self.neo4j_database.setText(Config.get("graph_backend.database", "neo4j"))
+
     def _save(self):
         if not self.llm_provider.text().strip() or not self.llm_base_url.text().strip():
             QMessageBox.warning(self, "提示", "请至少填写 LLM 的供应商名称和 API 地址。")
@@ -345,6 +470,15 @@ class SettingsDialog(QDialog):
 
         Config.set("appearance.theme", self.theme_combo.currentData())
         Config.set("appearance.font_size", self.font_size.value())
+
+        # 保存图谱后端配置
+        graph_provider = self.graph_provider.currentData()
+        Config.set("graph_backend.provider", graph_provider)
+        if graph_provider == "neo4j":
+            Config.set("graph_backend.uri", self.neo4j_uri.text().strip() or "bolt://localhost:7687")
+            Config.set("graph_backend.user", self.neo4j_user.text().strip() or "neo4j")
+            Config.set("graph_backend.password", self.neo4j_password.text().strip())
+            Config.set("graph_backend.database", self.neo4j_database.text().strip() or "neo4j")
 
         Config.save()
 
@@ -467,3 +601,191 @@ class SettingsDialog(QDialog):
         msg = service_configure_failure()
         QTimer.singleShot(3000, self._refresh_svc_status)
         QMessageBox.information(self, "崩溃重启策略", msg)
+
+    # ---- 图谱后端管理 ----
+
+    def _on_graph_provider_changed(self):
+        """Provider 切换时更新 UI 可见性"""
+        is_neo4j = self.graph_provider.currentData() == "neo4j"
+        self._neo4j_group.setVisible(is_neo4j)
+        self._neo4j_svc_group.setVisible(is_neo4j)
+
+    def _refresh_neo4j_status(self):
+        """刷新 Neo4j 状态显示"""
+        from src.services.neo4j_manager import Neo4jManager
+        mgr = Neo4jManager()
+        status = mgr.get_status()
+
+        if status["running"]:
+            self._neo4j_status_label.setText("运行中")
+            self._neo4j_status_label.setProperty("status", "online")
+        elif status["installed"]:
+            self._neo4j_status_label.setText("已停止")
+            self._neo4j_status_label.setProperty("status", "offline")
+        else:
+            self._neo4j_status_label.setText("未安装")
+            self._neo4j_status_label.setProperty("status", "offline")
+
+        self._neo4j_home_label.setText(status["neo4j_home"] or "未检测到")
+
+        self._btn_neo4j_start.setEnabled(status["installed"] and not status["running"])
+        self._btn_neo4j_stop.setEnabled(status["running"])
+
+        # 刷新样式
+        self._neo4j_status_label.style().unpolish(self._neo4j_status_label)
+        self._neo4j_status_label.style().polish(self._neo4j_status_label)
+
+    def _on_neo4j_start(self):
+        from src.services.neo4j_manager import Neo4jManager
+        mgr = Neo4jManager()
+        try:
+            msg = mgr.start(timeout=60)
+            QMessageBox.information(self, "Neo4j", msg)
+        except Exception as exc:
+            QMessageBox.warning(self, "Neo4j 启动失败", str(exc))
+        self._refresh_neo4j_status()
+
+    def _on_neo4j_stop(self):
+        from src.services.neo4j_manager import Neo4jManager
+        mgr = Neo4jManager()
+        try:
+            msg = mgr.stop(timeout=15)
+            QMessageBox.information(self, "Neo4j", msg)
+        except Exception as exc:
+            QMessageBox.warning(self, "Neo4j 停止失败", str(exc))
+        self._refresh_neo4j_status()
+
+    def _on_migrate(self):
+        """全量迁移 SQLite → 当前后端"""
+        provider = self.graph_provider.currentData()
+        if provider == "sqlite":
+            QMessageBox.information(self, "迁移", "当前后端为 SQLite，无需迁移。")
+            return
+
+        if not self._check_neo4j_running():
+            return
+
+        reply = QMessageBox.question(
+            self, "全量迁移",
+            "将 SQLite 中的图谱数据全量迁移到 Neo4j。\n"
+            "这会清空 Neo4j 中的现有数据后重新导入。\n\n确定继续？",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+
+        self._btn_migrate.setEnabled(False)
+        self._btn_sync.setEnabled(False)
+        self._migrate_progress.setVisible(True)
+        self._migrate_progress.setRange(0, 0)
+        self._migrate_status_label.setText("正在迁移...")
+
+        self._migrate_worker = _MigrationWorker(config=None, mode="full")
+        self._migrate_worker.progress.connect(self._on_migrate_progress)
+        self._migrate_worker.done.connect(self._on_migrate_done)
+        self._migrate_worker.error.connect(self._on_migrate_error)
+        self._migrate_worker.start()
+
+    def _on_incremental_sync(self):
+        """增量同步"""
+        provider = self.graph_provider.currentData()
+        if provider == "sqlite":
+            QMessageBox.information(self, "同步", "当前后端为 SQLite，无需同步。")
+            return
+
+        if not self._check_neo4j_running():
+            return
+
+        self._btn_migrate.setEnabled(False)
+        self._btn_sync.setEnabled(False)
+        self._migrate_progress.setVisible(True)
+        self._migrate_progress.setRange(0, 0)
+        self._migrate_status_label.setText("正在增量同步...")
+
+        self._migrate_worker = _MigrationWorker(config=None, mode="incremental")
+        self._migrate_worker.progress.connect(self._on_migrate_progress)
+        self._migrate_worker.done.connect(self._on_migrate_done)
+        self._migrate_worker.error.connect(self._on_migrate_error)
+        self._migrate_worker.start()
+
+    def _check_neo4j_running(self) -> bool:
+        from src.services.neo4j_manager import Neo4jManager
+        if not Neo4jManager().is_running():
+            QMessageBox.warning(
+                self, "Neo4j 未运行",
+                "请先启动 Neo4j 服务再执行迁移。",
+            )
+            return False
+        return True
+
+    def _on_migrate_progress(self, msg: str, current: int = 0, total: int = 0):
+        self._migrate_status_label.setText(msg)
+        if total > 0:
+            self._migrate_progress.setRange(0, total)
+            self._migrate_progress.setValue(min(current, total))
+
+    def _on_migrate_done(self, result: str):
+        self._btn_migrate.setEnabled(True)
+        self._btn_sync.setEnabled(True)
+        self._migrate_progress.setVisible(False)
+        self._migrate_progress.setRange(0, 100)
+        self._migrate_progress.setValue(0)
+        self._migrate_status_label.setText("迁移完成")
+        QMessageBox.information(self, "迁移完成", result)
+
+    def _on_migrate_error(self, error: str):
+        self._btn_migrate.setEnabled(True)
+        self._btn_sync.setEnabled(True)
+        self._migrate_progress.setVisible(False)
+        self._migrate_progress.setRange(0, 100)
+        self._migrate_progress.setValue(0)
+        self._migrate_status_label.setText(f"迁移失败: {error}")
+        QMessageBox.warning(self, "迁移失败", f"数据迁移出错:\n{error}")
+
+
+class _MigrationWorker(QThread):
+    """后台线程执行图谱迁移/同步，避免阻塞 UI。"""
+    progress = Signal(str, int, int)
+    done = Signal(str)
+    error = Signal(str)
+
+    def __init__(self, config, mode: str = "full"):
+        super().__init__()
+        self._config = config
+        self._mode = mode
+
+    def run(self):
+        try:
+            from src.utils.config import Config
+            from src.services.db import Database
+            from src.services.graph_backend.factory import create_graph_backend
+            from src.services.graph_backend.migration import GraphMigration
+
+            config = self._config or Config
+            backend = create_graph_backend(config, Database)
+
+            migration = GraphMigration(
+                config=config, db=Database,
+                progress_callback=lambda msg, cur=None, total=None: (
+                    self.progress.emit(msg, cur or 0, total or 0)
+                ),
+            )
+
+            if self._mode == "full":
+                result = migration.migrate_all(
+                    target=backend, clear_target=True, batch_size=500,
+                )
+                lines = [
+                    f"页面: {result.get('pages', 0)}",
+                    f"Block: {result.get('blocks', 0)}",
+                    f"标签: {result.get('tags', 0)}",
+                    f"边: {result.get('edges', 0)}",
+                    f"耗时: {result.get('duration_s', 0):.1f}s",
+                ]
+                self.done.emit("\n".join(lines))
+            else:
+                result = migration.sync_incremental(target=backend, since=None)
+                self.done.emit(str(result))
+
+        except Exception as exc:
+            self.error.emit(str(exc))

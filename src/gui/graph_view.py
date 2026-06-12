@@ -1055,6 +1055,52 @@ class GraphView(QWidget):
 
         self._setup_ui()
         self._load_graph_list()
+        self._setup_backend_indicator()
+
+    def _setup_backend_indicator(self):
+        """初始化后端状态定时刷新"""
+        self._backend_timer = QTimer(self)
+        self._backend_timer.timeout.connect(self._refresh_backend_indicator)
+        self._backend_timer.start(5000)
+        # 立即刷新一次
+        self._refresh_backend_indicator()
+
+    def _refresh_backend_indicator(self):
+        """刷新工具栏上的后端状态指示器"""
+        try:
+            from src.utils.config import Config
+            provider = Config.get("graph_backend.provider", "sqlite")
+        except Exception:
+            provider = "sqlite"
+
+        is_neo4j = provider == "neo4j"
+        healthy = False
+
+        if is_neo4j:
+            try:
+                from src.services.neo4j_manager import Neo4jManager
+                healthy = Neo4jManager().is_running()
+            except Exception:
+                healthy = False
+        else:
+            # SQLite 始终健康
+            healthy = True
+
+        # 更新显示
+        if is_neo4j:
+            label_text = "Neo4j"
+            status_prop = "online" if healthy else "offline"
+            tooltip = f"Neo4j 后端 — {'已连接' if healthy else '未连接'}"
+        else:
+            label_text = "SQLite"
+            status_prop = "online"
+            tooltip = "SQLite 后端（默认）"
+
+        self._backend_dot.setProperty("status", status_prop)
+        self._backend_dot.setText(label_text)
+        self._backend_dot.setToolTip(tooltip)
+        self._backend_dot.style().unpolish(self._backend_dot)
+        self._backend_dot.style().polish(self._backend_dot)
 
     def _setup_ui(self) -> None:
         layout = QVBoxLayout(self)
@@ -1120,6 +1166,16 @@ class GraphView(QWidget):
         set_named_icon(self.btn_unified, "graph_generate", "text_dim", 15)
         self.btn_unified.clicked.connect(self._load_unified_graph)
         toolbar.addWidget(self.btn_unified)
+
+        # ---- 后端状态指示器 ----
+        toolbar.addSpacing(12)
+        self._backend_dot = QLabel("SQLite")
+        self._backend_dot.setObjectName("indicatorDot")
+        self._backend_dot.setProperty("status", "online")
+        self._backend_dot.setFont(QFont("", -1, QFont.Bold))
+        self._backend_dot.setFixedHeight(24)
+        self._backend_dot.setContentsMargins(8, 2, 8, 2)
+        toolbar.addWidget(self._backend_dot)
 
         layout.addWidget(toolbar_card)
 
