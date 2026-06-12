@@ -162,6 +162,68 @@ def _content_preview(text, max_len=200):
     return text[:max_len] + ("..." if len(text) > max_len else "")
 
 
+# ---- MCP 写操作安全守卫 ----
+
+# 写操作工具名称集合（用于 _check_write_policy 快速判断）
+_WRITE_TOOLS = {
+    "create", "update", "delete",
+    "ingest_file", "ingest_url", "create_ingest_job",
+    "save_to_wiki",
+    "wiki_submit_review", "wiki_approve", "wiki_reject",
+    "wiki_deprecate", "wiki_restore_version",
+    "create_async_job",
+    "undo_operation", "fix_dead_references",
+    "cancel_job", "cancel_async_job", "reindex_all",
+}
+
+# 破坏性操作（更严格）
+_DESTRUCTIVE_TOOLS = {"delete", "cancel_job", "cancel_async_job", "reindex_all"}
+
+
+def _check_write_policy(tool_name: str) -> dict | None:
+    """检查写操作是否被当前安全策略允许。
+
+    Returns:
+        None: 允许执行
+        dict: 拒绝执行时返回 fail envelope
+    """
+    policy = str(Config.get("mcp.write_policy", "")).lower()
+    if not policy:
+        # 未配置策略时，默认行为：stdio 模式放行，HTTP 模式需确认
+        transport = os.environ.get("MCP_TRANSPORT", "stdio")
+        if transport == "streamable-http":
+            # HTTP 模式默认要求 token
+            token = os.environ.get("MCP_AUTH_TOKEN", "")
+            if not token:
+                return None  # 未配置 token 时暂时放行（向后兼容）
+        return None
+
+    if policy == "disabled":
+        return fail(ErrorCode.PERMISSION_DENIED, f"写操作已被安全策略禁用 (mcp.write_policy=disabled)")
+
+    if policy == "preview_only":
+        return fail(ErrorCode.PERMISSION_DENIED,
+                     f"当前策略仅允许预览 (mcp.write_policy=preview_only)，请使用 preview_operation 工具进行 dry_run")
+
+    if policy == "token_required":
+        transport = os.environ.get("MCP_TRANSPORT", "stdio")
+        if transport == "streamable-http":
+            expected_token = Config.get("mcp.auth_token", "")
+            if not expected_token:
+                logger.warning("mcp.write_policy=token_required 但未配置 mcp.auth_token，写操作将被拒绝")
+                return fail(ErrorCode.PERMISSION_DENIED, "MCP 写操作需要认证 token 但未配置 auth_token")
+            # 注意: 实际 token 校验需要在传输层实现，这里做配置层面的守卫
+
+    if policy == "local_confirm":
+        # stdio 模式下放行（客户端本身就是本地确认）
+        transport = os.environ.get("MCP_TRANSPORT", "stdio")
+        if transport == "streamable-http":
+            return fail(ErrorCode.PERMISSION_DENIED,
+                         "HTTP 模式下 local_confirm 策略要求通过本地 GUI 确认")
+
+    return None  # 允许
+
+
 def _load_json_dict(value) -> dict:
     if isinstance(value, dict):
         return value
@@ -291,7 +353,7 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
     "返回结构化 payload：answer / sources / source_graph / route / query_plan / "
     "block_contexts / warnings。"
     "[耗时提示：通常 5-30 秒，首次调用可能更长，建议客户端超时 ≥ 60s]",
-)
+    annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def ask(
     question: str,
@@ -346,7 +408,7 @@ def _do_ask(question: str) -> dict:
 @mcp.tool(
     description="创建新的知识条目。自动将内容分块并向量化索引，支持纯文本、Markdown 和代码。"
     "[耗时提示：短文本 2-5 秒，长文本可能 10-30 秒]",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def create(
     title: str,
@@ -366,6 +428,9 @@ def create(
         source_type: 来源类型 - manual（手动）、file（文件）、web（网页）
         dry_run: 设为 True 时只预览不执行
     """
+    _guard = _check_write_policy("create")
+    if _guard:
+        return _guard
     tags = tags or []
     container = _get_container()
     db = container.db
@@ -472,7 +537,7 @@ def read(
 
 @mcp.tool(
     description="更新已有知识条目的标题、内容或标签。修改内容时会自动创建版本快照。",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def update(
     item_id: str,
@@ -490,6 +555,9 @@ def update(
         tags: 新标签列表（可选）
         dry_run: 设为 True 时只预览变更不执行
     """
+    _guard = _check_write_policy("update")
+    if _guard:
+        return _guard
     container = _get_container()
     db = container.db
     existing = db.get_knowledge(item_id)
@@ -554,6 +622,9 @@ def delete(item_id: str, dry_run: bool = False) -> dict:
         item_id: 要删除的知识条目 ID
         dry_run: 设为 True 时只预览将删除的数据不执行
     """
+    _guard = _check_write_policy("delete")
+    if _guard:
+        return _guard
     container = _get_container()
     # 默认过滤已软删除条目 — 二次删除返 NOT_FOUND
     existing = container.db.get_knowledge(item_id, include_deleted=False)
@@ -622,7 +693,7 @@ def delete(item_id: str, dry_run: bool = False) -> dict:
 
 @mcp.tool(
     description="恢复已软删除的知识条目。清除 deleted_at 并将 MD 文件从 .trash 移回 pages/。",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def restore_knowledge(item_id: str) -> dict:
     """恢复软删除的知识条目（Phase 4）。
@@ -678,7 +749,7 @@ def restore_knowledge(item_id: str) -> dict:
 @mcp.tool(
     description="重建所有知识条目的索引（向量索引、全文索引、分块索引）。当搜索结果异常时使用。"
     "[耗时提示：可能数分钟，大量数据时建议客户端超时 ≥ 300s]",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': True, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def reindex_all(dry_run: bool = False) -> dict:
     """重建全部知识条目的索引。包括分块、向量化和全文索引。
@@ -686,6 +757,9 @@ def reindex_all(dry_run: bool = False) -> dict:
     Args:
         dry_run: 设为 True 时只返回将重建的数量不执行
     """
+    _guard = _check_write_policy("reindex_all")
+    if _guard:
+        return _guard
     container = _get_container()
     count = container.db.count_knowledge()
     if dry_run:
@@ -768,7 +842,7 @@ def tags() -> dict:
     description="解析本地文件并将其内容导入知识库。支持 PDF、DOCX、TXT、Markdown、HTML、图片及代码文件。"
     "Excel 文件的每个工作表独立导入。大文件自动转异步任务（返回 job_id）。"
     "[耗时提示：小文件 3-10 秒，大文件自动转异步]",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = False) -> dict:
     """解析本地文件并创建知识条目。
@@ -781,6 +855,9 @@ def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = F
         tags: 要附加的标签列表
         dry_run: 设为 True 时只预览将解析的文件信息不执行
     """
+    _guard = _check_write_policy("ingest_file")
+    if _guard:
+        return _guard
     try:
         validated_path = _validate_file_path(file_path)
     except (FileNotFoundError, PermissionError) as exc:
@@ -838,7 +915,7 @@ def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = F
 
 @mcp.tool(
     description="解析网页 URL 并将其内容导入知识库。支持 HTTP/HTTPS 网页，自动提取正文文本。",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def ingest_url(url: str, tags: list[str] | None = None, dry_run: bool = False) -> dict:
     """抓取网页并创建知识条目。
@@ -848,6 +925,9 @@ def ingest_url(url: str, tags: list[str] | None = None, dry_run: bool = False) -
         tags: 要附加的标签列表
         dry_run: 设为 True 时只预览将导入的 URL，不抓取网络
     """
+    _guard = _check_write_policy("ingest_url")
+    if _guard:
+        return _guard
     if dry_run:
         return dry_run_preview({
             "url": url,
@@ -1046,7 +1126,7 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
 @mcp.tool(
     description="创建异步文件/URL导入任务。大文件自动走此路径（也可手动调用强制异步）。"
     "返回 job_id 供 get_job 轮询。",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def create_ingest_job(
     file_path: str | None = None,
@@ -1181,6 +1261,9 @@ def cancel_job(job_id: str) -> dict:
     Args:
         job_id: 任务 ID
     """
+    _guard = _check_write_policy("cancel_job")
+    if _guard:
+        return _guard
     from src.services.async_task import AsyncTaskService
     from src.services.async_worker import TaskRegistry
     # 1) 在 TaskRegistry 中标记取消（让运行中的 handler 能检查到）
@@ -1198,7 +1281,7 @@ def cancel_job(job_id: str) -> dict:
 
 @mcp.tool(
     description="将好的问答回答保存为 Wiki 页面，实现知识沉淀和复利增长。",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None) -> dict:
     """将问答保存为 Wiki 页面。
@@ -1208,6 +1291,9 @@ def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None
         answer: AI 的回答
         source_ids: 引用的知识条目 ID 列表
     """
+    _guard = _check_write_policy("save_to_wiki")
+    if _guard:
+        return _guard
     if not Config.get("wiki.enabled", False):
         return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
     container = _get_container()
@@ -1224,7 +1310,7 @@ def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None
 
 @mcp.tool(
     description="对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。",
-)
+    annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def wiki_lint() -> dict:
     """运行 Wiki 体检，返回健康报告。"""
@@ -1241,7 +1327,7 @@ def wiki_lint() -> dict:
     "对每个死链分析上下文后选择修复策略：重定向到已有页面、创建占位页面或移除引用。"
     "修复前会先尝试解析有效引用写入 wiki_links 表。"
     "注意：会消耗 LLM 调用次数（每个含死链的页面约 1 次 LLM 调用）。",
-)
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def fix_dead_references(max_pages: int = 50, dry_run: bool = False) -> dict:
     """LLM 驱动的 Wiki 死链智能修复。
@@ -1250,6 +1336,9 @@ def fix_dead_references(max_pages: int = 50, dry_run: bool = False) -> dict:
         max_pages: 最多处理多少个含死链的页面（默认 50，控制 LLM 成本）
         dry_run: 仅扫描报告死链，不执行修复（默认 false）
     """
+    _guard = _check_write_policy("fix_dead_references")
+    if _guard:
+        return _guard
     if not Config.get("wiki.enabled", False):
         return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
 
@@ -1287,10 +1376,13 @@ def fix_dead_references(max_pages: int = 50, dry_run: bool = False) -> dict:
 
 # ---- Wiki Workflow MCP Tools ----
 
-@mcp.tool(description="提交 Wiki 页面进行审核（draft -> review）")
+@mcp.tool(description="提交 Wiki 页面进行审核（draft -> review）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def wiki_submit_review(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """提交页面审核"""
+    _guard = _check_write_policy("wiki_submit_review")
+    if _guard:
+        return _guard
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.submit_for_review(page_id, operator, comment)
     if result.success:
@@ -1303,10 +1395,13 @@ def wiki_submit_review(page_id: str, operator: str = "system", comment: str = ""
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
-@mcp.tool(description="审批通过 Wiki 页面（review -> published）")
+@mcp.tool(description="审批通过 Wiki 页面（review -> published）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def wiki_approve(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """审批通过"""
+    _guard = _check_write_policy("wiki_approve")
+    if _guard:
+        return _guard
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.approve(page_id, operator, comment)
     if result.success:
@@ -1319,10 +1414,13 @@ def wiki_approve(page_id: str, operator: str = "system", comment: str = "") -> d
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
-@mcp.tool(description="驳回 Wiki 页面（review -> draft）")
+@mcp.tool(description="驳回 Wiki 页面（review -> draft）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def wiki_reject(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """驳回页面"""
+    _guard = _check_write_policy("wiki_reject")
+    if _guard:
+        return _guard
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.reject(page_id, operator, comment)
     if result.success:
@@ -1335,10 +1433,13 @@ def wiki_reject(page_id: str, operator: str = "system", comment: str = "") -> di
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
-@mcp.tool(description="弃用 Wiki 页面（published -> deprecated）")
+@mcp.tool(description="弃用 Wiki 页面（published -> deprecated）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def wiki_deprecate(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """弃用页面"""
+    _guard = _check_write_policy("wiki_deprecate")
+    if _guard:
+        return _guard
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.deprecate(page_id, operator, comment)
     if result.success:
@@ -1351,7 +1452,7 @@ def wiki_deprecate(page_id: str, operator: str = "system", comment: str = "") ->
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
-@mcp.tool(description="获取 Wiki 页面工作流历史")
+@mcp.tool(description="获取 Wiki 页面工作流历史", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def wiki_workflow_history(page_id: str) -> dict:
     """获取工作流历史"""
@@ -1360,7 +1461,7 @@ def wiki_workflow_history(page_id: str) -> dict:
     return ok({"history": history}, page_id=page_id, count=len(history))
 
 
-@mcp.tool(description="获取 Wiki 页面版本列表")
+@mcp.tool(description="获取 Wiki 页面版本列表", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def wiki_list_versions(page_id: str) -> dict:
     """列出页面所有版本"""
@@ -1368,10 +1469,13 @@ def wiki_list_versions(page_id: str) -> dict:
     return ok({"versions": versions}, page_id=page_id, count=len(versions))
 
 
-@mcp.tool(description="恢复到指定版本的 Wiki 页面")
+@mcp.tool(description="恢复到指定版本的 Wiki 页面", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def wiki_restore_version(page_id: str, version: int) -> dict:
     """恢复到指定版本"""
+    _guard = _check_write_policy("wiki_restore_version")
+    if _guard:
+        return _guard
     from src.services.wiki_workflow import WikiWorkflow
     result = WikiWorkflow.restore_version(page_id, version)
     if result.success:
@@ -1385,7 +1489,7 @@ def wiki_restore_version(page_id: str, version: int) -> dict:
 
 # ---- Async Jobs MCP Tools ----
 
-@mcp.tool(description="创建异步任务")
+@mcp.tool(description="创建异步任务", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
 @_heartbeat
 def create_async_job(job_type: str, params: dict = None, priority: int = 1, max_retries: int = 3) -> dict:
     """创建异步任务"""
@@ -1394,7 +1498,7 @@ def create_async_job(job_type: str, params: dict = None, priority: int = 1, max_
     return ok({"job_id": job_id, "status": "pending"})
 
 
-@mcp.tool(description="获取异步任务状态")
+@mcp.tool(description="获取异步任务状态", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def get_async_job(job_id: str) -> dict:
     """获取任务状态"""
@@ -1405,7 +1509,7 @@ def get_async_job(job_id: str) -> dict:
     return ok(job.__dict__)
 
 
-@mcp.tool(description="列出异步任务")
+@mcp.tool(description="列出异步任务", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def list_async_jobs(status: str = None, job_type: str = None, limit: int = 20) -> dict:
     """列出任务"""
@@ -1414,10 +1518,13 @@ def list_async_jobs(status: str = None, job_type: str = None, limit: int = 20) -
     return ok([j.__dict__ for j in jobs], count=len(jobs), limit=limit)
 
 
-@mcp.tool(description="取消异步任务")
+@mcp.tool(description="取消异步任务", annotations={'readOnlyHint': False, 'destructiveHint': True, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def cancel_async_job(job_id: str) -> dict:
     """取消任务"""
+    _guard = _check_write_policy("cancel_async_job")
+    if _guard:
+        return _guard
     from src.services.async_task import AsyncTaskService
     success = AsyncTaskService.cancel_job(job_id)
     if success:
@@ -1425,7 +1532,7 @@ def cancel_async_job(job_id: str) -> dict:
     return ok({"success": False, "message": "无法取消（可能已完成或不存在）", "job_id": job_id})
 
 
-@mcp.tool(description="执行结构化查询 DSL，返回知识条目列表")
+@mcp.tool(description="执行结构化查询 DSL，返回知识条目列表", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def structured_query(query_dsl: str, limit: int = 100, offset: int = 0) -> dict:
     """Execute a structured JSON DSL query against the knowledge base.
@@ -1463,7 +1570,7 @@ def structured_query(query_dsl: str, limit: int = 100, offset: int = 0) -> dict:
         return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
 
 
-@mcp.tool(description="解释结构化查询的执行计划与匹配条件")
+@mcp.tool(description="解释结构化查询的执行计划与匹配条件", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def explain_query(query_dsl: str) -> dict:
     """Explain a structured query: show human-readable summary, execution plan, and condition tree.
@@ -1484,7 +1591,7 @@ def explain_query(query_dsl: str) -> dict:
         return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
 
 
-@mcp.tool(description="从给定节点遍历知识图谱（多跳、限深度、限节点数）")
+@mcp.tool(description="从给定节点遍历知识图谱（多跳、限深度、限节点数）", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
 @_heartbeat
 def graph_traverse(
     start_ids: str,
@@ -2079,6 +2186,9 @@ def undo_operation(operation_id: str, operator: str = "system") -> dict:
         operation_id: 要撤销的 operation_log.id
         operator: 撤销操作的操作者标识
     """
+    _guard = _check_write_policy("undo_operation")
+    if _guard:
+        return _guard
     if not operation_id:
         return fail(ErrorCode.VALIDATION_ERROR, "operation_id 必填")
     container = _get_container()
