@@ -3,6 +3,41 @@ import argparse
 import os
 
 
+# 默认 Session 空闲超时（秒）。None = 永不过期（SDK 默认）。
+# 设为 86400（24h）防止客户端长时间空闲后 "Session not found"。
+SESSION_IDLE_TIMEOUT = 86400
+
+
+def _patch_session_idle_timeout(timeout: float | None):
+    """Monkey-patch FastMCP 的 StreamableHTTPSessionManager 构造，注入 session_idle_timeout。
+
+    FastMCP v3.2.x 未暴露此参数，需要 patch create_streamable_http_app
+    中 StreamableHTTPSessionManager 的构造调用。
+    """
+    from fastmcp.server import http as _http_mod
+
+    _orig_create = _http_mod.create_streamable_http_app
+
+    def _patched_create(*args, **kwargs):
+        app = _orig_create(*args, **kwargs)
+        # app 的 lifespan 中会创建 StreamableHTTPSessionManager，
+        # 但 lifespan 是闭包，我们无法直接修改参数。
+        # 改为 patch StreamableHTTPSessionManager.__init__ 临时注入默认值。
+        return app
+
+    # 更精准：直接 patch SessionManager 的 __init__，用闭包捕获 timeout
+    _OrigManager = _http_mod.StreamableHTTPSessionManager
+    _orig_init = _OrigManager.__init__
+
+    def _patched_init(self, *a, **kw):
+        # 仅在调用方未显式传入时注入
+        if "session_idle_timeout" not in kw:
+            kw["session_idle_timeout"] = timeout
+        _orig_init(self, *a, **kw)
+
+    _OrigManager.__init__ = _patched_init
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="shinehe-mcp",
@@ -35,6 +70,10 @@ def main():
     if args.config:
         config_dir = os.path.dirname(os.path.abspath(args.config))
         os.environ["SHINEHE_HOME"] = config_dir
+
+    # HTTP 模式下 patch Session TTL，防止空闲断连
+    if args.transport != "stdio":
+        _patch_session_idle_timeout(SESSION_IDLE_TIMEOUT)
 
     from src.mcp_server import mcp
 
