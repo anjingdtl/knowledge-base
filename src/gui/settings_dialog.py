@@ -3,7 +3,10 @@ from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QFormLayout,
     QLineEdit, QSpinBox, QPushButton, QMessageBox,
     QTabWidget, QWidget, QLabel, QCheckBox, QComboBox,
+    QGroupBox, QGridLayout,
 )
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QFont
 from src.gui.icons import set_named_icon
 from src.utils.config import Config
 
@@ -167,6 +170,87 @@ class SettingsDialog(QDialog):
         appearance_form.addRow(hint_appearance)
         tabs.addTab(appearance_tab, "外观")
 
+        # ---- 服务设置 ----
+        service_tab = QWidget()
+        service_layout = QVBoxLayout(service_tab)
+
+        # 服务状态组
+        status_group = QGroupBox("Windows 服务状态")
+        status_grid = QGridLayout(status_group)
+
+        self._svc_status_label = QLabel("检测中...")
+        self._svc_status_label.setFont(QFont("", -1, QFont.Bold))
+        status_grid.addWidget(QLabel("服务状态："), 0, 0)
+        status_grid.addWidget(self._svc_status_label, 0, 1)
+
+        self._svc_failure_label = QLabel("检测中...")
+        status_grid.addWidget(QLabel("崩溃重启："), 1, 0)
+        status_grid.addWidget(self._svc_failure_label, 1, 1)
+
+        self._svc_mode_label = QLabel("服务模式")
+        status_grid.addWidget(QLabel("启动方式："), 2, 0)
+        status_grid.addWidget(self._svc_mode_label, 2, 1)
+
+        # 操作按钮组
+        ops_group = QGroupBox("服务操作")
+        ops_layout = QGridLayout(ops_group)
+
+        self._btn_svc_start = QPushButton("启动服务")
+        self._btn_svc_start.setMinimumHeight(32)
+        self._btn_svc_start.clicked.connect(self._on_svc_start)
+
+        self._btn_svc_stop = QPushButton("停止服务")
+        self._btn_svc_stop.setMinimumHeight(32)
+        self._btn_svc_stop.clicked.connect(self._on_svc_stop)
+
+        self._btn_svc_restart = QPushButton("重启服务")
+        self._btn_svc_restart.setMinimumHeight(32)
+        self._btn_svc_restart.clicked.connect(self._on_svc_restart)
+
+        ops_layout.addWidget(self._btn_svc_start, 0, 0)
+        ops_layout.addWidget(self._btn_svc_stop, 0, 1)
+        ops_layout.addWidget(self._btn_svc_restart, 0, 2)
+
+        # 服务安装/卸载
+        install_group = QGroupBox("服务管理")
+        install_layout = QHBoxLayout(install_group)
+
+        self._btn_svc_install = QPushButton("注册为 Windows 服务")
+        self._btn_svc_install.setMinimumHeight(32)
+        self._btn_svc_install.clicked.connect(self._on_svc_install)
+
+        self._btn_svc_remove = QPushButton("卸载服务")
+        self._btn_svc_remove.setMinimumHeight(32)
+        self._btn_svc_remove.clicked.connect(self._on_svc_remove)
+
+        self._btn_svc_set_failure = QPushButton("配置崩溃重启")
+        self._btn_svc_set_failure.setMinimumHeight(32)
+        self._btn_svc_set_failure.setToolTip("设置崩溃后 5s/10s/30s 自动重启，24h 重置计数")
+        self._btn_svc_set_failure.clicked.connect(self._on_svc_set_failure)
+
+        install_layout.addWidget(self._btn_svc_install)
+        install_layout.addWidget(self._btn_svc_remove)
+        install_layout.addWidget(self._btn_svc_set_failure)
+
+        # 说明
+        hint_service = QLabel(
+            "说明：注册为 Windows 服务后，MCP Server 将开机自启、崩溃自动重启。"
+            "侧边栏的「启动 MCP」按钮也会自动切换为服务模式操作。\n"
+            "安装/卸载/配置崩溃重启需要管理员权限（会弹出 UAC 确认框）。"
+        )
+        hint_service.setObjectName("hintLabel")
+        hint_service.setWordWrap(True)
+
+        service_layout.addWidget(status_group)
+        service_layout.addWidget(ops_group)
+        service_layout.addWidget(install_group)
+        service_layout.addWidget(hint_service)
+        service_layout.addStretch()
+        tabs.addTab(service_tab, "服务")
+
+        # 首次加载服务状态
+        self._refresh_svc_status()
+
         # ---- 按钮 ----
         btn_row = QHBoxLayout()
         btn_row.addStretch()
@@ -271,3 +355,115 @@ class SettingsDialog(QDialog):
 
         QMessageBox.information(self, "已保存", "设置已保存并生效。")
         self.accept()
+
+    # ---- 服务管理 ----
+
+    def _refresh_svc_status(self):
+        """刷新服务状态显示"""
+        from src.services.mcp_launcher import (
+            is_service_installed, get_service_status,
+            get_service_failure_config, is_running,
+        )
+        installed = is_service_installed()
+        if installed:
+            status = get_service_status()
+            status_text = {
+                "running": "运行中",
+                "stopped": "已停止",
+                "unknown": "未知",
+            }.get(status, status)
+            self._svc_status_label.setText(status_text)
+            self._svc_status_label.setProperty("status", status)
+            self._svc_mode_label.setText("Windows 服务（开机自启）")
+
+            # 崩溃重启策略
+            fc = get_service_failure_config()
+            if fc.get("configured"):
+                actions_desc = " / ".join(
+                    f"{a['delay_ms']//1000}s" for a in fc.get("actions", [])
+                )
+                self._svc_failure_label.setText(f"已配置（{actions_desc} 自动重启）")
+            else:
+                self._svc_failure_label.setText("未配置")
+
+            # 按钮状态
+            running = status == "running"
+            self._btn_svc_start.setEnabled(not running)
+            self._btn_svc_stop.setEnabled(running)
+            self._btn_svc_restart.setEnabled(running)
+            self._btn_svc_install.setEnabled(False)
+            self._btn_svc_remove.setEnabled(True)
+            self._btn_svc_set_failure.setEnabled(True)
+        else:
+            self._svc_status_label.setText("未注册")
+            self._svc_mode_label.setText("子进程模式（关闭 GUI 后继续运行）")
+            self._svc_failure_label.setText("—")
+            self._btn_svc_start.setEnabled(False)
+            self._btn_svc_stop.setEnabled(False)
+            self._btn_svc_restart.setEnabled(False)
+            self._btn_svc_install.setEnabled(True)
+            self._btn_svc_remove.setEnabled(False)
+            self._btn_svc_set_failure.setEnabled(False)
+
+        # 刷新按钮样式
+        for lbl in [self._svc_status_label]:
+            lbl.style().unpolish(lbl)
+            lbl.style().polish(lbl)
+
+    def _on_svc_start(self):
+        from src.services.mcp_launcher import service_start
+        msg = service_start()
+        QMessageBox.information(self, "服务操作", msg)
+        self._refresh_svc_status()
+
+    def _on_svc_stop(self):
+        from src.services.mcp_launcher import service_stop
+        msg = service_stop()
+        QMessageBox.information(self, "服务操作", msg)
+        self._refresh_svc_status()
+
+    def _on_svc_restart(self):
+        from src.services.mcp_launcher import service_restart
+        msg = service_restart()
+        QMessageBox.information(self, "服务操作", msg)
+        self._refresh_svc_status()
+
+    def _on_svc_install(self):
+        reply = QMessageBox.question(
+            self, "注册 Windows 服务",
+            "将 MCP Server 注册为 Windows 服务后：\n"
+            "• 开机自动启动\n"
+            "• 崩溃自动重启\n"
+            "• 侧边栏 MCP 按钮自动切换为服务模式\n\n"
+            "需要管理员权限（会弹出 UAC 确认框）。\n\n"
+            "确定注册？",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+        from src.services.mcp_launcher import service_install
+        msg = service_install()
+        # 等待 UAC 完成后刷新
+        QTimer.singleShot(3000, self._refresh_svc_status)
+        QMessageBox.information(self, "服务安装", msg + "\n\n点击确定后刷新状态...")
+
+    def _on_svc_remove(self):
+        reply = QMessageBox.question(
+            self, "卸载 Windows 服务",
+            "卸载后 MCP Server 将恢复为子进程模式（关闭 GUI 后继续运行）。\n"
+            "需要管理员权限（会弹出 UAC 确认框）。\n\n"
+            "确定卸载？",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+        from src.services.mcp_launcher import service_remove
+        msg = service_remove()
+        QTimer.singleShot(3000, self._refresh_svc_status)
+        QMessageBox.information(self, "服务卸载", msg + "\n\n点击确定后刷新状态...")
+
+    def _on_svc_set_failure(self):
+        from src.services.mcp_launcher import service_configure_failure
+        msg = service_configure_failure()
+        QTimer.singleShot(3000, self._refresh_svc_status)
+        QMessageBox.information(self, "崩溃重启策略", msg)
