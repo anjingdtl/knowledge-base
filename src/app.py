@@ -47,6 +47,72 @@ def _load_app_icon() -> QIcon:
     return QIcon()
 
 
+def _run_setup_wizard(parent=None) -> bool:
+    """运行首次启动配置向导，返回 True 表示用户完成了配置"""
+    from src.gui.setup_wizard import SetupWizard
+    wizard = SetupWizard(parent)
+    result = wizard.exec()
+    if result == SetupWizard.DialogCode.Accepted:
+        from src.utils.first_run import mark_completed
+        mark_completed()
+        # 可选导入示例知识包
+        if wizard.get_import_samples():
+            _import_sample_data()
+        return True
+    else:
+        # 用户跳过向导，也标记为已完成（不再打扰）
+        from src.utils.first_run import mark_completed
+        mark_completed()
+        return False
+
+
+def _import_sample_data():
+    """导入示例知识包"""
+    try:
+        samples_dir = Path(__file__).resolve().parent / "data" / "samples"  # src/data/samples/
+        if not samples_dir.exists():
+            logger.debug("示例知识包目录不存在，跳过")
+            return
+
+        from datetime import datetime
+        import json
+        import uuid
+
+        from src.services.db import Database
+        from src.services.file_parser import parse_file
+
+        now = datetime.now().isoformat()
+        count = 0
+        for md_file in sorted(samples_dir.glob("*.md")):
+            try:
+                parsed = parse_file(str(md_file))
+                if parsed and parsed.text.strip():
+                    Database.insert_knowledge({
+                        "id": str(uuid.uuid4()),
+                        "title": md_file.stem,
+                        "content": parsed.text[:5000],
+                        "source_type": "file",
+                        "source_path": str(md_file),
+                        "file_type": "md",
+                        "file_size": len(parsed.text.encode("utf-8")),
+                        "content_hash": "",
+                        "file_created_at": "",
+                        "file_modified_at": "",
+                        "tags": json.dumps(["示例"], ensure_ascii=False),
+                        "version": 1,
+                        "created_at": now,
+                        "updated_at": now,
+                    })
+                    count += 1
+            except Exception as e:
+                logger.warning("导入示例文件 %s 失败: %s", md_file.name, e)
+
+        if count > 0:
+            logger.info("已导入 %d 个示例知识条目", count)
+    except Exception as exc:
+        logger.warning("示例知识包导入失败（不影响使用）: %s", exc)
+
+
 class KnowledgeBaseApp:
     def __init__(self, argv):
         self.app = QApplication(argv)
@@ -54,6 +120,15 @@ class KnowledgeBaseApp:
         self.app.setStyle("Fusion")
         self.app.setWindowIcon(_load_app_icon())
         self._apply_theme()
+
+        # 首次启动检测 — 在主窗口创建前运行向导
+        from src.utils.first_run import is_first_run
+        self._is_first_run = is_first_run()
+        if self._is_first_run:
+            _run_setup_wizard(parent=None)
+            # 向导可能修改了配置，重新加载
+            Config.load()
+
         from src.gui.main_window import MainWindow, DatabaseInitError
         try:
             self.window = MainWindow()
