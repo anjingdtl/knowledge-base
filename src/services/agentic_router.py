@@ -161,8 +161,8 @@ class AgenticRouter:
         llm = self._llm
         if llm is None:
             try:
-                from src.services.db import Database
-                container = getattr(Database, "_container", None)
+                from src.core.container import get_active_container
+                container = get_active_container()
                 if container is not None and container.llm is not None:
                     self._llm = container.llm
                     llm = self._llm

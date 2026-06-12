@@ -24,8 +24,8 @@ logger = logging.getLogger(__name__)
 def _get_container_service(attr: str, fallback_factory):
     """从 DI 容器获取服务实例，容器不可用时 fallback 到新建。"""
     try:
-        from src.services.db import Database
-        container = Database._container
+        from src.core.container import get_active_container
+        container = get_active_container()
         if container is not None:
             svc = getattr(container, attr, None)
             if svc is not None:
@@ -347,8 +347,9 @@ class GenerateStage(PipelineStage):
         try:
             # 优先从 DI 容器获取 LLM 实例（复用连接和配置），fallback 到新实例
             try:
-                from src.services.db import Database
-                llm = Database._container.llm if Database._container else LLMService()
+                from src.core.container import get_active_container
+                _c = get_active_container()
+                llm = _c.llm if _c else LLMService()
             except Exception:
                 llm = LLMService()
             if stream:

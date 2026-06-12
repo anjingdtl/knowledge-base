@@ -22,6 +22,14 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
+# 模块级引用 — 任何代码可通过 get_active_container() 获取当前容器
+_active_container: "AppContainer | None" = None
+
+
+def get_active_container() -> "AppContainer | None":
+    """获取当前活跃的 DI 容器（替代旧的 Database._container 反向引用）。"""
+    return _active_container
+
 
 @dataclass
 class AppContainer:
@@ -271,7 +279,7 @@ def create_container(config_path: str | None = None) -> AppContainer:
 
     按依赖拓扑顺序构建服务:
     1. Config — 加载配置
-    2. Database — 连接 SQLite
+    2. Database — 创建 Database 实例（非类级别全局状态）
     3. VectorStore — 初始化向量存储
     4. EmbeddingService / LLMService — AI 服务
     """
@@ -281,29 +289,30 @@ def create_container(config_path: str | None = None) -> AppContainer:
     config.load(config_path)
     logger.info("Config loaded")
 
-    # 2. Database（使用类方法连接，cls._conn 全局共享）
-    # 如果已有活跃连接（如测试 fixture 已 connect），保留现有连接，不覆盖
+    # 2. Database — 创建实例（同时设置 Database._instance 供向后兼容）
     from src.services.db import Database
-    try:
-        Database.get_conn()
-        logger.info("Database already connected, reusing existing connection")
-    except Exception:
+    db: Database
+    if Database._instance is not None:
+        # 已有实例（如测试 fixture 已 connect），复用
+        db = Database._instance
+        logger.info("Database already connected, reusing existing instance")
+    else:
         db_path = config.get_db_path()
-        Database.connect(str(db_path))
-        logger.info("Database connected: %s", db_path)
+        db = Database(str(db_path))
+        logger.info("Database instance created: %s", db_path)
 
     # 3. VectorStore（注入 Database 实例）
     from src.services.vectorstore import VectorStore
-    vectorstore = VectorStore(db=Database)
+    vectorstore = VectorStore(db=db)
     logger.info("VectorStore ready")
 
     from src.services.block_store import BlockStore
-    block_store = BlockStore(db=Database)
+    block_store = BlockStore(db=db)
     logger.info("BlockStore ready")
 
     # 3.5 GraphBackend（插件式图后端）
     from src.services.graph_backend import create_graph_backend
-    graph_backend = create_graph_backend(config, db=Database)
+    graph_backend = create_graph_backend(config, db=db)
     logger.info("GraphBackend ready: %s", graph_backend.name)
 
     # 4. Embedding / LLM
@@ -315,7 +324,7 @@ def create_container(config_path: str | None = None) -> AppContainer:
 
     container = AppContainer(
         config=config,
-        db=Database,
+        db=db,
         vectorstore=vectorstore,
         block_store=block_store,
         graph_backend=graph_backend,
@@ -323,7 +332,7 @@ def create_container(config_path: str | None = None) -> AppContainer:
         llm=llm,
     )
 
-    # 初始化仓库层
+    # 初始化仓库层 — 全部注入 Database 实例
     from src.repositories.knowledge_repo import KnowledgeRepository
     from src.repositories.conversation_repo import ConversationRepository
     from src.repositories.wiki_repo import WikiRepository
@@ -332,33 +341,35 @@ def create_container(config_path: str | None = None) -> AppContainer:
     from src.repositories.entity_ref_repo import EntityRefRepository
     from src.repositories.category_repo import CategoryRepository
     from src.repositories.job_repo import JobRepository
-    container.knowledge_repo = KnowledgeRepository(db=Database)
-    container.conversation_repo = ConversationRepository(db=Database)
-    container.wiki_repo = WikiRepository(db=Database)
-    container.graph_repo = GraphRepository(db=Database, graph_backend=graph_backend)
-    container.block_repo = BlockRepository(db=Database)
-    container.entity_ref_repo = EntityRefRepository(db=Database)
-    container.category_repo = CategoryRepository(db=Database)
-    container.job_repo = JobRepository(db=Database)
+    container.knowledge_repo = KnowledgeRepository(db=db)
+    container.conversation_repo = ConversationRepository(db=db)
+    container.wiki_repo = WikiRepository(db=db)
+    container.graph_repo = GraphRepository(db=db, graph_backend=graph_backend)
+    container.block_repo = BlockRepository(db=db)
+    container.entity_ref_repo = EntityRefRepository(db=db)
+    container.category_repo = CategoryRepository(db=db)
+    container.job_repo = JobRepository(db=db)
 
     # Phase 2 仓库
     from src.repositories.tag_relation_repo import TagRelationRepository
     from src.repositories.property_schema_repo import PropertySchemaRepository
     from src.repositories.operation_log_repo import OperationLogRepository
-    container.tag_relation_repo = TagRelationRepository(db=Database)
-    container.property_schema_repo = PropertySchemaRepository(db=Database)
-    container.operation_log_repo = OperationLogRepository(db=Database)
+    container.tag_relation_repo = TagRelationRepository(db=db)
+    container.property_schema_repo = PropertySchemaRepository(db=db)
+    container.operation_log_repo = OperationLogRepository(db=db)
 
     logger.info("Repositories initialized")
 
-    # 将容器注入 Database 类，保持旧代码兼容
-    Database._container = container
+    # 设置模块级引用（替代旧的 Database._container 反向引用）
+    global _active_container
+    _active_container = container
 
     return container
 
 
 def shutdown_container(container: AppContainer):
     """关闭容器，释放资源"""
+    global _active_container
     try:
         for attr_name in getattr(container, '_initialized_services', []):
             svc = getattr(container, attr_name, None)
@@ -372,3 +383,6 @@ def shutdown_container(container: AppContainer):
             logger.info("Database closed")
     except Exception as e:
         logger.warning("Error during container shutdown: %s", e)
+    finally:
+        if _active_container is container:
+            _active_container = None

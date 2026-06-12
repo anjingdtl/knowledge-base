@@ -16,7 +16,7 @@ def _seed_chain():
         "file_type": "txt", "source_type": "manual", "source_path": "",
         "content_hash": "h1", "quality": "", "file_size": 0,
         "file_created_at": "", "file_modified_at": "",
-        "created_at": "", "updated_at": "",
+        "version": 1, "created_at": "", "updated_at": "",
     })
     Database.insert_blocks([
         {"id": "b1", "parent_id": None, "page_id": "k1", "content": "root",
