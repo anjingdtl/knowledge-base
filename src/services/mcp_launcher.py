@@ -22,6 +22,15 @@ _SERVICE_NAME = "ShineHeMCP"
 _process: subprocess.Popen | None = None
 
 
+def _run_hidden(args, **kwargs):
+    """Run a helper command without flashing a console window on Windows."""
+    if _is_windows():
+        kwargs["creationflags"] = (
+            kwargs.get("creationflags", 0) | subprocess.CREATE_NO_WINDOW
+        )
+    return subprocess.run(args, **kwargs)
+
+
 # ---- Windows 服务模式 ----
 
 def _is_windows() -> bool:
@@ -33,7 +42,7 @@ def is_service_installed() -> bool:
     if not _is_windows():
         return False
     try:
-        result = subprocess.run(
+        result = _run_hidden(
             ["sc.exe", "query", _SERVICE_NAME],
             capture_output=True, text=True, timeout=5,
         )
@@ -51,7 +60,7 @@ def get_service_status() -> str:
     if not _is_windows():
         return "not_installed"
     try:
-        result = subprocess.run(
+        result = _run_hidden(
             ["sc.exe", "query", _SERVICE_NAME],
             capture_output=True, text=True, timeout=5,
         )
@@ -74,7 +83,7 @@ def get_service_failure_config() -> dict:
     if not _is_windows():
         return {}
     try:
-        result = subprocess.run(
+        result = _run_hidden(
             ["sc.exe", "qfailure", _SERVICE_NAME],
             capture_output=True, text=True, timeout=5,
         )
@@ -102,7 +111,7 @@ def service_start() -> str:
         # 先检查服务是否已在运行
         if get_service_status() == "running":
             return "服务已在运行中"
-        result = subprocess.run(
+        result = _run_hidden(
             ["net", "start", _SERVICE_NAME],
             capture_output=True, text=True, timeout=30,
         )
@@ -123,7 +132,7 @@ def service_stop() -> str:
     try:
         if get_service_status() != "running":
             return "服务未在运行"
-        result = subprocess.run(
+        result = _run_hidden(
             ["net", "stop", _SERVICE_NAME],
             capture_output=True, text=True, timeout=30,
         )
@@ -257,6 +266,33 @@ def _is_pid_alive(pid: int) -> bool:
         return False
 
 
+def _pid_matches_mcp(pid: int) -> bool:
+    """Confirm a PID file still points to this project's MCP process."""
+    if not _is_pid_alive(pid):
+        return False
+    try:
+        if _is_windows():
+            result = _run_hidden(
+                [
+                    "wmic", "process", "where", f"processid={pid}",
+                    "get", "commandline", "/value",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=3,
+            )
+            command_line = result.stdout.lower()
+        else:
+            command_line = (
+                Path(f"/proc/{pid}/cmdline")
+                .read_text(encoding="utf-8", errors="ignore")
+                .lower()
+            )
+        return "run_mcp.py" in command_line or "windows_service.py" in command_line
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+
 def _kill_process_windows(pid: int):
     """在 Windows 上可靠终止指定 PID 的进程。
 
@@ -264,7 +300,7 @@ def _kill_process_windows(pid: int):
     也能正确终止。失败时回退到 ctypes 调用 TerminateProcess。
     """
     try:
-        subprocess.run(
+        _run_hidden(
             ["taskkill", "/PID", str(pid), "/F"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
@@ -288,18 +324,19 @@ def _kill_process_windows(pid: int):
 
 
 def is_running() -> bool:
-    """MCP 是否存活（优先检测 Windows 服务，其次检测子进程）"""
-    # 优先检测 Windows 服务
-    if _is_windows() and is_service_installed():
-        return get_service_status() == "running"
+    """MCP 是否存活；周期调用路径不启动外部命令。"""
     global _process
-    # 先检查本会话的子进程
     if _process is not None and _process.poll() is None:
         return True
-    # 再通过 PID 文件检查独立进程
-    pid = _read_pid()
-    if pid and _is_pid_alive(pid):
+
+    from src.services.mcp_heartbeat import is_mcp_available
+    if is_mcp_available():
         return True
+
+    # 不信任陈旧 PID；实际服务应由心跳或端口证明存活。
+    pid = _read_pid()
+    if pid:
+        _remove_pid()
     return False
 
 
@@ -387,7 +424,7 @@ def stop() -> str:
 
     # 再通过 PID 文件停止独立进程
     pid = _read_pid()
-    if pid and _is_pid_alive(pid):
+    if pid and _pid_matches_mcp(pid):
         try:
             if sys.platform == "win32":
                 # Windows: 使用 taskkill /PID /F 可靠终止独立进程

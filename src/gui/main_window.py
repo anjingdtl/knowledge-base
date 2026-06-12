@@ -388,8 +388,7 @@ class MainWindow(QMainWindow):
     def _update_status_bar(self):
         count = Database.count_knowledge()
         from src.services.mcp_heartbeat import is_mcp_available
-        from src.services.mcp_launcher import is_running as mcp_running
-        mcp_online = is_mcp_available() or mcp_running()
+        mcp_online = is_mcp_available()
         llm_status = self.llm_indicator.property("status") or "idle"
         llm_text = "就绪" if llm_status == "idle" else "运行中" if llm_status in ("running", "dim") else "异常"
         mcp_text = "在线" if mcp_online else "离线"
@@ -403,8 +402,7 @@ class MainWindow(QMainWindow):
 
     def _check_mcp_status(self):
         from src.services.mcp_heartbeat import is_mcp_available
-        from src.services.mcp_launcher import is_running
-        online = is_mcp_available() or is_running()
+        online = is_mcp_available()
         new_status = "online" if online else "offline"
         if self.mcp_light.property("status") != new_status:
             self.mcp_light.setProperty("status", new_status)

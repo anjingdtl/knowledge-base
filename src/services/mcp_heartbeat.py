@@ -1,4 +1,5 @@
 """MCP 状态检测 — GUI 检测 MCP Server 是否可用"""
+import socket
 import time
 from pathlib import Path
 
@@ -23,33 +24,28 @@ def is_mcp_available() -> bool:
     """判断 MCP Server 是否可用。
 
     检测策略：
-    1. 有 mcp_server 进程在运行 → 可用
-    2. 心跳文件存在且 5 分钟内有过更新 → 可用
+    1. 心跳文件存在且 5 分钟内有过更新 → 可用
+    2. 本地 MCP HTTP 端口可连接 → 可用
     3. 其他 → 不可用
+
+    此函数由 GUI 主线程周期调用，禁止启动 wmic/sc 等外部进程。
     """
-    # 策略 1：检查进程
-    if _check_process():
+    elapsed = _seconds_since_last_beat()
+    if elapsed is not None and elapsed < 300:
         return True
 
-    # 策略 2：检查心跳时效
-    elapsed = _seconds_since_last_beat()
-    return elapsed is not None and elapsed < 300
+    return _check_port()
 
 
-def _check_process() -> bool:
-    """检查是否有 mcp_server 进程在运行"""
+def _check_port() -> bool:
+    """快速探测本地 MCP HTTP 端口，不创建子进程。"""
     try:
-        import subprocess
-        result = subprocess.run(
-            ["wmic", "process", "where",
-             "commandline like '%run_mcp%' or commandline like '%mcp_server%'",
-             "get", "processid"],
-            capture_output=True, text=True, timeout=3,
-        )
-        lines = [l.strip() for l in result.stdout.strip().splitlines()
-                 if l.strip() and l.strip() != "ProcessId"]
-        return len(lines) > 0
-    except Exception:
+        from src.utils.config import Config
+        host = str(Config.get("mcp.bind_host", "127.0.0.1") or "127.0.0.1")
+        port = int(Config.get("mcp.port", 9000) or 9000)
+        with socket.create_connection((host, port), timeout=0.05):
+            return True
+    except (OSError, TypeError, ValueError):
         return False
 
 
