@@ -1,7 +1,34 @@
 .git
 __pycache__
 *.pyc
-data/
-*.db
+*.pyo
+.pytest_cache
 .claude/
 .venv/
+venv/
+node_modules/
+
+# 前端构建产物（API 镜像不需要）
+client/node_modules
+client/dist
+
+# 开发文件
+data/
+*.db
+*.db-shm
+*.db-wal
+*.log
+dist/
+build/
+*.egg-info/
+docs/
+tests/
+scripts/
+
+# 敏感配置
+config.yaml
+.env
+
+# IDE
+.vscode/
+.idea/
