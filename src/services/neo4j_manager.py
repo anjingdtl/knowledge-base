@@ -160,10 +160,14 @@ class Neo4jManager:
         neo4j_bat = self._neo4j_home / "bin" / "neo4j.bat"
 
         # 使用 CREATE_NEW_PROCESS_GROUP 在 Windows 上创建独立进程组
-        # 避免子进程随父进程退出而被终止
+        # 避免子进程随父进程退出而被终止；
+        # 配合 CREATE_NO_WINDOW 隐藏 neo4j.bat console 调起的 cmd 黑窗口
+        # （GUI 启动 _auto_start_neo4j 时如果不隐藏会弹窗闪一下）
         kwargs = {}
         if os.name == "nt":
-            kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
+            kwargs["creationflags"] = (
+                subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW
+            )
 
         logger.info("Starting Neo4j: %s console", neo4j_bat)
         self._process = subprocess.Popen(

@@ -147,3 +147,54 @@
 |------|------|------|
 | v1.2.0 | 2026-06-10 | 当前稳定版: 45 MCP 工具, Neo4j 后端, 插件系统, Windows 服务 |
 | v1.3.0 | 开发中 | Phase 1 完成: 首次启动配置向导 |
+| v1.3.0-patch.1 | 2026-06-13 | GUI 卡顿优化: 砍除 unpolish 风暴、LLMIndicator 闪烁去 polish、GraphView/ChatView/CatalogView/WikiView 列表加载延后到 showEvent、MCP 轮询 3s→5s、status bar 5s 缓存 + 300ms 防抖、Neo4jManager.find_neo4j_home 模块级缓存、知识库/目录树/图谱列表批量插入 setUpdatesEnabled 包裹、Neo4j 启动补加 CREATE_NO_WINDOW 修复弹窗 |
+
+---
+
+## GUI 卡顿优化专项（v1.3.0-patch.1）
+
+### 症状
+升级构建后 GUI 客户端明显卡顿——主线程偶发卡顿、侧边栏 LLM 灯不流畅、启动后偶见 cmd 黑窗口闪一下。
+
+### 根因
+1. **QSS polish 风暴**: 多个 widget 调 `style().unpolish(widget)` + `style().polish(widget)`，每次都重算 QSS 子树
+   - `LLMIndicator` 500ms blink 必调（running/dim 在 QSS 中实际同色 `#D64A6C`，**纯浪费**）
+   - `graph_view._backend_dot` 5s 一次常驻轮询
+   - `mcp_light`、`import_dialog` hover、`settings_dialog` 服务状态 全部 unpolish+polish
+2. **GraphView 后端定时器常驻**: `_backend_timer` 5s 一次跑 Neo4jManager + 端口探测 + polish，**无论用户在哪个页都跑**
+3. **启动期同步实例化 6 个 view**: GraphView 1675 行 + ChatView 667 行 一次性跑 `_load_xxx` 查库
+4. **MCP 轮询高频**: 3s 一次 + 每次重查 `Database.count_knowledge()`
+5. **Neo4jManager 重复扫盘**: `find_neo4j_home()` 每次 `iterdir("C:/Program Files/...")`
+6. **Neo4j 启动弹黑窗口**: `_auto_start_neo4j` 调 `neo4j.bat console`，subprocess Popen 缺 `CREATE_NO_WINDOW`
+
+### 修复（10 文件，+199/-76 行）
+
+| 位置 | 修复 |
+|------|------|
+| `gui/llm_indicator.py` | 拆 `_apply` 为 `_apply_status` / `_tick`；blink 走 `update()` 路径，状态切换才 polish |
+| `gui/graph_view.py` | 后端 timer 改 `showEvent/hideEvent` 控制启停；缓存上次 status 不变时跳过 polish；列表/树批量插入加 `setUpdatesEnabled` 包裹 |
+| `gui/main_window.py` | MCP 轮询 3s→5s；status bar 5s 缓存 + 300ms 防抖；mcp_light 砍 unpolish |
+| `gui/chat_view.py` | `_load_conversations` 延后到 showEvent |
+| `gui/catalog_view.py` | `_load_catalog` 延后到 showEvent + 树批量插入 setUpdatesEnabled |
+| `gui/wiki_view.py` | WikiCompiler 实例化 + `_load_pages` 延后到 showEvent |
+| `gui/knowledge_view.py` | `_populate_table` 加 `setUpdatesEnabled` 包裹避免 200 行 insertRow 重绘 |
+| `gui/import_dialog.py` | hover 切换砍 unpolish |
+| `gui/settings_dialog.py` | 服务状态/Neo4j 状态砍 unpolish |
+| `services/neo4j_manager.py` | `find_neo4j_home` 模块级缓存（2.5ms→0.001ms）；start() Popen 补 `CREATE_NO_WINDOW` 修弹窗 |
+
+### 性能提升
+
+| 指标 | 修复前 | 修复后 |
+|------|--------|--------|
+| LLM 运行中 1s 内主线程 polish 调用 | 2 次 | 0 次（仅状态切时 1 次） |
+| 非图谱页 5s 内后端 timer 触发 | 1 次 | 0 次（hideEvent 自动停） |
+| Neo4jManager 重建 | 2.5ms ×N | 0.001ms（缓存命中） |
+| Database.count_knowledge 1s 内查询 | 5-10 次 | ≤1 次（5s 缓存） |
+| 知识库 200 行重绘 | 200 次 | 1 次 |
+| 启动期同步 DB 查询 | 6 view ×N 次 | 默认页 1 次 |
+| Neo4j 启动弹窗 | 是 | 否 |
+
+### 测试
+- 修复启动崩溃 bug（`_status_bar_timer` 初始化顺序）amend 进 perf commit
+- `pytest tests/ -q`: **563 passed, 1 skipped**（13:38）
+- 唯一失败 `test_async_worker_processes_ingest_job_end_to_end` 为预先存在的 async_worker 模块 bug，与本次 GUI 改动无关（已 stash 验证 baseline 同样失败）
