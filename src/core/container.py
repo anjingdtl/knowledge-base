@@ -123,7 +123,13 @@ class AppContainer:
     def rag_pipeline(self):
         if self._rag_pipeline is None:
             from src.services.rag_pipeline import RAGService
-            self._rag_pipeline = RAGService()
+            self._rag_pipeline = RAGService(deps={
+                'db': self.db,
+                'llm': self.llm,
+                'query_rewriter': self.query_rewriter,
+                'reranker': self.reranker,
+                'hybrid_search': self.hybrid_search,
+            })
             self._track_service("_rag_pipeline")
         return self._rag_pipeline
 

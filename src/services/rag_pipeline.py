@@ -109,6 +109,9 @@ class PipelineStage(ABC):
 # ---- 内置阶段 ----
 
 class QueryRewriteStage(PipelineStage):
+    def __init__(self, query_rewriter=None):
+        self._query_rewriter = query_rewriter
+
     @property
     def name(self):
         return "query_rewrite"
@@ -120,7 +123,7 @@ class QueryRewriteStage(PipelineStage):
             return ctx
         num_variations = config.get("num_variations", 3)
         try:
-            rewriter = _get_container_service("query_rewriter", QueryRewriter)
+            rewriter = self._query_rewriter or _get_container_service("query_rewriter", QueryRewriter)
             ctx.rewritten_queries = rewriter.rewrite(ctx.question, num_variations=num_variations)
         except Exception as e:
             logger.warning("Query rewrite failed: %s", e)
@@ -129,6 +132,9 @@ class QueryRewriteStage(PipelineStage):
 
 
 class WikiRetrievalStage(PipelineStage):
+    def __init__(self, db=None):
+        self._db = db
+
     @property
     def name(self):
         return "wiki_retrieval"
@@ -140,9 +146,9 @@ class WikiRetrievalStage(PipelineStage):
             return ctx
 
         limit = config.get("limit", 3)
+        db = self._db or Database
         try:
-            # 优先用 FTS 搜索（同旧版 rag.py 的 _get_wiki_context）
-            wiki_results = Database.search_wiki_fts(ctx.question, limit=limit)
+            wiki_results = db.search_wiki_fts(ctx.question, limit=limit)
             if wiki_results:
                 parts = []
                 for wp in wiki_results:
@@ -156,8 +162,7 @@ class WikiRetrievalStage(PipelineStage):
                     parts.append(text)
                 ctx.wiki_context = "\n".join(parts)
             else:
-                # FTS 没结果时 fallback 到列表搜索
-                pages = Database.list_wiki_pages(status="published", search=ctx.question, limit=limit)
+                pages = db.list_wiki_pages(status="published", search=ctx.question, limit=limit)
                 if pages:
                     ctx.wiki_context = "\n\n".join([
                         f"## {p['title']}\n{p.get('content', '')[:500]}" for p in pages
@@ -168,6 +173,11 @@ class WikiRetrievalStage(PipelineStage):
 
 
 class VectorSearchStage(PipelineStage):
+    def __init__(self, db=None, hybrid_search=None, llm=None):
+        self._db = db
+        self._hybrid_search = hybrid_search
+        self._llm = llm
+
     @property
     def name(self):
         return "vector_search"
@@ -176,18 +186,17 @@ class VectorSearchStage(PipelineStage):
         if not self.is_enabled(config):
             return ctx
         top_k = config.get("top_k", 10)
-        # 外部已显式指定 query_spec 时（如 ask_with_query）跳过自动路由
+        db = self._db or Database
         override_spec = ctx.metadata.get("query_spec_override") or ctx.query_spec_override
         try:
             try:
                 from src.services.agentic_router import AgenticRouter, serialize_route
-                agentic_llm = _get_container_service("llm", LLMService)
-                agentic = AgenticRouter(db=Database, llm=agentic_llm)
+                agentic_llm = self._llm or _get_container_service("llm", LLMService)
+                agentic = AgenticRouter(db=db, llm=agentic_llm)
                 routing = agentic.route(ctx.question) if override_spec is None else {
                     "mode": "structured", "query_spec": override_spec,
                     "explanation": "explicit query_spec override",
                 }
-                # Sprint 2：把路由决策写入 ctx.metadata，供 ask 工具暴露给 Agent
                 ctx.metadata["route"] = serialize_route(routing)
                 if routing.get("query_spec") is not None:
                     ctx.metadata["query_plan"] = serialize_route(routing).get(
@@ -197,18 +206,18 @@ class VectorSearchStage(PipelineStage):
                     ctx.metadata.setdefault("query_plan", {})
                 if routing["mode"] == "structured" and routing.get("query_spec"):
                     from src.services.query_executor import QueryExecutor
-                    executor = QueryExecutor(db=Database)
+                    executor = QueryExecutor(db=db)
                     ctx.candidates = executor.execute(routing["query_spec"])
                     if ctx.candidates:
                         return ctx
                 elif routing["mode"] == "graph" and routing.get("query_spec"):
                     from src.services.query_executor import QueryExecutor
                     from src.services.graph_traversal import GraphTraversalService
-                    executor = QueryExecutor(db=Database)
+                    executor = QueryExecutor(db=db)
                     start_pages = executor.execute(routing["query_spec"])
                     start_ids = [p["id"] for p in start_pages]
                     traverse_config = routing.get("traverse", {"max_depth": 2})
-                    traversal = GraphTraversalService(db=Database).traverse(
+                    traversal = GraphTraversalService(db=db).traverse(
                         start_ids=start_ids, start_type="knowledge",
                         max_depth=traverse_config.get("max_depth", 2),
                     )
@@ -226,11 +235,11 @@ class VectorSearchStage(PipelineStage):
                 })
 
             from src.services.query_router import QueryRouter
-            router = QueryRouter(db=Database)
+            router = QueryRouter(db=db)
             if router.route(ctx.question).mode == "logic":
                 ctx.candidates = router.search(ctx.question, top_k=top_k)
                 return ctx
-            searcher = _get_container_service("hybrid_search", HybridSearcher)
+            searcher = self._hybrid_search or _get_container_service("hybrid_search", HybridSearcher)
             all_results = []
             for query in ctx.rewritten_queries:
                 results = searcher.search([query], top_k=top_k)
@@ -245,12 +254,11 @@ class VectorSearchStage(PipelineStage):
             unique.sort(key=lambda x: x.get("rrf_score", x.get("vec_score", x.get("score", 0))), reverse=True)
             ctx.candidates = unique[:top_k]
 
-            # 兜底：hybrid_search 无结果时，用 knowledge 级 FTS 搜索（同 SearchService 策略）
             if not ctx.candidates:
                 logger.info("Hybrid search returned empty, falling back to knowledge-level FTS")
                 ctx.metadata.setdefault("warnings", []).append("hybrid_search_empty_fallback_to_fts")
                 try:
-                    fts_results = Database.search_knowledge(ctx.question, limit=top_k)
+                    fts_results = db.search_knowledge(ctx.question, limit=top_k)
                     if fts_results:
                         ctx.candidates = [
                             {
@@ -278,6 +286,9 @@ class VectorSearchStage(PipelineStage):
 
 
 class RerankStage(PipelineStage):
+    def __init__(self, reranker=None):
+        self._reranker = reranker
+
     @property
     def name(self):
         return "rerank"
@@ -289,7 +300,7 @@ class RerankStage(PipelineStage):
         top_n = config.get("top_n", 5)
         min_score = config.get("min_score", 0.3)
         try:
-            reranker = _get_container_service("reranker", LLMReranker)
+            reranker = self._reranker or _get_container_service("reranker", LLMReranker)
             candidates_for_rerank = ctx.candidates[:top_n * 3]
             reranked = reranker.rerank(ctx.question, candidates_for_rerank)
             ctx.reranked_results = [r for r in reranked if r.get("score", 0) >= min_score][:top_n]
@@ -302,6 +313,10 @@ class RerankStage(PipelineStage):
 
 class GenerateStage(PipelineStage):
     """LLM 生成阶段 — 支持普通和流式两种模式"""
+
+    def __init__(self, llm=None, db=None):
+        self._llm = llm
+        self._db = db
 
     @property
     def name(self):
@@ -345,13 +360,14 @@ class GenerateStage(PipelineStage):
         messages = build_rag_messages(ctx.question, context, ctx.conversation_history)
 
         try:
-            # 优先从 DI 容器获取 LLM 实例（复用连接和配置），fallback 到新实例
-            try:
-                from src.core.container import get_active_container
-                _c = get_active_container()
-                llm = _c.llm if _c else LLMService()
-            except Exception:
-                llm = LLMService()
+            llm = self._llm
+            if llm is None:
+                try:
+                    from src.core.container import get_active_container
+                    _c = get_active_container()
+                    llm = _c.llm if _c else LLMService()
+                except Exception:
+                    llm = LLMService()
             if stream:
                 ctx.stream_generator = llm.chat_stream(messages, silent=True)
             else:
@@ -383,7 +399,8 @@ class GenerateStage(PipelineStage):
                 kid = r.get("knowledge_id", "")
             if kid:
                 kid_map[kid] = True
-        items = Database.get_knowledge_batch(list(kid_map.keys())) if kid_map else {}
+        _db = getattr(self, '_db', None) or Database
+        items = _db.get_knowledge_batch(list(kid_map.keys())) if kid_map else {}
         context_parts = []
         sources = []
         for i, result in enumerate(filtered):
@@ -489,6 +506,29 @@ class StageRegistry:
             instance = stage_cls()
             cls.register(instance.name, stage_cls)
 
+    @classmethod
+    def create_stage(cls, name: str, deps: dict | None = None) -> PipelineStage | None:
+        """创建阶段实例，支持依赖注入。
+
+        Args:
+            name: 阶段名称
+            deps: 依赖字典 (db, llm, query_rewriter, reranker, hybrid_search 等)
+        """
+        stage_cls = cls._stages.get(name)
+        if not stage_cls:
+            return None
+        if deps is None:
+            return stage_cls()
+        # 只传递构造函数接受的参数
+        import inspect
+        try:
+            sig = inspect.signature(stage_cls.__init__)
+            params = set(sig.parameters.keys()) - {'self'}
+            filtered = {k: v for k, v in deps.items() if k in params}
+            return stage_cls(**filtered)
+        except Exception:
+            return stage_cls()
+
 
 StageRegistry.init_builtins()
 
@@ -508,19 +548,29 @@ DEFAULT_PIPELINE_CONFIG = [
 # ---- 管线编排器 ----
 
 class RagPipeline:
-    """RAG 管线编排器 — 统一入口"""
+    """RAG 管线编排器 — 统一入口
 
-    def __init__(self, pipeline_config: list[dict] | None = None, llm=None):
+    支持两种创建方式:
+    1. 直接传入阶段实例: RagPipeline(stages=[(stage, config), ...])
+    2. 从配置+依赖创建: RagPipeline(deps={...}) — StageRegistry 自动注入依赖
+    """
+
+    def __init__(self, pipeline_config: list[dict] | None = None, llm=None,
+                 stages: list[tuple[PipelineStage, dict]] | None = None,
+                 deps: dict | None = None):
         self._llm = llm
         self._stages: list[tuple[PipelineStage, dict]] = []
-        self._build_from_config(pipeline_config or DEFAULT_PIPELINE_CONFIG)
+        if stages:
+            self._stages = list(stages)
+        else:
+            self._build_from_config(pipeline_config or DEFAULT_PIPELINE_CONFIG, deps or {})
 
-    def _build_from_config(self, config):
+    def _build_from_config(self, config, deps: dict | None = None):
         for entry in config:
             stage_name = entry.get("stage")
-            stage_cls = StageRegistry.get(stage_name)
-            if stage_cls:
-                self._stages.append((stage_cls(), entry))
+            stage = StageRegistry.create_stage(stage_name, deps)
+            if stage:
+                self._stages.append((stage, entry))
             else:
                 logger.warning("Unknown pipeline stage: %s", stage_name)
 
@@ -555,14 +605,14 @@ class RagPipeline:
         }
 
 
-def create_pipeline_from_config():
-    """从配置创建管线"""
+def create_pipeline_from_config(deps: dict | None = None):
+    """从配置创建管线，支持依赖注入"""
     if not Config.get("rag.pipeline.enabled", False):
         return None
     rag_config = Config.get_all().get("rag", {})
     StageRegistry.discover_from_config(rag_config)
     pipeline_config = rag_config.get("pipeline", {}).get("stages", [])
-    pipeline = RagPipeline(pipeline_config)
+    pipeline = RagPipeline(pipeline_config, deps=deps)
     return pipeline
 
 
@@ -572,18 +622,19 @@ class RAGService:
     """RAG 检索增强生成 — 统一入口
 
     同时支持普通和流式查询，内部使用 RagPipeline。
-    保持与旧版 rag.py 完全兼容的 API。
+    支持构造器注入依赖（推荐），或自动从 Container 获取（兼容）。
     """
 
-    def __init__(self):
+    def __init__(self, deps: dict | None = None):
+        self._deps = deps
         self._pipeline = None
         if Config.get("rag.pipeline.enabled", False):
             try:
-                self._pipeline = create_pipeline_from_config()
+                self._pipeline = create_pipeline_from_config(deps)
             except Exception as e:
                 logger.warning("Failed to load config pipeline, using default: %s", e)
         if not self._pipeline:
-            self._pipeline = RagPipeline()
+            self._pipeline = RagPipeline(deps=deps)
 
     def query(self, question: str, conversation_history: list[dict] | None = None,
               phase_callback=None) -> dict:
@@ -770,7 +821,8 @@ class RAGService:
             )
             if kid:
                 kid_map[kid] = True
-        items = Database.get_knowledge_batch(list(kid_map.keys())) if kid_map else {}
+        _db = getattr(self, '_db', None) or Database
+        items = _db.get_knowledge_batch(list(kid_map.keys())) if kid_map else {}
         context_parts = []
         sources = []
         for i, result in enumerate(filtered):
