@@ -29,6 +29,22 @@ def get_unified_graph(
     )
 
 
+@graph_router.get("/visualize")
+def visualize_graph(
+    limit: int = 100,
+    container: AppContainer = Depends(get_container),
+):
+    graph = container.unified_graph.build(
+        include_blocks=False,
+        include_tags=True,
+        block_limit=limit,
+    )
+    return {
+        "nodes": graph.get("nodes", [])[:limit],
+        "edges": graph.get("edges", []),
+    }
+
+
 @graph_router.post("/traverse")
 def traverse_graph(data: GraphTraverseReq, container: AppContainer = Depends(get_container)):
     return container.graph_traversal.traverse(

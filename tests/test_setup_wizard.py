@@ -227,18 +227,18 @@ class TestSampleData:
 
     def test_samples_directory_exists(self):
         """samples 目录存在"""
-        samples_dir = Path(__file__).resolve().parent.parent / "data" / "samples"
+        samples_dir = _SOURCE_DIR / "data" / "samples"
         assert samples_dir.exists()
 
     def test_sample_files_count(self):
         """至少有 5 个示例文件"""
-        samples_dir = Path(__file__).resolve().parent.parent / "data" / "samples"
+        samples_dir = _SOURCE_DIR / "data" / "samples"
         md_files = list(samples_dir.glob("*.md"))
         assert len(md_files) >= 5
 
     def test_sample_files_not_empty(self):
         """每个示例文件内容不为空"""
-        samples_dir = Path(__file__).resolve().parent.parent / "data" / "samples"
+        samples_dir = _SOURCE_DIR / "data" / "samples"
         for md_file in sorted(samples_dir.glob("*.md")):
             content = md_file.read_text(encoding="utf-8")
             assert len(content.strip()) > 50, f"{md_file.name} 内容过短"

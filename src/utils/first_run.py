@@ -8,6 +8,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
+from src.utils.config import Config
 from src.utils.paths import get_data_dir
 
 logger = logging.getLogger(__name__)
@@ -34,7 +35,6 @@ def is_first_run() -> bool:
     # 即使标记文件不存在，如果已有有效 API Key 配置，
     # 说明是老用户或已通过其他方式配置过，不触发向导
     try:
-        from src.utils.config import Config
         api_key = Config.get("llm.api_key", "")
         if api_key and not _is_placeholder(api_key):
             return False

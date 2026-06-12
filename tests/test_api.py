@@ -356,3 +356,56 @@ class TestPhase3QueryAPI:
         assert resp.status_code == 200
         assert "nodes" in resp.json()
         assert "edges" in resp.json()
+
+
+class TestPhase5WebContracts:
+    def test_stats_endpoint_uses_live_container(self, api_client):
+        resp = api_client.get("/api/stats")
+        assert resp.status_code == 200
+        assert "knowledge_count" in resp.json()
+
+    def test_graph_visualize_endpoint(self, api_client):
+        resp = api_client.get("/api/graph/visualize?limit=100")
+        assert resp.status_code == 200
+        assert set(resp.json()) >= {"nodes", "edges"}
+
+    def test_settings_endpoints(self, api_client, monkeypatch):
+        monkeypatch.setattr(api_client.app.state.container.config, "save", lambda *args, **kwargs: None)
+        current = api_client.get("/api/settings")
+        assert current.status_code == 200
+        assert set(current.json()) >= {"llm", "embedding", "reranker", "mcp", "graph_backend"}
+
+        saved = api_client.post("/api/settings/mcp", json={
+            "write_policy": "preview_only",
+            "allow_http_write": False,
+        })
+        assert saved.status_code == 200
+
+        backup = api_client.post("/api/settings/backup", json={})
+        assert backup.status_code == 200
+
+        exported = api_client.get("/api/settings/export")
+        assert exported.status_code == 200
+        assert "knowledge" in exported.json()
+
+    def test_wiki_create_update_and_workflow_contract(self, api_client):
+        created = api_client.post("/api/wiki/pages", json={"title": "Web Wiki", "content": "Draft"})
+        assert created.status_code == 201
+        page_id = created.json()["id"]
+
+        updated = api_client.put(
+            f"/api/wiki/pages/{page_id}",
+            json={"title": "Web Wiki Updated", "content": "Updated"},
+        )
+        assert updated.status_code == 200
+
+        workflow = api_client.post(
+            f"/api/wiki/pages/{page_id}/workflow",
+            json={"action": "submit_review"},
+        )
+        assert workflow.status_code == 200
+
+    def test_url_import_creates_job(self, api_client):
+        resp = api_client.post("/api/knowledge/import-url", json={"url": "https://example.com"})
+        assert resp.status_code == 202
+        assert resp.json()["status"] == "pending"

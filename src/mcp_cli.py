@@ -71,6 +71,9 @@ def main():
         config_dir = os.path.dirname(os.path.abspath(args.config))
         os.environ["SHINEHE_HOME"] = config_dir
 
+    # 写操作安全策略需要知道当前实际传输模式。
+    os.environ["MCP_TRANSPORT"] = args.transport
+
     # HTTP 模式下 patch Session TTL，防止空闲断连
     if args.transport != "stdio":
         _patch_session_idle_timeout(SESSION_IDLE_TIMEOUT)

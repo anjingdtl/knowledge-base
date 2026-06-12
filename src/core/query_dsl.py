@@ -305,6 +305,14 @@ def execute_dsl(ast, db=None):
 
 def _ast_to_clauses(node) -> list:
     """将 AST 节点转为查询构建器子句列表"""
+    from src.core.query_builder import (
+        file_type,
+        fulltext,
+        has_ref_to,
+        has_tag,
+        property as prop,
+    )
+
     if node is None:
         return []
 

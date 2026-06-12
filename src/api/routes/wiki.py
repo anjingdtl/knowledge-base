@@ -1,3 +1,6 @@
+import json
+import uuid
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -19,6 +22,16 @@ class SaveAnswerReq(BaseModel):
 class FixDeadLinksReq(BaseModel):
     max_pages: int = Field(default=50, ge=1, le=200, description="最多处理多少个含死链的页面")
     dry_run: bool = Field(default=False, description="仅预览修复方案，不实际写入")
+
+
+class WikiPageWriteReq(BaseModel):
+    title: str = Field(min_length=1, max_length=500)
+    content: str = ""
+
+
+class WikiWorkflowReq(BaseModel):
+    action: str
+    comment: str = ""
 
 
 @wiki_router.post("/save-answer")
@@ -48,6 +61,25 @@ def list_wiki_pages(
     return {"pages": pages, "total": total}
 
 
+@wiki_router.post("/pages", status_code=201)
+def create_wiki_page(data: WikiPageWriteReq, container: AppContainer = Depends(get_container)):
+    now = datetime.now().isoformat()
+    page_id = str(uuid.uuid4())
+    container.db.insert_wiki_page({
+        "id": page_id,
+        "title": data.title,
+        "content": data.content,
+        "source_ids": "[]",
+        "tags": "[]",
+        "concept_summary": "",
+        "status": "draft",
+        "lint_score": 1.0,
+        "created_at": now,
+        "updated_at": now,
+    })
+    return {"id": page_id, "message": "创建成功"}
+
+
 @wiki_router.get("/pages/{page_id}")
 def get_wiki_page(page_id: str, container: AppContainer = Depends(get_container)):
     page = container.db.get_wiki_page(page_id)
@@ -56,6 +88,48 @@ def get_wiki_page(page_id: str, container: AppContainer = Depends(get_container)
     page["links"] = container.db.get_links_for_page(page_id)
     page["backlinks"] = container.db.get_backlinks(page_id)
     return page
+
+
+@wiki_router.put("/pages/{page_id}")
+def update_wiki_page(
+    page_id: str,
+    data: WikiPageWriteReq,
+    container: AppContainer = Depends(get_container),
+):
+    page = container.db.get_wiki_page(page_id)
+    if not page:
+        raise HTTPException(404, "Wiki 页面不存在")
+    container.db.save_wiki_version(page_id, page)
+    container.db.update_wiki_page(page_id, title=data.title, content=data.content)
+    return {"message": "保存成功"}
+
+
+@wiki_router.post("/pages/{page_id}/workflow")
+def run_wiki_workflow(
+    page_id: str,
+    data: WikiWorkflowReq,
+    operator: str = Depends(_get_current_user),
+):
+    from src.services.wiki_workflow import WikiWorkflow
+
+    actions = {
+        "submit_review": WikiWorkflow.submit_for_review,
+        "approve": WikiWorkflow.approve,
+        "reject": WikiWorkflow.reject,
+        "deprecate": WikiWorkflow.deprecate,
+        "republish": WikiWorkflow.republish,
+    }
+    action = actions.get(data.action)
+    if action is None:
+        raise HTTPException(400, f"不支持的工作流操作: {data.action}")
+    result = action(page_id, operator, data.comment)
+    if not result.success:
+        raise HTTPException(400, result.message)
+    return {
+        "message": result.message,
+        "from_status": result.from_status,
+        "to_status": result.to_status,
+    }
 
 
 @wiki_router.delete("/pages/{page_id}")

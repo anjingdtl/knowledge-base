@@ -31,7 +31,7 @@ AIGC:
 ShineHe Knowledge is a **locally-running, privacy-first** knowledge base system:
 
 - Feed your documents in, ask questions in natural language, AI retrieves + generates answers
-- Native MCP Server with 45 tools, directly callable from Claude / Cursor / Cline and other AI tools
+- Native MCP Server with 51 core tools and 51 namespaced aliases, directly callable from Claude / Cursor / Cline and other AI tools
 - Built-in knowledge graph (SQLite + Neo4j dual backend), Wiki workflow, hybrid search engine
 - Plugin architecture with hook-based extensibility and swappable graph database backends
 
@@ -53,7 +53,7 @@ Vector search (bge-m3 1024-dim) + keyword search (FTS5) + RRF fusion, with Chine
 - File-first outline graph, multi-hop traversal, structured DSL queries, Agentic Router
 
 ### MCP Server
-45 tools + 3 resources + 4 prompt templates, covering search, Q&A, CRUD, ingestion, Wiki, graph, query, and operations.  
+51 core tools + 51 namespaced aliases + 2 resources + 1 resource template + 5 prompts, covering search, Q&A, CRUD, ingestion, Wiki, graph, query, operations, and agent memory.
 Write safety closed loop with `preview_operation` (dry-run) + `undo_operation` (rollback).
 
 ### Wiki System
@@ -183,7 +183,7 @@ knowledge-base/
 │   │   ├── neo4j_manager.py             # Neo4j process management (auto start/stop)
 │   │   ├── wiki_*.py                    # Wiki workflow system
 │   │   └── ...                          # More services
-│   ├── mcp_server.py                    # FastMCP Server (45 tools)
+│   ├── mcp_server.py                    # FastMCP Server (51 tools + 51 aliases)
 │   ├── plugins/                         # 🔌 Plugin hook system
 │   ├── gui/                             # PySide6 desktop UI
 │   │   ├── wiki_view.py                 #   Wiki management (health check / dead link fix / workflow)

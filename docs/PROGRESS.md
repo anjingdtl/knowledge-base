@@ -29,7 +29,7 @@
 ### Step 1.2: MCP 写操作安全策略
 - `mcp.write_policy` 四级策略 (preview_only / local_confirm / token_required / disabled)
 - `_check_write_policy()` 守卫函数
-- 全量工具 annotations 补齐 (41→48+)
+- 全量工具 annotations 补齐（当前 51 个核心工具）
 
 ### Step 1.3: Docker Profile 拆分
 - 多阶段 Dockerfile (base → api / mcp)
@@ -89,8 +89,8 @@
 ## Phase 4: MCP 产品化升级 ✅
 
 ### Step 4.1: MCP 工具 Schema 标准化
-- `_TOOL_METADATA` — 48 个工具元数据 (group / side_effect / requires_confirmation / short_desc)
-- `_TOOL_ALIASES` — 42 个命名空间别名 (kb.*/wiki.*/graph.*/ops.*/memory.*)
+- `_TOOL_METADATA` — 51 个工具元数据 (group / side_effect / requires_confirmation / short_desc)
+- `_TOOL_ALIASES` — 51 个命名空间别名 (kb.*/wiki.*/graph.*/ops.*/memory.*)
 - `_register_tool_aliases()` — 动态别名注册 (functools.wraps + 闭包)
 - `kb_capabilities` 暴露 tool_metadata / tool_aliases
 
@@ -100,6 +100,16 @@
 - `AgentMemoryService` — 6 个业务方法 + LLM/启发式双模式
 - 6 个 MCP 工具: remember_fact / recall_facts / update_project_context / search_decisions / summarize_recent_changes / extract_tasks_from_doc
 - Container 集成 + 31 个新测试
+
+### 2026-06-12 MCP 主链路复核
+- 修复 `memory.*` 6 个别名因注册时序错误而未实际暴露的问题
+- CLI 传播实际 transport，HTTP/SSE 写策略不再被误判为 stdio
+- `allow_http_write=false` 在 HTTP/SSE 模式下默认禁止真实写入，但继续允许 dry-run
+- `preview_only` 策略允许 `preview_operation` 和各写工具的 `dry_run=true`
+- restore / async job / Agent Memory 等遗漏入口全部接入统一写策略
+- `token_required` 接入 FastMCP Bearer TokenVerifier，无 token 或错误 token 在握手层拒绝
+- 实测 stdio / Streamable HTTP discovery、能力查询、别名调用、只读、预览、授权写入闭环
+- 当前注册表：51 个核心工具 + 51 个命名空间别名，共 102 个可调用工具名称
 
 ## Phase 5: 前端体验升级 ✅
 
@@ -150,8 +160,10 @@
 
 | 指标 | 数值 |
 |------|------|
-| Python 测试通过 | 534 |
-| Python 测试失败 | 11 (全部预存在，非本次引入) |
+| Python 测试通过 | 564 |
+| Python 测试跳过 | 1 |
+| Python 测试失败 | 0 |
+| MCP 专项测试 | 204 通过 / 1 跳过 |
 | TypeScript 编译 | 零错误 |
 | Vite Build | 成功 (292KB gzipped: 87KB) |
 | Commit 总数 | 11 (Phase 1-5) |
