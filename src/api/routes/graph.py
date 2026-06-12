@@ -37,3 +37,51 @@ def traverse_graph(data: GraphTraverseReq, container: AppContainer = Depends(get
         max_depth=data.max_depth,
         ref_types=data.ref_types,
     )
+
+
+@graph_router.get("/backend/status")
+def graph_backend_status(container: AppContainer = Depends(get_container)):
+    """获取当前图后端状态"""
+    backend = container.graph_backend
+    return {
+        "provider": backend.name,
+        "healthy": backend.health_check(),
+        "stats": backend.stats(),
+    }
+
+
+@graph_router.post("/backend/migrate")
+def migrate_to_graph_backend(
+    clear_target: bool = True,
+    batch_size: int = 500,
+    container: AppContainer = Depends(get_container),
+):
+    """将 SQLite 数据迁移到当前配置的图后端（如 Neo4j）"""
+    backend = container.graph_backend
+    if backend.name == "sqlite":
+        return {"message": "当前后端已经是 SQLite，无需迁移"}
+
+    from src.services.graph_backend.migration import GraphMigration
+    migration = GraphMigration(config=container.config, db=container.db)
+    result = migration.migrate_all(
+        target=backend,
+        clear_target=clear_target,
+        batch_size=batch_size,
+    )
+    return result
+
+
+@graph_router.post("/backend/sync")
+def incremental_sync_graph_backend(
+    since: str | None = None,
+    container: AppContainer = Depends(get_container),
+):
+    """增量同步：将 since 时间之后变更的数据同步到图后端"""
+    backend = container.graph_backend
+    if backend.name == "sqlite":
+        return {"message": "当前后端为 SQLite，无需增量同步"}
+
+    from src.services.graph_backend.migration import GraphMigration
+    migration = GraphMigration(config=container.config, db=container.db)
+    result = migration.sync_incremental(target=backend, since=since)
+    return result

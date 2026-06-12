@@ -1,15 +1,25 @@
-"""知识图谱仓库 — knowledge_graphs / nodes / relations"""
+"""知识图谱仓库 — knowledge_graphs / nodes / relations
+
+支持插件式图后端：当配置了 Neo4j 等外部图后端时，节点和关系的写入/读取
+会同时同步到图后端，以利用图数据库的原生遍历能力。
+"""
 import uuid
 from datetime import datetime
 from typing import Optional
 
 
 class GraphRepository:
-    """知识图谱、节点、关系边"""
+    """知识图谱、节点、关系边
 
-    def __init__(self, db=None):
+    参数:
+        db: 数据库实例
+        graph_backend: 图后端实例（可选）；为 None 时仅使用 SQLite
+    """
+
+    def __init__(self, db=None, graph_backend=None):
         from src.services.db import Database
         self._db = db or Database
+        self._backend = graph_backend
 
     def _conn(self):
         return self._db.get_conn()
@@ -79,6 +89,30 @@ class GraphRepository:
             )
         conn.commit()
 
+        # 同步到图后端
+        if self._backend and self._backend.name != "sqlite":
+            from src.services.graph_backend.base import GraphNode
+            nodes = []
+            for kid in knowledge_ids:
+                row = conn.execute(
+                    "SELECT id, title, file_type, source_type FROM knowledge_items WHERE id = ?",
+                    (kid,),
+                ).fetchone()
+                if row:
+                    nodes.append(GraphNode(
+                        id=f"page:{kid}",
+                        node_type="page",
+                        label=row["title"] or "",
+                        source_id=kid,
+                        properties={
+                            "file_type": row["file_type"] or "",
+                            "source_type": row["source_type"] or "",
+                            "graph_id": graph_id,
+                        },
+                    ))
+            if nodes:
+                self._backend.upsert_nodes_batch(nodes)
+
     def get_nodes(self, graph_id: str) -> list[dict]:
         rows = self._conn().execute(
             """SELECT n.*, ki.title as knowledge_title, ki.file_type, ki.tags
@@ -121,6 +155,21 @@ class GraphRepository:
             rows,
         )
         conn.commit()
+
+        # 同步到图后端
+        if self._backend and self._backend.name != "sqlite":
+            from src.services.graph_backend.base import GraphEdge, make_node_id
+            edges = [
+                GraphEdge(
+                    source=make_node_id("page", rel["source_knowledge_id"]),
+                    target=make_node_id("page", rel["target_knowledge_id"]),
+                    edge_type=rel.get("relation_type", "related"),
+                    properties={"graph_id": graph_id, "weight": rel.get("weight", 1.0)},
+                )
+                for rel in relations
+            ]
+            if edges:
+                self._backend.upsert_edges_batch(edges)
 
     def get_relations(self, graph_id: str) -> list[dict]:
         rows = self._conn().execute(

@@ -28,7 +28,7 @@ class AppContainer:
     """应用容器 — 持有所有服务实例
 
     服务按依赖拓扑排列:
-        Config → Database → VectorStore → EmbeddingService / LLMService → 上层服务
+        Config → Database → VectorStore → GraphBackend → EmbeddingService / LLMService → 上层服务
     """
 
     # --- 基础设施 ---
@@ -38,6 +38,9 @@ class AppContainer:
     # --- 存储 ---
     vectorstore: "VectorStore" = field(default=None)  # noqa: F821
     block_store: "BlockStore" = field(default=None)  # noqa: F821
+
+    # --- 图后端（插件式） ---
+    graph_backend: "GraphBackend" = field(default=None)  # noqa: F821
 
     # --- 仓库层（Phase 1.2 新增） ---
     knowledge_repo: "KnowledgeRepository" = field(default=None, repr=False)  # noqa: F821
@@ -179,7 +182,8 @@ class AppContainer:
         if self._file_graph_service is None:
             from src.services.file_graph import FileGraphService
             self._file_graph_service = FileGraphService(
-                self.config, self.db, self.block_store, self.embedding
+                self.config, self.db, self.block_store, self.embedding,
+                graph_backend=self.graph_backend,
             )
             self._track_service("_file_graph_service")
         return self._file_graph_service
@@ -190,7 +194,7 @@ class AppContainer:
     def unified_graph(self):
         if self._unified_graph is None:
             from src.services.unified_graph import UnifiedGraphService
-            self._unified_graph = UnifiedGraphService(db=self.db)
+            self._unified_graph = UnifiedGraphService(db=self.db, graph_backend=self.graph_backend)
             self._track_service("_unified_graph")
         return self._unified_graph
 
@@ -230,7 +234,7 @@ class AppContainer:
     def graph_traversal(self):
         if self._graph_traversal is None:
             from src.services.graph_traversal import GraphTraversalService
-            self._graph_traversal = GraphTraversalService(db=self.db)
+            self._graph_traversal = GraphTraversalService(db=self.db, graph_backend=self.graph_backend)
             self._track_service("_graph_traversal")
         return self._graph_traversal
 
@@ -297,6 +301,11 @@ def create_container(config_path: str | None = None) -> AppContainer:
     block_store = BlockStore(db=Database)
     logger.info("BlockStore ready")
 
+    # 3.5 GraphBackend（插件式图后端）
+    from src.services.graph_backend import create_graph_backend
+    graph_backend = create_graph_backend(config, db=Database)
+    logger.info("GraphBackend ready: %s", graph_backend.name)
+
     # 4. Embedding / LLM
     from src.services.embedding import EmbeddingService
     from src.services.llm import LLMService
@@ -309,6 +318,7 @@ def create_container(config_path: str | None = None) -> AppContainer:
         db=Database,
         vectorstore=vectorstore,
         block_store=block_store,
+        graph_backend=graph_backend,
         embedding=embedding,
         llm=llm,
     )
@@ -325,7 +335,7 @@ def create_container(config_path: str | None = None) -> AppContainer:
     container.knowledge_repo = KnowledgeRepository(db=Database)
     container.conversation_repo = ConversationRepository(db=Database)
     container.wiki_repo = WikiRepository(db=Database)
-    container.graph_repo = GraphRepository(db=Database)
+    container.graph_repo = GraphRepository(db=Database, graph_backend=graph_backend)
     container.block_repo = BlockRepository(db=Database)
     container.entity_ref_repo = EntityRefRepository(db=Database)
     container.category_repo = CategoryRepository(db=Database)
