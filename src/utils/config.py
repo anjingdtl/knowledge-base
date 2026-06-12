@@ -10,6 +10,7 @@
 """
 import functools
 import logging
+import os
 import yaml
 from pathlib import Path
 from src.utils.paths import get_config_path, get_data_dir
@@ -19,11 +20,22 @@ logger = logging.getLogger(__name__)
 # keyring 服务名，用于 OS keychain 中隔离本应用的凭据
 _KEYRING_SERVICE = "ShineHeKnowledge"
 
-# 需要通过 keyring 安全存储的配置键（以 api_key 结尾的路径）
+# 需要通过 keyring 安全存储的配置键
 _SECRET_KEYS = {
     "llm.api_key",
     "embedding.api_key",
     "reranker.api_key",
+    "graph_backend.password",
+    "api.jwt_secret",
+}
+
+# 敏感配置对应的环境变量映射（keyring 不可用时作为替代）
+_ENV_KEY_MAP = {
+    "llm.api_key": "SHINEHE_LLM_API_KEY",
+    "embedding.api_key": "SHINEHE_EMBEDDING_API_KEY",
+    "reranker.api_key": "SHINEHE_RERANKER_API_KEY",
+    "graph_backend.password": "SHINEHE_NEO4J_PASSWORD",
+    "api.jwt_secret": "SHINEHE_JWT_SECRET",
 }
 
 # keyring 可用性标志
@@ -118,17 +130,24 @@ class Config:
             config_path = str(get_config_path())
         with open(config_path, "r", encoding="utf-8") as f:
             self._data = yaml.safe_load(f) or {}
-        # 从 keychain 恢复 API Key
-        if _keyring_available:
-            for secret_key in _SECRET_KEYS:
+        # 从 keychain 恢复敏感凭据，优先级: keyring → 环境变量
+        for secret_key in _SECRET_KEYS:
+            value = None
+            # 1. 尝试从 keyring 读取
+            if _keyring_available:
                 kr_key = _secret_to_keyring_key(secret_key)
                 try:
-                    secret_val = keyring.get_password(_KEYRING_SERVICE, kr_key)
-                    if secret_val is not None:
-                        # 写入内存中的 _data，让 get() 能正常读取
-                        self._set_nested(secret_key, secret_val)
+                    value = keyring.get_password(_KEYRING_SERVICE, kr_key)
                 except Exception as exc:
                     logger.debug("从 keyring 读取 %s 失败: %s", secret_key, exc)
+            # 2. keyring 无值时尝试环境变量
+            if value is None:
+                env_key = _ENV_KEY_MAP.get(secret_key)
+                if env_key:
+                    value = os.environ.get(env_key)
+            # 写入内存中的 _data
+            if value is not None:
+                self._set_nested(secret_key, value)
         # 实例加载时注册为默认
         Config._default_instance = self
         return self._data
@@ -186,9 +205,18 @@ class Config:
                 except Exception as exc:
                     logger.warning("写入 keyring %s 失败，将回退到文件存储: %s", secret_key, exc)
         else:
-            import copy
-            # keyring 不可用时，凭据照旧写入 config.yaml（降级处理）
-            pass
+            # keyring 不可用时，凭据将照旧写入 config.yaml 明文文件
+            # 检查是否有敏感值即将被写入，有则发出警告
+            for secret_key in _SECRET_KEYS:
+                secret_val = self._get_nested(secret_key)
+                if secret_val:
+                    env_key = _ENV_KEY_MAP.get(secret_key, "")
+                    logger.warning(
+                        "keyring 不可用，敏感配置 '%s' 将以明文存储在 config.yaml 中。"
+                        "建议设置环境变量 %s 作为替代",
+                        secret_key, env_key,
+                    )
+                    break  # 只警告一次
 
         # 写入 YAML 文件时，剥离已通过 keyring 存储的敏感字段
         import copy
