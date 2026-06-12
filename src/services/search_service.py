@@ -35,21 +35,21 @@ class SearchService:
     def _stage_timeout(self, stage: str) -> float:
         """获取阶段超时时间，支持 config 覆盖"""
         cfg_key = f"rag.stage_timeout.{stage}"
-        custom = None
+        custom = self._cfg(cfg_key)
+        return float(custom or _STAGE_TIMEOUTS.get(stage, 30))
+
+    def _cfg(self, key: str, default=None):
+        """统一配置读取：支持 Config 对象或嵌套 dict"""
         if isinstance(self._config, dict):
-            # 从嵌套 dict 中读取
-            parts = cfg_key.split(".")
+            parts = key.split(".")
             obj = self._config
             for p in parts:
                 if isinstance(obj, dict):
                     obj = obj.get(p)
                 else:
-                    obj = None
-                    break
-            custom = obj
-        else:
-            custom = self._config.get(cfg_key)
-        return float(custom or _STAGE_TIMEOUTS.get(stage, 30))
+                    return default
+            return obj if obj is not None else default
+        return self._config.get(key, default)
 
     def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
         """完整搜索管线（带阶段超时保护）"""
@@ -161,7 +161,7 @@ class SearchService:
 
     def _timed_rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
         """带超时保护的重排序"""
-        if not self._config.get("rag.enable_rerank", False) if isinstance(self._config, dict) else not self._config.get("rag.enable_rerank", False):
+        if not self._cfg("rag.enable_rerank", False):
             return candidates
         timeout = self._stage_timeout("rerank")
         with ThreadPoolExecutor(max_workers=1) as pool:
@@ -174,9 +174,7 @@ class SearchService:
 
     def _rewrite_query(self, query: str) -> list[str]:
         """查询改写，失败回退 [query]"""
-        enabled = (self._config.get("rag.enable_query_rewriting", False)
-                   if isinstance(self._config, dict)
-                   else self._config.get("rag.enable_query_rewriting", False))
+        enabled = self._cfg("rag.enable_query_rewriting", False)
         if not enabled:
             return [query]
         try:
@@ -193,9 +191,7 @@ class SearchService:
 
     def _rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
         """重排序，失败保留原序"""
-        enabled = (self._config.get("rag.enable_rerank", False)
-                   if isinstance(self._config, dict)
-                   else self._config.get("rag.enable_rerank", False))
+        enabled = self._cfg("rag.enable_rerank", False)
         if not enabled:
             return candidates
         try:
