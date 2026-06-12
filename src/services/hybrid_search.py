@@ -27,9 +27,17 @@ class HybridSearcher:
         else:
             results = self._blend_search(queries, top_k)
 
-        # 为每个结果回溯父链上下文
+        # 为每个结果回溯父链上下文（小块 → 父块标题链）
         for r in results:
             enrich_result_with_context(r)
+
+        # Parent-Child 检索增强：附加父块完整内容
+        if self._get_config("rag.parent_child.enabled", False):
+            try:
+                from src.services.parent_child_retrieval import enrich_with_parent_context
+                results = enrich_with_parent_context(results, db=self._db)
+            except Exception as e:
+                logging.warning("Parent-child enrichment failed: %s", e)
 
         return results
 

@@ -1,0 +1,52 @@
+# 表格问答评测集 — 验证对结构化数据（Excel/CSV）的检索与回答能力
+# 需要预先导入包含表格数据的知识库
+
+- question: "所有项目的预算总额是多少？"
+  expected_answer_summary: "需要对表格中的预算列进行求和计算"
+  relevant_knowledge_ids: []
+  tags: [table, aggregation]
+
+- question: "哪个部门的员工人数最多？"
+  expected_answer_summary: "需要对比表格中的部门人数列"
+  relevant_knowledge_ids: []
+  tags: [table, comparison]
+
+- question: "2024年第一季度的销售额是多少？"
+  expected_answer_summary: "需要在时间序列表格中定位特定时间段数据"
+  relevant_knowledge_ids: []
+  tags: [table, lookup]
+
+- question: "列出所有状态为'已完成'的任务"
+  expected_answer_summary: "需要筛选表格中特定状态的行"
+  relevant_knowledge_ids: []
+  tags: [table, filter]
+
+- question: "产品A和产品B的价格差是多少？"
+  expected_answer_summary: "需要在表格中找到两个产品的价格并计算差值"
+  relevant_knowledge_ids: []
+  tags: [table, calculation]
+
+- question: "最近一次更新的记录是什么？"
+  expected_answer_summary: "需要按时间列排序找到最新记录"
+  relevant_knowledge_ids: []
+  tags: [table, temporal]
+
+- question: "哪个月份的利润率最高？"
+  expected_answer_summary: "需要计算利润率（利润/收入）并比较各月"
+  relevant_knowledge_ids: []
+  tags: [table, ratio]
+
+- question: "有多少个项目的截止日期在2024年底之前？"
+  expected_answer_summary: "需要按日期条件筛选并计数"
+  relevant_knowledge_ids: []
+  tags: [table, count]
+
+- question: "各地区的平均销售额排名如何？"
+  expected_answer_summary: "需要按地区分组求平均并排序"
+  relevant_knowledge_ids: []
+  tags: [table, group_by]
+
+- question: "库存低于安全线的商品有哪些？"
+  expected_answer_summary: "需要对比库存量和安全线字段"
+  relevant_knowledge_ids: []
+  tags: [table, threshold]

@@ -405,9 +405,14 @@ class GenerateStage(PipelineStage):
         sources = []
         for i, result in enumerate(filtered):
             text = result.get("text", result.get("chunk_text", ""))
-            # 附加 Block 父链上下文
+            # Parent-Child：优先使用父块完整内容
+            parent_content = result.get("parent_content", "")
             block_ctx = result.get("block_context", "")
-            if block_ctx:
+            if parent_content:
+                context_parts.append(
+                    f"[来源{i+1}] (父块上下文)\n{parent_content}\n---\n相关片段: {text}"
+                )
+            elif block_ctx:
                 context_parts.append(f"[来源{i+1}] (上下文: {block_ctx})\n{text}")
             else:
                 context_parts.append(f"[来源{i+1}]\n{text}")
@@ -464,13 +469,189 @@ class PostProcessStage(PipelineStage):
         return ctx
 
 
+class EvidenceCompressStage(PipelineStage):
+    """证据压缩阶段 — 在 rerank 后、generate 前压缩证据文本
+
+    支持两种策略:
+    - extractive: 抽取式 — 保留与问题相关的句子，删除无关内容（默认）
+    - abstractive: 摘要式 — 用 LLM 生成精简摘要（需要 LLM 服务）
+
+    配置:
+        strategy: extractive | abstractive
+        max_evidence_tokens: 最大证据 token 数（默认 4000）
+        sentence_window: extractive 模式下保留相关句子的上下文窗口（默认 1）
+    """
+
+    def __init__(self, llm=None):
+        self._llm = llm
+
+    @property
+    def name(self):
+        return "evidence_compress"
+
+    async def execute(self, ctx, config):
+        if not self.is_enabled(config):
+            return ctx
+        strategy = config.get("strategy", "extractive")
+        max_tokens = config.get("max_evidence_tokens", 4000)
+
+        results = ctx.reranked_results
+        if not results:
+            return ctx
+
+        if strategy == "abstractive":
+            results = self._abstractive_compress(ctx.question, results, max_tokens)
+        else:
+            results = self._extractive_compress(ctx.question, results, max_tokens, config)
+
+        ctx.reranked_results = results
+        # 记录压缩统计
+        ctx.metadata["evidence_compress"] = {
+            "strategy": strategy,
+            "max_tokens": max_tokens,
+            "result_count": len(results),
+        }
+        return ctx
+
+    def _extractive_compress(
+        self, query: str, results: list[dict],
+        max_tokens: int, config: dict,
+    ) -> list[dict]:
+        """抽取式压缩 — 保留与 query 相关的句子"""
+        import re
+
+        # 从 query 中提取关键词（简单分词：中文按字符，英文按空格）
+        keywords = set()
+        for word in re.findall(r'[一-鿿]|[a-zA-Z0-9]+', query.lower()):
+            if len(word) > 1 or not word.isascii():
+                keywords.add(word)
+
+        window = config.get("sentence_window", 1)
+        total_chars = 0
+        max_chars = max_tokens * 4  # 粗略估计 1 token ≈ 4 字符
+        compressed = []
+
+        for result in results:
+            text = result.get("text", "")
+            if not text:
+                compressed.append(result)
+                continue
+
+            sentences = self._split_sentences(text)
+            if not sentences:
+                compressed.append(result)
+                total_chars += len(text)
+                continue
+
+            # 标记相关句子
+            relevant_indices = set()
+            for i, sent in enumerate(sentences):
+                sent_lower = sent.lower()
+                if any(kw in sent_lower for kw in keywords):
+                    # 标记相关句子及其上下文窗口
+                    for j in range(max(0, i - window), min(len(sentences), i + window + 1)):
+                        relevant_indices.add(j)
+
+            if not relevant_indices:
+                # 没有匹配的关键词，保留前 3 句
+                relevant_indices = set(range(min(3, len(sentences))))
+
+            # 组装压缩文本
+            compressed_text = " ".join(sentences[i] for i in sorted(relevant_indices))
+
+            # 检查 token 预算
+            if total_chars + len(compressed_text) > max_chars:
+                # 超预算，截断到预算内
+                remaining = max_chars - total_chars
+                if remaining > 100:
+                    compressed_text = compressed_text[:remaining] + "..."
+                    compressed.append({**result, "text": compressed_text})
+                    total_chars += len(compressed_text)
+                break
+            else:
+                compressed.append({**result, "text": compressed_text})
+                total_chars += len(compressed_text)
+
+        return compressed
+
+    def _abstractive_compress(
+        self, query: str, results: list[dict], max_tokens: int,
+    ) -> list[dict]:
+        """摘要式压缩 — 用 LLM 生成精简摘要"""
+        try:
+            llm = self._llm
+            if llm is None:
+                try:
+                    from src.core.container import get_active_container
+                    _c = get_active_container()
+                    llm = _c.llm if _c else LLMService()
+                except Exception:
+                    llm = LLMService()
+
+            # 组装所有证据文本
+            evidence_parts = []
+            for i, r in enumerate(results):
+                text = r.get("text", "")
+                if text:
+                    evidence_parts.append(f"[来源{i+1}]\n{text}")
+            evidence = "\n\n".join(evidence_parts)
+
+            if not evidence:
+                return results
+
+            prompt = (
+                f"请根据以下证据内容，用简洁的语言总结与问题「{query}」直接相关的信息。"
+                f"保留关键事实和数据，删除无关描述。总长度不超过{max_tokens // 2}个字符。\n\n"
+                f"{evidence}"
+            )
+
+            messages = [
+                {"role": "system", "content": "你是一个知识压缩助手，只保留与问题直接相关的事实。"},
+                {"role": "user", "content": prompt},
+            ]
+            summary = strip_think(llm.chat(messages, silent=True))
+
+            # 将摘要作为单个"压缩证据"返回
+            return [{
+                **results[0],
+                "text": summary,
+                "metadata": {
+                    **(results[0].get("metadata") or {}),
+                    "compressed": True,
+                    "original_count": len(results),
+                },
+            }]
+        except Exception as e:
+            logger.warning("Abstractive compress failed, keeping original: %s", e)
+            return results
+
+    @staticmethod
+    def _split_sentences(text: str) -> list[str]:
+        """将文本按句号、问号、感叹号、换行分段"""
+        import re
+        # 按中英文句号、问号、感叹号分割，保留分隔符
+        parts = re.split(r'((?<=[。！？.!?\n]))', text)
+        sentences = []
+        buffer = ""
+        for part in parts:
+            buffer += part
+            if re.search(r'[。！？.!?\n]$', part):
+                s = buffer.strip()
+                if s:
+                    sentences.append(s)
+                buffer = ""
+        if buffer.strip():
+            sentences.append(buffer.strip())
+        return sentences
+
+
 # ---- 阶段注册表 ----
 
 class StageRegistry:
     _stages: dict[str, type[PipelineStage]] = {}
     _builtin_stages = [
         QueryRewriteStage, WikiRetrievalStage, VectorSearchStage,
-        RerankStage, GenerateStage, PostProcessStage,
+        RerankStage, EvidenceCompressStage, GenerateStage, PostProcessStage,
     ]
 
     @classmethod
@@ -540,6 +721,7 @@ DEFAULT_PIPELINE_CONFIG = [
     {"stage": "wiki_retrieval", "enabled": True, "limit": 3},
     {"stage": "vector_search", "enabled": True, "mode": "blend", "top_k": 10},
     {"stage": "rerank", "enabled": True, "top_n": 5, "min_score": 0.3},
+    {"stage": "evidence_compress", "enabled": False, "strategy": "extractive", "max_evidence_tokens": 4000},
     {"stage": "generate", "enabled": True, "stream": False},
     {"stage": "postprocess", "enabled": True, "dedup": True},
 ]
@@ -827,9 +1009,14 @@ class RAGService:
         sources = []
         for i, result in enumerate(filtered):
             text = result.get("text", result.get("chunk_text", ""))
-            # 附加 Block 父链上下文
+            # Parent-Child：优先使用父块完整内容
+            parent_content = result.get("parent_content", "")
             block_ctx = result.get("block_context", "")
-            if block_ctx:
+            if parent_content:
+                context_parts.append(
+                    f"[来源{i+1}] (父块上下文)\n{parent_content}\n---\n相关片段: {text}"
+                )
+            elif block_ctx:
                 context_parts.append(f"[来源{i+1}] (上下文: {block_ctx})\n{text}")
             else:
                 context_parts.append(f"[来源{i+1}]\n{text}")
