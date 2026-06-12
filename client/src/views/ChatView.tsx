@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { apiPost } from '../api'
+import PageHeader from '../components/PageHeader'
 
 interface Diagnostics {
   route: { mode: string; explanation: string }
@@ -45,14 +46,11 @@ function DiagnosticsPanel({ diagnostics }: { diagnostics: Diagnostics }) {
 
       {expanded && (
         <div className="mt-2 space-y-2 text-xs text-[var(--color-text-muted)]">
-          {/* 检索路由 */}
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded border border-[var(--color-border)] bg-[var(--color-surface)] p-2">
               <div className="font-medium text-[var(--color-text)]">路由</div>
               <div>模式: <span className="text-[var(--color-primary)]">{diagnostics.route.mode}</span></div>
-              {diagnostics.route.explanation && (
-                <div className="text-[11px] mt-1">{diagnostics.route.explanation}</div>
-              )}
+              {diagnostics.route.explanation && <div className="text-[11px] mt-1">{diagnostics.route.explanation}</div>}
             </div>
             <div className="rounded border border-[var(--color-border)] bg-[var(--color-surface)] p-2">
               <div className="font-medium text-[var(--color-text)]">检索统计</div>
@@ -63,23 +61,17 @@ function DiagnosticsPanel({ diagnostics }: { diagnostics: Diagnostics }) {
             </div>
           </div>
 
-          {/* 警告 */}
           {diagnostics.warnings.length > 0 && (
             <div className="rounded border border-yellow-500/30 bg-yellow-500/5 p-2">
               <div className="font-medium text-yellow-400">⚠ 警告</div>
-              {diagnostics.warnings.map((w, i) => (
-                <div key={i} className="text-[11px]">{w}</div>
-              ))}
+              {diagnostics.warnings.map((w, i) => <div key={i} className="text-[11px]">{w}</div>)}
             </div>
           )}
 
-          {/* 丢弃候选 */}
           {diagnostics.dropped_candidates.length > 0 && (
             <div className="rounded border border-[var(--color-border)] bg-[var(--color-surface)] p-2">
               <div className="font-medium text-[var(--color-text)]">丢弃的候选</div>
-              {diagnostics.dropped_candidates.map((d, i) => (
-                <div key={i} className="text-[11px]">{d.reason}</div>
-              ))}
+              {diagnostics.dropped_candidates.map((d, i) => <div key={i} className="text-[11px]">{d.reason}</div>)}
             </div>
           )}
         </div>
@@ -94,9 +86,7 @@ export default function ChatView() {
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
 
   const handleSend = async () => {
     if (!input.trim() || loading) return
@@ -126,7 +116,7 @@ export default function ChatView() {
 
   return (
     <div className="flex flex-col h-full">
-      <h2 className="text-xl font-bold mb-4">智能问答</h2>
+      <PageHeader title="智能问答" subtitle="基于知识库的 RAG 问答" />
 
       <div className="flex-1 overflow-auto space-y-4 mb-4">
         {messages.length === 0 && (
@@ -144,7 +134,6 @@ export default function ChatView() {
               <div className="whitespace-pre-wrap text-sm">{msg.content}</div>
               {msg.role === 'assistant' && (
                 <>
-                  {/* 引用来源 */}
                   {msg.sources && msg.sources.length > 0 && (
                     <div className="mt-2 pt-2 border-t border-[var(--color-border)]">
                       <p className="text-xs text-[var(--color-text-muted)] mb-1">引用来源：</p>
@@ -156,7 +145,6 @@ export default function ChatView() {
                       ))}
                     </div>
                   )}
-                  {/* 检索诊断面板 */}
                   {msg.diagnostics && <DiagnosticsPanel diagnostics={msg.diagnostics} />}
                 </>
               )}
@@ -177,11 +165,8 @@ export default function ChatView() {
           className="flex-1 px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm"
           disabled={loading}
         />
-        <button
-          onClick={handleSend}
-          disabled={loading || !input.trim()}
-          className="px-6 py-2 bg-[var(--color-primary)] text-white rounded-lg text-sm disabled:opacity-50"
-        >
+        <button onClick={handleSend} disabled={loading || !input.trim()}
+          className="px-6 py-2 bg-[var(--color-primary)] text-white rounded-lg text-sm disabled:opacity-50">
           发送
         </button>
       </div>

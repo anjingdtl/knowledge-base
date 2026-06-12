@@ -82,4 +82,32 @@ def create_app() -> FastAPI:
     def health():
         return {"status": "online", "name": APP_NAME, "version": VERSION, "nodes": Database.count_knowledge()}
 
+    @app.get("/api/stats")
+    def stats():
+        """知识库全局统计"""
+        from src.api.deps import get_container
+        container = get_container()
+        db = container.db
+        conn = db.get_conn()
+        knowledge_count = db.count_knowledge()
+        block_count = conn.execute("SELECT COUNT(*) as cnt FROM blocks").fetchone()["cnt"]
+        vector_count = conn.execute(
+            "SELECT COUNT(*) as cnt FROM sqlite_master WHERE type='table' AND name='vectors'"
+        ).fetchone()["cnt"] and conn.execute("SELECT COUNT(*) as cnt FROM vectors").fetchone()["cnt"] or 0
+        wiki_count = db.count_wiki_pages()
+        conversation_count = conn.execute("SELECT COUNT(*) as cnt FROM conversations").fetchone()["cnt"]
+        agent_memory_count = 0
+        try:
+            agent_memory_count = conn.execute("SELECT COUNT(*) as cnt FROM agent_memory").fetchone()["cnt"]
+        except Exception:
+            pass
+        return {
+            "knowledge_count": knowledge_count,
+            "block_count": block_count,
+            "vector_count": vector_count,
+            "wiki_count": wiki_count,
+            "conversation_count": conversation_count,
+            "agent_memory_count": agent_memory_count,
+        }
+
     return app

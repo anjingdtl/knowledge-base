@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { apiGet, apiPost } from '../api'
+import { useToast } from '../components/Toast'
+import PageHeader from '../components/PageHeader'
+import { safeTags } from '../utils/helpers'
 
 /* ---------- types ---------- */
 interface WikiPage {
@@ -57,13 +61,10 @@ interface RepairResult {
 type Tab = 'pages' | 'lint' | 'repair'
 
 /* ---------- helpers ---------- */
-function safeTags(raw: string): string[] {
-  try { return JSON.parse(raw || '[]') } catch { return [] }
-}
 
 function statusLabel(s: string) {
   const map: Record<string, string> = {
-    published: '已发布', draft: '草稿', deprecated: '已废弃', deleted: '回收站',
+    published: '已发布', draft: '草稿', review: '审核中', deprecated: '已废弃', deleted: '回收站',
   }
   return map[s] || s
 }
@@ -72,6 +73,7 @@ function statusColor(s: string) {
   const map: Record<string, string> = {
     published: 'bg-green-100 text-green-700',
     draft: 'bg-yellow-100 text-yellow-700',
+    review: 'bg-blue-100 text-blue-700',
     deprecated: 'bg-gray-100 text-gray-500',
     deleted: 'bg-red-100 text-red-600',
   }
@@ -81,30 +83,30 @@ function statusColor(s: string) {
 /* ---------- component ---------- */
 export default function WikiView() {
   const [tab, setTab] = useState<Tab>('pages')
+  const navigate = useNavigate()
 
   return (
     <div>
-      {/* header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold">Wiki 知识管理</h2>
-        <div className="flex gap-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-0.5">
-          {([['pages', '页面列表'], ['lint', '质量检查'], ['repair', '死链修复']] as [Tab, string][]).map(([k, l]) => (
-            <button
-              key={k}
-              onClick={() => setTab(k)}
-              className={`px-3 py-1 rounded-md text-sm transition-colors ${
-                tab === k
-                  ? 'bg-[var(--color-primary)] text-white'
-                  : 'text-[var(--color-text-muted)] hover:text-[var(--color-primary)]'
-              }`}
-            >
-              {l}
-            </button>
-          ))}
-        </div>
-      </div>
+      <PageHeader
+        title="Wiki 知识管理"
+        actions={
+          <div className="flex gap-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-0.5">
+            {([['pages', '页面列表'], ['lint', '质量检查'], ['repair', '死链修复']] as [Tab, string][]).map(([k, l]) => (
+              <button
+                key={k}
+                onClick={() => setTab(k)}
+                className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                  tab === k ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-text-muted)] hover:text-[var(--color-primary)]'
+                }`}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+        }
+      />
 
-      {tab === 'pages' && <PagesTab />}
+      {tab === 'pages' && <PagesTab onNavigate={id => navigate(`/wiki/${id}`)} />}
       {tab === 'lint' && <LintTab />}
       {tab === 'repair' && <RepairTab />}
     </div>
@@ -112,12 +114,15 @@ export default function WikiView() {
 }
 
 /* ===================== Pages Tab ===================== */
-function PagesTab() {
+function PagesTab({ onNavigate }: { onNavigate: (id: string) => void }) {
+  const { toast } = useToast()
   const [pages, setPages] = useState<WikiPage[]>([])
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [newTitle, setNewTitle] = useState('')
 
   const fetchPages = async () => {
     setLoading(true)
@@ -128,8 +133,8 @@ function PagesTab() {
       const data = await apiGet<{ pages: WikiPage[]; total: number }>(`/api/wiki/pages?${params}`)
       setPages(data.pages || [])
       setTotal(data.total || 0)
-    } catch (err) {
-      console.error('Failed to fetch wiki pages:', err)
+    } catch {
+      toast('加载 Wiki 页面失败', 'error')
     } finally {
       setLoading(false)
     }
@@ -137,7 +142,18 @@ function PagesTab() {
 
   useEffect(() => { fetchPages() }, [statusFilter])
 
-  const handleSearch = () => fetchPages()
+  const handleCreate = async () => {
+    if (!newTitle.trim()) return
+    try {
+      const data = await apiPost<{ id: string }>('/api/wiki/pages', { title: newTitle.trim(), content: '' })
+      toast('页面已创建', 'success')
+      setCreating(false)
+      setNewTitle('')
+      onNavigate(data.id)
+    } catch (err) {
+      toast(err instanceof Error ? err.message : '创建失败', 'error')
+    }
+  }
 
   return (
     <div>
@@ -146,11 +162,11 @@ function PagesTab() {
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleSearch()}
+          onKeyDown={e => e.key === 'Enter' && fetchPages()}
           placeholder="搜索页面标题..."
           className="px-3 py-1.5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm flex-1 min-w-[180px]"
         />
-        <button onClick={handleSearch} className="px-4 py-1.5 bg-[var(--color-primary)] text-white rounded-lg text-sm hover:opacity-90">
+        <button onClick={fetchPages} className="px-4 py-1.5 bg-[var(--color-primary)] text-white rounded-lg text-sm hover:opacity-90">
           搜索
         </button>
         <select
@@ -161,10 +177,33 @@ function PagesTab() {
           <option value="">全部状态</option>
           <option value="published">已发布</option>
           <option value="draft">草稿</option>
+          <option value="review">审核中</option>
           <option value="deprecated">已废弃</option>
         </select>
+        <button
+          onClick={() => setCreating(true)}
+          className="px-4 py-1.5 border border-[var(--color-primary)] text-[var(--color-primary)] rounded-lg text-sm hover:bg-[var(--color-primary-soft)]"
+        >
+          + 新建页面
+        </button>
         <span className="text-sm text-[var(--color-text-muted)]">共 {total} 页</span>
       </div>
+
+      {/* 新建表单 */}
+      {creating && (
+        <div className="flex items-center gap-2 mb-4 p-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
+          <input
+            value={newTitle}
+            onChange={e => setNewTitle(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleCreate()}
+            placeholder="输入页面标题..."
+            className="flex-1 px-3 py-1.5 border border-[var(--color-border)] rounded-lg text-sm bg-[var(--color-input)]"
+            autoFocus
+          />
+          <button onClick={handleCreate} className="px-4 py-1.5 bg-[var(--color-primary)] text-white rounded-lg text-sm">创建</button>
+          <button onClick={() => { setCreating(false); setNewTitle('') }} className="px-4 py-1.5 border border-[var(--color-border)] rounded-lg text-sm">取消</button>
+        </div>
+      )}
 
       {/* page list */}
       {loading ? (
@@ -174,7 +213,11 @@ function PagesTab() {
       ) : (
         <div className="grid gap-3">
           {pages.map(p => (
-            <div key={p.id} className="p-4 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)]">
+            <div
+              key={p.id}
+              onClick={() => onNavigate(p.id)}
+              className="p-4 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)] cursor-pointer hover:border-[var(--color-primary)] transition-colors"
+            >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <h3 className="font-medium truncate">{p.title}</h3>
@@ -208,6 +251,7 @@ function PagesTab() {
 
 /* ===================== Lint Tab ===================== */
 function LintTab() {
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<LintResult | null>(null)
   const [error, setError] = useState('')
@@ -219,6 +263,7 @@ function LintTab() {
     try {
       const data = await apiPost<LintResult>('/api/wiki/lint', {})
       setResult(data)
+      toast('质量检查完成', 'success')
     } catch (err) {
       setError(err instanceof Error ? err.message : '检查失败')
     } finally {
@@ -240,19 +285,14 @@ function LintTab() {
           {loading ? '检查中...' : '运行质量检查'}
         </button>
         {result && (
-          <span className="text-sm text-[var(--color-text-muted)]">
-            发现 {issues.length} 个问题
-          </span>
+          <span className="text-sm text-[var(--color-text-muted)]">发现 {issues.length} 个问题</span>
         )}
       </div>
 
       {error && (
-        <div className="p-3 mb-4 bg-red-50 border border-[var(--color-danger)]/30 text-[var(--color-danger)] rounded-lg text-sm">
-          {error}
-        </div>
+        <div className="p-3 mb-4 bg-red-50 border border-[var(--color-danger)]/30 text-[var(--color-danger)] rounded-lg text-sm">{error}</div>
       )}
 
-      {/* summary stats */}
       {Object.keys(summary).length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
           {Object.entries(summary).map(([rule, count]) => (
@@ -264,7 +304,6 @@ function LintTab() {
         </div>
       )}
 
-      {/* issue list */}
       {issues.length > 0 && (
         <div className="grid gap-2">
           {issues.map((issue, i) => (
@@ -279,9 +318,7 @@ function LintTab() {
                   {issue.rule || issue.severity || 'info'}
                 </span>
               </div>
-              {issue.message && (
-                <p className="mt-1 text-[var(--color-text-muted)]">{issue.message}</p>
-              )}
+              {issue.message && <p className="mt-1 text-[var(--color-text-muted)]">{issue.message}</p>}
             </div>
           ))}
         </div>
@@ -299,47 +336,30 @@ function LintTab() {
 
 /* ===================== Repair Tab ===================== */
 function RepairTab() {
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [preview, setPreview] = useState<PreviewResult | null>(null)
   const [repairResult, setRepairResult] = useState<RepairResult | null>(null)
   const [error, setError] = useState('')
   const [maxPages, setMaxPages] = useState(50)
 
-  /* step 1: preview (dry_run) */
   const runPreview = async () => {
-    setLoading(true)
-    setError('')
-    setPreview(null)
-    setRepairResult(null)
+    setLoading(true); setError(''); setPreview(null); setRepairResult(null)
     try {
-      const data = await apiPost<PreviewResult>('/api/wiki/fix-dead-links', {
-        max_pages: maxPages,
-        dry_run: true,
-      })
+      const data = await apiPost<PreviewResult>('/api/wiki/fix-dead-links', { max_pages: maxPages, dry_run: true })
       setPreview(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '扫描失败')
-    } finally {
-      setLoading(false)
-    }
+    } catch (err) { setError(err instanceof Error ? err.message : '扫描失败') }
+    finally { setLoading(false) }
   }
 
-  /* step 2: execute repair */
   const runRepair = async () => {
-    setLoading(true)
-    setError('')
-    setRepairResult(null)
+    setLoading(true); setError(''); setRepairResult(null)
     try {
-      const data = await apiPost<RepairResult>('/api/wiki/fix-dead-links', {
-        max_pages: maxPages,
-        dry_run: false,
-      })
+      const data = await apiPost<RepairResult>('/api/wiki/fix-dead-links', { max_pages: maxPages, dry_run: false })
       setRepairResult(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '修复失败')
-    } finally {
-      setLoading(false)
-    }
+      toast('修复完成', 'success')
+    } catch (err) { setError(err instanceof Error ? err.message : '修复失败') }
+    finally { setLoading(false) }
   }
 
   const deadLinks = preview?.dead_links || []
@@ -351,54 +371,35 @@ function RepairTab() {
         自动选择修复策略：重定向到已有页面、创建占位页面或移除标记。
       </p>
 
-      {/* controls */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <label className="text-sm text-[var(--color-text-muted)]">最大处理页数：</label>
         <input
-          type="number"
-          min={1}
-          max={200}
-          value={maxPages}
+          type="number" min={1} max={200} value={maxPages}
           onChange={e => setMaxPages(Number(e.target.value) || 50)}
           className="w-20 px-2 py-1.5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm text-center"
         />
-        <button
-          onClick={runPreview}
-          disabled={loading}
-          className="px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-primary)] text-[var(--color-primary)] rounded-lg text-sm hover:bg-[var(--color-primary-soft)] disabled:opacity-50"
-        >
+        <button onClick={runPreview} disabled={loading}
+          className="px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-primary)] text-[var(--color-primary)] rounded-lg text-sm hover:bg-[var(--color-primary-soft)] disabled:opacity-50">
           {loading ? '扫描中...' : '扫描死链（预览）'}
         </button>
         {preview && preview.total_dead_links > 0 && (
-          <button
-            onClick={runRepair}
-            disabled={loading}
-            className="px-5 py-2 bg-[var(--color-primary)] text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50"
-          >
+          <button onClick={runRepair} disabled={loading}
+            className="px-5 py-2 bg-[var(--color-primary)] text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50">
             {loading ? '修复中...' : '执行 LLM 修复'}
           </button>
         )}
       </div>
 
-      {error && (
-        <div className="p-3 mb-4 bg-red-50 border border-[var(--color-danger)]/30 text-[var(--color-danger)] rounded-lg text-sm">
-          {error}
-        </div>
-      )}
+      {error && <div className="p-3 mb-4 bg-red-50 border border-[var(--color-danger)]/30 text-[var(--color-danger)] rounded-lg text-sm">{error}</div>}
 
-      {/* preview results */}
       {preview && (
         <div className="mb-4">
           <div className="flex items-center gap-3 mb-3">
-            <span className="text-sm font-medium">
-              扫描结果：{preview.scanned} 个页面，共 {preview.total_dead_links} 个死链
-            </span>
+            <span className="text-sm font-medium">扫描结果：{preview.scanned} 个页面，共 {preview.total_dead_links} 个死链</span>
           </div>
-
           {deadLinks.length === 0 ? (
             <div className="py-8 text-center text-[var(--color-text-muted)]">
-              <div className="text-3xl mb-2">&#10003;</div>
-              未发现死链，所有引用均指向已存在的页面
+              <div className="text-3xl mb-2">&#10003;</div>未发现死链
             </div>
           ) : (
             <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg overflow-hidden">
@@ -414,9 +415,7 @@ function RepairTab() {
                     <tr key={i} className="border-b border-[var(--color-border)] last:border-b-0">
                       <td className="px-4 py-2">{dl.source_title}</td>
                       <td className="px-4 py-2">
-                        <span className="px-2 py-0.5 bg-red-50 text-[var(--color-danger)] rounded text-xs font-mono">
-                          [[{dl.dead_ref}]]
-                        </span>
+                        <span className="px-2 py-0.5 bg-red-50 text-[var(--color-danger)] rounded text-xs font-mono">[[{dl.dead_ref}]]</span>
                       </td>
                     </tr>
                   ))}
@@ -427,12 +426,9 @@ function RepairTab() {
         </div>
       )}
 
-      {/* repair results */}
       {repairResult && (
         <div className="mt-4">
           <h3 className="text-sm font-medium mb-3">修复结果</h3>
-
-          {/* stats cards */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
             {[
               ['扫描页面', repairResult.scanned],
@@ -447,16 +443,10 @@ function RepairTab() {
               </div>
             ))}
           </div>
-
           <div className={`p-3 rounded-lg text-sm ${
-            repairResult.status === 'clean'
-              ? 'bg-green-50 text-green-700'
-              : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
+            repairResult.status === 'clean' ? 'bg-green-50 text-green-700' : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
           }`}>
-            {repairResult.status === 'clean'
-              ? 'Wiki 中没有死链，所有内容引用均有效。'
-              : `修复完成。共处理 ${repairResult.fixed ?? 0} 处死链。`
-            }
+            {repairResult.status === 'clean' ? 'Wiki 中没有死链' : `修复完成。共处理 ${repairResult.fixed ?? 0} 处死链。`}
           </div>
         </div>
       )}
