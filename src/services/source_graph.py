@@ -1,4 +1,8 @@
-"""Build source graph payloads for RAG answers."""
+"""Build source graph payloads for RAG answers.
+
+当配置了 Neo4j 等外部图后端时，利用后端的图遍历能力替代逐条 SQL 查询，
+在大规模知识库下显著提升 source graph 的构建速度。
+"""
 from __future__ import annotations
 
 import json
@@ -10,6 +14,7 @@ def build_source_graph(
     sources: list[dict] | None,
     db=None,
     max_nodes: int | None = None,
+    graph_backend=None,
 ) -> dict:
     """构造 RAG 答案的 source_graph payload。
 
@@ -18,6 +23,7 @@ def build_source_graph(
         db: 数据库实例（默认使用 Database 单例）
         max_nodes: 节点数上限；超过则截断并设 ``truncated=True``。
                    缺省时从 config ``rag.max_graph_nodes`` 读取，再缺省 200。
+        graph_backend: 图后端实例（可选）；为 None 时使用 SQLite 后端。
 
     Returns:
         ``{"nodes": [...], "edges": [...], "truncated": bool, "node_count": int}``
@@ -26,6 +32,101 @@ def build_source_graph(
         from src.utils.config import Config
         max_nodes = int(Config.get("rag.max_graph_nodes", 200))
     db = db or Database
+
+    # 如果提供了图后端，使用后端优化的构建路径
+    if graph_backend is not None and graph_backend.name != "sqlite":
+        return _build_source_graph_via_backend(
+            sources, db, max_nodes, graph_backend,
+        )
+
+    # 默认路径：直接从 SQLite 构建（与改造前行为一致）
+    return _build_source_graph_sqlite(sources, db, max_nodes)
+
+
+def _build_source_graph_via_backend(
+    sources: list[dict],
+    db,
+    max_nodes: int,
+    backend,
+) -> dict:
+    """通过图后端构建 source graph — 适合 Neo4j 等非 SQLite 后端"""
+    nodes: dict[str, dict] = {}
+    edges: dict[tuple[str, str, str], dict] = {}
+    truncated = False
+
+    def add_node(node_id: str, node_type: str, label: str, **extra):
+        nonlocal truncated
+        if not node_id:
+            return
+        if node_id in nodes:
+            return
+        if len(nodes) >= max_nodes:
+            truncated = True
+            return
+        nodes[node_id] = {"id": node_id, "type": node_type, "label": label, **extra}
+
+    def add_edge(source: str, target: str, edge_type: str):
+        if source and target:
+            edges.setdefault((source, target, edge_type), {
+                "source": source,
+                "target": target,
+                "type": edge_type,
+            })
+
+    sources = sources or []
+
+    # 收集所有起始节点 ID
+    start_ids = []
+    for source in sources:
+        metadata = source.get("metadata") or {}
+        bid = source.get("block_id") or source.get("chunk_id") or source.get("id") or metadata.get("block_id")
+        kid = source.get("knowledge_id") or metadata.get("knowledge_id") or metadata.get("page_id")
+        if kid:
+            start_ids.append(f"page:{kid}")
+        if bid:
+            start_ids.append(f"block:{bid}")
+
+    if not start_ids:
+        return {"nodes": [], "edges": [], "truncated": False, "node_count": 0}
+
+    # 使用后端遍历获取子图（depth=2 覆盖祖先链和引用关系）
+    result = backend.traverse(
+        start_ids=start_ids,
+        max_depth=2,
+        max_nodes=max_nodes,
+    )
+
+    # 转换为 source graph 格式
+    for node_data in result.nodes:
+        node_type = node_data.get("type", "page")
+        node_id = node_data.get("id", "")
+        label = node_data.get("label", "")
+        props = node_data.get("properties", {})
+
+        if node_type in ("page", "knowledge"):
+            add_node(node_id, "knowledge", label)
+        elif node_type == "block":
+            add_node(node_id, "block", label, knowledge_id=props.get("page_id", ""))
+        else:
+            add_node(node_id, node_type, label)
+
+    for edge_data in result.edges:
+        add_edge(
+            edge_data.get("source", ""),
+            edge_data.get("target", ""),
+            edge_data.get("type", "link"),
+        )
+
+    return {
+        "nodes": list(nodes.values()),
+        "edges": list(edges.values()),
+        "truncated": truncated,
+        "node_count": len(nodes),
+    }
+
+
+def _build_source_graph_sqlite(sources, db, max_nodes: int) -> dict:
+    """直接从 SQLite 构建 source graph（与改造前行为一致）"""
     nodes: dict[str, dict] = {}
     edges: dict[tuple[str, str, str], dict] = {}
     truncated = False
