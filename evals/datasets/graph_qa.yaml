@@ -1,0 +1,52 @@
+# 图谱问答评测集 — 验证知识图谱遍历和多跳推理能力
+# 依赖图后端（Neo4j 或 SQLite）中有关系数据
+
+- question: "A 和 B 之间有什么关系？"
+  expected_answer_summary: "需要遍历图谱找到两个实体间的路径"
+  relevant_knowledge_ids: []
+  tags: [graph, path]
+
+- question: "哪些文档引用了这篇文档？"
+  expected_answer_summary: "需要反向遍历引用关系"
+  relevant_knowledge_ids: []
+  tags: [graph, reference]
+
+- question: "这个概念包含哪些子概念？"
+  expected_answer_summary: "需要沿着父子关系向下遍历"
+  relevant_knowledge_ids: []
+  tags: [graph, hierarchy]
+
+- question: "从技术A到技术B的实现路径是什么？"
+  expected_answer_summary: "需要多跳遍历找到从 A 到 B 的依赖链"
+  relevant_knowledge_ids: []
+  tags: [graph, multi_hop]
+
+- question: "哪些知识条目与'机器学习'主题相关？"
+  expected_answer_summary: "需要通过标签或实体关系查找关联条目"
+  relevant_knowledge_ids: []
+  tags: [graph, entity_search]
+
+- question: "这个模块的上下游依赖有哪些？"
+  expected_answer_summary: "需要双向遍历依赖关系图"
+  relevant_knowledge_ids: []
+  tags: [graph, dependency]
+
+- question: "项目X涉及哪些技术栈？"
+  expected_answer_summary: "需要从项目节点出发遍历技术标签关系"
+  relevant_knowledge_ids: []
+  tags: [graph, traversal]
+
+- question: "这两个方案的区别是什么？"
+  expected_answer_summary: "需要分别获取两个方案的属性和关系，进行对比"
+  relevant_knowledge_ids: []
+  tags: [graph, comparison]
+
+- question: "知识库中关于'安全'的知识网络是什么样的？"
+  expected_answer_summary: "需要以'安全'为中心构建子图"
+  relevant_knowledge_ids: []
+  tags: [graph, subgraph]
+
+- question: "最新添加的实体与哪些已有实体有关联？"
+  expected_answer_summary: "需要查找新实体的所有边连接"
+  relevant_knowledge_ids: []
+  tags: [graph, recent]

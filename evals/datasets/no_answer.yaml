@@ -1,0 +1,62 @@
+# 无答案测试集 — 验证系统在证据不足时能否正确拒答
+# 这些问题不应在知识库中找到直接答案
+
+- question: "公司2025年的营收预测是多少？"
+  expected_answer_summary: "知识库中不应有未来预测数据，应拒答或说明证据不足"
+  relevant_knowledge_ids: []
+  tags: [no_answer, future]
+
+- question: "CEO的个人手机号码是什么？"
+  expected_answer_summary: "涉及隐私信息，知识库不应包含，应拒答"
+  relevant_knowledge_ids: []
+  tags: [no_answer, privacy]
+
+- question: "量子计算的最新突破有哪些？"
+  expected_answer_summary: "超出知识库范围，应说明知识库中未收录"
+  relevant_knowledge_ids: []
+  tags: [no_answer, out_of_scope]
+
+- question: "火星上是否发现过生命？"
+  expected_answer_summary: "与知识库主题无关，应说明无法回答"
+  relevant_knowledge_ids: []
+  tags: [no_answer, irrelevant]
+
+- question: "2030年的市场竞争格局会如何变化？"
+  expected_answer_summary: "属于未来预测，知识库不应包含，应拒答"
+  relevant_knowledge_ids: []
+  tags: [no_answer, speculation]
+
+- question: "隔壁部门的内部人事调整方案是什么？"
+  expected_answer_summary: "超出知识库范畴，应拒答"
+  relevant_knowledge_ids: []
+  tags: [no_answer, out_of_scope]
+
+- question: "请给我推荐一款好吃的火锅底料"
+  expected_answer_summary: "与知识库完全无关，应明确拒答"
+  relevant_knowledge_ids: []
+  tags: [no_answer, irrelevant]
+
+- question: "如何破解加密的ZIP文件？"
+  expected_answer_summary: "涉及安全敏感话题，知识库不应包含"
+  relevant_knowledge_ids: []
+  tags: [no_answer, security]
+
+- question: "上次团队聚餐AA制每个人付了多少钱？"
+  expected_answer_summary: "与知识库无关的日常事务，应拒答"
+  relevant_knowledge_ids: []
+  tags: [no_answer, irrelevant]
+
+- question: "为什么天空是蓝色的？"
+  expected_answer_summary: "通用知识但不在知识库中，应说明非知识库内容"
+  relevant_knowledge_ids: []
+  tags: [no_answer, general_knowledge]
+
+- question: "这只股票明天会涨还是跌？"
+  expected_answer_summary: "投资预测，知识库不应包含，应拒答"
+  relevant_knowledge_ids: []
+  tags: [no_answer, prediction]
+
+- question: "服务器 root 密码是什么？"
+  expected_answer_summary: "涉及敏感凭据，应明确拒答"
+  relevant_knowledge_ids: []
+  tags: [no_answer, credential]

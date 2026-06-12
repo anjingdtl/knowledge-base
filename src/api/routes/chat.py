@@ -35,11 +35,15 @@ def ask_question(data: QuestionReq, container: AppContainer = Depends(get_contai
         source_graph=result.get("source_graph", {"nodes": [], "edges": []}),
     )
     container.db.insert_message(ai_msg.to_row())
+    # 构建诊断信息 — 从管线各阶段收集
+    diagnostics = _build_diagnostics(result)
+
     return {
         "conversation_id": conv_id,
         "answer": result["answer"],
         "sources": sources,
         "source_graph": result.get("source_graph", {"nodes": [], "edges": []}),
+        "diagnostics": diagnostics,
     }
 
 
@@ -64,6 +68,45 @@ def _normalize_sources(sources: list[dict]) -> list[dict]:
             "score": source.get("score", source.get("distance")),
         })
     return normalized
+
+
+def _build_diagnostics(result: dict) -> dict:
+    """从管线结果中提取检索诊断信息"""
+    route = result.get("route", {})
+    query_plan = result.get("query_plan", {})
+    warnings = result.get("warnings", [])
+    sources = result.get("sources", [])
+    wiki_context = result.get("wiki_context", "")
+    source_graph = result.get("source_graph", {})
+
+    # 统计 token 估算（来源文本长度 / 4 近似）
+    evidence_chars = sum(len(s.get("text_preview", "") or s.get("snippet", "")) for s in sources)
+    if wiki_context:
+        evidence_chars += len(wiki_context)
+
+    # 被丢弃的候选（得分低于阈值或被去重移除）
+    dropped = []
+    for w in warnings:
+        if "empty" in w.lower() or "fallback" in w.lower():
+            dropped.append({"reason": w})
+
+    return {
+        "route": {
+            "mode": route.get("mode", "unknown") if isinstance(route, dict) else str(route),
+            "explanation": route.get("explanation", "") if isinstance(route, dict) else "",
+        },
+        "retrieval": {
+            "total_sources": len(sources),
+            "wiki_hits": 1 if wiki_context else 0,
+            "graph_nodes": source_graph.get("node_count", 0),
+            "graph_truncated": source_graph.get("truncated", False),
+            "evidence_chars": evidence_chars,
+            "evidence_tokens_est": evidence_chars // 4,
+        },
+        "query_plan": query_plan,
+        "dropped_candidates": dropped,
+        "warnings": warnings,
+    }
 
 
 @chat_router.get("/conversations")
