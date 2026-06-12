@@ -541,7 +541,6 @@ class SettingsDialog(QDialog):
 
         # 刷新按钮样式
         for lbl in [self._svc_status_label]:
-            lbl.style().unpolish(lbl)
             lbl.style().polish(lbl)
 
     def _on_svc_start(self):
@@ -632,7 +631,6 @@ class SettingsDialog(QDialog):
         self._btn_neo4j_stop.setEnabled(status["running"])
 
         # 刷新样式
-        self._neo4j_status_label.style().unpolish(self._neo4j_status_label)
         self._neo4j_status_label.style().polish(self._neo4j_status_label)
 
     def _on_neo4j_start(self):

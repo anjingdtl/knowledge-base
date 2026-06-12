@@ -76,7 +76,14 @@ class CatalogView(QWidget):
         self._llm_indicator = llm_indicator
         self._worker = None
         self._setup_ui()
-        self._load_catalog()
+        # 目录首次加载延后到 showEvent（避免启动期一次性跑全部 DB 查询）
+        self._catalog_loaded = False
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not self._catalog_loaded:
+            self._load_catalog()
+            self._catalog_loaded = True
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -233,6 +240,9 @@ class CatalogView(QWidget):
 
     def _load_catalog(self):
         self._refresh_stats()
+        # 整批构建目录树期间关闭更新，避免大量 QTreeWidgetItem 插入时反复重绘
+        self.tree.setUpdatesEnabled(False)
+        self.tree.blockSignals(True)
         self.tree.clear()
         categories = Database.get_all_categories()
         cat_map = {c["id"]: c for c in categories}
@@ -368,6 +378,10 @@ class CatalogView(QWidget):
                         ki.setData(0, Qt.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
 
         self.tree.expandAll()
+        # 整批构建完成，恢复更新 + 信号（一次性重绘）
+        self.tree.blockSignals(False)
+        self.tree.setUpdatesEnabled(True)
+        self.tree.viewport().update()
 
         # 空状态切换逻辑
         total_items = len(Database.list_knowledge(limit=10000))

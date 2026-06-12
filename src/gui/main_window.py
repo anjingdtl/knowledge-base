@@ -252,14 +252,23 @@ class MainWindow(QMainWindow):
         # 注册 LLM 状态回调
         register_llm_status_callback(self._on_llm_status)
 
+        # 状态栏更新防抖定时器 + count 缓存必须在 _update_status() 调用前就绪
+        self._status_bar_dirty = False
+        self._status_bar_timer = QTimer(self)
+        self._status_bar_timer.setSingleShot(True)
+        self._status_bar_timer.timeout.connect(self._flush_status_bar)
+        # 知识条目数缓存 — 5s 内复用，避免每次 status bar 更新都重查 DB
+        self._cached_count: int | None = None
+        self._cached_count_ts: float = 0.0
+
         # 状态栏
         self.statusBar().showMessage("就绪")
         self._update_status()
 
-        # MCP 心跳轮询
+        # MCP 心跳轮询 — 5s 一次（从 3s 放宽），减少端口探测 + DB 计数频率
         self._mcp_timer = QTimer(self)
         self._mcp_timer.timeout.connect(self._check_mcp_status)
-        self._mcp_timer.start(3000)
+        self._mcp_timer.start(5000)
 
     def _build_title_bar(self) -> QWidget:
         title_bar = QFrame()
@@ -382,11 +391,31 @@ class MainWindow(QMainWindow):
         dialog.exec()
 
     def _update_status(self):
-        count = Database.count_knowledge()
-        self._update_status_bar()
+        # 强制失效缓存（导入/删除后会调用）
+        self._cached_count = None
+        self._schedule_status_bar()
 
-    def _update_status_bar(self):
-        count = Database.count_knowledge()
+    def _schedule_status_bar(self):
+        """300ms 防抖：短时间内多次状态变化只刷一次 status bar"""
+        if self._status_bar_timer.isActive():
+            return
+        self._status_bar_timer.start(300)
+
+    def _flush_status_bar(self):
+        """真正更新 status bar 文本"""
+        self._update_status_bar_now()
+
+    def _count_knowledge_cached(self) -> int:
+        """5s 缓存的 Database.count_knowledge 调用"""
+        import time as _time
+        now = _time.monotonic()
+        if self._cached_count is None or (now - self._cached_count_ts) > 5.0:
+            self._cached_count = Database.count_knowledge()
+            self._cached_count_ts = now
+        return self._cached_count
+
+    def _update_status_bar_now(self):
+        count = self._count_knowledge_cached()
         from src.services.mcp_heartbeat import is_mcp_available
         mcp_online = is_mcp_available()
         llm_status = self.llm_indicator.property("status") or "idle"
@@ -395,6 +424,10 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage(
             f"{count} 条知识  |  LLM {llm_text}  |  MCP {mcp_text}"
         )
+
+    # 兼容旧调用名：内部走防抖路径
+    def _update_status_bar(self):
+        self._schedule_status_bar()
 
     def _on_llm_status(self, status: str, detail: str = ""):
         self.llm_indicator.set_status(status, detail)
@@ -407,7 +440,7 @@ class MainWindow(QMainWindow):
         if self.mcp_light.property("status") != new_status:
             self.mcp_light.setProperty("status", new_status)
             self.mcp_light.setText(f"MCP {'活跃' if online else '离线'}")
-            self.mcp_light.style().unpolish(self.mcp_light)
+            # polish() 单次足够：dynamic property 变化后 QSS 选择器自动重算。
             self.mcp_light.style().polish(self.mcp_light)
             # 同步按钮状态
             self.btn_mcp_toggle.blockSignals(True)
@@ -427,5 +460,4 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(msg, 5000)
             self.mcp_light.setProperty("status", "offline")
             self.mcp_light.setText("MCP 离线")
-            self.mcp_light.style().unpolish(self.mcp_light)
             self.mcp_light.style().polish(self.mcp_light)

@@ -198,7 +198,8 @@ class ChatView(QWidget):
         self._current_conv_id = None
         self._worker = None
         self._setup_ui()
-        self._load_conversations()
+        # 对话列表首次加载延后到 showEvent：默认页是知识库，聊天页可能很久才切到
+        self._conversations_loaded = False
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -408,6 +409,9 @@ class ChatView(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
+        if not self._conversations_loaded:
+            self._load_conversations()
+            self._conversations_loaded = True
         if self._worker and self._worker.isRunning():
             return
         if self._current_conv_id:
