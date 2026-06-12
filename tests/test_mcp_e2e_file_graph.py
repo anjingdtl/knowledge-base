@@ -41,6 +41,7 @@ def test_mcp_process_file_graph_round_trip(tmp_path):
         "rag": {"enable_query_rewriting": False, "enable_rerank": False, "search_mode": "keywords"},
         "embedding": {"api_key": "invalid", "base_url": "http://127.0.0.1", "model": "test"},
         "llm": {"api_key": "invalid", "base_url": "http://127.0.0.1", "model": "test"},
+        "mcp": {"allow_http_write": True, "write_policy": ""},
     }
     config_path = tmp_path / "config.yaml"
     config_path.write_text(yaml.safe_dump(config), encoding="utf-8")

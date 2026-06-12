@@ -31,7 +31,7 @@ AIGC:
 ShineHe Knowledge 是一个**本地运行、隐私优先**的知识库系统：
 
 - 把你的文档喂进去，用自然语言问问题，AI 自动检索+生成回答
-- 原生 MCP Server，45 个工具直接被 Claude / Cursor / Cline 等 AI 工具调用
+- 原生 MCP Server，51 个核心工具 + 51 个命名空间别名，可直接被 Claude / Cursor / Cline 等 AI 工具调用
 - 内建知识图谱（SQLite + Neo4j 双后端）、Wiki 工作流、混合搜索引擎
 - 插件式架构，支持钩子扩展和图数据库后端切换
 
@@ -53,7 +53,7 @@ ShineHe Knowledge 是一个**本地运行、隐私优先**的知识库系统：
 - 文件大纲图谱、多跳图遍历、结构化 DSL 查询、Agentic Router 智能路由
 
 ### MCP Server
-45 个工具 + 3 资源 + 4 Prompt 模板，覆盖搜索、问答、CRUD、导入、Wiki、图谱、查询、运维全场景  
+51 个核心工具 + 51 个命名空间别名 + 2 个资源 + 1 个资源模板 + 5 个 Prompt，覆盖搜索、问答、CRUD、导入、Wiki、图谱、查询、运维和 Agent Memory 全场景
 支持 `preview_operation` 预览 + `undo_operation` 撤销，写操作安全闭环
 
 ### Wiki 系统

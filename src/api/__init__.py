@@ -2,7 +2,7 @@
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.services.db import Database
@@ -12,7 +12,11 @@ from src.version import APP_NAME, VERSION
 from src.api.routes import (
     auth_router, kb_router, chat_router, wiki_router, jobs_router, refs_router,
     graph_router, tags_router, properties_router, query_router,
+    settings_router,
 )
+from src.api.deps import get_container
+from src.api.routes.auth import _check_auth
+from src.core.container import AppContainer
 
 logger = logging.getLogger(__name__)
 
@@ -77,16 +81,15 @@ def create_app() -> FastAPI:
     app.include_router(tags_router, prefix="/api")
     app.include_router(properties_router, prefix="/api")
     app.include_router(query_router, prefix="/api")
+    app.include_router(settings_router, prefix="/api")
 
     @app.get("/api/health")
     def health():
         return {"status": "online", "name": APP_NAME, "version": VERSION, "nodes": Database.count_knowledge()}
 
-    @app.get("/api/stats")
-    def stats():
+    @app.get("/api/stats", dependencies=[Depends(_check_auth)])
+    def stats(container: AppContainer = Depends(get_container)):
         """知识库全局统计"""
-        from src.api.deps import get_container
-        container = get_container()
         db = container.db
         conn = db.get_conn()
         knowledge_count = db.count_knowledge()

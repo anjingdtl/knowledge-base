@@ -329,13 +329,19 @@ def test_rag_query_stream_routes_logic_queries_and_returns_source_graph(monkeypa
         def chat_stream(self, messages, silent=True, max_tokens_override=None):
             yield "answer"
 
-    monkeypatch.setattr(rag_mod, "HybridSearcher", lambda: ExplodingHybrid())
-    monkeypatch.setattr(rag_mod.QueryRewriter, "rewrite", lambda self, question: [question])
-    monkeypatch.setattr(rag_mod.RAGService, "_get_wiki_context", lambda self, query: "")
-    monkeypatch.setattr(rag_mod, "LLMReranker", lambda: PassThroughReranker())
-    monkeypatch.setattr(rag_mod, "LLMService", lambda: FakeLLM())
+    class FixedRewriter:
+        def rewrite(self, question):
+            return [question]
 
-    stream, sources, source_graph = RAGService().query_stream(
+    monkeypatch.setattr(rag_mod.RAGService, "_get_wiki_context", lambda self, query: "")
+
+    stream, sources, source_graph = RAGService(deps={
+        "db": Database._instance,
+        "query_rewriter": FixedRewriter(),
+        "hybrid_search": ExplodingHybrid(),
+        "reranker": PassThroughReranker(),
+        "llm": FakeLLM(),
+    }).query_stream(
         "#bug ::status unresolved [[Project Alpha]]"
     )
 

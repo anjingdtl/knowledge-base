@@ -39,8 +39,8 @@ class EmbeddingCache:
         # Lazy import to avoid circular dependencies at module level.
         if db is None:
             from src.services.db import Database
-            db = Database()
-            if Database._shutdown:
+            db = Database._instance
+            if db is None or db._shutdown:
                 raise RuntimeError(
                     "EmbeddingCache requires a connected Database, but the "
                     "Database singleton has been shut down. Pass an active "

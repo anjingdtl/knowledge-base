@@ -4,6 +4,7 @@
 利用图数据库的原生遍历能力显著提升大规模数据下的性能。
 """
 from src.services.db import Database
+from src.services.graph_backend.base import make_node_id, parse_node_id
 
 
 class GraphTraversalService:
@@ -43,25 +44,41 @@ class GraphTraversalService:
         Returns:
             {"nodes": [...], "edges": [...], "paths": [...], "truncated": bool}
         """
+        backend_start_type = "page" if start_type in ("knowledge", "page") else start_type
+        normalized_start_ids = [
+            sid if ":" in sid else make_node_id(backend_start_type, sid)
+            for sid in start_ids
+        ]
+
         # 处理节点过滤器
         node_filter_ids = None
         if node_filter is not None:
             from src.services.query_executor import QueryExecutor
             filter_results = QueryExecutor(db=self._db).execute(node_filter)
-            node_filter_ids = {r["id"] for r in filter_results}
+            node_filter_ids = {make_node_id("page", r["id"]) for r in filter_results}
 
         # 委托给图后端
         result = self._backend.traverse(
-            start_ids=start_ids,
+            start_ids=normalized_start_ids,
             max_depth=max_depth,
             edge_types=ref_types,
             max_nodes=max_nodes,
             node_filter_ids=node_filter_ids,
         )
 
+        def public_id(node_id: str) -> str:
+            return parse_node_id(node_id)[1] if ":" in node_id else node_id
+
         return {
             "nodes": result.nodes,
-            "edges": result.edges,
-            "paths": result.paths,
+            "edges": [
+                {
+                    **edge,
+                    "source": public_id(edge["source"]),
+                    "target": public_id(edge["target"]),
+                }
+                for edge in result.edges
+            ],
+            "paths": [[public_id(node_id) for node_id in path] for path in result.paths],
             "truncated": result.truncated,
         }

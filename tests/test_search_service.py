@@ -95,7 +95,9 @@ class TestSearchService:
     def test_search_returns_correct_structure(self):
         """返回结构包含 source, score, knowledge_id"""
         config = Mock()
-        config.get.return_value = False
+        config.get.side_effect = lambda key, default=None: {
+            "rag.enable_rerank": True,
+        }.get(key, default)
 
         db = Mock()
         db.search_wiki_fts.return_value = []

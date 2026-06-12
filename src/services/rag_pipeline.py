@@ -859,17 +859,17 @@ class RAGService:
     def query_stream(self, question: str, conversation_history: list[dict] | None = None,
                      phase_callback=None):
         """流式查询 — 返回 (stream_generator, sources)"""
-        import asyncio
-
         top_k = Config.get("rag.top_k", 5)
         rerank_top_n = Config.get("rag.rerank.top_n", 5)
         score_threshold = Config.get("rag.score_threshold", 0.5)
+        deps = self._deps or {}
+        db = deps.get("db", Database)
 
         if phase_callback:
             phase_callback("rewriting", "查询改写")
 
         # 阶段 1: 查询改写 + Wiki 检索并发
-        rewriter = QueryRewriter()
+        rewriter = deps.get("query_rewriter") or QueryRewriter()
         with ThreadPoolExecutor(max_workers=2) as pool:
             rewrite_future = pool.submit(rewriter.rewrite, question)
             wiki_future = pool.submit(self._get_wiki_context, question)
@@ -888,9 +888,9 @@ class RAGService:
             phase_callback("searching", "混合检索")
 
         # 阶段 2: 混合检索
-        searcher = HybridSearcher()
+        searcher = deps.get("hybrid_search") or HybridSearcher()
         from src.services.query_router import QueryRouter
-        router = QueryRouter(db=Database, hybrid_searcher=searcher)
+        router = QueryRouter(db=db, hybrid_searcher=searcher)
         if router.route(question).mode == "logic":
             candidates = router.search(question, top_k=top_k)
         else:
@@ -900,7 +900,7 @@ class RAGService:
             phase_callback("reranking", "结果重排序")
 
         # 阶段 3: 重排序
-        reranker = LLMReranker()
+        reranker = deps.get("reranker") or LLMReranker()
         results = reranker.rerank(question, candidates, top_n=rerank_top_n)
 
         if phase_callback:
@@ -909,7 +909,7 @@ class RAGService:
         if not results:
             # 回退：知识级 FTS + LIKE 搜索（兜底 block 级搜索遗漏的结果）
             try:
-                fts_results = Database.search_knowledge(question, limit=top_k)
+                fts_results = db.search_knowledge(question, limit=top_k)
                 if fts_results:
                     results = [
                         {
@@ -946,7 +946,7 @@ class RAGService:
         context = "\n\n".join(context_parts) if context_parts else "（知识库中未找到相关内容）"
         messages = build_rag_messages(question, context, conversation_history)
 
-        llm = _get_container_service("llm", LLMService)
+        llm = deps.get("llm") or _get_container_service("llm", LLMService)
         from src.services.source_graph import build_source_graph
         source_graph = build_source_graph(sources)
         return llm.chat_stream(messages, silent=True), sources, source_graph

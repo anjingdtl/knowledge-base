@@ -5,7 +5,14 @@ from src.api.routes.auth import _check_auth
 
 jobs_router = APIRouter(prefix="/jobs", tags=["jobs"], dependencies=[Depends(_check_auth)])
 
-ALLOWED_JOB_TYPES = {"reindex_all", "wiki_compile", "wiki_lint", "wiki_site_generate"}
+ALLOWED_JOB_TYPES = {
+    "reindex_all",
+    "wiki_compile",
+    "wiki_lint",
+    "wiki_site_generate",
+    "file_ingest",
+    "url_ingest",
+}
 
 
 class JobCreateReq(BaseModel):

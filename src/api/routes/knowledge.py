@@ -1,6 +1,7 @@
+from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 
 from src.api.deps import get_container
@@ -49,6 +50,11 @@ class KnowledgeUpdate(BaseModel):
 class KnowledgeBatchExport(BaseModel):
     ids: list[str] = Field(default_factory=list, max_length=500)
     tag: Optional[str] = None
+
+
+class UrlImportReq(BaseModel):
+    url: str = Field(pattern=r"^https?://")
+    tags: list[str] = []
 
 
 @kb_router.get("")
@@ -119,6 +125,40 @@ def create_knowledge(data: KnowledgeCreate, container: AppContainer = Depends(ge
         "source_type": data.source_type, "file_type": data.file_type,
     })
     return {"id": item_id, "message": "创建成功"}
+
+
+@kb_router.post("/import", status_code=202)
+async def import_file(
+    file: UploadFile = File(...),
+    tags: str = Form(""),
+    container: AppContainer = Depends(get_container),
+):
+    import json
+    import re
+    import uuid
+
+    safe_name = re.sub(r"[^A-Za-z0-9._-]", "_", Path(file.filename or "upload.bin").name)
+    upload_dir = Path(container.config.get_data_dir()) / "uploads"
+    upload_dir.mkdir(parents=True, exist_ok=True)
+    upload_path = upload_dir / f"{uuid.uuid4().hex}-{safe_name}"
+    with upload_path.open("wb") as target:
+        while chunk := await file.read(1024 * 1024):
+            target.write(chunk)
+
+    parsed_tags = json.loads(tags) if tags.strip().startswith("[") else [
+        tag.strip() for tag in tags.split(",") if tag.strip()
+    ]
+    job_id = container.db.create_job(
+        "file_ingest",
+        {"file_path": str(upload_path), "tags": parsed_tags},
+    )
+    return {"id": job_id, "job_id": job_id, "status": "pending", "type": "file_ingest"}
+
+
+@kb_router.post("/import-url", status_code=202)
+def import_url(data: UrlImportReq, container: AppContainer = Depends(get_container)):
+    job_id = container.db.create_job("url_ingest", {"url": data.url, "tags": data.tags})
+    return {"id": job_id, "job_id": job_id, "status": "pending", "type": "url_ingest"}
 
 
 @kb_router.put("/{item_id}")

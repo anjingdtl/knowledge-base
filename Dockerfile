@@ -3,8 +3,9 @@ FROM python:3.12-slim AS base
 
 WORKDIR /app
 
-# 先复制构建配置，利用 Docker layer cache
+# editable install 需要版本文件和包目录在构建上下文中
 COPY pyproject.toml ./
+COPY src ./src
 
 # 安装核心依赖（不含可选 extras）
 RUN pip install --no-cache-dir -e .

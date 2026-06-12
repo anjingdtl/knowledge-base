@@ -7,6 +7,7 @@ from src.api.routes.graph import graph_router
 from src.api.routes.tags import tags_router
 from src.api.routes.properties import properties_router
 from src.api.routes.chat import chat_router
+from src.api.routes.settings import settings_router
 
 __all__ = [
     "auth_router",
@@ -19,4 +20,5 @@ __all__ = [
     "tags_router",
     "properties_router",
     "query_router",
+    "settings_router",
 ]

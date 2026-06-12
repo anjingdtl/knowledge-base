@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import os
+import asyncio
 from pathlib import Path
 
 import pytest
@@ -306,6 +307,91 @@ class TestKBCapabilities:
             assert key in flows
             assert isinstance(flows[key], list)
             assert len(flows[key]) >= 2
+
+    def test_all_declared_tool_aliases_are_registered(self):
+        async def registered_names():
+            return {tool.name for tool in await mcp_mod.mcp.list_tools()}
+
+        names = asyncio.run(registered_names())
+        missing = set(mcp_mod._TOOL_ALIASES) - names
+        assert not missing, f"能力清单声明了未注册的工具别名: {sorted(missing)}"
+
+
+class TestWritePolicy:
+    def test_http_write_is_disabled_by_default(self, monkeypatch):
+        monkeypatch.setenv("MCP_TRANSPORT", "streamable-http")
+        monkeypatch.setattr(
+            mcp_mod.Config,
+            "get",
+            staticmethod(lambda key, default=None: {
+                "mcp.write_policy": "",
+                "mcp.allow_http_write": False,
+            }.get(key, default)),
+        )
+
+        result = mcp_mod._check_write_policy("create")
+
+        assert result["ok"] is False
+        assert result["error"]["code"] == "PERMISSION_DENIED"
+
+    def test_token_required_builds_real_bearer_verifier(self, monkeypatch):
+        monkeypatch.setenv("MCP_TRANSPORT", "streamable-http")
+        monkeypatch.setattr(
+            mcp_mod.Config,
+            "get",
+            staticmethod(lambda key, default=None: {
+                "mcp.write_policy": "token_required",
+                "mcp.auth_token": "test-secret",
+            }.get(key, default)),
+        )
+
+        verifier = mcp_mod._build_auth_provider()
+
+        assert verifier is not None
+        assert asyncio.run(verifier.verify_token("wrong")) is None
+        access = asyncio.run(verifier.verify_token("test-secret"))
+        assert access is not None
+        assert access.client_id == "shinehe-mcp"
+
+    def test_preview_only_allows_dry_run(self, monkeypatch):
+        monkeypatch.setenv("MCP_TRANSPORT", "stdio")
+        monkeypatch.setattr(
+            mcp_mod.Config,
+            "get",
+            staticmethod(lambda key, default=None: {
+                "mcp.write_policy": "preview_only",
+            }.get(key, default)),
+        )
+
+        assert mcp_mod._check_write_policy("create", dry_run=True) is None
+
+    @pytest.mark.parametrize(
+        ("tool", "kwargs"),
+        [
+            (mcp_mod.restore_knowledge, {"item_id": "missing"}),
+            (mcp_mod.create_ingest_job, {"url": "https://example.com"}),
+            (mcp_mod.create_async_job, {"job_type": "reindex"}),
+            (mcp_mod.remember_fact, {"key": "k", "value": "v"}),
+            (mcp_mod.update_project_context, {"summary": "context"}),
+            (mcp_mod.extract_tasks_from_doc, {"content": "- [ ] task"}),
+        ],
+    )
+    def test_all_write_entrypoints_honor_disabled_policy(
+        self, monkeypatch, tool, kwargs
+    ):
+        monkeypatch.setenv("MCP_TRANSPORT", "stdio")
+        monkeypatch.setattr(
+            mcp_mod.Config,
+            "get",
+            staticmethod(lambda key, default=None: {
+                "mcp.write_policy": "disabled",
+            }.get(key, default)),
+        )
+
+        result = tool(**kwargs)
+
+        assert result["ok"] is False
+        assert result["error"]["code"] == "PERMISSION_DENIED"
 
 
 # ---- query_operation_logs envelope ----

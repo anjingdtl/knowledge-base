@@ -185,6 +185,8 @@ class PluginManager:
         manifest._instance = instance
 
         # 注册事件钩子
+        from src.core.events import on
+
         for hook_name in manifest.hooks:
             handler = getattr(instance, hook_name.replace(".", "_"), None)
             if handler:

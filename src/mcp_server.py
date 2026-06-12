@@ -15,12 +15,14 @@ import functools
 import json
 import logging
 import os
+import secrets
 from contextlib import asynccontextmanager
 
 WIKI_SEARCH_LIMIT = 3  # Wiki 结构化知识搜索结果上限，可通过配置覆盖
 logger = logging.getLogger(__name__)
 
 from fastmcp import FastMCP
+from fastmcp.server.auth import AccessToken, TokenVerifier
 
 from src.core.container import create_container, shutdown_container, AppContainer
 from src.models.knowledge import KnowledgeItem
@@ -84,10 +86,42 @@ async def server_lifespan(server: FastMCP):
         shutdown_container(_container)
 
 
+class _StaticTokenVerifier(TokenVerifier):
+    """Verify a configured local bearer token for HTTP MCP transports."""
+
+    def __init__(self, expected_token: str):
+        super().__init__()
+        self._expected_token = expected_token
+
+    async def verify_token(self, token: str) -> AccessToken | None:
+        if not secrets.compare_digest(token, self._expected_token):
+            return None
+        return AccessToken(
+            token=token,
+            client_id="shinehe-mcp",
+            scopes=[],
+        )
+
+
+def _build_auth_provider() -> TokenVerifier | None:
+    transport = os.environ.get("MCP_TRANSPORT", "stdio")
+    policy = str(Config.get("mcp.write_policy", "")).lower()
+    if transport not in {"streamable-http", "sse"} or policy != "token_required":
+        return None
+
+    token = str(Config.get("mcp.auth_token", "") or "")
+    if not token:
+        raise RuntimeError(
+            "mcp.write_policy=token_required 时必须配置 mcp.auth_token"
+        )
+    return _StaticTokenVerifier(token)
+
+
 mcp = FastMCP(
     name="ShineHeKnowledge",
     version=VERSION,
     lifespan=server_lifespan,
+    auth=_build_auth_provider(),
 )
 
 
@@ -166,7 +200,7 @@ def _content_preview(text, max_len=200):
 
 # 写操作工具名称集合（用于 _check_write_policy 快速判断）
 _WRITE_TOOLS = {
-    "create", "update", "delete",
+    "create", "update", "delete", "restore_knowledge",
     "ingest_file", "ingest_url", "create_ingest_job",
     "save_to_wiki",
     "wiki_submit_review", "wiki_approve", "wiki_reject",
@@ -181,22 +215,30 @@ _WRITE_TOOLS = {
 _DESTRUCTIVE_TOOLS = {"delete", "cancel_job", "cancel_async_job", "reindex_all"}
 
 
-def _check_write_policy(tool_name: str) -> dict | None:
+def _check_write_policy(tool_name: str, *, dry_run: bool = False) -> dict | None:
     """检查写操作是否被当前安全策略允许。
 
     Returns:
         None: 允许执行
         dict: 拒绝执行时返回 fail envelope
     """
+    if dry_run:
+        return None
+
+    transport = os.environ.get("MCP_TRANSPORT", "stdio")
+    if (
+        transport in {"streamable-http", "sse"}
+        and not bool(Config.get("mcp.allow_http_write", False))
+    ):
+        return fail(
+            ErrorCode.PERMISSION_DENIED,
+            "HTTP 模式写操作已禁用，请设置 mcp.allow_http_write=true 后重试",
+            tool=tool_name,
+        )
+
     policy = str(Config.get("mcp.write_policy", "")).lower()
     if not policy:
-        # 未配置策略时，默认行为：stdio 模式放行，HTTP 模式需确认
-        transport = os.environ.get("MCP_TRANSPORT", "stdio")
-        if transport == "streamable-http":
-            # HTTP 模式默认要求 token
-            token = os.environ.get("MCP_AUTH_TOKEN", "")
-            if not token:
-                return None  # 未配置 token 时暂时放行（向后兼容）
+        # 未配置策略时，stdio 向后兼容放行；HTTP 由 allow_http_write 控制。
         return None
 
     if policy == "disabled":
@@ -207,8 +249,7 @@ def _check_write_policy(tool_name: str) -> dict | None:
                      f"当前策略仅允许预览 (mcp.write_policy=preview_only)，请使用 preview_operation 工具进行 dry_run")
 
     if policy == "token_required":
-        transport = os.environ.get("MCP_TRANSPORT", "stdio")
-        if transport == "streamable-http":
+        if transport in {"streamable-http", "sse"}:
             expected_token = Config.get("mcp.auth_token", "")
             if not expected_token:
                 logger.warning("mcp.write_policy=token_required 但未配置 mcp.auth_token，写操作将被拒绝")
@@ -217,8 +258,7 @@ def _check_write_policy(tool_name: str) -> dict | None:
 
     if policy == "local_confirm":
         # stdio 模式下放行（客户端本身就是本地确认）
-        transport = os.environ.get("MCP_TRANSPORT", "stdio")
-        if transport == "streamable-http":
+        if transport in {"streamable-http", "sse"}:
             return fail(ErrorCode.PERMISSION_DENIED,
                          "HTTP 模式下 local_confirm 策略要求通过本地 GUI 确认")
 
@@ -429,7 +469,7 @@ def create(
         source_type: 来源类型 - manual（手动）、file（文件）、web（网页）
         dry_run: 设为 True 时只预览不执行
     """
-    _guard = _check_write_policy("create")
+    _guard = _check_write_policy("create", dry_run=dry_run)
     if _guard:
         return _guard
     tags = tags or []
@@ -556,7 +596,7 @@ def update(
         tags: 新标签列表（可选）
         dry_run: 设为 True 时只预览变更不执行
     """
-    _guard = _check_write_policy("update")
+    _guard = _check_write_policy("update", dry_run=dry_run)
     if _guard:
         return _guard
     container = _get_container()
@@ -623,7 +663,7 @@ def delete(item_id: str, dry_run: bool = False) -> dict:
         item_id: 要删除的知识条目 ID
         dry_run: 设为 True 时只预览将删除的数据不执行
     """
-    _guard = _check_write_policy("delete")
+    _guard = _check_write_policy("delete", dry_run=dry_run)
     if _guard:
         return _guard
     container = _get_container()
@@ -702,6 +742,9 @@ def restore_knowledge(item_id: str) -> dict:
     Args:
         item_id: 要恢复的知识条目 ID
     """
+    _guard = _check_write_policy("restore_knowledge")
+    if _guard:
+        return _guard
     container = _get_container()
     # 必须看到 deleted_at 非空
     existing = container.db.get_knowledge(item_id, include_deleted=True)
@@ -758,7 +801,7 @@ def reindex_all(dry_run: bool = False) -> dict:
     Args:
         dry_run: 设为 True 时只返回将重建的数量不执行
     """
-    _guard = _check_write_policy("reindex_all")
+    _guard = _check_write_policy("reindex_all", dry_run=dry_run)
     if _guard:
         return _guard
     container = _get_container()
@@ -856,7 +899,7 @@ def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = F
         tags: 要附加的标签列表
         dry_run: 设为 True 时只预览将解析的文件信息不执行
     """
-    _guard = _check_write_policy("ingest_file")
+    _guard = _check_write_policy("ingest_file", dry_run=dry_run)
     if _guard:
         return _guard
     try:
@@ -926,7 +969,7 @@ def ingest_url(url: str, tags: list[str] | None = None, dry_run: bool = False) -
         tags: 要附加的标签列表
         dry_run: 设为 True 时只预览将导入的 URL，不抓取网络
     """
-    _guard = _check_write_policy("ingest_url")
+    _guard = _check_write_policy("ingest_url", dry_run=dry_run)
     if _guard:
         return _guard
     if dry_run:
@@ -1143,6 +1186,9 @@ def create_ingest_job(
         url: 网页 URL（与 file_path 二选一）
         tags: 附加标签列表
     """
+    _guard = _check_write_policy("create_ingest_job")
+    if _guard:
+        return _guard
     from src.services.async_task import AsyncTaskService
 
     tags = tags or []
@@ -1494,6 +1540,9 @@ def wiki_restore_version(page_id: str, version: int) -> dict:
 @_heartbeat
 def create_async_job(job_type: str, params: dict = None, priority: int = 1, max_retries: int = 3) -> dict:
     """创建异步任务"""
+    _guard = _check_write_policy("create_async_job")
+    if _guard:
+        return _guard
     from src.services.async_task import AsyncTaskService
     job_id = AsyncTaskService.create_job(job_type, params or {}, priority, max_retries)
     return ok({"job_id": job_id, "status": "pending"})
@@ -2395,10 +2444,6 @@ def _register_tool_aliases():
             logger.debug("Alias registration failed for %s: %s", alias_name, exc)
 
 
-# 注册别名
-_register_tool_aliases()
-
-
 # ---- Phase 4.2: Agent Memory Tools ----
 
 @mcp.tool(
@@ -2415,6 +2460,9 @@ def remember_fact(key: str, value: str, category: str = "fact") -> dict:
         value: 记忆内容
         category: 分类 — fact（事实）、decision（决策）、context（上下文）、task（任务）
     """
+    _guard = _check_write_policy("remember_fact")
+    if _guard:
+        return _guard
     result = _get_container().agent_memory.remember_fact(key, value, category)
     log_id = _op_log("remember", "agent_memory", result.get("id", ""), after={
         "key": key, "category": category, "value_preview": _content_preview(value),
@@ -2451,6 +2499,9 @@ def update_project_context(summary: str) -> dict:
     Args:
         summary: 项目上下文描述（会覆盖之前的内容）
     """
+    _guard = _check_write_policy("update_project_context")
+    if _guard:
+        return _guard
     result = _get_container().agent_memory.update_project_context(summary)
     log_id = _op_log("update_context", "agent_memory", "", after={
         "summary_preview": _content_preview(summary),
@@ -2501,8 +2552,15 @@ def extract_tasks_from_doc(content: str) -> dict:
     Args:
         content: 文档内容文本
     """
+    _guard = _check_write_policy("extract_tasks_from_doc")
+    if _guard:
+        return _guard
     result = _get_container().agent_memory.extract_tasks_from_doc(content)
     return ok(result, tasks_found=result.get("total_found", 0), stored=result.get("stored", 0))
+
+
+# 所有原始工具定义完成后再注册别名，避免 memory.* 等后置工具被跳过。
+_register_tool_aliases()
 
 
 # ---- Prompts ----

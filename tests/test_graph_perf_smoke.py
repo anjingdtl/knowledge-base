@@ -54,13 +54,15 @@ def test_get_block_ancestors_batch_cycle_protected():
     """b4 -> b5 -> b4 循环引用，递归 CTE 应在 max_depth 或 path 检测处停止。"""
     _seed_chain()
     Database.insert_blocks([
-        {"id": "b4", "parent_id": "b5", "page_id": "k1", "content": "a",
+        {"id": "b4", "parent_id": None, "page_id": "k1", "content": "a",
          "block_type": "text", "properties": "{}", "order_idx": 0,
          "created_at": "", "updated_at": ""},
         {"id": "b5", "parent_id": "b4", "page_id": "k1", "content": "b",
          "block_type": "text", "properties": "{}", "order_idx": 1,
          "created_at": "", "updated_at": ""},
     ])
+    Database.get_conn().execute("UPDATE blocks SET parent_id = ? WHERE id = ?", ("b5", "b4"))
+    Database.get_conn().commit()
     res = Database.get_block_ancestors_batch(["b4"], max_depth=10)
     # path 去重保证不会无限循环
     assert len(res.get("b4", [])) <= 10
