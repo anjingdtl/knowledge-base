@@ -65,6 +65,9 @@ class AppContainer:
     property_schema_repo: "PropertySchemaRepository" = field(default=None, repr=False)  # noqa: F821
     operation_log_repo: "OperationLogRepository" = field(default=None, repr=False)  # noqa: F821
 
+    # --- Phase 4 新增 ---
+    agent_memory_repo: "AgentMemoryRepository" = field(default=None, repr=False)  # noqa: F821
+
     # --- AI 服务 ---
     embedding: "EmbeddingService" = field(default=None)  # noqa: F821
     llm: "LLMService" = field(default=None)  # noqa: F821
@@ -96,6 +99,9 @@ class AppContainer:
 
     # --- 操作安全服务 (lazy init) ---
     _operation_log: Optional[object] = field(default=None, repr=False)
+
+    # --- Phase 4 业务服务 (lazy init) ---
+    _agent_memory: Optional[object] = field(default=None, repr=False)
 
     _initialized_services: list = field(default_factory=list, repr=False)
 
@@ -279,6 +285,18 @@ class AppContainer:
             self._track_service("_operation_log")
         return self._operation_log
 
+    @property
+    def agent_memory(self):
+        if self._agent_memory is None:
+            from src.services.agent_memory import AgentMemoryService
+            self._agent_memory = AgentMemoryService(
+                repo=self.agent_memory_repo,
+                db=self.db,
+                llm=self.llm,
+            )
+            self._track_service("_agent_memory")
+        return self._agent_memory
+
 
 def create_container(config_path: str | None = None) -> AppContainer:
     """创建并初始化应用容器
@@ -363,6 +381,10 @@ def create_container(config_path: str | None = None) -> AppContainer:
     container.tag_relation_repo = TagRelationRepository(db=db)
     container.property_schema_repo = PropertySchemaRepository(db=db)
     container.operation_log_repo = OperationLogRepository(db=db)
+
+    # Phase 4 仓库
+    from src.repositories.agent_memory_repo import AgentMemoryRepository
+    container.agent_memory_repo = AgentMemoryRepository(db=db)
 
     logger.info("Repositories initialized")
 

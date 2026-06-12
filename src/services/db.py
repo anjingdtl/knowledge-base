@@ -385,6 +385,45 @@ CREATE TABLE IF NOT EXISTS operation_logs (
 CREATE INDEX IF NOT EXISTS idx_oplog_target ON operation_logs(target_type, target_id);
 CREATE INDEX IF NOT EXISTS idx_oplog_time ON operation_logs(created_at);
 CREATE INDEX IF NOT EXISTS idx_oplog_operation ON operation_logs(operation);
+
+-- === Phase 4: Agent Memory ===
+CREATE TABLE IF NOT EXISTS agent_memory (
+    id TEXT PRIMARY KEY,
+    key TEXT NOT NULL,
+    value TEXT NOT NULL,
+    category TEXT NOT NULL DEFAULT 'fact',
+    metadata TEXT DEFAULT '{}',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_agent_memory_key ON agent_memory(key);
+CREATE INDEX IF NOT EXISTS idx_agent_memory_category ON agent_memory(category);
+CREATE INDEX IF NOT EXISTS idx_agent_memory_updated ON agent_memory(updated_at);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS agent_memory_fts USING fts5(
+    key, value,
+    content=agent_memory,
+    content_rowid=rowid,
+    tokenize='unicode61'
+);
+
+CREATE TRIGGER IF NOT EXISTS agent_memory_ai AFTER INSERT ON agent_memory BEGIN
+    INSERT INTO agent_memory_fts(rowid, key, value)
+    VALUES (new.rowid, new.key, new.value);
+END;
+
+CREATE TRIGGER IF NOT EXISTS agent_memory_ad AFTER DELETE ON agent_memory BEGIN
+    INSERT INTO agent_memory_fts(agent_memory_fts, rowid, key, value)
+    VALUES ('delete', old.rowid, old.key, old.value);
+END;
+
+CREATE TRIGGER IF NOT EXISTS agent_memory_au AFTER UPDATE ON agent_memory BEGIN
+    INSERT INTO agent_memory_fts(agent_memory_fts, rowid, key, value)
+    VALUES ('delete', old.rowid, old.key, old.value);
+    INSERT INTO agent_memory_fts(rowid, key, value)
+    VALUES (new.rowid, new.key, new.value);
+END;
 """
 
 
