@@ -55,6 +55,14 @@
 - `shinehe-mcp` 入口保留，不破坏已有客户端配置
 - `kb_capabilities` 新增 `tool_profile`/`visible_tools`/`hidden_groups` 字段
 
+### 安全加固（2026-06-13）
+
+- **SSRF 防护**：`parse_url()` 添加 DNS 解析后 IP 检查，阻止对内网/回环/链路本地地址的请求，限制最大重定向 5 次
+- **安全响应头**：API 层添加 `X-Content-Type-Options: nosniff`、`X-Frame-Options: DENY`、`Referrer-Policy: strict-origin-when-cross-origin`、`Permissions-Policy`
+- **CORS 安全**：wildcard origins 时自动禁用 `allow_credentials`，防止 token 泄露
+- **错误日志**：3 处裸 `except: pass` 改为 `except: logger.debug(...)`，避免静默吞掉异常
+- **SQL 审查**：确认所有 f-string SQL 中的变量均为内部硬编码或已白名单验证，无注入风险
+
 ## 既有能力（v1.2.0 及之前）
 
 - SQLite、FTS5、sqlite-vec 与 Block-first 存储。
