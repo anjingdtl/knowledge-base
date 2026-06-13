@@ -33,6 +33,7 @@ Version `1.3.1` completed a full repository health review on June 13, 2026:
 - Ruff clean across `src`, `tests`, `evals`, `tools`, and `scripts`
 - mypy clean across 157 source/tool files
 - React/Vite production build passed
+- GitHub Actions passed all five Linux gates: Test, Lint, Frontend Build, Retrieval Eval, and Docker Build
 - Retrieval gate passed with Recall@5 `0.8667`, MRR `0.7800`, nDCG@10 `0.7938`, No-Answer Accuracy `0.6667`, and Citation Location Completeness `1.0000`
 - The end-to-end local retrieval demo passed initial search, incremental update, and citation validation
 
