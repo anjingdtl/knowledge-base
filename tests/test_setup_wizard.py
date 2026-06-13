@@ -124,24 +124,25 @@ class TestFirstRun:
 # ---------------------------------------------------------------------------
 
 def _load_presets_via_ast() -> dict:
-    """通过 AST 解析 setup_wizard.py 中的 PROVIDER_PRESETS 字典"""
-    wizard_path = _SOURCE_DIR / "gui" / "setup_wizard.py"
-    source = wizard_path.read_text(encoding="utf-8")
-
-    start = source.index("PROVIDER_PRESETS = {")
-    depth = 0
-    i = source.index("{", start)
-    for j in range(i, len(source)):
-        if source[j] == "{":
-            depth += 1
-        elif source[j] == "}":
-            depth -= 1
-        if depth == 0:
-            end = j + 1
-            break
-
-    dict_str = source[i:end]
-    return ast.literal_eval(dict_str)
+    """通过 provider_presets 模块加载预设（重构后已迁移到 src.core.provider_presets）"""
+    from src.core.provider_presets import PROVIDER_PRESETS as core_presets
+    # 转换为 GUI 使用的 flat dict 格式以兼容旧测试断言
+    result = {}
+    for preset in core_presets.values():
+        d = {
+            "embedding_base_url": preset.embedding_base_url,
+            "embedding_model": preset.embedding_model,
+            "llm_base_url": preset.llm_base_url,
+            "llm_model": preset.llm_model,
+        }
+        if preset.reranker_base_url:
+            d["reranker_base_url"] = preset.reranker_base_url
+        if preset.reranker_model:
+            d["reranker_model"] = preset.reranker_model
+        if preset.api_key_placeholder:
+            d["api_key_placeholder"] = preset.api_key_placeholder
+        result[preset.display_name] = d
+    return result
 
 
 class TestProviderPresets:

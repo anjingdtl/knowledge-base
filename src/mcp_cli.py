@@ -38,7 +38,7 @@ def _patch_session_idle_timeout(timeout: float | None):
     _OrigManager.__init__ = _patched_init
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(
         prog="shinehe-mcp",
         description="ShineHeKnowledge MCP Server - 本地知识库 MCP 服务",
@@ -65,7 +65,7 @@ def main():
         default=None,
         help="配置文件路径（默认: 自动检测）",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.config:
         config_dir = os.path.dirname(os.path.abspath(args.config))

@@ -16,67 +16,41 @@ from PySide6.QtWidgets import (
     QProgressBar, QTextEdit, QMessageBox, QCheckBox,
 )
 
+from src.core.provider_presets import PROVIDER_PRESETS as _core_presets
 from src.utils.config import Config
 from src.version import APP_NAME, VERSION
 
 logger = logging.getLogger(__name__)
 
+
 # ---------------------------------------------------------------------------
-# 预设服务商模板
+# 预设服务商模板（从 src.core.provider_presets 转换，GUI 兼容格式）
 # ---------------------------------------------------------------------------
-PROVIDER_PRESETS = {
-    "SiliconFlow（硅基流动）": {
-        "embedding_base_url": "https://api.siliconflow.cn/v1",
-        "embedding_model": "BAAI/bge-m3",
-        "llm_base_url": "https://api.siliconflow.cn/v1",
-        "llm_model": "Qwen/Qwen3-8B",
-        "reranker_base_url": "https://api.siliconflow.cn/v1",
-        "reranker_model": "BAAI/bge-reranker-v2-m3",
-    },
-    "MiniMax": {
-        "embedding_base_url": "https://api.minimaxi.com/v1",
-        "embedding_model": "minimax-embedding",
-        "llm_base_url": "https://api.minimaxi.com/v1",
-        "llm_model": "MiniMax-M2.7",
-    },
-    "OpenAI": {
-        "embedding_base_url": "https://api.openai.com/v1",
-        "embedding_model": "text-embedding-3-small",
-        "llm_base_url": "https://api.openai.com/v1",
-        "llm_model": "gpt-4o-mini",
-    },
-    "DeepSeek": {
-        "embedding_base_url": "https://api.deepseek.com/v1",
-        "embedding_model": "",
-        "llm_base_url": "https://api.deepseek.com/v1",
-        "llm_model": "deepseek-chat",
-    },
-    "智谱 AI（GLM）": {
-        "embedding_base_url": "https://open.bigmodel.cn/api/paas/v4",
-        "embedding_model": "embedding-3",
-        "llm_base_url": "https://open.bigmodel.cn/api/paas/v4",
-        "llm_model": "glm-4-flash",
-    },
-    "Moonshot（Kimi）": {
-        "embedding_base_url": "https://api.moonshot.cn/v1",
-        "embedding_model": "",
-        "llm_base_url": "https://api.moonshot.cn/v1",
-        "llm_model": "moonshot-v1-8k",
-    },
-    "Ollama（本地模型）": {
-        "embedding_base_url": "http://localhost:11434/v1",
-        "embedding_model": "nomic-embed-text",
-        "llm_base_url": "http://localhost:11434/v1",
-        "llm_model": "qwen2.5",
-        "api_key_placeholder": "ollama",
-    },
-    "自定义": {
-        "embedding_base_url": "",
-        "embedding_model": "",
-        "llm_base_url": "",
-        "llm_model": "",
-    },
-}
+def _gui_presets() -> dict:
+    """将核心 ProviderPreset 转换为 GUI 使用的扁平字典格式
+
+    返回以显示名为键的字典，值包含 embedding/llm/reranker 配置，
+    保持与原有 GUI 代码完全兼容的格式。
+    """
+    result = {}
+    for p in _core_presets.values():
+        entry: dict = {
+            "embedding_base_url": p.embedding_base_url,
+            "embedding_model": p.embedding_model,
+            "llm_base_url": p.llm_base_url,
+            "llm_model": p.llm_model,
+        }
+        if p.reranker_base_url:
+            entry["reranker_base_url"] = p.reranker_base_url
+        if p.reranker_model:
+            entry["reranker_model"] = p.reranker_model
+        if p.api_key_placeholder is not None:
+            entry["api_key_placeholder"] = p.api_key_placeholder
+        result[p.display_name] = entry
+    return result
+
+
+PROVIDER_PRESETS = _gui_presets()
 
 
 # ---------------------------------------------------------------------------

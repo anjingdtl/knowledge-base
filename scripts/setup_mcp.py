@@ -1,117 +1,23 @@
-"""Configure ShineHeKnowledge MCP for common Agent clients."""
+"""Configure ShineHeKnowledge MCP for common Agent clients.
+
+核心逻辑已迁移至 src.services.project_setup，本文件保留为独立脚本入口。
+可通过 `python scripts/setup_mcp.py` 交互式运行。
+"""
 from __future__ import annotations
 
-import json
-import os
-import platform
-import shutil
 import sys
 from pathlib import Path
 
+# 确保项目根目录在 sys.path 中，以支持直接脚本运行
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SERVER_NAME = "shinehe-kb"
-
-
-def get_agent_config_paths() -> dict[str, Path]:
-    home = Path.home()
-    if platform.system() == "Windows":
-        appdata = Path(os.environ.get("APPDATA", home / "AppData" / "Roaming"))
-        return {
-            "claude-code": home / ".claude.json",
-            "cursor": home / ".cursor" / "mcp.json",
-            "cline": appdata
-            / "Code"
-            / "User"
-            / "globalStorage"
-            / "saoudrizwan.claude-dev"
-            / "settings"
-            / "cline_mcp_settings.json",
-            "windsurf": appdata / "WindSurf" / "mcp_settings.json",
-            "roo-code": appdata
-            / "Code"
-            / "User"
-            / "globalStorage"
-            / "rooveterinaryinc.roo-cline"
-            / "settings"
-            / "cline_mcp_settings.json",
-            "opencode": home / ".config" / "opencode" / "opencode.json",
-        }
-
-    support = home / "Library" / "Application Support"
-    return {
-        "claude-code": home / ".claude.json",
-        "cursor": home / ".cursor" / "mcp.json",
-        "cline": support
-        / "Code"
-        / "User"
-        / "globalStorage"
-        / "saoudrizwan.claude-dev"
-        / "settings"
-        / "cline_mcp_settings.json",
-        "windsurf": home / ".codeium" / "windsurf" / "mcp_config.json",
-        "roo-code": support
-        / "Code"
-        / "User"
-        / "globalStorage"
-        / "rooveterinaryinc.roo-cline"
-        / "settings"
-        / "cline_mcp_settings.json",
-        "opencode": home / ".config" / "opencode" / "opencode.json",
-    }
-
-
-def build_server_config() -> dict:
-    shinehe_cmd = shutil.which("shinehe-mcp")
-    if shinehe_cmd:
-        return {
-            "command": "shinehe-mcp",
-            "args": [],
-            "cwd": str(PROJECT_ROOT),
-            "env": {"SHINEHE_HOME": str(PROJECT_ROOT)},
-            "type": "stdio",
-        }
-
-    return {
-        "command": sys.executable,
-        "args": [str(PROJECT_ROOT / "run_mcp.py")],
-        "cwd": str(PROJECT_ROOT),
-        "env": {"SHINEHE_HOME": str(PROJECT_ROOT)},
-        "type": "stdio",
-    }
-
-
-def _read_json(path: Path) -> dict:
-    if not path.exists():
-        return {}
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def _write_json(path: Path, config: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(config, f, indent=2, ensure_ascii=False)
-        f.write("\n")
-
-
-def add_to_agent_config(agent_name: str, config_path: Path, server_config: dict) -> None:
-    config = _read_json(config_path)
-
-    if agent_name == "opencode":
-        config.setdefault("mcp", {})
-        config["mcp"][SERVER_NAME] = {
-            "type": "local",
-            "command": [server_config["command"], *server_config.get("args", [])],
-            "environment": server_config.get("env", {}),
-            "enabled": True,
-        }
-    else:
-        config.setdefault("mcpServers", {})
-        config["mcpServers"][SERVER_NAME] = server_config
-
-    _write_json(config_path, config)
-    print(f"[OK] {agent_name}: {config_path}")
+from src.services.project_setup import (
+    add_to_agent_config,
+    build_server_config,
+    get_agent_config_paths,
+)
 
 
 def main() -> None:
