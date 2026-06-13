@@ -7,6 +7,7 @@
 | `2026-06-04-structured-graph-rag/` | Logseq parity、Structured/Graph RAG、MCP-first、安全闭环 | 已完成并被后续方案吸收 |
 | `2026-06-12-full-platform-upgrade/` | 工程治理、架构、RAG、MCP、前端五阶段升级 | 已完成 |
 | `2026-06-13-gui-performance/` | GUI 卡顿和 Windows 控制台闪烁专项 | 已完成 |
+| `2026-06-13-repository-cleanup/` | 仓库文档、脚本、临时文件清理审计 | 已完成 |
 
 规则：
 

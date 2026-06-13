@@ -204,6 +204,15 @@ knowledge-base/
 - Continue
 - Other MCP-compatible clients
 
+## Documentation
+
+- [Documentation index](docs/README.md)
+- [Current optimization spec](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md)
+- [Module implementation plan](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
+- [MCP usage and contracts](docs/mcp/)
+- [Current project status](PROGRESS.md)
+- [Historical archive](docs/archive/README.md)
+
 ## Deployment
 
 ```bash

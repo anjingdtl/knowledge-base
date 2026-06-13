@@ -204,6 +204,15 @@ knowledge-base/
 - Continue
 - 其他 MCP 兼容客户端
 
+## 文档导航
+
+- [文档总索引](docs/README.md)
+- [当前优化改造 Spec](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md)
+- [分模块实施 Plan](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
+- [MCP 使用与工具契约](docs/mcp/)
+- [项目当前状态](PROGRESS.md)
+- [历史文档归档](docs/archive/README.md)
+
 ## 部署
 
 ```bash

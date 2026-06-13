@@ -7,10 +7,10 @@
 
 ## 权威文档
 
-- 当前优化规格：`docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md`
-- 当前实施计划：`docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md`
-- MCP 使用文档：`docs/mcp/`
-- 历史设计与已完成计划：`docs/archive/`
+- [当前优化规格](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md)
+- [当前实施计划](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
+- [MCP 使用文档](docs/mcp/)
+- [历史设计与已完成计划](docs/archive/README.md)
 
 除上述当前规格和计划外，归档目录中的文档只用于追溯，不代表当前待办。
 
