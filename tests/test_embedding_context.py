@@ -75,10 +75,13 @@ def test_embedding_text_uses_parent_chain_and_links_without_mutating_block_conte
 
 
 def test_read_can_include_blocks_and_embedding_preview():
-    Config.set("rag.embedding_context.enabled", True)
-    Config.set("rag.embedding_context.include_parent_chain", True)
-    Config.set("rag.embedding_context.include_links", False)
-    Config.set("rag.embedding_context.include_siblings", False)
+    from src.mcp_server import _get_container, read
+
+    config = _get_container().config
+    config.set("rag.embedding_context.enabled", True)
+    config.set("rag.embedding_context.include_parent_chain", True)
+    config.set("rag.embedding_context.include_links", False)
+    config.set("rag.embedding_context.include_siblings", False)
 
     page_id = insert_test_knowledge(
         title="Read preview page",
@@ -99,8 +102,6 @@ def test_read_can_include_blocks_and_embedding_preview():
         order_idx=0,
     )
 
-    from src.mcp_server import read
-
     result = read(
         item_id=page_id,
         include_blocks=True,
@@ -118,7 +119,9 @@ def test_read_can_include_blocks_and_embedding_preview():
 
 
 def test_reindex_dry_run_reports_embedding_context_counts_without_writing_vectors(monkeypatch):
-    Config.set("rag.embedding_context.enabled", True)
+    from src.mcp_server import _get_container, reindex_all
+
+    _get_container().config.set("rag.embedding_context.enabled", True)
 
     page_id = insert_test_knowledge(
         title="Dry run page",
@@ -127,8 +130,6 @@ def test_reindex_dry_run_reports_embedding_context_counts_without_writing_vector
     )
     insert_test_block(page_id, content="First existing block", block_id="dry-run-block-1")
     insert_test_block(page_id, content="Second existing block", block_id="dry-run-block-2")
-
-    from src.mcp_server import reindex_all
 
     def fail_if_embedding_runs(*args, **kwargs):
         raise AssertionError("dry_run must not generate embeddings")
