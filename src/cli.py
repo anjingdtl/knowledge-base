@@ -55,8 +55,24 @@ def _handle_index(args: argparse.Namespace) -> int:
     if args.force:
         print("  模式: 强制重建")
 
-    # TODO: 接入实际的索引服务
-    print("[TODO] 索引功能尚未完整实现，请使用 GUI 或 API 进行索引。")
+    from src.services.path_indexer import PathIndexService
+    indexer = PathIndexService()
+    result = indexer.index_path(
+        target,
+        recursive=args.recursive,
+        dry_run=args.dry_run,
+        force=args.force,
+    )
+
+    if result.mode == "async":
+        print(f"[ASYNC] 已提交异步任务 (job_id={result.job_id})，请稍后查看进度。")
+    else:
+        print(f"索引完成: +{result.created} ~{result.updated} -{result.deleted} (跳过 {result.skipped})")
+        if result.failed:
+            print(f"失败: {len(result.failed)} 个文件")
+            for f in result.failed:
+                print(f"  [ERROR] {f['path']}: {f['error']}")
+
     return 0
 
 
@@ -71,8 +87,54 @@ def _handle_watch(args: argparse.Namespace) -> int:
     if args.recursive:
         print("  模式: 递归")
 
-    # TODO: 接入实际的文件监听服务
-    print("[TODO] 文件监听功能尚未完整实现。")
+    from src.services.path_indexer import PathIndexService
+    from src.services.index_scheduler import IndexScheduler
+    from src.services.file_watcher import FileWatcher
+
+    indexer = PathIndexService()
+    scheduler = IndexScheduler(path_indexer=indexer, debounce_ms=500)
+
+    try:
+        watcher = FileWatcher(
+            scheduler=scheduler, root=target, recursive=args.recursive
+        )
+        watcher.start()
+        print("文件监听已启动，按 Ctrl+C 停止...")
+
+        import time
+        import signal
+
+        shutdown_requested = False
+
+        def _signal_handler(signum, frame):
+            nonlocal shutdown_requested
+            shutdown_requested = True
+
+        signal.signal(signal.SIGINT, _signal_handler)
+
+        while not shutdown_requested:
+            time.sleep(1)
+            # 每次循环 flush 待处理事件
+            result = scheduler.flush()
+            if result.created or result.updated or result.deleted:
+                print(
+                    f"  变更: +{result.created} ~{result.updated} -{result.deleted}"
+                )
+            if result.failed:
+                for f in result.failed:
+                    print(f"  [ERROR] {f['path']}: {f['error']}", file=sys.stderr)
+
+    except RuntimeError as e:
+        print(f"[ERROR] {e}", file=sys.stderr)
+        return 1
+    finally:
+        scheduler.shutdown()
+        try:
+            watcher.stop()
+        except Exception:
+            pass
+        print("\n文件监听已停止")
+
     return 0
 
 

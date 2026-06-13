@@ -484,6 +484,60 @@ def _estimate_file_complexity(file_path: str) -> dict:
     }
 
 
+# ---- M3: 路径扫描异步任务 ----
+
+
+def _path_scan_handler(job_id: str, params: dict) -> dict:
+    """路径扫描异步 handler — 逐文件索引"""
+    from src.services.async_task import AsyncTaskService
+    from src.services.async_worker import TaskRegistry
+
+    file_paths: list[str] = params.get("file_paths", [])
+    total = len(file_paths)
+
+    created = 0
+    updated = 0
+    failed_items: list[dict] = []
+
+    from src.repositories.indexed_file_repo import IndexedFileRepository
+    from src.services.path_indexer import PathIndexService
+
+    container = _get_container_for_handler()
+    repo = container.indexed_file_repo
+    indexer = container.path_indexer
+
+    for i, fp_str in enumerate(file_paths):
+        if TaskRegistry.is_cancelled(job_id):
+            AsyncTaskService.update_progress(
+                job_id,
+                int((i + 1) / total * 100),
+                f"已取消（处理到第 {i+1}/{total} 项）",
+            )
+            raise RuntimeError(f"Job {job_id} cancelled by user")
+
+        pct = int((i + 1) / total * 100)
+        AsyncTaskService.update_progress(job_id, pct, f"索引 {i+1}/{total}: {os.path.basename(fp_str)}")
+
+        from pathlib import Path
+        try:
+            result = indexer.index_path(Path(fp_str), recursive=False, force=True)
+            created += result.created
+            updated += result.updated
+            failed_items.extend(result.failed)
+        except Exception as e:
+            logger.warning("path_scan: failed to index %s: %s", fp_str, e)
+            failed_items.append({"path": fp_str, "error": str(e)})
+
+    AsyncTaskService.update_progress(job_id, 100, f"扫描完成: {created} 新建, {updated} 更新")
+
+    return {
+        "created": created,
+        "updated": updated,
+        "failed": failed_items,
+        "total": total,
+    }
+
+
 # 注册所有任务处理器
 def register_all_tasks():
     """注册所有任务处理器（在应用启动时调用）"""
@@ -493,6 +547,7 @@ def register_all_tasks():
     TaskRegistry.register("wiki_site_generate", _wiki_site_generate_handler)
     TaskRegistry.register("file_ingest", _file_ingest_handler)
     TaskRegistry.register("url_ingest", _url_ingest_handler)
+    TaskRegistry.register("path_scan", _path_scan_handler)
     logger.info("All async task handlers registered")
 
 

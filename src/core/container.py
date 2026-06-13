@@ -68,6 +68,9 @@ class AppContainer:
     # --- Phase 4 新增 ---
     agent_memory_repo: "AgentMemoryRepository" = field(default=None, repr=False)  # noqa: F821
 
+    # --- M3: 路径索引 ---
+    indexed_file_repo: "IndexedFileRepository" = field(default=None, repr=False)  # noqa: F821
+
     # --- AI 服务 ---
     embedding: "EmbeddingService" = field(default=None)  # noqa: F821
     llm: "LLMService" = field(default=None)  # noqa: F821
@@ -102,6 +105,9 @@ class AppContainer:
 
     # --- Phase 4 业务服务 (lazy init) ---
     _agent_memory: Optional[object] = field(default=None, repr=False)
+
+    # --- M3 业务服务 (lazy init) ---
+    _path_indexer: Optional[object] = field(default=None, repr=False)
 
     _initialized_services: list = field(default_factory=list, repr=False)
 
@@ -150,8 +156,8 @@ class AppContainer:
     @property
     def reranker(self):
         if self._reranker is None:
-            from src.services.reranker import LLMReranker
-            self._reranker = LLMReranker(self.llm, self.config)
+            from src.services.rerankers import create_reranker
+            self._reranker = create_reranker(config=self.config, llm=self.llm)
             self._track_service("_reranker")
         return self._reranker
 
@@ -297,6 +303,18 @@ class AppContainer:
             self._track_service("_agent_memory")
         return self._agent_memory
 
+    @property
+    def path_indexer(self):
+        if self._path_indexer is None:
+            from src.services.path_indexer import PathIndexService
+            self._path_indexer = PathIndexService(
+                db=self.db,
+                config=self.config,
+                indexed_file_repo=self.indexed_file_repo,
+            )
+            self._track_service("_path_indexer")
+        return self._path_indexer
+
 
 def create_container(config_path: str | None = None) -> AppContainer:
     """创建并初始化应用容器
@@ -385,6 +403,10 @@ def create_container(config_path: str | None = None) -> AppContainer:
     # Phase 4 仓库
     from src.repositories.agent_memory_repo import AgentMemoryRepository
     container.agent_memory_repo = AgentMemoryRepository(db=db)
+
+    # M3 仓库
+    from src.repositories.indexed_file_repo import IndexedFileRepository
+    container.indexed_file_repo = IndexedFileRepository(db=db)
 
     logger.info("Repositories initialized")
 
