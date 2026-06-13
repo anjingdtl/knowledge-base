@@ -29,18 +29,21 @@
 - 修复 Windows GBK 控制台下 Demo 状态符号崩溃，并将 Demo 测试隔离为确定性 fake 服务。
 - 将 `scripts/` 纳入 Ruff 健康门禁，清理构建、迁移、诊断、压力和数据救援脚本。
 - 修复检索评测中“引用完整性字段定义但从未计算”的死指标，建立真实非零 baseline。
+- 修复 Linux CI 的 GUI 系统依赖、跨平台类型边界、缺失运行时依赖和依赖本机配置的测试，升级 Actions 到 Node 24 运行时版本。
 
 ### 发布前验证
 
 | 门禁 | 结果 |
 |------|------|
 | Python 全量测试 | `828 passed, 2 skipped in 845.14s` |
+| GitHub Actions Test | Ubuntu / Python 3.12：`828 passed, 2 skipped in 145.12s` |
 | Ruff | `src tests evals tools scripts` 全绿 |
 | mypy | `157 source files`，无错误 |
 | Python compileall | `src scripts tests evals tools` 通过 |
 | Web 客户端 | TypeScript + Vite 生产构建通过 |
 | 检索评测 | CI 同款 fake-embedding 门禁通过 |
 | 本地检索 Demo | `initial_hit=true`、`incremental_update=true`、`citation_complete=true` |
+| 远端 CI | Test、Lint、Frontend Build、Retrieval Eval、Docker Build 五项全绿 |
 
 ### 当前检索基线
 
