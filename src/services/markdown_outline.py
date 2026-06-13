@@ -1,9 +1,9 @@
 """Markdown outliner parser for the file-first graph."""
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import re
 import uuid
+from dataclasses import dataclass, field
 
 
 @dataclass

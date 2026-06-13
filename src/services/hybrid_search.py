@@ -3,11 +3,11 @@ import hashlib
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
-from src.utils.config import Config
+from src.models.retrieval import normalize_fts_score, normalize_vector_score
+from src.services.block_context import enrich_result_with_context
 from src.services.block_store import BlockStore
 from src.services.db import Database
-from src.services.block_context import enrich_result_with_context
-from src.models.retrieval import normalize_vector_score, normalize_fts_score
+from src.utils.config import Config
 
 
 class HybridSearcher:

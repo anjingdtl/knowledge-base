@@ -7,8 +7,9 @@ These tests ensure that the retrieval evaluation datasets are well-formed:
 - No duplicate queries across datasets
 - Each block_contains string actually appears in the referenced fixture
 """
-import yaml
 from pathlib import Path
+
+import yaml
 
 EVALS_DIR = Path(__file__).parent.parent / "evals"
 FIXTURES_DIR = EVALS_DIR / "fixtures"

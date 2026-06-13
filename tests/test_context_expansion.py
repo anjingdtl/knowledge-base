@@ -8,9 +8,8 @@
 """
 from __future__ import annotations
 
-import pytest
-from src.services.parent_child_retrieval import ParentChildRetriever
 from src.services.db import Database
+from src.services.parent_child_retrieval import ParentChildRetriever
 from src.utils.config import Config
 
 

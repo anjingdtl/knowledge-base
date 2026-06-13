@@ -64,7 +64,7 @@ class WikiLint:
 
         page_ids_set = {p["id"] for p in pages}
         title_map = {p["id"]: p["title"] for p in pages}
-        page_by_id = {p["id"]: p for p in pages}
+        {p["id"]: p for p in pages}
 
         for page in pages:
             findings_for_page = []
@@ -132,7 +132,7 @@ class WikiLint:
 
         # 6. 内容死链 — content 中的 [[...]] 引用指向不存在的页面
         all_titles = {p["title"] for p in pages}
-        title_to_id = {p["title"]: p["id"] for p in pages}
+        {p["title"]: p["id"] for p in pages}
         for page in pages:
             content = page.get("content", "") or ""
             dead_refs = []

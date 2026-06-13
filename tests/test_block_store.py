@@ -1,5 +1,4 @@
 """BlockStore 单元测试 — Block 级向量存储"""
-import pytest
 from src.services.block_store import BlockStore
 from src.services.db import Database
 

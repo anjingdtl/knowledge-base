@@ -13,8 +13,7 @@
 编译为 SQL 查询，支持块级数据模型（blocks + properties + FTS + entity_refs）。
 """
 import logging
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
 

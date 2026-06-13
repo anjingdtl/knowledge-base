@@ -7,17 +7,16 @@ import logging
 from abc import ABC, abstractmethod
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from typing import Any, Optional, Callable
-import json
+from typing import Any
 
-from src.utils.config import Config
+from src.models.retrieval import build_match_channels
 from src.services.db import Database
 from src.services.hybrid_search import HybridSearcher
+from src.services.llm import LLMService
 from src.services.query_rewriter import QueryRewriter
 from src.services.reranker import LLMReranker
-from src.services.llm import LLMService
+from src.utils.config import Config
 from src.utils.llm_text import strip_think
-from src.models.retrieval import compute_final_score, build_match_channels
 
 logger = logging.getLogger(__name__)
 
@@ -212,8 +211,8 @@ class VectorSearchStage(PipelineStage):
                     if ctx.candidates:
                         return ctx
                 elif routing["mode"] == "graph" and routing.get("query_spec"):
-                    from src.services.query_executor import QueryExecutor
                     from src.services.graph_traversal import GraphTraversalService
+                    from src.services.query_executor import QueryExecutor
                     executor = QueryExecutor(db=db)
                     start_pages = executor.execute(routing["query_spec"])
                     start_ids = [p["id"] for p in start_pages]
@@ -329,10 +328,10 @@ class GenerateStage(PipelineStage):
         self._build_context(ctx)
 
         stream = config.get("stream", False)
-        temperature = config.get("temperature", 0.7)
-        max_tokens = config.get("max_tokens", 2048)
-        top_k = config.get("top_k", 5)
-        rerank_top_n = config.get("rerank_top_n", 5)
+        config.get("temperature", 0.7)
+        config.get("max_tokens", 2048)
+        config.get("top_k", 5)
+        config.get("rerank_top_n", 5)
         score_threshold = config.get("score_threshold", 0.5)
 
         # 筛选结果（同旧版逻辑）
@@ -844,7 +843,6 @@ class RAGService:
               phase_callback=None) -> dict:
         """同步查询（非流式）— 直接通过管线执行，无冗余预处理"""
         import asyncio
-        import concurrent.futures
 
         try:
             # 直接走管线，管线内部会依次执行全部阶段

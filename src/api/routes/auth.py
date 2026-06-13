@@ -1,7 +1,7 @@
-from fastapi import APIRouter, HTTPException, Header, Request
+from fastapi import APIRouter, Header, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from src.api.auth import authenticate, create_token, decode_token, register_user, get_users_db
+from src.api.auth import authenticate, decode_token, get_users_db, register_user
 from src.api.routes.rate_limiter import login_limiter
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])

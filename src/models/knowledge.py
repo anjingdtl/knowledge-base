@@ -1,8 +1,7 @@
 """知识条目数据模型"""
-from dataclasses import dataclass, field
-from datetime import datetime
 import json
 import uuid
+from dataclasses import dataclass, field
 
 from src.utils.time_utils import utcnow_iso
 

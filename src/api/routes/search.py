@@ -5,7 +5,6 @@ from src.api.deps import get_container
 from src.api.routes.auth import _check_auth
 from src.core.container import AppContainer
 
-
 query_router = APIRouter(prefix="/query", tags=["query"], dependencies=[Depends(_check_auth)])
 
 

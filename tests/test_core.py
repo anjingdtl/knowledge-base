@@ -1,13 +1,14 @@
 """核心模块测试 — DI 容器、事件总线、嵌入缓存、查询构建器、块模型、DSL"""
-import pytest
 import json
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from src.utils.config import Config
 from src.services.db import Database
+from src.utils.config import Config
 
 
 class TestDualMethodConfig:
@@ -27,6 +28,7 @@ class TestDualMethodConfig:
 
     def test_save_keeps_secret_when_keyring_write_fails(self, tmp_path, monkeypatch):
         import yaml
+
         import src.utils.config as config_mod
 
         class BrokenKeyring:
@@ -78,6 +80,7 @@ class TestDIContainer:
 
     def test_knowledge_repo_crud(self):
         import uuid
+
         from src.repositories.knowledge_repo import KnowledgeRepository
         repo = KnowledgeRepository(db=Database)
         uid = str(uuid.uuid4())
@@ -97,7 +100,7 @@ class TestDIContainer:
 
 class TestEventBus:
     def test_emit_and_subscribe(self):
-        from src.core.events import on, emit
+        from src.core.events import emit, on
         received = []
         on("knowledge.created", lambda sender, **kw: received.append(kw))
         emit("knowledge.created", item_id="abc")
@@ -138,7 +141,7 @@ class TestEmbeddingCache:
 
 class TestQueryBuilder:
     def test_has_tag_query(self):
-        from src.core.query_builder import query, has_tag
+        from src.core.query_builder import has_tag, query
         # 先插入数据
         Database.insert_knowledge({
             "id": "q1", "title": "Python 入门", "content": "Python 教程",
@@ -223,19 +226,19 @@ class TestBlockModel:
 
 class TestDSL:
     def test_parse_simple_tag(self):
-        from src.core.query_dsl import parse_dsl_query, TagNode
+        from src.core.query_dsl import TagNode, parse_dsl_query
         ast = parse_dsl_query("[[Python]]")
         assert isinstance(ast, TagNode)
         assert ast.tag == "Python"
 
     def test_parse_fulltext(self):
-        from src.core.query_dsl import parse_dsl_query, FullTextNode
+        from src.core.query_dsl import FullTextNode, parse_dsl_query
         ast = parse_dsl_query('"async patterns"')
         assert isinstance(ast, FullTextNode)
         assert ast.query == "async patterns"
 
     def test_parse_and(self):
-        from src.core.query_dsl import parse_dsl_query, AndNode, TagNode, FullTextNode
+        from src.core.query_dsl import AndNode, FullTextNode, TagNode, parse_dsl_query
         ast = parse_dsl_query('(and [[Python]] "tutorial")')
         assert isinstance(ast, AndNode)
         assert len(ast.children) == 2
@@ -243,14 +246,14 @@ class TestDSL:
         assert isinstance(ast.children[1], FullTextNode)
 
     def test_parse_property(self):
-        from src.core.query_dsl import parse_dsl_query, PropertyNode
+        from src.core.query_dsl import PropertyNode, parse_dsl_query
         ast = parse_dsl_query("(property priority high)")
         assert isinstance(ast, PropertyNode)
         assert ast.key == "priority"
         assert ast.value == "high"
 
     def test_parse_in_query_wrapper(self):
-        from src.core.query_dsl import parse_dsl_query, AndNode
+        from src.core.query_dsl import AndNode, parse_dsl_query
         ast = parse_dsl_query('{{query (and [[Python]] "async")}}')
         assert isinstance(ast, AndNode)
         assert len(ast.children) == 2

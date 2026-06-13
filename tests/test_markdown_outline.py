@@ -1,4 +1,4 @@
-from src.services.markdown_outline import MarkdownOutlineParser, PageDocument, OutlineBlock
+from src.services.markdown_outline import MarkdownOutlineParser, OutlineBlock, PageDocument
 
 
 def test_parse_nested_blocks_and_ids():

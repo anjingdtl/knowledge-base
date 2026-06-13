@@ -5,26 +5,53 @@ import math
 import random
 
 from PySide6.QtCore import (
-    Qt, QThread, Signal, QPropertyAnimation, QEasingCurve, QPoint, QRectF,
+    QEasingCurve,
+    QPoint,
+    QPropertyAnimation,
+    QRectF,
+    Qt,
+    QThread,
     QTimer,
+    Signal,
 )
 from PySide6.QtGui import (
-    QColor, QPen, QBrush, QFont, QPainterPath, QPainter, QWheelEvent,
-    QCursor, QTransform, QRadialGradient,
+    QBrush,
+    QColor,
+    QFont,
+    QPainter,
+    QPainterPath,
+    QPen,
+    QRadialGradient,
+    QTransform,
+    QWheelEvent,
 )
 from PySide6.QtWidgets import (
-    QWidget, QFrame, QVBoxLayout, QHBoxLayout, QListWidget, QListWidgetItem,
-    QPushButton, QLabel, QTextEdit, QSplitter, QStackedWidget,
-    QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsDropShadowEffect,
-    QGraphicsEllipseItem, QMenu, QInputDialog, QMessageBox, QProgressBar,
+    QFrame,
+    QGraphicsDropShadowEffect,
+    QGraphicsItem,
+    QGraphicsScene,
+    QGraphicsView,
+    QHBoxLayout,
+    QInputDialog,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QMenu,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QSplitter,
+    QStackedWidget,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
 
-from src.services.db import Database
-from src.services.graph_builder import GraphBuilder
+from src.gui.empty_state import EmptyState
 from src.gui.icons import set_named_icon
 from src.gui.theme import get_color
-from src.gui.empty_state import EmptyState
-
+from src.services.db import Database
+from src.services.graph_builder import GraphBuilder
 
 # ---- 关系类型颜色映射 ----
 
@@ -1569,7 +1596,7 @@ class GraphView(QWidget):
 
         self.detail_title.setText(knowledge.get("title", ""))
         file_type = knowledge.get("file_type", "txt")
-        source = knowledge.get("source_path", "") or knowledge.get("source_type", "manual")
+        knowledge.get("source_path", "") or knowledge.get("source_type", "manual")
         import_time = (
             knowledge.get("created_at", "")[:16].replace("T", " ")
             if knowledge.get("created_at") else "未知"

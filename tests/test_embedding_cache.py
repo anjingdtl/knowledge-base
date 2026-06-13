@@ -1,9 +1,10 @@
 """EmbeddingCache 集成测试 — 验证缓存接入 embedding 管线"""
-import pytest
 from unittest.mock import MagicMock, patch
-from src.services.embedding import EmbeddingService
+
+import pytest
+
 from src.core.embedding_cache import EmbeddingCache
-from src.services.db import Database
+from src.services.embedding import EmbeddingService
 
 
 class TestEmbeddingCacheIntegration:

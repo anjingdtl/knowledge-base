@@ -11,9 +11,8 @@
 """
 from __future__ import annotations
 
-import json
-import os
 import asyncio
+import json
 from pathlib import Path
 
 import pytest
@@ -22,7 +21,6 @@ import src.mcp_server as mcp_mod
 from src.mcp_server import (
     create,
     delete,
-    ingest_file,
     kb_capabilities,
     list_knowledge,
     query_operation_logs,
@@ -31,11 +29,12 @@ from src.mcp_server import (
     search,
     search_fulltext,
     structured_query,
-    tags as get_tags,
     update,
 )
+from src.mcp_server import (
+    tags as get_tags,
+)
 from src.services.db import Database
-
 
 SNAPSHOT_PATH = Path(__file__).parent / "snapshots" / "mcp_tools.json"
 

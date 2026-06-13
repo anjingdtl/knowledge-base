@@ -9,9 +9,9 @@
 """
 from __future__ import annotations
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
+import pytest
 
 # ---- 1. reranker 分数不应被缺失 score 字段破坏 ----
 
@@ -275,9 +275,10 @@ class TestRetrievalCandidateModel:
     def test_retrieval_candidate_model_exists(self):
         """src.models.retrieval 应定义 RetrievalCandidate。"""
         try:
-            from src.models.retrieval import RetrievalCandidate
             # 验证必须字段
             import typing
+
+            from src.models.retrieval import RetrievalCandidate
             hints = typing.get_type_hints(RetrievalCandidate)
             required_fields = {
                 "block_id", "knowledge_id", "text", "metadata",

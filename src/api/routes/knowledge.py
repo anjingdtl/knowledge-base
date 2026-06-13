@@ -7,9 +7,6 @@ from pydantic import BaseModel, Field
 from src.api.deps import get_container
 from src.api.routes.auth import _check_auth
 from src.core.container import AppContainer
-from src.models.knowledge import KnowledgeItem
-from src.services.indexer import index_knowledge_item, reindex_knowledge_item
-from src.services.vectorstore import VectorStore
 
 
 def _content_preview(text, max_len=200):

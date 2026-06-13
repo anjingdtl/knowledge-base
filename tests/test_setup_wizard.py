@@ -3,10 +3,8 @@
 注意：GUI 相关测试需要 PySide6 环境（仅限桌面环境运行）。
 本文件中 Provider 预设测试通过 AST 解析源文件，不触发 PySide6 导入。
 """
-import ast
-import pytest
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 _SOURCE_DIR = Path(__file__).resolve().parent.parent / "src"
 
@@ -75,7 +73,7 @@ class TestFirstRun:
             "src.utils.first_run.get_data_dir",
             lambda: tmp_path,
         )
-        from src.utils.first_run import mark_completed, is_first_run
+        from src.utils.first_run import is_first_run, mark_completed
 
         mock_config = MagicMock()
         mock_config.get.return_value = ""

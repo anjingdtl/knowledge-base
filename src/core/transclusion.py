@@ -7,9 +7,8 @@
     resolved = resolve_transclusions(text)
     # → "参见 [嵌入的块内容] 和 [嵌入的Wiki页面内容]"
 """
-import json
-import re
 import logging
+import re
 from typing import Optional
 
 logger = logging.getLogger(__name__)

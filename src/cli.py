@@ -87,9 +87,9 @@ def _handle_watch(args: argparse.Namespace) -> int:
     if args.recursive:
         print("  模式: 递归")
 
-    from src.services.path_indexer import PathIndexService
-    from src.services.index_scheduler import IndexScheduler
     from src.services.file_watcher import FileWatcher
+    from src.services.index_scheduler import IndexScheduler
+    from src.services.path_indexer import PathIndexService
 
     indexer = PathIndexService()
     scheduler = IndexScheduler(path_indexer=indexer, debounce_ms=500)
@@ -101,8 +101,8 @@ def _handle_watch(args: argparse.Namespace) -> int:
         watcher.start()
         print("文件监听已启动，按 Ctrl+C 停止...")
 
-        import time
         import signal
+        import time
 
         shutdown_requested = False
 

@@ -293,7 +293,7 @@ def test_query_executor_include_blocks():
 
 
 def test_query_builder_or_and_not_clauses():
-    from src.core.query_builder import HasTag, Or, Not, query
+    from src.core.query_builder import HasTag, Not, Or, query
 
     _insert_page("qb1", "QB Bug Frontend", tags=["bug", "frontend"])
     _insert_page("qb2", "QB Bug Backend", tags=["bug", "backend"])
@@ -311,7 +311,7 @@ def test_query_builder_or_and_not_clauses():
 
 
 def test_query_builder_to_query_spec():
-    from src.core.query_builder import HasTag, HasProperty, Or, Not, FullText, to_query_spec
+    from src.core.query_builder import FullText, HasProperty, HasTag, Not, Or, to_query_spec
 
     spec = to_query_spec(
         HasTag("bug"),
@@ -511,6 +511,7 @@ def test_agentic_router_handles_graph_query():
 
 def test_agentic_router_with_mock_llm():
     from unittest.mock import MagicMock
+
     from src.services.agentic_router import AgenticRouter
 
     mock_llm = MagicMock()
@@ -539,8 +540,9 @@ def test_query_router_accepts_dsl_json():
 
 
 def test_rag_pipeline_uses_agentic_router():
-    from unittest.mock import MagicMock, patch
-    from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
+    from unittest.mock import MagicMock
+
+    from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
 
     mock_llm = MagicMock()
     mock_llm.chat.return_value = '{"mode": "hybrid", "query": "test question"}'
@@ -563,6 +565,7 @@ def test_search_service_accepts_query_spec():
 
 def test_mcp_structured_query_tool_exists():
     import asyncio
+
     from src.mcp_server import mcp
     tool_names = [t.name for t in asyncio.run(mcp.list_tools())]
     assert "structured_query" in tool_names
@@ -572,7 +575,8 @@ def test_mcp_structured_query_tool_exists():
 
 def test_end_to_end_structured_query_through_rag():
     from unittest.mock import MagicMock
-    from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
+
+    from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
 
     _insert_page("e2e1", "E2E Bug Report", tags=["bug", "e2e-test"])
     _insert_block("e2eb1", "e2e1", "Login fails on Chrome", properties={"status": "open"})

@@ -1,17 +1,28 @@
 """回收站管理界面"""
-from pathlib import Path
 
-from PySide6.QtWidgets import (
-    QWidget, QFrame, QVBoxLayout, QHBoxLayout, QLabel,
-    QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView,
-    QPushButton, QMenu, QStackedWidget, QMessageBox,
-    QTextEdit, QDialog, QDialogButtonBox,
-)
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QDialog,
+    QDialogButtonBox,
+    QFrame,
+    QHBoxLayout,
+    QHeaderView,
+    QLabel,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QStackedWidget,
+    QTableWidget,
+    QTableWidgetItem,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
-from src.gui.icons import NAV, icon as make_icon, set_named_icon
 from src.gui.empty_state import EmptyState
-
+from src.gui.icons import NAV, set_named_icon
+from src.gui.icons import icon as make_icon
 
 # 表格列定义
 COL_SELECT = 0
@@ -22,8 +33,8 @@ TABLE_HEADERS = ["选择", "标题", "大小", "删除时间"]
 
 
 def _file_graph_service():
-    from src.services.db import Database
     from src.services.block_store import BlockStore
+    from src.services.db import Database
     from src.services.file_graph import FileGraphService
     from src.utils.config import Config
     return FileGraphService(Config, Database, BlockStore(db=Database), embedding=None)
@@ -279,7 +290,7 @@ class TrashView(QWidget):
                 failed.append(f"{fn}: {exc}")
         self.refresh()
         if failed:
-            QMessageBox.warning(self, "恢复完成", f"部分文件恢复失败：\n" + "\n".join(failed[:10]))
+            QMessageBox.warning(self, "恢复完成", "部分文件恢复失败：\n" + "\n".join(failed[:10]))
         else:
             QMessageBox.information(self, "恢复完成", f"已恢复 {len(filenames)} 个文件。")
 

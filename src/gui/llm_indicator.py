@@ -1,7 +1,7 @@
 """LLM 状态指示器，与 MCP 状态统一风格。"""
+from PySide6.QtCore import QPointF, Qt, QTimer
+from PySide6.QtGui import QBrush, QColor, QPainter, QRadialGradient
 from PySide6.QtWidgets import QLabel
-from PySide6.QtCore import Qt, QTimer, QPointF
-from PySide6.QtGui import QColor, QRadialGradient, QBrush, QPainter, QPolygonF
 
 from src.gui.theme import is_dark
 

@@ -3,7 +3,6 @@ import socket
 import time
 from pathlib import Path
 
-
 _path: Path | None = None
 
 

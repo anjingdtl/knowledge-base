@@ -1,7 +1,5 @@
 import json
 
-import pytest
-
 from src.models.knowledge import KnowledgeItem
 from src.models.parsed_content import StructuredBlock
 from src.services.db import Database
@@ -295,9 +293,9 @@ def test_query_router_unknown_link_title_does_not_broaden_property_results():
 
 
 def test_rag_query_stream_routes_logic_queries_and_returns_source_graph(monkeypatch):
+    import src.services.rag_pipeline as rag_mod
     from src.models.block import EntityRef
     from src.repositories.entity_ref_repo import EntityRefRepository
-    import src.services.rag_pipeline as rag_mod
     from src.services.rag_pipeline import RAGService
 
     project = _insert_item("Project Alpha", "Project summary")

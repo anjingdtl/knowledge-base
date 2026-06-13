@@ -1,8 +1,7 @@
 """分词和 FTS 查询清洗测试"""
 from src.utils.chinese_tokenizer import (
-    tokenize_chinese,
-    tokenize_chinese_full,
     sanitize_fts_query,
+    tokenize_chinese_full,
 )
 
 

@@ -1,12 +1,16 @@
 """测试 RAG 评测指标计算"""
 import pytest
-from evals.metrics import (
-    SingleResult, EvalMetrics,
-    compute_recall_at_k, compute_mrr, compute_citation_accuracy,
-    compute_faithfulness, compute_no_answer_accuracy,
-    compute_latency_stats, aggregate_metrics,
-)
 
+from evals.metrics import (
+    SingleResult,
+    aggregate_metrics,
+    compute_citation_accuracy,
+    compute_faithfulness,
+    compute_latency_stats,
+    compute_mrr,
+    compute_no_answer_accuracy,
+    compute_recall_at_k,
+)
 
 # ---- 测试数据 ----
 

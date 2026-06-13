@@ -18,10 +18,9 @@
     ast = parse_dsl_query('(and [[Python]] (property priority high) "async")')
     results = execute_dsl(ast)
 """
-import re
 import logging
+import re
 from dataclasses import dataclass
-from typing import Union
 
 logger = logging.getLogger(__name__)
 
@@ -269,8 +268,7 @@ def parse_dsl_query(query_text: str):
 def execute_dsl(ast, db=None):
     """执行 DSL AST，返回查询结果"""
     from src.core.query_builder import (
-        query, has_tag, property as prop, fulltext,
-        has_ref_to, file_type,
+        query,
     )
 
     if ast is None:
@@ -310,6 +308,8 @@ def _ast_to_clauses(node) -> list:
         fulltext,
         has_ref_to,
         has_tag,
+    )
+    from src.core.query_builder import (
         property as prop,
     )
 

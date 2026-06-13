@@ -8,11 +8,12 @@
 5. 迁移工具 (Mock)
 6. 服务层集成 (UnifiedGraphService / GraphTraversalService)
 """
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
+import pytest
+
+from src.services.db import Database
 from src.services.graph_backend.base import (
-    GraphBackend,
     GraphEdge,
     GraphNode,
     SubgraphResult,
@@ -20,11 +21,9 @@ from src.services.graph_backend.base import (
     make_node_id,
     parse_node_id,
 )
-from src.services.graph_backend.sqlite_backend import SQLiteGraphBackend
 from src.services.graph_backend.factory import create_graph_backend
+from src.services.graph_backend.sqlite_backend import SQLiteGraphBackend
 from src.services.graph_backend.sync_hooks import GraphSyncHook
-from src.services.db import Database
-
 
 # ---------------------------------------------------------------------------
 # ID 工具函数

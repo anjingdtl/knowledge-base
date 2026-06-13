@@ -1,6 +1,6 @@
 """SearchService 单元测试 — 验证完整搜索管线"""
-import pytest
 from unittest.mock import Mock, patch
+
 from src.services.search_service import SearchService
 
 

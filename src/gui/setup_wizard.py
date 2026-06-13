@@ -9,11 +9,20 @@
 import logging
 
 from PySide6.QtCore import Qt, QThread, Signal
-from PySide6.QtGui import QFont, QPixmap, QIcon
 from PySide6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QLineEdit, QComboBox, QWidget, QStackedWidget,
-    QProgressBar, QTextEdit, QMessageBox, QCheckBox,
+    QCheckBox,
+    QComboBox,
+    QDialog,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QStackedWidget,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
 
 from src.core.provider_presets import PROVIDER_PRESETS as _core_presets
@@ -79,7 +88,6 @@ class _ConnectivityWorker(QThread):
                 input=["ShineHeKnowledge 连通性测试"],
             )
             if resp.data and len(resp.data) > 0:
-                latency = resp.usage.total_tokens if resp.usage else 0
                 self.finished.emit(True, f"连接成功！模型返回 {len(resp.data)} 个向量")
             else:
                 self.finished.emit(False, "API 返回数据为空")

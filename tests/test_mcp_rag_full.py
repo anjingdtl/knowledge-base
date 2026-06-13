@@ -15,11 +15,8 @@ from __future__ import annotations
 import json
 from unittest.mock import MagicMock
 
-import pytest
-
 from src.services.db import Database
-from tests.test_full_pipeline_e2e import _make_block, _make_page
-
+from tests.test_full_pipeline_e2e import _make_page
 
 # ---------------------------------------------------------------------------
 # helpers
@@ -44,7 +41,7 @@ def _insert_block_with_id(block_id, page_id, content, properties=None,
 
 def _build_rag_with_mock_llm(llm_chat_returns: list[str]):
     """构造一个用 mock LLM 替换的 RAG pipeline，返回 mock LLM 方便调整。"""
-    from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
+    from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
     mock_llm = MagicMock()
     mock_llm.chat.side_effect = list(llm_chat_returns)
     pipeline = RagPipeline(pipeline_config=DEFAULT_PIPELINE_CONFIG, llm=mock_llm)
@@ -99,7 +96,7 @@ class TestMCPAskStructuredPayload:
     """ask 工具 envelope.data 必含 7 字段；sources[i].block_id 必填。"""
 
     def test_ask_returns_envelope_with_seven_fields(self, monkeypatch):
-        from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
+        from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
 
         # mock LLM：第一次返回 hybrid 路由，第二次生成回答
         mock_llm = MagicMock()
@@ -125,11 +122,11 @@ class TestMCPAskStructuredPayload:
     def test_ask_envelope_meta_includes_routing_stats(self):
         """ask 工具 envelope.meta 暴露 source_count / route_mode / graph_truncated。"""
         # 不依赖真实 LLM，直接 import ask 函数验证 meta 字段路径
-        from src.mcp_server import ask
-        import src.mcp_server as mcp_mod
-        from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG
-        from src.services.rag_pipeline import RagPipeline
         import asyncio
+
+        import src.mcp_server as mcp_mod
+        from src.mcp_server import ask
+        from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
 
         mock_llm = MagicMock()
         mock_llm.chat.side_effect = [
@@ -164,8 +161,9 @@ class TestMCPAskStructuredPayload:
 
     def test_ask_source_has_block_id_field(self):
         """当有检索结果时，sources[i].block_id 必填。"""
-        from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
         import asyncio
+
+        from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
 
         _make_page("p-rag-1", "RAG 测试页", tags=["rag-test"])
         _insert_block_with_id("block-rag-1", "p-rag-1", "Block-first RAG 测试内容",
@@ -190,8 +188,9 @@ class TestMCPAskStructuredPayload:
 
     def test_ask_source_graph_has_truncated_flag(self):
         """source_graph 必含 truncated / node_count 字段。"""
-        from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
         import asyncio
+
+        from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
 
         _make_page("p-graph-1", "图谱测试页", tags=["graph-test"])
         mock_llm = MagicMock()
@@ -212,8 +211,9 @@ class TestMCPAskStructuredPayload:
 
     def test_ask_route_has_mode_and_explanation(self):
         """route 字段含 mode + explanation。"""
-        from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
         import asyncio
+
+        from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
 
         _make_page("p-route-1", "路由测试页", tags=["route-test"])
         mock_llm = MagicMock()
@@ -258,8 +258,9 @@ class TestMCPRouteQuery:
         assert result["data"]["mode"] == "hybrid"
 
     def test_route_query_query_spec_is_json_safe(self):
-        from src.mcp_server import route_query
         import json as _json
+
+        from src.mcp_server import route_query
 
         result = route_query(question="找出所有标记为 bug 的问题")
         assert result["ok"] is True

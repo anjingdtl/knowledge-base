@@ -162,7 +162,7 @@ def _render_simple_page(page: dict, site_config: dict) -> str:
 def _render_simple_landing(data: dict) -> str:
     """简单渲染首页"""
     site_title = _html.escape(data.get("site_title", "Wiki"))
-    site_description = _html.escape(data.get("site_description", ""))
+    _html.escape(data.get("site_description", ""))
     stats = data.get("stats", {})
     recent = data.get("recent_pages", [])
 

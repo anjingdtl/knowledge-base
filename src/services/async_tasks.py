@@ -32,7 +32,6 @@ def _reindex_all_handler(job_id: str, params: dict) -> dict:
 def _wiki_compile_handler(job_id: str, params: dict) -> dict:
     """Wiki 编译任务"""
     from src.services.async_task import AsyncTaskService
-    from src.services.db import Database
 
     knowledge_ids = params.get("knowledge_ids", [])
     AsyncTaskService.update_progress(job_id, 0, f"Compiling {len(knowledge_ids)} items")
@@ -143,7 +142,7 @@ def _file_ingest_handler(job_id: str, params: dict) -> dict:
         pass
 
     # 获取容器服务
-    from src.core.container import create_container, AppContainer
+    from src.core.container import AppContainer
     container: AppContainer = _get_container_for_handler()
     db = container.db
 
@@ -499,11 +498,8 @@ def _path_scan_handler(job_id: str, params: dict) -> dict:
     updated = 0
     failed_items: list[dict] = []
 
-    from src.repositories.indexed_file_repo import IndexedFileRepository
-    from src.services.path_indexer import PathIndexService
 
     container = _get_container_for_handler()
-    repo = container.indexed_file_repo
     indexer = container.path_indexer
 
     for i, fp_str in enumerate(file_paths):

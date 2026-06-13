@@ -1,13 +1,14 @@
 """应用初始化"""
-import sys
 import logging
+import sys
 from pathlib import Path
-from PySide6.QtWidgets import QApplication, QMessageBox
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import QApplication, QMessageBox
 
-from src.version import APP_NAME, VERSION
 from src.utils.config import Config
+from src.version import APP_NAME
 
 logger = logging.getLogger(__name__)
 
@@ -74,9 +75,9 @@ def _import_sample_data():
             logger.debug("示例知识包目录不存在，跳过")
             return
 
-        from datetime import datetime
         import json
         import uuid
+        from datetime import datetime
 
         from src.services.db import Database
         from src.services.file_parser import parse_file
@@ -129,7 +130,7 @@ class KnowledgeBaseApp:
             # 向导可能修改了配置，重新加载
             Config.load()
 
-        from src.gui.main_window import MainWindow, DatabaseInitError
+        from src.gui.main_window import DatabaseInitError, MainWindow
         try:
             self.window = MainWindow()
         except DatabaseInitError as exc:

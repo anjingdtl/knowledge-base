@@ -1,8 +1,8 @@
 """file_watcher 单元测试（mock watchdog）"""
 import os
+from unittest.mock import MagicMock, patch
+
 import pytest
-from pathlib import Path
-from unittest.mock import MagicMock, patch, PropertyMock
 
 from src.services.file_watcher import FileWatcher, _normalize
 from src.services.index_scheduler import IndexScheduler

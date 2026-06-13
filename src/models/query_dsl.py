@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-
 VALID_OPS = {"eq", "ne", "gt", "gte", "lt", "lte", "in", "contains", "like"}
 VALID_SORT_FIELDS = {"updated_at", "created_at", "title", "version", "file_type"}
 VALID_SORT_ORDERS = {"asc", "desc"}

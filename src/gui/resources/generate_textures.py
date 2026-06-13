@@ -7,7 +7,7 @@ import math
 import random
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw
 
 OUT_DIR = Path(__file__).resolve().parent / "textures"
 OUT_DIR.mkdir(exist_ok=True)

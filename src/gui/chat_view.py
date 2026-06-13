@@ -1,22 +1,34 @@
 """RAG 问答对话界面"""
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QTextEdit,
-    QPushButton, QListWidget, QListWidgetItem, QLabel,
-    QSplitter, QMenu, QMessageBox, QStackedWidget, QFrame,
-)
-from PySide6.QtCore import Qt, QThread, Signal
-from PySide6.QtGui import QTextCursor
 import html
 import json
 
-from src.services.db import Database
-from src.services.rag import RAGService
-from src.services.llm import _notify_status
-from src.models.chat import Conversation, ChatMessage
-from src.gui.icons import NAV, icon as make_icon, set_named_icon
-from src.gui.theme import get_color
-from src.utils.config import Config
+from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtGui import QTextCursor
+from PySide6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QSplitter,
+    QStackedWidget,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
+
 from src.gui.empty_state import EmptyState
+from src.gui.icons import NAV, set_named_icon
+from src.gui.icons import icon as make_icon
+from src.gui.theme import get_color
+from src.models.chat import ChatMessage, Conversation
+from src.services.db import Database
+from src.services.llm import _notify_status
+from src.services.rag import RAGService
+from src.utils.config import Config
 
 
 def _font_sm() -> int:
@@ -461,7 +473,6 @@ class ChatView(QWidget):
         if event.key() == Qt.Key_Return and not event.modifiers() & Qt.ShiftModifier:
             self._send_message()
         else:
-            from PySide6.QtGui import QKeyEvent
             QTextEdit.keyPressEvent(self.chat_input, event)
 
     def _send_message(self):
@@ -650,7 +661,7 @@ class ChatView(QWidget):
             answer = last_ai["content"] if last_ai else ""
             page_id = compiler.save_answer(self._last_ai_question, answer, source_ids)
             if page_id:
-                QMessageBox.information(self, "成功", f"已保存为 Wiki 页面")
+                QMessageBox.information(self, "成功", "已保存为 Wiki 页面")
                 self.btn_save_wiki.setEnabled(False)
             else:
                 QMessageBox.warning(self, "提示", "回答内容过短，未保存")

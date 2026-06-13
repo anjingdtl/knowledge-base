@@ -1,7 +1,8 @@
 """查询重写模块 — 利用 LLM 生成多个改写查询以提升召回率"""
 import re
-from src.utils.config import Config
+
 from src.services.llm import LLMService
+from src.utils.config import Config
 from src.utils.llm_text import strip_think
 
 

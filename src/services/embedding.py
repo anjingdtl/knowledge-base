@@ -80,6 +80,7 @@ class EmbeddingService:
         """
         import logging
         from concurrent.futures import ThreadPoolExecutor, as_completed
+
         from openai import APIError
 
         if not texts:
@@ -138,6 +139,7 @@ class EmbeddingService:
     def embed_batch_with_cache(self, texts: list[str], batch_size: int = 20) -> list[list[float]]:
         """批量生成 embedding，带 SQLite 缓存"""
         import hashlib
+
         from src.core.embedding_cache import EmbeddingCache
 
         cache = EmbeddingCache()

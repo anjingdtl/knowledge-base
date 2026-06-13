@@ -1,8 +1,8 @@
 """SQLite 数据库操作 — 含版本控制与全文索引"""
+import json
 import logging
 import sqlite3
 import threading
-import json
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -1259,7 +1259,7 @@ class Database(metaclass=_DatabaseMeta):
 
     def search_blocks_fts(self, query: str, limit: int = 10) -> list[dict]:
         """Block 级 FTS 搜索"""
-        from src.utils.chinese_tokenizer import tokenize_chinese_full, sanitize_fts_query
+        from src.utils.chinese_tokenizer import sanitize_fts_query, tokenize_chinese_full
         sanitized = tokenize_chinese_full(query)
         if not sanitized.strip():
             return []
@@ -1427,7 +1427,7 @@ class Database(metaclass=_DatabaseMeta):
 
     def search_chunks_fts(self, query: str, limit: int = 20) -> list[dict]:
         """使用 jieba 全模式分词后的 chunk 级 FTS 搜索"""
-        from src.utils.chinese_tokenizer import tokenize_chinese_full, sanitize_fts_query
+        from src.utils.chinese_tokenizer import sanitize_fts_query, tokenize_chinese_full
         tokenized_query = tokenize_chinese_full(query)
         if not tokenized_query.strip():
             return []

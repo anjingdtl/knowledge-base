@@ -4,7 +4,7 @@ import threading
 from datetime import datetime
 from typing import Optional
 
-from src.models.block import Block, BlockRef, BlockProperty
+from src.models.block import Block, BlockProperty, BlockRef
 
 
 class BlockRepository:

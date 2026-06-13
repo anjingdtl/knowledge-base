@@ -1,12 +1,25 @@
 """设置对话框"""
-from PySide6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QFormLayout,
-    QLineEdit, QSpinBox, QPushButton, QMessageBox,
-    QTabWidget, QWidget, QLabel, QCheckBox, QComboBox,
-    QGroupBox, QGridLayout, QProgressBar,
-)
-from PySide6.QtCore import Qt, QTimer, QThread, Signal
+from PySide6.QtCore import QThread, QTimer, Signal
 from PySide6.QtGui import QFont
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QDialog,
+    QFormLayout,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QSpinBox,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
+
 from src.gui.icons import set_named_icon
 from src.utils.config import Config
 
@@ -484,6 +497,7 @@ class SettingsDialog(QDialog):
 
         # 立即应用主题
         from PySide6.QtWidgets import QApplication
+
         from src.gui.theme import apply
         apply(QApplication.instance())
 
@@ -495,8 +509,9 @@ class SettingsDialog(QDialog):
     def _refresh_svc_status(self):
         """刷新服务状态显示"""
         from src.services.mcp_launcher import (
-            is_service_installed, get_service_status,
-            get_service_failure_config, is_running,
+            get_service_failure_config,
+            get_service_status,
+            is_service_installed,
         )
         installed = is_service_installed()
         if installed:
@@ -754,10 +769,10 @@ class _MigrationWorker(QThread):
 
     def run(self):
         try:
-            from src.utils.config import Config
             from src.services.db import Database
             from src.services.graph_backend.factory import create_graph_backend
             from src.services.graph_backend.migration import GraphMigration
+            from src.utils.config import Config
 
             config = self._config or Config
             backend = create_graph_backend(config, Database)

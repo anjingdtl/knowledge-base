@@ -10,19 +10,16 @@
 """
 from __future__ import annotations
 
-import json
 import os
 import tempfile
-from unittest.mock import MagicMock, patch
 
 import pytest
 
-from src.services.async_task import AsyncTaskService, AsyncJob
+from src.services.async_task import AsyncTaskService
 from src.services.async_worker import TaskRegistry
 from src.services.db import Database
 from src.utils.envelope import ErrorCode
 from tests.conftest import insert_test_knowledge
-
 
 # ---------------------------------------------------------------------------
 # helpers
@@ -353,7 +350,6 @@ class TestIngestFileAutoRouting:
 
     def test_dry_run_no_db_write(self, setup_db, mcp_env):
         """dry_run 不创建知识条目也不创建 job。"""
-        from src.services.async_task import AsyncTaskService
         txt_file = _create_test_file(".txt", content="dry run no write")
         try:
             count_before = Database.count_knowledge()
