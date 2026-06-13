@@ -1,26 +1,15 @@
----
-AIGC:
-  ContentProducer: '001191110102MAD55U9H0F10002'
-  ContentPropagator: '001191110102MAD55U9H0F10002'
-  Label: '1'
-  ProduceID: '326076e1-9135-4ee2-a42b-717e45b37cee'
-  PropagateID: '326076e1-9135-4ee2-a42b-717e45b37cee'
-  ReservedCode1: 'd378b48f-d73f-4e6f-9832-9bc9ef613052'
-  ReservedCode2: 'd378b48f-d73f-4e6f-9832-9bc9ef613052'
----
-
 <div align="center">
 
 # ShineHe Knowledge
 
-**Local-First AI Knowledge Base — RAG Q&A + MCP Toolchain + Knowledge Graph**
+**Local-First MCP Knowledge Retrieval Engine for AI Assistants**
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-51%20tools-orange.svg)](src/mcp_server.py)
+[![MCP](https://img.shields.io/badge/MCP-10%20core%20tools-orange.svg)](src/mcp/tool_profiles.py)
 
 </div>
 
@@ -28,48 +17,82 @@ AIGC:
 
 ## What Is It
 
-ShineHe Knowledge is a **locally-running, privacy-first** knowledge base system:
+ShineHe Knowledge is a **local-first, privacy-focused MCP knowledge retrieval engine** that turns your documents into a high-precision search service for AI assistants like Claude, Cursor, and Cline.
 
-- Feed your documents in, ask questions in natural language, AI retrieves + generates answers
-- Native MCP Server with 51 original tools and 51 namespaced aliases, directly callable from Claude / Cursor / Cline and other AI tools
-- Built-in knowledge graph (SQLite + Neo4j dual backend), Wiki workflow, hybrid search engine
-- Plugin architecture with hook-based extensibility and swappable graph database backends
+- **Index your local documents** (PDF, DOCX, Markdown, Excel, code, etc.) into a SQLite-based vector + keyword search engine
+- **Expose 10 core MCP tools** for AI agents to search, ask questions, and retrieve cited answers
+- **Return structured citations** with document path, block ID, score breakdown, and match reasons
+- **Incremental directory watching** automatically re-indexes changed files
+- **All data stays local** (SQLite + sqlite-vec + FTS5). No cloud storage dependency.
 
-All data stays local (SQLite + sqlite-vec). No cloud storage dependency.
+## 30-Second Demo
 
-## Key Features
+```bash
+# 1. Install
+pip install -e ".[parsers]"
 
-### RAG Intelligent Q&A
-6-stage configurable pipeline: Query Rewriting → Wiki Retrieval → Hybrid Search → Reranking → Generation → Post-processing.  
-Supports both Agentic Router (auto-routing) and DSL (precise query) modes.
+# 2. Initialize local configuration
+shinehe init --local --path D:\docs --client claude-code
 
-### Hybrid Search Engine
-Vector search (bge-m3 1024-dim) + keyword search (FTS5) + RRF fusion, with Chinese segmentation optimization (jieba).
+# 3. Index your documents
+shinehe index D:\docs
 
-### Knowledge Graph (Dual Backend)
-- **SQLite backend** (default): zero dependency, queries knowledge tables directly
-- **Neo4j backend** (optional): Cypher queries, batch UNWIND, efficient multi-hop traversal
-- Pluggable backend interface + data migration + incremental sync + event-driven sync hooks
-- File-first outline graph, multi-hop traversal, structured DSL queries, Agentic Router
+# 4. Start MCP server (Claude Desktop / Cursor / Cline will connect automatically)
+shinehe mcp --transport stdio
+```
 
-### MCP Server
-51 original tools + 51 namespaced aliases + 3 resources + 5 prompts, covering search, Q&A, CRUD, ingestion, Wiki, graph, query, operations, and agent memory.
-Write safety closed loop with `preview_operation` (dry-run) + `undo_operation` (rollback).
+Your AI assistant can now call `search` or `ask` and receive answers with full citation trails:
 
-### Wiki System
-Full workflow (draft → review → published → deprecated), version snapshots & restore, LLM-powered dead link repair, knowledge health check.
+```json
+{
+  "document": "architecture.md",
+  "path": "D:/docs/architecture.md",
+  "knowledge_id": "doc_001",
+  "block_id": "doc_001_block_07",
+  "location": {
+    "heading_path": ["Architecture", "Storage"],
+    "paragraph_index": 12
+  },
+  "score": 0.87,
+  "score_breakdown": {
+    "vector": 0.82,
+    "keyword": 0.64,
+    "rrf": 0.031,
+    "rerank": 0.87
+  },
+  "match_channels": ["semantic", "keyword"],
+  "reason": "semantic + keyword match; reranked",
+  "text": "SQLite uses WAL mode for local indexing."
+}
+```
 
-### Operation Safety
-Preview before write (dry_run), full audit log, undo any operation — agents can never "accidentally" break things.
+## Supported Clients
 
-### Multi-Modal Document Parsing
-PDF / DOCX / TXT / Markdown / HTML / Excel / images / code files. Large files automatically processed asynchronously.
+- **Claude Desktop** — `mcp_config_templates/claude_desktop.json`
+- **Cursor** — `mcp_config_templates/cursor.json`
+- **Cline** — `mcp_config_templates/cline.json`
+- **Continue** — `mcp_config_templates/continue.json`
+- **Any MCP-compatible client** — stdio or HTTP/SSE transport
 
-### Plugin System
-Hook-based event-driven architecture — plugin callbacks fire on knowledge create/delete/update. Extend with a single registration.
+## Core Features
 
-### Four Runtime Modes
-Desktop GUI (PySide6) / REST API (FastAPI) / MCP Server (stdio + HTTP) / Windows Service, all sharing the same service layer.
+### High-Precision Retrieval
+6-stage configurable RAG pipeline: Query Rewrite → Vector + FTS5 Hybrid Search → RRF Fusion → Rerank → Context Expansion → Citation Packaging.
+
+### Structured Citations
+Every search result includes document path, block ID, location (page/sheet/slide/heading/line), score breakdown by channel (vector/keyword/RRF/rerank), match reason, and original text.
+
+### Incremental Directory Indexing
+`shinehe watch D:\docs` monitors your documents and automatically re-indexes new, modified, or deleted files with debounce and hash-based diff.
+
+### MCP Tool Profiles
+Default `core` profile exposes 10 stable tools for AI agents. Advanced users can switch to `extended`, `admin`, `full`, or `legacy` profiles via `config.yaml`.
+
+### Local Reranker (Optional)
+Pluggable reranker providers: API-based, local cross-encoder (sentence-transformers), LLM fallback, or disabled. Falls back gracefully on failure.
+
+### Eval & Quality Gates
+Fixed fixture datasets with golden sources, baseline thresholds, and CI integration prove retrieval quality (Recall@5, MRR, nDCG@10, citation completeness).
 
 ## Quick Start
 
@@ -79,152 +102,144 @@ Desktop GUI (PySide6) / REST API (FastAPI) / MCP Server (stdio + HTTP) / Windows
 # MCP core mode (minimal dependencies)
 pip install -e .
 
+# With document parsers (PDF, DOCX, Excel, etc.)
+pip install -e ".[parsers]"
+
 # Full-featured mode (GUI + API + parsers + Wiki + Graph)
 pip install -e ".[all]"
-
-# Neo4j graph backend only
-pip install -e ".[graph]"
 ```
 
-### Configure
-
-Edit `config.yaml` with your LLM / Embedding API settings (any OpenAI-compatible endpoint):
-
-```yaml
-embedding:
-  base_url: https://api.siliconflow.cn/v1
-  model: BAAI/bge-m3
-
-llm:
-  base_url: https://api.minimaxi.com/v1
-  model: MiniMax-M3
-
-# Optional: Neo4j graph backend
-graph_backend:
-  provider: neo4j          # default: sqlite
-  uri: bolt://localhost:7687
-  user: neo4j
-  password: your_password
-  database: neo4j
-```
-
-### Launch
+### Initialize
 
 ```bash
-# Desktop GUI
-python main.py
+# Local-first setup with Ollama (recommended for privacy)
+shinehe init --local --path D:\docs --client claude-code
 
-# REST API (port 8000)
-python run_api.py
+# Or use cloud API endpoints (edit config.yaml manually)
+shinehe init --path D:\docs --client cursor
+```
 
-# MCP Server (stdio mode)
+`shinehe init --local` generates:
+- Ollama embedding/LLM configuration (`http://localhost:11434/v1`)
+- `mcp.tool_profile=core` (10 tools)
+- `mcp.write_policy=disabled` (read-only by default)
+- `rag.search_mode=blend` (vector + keyword)
+- `rag.parent_child.enabled=true` (context expansion)
+
+### Index & Watch
+
+```bash
+# Index a directory
+shinehe index D:\docs
+
+# Watch for incremental updates (Ctrl+C to stop)
+shinehe watch D:\docs
+
+# Diagnose configuration
+shinehe doctor
+```
+
+### Launch MCP Server
+
+```bash
+# stdio mode (Claude Desktop / Cursor / Cline)
+shinehe mcp --transport stdio
+
+# HTTP mode (port 9000)
+shinehe mcp --transport streamable-http --port 9000
+
+# Legacy entry point (still works)
 python run_mcp.py
-
-# MCP Server (HTTP mode, port 9000)
-shinehe-mcp -t streamable-http --port 9000
-
-# Windows Service (auto-start on boot + crash recovery)
-python windows_service.py install
-python windows_service.py start
 ```
 
-### Web Client
+## Core MCP Tools
 
-```bash
-cd client
-npm install
-npm run dev      # Dev server (port 5173)
-npm run build    # Production build
-```
+The default `core` profile registers 10 tools optimized for AI agent retrieval:
 
-## MCP Tools Overview
+| Tool | Purpose | Side Effect |
+|------|---------|-------------|
+| `ping` | Connectivity check | read |
+| `kb_capabilities` | Query current profile, capabilities, limits | read |
+| `search` | High-precision retrieval with structured citations | read |
+| `ask` | Generate cited answers from retrieval results | read |
+| `read` | Read original document or block content | read |
+| `list_knowledge` | List indexed documents | read |
+| `index_path` | Index file or directory (returns async job for large inputs) | write |
+| `get_job` | Query indexing job status | read |
+| `list_jobs` | List indexing jobs | read |
+| `reindex_all` | Rebuild all indexes | write |
 
-| Category | Tools | Description |
-|----------|-------|-------------|
-| **Connection** | `ping` | Connectivity check, <10ms response |
-| **Search** | `search` / `search_fulltext` | Semantic search / Full-text search (FTS5) |
-| **Q&A** | `ask` / `ask_with_query` | RAG Q&A / Controllable Q&A with explicit QuerySpec |
-| **CRUD** | `create` / `read` / `update` / `delete` / `restore_knowledge` | Full lifecycle management (including soft-delete restore) |
-| **Ingest** | `ingest_file` / `ingest_url` | File / URL ingestion, large files auto-async |
-| **Async Jobs** | `create_ingest_job` / `get_job` / `list_jobs` / `cancel_job` | Ingest async job management |
-| **General Async** | `create_async_job` / `get_async_job` / `list_async_jobs` / `cancel_async_job` | General async task framework |
-| **Index** | `reindex_all` | Full index rebuild |
-| **Tags** | `tags` / `list_knowledge` | Tag and knowledge list queries |
-| **Structured Query** | `structured_query` / `explain_query` | DSL conditional queries / Execution plan explanation |
-| **Graph** | `graph_traverse` / `get_source_graph` | Multi-hop traversal / RAG evidence chain tracing |
-| **Smart Routing** | `route_query` / `execute_query` | Agentic routing analysis / Explicit QuerySpec execution |
-| **Wiki** | `wiki_lint` / `fix_dead_references` / `wiki_submit_review` / `wiki_approve` / `wiki_reject` / `wiki_deprecate` / `wiki_workflow_history` / `wiki_list_versions` / `wiki_restore_version` / `save_to_wiki` | Full Wiki workflow + dead link repair + version management |
-| **Operations** | `kb_capabilities` / `query_operation_logs` / `get_operation_log` / `undo_operation` / `preview_operation` / `list_recent_operations` | Capability query / Audit log / Undo / Preview |
+Advanced tools (Query DSL, source graph, CRUD, Wiki, Graph, Agent Memory) are available in `extended`, `admin`, `full`, and `legacy` profiles. See [docs/advanced-features.md](docs/advanced-features.md).
+
+## Retrieval Quality
+
+Retrieval quality is proven with fixed fixture datasets, golden sources, and CI gates:
+
+- **Recall@5** — percentage of queries where the correct document appears in top 5 results
+- **MRR** — mean reciprocal rank of the first correct hit
+- **nDCG@10** — normalized discounted cumulative gain
+- **Citation completeness** — percentage of citations with valid path, block ID, and location
+- **No-answer accuracy** — correct rejection of unanswerable queries
+
+Baseline thresholds are enforced in CI. See [docs/retrieval-quality.md](docs/retrieval-quality.md) and [evals/baselines/local.json](evals/baselines/local.json).
+
+## Core vs Experimental
+
+**Core (default):** MCP Server, local file indexing, hybrid search, RRF, rerank, context expansion, structured citations, directory watching, eval gates.
+
+**Experimental (opt-in):** Wiki workflow, Graph traversal (Neo4j), Agent Memory, Plugin system, Web admin UI, multi-user RBAC.
+
+Advanced features remain in the codebase but are hidden from the default MCP tool face. Enable them via `mcp.experimental_tools_enabled=true` in `config.yaml`. See [docs/advanced-features.md](docs/advanced-features.md).
 
 ## Architecture
 
 ```
 knowledge-base/
-├── main.py / run_api.py / run_mcp.py   # Four entry points → create_container() init
+├── main.py / run_api.py / run_mcp.py   # GUI/API/MCP entry points → create_container()
 ├── config.yaml                          # Main configuration
-├── windows_service.py                   # Windows Service (auto-start + crash recovery)
-├── client/                              # React 19 + Vite + TypeScript frontend
 ├── src/
 │   ├── core/container.py                # Dependency injection container
-│   ├── api/                             # FastAPI REST API (JWT auth)
-│   ├── services/                        # Core service layer
-│   │   ├── rag_pipeline.py              # 6-stage RAG pipeline
-│   │   ├── hybrid_search.py             # Hybrid search (vector + keyword + RRF)
-│   │   ├── vectorstore.py               # sqlite-vec vector store
-│   │   ├── block_store.py               # Block-level vector store
-│   │   ├── unified_graph.py             # Unified knowledge graph (backend-agnostic)
-│   │   ├── graph_backend/               # 🔌 Pluggable graph database backends
-│   │   │   ├── base.py                  #   Abstract interface + data classes
-│   │   │   ├── factory.py               #   Backend factory
-│   │   │   ├── sqlite_backend.py        #   SQLite backend (default)
-│   │   │   ├── neo4j_backend.py         #   Neo4j backend (Cypher queries)
-│   │   │   ├── migration.py             #   SQLite → Neo4j data migration
-│   │   │   └── sync_hooks.py            #   Event-driven incremental sync
-│   │   ├── neo4j_manager.py             # Neo4j process management (auto start/stop)
-│   │   ├── wiki_*.py                    # Wiki workflow system
-│   │   └── ...                          # More services
-│   ├── mcp_server.py                    # FastMCP Server (51 tools + 51 aliases)
-│   ├── plugins/                         # 🔌 Plugin hook system
-│   ├── gui/                             # PySide6 desktop UI
-│   │   ├── wiki_view.py                 #   Wiki management (health check / dead link fix / workflow)
-│   │   ├── graph_view.py               #   Graph visualization (force-directed / dual backend)
-│   │   ├── settings_dialog.py           #   Settings (7 tabs incl. service management)
-│   │   └── ...                          #   More views
-│   └── repositories/                    # Data access layer
-└── tests/                               # Test suite
+│   ├── mcp/tool_registry.py             # Declarative tool registration with profile filtering
+│   ├── mcp/tool_profiles.py             # core/extended/admin/full/legacy tool sets
+│   ├── mcp_server.py                    # FastMCP server (tool implementations, prompts, resources)
+│   ├── cli.py                           # shinehe init/index/watch/doctor/mcp
+│   ├── services/
+│   │   ├── path_indexer.py              # Incremental directory indexing
+│   │   ├── file_watcher.py              # watchdog-based directory monitoring
+│   │   ├── hybrid_search.py             # Vector + keyword + RRF fusion
+│   │   ├── search_service.py            # Unified search pipeline (MCP + API)
+│   │   ├── rag_pipeline.py              # 6-stage configurable RAG
+│   │   ├── citation_builder.py          # Structured citation with location metadata
+│   │   ├── rerankers/                   # Pluggable reranker providers (API/local/LLM/disabled)
+│   │   └── ...
+│   ├── repositories/                    # Data access layer (indexed_files, knowledge_items, blocks)
+│   └── models/                          # RetrievalCandidate, Citation, KnowledgeItem, Block
+├── evals/                               # Retrieval quality fixtures, datasets, baselines
+└── tests/                               # Contract, integration, and eval tests
 ```
-
-## One-Click AI Tool Integration
-
-`mcp_config_templates/` provides ready-to-use JSON configs for popular AI coding tools:
-
-- Claude Desktop
-- Cursor
-- Cline
-- Continue
-- Other MCP-compatible clients
 
 ## Documentation
 
-- [Documentation index](docs/README.md)
-- [Current optimization spec](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md)
-- [Module implementation plan](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
-- [MCP usage and contracts](docs/mcp/)
-- [Current project status](PROGRESS.md)
-- [Historical archive](docs/archive/README.md)
+- [Quick Start & Agent Usage](docs/mcp/agent-usage.md)
+- [MCP Tool Profiles & Migration Guide](docs/migration/mcp-tool-profiles.md)
+- [Advanced Features](docs/advanced-features.md)
+- [Retrieval Quality & Eval Gates](docs/retrieval-quality.md)
+- [Current Optimization Spec](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md)
+- [Module Implementation Plan](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
+- [Project Status](PROGRESS.md)
 
 ## Deployment
 
 ```bash
-# Docker
-docker compose up -d
+# Docker (MCP-only image)
+docker build --target mcp -t shinehe-knowledge:mcp .
+docker run -v ~/.shinehe/data:/data shinehe-knowledge:mcp
 
 # Windows installer
 python scripts/build_windows.py
 
 # Windows Service (auto-start + crash recovery)
 python windows_service.py install
-sc failure ShineHeMCP reset= 86400 actions= restart/5000/restart/10000/restart/30000
 python windows_service.py start
 ```
 
@@ -232,11 +247,11 @@ python windows_service.py start
 
 | Layer | Technology |
 |-------|-----------|
-| Backend | Python 3.10+ / FastAPI / FastMCP / PySide6 |
+| Backend | Python 3.10+ / FastAPI / FastMCP |
 | Vectors | sqlite-vec / bge-m3 (1024-dim) |
 | Storage | SQLite + FTS5 / Alembic migrations |
-| Graph | SQLite (default) / Neo4j (optional, Cypher queries) |
-| Frontend | React 19 / Vite / TypeScript / Tailwind CSS |
+| Reranker | sentence-transformers (optional) / API / LLM fallback |
+| Frontend | React 19 / Vite / TypeScript (optional web client) |
 | Build | PyInstaller + Inno Setup / Docker / Windows Service |
 
 ## License
