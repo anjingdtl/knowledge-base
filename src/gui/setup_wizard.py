@@ -566,7 +566,7 @@ class SetupWizard(QDialog):
 
     def get_import_samples(self) -> bool:
         """用户是否选择导入示例知识包"""
-        return self._import_samples_cb.isChecked()
+        return bool(self._import_samples_cb.isChecked())
 
     # ---- 清理 ----
 

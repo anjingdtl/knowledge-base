@@ -233,7 +233,8 @@ class Neo4jManager:
         # （GUI 启动 _auto_start_neo4j 时如果不隐藏会弹窗闪一下）
         creationflags = 0
         if os.name == "nt":
-            creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW
+            creationflags = int(getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0))
+            creationflags |= int(getattr(subprocess, "CREATE_NO_WINDOW", 0))
 
         logger.info("Starting Neo4j: %s console", neo4j_bat)
         self._process = subprocess.Popen(

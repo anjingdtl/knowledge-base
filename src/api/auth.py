@@ -105,13 +105,16 @@ _ensure_users_table()
 
 def hash_password(password: str) -> str:
     """使用 bcrypt 哈希密码。"""
-    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    return cast(
+        str,
+        bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8"),
+    )
 
 
 def verify_password(plain: str, hashed: str) -> bool:
     """验证密码与 bcrypt 哈希是否匹配。"""
     try:
-        return bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
+        return bool(bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8")))
     except Exception:
         return False
 
