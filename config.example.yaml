@@ -110,12 +110,12 @@ rag:
     wiki_search: 5
   top_k: 8
 reranker:
-  base_url: https://api.siliconflow.cn/v1
   enabled: true
+  provider: ""            # "" | api | local | llm | disabled
+  base_url: https://api.siliconflow.cn/v1
   model: BAAI/bge-reranker-v2-m3
-  provider: 硅基流动
-  reuse_llm: false
   use_llm_fallback: true
+  reuse_llm: false
   # api_key: <SECRET>   # 通过 keyring 管理，或设置环境变量 SHINEHE_RERANKER_API_KEY
 safety:
   operation_log:
@@ -139,6 +139,9 @@ storage:
   data_dir: data
   db_name: kb.db
   graph_dir: graph
+watcher:
+  debounce_ms: 500
+  recursive: true
 web:
   timeout: 30
 wiki:

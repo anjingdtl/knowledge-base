@@ -424,6 +424,21 @@ CREATE TRIGGER IF NOT EXISTS agent_memory_au AFTER UPDATE ON agent_memory BEGIN
     INSERT INTO agent_memory_fts(rowid, key, value)
     VALUES (new.rowid, new.key, new.value);
 END;
+
+-- === M3: Indexed Files (Path Index) ===
+CREATE TABLE IF NOT EXISTS indexed_files (
+    path TEXT PRIMARY KEY,
+    knowledge_id TEXT,
+    size INTEGER NOT NULL,
+    mtime_ns INTEGER NOT NULL,
+    sha256 TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    last_indexed_at TEXT,
+    last_error TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_indexed_files_status ON indexed_files(status);
+CREATE INDEX IF NOT EXISTS idx_indexed_files_knowledge ON indexed_files(knowledge_id);
 """
 
 
