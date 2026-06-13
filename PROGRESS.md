@@ -63,6 +63,14 @@
 - **错误日志**：3 处裸 `except: pass` 改为 `except: logger.debug(...)`，避免静默吞掉异常
 - **SQL 审查**：确认所有 f-string SQL 中的变量均为内部硬编码或已白名单验证，无注入风险
 
+### 图谱后端与设置页优化（2026-06-13）
+
+- **设置页新增 SQLite/Neo4j 差异说明**：在「后端选择」下方补一行 hint（约 60 字），帮助用户理解两者的适用场景
+- **默认后端切换为 SQLite**：`config.yaml` 中 `graph_backend.provider` 默认值从 `neo4j` 改为 `sqlite`，降低首次启动门槛；新增/删除知识条目时 `GraphSyncHook` 会自动增量同步到所选后端
+- **Neo4j 一键自动部署**：在「Neo4j 服务管理」栏新增「自动部署 Neo4j」按钮，后台下载 Neo4j Community 5.x 到 `%LOCALAPPDATA%\Neo4j` 并解压；部署完成后自动设置 `NEO4J_HOME` 环境变量（涉及系统级写操作时按需触发 UAC 提权）
+- **设置对话框布局修复**：窗口最小尺寸从 560×520 调整为 720×680、初始 820×760；图谱后端 Tab 用 `QScrollArea` 包裹，4 个 GroupBox 设置 `Maximum`/`Expanding` sizePolicy，切换到 Neo4j 时所有按钮与字段按自然高度显示，不再被压扁
+- **滚动条主题适配**：浅色/暗色 QSS 补 `QScrollArea#graphBackendScroll` 与 `QScrollBar` 样式，handle 颜色与主色板一致
+
 ## 既有能力（v1.2.0 及之前）
 
 - SQLite、FTS5、sqlite-vec 与 Block-first 存储。

@@ -191,6 +191,13 @@ Baseline thresholds are enforced in CI. See [docs/retrieval-quality.md](docs/ret
 
 Advanced features remain in the codebase but are hidden from the default MCP tool face. Enable them via `mcp.experimental_tools_enabled=true` in `config.yaml`. See [docs/advanced-features.md](docs/advanced-features.md).
 
+## Graph Backend (SQLite / Neo4j)
+
+Switch the knowledge base's graph storage backend from **Settings → Graph Backend** in the GUI:
+
+- **SQLite (default)** — zero-config, with `GraphSyncHook` automatically mirroring create/delete operations into the graph view. Best for small-to-medium graphs.
+- **Neo4j (optional)** — designed for large-scale relationship analysis and Cypher traversal. After picking Neo4j, click **Auto-Deploy Neo4j** to download and install Neo4j Community 5.x into `%LOCALAPPDATA%\Neo4j` (UAC is triggered on demand to set `NEO4J_HOME`), then use **Start Neo4j** and **Full Migration** to import existing data.
+
 ## Architecture
 
 ```
