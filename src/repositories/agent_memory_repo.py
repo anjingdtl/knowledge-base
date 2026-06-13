@@ -64,7 +64,7 @@ class AgentMemoryRepository:
                     },
                 )
                 self._conn().commit()
-                return existing["id"]
+                return str(existing["id"])
         # 不存在，走 store（store 自己有锁）
         return self.store(key, value, category, metadata)
 
@@ -73,14 +73,14 @@ class AgentMemoryRepository:
         with self._write_lock:
             cursor = self._conn().execute("DELETE FROM agent_memory WHERE id = ?", (memory_id,))
             self._conn().commit()
-            return cursor.rowcount > 0
+            return bool(cursor.rowcount > 0)
 
     def delete_by_key(self, key: str) -> bool:
         """按 key 删除"""
         with self._write_lock:
             cursor = self._conn().execute("DELETE FROM agent_memory WHERE key = ?", (key,))
             self._conn().commit()
-            return cursor.rowcount > 0
+            return bool(cursor.rowcount > 0)
 
     # ---- 读操作 ----
 

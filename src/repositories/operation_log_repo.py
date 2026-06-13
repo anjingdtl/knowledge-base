@@ -87,7 +87,7 @@ class OperationLogRepository:
         row = self._conn().execute(
             f"SELECT COUNT(*) as cnt FROM operation_logs{where}", params
         ).fetchone()
-        return row["cnt"]
+        return int(row["cnt"])
 
     def cleanup(self, retention_days: int = 90):
         cutoff = datetime.now().isoformat()

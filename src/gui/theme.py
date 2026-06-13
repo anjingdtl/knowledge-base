@@ -125,7 +125,7 @@ _THEMES = {"light": LIGHT, "dark": DARK}
 
 
 def current_theme() -> str:
-    return Config.get("appearance.theme", "light")
+    return str(Config.get("appearance.theme", "light"))
 
 
 def is_dark() -> bool:
@@ -138,7 +138,7 @@ def colors() -> dict:
 
 def get_color(role: str) -> str:
     fallback = "#1A1A1A" if not is_dark() else "#F8F9FA"
-    return colors().get(role, fallback)
+    return str(colors().get(role, fallback))
 
 
 def _gradient_accent() -> str:
@@ -185,5 +185,5 @@ def apply(app: QApplication):
         app.setStyleSheet(qss_text)
 
     font = QFont("Microsoft YaHei", font_size)
-    font.setStyleHint(QFont.SansSerif)
+    font.setStyleHint(QFont.StyleHint.SansSerif)
     app.setFont(font)

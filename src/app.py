@@ -86,16 +86,17 @@ def _import_sample_data():
         count = 0
         for md_file in sorted(samples_dir.glob("*.md")):
             try:
-                parsed = parse_file(str(md_file))
-                if parsed and parsed.text.strip():
+                parsed_list = parse_file(str(md_file))
+                if parsed_list and parsed_list[0].content.strip():
+                    parsed = parsed_list[0]
                     Database.insert_knowledge({
                         "id": str(uuid.uuid4()),
                         "title": md_file.stem,
-                        "content": parsed.text[:5000],
+                        "content": parsed.content[:5000],
                         "source_type": "file",
                         "source_path": str(md_file),
                         "file_type": "md",
-                        "file_size": len(parsed.text.encode("utf-8")),
+                        "file_size": len(parsed.content.encode("utf-8")),
                         "content_hash": "",
                         "file_created_at": "",
                         "file_modified_at": "",

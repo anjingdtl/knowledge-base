@@ -81,12 +81,13 @@ def _fetch_content(embed_type: str, embed_id: str, db=None) -> Optional[str]:
         elif embed_type == "knowledge":
             item = database.get_knowledge(embed_id)
             if item:
-                return item.get("content", "")[:1000]
+                return str(item.get("content") or "")[:1000]
             return None
 
     except Exception as e:
         logger.warning("Failed to fetch embed content %s:%s: %s", embed_type, embed_id, e)
         return None
+    return None
 
 
 def find_embed_references(text: str) -> list[dict]:

@@ -12,7 +12,7 @@ from src.services.index_scheduler import IndexScheduler, _normalize
 def mock_indexer():
     indexer = MagicMock()
     indexer.index_path.return_value = IndexResult(created=1)
-    indexer._repo = MagicMock()
+    indexer.delete_path.return_value = IndexResult(deleted=1)
     return indexer
 
 
@@ -76,11 +76,11 @@ class TestFlush:
         assert scheduler.pending_count == 0
 
     def test_flush_handles_deleted(self, scheduler, mock_indexer):
-        """deleted 事件应调用 mark_deleted"""
+        """deleted 事件应由 PathIndexService 统一删除知识和追踪记录"""
         scheduler.schedule("/tmp/gone.txt", "deleted")
         result = scheduler.flush()
         assert result.deleted == 1
-        mock_indexer._repo.mark_deleted.assert_called_once()
+        mock_indexer.delete_path.assert_called_once()
 
     def test_flush_handles_index_error(self, scheduler, mock_indexer):
         """索引失败应记录在 failed 列表"""

@@ -79,7 +79,7 @@ class WikiSiteGenerator:
         recent_pages = sorted(pages, key=lambda p: p.get("updated_at", ""), reverse=True)[:10]
 
         # 按标签分类
-        categories = {}
+        categories: dict[str, list[dict]] = {}
         for page in pages:
             tags = parse_tags(page.get("tags", "[]"))
             for tag in tags:

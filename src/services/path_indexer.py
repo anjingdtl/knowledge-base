@@ -98,8 +98,8 @@ class PathIndexService:
         if path.is_dir():
             manifest = self.scan_manifest(path, recursive=recursive)
             # 检查是否需要异步处理
-            if self._should_use_async(manifest):
-                return self._submit_async_job(path, manifest, recursive)
+            if not dry_run and self._should_use_async(manifest):
+                return self._submit_async_job(path, manifest, recursive, force)
             diff = self.compute_diff(manifest, path, force=force)
             return self.apply_diff(diff, dry_run=dry_run)
 
@@ -238,16 +238,30 @@ class PathIndexService:
             if dry_run:
                 result.deleted += 1
                 continue
-            try:
-                existing = self._repo.get(norm_path)
-                if existing and existing.get("knowledge_id"):
-                    self._soft_delete_knowledge(existing["knowledge_id"])
-                self._repo.mark_deleted(norm_path)
-                result.deleted += 1
-            except Exception as e:
-                logger.warning("Failed to mark deleted %s: %s", norm_path, e)
-                result.failed.append({"path": norm_path, "error": str(e)})
+            deleted = self.delete_path(Path(norm_path))
+            result.deleted += deleted.deleted
+            result.skipped += deleted.skipped
+            result.failed.extend(deleted.failed)
 
+        return result
+
+    def delete_path(self, path: Path) -> IndexResult:
+        """删除文件对应的知识条目，并在成功后更新文件追踪状态。"""
+        norm_path = _normalize_path(str(path))
+        result = IndexResult()
+        existing = self._repo.get(norm_path)
+        if existing is None or existing.get("status") == "deleted":
+            result.skipped = 1
+            return result
+
+        try:
+            if existing.get("knowledge_id"):
+                self._soft_delete_knowledge(existing["knowledge_id"])
+            self._repo.mark_deleted(norm_path)
+            result.deleted = 1
+        except Exception as e:
+            logger.warning("Failed to delete indexed path %s: %s", norm_path, e)
+            result.failed.append({"path": norm_path, "error": str(e)})
         return result
 
     # ------------------------------------------------------------------
@@ -419,14 +433,11 @@ class PathIndexService:
         """软删除知识条目"""
         conn = self._db.get_conn()
         now = datetime.now().isoformat()
-        try:
-            conn.execute(
-                "UPDATE knowledge_items SET deleted_at = ? WHERE id = ? AND deleted_at IS NULL",
-                (now, kid),
-            )
-            conn.commit()
-        except Exception as e:
-            logger.warning("Failed to soft-delete knowledge %s: %s", kid, e)
+        conn.execute(
+            "UPDATE knowledge_items SET deleted_at = ? WHERE id = ? AND deleted_at IS NULL",
+            (now, kid),
+        )
+        conn.commit()
 
     def _record_indexed(
         self, fp: FileFingerprint, kid: str, status: str
@@ -501,7 +512,11 @@ class PathIndexService:
         return False
 
     def _submit_async_job(
-        self, root: Path, manifest: list[FileFingerprint], recursive: bool
+        self,
+        root: Path,
+        manifest: list[FileFingerprint],
+        recursive: bool,
+        force: bool,
     ) -> IndexResult:
         """提交异步扫描任务"""
         from src.services.async_task import AsyncTaskService
@@ -513,6 +528,7 @@ class PathIndexService:
                 "root": str(root),
                 "file_paths": file_paths,
                 "recursive": recursive,
+                "force": force,
             },
         )
         logger.info(

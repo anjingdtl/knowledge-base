@@ -64,7 +64,16 @@ class TestBlockStore:
         conn.execute(
             "INSERT INTO blocks (id, page_id, content, block_type, properties, order_idx, created_at, updated_at) "
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            ("block-meta", "page-meta", "元数据测试", "code", '{"chunk_index": 5}', 5, "2026-01-01", "2026-01-01"),
+            (
+                "block-meta",
+                "page-meta",
+                "元数据测试",
+                "code",
+                '{"chunk_index": 5, "source_path": "D:/docs/meta.py"}',
+                5,
+                "2026-01-01",
+                "2026-01-01",
+            ),
         )
         conn.commit()
 
@@ -77,6 +86,7 @@ class TestBlockStore:
         assert r["metadata"]["page_id"] == "page-meta"
         assert r["metadata"]["block_type"] == "code"
         assert "chunk_index" in r["metadata"]["properties"]
+        assert r["metadata"]["source_path"] == "D:/docs/meta.py"
 
     def test_count_and_count_by_page(self):
         """统计功能正确"""

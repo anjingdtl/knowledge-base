@@ -16,6 +16,19 @@ no LLM or external API keys.
 | **MRR** | Mean Reciprocal Rank — 1/(rank of first correct result) |
 | **nDCG@10** | Normalized Discounted Cumulative Gain at rank 10 |
 | **No-Answer Accuracy** | Fraction of out-of-scope queries that correctly return no relevant results |
+| **Citation Location Completeness** | Share of returned citations with a valid path, block ID, and non-empty source location |
+
+## Current Baseline
+
+The checked-in `evals/baselines/local.json` baseline was refreshed on June 13, 2026:
+
+| Metric | Baseline |
+|--------|----------|
+| Recall@5 | 0.8667 |
+| MRR | 0.7800 |
+| nDCG@10 | 0.7938 |
+| No-Answer Accuracy | 0.6667 |
+| Citation Location Completeness | 1.0000 |
 
 ## Running Locally
 

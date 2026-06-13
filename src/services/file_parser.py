@@ -1,10 +1,13 @@
 """多格式文件解析器"""
+import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
     from src.models.parsed_content import StructuredBlock
+
+logger = logging.getLogger(__name__)
 
 
 def _read_file_text(path: Path) -> str:
@@ -36,7 +39,7 @@ def parse_file(file_path: str) -> list[ParsedFile]:
         raise FileNotFoundError(f"文件不存在: {file_path}")
 
     ext = path.suffix.lower()
-    parsers = {
+    parsers: dict[str, Callable[[Path], ParsedFile | list[ParsedFile]]] = {
         ".pdf": _parse_pdf,
         ".pptx": _parse_pptx,
         ".ppt": _parse_pptx,
@@ -513,7 +516,7 @@ def _parse_pdf(path: Path) -> ParsedFile:
             # 尝试用 pikepdf 修复损坏的 PDF
             try:
                 import pikepdf
-                with pikepdf.open(str(path), repair=True) as pdf:
+                with pikepdf.open(str(path), attempt_recovery=True) as pdf:
                     buf = BytesIO()
                     pdf.save(buf)
                     buf.seek(0)

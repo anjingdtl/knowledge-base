@@ -55,6 +55,32 @@ class TestChunkFTS:
 
 
 class TestHybridSearch:
+    def test_keyword_search_flattens_citation_metadata(self):
+        """关键词候选应直接暴露 CitationBuilder 需要的来源字段。"""
+        block = {
+            "id": "citation-block",
+            "parent_id": None,
+            "page_id": "citation-page",
+            "content": "本地索引引用路径 unique-citation-path",
+            "block_type": "text",
+            "properties": (
+                '{"knowledge_id": "citation-page", "chunk_index": 0, '
+                '"source_path": "D:/docs/architecture.md"}'
+            ),
+            "order_idx": 0,
+            "created_at": "2026-01-01",
+            "updated_at": "2026-01-01",
+        }
+        Database.insert_blocks([block])
+        Database.insert_blocks_fts([block])
+
+        results = HybridSearcher()._keyword_search(
+            ["unique-citation-path"],
+            top_k=3,
+        )
+
+        assert results[0]["metadata"]["source_path"] == "D:/docs/architecture.md"
+
     def test_blend_search_keeps_strong_keyword_match_above_weak_vector(self, monkeypatch):
         """FTS5 的负 rank 越小越相关，融合时不能被归一化成 0。"""
         searcher = HybridSearcher()

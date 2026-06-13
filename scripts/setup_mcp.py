@@ -13,7 +13,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-from src.services.project_setup import (
+from src.services.project_setup import (  # noqa: E402
     add_to_agent_config,
     build_server_config,
     get_agent_config_paths,

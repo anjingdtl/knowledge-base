@@ -13,6 +13,7 @@
 编译为 SQL 查询，支持块级数据模型（blocks + properties + FTS + entity_refs）。
 """
 import logging
+import re
 from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
@@ -24,6 +25,9 @@ class QueryClause:
     def to_sql(self) -> tuple[str, list]:
         """返回 (sql_fragment, params)"""
         raise NotImplementedError
+
+    def is_fts(self) -> bool:
+        return False
 
 
 class HasTag(QueryClause):
@@ -106,7 +110,7 @@ class Or(QueryClause):
         parts = []
         all_params = []
         for clause in self.clauses:
-            if hasattr(clause, 'is_fts') and clause.is_fts():
+            if clause.is_fts():
                 continue
             sql, params = clause.to_sql()
             if sql:
@@ -122,7 +126,7 @@ class Not(QueryClause):
         self.clause = clause
 
     def to_sql(self):
-        if hasattr(self.clause, 'is_fts') and self.clause.is_fts():
+        if self.clause.is_fts():
             return "", []
         sql, params = self.clause.to_sql()
         if not sql:
@@ -171,9 +175,10 @@ def query(*clauses: QueryClause, limit: int = 100, offset: int = 0,
         fts_query = ""
 
         for clause in clauses:
-            if hasattr(clause, 'is_fts') and clause.is_fts():
+            if clause.is_fts():
                 needs_fts = True
-                fts_query = clause.query_text
+                if isinstance(clause, FullText):
+                    fts_query = clause.query_text
             else:
                 sql, p = clause.to_sql()
                 if sql:
@@ -184,14 +189,14 @@ def query(*clauses: QueryClause, limit: int = 100, offset: int = 0,
         if needs_fts:
             try:
                 from src.utils.chinese_tokenizer import sanitize_fts_query
+                safe_q = sanitize_fts_query(fts_query)
             except ImportError:
-                # Fallback: basic FTS5 sanitization (remove special operators)
-                import re
-                def sanitize_fts_query(q: str) -> str:
-                    q = q.strip()
-                    q = re.sub(r'[^\w\s一-鿿]', ' ', q)
-                    return ' '.join(f'"{t}"' for t in q.split() if t) if q.strip() else ''
-            safe_q = sanitize_fts_query(fts_query)
+                cleaned_query = re.sub(r'[^\w\s一-鿿]', ' ', fts_query.strip())
+                safe_q = (
+                    ' '.join(f'"{token}"' for token in cleaned_query.split() if token)
+                    if cleaned_query
+                    else ''
+                )
             if safe_q:
                 where_parts = ["knowledge_fts MATCH ?"] + conditions
                 sql = (

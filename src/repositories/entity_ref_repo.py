@@ -70,7 +70,7 @@ class EntityRefRepository:
             (entity_type, entity_id, entity_type, entity_id),
         )
         self._conn().commit()
-        return cursor.rowcount
+        return int(cursor.rowcount)
 
     def delete_auto_discovered_for_source(self, source_type: str, source_id: str) -> int:
         cursor = self._conn().execute(
@@ -79,7 +79,7 @@ class EntityRefRepository:
             (source_type, source_id),
         )
         self._conn().commit()
-        return cursor.rowcount
+        return int(cursor.rowcount)
 
     def _list(self, where: str, params: list) -> list[EntityRef]:
         rows = self._conn().execute(

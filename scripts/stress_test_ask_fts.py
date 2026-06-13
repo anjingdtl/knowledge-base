@@ -138,7 +138,7 @@ def run_test(name, calls, concurrency, session_id):
               f"p50={statistics.median(latencies):,.0f}ms  "
               f"max={max(latencies):,.0f}ms")
     if fail_results:
-        print(f"  错误:")
+        print("  错误:")
         seen = set()
         for r in fail_results:
             key = f"{r['tool']}: {r['error'][:80]}"
@@ -174,12 +174,16 @@ def main():
         ]
     ]
     ok, n, fails = run_test("search_fulltext x10 并发", calls_fts, 10, session_id)
-    total_ok += ok; total_calls += n; all_failures.extend(fails)
+    total_ok += ok
+    total_calls += n
+    all_failures.extend(fails)
 
     # ---- 测试 2: search_fulltext 并发 20 ----
     calls_fts_20 = calls_fts * 2  # 20 个调用
     ok, n, fails = run_test("search_fulltext x20 并发", calls_fts_20, 20, session_id)
-    total_ok += ok; total_calls += n; all_failures.extend(fails)
+    total_ok += ok
+    total_calls += n
+    all_failures.extend(fails)
 
     # ---- 测试 3: ask 并发 5 ----
     calls_ask = [
@@ -193,7 +197,9 @@ def main():
         ]
     ]
     ok, n, fails = run_test("ask x5 并发（RAG管线）", calls_ask, 5, session_id)
-    total_ok += ok; total_calls += n; all_failures.extend(fails)
+    total_ok += ok
+    total_calls += n
+    all_failures.extend(fails)
 
     # ---- 测试 4: 混合并发（search + search_fulltext + ask + ping）----
     calls_mixed = [
@@ -209,7 +215,9 @@ def main():
         {"tool": "list_knowledge", "args": {"limit": 3}},
     ]
     ok, n, fails = run_test("混合工具 x10 并发", calls_mixed, 10, session_id)
-    total_ok += ok; total_calls += n; all_failures.extend(fails)
+    total_ok += ok
+    total_calls += n
+    all_failures.extend(fails)
 
     # ---- 测试 5: 极端并发 search_fulltext x30 ----
     calls_extreme = [
@@ -220,11 +228,13 @@ def main():
         ]
     ] * 2  # 30 calls
     ok, n, fails = run_test("search_fulltext x30 极端并发", calls_extreme, 30, session_id)
-    total_ok += ok; total_calls += n; all_failures.extend(fails)
+    total_ok += ok
+    total_calls += n
+    all_failures.extend(fails)
 
     # ---- 总结 ----
     print(f"\n{'#'*65}")
-    print(f"  总结")
+    print("  总结")
     print(f"{'#'*65}")
     print(f"  总调用:  {total_calls}")
     print(f"  总成功:  {total_ok}")
@@ -232,7 +242,7 @@ def main():
     print(f"  成功率:  {total_ok/max(total_calls,1)*100:.1f}%")
 
     if total_calls - total_ok == 0:
-        print(f"\n  [PASS] 所有调用全部成功，线程本地连接修复有效!")
+        print("\n  [PASS] 所有调用全部成功，线程本地连接修复有效!")
     else:
         # 分析失败类型
         fts_errors = [f for f in all_failures if "search_fulltext" in f["tool"]]

@@ -47,20 +47,23 @@ class AsyncJob:
         if isinstance(value, (dict, list)):
             return value
         if isinstance(value, str):
-            return json.loads(value)
-        return value
+            parsed = json.loads(value)
+            return parsed if isinstance(parsed, (dict, list)) else None
+        return None
 
     @classmethod
     def from_db(cls, row: dict) -> "AsyncJob":
         """从数据库行转换为 AsyncJob"""
+        params = cls._safe_json_parse(row.get("params", "{}"))
+        result = cls._safe_json_parse(row.get("result"))
         return cls(
             id=row["id"],
             job_type=row["job_type"],
             status=row["status"],
-            params=cls._safe_json_parse(row.get("params", "{}")) or {},
+            params=params if isinstance(params, dict) else {},
             progress=row.get("progress", 0),
             progress_message=row.get("progress_message", ""),
-            result=cls._safe_json_parse(row.get("result")),
+            result=result if isinstance(result, dict) else None,
             error_message=row.get("error_message", ""),
             retry_count=row.get("retry_count", 0),
             max_retries=row.get("max_retries", 3),

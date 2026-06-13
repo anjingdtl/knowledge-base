@@ -96,11 +96,12 @@ class IndexScheduler:
             # 处理 deleted
             for p in deleted_paths:
                 try:
-                    repo = self._indexer._repo
-                    repo.mark_deleted(p)
-                    result.deleted += 1
+                    deleted = self._indexer.delete_path(Path(p))
+                    result.deleted += deleted.deleted
+                    result.skipped += deleted.skipped
+                    result.failed.extend(deleted.failed)
                 except Exception as e:
-                    logger.warning("IndexScheduler: failed to mark deleted %s: %s", p, e)
+                    logger.warning("IndexScheduler: failed to delete %s: %s", p, e)
                     result.failed.append({"path": p, "error": str(e)})
         finally:
             self._processing = False

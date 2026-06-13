@@ -55,7 +55,7 @@ class EffectivePropertyService:
         tags = self._load_tags(page.get("tags") if page else "[]")
         explicit = self._load_props(block.get("properties"))
 
-        effective = {}
+        effective: dict[str, dict] = {}
         self._apply_scope(effective, "global", "", [], block_id)
         for tag in tags:
             self._apply_scope(effective, "tag", tag, tags, block_id)
@@ -80,7 +80,7 @@ class EffectivePropertyService:
         tags = self._load_tags(page.get("tags") if page else "[]")
         explicit = self._load_props(block.get("properties"))
 
-        effective = {}
+        effective: dict[str, dict] = {}
         # Apply schemas in precedence order: global -> tag -> page -> block(explicit)
         self._apply_scope(effective, "global", "", [], block_id)
         for tag in tags:

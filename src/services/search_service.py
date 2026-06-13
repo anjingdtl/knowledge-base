@@ -44,7 +44,7 @@ class SearchService:
         """统一配置读取：支持 Config 对象或嵌套 dict"""
         if isinstance(self._config, dict):
             parts = key.split(".")
-            obj = self._config
+            obj: object = self._config
             for p in parts:
                 if isinstance(obj, dict):
                     obj = obj.get(p)

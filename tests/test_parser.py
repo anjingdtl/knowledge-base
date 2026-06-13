@@ -1,10 +1,20 @@
 """文件解析器测试"""
 import pytest
 
-from src.services.file_parser import _remove_pdf_watermarks, parse_file
+from src.services.file_parser import _extract_pptx_shapes, _remove_pdf_watermarks, parse_file
 
 
 class TestTextParser:
+    def test_pptx_group_extraction_failure_is_skipped(self):
+        class BrokenGroupShape:
+            shape_type = 6
+
+            @property
+            def shapes(self):
+                raise RuntimeError("broken group")
+
+        assert _extract_pptx_shapes([BrokenGroupShape()]) == []
+
     def test_parse_txt(self, tmp_path):
         f = tmp_path / "test.txt"
         f.write_text("Hello World\n第二行", encoding="utf-8")

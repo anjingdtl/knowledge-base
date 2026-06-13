@@ -665,7 +665,7 @@ class Database(metaclass=_DatabaseMeta):
         if self._shutdown:
             raise RuntimeError("Database is shut down — connection no longer available")
 
-        conn = getattr(self._local, 'conn', None)
+        conn: sqlite3.Connection | None = getattr(self._local, 'conn', None)
         if conn is not None:
             # 健康检查：轻量 SELECT 验证连接存活
             try:
@@ -743,7 +743,7 @@ class Database(metaclass=_DatabaseMeta):
                 item,
             )
             conn.commit()
-        return item["id"]
+        return str(item["id"])
 
     def get_knowledge(self, item_id: str, include_deleted: bool = False) -> Optional[dict]:
         """按 ID 查询知识条目。
@@ -997,7 +997,7 @@ class Database(metaclass=_DatabaseMeta):
             "SELECT id, title, source_path, file_size, file_created_at, file_modified_at, created_at FROM knowledge_items"
         ).fetchall()
 
-        groups = {}
+        groups: dict[tuple[str, int, str, str], list[dict]] = {}
         for row in rows:
             src = (row["source_path"] or "").strip()
             size = row["file_size"] or 0
@@ -1025,7 +1025,7 @@ class Database(metaclass=_DatabaseMeta):
             row = self.get_conn().execute(
                 f"SELECT COUNT(*) as cnt FROM knowledge_items WHERE 1=1{deleted_clause}",
             ).fetchone()
-        return row["cnt"]
+        return int(row["cnt"])
 
     def get_stats(self) -> dict:
         """返回知识库统计汇总：文件数、存储占用、类型分布、分类覆盖"""
@@ -1463,7 +1463,7 @@ class Database(metaclass=_DatabaseMeta):
             conv,
         )
         self.get_conn().commit()
-        return conv["id"]
+        return str(conv["id"])
 
     def list_conversations(self, limit: int = 50) -> list[dict]:
         rows = self.get_conn().execute(
@@ -1488,7 +1488,7 @@ class Database(metaclass=_DatabaseMeta):
             msg,
         )
         self.get_conn().commit()
-        return msg["id"]
+        return str(msg["id"])
 
     def get_messages(self, conversation_id: str) -> list[dict]:
         rows = self.get_conn().execute(
@@ -1601,7 +1601,7 @@ class Database(metaclass=_DatabaseMeta):
             page,
         )
         conn.commit()
-        return page["id"]
+        return str(page["id"])
 
     def get_wiki_page(self, page_id: str) -> Optional[dict]:
         row = self.get_conn().execute("SELECT * FROM wiki_pages WHERE id = ?", (page_id,)).fetchone()
@@ -1681,7 +1681,7 @@ class Database(metaclass=_DatabaseMeta):
             row = self.get_conn().execute("SELECT COUNT(*) as cnt FROM wiki_pages WHERE status = ?", (status,)).fetchone()
         else:
             row = self.get_conn().execute("SELECT COUNT(*) as cnt FROM wiki_pages").fetchone()
-        return row["cnt"]
+        return int(row["cnt"])
 
     def search_wiki_fts(self, query: str, limit: int = 10) -> list[dict]:
         from src.utils.chinese_tokenizer import sanitize_fts_query

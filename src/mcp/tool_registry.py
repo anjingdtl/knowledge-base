@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Callable, Iterable
+from typing import Any, Callable, Iterable, ParamSpec, TypeVar
 
 from fastmcp import FastMCP
 
@@ -16,6 +16,9 @@ from src.mcp.tool_profiles import (
 )
 
 logger = logging.getLogger(__name__)
+
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
 @dataclass(frozen=True)
@@ -53,12 +56,12 @@ def tool_definition(
     *, name: str, description: str, annotations: dict[str, Any],
     group: str, side_effect: str, profiles: frozenset[str] | None = None,
     experimental: bool = False,
-):
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """Decorator to register a tool function with profile metadata."""
     if profiles is None:
         profiles = _compute_profiles(name, group, experimental)
 
-    def decorator(function: Callable[..., Any]):
+    def decorator(function: Callable[P, R]) -> Callable[P, R]:
         _DEFINITIONS[name] = ToolDefinition(
             name=name, function=function, description=description,
             annotations=annotations, group=group, side_effect=side_effect,

@@ -76,6 +76,8 @@ def gen_sidebar_stone(base_rgb: tuple, filename: str, w: int = 220, h: int = 120
     """生成侧边栏深海底纹 — Perlin 噪声叠加水平层理"""
     img = Image.new("RGBA", (w, h), (*base_rgb, 255))
     pixels = img.load()
+    if pixels is None:
+        raise RuntimeError("Unable to access generated texture pixels")
     perlin = PerlinNoise(seed=42)
 
     for y in range(h):
@@ -94,7 +96,10 @@ def gen_sidebar_stone(base_rgb: tuple, filename: str, w: int = 220, h: int = 120
         for x in range(w - 20, w):
             alpha_factor = (x - (w - 20)) / 20
             darken = int(12 * alpha_factor)
-            r, g, b, a = pixels[x, y]
+            pixel = pixels[x, y]
+            if not isinstance(pixel, tuple):
+                continue
+            r, g, b, a = pixel
             pixels[x, y] = (_clamp(r - darken), _clamp(g - darken), _clamp(b - darken), a)
 
     img.save(OUT_DIR / filename, "PNG")
@@ -214,6 +219,8 @@ def gen_card_surface(base_rgb: tuple, filename: str, w: int = 100, h: int = 100)
     """卡片表面微纹理"""
     img = Image.new("RGBA", (w, h), (*base_rgb, 255))
     pixels = img.load()
+    if pixels is None:
+        raise RuntimeError("Unable to access generated texture pixels")
     perlin = PerlinNoise(seed=123)
 
     for y in range(h):

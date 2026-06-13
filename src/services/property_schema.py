@@ -1,6 +1,7 @@
 """属性 Schema 服务层 — 类型校验、优先级解析"""
 import re
 from dataclasses import dataclass, field
+from typing import cast
 
 from src.models.property_schema import PropertySchema
 from src.repositories.property_schema_repo import PropertySchemaRepository
@@ -26,7 +27,7 @@ class PropertySchemaService:
                 f"Unsupported property_type '{schema.property_type}', "
                 f"must be one of {sorted(self.TYPE_NAMES)}"
             )
-        return self._repo.upsert(schema)
+        return cast(PropertySchema, self._repo.upsert(schema))
 
     def resolve_schema(
         self,
@@ -39,17 +40,17 @@ class PropertySchemaService:
         if block_id:
             found = self._repo.find("block", block_id, property_name)
             if found:
-                return found
+                return cast(PropertySchema, found)
         if page_id:
             found = self._repo.find("page", page_id, property_name)
             if found:
-                return found
+                return cast(PropertySchema, found)
         if tags:
             for tag in tags:
                 found = self._repo.find("tag", tag, property_name)
                 if found:
-                    return found
-        return self._repo.find("global", "", property_name)
+                    return cast(PropertySchema, found)
+        return cast(PropertySchema | None, self._repo.find("global", "", property_name))
 
     def validate_value(
         self,

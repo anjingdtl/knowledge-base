@@ -14,7 +14,6 @@ import struct
 from datetime import datetime
 from pathlib import Path
 
-
 BLOCK_GRAPH_SCHEMA = """
 CREATE TABLE IF NOT EXISTS blocks (
     id TEXT PRIMARY KEY,

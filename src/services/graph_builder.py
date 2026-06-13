@@ -94,7 +94,12 @@ class GraphBuilder:
             Database.insert_graph_relations(graph_id, all_relations)
         return all_relations
 
-    def _analyze_batch(self, graph_id: str, knowledge_ids: list[str]) -> list[dict]:
+    def _analyze_batch(
+        self,
+        graph_id: str,
+        knowledge_ids: list[str],
+        skip_delete: bool = False,
+    ) -> list[dict]:
         items = Database.get_knowledge_batch(knowledge_ids)
         if len(items) < 2:
             return []
@@ -138,7 +143,7 @@ class GraphBuilder:
                 "weight": 1.0,
             })
 
-        if valid_relations:
+        if valid_relations and not skip_delete:
             # 先删除该图谱的旧关系，再写入新的
             Database.delete_graph_relations(graph_id)
             Database.insert_graph_relations(graph_id, valid_relations)
@@ -254,5 +259,6 @@ class GraphBuilder:
         except json.JSONDecodeError:
             return None
         if key and isinstance(data, dict):
-            return data.get(key)
-        return data
+            selected = data.get(key)
+            return selected if isinstance(selected, (dict, list)) else None
+        return data if isinstance(data, (dict, list)) else None

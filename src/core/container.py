@@ -18,7 +18,29 @@
 
 import logging
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
+
+if TYPE_CHECKING:
+    from src.repositories.agent_memory_repo import AgentMemoryRepository
+    from src.repositories.block_repo import BlockRepository
+    from src.repositories.category_repo import CategoryRepository
+    from src.repositories.conversation_repo import ConversationRepository
+    from src.repositories.entity_ref_repo import EntityRefRepository
+    from src.repositories.graph_repo import GraphRepository
+    from src.repositories.indexed_file_repo import IndexedFileRepository
+    from src.repositories.job_repo import JobRepository
+    from src.repositories.knowledge_repo import KnowledgeRepository
+    from src.repositories.operation_log_repo import OperationLogRepository
+    from src.repositories.property_schema_repo import PropertySchemaRepository
+    from src.repositories.tag_relation_repo import TagRelationRepository
+    from src.repositories.wiki_repo import WikiRepository
+    from src.services.block_store import BlockStore
+    from src.services.db import Database
+    from src.services.embedding import EmbeddingService
+    from src.services.graph_backend import GraphBackend
+    from src.services.llm import LLMService
+    from src.services.vectorstore import VectorStore
+    from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -40,40 +62,40 @@ class AppContainer:
     """
 
     # --- 基础设施 ---
-    config: "Config" = field(default=None)  # noqa: F821
-    db: "Database" = field(default=None)  # noqa: F821
+    config: "Config"
+    db: "Database"
 
     # --- 存储 ---
-    vectorstore: "VectorStore" = field(default=None)  # noqa: F821
-    block_store: "BlockStore" = field(default=None)  # noqa: F821
+    vectorstore: "VectorStore"
+    block_store: "BlockStore"
 
     # --- 图后端（插件式） ---
-    graph_backend: "GraphBackend" = field(default=None)  # noqa: F821
+    graph_backend: "GraphBackend"
 
     # --- 仓库层（Phase 1.2 新增） ---
-    knowledge_repo: "KnowledgeRepository" = field(default=None, repr=False)  # noqa: F821
-    conversation_repo: "ConversationRepository" = field(default=None, repr=False)  # noqa: F821
-    wiki_repo: "WikiRepository" = field(default=None, repr=False)  # noqa: F821
-    graph_repo: "GraphRepository" = field(default=None, repr=False)  # noqa: F821
-    block_repo: "BlockRepository" = field(default=None, repr=False)  # noqa: F821
-    entity_ref_repo: "EntityRefRepository" = field(default=None, repr=False)  # noqa: F821
-    category_repo: "CategoryRepository" = field(default=None, repr=False)  # noqa: F821
-    job_repo: "JobRepository" = field(default=None, repr=False)  # noqa: F821
+    knowledge_repo: "KnowledgeRepository" = field(init=False, repr=False)
+    conversation_repo: "ConversationRepository" = field(init=False, repr=False)
+    wiki_repo: "WikiRepository" = field(init=False, repr=False)
+    graph_repo: "GraphRepository" = field(init=False, repr=False)
+    block_repo: "BlockRepository" = field(init=False, repr=False)
+    entity_ref_repo: "EntityRefRepository" = field(init=False, repr=False)
+    category_repo: "CategoryRepository" = field(init=False, repr=False)
+    job_repo: "JobRepository" = field(init=False, repr=False)
 
     # --- 仓库层（Phase 2 新增） ---
-    tag_relation_repo: "TagRelationRepository" = field(default=None, repr=False)  # noqa: F821
-    property_schema_repo: "PropertySchemaRepository" = field(default=None, repr=False)  # noqa: F821
-    operation_log_repo: "OperationLogRepository" = field(default=None, repr=False)  # noqa: F821
+    tag_relation_repo: "TagRelationRepository" = field(init=False, repr=False)
+    property_schema_repo: "PropertySchemaRepository" = field(init=False, repr=False)
+    operation_log_repo: "OperationLogRepository" = field(init=False, repr=False)
 
     # --- Phase 4 新增 ---
-    agent_memory_repo: "AgentMemoryRepository" = field(default=None, repr=False)  # noqa: F821
+    agent_memory_repo: "AgentMemoryRepository" = field(init=False, repr=False)
 
     # --- M3: 路径索引 ---
-    indexed_file_repo: "IndexedFileRepository" = field(default=None, repr=False)  # noqa: F821
+    indexed_file_repo: "IndexedFileRepository" = field(init=False, repr=False)
 
     # --- AI 服务 ---
-    embedding: "EmbeddingService" = field(default=None)  # noqa: F821
-    llm: "LLMService" = field(default=None)  # noqa: F821
+    embedding: "EmbeddingService"
+    llm: "LLMService"
 
     # --- 业务服务 (lazy init) ---
     _indexer: Optional[object] = field(default=None, repr=False)

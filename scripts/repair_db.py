@@ -7,9 +7,9 @@ Strategy:
   4. Re-create the schema for all tables
 """
 import os
-import sys
-import sqlite3
 import shutil
+import sqlite3
+import sys
 import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -64,7 +64,7 @@ def main():
     dst.execute("PRAGMA journal_mode=WAL")
     dst.execute("PRAGMA foreign_keys=ON")
 
-    from src.services.db import Database, _SCHEMA
+    from src.services.db import _SCHEMA, Database
     Database._conn = dst
     Database._instance = None
     Database._shutdown = False

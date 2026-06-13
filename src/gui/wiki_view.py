@@ -371,7 +371,7 @@ class WikiView(QWidget):
 
             label = f"[{badge}] {title}{issue_tag}  {score_label} {int(score * 100)}"
             item = QListWidgetItem(label)
-            item.setData(Qt.UserRole, p)
+            item.setData(Qt.ItemDataRole.UserRole, p)
 
             # 问题条目标红
             if findings:
@@ -408,7 +408,7 @@ class WikiView(QWidget):
             if findings:
                 label += " ⚠"
             item = QListWidgetItem(label)
-            item.setData(Qt.UserRole, p)
+            item.setData(Qt.ItemDataRole.UserRole, p)
             if findings:
                 has_error = any(f["severity"] == "error" for f in findings)
                 color = QColor(get_color("danger")) if has_error else QColor(get_color("indicator_running"))
@@ -427,12 +427,12 @@ class WikiView(QWidget):
         """单击：只填充详情内容（不弹面板）"""
         if not current:
             return
-        page = current.data(Qt.UserRole)
+        page = current.data(Qt.ItemDataRole.UserRole)
         self._fill_page_detail(page)
 
     def _on_page_double_clicked(self, item: QListWidgetItem):
         """双击：弹出右侧详情面板"""
-        page = item.data(Qt.UserRole)
+        page = item.data(Qt.ItemDataRole.UserRole)
         if not page:
             return
         self._fill_page_detail(page)
@@ -528,7 +528,10 @@ class WikiView(QWidget):
         # 链接
         links = Database.get_links_for_page(page["id"])
         if links:
-            link_strs = [f"{l['target_title']}({l['link_type']})" for l in links[:10]]
+            link_strs = [
+                f"{link['target_title']}({link['link_type']})"
+                for link in links[:10]
+            ]
             self.detail_links.setText("引用 → " + "、".join(link_strs))
         else:
             self.detail_links.setText("引用 → 无")
@@ -636,9 +639,9 @@ class WikiView(QWidget):
             return
         reply = QMessageBox.question(
             self, "确认弃用", "确定弃用此 Wiki 页面？弃用后用户仍可查看但不会在搜索中优先显示。",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply == QMessageBox.Yes:
+        if reply == QMessageBox.StandardButton.Yes:
             from src.services.wiki_workflow import WikiWorkflow
             result = WikiWorkflow.deprecate(page_id, operator="gui_user")
             if result.success:
@@ -653,9 +656,9 @@ class WikiView(QWidget):
             return
         reply = QMessageBox.question(
             self, "确认删除", "确定删除此 Wiki 页面？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply == QMessageBox.Yes:
+        if reply == QMessageBox.StandardButton.Yes:
             Database.delete_wiki_page(page_id)
             self._hide_detail_panel()
             self._load_pages()
@@ -695,7 +698,7 @@ class WikiView(QWidget):
         failed = []
         used_names = set()
         for item in selected:
-            page = item.data(Qt.UserRole)
+            page = item.data(Qt.ItemDataRole.UserRole)
             if not page:
                 continue
             title = page.get("title", "untitled")
@@ -724,7 +727,7 @@ class WikiView(QWidget):
         ids = []
         titles = []
         for item in selected:
-            page = item.data(Qt.UserRole)
+            page = item.data(Qt.ItemDataRole.UserRole)
             if page:
                 ids.append(page["id"])
                 titles.append(page.get("title", ""))
@@ -736,9 +739,9 @@ class WikiView(QWidget):
         reply = QMessageBox.question(
             self, "确认批量删除",
             f"确定删除以下 {len(ids)} 个 Wiki 页面？\n{preview}",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         deleted = 0
         for pid in ids:
@@ -831,9 +834,9 @@ class WikiView(QWidget):
             f"扫描到 {len(pages)} 个页面中共有 {dead_count} 个死链。\n\n"
             f"将调用 LLM 智能分析并修复（重定向、创建占位页或移除标记）。\n"
             f"确定开始修复？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
 
         self.btn_repair.setEnabled(False)

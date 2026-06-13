@@ -1,16 +1,15 @@
 """快速迁移脚本：使用 CREATE 代替 MERGE，大幅提升迁移速度"""
 import json
-import sys
 import time
 
-from src.utils.config import Config
 from src.services.db import Database
+from src.utils.config import Config
 
 config = Config()
 config.load()
 Database.connect(str(config.get_db_path()))
 
-from neo4j import GraphDatabase as Neo4jDriver
+from neo4j import GraphDatabase as Neo4jDriver  # noqa: E402
 
 # 从配置读取 Neo4j 连接信息，不再硬编码凭据
 graph_cfg = config.get("graph_backend", {})
@@ -105,7 +104,7 @@ for r in rows:
         tags = json.loads(raw) if isinstance(raw, str) else raw
         if isinstance(tags, list):
             all_tags.update(tags)
-    except:
+    except (json.JSONDecodeError, TypeError):
         pass
 
 if all_tags:
@@ -131,7 +130,7 @@ def load_json_list(val):
             p = json.loads(val)
             if isinstance(p, list):
                 return p
-        except:
+        except (json.JSONDecodeError, TypeError):
             pass
     return []
 
@@ -212,7 +211,7 @@ try:
         print(f"  {len(edges)} tag relations", flush=True)
     else:
         print("  No tag relations.", flush=True)
-except:
+except Exception:
     print("  No tag_relations table.", flush=True)
 
 # 6. 创建索引

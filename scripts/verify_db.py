@@ -1,4 +1,5 @@
 import sqlite3
+
 c = sqlite3.connect("data/kb.db")
 print("integrity:", c.execute("PRAGMA integrity_check").fetchone()[0])
 print()

@@ -5,7 +5,7 @@ import json
 import threading
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from src.services.db import Database
 
@@ -32,7 +32,7 @@ class KnowledgeRepository:
             item,
         )
         self._conn().commit()
-        return item["id"]
+        return str(item["id"])
 
     def get(self, item_id: str, include_deleted: bool = False) -> Optional[dict]:
         """按 ID 查询；默认过滤已软删除条目（Phase 4 / Sprint 3）。"""
@@ -55,7 +55,7 @@ class KnowledgeRepository:
         ).fetchone()
         return dict(row) if row else None
 
-    def get_batch(self, ids: list[str], include_deleted: bool = False) -> dict[str, dict]:
+    def get_batch(self, ids: List[str], include_deleted: bool = False) -> dict[str, dict]:
         if not ids:
             return {}
         placeholders = ",".join("?" for _ in ids)
@@ -69,7 +69,7 @@ class KnowledgeRepository:
              quality: str | None = None,
              sort_by: str = "updated_at", sort_order: str = "DESC",
              limit: int = 100, offset: int = 0,
-             include_deleted: bool = False) -> list[dict]:
+             include_deleted: bool = False) -> List[dict]:
         """列出知识条目；默认过滤已软删除条目。"""
         conditions, params = [], []
         if not include_deleted:
@@ -179,7 +179,7 @@ class KnowledgeRepository:
                 (item_id,),
             )
             self._conn().commit()
-            return cursor.rowcount > 0
+            return bool(cursor.rowcount > 0)
 
     def purge(self, item_id: str) -> bool:
         """Phase 4: 硬删（彻底清理所有关联数据）。
@@ -204,7 +204,7 @@ class KnowledgeRepository:
             ).fetchone()
         else:
             row = self._conn().execute("SELECT COUNT(*) as cnt FROM knowledge_items").fetchone()
-        return row["cnt"]
+        return int(row["cnt"])
 
     def get_stats(self) -> dict:
         conn = self._conn()
@@ -225,11 +225,11 @@ class KnowledgeRepository:
         return {"total_files": total_files, "total_size": total_size,
                 "file_type_dist": file_type_dist, "category_coverage": cat_count}
 
-    def find_duplicates(self) -> list:
+    def find_duplicates(self) -> List[List[dict]]:
         rows = self._conn().execute(
             "SELECT id, title, source_path, file_size, file_created_at, file_modified_at, created_at FROM knowledge_items"
         ).fetchall()
-        groups = {}
+        groups: dict[tuple[str, int, str, str], List[dict]] = {}
         for row in rows:
             src = (row["source_path"] or "").strip()
             size = row["file_size"] or 0
@@ -241,7 +241,7 @@ class KnowledgeRepository:
         return [sorted(g, key=lambda x: x.get("created_at", ""), reverse=True)
                 for g in groups.values() if len(g) > 1]
 
-    def get_all_tags(self) -> list[str]:
+    def get_all_tags(self) -> List[str]:
         rows = self._conn().execute("SELECT tags FROM knowledge_items WHERE tags IS NOT NULL").fetchall()
         tags_set = set()
         for row in rows:
@@ -251,7 +251,7 @@ class KnowledgeRepository:
                 pass
         return sorted(tags_set)
 
-    def get_all_file_types(self) -> list[str]:
+    def get_all_file_types(self) -> List[str]:
         rows = self._conn().execute(
             "SELECT DISTINCT file_type FROM knowledge_items WHERE file_type IS NOT NULL AND file_type != '' ORDER BY file_type"
         ).fetchall()
@@ -272,7 +272,7 @@ class KnowledgeRepository:
         )
         self._conn().commit()
 
-    def list_versions(self, knowledge_id: str) -> list[dict]:
+    def list_versions(self, knowledge_id: str) -> List[dict]:
         rows = self._conn().execute(
             "SELECT * FROM knowledge_versions WHERE knowledge_id = ? ORDER BY version DESC",
             (knowledge_id,),
@@ -301,7 +301,7 @@ class KnowledgeRepository:
 
     # ---- Chunks ----
 
-    def insert_chunks(self, chunks: list[dict]):
+    def insert_chunks(self, chunks: List[dict]):
         _required_chunk_keys = {"id", "knowledge_id", "chunk_index", "chunk_text", "created_at"}
         for i, c in enumerate(chunks):
             missing = _required_chunk_keys - set(c.keys())
@@ -316,7 +316,7 @@ class KnowledgeRepository:
         self._upsert_blocks_from_chunks(chunks)
         conn.commit()
 
-    def _upsert_blocks_from_chunks(self, chunks: list[dict]):
+    def _upsert_blocks_from_chunks(self, chunks: List[dict]):
         if not chunks:
             return
         block_rows = []
@@ -356,7 +356,7 @@ class KnowledgeRepository:
             prop_rows,
         )
 
-    def get_chunks_by_knowledge(self, knowledge_id: str) -> list[dict]:
+    def get_chunks_by_knowledge(self, knowledge_id: str) -> List[dict]:
         rows = self._conn().execute(
             "SELECT * FROM knowledge_chunks WHERE knowledge_id = ? ORDER BY chunk_index",
             (knowledge_id,),
@@ -369,7 +369,7 @@ class KnowledgeRepository:
 
     # ---- Chunk FTS ----
 
-    def insert_chunks_fts(self, chunks: list[dict]):
+    def insert_chunks_fts(self, chunks: List[dict]):
         import logging
 
         from src.utils.chinese_tokenizer import tokenize_chinese_full
@@ -396,7 +396,7 @@ class KnowledgeRepository:
         self._conn().execute("DELETE FROM chunk_fts WHERE knowledge_id = ?", (knowledge_id,))
         self._conn().commit()
 
-    def search_chunks_fts(self, query: str, limit: int = 20) -> list[dict]:
+    def search_chunks_fts(self, query: str, limit: int = 20) -> List[dict]:
         from src.utils.chinese_tokenizer import sanitize_fts_query, tokenize_chinese_full
         tokenized_query = tokenize_chinese_full(query)
         if not tokenized_query.strip():
@@ -429,7 +429,7 @@ class KnowledgeRepository:
 
     # ---- Knowledge FTS ----
 
-    def search(self, query: str, limit: int = 20, offset: int = 0) -> list[dict]:
+    def search(self, query: str, limit: int = 20, offset: int = 0) -> List[dict]:
         from src.utils.chinese_tokenizer import sanitize_fts_query
         conn = self._conn()
         try:

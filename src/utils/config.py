@@ -12,6 +12,7 @@ import functools
 import logging
 import os
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -107,7 +108,7 @@ class Config:
     def _set_nested(self, key: str, value):
         """内部辅助：直接在 _data 中设置嵌套键（不触发 load 检查）"""
         keys = key.split(".")
-        cfg = self._data
+        cfg: dict[str, Any] = self._data
         for k in keys[:-1]:
             cfg = cfg.setdefault(k, {})
         cfg[keys[-1]] = value
@@ -115,7 +116,7 @@ class Config:
     def _get_nested(self, key: str):
         """内部辅助：直接从 _data 中读取嵌套键"""
         keys = key.split(".")
-        val = self._data
+        val: Any = self._data
         for k in keys:
             if isinstance(val, dict):
                 val = val.get(k)
@@ -160,7 +161,7 @@ class Config:
         if not self._data:
             self.load()
         keys = key.split(".")
-        val = self._data
+        val: Any = self._data
         for k in keys:
             if isinstance(val, dict):
                 val = val.get(k)
@@ -254,6 +255,6 @@ class Config:
 
     @_dualmethod
     def get_db_path(self) -> Path:
-        return self.get_data_dir() / self.get("storage.db_name", "kb.db")
+        return Path(self.get_data_dir()) / str(self.get("storage.db_name", "kb.db"))
 
 

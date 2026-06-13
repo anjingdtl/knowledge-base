@@ -140,7 +140,7 @@ def do_start(host: str = _DEFAULT_HOST, port: int = _DEFAULT_PORT) -> int:
     # 检查端口
     if _is_port_in_use(port, host):
         print(f"[FAIL] 端口 {port} 已被占用，请检查是否有其他服务使用该端口")
-        print(f"  提示: 使用 --port 指定其他端口")
+        print("  提示: 使用 --port 指定其他端口")
         return 1
 
     # 选择 pythonw.exe（Windows 无窗口模式）
@@ -203,16 +203,16 @@ def do_start(host: str = _DEFAULT_HOST, port: int = _DEFAULT_PORT) -> int:
                 print(f"\n[FAIL] 启动失败（进程已退出），日志: {_LOG_FILE}")
                 return 1
             if _is_port_in_use(port, host):
-                print(f"[OK]")
+                print("[OK]")
                 print(f"  PID: {proc.pid}")
                 print(f"  HTTP 接入: http://{host}:{port}/mcp")
                 print(f"  日志: {_LOG_FILE}")
-                print(f"  关闭 GUI/终端不影响服务运行")
+                print("  关闭 GUI/终端不影响服务运行")
                 return 0
 
         print(f"[OK] (PID: {proc.pid})")
         print(f"  HTTP 接入: http://{host}:{port}/mcp")
-        print(f"  注意: 端口未响应，可能需要几秒完成初始化")
+        print("  注意: 端口未响应，可能需要几秒完成初始化")
         return 0
 
     except Exception as e:

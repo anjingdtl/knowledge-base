@@ -88,7 +88,7 @@ def _smart_summary(content: str, max_len: int = 300) -> str:
         if all(c in "—－-＝=· " for c in stripped):
             continue
         meaningful.append(stripped)
-        if sum(len(l) for l in meaningful) >= max_len:
+        if sum(len(text_line) for text_line in meaningful) >= max_len:
             break
     text = " ".join(meaningful)
     return text[:max_len]
@@ -500,7 +500,7 @@ class LibrarianService:
             if not raw_items:
                 return []
 
-            title_to_ids = {}
+            title_to_ids: dict[str, list[int]] = {}
             for i, item in enumerate(batch):
                 title_to_ids.setdefault(item["title"], []).append(i)
 

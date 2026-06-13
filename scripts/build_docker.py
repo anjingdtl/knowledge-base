@@ -3,12 +3,12 @@
 用法: python scripts/build_docker.py
 需要: 已安装 Docker
 """
+import os
 import subprocess
 import sys
-import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from src.version import APP_NAME, VERSION
+from src.version import VERSION
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 IMAGE_NAME = "shinehe/knowledge-base"
@@ -26,10 +26,10 @@ def main():
     print(f"构建 Docker 镜像: {tag}")
     print(f"{'='*50}\n")
     run(f'docker build -t "{tag}" -t "{tag_latest}" .')
-    print(f"\n[OK] 镜像构建完成!")
+    print("\n[OK] 镜像构建完成!")
     print(f"  {tag}")
     print(f"  {tag_latest}")
-    print(f"\n启动: docker-compose up -d shinehe-api")
+    print("\n启动: docker-compose up -d shinehe-api")
     print(f"推送: docker push {tag}")
 
 

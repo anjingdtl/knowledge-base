@@ -77,15 +77,18 @@ class HybridSearcher:
                     if cid not in seen:
                         seen.add(cid)
                         fts_rank = r.get("fts_rank", 0)
+                        properties = r.get("properties", {})
+                        metadata = dict(properties)
+                        metadata.update({
+                            "page_id": r.get("page_id", ""),
+                            "block_id": cid,
+                            "block_type": r.get("block_type", ""),
+                            "properties": properties,
+                        })
                         results.append({
                             "id": cid,
                             "text": r.get("content", ""),
-                            "metadata": {
-                                "page_id": r.get("page_id", ""),
-                                "block_id": cid,
-                                "block_type": r.get("block_type", ""),
-                                "properties": r.get("properties", {}),
-                            },
+                            "metadata": metadata,
                             "distance": 0,
                             "fts_rank": fts_rank,
                             "keyword_score": normalize_fts_score(fts_rank),
@@ -104,8 +107,8 @@ class HybridSearcher:
             fts_results = fts_future.result()
 
         k = 60
-        rrf_scores = {}
-        result_map = {}
+        rrf_scores: dict[str, float] = {}
+        result_map: dict[str, dict] = {}
         # 跟踪每个 item 来自哪个通道
         vec_ids = set()
         fts_ids = set()
@@ -180,11 +183,11 @@ class HybridSearcher:
         page_id = item.get("metadata", {}).get("page_id", "")
         block_id = item.get("id", "")
         if page_id and block_id:
-            return page_id + ":" + block_id
+            return f"{page_id}:{block_id}"
         kid = item.get("metadata", {}).get("knowledge_id", "")
         cidx = str(item.get("metadata", {}).get("chunk_index", 0))
         if kid:
-            return kid + ":" + cidx
+            return f"{kid}:{cidx}"
         text = item.get("text", "")
         text_hash = hashlib.md5(text.encode("utf-8", errors="replace")).hexdigest()[:12]
         return "text_" + text_hash

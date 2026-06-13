@@ -7,6 +7,7 @@ import os
 import secrets
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import cast
 
 import bcrypt
 from jose import JWTError, jwt
@@ -121,13 +122,17 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 def create_token(user_id: str) -> str:
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    return jwt.encode({"sub": user_id, "exp": expire}, SECRET_KEY, algorithm=ALGORITHM)
+    return cast(
+        str,
+        jwt.encode({"sub": user_id, "exp": expire}, SECRET_KEY, algorithm=ALGORITHM),
+    )
 
 
 def decode_token(token: str) -> str | None:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload.get("sub")
+        subject = payload.get("sub")
+        return subject if isinstance(subject, str) else None
     except JWTError:
         return None
 

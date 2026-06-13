@@ -63,7 +63,7 @@ class _PreviewDialog(QDialog):
         text_edit.setPlainText(content)
         layout.addWidget(text_edit)
 
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok)
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok)
         buttons.accepted.connect(self.accept)
         layout.addWidget(buttons)
 
@@ -222,8 +222,8 @@ class TrashView(QWidget):
         for row, item in enumerate(self._items):
             # 选择框
             cb = QTableWidgetItem()
-            cb.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-            cb.setCheckState(Qt.Unchecked)
+            cb.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+            cb.setCheckState(Qt.CheckState.Unchecked)
             self.table.setItem(row, COL_SELECT, cb)
             # 标题
             self.table.setItem(row, COL_TITLE, QTableWidgetItem(item["title"]))
@@ -243,7 +243,7 @@ class TrashView(QWidget):
         selected = []
         for row in range(self.table.rowCount()):
             item = self.table.item(row, COL_SELECT)
-            if item and item.checkState() == Qt.Checked:
+            if item and item.checkState() == Qt.CheckState.Checked:
                 selected.append(self._items[row]["filename"])
         return selected
 
@@ -256,14 +256,14 @@ class TrashView(QWidget):
         for row in range(self.table.rowCount()):
             item = self.table.item(row, COL_SELECT)
             if item:
-                item.setCheckState(Qt.Checked)
+                item.setCheckState(Qt.CheckState.Checked)
         self.table.blockSignals(False)
         self._update_selection_label()
 
     def _clear_selection(self):
         self.table.blockSignals(True)
         for row in range(self.table.rowCount()):
-            self.table.item(row, COL_SELECT).setCheckState(Qt.Unchecked)
+            self.table.item(row, COL_SELECT).setCheckState(Qt.CheckState.Unchecked)
         self.table.blockSignals(False)
         self._update_selection_label()
 
@@ -276,9 +276,9 @@ class TrashView(QWidget):
         reply = QMessageBox.question(
             self, "确认恢复",
             f"确定恢复选中的 {len(filenames)} 个文件吗？\n恢复后将重新建立索引。",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
 
         service = _file_graph_service()
@@ -301,9 +301,9 @@ class TrashView(QWidget):
         reply = QMessageBox.question(
             self, "确认永久删除",
             f"确定永久删除选中的 {len(filenames)} 个文件吗？\n此操作不可恢复。",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
 
         service = _file_graph_service()
@@ -319,9 +319,9 @@ class TrashView(QWidget):
         reply = QMessageBox.question(
             self, "确认清空回收站",
             f"确定清空回收站中的 {total} 个文件吗？\n此操作不可恢复。",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
 
         service = _file_graph_service()
@@ -352,9 +352,9 @@ class TrashView(QWidget):
         reply = QMessageBox.question(
             self, "确认恢复",
             f"确定恢复 \"{self._items[row]['title']}\" 吗？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         service = _file_graph_service()
         try:
@@ -368,9 +368,9 @@ class TrashView(QWidget):
         reply = QMessageBox.question(
             self, "确认永久删除",
             f"确定永久删除 \"{self._items[row]['title']}\" 吗？\n此操作不可恢复。",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         service = _file_graph_service()
         service.purge_page(filename)

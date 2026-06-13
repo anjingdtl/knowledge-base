@@ -32,7 +32,7 @@ from src.utils.config import Config
 
 
 def _font_sm() -> int:
-    return max(10, Config.get("appearance.font_size", 13) - 2)
+    return max(10, int(Config.get("appearance.font_size", 13)) - 2)
 
 
 class ChatWorker(QThread):
@@ -156,7 +156,11 @@ def _source_graph_summary(source_graph: dict | None) -> str:
     return summary
 
 
-def _ai_bubble_html(content: str, sources: list = None, source_graph: dict | None = None) -> str:
+def _ai_bubble_html(
+    content: str,
+    sources: list | None = None,
+    source_graph: dict | None = None,
+) -> str:
     text_color = get_color("text")
     dim = get_color("text_dim")
     bubble_bg = get_color("chat_ai_bubble")
@@ -279,7 +283,7 @@ class ChatView(QWidget):
         # 欢迎页容器（无对话时显示）
         welcome_container = QWidget()
         welcome_layout = QVBoxLayout(welcome_container)
-        welcome_layout.setAlignment(Qt.AlignCenter)
+        welcome_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         welcome_layout.setContentsMargins(40, 40, 40, 40)
 
         self.welcome_page = EmptyState(
@@ -291,7 +295,7 @@ class ChatView(QWidget):
 
         # 示例问题按钮区
         example_row = QHBoxLayout()
-        example_row.setAlignment(Qt.AlignCenter)
+        example_row.setAlignment(Qt.AlignmentFlag.AlignCenter)
         example_row.setSpacing(10)
         accent = get_color("accent")
         for question_text in [
@@ -300,7 +304,7 @@ class ChatView(QWidget):
             "什么是全渠道运营？",
         ]:
             btn = QPushButton(question_text)
-            btn.setCursor(Qt.PointingHandCursor)
+            btn.setCursor(Qt.CursorShape.PointingHandCursor)
             btn.setFixedHeight(32)
             btn.setStyleSheet(
                 f"QPushButton {{"
@@ -360,7 +364,7 @@ class ChatView(QWidget):
         convs = Database.list_conversations()
         for conv in convs:
             item = QListWidgetItem(conv["title"] or "新对话")
-            item.setData(Qt.UserRole, conv)
+            item.setData(Qt.ItemDataRole.UserRole, conv)
             self.conv_list.addItem(item)
         if convs:
             self.conv_list.setCurrentRow(0)
@@ -388,7 +392,7 @@ class ChatView(QWidget):
     def _on_conv_selected(self, current: QListWidgetItem, previous: QListWidgetItem):
         if not current:
             return
-        conv = current.data(Qt.UserRole)
+        conv = current.data(Qt.ItemDataRole.UserRole)
         self._current_conv_id = conv["id"]
         self._display_messages()
 
@@ -417,7 +421,7 @@ class ChatView(QWidget):
                     except (json.JSONDecodeError, ValueError):
                         source_graph = {"nodes": [], "edges": []}
                 self.chat_output.append(_ai_bubble_html(self._escape(content), sources, source_graph))
-        self.chat_output.moveCursor(QTextCursor.End)
+        self.chat_output.moveCursor(QTextCursor.MoveOperation.End)
 
     def showEvent(self, event):
         super().showEvent(event)
@@ -436,7 +440,7 @@ class ChatView(QWidget):
         Database.insert_conversation(conv.to_row())
         self._current_conv_id = conv.id
         item = QListWidgetItem("新对话")
-        item.setData(Qt.UserRole, {"id": conv.id, "title": conv.title, "created_at": conv.created_at})
+        item.setData(Qt.ItemDataRole.UserRole, {"id": conv.id, "title": conv.title, "created_at": conv.created_at})
         self.conv_list.insertItem(0, item)
         self.conv_list.setCurrentItem(item)
         self.chat_output.clear()
@@ -453,7 +457,7 @@ class ChatView(QWidget):
         action_delete = menu.addAction(make_icon(NAV["delete"], "danger"), "删除")
         action = menu.exec(self.conv_list.mapToGlobal(pos))
         if action == action_rename:
-            conv = item.data(Qt.UserRole)
+            conv = item.data(Qt.ItemDataRole.UserRole)
             from PySide6.QtWidgets import QInputDialog
             text, ok = QInputDialog.getText(self, "重命名", "对话标题：", text=conv["title"])
             if ok:
@@ -462,9 +466,9 @@ class ChatView(QWidget):
                 conv["title"] = text
                 item.setText(text)
         elif action == action_delete:
-            conv = item.data(Qt.UserRole)
-            reply = QMessageBox.question(self, "确认删除", "确定删除此对话？", QMessageBox.Yes | QMessageBox.No)
-            if reply == QMessageBox.Yes:
+            conv = item.data(Qt.ItemDataRole.UserRole)
+            reply = QMessageBox.question(self, "确认删除", "确定删除此对话？", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            if reply == QMessageBox.StandardButton.Yes:
                 Database.delete_conversation(conv["id"])
                 self._load_conversations()
                 self.chat_output.clear()
@@ -531,7 +535,7 @@ class ChatView(QWidget):
             )
             Database.get_conn().commit()
             current_item = self.conv_list.currentItem()
-            if current_item and current_item.data(Qt.UserRole).get("title") == "新对话":
+            if current_item and current_item.data(Qt.ItemDataRole.UserRole).get("title") == "新对话":
                 current_item.setText(question[:30])
 
     # 思考阶段中文映射
@@ -558,7 +562,7 @@ class ChatView(QWidget):
         phase = getattr(self, '_thinking_phase', '思考中')
         # 更新思考气泡中的文字
         cursor = self.chat_output.textCursor()
-        cursor.movePosition(QTextCursor.End)
+        cursor.movePosition(QTextCursor.MoveOperation.End)
         cursor.movePosition(QTextCursor.StartOfBlock, QTextCursor.KeepAnchor)
         cursor.removeSelectedText()
         cursor.insertText(f"{phase} {dots}")
@@ -591,7 +595,7 @@ class ChatView(QWidget):
 
     def _on_chunk(self, chunk: str):
         cursor = self.chat_output.textCursor()
-        cursor.movePosition(QTextCursor.End)
+        cursor.movePosition(QTextCursor.MoveOperation.End)
         cursor.insertText(chunk)
         self.chat_output.setTextCursor(cursor)
         self.chat_output.ensureCursorVisible()
@@ -647,9 +651,9 @@ class ChatView(QWidget):
             return
         reply = QMessageBox.question(
             self, "保存到 Wiki", "将这条 AI 回答保存为 Wiki 页面？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         from src.services.wiki_compiler import WikiCompiler
         source_ids = [s.get("knowledge_id", "") for s in self._last_ai_sources if s.get("knowledge_id")]

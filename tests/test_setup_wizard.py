@@ -224,6 +224,36 @@ class TestAppIntegration:
 class TestSampleData:
     """示例知识包文件验证"""
 
+    def test_import_sample_data_uses_parsed_file_contract(self, monkeypatch):
+        from src import app
+        from src.services import db, file_parser
+        from src.services.file_parser import ParsedFile
+
+        inserted = []
+        monkeypatch.setattr(
+            file_parser,
+            "parse_file",
+            lambda path: [
+                ParsedFile(
+                    title=Path(path).stem,
+                    content="# Sample\n\nReadable sample content.",
+                    file_type="md",
+                    source_path=path,
+                    metadata={},
+                )
+            ],
+        )
+        monkeypatch.setattr(
+            db.Database,
+            "insert_knowledge",
+            lambda *args: inserted.append(args[-1]),
+        )
+
+        app._import_sample_data()
+
+        assert inserted
+        assert inserted[0]["content"].startswith("# Sample")
+
     def test_samples_directory_exists(self):
         """samples 目录存在"""
         samples_dir = _SOURCE_DIR / "data" / "samples"

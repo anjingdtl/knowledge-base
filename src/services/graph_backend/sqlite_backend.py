@@ -544,16 +544,17 @@ class SQLiteGraphBackend(GraphBackend):
     @staticmethod
     def _node_to_traversal_dict(node: GraphNode) -> dict:
         """将 GraphNode 转换为 GraphTraversalService 风格的 dict"""
+        properties = dict(node.properties)
         result = {
             "id": node.source_id,
             "type": node.node_type,
             "label": node.label,
-            "properties": node.properties,
+            "properties": properties,
         }
         if node.node_type == "page":
-            result["properties"]["file_type"] = node.properties.get("file_type", "")
+            properties["file_type"] = node.properties.get("file_type", "")
         elif node.node_type == "block":
             result["block_id"] = node.source_id
-            result["properties"]["block_id"] = node.source_id
-            result["properties"]["page_id"] = node.properties.get("page_id", "")
+            properties["block_id"] = node.source_id
+            properties["page_id"] = node.properties.get("page_id", "")
         return result

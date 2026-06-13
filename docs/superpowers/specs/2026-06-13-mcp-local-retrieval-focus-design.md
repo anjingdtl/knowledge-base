@@ -1,10 +1,11 @@
 # MCP 本地高精准检索收束改造 Spec
 
 > **日期**: 2026-06-13
-> **状态**: Proposed
+> **状态**: Implemented and health-reviewed in v1.3.1
 > **输入建议**: `F:\迅雷下载\knowledge_base_mcp_local_retrieval_optimization.docx`
 > **适用项目**: ShineHeKnowledge
 > **核心定位**: Local-first MCP knowledge retrieval engine for AI assistants.
+> **验证**: 2026-06-13 全量测试 `828 passed, 2 skipped`，Ruff/mypy/前端构建/检索评测/Demo 全绿；本地 Docker 因无 CLI 由远端 CI 验证。
 
 ## 1. 执行决策
 

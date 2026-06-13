@@ -1,3 +1,5 @@
+from typing import Any
+
 from src.models.query_dsl import Condition, QuerySpec
 
 
@@ -42,8 +44,8 @@ class QueryExplainer:
         return "empty filter"
 
     def _build_plan(self, spec: QuerySpec) -> dict:
-        tables = set()
-        indexes = []
+        tables: set[str] = set()
+        indexes: list[str] = []
         self._collect_tables(spec.filter_condition, tables, indexes)
         if spec.include_blocks:
             tables.add("blocks")
@@ -56,7 +58,7 @@ class QueryExplainer:
             "sort": {"field": spec.sort_by, "order": spec.sort_order},
         }
 
-    def _collect_tables(self, condition: Condition, tables: set, indexes: list):
+    def _collect_tables(self, condition: Condition, tables: set[str], indexes: list[str]):
         tables.add("knowledge_items")
         if condition.type in ("and", "or"):
             for child in condition.children:
@@ -76,7 +78,7 @@ class QueryExplainer:
             tables.add("entity_refs")
             tables.add("knowledge_items")
 
-    def _estimate_complexity(self, condition: Condition, tables: set) -> str:
+    def _estimate_complexity(self, condition: Condition, tables: set[str]) -> str:
         depth = self._max_depth(condition)
         table_count = len(tables)
         if depth <= 1 and table_count <= 2:
@@ -95,7 +97,7 @@ class QueryExplainer:
         return 0
 
     def _build_tree(self, condition: Condition) -> dict:
-        node = {"type": condition.type}
+        node: dict[str, Any] = {"type": condition.type}
         if condition.type in ("and", "or"):
             node["children"] = [self._build_tree(c) for c in condition.children]
         elif condition.type == "not":

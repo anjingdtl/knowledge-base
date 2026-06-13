@@ -10,17 +10,15 @@
   python scripts/migrate_phase123.py --skip-sync    # 跳过 sync_all，只跑 Step 2+3
   python scripts/migrate_phase123.py --dry-run      # 只打印快照，不执行迁移
 """
-import sys
 import os
+import sys
 import time
-import json
-import sqlite3
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 os.environ.setdefault("SHINEHE_HOME", os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.utils.config import Config
 from src.services.db import Database
+from src.utils.config import Config
 
 
 def print_header(title):
@@ -178,31 +176,31 @@ def step3_verify():
         pct = with_parent / total_blocks * 100 if total_blocks > 0 else 0
         print(f"  [OK] Block 层级: {with_parent}/{total_blocks} ({pct:.1f}%) blocks have parent_id")
     else:
-        print(f"  [FAIL] Block 层级: 0 blocks have parent_id")
+        print("  [FAIL] Block 层级: 0 blocks have parent_id")
         ok = False
 
     if auto_links > 0:
         print(f"  [OK] Wiki-link 发现: {auto_links} auto_discovered entity_refs")
     else:
-        print(f"  [WARN] Wiki-link 发现: 0 auto_discovered links (可能是 MD 文件中无 [[链接]] 语法)")
+        print("  [WARN] Wiki-link 发现: 0 auto_discovered links (可能是 MD 文件中无 [[链接]] 语法)")
 
     if eff_props > 0:
         print(f"  [OK] 有效属性: {eff_props} rows in effective_property_index")
     else:
-        print(f"  [WARN] 有效属性: 0 rows (如果没有定义 property_schemas 这是正常的)")
+        print("  [WARN] 有效属性: 0 rows (如果没有定义 property_schemas 这是正常的)")
 
     ki_count = conn.execute("SELECT count(*) FROM knowledge_items").fetchone()[0]
     chunks_count = conn.execute("SELECT count(*) FROM knowledge_chunks").fetchone()[0]
     if ki_count > 0:
         print(f"  [OK] 知识条目: {ki_count} items, {chunks_count} chunks preserved")
     else:
-        print(f"  [FAIL] 知识条目丢失!")
+        print("  [FAIL] 知识条目丢失!")
         ok = False
 
     if ok:
-        print(f"\n  Migration PASSED — all Phase 1/2/3 capabilities are active.")
+        print("\n  Migration PASSED — all Phase 1/2/3 capabilities are active.")
     else:
-        print(f"\n  Migration has ISSUES — see above for details.")
+        print("\n  Migration has ISSUES — see above for details.")
 
     Database.close()
     return ok

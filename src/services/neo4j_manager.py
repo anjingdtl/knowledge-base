@@ -13,10 +13,11 @@ import logging
 import os
 import shutil
 import socket
+import stat
 import subprocess
 import time
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Optional
 from urllib.error import URLError
 from urllib.request import Request, urlopen
@@ -26,7 +27,7 @@ logger = logging.getLogger(__name__)
 # 默认 Bolt 端口
 DEFAULT_BOLT_PORT = 7687
 
-# Neo4j Community Edition 下载地址（5.x 系列，JDK 自带版本）
+# Neo4j Community Edition 下载地址（运行前需安装 Java 17 或 21）
 _NEO4J_DOWNLOAD_URL = (
     "https://dist.neo4j.org/neo4j-community-5.26.0-windows.zip"
 )
@@ -55,6 +56,54 @@ def _port_is_open(host: str, port: int) -> bool:
             return s.connect_ex((host, port)) == 0
     except OSError:
         return False
+
+
+def _find_java_executable() -> str | None:
+    """查找 Neo4j 5.26 支持的 Java 运行时入口。"""
+    java_home = os.environ.get("JAVA_HOME")
+    if java_home:
+        executable = "java.exe" if os.name == "nt" else "java"
+        candidate = Path(java_home) / "bin" / executable
+        if candidate.is_file():
+            return str(candidate)
+    return shutil.which("java")
+
+
+def _extract_zip_safely(
+    archive: Path,
+    target_dir: Path,
+    progress_callback=None,
+) -> None:
+    """安全解压 ZIP，拒绝路径穿越和符号链接成员。"""
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target_root = target_dir.resolve()
+
+    with zipfile.ZipFile(archive, "r") as zf:
+        members = zf.infolist()
+        for member in members:
+            member_path = PurePosixPath(member.filename.replace("\\", "/"))
+            mode = member.external_attr >> 16
+            if (
+                member_path.is_absolute()
+                or ".." in member_path.parts
+                or stat.S_ISLNK(mode)
+            ):
+                raise RuntimeError(f"ZIP 包含不安全路径: {member.filename}")
+
+            destination = (target_root / Path(*member_path.parts)).resolve()
+            try:
+                inside_target = os.path.commonpath((str(target_root), str(destination))) == str(target_root)
+            except ValueError:
+                inside_target = False
+            if not inside_target:
+                raise RuntimeError(f"ZIP 包含不安全路径: {member.filename}")
+
+        total = len(members)
+        for i, member in enumerate(members):
+            zf.extract(member, target_root)
+            if progress_callback and i % 50 == 0:
+                pct = min(int((i + 1) / max(total, 1) * 100), 99)
+                progress_callback("extracting", pct)
 
 
 def find_neo4j_home() -> Path | None:
@@ -167,25 +216,32 @@ class Neo4jManager:
                 "未找到 Neo4j 安装目录。请设置 NEO4J_HOME 环境变量或安装 Neo4j Community Edition。"
             )
 
-        neo4j_bat = self._neo4j_home / "bin" / "neo4j.bat"
+        if _find_java_executable() is None:
+            raise RuntimeError(
+                "Neo4j 5.26 需要预先安装 Java 17 或 Java 21，"
+                "并通过 JAVA_HOME 或 PATH 提供 java 命令。"
+            )
+
+        neo4j_home = self._neo4j_home
+        if neo4j_home is None:
+            raise FileNotFoundError("Neo4j installation directory is unavailable")
+        neo4j_bat = neo4j_home / "bin" / "neo4j.bat"
 
         # 使用 CREATE_NEW_PROCESS_GROUP 在 Windows 上创建独立进程组
         # 避免子进程随父进程退出而被终止；
         # 配合 CREATE_NO_WINDOW 隐藏 neo4j.bat console 调起的 cmd 黑窗口
         # （GUI 启动 _auto_start_neo4j 时如果不隐藏会弹窗闪一下）
-        kwargs = {}
+        creationflags = 0
         if os.name == "nt":
-            kwargs["creationflags"] = (
-                subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW
-            )
+            creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW
 
         logger.info("Starting Neo4j: %s console", neo4j_bat)
         self._process = subprocess.Popen(
             [str(neo4j_bat), "console"],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            cwd=str(self._neo4j_home),
-            **kwargs,
+            cwd=str(neo4j_home),
+            creationflags=creationflags,
         )
 
         # 等待 Bolt 端口就绪
@@ -207,14 +263,17 @@ class Neo4jManager:
             return "Neo4j 未在运行"
 
         # 尝试优雅停止
-        neo4j_bat = self._neo4j_home / "bin" / "neo4j.bat"
+        neo4j_home = self._neo4j_home
+        if neo4j_home is None:
+            raise FileNotFoundError("Neo4j installation directory is unavailable")
+        neo4j_bat = neo4j_home / "bin" / "neo4j.bat"
         if neo4j_bat.exists():
             try:
                 subprocess.run(
                     [str(neo4j_bat), "stop"],
                     timeout=10,
                     capture_output=True,
-                    cwd=str(self._neo4j_home),
+                    cwd=str(neo4j_home),
                 )
             except (subprocess.TimeoutExpired, OSError) as exc:
                 logger.warning("neo4j stop failed: %s", exc)
@@ -281,6 +340,7 @@ class Neo4jManager:
             "running": self.is_running(),
             "neo4j_home": str(self._neo4j_home) if self._neo4j_home else None,
             "bolt_port": self._bolt_port,
+            "java_available": _find_java_executable() is not None,
         }
 
     @staticmethod
@@ -290,7 +350,7 @@ class Neo4jManager:
     ) -> str:
         """自动下载并安装 Neo4j Community Edition
 
-        下载 Neo4j Community 5.x（自带 JDK）到用户目录，解压后即可使用。
+        下载 Neo4j Community 5.x 到用户目录。运行 Neo4j 前需预装 Java 17 或 21。
         安装完成后自动更新 NEO4J_HOME 缓存。
 
         Args:
@@ -346,14 +406,7 @@ class Neo4jManager:
             progress_callback("extracting", 0)
 
         try:
-            with zipfile.ZipFile(zip_path, "r") as zf:
-                members = zf.infolist()
-                total = len(members)
-                for i, member in enumerate(members):
-                    zf.extract(member, target_dir)
-                    if progress_callback and i % 50 == 0:
-                        pct = min(int(i / total * 100), 99)
-                        progress_callback("extracting", pct)
+            _extract_zip_safely(zip_path, target_dir, progress_callback)
         except (zipfile.BadZipFile, OSError) as exc:
             raise RuntimeError(f"解压 Neo4j 失败: {exc}") from exc
         finally:
