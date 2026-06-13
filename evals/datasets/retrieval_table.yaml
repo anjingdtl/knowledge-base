@@ -1,0 +1,14 @@
+# Table / structured queries — fixture-based retrieval evaluation
+# These queries target API documentation and structured content.
+
+- query: "API search endpoint parameters"
+  expected_sources:
+    - path: "fixtures/api_guide.md"
+      block_contains: "POST /api/search"
+  category: "structured"
+
+- query: "authentication bearer token"
+  expected_sources:
+    - path: "fixtures/api_guide.md"
+      block_contains: "Bearer token"
+  category: "keyword"

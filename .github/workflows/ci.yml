@@ -48,6 +48,38 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+  retrieval-eval:
+    name: Retrieval Eval
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -e ".[dev,parsers]"
+      - name: Validate eval datasets
+        run: pytest tests/test_eval_datasets.py -v --tb=short
+        env:
+          PYTHONPATH: .
+      - name: Run retrieval eval (fake-embedding mode)
+        run: |
+          python evals/run_retrieval_eval.py \
+            --all \
+            --fake-embedding \
+            --baseline evals/baselines/local.json \
+            --max-regression 0.05 \
+            --report json \
+            --output retrieval_report.json
+        env:
+          PYTHONPATH: .
+      - name: Upload retrieval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrieval-eval-report
+          path: retrieval_report.json
+          retention-days: 30
+
   docker:
     name: Docker Build
     runs-on: ubuntu-latest

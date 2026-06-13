@@ -1,0 +1,38 @@
+# Chinese retrieval queries — fixture-based retrieval evaluation
+# Each query maps to expected fixture sources for offline validation.
+
+- query: "知识库默认使用什么数据库？"
+  expected_sources:
+    - path: "fixtures/architecture.md"
+      block_contains: "SQLite with WAL mode"
+      location:
+        heading_path: ["System Architecture", "Storage Layer"]
+  must_not_match:
+    - path: "fixtures/distractor.md"
+  category: "keyword"
+
+- query: "如何改善搜索质量？"
+  expected_sources:
+    - path: "fixtures/troubleshooting.md"
+      block_contains: "reranker.enabled"
+  must_not_match:
+    - path: "fixtures/distractor.md"
+  category: "keyword"
+
+- query: "RRF 融合的默认常数是多少？"
+  expected_sources:
+    - path: "fixtures/architecture.md"
+      block_contains: "k=60"
+  category: "keyword"
+
+- query: "MCP 工具配置档有哪些选项？"
+  expected_sources:
+    - path: "fixtures/config_reference.md"
+      block_contains: "tool_profile"
+  category: "keyword"
+
+- query: "embedding 模型默认维度是多少？"
+  expected_sources:
+    - path: "fixtures/architecture.md"
+      block_contains: "1024"
+  category: "keyword"
