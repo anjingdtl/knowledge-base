@@ -40,7 +40,9 @@ def create_reranker(
     if config is None:
         from src.utils.config import Config as _Config
 
-        config = _Config
+        config = _Config  # type: ignore[assignment]
+
+    assert config is not None
 
     enabled = config.get("reranker.enabled", True)
     if not enabled:

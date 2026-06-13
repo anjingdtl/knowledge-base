@@ -19,7 +19,6 @@ import pytest
 
 import src.mcp_server as mcp_mod
 
-
 LEGACY_SNAPSHOT = Path(__file__).parent / "snapshots" / "mcp_tools_legacy.json"
 
 CORE_TOOLS = frozenset({
@@ -71,7 +70,6 @@ class TestCoreProfileTools:
         # 在 profile registry 实现前，此测试预期失败
         try:
             from src.mcp.tool_registry import select_tools
-            from src.mcp.tool_profiles import CORE_TOOLS as PROFILE_CORE
             definitions = select_tools("core", experimental_enabled=False)
             core_names = {d.name for d in definitions}
             assert len(core_names) == 10, (
@@ -136,7 +134,7 @@ class TestLegacyProfileSnapshot:
             definitions = select_tools("legacy", experimental_enabled=True)
             profile_names = {d.name for d in definitions}
             data = json.loads(LEGACY_SNAPSHOT.read_text(encoding="utf-8"))
-            snapshot_names = {t["name"] for t in data["tools"]}
+            {t["name"] for t in data["tools"]}
             # profile 应覆盖 snapshot 中所有原始工具
             snapshot_originals = {
                 t["name"] for t in data["tools"] if not t.get("is_alias")
@@ -156,7 +154,6 @@ class TestConfigCompatibility:
         """新配置缺省值为 core。"""
         try:
             from src.mcp.tool_registry import resolve_tool_profile
-            from src.utils.config import Config
             # 模拟无 mcp.tool_profile 的新配置
             profile = resolve_tool_profile({"mcp.tool_profile": None})
             # 新配置（没有旧工具使用痕迹）应默认为 core

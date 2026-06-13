@@ -4,7 +4,6 @@ from __future__ import annotations
 import logging
 import os
 from pathlib import Path
-from typing import Optional
 
 from src.services.index_scheduler import IndexScheduler
 
@@ -41,15 +40,14 @@ class FileWatcher:
             RuntimeError: watchdog 未安装
         """
         try:
+            from watchdog.events import FileSystemEventHandler
             from watchdog.observers import Observer
-            from watchdog.events import FileSystemEventHandler, FileCreatedEvent, \
-                FileModifiedEvent, FileDeletedEvent, FileMovedEvent
         except ImportError:
             raise RuntimeError(
                 "watchdog not installed. Run: pip install shinehe-knowledge[watch]"
             )
 
-        scheduler = self._scheduler
+        scheduler: IndexScheduler = self._scheduler  # type: ignore[assignment]
 
         class _Handler(FileSystemEventHandler):
             """将 watchdog 事件标准化并推入 IndexScheduler"""
@@ -73,8 +71,8 @@ class FileWatcher:
                     scheduler.schedule(event.dest_path, "created")
 
         self._observer = Observer()
-        self._observer.schedule(_Handler(), str(self._root), recursive=self._recursive)
-        self._observer.start()
+        self._observer.schedule(_Handler(), str(self._root), recursive=self._recursive)  # type: ignore[attr-defined]
+        self._observer.start()  # type: ignore[attr-defined]
         self._running = True
         logger.info(
             "FileWatcher started on %s (recursive=%s)", self._root, self._recursive

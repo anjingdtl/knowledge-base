@@ -26,7 +26,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.core.container import AppContainer
+from src.core.container import create_container, shutdown_container
 from src.utils.config import Config
 
 
@@ -252,42 +252,41 @@ mcp:
         config_path.write_text(config_content, encoding="utf-8")
         print(f"✓ 配置已写入: {config_path}")
         
-        # 加载配置
-        Config.load(str(config_path))
-        container = AppContainer()
-        container.config.set(Config)
-        
+        # 加载配置并创建容器
+        container = create_container(config_path=str(config_path))
+
         # 步骤 3: 索引文档
         print("\n[3/7] 索引文档...")
-        indexer = container.indexer()
-        index_result = indexer.index_directory(str(docs_dir))
-        print(f"✓ 索引完成: {index_result.get('total', 0)} 个文档, "
-              f"{index_result.get('chunks', 0)} 个块")
-        
+        path_indexer = container.path_indexer()
+        index_result = path_indexer.index_path(docs_dir, recursive=True)
+        print(f"✓ 索引完成: +{index_result.created} 新增, "
+              f"~{index_result.updated} 更新, -{index_result.deleted} 删除, "
+              f"跳过 {index_result.skipped}")
+
         # 步骤 4: 搜索查询
         print("\n[4/7] 搜索查询: 'Python 函数定义'")
         search_service = container.search_service()
         search_results = search_service.search("Python 函数定义", top_k=3)
-        
+
         if search_results and len(search_results) > 0:
             top_result = search_results[0]
             print(f"✓ 找到 {len(search_results)} 个结果")
             print(f"  最佳匹配: {top_result.get('title', 'N/A')}")
             print(f"  相关度: {top_result.get('score', 0):.3f}")
             results["initial_hit"] = True
-            
+
             # 检查引用完整性
             if top_result.get("content") and top_result.get("source_path"):
                 results["citation_complete"] = True
                 print(f"  ✓ 引用完整: 包含内容和来源")
         else:
             print("✗ 未找到结果")
-        
+
         # 步骤 5: 修改文档
         print("\n[5/7] 修改文档 (添加新内容)...")
         python_doc = docs_dir / "python_tutorial.md"
         existing_content = python_doc.read_text(encoding="utf-8")
-        
+
         new_section = """
 
 ## 新增章节: 异常处理
@@ -311,26 +310,27 @@ finally:
 """
         python_doc.write_text(existing_content + new_section, encoding="utf-8")
         print("✓ 文档已更新")
-        
+
         # 步骤 6: 增量更新
         print("\n[6/7] 增量更新索引...")
-        update_result = indexer.index_directory(str(docs_dir))
-        updated_count = update_result.get("updated", 0)
-        print(f"✓ 增量更新完成: {updated_count} 个文档已更新")
-        
-        if updated_count > 0:
+        update_result = path_indexer.index_path(docs_dir, recursive=True)
+        updated_count = update_result.updated
+        print(f"✓ 增量更新完成: +{update_result.created} 新增, "
+              f"~{update_result.updated} 更新, -{update_result.deleted} 删除")
+
+        if updated_count > 0 or update_result.created > 0:
             results["incremental_update"] = True
-        
+
         # 步骤 7: 再次搜索验证新内容
         print("\n[7/7] 搜索新内容: '异常处理 try-except'")
         new_results = search_service.search("异常处理 try-except", top_k=3)
-        
+
         if new_results and len(new_results) > 0:
             top_new = new_results[0]
             print(f"✓ 找到 {len(new_results)} 个结果")
             print(f"  最佳匹配: {top_new.get('title', 'N/A')}")
             print(f"  相关度: {top_new.get('score', 0):.3f}")
-            
+
             # 验证是否包含新内容
             content = top_new.get("content", "")
             if "异常处理" in content or "try-except" in content:
@@ -356,7 +356,7 @@ finally:
     finally:
         # 清理资源
         try:
-            container.shutdown()
+            shutdown_container(container)
         except Exception:
             pass
         

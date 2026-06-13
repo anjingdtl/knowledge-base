@@ -6,7 +6,6 @@ import logging
 import os
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
 
 from src.models.indexing import FileFingerprint, IndexResult, ManifestDiff
 from src.repositories.indexed_file_repo import IndexedFileRepository, _normalize_path
@@ -222,8 +221,8 @@ class PathIndexService:
                 continue
             try:
                 existing = self._repo.get(str(fp.path))
-                kid = existing.get("knowledge_id") if existing else None
-                kid = self._reingest_file(fp.path, kid)
+                existing_kid = existing.get("knowledge_id") if existing else None  # type: str | None
+                kid = self._reingest_file(fp.path, existing_kid)
                 self._record_indexed(fp, kid, "indexed")
                 result.updated += 1
             except Exception as e:
@@ -311,11 +310,12 @@ class PathIndexService:
 
     def _ingest_file(self, path: Path) -> str:
         """解析文件并创建知识条目，返回 knowledge_id"""
-        from src.services.file_parser import parse_file
-        from src.services.indexer import index_knowledge_item
-        from src.models.knowledge import KnowledgeItem
         import json
         import uuid
+
+        from src.models.knowledge import KnowledgeItem
+        from src.services.file_parser import parse_file
+        from src.services.indexer import index_knowledge_item
 
         parsed_list = parse_file(str(path))
         if not parsed_list:
@@ -374,9 +374,9 @@ class PathIndexService:
 
     def _reingest_file(self, path: Path, existing_kid: str | None) -> str:
         """重新解析文件并更新知识条目"""
+        from src.models.knowledge import KnowledgeItem
         from src.services.file_parser import parse_file
         from src.services.indexer import index_knowledge_item
-        from src.models.knowledge import KnowledgeItem
 
         parsed_list = parse_file(str(path))
         if not parsed_list:
