@@ -136,6 +136,28 @@ def _heartbeat(fn):
     return wrapper
 
 
+
+
+# ---- Declarative tool definition (profile-based registration) ----
+
+_PENDING_TOOLS: list[dict] = []
+
+
+def _define_tool(
+    *, name: str, description: str, annotations: dict,
+    group: str, side_effect: str,
+    profiles: frozenset | None = None,
+    experimental: bool = False,
+):
+    """Decorator that records tool metadata without registering with FastMCP."""
+    from src.mcp.tool_registry import tool_definition as _td
+    return _td(
+        name=name, description=description, annotations=annotations,
+        group=group, side_effect=side_effect,
+        profiles=profiles, experimental=experimental,
+    )
+
+
 def _run_async(coro, timeout: float = 120):
     """安全地运行异步协程，兼容已有/无事件循环两种场景。
 
@@ -201,7 +223,7 @@ def _content_preview(text, max_len=200):
 # 写操作工具名称集合（用于 _check_write_policy 快速判断）
 _WRITE_TOOLS = {
     "create", "update", "delete", "restore_knowledge",
-    "ingest_file", "ingest_url", "create_ingest_job",
+    "ingest_file", "ingest_url", "create_ingest_job", "index_path",
     "save_to_wiki",
     "wiki_submit_review", "wiki_approve", "wiki_reject",
     "wiki_deprecate", "wiki_restore_version",
@@ -311,10 +333,12 @@ def _embedding_context_config() -> dict:
 from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
 
 
-@mcp.tool(
+@_define_tool(
+    name="ping",
     description="轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，"
     "无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="ops", side_effect="read",
 )
 def ping() -> dict:
     """轻量级连通性检测，返回服务状态和时间戳。"""
@@ -327,9 +351,11 @@ def ping() -> dict:
     })
 
 
-@mcp.tool(
+@_define_tool(
+    name="search",
     description="基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。",
     annotations={"readOnlyHint": True, "openWorldHint": False},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def search(query: str, top_k: int = 5) -> dict:
@@ -343,9 +369,11 @@ def search(query: str, top_k: int = 5) -> dict:
     return ok(results, total_estimate=len(results), top_k=top_k)
 
 
-@mcp.tool(
+@_define_tool(
+    name="search_fulltext",
     description="基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。",
     annotations={"readOnlyHint": True, "openWorldHint": False},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
@@ -389,12 +417,15 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
     )
 
 
-@mcp.tool(
+@_define_tool(
+    name="ask",
     description="向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。"
     "返回结构化 payload：answer / sources / source_graph / route / query_plan / "
     "block_contexts / warnings。"
     "[耗时提示：通常 5-30 秒，首次调用可能更长，建议客户端超时 ≥ 60s]",
-    annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+    annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="kb", side_effect="read",
+)
 @_heartbeat
 def ask(
     question: str,
@@ -446,10 +477,13 @@ def _do_ask(question: str) -> dict:
     return _get_container().rag_pipeline.query(question)
 
 
-@mcp.tool(
+@_define_tool(
+    name="create",
     description="创建新的知识条目。自动将内容分块并向量化索引，支持纯文本、Markdown 和代码。"
     "[耗时提示：短文本 2-5 秒，长文本可能 10-30 秒]",
-    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="kb", side_effect="write",
+)
 @_heartbeat
 def create(
     title: str,
@@ -522,9 +556,11 @@ def create(
     return attach_operation_id(envelope, log_id)
 
 
-@mcp.tool(
+@_define_tool(
+    name="read",
     description="根据 ID 获取指定知识条目的完整信息。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def read(
@@ -576,9 +612,12 @@ def read(
     return ok(item)
 
 
-@mcp.tool(
+@_define_tool(
+    name="update",
     description="更新已有知识条目的标题、内容或标签。修改内容时会自动创建版本快照。",
-    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="kb", side_effect="write",
+)
 @_heartbeat
 def update(
     item_id: str,
@@ -651,9 +690,11 @@ def update(
     return attach_operation_id(envelope, log_id)
 
 
-@mcp.tool(
+@_define_tool(
+    name="delete",
     description="删除指定的知识条目（Phase 4 默认软删除，可通过 restore_knowledge 或 undo_operation 恢复）。",
     annotations={"destructiveHint": True},
+    group="kb", side_effect="destructive",
 )
 @_heartbeat
 def delete(item_id: str, dry_run: bool = False) -> dict:
@@ -732,9 +773,12 @@ def delete(item_id: str, dry_run: bool = False) -> dict:
     return attach_operation_id(envelope, log_id)
 
 
-@mcp.tool(
+@_define_tool(
+    name="restore_knowledge",
     description="恢复已软删除的知识条目。清除 deleted_at 并将 MD 文件从 .trash 移回 pages/。",
-    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="kb", side_effect="write",
+)
 @_heartbeat
 def restore_knowledge(item_id: str) -> dict:
     """恢复软删除的知识条目（Phase 4）。
@@ -790,10 +834,13 @@ def restore_knowledge(item_id: str) -> dict:
     return attach_operation_id(envelope, log_id)
 
 
-@mcp.tool(
+@_define_tool(
+    name="reindex_all",
     description="重建所有知识条目的索引（向量索引、全文索引、分块索引）。当搜索结果异常时使用。"
     "[耗时提示：可能数分钟，大量数据时建议客户端超时 ≥ 300s]",
-    annotations={'readOnlyHint': False, 'destructiveHint': True, 'idempotentHint': True, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': True, 'idempotentHint': True, 'openWorldHint': False},
+    group="kb", side_effect="destructive",
+)
 @_heartbeat
 def reindex_all(dry_run: bool = False) -> dict:
     """重建全部知识条目的索引。包括分块、向量化和全文索引。
@@ -831,9 +878,11 @@ def reindex_all(dry_run: bool = False) -> dict:
     return attach_operation_id(envelope, log_id)
 
 
-@mcp.tool(
+@_define_tool(
+    name="list_knowledge",
     description="列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。",
     annotations={"readOnlyHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def list_knowledge(
@@ -871,9 +920,38 @@ def list_knowledge(
     )
 
 
-@mcp.tool(
+@_define_tool(
+    name="index_path",
+    description="索引文件或目录。扫描本地路径，自动检测变更并增量导入知识库。"
+    "支持 PDF、DOCX、TXT、Markdown、代码等文档类型。",
+    annotations={"readOnlyHint": False, "destructiveHint": False},
+    group="kb", side_effect="write",
+)
+@_heartbeat
+def index_path(path: str, recursive: bool = True, dry_run: bool = False, force: bool = False) -> dict:
+    """索引文件或目录。
+
+    Args:
+        path: 文件或目录的本地路径
+        recursive: 是否递归扫描子目录（默认 True）
+        dry_run: 设为 True 时只预览变更不执行
+        force: 强制重新索引所有文件
+    """
+    _guard = _check_write_policy("index_path", dry_run=dry_run)
+    if _guard:
+        return _guard
+    from pathlib import Path
+    from dataclasses import asdict
+    service = _get_container().path_indexer
+    result = service.index_path(Path(path), recursive=recursive, dry_run=dry_run, force=force)
+    return ok(asdict(result), dry_run=dry_run)
+
+
+@_define_tool(
+    name="tags",
     description="获取知识库中所有已使用的标签列表。",
     annotations={"readOnlyHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def tags() -> dict:
@@ -882,11 +960,14 @@ def tags() -> dict:
     return ok(all_tags, count=len(all_tags))
 
 
-@mcp.tool(
+@_define_tool(
+    name="ingest_file",
     description="解析本地文件并将其内容导入知识库。支持 PDF、DOCX、TXT、Markdown、HTML、图片及代码文件。"
     "Excel 文件的每个工作表独立导入。大文件自动转异步任务（返回 job_id）。"
     "[耗时提示：小文件 3-10 秒，大文件自动转异步]",
-    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="kb", side_effect="write",
+)
 @_heartbeat
 def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = False) -> dict:
     """解析本地文件并创建知识条目。
@@ -957,9 +1038,12 @@ def ingest_file(file_path: str, tags: list[str] | None = None, dry_run: bool = F
     return ok(result, operation_id=operation_id)
 
 
-@mcp.tool(
+@_define_tool(
+    name="ingest_url",
     description="解析网页 URL 并将其内容导入知识库。支持 HTTP/HTTPS 网页，自动提取正文文本。",
-    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="kb", side_effect="write",
+)
 @_heartbeat
 def ingest_url(url: str, tags: list[str] | None = None, dry_run: bool = False) -> dict:
     """抓取网页并创建知识条目。
@@ -1167,10 +1251,13 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
 
 # ---- Phase 5 / Sprint 4: 大文件异步任务 ----
 
-@mcp.tool(
+@_define_tool(
+    name="create_ingest_job",
     description="创建异步文件/URL导入任务。大文件自动走此路径（也可手动调用强制异步）。"
     "返回 job_id 供 get_job 轮询。",
-    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="kb", side_effect="write",
+)
 @_heartbeat
 def create_ingest_job(
     file_path: str | None = None,
@@ -1236,9 +1323,11 @@ def create_ingest_job(
     )
 
 
-@mcp.tool(
+@_define_tool(
+    name="get_job",
     description="查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def get_job(job_id: str) -> dict:
@@ -1265,9 +1354,11 @@ def get_job(job_id: str) -> dict:
     })
 
 
-@mcp.tool(
+@_define_tool(
+    name="list_jobs",
     description="列出异步任务，可按状态/类型筛选。",
     annotations={"readOnlyHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def list_jobs(
@@ -1297,9 +1388,11 @@ def list_jobs(
     return ok(items, count=len(items), limit=limit, offset=offset)
 
 
-@mcp.tool(
+@_define_tool(
+    name="cancel_job",
     description="取消异步任务。仅 pending/running 状态的任务可取消。",
     annotations={"destructiveHint": True},
+    group="kb", side_effect="destructive",
 )
 @_heartbeat
 def cancel_job(job_id: str) -> dict:
@@ -1326,9 +1419,13 @@ def cancel_job(job_id: str) -> dict:
     )
 
 
-@mcp.tool(
+@_define_tool(
+    name="save_to_wiki",
     description="将好的问答回答保存为 Wiki 页面，实现知识沉淀和复利增长。",
-    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="wiki", side_effect="write",
+    experimental=True,
+)
 @_heartbeat
 def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None) -> dict:
     """将问答保存为 Wiki 页面。
@@ -1355,9 +1452,13 @@ def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None
     return ok({"message": "回答内容过短，未达到保存阈值", "no_op": True})
 
 
-@mcp.tool(
+@_define_tool(
+    name="wiki_lint",
     description="对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。",
-    annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+    annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="wiki", side_effect="read",
+    experimental=True,
+)
 @_heartbeat
 def wiki_lint() -> dict:
     """运行 Wiki 体检，返回健康报告。"""
@@ -1369,12 +1470,16 @@ def wiki_lint() -> dict:
     return ok(report)
 
 
-@mcp.tool(
+@_define_tool(
+    name="fix_dead_references",
     description="使用 LLM 智能修复 Wiki 页面中 [[...]] 死链。"
     "对每个死链分析上下文后选择修复策略：重定向到已有页面、创建占位页面或移除引用。"
     "修复前会先尝试解析有效引用写入 wiki_links 表。"
     "注意：会消耗 LLM 调用次数（每个含死链的页面约 1 次 LLM 调用）。",
-    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+    annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="wiki", side_effect="write",
+    experimental=True,
+)
 @_heartbeat
 def fix_dead_references(max_pages: int = 50, dry_run: bool = False) -> dict:
     """LLM 驱动的 Wiki 死链智能修复。
@@ -1423,7 +1528,12 @@ def fix_dead_references(max_pages: int = 50, dry_run: bool = False) -> dict:
 
 # ---- Wiki Workflow MCP Tools ----
 
-@mcp.tool(description="提交 Wiki 页面进行审核（draft -> review）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="wiki_submit_review",
+    description="提交 Wiki 页面进行审核（draft -> review）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="wiki", side_effect="write",
+    experimental=True,
+)
 @_heartbeat
 def wiki_submit_review(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """提交页面审核"""
@@ -1442,7 +1552,12 @@ def wiki_submit_review(page_id: str, operator: str = "system", comment: str = ""
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
-@mcp.tool(description="审批通过 Wiki 页面（review -> published）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="wiki_approve",
+    description="审批通过 Wiki 页面（review -> published）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="wiki", side_effect="write",
+    experimental=True,
+)
 @_heartbeat
 def wiki_approve(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """审批通过"""
@@ -1461,7 +1576,12 @@ def wiki_approve(page_id: str, operator: str = "system", comment: str = "") -> d
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
-@mcp.tool(description="驳回 Wiki 页面（review -> draft）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="wiki_reject",
+    description="驳回 Wiki 页面（review -> draft）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="wiki", side_effect="write",
+    experimental=True,
+)
 @_heartbeat
 def wiki_reject(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """驳回页面"""
@@ -1480,7 +1600,12 @@ def wiki_reject(page_id: str, operator: str = "system", comment: str = "") -> di
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
-@mcp.tool(description="弃用 Wiki 页面（published -> deprecated）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="wiki_deprecate",
+    description="弃用 Wiki 页面（published -> deprecated）", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="wiki", side_effect="write",
+    experimental=True,
+)
 @_heartbeat
 def wiki_deprecate(page_id: str, operator: str = "system", comment: str = "") -> dict:
     """弃用页面"""
@@ -1499,7 +1624,12 @@ def wiki_deprecate(page_id: str, operator: str = "system", comment: str = "") ->
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
-@mcp.tool(description="获取 Wiki 页面工作流历史", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="wiki_workflow_history",
+    description="获取 Wiki 页面工作流历史", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="wiki", side_effect="read",
+    experimental=True,
+)
 @_heartbeat
 def wiki_workflow_history(page_id: str) -> dict:
     """获取工作流历史"""
@@ -1508,7 +1638,12 @@ def wiki_workflow_history(page_id: str) -> dict:
     return ok({"history": history}, page_id=page_id, count=len(history))
 
 
-@mcp.tool(description="获取 Wiki 页面版本列表", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="wiki_list_versions",
+    description="获取 Wiki 页面版本列表", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="wiki", side_effect="read",
+    experimental=True,
+)
 @_heartbeat
 def wiki_list_versions(page_id: str) -> dict:
     """列出页面所有版本"""
@@ -1516,7 +1651,12 @@ def wiki_list_versions(page_id: str) -> dict:
     return ok({"versions": versions}, page_id=page_id, count=len(versions))
 
 
-@mcp.tool(description="恢复到指定版本的 Wiki 页面", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+@_define_tool(
+    name="wiki_restore_version",
+    description="恢复到指定版本的 Wiki 页面", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="wiki", side_effect="write",
+    experimental=True,
+)
 @_heartbeat
 def wiki_restore_version(page_id: str, version: int) -> dict:
     """恢复到指定版本"""
@@ -1536,7 +1676,11 @@ def wiki_restore_version(page_id: str, version: int) -> dict:
 
 # ---- Async Jobs MCP Tools ----
 
-@mcp.tool(description="创建异步任务", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False})
+@_define_tool(
+    name="create_async_job",
+    description="创建异步任务", annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': False, 'openWorldHint': False},
+    group="ops", side_effect="write",
+)
 @_heartbeat
 def create_async_job(job_type: str, params: dict = None, priority: int = 1, max_retries: int = 3) -> dict:
     """创建异步任务"""
@@ -1548,7 +1692,11 @@ def create_async_job(job_type: str, params: dict = None, priority: int = 1, max_
     return ok({"job_id": job_id, "status": "pending"})
 
 
-@mcp.tool(description="获取异步任务状态", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="get_async_job",
+    description="获取异步任务状态", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="ops", side_effect="read",
+)
 @_heartbeat
 def get_async_job(job_id: str) -> dict:
     """获取任务状态"""
@@ -1559,7 +1707,11 @@ def get_async_job(job_id: str) -> dict:
     return ok(job.__dict__)
 
 
-@mcp.tool(description="列出异步任务", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="list_async_jobs",
+    description="列出异步任务", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="ops", side_effect="read",
+)
 @_heartbeat
 def list_async_jobs(status: str = None, job_type: str = None, limit: int = 20) -> dict:
     """列出任务"""
@@ -1568,7 +1720,11 @@ def list_async_jobs(status: str = None, job_type: str = None, limit: int = 20) -
     return ok([j.__dict__ for j in jobs], count=len(jobs), limit=limit)
 
 
-@mcp.tool(description="取消异步任务", annotations={'readOnlyHint': False, 'destructiveHint': True, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="cancel_async_job",
+    description="取消异步任务", annotations={'readOnlyHint': False, 'destructiveHint': True, 'idempotentHint': True, 'openWorldHint': False},
+    group="ops", side_effect="destructive",
+)
 @_heartbeat
 def cancel_async_job(job_id: str) -> dict:
     """取消任务"""
@@ -1582,7 +1738,11 @@ def cancel_async_job(job_id: str) -> dict:
     return ok({"success": False, "message": "无法取消（可能已完成或不存在）", "job_id": job_id})
 
 
-@mcp.tool(description="执行结构化查询 DSL，返回知识条目列表", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="structured_query",
+    description="执行结构化查询 DSL，返回知识条目列表", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="kb", side_effect="read",
+)
 @_heartbeat
 def structured_query(query_dsl: str, limit: int = 100, offset: int = 0) -> dict:
     """Execute a structured JSON DSL query against the knowledge base.
@@ -1620,7 +1780,11 @@ def structured_query(query_dsl: str, limit: int = 100, offset: int = 0) -> dict:
         return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
 
 
-@mcp.tool(description="解释结构化查询的执行计划与匹配条件", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="explain_query",
+    description="解释结构化查询的执行计划与匹配条件", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="kb", side_effect="read",
+)
 @_heartbeat
 def explain_query(query_dsl: str) -> dict:
     """Explain a structured query: show human-readable summary, execution plan, and condition tree.
@@ -1641,7 +1805,12 @@ def explain_query(query_dsl: str) -> dict:
         return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
 
 
-@mcp.tool(description="从给定节点遍历知识图谱（多跳、限深度、限节点数）", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False})
+@_define_tool(
+    name="graph_traverse",
+    description="从给定节点遍历知识图谱（多跳、限深度、限节点数）", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    group="graph", side_effect="read",
+    experimental=True,
+)
 @_heartbeat
 def graph_traverse(
     start_ids: str,
@@ -1690,10 +1859,12 @@ def graph_traverse(
 
 # ---- Sprint 2: Agentic Query 入口 ----
 
-@mcp.tool(
+@_define_tool(
+    name="route_query",
     description="仅路由分析，不执行检索。返回 mode (structured|graph|hybrid) + query_spec + "
     "traverse + explanation，Agent 据此决定下一步走 execute_query 还是 ask_with_query。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def route_query(question: str) -> dict:
@@ -1721,10 +1892,12 @@ def route_query(question: str) -> dict:
         return fail(ErrorCode.INTERNAL_ERROR, str(exc), question=question)
 
 
-@mcp.tool(
+@_define_tool(
+    name="execute_query",
     description="执行显式 QuerySpec DSL。支持 type=structured（条件过滤）/ graph（图遍历）/ "
     "hybrid（混合搜索）。分页透传 limit/offset/next_offset/truncated。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def execute_query(
@@ -1808,11 +1981,13 @@ def execute_query(
         return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc), type=type)
 
 
-@mcp.tool(
+@_define_tool(
+    name="ask_with_query",
     description="用显式 QuerySpec 控制 RAG 检索阶段，再调用 LLM 生成回答。"
     "返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。"
     "[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]",
     annotations={"readOnlyHint": True, "idempotentHint": False},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def ask_with_query(
@@ -1859,9 +2034,11 @@ def ask_with_query(
         return fail(ErrorCode.INTERNAL_ERROR, str(exc), question=question)
 
 
-@mcp.tool(
+@_define_tool(
+    name="get_source_graph",
     description="根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def get_source_graph(
@@ -2021,9 +2198,11 @@ def get_stats_resource() -> str:
 
 # ---- Capabilities (Sprint 1 新增) ----
 
-@mcp.tool(
+@_define_tool(
+    name="kb_capabilities",
     description="查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def kb_capabilities() -> dict:
@@ -2081,14 +2260,22 @@ def kb_capabilities() -> dict:
             "qna": ["route_query", "ask(include_graph=true, include_context=true)", "get_source_graph", "read"],
             "agent_memory": ["remember_fact", "recall_facts", "update_project_context", "search_decisions", "summarize_recent_changes"],
         },
+        "tool_profile": _CURRENT_PROFILE,
+        "write_policy": Config.get("mcp.write_policy", ""),
+        "experimental_tools_enabled": _EXPERIMENTAL_ENABLED,
+        "visible_tools": sorted({t["name"] for t in tool_summaries if "." not in t["name"]}),
+        "hidden_groups": sorted(_compute_hidden_groups(tool_summaries)),
+        "legacy_aliases_enabled": _ENABLE_ALIASES,
     })
 
 
 # ---- Operation Log Query ----
 
-@mcp.tool(
+@_define_tool(
+    name="query_operation_logs",
     description="查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。",
     annotations={"readOnlyHint": True},
+    group="ops", side_effect="read",
 )
 @_heartbeat
 def query_operation_logs(
@@ -2131,10 +2318,12 @@ def query_operation_logs(
 
 # ---- Phase 4 / Sprint 3: 写操作安全闭环 ----
 
-@mcp.tool(
+@_define_tool(
+    name="preview_operation",
     description="预览写操作而不实际执行。支持 update / create / delete / ingest_file / "
     "reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="kb", side_effect="read",
 )
 @_heartbeat
 def preview_operation(
@@ -2202,9 +2391,11 @@ def preview_operation(
     )
 
 
-@mcp.tool(
+@_define_tool(
+    name="get_operation_log",
     description="按 ID 查询单条操作日志的完整记录。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="ops", side_effect="read",
 )
 @_heartbeat
 def get_operation_log(operation_id: str) -> dict:
@@ -2226,10 +2417,12 @@ def get_operation_log(operation_id: str) -> dict:
     return ok({**entry, "can_undo": can_undo})
 
 
-@mcp.tool(
+@_define_tool(
+    name="undo_operation",
     description="撤销某条操作。支持 update（恢复字段）/ create（软删新条目）/ "
     "delete（恢复软删条目）/ ingest（恢复）。返回 undone_log_id。",
     annotations={"idempotentHint": False, "destructiveHint": False},
+    group="ops", side_effect="write",
 )
 @_heartbeat
 def undo_operation(operation_id: str, operator: str = "system") -> dict:
@@ -2255,10 +2448,12 @@ def undo_operation(operation_id: str, operator: str = "system") -> dict:
                 details=err.get("details"))
 
 
-@mcp.tool(
+@_define_tool(
+    name="list_recent_operations",
     description="列出最近的操作日志（query_operation_logs 的便捷别名）。"
     "按 created_at DESC 排序，缺省 limit=20。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="ops", side_effect="read",
 )
 @_heartbeat
 def list_recent_operations(
@@ -2302,6 +2497,7 @@ _TOOL_METADATA = {
     "restore_knowledge":{"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "恢复知识"},
     "reindex_all":      {"group": "kb",  "side_effect": "destructive","requires_confirmation": True,  "short_desc": "重建索引"},
     "list_knowledge":   {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "列出知识"},
+    "index_path":       {"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "索引路径"},
     "tags":             {"group": "kb",  "side_effect": "read",       "requires_confirmation": False, "short_desc": "列出标签"},
     "ingest_file":      {"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "导入文件"},
     "ingest_url":       {"group": "kb",  "side_effect": "write",      "requires_confirmation": False, "short_desc": "导入网页"},
@@ -2407,49 +2603,15 @@ _TOOL_ALIASES = {
 }
 
 
-def _register_tool_aliases():
-    """注册 namespaced 工具别名（kb.*, wiki.*, graph.*, ops.*）。
-    保留原始工具名不变，别名调用相同的底层函数。
-    """
-    import sys
-    current_module = sys.modules[__name__]
-
-    for alias_name, original_name in _TOOL_ALIASES.items():
-        original_fn = getattr(current_module, original_name, None)
-        if not original_fn:
-            logger.debug("Alias %s → %s: original not found, skipping", alias_name, original_name)
-            continue
-
-        meta = _TOOL_METADATA.get(original_name, {})
-        side = meta.get("side_effect", "read")
-
-        # 创建独立函数对象（保留原始签名）
-        @functools.wraps(original_fn)
-        def _alias(*args, _fn=original_fn, **kwargs):
-            return _fn(*args, **kwargs)
-
-        try:
-            mcp.tool(
-                _alias,
-                name=alias_name,
-                description=f"[→ {original_name}] {meta.get('short_desc', '')}",
-                annotations={
-                    "readOnlyHint": side == "read",
-                    "destructiveHint": side == "destructive",
-                    "idempotentHint": side == "read",
-                    "openWorldHint": False,
-                },
-            )
-        except Exception as exc:
-            logger.debug("Alias registration failed for %s: %s", alias_name, exc)
-
-
 # ---- Phase 4.2: Agent Memory Tools ----
 
-@mcp.tool(
+@_define_tool(
+    name="remember_fact",
     description="记住一个事实、决策、上下文或任务，持久化到知识库。"
     "相同 key 会覆盖已有记忆。category: fact | decision | context | task。",
     annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+    group="memory", side_effect="write",
+    experimental=True,
 )
 @_heartbeat
 def remember_fact(key: str, value: str, category: str = "fact") -> dict:
@@ -2470,9 +2632,12 @@ def remember_fact(key: str, value: str, category: str = "fact") -> dict:
     return attach_operation_id(ok(result), log_id)
 
 
-@mcp.tool(
+@_define_tool(
+    name="recall_facts",
     description="搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。",
     annotations={"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False},
+    group="memory", side_effect="read",
+    experimental=True,
 )
 @_heartbeat
 def recall_facts(query: str, category: str | None = None, limit: int = 5) -> dict:
@@ -2487,10 +2652,13 @@ def recall_facts(query: str, category: str | None = None, limit: int = 5) -> dic
     return ok(results, count=len(results), query=query)
 
 
-@mcp.tool(
+@_define_tool(
+    name="update_project_context",
     description="更新项目整体上下文描述。Agent 可通过此工具记住项目的全局背景信息，"
     "在后续会话中通过 recall_facts(query='project_context') 回忆。",
     annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
+    group="memory", side_effect="write",
+    experimental=True,
 )
 @_heartbeat
 def update_project_context(summary: str) -> dict:
@@ -2509,9 +2677,12 @@ def update_project_context(summary: str) -> dict:
     return attach_operation_id(ok(result), log_id)
 
 
-@mcp.tool(
+@_define_tool(
+    name="search_decisions",
     description="搜索架构/技术决策记录（category=decision 的记忆）。",
     annotations={"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False},
+    group="memory", side_effect="read",
+    experimental=True,
 )
 @_heartbeat
 def search_decisions(query: str, limit: int = 5) -> dict:
@@ -2525,9 +2696,12 @@ def search_decisions(query: str, limit: int = 5) -> dict:
     return ok(results, count=len(results), query=query)
 
 
-@mcp.tool(
+@_define_tool(
+    name="summarize_recent_changes",
     description="总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。",
     annotations={"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False},
+    group="memory", side_effect="read",
+    experimental=True,
 )
 @_heartbeat
 def summarize_recent_changes(since_hours: int = 24) -> dict:
@@ -2540,10 +2714,13 @@ def summarize_recent_changes(since_hours: int = 24) -> dict:
     return ok(result)
 
 
-@mcp.tool(
+@_define_tool(
+    name="extract_tasks_from_doc",
     description="从文档内容中提取待办任务。使用 LLM 智能提取（如可用），否则启发式匹配。"
     "自动将提取结果存为 category=task 的记忆。",
     annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False},
+    group="memory", side_effect="write",
+    experimental=True,
 )
 @_heartbeat
 def extract_tasks_from_doc(content: str) -> dict:
@@ -2559,11 +2736,52 @@ def extract_tasks_from_doc(content: str) -> dict:
     return ok(result, tasks_found=result.get("total_found", 0), stored=result.get("stored", 0))
 
 
-# 所有原始工具定义完成后再注册别名，避免 memory.* 等后置工具被跳过。
-_register_tool_aliases()
+
 
 
 # ---- Prompts ----
+
+
+# ---- Profile-based registration ----
+
+from src.mcp.tool_registry import select_tools, register_tools, get_definitions, resolve_tool_profile
+from src.mcp.aliases import register_aliases as _register_aliases
+from src.mcp.tool_profiles import EXPERIMENTAL_GROUPS as _EXP_GROUPS
+
+# Determine current profile from config
+_CURRENT_PROFILE = resolve_tool_profile(
+    {k: Config.get(k) for k in [
+        "mcp.tool_profile", "mcp.write_policy", "mcp.allow_http_write",
+        "mcp.auth_token", "mcp.enable_legacy_aliases",
+        "mcp.experimental_tools_enabled",
+    ]}
+)
+_EXPERIMENTAL_ENABLED = bool(Config.get("mcp.experimental_tools_enabled", False))
+_ENABLE_ALIASES = bool(
+    Config.get("mcp.enable_legacy_aliases", _CURRENT_PROFILE == "legacy")
+)
+
+# Select and register tools based on profile
+_selected_tools = select_tools(_CURRENT_PROFILE, experimental_enabled=_EXPERIMENTAL_ENABLED)
+register_tools(mcp, _selected_tools)
+_VISIBLE_TOOL_NAMES = {d.name for d in _selected_tools}
+
+# Register aliases if enabled
+if _ENABLE_ALIASES:
+    _register_aliases(mcp, get_definitions(), _VISIBLE_TOOL_NAMES)
+
+
+def _compute_hidden_groups(tool_summaries_list):
+    """Compute which experimental groups are hidden."""
+    all_defs = get_definitions()
+    visible_names = {t["name"] for t in tool_summaries_list if "." not in t["name"]}
+    visible_groups = set()
+    for n in visible_names:
+        d = all_defs.get(n)
+        if d:
+            visible_groups.add(d.group)
+    return _EXP_GROUPS - visible_groups
+
 
 @mcp.prompt(name="kb_qa", description="知识库问答提示模板")
 def knowledge_qa_prompt(question: str) -> str:

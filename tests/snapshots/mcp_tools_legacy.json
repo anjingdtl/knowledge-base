@@ -16,6 +16,7 @@
     {"name": "restore_knowledge", "side_effect": "write", "group": "kb", "is_alias": false},
     {"name": "reindex_all", "side_effect": "destructive", "group": "kb", "is_alias": false},
     {"name": "list_knowledge", "side_effect": "read", "group": "kb", "is_alias": false},
+    {"name": "index_path", "side_effect": "write", "group": "kb", "is_alias": false},
     {"name": "tags", "side_effect": "read", "group": "kb", "is_alias": false},
     {"name": "ingest_file", "side_effect": "write", "group": "kb", "is_alias": false},
     {"name": "ingest_url", "side_effect": "write", "group": "kb", "is_alias": false},
