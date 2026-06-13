@@ -1,18 +1,17 @@
 """Declarative tool registry with profile-based filtering."""
 from __future__ import annotations
 
-import functools
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Callable, Iterable
 
 from fastmcp import FastMCP
 
 from src.mcp.tool_profiles import (
-    CORE_TOOLS,
-    EXTENDED_TOOLS,
     ADMIN_TOOLS,
+    CORE_TOOLS,
     EXPERIMENTAL_GROUPS,
+    EXTENDED_TOOLS,
     PROFILES,
 )
 
@@ -105,7 +104,7 @@ def resolve_tool_profile(config_dict: dict) -> str:
     - If config has mcp settings but no tool_profile, default to "legacy" (old user)
     - If config has no mcp settings at all, default to "core" (new user)
     """
-    profile = config_dict.get("mcp.tool_profile")
+    profile: str = config_dict.get("mcp.tool_profile")  # type: ignore[assignment]
     if profile and profile in PROFILES:
         return profile
 

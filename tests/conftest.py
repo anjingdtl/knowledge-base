@@ -1,12 +1,13 @@
 """测试配置和 fixtures"""
 import os
 import sys
+
 import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from src.utils.config import Config
 from src.services.db import Database
+from src.utils.config import Config
 
 
 @pytest.fixture(autouse=True)
@@ -60,11 +61,11 @@ def sample_item():
 def api_client(setup_db, monkeypatch):
     """创建 API 测试客户端，mock 掉 embedding 和 vectorstore"""
     from fastapi.testclient import TestClient
-    from src.api import create_app
-    from src.api.auth import register_user
 
     # Mock index_knowledge_item to avoid real embedding API calls during tests
     import src.services.indexer as indexer_mod
+    from src.api import create_app
+    from src.api.auth import register_user
     monkeypatch.setattr(indexer_mod, "index_knowledge_item", lambda item: None)
     monkeypatch.setattr(indexer_mod, "reindex_knowledge_item", lambda *a: None)
 
@@ -72,6 +73,10 @@ def api_client(setup_db, monkeypatch):
         def delete_by_knowledge(self, kid): pass
         def add_chunks(self, chunks): pass
     import src.api.routes.knowledge as knowledge_routes
+    # VectorStore is accessed via container, not directly imported.
+    # Set a placeholder attribute so monkeypatch.setattr doesn't fail.
+    if not hasattr(knowledge_routes, "VectorStore"):
+        knowledge_routes.VectorStore = None  # type: ignore[attr-defined]
     monkeypatch.setattr(knowledge_routes, "VectorStore", MockVS)
 
     # Reset rate limiter so test runs don't hit the 10/minute login cap
@@ -96,6 +101,7 @@ def insert_test_knowledge(title="Test", content="Content", tags=None, item_id=No
     """插入测试知识条目"""
     import json
     import uuid
+
     from src.services.db import Database
     kid = item_id or str(uuid.uuid4())
     Database.insert_knowledge({
@@ -122,6 +128,7 @@ def insert_test_block(page_id, content="Block content", block_type="text",
     """插入测试 Block"""
     import json
     import uuid
+
     from src.services.db import Database
     bid = block_id or str(uuid.uuid4())
     Database.insert_blocks([{
@@ -143,6 +150,7 @@ def insert_test_wiki_page(title="Wiki Test", content="Wiki content", status="dra
     """插入测试 Wiki 页面"""
     import json
     import uuid
+
     from src.services.db import Database
     pid = page_id or str(uuid.uuid4())
     Database.insert_wiki_page({

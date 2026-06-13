@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib
+import importlib.util
 import logging
 from typing import TYPE_CHECKING
 
@@ -54,7 +55,7 @@ class LocalCrossEncoderReranker:
                 self._model = CrossEncoder(self._model_name)
 
             pairs = [[query, c.get("text", "")] for c in candidates]
-            scores = self._model.predict(pairs)
+            scores = self._model.predict(pairs)  # type: ignore[attr-defined]
 
             for c, score in zip(candidates, scores):
                 c["rerank_score"] = float(score)

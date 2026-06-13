@@ -348,7 +348,7 @@ def _read_json(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
     with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
+        return dict(json.load(f))
 
 
 def _write_json(path: Path, config: dict[str, Any]) -> None:
