@@ -39,7 +39,7 @@ class QueryRouter:
     def search(self, question: str, top_k: int = 5) -> list[dict]:
         intent = self.route(question)
         if intent.mode != "logic":
-            return self._hybrid.search([question], top_k=top_k)
+            return list(self._hybrid.search([question], top_k=top_k))
         return self._search_logic(intent, top_k=top_k)
 
     def _search_logic(self, intent: QueryIntent, top_k: int) -> list[dict]:

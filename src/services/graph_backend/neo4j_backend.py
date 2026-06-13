@@ -39,7 +39,6 @@ logger = logging.getLogger(__name__)
 # 尝试导入 neo4j 驱动 — 仅在 provider=neo4j 时需要
 try:
     from neo4j import GraphDatabase as Neo4jDriver
-    from neo4j.exceptions import AuthError, ServiceUnavailable
 
     NEO4J_AVAILABLE = True
 except ImportError:
@@ -655,22 +654,24 @@ class Neo4jGraphBackend(GraphBackend):
             return raw
         if isinstance(raw, str):
             try:
-                return json.loads(raw)
+                parsed = json.loads(raw)
+                return parsed if isinstance(parsed, dict) else {}
             except (json.JSONDecodeError, TypeError):
                 return {}
         return {}
 
     @staticmethod
     def _node_to_traversal_dict(node: GraphNode) -> dict:
+        properties = dict(node.properties)
         result = {
             "id": node.source_id,
             "type": node.node_type,
             "label": node.label,
-            "properties": node.properties,
+            "properties": properties,
         }
         if node.node_type == "block":
             result["block_id"] = node.source_id
-            result["properties"]["block_id"] = node.source_id
+            properties["block_id"] = node.source_id
         return result
 
     def _traverse_bfs_fallback(

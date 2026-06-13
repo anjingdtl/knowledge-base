@@ -286,11 +286,11 @@ class CatalogView(QWidget):
                     self.tree,
                     [f"{schema_cat['code']} {schema_cat['name']} ({count})"],
                 )
-                root_node.setData(0, Qt.UserRole, {"type": "category", "id": cat_db["id"], "data": cat_db})
+                root_node.setData(0, Qt.ItemDataRole.UserRole, {"type": "category", "id": cat_db["id"], "data": cat_db})
 
                 for item in root_items:
                     ki = QTreeWidgetItem(root_node, [f"  {item['title']}"])
-                    ki.setData(0, Qt.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
+                    ki.setData(0, Qt.ItemDataRole.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
 
                 # 先渲染预设子类
                 for schema_sub in schema_cat.get("subcategories", []):
@@ -306,10 +306,10 @@ class CatalogView(QWidget):
                         [f"  {schema_sub['code']} {schema_sub['name']} ({len(sub_items)})"],
                     )
                     if sub_db:
-                        sub_node.setData(0, Qt.UserRole, {"type": "category", "id": sub_db["id"], "data": sub_db})
+                        sub_node.setData(0, Qt.ItemDataRole.UserRole, {"type": "category", "id": sub_db["id"], "data": sub_db})
                     for item in sub_items:
                         ki = QTreeWidgetItem(sub_node, [f"    {item['title']}"])
-                        ki.setData(0, Qt.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
+                        ki.setData(0, Qt.ItemDataRole.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
 
                 # 再渲染动态子分类（不属于预设子类的）
                 preset_sub_codes = {s["code"] for s in schema_cat.get("subcategories", [])}
@@ -322,16 +322,16 @@ class CatalogView(QWidget):
                             root_node,
                             [f"  {sc['name']} ({len(dyn_items)})"],
                         )
-                        sub_node.setData(0, Qt.UserRole, {"type": "category", "id": sc["id"], "data": sc})
+                        sub_node.setData(0, Qt.ItemDataRole.UserRole, {"type": "category", "id": sc["id"], "data": sc})
                         for item in dyn_items:
                             ki = QTreeWidgetItem(sub_node, [f"    {item['title']}"])
-                            ki.setData(0, Qt.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
+                            ki.setData(0, Qt.ItemDataRole.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
             else:
                 root_node = QTreeWidgetItem(
                     self.tree,
                     [f"{schema_cat['code']} {schema_cat['name']} (0)"],
                 )
-                root_node.setData(0, Qt.UserRole, {
+                root_node.setData(0, Qt.ItemDataRole.UserRole, {
                     "type": "category", "id": "",
                     "data": {"name": f"{schema_cat['code']} {schema_cat['name']}",
                              "description": schema_cat["description"]},
@@ -355,10 +355,10 @@ class CatalogView(QWidget):
             [f"{UNCATEGORIZED['code']} {UNCATEGORIZED['name']} ({len(uncat_items)})"],
         )
         if uncategorized_db:
-            z_node.setData(0, Qt.UserRole, {"type": "category", "id": uncategorized_db["id"], "data": uncategorized_db})
+            z_node.setData(0, Qt.ItemDataRole.UserRole, {"type": "category", "id": uncategorized_db["id"], "data": uncategorized_db})
         for item in uncat_items:
             ki = QTreeWidgetItem(z_node, [f"  {item['title']}"])
-            ki.setData(0, Qt.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
+            ki.setData(0, Qt.ItemDataRole.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
 
         # 动态分类（不属于预设分类的顶级分类）
         dynamic_roots = [
@@ -367,23 +367,23 @@ class CatalogView(QWidget):
         ]
         if dynamic_roots:
             dyn_root = QTreeWidgetItem(self.tree, ["自定义分类"])
-            dyn_root.setData(0, Qt.UserRole, {"type": "category", "id": "", "data": {"name": "自定义分类"}})
+            dyn_root.setData(0, Qt.ItemDataRole.UserRole, {"type": "category", "id": "", "data": {"name": "自定义分类"}})
             for dc in dynamic_roots:
                 dc_items = Database.get_knowledge_by_category(dc["id"])
                 dc_children = [c for c in categories if c.get("parent_id") == dc["id"]]
                 count = len(dc_items) + sum(len(Database.get_knowledge_by_category(ch["id"])) for ch in dc_children)
                 dc_node = QTreeWidgetItem(dyn_root, [f"  {dc['name']} ({count})"])
-                dc_node.setData(0, Qt.UserRole, {"type": "category", "id": dc["id"], "data": dc})
+                dc_node.setData(0, Qt.ItemDataRole.UserRole, {"type": "category", "id": dc["id"], "data": dc})
                 for item in dc_items:
                     ki = QTreeWidgetItem(dc_node, [f"    {item['title']}"])
-                    ki.setData(0, Qt.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
+                    ki.setData(0, Qt.ItemDataRole.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
                 for ch in dc_children:
                     ch_items = Database.get_knowledge_by_category(ch["id"])
                     ch_node = QTreeWidgetItem(dc_node, [f"    {ch['name']} ({len(ch_items)})"])
-                    ch_node.setData(0, Qt.UserRole, {"type": "category", "id": ch["id"], "data": ch})
+                    ch_node.setData(0, Qt.ItemDataRole.UserRole, {"type": "category", "id": ch["id"], "data": ch})
                     for item in ch_items:
                         ki = QTreeWidgetItem(ch_node, [f"      {item['title']}"])
-                        ki.setData(0, Qt.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
+                        ki.setData(0, Qt.ItemDataRole.UserRole, {"type": "knowledge", "id": item["id"], "data": item})
 
         self.tree.expandAll()
         # 整批构建完成，恢复更新 + 信号（一次性重绘）
@@ -409,7 +409,7 @@ class CatalogView(QWidget):
                 self.tree_stack.setCurrentIndex(0)  # 正常显示树
 
     def _on_item_clicked(self, item: QTreeWidgetItem, column: int):
-        data = item.data(0, Qt.UserRole)
+        data = item.data(0, Qt.ItemDataRole.UserRole)
         if not data:
             return
 
@@ -438,7 +438,7 @@ class CatalogView(QWidget):
 
     def _on_item_double_clicked(self, item: QTreeWidgetItem, column: int):
         """双击：弹出右侧详情面板"""
-        data = item.data(0, Qt.UserRole)
+        data = item.data(0, Qt.ItemDataRole.UserRole)
         if not data:
             return
         self._show_detail_panel(data)
@@ -553,9 +553,9 @@ class CatalogView(QWidget):
             reply = QMessageBox.question(
                 self, "全部分类完毕",
                 f"所有 {total} 条知识已分类完毕。\n是否强制重新全量分类？",
-                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             )
-            if reply != QMessageBox.Yes:
+            if reply != QMessageBox.StandardButton.Yes:
                 return
             incremental = False
             unclassified_count = total

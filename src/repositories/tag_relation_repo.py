@@ -24,7 +24,7 @@ class TagRelationRepository:
             "DELETE FROM tag_relations WHERE parent_tag = ? AND child_tag = ?",
             (parent_tag, child_tag),
         )
-        return cursor.rowcount
+        return int(cursor.rowcount)
 
     def list_all(self) -> list[TagRelation]:
         rows = self._conn().execute(

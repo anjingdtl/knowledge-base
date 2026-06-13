@@ -91,10 +91,11 @@ def resolve_all_content_links() -> dict:
 def parse_tags(raw) -> list[str]:
     """解析 tags 字段（兼容 JSON 字符串和列表）"""
     if isinstance(raw, list):
-        return raw
+        return [str(tag) for tag in raw]
     if isinstance(raw, str):
         try:
-            return json.loads(raw)
+            parsed = json.loads(raw)
+            return [str(tag) for tag in parsed] if isinstance(parsed, list) else []
         except (json.JSONDecodeError, TypeError):
             return []
     return []
@@ -201,7 +202,7 @@ class WikiCompiler:
             return None
 
         result = self._parse_json_response(response)
-        if not result or not result.get("title"):
+        if not isinstance(result, dict) or not result.get("title"):
             return None
 
         # 根据配置决定初始状态
@@ -225,7 +226,7 @@ class WikiCompiler:
             "question": question[:self.QUERY_SAVE_TITLE_TRUNCATE],
             "title": result["title"],
         })
-        return page["id"]
+        return str(page["id"])
 
     def _get_existing_pages_summary(self) -> str:
         pages = Database.list_wiki_pages(status="active", limit=self.EXISTING_PAGES_LIMIT)
@@ -263,7 +264,7 @@ class WikiCompiler:
         }
         Database.insert_wiki_page(page)
         self._auto_link_by_tags(page["id"], tags)
-        return page["id"]
+        return str(page["id"])
 
     def _update_existing_page(self, concept: dict, knowledge_id: str) -> str | None:
         page_id = concept.get("existing_page_id")
@@ -275,7 +276,7 @@ class WikiCompiler:
 
         new_content = concept.get("merge_content", "")
         if not new_content:
-            return page_id
+            return str(page_id)
 
         prompt = MERGE_PROMPT.format(
             existing_title=existing["title"],
@@ -285,7 +286,8 @@ class WikiCompiler:
         )
         try:
             response = self._llm.chat([{"role": "user", "content": prompt}], silent=True)
-            result = self._parse_json_response(response)
+            parsed_result = self._parse_json_response(response)
+            result = parsed_result if isinstance(parsed_result, dict) else None
         except Exception as e:
             logger.warning("Wiki merge LLM call failed: %s", e)
             result = None
@@ -304,7 +306,7 @@ class WikiCompiler:
                     source_ids.append(knowledge_id)
                 updates["source_ids"] = json.dumps(source_ids, ensure_ascii=False)
                 Database.update_wiki_page(page_id, **updates)
-        return page_id
+        return str(page_id)
 
     def _auto_link_by_tags(self, page_id: str, tags: list[str]):
         """基于标签重叠自动创建交叉引用（零 LLM 成本）"""
@@ -402,7 +404,7 @@ class WikiCompiler:
             pages = Database.list_wiki_pages(limit=500)
             for p in pages:
                 if p["id"].startswith(partial_or_full):
-                    return p["id"]
+                    return str(p["id"])
         return None
 
     def _parse_json_response(self, response: str, key: str | None = None) -> dict | list | None:
@@ -421,8 +423,9 @@ class WikiCompiler:
         except json.JSONDecodeError:
             return None
         if key and isinstance(data, dict):
-            return data.get(key)
-        return data
+            selected = data.get(key)
+            return selected if isinstance(selected, (dict, list)) else None
+        return data if isinstance(data, (dict, list)) else None
 
     def repair_dead_references(self, max_pages: int = 50) -> dict:
         """LLM 驱动的死链修复。

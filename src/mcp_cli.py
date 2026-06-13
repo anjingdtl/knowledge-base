@@ -34,7 +34,7 @@ def _patch_session_idle_timeout(timeout: float | None):
             kw["session_idle_timeout"] = timeout
         _orig_init(self, *a, **kw)
 
-    _OrigManager.__init__ = _patched_init
+    _OrigManager.__init__ = _patched_init  # type: ignore[method-assign]
 
 
 def main(argv=None):

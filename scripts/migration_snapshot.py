@@ -1,4 +1,5 @@
 """迁移前数据快照"""
+import os
 import sqlite3
 
 conn = sqlite3.connect("data/kb.db")
@@ -33,7 +34,6 @@ for r in conn.execute("SELECT file_type, count(*) as c FROM knowledge_items GROU
     print(f"  file_type={r['file_type']}: {r['c']}")
 
 print("\n=== Graph Pages ===")
-import os
 pages_dir = "data/graph/pages"
 if os.path.isdir(pages_dir):
     md_files = [f for f in os.listdir(pages_dir) if f.endswith(".md")]

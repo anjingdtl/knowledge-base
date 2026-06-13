@@ -49,8 +49,8 @@ class TestOperationLogInfrastructure:
         repo.insert({"operation": "delete", "target_type": "knowledge", "target_id": "a2"})
 
         logs = repo.query(operation="create", target_type="knowledge")
-        knowledge_creates = [l for l in logs if l["target_type"] == "knowledge"]
-        assert all(l["operation"] == "create" for l in knowledge_creates)
+        knowledge_creates = [entry for entry in logs if entry["target_type"] == "knowledge"]
+        assert all(entry["operation"] == "create" for entry in knowledge_creates)
 
     def test_service_log_disabled(self):
         Config.set("safety.operation_log.enabled", False)
@@ -91,8 +91,8 @@ class TestOperationLogInfrastructure:
 
         repo.cleanup(retention_days=30)
         logs = repo.query(target_type="knowledge")
-        assert all(l["target_id"] != "old-1" for l in logs)
-        assert any(l["target_id"] == "new-1" for l in logs)
+        assert all(entry["target_id"] != "old-1" for entry in logs)
+        assert any(entry["target_id"] == "new-1" for entry in logs)
 
 
 class TestVersionSnapshotExtension:

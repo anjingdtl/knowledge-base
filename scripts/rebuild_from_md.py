@@ -11,9 +11,9 @@ Steps:
   5. Verify
 """
 import os
+import shutil
 import sys
 import time
-import shutil
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -37,8 +37,9 @@ def main():
     from src.utils.config import Config
     Config.load()
 
-    from src.services.db import Database, _SCHEMA
     import sqlite3
+
+    from src.services.db import _SCHEMA, Database
 
     fresh = sqlite3.connect(FRESH_PATH)
     fresh.execute("PRAGMA journal_mode=WAL")
@@ -186,7 +187,7 @@ def main():
                 os.remove(os.path.join("data", f))
                 print(f"  Cleaned up: {f}")
 
-        print(f"\n  SUCCESS: Fresh DB installed at data/kb.db")
+        print("\n  SUCCESS: Fresh DB installed at data/kb.db")
         print(f"  Backup: {os.path.basename(final_backup)}")
     else:
         print(f"\n  ISSUE: ki={ki}, integrity={integrity}")

@@ -120,7 +120,7 @@ def init_session(host: str, port: int, path: str) -> str | None:
     try:
         conn.request("POST", path, body=json.dumps(body), headers=headers)
         resp = conn.getresponse()
-        raw = resp.read().decode("utf-8", errors="replace")
+        resp.read()
         session_id = None
         for k, v in resp.getheaders():
             if k.lower() == "mcp-session-id":
@@ -227,7 +227,7 @@ def print_report(report: StressTestReport, label: str = ""):
     print(f"  失败:       {report.fail_count}")
     print(f"  成功率:     {report.success_rate:.1f}%")
     if report.latencies:
-        print(f"  延迟统计:")
+        print("  延迟统计:")
         print(f"    平均:     {report.avg_latency_ms:,.0f} ms")
         print(f"    P50:      {report.p50_latency_ms:,.0f} ms")
         print(f"    P95:      {report.p95_latency_ms:,.0f} ms")
@@ -235,7 +235,7 @@ def print_report(report: StressTestReport, label: str = ""):
         print(f"    最小:     {min(report.latencies):,.0f} ms")
         print(f"    最大:     {max(report.latencies):,.0f} ms")
     if report.errors:
-        print(f"  错误详情:")
+        print("  错误详情:")
         seen = set()
         for e in report.errors:
             short = e[:120]
@@ -306,7 +306,7 @@ def main():
 
     # 总结
     print(f"\n{'#'*60}")
-    print(f"  总结")
+    print("  总结")
     print(f"{'#'*60}")
     total = sum(r.total_calls for r in all_reports)
     ok_count = sum(r.success_count for r in all_reports)
@@ -329,7 +329,7 @@ def main():
     elif ok_count / max(total, 1) >= 0.95:
         print(f"\n  [WARN] 成功率 {ok_count/max(total,1)*100:.1f}%，少量失败可接受")
     else:
-        print(f"\n  [FAIL] 成功率过低，请检查服务端日志")
+        print("\n  [FAIL] 成功率过低，请检查服务端日志")
 
     print(f"{'#'*60}")
 

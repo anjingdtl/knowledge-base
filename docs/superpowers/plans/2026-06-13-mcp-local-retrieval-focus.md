@@ -1,6 +1,8 @@
 # MCP Local Retrieval Focus Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+>
+> **执行状态（2026-06-13）:** 已在 v1.3.1 完成实现与全仓库健康审查。下方复选框保留为原始执行清单，不再作为实时进度源；最新状态以根目录 `PROGRESS.md` 为准。验证结果：全量测试 `828 passed, 2 skipped`，扩展 Ruff、mypy、前端构建、CI 同款检索评测和端到端 Demo 均通过。本机无 Docker CLI，镜像构建由远端 CI `docker` job 验证。
 
 **Goal:** 将 ShineHeKnowledge 收束为默认工具面精简、可一键本地初始化、可持续索引目录、引用可解释且质量可量化的 MCP 本地知识检索引擎。
 

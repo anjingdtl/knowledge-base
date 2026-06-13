@@ -168,7 +168,10 @@ class QualityWorker(QThread):
         if source_path and os.path.isfile(source_path):
             try:
                 from src.services.file_parser import parse_file
-                parsed = parse_file(source_path)
+                parsed_list = parse_file(source_path)
+                if not parsed_list:
+                    return False
+                parsed = parsed_list[0]
                 if parsed.content and not _check_garbled(parsed.content):
                     hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
                     _file_graph_service().update_page(
@@ -740,11 +743,11 @@ class KnowledgeView(QWidget):
 
             select_item = QTableWidgetItem("")
             select_item.setFlags(
-                Qt.ItemIsUserCheckable | Qt.ItemIsEnabled | Qt.ItemIsSelectable
+                Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable
             )
-            select_item.setCheckState(Qt.Unchecked)
-            select_item.setData(Qt.UserRole, item)
-            select_item.setTextAlignment(Qt.AlignCenter)
+            select_item.setCheckState(Qt.CheckState.Unchecked)
+            select_item.setData(Qt.ItemDataRole.UserRole, item)
+            select_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             self.table_widget.setItem(row, COL_SELECT, select_item)
 
             # 标题
@@ -755,7 +758,7 @@ class KnowledgeView(QWidget):
                 title_item.setForeground(QColor(get_color("garbled_fg")))
             else:
                 title_item = QTableWidgetItem(title)
-            title_item.setData(Qt.UserRole, item)
+            title_item.setData(Qt.ItemDataRole.UserRole, item)
             self.table_widget.setItem(row, COL_TITLE, title_item)
 
             # 格式（彩色徽章）
@@ -764,7 +767,7 @@ class KnowledgeView(QWidget):
             bg_color = FILE_TYPE_COLORS.get(file_type, "#F5F1EB")
             format_item.setBackground(QColor(bg_color))
             format_item.setForeground(QColor("#1A1A1A"))
-            format_item.setTextAlignment(Qt.AlignCenter)
+            format_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             self.table_widget.setItem(row, COL_FORMAT, format_item)
 
             # 导入时间
@@ -800,13 +803,13 @@ class KnowledgeView(QWidget):
     def _on_table_item_changed(self, item: QTableWidgetItem):
         if item.column() != COL_SELECT:
             return
-        data = item.data(Qt.UserRole)
+        data = item.data(Qt.ItemDataRole.UserRole)
         if not data:
             return
         item_id = data.get("id", "")
         if not item_id:
             return
-        if item.checkState() == Qt.Checked:
+        if item.checkState() == Qt.CheckState.Checked:
             self._selected_ids.add(item_id)
         else:
             self._selected_ids.discard(item_id)
@@ -824,10 +827,10 @@ class KnowledgeView(QWidget):
         self.table_widget.blockSignals(True)
         self._selected_ids.clear()
         for item in self._visible_select_items():
-            data = item.data(Qt.UserRole) or {}
+            data = item.data(Qt.ItemDataRole.UserRole) or {}
             if data.get("id"):
                 self._selected_ids.add(data["id"])
-                item.setCheckState(Qt.Checked)
+                item.setCheckState(Qt.CheckState.Checked)
         self.table_widget.blockSignals(False)
         self._update_selection_state()
 
@@ -835,7 +838,7 @@ class KnowledgeView(QWidget):
         self.table_widget.blockSignals(True)
         self._selected_ids.clear()
         for item in self._visible_select_items():
-            item.setCheckState(Qt.Unchecked)
+            item.setCheckState(Qt.CheckState.Unchecked)
         self.table_widget.blockSignals(False)
         self._update_selection_state()
 
@@ -843,7 +846,7 @@ class KnowledgeView(QWidget):
         selected = []
         seen = set()
         for item in self._visible_select_items():
-            data = item.data(Qt.UserRole) or {}
+            data = item.data(Qt.ItemDataRole.UserRole) or {}
             item_id = data.get("id", "")
             if item_id and item_id in self._selected_ids and item_id not in seen:
                 selected.append(data)
@@ -937,7 +940,8 @@ class KnowledgeView(QWidget):
         title_item = self.table_widget.item(row, COL_TITLE)
         if not title_item:
             return None
-        return title_item.data(Qt.UserRole)
+        data = title_item.data(Qt.ItemDataRole.UserRole)
+        return data if isinstance(data, dict) else None
 
     def _on_row_selected(self, row: int, col: int, prev_row: int, prev_col: int):
         """单击行：不做任何操作（详情面板通过双击弹出）"""
@@ -1031,11 +1035,11 @@ class KnowledgeView(QWidget):
             if policy.is_partial:
                 for block in repo.list_by_page(item_id, limit=policy.limit):
                     node = QTreeWidgetItem([block.content or ""])
-                    node.setData(0, Qt.UserRole, block.id)
-                    node.setFlags(node.flags() | Qt.ItemIsEditable)
+                    node.setData(0, Qt.ItemDataRole.UserRole, block.id)
+                    node.setFlags(node.flags() | Qt.ItemFlag.ItemIsEditable)
                     self.outline_tree.addTopLevelItem(node)
                 more = QTreeWidgetItem([f"... only first {policy.limit} of {block_count} blocks shown"])
-                more.setFlags(more.flags() & ~Qt.ItemIsEditable)
+                more.setFlags(more.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 self.outline_tree.addTopLevelItem(more)
                 return
 
@@ -1046,8 +1050,8 @@ class KnowledgeView(QWidget):
             from src.repositories.block_repo import BlockRepository
             for block in BlockRepository(db=Database).list_by_page(item_id, limit=1000):
                 node = QTreeWidgetItem([block.content or ""])
-                node.setData(0, Qt.UserRole, block.id)
-                node.setFlags(node.flags() | Qt.ItemIsEditable)
+                node.setData(0, Qt.ItemDataRole.UserRole, block.id)
+                node.setFlags(node.flags() | Qt.ItemFlag.ItemIsEditable)
                 self.outline_tree.addTopLevelItem(node)
         finally:
             self.outline_tree.setUpdatesEnabled(True)
@@ -1055,8 +1059,8 @@ class KnowledgeView(QWidget):
 
     def _add_outline_item(self, parent, block):
         node = QTreeWidgetItem([block.content or ""])
-        node.setData(0, Qt.UserRole, getattr(block, "id", ""))
-        node.setFlags(node.flags() | Qt.ItemIsEditable)
+        node.setData(0, Qt.ItemDataRole.UserRole, getattr(block, "id", ""))
+        node.setFlags(node.flags() | Qt.ItemFlag.ItemIsEditable)
         if parent is None:
             self.outline_tree.addTopLevelItem(node)
         else:
@@ -1068,7 +1072,7 @@ class KnowledgeView(QWidget):
     def _outline_add_sibling(self):
         current = self.outline_tree.currentItem()
         node = QTreeWidgetItem(["新块"])
-        node.setFlags(node.flags() | Qt.ItemIsEditable)
+        node.setFlags(node.flags() | Qt.ItemFlag.ItemIsEditable)
         if current and current.parent():
             current.parent().insertChild(current.parent().indexOfChild(current) + 1, node)
         elif current:
@@ -1084,7 +1088,7 @@ class KnowledgeView(QWidget):
             self._outline_add_sibling()
             return
         node = QTreeWidgetItem(["新子块"])
-        node.setFlags(node.flags() | Qt.ItemIsEditable)
+        node.setFlags(node.flags() | Qt.ItemFlag.ItemIsEditable)
         current.addChild(node)
         current.setExpanded(True)
         self.outline_tree.setCurrentItem(node)
@@ -1136,7 +1140,7 @@ class KnowledgeView(QWidget):
 
     def _outline_item_to_dict(self, item):
         return {
-            "id": item.data(0, Qt.UserRole) or "",
+            "id": item.data(0, Qt.ItemDataRole.UserRole) or "",
             "content": item.text(0),
             "children": [self._outline_item_to_dict(item.child(i)) for i in range(item.childCount())],
         }
@@ -1189,7 +1193,7 @@ class KnowledgeView(QWidget):
         title_item = self.table_widget.item(row, COL_TITLE)
         if not title_item:
             return
-        data = title_item.data(Qt.UserRole)
+        data = title_item.data(Qt.ItemDataRole.UserRole)
         if not data:
             return
         menu = QMenu(self)
@@ -1262,9 +1266,9 @@ class KnowledgeView(QWidget):
     def _delete_item(self, data: dict):
         reply = QMessageBox.question(
             self, "确认删除", f"确定删除 \"{data['title']}\" 吗？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply == QMessageBox.Yes:
+        if reply == QMessageBox.StandardButton.Yes:
             self._file_graph_service().delete_page(data["id"])
             self._load_knowledge()
 
@@ -1276,9 +1280,9 @@ class KnowledgeView(QWidget):
             self,
             "确认批量删除",
             f"确定删除选中的 {len(items)} 条知识吗？此操作会将对应 Markdown 移入回收区。",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         failed = []
         service = self._file_graph_service()
@@ -1379,9 +1383,9 @@ class KnowledgeView(QWidget):
             reply = QMessageBox.question(
                 self, "全部审查完毕",
                 f"所有 {total} 条知识已审查完毕。\n是否强制重新全量审查？",
-                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             )
-            if reply != QMessageBox.Yes:
+            if reply != QMessageBox.StandardButton.Yes:
                 return
             items = Database.list_knowledge(limit=10000)
 
@@ -1453,18 +1457,18 @@ class KnowledgeView(QWidget):
             reply = QMessageBox.question(
                 self, "全部标准化完毕",
                 f"所有 {len(all_items)} 个条目标题已标准化。\n是否强制重新全量重命名？",
-                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             )
-            if reply != QMessageBox.Yes:
+            if reply != QMessageBox.StandardButton.Yes:
                 return
             items = all_items
         else:
             reply = QMessageBox.question(
                 self, "智能重命名",
                 f"共 {len(items)} 个条目需要重命名（已跳过 {len(all_items) - len(items)} 个标准化标题），是否继续？",
-                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             )
-            if reply != QMessageBox.Yes:
+            if reply != QMessageBox.StandardButton.Yes:
                 return
 
         self.act_rename.setEnabled(False)

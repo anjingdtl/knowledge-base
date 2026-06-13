@@ -8,10 +8,9 @@
 1. PyInstaller 打包为单文件 exe
 2. (可选) Inno Setup 打包为安装向导
 """
+import os
 import subprocess
 import sys
-import os
-import shutil
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from src.version import APP_NAME, VERSION
@@ -41,7 +40,7 @@ def build_pyinstaller():
 
 def build_inno_setup():
     print(f"\n{'='*50}")
-    print(f"[2/2] Inno Setup 打包安装向导")
+    print("[2/2] Inno Setup 打包安装向导")
     print(f"{'='*50}")
     # 查找 Inno Setup
     iscc_paths = [
@@ -56,7 +55,7 @@ def build_inno_setup():
     if not iscc:
         print("[SKIP] 未找到 Inno Setup，跳过安装向导打包。")
         print("       安装 Inno Setup 6: https://jrsoftware.org/isdl.php")
-        print(f"       然后运行: ISCC installer\\setup.iss")
+        print("       然后运行: ISCC installer\\setup.iss")
         return
     iss_file = os.path.join(ROOT, "installer", "setup.iss")
     run(f'"{iscc}" "{iss_file}"')
@@ -72,7 +71,7 @@ def main():
     os.makedirs(os.path.join(ROOT, "dist"), exist_ok=True)
     build_pyinstaller()
     build_inno_setup()
-    print(f"\n[DONE] 构建完成! 输出目录: dist/")
+    print("\n[DONE] 构建完成! 输出目录: dist/")
 
 
 if __name__ == "__main__":

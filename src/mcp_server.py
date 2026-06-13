@@ -17,16 +17,18 @@ import logging
 import os
 import secrets
 from contextlib import asynccontextmanager
-
-WIKI_SEARCH_LIMIT = 3  # Wiki 结构化知识搜索结果上限，可通过配置覆盖
-logger = logging.getLogger(__name__)
+from typing import Callable, ParamSpec, TypeVar
 
 from fastmcp import FastMCP
 from fastmcp.server.auth import AccessToken, TokenVerifier
 
 from src.core.container import AppContainer, create_container, shutdown_container
+from src.mcp.aliases import register_aliases as _register_aliases
+from src.mcp.tool_profiles import EXPERIMENTAL_GROUPS as _EXP_GROUPS
+from src.mcp.tool_registry import get_definitions, register_tools, resolve_tool_profile, select_tools
 from src.services.file_parser import parse_file, parse_url
 from src.services.mcp_heartbeat import beat
+from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
 from src.utils.config import Config
 from src.utils.envelope import (
     ErrorCode,
@@ -36,6 +38,11 @@ from src.utils.envelope import (
     ok,
 )
 from src.version import VERSION
+
+WIKI_SEARCH_LIMIT = 3  # Wiki 结构化知识搜索结果上限，可通过配置覆盖
+logger = logging.getLogger(__name__)
+P = ParamSpec("P")
+R = TypeVar("R")
 
 # ---- 心跳后台任务 ----
 
@@ -123,10 +130,10 @@ mcp = FastMCP(
 
 # ---- 心跳装饰器 ----
 
-def _heartbeat(fn):
+def _heartbeat(fn: Callable[P, R]) -> Callable[P, R]:
     """为 MCP 工具函数添加心跳记录"""
     @functools.wraps(fn)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         beat()
         return fn(*args, **kwargs)
     return wrapper
@@ -144,7 +151,7 @@ def _define_tool(
     group: str, side_effect: str,
     profiles: frozenset | None = None,
     experimental: bool = False,
-):
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """Decorator that records tool metadata without registering with FastMCP."""
     from src.mcp.tool_registry import tool_definition as _td
     return _td(
@@ -198,11 +205,11 @@ def _op_log(operation, target_type, target_id, operator="system", source="mcp",
         ``operation_id`` 字段，便于 ``get_operation_log`` 反查。
     """
     try:
-        return _get_container().operation_log.log(
+        return str(_get_container().operation_log.log(
             operation=operation, target_type=target_type, target_id=target_id,
             operator=operator, source=source,
             before=before, after=after, metadata=metadata,
-        )
+        ))
     except Exception as exc:
         logger.warning("operation_log failed: %s", exc)
         return ""
@@ -325,8 +332,6 @@ def _embedding_context_config() -> dict:
 
 
 # ---- Tools ----
-
-from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
 
 
 @_define_tool(
@@ -470,7 +475,7 @@ def ask(
 
 
 def _do_ask(question: str) -> dict:
-    return _get_container().rag_pipeline.query(question)
+    return dict(_get_container().rag_pipeline.query(question))
 
 
 @_define_tool(
@@ -938,8 +943,21 @@ def index_path(path: str, recursive: bool = True, dry_run: bool = False, force: 
         return _guard
     from dataclasses import asdict
     from pathlib import Path
+
+    try:
+        validated_path = _validate_ingest_path(path)
+    except FileNotFoundError as exc:
+        return fail(ErrorCode.NOT_FOUND, str(exc), path=path)
+    except PermissionError as exc:
+        return fail(ErrorCode.PERMISSION_DENIED, str(exc), path=path)
+
     service = _get_container().path_indexer
-    result = service.index_path(Path(path), recursive=recursive, dry_run=dry_run, force=force)
+    result = service.index_path(
+        Path(validated_path),
+        recursive=recursive,
+        dry_run=dry_run,
+        force=force,
+    )
     return ok(asdict(result), dry_run=dry_run)
 
 
@@ -1067,8 +1085,8 @@ def ingest_url(url: str, tags: list[str] | None = None, dry_run: bool = False) -
     return ok(result, operation_id=result.get("operation_id"))
 
 
-def _validate_file_path(file_path: str) -> str:
-    """验证文件路径在允许的目录范围内，防止路径遍历攻击。
+def _validate_ingest_path(path: str) -> str:
+    """验证文件或目录在允许的目录范围内，防止路径遍历攻击。
 
     允许的目录包括:
     1. config.yaml 中 security.allowed_ingest_dirs 配置的目录
@@ -1077,11 +1095,10 @@ def _validate_file_path(file_path: str) -> str:
     """
     from src.utils.paths import get_data_dir
 
-    resolved = os.path.realpath(file_path)
+    resolved = os.path.realpath(path)
 
-    # 检查文件是否存在
-    if not os.path.isfile(resolved):
-        raise FileNotFoundError(f"文件不存在: {file_path}")
+    if not os.path.exists(resolved):
+        raise FileNotFoundError(f"路径不存在: {path}")
 
     # 构建允许的目录白名单
     allowed_dirs: list[str] = []
@@ -1109,14 +1126,28 @@ def _validate_file_path(file_path: str) -> str:
     allowed_dirs.append(os.path.realpath(home))
 
     # 检查文件是否在任一允许的目录下
+    resolved_norm = os.path.normcase(resolved)
     for allowed in allowed_dirs:
-        if resolved.startswith(allowed + os.sep) or resolved == allowed:
-            return resolved
+        allowed_norm = os.path.normcase(os.path.realpath(allowed))
+        try:
+            if os.path.commonpath((resolved_norm, allowed_norm)) == allowed_norm:
+                return resolved
+        except ValueError:
+            # Windows 不同盘符无法计算 commonpath，视为不在授权目录中。
+            continue
 
     raise PermissionError(
-        f"文件路径不在允许的目录范围内: {file_path}。"
+        f"路径不在允许的目录范围内: {path}。"
         f"请在 config.yaml 的 security.allowed_ingest_dirs 中添加允许的目录。"
     )
+
+
+def _validate_file_path(file_path: str) -> str:
+    """验证待导入文件路径，并确保目标是普通文件。"""
+    resolved = os.path.realpath(file_path)
+    if not os.path.isfile(resolved):
+        raise FileNotFoundError(f"文件不存在: {file_path}")
+    return _validate_ingest_path(resolved)
 
 
 def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
@@ -1677,7 +1708,12 @@ def wiki_restore_version(page_id: str, version: int) -> dict:
     group="ops", side_effect="write",
 )
 @_heartbeat
-def create_async_job(job_type: str, params: dict = None, priority: int = 1, max_retries: int = 3) -> dict:
+def create_async_job(
+    job_type: str,
+    params: dict | None = None,
+    priority: int = 1,
+    max_retries: int = 3,
+) -> dict:
     """创建异步任务"""
     _guard = _check_write_policy("create_async_job")
     if _guard:
@@ -1708,7 +1744,11 @@ def get_async_job(job_id: str) -> dict:
     group="ops", side_effect="read",
 )
 @_heartbeat
-def list_async_jobs(status: str = None, job_type: str = None, limit: int = 20) -> dict:
+def list_async_jobs(
+    status: str | None = None,
+    job_type: str | None = None,
+    limit: int = 20,
+) -> dict:
     """列出任务"""
     from src.services.async_task import AsyncTaskService
     jobs = AsyncTaskService.list_jobs(status, job_type, limit)
@@ -2738,10 +2778,6 @@ def extract_tasks_from_doc(content: str) -> dict:
 
 
 # ---- Profile-based registration ----
-
-from src.mcp.aliases import register_aliases as _register_aliases
-from src.mcp.tool_profiles import EXPERIMENTAL_GROUPS as _EXP_GROUPS
-from src.mcp.tool_registry import get_definitions, register_tools, resolve_tool_profile, select_tools
 
 # Determine current profile from config
 _CURRENT_PROFILE = resolve_tool_profile(

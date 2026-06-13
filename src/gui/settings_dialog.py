@@ -254,7 +254,7 @@ class SettingsDialog(QDialog):
         neo4j_svc_grid = QGridLayout(self._neo4j_svc_group)
 
         self._neo4j_status_label = QLabel("检测中...")
-        self._neo4j_status_label.setFont(QFont("", -1, QFont.Bold))
+        self._neo4j_status_label.setFont(QFont("", -1, QFont.Weight.Bold))
         neo4j_svc_grid.addWidget(QLabel("服务状态："), 0, 0)
         neo4j_svc_grid.addWidget(self._neo4j_status_label, 0, 1)
 
@@ -354,7 +354,7 @@ class SettingsDialog(QDialog):
         status_grid = QGridLayout(status_group)
 
         self._svc_status_label = QLabel("检测中...")
-        self._svc_status_label.setFont(QFont("", -1, QFont.Bold))
+        self._svc_status_label.setFont(QFont("", -1, QFont.Weight.Bold))
         status_grid.addWidget(QLabel("服务状态："), 0, 0)
         status_grid.addWidget(self._svc_status_label, 0, 1)
 
@@ -632,9 +632,9 @@ class SettingsDialog(QDialog):
             "• 侧边栏 MCP 按钮自动切换为服务模式\n\n"
             "需要管理员权限（会弹出 UAC 确认框）。\n\n"
             "确定注册？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         from src.services.mcp_launcher import service_install
         msg = service_install()
@@ -648,9 +648,9 @@ class SettingsDialog(QDialog):
             "卸载后 MCP Server 将恢复为子进程模式（关闭 GUI 后继续运行）。\n"
             "需要管理员权限（会弹出 UAC 确认框）。\n\n"
             "确定卸载？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
         from src.services.mcp_launcher import service_remove
         msg = service_remove()
@@ -734,9 +734,9 @@ class SettingsDialog(QDialog):
             "• 安装位置：%LOCALAPPDATA%\\Neo4j\n"
             "• 设置环境变量时可能需要管理员权限（会弹出 UAC 确认框）\n\n"
             "确定开始部署？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
 
         self._btn_neo4j_auto_deploy.setEnabled(False)
@@ -793,9 +793,9 @@ class SettingsDialog(QDialog):
             self, "全量迁移",
             "将 SQLite 中的图谱数据全量迁移到 Neo4j。\n"
             "这会清空 Neo4j 中的现有数据后重新导入。\n\n确定继续？",
-            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
-        if reply != QMessageBox.Yes:
+        if reply != QMessageBox.StandardButton.Yes:
             return
 
         self._btn_migrate.setEnabled(False)

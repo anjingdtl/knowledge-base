@@ -3,16 +3,17 @@
 Since the schema is broken, we use raw page-level reads to extract data,
 then insert into a freshly created DB.
 """
-import sqlite3
 import os
-import time
 import shutil
+import sqlite3
+import time
 
 BROKEN = "data/kb.db"
 CLEAN = f"data/kb.db.clean_{int(time.time())}"
 
 # Step 1: Create clean DB with proper schema
-from src.services.db import _SCHEMA
+from src.services.db import _SCHEMA  # noqa: E402
+
 clean = sqlite3.connect(CLEAN)
 clean.execute("PRAGMA journal_mode=WAL")
 clean.executescript(_SCHEMA)
@@ -71,7 +72,7 @@ if ki > 0 and integrity == "ok":
     shutil.copy2(BROKEN, backup)
     shutil.copy2(CLEAN, BROKEN)
     os.remove(CLEAN)
-    print(f"\nSUCCESS: Clean DB installed")
+    print("\nSUCCESS: Clean DB installed")
     print(f"Backup: {os.path.basename(backup)}")
 else:
     print(f"\nISSUE: ki={ki}, integrity={integrity}")

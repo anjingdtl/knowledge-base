@@ -96,7 +96,7 @@ class EmbeddingService:
         for i in range(0, len(texts), batch_size):
             batches.append((i, texts[i:i + batch_size]))
 
-        results: list[list[float] | None] = [None] * len(batches)
+        results: list[list[list[float]] | None] = [None] * len(batches)
 
         def _embed_one(idx: int, batch: list[str]) -> tuple[int, list[list[float]]]:
             try:
@@ -132,8 +132,10 @@ class EmbeddingService:
 
         # 按原 batch 顺序拼成扁平结果（任一 batch 失败会在上面抛出，不会到这里）
         flat: list[list[float]] = []
-        for embs in results:
-            flat.extend(embs)
+        for embeddings in results:
+            if embeddings is None:
+                raise RuntimeError("Embedding batch completed without a result")
+            flat.extend(embeddings)
         return flat
 
     def embed_batch_with_cache(self, texts: list[str], batch_size: int = 20) -> list[list[float]]:
@@ -145,8 +147,8 @@ class EmbeddingService:
         cache = EmbeddingCache()
         model = self._cfg("embedding.model", "")
 
-        results = [None] * len(texts)
-        to_embed = []
+        results: list[list[float] | None] = [None] * len(texts)
+        to_embed: list[tuple[int, str]] = []
 
         for i, text in enumerate(texts):
             content_hash = hashlib.sha256(text.encode()).hexdigest()
@@ -164,7 +166,9 @@ class EmbeddingService:
                 cache.put(content_hash, model, emb)
                 results[i] = emb
 
-        return results
+        if any(result is None for result in results):
+            raise RuntimeError("Embedding cache batch completed without a result")
+        return [result for result in results if result is not None]
 
     def reset_client(self):
         self._client = None

@@ -7,7 +7,7 @@ import re
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from src.models.knowledge import KnowledgeChunk, KnowledgeItem
 from src.services.markdown_outline import MarkdownOutlineParser, OutlineBlock, PageDocument
@@ -291,7 +291,7 @@ class FileGraphService:
         path = self._resolve_page_path(page_id)
         page = self._parser.parse(path.read_text(encoding="utf-8"))
         self._parser.ensure_ids(page)
-        return page
+        return cast(PageDocument, page)
 
     def _rebuild_page_cache(self, page: PageDocument, item: KnowledgeItem) -> None:
         from src.services.vectorstore import VectorStore
@@ -386,7 +386,10 @@ class FileGraphService:
         if chunks is None:
             # 兼容老调用方：单独查询这条 item 的 chunks
             chunks = self._db.get_chunks_by_knowledge(item["id"])
-        blocks = [OutlineBlock(id=c["id"], content=c.get("chunk_text", "")) for c in chunks]
+        blocks = [
+            OutlineBlock(id=c["id"], content=str(c.get("chunk_text") or ""))
+            for c in chunks
+        ]
         if not blocks:
             blocks = [OutlineBlock(content=line.strip()) for line in item.get("content", "").splitlines() if line.strip()]
         return PageDocument(
@@ -413,7 +416,7 @@ class FileGraphService:
             elif isinstance(block, dict):
                 result.append(OutlineBlock(
                     id=block.get("id", ""),
-                    content=block.get("content", block.get("text", "")),
+                    content=str(block.get("content") or block.get("text") or ""),
                     properties=block.get("properties", {}),
                     children=self._coerce_blocks(block.get("children", [])),
                 ))
@@ -448,9 +451,11 @@ class FileGraphService:
         manifest = self._read_manifest()
         entry = manifest.get(path_or_id)
         if entry:
-            path = Path(entry.get("path") if isinstance(entry, dict) else entry)
-            if path.exists():
-                return path
+            raw_path = entry.get("path") if isinstance(entry, dict) else entry
+            if raw_path:
+                path = Path(str(raw_path))
+                if path.exists():
+                    return path
         for path in list((self.graph_dir / "pages").glob("*.md")) + list((self.graph_dir / "journals").glob("*.md")):
             try:
                 page = self._parser.parse(path.read_text(encoding="utf-8"))
@@ -475,7 +480,8 @@ class FileGraphService:
         if not path.exists():
             return {}
         try:
-            return json.loads(path.read_text(encoding="utf-8"))
+            parsed = json.loads(path.read_text(encoding="utf-8"))
+            return parsed if isinstance(parsed, dict) else {}
         except (json.JSONDecodeError, OSError):
             return {}
 

@@ -67,7 +67,7 @@ def assemble_title(filename: str, result: dict) -> str:
     return title[:60]
 
 
-def generate_title(content: str, filename: str = None) -> str:
+def generate_title(content: str, filename: str | None = None) -> str:
     """用 LLM 判断文件名是否需要补充，返回以文件名为基础的标题"""
     snippet = content[:800] if content else ""
     if not snippet.strip() or not filename:
@@ -323,7 +323,7 @@ class DropArea(QLabel):
         self.setObjectName("dropArea")
         self.setAcceptDrops(True)
         self.setMinimumHeight(90)
-        self.setAlignment(Qt.AlignCenter)
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setProperty("hover", "false")
         self.setText("拖放文件或文件夹到此处")
 
@@ -722,7 +722,7 @@ class ImportDialog(QDialog):
         status_colors = {"success": QColor(get_color("indicator_idle")), "skipped": QColor(get_color("indicator_running")), "failed": QColor(get_color("danger"))}
         item_status = QTableWidgetItem(status_icons.get(status, status))
         item_status.setForeground(status_colors.get(status, QColor()))
-        item_status.setTextAlignment(Qt.AlignCenter)
+        item_status.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
         item_detail = QTableWidgetItem(detail)
 

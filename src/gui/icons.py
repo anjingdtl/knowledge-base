@@ -1,8 +1,10 @@
 """QtAwesome 图标辅助层，缺失依赖时安全降级为空图标。"""
 from __future__ import annotations
 
+from typing import cast
+
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import QPushButton, QToolButton
 
 from src.gui.theme import get_color
@@ -60,21 +62,22 @@ NAV = {
 def icon(name: str, color_role: str = "text_dim", scale_factor: float = 1.0) -> QIcon:
     if qta is None:
         return QIcon()
-    return qta.icon(name, color=get_color(color_role), scale_factor=scale_factor)
+    return cast(QIcon, qta.icon(name, color=get_color(color_role), scale_factor=scale_factor))
 
 
 def set_icon(
-    button: QPushButton | QToolButton,
+    button: QAction | QPushButton | QToolButton,
     name: str,
     color_role: str = "text_dim",
     size: int = 16,
 ) -> None:
     button.setIcon(icon(name, color_role=color_role))
-    button.setIconSize(QSize(size, size))
+    if isinstance(button, (QPushButton, QToolButton)):
+        button.setIconSize(QSize(size, size))
 
 
 def set_named_icon(
-    button: QPushButton | QToolButton,
+    button: QAction | QPushButton | QToolButton,
     key: str,
     color_role: str = "text_dim",
     size: int = 16,

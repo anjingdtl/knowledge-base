@@ -62,12 +62,24 @@ def api_client(setup_db, monkeypatch):
     """创建 API 测试客户端，mock 掉 embedding 和 vectorstore"""
     from fastapi.testclient import TestClient
 
+    Config.set("wiki.enabled", False)
+
     # Mock index_knowledge_item to avoid real embedding API calls during tests
     import src.services.indexer as indexer_mod
+    import src.services.wiki_compiler as wiki_compiler_mod
     from src.api import create_app
     from src.api.auth import register_user
+    from src.services.embedding import EmbeddingService
+
     monkeypatch.setattr(indexer_mod, "index_knowledge_item", lambda item: None)
     monkeypatch.setattr(indexer_mod, "reindex_knowledge_item", lambda *a: None)
+    monkeypatch.setattr(wiki_compiler_mod, "try_wiki_compile", lambda item_id: None)
+    monkeypatch.setattr(
+        EmbeddingService,
+        "embed_batch_with_cache",
+        lambda self, texts, batch_size=20: [],
+    )
+    monkeypatch.setattr(EmbeddingService, "embed", lambda self, text: [0.0] * 8)
 
     class MockVS:
         def delete_by_knowledge(self, kid): pass

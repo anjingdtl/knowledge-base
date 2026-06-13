@@ -3,6 +3,7 @@ import hashlib
 import logging
 import os
 from datetime import datetime, timezone
+from typing import Any, Callable
 
 from src.services.async_worker import TaskRegistry
 from src.services.indexer import reindex_all
@@ -147,10 +148,11 @@ def _file_ingest_handler(job_id: str, params: dict) -> dict:
     db = container.db
 
     # 尝试导入 wiki 编译
+    compile_wiki: Callable[[str], Any] | None
     try:
-        from src.services.wiki_compiler import try_wiki_compile
+        from src.services.wiki_compiler import try_wiki_compile as compile_wiki
     except ImportError:
-        try_wiki_compile = None
+        compile_wiki = None
 
     created_items: list[dict] = []
     skipped_items: list[dict] = []
@@ -218,9 +220,9 @@ def _file_ingest_handler(job_id: str, params: dict) -> dict:
                 pass
 
             # Wiki 编译
-            if try_wiki_compile is not None:
+            if compile_wiki is not None:
                 try:
-                    try_wiki_compile(item_id)
+                    compile_wiki(item_id)
                 except Exception:
                     pass
 
@@ -487,50 +489,88 @@ def _estimate_file_complexity(file_path: str) -> dict:
 
 
 def _path_scan_handler(job_id: str, params: dict) -> dict:
-    """路径扫描异步 handler — 逐文件索引"""
+    """路径扫描异步 handler — 计算增量差异并逐项应用"""
+    from pathlib import Path
+
+    from src.models.indexing import ManifestDiff
     from src.services.async_task import AsyncTaskService
     from src.services.async_worker import TaskRegistry
-
-    file_paths: list[str] = params.get("file_paths", [])
-    total = len(file_paths)
-
-    created = 0
-    updated = 0
-    failed_items: list[dict] = []
-
 
     container = _get_container_for_handler()
     indexer = container.path_indexer
 
-    for i, fp_str in enumerate(file_paths):
+    root_value = params.get("root")
+    file_paths: list[str] = params.get("file_paths", [])
+    if not root_value and file_paths:
+        common = Path(os.path.commonpath(file_paths))
+        root_value = str(common if common.is_dir() else common.parent)
+    if not root_value:
+        raise RuntimeError("path_scan job missing root")
+
+    root = Path(root_value)
+    recursive = bool(params.get("recursive", True))
+    force = bool(params.get("force", False))
+    manifest = indexer.scan_manifest(root, recursive=recursive)
+    diff = indexer.compute_diff(manifest, root, force=force)
+
+    operations = (
+        [("created", fp) for fp in diff.created]
+        + [("modified", fp) for fp in diff.modified]
+        + [("deleted", path) for path in diff.deleted]
+    )
+    total = len(operations)
+    created = 0
+    updated = 0
+    deleted = 0
+    skipped = len(diff.unchanged)
+    failed_items: list[dict] = []
+
+    for i, (change_type, value) in enumerate(operations):
         if TaskRegistry.is_cancelled(job_id):
             AsyncTaskService.update_progress(
                 job_id,
-                int((i + 1) / total * 100),
-                f"已取消（处理到第 {i+1}/{total} 项）",
+                int(i / max(total, 1) * 100),
+                f"已取消（处理到第 {i}/{total} 项）",
             )
             raise RuntimeError(f"Job {job_id} cancelled by user")
 
-        pct = int((i + 1) / total * 100)
-        AsyncTaskService.update_progress(job_id, pct, f"索引 {i+1}/{total}: {os.path.basename(fp_str)}")
-
-        from pathlib import Path
+        display_path = value.path if hasattr(value, "path") else value
+        pct = int((i + 1) / max(total, 1) * 100)
+        AsyncTaskService.update_progress(
+            job_id,
+            pct,
+            f"处理 {i+1}/{total}: {os.path.basename(str(display_path))}",
+        )
         try:
-            result = indexer.index_path(Path(fp_str), recursive=False, force=True)
+            if change_type == "created":
+                partial = ManifestDiff(created=[value])
+            elif change_type == "modified":
+                partial = ManifestDiff(modified=[value])
+            else:
+                partial = ManifestDiff(deleted=[value])
+            result = indexer.apply_diff(partial)
             created += result.created
             updated += result.updated
+            deleted += result.deleted
+            skipped += result.skipped
             failed_items.extend(result.failed)
         except Exception as e:
-            logger.warning("path_scan: failed to index %s: %s", fp_str, e)
-            failed_items.append({"path": fp_str, "error": str(e)})
+            logger.warning("path_scan: failed to process %s: %s", display_path, e)
+            failed_items.append({"path": str(display_path), "error": str(e)})
 
-    AsyncTaskService.update_progress(job_id, 100, f"扫描完成: {created} 新建, {updated} 更新")
+    AsyncTaskService.update_progress(
+        job_id,
+        100,
+        f"扫描完成: {created} 新建, {updated} 更新, {deleted} 删除, {skipped} 跳过",
+    )
 
     return {
         "created": created,
         "updated": updated,
+        "deleted": deleted,
+        "skipped": skipped,
         "failed": failed_items,
-        "total": total,
+        "total": len(manifest) + len(diff.deleted),
     }
 
 

@@ -2,14 +2,14 @@
 import json
 import time
 
-from src.utils.config import Config
 from src.services.db import Database
+from src.utils.config import Config
 
 config = Config()
 config.load()
 Database.connect(str(config.get_db_path()))
 
-from neo4j import GraphDatabase as Neo4jDriver
+from neo4j import GraphDatabase as Neo4jDriver  # noqa: E402
 
 # 从配置读取 Neo4j 连接信息，不再硬编码凭据
 graph_cfg = config.get("graph_backend", {})
@@ -23,12 +23,15 @@ conn = Database.get_conn()
 batch_size = 10000
 
 def load_json_list(val):
-    if isinstance(val, list): return val
+    if isinstance(val, list):
+        return val
     if isinstance(val, str):
         try:
             p = json.loads(val)
-            if isinstance(p, list): return p
-        except: pass
+            if isinstance(p, list):
+                return p
+        except (json.JSONDecodeError, TypeError):
+            pass
     return []
 
 total_start = time.time()
@@ -112,7 +115,7 @@ try:
         print(f"   {len(edges)} tag relations", flush=True)
     else:
         print("   None.", flush=True)
-except:
+except Exception:
     print("   No tag_relations table.", flush=True)
 
 # Stats

@@ -34,7 +34,7 @@ def create_graph_backend(config, db=None) -> GraphBackend:
 
     if provider == "sqlite":
         from src.services.graph_backend.sqlite_backend import SQLiteGraphBackend
-        backend = SQLiteGraphBackend(db=db)
+        backend: GraphBackend = SQLiteGraphBackend(db=db)
         logger.info("Graph backend: SQLite (default)")
         return backend
 

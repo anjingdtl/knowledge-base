@@ -250,7 +250,7 @@ class SetupWizard(QDialog):
         prov_label = QLabel("服务商：")
         prov_label.setFixedWidth(90)
         self._provider_combo = QComboBox()
-        self._provider_combo.addItems(PROVIDER_PRESETS.keys())
+        self._provider_combo.addItems(list(PROVIDER_PRESETS))
         self._provider_combo.currentTextChanged.connect(self._on_provider_changed)
         prov_row.addWidget(prov_label)
         prov_row.addWidget(self._provider_combo, 1)

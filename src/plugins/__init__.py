@@ -1,6 +1,5 @@
 """可扩展插件系统"""
 import importlib
-import json
 import os
 import sys
 from pathlib import Path

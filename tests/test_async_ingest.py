@@ -471,6 +471,48 @@ class TestProgressReporting:
             os.unlink(txt_file)
 
 
+class TestPathScanHandler:
+    def test_unchanged_files_are_not_force_reindexed(self, monkeypatch, tmp_path):
+        from src.models.indexing import FileFingerprint, ManifestDiff
+        from src.services import async_tasks
+
+        path = tmp_path / "unchanged.md"
+        path.write_text("same", encoding="utf-8")
+        fingerprint = FileFingerprint(
+            path=path,
+            size=path.stat().st_size,
+            mtime_ns=path.stat().st_mtime_ns,
+            sha256="same-hash",
+        )
+
+        class Indexer:
+            def scan_manifest(self, root, recursive=True):
+                return [fingerprint]
+
+            def compute_diff(self, manifest, root, force=False):
+                assert force is False
+                return ManifestDiff(unchanged=[fingerprint])
+
+            def apply_diff(self, diff):
+                raise AssertionError("unchanged file reached apply_diff")
+
+        class Container:
+            path_indexer = Indexer()
+
+        monkeypatch.setattr(async_tasks, "_get_container_for_handler", lambda: Container())
+        monkeypatch.setattr(AsyncTaskService, "update_progress", lambda *args, **kwargs: None)
+        monkeypatch.setattr(TaskRegistry, "is_cancelled", lambda job_id: False)
+
+        result = async_tasks._path_scan_handler(
+            "job-1",
+            {"root": str(tmp_path), "recursive": True, "force": False},
+        )
+
+        assert result["skipped"] == 1
+        assert result["created"] == 0
+        assert result["updated"] == 0
+
+
 # ---------------------------------------------------------------------------
 # 9) Envelope 兼容 — 旧工具仍可工作
 # ---------------------------------------------------------------------------

@@ -238,8 +238,11 @@ def restore_version(item_id: str, version: int,
 def export_knowledge(data: KnowledgeBatchExport,
                      container: AppContainer = Depends(get_container)):
     if data.ids:
-        items = [container.db.get_knowledge(iid) for iid in data.ids]
-        items = [i for i in items if i]
+        items = [
+            item
+            for iid in data.ids
+            if (item := container.db.get_knowledge(iid)) is not None
+        ]
     elif data.tag:
         items = container.db.list_knowledge(tag=data.tag, limit=1000)
     else:

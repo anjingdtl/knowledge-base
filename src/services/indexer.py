@@ -3,6 +3,7 @@ import json
 import logging
 import uuid
 from datetime import datetime
+from typing import Callable
 
 from src.models.knowledge import KnowledgeChunk, KnowledgeItem
 from src.services.block_store import BlockStore
@@ -17,8 +18,15 @@ def index_knowledge_item(item: KnowledgeItem):
     tags_str = ",".join(item.tags)
     chunk_size = Config.get("rag.chunk_size", 500)
     chunk_overlap = Config.get("rag.chunk_overlap", 50)
-    base_meta = {"knowledge_id": item.id, "tags": tags_str, "title": item.title,
-                 "created_at": item.created_at}
+    base_meta = {
+        "knowledge_id": item.id,
+        "tags": tags_str,
+        "title": item.title,
+        "source_path": item.source_path,
+        "source_type": item.source_type,
+        "file_type": item.file_type,
+        "created_at": item.created_at,
+    }
 
     if item.file_type == "md":
         chunks = split_markdown(item.content, chunk_size=chunk_size,
@@ -51,10 +59,14 @@ def index_knowledge_item(item: KnowledgeItem):
             "page_id": item.id,
             "content": c.text,
             "block_type": "text",
-            "properties": json.dumps({
-                "knowledge_id": item.id,
-                "chunk_index": c.index,
-            }, ensure_ascii=False),
+            "properties": json.dumps(
+                {
+                    **c.metadata,
+                    "knowledge_id": item.id,
+                    "chunk_index": c.index,
+                },
+                ensure_ascii=False,
+            ),
             "order_idx": c.index,
             "created_at": now,
             "updated_at": now,
@@ -66,21 +78,21 @@ def index_knowledge_item(item: KnowledgeItem):
         row["id"] = block_id
         chunk_rows.append(row)
 
-    Database.insert_blocks(block_rows)
-
     Database.insert_chunks(chunk_rows)
 
-    texts = [b["content"] for b in block_rows]
-    embeddings = [None] * len(texts)
+    Database.insert_blocks(block_rows)
+
+    texts: list[str] = [str(b["content"]) for b in block_rows]
+    embeddings: list[list[float] | None] = [None] * len(texts)
     try:
         from src.services.embedding import EmbeddingService
         embedding_service = EmbeddingService()
         build_embedding_text = getattr(embedding_service, "build_embedding_text", None)
         if callable(build_embedding_text):
-            texts = [build_embedding_text(b) for b in block_rows]
+            texts = [str(build_embedding_text(b)) for b in block_rows]
         else:
-            texts = [b["content"] for b in block_rows]
-        embeddings = embedding_service.embed_batch_with_cache(texts)
+            texts = [str(b["content"]) for b in block_rows]
+        embeddings = list(embedding_service.embed_batch_with_cache(texts))
         if len(embeddings) != len(texts):
             logging.warning(
                 "Embedding count mismatch for %s: expected %d, got %d. "
@@ -94,7 +106,7 @@ def index_knowledge_item(item: KnowledgeItem):
         emb = embeddings[i] if i < len(embeddings) else None
         if emb:
             try:
-                BlockStore().add_block_embedding(block["id"], emb)
+                BlockStore().add_block_embedding(str(block["id"]), emb)
             except Exception as e:
                 logging.error(f"Vec insert failed for block {block['id']}: {e}")
             try:
@@ -125,7 +137,10 @@ def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
     index_knowledge_item(item)
 
 
-def reindex_all(progress_callback: callable = None, dry_run: bool = False) -> dict:
+def reindex_all(
+    progress_callback: Callable[[int, int, str], None] | None = None,
+    dry_run: bool = False,
+) -> dict:
     """重建所有知识条目的索引（向量 + FTS）"""
     items = Database.list_knowledge(limit=100000)
     total = len(items)

@@ -1,4 +1,6 @@
 """Block-First Indexer 集成测试"""
+import json
+
 from src.models.knowledge import KnowledgeItem
 from src.services.block_store import BlockStore
 from src.services.db import Database
@@ -6,6 +8,38 @@ from src.services.indexer import index_knowledge_item, reindex_knowledge_item
 
 
 class TestBlockFirstIndexer:
+    def test_index_preserves_citation_source_metadata(self, monkeypatch, tmp_path):
+        """文件来源路径必须进入 Block 元数据，供 CitationBuilder 使用。"""
+
+        class MockEmbeddingService:
+            def embed_batch_with_cache(self, texts, batch_size=20):
+                return [[0.1] * 1024 for _ in texts]
+
+        monkeypatch.setattr(
+            "src.services.embedding.EmbeddingService",
+            MockEmbeddingService,
+        )
+
+        source_path = tmp_path / "architecture.md"
+        item = KnowledgeItem(
+            title="架构设计",
+            content="# 架构\n\nSQLite 使用 WAL 模式保存本地索引。",
+            source_type="file",
+            source_path=str(source_path),
+            file_type="md",
+        )
+        Database.insert_knowledge(item.to_row())
+        index_knowledge_item(item)
+
+        row = Database.get_conn().execute(
+            "SELECT properties FROM blocks WHERE page_id = ? LIMIT 1",
+            (item.id,),
+        ).fetchone()
+        properties = json.loads(row["properties"])
+
+        assert properties["source_path"] == str(source_path)
+        assert properties["title"] == "架构设计"
+
     def test_index_creates_blocks_and_vectors(self, monkeypatch):
         """index_knowledge_item → blocks + vec_blocks + block_fts 都有数据"""
         mock_embeddings = [[0.1] * 1024 for _ in range(10)]

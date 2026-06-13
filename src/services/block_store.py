@@ -51,7 +51,7 @@ class BlockStore:
         return Database.get_conn()
 
     def _get_dimension(self) -> int:
-        return Config.get("embedding.dimension", 1024)
+        return int(Config.get("embedding.dimension", 1024))
 
     def _ensure_table(self):
         self._check_db_changed()
@@ -127,14 +127,16 @@ class BlockStore:
                 properties = json.loads(r[4]) if r[4] else {}
             except (json.JSONDecodeError, TypeError):
                 properties = {}
+            metadata = dict(properties)
+            metadata.update({
+                "page_id": r[1],
+                "block_type": r[3],
+                "properties": properties,
+            })
             results.append({
                 "id": r[0],
                 "text": r[2],
-                "metadata": {
-                    "page_id": r[1],
-                    "block_type": r[3],
-                    "properties": properties,
-                },
+                "metadata": metadata,
                 "distance": r[5],
             })
         return results

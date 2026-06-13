@@ -7,6 +7,7 @@ import json
 import logging
 import re
 from datetime import datetime, timedelta
+from typing import cast
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +88,7 @@ class AgentMemoryService:
                     r["metadata"] = json.loads(r["metadata"])
                 except (json.JSONDecodeError, TypeError):
                     pass
-        return results
+        return cast(list[dict], list(results))
 
     def update_project_context(self, summary: str) -> dict:
         """更新项目整体上下文描述

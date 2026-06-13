@@ -74,7 +74,7 @@ class GraphMigration:
             迁移统计 {"pages": N, "blocks": N, "tags": N, "edges": N, "duration_s": N}
         """
         start_time = time.time()
-        stats: dict[str, int] = {
+        stats: dict[str, int | float] = {
             "pages": 0, "blocks": 0, "tags": 0, "edges": 0,
         }
 

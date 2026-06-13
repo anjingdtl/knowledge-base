@@ -32,7 +32,12 @@ def create_job(data: JobCreateReq):
 
 
 @jobs_router.get("")
-def list_jobs(status: str = None, job_type: str = None, limit: int = 50, offset: int = 0):
+def list_jobs(
+    status: str | None = None,
+    job_type: str | None = None,
+    limit: int = 50,
+    offset: int = 0,
+):
     from src.services.async_task import AsyncTaskService
     jobs = AsyncTaskService.list_jobs(status, job_type, limit, offset)
     return {"jobs": [j.__dict__ for j in jobs]}

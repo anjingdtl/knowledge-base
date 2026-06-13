@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-10%20core%20tools-orange.svg)](src/mcp/tool_profiles.py)
@@ -24,6 +24,17 @@ ShineHe Knowledge is a **local-first, privacy-focused MCP knowledge retrieval en
 - **Return structured citations** with document path, block ID, score breakdown, and match reasons
 - **Incremental directory watching** automatically re-indexes changed files
 - **All data stays local** (SQLite + sqlite-vec + FTS5). No cloud storage dependency.
+
+## Current Health
+
+Version `1.3.1` completed a full repository health review on June 13, 2026:
+
+- `828 passed, 2 skipped` in the full Python test suite
+- Ruff clean across `src`, `tests`, `evals`, `tools`, and `scripts`
+- mypy clean across 157 source/tool files
+- React/Vite production build passed
+- Retrieval gate passed with Recall@5 `0.8667`, MRR `0.7800`, nDCG@10 `0.7938`, No-Answer Accuracy `0.6667`, and Citation Location Completeness `1.0000`
+- The end-to-end local retrieval demo passed initial search, incremental update, and citation validation
 
 ## 30-Second Demo
 

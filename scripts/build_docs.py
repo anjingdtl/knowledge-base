@@ -3,17 +3,16 @@
 用法: python scripts/build_docs.py
 输出: docs/ShineHeKnowledge_UserManual_vX.X.X.docx
 """
-import sys
 import os
+import sys
 from datetime import datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from src.version import APP_NAME, VERSION
-
 from docx import Document
-from docx.shared import Pt, Inches, Cm, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.shared import Pt, RGBColor
+
+from src.version import APP_NAME, VERSION
 
 
 def _add_table(doc, headers, rows):

@@ -281,6 +281,30 @@ class TestApplyDiff:
         rec = repo.get(str(tmp_path / "gone.md"))
         assert rec["status"] == "deleted"
 
+    def test_delete_path_keeps_tracking_active_when_knowledge_delete_fails(
+        self, service, repo, tmp_path
+    ):
+        path = tmp_path / "kept.md"
+        repo.upsert({
+            "path": str(path),
+            "size": 10,
+            "mtime_ns": 1,
+            "sha256": "h",
+            "status": "indexed",
+            "knowledge_id": "kid-kept",
+        })
+
+        with patch.object(
+            service,
+            "_soft_delete_knowledge",
+            side_effect=RuntimeError("database busy"),
+        ):
+            result = service.delete_path(path)
+
+        assert result.deleted == 0
+        assert result.failed == [{"path": _normalize_path(str(path)), "error": "database busy"}]
+        assert repo.get(str(path))["status"] == "indexed"
+
     def test_dry_run_safety(self, service, repo, tmp_path):
         """dry-run 不应实际修改数据库"""
         fp = _write_file(tmp_path, "dryrun.md", "dry")
@@ -340,6 +364,22 @@ class TestIndexPath:
 
         result = service.index_path(fp, dry_run=True)
         assert result.created == 1
+
+    def test_large_directory_dry_run_does_not_submit_async_job(self, service, tmp_path):
+        _write_file(tmp_path, "dry.md", "dry content")
+
+        with (
+            patch.object(service, "_should_use_async", return_value=True),
+            patch.object(
+                service,
+                "_submit_async_job",
+                side_effect=AssertionError("dry-run submitted a job"),
+            ),
+        ):
+            result = service.index_path(tmp_path, dry_run=True)
+
+        assert result.created == 1
+        assert result.job_id is None
 
     def test_path_normalization(self, service, tmp_path):
         """路径应被标准化处理"""

@@ -1,7 +1,7 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-06-13
-> 源码版本：`src/version.py` 中的 `1.3.0`
+> 源码版本：`src/version.py` 中的 `1.3.1`
 > 当前分支：`master`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎
 
@@ -15,6 +15,47 @@
 - [历史设计与已完成计划](docs/archive/README.md)
 
 除上述当前规格和计划外，归档目录中的文档只用于追溯，不代表当前待办。
+
+## v1.3.1 全仓库健康审查 — 已完成
+
+本轮基于当前规格与实施计划，对源码、测试、GUI、MCP、索引、引用、评测、构建脚本和发布资料进行了全量审查与修复。
+
+### 主要修复
+
+- 修复目录索引、异步任务、文件解析、Neo4j 生命周期、GUI worker 清理和 MCP 工具契约中的实际缺陷。
+- 修复 Block 元数据被兼容 chunk 写入覆盖的问题，确保 `source_path`、Block ID 和 Citation 可追溯。
+- 更新过时的容器属性调用、PySide6 枚举和 pikepdf 参数，删除无效导入与旧式异常处理。
+- 为 `Database` 兼容元类增加 mypy 插件，清零源码类型错误。
+- 修复 Windows GBK 控制台下 Demo 状态符号崩溃，并将 Demo 测试隔离为确定性 fake 服务。
+- 将 `scripts/` 纳入 Ruff 健康门禁，清理构建、迁移、诊断、压力和数据救援脚本。
+- 修复检索评测中“引用完整性字段定义但从未计算”的死指标，建立真实非零 baseline。
+
+### 发布前验证
+
+| 门禁 | 结果 |
+|------|------|
+| Python 全量测试 | `828 passed, 2 skipped in 845.14s` |
+| Ruff | `src tests evals tools scripts` 全绿 |
+| mypy | `157 source files`，无错误 |
+| Python compileall | `src scripts tests evals tools` 通过 |
+| Web 客户端 | TypeScript + Vite 生产构建通过 |
+| 检索评测 | CI 同款 fake-embedding 门禁通过 |
+| 本地检索 Demo | `initial_hit=true`、`incremental_update=true`、`citation_complete=true` |
+
+### 当前检索基线
+
+| 指标 | 综合结果 |
+|------|----------|
+| Recall@5 | 0.8667 |
+| MRR | 0.7800 |
+| nDCG@10 | 0.7938 |
+| No-Answer Accuracy | 0.6667 |
+| Citation Location Completeness | 1.0000 |
+
+### 已知边界
+
+- `retrieval_zh` Recall@5 仍为 `0.6000`，No-Answer Accuracy 为 `0.6667`，均已进入非零 baseline，后续优化不得回退超过 5%。
+- 本机没有 Docker CLI，无法执行本地镜像构建；Dockerfile 由 GitHub Actions 的 `docker` job 继续作为远端发布门禁。
 
 ## v1.3.0 MCP Local Retrieval Focus — 已完成
 

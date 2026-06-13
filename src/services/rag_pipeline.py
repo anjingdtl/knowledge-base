@@ -99,7 +99,7 @@ class PipelineStage(ABC):
         pass
 
     def is_enabled(self, config: dict) -> bool:
-        return config.get("enabled", True)
+        return bool(config.get("enabled", True))
 
     @abstractmethod
     async def execute(self, ctx: RagContext, config: dict) -> RagContext:
@@ -830,14 +830,13 @@ class RAGService:
 
     def __init__(self, deps: dict | None = None):
         self._deps = deps
-        self._pipeline = None
+        pipeline: RagPipeline | None = None
         if Config.get("rag.pipeline.enabled", False):
             try:
-                self._pipeline = create_pipeline_from_config(deps)
+                pipeline = create_pipeline_from_config(deps)
             except Exception as e:
                 logger.warning("Failed to load config pipeline, using default: %s", e)
-        if not self._pipeline:
-            self._pipeline = RagPipeline(deps=deps)
+        self._pipeline = pipeline or RagPipeline(deps=deps)
 
     def query(self, question: str, conversation_history: list[dict] | None = None,
               phase_callback=None) -> dict:
@@ -869,7 +868,7 @@ class RAGService:
             if "source_graph" not in result:
                 from src.services.source_graph import build_source_graph
                 result["source_graph"] = build_source_graph(result.get("sources", []))
-            return result
+            return dict(result)
         except Exception as e:
             logger.error("Pipeline execution failed, falling back to direct query: %s", e)
             # fallback：仅用 Wiki 上下文 + LLM 直接生成

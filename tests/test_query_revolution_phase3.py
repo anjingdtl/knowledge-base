@@ -1,3 +1,5 @@
+import json as _json
+
 import pytest
 
 
@@ -105,9 +107,6 @@ def test_dsl_rejects_invalid_filter():
 
     with pytest.raises(ValueError, match="unknown operator"):
         QuerySpec.from_json({"filter": {"property": {"key": "x", "op": "bad_op", "value": 1}}})
-
-
-import json as _json
 
 
 def _insert_page(item_id, title, content="", tags=None, file_type="txt", source_type="manual"):

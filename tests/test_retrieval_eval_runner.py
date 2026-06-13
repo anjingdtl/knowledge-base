@@ -17,6 +17,7 @@ from evals.run_retrieval_eval import (
     aggregate_retrieval_metrics,
     build_index,
     compare_with_baseline,
+    compute_citation_location_completeness,
     compute_mrr,
     compute_ndcg,
     compute_recall,
@@ -119,6 +120,30 @@ class TestComputeNDCG:
         assert ndcg > 0.5
 
 
+class TestCitationCompleteness:
+    def test_complete_structured_citation(self):
+        results = [{
+            "citation": {
+                "path": "architecture.md",
+                "block_id": "architecture.md:1",
+                "location": {"heading_path": ["Storage"]},
+            },
+        }]
+
+        assert compute_citation_location_completeness(results) == 1.0
+
+    def test_missing_location_is_incomplete(self):
+        results = [{
+            "citation": {
+                "path": "architecture.md",
+                "block_id": "architecture.md:1",
+                "location": {},
+            },
+        }]
+
+        assert compute_citation_location_completeness(results) == 0.0
+
+
 class TestOfflineIndex:
     def test_index_and_search(self, tmp_path):
         # Create a simple fixture
@@ -151,6 +176,8 @@ class TestOfflineIndex:
         results = index.search("BM25 scoring")
         assert len(results) > 0
         assert results[0]["score"] > 0
+        assert results[0]["citation"]["block_id"]
+        assert results[0]["citation"]["location"]["heading_path"] == ["Heading"]
 
     def test_python_fixture_splitting(self, tmp_path):
         fixture = tmp_path / "code.py"
@@ -182,15 +209,18 @@ class TestAggregateRetrievalMetrics:
         query_results = [
             {"query": "q1", "category": "keyword", "recall": 1.0, "mrr": 1.0,
              "ndcg": 1.0, "latency_ms": 10.0, "must_not_violated": False,
-             "no_answer_correct": True, "results_count": 5},
+             "no_answer_correct": True, "results_count": 5,
+             "citation_location_completeness": 1.0},
             {"query": "q2", "category": "keyword", "recall": 0.5, "mrr": 0.5,
              "ndcg": 0.7, "latency_ms": 20.0, "must_not_violated": False,
-             "no_answer_correct": True, "results_count": 5},
+             "no_answer_correct": True, "results_count": 5,
+             "citation_location_completeness": 0.5},
         ]
         m = aggregate_retrieval_metrics(query_results)
         assert m.total_queries == 2
         assert m.recall_at_5 == pytest.approx(0.75)
         assert m.mrr == pytest.approx(0.75)
+        assert m.citation_location_completeness == pytest.approx(0.75)
 
     def test_no_answer_metrics(self):
         query_results = [
@@ -209,6 +239,38 @@ class TestAggregateRetrievalMetrics:
         m = aggregate_retrieval_metrics([])
         assert m.total_queries == 0
         assert m.recall_at_5 == 0.0
+
+    def test_citation_completeness_excludes_queries_without_results(self):
+        query_results = [
+            {
+                "query": "hit",
+                "category": "keyword",
+                "recall": 1.0,
+                "mrr": 1.0,
+                "ndcg": 1.0,
+                "latency_ms": 1.0,
+                "must_not_violated": False,
+                "no_answer_correct": True,
+                "results_count": 1,
+                "citation_location_completeness": 1.0,
+            },
+            {
+                "query": "miss",
+                "category": "keyword",
+                "recall": 0.0,
+                "mrr": 0.0,
+                "ndcg": 0.0,
+                "latency_ms": 1.0,
+                "must_not_violated": False,
+                "no_answer_correct": True,
+                "results_count": 0,
+                "citation_location_completeness": 0.0,
+            },
+        ]
+
+        metrics = aggregate_retrieval_metrics(query_results)
+
+        assert metrics.citation_location_completeness == 1.0
 
 
 class TestCompareWithBaseline:
@@ -243,15 +305,23 @@ class TestCompareWithBaseline:
                 "mrr": 0.8,
                 "ndcg_at_10": 0.85,
                 "no_answer_accuracy": 1.0,
+                "citation_location_completeness": 1.0,
             }
         }
         bp = tmp_path / "baseline.json"
         bp.write_text(json.dumps(baseline), encoding="utf-8")
 
-        m = RetrievalMetrics(recall_at_5=0.5, mrr=0.3, ndcg_at_10=0.4, no_answer_accuracy=0.5)
+        m = RetrievalMetrics(
+            recall_at_5=0.5,
+            mrr=0.3,
+            ndcg_at_10=0.4,
+            no_answer_accuracy=0.5,
+            citation_location_completeness=0.5,
+        )
         passed, warnings = compare_with_baseline(m, str(bp), max_regression=0.02)
         assert passed is False
         assert any("REGRESSION" in w for w in warnings)
+        assert any("citation_location_completeness" in w for w in warnings)
 
     def test_baseline_zero_values(self, tmp_path):
         """When baseline has all zeros, no regression should be flagged."""

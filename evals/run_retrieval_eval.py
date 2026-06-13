@@ -128,6 +128,26 @@ def compute_ndcg(results: list[dict], expected_paths: list[str], k: int = 10) ->
     return dcg / idcg if idcg > 0 else 0.0
 
 
+def compute_citation_location_completeness(results: list[dict]) -> float:
+    """Return the share of results with a traceable path, block, and location."""
+    if not results:
+        return 0.0
+
+    complete = 0
+    for result in results:
+        citation = result.get("citation")
+        if not isinstance(citation, dict):
+            continue
+        location = citation.get("location")
+        has_location = (
+            isinstance(location, dict)
+            and any(value not in (None, "", [], {}) for value in location.values())
+        )
+        if citation.get("path") and citation.get("block_id") and has_location:
+            complete += 1
+    return complete / len(results)
+
+
 # ---------------------------------------------------------------------------
 # Lightweight offline indexer (fake-embedding / BM25 keyword mode)
 # ---------------------------------------------------------------------------
@@ -275,6 +295,8 @@ class OfflineIndex:
 
         results = []
         for score, doc in scored[:top_k]:
+            block_id = f"{doc['source_path']}:{doc['chunk_index']}"
+            heading_path = [doc["heading"]] if doc["heading"] else []
             results.append({
                 "source_path": doc["source_path"],
                 "title": doc["title"],
@@ -286,7 +308,24 @@ class OfflineIndex:
                     "chunk_index": doc["chunk_index"],
                 },
                 "citation": {
+                    "document": doc["title"],
                     "path": doc["source_path"],
+                    "knowledge_id": doc["source_path"],
+                    "block_id": block_id,
+                    "location": {
+                        "heading_path": heading_path,
+                        "paragraph_index": doc["chunk_index"],
+                    },
+                    "score": score,
+                    "score_breakdown": {
+                        "vector": None,
+                        "keyword": score,
+                        "rrf": None,
+                        "rerank": None,
+                    },
+                    "match_channels": ["keyword"],
+                    "reason": "keyword match",
+                    "text": doc["text"],
                 },
             })
         return results
@@ -351,6 +390,7 @@ def run_single_query(index: OfflineIndex, item: dict) -> dict:
     recall = compute_recall(results, expected_paths)
     mrr = compute_mrr(results, expected_paths)
     ndcg = compute_ndcg(results, expected_paths)
+    citation_location_completeness = compute_citation_location_completeness(results)
 
     # Check must_not_match
     result_filenames = set()
@@ -375,6 +415,7 @@ def run_single_query(index: OfflineIndex, item: dict) -> dict:
         "recall": recall,
         "mrr": mrr,
         "ndcg": ndcg,
+        "citation_location_completeness": citation_location_completeness,
         "latency_ms": latency_ms,
         "must_not_violated": must_not_violated,
         "no_answer_correct": no_answer_correct,
@@ -399,6 +440,13 @@ def aggregate_retrieval_metrics(query_results: list[dict]) -> RetrievalMetrics:
         m.recall_at_5 = sum(q["recall"] for q in retrieval_items) / len(retrieval_items)
         m.mrr = sum(q["mrr"] for q in retrieval_items) / len(retrieval_items)
         m.ndcg_at_10 = sum(q["ndcg"] for q in retrieval_items) / len(retrieval_items)
+
+    citation_items = [q for q in retrieval_items if q["results_count"] > 0]
+    if citation_items:
+        m.citation_location_completeness = (
+            sum(q["citation_location_completeness"] for q in citation_items)
+            / len(citation_items)
+        )
 
     if no_answer_items:
         m.no_answer_accuracy = (
@@ -442,6 +490,10 @@ def compare_with_baseline(
         ("mrr", metrics.mrr),
         ("ndcg_at_10", metrics.ndcg_at_10),
         ("no_answer_accuracy", metrics.no_answer_accuracy),
+        (
+            "citation_location_completeness",
+            metrics.citation_location_completeness,
+        ),
     ]
 
     for key, current_value in comparisons:
@@ -477,6 +529,9 @@ def update_baseline(metrics: RetrievalMetrics, baseline_path: str):
             "mrr": round(metrics.mrr, 4),
             "ndcg_at_10": round(metrics.ndcg_at_10, 4),
             "no_answer_accuracy": round(metrics.no_answer_accuracy, 4),
+            "citation_location_completeness": round(
+                metrics.citation_location_completeness, 4
+            ),
             "latency_p50_ms": round(metrics.latency_p50_ms, 2),
             "latency_p95_ms": round(metrics.latency_p95_ms, 2),
         },
@@ -501,12 +556,19 @@ def format_report(
     # Summary table
     lines.append("## Summary")
     lines.append("")
-    lines.append("| Dataset | Queries | Recall@5 | MRR | nDCG@10 | No-Answer Acc | P50 (ms) | P95 (ms) |")
-    lines.append("|---------|---------|----------|-----|---------|---------------|----------|----------|")
+    lines.append(
+        "| Dataset | Queries | Recall@5 | MRR | nDCG@10 | "
+        "No-Answer Acc | Citation Location | P50 (ms) | P95 (ms) |"
+    )
+    lines.append(
+        "|---------|---------|----------|-----|---------|---------------|"
+        "-------------------|----------|----------|"
+    )
     for name, m in all_metrics.items():
         lines.append(
             f"| {name} | {m.total_queries} | {m.recall_at_5:.4f} | {m.mrr:.4f} "
             f"| {m.ndcg_at_10:.4f} | {m.no_answer_accuracy:.4f} "
+            f"| {m.citation_location_completeness:.4f} "
             f"| {m.latency_p50_ms:.1f} | {m.latency_p95_ms:.1f} |"
         )
 
@@ -592,6 +654,10 @@ def run_eval(
             combined.mrr = sum(m.mrr for m in retrieval_metrics) / len(retrieval_metrics)
             combined.ndcg_at_10 = (
                 sum(m.ndcg_at_10 for m in retrieval_metrics) / len(retrieval_metrics)
+            )
+            combined.citation_location_completeness = (
+                sum(m.citation_location_completeness for m in retrieval_metrics)
+                / len(retrieval_metrics)
             )
 
         no_answer_metrics = [

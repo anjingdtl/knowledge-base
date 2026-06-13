@@ -29,7 +29,7 @@ class ConversationRepository:
             conv,
         )
         conn.commit()
-        return conv["id"]
+        return str(conv["id"])
 
     def list_conversations(self, limit: int = 50) -> list[dict]:
         rows = self._conn().execute(
@@ -56,7 +56,7 @@ class ConversationRepository:
             msg,
         )
         conn.commit()
-        return msg["id"]
+        return str(msg["id"])
 
     def get_messages(self, conversation_id: str) -> list[dict]:
         rows = self._conn().execute(

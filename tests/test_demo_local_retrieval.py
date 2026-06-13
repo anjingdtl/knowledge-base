@@ -7,17 +7,63 @@
 3. 结果验证
 """
 
+import io
 import json
 import shutil
+import sys
 import tempfile
 from pathlib import Path
 
 import pytest
 
+import scripts.demo_local_retrieval as demo_module
 from scripts.demo_local_retrieval import (
     create_test_documents,
     run_demo,
 )
+
+
+class FakeIndexResult:
+    created = 1
+    updated = 1
+    deleted = 0
+    skipped = 0
+
+
+class FakePathIndexer:
+    def index_path(self, path, recursive):
+        assert path.name == "docs"
+        assert recursive is True
+        return FakeIndexResult()
+
+
+class FakeSearchService:
+    def search(self, query, top_k):
+        assert top_k == 3
+        return [{
+            "title": "Python 编程入门",
+            "score": 1.0,
+            "text": f"{query} 异常处理 try-except",
+            "citation": {
+                "document": "python_tutorial.md",
+                "path": "docs/python_tutorial.md",
+                "knowledge_id": "doc-1",
+                "block_id": "doc-1-block-1",
+                "text": f"{query} 异常处理 try-except",
+            },
+        }]
+
+
+class FakeContainer:
+    path_indexer = FakePathIndexer()
+    search_service = FakeSearchService()
+
+
+@pytest.fixture(autouse=True)
+def fake_demo_services(monkeypatch):
+    """Demo 单测使用确定性服务，不依赖本机 Ollama 或网络。"""
+    monkeypatch.setattr(demo_module, "create_container", lambda **kwargs: FakeContainer())
+    monkeypatch.setattr(demo_module, "shutdown_container", lambda container: None)
 
 
 @pytest.fixture
@@ -51,6 +97,65 @@ def test_create_test_documents(temp_workdir):
         assert file_path.exists(), f"{filename} 应该被创建"
         content = file_path.read_text(encoding="utf-8")
         assert len(content) > 100, f"{filename} 应该包含足够的内容"
+
+
+def test_demo_output_supports_windows_console_encoding(temp_workdir, monkeypatch):
+    """演示脚本不应向 Windows 默认控制台输出不可编码的状态符号。"""
+    output = io.TextIOWrapper(io.BytesIO(), encoding="cp936", errors="strict")
+    monkeypatch.setattr(sys, "stdout", output)
+
+    results = run_demo(temp_workdir, keep_workdir=True)
+    output.flush()
+
+    assert isinstance(results, dict)
+    assert (temp_workdir / "config.yaml").exists()
+
+
+def test_demo_uses_container_services_as_properties(temp_workdir, monkeypatch):
+    """演示脚本应遵循 AppContainer 的属性式服务访问契约。"""
+
+    class ContractIndexResult:
+        created = 1
+        updated = 1
+        deleted = 0
+        skipped = 0
+
+    class ContractPathIndexer:
+        def index_path(self, path, recursive):
+            assert path == temp_workdir / "docs"
+            assert recursive is True
+            return ContractIndexResult()
+
+    class ContractSearchService:
+        def search(self, query, top_k):
+            assert top_k == 3
+            return [{
+                "title": "Python 编程入门",
+                "score": 1.0,
+                "text": f"{query} 异常处理 try-except",
+                "citation": {
+                    "document": "python_tutorial.md",
+                    "path": "docs/python_tutorial.md",
+                    "knowledge_id": "doc-1",
+                    "block_id": "doc-1-block-1",
+                    "text": f"{query} 异常处理 try-except",
+                },
+            }]
+
+    class ContractContainer:
+        path_indexer = ContractPathIndexer()
+        search_service = ContractSearchService()
+
+    monkeypatch.setattr(demo_module, "create_container", lambda **kwargs: ContractContainer())
+    monkeypatch.setattr(demo_module, "shutdown_container", lambda container: None)
+
+    results = run_demo(temp_workdir, keep_workdir=True)
+
+    assert results == {
+        "initial_hit": True,
+        "incremental_update": True,
+        "citation_complete": True,
+    }
 
 
 def test_run_demo_basic(temp_workdir):

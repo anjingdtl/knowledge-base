@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +106,7 @@ class ParentChildRetriever:
         if self._config is not None:
             if isinstance(self._config, dict):
                 parts = key.split(".")
-                obj = self._config
+                obj: Any = self._config
                 for p in parts:
                     if isinstance(obj, dict):
                         obj = obj.get(p)
@@ -190,9 +191,9 @@ class ParentChildRetriever:
         # 对每个 page_id，查询该 page 下所有子 block 以构建完整的父块内容
         page_parent_content = {}
         for page_id in page_ids:
-            parent = self._find_page_parent(db, page_id, parent_types, max_parent_chars)
-            if parent:
-                page_parent_content[page_id] = parent
+            page_parent = self._find_page_parent(db, page_id, parent_types, max_parent_chars)
+            if page_parent:
+                page_parent_content[page_id] = page_parent
 
         # 附加父块内容到结果
         for r in results:

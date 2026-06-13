@@ -1,5 +1,6 @@
 import json
 import re
+from typing import Any
 
 from src.models.query_dsl import QuerySpec
 from src.services.db import Database
@@ -89,20 +90,20 @@ class AgenticRouter:
 
     def route(self, question: str) -> dict:
         if self._is_structured(question):
-            dsl = self._try_rule_based(question)
-            if dsl is not None:
-                return {"mode": "structured", "query_spec": dsl, "explanation": "rule-based routing"}
+            rule_spec = self._try_rule_based(question)
+            if rule_spec is not None:
+                return {"mode": "structured", "query_spec": rule_spec, "explanation": "rule-based routing"}
 
         if self._is_graph_query(question):
-            dsl = self._try_llm(question)
-            if dsl is not None:
-                return {"mode": "graph", "query_spec": dsl.get("query_spec"),
-                        "traverse": dsl.get("traverse", {"max_depth": 2}),
+            llm_route = self._try_llm(question)
+            if llm_route is not None:
+                return {"mode": "graph", "query_spec": llm_route.get("query_spec"),
+                        "traverse": llm_route.get("traverse", {"max_depth": 2}),
                         "explanation": "LLM graph routing"}
 
-        dsl = self._try_llm(question)
-        if dsl is not None and dsl.get("mode") == "structured":
-            return {"mode": "structured", "query_spec": dsl["query_spec"],
+        llm_route = self._try_llm(question)
+        if llm_route is not None and llm_route.get("mode") == "structured":
+            return {"mode": "structured", "query_spec": llm_route["query_spec"],
                     "explanation": "LLM structured routing"}
 
         return {"mode": "hybrid", "query_spec": None, "explanation": "fallback to hybrid search"}
@@ -116,7 +117,7 @@ class AgenticRouter:
         return any(signal in lower for signal in _GRAPH_SIGNALS)
 
     def _try_rule_based(self, question: str) -> "QuerySpec | None":
-        conditions = []
+        conditions: list[dict[str, Any]] = []
 
         for m in _NL_TAG_RE.finditer(question):
             conditions.append({"tag": m.group(1)})
@@ -137,7 +138,7 @@ class AgenticRouter:
         legacy = QueryRouter(db=self._db).route(question)
         if legacy.mode == "logic":
             for tag in legacy.tags:
-                entry = {"tag": tag}
+                entry: dict[str, Any] = {"tag": tag}
                 if entry not in conditions:
                     conditions.append(entry)
             for key, value in legacy.properties.items():

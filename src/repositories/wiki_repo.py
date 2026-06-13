@@ -28,7 +28,7 @@ class WikiRepository:
             page,
         )
         self._conn().commit()
-        return page["id"]
+        return str(page["id"])
 
     def get_page(self, page_id: str) -> Optional[dict]:
         row = self._conn().execute("SELECT * FROM wiki_pages WHERE id = ?", (page_id,)).fetchone()
@@ -52,7 +52,7 @@ class WikiRepository:
             values,
         )
         self._conn().commit()
-        return cursor.rowcount > 0
+        return bool(cursor.rowcount > 0)
 
     def delete_page(self, page_id: str):
         conn = self._conn()
@@ -89,7 +89,7 @@ class WikiRepository:
             row = self._conn().execute("SELECT COUNT(*) as cnt FROM wiki_pages WHERE status = ?", (status,)).fetchone()
         else:
             row = self._conn().execute("SELECT COUNT(*) as cnt FROM wiki_pages").fetchone()
-        return row["cnt"]
+        return int(row["cnt"])
 
     def search_fts(self, query: str, limit: int = 10) -> list[dict]:
         from src.utils.chinese_tokenizer import sanitize_fts_query

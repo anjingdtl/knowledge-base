@@ -5,6 +5,8 @@ import logging
 import sqlite3
 import sys
 
+from PySide6.QtCore import QPoint, QSettings, Qt, QTimer
+from PySide6.QtGui import QColor, QCursor
 from PySide6.QtWidgets import (
     QFrame,
     QGraphicsDropShadowEffect,
@@ -18,15 +20,12 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-logger = logging.getLogger(__name__)
-
-from PySide6.QtCore import QPoint, QSettings, Qt, QTimer
-from PySide6.QtGui import QColor, QCursor
-
 from src.gui.icons import set_named_icon
 from src.services.db import Database
 from src.services.llm import register_llm_status_callback, unregister_llm_status_callback
 from src.version import VERSION
+
+logger = logging.getLogger(__name__)
 
 
 class DatabaseInitError(Exception):
@@ -281,9 +280,9 @@ class MainWindow(QMainWindow):
         title_bar = QFrame()
         title_bar.setObjectName("titleBar")
         title_bar.setFixedHeight(34)
-        title_bar.mousePressEvent = self._title_mouse_press
-        title_bar.mouseMoveEvent = self._title_mouse_move
-        title_bar.mouseDoubleClickEvent = self._title_mouse_double_click
+        title_bar.mousePressEvent = self._title_mouse_press  # type: ignore[method-assign]
+        title_bar.mouseMoveEvent = self._title_mouse_move  # type: ignore[method-assign]
+        title_bar.mouseDoubleClickEvent = self._title_mouse_double_click  # type: ignore[method-assign]
 
         row = QHBoxLayout(title_bar)
         row.setContentsMargins(12, 0, 6, 0)

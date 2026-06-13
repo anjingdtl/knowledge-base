@@ -1,8 +1,11 @@
 """分类仓库 — categories / knowledge_categories"""
 from datetime import datetime
+from typing import Callable
 
+get_all_codes: Callable[[bool], set[str]] | None
 try:
-    from src.data.classification_schema import get_all_codes
+    from src.data.classification_schema import get_all_codes as _get_all_codes
+    get_all_codes = _get_all_codes
 except ImportError:
     get_all_codes = None
 

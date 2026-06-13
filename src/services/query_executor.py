@@ -1,3 +1,5 @@
+from typing import Any, cast
+
 from src.models.query_dsl import Condition, QuerySpec
 from src.services.db import Database
 
@@ -58,7 +60,7 @@ class QueryExecutor:
         handler = getattr(self, f"_compile_{condition.type}", None)
         if handler is None:
             return "", [], False
-        return handler(condition)
+        return cast(tuple[str, list[Any], bool], handler(condition))
 
     def _compile_and(self, condition: Condition) -> tuple[str, list, bool]:
         parts = []

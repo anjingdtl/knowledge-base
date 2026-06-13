@@ -32,13 +32,14 @@ def build_source_graph(
     db = db or Database
 
     # 如果提供了图后端，使用后端优化的构建路径
+    normalized_sources = sources or []
     if graph_backend is not None and graph_backend.name != "sqlite":
         return _build_source_graph_via_backend(
-            sources, db, max_nodes, graph_backend,
+            normalized_sources, db, max_nodes, graph_backend,
         )
 
     # 默认路径：直接从 SQLite 构建（与改造前行为一致）
-    return _build_source_graph_sqlite(sources, db, max_nodes)
+    return _build_source_graph_sqlite(normalized_sources, db, max_nodes)
 
 
 def _build_source_graph_via_backend(

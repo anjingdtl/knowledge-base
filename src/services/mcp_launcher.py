@@ -13,6 +13,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from typing import Any
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _MCP_SCRIPT = _PROJECT_ROOT / "run_mcp.py"
@@ -22,7 +23,7 @@ _SERVICE_NAME = "ShineHeMCP"
 _process: subprocess.Popen | None = None
 
 
-def _run_hidden(args, **kwargs):
+def _run_hidden(args: list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
     """Run a helper command without flashing a console window on Windows."""
     if _is_windows():
         kwargs["creationflags"] = (
@@ -87,7 +88,11 @@ def get_service_failure_config() -> dict:
             ["sc.exe", "qfailure", _SERVICE_NAME],
             capture_output=True, text=True, timeout=5,
         )
-        info = {"configured": False, "reset_period": 0, "actions": []}
+        info: dict[str, Any] = {
+            "configured": False,
+            "reset_period": 0,
+            "actions": [],
+        }
         for line in result.stdout.splitlines():
             line = line.strip()
             if "RESET_PERIOD" in line:

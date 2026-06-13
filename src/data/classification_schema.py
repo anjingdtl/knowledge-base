@@ -4,8 +4,9 @@
 客服、产品、财务、人力、IT、采购、法律等核心业务领域。
 分类为两级结构，LLM 从中选择归入，不可自创类别。
 """
+from typing import Any
 
-CLASSIFICATION_SCHEMA = [
+CLASSIFICATION_SCHEMA: list[dict[str, Any]] = [
     {
         "code": "A",
         "name": "战略与管理",
@@ -173,12 +174,16 @@ CLASSIFICATION_SCHEMA = [
 ]
 
 # 兜底未分类类别
-UNCATEGORIZED = {"code": "Z", "name": "未分类", "description": "无法归入上述类别的知识条目"}
+UNCATEGORIZED: dict[str, str] = {
+    "code": "Z",
+    "name": "未分类",
+    "description": "无法归入上述类别的知识条目",
+}
 
 
 def get_schema_prompt() -> str:
     """将分类体系格式化为 LLM prompt 中的参考文本"""
-    lines = []
+    lines: list[str] = []
     for cat in CLASSIFICATION_SCHEMA:
         lines.append(f"- {cat['code']} {cat['name']}：{cat['description']}")
         for sub in cat.get("subcategories", []):
@@ -189,7 +194,7 @@ def get_schema_prompt() -> str:
 
 def get_all_codes(include_db=False) -> set[str]:
     """返回所有有效的分类代码（含大类和子类）。include_db 时合并数据库中的动态分类。"""
-    codes = set()
+    codes: set[str] = set()
     for cat in CLASSIFICATION_SCHEMA:
         codes.add(cat["code"])
         for sub in cat.get("subcategories", []):

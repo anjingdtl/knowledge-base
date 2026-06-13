@@ -3,11 +3,14 @@ from __future__ import annotations
 
 import math
 import random
+from collections.abc import Hashable
+from typing import TypeVar
 
 from PySide6.QtCore import (
     QEasingCurve,
     QPoint,
     QPropertyAnimation,
+    QRect,
     QRectF,
     Qt,
     QThread,
@@ -156,6 +159,7 @@ _CENTER_K = 0.005
 _DAMPING = 0.9
 _MAX_ITERATIONS = 200
 _LARGE_GRAPH_LAYOUT_NODE_LIMIT = 1000
+NodeKey = TypeVar("NodeKey", bound=Hashable)
 
 
 def _layout_iterations_for_node_count(node_count: int) -> int:
@@ -165,10 +169,10 @@ def _layout_iterations_for_node_count(node_count: int) -> int:
 
 
 def _compute_force_layout(
-    initial_positions: dict[int, tuple[float, float, bool]],
-    edge_pairs: list[tuple[int, int]],
+    initial_positions: dict[NodeKey, tuple[float, float, bool]],
+    edge_pairs: list[tuple[NodeKey, NodeKey]],
     iterations: int = _MAX_ITERATIONS,
-) -> dict[int, tuple[float, float]]:
+) -> dict[NodeKey, tuple[float, float]]:
     """纯计算的力导向布局 — 输入/输出均为原生类型，可在线程中安全运行。
 
     Args:
@@ -182,7 +186,7 @@ def _compute_force_layout(
     if not initial_positions:
         return {}
 
-    positions: dict[int, list[float]] = {}
+    positions: dict[NodeKey, list[float]] = {}
     for key, (x, y, is_pinned) in initial_positions.items():
         if is_pinned:
             positions[key] = [x, y]
@@ -193,10 +197,10 @@ def _compute_force_layout(
 
     pinned_keys = {k for k, (_, _, p) in initial_positions.items() if p}
     keys = list(positions.keys())
-    velocities: dict[int, list[float]] = {k: [0.0, 0.0] for k in keys}
+    velocities: dict[NodeKey, list[float]] = {k: [0.0, 0.0] for k in keys}
 
     for _ in range(iterations):
-        forces: dict[int, list[float]] = {k: [0.0, 0.0] for k in keys}
+        forces: dict[NodeKey, list[float]] = {k: [0.0, 0.0] for k in keys}
 
         # 节点两两斥力 — O(n²) 纯数值运算，线程内安全
         for i, k1 in enumerate(keys):
@@ -319,6 +323,7 @@ class GraphNodeItem(QGraphicsItem):
         self._muted = False
         self._edges: list[GraphEdgeItem] = []
         self._radius = self.BASE_RADIUS
+        self._unified_node: dict | None = None
 
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges, True)
@@ -678,6 +683,7 @@ class GraphScene(QGraphicsScene):
         self._knowledge_callback = None
         self._highlighted_node: GraphNodeItem | None = None
         self._legend: GraphLegendItem | None = None
+        self._layout_worker: _ForceLayoutWorker | None = None
         self._ensure_legend()
 
     def set_knowledge_callback(self, callback) -> None:
@@ -931,7 +937,7 @@ class GraphCanvas(QGraphicsView):
         self.setStyleSheet(f"background: {bg}; border: none;")
         self._bg_color = bg
 
-    def drawBackground(self, painter: QPainter, rect: QRectF) -> None:
+    def drawBackground(self, painter: QPainter, rect: QRectF | QRect) -> None:
         """绘制背景网格点（Obsidian 风格）。"""
         painter.save()
         painter.fillRect(rect, QBrush(_qcolor_from_role("bg", 255)))
@@ -1104,11 +1110,6 @@ class GraphView(QWidget):
             self._refresh_backend_indicator()
             self._backend_timer.start(5000)
 
-    def hideEvent(self, event):
-        super().hideEvent(event)
-        if self._backend_timer is not None and self._backend_timer.isActive():
-            self._backend_timer.stop()
-
     def _refresh_backend_indicator(self):
         """刷新工具栏上的后端状态指示器（仅在状态真变化时调 polish）"""
         try:
@@ -1226,7 +1227,7 @@ class GraphView(QWidget):
         self._backend_dot = QLabel("SQLite")
         self._backend_dot.setObjectName("indicatorDot")
         self._backend_dot.setProperty("status", "online")
-        self._backend_dot.setFont(QFont("", -1, QFont.Bold))
+        self._backend_dot.setFont(QFont("", -1, QFont.Weight.Bold))
         self._backend_dot.setFixedHeight(24)
         self._backend_dot.setContentsMargins(8, 2, 8, 2)
         toolbar.addWidget(self._backend_dot)
@@ -1287,7 +1288,7 @@ class GraphView(QWidget):
         # ---- 右侧详情面板（覆盖层） ----
         self._detail_width = 450
         self._detail_open = False
-        self._detail_anim = None
+        self._detail_anim: QPropertyAnimation | None = None
 
         self.detail_panel = QFrame(self)
         self.detail_panel.setObjectName("detailCard")
@@ -1666,6 +1667,8 @@ class GraphView(QWidget):
 
     def hideEvent(self, event) -> None:
         super().hideEvent(event)
+        if self._backend_timer is not None and self._backend_timer.isActive():
+            self._backend_timer.stop()
         if self._detail_anim is not None:
             self._detail_anim.stop()
             self._detail_anim = None

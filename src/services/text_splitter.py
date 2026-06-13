@@ -100,9 +100,9 @@ def _parse_md_hierarchy(text: str) -> list[tuple[str, str]]:
 
     heading_path 为完整的标题层级路径，如 "# 第一章 > ## 1.2 节 > ### 1.2.1"
     """
-    heading_stack = []  # [(level, title), ...]
-    results = []
-    current_lines = []
+    heading_stack: list[tuple[int, str]] = []
+    results: list[tuple[str, str]] = []
+    current_lines: list[str] = []
 
     for line in text.split("\n"):
         match = re.match(r'^(#{1,6})\s+(.+)', line)
@@ -128,8 +128,8 @@ def _parse_md_hierarchy(text: str) -> list[tuple[str, str]]:
 def _merge_paragraphs(paragraphs: list[str], chunk_size: int, overlap: int) -> list[str]:
     if not paragraphs:
         return []
-    chunks = []
-    current_parts = []
+    chunks: list[str] = []
+    current_parts: list[str] = []
     current_len = 0
 
     for para in paragraphs:

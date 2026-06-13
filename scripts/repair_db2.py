@@ -4,9 +4,9 @@ Uses 'PRAGMA writable_schema' to skip corrupted pages during dump,
 then reimport into a fresh database.
 """
 import os
-import sys
-import subprocess
 import shutil
+import sqlite3
+import sys
 import time
 
 src_path = "data/kb.db"
@@ -14,8 +14,6 @@ repaired_path = f"data/kb.db.repaired_{int(time.time())}"
 dump_path = "data/kb_dump.sql"
 
 print("Step 1: Dumping intact data from corrupted DB...")
-
-import sqlite3
 
 src = sqlite3.connect(src_path)
 src.row_factory = None  # raw tuples for speed
@@ -81,9 +79,8 @@ if os.path.exists(repaired_path):
 
 # Create fresh DB with the correct schema first
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from src.services.db import _SCHEMA
+from src.services.db import _SCHEMA  # noqa: E402
 
-import sqlite3
 dst = sqlite3.connect(repaired_path)
 dst.execute("PRAGMA journal_mode=WAL")
 dst.execute("PRAGMA foreign_keys=OFF")  # Disable FK during import
@@ -117,7 +114,7 @@ if ki > 0 and integrity == "ok":
     os.remove(repaired_path)
     if os.path.exists(dump_path):
         os.remove(dump_path)
-    print(f"\n  SUCCESS: repaired DB installed")
+    print("\n  SUCCESS: repaired DB installed")
     print(f"  Backup: {os.path.basename(backup_path)}")
 else:
     print(f"\n  ISSUE: knowledge_items={ki}, integrity={integrity}")

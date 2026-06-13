@@ -6,11 +6,10 @@
     python scripts/check_mcp.py --tools      # 仅列出可用工具
 """
 import argparse
+import http.client
 import json
 import sys
 import time
-import http.client
-
 
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 9000
@@ -73,7 +72,7 @@ def check_connectivity(host: str, port: int) -> bool:
 
 def check_initialize(host: str, port: int, path: str) -> tuple[str | None, dict | None]:
     """初始化 MCP 会话"""
-    print(f"[2/4] 初始化 MCP 会话 ...", end=" ")
+    print("[2/4] 初始化 MCP 会话 ...", end=" ")
     body = {
         "jsonrpc": "2.0",
         "id": 1,
@@ -102,7 +101,7 @@ def check_initialize(host: str, port: int, path: str) -> tuple[str | None, dict 
 
 def check_tools(host: str, port: int, path: str, session_id: str) -> list[str]:
     """列出可用工具"""
-    print(f"[3/4] 获取工具列表 ...", end=" ")
+    print("[3/4] 获取工具列表 ...", end=" ")
     body = {
         "jsonrpc": "2.0",
         "id": 2,
@@ -124,7 +123,7 @@ def check_tools(host: str, port: int, path: str, session_id: str) -> list[str]:
 
 def check_ping(host: str, port: int, path: str, session_id: str) -> float | None:
     """测试 ping 工具"""
-    print(f"[4/4] 测试 ping 工具 ...", end=" ")
+    print("[4/4] 测试 ping 工具 ...", end=" ")
     body = {
         "jsonrpc": "2.0",
         "id": 3,

@@ -35,7 +35,7 @@ class OperationLogService:
         if not Config.get("safety.operation_log.enabled", True):
             return ""
         try:
-            return self._repo.insert({
+            return str(self._repo.insert({
                 "operation": operation,
                 "target_type": target_type,
                 "target_id": target_id,
@@ -45,21 +45,21 @@ class OperationLogService:
                 "snapshot_after": json.dumps(after, ensure_ascii=False, default=str) if after else None,
                 "metadata": metadata or {},
                 "created_at": datetime.now().isoformat(),
-            })
+            }))
         except Exception:
             logger.warning("Failed to log operation %s on %s/%s", operation, target_type, target_id, exc_info=True)
             return ""
 
     def query(self, target_type=None, target_id=None, operation=None,
               source=None, limit=50, offset=0) -> list[dict]:
-        return self._repo.query(
+        return list(self._repo.query(
             target_type=target_type, target_id=target_id,
             operation=operation, source=source,
             limit=limit, offset=offset,
-        )
+        ))
 
     def get_by_target(self, target_type: str, target_id: str, limit=20) -> list[dict]:
-        return self._repo.get_by_target(target_type, target_id, limit=limit)
+        return list(self._repo.get_by_target(target_type, target_id, limit=limit))
 
     # ---- Phase 4 / Sprint 3: undo ----
 
@@ -225,7 +225,8 @@ def _parse_snapshot(raw: Any) -> Optional[dict]:
         return raw
     if isinstance(raw, str):
         try:
-            return json.loads(raw)
+            parsed = json.loads(raw)
+            return parsed if isinstance(parsed, dict) else None
         except (json.JSONDecodeError, TypeError):
             return None
     return None

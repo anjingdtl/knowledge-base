@@ -69,7 +69,7 @@ def _render_jinja_page(page: dict, site_config: dict) -> str:
         meta_tags = SEOMetadataGenerator.generate_meta_tags(seo)
         structured_data = SEOMetadataGenerator.generate_structured_data(page, seo)
 
-        return template.render(
+        return str(template.render(
             page=page,
             content_html=content_html,
             site_title=site_config.get("site_title", "Wiki"),
@@ -77,7 +77,7 @@ def _render_jinja_page(page: dict, site_config: dict) -> str:
             meta_tags=meta_tags,
             structured_data=structured_data,
             base_url=site_config.get("base_url", ""),
-        )
+        ))
     except Exception as e:
         logger.error(f"Jinja2 render failed: {e}")
         return _render_simple_page(page, site_config)
@@ -89,7 +89,7 @@ def _render_jinja_landing(data: dict, base_url: str) -> str:
         env = _get_jinja_env()
         template = env.get_template("landing.html")
 
-        return template.render(
+        return str(template.render(
             site_title=data.get("site_title", "Wiki"),
             site_description=data.get("site_description", ""),
             sections=data.get("sections", []),
@@ -97,7 +97,7 @@ def _render_jinja_landing(data: dict, base_url: str) -> str:
             categories=data.get("categories", {}),
             stats=data.get("stats", {}),
             base_url=base_url,
-        )
+        ))
     except Exception as e:
         logger.error(f"Jinja2 landing render failed: {e}")
         return _render_simple_landing(data)
