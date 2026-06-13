@@ -17,6 +17,7 @@ from src.services.query_rewriter import QueryRewriter
 from src.services.reranker import LLMReranker
 from src.services.llm import LLMService
 from src.utils.llm_text import strip_think
+from src.models.retrieval import compute_final_score, build_match_channels
 
 logger = logging.getLogger(__name__)
 
@@ -391,6 +392,8 @@ class GenerateStage(PipelineStage):
                      ``text_preview`` / ``score`` / ``block_context``，供 Agent
                      端做溯源 + 反查。
         """
+        from src.services.citation_builder import CitationBuilder
+
         kid_map = {}
         for r in filtered:
             meta = r.get("metadata", {}) if isinstance(r.get("metadata"), dict) else {}
@@ -401,6 +404,7 @@ class GenerateStage(PipelineStage):
                 kid_map[kid] = True
         _db = getattr(self, '_db', None) or Database
         items = _db.get_knowledge_batch(list(kid_map.keys())) if kid_map else {}
+        citation_builder = CitationBuilder(_db)
         context_parts = []
         sources = []
         for i, result in enumerate(filtered):
@@ -433,6 +437,22 @@ class GenerateStage(PipelineStage):
                 or result.get("chunk_id")
                 or result.get("id", "")
             )
+
+            # 分数回退链: rerank_score > rrf_score > vector_score > distance
+            # 使用显式 None 检查，0.0 是有效分数
+            score = 0.0
+            for key in ("rerank_score", "rrf_score", "vector_score", "distance"):
+                val = result.get(key)
+                if val is not None:
+                    score = val
+                    break
+
+            # 构建 match_channels
+            channels = result.get("match_channels") or build_match_channels(result)
+
+            # 构建 citation
+            citation = citation_builder.build(result, item)
+
             sources.append({
                 "block_id": block_id,
                 "chunk_id": result.get("id", result.get("chunk_id", "")),
@@ -440,7 +460,9 @@ class GenerateStage(PipelineStage):
                 "title": title,
                 "text_preview": text[:200],
                 "block_context": block_ctx,
-                "score": result.get("rerank_score", result.get("rrf_score", result.get("score", result.get("distance", 0)))),
+                "score": score,
+                "match_channels": channels,
+                "citation": citation.to_dict(),
             })
         return context_parts, sources
 
@@ -993,6 +1015,8 @@ class RAGService:
         return "\n".join(parts)
 
     def _build_context(self, filtered: list[dict]) -> tuple[list[str], list[dict]]:
+        from src.services.citation_builder import CitationBuilder
+
         kid_map = {}
         for r in filtered:
             metadata = r.get("metadata", {})
@@ -1005,6 +1029,7 @@ class RAGService:
                 kid_map[kid] = True
         _db = getattr(self, '_db', None) or Database
         items = _db.get_knowledge_batch(list(kid_map.keys())) if kid_map else {}
+        citation_builder = CitationBuilder(_db)
         context_parts = []
         sources = []
         for i, result in enumerate(filtered):
@@ -1033,12 +1058,29 @@ class RAGService:
                 or (metadata.get("block_id") if isinstance(metadata, dict) else "")
                 or result.get("id", "")
             )
+
+            # 分数回退链: rerank_score > rrf_score > vector_score > distance
+            score = 0.0
+            for key in ("rerank_score", "rrf_score", "vector_score", "distance"):
+                val = result.get(key)
+                if val is not None:
+                    score = val
+                    break
+
+            # 构建 match_channels
+            channels = result.get("match_channels") or build_match_channels(result)
+
+            # 构建 citation
+            citation = citation_builder.build(result, item)
+
             sources.append({
                 "block_id": block_id,
                 "chunk_id": result.get("id", ""),
                 "knowledge_id": kid,
                 "title": title,
                 "text_preview": text[:200],
-                "score": result.get("rerank_score", result.get("distance", 0)),
+                "score": score,
+                "match_channels": channels,
+                "citation": citation.to_dict(),
             })
         return context_parts, sources

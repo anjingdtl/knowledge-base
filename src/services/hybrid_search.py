@@ -7,6 +7,7 @@ from src.utils.config import Config
 from src.services.block_store import BlockStore
 from src.services.db import Database
 from src.services.block_context import enrich_result_with_context
+from src.models.retrieval import normalize_vector_score, normalize_fts_score
 
 
 class HybridSearcher:
@@ -51,11 +52,14 @@ class HybridSearcher:
                     cid = r["id"]
                     if cid not in seen:
                         seen.add(cid)
+                        dist = r.get("distance", 0)
                         results.append({
                             "id": cid,
                             "text": r["text"],
                             "metadata": r.get("metadata", {}),
-                            "distance": r.get("distance", 0),
+                            "distance": dist,
+                            "vector_score": normalize_vector_score(dist),
+                            "match_channels": ["semantic"],
                         })
             except Exception as e:
                 logging.warning(f"Vector search failed: {e}")
@@ -72,6 +76,7 @@ class HybridSearcher:
                     cid = r["id"]
                     if cid not in seen:
                         seen.add(cid)
+                        fts_rank = r.get("fts_rank", 0)
                         results.append({
                             "id": cid,
                             "text": r.get("content", ""),
@@ -82,7 +87,9 @@ class HybridSearcher:
                                 "properties": r.get("properties", {}),
                             },
                             "distance": 0,
-                            "fts_rank": r.get("fts_rank", 0),
+                            "fts_rank": fts_rank,
+                            "keyword_score": normalize_fts_score(fts_rank),
+                            "match_channels": ["keyword"],
                         })
             except Exception as e:
                 logging.warning(f"Keyword search failed: {e}")
@@ -99,21 +106,27 @@ class HybridSearcher:
         k = 60
         rrf_scores = {}
         result_map = {}
+        # 跟踪每个 item 来自哪个通道
+        vec_ids = set()
+        fts_ids = set()
 
         for rank, item in enumerate(vec_results):
             item_id = self._candidate_id(item)
             rrf_scores[item_id] = rrf_scores.get(item_id, 0) + 1.0 / (k + rank + 1)
+            vec_ids.add(item_id)
             if item_id not in result_map:
                 result_map[item_id] = {
                     "id": item.get("id", item_id),
                     "text": item["text"],
                     "metadata": self._metadata_with_block_id(item, item.get("id", item_id)),
                     "distance": item.get("distance", 0),
+                    "vector_score": item.get("vector_score", normalize_vector_score(item.get("distance", 0))),
                 }
 
         for rank, item in enumerate(fts_results):
             item_id = self._candidate_id(item)
             rrf_scores[item_id] = rrf_scores.get(item_id, 0) + 1.0 / (k + rank + 1)
+            fts_ids.add(item_id)
             if item_id not in result_map:
                 result_map[item_id] = {
                     "id": item.get("id", item_id),
@@ -121,15 +134,32 @@ class HybridSearcher:
                     "metadata": self._metadata_with_block_id(item, item.get("id", item_id)),
                     "distance": item.get("distance", 0),
                     "fts_rank": item.get("fts_rank", 0),
+                    "keyword_score": item.get("keyword_score", normalize_fts_score(item.get("fts_rank", 0))),
                 }
             else:
                 result_map[item_id].setdefault("fts_rank", item.get("fts_rank", 0))
+                result_map[item_id].setdefault("keyword_score",
+                    item.get("keyword_score", normalize_fts_score(item.get("fts_rank", 0))))
 
         sorted_ids = sorted(rrf_scores, key=lambda x: rrf_scores[x], reverse=True)
         results = []
         for item_id in sorted_ids[:top_k * 2]:
             item = result_map[item_id]
             item["rrf_score"] = rrf_scores[item_id]
+            item["final_score"] = rrf_scores[item_id]  # blend 阶段 final_score = rrf_score
+
+            # 构建 match_channels
+            channels = []
+            if item_id in vec_ids:
+                channels.append("semantic")
+            if item_id in fts_ids:
+                channels.append("keyword")
+            item["match_channels"] = channels
+
+            # 确保 vector_score 和 keyword_score 都有值
+            item.setdefault("vector_score", None)
+            item.setdefault("keyword_score", None)
+
             results.append(item)
 
         return self._preserve_keyword_hits(results, top_k)
