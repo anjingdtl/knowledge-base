@@ -2,7 +2,7 @@
 
 ## 什么是 MCP？
 
-Model Context Protocol（MCP）是一个开放协议，让 AI 应用能够安全地访问外部工具和数据源。ShineHeKnowledge 通过 MCP Server 暴露约 30 个工具，让你的 AI 编码工具直接操作知识库。
+Model Context Protocol（MCP）是一个开放协议，让 AI 应用能够安全地访问外部工具和数据源。ShineHeKnowledge 当前注册 51 个原始工具和 51 个命名空间别名，让 AI 编码工具可以检索、问答和管理本地知识。
 
 ## 支持的 AI 工具
 

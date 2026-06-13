@@ -20,7 +20,7 @@ AIGC:
 [![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-45%20tools-orange.svg)](src/mcp_server.py)
+[![MCP](https://img.shields.io/badge/MCP-51%20tools-orange.svg)](src/mcp_server.py)
 
 </div>
 
@@ -31,7 +31,7 @@ AIGC:
 ShineHe Knowledge is a **locally-running, privacy-first** knowledge base system:
 
 - Feed your documents in, ask questions in natural language, AI retrieves + generates answers
-- Native MCP Server with 51 core tools and 51 namespaced aliases, directly callable from Claude / Cursor / Cline and other AI tools
+- Native MCP Server with 51 original tools and 51 namespaced aliases, directly callable from Claude / Cursor / Cline and other AI tools
 - Built-in knowledge graph (SQLite + Neo4j dual backend), Wiki workflow, hybrid search engine
 - Plugin architecture with hook-based extensibility and swappable graph database backends
 
@@ -53,7 +53,7 @@ Vector search (bge-m3 1024-dim) + keyword search (FTS5) + RRF fusion, with Chine
 - File-first outline graph, multi-hop traversal, structured DSL queries, Agentic Router
 
 ### MCP Server
-51 core tools + 51 namespaced aliases + 2 resources + 1 resource template + 5 prompts, covering search, Q&A, CRUD, ingestion, Wiki, graph, query, operations, and agent memory.
+51 original tools + 51 namespaced aliases + 3 resources + 5 prompts, covering search, Q&A, CRUD, ingestion, Wiki, graph, query, operations, and agent memory.
 Write safety closed loop with `preview_operation` (dry-run) + `undo_operation` (rollback).
 
 ### Wiki System

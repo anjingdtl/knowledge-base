@@ -132,7 +132,7 @@ def build_doc():
         "Block 级引用体系：支持段落级嵌入（Transclusion）、链接扩展、DSL 查询语言",
         "异步任务系统：大文件自动转异步导入，支持任务状态追踪和取消",
         "安全与审计：操作日志、预览模式、撤销操作、软删除与恢复",
-        "MCP Server：约 30 个工具 + 3 个资源 + 4 个 Prompt 模板，支持 stdio / streamable-http / sse",
+        "MCP Server：51 个原始工具 + 51 个命名空间别名 + 3 个资源 + 5 个 Prompt，支持 stdio / streamable-http / sse",
         "跨平台：Python 全栈架构，Windows 安装包、Docker 容器、源码运行三种部署方式",
     ]
     for f in features:
@@ -434,7 +434,7 @@ def build_doc():
     # ==== 7. MCP 工具一览 ====
     doc.add_heading("7. MCP 工具一览", level=1)
     doc.add_paragraph(
-        "MCP Server 暴露约 30 个工具、3 个资源和 4 个 Prompt 模板。以下为核心工具分类："
+        "MCP Server 当前注册 51 个原始工具、51 个命名空间别名、3 个资源和 5 个 Prompt。以下为常用工具分类："
     )
 
     doc.add_heading("核心知识操作", level=2)

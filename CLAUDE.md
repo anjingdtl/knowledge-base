@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目速查: ShineHeKnowledge
 
-本地知识库系统（v1.2.0），支持多模态文档管理、RAG 智能问答。三种运行模式共享同一服务层，通过 AppContainer 依赖注入。
+本地优先知识检索系统（v1.2.0），支持多模态文档管理、RAG 智能问答和 MCP Agent 接入。桌面 GUI、REST API、MCP Server、Windows 服务四种运行模式共享同一服务层，通过 AppContainer 依赖注入。
+
+当前权威方向、实施计划和历史归档入口见 `docs/README.md` 与根目录 `PROGRESS.md`。不要从 `docs/archive/` 中恢复旧待办。
 
 ## 运行命令
 
@@ -42,9 +44,9 @@ python scripts/build_docs.py                # 用户说明文档
 
 ```
 knowledge-base/
-├── main.py / run_api.py / run_mcp.py   # 三种入口 → 均通过 create_container() 初始化
+├── main.py / run_api.py / run_mcp.py   # GUI/API/MCP 入口 → create_container() 初始化
 ├── config.yaml                          # 驱动所有模式的主配置
-├── alembic/                             # 数据库迁移（3 个版本）
+├── alembic/                             # 数据库迁移
 ├── client/                              # React 19 + Vite + TypeScript Web 前端
 ├── mcp_config_templates/                # 一键 MCP 配置 JSON（Claude/Cursor/Cline 等）
 ├── scripts/                             # 构建、迁移、MCP 配置脚本
@@ -55,8 +57,8 @@ knowledge-base/
     │   ├── __init__.py                  # create_app() FastAPI 工厂，lifespan 中创建 Container
     │   ├── auth.py                      # JWT 认证（python-jose + bcrypt）
     │   ├── deps.py                      # FastAPI DI: get_container() 从 app.state 提取
-    │   └── routes.py                    # 6 个路由模块: auth/kb/refs/chat/wiki/jobs
-    ├── repositories/                    # 数据访问层（8 个 Repo，逐步替代 db.py 直接操作）
+    │   └── routes/                      # auth/chat/graph/jobs/knowledge/settings 等路由
+    ├── repositories/                    # 数据访问层，逐步替代 db.py 直接操作
     ├── services/                        # 核心服务层
     │   ├── db.py                        # SQLite + FTS5 存储（单例，兼容旧代码）
     │   ├── vectorstore.py               # sqlite-vec 向量存储（1024 维 bge-m3）
@@ -67,7 +69,7 @@ knowledge-base/
     │   ├── rag_pipeline.py              # 可配置 RAG 管线（6 阶段）
     │   ├── file_graph.py                # 文件优先大纲图谱
     │   └── wiki_*.py                    # Wiki 系统（compiler/workflow/site/seo/lint）
-    ├── mcp_server.py                    # FastMCP Server（~30 工具 + 资源 + prompt）
+    ├── mcp_server.py                    # 51 工具 + 51 别名 + 3 资源 + 5 Prompt
     ├── gui/                             # PySide6 桌面界面（暗色科幻主题）
     ├── models/                          # 数据模型（KnowledgeItem/Conversation/Block）
     └── utils/config.py                  # Config 单例 + keyring 密钥管理
@@ -90,7 +92,7 @@ Config → Database → VectorStore → BlockStore → Embedding/LLM → Reposit
 ### 双认证模型
 
 - **REST API**：JWT Bearer Token（`auth.py`），用户注册/登录，密钥自动生成存 `data/.jwt_secret`
-- **MCP Server**：无认证，依赖传输层信任模型（stdio 或本地 HTTP）
+- **MCP Server**：stdio 使用本地信任模型；HTTP/SSE 写操作受 `write_policy`、`allow_http_write` 和可选 Bearer Token 约束
 - 测试中通过 `api_client` fixture 自动注册用户并注入 token
 
 ### Repository 层过渡
@@ -109,8 +111,8 @@ Config → Database → VectorStore → BlockStore → Embedding/LLM → Reposit
 
 - `conftest.py`：`setup_db` (autouse) 每个测试创建临时 SQLite 并重置 Database/VectorStore/BlockStore 单例
 - `api_client` fixture：创建 FastAPI TestClient，mock 掉 embedding 调用，自动注入 Bearer token
-- 无 linting/formatting 配置（无 ruff/black/mypy）
-- 无 CI/CD 配置
+- `pyproject.toml` 配置 ruff、mypy、pytest；`pyproject.toml` 是唯一依赖声明
+- `.github/workflows/ci.yml` 运行 lint、Python tests、前端 build 和 Docker build
 
 ## RAG 管线
 
@@ -133,7 +135,7 @@ Config → Database → VectorStore → BlockStore → Embedding/LLM → Reposit
 
 ## MCP Server
 
-`src/mcp_server.py` 基于 FastMCP，暴露约 30 个工具、3 个资源（`kb://knowledge/{id}`、`kb://tags`、`kb://stats`）和 1 个 prompt 模板。`mcp_config_templates/` 提供主流 AI 编码工具的一键配置 JSON。
+`src/mcp_server.py` 基于 FastMCP，当前注册 51 个原始工具、51 个命名空间别名、3 个资源（`kb://knowledge/{id}`、`kb://tags`、`kb://stats`）和 5 个 Prompt。`mcp_config_templates/` 提供主流 AI 编码工具的一键配置 JSON。
 
 ## 版本发布
 

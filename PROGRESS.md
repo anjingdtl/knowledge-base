@@ -1,200 +1,57 @@
-# ShineHeKnowledge 开发进度
+# ShineHeKnowledge 当前状态
 
-> 最后更新: 2026-06-12
-> 当前版本: v1.2.0 → v2.0.0 升级中
-> 升级规格: `docs/superpowers/specs/2026-06-12-knowledge-base-upgrade-design.md`
+> 最后更新：2026-06-13
+> 源码版本：`src/version.py` 中的 `1.2.0`
+> 当前分支：`master`
+> 当前方向：收束为本地优先的 MCP 高精准知识检索引擎
 
----
+## 权威文档
 
-## 总体进度
+- 当前优化规格：`docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md`
+- 当前实施计划：`docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md`
+- MCP 使用文档：`docs/mcp/`
+- 历史设计与已完成计划：`docs/archive/`
 
-| 阶段 | 板块 | 目标版本 | 状态 | 完成时间 |
-|------|------|----------|------|----------|
-| Phase 1 | A1: 首次启动配置向导 | v1.3.0 | ✅ 已完成 | 2026-06-12 |
-| Phase 2 | C2: 文件监控与增量索引 | v1.4.0 | ⬜ 未开始 | — |
-| Phase 3 | B2: 多模态解析与可视化 | v1.5.0-a | ⬜ 未开始 | — |
-| Phase 4 | C1: Obsidian 生态兼容 | v1.5.0-b | ⬜ 未开始 | — |
-| Phase 5 | B1: GraphRAG 实体关系抽取 | v1.6.0 | ⬜ 未开始 | — |
-| Phase 6 | D1: RBAC 权限隔离 | v2.0.0-a | ⬜ 未开始 | — |
-| Phase 7 | A2: 零配置便携版 + 集成测试 | v2.0.0 | ⬜ 未开始 | — |
+除上述当前规格和计划外，归档目录中的文档只用于追溯，不代表当前待办。
 
-**整体进度: 1/7 阶段完成 (14%)**
+## 已完成的主要能力
 
----
+- SQLite、FTS5、sqlite-vec 与 Block-first 存储。
+- 向量检索 + 全文检索 + RRF 融合。
+- query rewrite、reranker、Parent-Child、Evidence Compression。
+- Block 级来源、source graph、结构化查询与 Agentic Router。
+- MCP envelope、写操作策略、dry-run、审计、soft delete 与 undo。
+- 大文件异步导入和任务查询。
+- 51 个原始 MCP 工具、51 个命名空间别名、3 个资源、5 个 Prompt。
+- GUI、REST API、Web 客户端、Docker、Windows 服务和安装脚本。
+- CI：Python lint/test、前端构建和 Docker 构建。
 
-## Phase 1: 首次启动配置向导 ✅
+## 当前改造
 
-> Commit: `cca838c` — 2026-06-12
+`MCP Local Retrieval Focus` 尚未开始编码，计划分为：
 
-### 交付内容
+1. 冻结 MCP 与检索基线。
+2. 增加本地初始化和统一 CLI。
+3. 增加目录索引与文件监听。
+4. 精简默认 MCP 工具配置档。
+5. 统一检索候选分数和 Citation。
+6. 增加可选本地 reranker provider。
+7. 建立真实 golden source 的 Eval 门禁。
+8. 重写 README、Demo 和发布文档。
 
-| 文件 | 类型 | 行数 | 说明 |
-|------|------|------|------|
-| `src/utils/first_run.py` | 新增 | ~80 | 首次启动检测（标记文件 + API Key 占位符判断） |
-| `src/gui/setup_wizard.py` | 新增 | ~590 | 4 步 PySide6 配置向导 |
-| `src/app.py` | 修改 | +75 | 向导集成 + 示例知识包导入 |
-| `src/data/samples/*.md` | 新增 | 5 文件 | 中文入门示例文档 |
-| `tests/test_setup_wizard.py` | 新增 | ~170 | 单元测试 |
+## 文档清理记录
 
-### 功能明细
+2026-06-13 完成首轮仓库清理：
 
-- **首次启动检测**: `is_first_run()` 检查 `data/.first_run` 标记文件和 API Key 是否为占位符
-- **4 步向导**:
-  1. 欢迎页 — 功能亮点介绍
-  2. AI 服务商选择 — 8 个预设模板（SiliconFlow / MiniMax / OpenAI / DeepSeek / 智谱 / Moonshot / Ollama / 自定义）
-  3. 连通性测试 — 后台线程调用 Embedding API 验证，8 秒超时
-  4. 配置摘要 — 可选导入示例知识包
-- **安全存储**: API Key 通过 OS keyring 存储，不落盘 config.yaml
-- **向后兼容**: 老用户不触发向导
-- **优雅跳过**: 可随时跳过，在 Settings 中配置
+- 旧的 Structured/Graph RAG、MCP-first 和全平台升级方案移入 `docs/archive/`。
+- 删除失效的手册补丁脚本、弃用的 `requirements.txt`、旧图标和误提交的 `.superpowers` 临时文件。
+- 保留被测试引用的迁移脚本。
+- 保留可能用于用户数据恢复的一次性脚本，并在 `scripts/README.md` 标明风险和用途。
 
----
+## 验证原则
 
-## Phase 2: 文件监控与增量索引 ⬜
-
-> 计划版本: v1.4.0 | 预估工作量: 2 周
-
-### 待实现
-
-- [ ] `pyproject.toml` 增加 `watchdog>=4.0` 依赖
-- [ ] Alembic 迁移: `file_index` 表（文件路径、hash、索引状态）
-- [ ] `src/repositories/file_index_repo.py` — 文件索引 CRUD
-- [ ] `src/services/file_watcher.py` — watchdog 文件监控 + debounce
-- [ ] `src/services/index_scheduler.py` — 增量索引调度器
-- [ ] `src/core/container.py` — 注册新服务
-- [ ] `config.yaml` 增加 `watcher` 配置节
-- [ ] API 端点: `GET /api/indexer/status`, `POST /api/indexer/scan`
-- [ ] GUI 状态栏索引指示器
-- [ ] 测试覆盖
-
----
-
-## Phase 3: 多模态解析与可视化 ⬜
-
-> 计划版本: v1.5.0-a | 预估工作量: 1.5 周 | 依赖: Phase 2
-
-### 待实现
-
-- [ ] Alembic 迁移: `attachments` 表
-- [ ] `src/services/image_analyzer.py` — 多模态 LLM 图片分析
-- [ ] `src/services/attachment_store.py` — 附件存储管理
-- [ ] `src/api/routes/attachments.py` — 附件 API
-- [ ] React 客户端: `react-markdown` + `rehype-highlight` + 图片渲染
-- [ ] 修改 `file_parser.py` 图片解析：元数据 → 智能分析
-
----
-
-## Phase 4: Obsidian 生态兼容 ⬜
-
-> 计划版本: v1.5.0-b | 预估工作量: 1.5 周 | 依赖: Phase 2 + 3
-
-### 待实现
-
-- [ ] `src/services/markdown_parser.py` — 双格式解析（Logseq + Obsidian YAML frontmatter）
-- [ ] Alembic 迁移: `external_sources` 表
-- [ ] `src/services/vault_sync.py` — Obsidian Vault 挂载与同步
-- [ ] API 端点: `POST /api/sources`, `GET /api/sources`
-- [ ] GUI 设置增加"数据源" Tab
-
----
-
-## Phase 5: GraphRAG 实体关系抽取 ⬜
-
-> 计划版本: v1.6.0 | 预估工作量: 3 周 | 依赖: Phase 2
-
-### 待实现
-
-- [ ] Alembic 迁移: `entity_triples`, `entity_index`, `community_summaries` 表
-- [ ] `src/services/entity_extractor.py` — LLM 实体三元组抽取
-- [ ] `src/services/entity_resolver.py` — 实体消歧与合并
-- [ ] `src/services/community_detector.py` — 社区检测与摘要
-- [ ] RAG 管线自定义阶段: `entity_extract` + `graph_retrieval`
-- [ ] API 端点: 实体搜索、关系查询、社区列表
-
----
-
-## Phase 6: RBAC 权限隔离 ⬜
-
-> 计划版本: v2.0.0-a | 预估工作量: 1 周
-
-### 待实现
-
-- [ ] Alembic 迁移: `users` 表扩展（role, email, is_active）
-- [ ] JWT payload 扩展: 增加 `role` 字段
-- [ ] `src/api/permissions.py` — 角色权限装饰器
-- [ ] 全路由添加权限标注
-- [ ] 用户管理 API + GUI
-
----
-
-## Phase 7: 零配置便携版 + 集成测试 ⬜
-
-> 计划版本: v2.0.0 | 预估工作量: 1 周 | 依赖: Phase 1-6 全部完成
-
-### 待实现
-
-- [ ] `scripts/build_portable.py` — embeddable Python 便携版打包
-- [ ] PyInstaller spec 修复（补齐 hidden imports）
-- [ ] `scripts/install_windows.ps1` — 一键安装脚本
-- [ ] 集成测试: 完整用户旅程 + 升级兼容性
-- [ ] README / CLAUDE.md 文档更新
-
----
-
-## 版本历史
-
-| 版本 | 日期 | 说明 |
-|------|------|------|
-| v1.2.0 | 2026-06-10 | 当前稳定版: 45 MCP 工具, Neo4j 后端, 插件系统, Windows 服务 |
-| v1.3.0 | 开发中 | Phase 1 完成: 首次启动配置向导 |
-| v1.3.0-patch.1 | 2026-06-13 | GUI 卡顿优化: 砍除 unpolish 风暴、LLMIndicator 闪烁去 polish、GraphView/ChatView/CatalogView/WikiView 列表加载延后到 showEvent、MCP 轮询 3s→5s、status bar 5s 缓存 + 300ms 防抖、Neo4jManager.find_neo4j_home 模块级缓存、知识库/目录树/图谱列表批量插入 setUpdatesEnabled 包裹、Neo4j 启动补加 CREATE_NO_WINDOW 修复弹窗 |
-
----
-
-## GUI 卡顿优化专项（v1.3.0-patch.1）
-
-### 症状
-升级构建后 GUI 客户端明显卡顿——主线程偶发卡顿、侧边栏 LLM 灯不流畅、启动后偶见 cmd 黑窗口闪一下。
-
-### 根因
-1. **QSS polish 风暴**: 多个 widget 调 `style().unpolish(widget)` + `style().polish(widget)`，每次都重算 QSS 子树
-   - `LLMIndicator` 500ms blink 必调（running/dim 在 QSS 中实际同色 `#D64A6C`，**纯浪费**）
-   - `graph_view._backend_dot` 5s 一次常驻轮询
-   - `mcp_light`、`import_dialog` hover、`settings_dialog` 服务状态 全部 unpolish+polish
-2. **GraphView 后端定时器常驻**: `_backend_timer` 5s 一次跑 Neo4jManager + 端口探测 + polish，**无论用户在哪个页都跑**
-3. **启动期同步实例化 6 个 view**: GraphView 1675 行 + ChatView 667 行 一次性跑 `_load_xxx` 查库
-4. **MCP 轮询高频**: 3s 一次 + 每次重查 `Database.count_knowledge()`
-5. **Neo4jManager 重复扫盘**: `find_neo4j_home()` 每次 `iterdir("C:/Program Files/...")`
-6. **Neo4j 启动弹黑窗口**: `_auto_start_neo4j` 调 `neo4j.bat console`，subprocess Popen 缺 `CREATE_NO_WINDOW`
-
-### 修复（10 文件，+199/-76 行）
-
-| 位置 | 修复 |
-|------|------|
-| `gui/llm_indicator.py` | 拆 `_apply` 为 `_apply_status` / `_tick`；blink 走 `update()` 路径，状态切换才 polish |
-| `gui/graph_view.py` | 后端 timer 改 `showEvent/hideEvent` 控制启停；缓存上次 status 不变时跳过 polish；列表/树批量插入加 `setUpdatesEnabled` 包裹 |
-| `gui/main_window.py` | MCP 轮询 3s→5s；status bar 5s 缓存 + 300ms 防抖；mcp_light 砍 unpolish |
-| `gui/chat_view.py` | `_load_conversations` 延后到 showEvent |
-| `gui/catalog_view.py` | `_load_catalog` 延后到 showEvent + 树批量插入 setUpdatesEnabled |
-| `gui/wiki_view.py` | WikiCompiler 实例化 + `_load_pages` 延后到 showEvent |
-| `gui/knowledge_view.py` | `_populate_table` 加 `setUpdatesEnabled` 包裹避免 200 行 insertRow 重绘 |
-| `gui/import_dialog.py` | hover 切换砍 unpolish |
-| `gui/settings_dialog.py` | 服务状态/Neo4j 状态砍 unpolish |
-| `services/neo4j_manager.py` | `find_neo4j_home` 模块级缓存（2.5ms→0.001ms）；start() Popen 补 `CREATE_NO_WINDOW` 修弹窗 |
-
-### 性能提升
-
-| 指标 | 修复前 | 修复后 |
-|------|--------|--------|
-| LLM 运行中 1s 内主线程 polish 调用 | 2 次 | 0 次（仅状态切时 1 次） |
-| 非图谱页 5s 内后端 timer 触发 | 1 次 | 0 次（hideEvent 自动停） |
-| Neo4jManager 重建 | 2.5ms ×N | 0.001ms（缓存命中） |
-| Database.count_knowledge 1s 内查询 | 5-10 次 | ≤1 次（5s 缓存） |
-| 知识库 200 行重绘 | 200 次 | 1 次 |
-| 启动期同步 DB 查询 | 6 view ×N 次 | 默认页 1 次 |
-| Neo4j 启动弹窗 | 是 | 否 |
-
-### 测试
-- 修复启动崩溃 bug（`_status_bar_timer` 初始化顺序）amend 进 perf commit
-- `pytest tests/ -q`: **563 passed, 1 skipped**（13:38）
-- 唯一失败 `test_async_worker_processes_ingest_job_end_to_end` 为预先存在的 async_worker 模块 bug，与本次 GUI 改动无关（已 stash 验证 baseline 同样失败）
+- MCP/RAG 改动优先运行对应 contract 和 targeted regression。
+- 数据库迁移必须运行 `tests/test_migration.py`。
+- 前端改动必须运行 `npm --prefix client run build`。
+- 发布前再运行完整测试、Docker 构建和实际 GUI/MCP 启动验证。
+- 测试结果只记录当次真实执行结果，不从历史文档复制通过数量。

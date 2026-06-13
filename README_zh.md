@@ -20,7 +20,7 @@ AIGC:
 [![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-45%20tools-orange.svg)](src/mcp_server.py)
+[![MCP](https://img.shields.io/badge/MCP-51%20tools-orange.svg)](src/mcp_server.py)
 
 </div>
 
@@ -31,7 +31,7 @@ AIGC:
 ShineHe Knowledge 是一个**本地运行、隐私优先**的知识库系统：
 
 - 把你的文档喂进去，用自然语言问问题，AI 自动检索+生成回答
-- 原生 MCP Server，51 个核心工具 + 51 个命名空间别名，可直接被 Claude / Cursor / Cline 等 AI 工具调用
+- 原生 MCP Server，51 个原始工具 + 51 个命名空间别名，可直接被 Claude / Cursor / Cline 等 AI 工具调用
 - 内建知识图谱（SQLite + Neo4j 双后端）、Wiki 工作流、混合搜索引擎
 - 插件式架构，支持钩子扩展和图数据库后端切换
 
@@ -53,7 +53,7 @@ ShineHe Knowledge 是一个**本地运行、隐私优先**的知识库系统：
 - 文件大纲图谱、多跳图遍历、结构化 DSL 查询、Agentic Router 智能路由
 
 ### MCP Server
-51 个核心工具 + 51 个命名空间别名 + 2 个资源 + 1 个资源模板 + 5 个 Prompt，覆盖搜索、问答、CRUD、导入、Wiki、图谱、查询、运维和 Agent Memory 全场景
+51 个原始工具 + 51 个命名空间别名 + 3 个资源 + 5 个 Prompt，覆盖搜索、问答、CRUD、导入、Wiki、图谱、查询、运维和 Agent Memory 全场景
 支持 `preview_operation` 预览 + `undo_operation` 撤销，写操作安全闭环
 
 ### Wiki 系统
@@ -183,7 +183,7 @@ knowledge-base/
 │   │   ├── neo4j_manager.py             # Neo4j 进程管理（自动启停）
 │   │   ├── wiki_*.py                    # Wiki 工作流系统
 │   │   └── ...                          # 更多服务
-│   ├── mcp_server.py                    # FastMCP Server（45 工具）
+│   ├── mcp_server.py                    # FastMCP Server（51 个原生工具）
 │   ├── plugins/                         # 🔌 插件钩子系统
 │   ├── gui/                             # PySide6 桌面界面
 │   │   ├── wiki_view.py                 #   Wiki 管理（体检 / 死链修复 / 工作流）
