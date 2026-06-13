@@ -563,13 +563,21 @@ def test_search_service_accepts_query_spec():
 
 
 def test_mcp_structured_query_tool_exists():
-    import asyncio
+    import src.mcp_server  # noqa: F401
+    from src.mcp.tool_registry import get_definitions, select_tools
 
-    from src.mcp_server import mcp
-    tool_names = [t.name for t in asyncio.run(mcp.list_tools())]
-    assert "structured_query" in tool_names
-    assert "explain_query" in tool_names
-    assert "graph_traverse" in tool_names
+    definitions = get_definitions()
+    assert "structured_query" in definitions
+    assert "explain_query" in definitions
+    assert "graph_traverse" in definitions
+
+    extended_names = {tool.name for tool in select_tools("extended")}
+    assert {"structured_query", "explain_query"} <= extended_names
+
+    full_experimental_names = {
+        tool.name for tool in select_tools("full", experimental_enabled=True)
+    }
+    assert "graph_traverse" in full_experimental_names
 
 
 def test_end_to_end_structured_query_through_rag():
