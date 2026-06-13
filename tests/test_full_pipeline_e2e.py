@@ -2,14 +2,11 @@
 
 覆盖 Phase 1 (Structured/Graph RAG) + Phase 2 (Logseq Graph) + Phase 3 (Query Revolution) 的全部核心能力。
 """
-import asyncio
 import json
-import uuid
 
 import pytest
 
 from src.services.db import Database
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -68,7 +65,7 @@ class TestPhase1StructuredImportAndContext:
         root = _make_block("b-root", page_id, "系统架构概览")
         child1 = _make_block("b-fe", page_id, "前端架构：React + TypeScript",
                              parent_id=root, order_idx=1)
-        child2 = _make_block("b-be", page_id, "后端架构：FastAPI + SQLite",
+        _make_block("b-be", page_id, "后端架构：FastAPI + SQLite",
                              parent_id=root, order_idx=2)
         grandchild = _make_block("b-fe-detail", page_id,
                                  "前端使用 Vite 构建，组件库基于 Ant Design",
@@ -91,8 +88,8 @@ class TestPhase1StructuredImportAndContext:
         _make_block("b-link-block", page_a,
                     "参考 [[系统架构设计]] 进行重构，详见 [[后端API设计]]")
 
-        from src.services.link_discovery import LinkDiscoveryService
         from src.repositories.entity_ref_repo import EntityRefRepository
+        from src.services.link_discovery import LinkDiscoveryService
         service = LinkDiscoveryService(db=Database)
         created = service.discover_links(page_a)
 
@@ -156,8 +153,8 @@ class TestPhase2GraphCapabilities:
 
     def test_effective_property_inheritance(self):
         from src.models.property_schema import PropertySchema
-        from src.services.property_schema import PropertySchemaService
         from src.services.effective_properties import EffectivePropertyService
+        from src.services.property_schema import PropertySchemaService
 
         page_id = _make_page("p-task", "前端任务清单", tags=["前端", "任务"])
         block_explicit = _make_block("b-explicit", page_id, "实现登录页面",
@@ -350,6 +347,7 @@ class TestPhase3QueryRevolution:
 
     def test_agentic_router_falls_back_for_fuzzy(self):
         from unittest.mock import MagicMock
+
         from src.services.agentic_router import AgenticRouter
 
         mock_llm = MagicMock()
@@ -361,7 +359,7 @@ class TestPhase3QueryRevolution:
         assert result["query_spec"] is None
 
     def test_query_builder_bridge_or_not_to_dsl(self):
-        from src.core.query_builder import HasTag, HasProperty, Or, Not, to_query_spec
+        from src.core.query_builder import HasProperty, HasTag, Not, Or, to_query_spec
 
         spec = to_query_spec(
             HasTag("bug"),
@@ -407,7 +405,8 @@ class TestMCPToolIntegration:
         assert "mcp-test" in json.loads(read_result["data"].get("tags", "[]"))
 
     def test_mcp_list_and_tags(self):
-        from src.mcp_server import create, list_knowledge, tags as get_tags
+        from src.mcp_server import create, list_knowledge
+        from src.mcp_server import tags as get_tags
 
         create(title="标签测试 A", content="内容 A", tags=["e2e-tag-x"])
         create(title="标签测试 B", content="内容 B", tags=["e2e-tag-y"])
@@ -571,9 +570,9 @@ class TestCrossPhaseIntegration:
 
     def test_tag_inheritance_expands_structured_query(self):
         """Phase 2 标签继承 → Phase 3 DSL 查询展开"""
-        from src.services.tag_hierarchy import TagHierarchyService
         from src.models.query_dsl import QuerySpec
         from src.services.query_executor import QueryExecutor
+        from src.services.tag_hierarchy import TagHierarchyService
 
         TagHierarchyService(db=Database).add_relation("项目", "前端项目")
         TagHierarchyService(db=Database).add_relation("项目", "后端项目")
@@ -595,15 +594,15 @@ class TestCrossPhaseIntegration:
     def test_effective_properties_queryable_via_dsl(self):
         """Phase 2 有效属性 → Phase 3 DSL 属性查询"""
         from src.models.property_schema import PropertySchema
-        from src.services.property_schema import PropertySchemaService
-        from src.services.effective_properties import EffectivePropertyService
         from src.models.query_dsl import QuerySpec
+        from src.services.effective_properties import EffectivePropertyService
+        from src.services.property_schema import PropertySchemaService
         from src.services.query_executor import QueryExecutor
 
         page_id = _make_page("p-eff-q", "有效属性查询测试", tags=["eff-test"])
-        b1 = _make_block("b-eff-q1", page_id, "有显式状态的 Block",
+        _make_block("b-eff-q1", page_id, "有显式状态的 Block",
                          properties={"severity": "high"})
-        b2 = _make_block("b-eff-q2", page_id, "无显式状态的 Block", order_idx=1)
+        _make_block("b-eff-q2", page_id, "无显式状态的 Block", order_idx=1)
 
         schema_svc = PropertySchemaService(db=Database)
         schema_svc.upsert(PropertySchema(
@@ -629,8 +628,8 @@ class TestCrossPhaseIntegration:
 
     def test_link_discovery_feeds_graph_traversal(self):
         """Phase 1 链接发现 → Phase 3 图谱遍历"""
-        from src.services.link_discovery import LinkDiscoveryService
         from src.services.graph_traversal import GraphTraversalService
+        from src.services.link_discovery import LinkDiscoveryService
 
         _make_page("p-source", "源页面", content="链接到 [[目标页面]]")
         _make_page("p-target", "目标页面", content="这是目标页面")
@@ -648,9 +647,9 @@ class TestCrossPhaseIntegration:
     def test_full_pipeline_import_to_query_to_explain(self):
         """完整流程：导入 → 属性传播 → DSL 查询 → 查询解释"""
         from src.models.property_schema import PropertySchema
-        from src.services.property_schema import PropertySchemaService
-        from src.services.effective_properties import EffectivePropertyService
         from src.models.query_dsl import QuerySpec
+        from src.services.effective_properties import EffectivePropertyService
+        from src.services.property_schema import PropertySchemaService
         from src.services.query_executor import QueryExecutor
         from src.services.query_explainer import QueryExplainer
 

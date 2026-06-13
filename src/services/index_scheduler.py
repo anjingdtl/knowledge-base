@@ -5,7 +5,6 @@ import logging
 import os
 import threading
 from pathlib import Path
-from typing import Optional
 
 from src.models.indexing import IndexResult
 
@@ -97,7 +96,6 @@ class IndexScheduler:
             # 处理 deleted
             for p in deleted_paths:
                 try:
-                    from src.repositories.indexed_file_repo import IndexedFileRepository
                     repo = self._indexer._repo
                     repo.mark_deleted(p)
                     result.deleted += 1

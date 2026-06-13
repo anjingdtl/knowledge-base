@@ -3,15 +3,11 @@
 测试健康检查逻辑，使用 mock 替代外部依赖，不依赖 PySide6。
 """
 import json
-import os
 import sqlite3
 from pathlib import Path
-from unittest.mock import patch, MagicMock
-
-import pytest
+from unittest.mock import MagicMock, patch
 
 from src.services.doctor import DoctorService
-
 
 # ---------------------------------------------------------------------------
 # SQLite / FTS5 检查

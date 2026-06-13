@@ -1,8 +1,8 @@
 """Block-First Indexer 集成测试"""
+from src.models.knowledge import KnowledgeItem
+from src.services.block_store import BlockStore
 from src.services.db import Database
 from src.services.indexer import index_knowledge_item, reindex_knowledge_item
-from src.services.block_store import BlockStore
-from src.models.knowledge import KnowledgeItem
 
 
 class TestBlockFirstIndexer:

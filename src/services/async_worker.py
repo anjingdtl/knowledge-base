@@ -4,7 +4,7 @@ import threading
 import time
 from typing import Callable, Optional
 
-from src.services.async_task import AsyncJob, JobStatus, AsyncTaskService
+from src.services.async_task import AsyncJob, AsyncTaskService, JobStatus
 
 # 取消标记的过期时间（秒）
 _CANCELLED_JOBS_TTL = 3600  # 1 小时

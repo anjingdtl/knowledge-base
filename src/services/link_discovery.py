@@ -1,9 +1,9 @@
 """Automatic discovery of Logseq-style wiki links in stored blocks."""
 from __future__ import annotations
 
-from dataclasses import dataclass
 import re
 import uuid
+from dataclasses import dataclass
 
 from src.models.block import EntityRef
 from src.repositories.entity_ref_repo import EntityRefRepository

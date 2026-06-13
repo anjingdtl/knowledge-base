@@ -1,8 +1,8 @@
 """属性类型 Schema 数据模型"""
-from dataclasses import dataclass, field
-from datetime import datetime
 import json
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
 
 @dataclass

@@ -1,7 +1,6 @@
 """Wiki SEO 元数据模型"""
 import json
-from dataclasses import dataclass, field, asdict
-from typing import Optional
+from dataclasses import asdict, dataclass, field
 
 from src.services.wiki_compiler import parse_tags
 

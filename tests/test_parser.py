@@ -1,10 +1,7 @@
 """文件解析器测试"""
-import tempfile
-import os
 import pytest
 
-from src.services.file_parser import parse_file
-from src.services.file_parser import _remove_pdf_watermarks
+from src.services.file_parser import _remove_pdf_watermarks, parse_file
 
 
 class TestTextParser:

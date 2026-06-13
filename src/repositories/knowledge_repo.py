@@ -1,5 +1,6 @@
 """知识条目仓库 — knowledge_items / knowledge_versions / knowledge_chunks / FTS"""
 from __future__ import annotations
+
 import json
 import threading
 import uuid
@@ -369,8 +370,9 @@ class KnowledgeRepository:
     # ---- Chunk FTS ----
 
     def insert_chunks_fts(self, chunks: list[dict]):
-        from src.utils.chinese_tokenizer import tokenize_chinese_full
         import logging
+
+        from src.utils.chinese_tokenizer import tokenize_chinese_full
         logger = logging.getLogger(__name__)
         _required_fts_keys = {"id", "knowledge_id", "chunk_text"}
         conn = self._conn()
@@ -395,7 +397,7 @@ class KnowledgeRepository:
         self._conn().commit()
 
     def search_chunks_fts(self, query: str, limit: int = 20) -> list[dict]:
-        from src.utils.chinese_tokenizer import tokenize_chinese_full, sanitize_fts_query
+        from src.utils.chinese_tokenizer import sanitize_fts_query, tokenize_chinese_full
         tokenized_query = tokenize_chinese_full(query)
         if not tokenized_query.strip():
             return []

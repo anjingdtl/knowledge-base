@@ -1,11 +1,9 @@
 """CitationBuilder 单元测试"""
 from __future__ import annotations
 
-import pytest
 from unittest.mock import Mock
 
 from src.services.citation_builder import CitationBuilder
-from src.models.citation import Citation, CitationLocation
 
 
 class TestCitationBasic:

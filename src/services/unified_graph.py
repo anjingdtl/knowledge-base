@@ -8,7 +8,6 @@ import json
 import logging
 from typing import Optional
 
-from src.models.unified_node import UnifiedNode, UnifiedEdge
 from src.services.db import Database
 
 logger = logging.getLogger(__name__)

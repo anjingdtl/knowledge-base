@@ -4,12 +4,12 @@ import logging
 import uuid
 from datetime import datetime
 
-from src.utils.config import Config
-from src.models.knowledge import KnowledgeItem, KnowledgeChunk
-from src.services.db import Database
-from src.services.text_splitter import TextChunk, split_text, split_markdown, split_code
+from src.models.knowledge import KnowledgeChunk, KnowledgeItem
 from src.services.block_store import BlockStore
+from src.services.db import Database
+from src.services.text_splitter import TextChunk, split_code, split_markdown, split_text
 from src.services.vectorstore import VectorStore
+from src.utils.config import Config
 
 
 def index_knowledge_item(item: KnowledgeItem):
@@ -197,7 +197,6 @@ class IndexerService:
         self._config = config
 
     def index(self, item):
-        from src.models.knowledge import KnowledgeItem
         index_knowledge_item(item)
 
     def reindex(self, item_id: str, item):

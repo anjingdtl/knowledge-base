@@ -1,8 +1,10 @@
 """测试 EvidenceCompressStage"""
-import pytest
 import asyncio
+
 from src.services.rag_pipeline import (
-    RagContext, EvidenceCompressStage, StageRegistry,
+    EvidenceCompressStage,
+    RagContext,
+    StageRegistry,
 )
 
 

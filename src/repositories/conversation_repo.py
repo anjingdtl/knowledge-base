@@ -1,6 +1,5 @@
 """对话仓库 — conversations / chat_messages"""
 import json
-from typing import Optional
 
 
 def _require_keys(data: dict, keys: tuple[str, ...]):

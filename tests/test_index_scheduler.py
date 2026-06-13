@@ -1,11 +1,11 @@
 """index_scheduler 单元测试"""
 import os
-import pytest
-from pathlib import Path
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock
 
-from src.services.index_scheduler import IndexScheduler, _normalize
+import pytest
+
 from src.models.indexing import IndexResult
+from src.services.index_scheduler import IndexScheduler, _normalize
 
 
 @pytest.fixture
@@ -39,14 +39,14 @@ class TestEventMerging:
         scheduler.schedule("/tmp/test.txt", "modified")
         scheduler.schedule("/tmp/test.txt", "modified")
         scheduler.schedule("/tmp/test.txt", "modified")
-        result = scheduler.flush()
+        scheduler.flush()
         assert mock_indexer.index_path.call_count == 1
 
     def test_create_plus_delete_drops(self, scheduler, mock_indexer):
         """create + delete 应被丢弃"""
         scheduler.schedule("/tmp/new.txt", "created")
         scheduler.schedule("/tmp/new.txt", "deleted")
-        result = scheduler.flush()
+        scheduler.flush()
         # 应该没有实际操作
         assert mock_indexer.index_path.call_count == 0
 
@@ -54,7 +54,7 @@ class TestEventMerging:
         """不同路径的事件应独立处理"""
         scheduler.schedule("/tmp/a.txt", "created")
         scheduler.schedule("/tmp/b.txt", "modified")
-        result = scheduler.flush()
+        scheduler.flush()
         assert mock_indexer.index_path.call_count == 2
 
 

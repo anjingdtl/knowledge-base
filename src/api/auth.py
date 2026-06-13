@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import bcrypt
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 
 logger = logging.getLogger(__name__)
 

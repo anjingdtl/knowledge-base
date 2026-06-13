@@ -1,12 +1,13 @@
 """统一搜索服务 — MCP 和 API 共用"""
 import logging
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeout
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeout
 
-from src.services.query_rewriter import QueryRewriter
-from src.services.hybrid_search import HybridSearcher
-from src.services.reranker import LLMReranker
 from src.services.citation_builder import CitationBuilder
+from src.services.hybrid_search import HybridSearcher
+from src.services.query_rewriter import QueryRewriter
+from src.services.reranker import LLMReranker
 
 logger = logging.getLogger(__name__)
 
@@ -57,8 +58,8 @@ class SearchService:
         t0 = time.monotonic()
 
         if query_spec is not None:
-            from src.services.query_executor import QueryExecutor
             from src.services.db import Database
+            from src.services.query_executor import QueryExecutor
             executor = QueryExecutor(db=self._db or Database)
             spec_results = executor.execute(query_spec)
             structured = []

@@ -5,6 +5,6 @@
 """
 
 # 向后兼容：from src.services.rag import RAGService 仍然有效
-from src.services.rag_pipeline import RAGService, RagPipeline, RagContext, PipelineStage, StageRegistry
+from src.services.rag_pipeline import PipelineStage, RagContext, RagPipeline, RAGService, StageRegistry
 
 __all__ = ["RAGService", "RagPipeline", "RagContext", "PipelineStage", "StageRegistry"]

@@ -11,17 +11,13 @@
 """
 from __future__ import annotations
 
-import json
-from unittest.mock import MagicMock
-
 import pytest
 
+from src.repositories.knowledge_repo import KnowledgeRepository
+from src.repositories.operation_log_repo import OperationLogRepository
 from src.services.db import Database
 from src.services.operation_log import OperationLogService
-from src.repositories.operation_log_repo import OperationLogRepository
-from src.repositories.knowledge_repo import KnowledgeRepository
 from tests.conftest import insert_test_knowledge
-
 
 # ---------------------------------------------------------------------------
 # helpers
@@ -255,7 +251,7 @@ class TestOperationLogUndo:
 
     def test_undo_unknown_operation_returns_error(self):
         svc = _container_with_repo()
-        kid = insert_test_knowledge(title="x", content="c")
+        insert_test_knowledge(title="x", content="c")
         log_id = svc.log("reindex", "system", "all")
 
         result = svc.undo(log_id)
@@ -382,7 +378,7 @@ class TestMcpUndoOperation:
     """undo_operation 工具 — 走 OperationLogService.undo。"""
 
     def test_undo_create_soft_deletes_item(self, mcp_env):
-        from src.mcp_server import create, undo_operation, read
+        from src.mcp_server import create, read, undo_operation
         created = create(title="待撤销创建", content="c")
         kid = created["data"]["id"]
         log_id = created["operation_id"]
@@ -396,7 +392,7 @@ class TestMcpUndoOperation:
         assert read_env["ok"] is False
 
     def test_undo_update_restores_content(self, mcp_env):
-        from src.mcp_server import create, update, undo_operation
+        from src.mcp_server import create, undo_operation, update
         created = create(title="原", content="原内容")
         kid = created["data"]["id"]
         updated = update(item_id=kid, title="新", content="新内容")
@@ -408,7 +404,7 @@ class TestMcpUndoOperation:
         assert "title" in env["data"]["restored_fields"]
 
     def test_undo_delete_restores_item(self, mcp_env):
-        from src.mcp_server import create, delete, undo_operation, read
+        from src.mcp_server import create, delete, read, undo_operation
         created = create(title="待删", content="c")
         kid = created["data"]["id"]
         deleted = delete(item_id=kid)
@@ -490,7 +486,7 @@ class TestMcpRestoreKnowledge:
     """restore_knowledge 工具 — 恢复软删条目。"""
 
     def test_restore_soft_deleted_via_mcp(self, mcp_env):
-        from src.mcp_server import create, delete, restore_knowledge, read
+        from src.mcp_server import create, delete, read, restore_knowledge
         created = create(title="待恢复", content="c")
         kid = created["data"]["id"]
         delete(item_id=kid)

@@ -7,23 +7,40 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-from PySide6.QtWidgets import (
-    QWidget, QFrame, QVBoxLayout, QHBoxLayout, QLineEdit,
-    QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView,
-    QLabel, QTextEdit, QTreeWidget, QTreeWidgetItem, QTabWidget,
-    QPushButton, QComboBox, QFileDialog, QMenu,
-    QSplitter, QMessageBox, QInputDialog, QProgressDialog,
-    QStackedWidget, QToolButton,
-)
-from PySide6.QtCore import Qt, Signal, QThread, QTimer, QPropertyAnimation, QEasingCurve, QPoint, QSettings
+from PySide6.QtCore import QEasingCurve, QPoint, QPropertyAnimation, QSettings, Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QColor
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QComboBox,
+    QFileDialog,
+    QFrame,
+    QHBoxLayout,
+    QHeaderView,
+    QInputDialog,
+    QLabel,
+    QLineEdit,
+    QMenu,
+    QMessageBox,
+    QProgressDialog,
+    QPushButton,
+    QStackedWidget,
+    QTableWidget,
+    QTableWidgetItem,
+    QTabWidget,
+    QTextEdit,
+    QToolButton,
+    QTreeWidget,
+    QTreeWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
-from src.services.db import Database
-from src.gui.icons import NAV, icon as make_icon, set_named_icon
-from src.gui.theme import get_color
-from src.utils.config import Config
 from src.gui.empty_state import EmptyState
-
+from src.gui.icons import NAV, set_named_icon
+from src.gui.icons import icon as make_icon
+from src.gui.theme import get_color
+from src.services.db import Database
+from src.utils.config import Config
 
 OUTLINE_RENDER_LIMIT = 500
 
@@ -142,8 +159,8 @@ class QualityWorker(QThread):
 
     def _try_repair(self, item: dict) -> bool:
         """尝试修复乱码条目：源文件重读 → LLM 修复"""
-        from src.services.llm import LLMService
         from src.gui.import_dialog import _strip_think
+        from src.services.llm import LLMService
         source_path = item.get("source_path", "")
         content = item.get("content", "")
 
@@ -153,7 +170,7 @@ class QualityWorker(QThread):
                 from src.services.file_parser import parse_file
                 parsed = parse_file(source_path)
                 if parsed.content and not _check_garbled(parsed.content):
-                    content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+                    hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
                     _file_graph_service().update_page(
                         item["id"],
                         parsed.content,
@@ -227,10 +244,7 @@ class RenameWorker(QThread):
             self.finished.emit(getattr(self, "_renamed", 0))
 
     def _do_rename(self):
-        import re
-        import json
-        from src.services.llm import LLMService
-        from src.gui.import_dialog import _strip_think, generate_title
+        from src.gui.import_dialog import generate_title
 
         if self._items is not None:
             items = self._items
@@ -943,7 +957,7 @@ class KnowledgeView(QWidget):
 
         # 结构化元信息：基本信息行
         dim = get_color("text_dim")
-        accent = get_color("accent")
+        get_color("accent")
         file_type = item.get("file_type", "未知")
         source = item.get("source_path") or item.get("source_type") or "手动创建"
         source_label = os.path.basename(source) if source and os.path.exists(source) else source
@@ -966,7 +980,7 @@ class KnowledgeView(QWidget):
         visible_tags = tags[:6]
         hidden_count = max(0, len(tags) - len(visible_tags))
         tag_html = (
-            f'<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">'
+            '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">'
             + "".join(
                 f'<span style="background:{tag_bg};color:{tag_text_color};padding:2px 8px;'
                 f'border-radius:6px;font-size:{tag_sm}px;'
@@ -993,7 +1007,7 @@ class KnowledgeView(QWidget):
         self.detail_chars.setText(
             f'<span style="color:{dim};font-size:{max(9, Config.get("appearance.font_size", 13) - 4)}px;">'
             f'共 {total_chars} 字'
-            + (f'（已截断显示前 10000 字）' if total_chars > 10000 else '')
+            + ('（已截断显示前 10000 字）' if total_chars > 10000 else '')
             + '</span>'
         )
 
@@ -1207,16 +1221,15 @@ class KnowledgeView(QWidget):
         try:
             parsed_list = parse_file(path)
             parsed = parsed_list[0]
-            content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+            hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
             title = data.get("title", "")
             from src.gui.import_dialog import generate_title
             filename_stem = os.path.splitext(os.path.basename(path))[0]
             new_title = generate_title(parsed.content, filename=filename_stem)
             if not new_title:
                 new_title = title
-            file_size = 0
             try:
-                file_size = os.path.getsize(path)
+                os.path.getsize(path)
             except OSError:
                 pass
             self._file_graph_service().update_page(
@@ -1460,7 +1473,7 @@ class KnowledgeView(QWidget):
         self._rename_progress.setMinimumDuration(0)
         self._rename_progress.setCancelButton(None)
 
-        total = len(items)
+        len(items)
         self._rename_worker = RenameWorker(items=items)
         self._rename_worker.progress.connect(self._on_rename_progress)
         self._rename_worker.finished.connect(self._on_rename_finished)
@@ -1489,7 +1502,7 @@ class KnowledgeView(QWidget):
         total_dupes = sum(len(g) - 1 for g in groups)
 
         # 用自定义对话框代替 QMessageBox，限制高度可滚动
-        from PySide6.QtWidgets import QDialog, QVBoxLayout, QTextEdit, QDialogButtonBox
+        from PySide6.QtWidgets import QDialog, QDialogButtonBox, QTextEdit, QVBoxLayout
         dialog = QDialog(self)
         dialog.setWindowTitle("确认去重")
         dialog.setMinimumWidth(420)

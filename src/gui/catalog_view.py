@@ -1,18 +1,26 @@
 """知识目录浏览视图 — 分类树 + 条目详情"""
-from PySide6.QtWidgets import (
-    QWidget, QFrame, QVBoxLayout, QHBoxLayout, QTreeWidget, QTreeWidgetItem,
-    QPushButton, QLabel, QTextEdit, QProgressBar, QMessageBox, QSplitter,
-    QStackedWidget,
-)
-from PySide6.QtCore import Qt, QThread, Signal, QPropertyAnimation, QEasingCurve, QPoint
+from PySide6.QtCore import QEasingCurve, QPoint, QPropertyAnimation, Qt, QThread, Signal
 from PySide6.QtGui import QColor
+from PySide6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QStackedWidget,
+    QTextEdit,
+    QTreeWidget,
+    QTreeWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
+from src.data.classification_schema import CLASSIFICATION_SCHEMA, UNCATEGORIZED
+from src.gui.empty_state import EmptyState
+from src.gui.icons import set_named_icon
 from src.services.db import Database
 from src.services.librarian import LibrarianService
-from src.data.classification_schema import CLASSIFICATION_SCHEMA, UNCATEGORIZED
-from src.gui.icons import set_named_icon
-from src.gui.theme import get_color
-from src.gui.empty_state import EmptyState
 
 
 def _schema_items() -> list[dict]:
@@ -245,7 +253,7 @@ class CatalogView(QWidget):
         self.tree.blockSignals(True)
         self.tree.clear()
         categories = Database.get_all_categories()
-        cat_map = {c["id"]: c for c in categories}
+        {c["id"]: c for c in categories}
 
         # 预设分类的 code 集合，用于识别动态分类
         schema_codes = set()

@@ -156,7 +156,7 @@ def service_restart() -> str:
 
 def service_install() -> str:
     """注册 Windows 服务（需管理员权限）
-    
+
     通过 UAC 提权执行 python windows_service.py install
     """
     if not _is_windows():
@@ -195,7 +195,7 @@ def service_remove() -> str:
             f'"{script}" remove', str(_PROJECT_ROOT), 0,
         )
         if ret <= 32:
-            return f"提权失败，请手动以管理员身份运行: python windows_service.py remove"
+            return "提权失败，请手动以管理员身份运行: python windows_service.py remove"
         time.sleep(3)
         if not is_service_installed():
             return "Windows 服务已卸载"
@@ -386,7 +386,7 @@ def start(host: str = "127.0.0.1", port: int = 9000) -> str:
             return f"MCP Server 已启动 (端口 {port})，关闭应用后将继续运行"
         else:
             _remove_pid()
-            return f"MCP Server 启动失败（进程已退出）"
+            return "MCP Server 启动失败（进程已退出）"
     except Exception as e:
         return f"MCP Server 启动失败: {e}"
 

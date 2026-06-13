@@ -1,13 +1,13 @@
 """path_indexer 单元测试"""
 import hashlib
-import os
-import pytest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
-from src.models.indexing import FileFingerprint, IndexResult, ManifestDiff
+import pytest
+
+from src.models.indexing import FileFingerprint, ManifestDiff
 from src.repositories.indexed_file_repo import IndexedFileRepository, _normalize_path
-from src.services.path_indexer import PathIndexService, SUPPORTED_EXTENSIONS, SKIP_DIRS
+from src.services.path_indexer import PathIndexService
 
 
 @pytest.fixture

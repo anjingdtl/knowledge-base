@@ -1,15 +1,15 @@
 """File-first Markdown graph service."""
 from __future__ import annotations
 
-from datetime import datetime
 import hashlib
 import json
 import re
 import shutil
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from src.models.knowledge import KnowledgeItem, KnowledgeChunk
+from src.models.knowledge import KnowledgeChunk, KnowledgeItem
 from src.services.markdown_outline import MarkdownOutlineParser, OutlineBlock, PageDocument
 
 

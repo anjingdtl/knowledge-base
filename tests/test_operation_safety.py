@@ -5,8 +5,8 @@ from datetime import datetime
 
 import pytest
 
-from src.services.db import Database
 from src.repositories.operation_log_repo import OperationLogRepository
+from src.services.db import Database
 from src.services.operation_log import OperationLogService
 from src.utils.config import Config
 from tests.conftest import insert_test_knowledge, insert_test_wiki_page

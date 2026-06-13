@@ -1,9 +1,8 @@
-import json
 import uuid
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from src.api.deps import get_container
@@ -187,8 +186,8 @@ def fix_dead_links(data: FixDeadLinksReq, container: AppContainer = Depends(get_
     compiler = WikiCompiler()
     if data.dry_run:
         # dry_run: 仅扫描死链，不调用 LLM
-        from src.services.wiki_compiler import _WIKI_LINK_RE
         from src.services.db import Database
+        from src.services.wiki_compiler import _WIKI_LINK_RE
         pages = Database.list_wiki_pages(limit=500)
         if not pages:
             return {"status": "empty", "scanned": 0, "dead_links": []}

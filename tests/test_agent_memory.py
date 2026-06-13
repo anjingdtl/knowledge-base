@@ -1,11 +1,6 @@
 """Agent Memory + Tool Schema 标准化 测试"""
-import json
-import uuid
-from datetime import datetime
-from unittest.mock import MagicMock, patch
 
 import pytest
-
 
 # ---- Fixtures ----
 
@@ -196,7 +191,7 @@ class TestToolMetadata:
 
     def test_aliases_reference_existing_tools(self):
         """所有别名都指向存在的元数据"""
-        from src.mcp_server import _TOOL_METADATA, _TOOL_ALIASES
+        from src.mcp_server import _TOOL_ALIASES, _TOOL_METADATA
         for alias_name, original_name in _TOOL_ALIASES.items():
             assert original_name in _TOOL_METADATA, f"Alias '{alias_name}' references unknown tool '{original_name}'"
 

@@ -22,7 +22,7 @@ from __future__ import annotations
 import json
 import logging
 from collections import deque
-from typing import Any, Optional
+from typing import Optional
 
 from src.services.graph_backend.base import (
     GraphBackend,
@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 # 尝试导入 neo4j 驱动 — 仅在 provider=neo4j 时需要
 try:
     from neo4j import GraphDatabase as Neo4jDriver
-    from neo4j.exceptions import ServiceUnavailable, AuthError
+    from neo4j.exceptions import AuthError, ServiceUnavailable
 
     NEO4J_AVAILABLE = True
 except ImportError:
@@ -419,7 +419,7 @@ class Neo4jGraphBackend(GraphBackend):
                         if start_node:
                             all_nodes[start_nid] = self._node_to_traversal_dict(start_node)
 
-                    depth = record["depth"]
+                    record["depth"]
                     rel_types = record["rel_types"] or []
                     path_ids = record["path_ids"] or []
                     path_labels = record["path_labels"] or []

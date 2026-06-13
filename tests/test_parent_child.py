@@ -1,11 +1,11 @@
 """测试 Parent-Child Retrieval"""
-import pytest
+from src.services.db import Database
 from src.services.parent_child_retrieval import (
-    ParentChildRetriever, ParentBlock,
-    BLOCK_STRATEGIES, DEFAULT_STRATEGY,
+    BLOCK_STRATEGIES,
+    DEFAULT_STRATEGY,
+    ParentChildRetriever,
     enrich_with_parent_context,
 )
-from src.services.db import Database
 
 
 def _seed_hierarchy():

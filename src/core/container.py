@@ -375,14 +375,14 @@ def create_container(config_path: str | None = None) -> AppContainer:
     )
 
     # 初始化仓库层 — 全部注入 Database 实例
-    from src.repositories.knowledge_repo import KnowledgeRepository
-    from src.repositories.conversation_repo import ConversationRepository
-    from src.repositories.wiki_repo import WikiRepository
-    from src.repositories.graph_repo import GraphRepository
     from src.repositories.block_repo import BlockRepository
-    from src.repositories.entity_ref_repo import EntityRefRepository
     from src.repositories.category_repo import CategoryRepository
+    from src.repositories.conversation_repo import ConversationRepository
+    from src.repositories.entity_ref_repo import EntityRefRepository
+    from src.repositories.graph_repo import GraphRepository
     from src.repositories.job_repo import JobRepository
+    from src.repositories.knowledge_repo import KnowledgeRepository
+    from src.repositories.wiki_repo import WikiRepository
     container.knowledge_repo = KnowledgeRepository(db=db)
     container.conversation_repo = ConversationRepository(db=db)
     container.wiki_repo = WikiRepository(db=db)
@@ -393,9 +393,9 @@ def create_container(config_path: str | None = None) -> AppContainer:
     container.job_repo = JobRepository(db=db)
 
     # Phase 2 仓库
-    from src.repositories.tag_relation_repo import TagRelationRepository
-    from src.repositories.property_schema_repo import PropertySchemaRepository
     from src.repositories.operation_log_repo import OperationLogRepository
+    from src.repositories.property_schema_repo import PropertySchemaRepository
+    from src.repositories.tag_relation_repo import TagRelationRepository
     container.tag_relation_repo = TagRelationRepository(db=db)
     container.property_schema_repo = PropertySchemaRepository(db=db)
     container.operation_log_repo = OperationLogRepository(db=db)

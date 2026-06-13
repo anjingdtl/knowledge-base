@@ -1,9 +1,7 @@
 """知识图谱构建服务 — 通过 LLM 分析知识关系并生成图谱结构"""
 
 import json
-import uuid
 import logging
-from datetime import datetime
 
 from src.services.db import Database
 from src.services.llm import LLMService
@@ -162,7 +160,7 @@ class GraphBuilder:
             self._emit_progress(f"共 {total} 个分类待分析...", 0, total)
 
         for idx, (cat, knowledge_ids) in enumerate(valid_cats):
-            cat_id = cat["id"]
+            cat["id"]
             cat_name = cat["name"]
             self._emit_progress(f"正在分析 [{idx + 1}/{total}]: {cat_name} ({len(knowledge_ids)}条)", idx + 1, total)
 

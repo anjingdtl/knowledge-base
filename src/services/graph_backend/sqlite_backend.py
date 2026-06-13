@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import logging
 from collections import deque
-from typing import Any, Optional
+from typing import Optional
 
 from src.services.graph_backend.base import (
     GraphBackend,

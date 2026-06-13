@@ -7,7 +7,6 @@ from pathlib import Path
 import src.mcp_server as mcp_mod
 from src.mcp_server import kb_capabilities
 
-
 DOCS_DIR = Path(__file__).resolve().parents[1] / "docs" / "mcp"
 ROOT_DIR = Path(__file__).resolve().parents[1]
 
@@ -109,7 +108,7 @@ def test_readme_positions_project_as_local_mcp_retrieval_engine():
     """README first screen must position project as local MCP retrieval engine."""
     readme_en = ROOT_DIR / "README.md"
     readme_zh = ROOT_DIR / "README_zh.md"
-    
+
     for readme in [readme_en, readme_zh]:
         text = readme.read_text(encoding="utf-8")
         # Must mention core positioning
@@ -118,15 +117,15 @@ def test_readme_positions_project_as_local_mcp_retrieval_engine():
         assert "MCP" in text, f"{readme.name} must mention MCP"
         assert "retrieval" in text.lower() or "检索" in text, \
             f"{readme.name} must mention retrieval"
-        
+
         # Must mention shinehe init command
         assert "shinehe init" in text, f"{readme.name} must document shinehe init"
-        
+
         # Must NOT claim 51 tools in first screen (check first 2000 chars)
         first_screen = text[:2000]
         assert "51 tools" not in first_screen and "51 个工具" not in first_screen, \
             f"{readme.name} first screen must not claim 51 tools"
-        
+
         # Must mention core profile or 10 tools
         assert "core" in text.lower() or "10" in text, \
             f"{readme.name} must mention core profile or 10 tools"
@@ -140,12 +139,12 @@ def test_documentation_does_not_hardcode_wrong_tool_count():
         ROOT_DIR / "CLAUDE.md",
         ROOT_DIR / "docs" / "mcp" / "agent-usage.md",
     ]
-    
+
     for doc_path in docs_to_check:
         if not doc_path.exists():
             continue
         text = doc_path.read_text(encoding="utf-8")
-        
+
         # Should not claim "51 tools" without context (legacy is OK)
         if "51" in text:
             # If 51 is mentioned, it must be in context of legacy or historical
@@ -157,10 +156,10 @@ def test_recommended_flows_only_reference_visible_core_tools():
     """When core profile is active, recommended flows should only reference visible tools."""
     result = kb_capabilities()
     assert result["ok"] is True
-    
-    visible_tools = set(result["data"]["visible_tools"])
+
+    set(result["data"]["visible_tools"])
     flows = result["data"]["recommended_flows"]
-    
+
     # Extract tool names from flows (handle "tool|alt" syntax)
     for flow_name, flow_steps in flows.items():
         for step in flow_steps:
@@ -178,7 +177,7 @@ def test_advanced_features_doc_exists():
     """docs/advanced-features.md must exist and describe opt-in features."""
     advanced_doc = ROOT_DIR / "docs" / "advanced-features.md"
     assert advanced_doc.exists(), "docs/advanced-features.md must exist"
-    
+
     text = advanced_doc.read_text(encoding="utf-8")
     assert "experimental" in text.lower() or "实验性" in text, \
         "advanced-features.md must describe experimental features"
@@ -192,7 +191,7 @@ def test_migration_guide_exists():
     """docs/migration/mcp-tool-profiles.md must exist and explain profile migration."""
     migration_doc = ROOT_DIR / "docs" / "migration" / "mcp-tool-profiles.md"
     assert migration_doc.exists(), "docs/migration/mcp-tool-profiles.md must exist"
-    
+
     text = migration_doc.read_text(encoding="utf-8")
     assert "core" in text, "migration guide must mention core profile"
     assert "legacy" in text, "migration guide must mention legacy profile"

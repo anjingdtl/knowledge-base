@@ -1,23 +1,35 @@
 """文件导入对话框"""
-from PySide6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QListWidget,
-    QPushButton, QLabel, QLineEdit,
-    QFileDialog, QMessageBox, QTextEdit, QTableWidget,
-    QTableWidgetItem, QHeaderView, QAbstractItemView,
-    QTabWidget, QWidget,
-)
-from PySide6.QtCore import Qt, QThread, Signal, QMimeData
-from PySide6.QtGui import QDragEnterEvent, QDropEvent, QPainter, QColor, QFont
 import os
 from datetime import datetime
 
-from src.services.file_parser import parse_file
-from src.services.db import Database
-from src.services.block_store import BlockStore
-from src.services.file_graph import FileGraphService
-from src.services.llm import LLMService
+from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtGui import QColor, QDragEnterEvent, QDropEvent
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QDialog,
+    QFileDialog,
+    QHBoxLayout,
+    QHeaderView,
+    QLabel,
+    QLineEdit,
+    QListWidget,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QTabWidget,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
+
 from src.gui.icons import set_named_icon
 from src.gui.theme import get_color
+from src.services.block_store import BlockStore
+from src.services.db import Database
+from src.services.file_graph import FileGraphService
+from src.services.file_parser import parse_file
+from src.services.llm import LLMService
 from src.utils.config import Config
 
 TITLE_PROMPT = """你是一个标题生成助手。请根据文件名和文件内容判断文件名是否已能准确概括内容。
@@ -65,7 +77,8 @@ def generate_title(content: str, filename: str = None) -> str:
         prompt = TITLE_PROMPT.format(filename=filename, content=snippet)
         raw = llm.chat([{"role": "user", "content": prompt}], silent=True)
         text = _strip_think(raw).strip()
-        import json, re
+        import json
+        import re
         json_match = re.search(r'\{[^{}]+\}', text)
         if json_match:
             result = json.loads(json_match.group())
@@ -151,9 +164,8 @@ class ImportWorker(QThread):
                     filename_stem = os.path.splitext(basename)[0]
                     title = generate_title(parsed.content, filename=filename_stem)
 
-                    file_size = 0
                     try:
-                        file_size = os.path.getsize(path)
+                        os.path.getsize(path)
                     except OSError:
                         pass
 
@@ -237,8 +249,9 @@ class UrlImportWorker(QThread):
 
     def run(self):
         import hashlib
-        from src.services.file_parser import parse_url
         from urllib.parse import urlparse
+
+        from src.services.file_parser import parse_url
 
         total = len(self.urls)
         counters = {"success": 0, "skipped": 0, "failed": 0}

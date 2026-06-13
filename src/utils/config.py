@@ -11,8 +11,10 @@
 import functools
 import logging
 import os
-import yaml
 from pathlib import Path
+
+import yaml
+
 from src.utils.paths import get_config_path, get_data_dir
 
 logger = logging.getLogger(__name__)

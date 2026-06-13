@@ -11,7 +11,6 @@ from src.api.deps import get_container
 from src.api.routes.auth import _check_auth
 from src.core.container import AppContainer
 
-
 settings_router = APIRouter(
     prefix="/settings",
     tags=["settings"],

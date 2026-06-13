@@ -2,12 +2,11 @@
 
 测试参数解析、子命令分发，不依赖 PySide6。
 """
-import sys
+from unittest.mock import patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 
 from src.cli import main
-
 
 # ---------------------------------------------------------------------------
 # 基础解析测试

@@ -1,17 +1,16 @@
 """Reranker provider 单元测试 — 覆盖 ApiReranker, LocalCrossEncoderReranker, LLMFallbackReranker, DisabledReranker, Factory"""
 from __future__ import annotations
 
-import json
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import pytest
 
+from src.services.reranker import LLMReranker, get_reranker
 from src.services.rerankers.api import ApiReranker
 from src.services.rerankers.base import Reranker
 from src.services.rerankers.factory import DisabledReranker, create_reranker
 from src.services.rerankers.llm import LLMFallbackReranker
 from src.services.rerankers.local import LocalCrossEncoderReranker
-from src.services.reranker import LLMReranker, get_reranker
 
 
 def _make_candidates(n=5):

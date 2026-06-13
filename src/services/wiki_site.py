@@ -3,10 +3,8 @@ import json
 import logging
 from pathlib import Path
 from typing import Optional
-from datetime import datetime
 
 from src.services.db import Database
-from src.services.wiki_seo import SEOMetadataGenerator, WikiSEOMetadata
 from src.services.wiki_compiler import parse_tags
 from src.utils.config import Config
 

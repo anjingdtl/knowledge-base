@@ -1,20 +1,27 @@
 """主窗口"""
-import sqlite3
-import sys
-import logging
 import ctypes
 import ctypes.wintypes
+import logging
+import sqlite3
+import sys
 
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QStackedWidget, QLabel, QGraphicsDropShadowEffect, QFrame,
+    QFrame,
+    QGraphicsDropShadowEffect,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
     QMessageBox,
+    QPushButton,
+    QStackedWidget,
+    QVBoxLayout,
+    QWidget,
 )
 
 logger = logging.getLogger(__name__)
-from PySide6.QtCore import Qt, QTimer, QSettings, QPoint
-from PySide6.QtGui import QIcon, QColor, QCursor
-from pathlib import Path
+
+from PySide6.QtCore import QPoint, QSettings, Qt, QTimer
+from PySide6.QtGui import QColor, QCursor
 
 from src.gui.icons import set_named_icon
 from src.services.db import Database
@@ -117,13 +124,13 @@ class MainWindow(QMainWindow):
         layout.setSpacing(0)
 
         # 延迟导入视图
-        from src.gui.llm_indicator import LLMIndicator
-        from src.gui.knowledge_view import KnowledgeView
-        from src.gui.chat_view import ChatView
         from src.gui.catalog_view import CatalogView
-        from src.gui.wiki_view import WikiView
+        from src.gui.chat_view import ChatView
         from src.gui.graph_view import GraphView
+        from src.gui.knowledge_view import KnowledgeView
+        from src.gui.llm_indicator import LLMIndicator
         from src.gui.trash_view import TrashView
+        from src.gui.wiki_view import WikiView
 
         # ---- 侧边栏 ----
         sidebar = QWidget()

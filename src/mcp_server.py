@@ -24,12 +24,9 @@ logger = logging.getLogger(__name__)
 from fastmcp import FastMCP
 from fastmcp.server.auth import AccessToken, TokenVerifier
 
-from src.core.container import create_container, shutdown_container, AppContainer
-from src.models.knowledge import KnowledgeItem
-from src.services.mcp_heartbeat import beat
-from src.services.rag import RAGService
+from src.core.container import AppContainer, create_container, shutdown_container
 from src.services.file_parser import parse_file, parse_url
-from src.services.indexer import index_knowledge_item
+from src.services.mcp_heartbeat import beat
 from src.utils.config import Config
 from src.utils.envelope import (
     ErrorCode,
@@ -39,7 +36,6 @@ from src.utils.envelope import (
     ok,
 )
 from src.version import VERSION
-
 
 # ---- 心跳后台任务 ----
 
@@ -185,7 +181,7 @@ def _run_async(coro, timeout: float = 120):
 
     if loop and loop.is_running():
         # 已有事件循环（streamable-http 等场景）
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1):
             future = asyncio.run_coroutine_threadsafe(coro, loop)
             return future.result(timeout=timeout)
     else:
@@ -264,11 +260,11 @@ def _check_write_policy(tool_name: str, *, dry_run: bool = False) -> dict | None
         return None
 
     if policy == "disabled":
-        return fail(ErrorCode.PERMISSION_DENIED, f"写操作已被安全策略禁用 (mcp.write_policy=disabled)")
+        return fail(ErrorCode.PERMISSION_DENIED, "写操作已被安全策略禁用 (mcp.write_policy=disabled)")
 
     if policy == "preview_only":
         return fail(ErrorCode.PERMISSION_DENIED,
-                     f"当前策略仅允许预览 (mcp.write_policy=preview_only)，请使用 preview_operation 工具进行 dry_run")
+                     "当前策略仅允许预览 (mcp.write_policy=preview_only)，请使用 preview_operation 工具进行 dry_run")
 
     if policy == "token_required":
         if transport in {"streamable-http", "sse"}:
@@ -940,8 +936,8 @@ def index_path(path: str, recursive: bool = True, dry_run: bool = False, force: 
     _guard = _check_write_policy("index_path", dry_run=dry_run)
     if _guard:
         return _guard
-    from pathlib import Path
     from dataclasses import asdict
+    from pathlib import Path
     service = _get_container().path_indexer
     result = service.index_path(Path(path), recursive=recursive, dry_run=dry_run, force=force)
     return ok(asdict(result), dry_run=dry_run)
@@ -1151,9 +1147,8 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     except OSError:
         pass
 
-    file_size = 0
     try:
-        file_size = os.path.getsize(validated_path)
+        os.path.getsize(validated_path)
     except OSError:
         pass
 
@@ -1495,7 +1490,7 @@ def fix_dead_references(max_pages: int = 50, dry_run: bool = False) -> dict:
         return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
 
     # 第一步：先解析有效引用
-    from src.services.wiki_compiler import resolve_all_content_links, WikiCompiler
+    from src.services.wiki_compiler import WikiCompiler, resolve_all_content_links
     link_result = resolve_all_content_links()
 
     if dry_run:
@@ -2006,7 +2001,7 @@ def ask_with_query(
         与 ``ask`` 工具相同的 7 字段结构化 payload（data 内）
     """
     from src.models.query_dsl import QuerySpec
-    from src.services.rag_pipeline import RagPipeline, DEFAULT_PIPELINE_CONFIG
+    from src.services.rag_pipeline import DEFAULT_PIPELINE_CONFIG, RagPipeline
 
     container = _get_container()
     try:
@@ -2744,9 +2739,9 @@ def extract_tasks_from_doc(content: str) -> dict:
 
 # ---- Profile-based registration ----
 
-from src.mcp.tool_registry import select_tools, register_tools, get_definitions, resolve_tool_profile
 from src.mcp.aliases import register_aliases as _register_aliases
 from src.mcp.tool_profiles import EXPERIMENTAL_GROUPS as _EXP_GROUPS
+from src.mcp.tool_registry import get_definitions, register_tools, resolve_tool_profile, select_tools
 
 # Determine current profile from config
 _CURRENT_PROFILE = resolve_tool_profile(

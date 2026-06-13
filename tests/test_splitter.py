@@ -1,7 +1,6 @@
 """文本分块测试"""
-import pytest
 
-from src.services.text_splitter import split_text, split_markdown, split_code
+from src.services.text_splitter import split_code, split_markdown, split_text
 
 
 class TestSplitText:

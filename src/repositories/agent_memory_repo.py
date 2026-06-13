@@ -3,7 +3,6 @@ import json
 import threading
 import uuid
 from datetime import datetime, timedelta
-from typing import Optional
 
 from src.services.db import Database
 

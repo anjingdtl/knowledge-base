@@ -1,14 +1,20 @@
 """Wiki 知识编译引擎 — Ingest 编译 + 交叉引用 + Query 回存"""
 import json
+import logging
 import re
 import uuid
-import logging
 from datetime import datetime
 
+from src.data.wiki_schema import (
+    DEAD_LINK_REPAIR_PROMPT,
+    INGEST_PROMPT,
+    LINK_DISCOVERY_PROMPT,
+    MERGE_PROMPT,
+    QUERY_SAVE_PROMPT,
+)
 from src.services.db import Database
 from src.services.llm import LLMService
 from src.utils.config import Config
-from src.data.wiki_schema import INGEST_PROMPT, MERGE_PROMPT, LINK_DISCOVERY_PROMPT, QUERY_SAVE_PROMPT, DEAD_LINK_REPAIR_PROMPT
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +43,7 @@ def resolve_all_content_links() -> dict:
 
     total_links = 0
     all_dead_refs = []
-    compiler = WikiCompiler()
+    WikiCompiler()
 
     for page in pages:
         page_id = page["id"]
@@ -471,8 +477,7 @@ class WikiCompiler:
         fix_details = []
 
         # 配置
-        auto_publish = Config.get("wiki.auto_publish", True)
-        initial_status = "published" if auto_publish else "draft"
+        Config.get("wiki.auto_publish", True)
 
         # 第二步：逐页面调用 LLM 修复
         for page, dead_refs in pages_with_dead:

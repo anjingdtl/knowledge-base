@@ -2,14 +2,23 @@
 from __future__ import annotations
 
 import json
+
 import pytest
 
-import src.mcp_server as mcp_mod
 from src.mcp_server import (
-    search, search_fulltext, read, create, update,
-    delete, list_knowledge, tags as get_tags,
-    get_knowledge_resource, get_tags_resource, get_stats_resource,
+    create,
+    delete,
+    get_knowledge_resource,
+    get_stats_resource,
+    get_tags_resource,
     knowledge_qa_prompt,
+    list_knowledge,
+    read,
+    search_fulltext,
+    update,
+)
+from src.mcp_server import (
+    tags as get_tags,
 )
 from src.models.knowledge import KnowledgeItem
 from src.services.db import Database

@@ -1,13 +1,13 @@
 """Rules-based router for exact logic queries vs fuzzy hybrid retrieval."""
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import json
 import re
+from dataclasses import dataclass, field
 
+from src.services.block_context import BlockContextService
 from src.services.db import Database
 from src.services.hybrid_search import HybridSearcher
-from src.services.block_context import BlockContextService
 
 
 @dataclass

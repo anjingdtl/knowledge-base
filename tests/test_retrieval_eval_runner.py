@@ -4,25 +4,24 @@ Tests the metric computation functions and the eval runner logic
 with mocked/offline search results.
 """
 import json
-import math
-import pytest
+import sys
 from pathlib import Path
 
-import sys
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from evals.run_retrieval_eval import (
+    OfflineIndex,
     RetrievalMetrics,
-    compute_recall,
+    aggregate_retrieval_metrics,
+    build_index,
+    compare_with_baseline,
     compute_mrr,
     compute_ndcg,
-    OfflineIndex,
-    aggregate_retrieval_metrics,
-    compare_with_baseline,
+    compute_recall,
     run_single_query,
-    build_index,
 )
-
 
 # ---------------------------------------------------------------------------
 # Test data

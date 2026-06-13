@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from src.api.deps import get_container
 from src.api.routes.auth import _check_auth
 from src.core.container import AppContainer
-from src.models.chat import Conversation, ChatMessage
+from src.models.chat import ChatMessage, Conversation
 
 chat_router = APIRouter(prefix="/chat", tags=["chat"], dependencies=[Depends(_check_auth)])
 

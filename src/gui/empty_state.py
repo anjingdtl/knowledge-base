@@ -1,10 +1,15 @@
 """空状态引导组件。"""
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
 
-from src.gui.icons import NAV, icon as make_icon
+from src.gui.icons import NAV
+from src.gui.icons import icon as make_icon
 from src.gui.theme import get_color
 
 
@@ -31,7 +36,8 @@ class EmptyState(QWidget):
         buttons: list[dict],
         icon_key: str | None,
     ):
-        colors = lambda role: get_color(role)
+        def colors(role):
+            return get_color(role)
         try:
             from src.utils.config import Config
             base_font = Config.get("appearance.font_size", 14)

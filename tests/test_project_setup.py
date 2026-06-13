@@ -3,20 +3,17 @@
 测试配置构建、YAML 写入、客户端配置，不依赖 PySide6。
 """
 import json
-import os
-from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 import yaml
 
 from src.services.project_setup import (
+    SERVER_NAME,
     ProjectSetupService,
     add_to_agent_config,
     get_agent_config_paths,
-    SERVER_NAME,
 )
-
 
 # ---------------------------------------------------------------------------
 # build_config 测试

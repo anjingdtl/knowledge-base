@@ -6,8 +6,8 @@ from src.services.file_graph import FileGraphService
 
 
 def _service(tmp_path):
-    from src.utils.config import Config
     from src.services.block_store import BlockStore
+    from src.utils.config import Config
 
     Config.set("storage.graph_dir", str(tmp_path / "graph"))
     return FileGraphService(Config, Database, BlockStore(db=Database), embedding=None)

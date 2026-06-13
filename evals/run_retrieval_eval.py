@@ -19,11 +19,9 @@ import math
 import re
 import sys
 import time
-import tempfile
-import os
-from pathlib import Path
-from dataclasses import dataclass, field, asdict
 from collections import Counter
+from dataclasses import asdict, dataclass
+from pathlib import Path
 
 import yaml
 
@@ -714,7 +712,7 @@ def main():
             lines.append(f"  Latency P95:  {m.latency_p95_ms:.1f}ms")
 
         if report_data.get("baseline_warnings"):
-            lines.append(f"\nBaseline Comparison:")
+            lines.append("\nBaseline Comparison:")
             for w in report_data["baseline_warnings"]:
                 lines.append(f"  - {w}")
 

@@ -1,18 +1,20 @@
 """知识库归纳整理服务 — 基于企业知识管理预设分类，LLM 负责归类"""
+import difflib
 import json
 import logging
-import uuid
 import threading
-import difflib
+import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from src.utils.config import Config
-from src.services.llm import LLMService
-from src.services.db import Database
 from src.data.classification_schema import (
-    CLASSIFICATION_SCHEMA, UNCATEGORIZED, get_schema_prompt, get_all_codes,
+    CLASSIFICATION_SCHEMA,
+    UNCATEGORIZED,
+    get_all_codes,
+    get_schema_prompt,
 )
-
+from src.services.db import Database
+from src.services.llm import LLMService
+from src.utils.config import Config
 
 CLASSIFY_PROMPT = """你是一个企业知识库管理员。请将以下知识条目归入企业知识管理分类体系中。
 

@@ -1,26 +1,34 @@
 """Wiki 页面浏览器视图"""
+import json
+import re
 from pathlib import Path
 
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout,
-    QListWidget, QListWidgetItem, QLabel,
-    QPushButton, QLineEdit, QTextEdit, QComboBox,
-    QMessageBox, QStackedWidget, QFrame,
-    QFileDialog,
-)
-from PySide6.QtCore import Qt, QThread, Signal, QPropertyAnimation, QEasingCurve, QPoint
+from PySide6.QtCore import QEasingCurve, QPoint, QPropertyAnimation, Qt, QThread, Signal
 from PySide6.QtGui import QColor
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFileDialog,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QListWidget,
+    QListWidgetItem,
+    QMessageBox,
+    QPushButton,
+    QStackedWidget,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
+from src.gui.empty_state import EmptyState
+from src.gui.icons import set_named_icon
+from src.gui.theme import get_color
 from src.services.db import Database
 from src.services.wiki_compiler import WikiCompiler
 from src.services.wiki_lint import WikiLint
-from src.gui.icons import set_named_icon
-from src.gui.theme import get_color
 from src.utils.config import Config
-from src.gui.empty_state import EmptyState
-
-import json
-import re
 
 
 def _safe_wiki_filename(title: str) -> str:

@@ -1,9 +1,8 @@
 """搜索链路集成测试 — 验证 FTS/向量/混合搜索"""
-import json
-from src.services.db import Database
-from src.services.indexer import index_knowledge_item
-from src.services.hybrid_search import HybridSearcher
 from src.models.knowledge import KnowledgeItem
+from src.services.db import Database
+from src.services.hybrid_search import HybridSearcher
+from src.services.indexer import index_knowledge_item
 
 
 class TestFTS5ChineseSearch:

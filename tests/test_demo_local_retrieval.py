@@ -34,18 +34,18 @@ def test_create_test_documents(temp_workdir):
     """验证测试文档创建功能"""
     # 创建文档
     create_test_documents(temp_workdir)
-    
+
     # 验证文档目录
     docs_dir = temp_workdir / "docs"
     assert docs_dir.exists(), "docs 目录应该被创建"
-    
+
     # 验证文档文件
     expected_files = [
         "python_tutorial.md",
         "database_guide.md",
         "api_design.md",
     ]
-    
+
     for filename in expected_files:
         file_path = docs_dir / filename
         assert file_path.exists(), f"{filename} 应该被创建"
@@ -57,13 +57,13 @@ def test_run_demo_basic(temp_workdir):
     """验证演示流程基本执行"""
     # 运行演示（保留工作目录以便检查）
     results = run_demo(temp_workdir, keep_workdir=True)
-    
+
     # 验证返回结构
     assert isinstance(results, dict), "结果应该是字典"
     assert "initial_hit" in results, "应该包含 initial_hit 字段"
     assert "incremental_update" in results, "应该包含 incremental_update 字段"
     assert "citation_complete" in results, "应该包含 citation_complete 字段"
-    
+
     # 验证字段类型
     assert isinstance(results["initial_hit"], bool)
     assert isinstance(results["incremental_update"], bool)
@@ -73,10 +73,10 @@ def test_run_demo_basic(temp_workdir):
 def test_demo_creates_config(temp_workdir):
     """验证演示创建配置文件"""
     run_demo(temp_workdir, keep_workdir=True)
-    
+
     config_path = temp_workdir / "config.yaml"
     assert config_path.exists(), "config.yaml 应该被创建"
-    
+
     content = config_path.read_text(encoding="utf-8")
     assert "storage:" in content, "配置应该包含 storage 部分"
     assert "embedding:" in content, "配置应该包含 embedding 部分"
@@ -86,10 +86,10 @@ def test_demo_creates_config(temp_workdir):
 def test_demo_creates_documents(temp_workdir):
     """验证演示创建文档"""
     run_demo(temp_workdir, keep_workdir=True)
-    
+
     docs_dir = temp_workdir / "docs"
     assert docs_dir.exists(), "docs 目录应该被创建"
-    
+
     md_files = list(docs_dir.glob("*.md"))
     assert len(md_files) >= 3, "应该至少创建 3 个 markdown 文档"
 
@@ -97,7 +97,7 @@ def test_demo_creates_documents(temp_workdir):
 def test_demo_output_structure(temp_workdir):
     """验证演示输出结构"""
     results = run_demo(temp_workdir, keep_workdir=True)
-    
+
     # 验证所有必需字段
     required_fields = ["initial_hit", "incremental_update", "citation_complete"]
     for field in required_fields:
@@ -108,7 +108,7 @@ def test_demo_cleanup(temp_workdir):
     """验证演示清理功能"""
     # 不保留工作目录
     results = run_demo(temp_workdir, keep_workdir=False)
-    
+
     # 验证工作目录被清理（除非演示失败）
     # 注意：如果演示失败，可能会保留目录用于调试
     if all(results.values()):
@@ -122,39 +122,39 @@ def test_demo_json_output(temp_workdir, tmp_path):
     """验证 JSON 输出功能"""
     # 运行演示
     results = run_demo(temp_workdir, keep_workdir=True)
-    
+
     # 保存 JSON
     json_path = tmp_path / "results.json"
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
-    
+
     # 验证 JSON 文件
     assert json_path.exists(), "JSON 文件应该被创建"
-    
+
     # 读取并验证
     with open(json_path, "r", encoding="utf-8") as f:
         loaded = json.load(f)
-    
+
     assert loaded == results, "JSON 内容应该与原始结果一致"
 
 
 def test_demo_document_content_quality(temp_workdir):
     """验证创建的文档内容质量"""
     create_test_documents(temp_workdir)
-    
+
     docs_dir = temp_workdir / "docs"
-    
+
     # 验证 Python 教程
     python_doc = docs_dir / "python_tutorial.md"
     python_content = python_doc.read_text(encoding="utf-8")
     assert "Python" in python_content
     assert "函数" in python_content or "function" in python_content.lower()
-    
+
     # 验证数据库指南
     db_doc = docs_dir / "database_guide.md"
     db_content = db_doc.read_text(encoding="utf-8")
     assert "SQL" in db_content or "数据库" in db_content
-    
+
     # 验证 API 设计
     api_doc = docs_dir / "api_design.md"
     api_content = api_doc.read_text(encoding="utf-8")
@@ -164,20 +164,20 @@ def test_demo_document_content_quality(temp_workdir):
 def test_demo_incremental_update_logic(temp_workdir):
     """验证增量更新逻辑"""
     # 第一次运行
-    results1 = run_demo(temp_workdir, keep_workdir=True)
-    
+    run_demo(temp_workdir, keep_workdir=True)
+
     # 验证文档已创建
     docs_dir = temp_workdir / "docs"
     python_doc = docs_dir / "python_tutorial.md"
     assert python_doc.exists()
-    
+
     # 记录初始内容长度
     initial_length = len(python_doc.read_text(encoding="utf-8"))
-    
+
     # 修改文档
     new_content = python_doc.read_text(encoding="utf-8") + "\n\n# 新增章节\n测试内容"
     python_doc.write_text(new_content, encoding="utf-8")
-    
+
     # 验证文档已修改
     updated_length = len(python_doc.read_text(encoding="utf-8"))
     assert updated_length > initial_length, "文档应该被成功修改"
@@ -186,7 +186,7 @@ def test_demo_incremental_update_logic(temp_workdir):
 def test_demo_search_functionality(temp_workdir):
     """验证搜索功能"""
     results = run_demo(temp_workdir, keep_workdir=True)
-    
+
     # 如果演示成功执行，应该至少有一个搜索结果
     # 注意：这依赖于实际的索引和搜索实现
     # 在某些环境下（如缺少 embedding 服务），搜索可能失败
@@ -199,7 +199,7 @@ def test_demo_error_handling(temp_workdir):
     # 创建一个无效的工作目录（例如只读）
     # 注意：这个测试可能在某些系统上无法执行（权限问题）
     # 因此只验证基本的异常处理逻辑
-    
+
     try:
         results = run_demo(temp_workdir, keep_workdir=True)
         # 如果执行成功，验证返回结构
@@ -212,15 +212,15 @@ def test_demo_error_handling(temp_workdir):
 def test_demo_configuration_validation(temp_workdir):
     """验证配置生成"""
     run_demo(temp_workdir, keep_workdir=True)
-    
+
     config_path = temp_workdir / "config.yaml"
     content = config_path.read_text(encoding="utf-8")
-    
+
     # 验证关键配置项
     assert "data_dir" in content, "配置应该包含 data_dir"
     assert "tool_profile" in content, "配置应该包含 tool_profile"
     assert "write_policy" in content, "配置应该包含 write_policy"
-    
+
     # 验证配置值合理性
     assert "core" in content or "full" in content, "tool_profile 应该是有效值"
     assert "disabled" in content or "preview_only" in content, "write_policy 应该是有效值"

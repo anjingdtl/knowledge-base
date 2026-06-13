@@ -24,7 +24,7 @@ import importlib
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Any, Optional
 
 import yaml
 
@@ -117,7 +117,6 @@ class PluginManager:
 
     def initialize_all(self, container):
         """初始化所有已发现的插件"""
-        from src.core.events import on
         for name, manifest in self._plugins.items():
             try:
                 self._initialize_one(name, manifest, container)

@@ -1,9 +1,7 @@
 """数据库操作测试"""
-import json
-import pytest
 
-from src.services.db import Database
 from src.models.knowledge import KnowledgeItem
+from src.services.db import Database
 
 
 class TestKnowledgeCRUD:
