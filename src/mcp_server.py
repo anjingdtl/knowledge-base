@@ -2285,7 +2285,7 @@ def kb_capabilities() -> dict:
             "max_graph_depth": int(Config.get("rag.max_graph_depth", 3)),
         },
         "tool_metadata": _TOOL_METADATA,
-        "tool_aliases": _TOOL_ALIASES,
+        "tool_aliases": _REGISTERED_TOOL_ALIASES,
         "tools": tool_summaries,
         "recommended_flows": {
             "research": ["kb_capabilities", "route_query", "execute_query|ask", "get_source_graph", "read"],
@@ -2796,6 +2796,11 @@ _ENABLE_ALIASES = bool(
 _selected_tools = select_tools(_CURRENT_PROFILE, experimental_enabled=_EXPERIMENTAL_ENABLED)
 register_tools(mcp, _selected_tools)
 _VISIBLE_TOOL_NAMES = {d.name for d in _selected_tools}
+_REGISTERED_TOOL_ALIASES = {
+    alias_name: original_name
+    for alias_name, original_name in _TOOL_ALIASES.items()
+    if _ENABLE_ALIASES and original_name in _VISIBLE_TOOL_NAMES
+}
 
 # Register aliases if enabled
 if _ENABLE_ALIASES:

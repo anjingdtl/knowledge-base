@@ -312,7 +312,8 @@ class TestKBCapabilities:
             return {tool.name for tool in await mcp_mod.mcp.list_tools()}
 
         names = asyncio.run(registered_names())
-        missing = set(mcp_mod._TOOL_ALIASES) - names
+        declared_aliases = kb_capabilities()["data"]["tool_aliases"]
+        missing = set(declared_aliases) - names
         assert not missing, f"能力清单声明了未注册的工具别名: {sorted(missing)}"
 
 
