@@ -1,11 +1,12 @@
 """设置对话框"""
-from PySide6.QtCore import QThread, QTimer, Signal
+from PySide6.QtCore import Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
     QDialog,
     QFormLayout,
+    QFrame,
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
@@ -14,6 +15,8 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QProgressBar,
     QPushButton,
+    QScrollArea,
+    QSizePolicy,
     QSpinBox,
     QTabWidget,
     QVBoxLayout,
@@ -28,8 +31,9 @@ class SettingsDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("设置")
-        self.setMinimumWidth(560)
-        self.setMinimumHeight(520)
+        self.setMinimumWidth(720)
+        self.setMinimumHeight(680)
+        self.resize(820, 760)
         self._setup_ui()
         self._load_values()
 
@@ -185,10 +189,24 @@ class SettingsDialog(QDialog):
 
         # ---- 图谱后端设置 ----
         graph_tab = QWidget()
-        graph_layout = QVBoxLayout(graph_tab)
+        graph_outer = QVBoxLayout(graph_tab)
+        graph_outer.setContentsMargins(0, 0, 0, 0)
+        graph_outer.setSpacing(0)
+
+        graph_scroll = QScrollArea()
+        graph_scroll.setObjectName("graphBackendScroll")
+        graph_scroll.setWidgetResizable(True)
+        graph_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        graph_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+        graph_container = QWidget()
+        graph_layout = QVBoxLayout(graph_container)
+        graph_layout.setContentsMargins(12, 12, 12, 12)
+        graph_layout.setSpacing(12)
 
         # Provider 选择
         provider_group = QGroupBox("图存储后端")
+        provider_group.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
         provider_form = QFormLayout(provider_group)
 
         self.graph_provider = QComboBox()
@@ -197,10 +215,21 @@ class SettingsDialog(QDialog):
         self.graph_provider.currentIndexChanged.connect(self._on_graph_provider_changed)
         provider_form.addRow("后端选择：", self.graph_provider)
 
+        # SQLite / Neo4j 差异说明
+        provider_hint = QLabel(
+            "SQLite 内置本地存储，零配置即用，适合中小规模图谱；"
+            "Neo4j 为专业图数据库，支持 Cypher 查询与高性能遍历，"
+            "适合大规模关联分析，但需额外部署服务。"
+        )
+        provider_hint.setObjectName("hintLabel")
+        provider_hint.setWordWrap(True)
+        provider_form.addRow(provider_hint)
+
         graph_layout.addWidget(provider_group)
 
         # Neo4j 连接配置
         self._neo4j_group = QGroupBox("Neo4j 连接配置")
+        self._neo4j_group.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
         neo4j_form = QFormLayout(self._neo4j_group)
 
         self.neo4j_uri = QLineEdit()
@@ -221,6 +250,7 @@ class SettingsDialog(QDialog):
 
         # Neo4j 服务管理
         self._neo4j_svc_group = QGroupBox("Neo4j 服务管理")
+        self._neo4j_svc_group.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
         neo4j_svc_grid = QGridLayout(self._neo4j_svc_group)
 
         self._neo4j_status_label = QLabel("检测中...")
@@ -243,15 +273,30 @@ class SettingsDialog(QDialog):
         self._btn_neo4j_refresh = QPushButton("刷新状态")
         self._btn_neo4j_refresh.setMinimumHeight(32)
         self._btn_neo4j_refresh.clicked.connect(self._refresh_neo4j_status)
+        self._btn_neo4j_auto_deploy = QPushButton("自动部署 Neo4j")
+        self._btn_neo4j_auto_deploy.setMinimumHeight(32)
+        self._btn_neo4j_auto_deploy.setObjectName("primaryBtn")
+        self._btn_neo4j_auto_deploy.clicked.connect(self._on_neo4j_auto_deploy)
         neo4j_btn_row.addWidget(self._btn_neo4j_start)
         neo4j_btn_row.addWidget(self._btn_neo4j_stop)
         neo4j_btn_row.addWidget(self._btn_neo4j_refresh)
+        neo4j_btn_row.addWidget(self._btn_neo4j_auto_deploy)
         neo4j_svc_grid.addLayout(neo4j_btn_row, 2, 0, 1, 2)
+
+        self._neo4j_deploy_progress = QProgressBar()
+        self._neo4j_deploy_progress.setMaximumHeight(18)
+        self._neo4j_deploy_progress.setVisible(False)
+        neo4j_svc_grid.addWidget(self._neo4j_deploy_progress, 3, 0, 1, 2)
+
+        self._neo4j_deploy_label = QLabel("")
+        self._neo4j_deploy_label.setObjectName("hintLabel")
+        neo4j_svc_grid.addWidget(self._neo4j_deploy_label, 4, 0, 1, 2)
 
         graph_layout.addWidget(self._neo4j_svc_group)
 
         # 数据迁移
         migrate_group = QGroupBox("数据迁移")
+        migrate_group.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         migrate_layout = QVBoxLayout(migrate_group)
 
         migrate_desc = QLabel("将 SQLite 中的图谱数据迁移到当前配置的图后端。\n"
@@ -290,7 +335,9 @@ class SettingsDialog(QDialog):
         hint_graph.setObjectName("hintLabel")
         hint_graph.setWordWrap(True)
         graph_layout.addWidget(hint_graph)
-        graph_layout.addStretch()
+
+        graph_scroll.setWidget(graph_container)
+        graph_outer.addWidget(graph_scroll)
 
         tabs.addTab(graph_tab, "图谱后端")
 
@@ -644,6 +691,7 @@ class SettingsDialog(QDialog):
 
         self._btn_neo4j_start.setEnabled(status["installed"] and not status["running"])
         self._btn_neo4j_stop.setEnabled(status["running"])
+        self._btn_neo4j_auto_deploy.setEnabled(not status["installed"])
 
         # 刷新样式
         self._neo4j_status_label.style().polish(self._neo4j_status_label)
@@ -667,6 +715,69 @@ class SettingsDialog(QDialog):
         except Exception as exc:
             QMessageBox.warning(self, "Neo4j 停止失败", str(exc))
         self._refresh_neo4j_status()
+
+    def _on_neo4j_auto_deploy(self):
+        """自动部署 Neo4j — 下载 Community Edition 并安装到用户目录"""
+        from src.services.neo4j_manager import Neo4jManager
+        mgr = Neo4jManager()
+        if mgr.is_installed():
+            QMessageBox.information(
+                self, "Neo4j 已安装",
+                f"已检测到 Neo4j 安装路径：\n{mgr.neo4j_home}\n\n无需重复部署。",
+            )
+            return
+
+        reply = QMessageBox.question(
+            self, "自动部署 Neo4j",
+            "将自动下载 Neo4j Community Edition 并安装到用户目录。\n\n"
+            "• 下载大小约 200 MB，请确保网络通畅\n"
+            "• 安装位置：%LOCALAPPDATA%\\Neo4j\n"
+            "• 设置环境变量时可能需要管理员权限（会弹出 UAC 确认框）\n\n"
+            "确定开始部署？",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+
+        self._btn_neo4j_auto_deploy.setEnabled(False)
+        self._btn_neo4j_start.setEnabled(False)
+        self._btn_neo4j_stop.setEnabled(False)
+        self._neo4j_deploy_progress.setVisible(True)
+        self._neo4j_deploy_progress.setRange(0, 100)
+        self._neo4j_deploy_progress.setValue(0)
+        self._neo4j_deploy_label.setText("正在下载 Neo4j...")
+
+        self._deploy_worker = _Neo4jDeployWorker()
+        self._deploy_worker.progress.connect(self._on_deploy_progress)
+        self._deploy_worker.done.connect(self._on_deploy_done)
+        self._deploy_worker.error.connect(self._on_deploy_error)
+        self._deploy_worker.start()
+
+    def _on_deploy_progress(self, stage: str, percent: int):
+        stage_text = {
+            "downloading": "正在下载 Neo4j",
+            "extracting": "正在解压安装",
+            "done": "部署完成",
+        }.get(stage, stage)
+        self._neo4j_deploy_label.setText(f"{stage_text}... {percent}%")
+        self._neo4j_deploy_progress.setValue(percent)
+
+    def _on_deploy_done(self, neo4j_home: str):
+        self._btn_neo4j_auto_deploy.setEnabled(True)
+        self._neo4j_deploy_progress.setVisible(False)
+        self._neo4j_deploy_label.setText("")
+        self._refresh_neo4j_status()
+        QMessageBox.information(
+            self, "部署完成",
+            f"Neo4j 已成功部署到：\n{neo4j_home}\n\n"
+            "现在可以启动 Neo4j 服务了。",
+        )
+
+    def _on_deploy_error(self, error: str):
+        self._btn_neo4j_auto_deploy.setEnabled(True)
+        self._neo4j_deploy_progress.setVisible(False)
+        self._neo4j_deploy_label.setText(f"部署失败: {error}")
+        QMessageBox.warning(self, "部署失败", f"Neo4j 自动部署出错:\n{error}")
 
     def _on_migrate(self):
         """全量迁移 SQLite → 当前后端"""
@@ -800,5 +911,22 @@ class _MigrationWorker(QThread):
                 result = migration.sync_incremental(target=backend, since=None)
                 self.done.emit(str(result))
 
+        except Exception as exc:
+            self.error.emit(str(exc))
+
+
+class _Neo4jDeployWorker(QThread):
+    """后台线程执行 Neo4j 自动部署，避免阻塞 UI。"""
+    progress = Signal(str, int)  # stage, percent
+    done = Signal(str)           # neo4j_home
+    error = Signal(str)
+
+    def run(self):
+        try:
+            from src.services.neo4j_manager import Neo4jManager
+            neo4j_home = Neo4jManager.auto_deploy(
+                progress_callback=lambda stage, pct: self.progress.emit(stage, pct),
+            )
+            self.done.emit(neo4j_home)
         except Exception as exc:
             self.error.emit(str(exc))

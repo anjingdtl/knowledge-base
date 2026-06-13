@@ -1,4 +1,4 @@
-"""Neo4j 服务进程管理 — 检测、启停本地 Neo4j 实例
+"""Neo4j 服务进程管理 — 检测、启停、自动部署本地 Neo4j 实例
 
 用法:
     from src.services.neo4j_manager import Neo4jManager
@@ -15,13 +15,24 @@ import shutil
 import socket
 import subprocess
 import time
+import zipfile
 from pathlib import Path
 from typing import Optional
+from urllib.error import URLError
+from urllib.request import Request, urlopen
 
 logger = logging.getLogger(__name__)
 
 # 默认 Bolt 端口
 DEFAULT_BOLT_PORT = 7687
+
+# Neo4j Community Edition 下载地址（5.x 系列，JDK 自带版本）
+_NEO4J_DOWNLOAD_URL = (
+    "https://dist.neo4j.org/neo4j-community-5.26.0-windows.zip"
+)
+
+# 默认安装目标目录
+_DEFAULT_INSTALL_DIR = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "Neo4j"
 
 # 搜索 Neo4j 安装目录的候选路径
 _SEARCH_PATHS = [
@@ -271,3 +282,135 @@ class Neo4jManager:
             "neo4j_home": str(self._neo4j_home) if self._neo4j_home else None,
             "bolt_port": self._bolt_port,
         }
+
+    @staticmethod
+    def auto_deploy(
+        progress_callback=None,
+        install_dir: Path | None = None,
+    ) -> str:
+        """自动下载并安装 Neo4j Community Edition
+
+        下载 Neo4j Community 5.x（自带 JDK）到用户目录，解压后即可使用。
+        安装完成后自动更新 NEO4J_HOME 缓存。
+
+        Args:
+            progress_callback: 可选回调 ``fn(stage: str, percent: int)``
+                stage 为 "downloading" / "extracting" / "done"
+            install_dir: 安装目标目录，默认 %LOCALAPPDATA%/Neo4j
+
+        Returns:
+            安装后的 neo4j_home 路径字符串
+
+        Raises:
+            RuntimeError: 下载或解压失败
+        """
+        target_dir = install_dir or _DEFAULT_INSTALL_DIR
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        zip_name = _NEO4J_DOWNLOAD_URL.rsplit("/", 1)[-1]
+        zip_path = target_dir / zip_name
+
+        # 1. 下载
+        if progress_callback:
+            progress_callback("downloading", 0)
+
+        try:
+            req = Request(_NEO4J_DOWNLOAD_URL, headers={"User-Agent": "ShineHeKnowledge/1.0"})
+            with urlopen(req, timeout=120) as resp:
+                total = int(resp.headers.get("Content-Length", 0))
+                downloaded = 0
+                chunk_size = 65536
+                with open(zip_path, "wb") as f:
+                    while True:
+                        chunk = resp.read(chunk_size)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+                        downloaded += len(chunk)
+                        if total > 0 and progress_callback:
+                            pct = min(int(downloaded / total * 100), 99)
+                            progress_callback("downloading", pct)
+        except (URLError, OSError) as exc:
+            # 清理不完整文件
+            zip_path.unlink(missing_ok=True)
+            raise RuntimeError(
+                f"下载 Neo4j 失败: {exc}\n"
+                "请检查网络连接，或手动下载后放置到: " + str(target_dir)
+            ) from exc
+
+        if progress_callback:
+            progress_callback("downloading", 100)
+
+        # 2. 解压
+        if progress_callback:
+            progress_callback("extracting", 0)
+
+        try:
+            with zipfile.ZipFile(zip_path, "r") as zf:
+                members = zf.infolist()
+                total = len(members)
+                for i, member in enumerate(members):
+                    zf.extract(member, target_dir)
+                    if progress_callback and i % 50 == 0:
+                        pct = min(int(i / total * 100), 99)
+                        progress_callback("extracting", pct)
+        except (zipfile.BadZipFile, OSError) as exc:
+            raise RuntimeError(f"解压 Neo4j 失败: {exc}") from exc
+        finally:
+            # 清理 zip
+            zip_path.unlink(missing_ok=True)
+
+        if progress_callback:
+            progress_callback("extracting", 100)
+
+        # 3. 定位 neo4j_home（解压后目录名如 neo4j-community-5.26.0）
+        neo4j_home = None
+        for child in target_dir.iterdir():
+            if child.is_dir() and (child / "bin" / "neo4j.bat").exists():
+                neo4j_home = child
+                break
+
+        if neo4j_home is None:
+            raise RuntimeError(
+                "解压完成但未找到 neo4j.bat，请检查安装包是否正确。"
+            )
+
+        # 4. 更新缓存
+        global _neo4j_home_cache
+        _neo4j_home_cache = neo4j_home
+
+        # 5. 设置 NEO4J_HOME 环境变量（当前进程 + 用户环境变量）
+        os.environ["NEO4J_HOME"] = str(neo4j_home)
+        try:
+            _set_user_env("NEO4J_HOME", str(neo4j_home))
+        except Exception as exc:
+            logger.warning("设置用户环境变量 NEO4J_HOME 失败（需管理员权限）: %s", exc)
+
+        if progress_callback:
+            progress_callback("done", 100)
+
+        logger.info("Neo4j auto-deploy complete: %s", neo4j_home)
+        return str(neo4j_home)
+
+
+def _set_user_env(key: str, value: str) -> None:
+    """设置用户级持久环境变量（需要管理员权限写注册表）
+
+    使用 PowerShell 通过注册表设置，避免调用 setx 的 1024 字符限制。
+    如无管理员权限则静默失败，仅设置当前进程环境变量。
+    """
+    try:
+        ps_script = (
+            f"[Environment]::SetEnvironmentVariable('{key}', '{value}', 'User')"
+        )
+        subprocess.run(
+            [
+                "powershell", "-Command",
+                f"Start-Process powershell -ArgumentList '-Command {ps_script}' "
+                f"-Verb RunAs -Wait",
+            ],
+            timeout=30,
+            capture_output=True,
+        )
+    except (subprocess.TimeoutExpired, OSError) as exc:
+        logger.debug("设置用户环境变量失败（非致命）: %s", exc)
