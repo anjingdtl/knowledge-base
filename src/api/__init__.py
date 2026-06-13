@@ -4,19 +4,27 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
+from src.api.deps import get_container
+from src.api.routes import (
+    auth_router,
+    chat_router,
+    graph_router,
+    jobs_router,
+    kb_router,
+    properties_router,
+    query_router,
+    refs_router,
+    settings_router,
+    tags_router,
+    wiki_router,
+)
+from src.api.routes.auth import _check_auth
+from src.core.container import AppContainer, create_container, shutdown_container
 from src.services.db import Database
 from src.utils.config import Config
-from src.core.container import create_container, shutdown_container
 from src.version import APP_NAME, VERSION
-from src.api.routes import (
-    auth_router, kb_router, chat_router, wiki_router, jobs_router, refs_router,
-    graph_router, tags_router, properties_router, query_router,
-    settings_router,
-)
-from src.api.deps import get_container
-from src.api.routes.auth import _check_auth
-from src.core.container import AppContainer
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +79,18 @@ def create_app() -> FastAPI:
             allow_headers=["*"],
         )
 
+    # Security headers middleware (defense-in-depth)
+    class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):
+            response = await call_next(request)
+            response.headers["X-Content-Type-Options"] = "nosniff"
+            response.headers["X-Frame-Options"] = "DENY"
+            response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+            response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+            return response
+
+    app.add_middleware(SecurityHeadersMiddleware)
+
     app.include_router(auth_router, prefix="/api")
     app.include_router(kb_router, prefix="/api")
     app.include_router(refs_router, prefix="/api")
@@ -103,7 +123,7 @@ def create_app() -> FastAPI:
         try:
             agent_memory_count = conn.execute("SELECT COUNT(*) as cnt FROM agent_memory").fetchone()["cnt"]
         except Exception:
-            pass
+            logger.debug("agent_memory table not found, skipping")
         return {
             "knowledge_count": knowledge_count,
             "block_count": block_count,

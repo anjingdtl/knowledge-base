@@ -1,7 +1,6 @@
 """多格式文件解析器"""
-import os
+from dataclasses import dataclass
 from pathlib import Path
-from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -214,7 +213,7 @@ def _extract_pptx_shapes(shapes) -> list[str]:
             try:
                 parts.extend(_extract_pptx_shapes(shape.shapes))
             except Exception:
-                pass
+                logger.debug("Failed to extract group shape, skipping")
             continue
         # 普通文本框/标题
         if shape.has_text_frame:
@@ -267,9 +266,9 @@ def _pptx_slide_to_block(slide_num: int, parts: list[str]) -> "StructuredBlock":
 
 
 def _parse_pptx(path: Path) -> ParsedFile:
-    from pptx import Presentation
-    from pptx.util import Emu
     import re as _re
+
+    from pptx import Presentation
 
     prs = Presentation(str(path))
     slide_count = len(prs.slides)
@@ -500,6 +499,7 @@ def _pdf_pages_to_blocks_from_text(pages_text: list[str]) -> list["StructuredBlo
 
 def _parse_pdf(path: Path) -> ParsedFile:
     from io import BytesIO
+
     from PyPDF2 import PdfReader
     from PyPDF2.errors import PdfReadError, PdfStreamError
 
@@ -559,6 +559,7 @@ def _parse_pdf(path: Path) -> ParsedFile:
             text = page.extract_text()
         except Exception:
             # 单页提取失败不影响其他页
+            logger.debug("Failed to extract text from PDF page %d", i)
             text = ""
         if text:
             raw_pages.append(text)
@@ -766,13 +767,30 @@ def _extract_main_content(soup) -> str:
 
 def parse_url(url: str, timeout: float | None = None) -> ParsedFile:
     """抓取网页并提取正文文本"""
-    import httpx
+    import ipaddress
     import re
-    from bs4 import BeautifulSoup
+    import socket
     from urllib.parse import urlparse
+
+    import httpx
+    from bs4 import BeautifulSoup
 
     if not url.startswith(("http://", "https://")):
         raise ValueError(f"不支持的 URL 协议: {url}")
+
+    # SSRF 防护：阻止对内网/回环/链路本地地址的请求
+    parsed = urlparse(url)
+    hostname = parsed.hostname
+    if hostname:
+        try:
+            # 先尝试 DNS 解析，再检查 IP 是否为私有地址
+            resolved_ips = socket.getaddrinfo(hostname, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
+            for _, _, _, _, addr in resolved_ips:
+                ip = ipaddress.ip_address(addr[0])
+                if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved:
+                    raise ValueError(f"不允许访问内网地址: {hostname} ({ip})")
+        except socket.gaierror:
+            raise ValueError(f"无法解析主机名: {hostname}")
 
     if timeout is None:
         from src.utils.config import Config
@@ -784,7 +802,7 @@ def parse_url(url: str, timeout: float | None = None) -> ParsedFile:
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
     }
-    with httpx.Client(timeout=timeout, follow_redirects=True, headers=headers) as client:
+    with httpx.Client(timeout=timeout, follow_redirects=True, headers=headers, max_redirects=5) as client:
         response = client.get(url)
         if response.status_code != 200:
             raise RuntimeError(f"HTTP {response.status_code}: {url}")
