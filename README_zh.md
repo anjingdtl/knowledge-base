@@ -191,6 +191,13 @@ python run_mcp.py
 
 高级功能保留在代码库中，但默认对 MCP 工具面隐藏。通过 `config.yaml` 中的 `mcp.experimental_tools_enabled=true` 启用。参见 [docs/advanced-features.md](docs/advanced-features.md)。
 
+## 图谱后端（SQLite / Neo4j）
+
+GUI 设置 → 「图谱后端」标签页可切换知识库的图存储后端：
+
+- **SQLite（默认）**：零配置即用，新增/删除条目时由 `GraphSyncHook` 自动增量同步到图视图，适合中小规模图谱
+- **Neo4j（可选）**：适合大规模关联分析与 Cypher 遍历。选择后可点击「**自动部署 Neo4j**」一键下载并安装 Neo4j Community 5.x 到 `%LOCALAPPDATA%\Neo4j`（按需触发 UAC 设置 `NEO4J_HOME`），随后使用「启动 Neo4j」「全量迁移」即可把现有数据迁入
+
 ## 架构
 
 ```
