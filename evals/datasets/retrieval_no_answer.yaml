@@ -1,0 +1,16 @@
+# No-answer queries — should return no relevant results from fixtures
+# These test that the system correctly identifies out-of-scope queries.
+
+- query: "如何安装 Kubernetes？"
+  expected_sources: []
+  category: "no_answer"
+
+- query: "PostgreSQL replication setup"
+  expected_sources: []
+  must_not_match:
+    - path: "fixtures/distractor.md"
+  category: "no_answer"
+
+- query: "React component lifecycle"
+  expected_sources: []
+  category: "no_answer"

@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-06-13",
+  "description": "Initial baseline for MCP local retrieval focus",
+  "metrics": {
+    "recall_at_5": 0.0,
+    "mrr": 0.0,
+    "ndcg_at_10": 0.0,
+    "no_answer_accuracy": 0.0,
+    "latency_p50_ms": 0.0,
+    "latency_p95_ms": 0.0
+  },
+  "note": "Baseline values will be set after first successful eval run"
+}

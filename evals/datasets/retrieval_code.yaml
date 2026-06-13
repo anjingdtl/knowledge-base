@@ -1,0 +1,20 @@
+# Code retrieval queries — fixture-based retrieval evaluation
+# These queries target Python source code fixtures.
+
+- query: "calculate_rrf_score function"
+  expected_sources:
+    - path: "fixtures/code_example.py"
+      block_contains: "Reciprocal Rank Fusion score"
+  category: "code"
+
+- query: "HybridSearchError exception"
+  expected_sources:
+    - path: "fixtures/code_example.py"
+      block_contains: "HybridSearchError"
+  category: "code"
+
+- query: "normalize file path cross-platform"
+  expected_sources:
+    - path: "fixtures/code_example.py"
+      block_contains: "normcase"
+  category: "code"
