@@ -1,6 +1,7 @@
 """测试配置和 fixtures"""
 import os
 import sys
+import tempfile
 
 import pytest
 
@@ -16,6 +17,10 @@ def setup_db(tmp_path):
     Config.load()
     Config.set("storage.data_dir", str(tmp_path))
     Config.set("storage.db_name", "test.db")
+    Config.set(
+        "security.allowed_ingest_dirs",
+        [str(tmp_path), tempfile.gettempdir()],
+    )
     # 重置 Database 实例
     Database._instance = None
     Database.connect(str(db_path))

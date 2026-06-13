@@ -21,13 +21,18 @@ _PID_FILE = _PROJECT_ROOT / "data" / "mcp.pid"
 _SERVICE_NAME = "ShineHeMCP"
 
 _process: subprocess.Popen | None = None
+_CREATE_NO_WINDOW = int(getattr(subprocess, "CREATE_NO_WINDOW", 0))
+_CREATE_NEW_PROCESS_GROUP = int(
+    getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
+)
+_DETACHED_PROCESS = int(getattr(subprocess, "DETACHED_PROCESS", 0))
 
 
 def _run_hidden(args: list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
     """Run a helper command without flashing a console window on Windows."""
     if _is_windows():
         kwargs["creationflags"] = (
-            kwargs.get("creationflags", 0) | subprocess.CREATE_NO_WINDOW
+            kwargs.get("creationflags", 0) | _CREATE_NO_WINDOW
         )
     return subprocess.run(args, **kwargs)
 
@@ -36,6 +41,28 @@ def _run_hidden(args: list[str], **kwargs: Any) -> subprocess.CompletedProcess[s
 
 def _is_windows() -> bool:
     return sys.platform == "win32"
+
+
+def _shell_execute_elevated(
+    executable: str,
+    parameters: str,
+) -> int:
+    """Invoke ShellExecuteW without exposing Windows-only ctypes attributes."""
+    import ctypes
+
+    windll = getattr(ctypes, "windll", None)
+    if windll is None:
+        raise OSError("Windows ShellExecute API is unavailable")
+    return int(
+        windll.shell32.ShellExecuteW(
+            None,
+            "runas",
+            executable,
+            parameters,
+            str(_PROJECT_ROOT),
+            0,
+        )
+    )
 
 
 def is_service_installed() -> bool:
@@ -169,10 +196,9 @@ def service_install() -> str:
     try:
         script = _PROJECT_ROOT / "windows_service.py"
         # 使用 ShellExecute 以管理员身份运行
-        import ctypes
-        ret = ctypes.windll.shell32.ShellExecuteW(
-            None, "runas", sys.executable,
-            f'"{script}" install', str(_PROJECT_ROOT), 0,
+        ret = _shell_execute_elevated(
+            sys.executable,
+            f'"{script}" install',
         )
         if ret <= 32:
             return f"提权失败（返回值 {ret}），请手动以管理员身份运行: python windows_service.py install"
@@ -194,10 +220,9 @@ def service_remove() -> str:
             service_stop()
             time.sleep(2)
         script = _PROJECT_ROOT / "windows_service.py"
-        import ctypes
-        ret = ctypes.windll.shell32.ShellExecuteW(
-            None, "runas", sys.executable,
-            f'"{script}" remove', str(_PROJECT_ROOT), 0,
+        ret = _shell_execute_elevated(
+            sys.executable,
+            f'"{script}" remove',
         )
         if ret <= 32:
             return "提权失败，请手动以管理员身份运行: python windows_service.py remove"
@@ -214,15 +239,14 @@ def service_configure_failure() -> str:
     if not _is_windows():
         return "仅支持 Windows 服务模式"
     try:
-        import ctypes
         # 通过 bat 脚本以管理员身份执行 sc failure
         bat_content = '@echo off\nsc failure ShineHeMCP reset= 86400 actions= restart/5000/restart/10000/restart/30000\n'
         bat_path = _PROJECT_ROOT / "data" / "_set_failure.bat"
         bat_path.parent.mkdir(parents=True, exist_ok=True)
         bat_path.write_text(bat_content, encoding="ascii")
-        ret = ctypes.windll.shell32.ShellExecuteW(
-            None, "runas", "cmd.exe",
-            f'/c "{bat_path}"', str(_PROJECT_ROOT), 0,
+        ret = _shell_execute_elevated(
+            "cmd.exe",
+            f'/c "{bat_path}"',
         )
         if ret <= 32:
             return "提权失败，请手动以管理员身份运行: sc.exe failure ShineHeMCP reset= 86400 actions= restart/5000/restart/10000/restart/30000"
@@ -376,7 +400,11 @@ def start(host: str = "127.0.0.1", port: int = 9000) -> str:
         # DETACHED_PROCESS: 脱离父进程控制台
         flags = 0
         if sys.platform == "win32":
-            flags |= subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS | subprocess.CREATE_NO_WINDOW
+            flags = (
+                _CREATE_NEW_PROCESS_GROUP
+                | _DETACHED_PROCESS
+                | _CREATE_NO_WINDOW
+            )
 
         _process = subprocess.Popen(
             cmd,
