@@ -106,6 +106,14 @@ Config → Database → VectorStore → BlockStore → Embedding/LLM → Reposit
 - **MCP Server**：stdio 使用本地信任模型；HTTP/SSE 写操作受 `write_policy`、`allow_http_write` 和可选 Bearer Token 约束
 - 测试中通过 `api_client` fixture 自动注册用户并注入 token
 
+### 安全防护
+
+- **SSRF 防护**：`parse_url()` 在 HTTP 请求前做 DNS 解析 + IP 检查，阻止内网/回环/链路本地地址
+- **安全响应头**：API 层自动添加 `X-Content-Type-Options`、`X-Frame-Options`、`Referrer-Policy`、`Permissions-Policy`
+- **CORS 安全**：`allow_origins=["*"]` 时自动禁用 `allow_credentials`，防止 token 泄露
+- **密码存储**：bcrypt 哈希，不存储明文
+- **SQL 安全**：所有动态 SQL 变量均为内部硬编码或已白名单验证
+
 ### Repository 层过渡
 
 `src/repositories/` 正逐步替代 `db.py` 中的直接 SQL 操作。新增数据访问应优先写 Repository，而非直接调用 `Database` 方法。
