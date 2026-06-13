@@ -68,6 +68,10 @@ rag:
       page_as_block: true
   link_expansion:
     max_links: 3
+  max_blocks_per_document: 3
+  parent_child:
+    enabled: true
+    max_parent_chars: 4000
   pipeline:
     enabled: true
     stages:

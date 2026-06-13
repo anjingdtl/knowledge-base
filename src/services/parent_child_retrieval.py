@@ -102,6 +102,26 @@ class ParentChildRetriever:
         from src.services.db import Database
         return Database
 
+    def _get_config(self, key: str, default=None):
+        """读取配置项，支持 Config 对象或 dict。"""
+        if self._config is not None:
+            if isinstance(self._config, dict):
+                parts = key.split(".")
+                obj = self._config
+                for p in parts:
+                    if isinstance(obj, dict):
+                        obj = obj.get(p)
+                    else:
+                        return default
+                return obj if obj is not None else default
+            return self._config.get(key, default)
+        # 尝试从全局 Config 读取
+        try:
+            from src.utils.config import Config
+            return Config.get(key, default)
+        except Exception:
+            return default
+
     def _get_strategy(self, file_type: str) -> dict:
         """获取文件类型对应的 block 策略"""
         # 查找精确匹配
@@ -135,7 +155,12 @@ class ParentChildRetriever:
 
         strategy = self._get_strategy(file_type)
         if max_parent_chars is None:
-            max_parent_chars = strategy["max_parent_chars"]
+            # 优先从 config 读取 rag.parent_child.max_parent_chars
+            config_val = self._get_config("rag.parent_child.max_parent_chars")
+            if config_val is not None:
+                max_parent_chars = int(config_val)
+            else:
+                max_parent_chars = strategy["max_parent_chars"]
 
         db = self._get_db()
 
@@ -311,7 +336,8 @@ def enrich_with_parent_context(
     results: list[dict],
     db=None,
     file_type: str = "",
+    config=None,
 ) -> list[dict]:
     """便捷函数：为检索结果附加父块上下文"""
-    retriever = ParentChildRetriever(db=db)
+    retriever = ParentChildRetriever(db=db, config=config)
     return retriever.enrich(results, file_type=file_type)

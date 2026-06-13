@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as
 from src.services.query_rewriter import QueryRewriter
 from src.services.hybrid_search import HybridSearcher
 from src.services.reranker import LLMReranker
+from src.services.citation_builder import CitationBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -130,23 +131,43 @@ class SearchService:
         # ── 阶段 4: 组装结果 ──
         output.extend(wiki_results)
 
-        seen_kids = {w.get("knowledge_id") for w in wiki_results}
+        seen_blocks = set()
+        citation_builder = CitationBuilder(self._db)
         for r in candidates:
+            bid = r.get("id", "")
+            if bid and bid in seen_blocks:
+                continue
+            if bid:
+                seen_blocks.add(bid)
+
             kid = (r.get("metadata") or {}).get("page_id",
                   (r.get("metadata") or {}).get("knowledge_id", ""))
-            if kid and kid not in seen_kids:
-                seen_kids.add(kid)
-                item = self._db.get_knowledge(kid) if kid else None
-                score = r.get("rerank_score", r.get("rrf_score",
-                        r.get("score", r.get("distance", 0))))
-                output.append({
-                    "source": "knowledge",
-                    "block_id": r.get("id", ""),
-                    "knowledge_id": kid,
-                    "title": item["title"] if item else "未知",
-                    "text": r.get("text", ""),
-                    "score": score,
-                })
+
+            item = self._db.get_knowledge(kid) if kid else None
+
+            # 分数回退链: rerank_score > rrf_score > vector_score > distance
+            # 使用显式 None 检查，0.0 是有效分数
+            score = 0.0
+            for key in ("rerank_score", "rrf_score", "vector_score", "distance"):
+                val = r.get(key)
+                if val is not None:
+                    score = val
+                    break
+
+            # 构建 citation
+            citation = citation_builder.build(r, item)
+
+            output.append({
+                "source": "knowledge",
+                "block_id": bid,
+                "knowledge_id": kid,
+                "title": item["title"] if item else "未知",
+                "text": r.get("text", ""),
+                "score": score,
+                "match_channels": r.get("match_channels", []),
+                "warnings": r.get("warnings", []),
+                "citation": citation.to_dict(),
+            })
 
         elapsed = time.monotonic() - t0
         logger.info("Search completed in %.2fs: %d results for query=%r", elapsed, len(output), query[:50])
