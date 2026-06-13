@@ -62,6 +62,7 @@ dev = [
 ]
 
 [project.scripts]
+shinehe = "src.cli:main"
 shinehe-mcp = "src.mcp_cli:main"
 
 [tool.hatch.version]
