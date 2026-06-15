@@ -7,17 +7,17 @@
 
 | Profile | Tools | Use Case |
 |---------|-------|----------|
-| `core` | 10 core tools | Default for AI agents |
+| `core` | 10 core tools | Minimal surface for AI agents |
 | `extended` | core + Query DSL + source graph + job management | Advanced research |
 | `admin` | extended + CRUD + audit/undo | Local human maintenance |
-| `full` | all non-experimental tools | Power users |
+| `full` | all non-experimental tools (**default**) | Power users / general AI agents |
 | `legacy` | all tools + namespaced aliases | Backward compatibility |
 
 Configure in `config.yaml`:
 
 ```yaml
 mcp:
-  tool_profile: core        # core | extended | admin | full | legacy
+  tool_profile: full        # core | extended | admin | full | legacy
   enable_legacy_aliases: false
   experimental_tools_enabled: false
 ```
