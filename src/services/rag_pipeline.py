@@ -303,7 +303,12 @@ class RerankStage(PipelineStage):
             reranker = self._reranker or _get_container_service("reranker", LLMReranker)
             candidates_for_rerank = ctx.candidates[:top_n * 3]
             reranked = reranker.rerank(ctx.question, candidates_for_rerank)
-            ctx.reranked_results = [r for r in reranked if r.get("rerank_score", 0) >= min_score][:top_n]
+            filtered = [r for r in reranked if r.get("rerank_score", 0) >= min_score][:top_n]
+            # 安全网：过滤太严时保留 top_n 结果，避免下游上下文为空
+            if not filtered and reranked:
+                filtered = reranked[:top_n]
+                logger.info("RerankStage: min_score=%.2f filtered all results, keeping top %d as safety net", min_score, len(filtered))
+            ctx.reranked_results = filtered
         except Exception as e:
             logger.warning("Rerank failed: %s", e)
             ctx.metadata.setdefault("warnings", []).append(f"rerank_failed: {e}")
@@ -841,7 +846,7 @@ class RAGService:
     def query(self, question: str, conversation_history: list[dict] | None = None,
               phase_callback=None) -> dict:
         """同步查询（非流式）— 直接通过管线执行，无冗余预处理"""
-        import asyncio
+        import asyncio, traceback
 
         try:
             # 直接走管线，管线内部会依次执行全部阶段
@@ -870,7 +875,8 @@ class RAGService:
                 result["source_graph"] = build_source_graph(result.get("sources", []))
             return dict(result)
         except Exception as e:
-            logger.error("Pipeline execution failed, falling back to direct query: %s", e)
+            err_detail = traceback.format_exc()
+            logger.error("Pipeline execution failed, falling back to direct query: %s\n%s", e, err_detail)
             # fallback：仅用 Wiki 上下文 + LLM 直接生成
             ctx = RagContext(question=question, conversation_history=conversation_history or [])
             return self._direct_query(question, conversation_history, ctx)
