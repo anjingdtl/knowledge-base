@@ -1744,6 +1744,22 @@ class Database(metaclass=_DatabaseMeta):
         ).fetchall()
         return [dict(r) for r in rows]
 
+    def get_dangling_wiki_links(self) -> list[dict]:
+        """返回 wiki_links 中 source/target 物理上已不在 wiki_pages 的悬空记录。
+
+        用于 broken_link 检查:只有真正物理悬空的链接才算损坏。
+        status=deleted 的软删页面因物理仍存在,不被计为悬空。
+        """
+        rows = self.get_conn().execute(
+            """SELECT wl.source_page_id, wl.target_page_id, wl.link_type, wl.weight,
+                      sp.title as source_title, tp.title as target_title
+               FROM wiki_links wl
+               LEFT JOIN wiki_pages sp ON sp.id = wl.source_page_id
+               LEFT JOIN wiki_pages tp ON tp.id = wl.target_page_id
+               WHERE sp.id IS NULL OR tp.id IS NULL""",
+        ).fetchall()
+        return [dict(r) for r in rows]
+
     # ---- Wiki Ops Log ----
 
     def insert_wiki_op(self, op_type: str, target_id: str, detail: dict | None = None) -> str:
