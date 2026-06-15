@@ -136,58 +136,63 @@ def get_service_failure_config() -> dict:
 
 
 def service_start() -> str:
-    """启动 Windows 服务（需要管理员权限）"""
+    """启动 Windows 服务（通过 UAC 提权）"""
     if not _is_windows():
         return "仅支持 Windows 服务模式"
     try:
         # 先检查服务是否已在运行
         if get_service_status() == "running":
             return "服务已在运行中"
-        result = _run_hidden(
-            ["net", "start", _SERVICE_NAME],
-            capture_output=True, text=True, timeout=30,
-        )
-        if result.returncode == 0:
-            return "Windows 服务已启动"
-        # 可能需要管理员权限
-        if "拒绝访问" in result.stderr or "Access is denied" in result.stderr:
-            return "启动失败：需要管理员权限"
-        return f"启动失败：{result.stderr.strip() or result.stdout.strip()}"
+        # 通过 ShellExecuteW "runas" 触发 UAC 提权
+        ret = _shell_execute_elevated("sc.exe", f"start {_SERVICE_NAME}")
+        if ret <= 32:
+            return f"提权失败（返回值 {ret}），请手动以管理员身份运行: sc start {_SERVICE_NAME}"
+        return "已请求启动服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"启动异常: {e}"
 
 
 def service_stop() -> str:
-    """停止 Windows 服务"""
+    """停止 Windows 服务（通过 UAC 提权）"""
     if not _is_windows():
         return "仅支持 Windows 服务模式"
     try:
         if get_service_status() != "running":
             return "服务未在运行"
-        result = _run_hidden(
-            ["net", "stop", _SERVICE_NAME],
-            capture_output=True, text=True, timeout=30,
-        )
-        if result.returncode == 0:
-            return "Windows 服务已停止"
-        if "拒绝访问" in result.stderr or "Access is denied" in result.stderr:
-            return "停止失败：需要管理员权限"
-        return f"停止失败：{result.stderr.strip() or result.stdout.strip()}"
+        # 通过 ShellExecuteW "runas" 触发 UAC 提权
+        ret = _shell_execute_elevated("sc.exe", f"stop {_SERVICE_NAME}")
+        if ret <= 32:
+            return f"提权失败（返回值 {ret}），请手动以管理员身份运行: sc stop {_SERVICE_NAME}"
+        return "已请求停止服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"停止异常: {e}"
 
 
 def service_restart() -> str:
-    """重启 Windows 服务"""
-    msg = service_stop()
-    if "失败" in msg or "异常" in msg:
-        return msg
-    time.sleep(2)
-    return service_start()
+    """重启 Windows 服务（通过 UAC 提权，一个弹窗完成停止+启动）"""
+    if not _is_windows():
+        return "仅支持 Windows 服务模式"
+    try:
+        # 用 bat 脚本实现 stop→wait→start，只需一次 UAC 提权
+        bat_content = (
+            '@echo off\n'
+            f'sc stop {_SERVICE_NAME}\n'
+            'timeout /t 3 /nobreak >nul\n'
+            f'sc start {_SERVICE_NAME}\n'
+        )
+        bat_path = _PROJECT_ROOT / "data" / "_restart_svc.bat"
+        bat_path.parent.mkdir(parents=True, exist_ok=True)
+        bat_path.write_text(bat_content, encoding="ascii")
+        ret = _shell_execute_elevated("cmd.exe", f'/c "{bat_path}"')
+        if ret <= 32:
+            return f"提权失败（返回值 {ret}），请手动以管理员身份运行重启操作"
+        return "已请求重启服务，请确认 UAC 弹窗"
+    except Exception as e:
+        return f"重启异常: {e}"
 
 
 def service_install() -> str:
-    """注册 Windows 服务（需管理员权限）
+    """注册 Windows 服务（通过 UAC 提权）
 
     通过 UAC 提权执行 python windows_service.py install
     """
@@ -202,23 +207,20 @@ def service_install() -> str:
         )
         if ret <= 32:
             return f"提权失败（返回值 {ret}），请手动以管理员身份运行: python windows_service.py install"
-        time.sleep(3)
-        if is_service_installed():
-            return "Windows 服务注册成功"
-        return "服务注册可能未成功，请检查 UAC 是否已确认"
+        return "已请求注册服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"注册异常: {e}"
 
 
 def service_remove() -> str:
-    """卸载 Windows 服务（需管理员权限）"""
+    """卸载 Windows 服务（通过 UAC 提权）"""
     if not _is_windows():
         return "仅支持 Windows 服务模式"
     try:
-        # 先停止
+        # 如果服务正在运行，先触发 UAC 停止
         if get_service_status() == "running":
-            service_stop()
-            time.sleep(2)
+            _shell_execute_elevated("sc.exe", f"stop {_SERVICE_NAME}")
+            time.sleep(3)
         script = _PROJECT_ROOT / "windows_service.py"
         ret = _shell_execute_elevated(
             sys.executable,
@@ -226,35 +228,28 @@ def service_remove() -> str:
         )
         if ret <= 32:
             return "提权失败，请手动以管理员身份运行: python windows_service.py remove"
-        time.sleep(3)
-        if not is_service_installed():
-            return "Windows 服务已卸载"
-        return "服务卸载可能未成功，请检查 UAC 是否已确认"
+        return "已请求卸载服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"卸载异常: {e}"
 
 
 def service_configure_failure() -> str:
-    """配置服务崩溃自动重启策略（需管理员权限）"""
+    """配置服务崩溃自动重启策略（通过 UAC 提权）"""
     if not _is_windows():
         return "仅支持 Windows 服务模式"
     try:
         # 通过 bat 脚本以管理员身份执行 sc failure
-        bat_content = '@echo off\nsc failure ShineHeMCP reset= 86400 actions= restart/5000/restart/10000/restart/30000\n'
+        bat_content = (
+            '@echo off\n'
+            f'sc failure {_SERVICE_NAME} reset= 86400 actions= restart/5000/restart/10000/restart/30000\n'
+        )
         bat_path = _PROJECT_ROOT / "data" / "_set_failure.bat"
         bat_path.parent.mkdir(parents=True, exist_ok=True)
         bat_path.write_text(bat_content, encoding="ascii")
-        ret = _shell_execute_elevated(
-            "cmd.exe",
-            f'/c "{bat_path}"',
-        )
+        ret = _shell_execute_elevated("cmd.exe", f'/c "{bat_path}"')
         if ret <= 32:
-            return "提权失败，请手动以管理员身份运行: sc.exe failure ShineHeMCP reset= 86400 actions= restart/5000/restart/10000/restart/30000"
-        time.sleep(3)
-        fc = get_service_failure_config()
-        if fc.get("configured"):
-            return "崩溃重启策略配置成功（5s/10s/30s 自动重启）"
-        return "策略配置可能未成功，请检查 UAC 是否已确认"
+            return "提权失败，请手动以管理员身份运行: sc failure ShineHeMCP reset= 86400 actions= restart/5000/restart/10000/restart/30000"
+        return "已请求配置崩溃重启策略，请确认 UAC 弹窗"
     except Exception as e:
         return f"配置异常: {e}"
 
