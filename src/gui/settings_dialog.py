@@ -187,7 +187,98 @@ class SettingsDialog(QDialog):
         appearance_form.addRow(hint_appearance)
         tabs.addTab(appearance_tab, "外观")
 
-        # ---- 图谱后端设置 ----
+        # ---- MCP 工具配置档 ----
+        from src.mcp.tool_profiles import PROFILE_INFO
+
+        self._profile_info = PROFILE_INFO
+
+        mcp_tab = QWidget()
+        mcp_outer = QVBoxLayout(mcp_tab)
+        mcp_outer.setContentsMargins(0, 0, 0, 0)
+        mcp_outer.setSpacing(0)
+
+        mcp_scroll = QScrollArea()
+        mcp_scroll.setWidgetResizable(True)
+        mcp_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        mcp_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+        mcp_container = QWidget()
+        mcp_layout = QVBoxLayout(mcp_container)
+        mcp_layout.setContentsMargins(12, 12, 12, 12)
+        mcp_layout.setSpacing(12)
+
+        # 档位选择
+        profile_group = QGroupBox("MCP 工具配置档")
+        profile_group.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        profile_form = QFormLayout(profile_group)
+
+        self.mcp_profile_combo = QComboBox()
+        for key in ("core", "extended", "admin", "full", "legacy"):
+            self.mcp_profile_combo.addItem(self._profile_info[key]["label"], key)
+        self.mcp_profile_combo.currentIndexChanged.connect(self._on_mcp_profile_changed)
+        profile_form.addRow("档位选择：", self.mcp_profile_combo)
+
+        mcp_layout.addWidget(profile_group)
+
+        # 档位详情
+        self._mcp_detail_group = QGroupBox("当前档位详情")
+        self._mcp_detail_group.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        detail_form = QFormLayout(self._mcp_detail_group)
+        detail_form.setLabelAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
+
+        self._mcp_summary_label = QLabel("—")
+        self._mcp_summary_label.setWordWrap(True)
+        self._mcp_scope_label = QLabel("—")
+        self._mcp_scope_label.setWordWrap(True)
+        self._mcp_scope_label.setObjectName("hintLabel")
+        self._mcp_usecase_label = QLabel("—")
+        self._mcp_usecase_label.setWordWrap(True)
+        self._mcp_writes_label = QLabel("—")
+        self._mcp_writes_label.setWordWrap(True)
+        self._mcp_writes_label.setObjectName("hintLabel")
+
+        detail_form.addRow("概述：", self._mcp_summary_label)
+        detail_form.addRow("工具范围：", self._mcp_scope_label)
+        detail_form.addRow("适用场景：", self._mcp_usecase_label)
+        detail_form.addRow("写权限：", self._mcp_writes_label)
+
+        mcp_layout.addWidget(self._mcp_detail_group)
+
+        # 辅助开关
+        switches_group = QGroupBox("辅助开关")
+        switches_group.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        switches_layout = QVBoxLayout(switches_group)
+
+        self.mcp_enable_aliases = QCheckBox("启用 legacy 别名(注册 kb.search / kb.ask 等命名空间别名)")
+        self.mcp_enable_experimental = QCheckBox("启用 experimental 工具(Wiki、图谱、Agent Memory)")
+        switches_layout.addWidget(self.mcp_enable_aliases)
+        switches_layout.addWidget(self.mcp_enable_experimental)
+
+        switches_hint = QLabel(
+            "说明：legacy 别名仅在客户端依赖 kb.* 命名时打开;"
+            "experimental 工具默认隐藏,启用后会暴露 Wiki / 图谱 / Agent Memory 相关工具(对应需求时再开)。"
+        )
+        switches_hint.setObjectName("hintLabel")
+        switches_hint.setWordWrap(True)
+        switches_layout.addWidget(switches_hint)
+
+        mcp_layout.addWidget(switches_group)
+
+        hint_mcp = QLabel(
+            "说明:修改配置档后需重启 MCP server 才能生效(关闭并重新启动侧边栏 MCP 进程,"
+            "或重启 Windows 服务)。\n"
+            "当前活跃档位可通过任何 MCP 客户端调用 `kb_capabilities` 工具查看。"
+        )
+        hint_mcp.setObjectName("hintLabel")
+        hint_mcp.setWordWrap(True)
+        mcp_layout.addWidget(hint_mcp)
+
+        mcp_layout.addStretch()
+        mcp_scroll.setWidget(mcp_container)
+        mcp_outer.addWidget(mcp_scroll)
+        tabs.addTab(mcp_tab, "MCP")
+
+        # 图谱后端设置
         graph_tab = QWidget()
         graph_outer = QVBoxLayout(graph_tab)
         graph_outer.setContentsMargins(0, 0, 0, 0)
@@ -484,6 +575,22 @@ class SettingsDialog(QDialog):
         self.neo4j_password.setText(Config.get("graph_backend.password", ""))
         self.neo4j_database.setText(Config.get("graph_backend.database", "neo4j"))
 
+        # MCP 工具配置档
+        mcp_profile = Config.get("mcp.tool_profile", "full") or "full"
+        if mcp_profile not in {"core", "extended", "admin", "full", "legacy"}:
+            mcp_profile = "full"
+        midx = self.mcp_profile_combo.findData(mcp_profile)
+        if midx >= 0:
+            self.mcp_profile_combo.setCurrentIndex(midx)
+        # 触发详情区刷新(防止首次加载时未联动)
+        self._on_mcp_profile_changed()
+        self.mcp_enable_aliases.setChecked(
+            bool(Config.get("mcp.enable_legacy_aliases", mcp_profile == "legacy"))
+        )
+        self.mcp_enable_experimental.setChecked(
+            bool(Config.get("mcp.experimental_tools_enabled", False))
+        )
+
     def _save(self):
         if not self.llm_provider.text().strip() or not self.llm_base_url.text().strip():
             QMessageBox.warning(self, "提示", "请至少填写 LLM 的供应商名称和 API 地址。")
@@ -540,6 +647,22 @@ class SettingsDialog(QDialog):
             Config.set("graph_backend.password", self.neo4j_password.text().strip())
             Config.set("graph_backend.database", self.neo4j_database.text().strip() or "neo4j")
 
+        # 保存 MCP 配置档(先取旧值再 set,便于判断是否需要重启提示)
+        new_profile = self.mcp_profile_combo.currentData() or "full"
+        new_aliases = self.mcp_enable_aliases.isChecked()
+        new_experimental = self.mcp_enable_experimental.isChecked()
+        old_profile = Config.get("mcp.tool_profile", "full")
+        old_aliases = bool(Config.get("mcp.enable_legacy_aliases", False))
+        old_experimental = bool(Config.get("mcp.experimental_tools_enabled", False))
+        mcp_changed = (
+            new_profile != old_profile
+            or new_aliases != old_aliases
+            or new_experimental != old_experimental
+        )
+        Config.set("mcp.tool_profile", new_profile)
+        Config.set("mcp.enable_legacy_aliases", new_aliases)
+        Config.set("mcp.experimental_tools_enabled", new_experimental)
+
         Config.save()
 
         # 立即应用主题
@@ -548,7 +671,15 @@ class SettingsDialog(QDialog):
         from src.gui.theme import apply
         apply(QApplication.instance())
 
-        QMessageBox.information(self, "已保存", "设置已保存并生效。")
+        if mcp_changed:
+            QMessageBox.information(
+                self, "已保存",
+                "设置已保存。\n\n"
+                "MCP 配置档已变更,需重启 MCP server 才能生效("
+                "关闭并重新启动侧边栏 MCP 进程,或重启 Windows 服务)。"
+            )
+        else:
+            QMessageBox.information(self, "已保存", "设置已保存并生效。")
         self.accept()
 
     # ---- 服务管理 ----
@@ -670,6 +801,19 @@ class SettingsDialog(QDialog):
         is_neo4j = self.graph_provider.currentData() == "neo4j"
         self._neo4j_group.setVisible(is_neo4j)
         self._neo4j_svc_group.setVisible(is_neo4j)
+
+    # ---- MCP 配置档 ----
+
+    def _on_mcp_profile_changed(self):
+        """档位切换时刷新详情区"""
+        key = self.mcp_profile_combo.currentData() or "full"
+        info = self._profile_info.get(key)
+        if not info:
+            return
+        self._mcp_summary_label.setText(info["summary"])
+        self._mcp_scope_label.setText(info["scope"])
+        self._mcp_usecase_label.setText(info["use_case"])
+        self._mcp_writes_label.setText(info["writes"])
 
     def _refresh_neo4j_status(self):
         """刷新 Neo4j 状态显示"""
