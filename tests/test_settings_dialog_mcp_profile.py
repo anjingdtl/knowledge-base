@@ -82,6 +82,7 @@ def settings_dialog(qapp, tmp_path, monkeypatch):
         "llm": {"provider": "openai", "base_url": "https://api.openai.com/v1"},
         "appearance": {"theme": "dark", "font_size": 14},
         "graph_backend": {"provider": "sqlite"},
+        "wiki": {"enabled": False},
     }
     monkeypatch.setattr(Config, "_default_instance", isolated)
 
@@ -114,8 +115,36 @@ class TestMcpTabPresent:
         assert PROFILE_INFO["legacy"]["summary"] in settings_dialog._mcp_summary_label.text()
 
     def test_aux_switches_exist(self, settings_dialog):
-        # 两个辅助开关存在且默认未勾选
+        # 三个辅助开关存在且默认未勾选
         assert settings_dialog.mcp_enable_aliases is not None
         assert settings_dialog.mcp_enable_experimental is not None
+        assert settings_dialog.mcp_enable_wiki is not None
         assert settings_dialog.mcp_enable_aliases.isChecked() is False
         assert settings_dialog.mcp_enable_experimental.isChecked() is False
+        assert settings_dialog.mcp_enable_wiki.isChecked() is False
+
+
+class TestWikiSwitch:
+    """wiki.enabled 总开关 —— 此前无任何 UI 可启用它,导致体检/死链修复恒报未启用。"""
+
+    def test_wiki_switch_reflects_config(self, settings_dialog):
+        # fixture 中 wiki.enabled = False
+        assert settings_dialog.mcp_enable_wiki.isChecked() is False
+
+    def test_wiki_switch_persists_on_save(self, settings_dialog, monkeypatch):
+        from src.gui import settings_dialog as sd_mod
+        from src.gui import theme as theme_mod
+        from src.utils.config import Config
+
+        # 屏蔽真实写盘、主题重应用、弹窗、关闭对话框等副作用
+        monkeypatch.setattr(Config, "save", lambda *a, **kw: None)
+        monkeypatch.setattr(theme_mod, "apply", lambda *a, **kw: None)
+        monkeypatch.setattr(sd_mod.QMessageBox, "information", lambda *a, **kw: None)
+        monkeypatch.setattr(sd_mod.QMessageBox, "warning", lambda *a, **kw: None)
+        monkeypatch.setattr(settings_dialog, "accept", lambda *a, **kw: None)
+
+        settings_dialog.mcp_enable_wiki.setChecked(True)
+        settings_dialog._save()
+
+        # wiki.enabled 应被持久化到 Config(操作 _default_instance = isolated)
+        assert Config.get("wiki.enabled", False) is True

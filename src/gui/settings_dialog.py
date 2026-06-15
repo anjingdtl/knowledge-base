@@ -251,12 +251,16 @@ class SettingsDialog(QDialog):
 
         self.mcp_enable_aliases = QCheckBox("启用 legacy 别名(注册 kb.search / kb.ask 等命名空间别名)")
         self.mcp_enable_experimental = QCheckBox("启用 experimental 工具(Wiki、图谱、Agent Memory)")
+        self.mcp_enable_wiki = QCheckBox("启用 Wiki 系统(知识体检、死链修复、自动编译)")
         switches_layout.addWidget(self.mcp_enable_aliases)
         switches_layout.addWidget(self.mcp_enable_experimental)
+        switches_layout.addWidget(self.mcp_enable_wiki)
 
         switches_hint = QLabel(
             "说明：legacy 别名仅在客户端依赖 kb.* 命名时打开;"
             "experimental 工具默认隐藏,启用后会暴露 Wiki / 图谱 / Agent Memory 相关工具(对应需求时再开)。"
+            "Wiki 系统是知识体检、死链修复、自动编译的总开关 —— "
+            "experimental 仅负责把工具暴露给 MCP 客户端,需同时打开此开关,后端才真正启用(即时生效,无需重启)。"
         )
         switches_hint.setObjectName("hintLabel")
         switches_hint.setWordWrap(True)
@@ -590,6 +594,9 @@ class SettingsDialog(QDialog):
         self.mcp_enable_experimental.setChecked(
             bool(Config.get("mcp.experimental_tools_enabled", False))
         )
+        self.mcp_enable_wiki.setChecked(
+            bool(Config.get("wiki.enabled", False))
+        )
 
     def _save(self):
         if not self.llm_provider.text().strip() or not self.llm_base_url.text().strip():
@@ -662,6 +669,7 @@ class SettingsDialog(QDialog):
         Config.set("mcp.tool_profile", new_profile)
         Config.set("mcp.enable_legacy_aliases", new_aliases)
         Config.set("mcp.experimental_tools_enabled", new_experimental)
+        Config.set("wiki.enabled", self.mcp_enable_wiki.isChecked())
 
         Config.save()
 
