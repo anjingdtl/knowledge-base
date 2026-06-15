@@ -2046,7 +2046,17 @@ def ask_with_query(
     container = _get_container()
     try:
         spec = QuerySpec.from_json(query_spec) if isinstance(query_spec, dict) else query_spec
-        pipeline = RagPipeline(pipeline_config=DEFAULT_PIPELINE_CONFIG, llm=container.llm)
+        pipeline = RagPipeline(
+            pipeline_config=DEFAULT_PIPELINE_CONFIG,
+            llm=container.llm,
+            deps={
+                "db": container.db,
+                "llm": container.llm,
+                "query_rewriter": container.query_rewriter,
+                "reranker": container.reranker,
+                "hybrid_search": container.hybrid_search,
+            },
+        )
         # 把 spec 注入 metadata，VectorSearchStage 会跳过自动路由直接使用
         # 使用 _run_async 安全执行，避免在已有事件循环中调用 asyncio.run()
         result = _run_async(

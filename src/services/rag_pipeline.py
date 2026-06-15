@@ -303,7 +303,7 @@ class RerankStage(PipelineStage):
             reranker = self._reranker or _get_container_service("reranker", LLMReranker)
             candidates_for_rerank = ctx.candidates[:top_n * 3]
             reranked = reranker.rerank(ctx.question, candidates_for_rerank)
-            ctx.reranked_results = [r for r in reranked if r.get("score", 0) >= min_score][:top_n]
+            ctx.reranked_results = [r for r in reranked if r.get("rerank_score", 0) >= min_score][:top_n]
         except Exception as e:
             logger.warning("Rerank failed: %s", e)
             ctx.metadata.setdefault("warnings", []).append(f"rerank_failed: {e}")
