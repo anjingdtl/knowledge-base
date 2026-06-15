@@ -295,28 +295,63 @@ def _is_pid_alive(pid: int) -> bool:
         return False
 
 
+def _wmic_commandline(pid: int) -> str:
+    """通过 wmic 读取进程命令行(老版 Windows)。
+
+    返回空串表示不可用:wmic 未安装(Win11 24H2+ 默认移除)、查询失败或无输出。
+    抛 OSError/TimeoutExpired 由上层 _read_process_commandline 捕获并回退。
+    """
+    result = _run_hidden(
+        ["wmic", "process", "where", f"processid={pid}",
+         "get", "commandline", "/value"],
+        capture_output=True, text=True, timeout=3,
+    )
+    if result.returncode != 0 or not result.stdout.strip():
+        return ""
+    return result.stdout
+
+
+def _cim_commandline(pid: int) -> str:
+    """通过 PowerShell Get-CimInstance 读取进程命令行(wmic 的现代替代)。
+
+    Win7+/PowerShell 3.0+ 内置,是 Win11 24H2+ 移除 wmic 后的回退路径。
+    """
+    result = _run_hidden(
+        ["powershell", "-NoProfile", "-NonInteractive", "-Command",
+         f"(Get-CimInstance Win32_Process -Filter \"ProcessId={pid}\").CommandLine"],
+        capture_output=True, text=True, timeout=5,
+    )
+    return result.stdout
+
+
+def _read_process_commandline(pid: int) -> str:
+    """读取进程命令行并转小写。
+
+    Windows 上 wmic 优先(快),不可用或失败时回退 PowerShell CIM。
+    两个探测点都拿不到有效输出则返回空串。
+    """
+    if _is_windows():
+        for probe in (_wmic_commandline, _cim_commandline):
+            try:
+                out = probe(pid)
+                if out.strip():
+                    return out.lower()
+            except (OSError, subprocess.TimeoutExpired):
+                continue
+        return ""
+    return (
+        Path(f"/proc/{pid}/cmdline")
+        .read_text(encoding="utf-8", errors="ignore")
+        .lower()
+    )
+
+
 def _pid_matches_mcp(pid: int) -> bool:
     """Confirm a PID file still points to this project's MCP process."""
     if not _is_pid_alive(pid):
         return False
     try:
-        if _is_windows():
-            result = _run_hidden(
-                [
-                    "wmic", "process", "where", f"processid={pid}",
-                    "get", "commandline", "/value",
-                ],
-                capture_output=True,
-                text=True,
-                timeout=3,
-            )
-            command_line = result.stdout.lower()
-        else:
-            command_line = (
-                Path(f"/proc/{pid}/cmdline")
-                .read_text(encoding="utf-8", errors="ignore")
-                .lower()
-            )
+        command_line = _read_process_commandline(pid)
         return "run_mcp.py" in command_line or "windows_service.py" in command_line
     except (OSError, subprocess.TimeoutExpired):
         return False
