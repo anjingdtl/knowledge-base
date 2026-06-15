@@ -1,5 +1,5 @@
 """设置对话框"""
-from PySide6.QtCore import Qt, QThread, QTimer, Signal
+from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -747,19 +747,29 @@ class SettingsDialog(QDialog):
     def _on_svc_start(self):
         from src.services.mcp_launcher import service_start
         msg = service_start()
-        QMessageBox.information(self, "服务操作", msg)
+        # UAC 是异步的，用户确认弹窗后再刷新状态
+        if "UAC" in msg:
+            QMessageBox.information(self, "服务操作", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+        else:
+            QMessageBox.information(self, "服务操作", msg)
         self._refresh_svc_status()
 
     def _on_svc_stop(self):
         from src.services.mcp_launcher import service_stop
         msg = service_stop()
-        QMessageBox.information(self, "服务操作", msg)
+        if "UAC" in msg:
+            QMessageBox.information(self, "服务操作", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+        else:
+            QMessageBox.information(self, "服务操作", msg)
         self._refresh_svc_status()
 
     def _on_svc_restart(self):
         from src.services.mcp_launcher import service_restart
         msg = service_restart()
-        QMessageBox.information(self, "服务操作", msg)
+        if "UAC" in msg:
+            QMessageBox.information(self, "服务操作", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+        else:
+            QMessageBox.information(self, "服务操作", msg)
         self._refresh_svc_status()
 
     def _on_svc_install(self):
@@ -777,9 +787,11 @@ class SettingsDialog(QDialog):
             return
         from src.services.mcp_launcher import service_install
         msg = service_install()
-        # 等待 UAC 完成后刷新
-        QTimer.singleShot(3000, self._refresh_svc_status)
-        QMessageBox.information(self, "服务安装", msg + "\n\n点击确定后刷新状态...")
+        if "UAC" in msg:
+            QMessageBox.information(self, "服务安装", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+        else:
+            QMessageBox.information(self, "服务安装", msg + "\n\n点击确定后刷新状态...")
+        self._refresh_svc_status()
 
     def _on_svc_remove(self):
         reply = QMessageBox.question(
@@ -793,14 +805,20 @@ class SettingsDialog(QDialog):
             return
         from src.services.mcp_launcher import service_remove
         msg = service_remove()
-        QTimer.singleShot(3000, self._refresh_svc_status)
-        QMessageBox.information(self, "服务卸载", msg + "\n\n点击确定后刷新状态...")
+        if "UAC" in msg:
+            QMessageBox.information(self, "服务卸载", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+        else:
+            QMessageBox.information(self, "服务卸载", msg + "\n\n点击确定后刷新状态...")
+        self._refresh_svc_status()
 
     def _on_svc_set_failure(self):
         from src.services.mcp_launcher import service_configure_failure
         msg = service_configure_failure()
-        QTimer.singleShot(3000, self._refresh_svc_status)
-        QMessageBox.information(self, "崩溃重启策略", msg)
+        if "UAC" in msg:
+            QMessageBox.information(self, "崩溃重启策略", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+        else:
+            QMessageBox.information(self, "崩溃重启策略", msg)
+        self._refresh_svc_status()
 
     # ---- 图谱后端管理 ----
 
