@@ -122,7 +122,7 @@ safety:
     enabled: true
     retention_days: 90
 mcp:
-  tool_profile: full        # core | extended | admin | full | legacy
+  tool_profile: extended    # core | extended | admin | full | legacy
   enable_legacy_aliases: false
   experimental_tools_enabled: false
   write_policy: ""          # 写操作安全策略: "" | preview_only | local_confirm | token_required | disabled

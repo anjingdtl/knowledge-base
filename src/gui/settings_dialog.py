@@ -576,9 +576,9 @@ class SettingsDialog(QDialog):
         self.neo4j_database.setText(Config.get("graph_backend.database", "neo4j"))
 
         # MCP 工具配置档
-        mcp_profile = Config.get("mcp.tool_profile", "full") or "full"
+        mcp_profile = Config.get("mcp.tool_profile", "extended") or "extended"
         if mcp_profile not in {"core", "extended", "admin", "full", "legacy"}:
-            mcp_profile = "full"
+            mcp_profile = "extended"
         midx = self.mcp_profile_combo.findData(mcp_profile)
         if midx >= 0:
             self.mcp_profile_combo.setCurrentIndex(midx)
@@ -648,10 +648,10 @@ class SettingsDialog(QDialog):
             Config.set("graph_backend.database", self.neo4j_database.text().strip() or "neo4j")
 
         # 保存 MCP 配置档(先取旧值再 set,便于判断是否需要重启提示)
-        new_profile = self.mcp_profile_combo.currentData() or "full"
+        new_profile = self.mcp_profile_combo.currentData() or "extended"
         new_aliases = self.mcp_enable_aliases.isChecked()
         new_experimental = self.mcp_enable_experimental.isChecked()
-        old_profile = Config.get("mcp.tool_profile", "full")
+        old_profile = Config.get("mcp.tool_profile", "extended")
         old_aliases = bool(Config.get("mcp.enable_legacy_aliases", False))
         old_experimental = bool(Config.get("mcp.experimental_tools_enabled", False))
         mcp_changed = (
@@ -806,7 +806,7 @@ class SettingsDialog(QDialog):
 
     def _on_mcp_profile_changed(self):
         """档位切换时刷新详情区"""
-        key = self.mcp_profile_combo.currentData() or "full"
+        key = self.mcp_profile_combo.currentData() or "extended"
         info = self._profile_info.get(key)
         if not info:
             return

@@ -70,7 +70,7 @@ class ProjectSetupService:
                 "max_tokens": 2048,
             },
             "mcp": {
-                "tool_profile": "full",
+                "tool_profile": "extended",
                 "write_policy": "disabled",
             },
             "rag": {

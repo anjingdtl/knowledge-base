@@ -150,15 +150,15 @@ class TestLegacyProfileSnapshot:
 class TestConfigCompatibility:
     """配置兼容规则测试。"""
 
-    def test_new_config_defaults_to_full(self):
-        """新配置缺省值为 full。"""
+    def test_new_config_defaults_to_extended(self):
+        """新配置缺省值为 extended。"""
         try:
             from src.mcp.tool_registry import resolve_tool_profile
             # 模拟无 mcp.tool_profile 的新配置
             profile = resolve_tool_profile({"mcp.tool_profile": None})
-            # 新配置（没有旧工具使用痕迹）应默认为 full
-            assert profile == "full", (
-                f"缺省 profile 应为 full，实际: {profile}"
+            # 新配置（没有旧工具使用痕迹）应默认为 extended
+            assert profile == "extended", (
+                f"缺省 profile 应为 extended，实际: {profile}"
             )
         except ImportError:
             pytest.skip("tool_registry 尚未实现（M1 阶段）")

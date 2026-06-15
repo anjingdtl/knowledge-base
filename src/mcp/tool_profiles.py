@@ -36,11 +36,11 @@ PROFILE_INFO: dict[str, dict[str, str]] = {
         "writes": "仅 index_path / reindex_all 触发写，并受 write_policy 控制。",
     },
     "extended": {
-        "label": "extended — 扩展档（20 个工具）",
-        "summary": "core + 高级查询能力（Query DSL、来源图谱、异步任务）。",
+        "label": "extended — 扩展档(20 个工具,推荐 / 默认)",
+        "summary": "core + 高级查询能力(Query DSL、来源图谱、异步任务)。",
         "scope": "在 core 基础上增加 search_fulltext / tags / route_query / execute_query / structured_query / explain_query / ask_with_query / get_source_graph / create_ingest_job / cancel_job",
-        "use_case": "需要结构化查询、证据链追溯、异步导入大文件的研究型 Agent。",
-        "writes": "与 core 一致（仅 index_path / reindex_all + 异步任务）。",
+        "use_case": "通用 AI 助手的推荐档:既保留只读检索的稳定面,又提供结构化查询、证据链追溯、异步导入大文件等研究型能力。",
+        "writes": "仅 index_path / reindex_all / create_ingest_job 触发写,受 write_policy 控制;不含增删改与撤销。",
     },
     "admin": {
         "label": "admin — 管理档（30 个工具）",
@@ -50,11 +50,11 @@ PROFILE_INFO: dict[str, dict[str, str]] = {
         "writes": "包含写工具，建议同时设 write_policy = preview_only 或 local_confirm。",
     },
     "full": {
-        "label": "full — 完整档（所有非 experimental 工具，推荐 / 默认）",
-        "summary": "暴露所有非 experimental 工具，开箱即用，无需手动切档。",
+        "label": "full — 完整档（所有非 experimental 工具）",
+        "summary": "暴露所有非 experimental 工具,功能最全。",
         "scope": "包含 core + extended + admin 的全部工具；Wiki / 图谱 / Agent Memory 工具仍需打开下方「实验性工具」开关才会出现。",
-        "use_case": "通用 AI 助手 + 知识库管理一体化的默认选择。",
-        "writes": "包含全部写工具，写入仍受 write_policy 与 HTTP 模式 allow_http_write 限制。",
+        "use_case": "需要在 AI 助手里直接增删改知识、跑操作审计的本地维护场景。",
+        "writes": "包含全部写工具,写入仍受 write_policy 与 HTTP 模式 allow_http_write 限制。",
     },
     "legacy": {
         "label": "legacy — 旧版兼容档（含命名空间别名）",

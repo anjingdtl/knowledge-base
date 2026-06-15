@@ -9,7 +9,7 @@
 [![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-full%20profile%20by%20default-orange.svg)](src/mcp/tool_profiles.py)
+[![MCP](https://img.shields.io/badge/MCP-extended%20profile%20by%20default-orange.svg)](src/mcp/tool_profiles.py)
 
 </div>
 
@@ -133,7 +133,7 @@ shinehe init --path D:\docs --client cursor
 
 `shinehe init --local` generates:
 - Ollama embedding/LLM configuration (`http://localhost:11434/v1`)
-- `mcp.tool_profile=full` (all non-experimental tools)
+- `mcp.tool_profile=extended` (20 tools: 10 core read tools + Query DSL / source graph / async ingest)
 - `mcp.write_policy=disabled` (read-only by default)
 - `rag.search_mode=blend` (vector + keyword)
 - `rag.parent_child.enabled=true` (context expansion)
@@ -166,7 +166,7 @@ python run_mcp.py
 
 ## Core MCP Tools
 
-The default `full` profile registers all non-experimental tools. The 10 core tools below are always exposed and optimized for AI agent retrieval (switch to `core` if you want only these):
+The default `extended` profile registers 20 tools: the 10 core retrieval tools listed below, plus Query DSL, source graph, and async ingest tooling. The 10 core tools are always exposed and optimized for AI agent retrieval (switch to `core` if you only want these):
 
 | Tool | Purpose | Side Effect |
 |------|---------|-------------|
@@ -181,7 +181,7 @@ The default `full` profile registers all non-experimental tools. The 10 core too
 | `list_jobs` | List indexing jobs | read |
 | `reindex_all` | Rebuild all indexes | write |
 
-Advanced tools (Query DSL, source graph, CRUD, Wiki, Graph, Agent Memory) ship in `extended`, `admin`, `full`, and `legacy` profiles. Since `full` is the new default, all non-experimental advanced tools are enabled out of the box. See [docs/advanced-features.md](docs/advanced-features.md).
+Advanced tools (CRUD, Wiki, Graph, Agent Memory) ship in `admin`, `full`, and `legacy` profiles. See [docs/advanced-features.md](docs/advanced-features.md).
 
 ## Retrieval Quality
 
