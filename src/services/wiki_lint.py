@@ -62,10 +62,6 @@ class WikiLint:
             linked_page_ids.add(link["source_page_id"])
             linked_page_ids.add(link["target_page_id"])
 
-        page_ids_set = {p["id"] for p in pages}
-        title_map = {p["id"]: p["title"] for p in pages}
-        {p["id"]: p for p in pages}
-
         for page in pages:
             findings_for_page = []
 
@@ -116,23 +112,27 @@ class WikiLint:
                     detail={"page_ids": ids},
                 ))
 
-        # 5. 损坏链接 — 指向不存在的 wiki_pages
-        for link in all_links:
-            if link["source_page_id"] not in page_ids_set or link["target_page_id"] not in page_ids_set:
-                report.findings.append(LintFinding(
-                    severity="error", category="broken_link",
-                    page_id=link.get("source_page_id", ""),
-                    page_title=title_map.get(link.get("source_page_id", ""), "未知"),
-                    message="链接指向不存在的页面",
-                    detail={
-                        "source": link.get("source_title", ""),
-                        "target": link.get("target_title", ""),
-                    },
-                ))
+        # 5. 损坏链接 — wiki_links 中物理悬空的记录(source/target 已被 purge 删除但链接残留)
+        #    status=deleted 的软删页面物理仍存在,不算悬空,不在此列。
+        dangling_links = Database.get_dangling_wiki_links()
+        for link in dangling_links:
+            src_id = link.get("source_page_id", "")
+            tgt_id = link.get("target_page_id", "")
+            src_title = link.get("source_title")
+            tgt_title = link.get("target_title")
+            report.findings.append(LintFinding(
+                severity="error", category="broken_link",
+                page_id=src_id,
+                page_title=src_title or "未知",
+                message="链接指向不存在的页面",
+                detail={
+                    "source": src_title or f"(已删除页面 {src_id[:8]})",
+                    "target": tgt_title or f"(已删除页面 {tgt_id[:8]})",
+                },
+            ))
 
         # 6. 内容死链 — content 中的 [[...]] 引用指向不存在的页面
         all_titles = {p["title"] for p in pages}
-        {p["title"]: p["id"] for p in pages}
         for page in pages:
             content = page.get("content", "") or ""
             dead_refs = []
