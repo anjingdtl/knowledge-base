@@ -20,6 +20,8 @@ class DisabledReranker:
     """No-op reranker that returns candidates unchanged."""
 
     def rerank(self, query: str, candidates: list[dict], top_n: int = 5) -> list[dict]:
+        for c in candidates[:top_n]:
+            c.setdefault("rerank_score", c.get("rrf_score", 0.5))
         return candidates[:top_n]
 
 
