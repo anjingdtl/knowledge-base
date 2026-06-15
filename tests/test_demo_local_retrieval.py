@@ -327,5 +327,7 @@ def test_demo_configuration_validation(temp_workdir):
     assert "write_policy" in content, "配置应该包含 write_policy"
 
     # 验证配置值合理性
-    assert "core" in content or "full" in content, "tool_profile 应该是有效值"
+    assert any(p in content for p in ("core", "extended", "admin", "full", "legacy")), (
+        "tool_profile 应该是有效值"
+    )
     assert "disabled" in content or "preview_only" in content, "write_policy 应该是有效值"

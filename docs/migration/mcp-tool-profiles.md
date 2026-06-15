@@ -3,13 +3,13 @@
 > From v1.3.0, ShineHeKnowledge uses configurable tool profiles to control which MCP tools are registered.
 > This guide helps existing users migrate from v1.2 (51 tools + 51 aliases) to the new profile system.
 >
-> **Update (v1.3.2+):** the default profile for brand-new configs has been changed from `core` to `full`. Existing configs are unaffected — only fresh `shinehe init` runs / blank configs see the new default.
+> **Update (v1.3.2+):** the default profile for brand-new configs is `extended` (20 tools: core retrieval + Query DSL + source graph + async ingest). Earlier short-lived defaults of `core` (v1.3.0–v1.3.1) and `full` (v1.3.2 RC) are superseded. Existing configs are unaffected — only fresh `shinehe init` runs / blank configs see the new default.
 
 ## What Changed
 
 | Before (v1.2) | After (v1.3) |
 |---------------|-------------|
-| 51 tools + 51 aliases always registered | Default `full` profile (all non-experimental tools) |
+| 51 tools + 51 aliases always registered | Default `extended` profile (20 tools) |
 | No profile concept | 5 profiles: core, extended, admin, full, legacy |
 | Aliases always on | Aliases only in `legacy` profile or explicit opt-in |
 | `write_policy` optional | `write_policy=disabled` by default for new configs |
@@ -18,7 +18,7 @@
 
 ### New Users
 
-No migration needed. `shinehe init` generates a config with `mcp.tool_profile: full`.
+No migration needed. `shinehe init` generates a config with `mcp.tool_profile: extended`.
 
 ### Existing Users (v1.2 config)
 
@@ -32,9 +32,9 @@ mcp:
   tool_profile: legacy
   enable_legacy_aliases: true
 
-# Option B: Adopt the new default — all non-experimental tools, no aliases
+# Option B: Adopt the new default — 20 tools, core retrieval + advanced query
 mcp:
-  tool_profile: full
+  tool_profile: extended
   enable_legacy_aliases: false
 
 # Option C: Minimal surface for AI agent retrieval
@@ -42,6 +42,11 @@ mcp:
   tool_profile: core
   enable_legacy_aliases: false
   write_policy: disabled
+
+# Option D: Power-user / local maintenance — all non-experimental tools
+mcp:
+  tool_profile: full
+  enable_legacy_aliases: false
 ```
 
 ## Profile Reference
@@ -54,7 +59,7 @@ mcp:
 
 ### `extended`
 
-core + 10 advanced tools:
+core + 10 advanced tools (**default profile for new configs from v1.3.2+**):
 
 `search_fulltext`, `tags`, `route_query`, `execute_query`, `structured_query`, `explain_query`, `ask_with_query`, `get_source_graph`, `create_ingest_job`, `cancel_job`
 
@@ -66,7 +71,7 @@ extended + 10 CRUD/audit tools:
 
 ### `full`
 
-All non-experimental tools (no Wiki/Graph/Memory unless `experimental_tools_enabled=true`). **Default profile for new configs from v1.3.2+.**
+All non-experimental tools (no Wiki/Graph/Memory unless `experimental_tools_enabled=true`).
 
 ### `legacy`
 
@@ -86,7 +91,7 @@ mcp:
 
 | Scenario | Behavior |
 |----------|----------|
-| New config (no `mcp:` section) | `full` profile |
+| New config (no `mcp:` section) | `extended` profile |
 | Old config (has `mcp:` but no `tool_profile`) | `legacy` profile (auto-detected) |
 | `enable_legacy_aliases: false` | No `kb.*` aliases registered |
 | `experimental_tools_enabled: false` | Wiki/Graph/Memory tools hidden |
@@ -108,7 +113,7 @@ Call `kb_capabilities` after connecting. It returns:
 
 ```json
 {
-  "tool_profile": "full",
+  "tool_profile": "extended",
   "write_policy": "disabled",
   "experimental_tools_enabled": false,
   "visible_tools": ["ask", "get_job", "index_path", ...],

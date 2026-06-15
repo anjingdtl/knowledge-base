@@ -255,7 +255,7 @@ rag:
   search_mode: hybrid
 
 mcp:
-  tool_profile: full
+  tool_profile: extended
   write_policy: disabled
 """
         config_path.write_text(config_content, encoding="utf-8")

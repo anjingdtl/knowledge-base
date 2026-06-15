@@ -156,15 +156,15 @@ Config → Database → VectorStore → BlockStore → Embedding/LLM → Reposit
 
 `src/mcp_server.py` 基于 FastMCP,通过 `src/mcp/tool_registry.py` 按配置档注册工具。
 
-**默认 full 配置档(所有非 experimental 工具):**
+**默认 extended 配置档(20 个工具:核心检索 + 高级查询):**
 
-10 个始终暴露的核心工具:
+10 个始终暴露的核心检索工具:
 - `ping`, `kb_capabilities`, `search`, `ask`, `read`
 - `list_knowledge`, `index_path`, `get_job`, `list_jobs`, `reindex_all`
 
-Full 还包含 extended/admin 的全部工具(Query DSL、来源图谱、CRUD、操作日志等)。Wiki/图谱/Agent Memory 需 `experimental_tools_enabled=true`。
+extended 在 core 基础上额外提供 Query DSL、来源图谱、异步导入等高级查询能力(共 20 个)。如需 CRUD、操作审计请切到 `admin`;如需所有非 experimental 工具请切到 `full`。Wiki/图谱/Agent Memory 需 `experimental_tools_enabled=true`。
 
-**配置档:** core / extended / admin / full(默认) / legacy
+**配置档:** core / extended(默认) / admin / full / legacy
 
 **资源：** 3 个（`kb://knowledge/{id}`、`kb://tags`、`kb://stats`）
 

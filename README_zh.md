@@ -9,7 +9,7 @@
 [![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-full%20profile%20by%20default-orange.svg)](src/mcp/tool_profiles.py)
+[![MCP](https://img.shields.io/badge/MCP-extended%20profile%20by%20default-orange.svg)](src/mcp/tool_profiles.py)
 
 </div>
 
@@ -98,7 +98,7 @@ shinehe mcp --transport stdio
 `shinehe watch D:\docs` 监听你的文档目录，自动重新索引新增、修改或删除的文件，支持防抖和基于哈希的差异检测。
 
 ### MCP 工具配置档
-默认 `full` 配置档暴露所有非 experimental 工具供 AI 助手使用。可通过 `config.yaml` 切换到更精简的 `core`、`extended`、`admin` 或完全兼容旧版的 `legacy` 配置档。
+默认 `extended` 配置档暴露 20 个工具:10 个稳定的核心检索工具 + 高级查询能力(Query DSL、来源图谱、异步导入)。需要更精简或更全面的场景可在 `config.yaml` 切换到 `core`、`admin`、`full` 或 `legacy`。
 
 ### 本地重排序器（可选）
 可插拔的重排序器提供者：API 方式、本地交叉编码器（sentence-transformers）、LLM 降级或禁用。失败时优雅降级。
@@ -133,7 +133,7 @@ shinehe init --path D:\docs --client cursor
 
 `shinehe init --local` 生成：
 - Ollama embedding/LLM 配置（`http://localhost:11434/v1`）
-- `mcp.tool_profile=full`（所有非 experimental 工具）
+- `mcp.tool_profile=extended`(20 个工具:10 个核心检索 + Query DSL / 来源图谱 / 异步导入)
 - `mcp.write_policy=disabled`（默认只读）
 - `rag.search_mode=blend`（向量 + 关键词）
 - `rag.parent_child.enabled=true`（上下文扩展）
@@ -166,7 +166,7 @@ python run_mcp.py
 
 ## 核心 MCP 工具
 
-默认 `full` 配置档注册所有非 experimental 工具。下表为始终暴露的 10 个核心工具,专为 AI 助手检索优化(如只需这 10 个,可在 `config.yaml` 切换到 `core`):
+默认 `extended` 配置档注册 20 个工具:下表 10 个核心检索工具 + Query DSL、来源图谱、异步导入等高级查询能力。核心 10 个工具始终暴露,专为 AI 助手检索优化(如只需这 10 个,可在 `config.yaml` 切换到 `core`):
 
 | 工具 | 用途 | 副作用 |
 |------|------|--------|
@@ -181,7 +181,7 @@ python run_mcp.py
 | `list_jobs` | 列出索引任务 | 只读 |
 | `reindex_all` | 重建所有索引 | 写 |
 
-高级工具（Query DSL、来源图谱、CRUD、Wiki、图谱、Agent Memory）分布在 `extended`、`admin`、`full` 和 `legacy` 配置档中。因新默认值为 `full`,所有非 experimental 高级工具开箱即可用。参见 [docs/advanced-features.md](docs/advanced-features.md)。
+高级工具（CRUD、Wiki、图谱、Agent Memory）分布在 `admin`、`full` 和 `legacy` 配置档中。参见 [docs/advanced-features.md](docs/advanced-features.md)。
 
 ## 检索质量
 

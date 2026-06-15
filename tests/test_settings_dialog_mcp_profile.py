@@ -44,11 +44,11 @@ class TestProfileInfoMetadata:
                 f"{key} 的 label 应包含档位名:{info['label']!r}"
             )
 
-    def test_full_is_marked_as_default(self):
-        """full 档应标识为默认/推荐(与新默认值保持一致)。"""
-        label = PROFILE_INFO["full"]["label"]
+    def test_extended_is_marked_as_default(self):
+        """extended 档应标识为默认/推荐(与新默认值保持一致)。"""
+        label = PROFILE_INFO["extended"]["label"]
         assert "默认" in label or "推荐" in label, (
-            f"full 的 label 应标注为默认或推荐:{label!r}"
+            f"extended 的 label 应标注为默认或推荐:{label!r}"
         )
 
 
