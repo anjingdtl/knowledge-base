@@ -150,16 +150,15 @@ class TestLegacyProfileSnapshot:
 class TestConfigCompatibility:
     """配置兼容规则测试。"""
 
-    def test_new_config_defaults_to_core(self):
-        """新配置缺省值为 core。"""
+    def test_new_config_defaults_to_full(self):
+        """新配置缺省值为 full。"""
         try:
             from src.mcp.tool_registry import resolve_tool_profile
             # 模拟无 mcp.tool_profile 的新配置
             profile = resolve_tool_profile({"mcp.tool_profile": None})
-            # 新配置（没有旧工具使用痕迹）应默认为 core
-            # 注意：具体逻辑在 M1 实现时确定
-            assert profile in ("core", "legacy"), (
-                f"缺省 profile 应为 core 或 legacy，实际: {profile}"
+            # 新配置（没有旧工具使用痕迹）应默认为 full
+            assert profile == "full", (
+                f"缺省 profile 应为 full，实际: {profile}"
             )
         except ImportError:
             pytest.skip("tool_registry 尚未实现（M1 阶段）")

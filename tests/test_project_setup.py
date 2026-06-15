@@ -38,7 +38,7 @@ class TestBuildConfig:
         service = ProjectSetupService()
         config = service.build_config({"local": True})
 
-        assert config["mcp"]["tool_profile"] == "core"
+        assert config["mcp"]["tool_profile"] == "full"
         assert config["mcp"]["write_policy"] == "disabled"
 
     def test_local_config_rag_settings(self):

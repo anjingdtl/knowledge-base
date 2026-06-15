@@ -105,7 +105,7 @@ def resolve_tool_profile(config_dict: dict) -> str:
     Rules:
     - If mcp.tool_profile is explicitly set, use it
     - If config has mcp settings but no tool_profile, default to "legacy" (old user)
-    - If config has no mcp settings at all, default to "core" (new user)
+    - If config has no mcp settings at all, default to "full" (new user)
     """
     profile: str = config_dict.get("mcp.tool_profile")  # type: ignore[assignment]
     if profile and profile in PROFILES:
@@ -120,4 +120,4 @@ def resolve_tool_profile(config_dict: dict) -> str:
 
     if has_mcp_settings:
         return "legacy"
-    return "core"
+    return "full"
