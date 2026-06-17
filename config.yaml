@@ -41,3 +41,5 @@ storage:
   graph_dir: graph
 wiki:
   enabled: true
+  auto_save_answer: false
+  auto_save_min_length: 500
