@@ -1601,6 +1601,8 @@ class Database(metaclass=_DatabaseMeta):
     # ---- Wiki Pages ----
 
     def insert_wiki_page(self, page: dict) -> str:
+        # 自动补齐 complex_anomaly 默认值，避免旧调用路径缺参报错
+        page.setdefault("complex_anomaly", "")
         conn = self.get_conn()
         conn.execute(
             """INSERT INTO wiki_pages
