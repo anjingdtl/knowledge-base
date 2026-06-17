@@ -849,7 +849,7 @@ class WikiView(QWidget):
             return
 
         # 先快速扫描死链数量，让用户确认
-        from src.services.wiki_compiler import _WIKI_LINK_RE
+        from src.services.wiki_compiler import _WIKI_LINK_RE, _strip_pipe
         pages = Database.list_wiki_pages(limit=500)
         if not pages:
             QMessageBox.information(self, "修复死链", "当前没有 Wiki 页面，无需修复。")
@@ -860,7 +860,7 @@ class WikiView(QWidget):
         for page in pages:
             content = page.get("content", "") or ""
             for m in _WIKI_LINK_RE.finditer(content):
-                if m.group(1).strip() not in all_titles:
+                if _strip_pipe(m.group(1).strip()) not in all_titles:
                     dead_count += 1
 
         if dead_count == 0:
