@@ -185,14 +185,15 @@ def fix_dead_links(data: FixDeadLinksReq, container: AppContainer = Depends(get_
     from src.services.wiki_compiler import WikiCompiler
     compiler = WikiCompiler()
     if data.dry_run:
-        # dry_run: 仅扫描死链，不调用 LLM
+        # dry_run: 仅扫描死链 + stale，不调用 LLM
         from src.services.db import Database
         from src.services.wiki_compiler import _WIKI_LINK_RE
         pages = Database.list_wiki_pages(limit=500)
         if not pages:
-            return {"status": "empty", "scanned": 0, "dead_links": []}
+            return {"status": "empty", "scanned": 0, "dead_links": [], "stale_pages": 0}
         all_titles = {p["title"] for p in pages}
         dead_links = []
+        stale_pages = []
         for page in pages[:data.max_pages]:
             content = page.get("content", "") or ""
             for m in _WIKI_LINK_RE.finditer(content):
@@ -203,11 +204,29 @@ def fix_dead_links(data: FixDeadLinksReq, container: AppContainer = Depends(get_
                         "source_title": page["title"],
                         "dead_ref": ref,
                     })
+            # stale 检查
+            source_ids_raw = page.get("source_ids", "[]")
+            try:
+                import json as _json
+                source_ids = _json.loads(source_ids_raw) if isinstance(source_ids_raw, str) else source_ids_raw
+            except (_json.JSONDecodeError, TypeError):
+                source_ids = []
+            if source_ids:
+                existing = Database.get_knowledge_batch(source_ids)
+                deleted_ids = [sid for sid in source_ids if sid not in existing]
+                if deleted_ids:
+                    stale_pages.append({
+                        "page_id": page["id"],
+                        "page_title": page["title"],
+                        "deleted_source_ids": deleted_ids,
+                    })
         return {
             "status": "preview",
             "scanned": min(len(pages), data.max_pages),
             "total_dead_links": len(dead_links),
             "dead_links": dead_links,
+            "stale_pages": len(stale_pages),
+            "stale_details": stale_pages,
         }
     else:
         result = compiler.repair_dead_references(max_pages=data.max_pages)

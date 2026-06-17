@@ -1499,10 +1499,11 @@ def wiki_lint() -> dict:
 
 @_define_tool(
     name="fix_dead_references",
-    description="使用 LLM 智能修复 Wiki 页面中 [[...]] 死链。"
+    description="使用 LLM 智能修复 Wiki 页面中 [[...]] 死链，并自动清理过时的 source_ids。"
     "对每个死链分析上下文后选择修复策略：重定向到已有页面、创建占位页面或移除引用。"
+    "同时自动清理 source_ids 中指向已删除知识条目的过时引用（lint 报告的 stale 问题）。"
     "修复前会先尝试解析有效引用写入 wiki_links 表。"
-    "注意：会消耗 LLM 调用次数（每个含死链的页面约 1 次 LLM 调用）。",
+    "注意：死链修复会消耗 LLM 调用次数（每个含死链的页面约 1 次 LLM 调用）。",
     annotations={'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
     group="wiki", side_effect="write",
     experimental=True,
@@ -1526,12 +1527,17 @@ def fix_dead_references(max_pages: int = 50, dry_run: bool = False) -> dict:
     link_result = resolve_all_content_links()
 
     if dry_run:
-        # 仅报告，不修复
+        # 仅报告，不修复（同时包含 stale 扫描结果）
+        from src.services.wiki_lint import WikiLint
+        lint_report = WikiLint().run()
+        stale_findings = [f for f in lint_report.get("findings", []) if f.get("category") == "stale"]
         return ok({
             "mode": "dry_run",
             "links_created": link_result["links_created"],
             "dead_reference_count": link_result["dead_reference_count"],
             "dead_references": link_result["dead_references"],
+            "stale_pages": len(stale_findings),
+            "stale_details": stale_findings,
         })
 
     # 第二步：LLM 修复
