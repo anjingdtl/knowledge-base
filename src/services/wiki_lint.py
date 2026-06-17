@@ -104,9 +104,11 @@ class WikiLint:
             if not findings_for_page:
                 report.healthy_pages += 1
 
-        # 4. 重复页面 — 相同标题
+        # 4. 重复页面 — 相同标题（排除 deprecated/deleted，已废弃的属于正常历史）
         title_counts: dict[str, list[str]] = {}
         for page in pages:
+            if page.get("status") in ("deprecated", "deleted"):
+                continue
             title_counts.setdefault(page["title"], []).append(page["id"])
         for title, ids in title_counts.items():
             if len(ids) > 1:
@@ -229,9 +231,11 @@ class WikiLint:
                     "status": page.get("status", ""),
                 })
 
-        # 3. duplicate
+        # 3. duplicate（排除 deprecated/deleted）
         title_counts: dict[str, list[str]] = {}
         for page in pages:
+            if page.get("status") in ("deprecated", "deleted"):
+                continue
             title_counts.setdefault(page["title"], []).append(page["id"])
         for title, ids in title_counts.items():
             if len(ids) > 1:
