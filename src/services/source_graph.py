@@ -300,6 +300,38 @@ def _build_source_graph_sqlite(sources, db, max_nodes: int) -> dict:
                         )
                 add_edge(block_id, target_id, ref["ref_type"] or "link")
 
+    # 补充：从 knowledge_graph_relations 加载 LLM 发现的语义关系边
+    if knowledge_ids:
+        try:
+            placeholders = ",".join("?" for _ in knowledge_ids)
+            kg_rows = conn.execute(
+                f"""SELECT source_knowledge_id, target_knowledge_id, relation_type
+                    FROM knowledge_graph_relations
+                    WHERE source_knowledge_id IN ({placeholders})
+                       OR target_knowledge_id IN ({placeholders})""",
+                list(knowledge_ids) + list(knowledge_ids),
+            ).fetchall()
+            for r in kg_rows:
+                src_kid = r["source_knowledge_id"]
+                tgt_kid = r["target_knowledge_id"]
+                rel_type = r["relation_type"] or "related"
+                # 确保相关知识节点也在图中
+                if src_kid not in knowledge_cache:
+                    batch = db.get_knowledge_batch([src_kid])
+                    knowledge_cache.update(batch)
+                if tgt_kid not in knowledge_cache:
+                    batch = db.get_knowledge_batch([tgt_kid])
+                    knowledge_cache.update(batch)
+                src_item = knowledge_cache.get(src_kid)
+                tgt_item = knowledge_cache.get(tgt_kid)
+                if src_item:
+                    add_node(src_kid, "knowledge", src_item.get("title", src_kid))
+                if tgt_item:
+                    add_node(tgt_kid, "knowledge", tgt_item.get("title", tgt_kid))
+                add_edge(src_kid, tgt_kid, rel_type)
+        except Exception:
+            pass  # knowledge_graph_relations 表可能不存在
+
     return {
         "nodes": list(nodes.values()),
         "edges": list(edges.values()),
