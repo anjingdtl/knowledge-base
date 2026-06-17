@@ -22,6 +22,11 @@ logger = logging.getLogger(__name__)
 _WIKI_LINK_RE = re.compile(r"\[\[([^]\n#]+)(?:#([^]\n]+))?\]\]")
 
 
+def _strip_pipe(ref_title: str) -> str:
+    """去除 Wiki 链接中的管道符显示文本，如 [[目标|显示]] → 目标"""
+    return ref_title.split("|")[0].strip()
+
+
 def try_wiki_compile(knowledge_id: str):
     """尝试对已导入的知识条目执行 Wiki 编译（供 MCP/API 层共享调用）"""
     if not Config.get("wiki.enabled", False) or not Config.get("wiki.auto_compile", True):
@@ -53,7 +58,7 @@ def resolve_all_content_links() -> dict:
 
         seen_targets = set()
         for match in _WIKI_LINK_RE.finditer(content):
-            ref_title = match.group(1).strip()
+            ref_title = _strip_pipe(match.group(1).strip())
             if ref_title in seen_targets or ref_title == page.get("title", ""):
                 continue
             seen_targets.add(ref_title)
@@ -443,7 +448,7 @@ class WikiCompiler:
 
         seen_targets = set()
         for match in _WIKI_LINK_RE.finditer(content):
-            ref_title = match.group(1).strip()
+            ref_title = _strip_pipe(match.group(1).strip())
             if ref_title in seen_targets:
                 continue
             seen_targets.add(ref_title)
@@ -528,7 +533,7 @@ class WikiCompiler:
             dead_refs = []
             seen = set()
             for match in _WIKI_LINK_RE.finditer(content):
-                ref_title = match.group(1).strip()
+                ref_title = _strip_pipe(match.group(1).strip())
                 if ref_title not in seen and ref_title not in all_titles:
                     seen.add(ref_title)
                     dead_refs.append(ref_title)

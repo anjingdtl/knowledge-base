@@ -13,6 +13,11 @@ logger = logging.getLogger(__name__)
 _WIKI_LINK_RE = re.compile(r"\[\[([^]\n#]+)(?:#([^]\n]+))?\]\]")
 
 
+def _strip_pipe(ref_title: str) -> str:
+    """去除 Wiki 链接中的管道符显示文本，如 [[目标|显示]] → 目标"""
+    return ref_title.split("|")[0].strip()
+
+
 @dataclass
 class LintFinding:
     severity: str          # error | warning | info
@@ -137,7 +142,7 @@ class WikiLint:
             content = page.get("content", "") or ""
             dead_refs = []
             for match in _WIKI_LINK_RE.finditer(content):
-                ref_title = match.group(1).strip()
+                ref_title = _strip_pipe(match.group(1).strip())
                 if ref_title not in all_titles:
                     dead_refs.append(ref_title)
             if dead_refs:
