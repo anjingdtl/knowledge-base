@@ -59,13 +59,14 @@ def resolve_all_content_links() -> dict:
             seen_targets.add(ref_title)
 
             target = Database.get_wiki_page_by_title(ref_title)
-            if target and target["id"] != page_id:
+            # 只匹配非 deleted 状态的页面，与 lint 判定一致
+            if target and target["id"] != page_id and target.get("status") != "deleted":
                 try:
                     Database.add_wiki_link(page_id, target["id"], "references", 1.0)
                     total_links += 1
                 except Exception as e:
                     logger.warning("Failed to add content link: %s", e)
-            elif not target:
+            elif not target or (target and target.get("status") == "deleted"):
                 all_dead_refs.append({
                     "source_page_id": page_id,
                     "source_title": page["title"],
@@ -187,6 +188,55 @@ class WikiCompiler:
             "pages_updated": len(updated_ids),
         })
         return {"created": created_ids, "updated": updated_ids, "status": "success"}
+
+    def _clean_stale_source_ids(self, pages: list[dict]) -> dict:
+        """清理 Wiki 页面 source_ids 中指向已删除 knowledge_items 的引用。
+
+        与 lint 的 stale 检查对齐，自动修复该类问题。
+
+        Args:
+            pages: Wiki 页面列表
+
+        Returns:
+            {"cleaned": 清理的页面数, "source_ids_removed": 移除的 source_id 总数, "details": [...]}
+        """
+        cleaned = 0
+        total_removed = 0
+        details = []
+
+        for page in pages:
+            source_ids_raw = page.get("source_ids", "[]")
+            try:
+                source_ids = json.loads(source_ids_raw) if isinstance(source_ids_raw, str) else source_ids_raw
+            except (json.JSONDecodeError, TypeError):
+                continue
+
+            if not source_ids:
+                continue
+
+            existing = Database.get_knowledge_batch(source_ids)
+            deleted_ids = [sid for sid in source_ids if sid not in existing]
+
+            if not deleted_ids:
+                continue
+
+            # 从 source_ids 中移除已删除的 ID
+            new_source_ids = [sid for sid in source_ids if sid in existing]
+            new_source_ids_json = json.dumps(new_source_ids, ensure_ascii=False)
+
+            Database.update_wiki_page(page["id"], source_ids=new_source_ids_json)
+            cleaned += 1
+            total_removed += len(deleted_ids)
+            details.append({
+                "page_id": page["id"],
+                "page_title": page["title"],
+                "removed_ids": deleted_ids,
+                "remaining_ids": len(new_source_ids),
+            })
+            logger.info("Cleaned stale source_ids for [%s]: removed %d, remaining %d",
+                        page["title"], len(deleted_ids), len(new_source_ids))
+
+        return {"cleaned": cleaned, "source_ids_removed": total_removed, "details": details}
 
     def save_answer(self, question: str, answer: str, source_ids: list[str] | None = None) -> str | None:
         """将问答保存为 Wiki 页面"""
@@ -428,11 +478,12 @@ class WikiCompiler:
         return data if isinstance(data, (dict, list)) else None
 
     def repair_dead_references(self, max_pages: int = 50) -> dict:
-        """LLM 驱动的死链修复。
+        """LLM 驱动的死链修复 + stale source_ids 清理。
 
         扫描所有 Wiki 页面中的 [[...]] 死链，调用 LLM 分析上下文后
         选择修复策略：redirect（重定向到已有页面）、stub（创建占位页面）
         或 remove（移除引用标记）。
+        同时清理 source_ids 中指向已删除 knowledge_items 的过时引用。
 
         Args:
             max_pages: 最多处理多少个含死链的页面（控制 LLM 成本）
@@ -446,6 +497,9 @@ class WikiCompiler:
 
         all_titles = {p["title"] for p in pages}
         title_to_id = {p["title"]: p["id"] for p in pages}
+
+        # 第零步：清理 stale source_ids（与 lint 的 stale 检查对齐）
+        stale_fixed = self._clean_stale_source_ids(pages)
 
         # 第一步：收集所有含死链的页面
         pages_with_dead = []  # [(page, [dead_ref_titles])]
@@ -640,6 +694,8 @@ class WikiCompiler:
             "stubs_created": total_stubs,
             "removed": total_removes,
             "errors": total_errors,
+            "stale_cleaned": stale_fixed["cleaned"],
+            "stale_source_ids_removed": stale_fixed["source_ids_removed"],
         }
         Database.insert_wiki_op("repair_dead_references", "", summary)
 
@@ -649,4 +705,5 @@ class WikiCompiler:
             "pages_with_dead_refs": len(pages_with_dead),
             **summary,
             "details": fix_details,
+            "stale_details": stale_fixed.get("details", []),
         }
