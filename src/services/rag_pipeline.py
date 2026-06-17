@@ -217,7 +217,9 @@ class VectorSearchStage(PipelineStage):
                     start_pages = executor.execute(routing["query_spec"])
                     start_ids = [p["id"] for p in start_pages]
                     traverse_config = routing.get("traverse", {"max_depth": 2})
-                    traversal = GraphTraversalService(db=db).traverse(
+                    # 使用注入的 graph_backend 而非创建新实例
+                    gb = deps.get("graph_backend") if deps else None
+                    traversal = GraphTraversalService(db=db, graph_backend=gb).traverse(
                         start_ids=start_ids, start_type="knowledge",
                         max_depth=traverse_config.get("max_depth", 2),
                     )
@@ -767,6 +769,7 @@ class RagPipeline:
                  stages: list[tuple[PipelineStage, dict]] | None = None,
                  deps: dict | None = None):
         self._llm = llm
+        self._deps = deps or {}
         self._stages: list[tuple[PipelineStage, dict]] = []
         if stages:
             self._stages = list(stages)
@@ -785,6 +788,10 @@ class RagPipeline:
     def add_stage(self, stage, config):
         self._stages.append((stage, config))
 
+    def _resolve_graph_backend(self):
+        """从 deps 中提取 graph_backend"""
+        return self._deps.get("graph_backend")
+
     async def execute(self, question, conversation_history=None, **kwargs):
         ctx = RagContext(question=question, conversation_history=conversation_history or [], **kwargs)
         for stage, config in self._stages:
@@ -794,7 +801,9 @@ class RagPipeline:
                 except Exception as e:
                     logger.error("Stage %s failed: %s", stage.name, e)
         from src.services.source_graph import build_source_graph
-        ctx.source_graph = build_source_graph(ctx.sources)
+        # 从 deps 获取 graph_backend，让 source_graph 也能利用图谱关系
+        gb = self._resolve_graph_backend()
+        ctx.source_graph = build_source_graph(ctx.sources, graph_backend=gb)
         # Sprint 2：构造结构化 RAG payload（ask 工具 7 字段）
         default_route = {"mode": "hybrid", "explanation": "no router decision recorded"}
         route = ctx.metadata.get("route", default_route)
@@ -872,7 +881,10 @@ class RAGService:
                 ))
             if "source_graph" not in result:
                 from src.services.source_graph import build_source_graph
-                result["source_graph"] = build_source_graph(result.get("sources", []))
+                result["source_graph"] = build_source_graph(
+                    result.get("sources", []),
+                    graph_backend=self._resolve_graph_backend(),
+                )
             return dict(result)
         except Exception as e:
             err_detail = traceback.format_exc()
@@ -973,7 +985,7 @@ class RAGService:
 
         llm = deps.get("llm") or _get_container_service("llm", LLMService)
         from src.services.source_graph import build_source_graph
-        source_graph = build_source_graph(sources)
+        source_graph = build_source_graph(sources, graph_backend=deps.get("graph_backend"))
         return llm.chat_stream(messages, silent=True), sources, source_graph
 
     def _direct_query(self, question: str, conversation_history: list[dict] | None,
