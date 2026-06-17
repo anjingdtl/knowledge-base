@@ -279,14 +279,15 @@ class SQLiteGraphBackend(GraphBackend):
         edges: list[dict] = []
         paths: list[list[str]] = []
         visited: set[str] = set()
-        queue: deque[tuple[str, int, list[str]]] = deque()
+        # 队列元素: (node_id, depth, path, incoming_edge_type)
+        queue: deque[tuple[str, int, list[str], str | None]] = deque()
 
         for sid in start_ids:
             nid = make_node_id("page", sid) if ":" not in sid else sid
-            queue.append((nid, 0, [nid]))
+            queue.append((nid, 0, [nid], None))
 
         while queue:
-            current_id, depth, path = queue.popleft()
+            current_id, depth, path, incoming_edge_type = queue.popleft()
             if current_id in visited:
                 continue
             visited.add(current_id)
@@ -305,7 +306,7 @@ class SQLiteGraphBackend(GraphBackend):
                 edges.append({
                     "source": path[-2],
                     "target": current_id,
-                    "type": "link",
+                    "type": incoming_edge_type or "link",
                     "depth": depth,
                 })
                 paths.append(path)
@@ -316,7 +317,7 @@ class SQLiteGraphBackend(GraphBackend):
             neighbors = self.find_neighbors(current_id, edge_types=edge_types)
             for neighbor, _edge in neighbors:
                 if neighbor.id not in visited:
-                    queue.append((neighbor.id, depth + 1, path + [neighbor.id]))
+                    queue.append((neighbor.id, depth + 1, path + [neighbor.id], _edge.edge_type if _edge else None))
 
         return TraversalResult(
             nodes=list(nodes.values()),
