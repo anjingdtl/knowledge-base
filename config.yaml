@@ -1,6 +1,6 @@
 appearance:
   font_size: 14
-  theme: light
+  theme: dark
 embedding:
   base_url: https://api.siliconflow.cn/v1
   model: BAAI/bge-m3
@@ -18,11 +18,11 @@ llm:
   provider: Minimax
   temperature: 0.7
 mcp:
+  allow_http_write: true
   enable_legacy_aliases: true
   experimental_tools_enabled: true
   tool_profile: extended
-  allow_http_write: true
-  write_policy: ""
+  write_policy: ''
 rag:
   chunk_overlap: 150
   chunk_size: 1000
@@ -40,6 +40,6 @@ storage:
   db_name: kb.db
   graph_dir: graph
 wiki:
-  enabled: true
   auto_save_answer: false
   auto_save_min_length: 500
+  enabled: true

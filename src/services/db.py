@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     concept_summary TEXT,
     status TEXT DEFAULT 'active',
     lint_score REAL DEFAULT 1.0,
+    complex_anomaly TEXT DEFAULT '',
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -547,6 +548,13 @@ class Database(metaclass=_DatabaseMeta):
         if "source_graph" not in msg_cols:
             self._base_conn.execute(
                 "ALTER TABLE chat_messages ADD COLUMN source_graph TEXT DEFAULT '{\"nodes\":[],\"edges\":[]}'"
+            )
+
+        # wiki_pages: complex_anomaly 字段（存储复杂异常类别，逗号分隔）
+        wiki_cols = {row[1] for row in self._base_conn.execute("PRAGMA table_info(wiki_pages)").fetchall()}
+        if "complex_anomaly" not in wiki_cols:
+            self._base_conn.execute(
+                "ALTER TABLE wiki_pages ADD COLUMN complex_anomaly TEXT DEFAULT ''"
             )
 
         ref_cols = {row[1] for row in self._base_conn.execute("PRAGMA table_info(entity_refs)").fetchall()}
@@ -1596,8 +1604,8 @@ class Database(metaclass=_DatabaseMeta):
         conn = self.get_conn()
         conn.execute(
             """INSERT INTO wiki_pages
-               (id, title, content, source_ids, tags, concept_summary, status, lint_score, created_at, updated_at)
-               VALUES (:id, :title, :content, :source_ids, :tags, :concept_summary, :status, :lint_score, :created_at, :updated_at)""",
+               (id, title, content, source_ids, tags, concept_summary, status, lint_score, complex_anomaly, created_at, updated_at)
+               VALUES (:id, :title, :content, :source_ids, :tags, :concept_summary, :status, :lint_score, :complex_anomaly, :created_at, :updated_at)""",
             page,
         )
         conn.commit()
@@ -1614,7 +1622,7 @@ class Database(metaclass=_DatabaseMeta):
     def update_wiki_page(self, page_id: str, **fields):
         if not fields:
             return
-        allowed = {"title", "content", "source_ids", "tags", "concept_summary", "status", "lint_score"}
+        allowed = {"title", "content", "source_ids", "tags", "concept_summary", "status", "lint_score", "complex_anomaly"}
         invalid = set(fields) - allowed
         if invalid:
             raise ValueError(f"Invalid fields: {invalid}")
