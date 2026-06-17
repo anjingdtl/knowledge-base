@@ -460,6 +460,7 @@ def ask(
             result.get("sources", []),
             db=_get_container().db,
             max_nodes=max_graph_nodes,
+            graph_backend=_get_container().graph_backend,
         )
     else:
         result["source_graph"] = {"nodes": [], "edges": [], "truncated": False, "node_count": 0}
@@ -1868,7 +1869,7 @@ def graph_traverse(
     container = _get_container()
     try:
         ids = json.loads(start_ids) if isinstance(start_ids, str) else start_ids
-        service = GraphTraversalService(db=container.db)
+        service = GraphTraversalService(db=container.db, graph_backend=container.graph_backend)
         result = service.traverse(start_ids=ids, start_type=start_type, max_depth=max_depth)
         # 截断节点数
         nodes = result.get("nodes", [])
@@ -1971,7 +1972,7 @@ def execute_query(
                     ErrorCode.VALIDATION_ERROR,
                     "graph 模式需要在 query_spec.start_ids 提供起点节点",
                 )
-            traversal = GraphTraversalService(db=container.db).traverse(
+            traversal = GraphTraversalService(db=container.db, graph_backend=container.graph_backend).traverse(
                 start_ids=start_ids, start_type=start_type, max_depth=max_depth,
             )
             nodes = traversal.get("nodes", [])
@@ -2124,6 +2125,7 @@ def get_source_graph(
         source_rows,
         db=_get_container().db,
         max_nodes=max(1, int(max_nodes or 50)),
+        graph_backend=_get_container().graph_backend,
     )
     return ok(
         graph,

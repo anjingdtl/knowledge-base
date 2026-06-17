@@ -187,6 +187,28 @@ class SQLiteGraphBackend(GraphBackend):
                     if neighbor:
                         results.append((neighbor, edge))
 
+                # 补充：从 knowledge_graph_relations 查询 LLM 发现的语义关系
+                try:
+                    kg_rows = conn.execute(
+                        """SELECT kgr.target_knowledge_id, kgr.relation_type, kgr.description
+                           FROM knowledge_graph_relations kgr
+                           WHERE kgr.source_knowledge_id = ?
+                           LIMIT ?""",
+                        (source_id, limit),
+                    ).fetchall()
+                    for row in kg_rows:
+                        tgt_id = make_node_id("page", row["target_knowledge_id"])
+                        edge = GraphEdge(
+                            source=node_id, target=tgt_id,
+                            edge_type=row["relation_type"] or "related",
+                            properties={"description": row["description"] or ""},
+                        )
+                        neighbor = self.get_node(tgt_id)
+                        if neighbor:
+                            results.append((neighbor, edge))
+                except Exception:
+                    pass  # knowledge_graph_relations 表可能不存在
+
             elif node_type == "block":
                 rows = conn.execute(
                     f"""SELECT er.target_id, er.target_type, er.ref_type
@@ -218,6 +240,29 @@ class SQLiteGraphBackend(GraphBackend):
                 neighbor = self.get_node(src_id)
                 if neighbor:
                     results.append((neighbor, edge))
+
+            # 补充：从 knowledge_graph_relations 查询反向入边
+            if node_type in ("page", "knowledge"):
+                try:
+                    kg_in_rows = conn.execute(
+                        """SELECT kgr.source_knowledge_id, kgr.relation_type, kgr.description
+                           FROM knowledge_graph_relations kgr
+                           WHERE kgr.target_knowledge_id = ?
+                           LIMIT ?""",
+                        (source_id, limit),
+                    ).fetchall()
+                    for row in kg_in_rows:
+                        src_nid = make_node_id("page", row["source_knowledge_id"])
+                        edge = GraphEdge(
+                            source=src_nid, target=node_id,
+                            edge_type=row["relation_type"] or "related",
+                            properties={"description": row["description"] or ""},
+                        )
+                        neighbor = self.get_node(src_nid)
+                        if neighbor:
+                            results.append((neighbor, edge))
+                except Exception:
+                    pass  # knowledge_graph_relations 表可能不存在
 
         return results
 
@@ -416,6 +461,32 @@ class SQLiteGraphBackend(GraphBackend):
             except Exception:
                 pass
 
+        # 5. 加载 knowledge_graph_relations（LLM 发现的语义关系）
+        try:
+            kg_sql = "SELECT source_knowledge_id, target_knowledge_id, relation_type, description FROM knowledge_graph_relations"
+            kg_params: list = []
+            if edge_limit is not None and edge_limit >= 0:
+                kg_sql += " LIMIT ?"
+                kg_params.append(edge_limit)
+            kg_rows = conn.execute(kg_sql, kg_params).fetchall()
+            for row in kg_rows:
+                src = f"page:{row['source_knowledge_id']}"
+                tgt = f"page:{row['target_knowledge_id']}"
+                add_edge(GraphEdge(
+                    source=src, target=tgt,
+                    edge_type=row["relation_type"] or "related",
+                    properties={"description": row["description"] or ""},
+                ))
+                # 确保两端节点存在
+                for nid in (src, tgt):
+                    _, kid = parse_node_id(nid)
+                    if nid not in node_ids:
+                        node = self.get_node(nid)
+                        if node:
+                            add_node(node)
+        except Exception:
+            pass  # knowledge_graph_relations 表可能不存在
+
         return SubgraphResult(
             nodes=nodes,
             edges=edges,
@@ -502,12 +573,20 @@ class SQLiteGraphBackend(GraphBackend):
         page_count = conn.execute("SELECT COUNT(*) FROM knowledge_items").fetchone()[0]
         block_count = conn.execute("SELECT COUNT(*) FROM blocks").fetchone()[0]
         ref_count = conn.execute("SELECT COUNT(*) FROM entity_refs").fetchone()[0]
+        # 补充 knowledge_graph_relations 统计
+        kg_rel_count = 0
+        try:
+            kg_rel_count = conn.execute("SELECT COUNT(*) FROM knowledge_graph_relations").fetchone()[0]
+        except Exception:
+            pass
         return {
             "backend": "sqlite",
             "node_count": page_count + block_count,
-            "edge_count": ref_count,
+            "edge_count": ref_count + kg_rel_count,
             "page_count": page_count,
             "block_count": block_count,
+            "entity_ref_count": ref_count,
+            "kg_relation_count": kg_rel_count,
         }
 
     # ------------------------------------------------------------------

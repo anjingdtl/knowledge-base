@@ -163,6 +163,7 @@ class AppContainer:
                 'query_rewriter': self.query_rewriter,
                 'reranker': self.reranker,
                 'hybrid_search': self.hybrid_search,
+                'graph_backend': self.graph_backend,
             })
             self._track_service("_rag_pipeline")
         return self._rag_pipeline
@@ -203,7 +204,7 @@ class AppContainer:
     def graph_builder(self):
         if self._graph_builder is None:
             from src.services.graph_builder import GraphBuilder
-            self._graph_builder = GraphBuilder(self.db, self.llm, self.config)
+            self._graph_builder = GraphBuilder(graph_backend=self.graph_backend)
             self._track_service("_graph_builder")
         return self._graph_builder
 
