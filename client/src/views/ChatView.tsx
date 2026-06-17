@@ -22,6 +22,7 @@ interface Message {
   content: string
   sources?: { title: string; knowledge_id: string; block_id?: string; snippet?: string; score?: number }[]
   diagnostics?: Diagnostics
+  wikiSaved?: boolean
 }
 
 function DiagnosticsPanel({ diagnostics }: { diagnostics: Diagnostics }) {
@@ -146,6 +147,46 @@ export default function ChatView() {
                     </div>
                   )}
                   {msg.diagnostics && <DiagnosticsPanel diagnostics={msg.diagnostics} />}
+                  {/* 保存到 Wiki 按钮 */}
+                  {msg.content.length >= 100 && !msg.wikiSaved && (
+                    <div className="mt-2 pt-2 border-t border-[var(--color-border)]">
+                      <button
+                        onClick={async () => {
+                          // 找到当前 assistant 消息前最近的一条 user 消息
+                          const userMsg = [...messages].reverse().find((m, ri) => {
+                            const realIdx = messages.length - 1 - ri
+                            return m.role === 'user' && realIdx < i
+                          })
+                          const question = userMsg?.content || ''
+                          const sourceIds = msg.sources?.map(s => s.knowledge_id).filter(Boolean) || []
+                          try {
+                            const res = await apiPost<{ page_id?: string; message?: string }>('/api/wiki/save-answer', {
+                              question,
+                              answer: msg.content,
+                              source_ids: sourceIds,
+                            })
+                            if (res.page_id) {
+                              setMessages(prev => prev.map((m, idx) => idx === i ? { ...m, wikiSaved: true } : m))
+                            }
+                          } catch {
+                            // 静默失败，不干扰用户
+                          }
+                        }}
+                        className="flex items-center gap-1 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                          <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" />
+                          <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+                        </svg>
+                        <span>保存到 Wiki</span>
+                      </button>
+                    </div>
+                  )}
+                  {msg.wikiSaved && (
+                    <div className="mt-2 pt-2 border-t border-[var(--color-border)]">
+                      <span className="text-xs text-green-500">已保存到 Wiki ✓</span>
+                    </div>
+                  )}
                 </>
               )}
             </div>

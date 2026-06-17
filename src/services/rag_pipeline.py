@@ -792,6 +792,27 @@ class RagPipeline:
         """从 deps 中提取 graph_backend"""
         return self._deps.get("graph_backend")
 
+    def _try_auto_save_wiki(self, question: str, ctx: "RagContext"):
+        """自动保存高质量回答到 Wiki（静默，不影响主流程）"""
+        try:
+            from src.utils.config import Config
+            if not Config.get("wiki.enabled", False):
+                return
+            from src.services.wiki_compiler import WikiCompiler
+            compiler = WikiCompiler()
+            # 质量门槛：来源数 ≥ 2 且无严重警告
+            critical_warnings = [w for w in ctx.metadata.get("warnings", [])
+                                 if "no sources" in w.lower() or "failed" in w.lower()]
+            if len(ctx.sources) < 2 or critical_warnings:
+                return
+            source_ids = [s.get("knowledge_id") for s in ctx.sources if s.get("knowledge_id")]
+            page_id = compiler.save_answer(question, ctx.answer, source_ids)
+            if page_id:
+                logger.info("Auto-saved high-quality answer to Wiki: page_id=%s, question=%s",
+                            page_id, question[:50])
+        except Exception as e:
+            logger.warning("Auto-save to Wiki failed (non-fatal): %s", e)
+
     async def execute(self, question, conversation_history=None, **kwargs):
         ctx = RagContext(question=question, conversation_history=conversation_history or [], **kwargs)
         for stage, config in self._stages:
@@ -810,6 +831,12 @@ class RagPipeline:
         query_plan = ctx.metadata.get("query_plan", {})
         block_contexts = ctx.metadata.get("block_contexts", {})
         warnings = ctx.metadata.get("warnings", [])
+
+        # 自动保存高质量回答到 Wiki
+        wiki_auto_save = Config.get("wiki.auto_save_answer", False)
+        if wiki_auto_save and ctx.answer and len(ctx.answer) >= Config.get("wiki.auto_save_min_length", 500):
+            self._try_auto_save_wiki(question, ctx)
+
         return {
             "answer": ctx.answer,
             "sources": ctx.sources,
