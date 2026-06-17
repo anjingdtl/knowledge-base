@@ -99,12 +99,45 @@ class WikiRepairWorker(QThread):
             self.error.emit(str(e))
 
 
+class WikiComplexRepairWorker(QThread):
+    """后台线程：复杂问题扫描/标记/修复"""
+    scan_done = Signal(dict)
+    repair_done = Signal(dict)
+    error = Signal(str)
+
+    def __init__(self, action: str = "scan", issues: list | None = None, parent=None):
+        super().__init__(parent)
+        self._action = action
+        self._issues = issues
+
+    def run(self):
+        try:
+            linter = WikiLint()
+            if self._action == "scan":
+                result = linter.scan_complex_issues()
+                self.scan_done.emit(result)
+            elif self._action == "repair":
+                result = linter.repair_complex_issues(issues=self._issues)
+                self.repair_done.emit(result)
+            elif self._action == "mark":
+                for issue in (self._issues or []):
+                    pid = issue.get("page_id", "")
+                    cats = issue.get("categories", [])
+                    if pid and cats:
+                        WikiLint.mark_complex_anomaly(pid, cats)
+                self.repair_done.emit({"action": "mark", "marked_count": len(self._issues or [])})
+        except Exception as e:
+            self.error.emit(str(e))
+
+
 class WikiView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._compiler = None  # 首次 showEvent 时再实例化（避免启动期重活）
         self._lint_worker = None
         self._repair_worker = None
+        self._complex_worker = None
+        self._complex_scan_result = None  # 缓存扫描结果
         self._lint_findings = {}  # page_id → [findings]
         self._setup_ui()
         self._pages_loaded = False
@@ -168,6 +201,12 @@ class WikiView(QWidget):
         self.btn_repair.setToolTip("使用 LLM 智能修复 Wiki 页面中的 [[死链]] 引用")
         self.btn_repair.clicked.connect(self._run_repair)
         toolbar.addWidget(self.btn_repair)
+
+        self.btn_complex_repair = QPushButton("复杂修复")
+        set_named_icon(self.btn_complex_repair, "fix", "text_dim", 15)
+        self.btn_complex_repair.setToolTip("检测并修复孤立页面、内容空洞、同名重复等复杂问题")
+        self.btn_complex_repair.clicked.connect(self._run_complex_repair)
+        toolbar.addWidget(self.btn_complex_repair)
 
         self.stats_label = QLabel("")
         self.stats_label.setObjectName("hintLabel")
@@ -884,3 +923,104 @@ class WikiView(QWidget):
         self.btn_repair.setEnabled(True)
         self.stats_label.setText(f"修复失败: {error_msg[:50]}")
         QMessageBox.warning(self, "修复失败", f"LLM 修复过程出错：\n\n{error_msg}")
+
+    # ---- 复杂修复 ----
+
+    def _run_complex_repair(self):
+        """启动复杂问题扫描"""
+        if self._complex_worker and self._complex_worker.isRunning():
+            return
+        if not Config.get("wiki.enabled", False):
+            QMessageBox.warning(self, "提示", "Wiki 功能未启用")
+            return
+
+        self.btn_complex_repair.setEnabled(False)
+        self.stats_label.setText("正在扫描复杂问题...")
+        self._complex_worker = WikiComplexRepairWorker(action="scan")
+        self._complex_worker.scan_done.connect(self._on_complex_scan_done)
+        self._complex_worker.repair_done.connect(self._on_complex_repair_done)
+        self._complex_worker.error.connect(self._on_complex_error)
+        self._complex_worker.start()
+
+    def _on_complex_scan_done(self, result: dict):
+        self.btn_complex_repair.setEnabled(True)
+        scanned = result.get("scanned", 0)
+        total_issues = result.get("total_issues", 0)
+        pre_marked = result.get("pre_marked", [])
+        issues = result.get("issues", [])
+
+        self._complex_scan_result = result
+
+        if total_issues == 0 and not pre_marked:
+            self.stats_label.setText(f"复杂修复: {scanned} 页面无复杂问题")
+            QMessageBox.information(self, "复杂修复", f"扫描了 {scanned} 个页面，未发现复杂问题！")
+            return
+
+        # 构建报告
+        cat_labels = {"orphan": "孤立页面", "empty": "内容空洞", "duplicate": "同名重复", "contradiction": "内容矛盾"}
+        lines = [f"扫描 {scanned} 个页面，发现 {total_issues} 个复杂问题：\n"]
+
+        for issue in issues[:30]:
+            cats = "、".join(cat_labels.get(c, c) for c in issue.get("categories", []))
+            lines.append(f"  · [{cats}] {issue.get('page_title', '')}")
+
+        if pre_marked:
+            lines.append(f"\n另有 {len(pre_marked)} 个已标记待修复页面。")
+
+        # 弹出选择对话框：修复 / 仅标记 / 取消
+        msg = QMessageBox(self)
+        msg.setWindowTitle("复杂修复")
+        msg.setText("\n".join(lines))
+        btn_repair = msg.addButton("立即修复", QMessageBox.ButtonRole.AcceptRole)
+        btn_mark = msg.addButton("仅标记异常", QMessageBox.ButtonRole.ResetRole)
+        btn_cancel = msg.addButton("取消", QMessageBox.ButtonRole.RejectRole)
+        msg.exec()
+
+        clicked = msg.clickedButton()
+        if clicked == btn_repair:
+            self._start_complex_action("repair", issues)
+        elif clicked == btn_mark:
+            self._start_complex_action("mark", issues)
+
+    def _start_complex_action(self, action: str, issues: list):
+        """启动复杂修复/标记操作"""
+        self.btn_complex_repair.setEnabled(False)
+        label = "修复" if action == "repair" else "标记"
+        self.stats_label.setText(f"正在{label}复杂问题...")
+        self._complex_worker = WikiComplexRepairWorker(action=action, issues=issues)
+        self._complex_worker.scan_done.connect(self._on_complex_scan_done)
+        self._complex_worker.repair_done.connect(self._on_complex_repair_done)
+        self._complex_worker.error.connect(self._on_complex_error)
+        self._complex_worker.start()
+
+    def _on_complex_repair_done(self, result: dict):
+        self.btn_complex_repair.setEnabled(True)
+        action = result.get("action", "")
+
+        if action == "mark":
+            marked = result.get("marked_count", 0)
+            self.stats_label.setText(f"已标记 {marked} 个页面为复杂异常")
+            QMessageBox.information(self, "复杂修复", f"已将 {marked} 个页面标记为「复杂异常」，下次可重新扫描确认修复。")
+        else:
+            orphan_fixed = result.get("orphan_fixed", 0)
+            empty_fixed = result.get("empty_fixed", 0)
+            duplicate_fixed = result.get("duplicate_fixed", 0)
+            errors = result.get("errors", 0)
+            total = orphan_fixed + empty_fixed + duplicate_fixed
+            self.stats_label.setText(f"复杂修复完成: {total} 项已处理")
+
+            lines = [f"修复完成！共处理 {total} 项：\n",
+                     f"  · 孤立→关联: {orphan_fixed}",
+                     f"  · 空洞→补写: {empty_fixed}",
+                     f"  · 重复→去重: {duplicate_fixed}"]
+            if errors:
+                lines.append(f"\n  ⚠ 失败: {errors} 处（可稍后重试）")
+            QMessageBox.information(self, "复杂修复", "\n".join(lines))
+
+        self._complex_scan_result = None
+        self._load_pages()
+
+    def _on_complex_error(self, error_msg: str):
+        self.btn_complex_repair.setEnabled(True)
+        self.stats_label.setText(f"复杂修复失败: {error_msg[:50]}")
+        QMessageBox.warning(self, "复杂修复失败", f"操作出错：\n\n{error_msg}")
