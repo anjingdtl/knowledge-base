@@ -23,6 +23,11 @@ class FixDeadLinksReq(BaseModel):
     dry_run: bool = Field(default=False, description="仅预览修复方案，不实际写入")
 
 
+class ComplexRepairReq(BaseModel):
+    action: str = Field(description="scan | mark | repair")
+    issues: Optional[list[dict]] = Field(default=None, description="指定要修复/标记的问题列表（action=mark/repair时）")
+
+
 class WikiPageWriteReq(BaseModel):
     title: str = Field(min_length=1, max_length=500)
     content: str = ""
@@ -231,6 +236,43 @@ def fix_dead_links(data: FixDeadLinksReq, container: AppContainer = Depends(get_
     else:
         result = compiler.repair_dead_references(max_pages=data.max_pages)
         return result
+
+
+@wiki_router.post("/complex-repair")
+def complex_repair(data: ComplexRepairReq, container: AppContainer = Depends(get_container)):
+    """复杂问题扫描/标记/修复（orphan/empty/duplicate/contradiction）。
+
+    - action=scan: 扫描四类复杂问题 + 已标记待修复页面
+    - action=mark: 仅标记为"复杂异常"，不修复
+    - action=repair: 执行 LLM/规则修复
+    """
+    from src.utils.config import Config
+    if not Config.get("wiki.enabled", False):
+        raise HTTPException(400, "Wiki 功能未启用")
+    from src.services.wiki_lint import WikiLint
+    linter = WikiLint()
+
+    if data.action == "scan":
+        return linter.scan_complex_issues()
+
+    elif data.action == "mark":
+        # 标记页面为"复杂异常"，不修复
+        marked = []
+        issues = data.issues or []
+        for issue in issues:
+            pid = issue.get("page_id", "")
+            cats = issue.get("categories", [])
+            if pid and cats:
+                WikiLint.mark_complex_anomaly(pid, cats)
+                marked.append({"page_id": pid, "page_title": issue.get("page_title", ""), "marked": cats})
+        return {"action": "mark", "marked_count": len(marked), "details": marked}
+
+    elif data.action == "repair":
+        result = linter.repair_complex_issues(issues=data.issues)
+        return result
+
+    else:
+        raise HTTPException(400, f"不支持的 action: {data.action}，可选: scan/mark/repair")
 
 
 @wiki_router.get("/ops")

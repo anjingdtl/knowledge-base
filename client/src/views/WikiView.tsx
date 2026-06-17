@@ -12,6 +12,7 @@ interface WikiPage {
   summary: string
   status: string
   lint_score: number | null
+  complex_anomaly?: string
   tags: string
   created_at: string
   updated_at: string
@@ -58,7 +59,7 @@ interface RepairResult {
   [key: string]: unknown
 }
 
-type Tab = 'pages' | 'lint' | 'repair'
+type Tab = 'pages' | 'lint' | 'repair' | 'complex'
 
 /* ---------- helpers ---------- */
 
@@ -91,7 +92,7 @@ export default function WikiView() {
         title="Wiki 知识管理"
         actions={
           <div className="flex gap-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-0.5">
-            {([['pages', '页面列表'], ['lint', '质量检查'], ['repair', '死链修复']] as [Tab, string][]).map(([k, l]) => (
+            {([['pages', '页面列表'], ['lint', '质量检查'], ['repair', '死链修复'], ['complex', '复杂修复']] as [Tab, string][]).map(([k, l]) => (
               <button
                 key={k}
                 onClick={() => setTab(k)}
@@ -109,6 +110,7 @@ export default function WikiView() {
       {tab === 'pages' && <PagesTab onNavigate={id => navigate(`/wiki/${id}`)} />}
       {tab === 'lint' && <LintTab />}
       {tab === 'repair' && <RepairTab />}
+      {tab === 'complex' && <ComplexTab />}
     </div>
   )
 }
@@ -228,6 +230,11 @@ function PagesTab({ onNavigate }: { onNavigate: (id: string) => void }) {
                 <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full ${statusColor(p.status)}`}>
                   {statusLabel(p.status)}
                 </span>
+                {p.complex_anomaly && (
+                  <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">
+                    复杂异常
+                  </span>
+                )}
               </div>
               <div className="mt-2 flex items-center gap-3 text-xs text-[var(--color-text-muted)]">
                 {p.tags && safeTags(p.tags).length > 0 && (
@@ -447,6 +454,245 @@ function RepairTab() {
             repairResult.status === 'clean' ? 'bg-green-50 text-green-700' : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
           }`}>
             {repairResult.status === 'clean' ? 'Wiki 中没有死链' : `修复完成。共处理 ${repairResult.fixed ?? 0} 处死链。`}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ===================== Complex Repair Tab ===================== */
+
+interface ComplexIssue {
+  page_id: string
+  page_title: string
+  categories: string[]
+  duplicate_count?: number
+  duplicate_ids?: string[]
+}
+
+interface ComplexScanResult {
+  scanned: number
+  total_issues: number
+  issues: ComplexIssue[]
+  pre_marked: Array<{ page_id: string; page_title: string; anomaly_types: string }>
+}
+
+interface ComplexRepairResult {
+  status: string
+  orphan_fixed?: number
+  empty_fixed?: number
+  duplicate_fixed?: number
+  errors?: number
+  details?: Array<Record<string, unknown>>
+}
+
+function ComplexTab() {
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
+  const [scanResult, setScanResult] = useState<ComplexScanResult | null>(null)
+  const [repairResult, setRepairResult] = useState<ComplexRepairResult | null>(null)
+  const [error, setError] = useState('')
+  const [confirmDialog, setConfirmDialog] = useState<'repair' | 'mark' | null>(null)
+
+  const runScan = async () => {
+    setLoading(true); setError(''); setScanResult(null); setRepairResult(null)
+    try {
+      const data = await apiPost<ComplexScanResult>('/api/wiki/complex-repair', { action: 'scan' })
+      setScanResult(data)
+      if (data.total_issues === 0 && data.pre_marked.length === 0) {
+        toast('未发现复杂问题', 'success')
+      }
+    } catch (err) { setError(err instanceof Error ? err.message : '扫描失败') }
+    finally { setLoading(false) }
+  }
+
+  const doRepair = async () => {
+    setLoading(true); setError(''); setConfirmDialog(null)
+    try {
+      const issues = scanResult?.issues || []
+      const data = await apiPost<ComplexRepairResult>('/api/wiki/complex-repair', {
+        action: 'repair', issues,
+      })
+      setRepairResult(data)
+      toast('修复完成', 'success')
+      // 重新扫描获取最新状态
+      const newScan = await apiPost<ComplexScanResult>('/api/wiki/complex-repair', { action: 'scan' })
+      setScanResult(newScan)
+    } catch (err) { setError(err instanceof Error ? err.message : '修复失败') }
+    finally { setLoading(false) }
+  }
+
+  const doMark = async () => {
+    setLoading(true); setError(''); setConfirmDialog(null)
+    try {
+      const issues = scanResult?.issues || []
+      await apiPost('/api/wiki/complex-repair', { action: 'mark', issues })
+      toast('已标记为复杂异常（未修复）', 'success')
+      // 重新扫描
+      const newScan = await apiPost<ComplexScanResult>('/api/wiki/complex-repair', { action: 'scan' })
+      setScanResult(newScan)
+    } catch (err) { setError(err instanceof Error ? err.message : '标记失败') }
+    finally { setLoading(false) }
+  }
+
+  const categoryLabel: Record<string, string> = {
+    orphan: '孤立页面', empty: '内容空洞', duplicate: '同名重复', contradiction: '内容矛盾',
+  }
+
+  const issues = scanResult?.issues || []
+  const preMarked = scanResult?.pre_marked || []
+  const hasPreMarked = preMarked.length > 0
+
+  return (
+    <div>
+      <p className="text-sm text-[var(--color-text-muted)] mb-4">
+        检测并修复复杂问题：孤立页面（无交叉引用）、内容空洞（摘要/正文为空）、同名重复、内容矛盾。
+        扫描后可选择<b>立即修复</b>或<b>仅标记</b>。
+      </p>
+
+      {/* 已标记待修复提示 */}
+      {hasPreMarked && !scanResult?.total_issues && (
+        <div className="p-3 mb-4 bg-orange-50 border border-orange-300/50 text-orange-700 rounded-lg text-sm">
+          存在 {preMarked.length} 个已标记「复杂异常」的页面待修复。点击下方按钮重新扫描。
+        </div>
+      )}
+
+      <div className="flex items-center gap-3 mb-4 flex-wrap">
+        <button onClick={runScan} disabled={loading}
+          className="px-5 py-2 bg-[var(--color-surface)] border border-[var(--color-primary)] text-[var(--color-primary)] rounded-lg text-sm hover:bg-[var(--color-primary-soft)] disabled:opacity-50">
+          {loading ? '扫描中...' : '扫描复杂问题'}
+        </button>
+      </div>
+
+      {error && <div className="p-3 mb-4 bg-red-50 border border-[var(--color-danger)]/30 text-[var(--color-danger)] rounded-lg text-sm">{error}</div>}
+
+      {/* 扫描结果 + 确认对话框 */}
+      {scanResult && (
+        <div className="mb-4">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-sm font-medium">
+              扫描 {scanResult.scanned} 个页面，发现 {scanResult.total_issues} 个复杂问题
+              {preMarked.length > 0 && `，${preMarked.length} 个已标记待修复`}
+            </span>
+          </div>
+
+          {issues.length === 0 && preMarked.length === 0 ? (
+            <div className="py-8 text-center text-[var(--color-text-muted)]">
+              <div className="text-3xl mb-2">&#10003;</div>未发现复杂问题
+            </div>
+          ) : (
+            <>
+              {/* 问题列表 */}
+              <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg overflow-hidden mb-4">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg)]">
+                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-muted)]">页面</th>
+                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-muted)]">问题类型</th>
+                      <th className="px-4 py-2 text-left font-medium text-[var(--color-text-muted)]">状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {issues.map((issue, i) => (
+                      <tr key={i} className="border-b border-[var(--color-border)] last:border-b-0">
+                        <td className="px-4 py-2">{issue.page_title}</td>
+                        <td className="px-4 py-2">
+                          {issue.categories.map(c => (
+                            <span key={c} className="inline-block mr-1 px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded text-xs">
+                              {categoryLabel[c] || c}
+                            </span>
+                          ))}
+                        </td>
+                        <td className="px-4 py-2">
+                          <span className="text-xs text-[var(--color-text-muted)]">待处理</span>
+                        </td>
+                      </tr>
+                    ))}
+                    {preMarked.map((pm, i) => (
+                      <tr key={`pm-${i}`} className="border-b border-[var(--color-border)] last:border-b-0 bg-orange-50/50">
+                        <td className="px-4 py-2">{pm.page_title}</td>
+                        <td className="px-4 py-2">
+                          {pm.anomaly_types.split(',').map((t: string) => (
+                            <span key={t} className="inline-block mr-1 px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs">
+                              {categoryLabel[t] || t}
+                            </span>
+                          ))}
+                        </td>
+                        <td className="px-4 py-2">
+                          <span className="text-xs text-orange-600 font-medium">已标记</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* 修复/标记按钮 */}
+              {issues.length > 0 && (
+                <div className="flex items-center gap-3">
+                  <button onClick={() => setConfirmDialog('repair')} disabled={loading}
+                    className="px-5 py-2 bg-[var(--color-primary)] text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50">
+                    立即修复
+                  </button>
+                  <button onClick={() => setConfirmDialog('mark')} disabled={loading}
+                    className="px-5 py-2 border border-orange-400 text-orange-600 rounded-lg text-sm hover:bg-orange-50 disabled:opacity-50">
+                    仅标记异常
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {/* 确认对话框 */}
+      {confirmDialog && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" onClick={() => setConfirmDialog(null)}>
+          <div className="bg-[var(--color-bg)] rounded-lg shadow-xl p-6 max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-medium mb-3">
+              {confirmDialog === 'repair' ? '确认修复' : '确认标记'}
+            </h3>
+            <p className="text-sm text-[var(--color-text-muted)] mb-5">
+              {confirmDialog === 'repair'
+                ? `将自动修复 ${issues.length} 个复杂问题（或phan关联、empty补写、duplicate去重）。确定开始修复？`
+                : `将 ${issues.length} 个页面标记为「复杂异常」但不修复，下次可通过扫描再次确认修复。确定仅标记？`}
+            </p>
+            <div className="flex justify-end gap-3">
+              <button onClick={() => setConfirmDialog(null)}
+                className="px-4 py-2 border border-[var(--color-border)] rounded-lg text-sm">取消</button>
+              <button onClick={confirmDialog === 'repair' ? doRepair : doMark} disabled={loading}
+                className={`px-5 py-2 rounded-lg text-sm text-white disabled:opacity-50 ${
+                  confirmDialog === 'repair'
+                    ? 'bg-[var(--color-primary)] hover:opacity-90'
+                    : 'bg-orange-500 hover:bg-orange-600'
+                }`}>
+                {loading ? '处理中...' : confirmDialog === 'repair' ? '是，开始修复' : '是，仅标记'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 修复结果 */}
+      {repairResult && (
+        <div className="mt-4">
+          <h3 className="text-sm font-medium mb-3">修复结果</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            {[
+              ['孤立→关联', repairResult.orphan_fixed ?? 0],
+              ['空洞→补写', repairResult.empty_fixed ?? 0],
+              ['重复→去重', repairResult.duplicate_fixed ?? 0],
+              ['失败', repairResult.errors ?? 0],
+            ].map(([label, val]) => (
+              <div key={label as string} className="p-3 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)] text-center">
+                <div className="text-2xl font-bold text-[var(--color-primary)]">{val as number}</div>
+                <div className="text-xs text-[var(--color-text-muted)] mt-1">{label}</div>
+              </div>
+            ))}
+          </div>
+          <div className="p-3 rounded-lg text-sm bg-green-50 text-green-700">
+            修复完成。{repairResult.status === 'clean' ? '无复杂问题' : `已处理 ${((repairResult.orphan_fixed ?? 0) + (repairResult.empty_fixed ?? 0) + (repairResult.duplicate_fixed ?? 0))} 项。`}
           </div>
         </div>
       )}

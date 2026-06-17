@@ -118,6 +118,24 @@ class WikiCompiler:
     def __init__(self):
         self._llm = LLMService()
 
+    def _generate_summary(self, title: str, content: str) -> str | None:
+        """用 LLM 为已有内容生成 concept_summary"""
+        if not content or len(content) < 20:
+            return None
+        prompt = (
+            f"请为以下 Wiki 页面生成一段 50-100 字的摘要，"
+            f"直接输出摘要内容，不要加标题、不要加引号：\n\n"
+            f"标题：{title}\n\n内容：{content[:1000]}"
+        )
+        try:
+            response = self._llm.chat([{"role": "user", "content": prompt}], silent=True)
+            summary = response.strip()
+            if summary and len(summary) >= 10:
+                return summary[:200]
+        except Exception as e:
+            logger.warning("Failed to generate summary for [%s]: %s", title, e)
+        return None
+
     def ingest(self, knowledge_id: str) -> dict:
         """将知识条目编译为 Wiki 页面，返回新创建/更新的页面 ID 列表"""
         if not Config.get("wiki.enabled", False):
