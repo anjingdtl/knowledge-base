@@ -64,26 +64,47 @@ def parse_file(file_path: str) -> list[ParsedFile]:
         # Excel 解析器直接返回 list[ParsedFile]
         if isinstance(result, list):
             for pf in result:
-                pf.content = _clean_surrogates(pf.content)
+                _clean_parsed(pf)
             return result
-        result.content = _clean_surrogates(result.content)
+        _clean_parsed(result)
         return [result]
     elif ext in code_extensions:
         r = _parse_code(path)
-        r.content = _clean_surrogates(r.content)
+        _clean_parsed(r)
         return [r]
     elif ext in (".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp"):
         r = _parse_image(path)
-        r.content = _clean_surrogates(r.content)
+        _clean_parsed(r)
         return [r]
     else:
         r = _parse_text(path)
-        r.content = _clean_surrogates(r.content)
+        _clean_parsed(r)
         return [r]
+
+
+def _clean_parsed(pf: ParsedFile) -> None:
+    """清理 ParsedFile 中所有可能含 surrogate 的文本字段（原地修改）"""
+    pf.content = _clean_surrogates(pf.content)
+    pf.title = _clean_surrogates(pf.title)
+    if pf.structured:
+        for block in pf.structured:
+            block.content = _clean_surrogates(block.content)
+            if block.children:
+                _clean_blocks(block.children)
+
+
+def _clean_blocks(blocks: list) -> None:
+    """递归清理 StructuredBlock 树中的所有 content"""
+    for block in blocks:
+        block.content = _clean_surrogates(block.content)
+        if block.children:
+            _clean_blocks(block.children)
 
 
 def _clean_surrogates(text: str) -> str:
     """清理 UTF-16 代理半字符（PDF 等二进制提取时可能混入，导致 encode('utf-8') 报错）"""
+    if not text:
+        return text
     return text.encode("utf-8", errors="surrogatepass").decode("utf-8", errors="replace")
 
 

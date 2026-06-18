@@ -151,7 +151,7 @@ class EmbeddingService:
         to_embed: list[tuple[int, str]] = []
 
         for i, text in enumerate(texts):
-            content_hash = hashlib.sha256(text.encode()).hexdigest()
+            content_hash = hashlib.sha256(text.encode("utf-8", errors="surrogatepass")).hexdigest()
             cached = cache.get(content_hash, model)
             if cached is not None:
                 results[i] = cached
@@ -162,7 +162,7 @@ class EmbeddingService:
             texts_to_embed = [t for _, t in to_embed]
             embeddings = self.embed_batch(texts_to_embed, batch_size)
             for (i, text), emb in zip(to_embed, embeddings):
-                content_hash = hashlib.sha256(text.encode()).hexdigest()
+                content_hash = hashlib.sha256(text.encode("utf-8", errors="surrogatepass")).hexdigest()
                 cache.put(content_hash, model, emb)
                 results[i] = emb
 
