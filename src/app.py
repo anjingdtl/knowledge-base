@@ -96,7 +96,7 @@ def _import_sample_data():
                         "source_type": "file",
                         "source_path": str(md_file),
                         "file_type": "md",
-                        "file_size": len(parsed.content.encode("utf-8")),
+                        "file_size": len(parsed.content.encode("utf-8", errors="surrogatepass")),
                         "content_hash": "",
                         "file_created_at": "",
                         "file_modified_at": "",

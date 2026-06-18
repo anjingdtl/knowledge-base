@@ -122,7 +122,7 @@ class FileGraphService:
             source_path=str(path),
             file_type=page.metadata.get("file-type", "md"),
             file_size=stat.st_size,
-            content_hash=hashlib.sha256(text.encode("utf-8")).hexdigest(),
+            content_hash=hashlib.sha256(text.encode("utf-8", errors="surrogatepass")).hexdigest(),
             file_created_at=page.metadata.get("created-at", now),
             file_modified_at=datetime.fromtimestamp(stat.st_mtime).isoformat(),
             tags=page.tags,

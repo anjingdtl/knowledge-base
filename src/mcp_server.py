@@ -513,7 +513,7 @@ def create(
     db = container.db
     # 哈希去重
     import hashlib
-    content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
+    content_hash = hashlib.sha256(content.encode("utf-8", errors="surrogatepass")).hexdigest()
     existing = db.get_knowledge_by_hash(content_hash)
     if existing:
         return ok(
@@ -1188,7 +1188,7 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     container = _get_container()
     db = container.db
     for parsed in parsed_list:
-        content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+        content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
         existing = db.get_knowledge_by_hash(content_hash)
         if existing:
             results.append({
@@ -1243,7 +1243,7 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
     db = container.db
 
     import hashlib
-    content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+    content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
     existing = db.get_knowledge_by_hash(content_hash)
     if existing:
         return {

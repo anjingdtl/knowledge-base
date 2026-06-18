@@ -185,7 +185,7 @@ def _file_ingest_handler(job_id: str, params: dict) -> dict:
 
         try:
             # 哈希去重
-            content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+            content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
             existing = db.get_knowledge_by_hash(content_hash)
             if existing:
                 skipped_items.append({
@@ -291,7 +291,7 @@ def _url_ingest_handler(job_id: str, params: dict) -> dict:
     db = container.db
 
     # 哈希去重
-    content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+    content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
     existing = db.get_knowledge_by_hash(content_hash)
     if existing:
         AsyncTaskService.update_progress(job_id, 100, "网页内容已存在，跳过")
