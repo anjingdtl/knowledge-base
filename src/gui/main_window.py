@@ -241,19 +241,22 @@ class MainWindow(QMainWindow):
         self.stack = QStackedWidget()
         layout.addWidget(self.stack, 1)
 
+        # 仅首页 View 同步创建，其余按需懒加载
         self.knowledge_view = KnowledgeView()
-        self.chat_view = ChatView(llm_indicator=self.llm_indicator)
-        self.catalog_view = CatalogView(llm_indicator=self.llm_indicator)
-        self.wiki_view = WikiView()
-        self.graph_view = GraphView(llm_indicator=self.llm_indicator)
-        self.trash_view = TrashView()
-
         self.stack.addWidget(self.knowledge_view)
-        self.stack.addWidget(self.chat_view)
-        self.stack.addWidget(self.catalog_view)
-        self.stack.addWidget(self.wiki_view)
-        self.stack.addWidget(self.graph_view)
-        self.stack.addWidget(self.trash_view)
+
+        # 懒加载占位：先加空 QWidget 占位，切换时才创建真正 View
+        self._lazy_views: dict[int, tuple[type, dict, QWidget]] = {}
+        for idx, (name, cls, kwargs) in enumerate([
+            (1, ChatView, {"llm_indicator": self.llm_indicator}),
+            (2, CatalogView, {"llm_indicator": self.llm_indicator}),
+            (3, WikiView, {}),
+            (4, GraphView, {"llm_indicator": self.llm_indicator}),
+            (5, TrashView, {}),
+        ], start=1):
+            placeholder = QWidget()
+            self.stack.addWidget(placeholder)
+            self._lazy_views[idx] = (cls, kwargs, placeholder)
 
         # 注册 LLM 状态回调
         register_llm_status_callback(self._on_llm_status)
@@ -269,7 +272,8 @@ class MainWindow(QMainWindow):
 
         # 状态栏
         self.statusBar().showMessage("就绪")
-        self._update_status()
+        # 延迟 200ms 再更新状态栏，让窗口先渲染出来
+        QTimer.singleShot(200, self._update_status)
 
         # MCP 心跳轮询 — 5s 一次（从 3s 放宽），减少端口探测 + DB 计数频率
         self._mcp_timer = QTimer(self)
@@ -377,6 +381,19 @@ class MainWindow(QMainWindow):
         return super().nativeEvent(eventType, message)
 
     def _switch_page(self, index: int):
+        # 懒加载：首次切换到非首页时才创建 View
+        if index in self._lazy_views:
+            cls, kwargs, placeholder = self._lazy_views.pop(index)
+            real_view = cls(**kwargs)
+            # 替换 stack 中的 placeholder
+            stack_idx = self.stack.indexOf(placeholder)
+            self.stack.removeWidget(placeholder)
+            placeholder.deleteLater()
+            self.stack.insertWidget(stack_idx, real_view)
+            # 存为属性，方便后续引用
+            attr_names = {1: "chat_view", 2: "catalog_view", 3: "wiki_view", 4: "graph_view", 5: "trash_view"}
+            setattr(self, attr_names[index], real_view)
+
         self.stack.setCurrentIndex(index)
         self.btn_knowledge.setChecked(index == 0)
         self.btn_chat.setChecked(index == 1)
@@ -385,10 +402,10 @@ class MainWindow(QMainWindow):
         self.btn_graph.setChecked(index == 4)
         self.btn_trash.setChecked(index == 5)
         # 切换到知识目录时刷新，确保与知识库的标题修改同步
-        if index == 2:
+        if index == 2 and hasattr(self, 'catalog_view'):
             self.catalog_view._load_catalog()
         # 切换到回收站时刷新列表
-        if index == 5:
+        if index == 5 and hasattr(self, 'trash_view'):
             self.trash_view.refresh()
 
     def _open_settings(self):
