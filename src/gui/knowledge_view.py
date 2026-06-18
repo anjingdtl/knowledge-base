@@ -346,8 +346,15 @@ class KnowledgeView(QWidget):
         self._search_timer = None
         self._selected_ids: set[str] = set()
         self._bulk_actions: list[QPushButton] = []
+        self._data_loaded = False  # 延迟加载标记
         self._setup_ui()
-        self._load_knowledge()
+
+    def showEvent(self, event):
+        """首次显示时才加载数据，避免阻塞启动"""
+        super().showEvent(event)
+        if not self._data_loaded:
+            self._data_loaded = True
+            self._load_knowledge()
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
