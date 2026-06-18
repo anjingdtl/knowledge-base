@@ -68,7 +68,7 @@ class FileGraphService:
                     backup_path = root / ".kb" / "backups" / path.name
                     backup_path.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(path, backup_path)
-                path.write_text(self._parser.serialize(page), encoding="utf-8")
+                path.write_text(self._parser.serialize(page), encoding="utf-8", errors="surrogatepass")
         if not dry_run:
             self._write_manifest({p["id"]: p["path"] for p in planned})
         return {"dry_run": dry_run, "count": len(planned), "pages": planned}
@@ -108,7 +108,7 @@ class FileGraphService:
             page.title = path.stem.split("--", 1)[0]
         changed = self._parser.ensure_ids(page)
         if changed:
-            path.write_text(self._parser.serialize(page), encoding="utf-8")
+            path.write_text(self._parser.serialize(page), encoding="utf-8", errors="surrogatepass")
             text = path.read_text(encoding="utf-8")
 
         content = self._content_from_page(page)
@@ -184,7 +184,7 @@ class FileGraphService:
         )
         self._parser.ensure_ids(page)
         path = self._page_path(page.title, page.id)
-        path.write_text(self._parser.serialize(page), encoding="utf-8")
+        path.write_text(self._parser.serialize(page), encoding="utf-8", errors="surrogatepass")
         self.sync_page(str(path))
         return page.id
 
@@ -202,7 +202,7 @@ class FileGraphService:
         page.metadata["updated-at"] = datetime.now().isoformat()
         page.blocks = self._coerce_blocks(blocks)
         self._parser.ensure_ids(page)
-        path.write_text(self._parser.serialize(page), encoding="utf-8")
+        path.write_text(self._parser.serialize(page), encoding="utf-8", errors="surrogatepass")
         self.sync_page(str(path))
 
     def delete_page(self, page_id: str, move_to_trash: bool = True) -> None:
@@ -468,7 +468,7 @@ class FileGraphService:
             page = self._page_from_item(existing)
             self._parser.ensure_ids(page)
             path = self._page_path(page.title, page.id)
-            path.write_text(self._parser.serialize(page), encoding="utf-8")
+            path.write_text(self._parser.serialize(page), encoding="utf-8", errors="surrogatepass")
             return path
         raise FileNotFoundError(f"Page not found in graph: {path_or_id}")
 
