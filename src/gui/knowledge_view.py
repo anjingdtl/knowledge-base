@@ -173,7 +173,7 @@ class QualityWorker(QThread):
                     return False
                 parsed = parsed_list[0]
                 if parsed.content and not _check_garbled(parsed.content):
-                    hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+                    hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
                     _file_graph_service().update_page(
                         item["id"],
                         parsed.content,
@@ -1225,7 +1225,7 @@ class KnowledgeView(QWidget):
         try:
             parsed_list = parse_file(path)
             parsed = parsed_list[0]
-            hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+            hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
             title = data.get("title", "")
             from src.gui.import_dialog import generate_title
             filename_stem = os.path.splitext(os.path.basename(path))[0]

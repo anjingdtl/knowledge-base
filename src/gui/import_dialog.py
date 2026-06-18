@@ -145,7 +145,7 @@ class ImportWorker(QThread):
                     pass
 
                 for idx, parsed in enumerate(parsed_list):
-                    content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+                    content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
 
                     # 快速去重检查（减少无谓的 LLM 调用）
                     with lock:
@@ -263,7 +263,7 @@ class UrlImportWorker(QThread):
                 url = url.strip()
                 try:
                     parsed = parse_url(url)
-                    content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+                    content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
 
                     existing = Database.get_knowledge_by_hash(content_hash)
                     if existing:
@@ -621,7 +621,7 @@ class ImportDialog(QDialog):
         tags = [t.strip() for t in self.paste_tag_input.text().split(",") if t.strip()]
 
         import hashlib
-        content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
+        content_hash = hashlib.sha256(content.encode("utf-8", errors="surrogatepass")).hexdigest()
         existing = Database.get_knowledge_by_hash(content_hash)
         if existing:
             QMessageBox.information(self, "提示", f"内容已存在：《{existing.get('title', '')}》")

@@ -337,7 +337,7 @@ class PathIndexService:
 
         parsed = parsed_list[0]
 
-        content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+        content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
         file_created_at = ""
         file_modified_at = ""
         try:
@@ -397,7 +397,7 @@ class PathIndexService:
             raise ValueError(f"No content parsed from {path}")
 
         parsed = parsed_list[0]
-        content_hash = hashlib.sha256(parsed.content.encode("utf-8")).hexdigest()
+        content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
 
         if existing_kid:
             conn = self._db.get_conn()
