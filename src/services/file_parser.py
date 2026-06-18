@@ -63,14 +63,28 @@ def parse_file(file_path: str) -> list[ParsedFile]:
         result = parsers[ext](path)
         # Excel 解析器直接返回 list[ParsedFile]
         if isinstance(result, list):
+            for pf in result:
+                pf.content = _clean_surrogates(pf.content)
             return result
+        result.content = _clean_surrogates(result.content)
         return [result]
     elif ext in code_extensions:
-        return [_parse_code(path)]
+        r = _parse_code(path)
+        r.content = _clean_surrogates(r.content)
+        return [r]
     elif ext in (".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp"):
-        return [_parse_image(path)]
+        r = _parse_image(path)
+        r.content = _clean_surrogates(r.content)
+        return [r]
     else:
-        return [_parse_text(path)]
+        r = _parse_text(path)
+        r.content = _clean_surrogates(r.content)
+        return [r]
+
+
+def _clean_surrogates(text: str) -> str:
+    """清理 UTF-16 代理半字符（PDF 等二进制提取时可能混入，导致 encode('utf-8') 报错）"""
+    return text.encode("utf-8", errors="surrogatepass").decode("utf-8", errors="replace")
 
 
 MAX_ROWS_PER_SHEET = 500
