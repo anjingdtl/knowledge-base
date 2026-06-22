@@ -135,3 +135,70 @@ def test_pid_matches_mcp_prefers_wmic_when_available(monkeypatch):
     )
 
     assert mcp_launcher._pid_matches_mcp(12345) is True
+
+
+# ---------- 端口冲突预检(Bug 2 真正根因:服务与子进程模式共用 9000) ----------
+
+
+class _FakeNetstat:
+    def __init__(self, stdout=""):
+        self.returncode = 0
+        self.stdout = stdout
+        self.stderr = ""
+
+
+def test_port_in_use_detects_listener(monkeypatch):
+    """netstat 输出含 :9000 LISTENING → 返回占用 PID。"""
+    monkeypatch.setattr(
+        subprocess,
+        "run",
+        lambda *a, **kw: _FakeNetstat(
+            "  TCP    127.0.0.1:9000     0.0.0.0:0     LISTENING    29796\r\n"
+            "  TCP    0.0.0.0:135        0.0.0.0:0     LISTENING    4\r\n"
+        ),
+    )
+    assert mcp_launcher._port_in_use(9000) == 29796
+    assert mcp_launcher._port_in_use(8000) is None
+
+
+def test_port_in_use_returns_none_when_netstat_fails(monkeypatch):
+    """netstat 不可用时不崩溃,返回 None(交由上层放行)。"""
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: (_ for _ in ()).throw(OSError()))
+    assert mcp_launcher._port_in_use(9000) is None
+
+
+def test_service_start_blocks_when_port_occupied(monkeypatch):
+    """端口被占 → service_start 返回冲突提示,且不触发 UAC 提权。
+
+    Bug 2 根因:子进程模式 MCP 占着 9000 时,服务启动 uvicorn bind 失败而退出,
+    表现为「点启动后状态仍是已停止」。预检把这条路径前移为明确提示。
+    """
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
+    monkeypatch.setattr(mcp_launcher, "_port_in_use", lambda port: 12345)
+    escalated = []
+    monkeypatch.setattr(
+        mcp_launcher,
+        "_shell_execute_elevated",
+        lambda *a, **kw: escalated.append(a) or 99,
+    )
+    msg = mcp_launcher.service_start()
+    assert "端口 9000" in msg and "12345" in msg
+    assert escalated == [], "端口被占时不应触发 UAC 提权"
+
+
+def test_service_start_proceeds_when_port_free(monkeypatch):
+    """端口空闲 → 正常走 UAC 提权 sc start。"""
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
+    monkeypatch.setattr(mcp_launcher, "_port_in_use", lambda port: None)
+    called = {}
+
+    def fake_elevated(exe, params):
+        called["args"] = (exe, params)
+        return 33  # >32 表示 ShellExecuteW 成功触发 UAC
+
+    monkeypatch.setattr(mcp_launcher, "_shell_execute_elevated", fake_elevated)
+    msg = mcp_launcher.service_start()
+    assert "UAC" in msg
+    assert called["args"][0] == "sc.exe"

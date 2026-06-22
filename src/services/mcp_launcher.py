@@ -19,6 +19,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _MCP_SCRIPT = _PROJECT_ROOT / "run_mcp.py"
 _PID_FILE = _PROJECT_ROOT / "data" / "mcp.pid"
 _SERVICE_NAME = "ShineHeMCP"
+_SERVICE_PORT = 9000  # windows_service.py 硬编码的服务监听端口
 
 _process: subprocess.Popen | None = None
 _CREATE_NO_WINDOW = int(getattr(subprocess, "CREATE_NO_WINDOW", 0))
@@ -106,8 +107,48 @@ def get_service_status() -> str:
         return "unknown"
 
 
+def _parse_failure_config(text: str) -> dict:
+    """解析 sc qfailure 输出文本,兼容中英文本地化。
+
+    sc.exe 的字段名(FAILURE_ACTIONS / RESET_PERIOD)固定英文,但 failure action
+    的描述文本(RESTART -- Delay = N milliseconds)在非英文 Windows 上被本地化
+    (中文: 「重新启动 -- 延迟 = N 毫秒」)。旧实现按行匹配 "RESTART" / "Delay"
+    关键词,中文输出下永远命中失败,导致 UI 始终显示「未配置」。
+
+    本函数不依赖本地化关键词:靠字段名 FAILURE_ACTIONS 定位 actions 区块后,
+    直接提取其中的延迟数值(= 后的毫秒数)。
+    """
+    import re
+
+    info: dict[str, Any] = {
+        "configured": False,
+        "reset_period": 0,
+        "actions": [],
+    }
+    # RESET_PERIOD 字段名英文固定;冒号前的描述(如 "in seconds" / "秒数")任意
+    m = re.search(r"RESET_PERIOD[^:\n]*:\s*(\d+)", text)
+    if m:
+        info["reset_period"] = int(m.group(1))
+    # FAILURE_ACTIONS 字段名英文固定;其后(同行剩余 + 续行)是 action 描述,
+    # 续行以空白开头、不是 "KEY:" 格式。lookahead 遇到下一个字段或文本结尾即停止。
+    m = re.search(
+        r"FAILURE_ACTIONS\s*:(.*?)(?=\n\s*[A-Z_]+\s*:|\Z)",
+        text,
+        re.DOTALL,
+    )
+    if m:
+        for delay in re.findall(r"=\s*(\d+)", m.group(1)):
+            info["actions"].append({"type": "restart", "delay_ms": int(delay)})
+    info["configured"] = len(info["actions"]) > 0
+    return info
+
+
 def get_service_failure_config() -> dict:
-    """获取服务崩溃重启策略"""
+    """获取服务崩溃重启策略。
+
+    Returns:
+        {'configured': bool, 'reset_period': 秒, 'actions': [{'delay_ms': 毫秒}]}
+    """
     if not _is_windows():
         return {}
     try:
@@ -115,24 +156,33 @@ def get_service_failure_config() -> dict:
             ["sc.exe", "qfailure", _SERVICE_NAME],
             capture_output=True, text=True, timeout=5,
         )
-        info: dict[str, Any] = {
-            "configured": False,
-            "reset_period": 0,
-            "actions": [],
-        }
-        for line in result.stdout.splitlines():
-            line = line.strip()
-            if "RESET_PERIOD" in line:
-                info["reset_period"] = int(line.split(":")[-1].strip())
-            elif "RESTART" in line:
-                import re
-                m = re.search(r"Delay\s*=\s*(\d+)", line)
-                delay = int(m.group(1)) if m else 0
-                info["actions"].append({"type": "restart", "delay_ms": delay})
-        info["configured"] = len(info["actions"]) > 0
-        return info
+        if result.returncode != 0:
+            return {"configured": False, "reset_period": 0, "actions": []}
+        return _parse_failure_config(result.stdout)
     except Exception:
         return {"configured": False}
+
+
+def _port_in_use(port: int) -> int | None:
+    """返回监听指定端口的 PID;无人监听返回 None。
+
+    服务与子进程模式都监听 _SERVICE_PORT。若服务启动前该端口已被占用
+    (通常是子进程模式的 MCP 仍在运行),uvicorn bind 会失败,服务启动即崩溃,
+    表现为「点启动后状态仍是已停止」。
+    """
+    try:
+        result = _run_hidden(
+            ["netstat", "-ano", "-p", "TCP"],
+            capture_output=True, text=True, timeout=5,
+        )
+        for line in result.stdout.splitlines():
+            if "LISTENING" not in line:
+                continue
+            if any(tok.endswith(f":{port}") for tok in line.split()):
+                return int(line.split()[-1])
+    except Exception:
+        pass
+    return None
 
 
 def service_start() -> str:
@@ -143,6 +193,13 @@ def service_start() -> str:
         # 先检查服务是否已在运行
         if get_service_status() == "running":
             return "服务已在运行中"
+        # 端口冲突预检:服务监听 _SERVICE_PORT,被占用则 bind 必失败
+        holder = _port_in_use(_SERVICE_PORT)
+        if holder is not None:
+            return (
+                f"端口 {_SERVICE_PORT} 已被进程 PID {holder} 占用,服务无法绑定启动。\n"
+                f"(通常是子进程模式的 MCP 仍在运行,请先在侧边栏停止它再启动服务)"
+            )
         # 通过 ShellExecuteW "runas" 触发 UAC 提权
         ret = _shell_execute_elevated("sc.exe", f"start {_SERVICE_NAME}")
         if ret <= 32:
