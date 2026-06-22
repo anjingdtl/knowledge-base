@@ -267,6 +267,17 @@ class TestMCPRouteQuery:
         # 能 JSON 序列化说明没有 QuerySpec 对象泄漏
         _json.dumps(result["data"])
 
+    def test_route_query_uses_known_tag_mentions_without_marker(self):
+        from src.mcp_server import route_query
+
+        _make_page("p-route-tag", "创智杯测试", tags=["创智杯"])
+
+        result = route_query(question="创智杯竞赛规则和拉收目标")
+
+        assert result["ok"] is True
+        assert result["data"]["mode"] == "structured"
+        assert result["data"]["query_spec"]["filter"]["tag"] == "创智杯"
+
 
 # ---------------------------------------------------------------------------
 # 4) MCP execute_query 工具
@@ -289,6 +300,21 @@ class TestMCPExecuteQuery:
         assert len(payload) >= 2
         assert result["meta"]["type"] == "structured"
         assert "total_estimate" in result["meta"]
+
+    def test_execute_query_accepts_tag_eq_filter_shape(self):
+        from src.mcp_server import execute_query
+
+        _make_page("p-exec-eq-1", "执行查询 eq A", tags=["创智杯"])
+        _make_page("p-exec-eq-2", "执行查询 eq B", tags=["其他"])
+
+        result = execute_query(
+            query_spec={"filter": {"tag": {"eq": "创智杯"}}},
+            type="structured",
+            limit=10,
+        )
+
+        assert result["ok"] is True
+        assert [row["id"] for row in result["data"]] == ["p-exec-eq-1"]
 
     def test_execute_query_graph_requires_start_ids(self):
         from src.mcp_server import execute_query

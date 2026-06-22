@@ -89,10 +89,9 @@ class AgenticRouter:
         self._llm = llm
 
     def route(self, question: str) -> dict:
-        if self._is_structured(question):
-            rule_spec = self._try_rule_based(question)
-            if rule_spec is not None:
-                return {"mode": "structured", "query_spec": rule_spec, "explanation": "rule-based routing"}
+        rule_spec = self._try_rule_based(question)
+        if rule_spec is not None:
+            return {"mode": "structured", "query_spec": rule_spec, "explanation": "rule-based routing"}
 
         if self._is_graph_query(question):
             llm_route = self._try_llm(question)
@@ -121,6 +120,11 @@ class AgenticRouter:
 
         for m in _NL_TAG_RE.finditer(question):
             conditions.append({"tag": m.group(1)})
+
+        for tag in self._known_tags_in_question(question):
+            entry: dict[str, Any] = {"tag": tag}
+            if entry not in conditions:
+                conditions.append(entry)
 
         for m in _NL_PROP_RE.finditer(question):
             key = m.group(1)
@@ -157,6 +161,21 @@ class AgenticRouter:
         else:
             filter_data = {"and": conditions}
         return QuerySpec.from_json({"filter": filter_data})
+
+    def _known_tags_in_question(self, question: str) -> list[str]:
+        if not question:
+            return []
+        try:
+            tags = self._db.get_all_tags()
+        except Exception:
+            return []
+        matches = []
+        for tag in sorted(tags, key=len, reverse=True):
+            if len(tag) < 2:
+                continue
+            if tag in question and tag not in matches:
+                matches.append(tag)
+        return matches
 
     def _try_llm(self, question: str) -> dict | None:
         llm = self._llm

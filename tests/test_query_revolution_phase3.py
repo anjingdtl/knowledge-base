@@ -18,6 +18,37 @@ def test_dsl_parse_simple_tag_filter():
     assert spec.sort_order == "desc"
 
 
+def test_dsl_normalizes_reported_sort_shapes():
+    from src.models.query_dsl import QuerySpec
+
+    spec = QuerySpec.from_json({
+        "filter": {"tag": "Python"},
+        "sort": {"field": "title", "order": "DESC"},
+    })
+    assert spec.sort_by == "title"
+    assert spec.sort_order == "desc"
+
+    multi = QuerySpec.from_json({
+        "filter": {"tag": "Python"},
+        "sort": [
+            {"field": "file_type", "order": "ASC"},
+            {"by": "updated_at", "order": "DESC"},
+        ],
+    })
+    assert multi.sort_by == "file_type"
+    assert multi.sort_order == "asc"
+    assert multi.sort_terms == [("file_type", "asc"), ("updated_at", "desc")]
+
+
+def test_dsl_normalizes_tag_operator_filter():
+    from src.models.query_dsl import QuerySpec
+
+    spec = QuerySpec.from_json({"filter": {"tag": {"eq": "创智杯"}}})
+
+    assert spec.filter_condition.type == "tag"
+    assert spec.filter_condition.value == "创智杯"
+
+
 def test_dsl_parse_and_or_not_groups():
     from src.models.query_dsl import QuerySpec
 
@@ -271,6 +302,27 @@ def test_query_executor_sort_and_pagination():
     results2 = executor.execute(spec_page2)
     assert len(results2) == 1
     assert results2[0]["title"] == "Gamma"
+
+
+def test_query_executor_multi_sort_terms():
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_executor import QueryExecutor
+
+    _insert_page("p33", "Same", tags=["multi-sort"], file_type="pdf")
+    _insert_page("p34", "Same", tags=["multi-sort"], file_type="docx")
+    _insert_page("p35", "Other", tags=["multi-sort"], file_type="md")
+
+    executor = QueryExecutor()
+    spec = QuerySpec.from_json({
+        "filter": {"tag": "multi-sort"},
+        "sort": [
+            {"field": "title", "order": "desc"},
+            {"field": "file_type", "order": "asc"},
+        ],
+    })
+    results = executor.execute(spec)
+
+    assert [r["id"] for r in results[:3]] == ["p34", "p33", "p35"]
 
 
 def test_query_executor_include_blocks():

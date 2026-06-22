@@ -307,6 +307,16 @@ class TestKBCapabilities:
             assert isinstance(flows[key], list)
             assert len(flows[key]) >= 2
 
+    def test_runtime_diagnostics_report_key_and_vector_index_state(self, mcp_env):
+        result = kb_capabilities()
+        diagnostics = result["data"]["runtime_diagnostics"]
+
+        assert "api_keys" in diagnostics
+        assert "vector_index" in diagnostics
+        assert set(diagnostics["api_keys"]) >= {"llm", "embedding", "reranker"}
+        assert "coverage" in diagnostics["vector_index"]
+        assert "recommendation" in diagnostics["vector_index"]
+
     def test_all_declared_tool_aliases_are_registered(self):
         async def registered_names():
             return {tool.name for tool in await mcp_mod.mcp.list_tools()}

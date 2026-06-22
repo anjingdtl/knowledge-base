@@ -55,6 +55,21 @@ class TestDualMethodConfig:
         saved = yaml.safe_load(out.read_text(encoding="utf-8"))
         assert saved["llm"]["api_key"] == "secret-key"
 
+    def test_export_secret_env_adds_loaded_secrets_without_overwriting(self):
+        cfg = Config()
+        cfg._data = {
+            "llm": {"api_key": "llm-secret"},
+            "embedding": {"api_key": "embedding-secret"},
+            "reranker": {"api_key": "reranker-secret"},
+        }
+        env = {"SHINEHE_LLM_API_KEY": "existing"}
+
+        exported = cfg.export_secret_env(env)
+
+        assert exported["SHINEHE_LLM_API_KEY"] == "existing"
+        assert exported["SHINEHE_EMBEDDING_API_KEY"] == "embedding-secret"
+        assert exported["SHINEHE_RERANKER_API_KEY"] == "reranker-secret"
+
 
 class TestDIContainer:
     def test_create_container(self):
