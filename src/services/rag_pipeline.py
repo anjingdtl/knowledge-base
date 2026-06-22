@@ -34,6 +34,42 @@ def _get_container_service(attr: str, fallback_factory):
         pass
     return fallback_factory()
 
+def _run_coroutine_sync(coro, timeout: float = 120):
+    """Run an async pipeline from sync entrypoints without blocking its loop."""
+    import asyncio
+    import concurrent.futures
+    import queue
+    import threading
+
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
+    if not (loop and loop.is_running()):
+        return asyncio.run(coro)
+
+    result_queue: queue.Queue[tuple[bool, object]] = queue.Queue(maxsize=1)
+
+    def _runner():
+        try:
+            result_queue.put((True, asyncio.run(coro)))
+        except BaseException as exc:  # noqa: BLE001 - pass through to caller
+            result_queue.put((False, exc))
+
+    thread = threading.Thread(target=_runner, name="RAGPipelineAsyncBridge", daemon=True)
+    thread.start()
+    thread.join(timeout=timeout)
+    if thread.is_alive():
+        raise concurrent.futures.TimeoutError()
+    success, result = result_queue.get_nowait()
+    if success:
+        return result
+    if isinstance(result, BaseException):
+        raise result
+    raise RuntimeError(str(result))
+
+
 # ---- 统一的 prompt 模板 ----
 
 RAG_SYSTEM_PROMPT = """你是一个严谨的知识库问答助手。请基于检索到的知识库内容回答用户问题。
@@ -885,7 +921,6 @@ class RAGService:
     def query(self, question: str, conversation_history: list[dict] | None = None,
               phase_callback=None) -> dict:
         """同步查询（非流式）— 直接通过管线执行，无冗余预处理"""
-        import asyncio
         import traceback
 
         try:
@@ -894,22 +929,10 @@ class RAGService:
             if phase_callback:
                 phase_callback("searching", "RAG 管线执行中")
 
-            try:
-                loop = asyncio.get_running_loop()
-            except RuntimeError:
-                loop = None
-
-            if loop and loop.is_running():
-                # 已有事件循环（streamable-http 等场景）— 线程安全提交
-                future = asyncio.run_coroutine_threadsafe(
-                    self._pipeline.execute(question, conversation_history), loop
-                )
-                result = future.result(timeout=120)
-            else:
-                # 无事件循环 → asyncio.run() 安全
-                result = asyncio.run(self._pipeline.execute(
-                    question, conversation_history
-                ))
+            result = _run_coroutine_sync(
+                self._pipeline.execute(question, conversation_history),
+                timeout=120,
+            )
             if "source_graph" not in result:
                 from src.services.source_graph import build_source_graph
                 result["source_graph"] = build_source_graph(
