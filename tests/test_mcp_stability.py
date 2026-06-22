@@ -18,6 +18,39 @@ def test_run_async_uses_separate_loop_when_called_inside_running_loop():
     assert asyncio.run(caller()) == "ok"
 
 
+def test_rag_query_uses_separate_loop_when_called_inside_running_loop(monkeypatch):
+    from src.services.rag_pipeline import RAGService
+
+    class Pipeline:
+        async def execute(self, question, conversation_history=None):
+            await asyncio.sleep(0)
+            return {
+                "answer": f"answer: {question}",
+                "sources": [],
+                "source_graph": {"nodes": [], "edges": []},
+            }
+
+    service = RAGService(deps={})
+    service._pipeline = Pipeline()
+
+    def fail_if_self_deadlocking(*args, **kwargs):
+        raise AssertionError("must not synchronously wait on the running loop")
+
+    monkeypatch.setattr(asyncio, "run_coroutine_threadsafe", fail_if_self_deadlocking)
+    monkeypatch.setattr(
+        service,
+        "_direct_query",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("query should not fall back when the pipeline can run")
+        ),
+    )
+
+    async def caller():
+        return service.query("MCP ask")
+
+    assert asyncio.run(caller())["answer"] == "answer: MCP ask"
+
+
 def test_try_wiki_compile_does_not_block_caller_when_auto_compile_is_enabled(
     setup_db,
     monkeypatch,
