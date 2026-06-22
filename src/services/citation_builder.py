@@ -48,6 +48,20 @@ class CitationBuilder:
             title = item["title"]
         elif metadata.get("title"):
             title = metadata["title"]
+        else:
+            # BUG-8 fix: 从 metadata 中的 knowledge_id/page_id 回查标题
+            kid = metadata.get("page_id") or metadata.get("knowledge_id", "")
+            if kid:
+                try:
+                    db = self._get_db()
+                    row = db.get_conn().execute(
+                        "SELECT title FROM knowledge_items WHERE id = ? AND deleted_at IS NULL",
+                        (kid,),
+                    ).fetchone()
+                    if row and row[0]:
+                        title = row[0]
+                except Exception:
+                    pass
 
         # 构建定位信息
         location = self._location_from_metadata(metadata)

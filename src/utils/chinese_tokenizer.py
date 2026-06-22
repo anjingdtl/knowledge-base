@@ -41,11 +41,15 @@ def sanitize_fts_query(query: str, is_tokenized: bool = False) -> str:
 
 
 def tokenize_mixed_query_terms(text: str) -> list[str]:
-    """Return stable FTS tokens for CJK + ASCII mixed business terms."""
+    """Return stable FTS tokens for CJK + ASCII mixed business terms.
+
+    BUG-6 fix: 对 CJK+ASCII 混合术语（如 "AI介入率"）同时保留原始短语
+    和分词结果，确保在 jieba 预分词的 FTS 索引中也能命中短语匹配。
+    """
     if not text or not text.strip():
         return []
 
-    raw_parts = re.findall(r"[A-Za-z0-9]+|[\u4e00-\u9fff]+", text)
+    raw_parts = re.findall(r"[A-Za-z0-9+]+|[\u4e00-\u9fff]+", text)
     terms: list[str] = []
 
     def add(term: str):
@@ -57,15 +61,39 @@ def tokenize_mixed_query_terms(text: str) -> list[str]:
         if term not in terms:
             terms.append(term)
 
+    # BUG-6: 保留原始混合短语（如 "AI介入率"）作为整体搜索词
+    # 去掉纯空白后的原始文本，适合 jieba 预分词索引中的短语匹配
+    original_phrase = re.sub(r"\s+", "", text).strip()
+    if original_phrase and len(original_phrase) >= 2:
+        add(original_phrase)
+
     for part in raw_parts:
         add(part)
         if re.fullmatch(r"[\u4e00-\u9fff]+", part):
             for word in jieba.cut_for_search(part):
                 add(word)
+            # bigrams
             if len(part) <= 12:
                 for i in range(len(part) - 1):
                     add(part[i:i + 2])
+            # BUG-6: 添加 trigrams 提升 3+ 字中文短语的召回
+            if len(part) >= 3 and len(part) <= 15:
+                for i in range(len(part) - 2):
+                    add(part[i:i + 3])
         else:
             add(part.lower())
+
+    # BUG-6: 对跨 CJK+ASCII 边界的连续片段，保留原始混合子短语
+    # 例如 "AI介入率" → 保留 "AI介入" 和 "介入率" 等跨越边界的子短语
+    normalized = re.sub(r"\s+", "", text)
+    if len(normalized) >= 3:
+        # 提取跨越 ASCII/CJK 边界的连续子串（长度 2-8）
+        for window in range(min(8, len(normalized)), 1, -1):
+            for i in range(len(normalized) - window + 1):
+                sub = normalized[i:i + window]
+                has_ascii = bool(re.search(r"[A-Za-z0-9]", sub))
+                has_cjk = bool(re.search(r"[\u4e00-\u9fff]", sub))
+                if has_ascii and has_cjk:
+                    add(sub)
 
     return terms

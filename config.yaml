@@ -4,24 +4,24 @@ appearance:
 embedding:
   base_url: https://api.siliconflow.cn/v1
   model: BAAI/bge-m3
-  provider: Minimax
-  reuse_llm: true
+  provider: siliconflow
+  reuse_llm: false
 graph_backend:
   database: neo4j
-  provider: neo4j
+  provider: sqlite
   uri: bolt://localhost:7687
   user: neo4j
 llm:
   base_url: https://api.minimaxi.com/v1
   max_tokens: 2048
-  model: MiniMax-M2.7
+  model: MiniMax-M3
   provider: Minimax
   temperature: 0.7
 mcp:
   allow_http_write: true
   enable_legacy_aliases: true
   experimental_tools_enabled: true
-  tool_profile: extended
+  tool_profile: full
   write_policy: ''
 rag:
   chunk_overlap: 150
@@ -29,10 +29,10 @@ rag:
   score_threshold: 0.35
   top_k: 5
 reranker:
-  base_url: ''
+  base_url: https://api.siliconflow.cn/v1
   enabled: true
-  model: ''
-  provider: ''
+  model: BAAI/bge-reranker-v2-m3
+  provider: siliconflow
   reuse_llm: false
   use_llm_fallback: true
 storage:
