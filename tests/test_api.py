@@ -331,6 +331,14 @@ class TestPhase3QueryAPI:
         results = resp.json()["results"]
         assert any(r["id"] == "pq1" for r in results)
 
+    def test_structured_query_endpoint_accepts_sort_list(self, api_client):
+        resp = api_client.post("/api/query", json={
+            "filter": {"tag": "query-test"},
+            "sort": [{"field": "title", "order": "DESC"}],
+            "limit": 10,
+        })
+        assert resp.status_code == 200
+
     def test_explain_query_endpoint(self, api_client):
         resp = api_client.post("/api/query/explain", json={
             "filter": {"and": [{"tag": "bug"}, {"property": {"key": "status", "op": "eq", "value": "open"}}]},

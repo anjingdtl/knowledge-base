@@ -45,14 +45,20 @@ class QuerySpec:
     offset: int = 0
     sort_by: str = "updated_at"
     sort_order: str = "desc"
+    sort_terms: list[tuple[str, str]] = field(default_factory=list)
     include_blocks: bool = False
 
     def to_json(self) -> dict:
+        sort: dict | list[dict]
+        if len(self.sort_terms) > 1:
+            sort = [{"by": by, "order": order} for by, order in self.sort_terms]
+        else:
+            sort = {"by": self.sort_by, "order": self.sort_order}
         result = {
             "filter": self.filter_condition.to_json(),
             "limit": self.limit,
             "offset": self.offset,
-            "sort": {"by": self.sort_by, "order": self.sort_order},
+            "sort": sort,
         }
         if self.include_blocks:
             result["include_blocks"] = True
@@ -62,21 +68,43 @@ class QuerySpec:
     def from_json(cls, data: dict) -> "QuerySpec":
         filter_data = data.get("filter", {})
         condition = cls._parse_condition(filter_data)
-        sort_data = data.get("sort", {})
-        sort_by = sort_data.get("by", "updated_at")
-        sort_order = sort_data.get("order", "desc")
-        if sort_by not in VALID_SORT_FIELDS:
-            raise ValueError(f"invalid sort field: {sort_by}")
-        if sort_order not in VALID_SORT_ORDERS:
-            raise ValueError(f"invalid sort order: {sort_order}")
+        sort_terms = cls._parse_sort_terms(data.get("sort", {}))
+        sort_by, sort_order = sort_terms[0]
         return cls(
             filter_condition=condition,
             limit=data.get("limit", 100),
             offset=data.get("offset", 0),
             sort_by=sort_by,
             sort_order=sort_order,
+            sort_terms=sort_terms,
             include_blocks=data.get("include_blocks", False),
         )
+
+    @classmethod
+    def _parse_sort_terms(cls, sort_data: Any) -> list[tuple[str, str]]:
+        if not sort_data:
+            sort_items = [{}]
+        elif isinstance(sort_data, list):
+            sort_items = sort_data or [{}]
+        elif isinstance(sort_data, dict):
+            sort_items = [sort_data]
+        else:
+            raise ValueError("sort must be an object or list of objects")
+
+        terms = []
+        for item in sort_items:
+            if not isinstance(item, dict):
+                raise ValueError("sort entries must be objects")
+            sort_by = item.get("by", item.get("field", "updated_at"))
+            sort_order = str(item.get("order", "desc")).lower()
+            if sort_by not in VALID_SORT_FIELDS:
+                raise ValueError(f"invalid sort field: {sort_by}")
+            if sort_order not in VALID_SORT_ORDERS:
+                raise ValueError(f"invalid sort order: {sort_order}")
+            term = (sort_by, sort_order)
+            if term not in terms:
+                terms.append(term)
+        return terms or [("updated_at", "desc")]
 
     @classmethod
     def _parse_condition(cls, data: dict) -> Condition:
@@ -98,9 +126,15 @@ class QuerySpec:
                 child=cls._parse_condition(data["not"]),
             )
         if "tag" in data:
+            tag_data = data["tag"]
+            if isinstance(tag_data, dict):
+                if "eq" in tag_data:
+                    tag_data = tag_data["eq"]
+                else:
+                    raise ValueError(f"unknown tag operator: {list(tag_data.keys())}")
             return Condition(
                 type="tag",
-                value=data["tag"],
+                value=tag_data,
                 expand_descendants=data.get("expand_descendants", True),
             )
         if "property" in data:

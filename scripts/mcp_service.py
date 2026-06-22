@@ -158,8 +158,15 @@ def do_start(host: str = _DEFAULT_HOST, port: int = _DEFAULT_PORT) -> int:
         "-p", str(port),
     ]
 
-    # 设置环境变量
+    # 设置环境变量，并把 keyring/config 中的密钥显式传给后台子进程
     env = os.environ.copy()
+    try:
+        from src.utils.config import Config
+        cfg = Config()
+        cfg.load(str(_PROJECT_ROOT / "config.yaml"))
+        env = cfg.export_secret_env(env)
+    except Exception as exc:
+        print(f"[WARN] 无法导出 API Key 环境变量，子进程将只继承当前环境: {exc}")
     env["SHINEHE_HOME"] = str(_PROJECT_ROOT)
 
     try:

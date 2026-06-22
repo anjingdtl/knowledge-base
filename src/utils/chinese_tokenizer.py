@@ -1,4 +1,6 @@
 """中文分词工具 — 基于 jieba"""
+import re
+
 import jieba
 
 
@@ -36,3 +38,34 @@ def sanitize_fts_query(query: str, is_tokenized: bool = False) -> str:
         if not clean:
             return ""
         return f'"{clean}"'
+
+
+def tokenize_mixed_query_terms(text: str) -> list[str]:
+    """Return stable FTS tokens for CJK + ASCII mixed business terms."""
+    if not text or not text.strip():
+        return []
+
+    raw_parts = re.findall(r"[A-Za-z0-9]+|[\u4e00-\u9fff]+", text)
+    terms: list[str] = []
+
+    def add(term: str):
+        term = term.strip()
+        if not term:
+            return
+        if re.fullmatch(r"[\u4e00-\u9fff]", term):
+            return
+        if term not in terms:
+            terms.append(term)
+
+    for part in raw_parts:
+        add(part)
+        if re.fullmatch(r"[\u4e00-\u9fff]+", part):
+            for word in jieba.cut_for_search(part):
+                add(word)
+            if len(part) <= 12:
+                for i in range(len(part) - 1):
+                    add(part[i:i + 2])
+        else:
+            add(part.lower())
+
+    return terms

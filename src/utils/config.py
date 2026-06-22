@@ -248,6 +248,22 @@ class Config:
         return self._data
 
     @_dualmethod
+    def export_secret_env(self, env: dict[str, str] | None = None, overwrite: bool = False) -> dict[str, str]:
+        """Return an env mapping populated with loaded secret values.
+
+        Existing environment values win by default so callers can deliberately
+        override keyring/config values for a child process.
+        """
+        if not self._data:
+            self.load()
+        result = dict(env or {})
+        for secret_key, env_key in _ENV_KEY_MAP.items():
+            value = self._get_nested(secret_key)
+            if value and (overwrite or not result.get(env_key)):
+                result[env_key] = str(value)
+        return result
+
+    @_dualmethod
     def get_data_dir(self) -> Path:
         return get_data_dir()
 

@@ -29,8 +29,7 @@ class QueryExecutor:
             base_query += " JOIN knowledge_fts ON knowledge_fts.rowid = ki.rowid"
 
         where_clause = " AND ".join(where_parts) if where_parts else "1=1"
-        order_dir = "ASC" if spec.sort_order == "asc" else "DESC"
-        order_clause = f"ORDER BY ki.{spec.sort_by} {order_dir}"
+        order_clause = self._compile_order_clause(spec)
 
         full_sql = f"{base_query} WHERE {where_clause} {order_clause} LIMIT ? OFFSET ?"
         params.extend([spec.limit, spec.offset])
@@ -53,6 +52,15 @@ class QueryExecutor:
                 row["blocks"] = blocks_payload
 
         return rows
+
+    @staticmethod
+    def _compile_order_clause(spec: QuerySpec) -> str:
+        terms = spec.sort_terms or [(spec.sort_by, spec.sort_order)]
+        parts = []
+        for field, order in terms:
+            order_dir = "ASC" if order == "asc" else "DESC"
+            parts.append(f"ki.{field} {order_dir}")
+        return "ORDER BY " + ", ".join(parts)
 
     def _compile(self, condition: Condition) -> tuple[str, list, bool]:
         if condition.type not in self.VALID_CONDITION_TYPES:

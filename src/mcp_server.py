@@ -930,7 +930,7 @@ def list_knowledge(
         tag=tag, file_type=file_type, sort_by=sort_by,
         sort_order=sort_order, limit=limit, offset=offset,
     )
-    total = db.count_knowledge(tag=tag)
+    total = db.count_knowledge(tag=tag, file_type=file_type)
     has_more = (offset + len(items)) < total
     return ok(
         items,
@@ -2269,6 +2269,52 @@ def get_stats_resource() -> str:
     return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
+def _runtime_diagnostics() -> dict:
+    """Return non-secret operational diagnostics for MCP clients."""
+    c = _get_container()
+    key_state = {
+        "llm": bool(Config.get("llm.api_key", "")),
+        "embedding": bool(Config.get("embedding.api_key", "") or Config.get("llm.api_key", "")),
+        "reranker": bool(Config.get("reranker.api_key", "") or Config.get("embedding.api_key", "")),
+    }
+
+    block_count = 0
+    vector_count = 0
+    vector_error = ""
+    try:
+        row = c.db.get_conn().execute("SELECT COUNT(*) AS cnt FROM blocks").fetchone()
+        block_count = int(row["cnt"] if row else 0)
+    except Exception as exc:
+        vector_error = f"block count unavailable: {type(exc).__name__}"
+
+    try:
+        vector_count = int(c.block_store.count())
+    except Exception as exc:
+        vector_error = f"sqlite-vec unavailable: {type(exc).__name__}: {str(exc)[:120]}"
+
+    coverage = (vector_count / block_count) if block_count else 0.0
+    if not key_state["embedding"]:
+        recommendation = "配置 embedding.api_key 或 llm.api_key 后重建向量索引"
+    elif block_count and vector_count == 0:
+        recommendation = "向量索引为空，请执行 reindex_all 或迁移脚本回填 block embeddings"
+    elif block_count and coverage < 0.8:
+        recommendation = "向量索引覆盖率偏低，请执行 reindex_all 回填缺失 block embeddings"
+    else:
+        recommendation = "向量索引状态正常"
+
+    return {
+        "api_keys": key_state,
+        "vector_index": {
+            "blocks": block_count,
+            "vectors": vector_count,
+            "coverage": round(coverage, 4),
+            "sqlite_vec_ok": not bool(vector_error),
+            "error": vector_error,
+            "recommendation": recommendation,
+        },
+    }
+
+
 # ---- Capabilities (Sprint 1 新增) ----
 
 @_define_tool(
@@ -2325,6 +2371,7 @@ def kb_capabilities() -> dict:
         "tool_metadata": _TOOL_METADATA,
         "tool_aliases": _REGISTERED_TOOL_ALIASES,
         "tools": tool_summaries,
+        "runtime_diagnostics": _runtime_diagnostics(),
         "recommended_flows": {
             "research": ["kb_capabilities", "route_query", "execute_query|ask", "get_source_graph", "read"],
             "safe_update": ["read", "preview_operation", "update(dry_run=true)", "update", "get_operation_log"],

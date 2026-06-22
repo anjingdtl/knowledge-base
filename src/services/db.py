@@ -825,7 +825,7 @@ class Database(metaclass=_DatabaseMeta):
 
     def search_knowledge(self, query: str, limit: int = 20, offset: int = 0,
                          include_deleted: bool = False) -> list[dict]:
-        from src.utils.chinese_tokenizer import sanitize_fts_query
+        from src.utils.chinese_tokenizer import sanitize_fts_query, tokenize_mixed_query_terms
         conn = self.get_conn()
         deleted_clause = "" if include_deleted else " AND ki.deleted_at IS NULL"
         try:
@@ -840,6 +840,18 @@ class Database(metaclass=_DatabaseMeta):
                 ).fetchall()
                 if fts_rows:
                     return [dict(r) for r in fts_rows]
+            mixed_terms = tokenize_mixed_query_terms(query)
+            mixed_query = sanitize_fts_query(" ".join(mixed_terms), is_tokenized=True)
+            if mixed_query and mixed_query != safe_query:
+                fts_rows = conn.execute(
+                    f"""SELECT ki.*, rank as fts_rank FROM knowledge_fts kf
+                        JOIN knowledge_items ki ON ki.rowid = kf.rowid
+                        WHERE knowledge_fts MATCH ?{deleted_clause}
+                        ORDER BY fts_rank LIMIT ? OFFSET ?""",
+                    (mixed_query, limit, offset),
+                ).fetchall()
+                if fts_rows:
+                    return [dict(r) for r in fts_rows]
         except sqlite3.OperationalError as e:
             logger.warning("FTS search failed, falling back to LIKE: %s", e)
         # 转义 LIKE 通配符，防止用户输入 % 或 _ 影响搜索行为
@@ -850,6 +862,20 @@ class Database(metaclass=_DatabaseMeta):
                 f"SELECT * FROM knowledge_items WHERE (title LIKE ? ESCAPE '\\' OR content LIKE ? ESCAPE '\\'){deleted_clause2} ORDER BY updated_at DESC LIMIT ? OFFSET ?",
                 (f"%{escaped}%", f"%{escaped}%", limit, offset),
             ).fetchall()
+            if rows:
+                return [dict(r) for r in rows]
+            mixed_terms = tokenize_mixed_query_terms(query)
+            like_terms = [t.replace('%', '\\%').replace('_', '\\_') for t in mixed_terms[:8]]
+            if like_terms:
+                conditions = " OR ".join(["title LIKE ? ESCAPE '\\' OR content LIKE ? ESCAPE '\\'"] * len(like_terms))
+                params = []
+                for term in like_terms:
+                    params.extend([f"%{term}%", f"%{term}%"])
+                rows = conn.execute(
+                    f"SELECT * FROM knowledge_items WHERE ({conditions}){deleted_clause2} "
+                    "ORDER BY updated_at DESC LIMIT ? OFFSET ?",
+                    params + [limit, offset],
+                ).fetchall()
         except sqlite3.OperationalError as e:
             logger.error("LIKE fallback search failed: %s", e)
             return []
@@ -1024,17 +1050,27 @@ class Database(metaclass=_DatabaseMeta):
                 result.append(g)
         return result
 
-    def count_knowledge(self, tag: str | None = None, include_deleted: bool = False) -> int:
-        deleted_clause = "" if include_deleted else " AND deleted_at IS NULL"
+    def count_knowledge(
+        self,
+        tag: str | None = None,
+        file_type: str | None = None,
+        include_deleted: bool = False,
+    ) -> int:
+        conditions = []
+        params = []
+        if not include_deleted:
+            conditions.append("deleted_at IS NULL")
         if tag:
-            row = self.get_conn().execute(
-                f"SELECT COUNT(*) as cnt FROM knowledge_items WHERE tags LIKE ?{deleted_clause}",
-                (f'%"{tag}"%',),
-            ).fetchone()
-        else:
-            row = self.get_conn().execute(
-                f"SELECT COUNT(*) as cnt FROM knowledge_items WHERE 1=1{deleted_clause}",
-            ).fetchone()
+            conditions.append("tags LIKE ?")
+            params.append(f'%"{tag}"%')
+        if file_type:
+            conditions.append("file_type = ?")
+            params.append(file_type)
+        where = " WHERE " + " AND ".join(conditions) if conditions else ""
+        row = self.get_conn().execute(
+            f"SELECT COUNT(*) as cnt FROM knowledge_items{where}",
+            params,
+        ).fetchone()
         return int(row["cnt"])
 
     def get_stats(self) -> dict:

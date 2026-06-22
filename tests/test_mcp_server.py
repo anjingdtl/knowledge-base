@@ -78,6 +78,14 @@ class TestSearchFulltext:
         assert len(data) >= 1
         assert any("Python" in r["title"] for r in data)
 
+    def test_cjk_ascii_mixed_terms_fall_back_to_subterms(self, mcp_env):
+        _insert_sample("企微运营计划", "企微运营官AI完整服务率达到百分之五十")
+
+        result = search_fulltext(query="企微AI完整服务率")
+
+        assert result["ok"] is True
+        assert any("企微运营计划" == r.get("title") for r in result["data"])
+
 
 class TestRead:
     def test_existing_item(self, mcp_env):
@@ -190,6 +198,16 @@ class TestList:
         assert len(result["data"]) == 2
         assert result["meta"]["limit"] == 2
         assert result["meta"]["next_offset"] == 2
+
+    def test_file_type_filter_total_matches_filtered_rows(self, mcp_env):
+        _insert_sample("PDF 知识", file_type="pdf")
+        _insert_sample("DOCX 知识", file_type="docx")
+
+        result = list_knowledge(file_type="pdf", limit=20)
+
+        assert result["ok"] is True
+        assert result["meta"]["total"] == 1
+        assert [item["title"] for item in result["data"]] == ["PDF 知识"]
 
 
 class TestTags:

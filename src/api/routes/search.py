@@ -12,7 +12,7 @@ class QueryDSLReq(BaseModel):
     filter: dict
     limit: int = 100
     offset: int = 0
-    sort: dict | None = None
+    sort: dict | list[dict] | None = None
     include_blocks: bool = False
 
 
