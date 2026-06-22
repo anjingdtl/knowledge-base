@@ -199,16 +199,13 @@ python run_mcp.py
 
 **核心（默认）：** MCP 服务器、本地文件索引、混合搜索、RRF、重排序、上下文扩展、结构化引用、目录监听、评测门禁。
 
-**实验性（可选）：** Wiki 工作流、图谱遍历（Neo4j）、Agent Memory、插件系统、Web 管理后台、多用户 RBAC。
+**实验性（可选）：** Wiki 工作流、SQLite 图谱遍历、Agent Memory、插件系统、Web 管理后台、多用户 RBAC。
 
 高级功能保留在代码库中，但默认对 MCP 工具面隐藏。通过 `config.yaml` 中的 `mcp.experimental_tools_enabled=true` 启用。参见 [docs/advanced-features.md](docs/advanced-features.md)。
 
-## 图谱后端（SQLite / Neo4j）
+## SQLite 图谱存储
 
-GUI 设置 → 「图谱后端」标签页可切换知识库的图存储后端：
-
-- **SQLite（默认）**：零配置即用，新增/删除条目时由 `GraphSyncHook` 自动增量同步到图视图，适合中小规模图谱
-- **Neo4j（可选）**：适合大规模关联分析与 Cypher 遍历。选择后可点击「**自动部署 Neo4j**」一键下载并安装 Neo4j Community 5.x 到 `%LOCALAPPDATA%\Neo4j`（按需触发 UAC 设置 `NEO4J_HOME`），随后使用「启动 Neo4j」「全量迁移」即可把现有数据迁入
+图谱数据保存在本地 SQLite：Page、Block、Tag、实体引用和语义关系共用 `data/kb.db`，无需部署外部图数据库。统一图谱、来源图谱和多跳遍历都从这些本地表动态构建。
 
 ## 架构
 

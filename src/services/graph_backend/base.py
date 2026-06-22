@@ -1,6 +1,6 @@
-"""插件式图数据库后端 — 抽象基类
+"""SQLite 图数据库后端 — 抽象接口
 
-定义了图谱操作的统一接口，支持 SQLite（默认）、Neo4j 等多种后端。
+定义了图谱操作的统一接口，当前生产实现为 SQLiteGraphBackend。
 所有图谱服务（UnifiedGraphService、GraphTraversalService、SourceGraph、
 GraphRepository、FileGraphService）均通过此接口访问底层图存储。
 
@@ -8,7 +8,7 @@ GraphRepository、FileGraphService）均通过此接口访问底层图存储。
     - 读操作优先：图遍历/查询路径必须高效
     - ID 约定：node_id = "{type}:{source_id}"，如 "page:abc", "block:def", "tag:python"
     - edge_type 复用现有关系名：contains, parent, tagged_with, mention, references 等
-    - 后端实现可无状态（SQLite 每次从 DB 查）或有状态（Neo4j 维护连接池）
+    - 后端实现从本地 SQLite 表读取图数据
 """
 from __future__ import annotations
 
@@ -134,7 +134,7 @@ class GraphBackend(ABC):
     @property
     @abstractmethod
     def name(self) -> str:
-        """后端名称，如 'sqlite', 'neo4j', 'memgraph'"""
+        """后端名称，当前为 'sqlite'"""
         ...
 
     # ---- 写操作 ----

@@ -973,7 +973,7 @@ class WikiView(QWidget):
         msg.setText("\n".join(lines))
         btn_repair = msg.addButton("立即修复", QMessageBox.ButtonRole.AcceptRole)
         btn_mark = msg.addButton("仅标记异常", QMessageBox.ButtonRole.ResetRole)
-        btn_cancel = msg.addButton("取消", QMessageBox.ButtonRole.RejectRole)
+        msg.addButton("取消", QMessageBox.ButtonRole.RejectRole)
         msg.exec()
 
         clicked = msg.clickedButton()

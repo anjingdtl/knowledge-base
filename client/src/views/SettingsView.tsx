@@ -140,7 +140,7 @@ function ModelsTab() {
         </div>
       </div>
 
-      {/* Graph Backend */}
+      {/* Graph Storage */}
       {settings?.graph_backend && (
         <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5">
           <h3 className="font-medium mb-3">图后端</h3>
@@ -288,8 +288,8 @@ function BackupTab() {
           <div>SQLite + FTS5</div>
           <div className="text-[var(--color-text-muted)]">向量引擎</div>
           <div>sqlite-vec</div>
-          <div className="text-[var(--color-text-muted)]">图谱后端</div>
-          <div>Neo4j / SQLite (可选)</div>
+          <div className="text-[var(--color-text-muted)]">图谱存储</div>
+          <div>SQLite 内置图索引</div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 # 图谱问答评测集 — 验证知识图谱遍历和多跳推理能力
-# 依赖图后端（Neo4j 或 SQLite）中有关系数据
+# 依赖 SQLite 图存储中有关系数据
 
 - question: "A 和 B 之间有什么关系？"
   expected_answer_summary: "需要遍历图谱找到两个实体间的路径"

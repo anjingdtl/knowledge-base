@@ -43,8 +43,6 @@ class MainWindow(QMainWindow):
         self._restore_geometry()
         self._init_database()
         self._setup_ui()
-        # 延迟 1 秒后检测并自动拉起 Neo4j（不阻塞 UI 初始渲染）
-        QTimer.singleShot(1000, self._auto_start_neo4j)
 
     def _restore_geometry(self):
         """从 QSettings 恢复窗口位置和大小"""
@@ -76,33 +74,6 @@ class MainWindow(QMainWindow):
                 f"无法连接数据库，请检查数据文件是否损坏或被占用。\n\n{exc}",
             )
             raise DatabaseInitError(str(exc))
-
-    def _auto_start_neo4j(self):
-        """如果配置了 Neo4j 后端但服务未运行，自动拉起 Neo4j"""
-        try:
-            from src.utils.config import Config
-            provider = Config.get("graph_backend.provider", "sqlite")
-            if provider != "neo4j":
-                return
-
-            from src.services.neo4j_manager import Neo4jManager
-            mgr = Neo4jManager()
-            if mgr.is_running():
-                logger.info("Neo4j already running on port %d", mgr.bolt_port)
-                return
-
-            if not mgr.is_installed():
-                logger.warning(
-                    "Neo4j backend configured but not installed. "
-                    "Set NEO4J_HOME or install Neo4j Community Edition."
-                )
-                return
-
-            logger.info("Auto-starting Neo4j...")
-            msg = mgr.start(timeout=60)
-            logger.info("Neo4j auto-start: %s", msg)
-        except Exception as exc:
-            logger.warning("Neo4j auto-start failed: %s", exc)
 
     def _setup_ui(self):
         root = QWidget()

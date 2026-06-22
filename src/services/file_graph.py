@@ -16,8 +16,7 @@ from src.services.markdown_outline import MarkdownOutlineParser, OutlineBlock, P
 class FileGraphService:
     """Owns the local Markdown graph and rebuilds DB/vector caches from it.
 
-    支持图后端增量同步：当 graph_backend 为 Neo4j 等非 SQLite 后端时，
-    页面/块的变更会自动同步到图后端。
+    图数据写入本地 SQLite 表，并由 SQLiteGraphBackend 动态读取。
     """
 
     def __init__(self, config, db, block_store, embedding=None, graph_backend=None):
@@ -26,11 +25,6 @@ class FileGraphService:
         self._block_store = block_store
         self._embedding = embedding
         self._parser = MarkdownOutlineParser()
-        # 图后端同步钩子
-        self._sync_hook = None
-        if graph_backend is not None:
-            from src.services.graph_backend.sync_hooks import GraphSyncHook
-            self._sync_hook = GraphSyncHook(graph_backend)
 
     def ensure_graph(self) -> Path:
         root = self.graph_dir
@@ -155,15 +149,6 @@ class FileGraphService:
         except Exception:
             pass
 
-        # 同步到图后端
-        if self._sync_hook and self._sync_hook.enabled:
-            tags = page.tags or []
-            self._sync_hook.on_page_synced(
-                page.id, page.title, tags=tags,
-                file_type=page.metadata.get("file-type", "md"),
-                source_type=page.metadata.get("source-type", "file_graph"),
-            )
-
         manifest = self._read_manifest()
         manifest[page.id] = {"path": str(path), "mtime": stat.st_mtime}
         self._write_manifest(manifest)
@@ -215,10 +200,6 @@ class FileGraphService:
         elif path.exists():
             path.unlink()
         self._delete_cache(page_id)
-
-        # 同步删除到图后端
-        if self._sync_hook and self._sync_hook.enabled:
-            self._sync_hook.on_page_deleted(page_id)
 
         manifest = self._read_manifest()
         manifest.pop(page_id, None)

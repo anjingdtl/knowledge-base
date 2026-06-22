@@ -7,7 +7,6 @@
 
 修复后 broken_link 应只报「真正物理悬空」的链接。
 """
-import json
 import uuid
 from datetime import datetime
 

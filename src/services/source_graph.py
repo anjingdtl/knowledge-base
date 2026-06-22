@@ -1,8 +1,4 @@
-"""Build source graph payloads for RAG answers.
-
-当配置了 Neo4j 等外部图后端时，利用后端的图遍历能力替代逐条 SQL 查询，
-在大规模知识库下显著提升 source graph 的构建速度。
-"""
+"""Build source graph payloads for RAG answers from local graph tables."""
 from __future__ import annotations
 
 from src.services.db import Database
@@ -48,7 +44,7 @@ def _build_source_graph_via_backend(
     max_nodes: int,
     backend,
 ) -> dict:
-    """通过图后端构建 source graph — 适合 Neo4j 等非 SQLite 后端"""
+    """通过自定义图后端构建 source graph。"""
     nodes: dict[str, dict] = {}
     edges: dict[tuple[str, str, str], dict] = {}
     truncated = False

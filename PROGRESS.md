@@ -1,6 +1,6 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-06-13
+> 最后更新：2026-06-22
 > 源码版本：`src/version.py` 中的 `1.3.1`
 > 当前分支：`master`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎
@@ -22,7 +22,7 @@
 
 ### 主要修复
 
-- 修复目录索引、异步任务、文件解析、Neo4j 生命周期、GUI worker 清理和 MCP 工具契约中的实际缺陷。
+- 修复目录索引、异步任务、文件解析、SQLite 图存储、GUI worker 清理和 MCP 工具契约中的实际缺陷。
 - 修复 Block 元数据被兼容 chunk 写入覆盖的问题，确保 `source_path`、Block ID 和 Citation 可追溯。
 - 更新过时的容器属性调用、PySide6 枚举和 pikepdf 参数，删除无效导入与旧式异常处理。
 - 为 `Database` 兼容元类增加 mypy 插件，清零源码类型错误。
@@ -107,13 +107,13 @@
 - **错误日志**：3 处裸 `except: pass` 改为 `except: logger.debug(...)`，避免静默吞掉异常
 - **SQL 审查**：确认所有 f-string SQL 中的变量均为内部硬编码或已白名单验证，无注入风险
 
-### 图谱后端与设置页优化（2026-06-13）
+### SQLite 图谱存储收束（2026-06-22）
 
-- **设置页新增 SQLite/Neo4j 差异说明**：在「后端选择」下方补一行 hint（约 60 字），帮助用户理解两者的适用场景
-- **默认后端切换为 SQLite**：`config.yaml` 中 `graph_backend.provider` 默认值从 `neo4j` 改为 `sqlite`，降低首次启动门槛；新增/删除知识条目时 `GraphSyncHook` 会自动增量同步到所选后端
-- **Neo4j 一键自动部署**：在「Neo4j 服务管理」栏新增「自动部署 Neo4j」按钮，后台下载 Neo4j Community 5.x 到 `%LOCALAPPDATA%\Neo4j` 并解压；部署完成后自动设置 `NEO4J_HOME` 环境变量（涉及系统级写操作时按需触发 UAC 提权）
-- **设置对话框布局修复**：窗口最小尺寸从 560×520 调整为 720×680、初始 820×760；图谱后端 Tab 用 `QScrollArea` 包裹，4 个 GroupBox 设置 `Maximum`/`Expanding` sizePolicy，切换到 Neo4j 时所有按钮与字段按自然高度显示，不再被压扁
-- **滚动条主题适配**：浅色/暗色 QSS 补 `QScrollArea#graphBackendScroll` 与 `QScrollBar` 样式，handle 颜色与主色板一致
+- **外部图数据库移除**：图谱存储统一使用 SQLite，本地 `data/kb.db` 中的 Page、Block、Tag、实体引用和语义关系表共同构成图视图
+- **设置页收束**：GUI 不再提供外部后端切换、服务启停、自动部署或迁移按钮，只展示 SQLite 图谱存储说明
+- **运行路径简化**：GUI、API、MCP 启动时不会检测或拉起外部图服务；旧配置中的非 SQLite provider 会兼容降级为 SQLite
+- **依赖与部署简化**：核心安装、`all` extra、Docker Compose 和示例配置都不再包含外部图数据库服务
+- **滚动条主题适配**：浅色/暗色 QSS 保留 `QScrollArea#graphBackendScroll` 与 `QScrollBar` 样式，handle 颜色与主色板一致
 
 ## 既有能力（v1.2.0 及之前）
 

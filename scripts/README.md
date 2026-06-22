@@ -23,7 +23,6 @@
 | `migrate_to_block_store.py` | 旧 chunk 向量迁移到 Block Store |
 | `migrate_phase123.py` | 历史 Phase 1-3 数据重建 |
 | `export_to_file_graph.py` | 数据库条目导出到 Markdown File Graph |
-| `fast_migrate.py` / `fast_migrate_edges.py` | 历史 SQLite -> Neo4j 快速迁移 |
 
 新 schema 变更应使用 Alembic，不应再新增同类一次性迁移脚本。
 

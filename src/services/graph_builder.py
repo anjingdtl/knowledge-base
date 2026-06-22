@@ -51,7 +51,6 @@ class GraphBuilder:
     def __init__(self, progress_callback=None, graph_backend=None):
         self._llm = LLMService()
         self._progress = progress_callback  # signature: (message: str) -> None
-        self._graph_backend = graph_backend
 
     def _emit_progress(self, message: str, current: int | None = None, total: int | None = None) -> None:
         if not self._progress:
@@ -63,33 +62,6 @@ class GraphBuilder:
                 self._progress(message)
         except TypeError:
             self._progress(message)
-
-    def _sync_relations_to_backend(self, relations: list[dict]) -> None:
-        """将 knowledge_graph_relations 同步到 graph_backend（entity_refs 或 Neo4j）"""
-        if not self._graph_backend or not relations:
-            return
-        try:
-            from src.services.graph_backend.base import GraphEdge, make_node_id
-            edges = []
-            for rel in relations:
-                src_id = rel.get("source_knowledge_id", "")
-                tgt_id = rel.get("target_knowledge_id", "")
-                if not src_id or not tgt_id:
-                    continue
-                edges.append(GraphEdge(
-                    source=make_node_id("page", src_id),
-                    target=make_node_id("page", tgt_id),
-                    edge_type=rel.get("relation_type", "related"),
-                    properties={
-                        "weight": rel.get("weight", 1.0),
-                        "description": rel.get("description", ""),
-                    },
-                ))
-            if edges:
-                self._graph_backend.upsert_edges_batch(edges)
-                logger.info("Synced %d graph relations to backend (%s)", len(edges), self._graph_backend.name)
-        except Exception as e:
-            logger.warning("Failed to sync relations to graph_backend: %s", e)
 
     def build_from_knowledge(self, graph_id: str, knowledge_ids: list[str]) -> list[dict]:
         """分析指定知识条目之间的关系，并将结果写入数据库。返回生成的关系列表。"""
@@ -120,8 +92,6 @@ class GraphBuilder:
 
         if all_relations:
             Database.insert_graph_relations(graph_id, all_relations)
-            # 同步到 graph_backend
-            self._sync_relations_to_backend(all_relations)
         return all_relations
 
     def _analyze_batch(
@@ -177,8 +147,6 @@ class GraphBuilder:
             # 先删除该图谱的旧关系，再写入新的
             Database.delete_graph_relations(graph_id)
             Database.insert_graph_relations(graph_id, valid_relations)
-            # 同步到 graph_backend（让 traverse/source_graph 能发现这些关系）
-            self._sync_relations_to_backend(valid_relations)
         return valid_relations
 
     def auto_generate_by_categories(self) -> list[str]:

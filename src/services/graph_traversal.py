@@ -1,8 +1,4 @@
-"""图遍历服务 — 通过图后端执行 BFS 遍历
-
-当配置了 Neo4j 等外部图后端时，遍历操作委托给后端执行，
-利用图数据库的原生遍历能力显著提升大规模数据下的性能。
-"""
+"""图遍历服务 — 通过 SQLiteGraphBackend 执行 BFS 遍历。"""
 from src.services.db import Database
 from src.services.graph_backend.base import make_node_id, parse_node_id
 

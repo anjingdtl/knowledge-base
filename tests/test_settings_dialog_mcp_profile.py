@@ -13,7 +13,6 @@ import pytest
 
 from src.mcp.tool_profiles import PROFILE_INFO, PROFILES
 
-
 # ---------- 元数据契约 ----------
 
 class TestProfileInfoMetadata:

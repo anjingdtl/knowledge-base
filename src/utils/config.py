@@ -28,7 +28,6 @@ _SECRET_KEYS = {
     "llm.api_key",
     "embedding.api_key",
     "reranker.api_key",
-    "graph_backend.password",
     "api.jwt_secret",
 }
 
@@ -37,7 +36,6 @@ _ENV_KEY_MAP = {
     "llm.api_key": "SHINEHE_LLM_API_KEY",
     "embedding.api_key": "SHINEHE_EMBEDDING_API_KEY",
     "reranker.api_key": "SHINEHE_RERANKER_API_KEY",
-    "graph_backend.password": "SHINEHE_NEO4J_PASSWORD",
     "api.jwt_secret": "SHINEHE_JWT_SECRET",
 }
 
