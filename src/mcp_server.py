@@ -471,6 +471,7 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
             "title": wr["title"],
             "summary": summary,
             "text": f"[Wiki] {wr['title']}: {summary}\n{content_preview}",
+            "fts_rank": wr.get("fts_rank", 0),
         })
 
     seen_block_ids = set()
@@ -528,6 +529,20 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
         item.setdefault("match_channel", "knowledge_fts")
         item.setdefault("match_channels", ["knowledge_fts"])
         output.append(item)
+
+    # BUG-7 fix: 统一排序 — 将所有层的结果按 fts_score 归一化后排序
+    from src.models.retrieval import normalize_fts_score
+
+    for item in output:
+        raw_rank = item.get("fts_rank", 0)
+        fts_score = normalize_fts_score(raw_rank)
+        # Wiki 结构化知识优先：给 wiki 结果加小幅分数 boost
+        if item.get("source") == "wiki":
+            fts_score = min(fts_score + 0.1, 1.0)
+        item["fts_score"] = fts_score
+
+    # 按 fts_score 降序排列（高相关性在前）
+    output.sort(key=lambda x: x.get("fts_score", 0), reverse=True)
 
     has_more = len(kb_results) == limit or len(block_results) > offset + limit or len(chunk_results) > offset + limit
     return ok(

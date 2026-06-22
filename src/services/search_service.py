@@ -133,6 +133,8 @@ class SearchService:
         output.extend(wiki_results)
 
         seen_blocks = set()
+        knowledge_doc_counts: dict[str, int] = {}
+        max_per_doc = 3  # BUG-5 fix: 同一文档最多返回 3 个 block，避免重复块挤占多样性
         citation_builder = CitationBuilder(self._db)
         for r in candidates:
             bid = r.get("id", "")
@@ -143,6 +145,13 @@ class SearchService:
 
             kid = (r.get("metadata") or {}).get("page_id",
                   (r.get("metadata") or {}).get("knowledge_id", ""))
+
+            # BUG-5: knowledge 级去重 — 同一文档不超过 max_per_doc 条
+            if kid:
+                doc_count = knowledge_doc_counts.get(kid, 0)
+                if doc_count >= max_per_doc:
+                    continue
+                knowledge_doc_counts[kid] = doc_count + 1
 
             item = self._db.get_knowledge(kid) if kid else None
 
@@ -155,6 +164,26 @@ class SearchService:
                     score = val
                     break
 
+            # BUG-8 fix: 更健壮的 title 回退
+            title = "未知"
+            if item and item.get("title"):
+                title = item["title"]
+            elif (r.get("metadata") or {}).get("title"):
+                title = r["metadata"]["title"]
+            elif kid:
+                # 尝试从 blocks 表的 page_id 关联 knowledge_items 获取标题
+                try:
+                    row = self._db.get_conn().execute(
+                        "SELECT title FROM knowledge_items WHERE id = ? AND deleted_at IS NULL",
+                        (kid,),
+                    ).fetchone()
+                    if row and row[0]:
+                        title = row[0]
+                except Exception:
+                    pass
+                if title == "未知":
+                    logger.debug("Title fallback to '未知' for knowledge_id=%s", kid)
+
             # 构建 citation
             citation = citation_builder.build(r, item)
 
@@ -162,7 +191,7 @@ class SearchService:
                 "source": "knowledge",
                 "block_id": bid,
                 "knowledge_id": kid,
-                "title": item["title"] if item else "未知",
+                "title": title,
                 "text": r.get("text", ""),
                 "score": score,
                 "match_channels": r.get("match_channels", []),

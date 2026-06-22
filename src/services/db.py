@@ -1305,14 +1305,17 @@ class Database(metaclass=_DatabaseMeta):
 
     def search_blocks_fts(self, query: str, limit: int = 10) -> list[dict]:
         """Block 级 FTS 搜索"""
-        from src.utils.chinese_tokenizer import sanitize_fts_query, tokenize_chinese_full
+        from src.utils.chinese_tokenizer import (
+            sanitize_fts_query, tokenize_chinese_full, tokenize_mixed_query_terms,
+        )
         sanitized = tokenize_chinese_full(query)
         if not sanitized.strip():
             return []
         safe_query = sanitize_fts_query(sanitized, is_tokenized=True)
         if not safe_query:
             return []
-        rows = self.get_conn().execute(
+        conn = self.get_conn()
+        rows = conn.execute(
             """SELECT b.id, b.page_id, b.content, b.block_type, b.properties,
                       bf.rank
                FROM block_fts bf
@@ -1323,6 +1326,7 @@ class Database(metaclass=_DatabaseMeta):
             (safe_query, limit),
         ).fetchall()
         results = []
+        seen_ids = set()
         for r in rows:
             try:
                 properties = json.loads(r[4]) if r[4] else {}
@@ -1336,7 +1340,47 @@ class Database(metaclass=_DatabaseMeta):
                 "properties": properties,
                 "fts_rank": r[5],
             })
-        return results
+            seen_ids.add(r[0])
+
+        # BUG-6 fix: 对 CJK+ASCII 混合查询补充 mixed-terms 搜索
+        if len(results) < limit:
+            mixed_terms = tokenize_mixed_query_terms(query)
+            if mixed_terms:
+                mixed_query = sanitize_fts_query(" ".join(mixed_terms), is_tokenized=True)
+                if mixed_query and mixed_query != safe_query:
+                    try:
+                        extra_rows = conn.execute(
+                            """SELECT b.id, b.page_id, b.content, b.block_type, b.properties,
+                                      bf.rank
+                               FROM block_fts bf
+                               JOIN blocks b ON b.id = bf.block_id
+                               WHERE block_fts MATCH ?
+                               ORDER BY bf.rank
+                               LIMIT ?""",
+                            (mixed_query, limit),
+                        ).fetchall()
+                        for r in extra_rows:
+                            if r[0] in seen_ids:
+                                continue
+                            seen_ids.add(r[0])
+                            try:
+                                properties = json.loads(r[4]) if r[4] else {}
+                            except (json.JSONDecodeError, TypeError):
+                                properties = {}
+                            results.append({
+                                "id": r[0],
+                                "page_id": r[1],
+                                "content": r[2],
+                                "block_type": r[3],
+                                "properties": properties,
+                                "fts_rank": r[5],
+                            })
+                            if len(results) >= limit:
+                                break
+                    except Exception:
+                        pass
+
+        return results[:limit]
 
     def delete_blocks_fts(self, page_id: str):
         """删除指定 page 的 block FTS 记录"""

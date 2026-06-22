@@ -125,6 +125,32 @@ class QuerySpec:
                 type="not",
                 child=cls._parse_condition(data["not"]),
             )
+        # BUG-4 fix: "tags" (plural) 兼容 — 标准化为 "tag" 过滤器
+        if "tags" in data:
+            tag_data = data["tags"]
+            if isinstance(tag_data, dict):
+                # {"tags": {"contains": "xxx"}} → tag match
+                if "contains" in tag_data:
+                    tag_data = tag_data["contains"]
+                elif "eq" in tag_data:
+                    tag_data = tag_data["eq"]
+                elif "in" in tag_data:
+                    # {"tags": {"in": ["a", "b"]}} → OR of tags
+                    tag_list = tag_data["in"]
+                    if not isinstance(tag_list, list):
+                        tag_list = [tag_list]
+                    children = [Condition(type="tag", value=t, expand_descendants=True)
+                                for t in tag_list]
+                    if len(children) == 1:
+                        return children[0]
+                    return Condition(type="or", children=children)
+                else:
+                    raise ValueError(f"unknown tags operator: {list(tag_data.keys())}")
+            return Condition(
+                type="tag",
+                value=tag_data,
+                expand_descendants=data.get("expand_descendants", True),
+            )
         if "tag" in data:
             tag_data = data["tag"]
             if isinstance(tag_data, dict):

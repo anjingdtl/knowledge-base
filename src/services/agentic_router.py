@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from typing import Any
 
@@ -96,15 +97,38 @@ class AgenticRouter:
         if self._is_graph_query(question):
             llm_route = self._try_llm(question)
             if llm_route is not None:
+                if llm_route.get("mode") == "hybrid":
+                    # LLM 主动判定为 hybrid
+                    return {"mode": "hybrid", "query_spec": None,
+                            "explanation": "LLM classified as hybrid search"}
                 return {"mode": "graph", "query_spec": llm_route.get("query_spec"),
                         "traverse": llm_route.get("traverse", {"max_depth": 2}),
                         "explanation": "LLM graph routing"}
+            # LLM 不可用时的 graph 回退：构建 fulltext QuerySpec
+            logging.warning("LLM unavailable for graph routing, falling back to fulltext")
+            from src.models.query_dsl import QuerySpec
+            return {"mode": "hybrid", "query_spec": QuerySpec.from_json(
+                {"filter": {"fulltext": question}}
+            ), "explanation": "fallback to hybrid (LLM unavailable)"}
 
         llm_route = self._try_llm(question)
-        if llm_route is not None and llm_route.get("mode") == "structured":
-            return {"mode": "structured", "query_spec": llm_route["query_spec"],
-                    "explanation": "LLM structured routing"}
+        if llm_route is not None:
+            if llm_route.get("mode") == "structured":
+                return {"mode": "structured", "query_spec": llm_route["query_spec"],
+                        "explanation": "LLM structured routing"}
+            if llm_route.get("mode") == "hybrid":
+                return {"mode": "hybrid", "query_spec": None,
+                        "explanation": "LLM classified as hybrid search"}
 
+        # BUG-3 fix: LLM 不可用时，基于规则信号判断路由，而非盲目降级
+        if self._is_structured(question):
+            from src.models.query_dsl import QuerySpec
+            spec = QuerySpec.from_json({"filter": {"fulltext": question}})
+            return {"mode": "structured", "query_spec": spec,
+                    "explanation": "rule-based structured (LLM unavailable)"}
+
+        logging.debug("route_query: no rule/LLM match, fallback to hybrid for query=%r",
+                       question[:50])
         return {"mode": "hybrid", "query_spec": None, "explanation": "fallback to hybrid search"}
 
     def _is_structured(self, question: str) -> bool:

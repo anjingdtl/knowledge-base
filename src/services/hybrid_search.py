@@ -48,6 +48,8 @@ class HybridSearcher:
         for query in queries:
             try:
                 vec_results = self._block_store.search(query, top_k=top_k * 2)
+                if not vec_results:
+                    logging.debug("Vector search returned 0 results for query=%r", query[:50])
                 for r in vec_results:
                     cid = r["id"]
                     if cid not in seen:
@@ -62,7 +64,28 @@ class HybridSearcher:
                             "match_channels": ["semantic"],
                         })
             except Exception as e:
-                logging.warning(f"Vector search failed: {e}")
+                logging.warning("Vector search failed for query=%r: %s", query[:50], e)
+        if not results:
+            # 诊断：检查向量索引覆盖率
+            try:
+                vec_count = self._block_store.count()
+                block_count = self._db.get_conn().execute(
+                    "SELECT count(*) FROM blocks"
+                ).fetchone()[0]
+                if vec_count == 0:
+                    logging.warning(
+                        "Vector index is EMPTY (%d blocks, 0 embeddings). "
+                        "Run reindex_all to rebuild vector index.",
+                        block_count,
+                    )
+                elif block_count > 0 and vec_count / block_count < 0.5:
+                    logging.warning(
+                        "Vector index coverage very low: %d/%d (%.1f%%). "
+                        "Semantic search degraded. Run reindex_all to rebuild.",
+                        vec_count, block_count, vec_count / block_count * 100,
+                    )
+            except Exception:
+                pass
         results.sort(key=lambda x: (1 - x["distance"] / 2, -len(x.get("text", ""))), reverse=True)
         return results[:top_k * 2]
 
