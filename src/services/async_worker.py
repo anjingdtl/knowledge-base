@@ -92,6 +92,16 @@ class AsyncWorker:
         """启动 Worker"""
         if self._running:
             return
+        # 确保所有任务 handler 已注册。src.services.async_tasks 在模块导入时
+        # 调用 register_all_tasks() 注册 file_ingest / url_ingest / reindex_all
+        # 等 handler，但 worker 的导入链不会触及它；若不显式触发，worker
+        # 认领任务后会因 "No handler for <job_type>" 直接置为 FAILED。
+        # 此处延迟导入：async_tasks 顶部又导入了 async_worker，顶部 import
+        # 会形成循环，必须在运行期（async_worker 已加载完毕后）执行。
+        try:
+            import src.services.async_tasks  # noqa: F401 — 触发 register_all_tasks
+        except Exception as exc:
+            logger.error("Failed to register async task handlers: %s", exc)
         self._running = True
         # 启动主调度线程
         self._thread = threading.Thread(target=self._run_loop, daemon=True, name="AsyncWorker-Main")
