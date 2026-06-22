@@ -1614,10 +1614,21 @@ def cancel_job(job_id: str) -> dict:
     success = AsyncTaskService.cancel_job(job_id)
     if success:
         return ok({"success": True, "message": "任务已取消", "job_id": job_id})
+    # 失败：查询当前状态给出具体原因，便于 Agent 区分「已完成 / 已失败 / 不存在」，
+    # 而不是统一返回模糊的 PRECONDITION_FAILED。
+    current_status = "not_found"
+    try:
+        job = _get_container().db.get_job(job_id)
+        if job:
+            current_status = job.get("status", "unknown")
+    except Exception as exc:
+        logger.debug("cancel_job: failed to inspect job status: %s", exc)
+        current_status = "unknown"
     return fail(
         ErrorCode.PRECONDITION_FAILED,
-        "无法取消（可能已完成或不存在）",
+        f"无法取消：任务当前状态为 {current_status}（仅 pending/running 可取消）",
         job_id=job_id,
+        current_status=current_status,
     )
 
 
@@ -2530,17 +2541,23 @@ def _runtime_diagnostics() -> dict:
 @_heartbeat
 def kb_capabilities() -> dict:
     """返回当前 MCP 服务的能力、限制和推荐调用流程。"""
-    # 工具签名从 FastMCP 实例动态生成（避免与实际注册的工具不一致）
+    # 工具签名从注册表生成（兼容 FastMCP 2.x 内部结构变化）
     tool_summaries: list[dict] = []
     try:
-        # FastMCP >= 0.4 通过 mcp._tool_manager._tools 暴露注册表
-        registry = getattr(mcp, "_tool_manager", None) or getattr(mcp, "tool_manager", None)
-        if registry is not None:
-            tools = getattr(registry, "_tools", None) or getattr(registry, "tools", {}) or {}
-            for name, tool in tools.items():
+        all_defs = get_definitions()
+        for name, definition in all_defs.items():
+            if name in _VISIBLE_TOOL_NAMES:
                 tool_summaries.append({
                     "name": name,
-                    "description": getattr(tool, "description", ""),
+                    "description": definition.description,
+                })
+        # 同时列出已启用的命名空间别名
+        for alias_name, original_name in _REGISTERED_TOOL_ALIASES.items():
+            original = all_defs.get(original_name)
+            if original:
+                tool_summaries.append({
+                    "name": alias_name,
+                    "description": f"{original.description} (alias of {original_name})",
                 })
     except Exception as exc:
         logger.debug("tool registry introspection failed: %s", exc)

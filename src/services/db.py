@@ -10,6 +10,15 @@ from typing import Optional
 
 from src.utils.config import Config
 
+# sqlite_vec 提供 vec0 虚拟表模块（向量检索）。每条 SQLite 连接都必须
+# 单独加载该扩展，否则查询 vec_chunks / vec_blocks 时会抛
+# OperationalError: no such module: vec0。这里做软导入：未安装时降级为
+# 关键词检索，而不是让整个 db 模块无法加载。
+try:
+    import sqlite_vec as _sqlite_vec
+except Exception:  # pragma: no cover - 仅在精简环境触发
+    _sqlite_vec = None
+
 logger = logging.getLogger(__name__)
 
 _SCHEMA = """
@@ -514,7 +523,28 @@ class Database(metaclass=_DatabaseMeta):
         conn.execute("PRAGMA synchronous = NORMAL")
         conn.execute("PRAGMA busy_timeout = 30000")
         conn.execute("PRAGMA cache_size = -64000")  # 64MB cache
+        self._load_vec_extension(conn)
         return conn
+
+    @staticmethod
+    def _load_vec_extension(conn: sqlite3.Connection) -> None:
+        """为新连接加载 sqlite_vec 扩展（注册 vec0 虚拟表模块）。
+
+        get_conn() 使用 threading.local 线程本地连接，工作线程首次调用时
+        会建立全新连接。若不在每条连接上加载扩展，vec0 虚拟表查询会抛
+        ``no such module: vec0``，导致向量通道整体降级为关键词匹配。
+        加载失败仅记日志，不阻断连接创建（保留纯关键词检索能力）。
+        """
+        if _sqlite_vec is None:
+            return
+        try:
+            conn.enable_load_extension(True)
+            try:
+                _sqlite_vec.load(conn)
+            finally:
+                conn.enable_load_extension(False)
+        except Exception as exc:
+            logger.warning("Failed to load sqlite_vec on new connection: %s", exc)
 
     @classmethod
     def connect(cls, db_path: str | Path | None = None):

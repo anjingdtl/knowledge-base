@@ -219,6 +219,37 @@ class VectorSearchStage(PipelineStage):
     def name(self):
         return "vector_search"
 
+    @staticmethod
+    def _normalize_knowledge_rows(rows: list[dict]) -> list[dict]:
+        """把 QueryExecutor 返回的 knowledge_items 原始行归一化为 pipeline 标准 candidate。
+
+        ``QueryExecutor.execute()`` 返回 ``SELECT ki.*`` 的原始行（字段为
+        content / title / id），而 RAG 下游阶段（RerankStage / GenerateStage）
+        统一从 candidate 的 ``text`` 字段与 ``metadata.page_id`` /
+        ``metadata.knowledge_id`` 取值。不归一化会导致 ask_with_query 在
+        structured / graph 模式下 source 文本为空、citation 缺失，LLM 误判
+        “知识库无内容”。execute_query 工具直接把原始行返回给 Agent，不走
+        此路径，故其行为不受影响。
+        """
+        normalized: list[dict] = []
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            kid = row.get("id", "")
+            normalized.append({
+                "id": kid,
+                "text": row.get("content", ""),
+                "metadata": {
+                    "page_id": kid,
+                    "knowledge_id": kid,
+                    "title": row.get("title", ""),
+                    "block_type": "knowledge",
+                },
+                "distance": 0,
+                "match_channels": ["structured"],
+            })
+        return normalized
+
     async def execute(self, ctx, config):
         if not self.is_enabled(config):
             return ctx
@@ -244,7 +275,9 @@ class VectorSearchStage(PipelineStage):
                 if routing["mode"] == "structured" and routing.get("query_spec"):
                     from src.services.query_executor import QueryExecutor
                     executor = QueryExecutor(db=db)
-                    ctx.candidates = executor.execute(routing["query_spec"])
+                    ctx.candidates = self._normalize_knowledge_rows(
+                        executor.execute(routing["query_spec"])
+                    )
                     if ctx.candidates:
                         return ctx
                 elif routing["mode"] == "graph" and routing.get("query_spec"):
@@ -252,13 +285,13 @@ class VectorSearchStage(PipelineStage):
                     from src.services.query_executor import QueryExecutor
                     executor = QueryExecutor(db=db)
                     start_pages = executor.execute(routing["query_spec"])
-                    start_ids = [p["id"] for p in start_pages]
+                    start_ids = [p.get("id", "") for p in start_pages]
                     traverse_config = routing.get("traverse", {"max_depth": 2})
                     traversal = GraphTraversalService(db=db, graph_backend=self._graph_backend).traverse(
                         start_ids=start_ids, start_type="knowledge",
                         max_depth=traverse_config.get("max_depth", 2),
                     )
-                    ctx.candidates = start_pages
+                    ctx.candidates = self._normalize_knowledge_rows(start_pages)
                     ctx.metadata["graph_traversal"] = traversal
                     if ctx.candidates:
                         return ctx

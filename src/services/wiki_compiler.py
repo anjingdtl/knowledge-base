@@ -60,7 +60,7 @@ def resolve_all_content_links() -> dict:
     """
     pages = Database.list_wiki_pages(limit=500)
     if not pages:
-        return {"scanned": 0, "links_created": 0, "dead_refs": []}
+        return {"scanned": 0, "links_created": 0, "dead_references": [], "dead_reference_count": 0}
 
     total_links = 0
     all_dead_refs = []

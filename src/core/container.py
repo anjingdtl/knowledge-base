@@ -188,7 +188,7 @@ class AppContainer:
     def wiki_compiler(self):
         if self._wiki_compiler is None:
             from src.services.wiki_compiler import WikiCompiler
-            self._wiki_compiler = WikiCompiler(self.db, self.llm, self.config)
+            self._wiki_compiler = WikiCompiler()
             self._track_service("_wiki_compiler")
         return self._wiki_compiler
 
