@@ -24,3 +24,6 @@ node_modules/
 
 # 含敏感凭据的真实配置文件（使用 config.example.yaml 作为模板）
 config.yaml
+
+# 临时调试产物目录（debug 脚本、日志、截图、一次性验证脚本）
+.temp/
