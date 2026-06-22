@@ -22,7 +22,10 @@ class HybridSearcher:
     def search(self, queries: list[str], top_k: int = 5) -> list[dict]:
         mode = self._get_config("rag.search_mode", "blend")
         if mode == "embedding":
-            results = self._vector_search(queries, top_k)
+            results, _vec_warnings = self._vector_search(queries, top_k)
+            if _vec_warnings:
+                for r in results:
+                    r.setdefault("warnings", []).extend(_vec_warnings)
         elif mode == "keywords":
             results = self._keyword_search(queries, top_k)
         else:
@@ -42,9 +45,16 @@ class HybridSearcher:
 
         return results
 
-    def _vector_search(self, queries: list[str], top_k: int) -> list[dict]:
+    def _vector_search(self, queries: list[str], top_k: int) -> tuple[list[dict], list[str]]:
+        """返回 (候选列表, 降级告警列表)。
+
+        向量通道失败时**不抛异常**（避免连累并行执行的 keyword 通道），
+        而是把失败原因收集到 warnings，由 _blend_search 合并到候选的
+        warnings 字段，让上层和用户能区分"索引空 / API 失败 / 正常未命中"。
+        """
         results = []
         seen = set()
+        warnings: list[str] = []
         for query in queries:
             try:
                 vec_results = self._block_store.search(query, top_k=top_k * 2)
@@ -64,30 +74,42 @@ class HybridSearcher:
                             "match_channels": ["semantic"],
                         })
             except Exception as e:
+                # 关键：吞掉异常只记录，绝对不能向上抛，否则 _blend_search 的
+                # ThreadPoolExecutor 会让 vector 失败连累 keyword 通道（新 P0）。
+                msg = f"vector channel degraded: {type(e).__name__}: {e}"
+                warnings.append(msg[:300])
                 logging.warning("Vector search failed for query=%r: %s", query[:50], e)
         if not results:
-            # 诊断：检查向量索引覆盖率
-            try:
-                vec_count = self._block_store.count()
-                block_count = self._db.get_conn().execute(
-                    "SELECT count(*) FROM blocks"
-                ).fetchone()[0]
-                if vec_count == 0:
-                    logging.warning(
-                        "Vector index is EMPTY (%d blocks, 0 embeddings). "
-                        "Run reindex_all to rebuild vector index.",
-                        block_count,
-                    )
-                elif block_count > 0 and vec_count / block_count < 0.5:
-                    logging.warning(
-                        "Vector index coverage very low: %d/%d (%.1f%%). "
-                        "Semantic search degraded. Run reindex_all to rebuild.",
-                        vec_count, block_count, vec_count / block_count * 100,
-                    )
-            except Exception:
-                pass
+            self._log_vector_coverage_diagnosis()
         results.sort(key=lambda x: (1 - x["distance"] / 2, -len(x.get("text", ""))), reverse=True)
-        return results[:top_k * 2]
+        return results[:top_k * 2], warnings
+
+    def _log_vector_coverage_diagnosis(self) -> None:
+        """向量通道无结果时记录覆盖率诊断，帮助区分索引空 vs API 调用失败。
+
+        覆盖率检查仅在 results 为空时执行，与 warnings 是否为空无关——
+        这样 API 调用失败（results 为空、warnings 非空）时也能输出索引
+        覆盖率，便于定位是"索引没建"还是"凭据/网络问题"。
+        """
+        try:
+            vec_count = self._block_store.count()
+            block_count = self._db.get_conn().execute(
+                "SELECT count(*) FROM blocks"
+            ).fetchone()[0]
+            if vec_count == 0:
+                logging.warning(
+                    "Vector index is EMPTY (%d blocks, 0 embeddings). "
+                    "Run reindex_all to rebuild vector index.",
+                    block_count,
+                )
+            elif block_count > 0 and vec_count / block_count < 0.5:
+                logging.warning(
+                    "Vector index coverage very low: %d/%d (%.1f%%). "
+                    "Semantic search degraded. Run reindex_all to rebuild.",
+                    vec_count, block_count, vec_count / block_count * 100,
+                )
+        except Exception as diag_exc:
+            logging.debug("Vector coverage diagnosis failed: %s", diag_exc)
 
     def _keyword_search(self, queries: list[str], top_k: int) -> list[dict]:
         results = []
@@ -126,7 +148,7 @@ class HybridSearcher:
         with ThreadPoolExecutor(max_workers=2) as pool:
             vec_future = pool.submit(self._vector_search, queries, top_k * 3)
             fts_future = pool.submit(self._keyword_search, queries, top_k * 3)
-            vec_results = vec_future.result()
+            vec_results, vec_warnings = vec_future.result()
             fts_results = fts_future.result()
 
         k = 60
@@ -188,7 +210,14 @@ class HybridSearcher:
 
             results.append(item)
 
-        return self._preserve_keyword_hits(results, top_k)
+        final = self._preserve_keyword_hits(results, top_k)
+        # 向量通道降级时，把诊断信息合并到所有候选的 warnings 字段，
+        # 让上层 CitationBuilder / search_service 能透传给用户。用
+        # setdefault+extend 而非覆盖，避免冲掉 reranker/parent-child 写入的既有 warnings。
+        if vec_warnings:
+            for item in final:
+                item.setdefault("warnings", []).extend(vec_warnings)
+        return final
 
     @staticmethod
     def _normalize_fts_rank(raw_rank: float) -> float:

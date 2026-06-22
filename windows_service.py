@@ -71,6 +71,9 @@ class ShineHeMCPService(win32serviceutil.ServiceFramework):
     def _run_server(self):
         """启动 MCP Server (streamable-http)"""
         try:
+            # 启动期加载配置、注入 secret 到进程环境，并诊断 API Key 是否就位
+            self._diagnose_secrets()
+
             # 注入 Session TTL patch
             from src.mcp_cli import _patch_session_idle_timeout, SESSION_IDLE_TIMEOUT
             _patch_session_idle_timeout(SESSION_IDLE_TIMEOUT)
@@ -115,6 +118,38 @@ class ShineHeMCPService(win32serviceutil.ServiceFramework):
         except Exception as e:
             servicemanager.LogErrorMsg(f"ShineHeMCP 服务异常: {e}")
             raise
+
+    def _diagnose_secrets(self):
+        """启动期加载配置，把 keyring/env 中的 secret 注入进程环境，
+        并在 API Key 缺失时记录 Windows 事件日志告警。
+
+        Windows 服务运行在 SYSTEM 账户，读不到交互式账户的 keyring 凭据，
+        因此需要通过系统环境变量（setx /M 或服务 Environment 注册表）注入。
+        """
+        try:
+            from src.utils.config import Config
+            config = Config()
+            config.load()
+            # 把已加载的 secret 写回 os.environ，确保后续延迟 Config.load
+            # 也能稳定读到（不覆盖已有的环境变量）
+            config.export_secret_env(os.environ, overwrite=False)
+            llm_key = config.get("llm.api_key", "")
+            emb_key = config.get("embedding.api_key", "") or llm_key
+            missing = []
+            if not llm_key:
+                missing.append("SHINEHE_LLM_API_KEY (ask/RAG 生成)")
+            if not emb_key:
+                missing.append("SHINEHE_EMBEDDING_API_KEY (向量/语义搜索)")
+            if missing:
+                servicemanager.LogErrorMsg(
+                    "ShineHeMCP 服务启动检测到 API Key 缺失: "
+                    + ", ".join(missing)
+                    + "。对应功能将不可用。请以管理员身份执行 "
+                    "`setx SHINEHE_LLM_API_KEY <KEY> /M`（embedding 同理）"
+                    "设置系统环境变量后重启服务，或在服务运行账户下配置 keyring。"
+                )
+        except Exception as exc:
+            servicemanager.LogErrorMsg(f"ShineHeMCP 配置加载失败: {exc}")
 
 
 if __name__ == "__main__":

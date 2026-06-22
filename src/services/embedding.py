@@ -1,5 +1,12 @@
 """Embedding 服务 — 基于 OpenAI 兼容协议，支持任意供应商"""
+import logging
+
 from src.utils.config import Config
+
+logger = logging.getLogger(__name__)
+
+# 标记是否已就 "Embedding API Key 缺失" 告警过一次，避免重复刷屏
+_embedding_key_missing_warned = False
 
 
 class EmbeddingService:
@@ -55,7 +62,22 @@ class EmbeddingService:
         if self._client is not None:
             return self._client
         from openai import OpenAI
-        api_key = self._cfg("embedding.api_key") or self._cfg("llm.api_key", "") or "no-key"
+        api_key = self._cfg("embedding.api_key") or self._cfg("llm.api_key", "")
+        if not api_key:
+            # 静默兜底为 "no-key" 会让 embedding 调用拿到模糊的 401，向量通道
+            # 异常被 hybrid_search 吞掉后表现为 score_breakdown.vector 始终为 null。
+            # 这里一次性告警，指明配置路径。
+            global _embedding_key_missing_warned
+            if not _embedding_key_missing_warned:
+                logger.warning(
+                    "Embedding API Key 未配置（embedding.api_key 与 llm.api_key "
+                    "均为空），向量索引与语义搜索将不可用。请通过以下任一方式配置："
+                    "1) GUI 设置；2) 环境变量 SHINEHE_EMBEDDING_API_KEY（或复用 "
+                    "SHINEHE_LLM_API_KEY）；3) keyring。Windows Service 需在服务"
+                    "账户下配置或注入系统环境变量。"
+                )
+                _embedding_key_missing_warned = True
+            api_key = "no-key"
         base_url = self._cfg("embedding.base_url") or self._cfg("llm.base_url") or None
         timeout = float(self._cfg("embedding.timeout", 15) or 15)
         self._client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout)

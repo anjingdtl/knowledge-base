@@ -156,12 +156,20 @@ class FileGraphService:
 
     def create_page(self, title: str, blocks, tags=None, metadata=None) -> str:
         now = datetime.now().isoformat()
+        meta_in = metadata or {}
         page = PageDocument(
             title=title,
             tags=tags or [],
             metadata={
-                "source-type": (metadata or {}).get("source_type", "manual"),
-                "source-path": (metadata or {}).get("source_path", ""),
+                "source-type": meta_in.get("source_type", "manual"),
+                "source-path": meta_in.get("source_path", ""),
+                # BUG-7 fix: 补 file-type 键。原实现丢弃了入参的 file_type，
+                # 导致 sync_page（见上方 file_type=page.metadata.get("file-type","md")）
+                # 一律 fallback 为 "md"，list_knowledge(file_type="pdf") 查不到 PDF 条目。
+                # 默认值 "md" 与 sync_page 的 fallback 保持一致。
+                "file-type": meta_in.get("file_type", "md"),
+                "file-created-at": meta_in.get("file_created_at", now),
+                "file-modified-at": meta_in.get("file_modified_at", now),
                 "created-at": now,
                 "updated-at": now,
             },

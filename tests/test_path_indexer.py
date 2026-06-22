@@ -389,3 +389,51 @@ class TestIndexPath:
         with patch.object(service, "_ingest_file", return_value="kid-norm"):
             result = service.index_path(fp)
         assert result.created == 1
+
+
+class TestIngestDedup:
+    """BUG-8 回归：按内容哈希幂等去重，避免同一文件产生重复条目。"""
+
+    def test_ingest_file_dedup_by_content_hash(self, service, tmp_path, monkeypatch):
+        from src.models.knowledge import KnowledgeItem
+        from src.services.db import Database
+
+        content = "重复内容测试 CDN 拦截策略"
+        content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
+
+        # 预先插入同 content_hash 的条目，模拟"首次 ingest 的结果已存在"
+        existing = KnowledgeItem(
+            title="原文件",
+            content=content,
+            source_type="file",
+            file_type="txt",
+            content_hash=content_hash,
+        )
+        Database.insert_knowledge(existing.to_row())
+
+        # mock parse_file 返回同 content（避免真实文件解析）
+        from types import SimpleNamespace
+
+        fake_parsed = SimpleNamespace(title="原文件", content=content, file_type="txt")
+        monkeypatch.setattr(
+            "src.services.file_parser.parse_file",
+            lambda path: [fake_parsed],
+        )
+        # mock index_knowledge_item 避免真实 embedding 调用
+        monkeypatch.setattr(
+            "src.services.indexer.index_knowledge_item",
+            lambda item: None,
+        )
+
+        fp = _write_file(tmp_path, "dup.txt", content)
+        returned_id = service._ingest_file(fp)
+
+        # 命中 dedup，返回已存在 id 而非新建
+        assert returned_id == existing.id
+        # 库中该 content_hash 仍只有 1 条（没有产生重复）
+        conn = Database.get_conn()
+        count = conn.execute(
+            "SELECT count(*) FROM knowledge_items WHERE content_hash = ?",
+            (content_hash,),
+        ).fetchone()[0]
+        assert count == 1
