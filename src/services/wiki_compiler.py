@@ -2,6 +2,7 @@
 import json
 import logging
 import re
+import threading
 import uuid
 from datetime import datetime
 
@@ -17,6 +18,7 @@ from src.services.llm import LLMService
 from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
+_compile_slot = threading.BoundedSemaphore(value=1)
 
 # 匹配 wiki 页面 content 中的 [[标题]] 或 [[标题#锚点]] 引用
 _WIKI_LINK_RE = re.compile(r"\[\[([^]\n#]+)(?:#([^]\n]+))?\]\]")
@@ -31,10 +33,24 @@ def try_wiki_compile(knowledge_id: str):
     """尝试对已导入的知识条目执行 Wiki 编译（供 MCP/API 层共享调用）"""
     if not Config.get("wiki.enabled", False) or not Config.get("wiki.auto_compile", True):
         return
-    try:
-        WikiCompiler().ingest(knowledge_id)
-    except Exception as e:
-        logger.warning("Wiki compile failed for %s: %s", knowledge_id, e)
+    if not _compile_slot.acquire(blocking=False):
+        logger.info("Wiki compile skipped for %s: previous compile still running", knowledge_id)
+        return
+
+    def _run():
+        try:
+            WikiCompiler().ingest(knowledge_id)
+        except Exception as e:
+            logger.warning("Wiki compile failed for %s: %s", knowledge_id, e)
+        finally:
+            _compile_slot.release()
+
+    thread = threading.Thread(
+        target=_run,
+        name=f"WikiCompile-{knowledge_id[:8]}",
+        daemon=True,
+    )
+    thread.start()
 
 
 def resolve_all_content_links() -> dict:

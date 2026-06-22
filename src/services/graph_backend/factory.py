@@ -49,7 +49,14 @@ def create_graph_backend(config, db=None) -> GraphBackend:
                 max_connection_pool_size=int(
                     config.get("graph_backend.max_connection_pool_size", 50)
                 ),
+                connection_timeout=float(
+                    config.get("graph_backend.connection_timeout", 2.0) or 2.0
+                ),
             )
+            if bool(config.get("graph_backend.health_check_on_startup", True)):
+                if not backend.health_check():
+                    backend.close()
+                    raise RuntimeError("Neo4j health check failed")
             logger.info("Graph backend: Neo4j (%s)", config.get("graph_backend.uri", "bolt://localhost:7687"))
             return backend
         except (ImportError, Exception) as e:
