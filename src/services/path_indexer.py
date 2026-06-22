@@ -338,6 +338,16 @@ class PathIndexService:
         parsed = parsed_list[0]
 
         content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
+
+        # BUG-8 fix: 按内容哈希幂等去重，与 mcp_server.create / UrlImportWorker 一致。
+        # 避免 indexed_files 记录丢失或路径标准化不一致时，同一文件被二次 ingest，
+        # 产生同 title 不同 id 的重复条目。命中后返回已存在 id，调用方会继续
+        # _record_indexed 把该 id 重新绑定到当前路径（修复悬空的 indexed_files 记录）。
+        existing = self._db.get_knowledge_by_hash(content_hash)
+        if existing:
+            logger.info("Skip duplicate ingest for %s, reusing existing id=%s", path, existing["id"])
+            return existing["id"]
+
         file_created_at = ""
         file_modified_at = ""
         try:

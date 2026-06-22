@@ -53,6 +53,14 @@ _LOGIC_SIGNALS = (
     "find all", "list all", "show all", "filter", "where",
 )
 
+# _is_structured 兜底用的强信号子集：只保留明确表达"列举/筛选"意图的词，
+# 去掉"状态/包含/哪些/属于"等易在日常语义查询中误命中的弱信号词。
+# 否则"Python 异步编程有哪些最佳实践"这类纯语义查询会被误判为 structured。
+_STRUCTURED_STRONG_SIGNALS = (
+    "所有", "全部", "列出", "找出", "查找", "筛选", "过滤", "统计",
+    "find all", "list all", "show all", "filter", "where",
+)
+
 _GRAPH_SIGNALS = (
     "关系", "链接", "引用", "关联", "图谱",
     "related to", "links to", "references", "graph",
@@ -104,12 +112,14 @@ class AgenticRouter:
                 return {"mode": "graph", "query_spec": llm_route.get("query_spec"),
                         "traverse": llm_route.get("traverse", {"max_depth": 2}),
                         "explanation": "LLM graph routing"}
-            # LLM 不可用时的 graph 回退：构建 fulltext QuerySpec
-            logging.warning("LLM unavailable for graph routing, falling back to fulltext")
+            # LLM 不可用时的 graph 回退：构建 fulltext QuerySpec，走 structured 执行器。
+            # mode 与 query_spec 必须语义一致 —— hybrid 执行器会忽略 query_spec，
+            # 导致 fulltext filter 丢失，故这里用 structured（与下方 _is_structured 兜底一致）。
+            logging.warning("LLM unavailable for graph routing, falling back to fulltext structured")
             from src.models.query_dsl import QuerySpec
-            return {"mode": "hybrid", "query_spec": QuerySpec.from_json(
+            return {"mode": "structured", "query_spec": QuerySpec.from_json(
                 {"filter": {"fulltext": question}}
-            ), "explanation": "fallback to hybrid (LLM unavailable)"}
+            ), "explanation": "fallback to structured (LLM unavailable, graph signal)"}
 
         llm_route = self._try_llm(question)
         if llm_route is not None:
@@ -132,8 +142,10 @@ class AgenticRouter:
         return {"mode": "hybrid", "query_spec": None, "explanation": "fallback to hybrid search"}
 
     def _is_structured(self, question: str) -> bool:
+        """LLM 不可用时的兜底：仅匹配强信号词，避免"哪些/状态/包含"等
+        日常词把纯语义查询误判为 structured。"""
         lower = question.lower()
-        return any(signal in lower for signal in _LOGIC_SIGNALS)
+        return any(signal in lower for signal in _STRUCTURED_STRONG_SIGNALS)
 
     def _is_graph_query(self, question: str) -> bool:
         lower = question.lower()
@@ -212,7 +224,8 @@ class AgenticRouter:
                     llm = self._llm
                 else:
                     return None
-            except Exception:
+            except Exception as exc:
+                logging.debug("route_query: LLM container lookup failed: %s", exc)
                 return None
         if llm is None:
             return None
@@ -237,5 +250,6 @@ class AgenticRouter:
                     result["traverse"] = parsed["traverse"]
                 return result
             return None
-        except Exception:
+        except Exception as exc:
+            logging.debug("route_query: LLM routing failed (auth/unavailable/parse): %s", exc)
             return None

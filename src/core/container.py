@@ -387,6 +387,26 @@ def create_container(config_path: str | None = None) -> AppContainer:
     llm = LLMService(config)
     logger.info("AI services initialized")
 
+    # 启动期 API Key 存在性检查：缺失时告警一次（不阻断，保护纯检索用途）。
+    # 用函数属性跨多次 create_container 去重，避免测试频繁调用时刷屏。
+    if not getattr(create_container, "_key_check_done", False):
+        create_container._key_check_done = True
+        _llm_key = config.get("llm.api_key", "")
+        _emb_key = config.get("embedding.api_key", "") or _llm_key
+        if not _llm_key:
+            logger.warning(
+                "启动检测：llm.api_key 未读取到，ask/RAG 生成、查询改写与 "
+                "LLM 重排序将失败。配置路径：1) GUI 设置 → LLM；"
+                "2) 环境变量 SHINEHE_LLM_API_KEY；3) keyring。"
+                "Windows Service 需在服务账户下配置或注入系统环境变量。"
+            )
+        if not _emb_key:
+            logger.warning(
+                "启动检测：embedding.api_key 未读取到，向量索引与语义搜索"
+                "将不可用（score_breakdown.vector 将为 null）。配置路径："
+                "1) GUI 设置；2) 环境变量 SHINEHE_EMBEDDING_API_KEY；3) keyring。"
+            )
+
     container = AppContainer(
         config=config,
         db=db,

@@ -576,6 +576,64 @@ def test_agentic_router_with_mock_llm():
     assert spec.filter_condition.type == "and"
 
 
+def test_agentic_router_strong_signal_structured_when_llm_unavailable():
+    """BUG-3 回归：LLM 不可用时，含强信号词（统计/全部）的查询应走 structured
+    兜底而非盲目 fallback hybrid；锁住 _is_structured 的强信号子集。"""
+    from src.services.agentic_router import AgenticRouter
+
+    router = AgenticRouter(llm=None)
+    result = router.route("统计全部知识条目的数量")
+
+    assert result["mode"] == "structured"
+    assert "LLM unavailable" in result["explanation"]
+
+
+def test_dsl_tags_plural_in_produces_or():
+    """BUG-4: {"tags":{"in":[...]}} 复数形式应产生 OR 节点。"""
+    from src.models.query_dsl import QuerySpec
+
+    spec = QuerySpec.from_json({"filter": {"tags": {"in": ["a", "b"]}}})
+
+    assert spec.filter_condition.type == "or"
+    assert len(spec.filter_condition.children) == 2
+
+
+def test_dsl_tag_rejects_unknown_operator():
+    """BUG-4: 单数 tag 只支持 eq，{"tag":{"contains":...}} 应 raise，锁住校验。"""
+    from src.models.query_dsl import QuerySpec
+
+    with pytest.raises(ValueError):
+        QuerySpec.from_json({"filter": {"tag": {"contains": "x"}}})
+
+
+def test_dsl_sort_exact_reported_payload():
+    """BUG-5 回归：报告精确 payload（单元素 list + field 别名 + 小写 desc）应通过。"""
+    from src.models.query_dsl import QuerySpec
+
+    spec = QuerySpec.from_json({
+        "filter": {"tag": "x"},
+        "sort": [{"field": "updated_at", "order": "desc"}],
+    })
+
+    assert spec.sort_terms == [("updated_at", "desc")]
+
+
+def test_dsl_sort_rejects_invalid_field_and_order():
+    """BUG-5 反向：非法 field / order 必须 raise，锁住校验不被后续重构放宽。"""
+    from src.models.query_dsl import QuerySpec
+
+    with pytest.raises(ValueError):
+        QuerySpec.from_json({
+            "filter": {"tag": "x"},
+            "sort": [{"field": "nonexistent", "order": "desc"}],
+        })
+    with pytest.raises(ValueError):
+        QuerySpec.from_json({
+            "filter": {"tag": "x"},
+            "sort": [{"field": "title", "order": "sideways"}],
+        })
+
+
 def test_query_router_accepts_dsl_json():
     from src.services.query_router import QueryRouter
 

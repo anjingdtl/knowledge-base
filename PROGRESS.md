@@ -16,6 +16,40 @@
 
 除上述当前规格和计划外，归档目录中的文档只用于追溯，不代表当前待办。
 
+## 第5轮稳定性测试报告全量修复 — 已完成（2026-06-22）
+
+基于 `docs/ShineHe_KB_MCP_稳定性测试报告第5轮.md` 的 8 个 Bug 做代码层根因定位（含交叉审查）并全量修复。
+
+### 修复清单
+
+| Bug | 结论 | 主要改动 |
+|-----|------|---------|
+| BUG-1 P0 LLM 认证 | 代码改进 + 部署配 key | `llm.py`/`embedding.py` 移除静默 `no-key` 兜底、加精确诊断与一次性告警；`container.py` 启动期 key 缺失检测；`windows_service.py` 启动时显式 `Config.load()` + 注入 secret 到进程环境，缺失时记 Windows 事件日志 |
+| BUG-2 P0 Vector null | 与 BUG-1 同源 + 可观测性 | `hybrid_search._vector_search` 改返回 `(results, warnings)`（用返回值而非实例属性），降级原因透传到候选 `warnings`，keyword 通道独立性绝对不破坏；不改 `vector_score=None` 语义 |
+| BUG-3 P1 route_query | 补完 3 个遗留缺陷 | `agentic_router`：graph 分支 mode 改 structured（消除 mode/query_spec 矛盾）；`_is_structured` 收紧为强信号子集（避免"哪些/状态"误命中语义查询）；`_try_llm` 加 debug 日志；恢复强断言 |
+| BUG-7 P2 file_type | 真 bug 已修 | `file_graph.create_page` 补 file-type 键（原被丢弃致 sync_page fallback "md"） |
+| BUG-8 P3 重复 | 已修，"未知"订正 | `path_indexer._ingest_file` 加 content_hash 幂等去重（与 `mcp_server.create` 一致）。"未知"标题是展示层回退非导入问题，不改 |
+
+BUG-4/5/6 在 round 1/4（commit `82d2a99`/`fe19524`）已有代码层修复，报告基于旧快照；本轮补回归测试锁死。
+
+### 验证
+
+| 门禁 | 结果 |
+|------|------|
+| Python 全量测试 | `887 passed, 1 skipped in 267.54s` |
+| 改动模块集成测试 | test_core/search/search_service/mcp_server/indexer/reranker_providers/mcp_stability/mcp_rag_full/query_revolution_phase3/llm_configuration/file_graph/path_indexer 零回归 |
+
+### 部署侧待办（用户必做）
+
+BUG-1/BUG-2 的 RAG 与语义搜索完全恢复，需在 Windows Service 环境注入 API Key（SYSTEM 账户读不到交互式账户的 keyring）：
+
+```
+setx SHINEHE_LLM_API_KEY <KEY> /M
+setx SHINEHE_EMBEDDING_API_KEY <KEY> /M
+```
+
+重启 `ShineHeMCP` 服务后，`ops_ping` 的 `api_keys.llm/embedding` 应为 true，`vector_index.coverage` 应 > 0；历史 PDF 条目 file_type 需 `reindex_all` 修正（BUG-7）。
+
 ## v1.3.1 全仓库健康审查 — 已完成
 
 本轮基于当前规格与实施计划，对源码、测试、GUI、MCP、索引、引用、评测、构建脚本和发布资料进行了全量审查与修复。

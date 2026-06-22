@@ -254,8 +254,10 @@ class TestMCPRouteQuery:
 
         result = route_query(question="Python 异步编程有哪些最佳实践")
         assert result["ok"] is True
-        # fuzzy 问题通常 fallback 到 hybrid，但 LLM 可能判定为 structured（取决于模型版本）
-        assert result["data"]["mode"] in {"hybrid", "structured"}
+        # 纯语义查询（无 #tag/::prop/[[link]]，也不含"找出/所有/筛选"等强信号）
+        # 在 LLM 不可用的测试环境下应正确 fallback 到 hybrid，而非被 _is_structured
+        # 的弱信号词（如"哪些/状态"）误判为 structured。断言收紧为 == "hybrid"。
+        assert result["data"]["mode"] == "hybrid"
 
     def test_route_query_query_spec_is_json_safe(self):
         import json as _json
