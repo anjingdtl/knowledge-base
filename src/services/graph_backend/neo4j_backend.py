@@ -96,6 +96,7 @@ class Neo4jGraphBackend(GraphBackend):
         password: str = "",
         database: str = "neo4j",
         max_connection_pool_size: int = 50,
+        connection_timeout: float = 2.0,
     ):
         _check_neo4j_available()
         self._uri = uri
@@ -106,6 +107,8 @@ class Neo4jGraphBackend(GraphBackend):
             uri,
             auth=(user, password),
             max_connection_pool_size=max_connection_pool_size,
+            connection_timeout=connection_timeout,
+            connection_acquisition_timeout=connection_timeout,
         )
         logger.info("Neo4j backend connected: %s (db=%s)", uri, database)
 

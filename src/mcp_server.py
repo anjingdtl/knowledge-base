@@ -187,10 +187,30 @@ def _run_async(coro, timeout: float = 120):
         loop = None
 
     if loop and loop.is_running():
-        # 已有事件循环（streamable-http 等场景）
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1):
-            future = asyncio.run_coroutine_threadsafe(coro, loop)
-            return future.result(timeout=timeout)
+        # 已有事件循环时，不能把协程投递回同一个 loop 再同步等待；
+        # 那会阻塞当前 loop，导致 future 永远没有机会执行。
+        import queue
+        import threading
+
+        result_queue: queue.Queue[tuple[bool, object]] = queue.Queue(maxsize=1)
+
+        def _runner():
+            try:
+                result_queue.put((True, asyncio.run(coro)))
+            except BaseException as exc:  # noqa: BLE001 - propagate to caller
+                result_queue.put((False, exc))
+
+        thread = threading.Thread(target=_runner, name="MCPAsyncBridge", daemon=True)
+        thread.start()
+        thread.join(timeout=timeout)
+        if thread.is_alive():
+            raise concurrent.futures.TimeoutError()
+        success, result = result_queue.get_nowait()
+        if success:
+            return result
+        if isinstance(result, BaseException):
+            raise result
+        raise RuntimeError(str(result))
     else:
         # 无事件循环（stdio 线程池场景）
         return asyncio.run(coro)
