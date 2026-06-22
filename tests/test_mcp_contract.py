@@ -21,11 +21,14 @@ import src.mcp_server as mcp_mod
 from src.mcp_server import (
     create,
     delete,
+    explain_query,
+    get_source_graph,
     kb_capabilities,
     list_knowledge,
     query_operation_logs,
     read,
     reindex_all,
+    route_query,
     search,
     search_fulltext,
     structured_query,
@@ -214,6 +217,92 @@ class TestStableErrorCodes:
         result = structured_query(query_dsl=json.dumps(spec), limit=5)
         # 不管命中与否，结构必须是 envelope
         assert "ok" in result
+
+
+class TestStabilityReportCompatibility:
+    """兼容 v1.3.1 稳定性报告中暴露的常见 MCP 客户端参数写法。"""
+
+    def test_ask_accepts_query_alias(self, mcp_env, monkeypatch):
+        monkeypatch.setattr(
+            mcp_mod,
+            "_do_ask",
+            lambda question: {
+                "answer": f"answer:{question}",
+                "sources": [],
+                "route": {"mode": "hybrid"},
+                "warnings": [],
+                "block_contexts": {},
+            },
+        )
+
+        result = mcp_mod.ask(query="企微AI介入率考核指标", include_graph=False)
+
+        assert result["ok"] is True
+        assert result["data"]["answer"] == "answer:企微AI介入率考核指标"
+
+    def test_route_query_accepts_query_alias(self, mcp_env):
+        result = route_query(query="企微AI介入率考核指标")
+
+        assert result["ok"] is True
+        assert result["data"]["mode"] in {"hybrid", "structured", "graph"}
+
+    def test_structured_query_accepts_query_alias_for_natural_language(self, mcp_env):
+        _insert_kb_item("企微指标", "企微AI介入率考核指标要求达到 80%")
+
+        result = structured_query(query="企微AI介入率考核指标", limit=5)
+
+        assert result["ok"] is True
+        assert result["data"]
+        assert result["data"][0]["title"] == "企微指标"
+
+    def test_read_accepts_query_alias_and_reads_top_match(self, mcp_env):
+        kid = _insert_kb_item("首次回复", "首次回复时长要求不超过 30 秒")
+
+        result = read(query="首次回复时长要求", top_k=1)
+
+        assert result["ok"] is True
+        assert result["data"]["id"] == kid
+        assert result["meta"]["resolved_from_query"] is True
+
+    def test_explain_query_accepts_query_alias_for_natural_language(self, mcp_env):
+        result = explain_query(query="SQLite FTS5中文搜索")
+
+        assert result["ok"] is True
+        assert result["data"]["query"]["filter"]["fulltext"] == "SQLite FTS5中文搜索"
+
+    def test_get_source_graph_accepts_query_alias(self, mcp_env):
+        kid = _insert_kb_item("MCP服务接口能力", "MCP服务接口能力包含搜索和问答")
+
+        result = get_source_graph(query="MCP服务接口能力")
+
+        assert result["ok"] is True
+        node_ids = {node["id"] for node in result["data"]["nodes"]}
+        assert kid in node_ids
+
+    def test_search_fulltext_uses_segmented_block_fts_for_chinese(self, mcp_env):
+        kid = _insert_kb_item("回复时长", "无关条目正文")
+        block_id = "block-reply-time"
+        Database.insert_blocks([{
+            "id": block_id,
+            "parent_id": None,
+            "page_id": kid,
+            "content": "首次回复时长要求不超过 30 秒",
+            "block_type": "paragraph",
+            "properties": "{}",
+            "order_idx": 0,
+            "created_at": "2026-06-22T00:00:00",
+            "updated_at": "2026-06-22T00:00:00",
+        }])
+        Database.insert_blocks_fts([{
+            "id": block_id,
+            "page_id": kid,
+            "content": "首次回复时长要求不超过 30 秒",
+        }])
+
+        result = search_fulltext(query="首次回复时长要求", limit=5)
+
+        assert result["ok"] is True
+        assert any(row.get("block_id") == block_id for row in result["data"])
 
 
 # ---- 写工具 + operation_id ----

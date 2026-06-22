@@ -320,6 +320,58 @@ def _load_json_dict(value) -> dict:
         return {}
 
 
+def _resolve_query_alias(primary: str | None, alias: str | None) -> str | None:
+    """Resolve canonical MCP argument names with a legacy ``query`` alias."""
+    value = primary if primary is not None else alias
+    if isinstance(value, str):
+        value = value.strip()
+    return value or None
+
+
+def _natural_language_query_dsl(query: str, *, limit: int = 100, offset: int = 0) -> dict:
+    return {
+        "filter": {"fulltext": query},
+        "limit": limit,
+        "offset": offset,
+        "sort": {"by": "updated_at", "order": "desc"},
+    }
+
+
+def _looks_like_json(value: str) -> bool:
+    value = value.strip()
+    return value.startswith("{") or value.startswith("[")
+
+
+def _parse_query_dsl_or_natural_language(
+    value,
+    *,
+    limit: int = 100,
+    offset: int = 0,
+    allow_natural_language: bool = True,
+) -> tuple[dict, bool]:
+    """Return ``(dsl_dict, was_natural_language_query)``."""
+    if isinstance(value, dict):
+        return value, False
+    if isinstance(value, str) and (_looks_like_json(value) or not allow_natural_language):
+        return json.loads(value), False
+    if isinstance(value, str):
+        return _natural_language_query_dsl(value, limit=limit, offset=offset), True
+    return value, False
+
+
+def _search_sources_from_query(query: str, *, limit: int = 5) -> list[dict]:
+    rows = _get_container().db.search_knowledge(query, limit=max(1, limit), offset=0)
+    return [
+        {
+            "knowledge_id": row.get("id"),
+            "title": row.get("title", ""),
+            "text": row.get("content", ""),
+        }
+        for row in rows
+        if row.get("id")
+    ]
+
+
 def _list_blocks_for_page(page_id: str) -> list[dict]:
     rows = _get_container().db.get_conn().execute(
         """SELECT id, parent_id, page_id, content, block_type, properties, order_idx,
@@ -421,13 +473,63 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
             "text": f"[Wiki] {wr['title']}: {summary}\n{content_preview}",
         })
 
+    seen_block_ids = set()
+    seen_knowledge_ids = set()
+
+    # Block/chunk FTS uses jieba pre-tokenization and works better for Chinese
+    # phrases than the item-level unicode61 index.
+    block_results = db.search_blocks_fts(query, limit=max(limit + offset, limit))
+    for block in block_results[offset:offset + limit]:
+        block_id = block.get("id", "")
+        knowledge_id = block.get("page_id", "")
+        seen_block_ids.add(block_id)
+        if knowledge_id:
+            seen_knowledge_ids.add(knowledge_id)
+        item = db.get_knowledge(knowledge_id) if knowledge_id else None
+        output.append({
+            "source": "knowledge",
+            "match_channel": "block_fts",
+            "match_channels": ["block_fts"],
+            "block_id": block_id,
+            "knowledge_id": knowledge_id,
+            "title": item.get("title", "") if item else "",
+            "text": block.get("content", ""),
+            "block_type": block.get("block_type", ""),
+            "properties": block.get("properties", {}),
+            "fts_rank": block.get("fts_rank", 0),
+        })
+
+    chunk_results = db.search_chunks_fts(query, limit=max(limit + offset, limit))
+    for chunk in chunk_results[offset:offset + limit]:
+        chunk_id = chunk.get("id", "")
+        if chunk_id in seen_block_ids:
+            continue
+        knowledge_id = chunk.get("knowledge_id", "")
+        if knowledge_id:
+            seen_knowledge_ids.add(knowledge_id)
+        item = db.get_knowledge(knowledge_id) if knowledge_id else None
+        output.append({
+            "source": "knowledge",
+            "match_channel": "chunk_fts",
+            "match_channels": ["chunk_fts"],
+            "chunk_id": chunk_id,
+            "knowledge_id": knowledge_id,
+            "title": item.get("title", "") if item else "",
+            "text": chunk.get("chunk_text", ""),
+            "fts_rank": chunk.get("fts_rank", 0),
+        })
+
     # FTS5 知识搜索
     kb_results = db.search_knowledge(query, limit=limit, offset=offset)
     for item in kb_results:
+        if item.get("id") in seen_knowledge_ids:
+            continue
         item["source"] = "knowledge"
+        item.setdefault("match_channel", "knowledge_fts")
+        item.setdefault("match_channels", ["knowledge_fts"])
         output.append(item)
 
-    has_more = len(kb_results) == limit
+    has_more = len(kb_results) == limit or len(block_results) > offset + limit or len(chunk_results) > offset + limit
     return ok(
         output,
         limit=limit,
@@ -449,11 +551,12 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
 )
 @_heartbeat
 def ask(
-    question: str,
+    question: str | None = None,
     include_graph: bool = True,
     include_context: bool = True,
     max_sources: int = 5,
     max_graph_nodes: int = 50,
+    query: str | None = None,
 ) -> dict:
     """基于知识库的智能问答，返回 7 字段结构化 RAG payload。
 
@@ -471,6 +574,12 @@ def ask(
             - warnings: 检索/生成阶段的告警
             - wiki_context: Wiki 知识上下文（仅当 wiki.enabled=true）
     """
+    question = _resolve_query_alias(question, query)
+    if not question:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "ask requires question (or query alias)",
+        )
     result = _do_ask(question)
     if max_sources and max_sources > 0:
         result["sources"] = list(result.get("sources", []))[:max_sources]
@@ -586,11 +695,13 @@ def create(
 )
 @_heartbeat
 def read(
-    item_id: str,
+    item_id: str | None = None,
     include_blocks: bool = False,
     include_embedding_preview: bool = False,
     include_effective_properties: bool = False,
     include_linked_summaries: bool = False,
+    query: str | None = None,
+    top_k: int = 1,
 ) -> dict:
     """读取指定 ID 的知识条目。
 
@@ -598,6 +709,35 @@ def read(
         item_id: 知识条目的唯一 ID
     """
     container = _get_container()
+    item_id = _resolve_query_alias(item_id, None)
+    query = _resolve_query_alias(None, query)
+    if not item_id and query:
+        exact = container.db.get_knowledge(query)
+        if exact:
+            item_id = exact["id"]
+        else:
+            matches = container.db.search_knowledge(query, limit=max(1, int(top_k or 1)), offset=0)
+            if not matches:
+                return fail(
+                    ErrorCode.NOT_FOUND,
+                    f"未找到与查询匹配的知识条目: {query}",
+                    query=query,
+                )
+            if int(top_k or 1) > 1:
+                items = [container.db.get_knowledge(row["id"]) or row for row in matches]
+                return ok(
+                    items,
+                    resolved_from_query=True,
+                    query=query,
+                    count=len(items),
+                    top_k=top_k,
+                )
+            item_id = matches[0]["id"]
+    if not item_id:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "read requires item_id (or query alias)",
+        )
     item = container.db.get_knowledge(item_id)
     if not item:
         return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {item_id}", item_id=item_id)
@@ -631,7 +771,7 @@ def read(
                 block["linked_summaries"] = get_links(block["id"], max_links)
         item = dict(item)
         item["blocks"] = blocks
-    return ok(item)
+    return ok(item, resolved_from_query=bool(query and item_id))
 
 
 @_define_tool(
@@ -1806,7 +1946,12 @@ def cancel_async_job(job_id: str) -> dict:
     group="kb", side_effect="read",
 )
 @_heartbeat
-def structured_query(query_dsl: str, limit: int = 100, offset: int = 0) -> dict:
+def structured_query(
+    query_dsl: str | dict | None = None,
+    limit: int = 100,
+    offset: int = 0,
+    query: str | dict | None = None,
+) -> dict:
     """Execute a structured JSON DSL query against the knowledge base.
 
     The DSL supports tag, property, fulltext, link, file_type, source_type filters
@@ -1822,7 +1967,30 @@ def structured_query(query_dsl: str, limit: int = 100, offset: int = 0) -> dict:
 
     container = _get_container()
     try:
-        dsl = json.loads(query_dsl) if isinstance(query_dsl, str) else query_dsl
+        query_value = query_dsl if query_dsl is not None else query
+        if query_value is None:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "structured_query requires query_dsl (or query alias)",
+            )
+        dsl, natural_language = _parse_query_dsl_or_natural_language(
+            query_value,
+            limit=limit,
+            offset=offset,
+            allow_natural_language=query_dsl is None and query is not None,
+        )
+        if natural_language and isinstance(query_value, str):
+            rows = container.db.search_knowledge(query_value, limit=limit, offset=offset)
+            has_more = len(rows) == limit
+            return ok(
+                rows,
+                limit=limit,
+                offset=offset,
+                next_offset=offset + len(rows) if has_more else None,
+                truncated=has_more,
+                query_alias_used=query is not None,
+                natural_language_query=True,
+            )
         spec = QuerySpec.from_json(dsl)
         spec.limit = min(spec.limit, limit)
         spec.offset = offset
@@ -1848,7 +2016,7 @@ def structured_query(query_dsl: str, limit: int = 100, offset: int = 0) -> dict:
     group="kb", side_effect="read",
 )
 @_heartbeat
-def explain_query(query_dsl: str) -> dict:
+def explain_query(query_dsl: str | dict | None = None, query: str | dict | None = None) -> dict:
     """Explain a structured query: show human-readable summary, execution plan, and condition tree.
 
     Args:
@@ -1858,10 +2026,22 @@ def explain_query(query_dsl: str) -> dict:
     from src.services.query_explainer import QueryExplainer
 
     try:
-        dsl = json.loads(query_dsl) if isinstance(query_dsl, str) else query_dsl
+        query_value = query_dsl if query_dsl is not None else query
+        if query_value is None:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "explain_query requires query_dsl (or query alias)",
+            )
+        dsl, natural_language = _parse_query_dsl_or_natural_language(
+            query_value,
+            allow_natural_language=query_dsl is None and query is not None,
+        )
         spec = QuerySpec.from_json(dsl)
-        explainer = QueryExplainer()
-        return ok(explainer.explain(spec))
+        payload = QueryExplainer().explain(spec)
+        if natural_language:
+            payload["query"] = spec.to_json()
+            payload["natural_language_query"] = True
+        return ok(payload, query_alias_used=query is not None)
     except Exception as exc:
         logger.exception("explain_query failed: %s", exc)
         return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
@@ -1929,7 +2109,7 @@ def graph_traverse(
     group="kb", side_effect="read",
 )
 @_heartbeat
-def route_query(question: str) -> dict:
+def route_query(question: str | None = None, query: str | None = None) -> dict:
     """路由分析：识别问题是结构化 / 图谱 / 模糊语义。
 
     Args:
@@ -1945,6 +2125,12 @@ def route_query(question: str) -> dict:
     from src.services.agentic_router import AgenticRouter, serialize_route
     container = _get_container()
     try:
+        question = _resolve_query_alias(question, query)
+        if not question:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "route_query requires question (or query alias)",
+            )
         router = AgenticRouter(db=container.db, llm=container.llm)
         routing = router.route(question)
         payload = serialize_route(routing)
@@ -2118,6 +2304,7 @@ def get_source_graph(
     block_ids: list[str] | str | None = None,
     knowledge_ids: list[str] | str | None = None,
     max_nodes: int = 50,
+    query: str | None = None,
 ) -> dict:
     """Build a local source graph from RAG sources or explicit IDs."""
     def parse_list(value):
@@ -2139,11 +2326,13 @@ def get_source_graph(
         source_rows.append({"block_id": block_id})
     for knowledge_id in parse_list(knowledge_ids):
         source_rows.append({"knowledge_id": knowledge_id})
+    if not source_rows and query:
+        source_rows.extend(_search_sources_from_query(query, limit=max_nodes))
 
     if not source_rows:
         return fail(
             ErrorCode.VALIDATION_ERROR,
-            "get_source_graph requires sources, block_ids, or knowledge_ids",
+            "get_source_graph requires sources, block_ids, knowledge_ids, or query",
         )
 
     from src.services.source_graph import build_source_graph
