@@ -1,5 +1,5 @@
 """设置对话框"""
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -35,6 +35,14 @@ class SettingsDialog(QDialog):
         self.resize(820, 760)
         self._setup_ui()
         self._load_values()
+
+        # 服务操作异步轮询:ShellExecuteW runas 触发 UAC 后不等待操作完成,
+        # 立即刷新会读到旧状态。用 QTimer 周期性刷新,跟踪真实结果。
+        self._svc_poll = QTimer(self)
+        self._svc_poll.setInterval(1000)
+        self._svc_poll.timeout.connect(self._on_svc_poll_tick)
+        self._svc_poll_ticks = 0
+        self._svc_poll_expect_running: bool | None = None
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -617,30 +625,33 @@ class SettingsDialog(QDialog):
     def _on_svc_start(self):
         from src.services.mcp_launcher import service_start
         msg = service_start()
-        # UAC 是异步的，用户确认弹窗后再刷新状态
         if "UAC" in msg:
-            QMessageBox.information(self, "服务操作", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+            # UAC 异步:用户先确认 UAC 弹窗,再点此处「确定」触发后台轮询
+            QMessageBox.information(self, "服务操作", msg + "\n\n请先在 UAC 弹窗中确认,再点击此处「确定」开始跟踪启动结果...")
+            # 启动类操作:期望最终变 running,超时未达则提示排查
+            self._poll_svc_after_uac(expect_running=True)
         else:
-            QMessageBox.information(self, "服务操作", msg)
-        self._refresh_svc_status()
+            # 非 UAC 分支:端口冲突/已在运行/提权失败等,显示后只刷新一次
+            QMessageBox.warning(self, "服务操作", msg)
+            self._refresh_svc_status()
 
     def _on_svc_stop(self):
         from src.services.mcp_launcher import service_stop
         msg = service_stop()
         if "UAC" in msg:
-            QMessageBox.information(self, "服务操作", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+            QMessageBox.information(self, "服务操作", msg + "\n\n请先在 UAC 弹窗中确认,再点击此处「确定」开始跟踪停止结果...")
         else:
             QMessageBox.information(self, "服务操作", msg)
-        self._refresh_svc_status()
+        self._poll_svc_after_uac(expect_running=False)
 
     def _on_svc_restart(self):
         from src.services.mcp_launcher import service_restart
         msg = service_restart()
         if "UAC" in msg:
-            QMessageBox.information(self, "服务操作", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+            QMessageBox.information(self, "服务操作", msg + "\n\n请先在 UAC 弹窗中确认,再点击此处「确定」开始跟踪重启结果...")
         else:
             QMessageBox.information(self, "服务操作", msg)
-        self._refresh_svc_status()
+        self._poll_svc_after_uac(expect_running=True)
 
     def _on_svc_install(self):
         reply = QMessageBox.question(
@@ -658,10 +669,11 @@ class SettingsDialog(QDialog):
         from src.services.mcp_launcher import service_install
         msg = service_install()
         if "UAC" in msg:
-            QMessageBox.information(self, "服务安装", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+            QMessageBox.information(self, "服务安装", msg + "\n\n请先在 UAC 弹窗中确认,再点击此处「确定」开始跟踪注册结果...")
         else:
             QMessageBox.information(self, "服务安装", msg + "\n\n点击确定后刷新状态...")
-        self._refresh_svc_status()
+        # 注册后状态语义不同(可能 stopped),仅刷新不判定成败
+        self._poll_svc_after_uac(expect_running=None)
 
     def _on_svc_remove(self):
         reply = QMessageBox.question(
@@ -676,19 +688,76 @@ class SettingsDialog(QDialog):
         from src.services.mcp_launcher import service_remove
         msg = service_remove()
         if "UAC" in msg:
-            QMessageBox.information(self, "服务卸载", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+            QMessageBox.information(self, "服务卸载", msg + "\n\n请先在 UAC 弹窗中确认,再点击此处「确定」开始跟踪卸载结果...")
         else:
             QMessageBox.information(self, "服务卸载", msg + "\n\n点击确定后刷新状态...")
-        self._refresh_svc_status()
+        self._poll_svc_after_uac(expect_running=None)
 
     def _on_svc_set_failure(self):
         from src.services.mcp_launcher import service_configure_failure
         msg = service_configure_failure()
         if "UAC" in msg:
-            QMessageBox.information(self, "崩溃重启策略", msg + "\n\n确认 UAC 后点击确定刷新状态...")
+            QMessageBox.information(self, "崩溃重启策略", msg + "\n\n请先在 UAC 弹窗中确认,再点击此处「确定」开始刷新配置...")
         else:
             QMessageBox.information(self, "崩溃重启策略", msg)
+        self._poll_svc_after_uac(expect_running=None)
+
+    # ---- 服务操作异步轮询 ----
+
+    def _poll_svc_after_uac(self, expect_running: bool | None):
+        """UAC 异步操作后轮询服务状态,跟踪真实结果。
+
+        expect_running:
+          True  — 期望服务变 running(start/restart),超时未达提示「启动失败」
+          False — 期望服务变 stopped(stop)
+          None  — 仅周期刷新不判定成败(install/remove/configure)
+        """
+        self._svc_poll_expect_running = expect_running
+        self._svc_poll_ticks = 8  # ~8 秒覆盖服务启动/停止窗口
+        self._svc_poll.start()
         self._refresh_svc_status()
+
+    def _on_svc_poll_tick(self):
+        self._refresh_svc_status()
+        self._svc_poll_ticks -= 1
+
+        # 仅刷新模式:到时即停,不判定
+        if self._svc_poll_expect_running is None:
+            if self._svc_poll_ticks <= 0:
+                self._svc_poll.stop()
+            return
+
+        from src.services.mcp_launcher import get_service_status, is_service_installed
+        status = get_service_status() if is_service_installed() else "not_installed"
+        reached = (
+            status == "running"
+            if self._svc_poll_expect_running
+            else status in ("stopped", "not_installed")
+        )
+        if reached or self._svc_poll_ticks <= 0:
+            self._svc_poll.stop()
+            if not reached:
+                self._prompt_svc_failure(self._svc_poll_expect_running)
+
+    def _prompt_svc_failure(self, expect_running: bool):
+        """操作超时未达预期时引导用户排查,而非默默显示旧状态。"""
+        if expect_running:
+            QMessageBox.warning(
+                self, "服务启动未生效",
+                "等待数秒后服务仍未进入「运行中」状态。\n\n"
+                "常见原因:\n"
+                "• 服务注册不完整 — 注册表缺少 PythonClass,pythonservice.exe 找不到服务类\n"
+                "  (若服务曾由打包应用注册,需重新注册)\n"
+                "• 服务进程启动后立即崩溃 — 查看: 事件查看器 → Windows 日志 → 系统\n"
+                "• UAC 提权弹窗被取消\n\n"
+                "建议:先点「卸载服务」,再点「注册为 Windows 服务」重新注册,然后再次启动。",
+            )
+        else:
+            QMessageBox.warning(
+                self, "服务停止未生效",
+                "等待数秒后服务仍未停止。\n\n"
+                "可稍后重试,或手动执行: sc stop ShineHeMCP",
+            )
 
     # ---- MCP 配置档 ----
 
