@@ -40,20 +40,3 @@ services:
     profiles:
       - mcp
     restart: unless-stopped
-
-  neo4j:
-    image: neo4j:5-community
-    container_name: shinehe-kb-neo4j
-    ports:
-      - "7474:7474"
-      - "7687:7687"
-    environment:
-      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:?Set NEO4J_PASSWORD}
-    volumes:
-      - neo4j-data:/data
-    profiles:
-      - graph
-    restart: unless-stopped
-
-volumes:
-  neo4j-data:

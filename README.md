@@ -199,16 +199,13 @@ Baseline thresholds are enforced in CI. See [docs/retrieval-quality.md](docs/ret
 
 **Core (default):** MCP Server, local file indexing, hybrid search, RRF, rerank, context expansion, structured citations, directory watching, eval gates.
 
-**Experimental (opt-in):** Wiki workflow, Graph traversal (Neo4j), Agent Memory, Plugin system, Web admin UI, multi-user RBAC.
+**Experimental (opt-in):** Wiki workflow, SQLite graph traversal, Agent Memory, Plugin system, Web admin UI, multi-user RBAC.
 
 Advanced features remain in the codebase but are hidden from the default MCP tool face. Enable them via `mcp.experimental_tools_enabled=true` in `config.yaml`. See [docs/advanced-features.md](docs/advanced-features.md).
 
-## Graph Backend (SQLite / Neo4j)
+## SQLite Graph Storage
 
-Switch the knowledge base's graph storage backend from **Settings → Graph Backend** in the GUI:
-
-- **SQLite (default)** — zero-config, with `GraphSyncHook` automatically mirroring create/delete operations into the graph view. Best for small-to-medium graphs.
-- **Neo4j (optional)** — designed for large-scale relationship analysis and Cypher traversal. After picking Neo4j, click **Auto-Deploy Neo4j** to download and install Neo4j Community 5.x into `%LOCALAPPDATA%\Neo4j` (UAC is triggered on demand to set `NEO4J_HOME`), then use **Start Neo4j** and **Full Migration** to import existing data.
+Graph data is stored in the local SQLite database through Page, Block, Tag, entity reference, and semantic relation tables. No external graph database is required. Unified graph views, source graphs, and multi-hop traversal are built from `data/kb.db`.
 
 ## Architecture
 

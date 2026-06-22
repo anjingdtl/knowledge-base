@@ -247,6 +247,19 @@ class TestChatSourceContract:
 
 
 class TestPhase2GraphAPI:
+    def test_graph_backend_status_is_sqlite_only(self, api_client):
+        resp = api_client.get("/api/graph/backend/status")
+
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["provider"] == "sqlite"
+        assert data["healthy"] is True
+        assert data["stats"]["backend"] == "sqlite"
+
+    def test_external_graph_migration_routes_are_removed(self, api_client):
+        assert api_client.post("/api/graph/backend/migrate").status_code == 404
+        assert api_client.post("/api/graph/backend/sync").status_code == 404
+
     def test_unified_graph_endpoint_returns_nodes_and_edges(self, api_client):
         from src.services.db import Database
         Database.insert_knowledge({

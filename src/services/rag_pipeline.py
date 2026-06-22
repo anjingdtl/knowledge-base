@@ -173,10 +173,11 @@ class WikiRetrievalStage(PipelineStage):
 
 
 class VectorSearchStage(PipelineStage):
-    def __init__(self, db=None, hybrid_search=None, llm=None):
+    def __init__(self, db=None, hybrid_search=None, llm=None, graph_backend=None):
         self._db = db
         self._hybrid_search = hybrid_search
         self._llm = llm
+        self._graph_backend = graph_backend
 
     @property
     def name(self):
@@ -217,9 +218,7 @@ class VectorSearchStage(PipelineStage):
                     start_pages = executor.execute(routing["query_spec"])
                     start_ids = [p["id"] for p in start_pages]
                     traverse_config = routing.get("traverse", {"max_depth": 2})
-                    # 使用注入的 graph_backend 而非创建新实例
-                    gb = deps.get("graph_backend") if deps else None
-                    traversal = GraphTraversalService(db=db, graph_backend=gb).traverse(
+                    traversal = GraphTraversalService(db=db, graph_backend=self._graph_backend).traverse(
                         start_ids=start_ids, start_type="knowledge",
                         max_depth=traverse_config.get("max_depth", 2),
                     )
@@ -879,10 +878,15 @@ class RAGService:
                 logger.warning("Failed to load config pipeline, using default: %s", e)
         self._pipeline = pipeline or RagPipeline(deps=deps)
 
+    def _resolve_graph_backend(self):
+        """从 deps 中提取 graph_backend。"""
+        return (self._deps or {}).get("graph_backend")
+
     def query(self, question: str, conversation_history: list[dict] | None = None,
               phase_callback=None) -> dict:
         """同步查询（非流式）— 直接通过管线执行，无冗余预处理"""
-        import asyncio, traceback
+        import asyncio
+        import traceback
 
         try:
             # 直接走管线，管线内部会依次执行全部阶段

@@ -68,6 +68,7 @@ knowledge-base/
     ├── services/                        # 核心服务层
     │   ├── db.py                        # SQLite + FTS5 存储（单例，兼容旧代码）
     │   ├── vectorstore.py               # sqlite-vec 向量存储（1024 维 bge-m3）
+    │   ├── graph_backend/               # SQLiteGraphBackend，本地 SQLite 图存储
     │   ├── block_store.py               # Block 级向量存储
     │   ├── path_indexer.py              # 目录增量索引服务
     │   ├── file_watcher.py              # watchdog 目录监听
@@ -117,6 +118,10 @@ Config → Database → VectorStore → BlockStore → Embedding/LLM → Reposit
 ### Repository 层过渡
 
 `src/repositories/` 正逐步替代 `db.py` 中的直接 SQL 操作。新增数据访问应优先写 Repository，而非直接调用 `Database` 方法。
+
+### 图谱存储
+
+图谱存储统一使用 `SQLiteGraphBackend`；项目不再依赖外部图数据库服务。Page、Block、Tag、`entity_refs`、`tag_relations` 和 `knowledge_graph_relations` 共同构成 SQLite 图视图。
 
 ## 环境变量
 

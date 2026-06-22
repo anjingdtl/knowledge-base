@@ -1,7 +1,6 @@
-"""插件式图数据库后端
+"""SQLite 图数据库后端
 
-提供统一的图操作接口，支持 SQLite（默认）和 Neo4j 等后端。
-通过 config.yaml 的 graph_backend 配置节切换后端。
+提供统一的图操作接口，当前唯一实现为 SQLiteGraphBackend。
 
 快速使用:
     from src.services.graph_backend import create_graph_backend
@@ -18,7 +17,7 @@ from src.services.graph_backend.base import (
     parse_node_id,
 )
 from src.services.graph_backend.factory import create_graph_backend
-from src.services.graph_backend.migration import GraphMigration
+from src.services.graph_backend.sqlite_backend import SQLiteGraphBackend
 
 __all__ = [
     "GraphBackend",
@@ -29,5 +28,5 @@ __all__ = [
     "make_node_id",
     "parse_node_id",
     "create_graph_backend",
-    "GraphMigration",
+    "SQLiteGraphBackend",
 ]

@@ -51,7 +51,7 @@ ShineHeKnowledge 下一阶段不再以“继续增加知识管理功能”为主
 4. `search` 与 `ask` 返回统一、可追溯、可解释的引用结构。
 5. 本地目录发生新增、修改、删除时可增量同步索引。
 6. 检索质量通过真实 golden dataset、基线文件和 CI 门禁证明。
-7. 默认安装不要求 GUI、Neo4j、Web Client、Wiki 或插件依赖。
+7. 默认安装不要求 GUI、外部图数据库、Web Client、Wiki 或插件依赖。
 
 ### 3.2 非目标
 
@@ -94,7 +94,7 @@ ShineHeKnowledge 下一阶段不再以“继续增加知识管理功能”为主
 默认不注册到 MCP 工具面，不出现在 README 第一屏：
 
 - Wiki workflow
-- Graph traversal / Neo4j
+- SQLite graph traversal
 - Agent Memory
 - Plugin system
 - Web 管理后台
@@ -558,7 +558,7 @@ Phase 1 和 Phase 4 可并行；Phase 2 依赖 CLI 配置位置；Phase 3 在 `i
 8. reranker 失败时自动降级且不丢失检索结果。
 9. Eval fixture 包含有效 golden source，CI 能阻止明显质量回退。
 10. README 第一屏不再以 51 个工具、Wiki、Graph 或插件为主卖点。
-11. 默认安装和 Docker MCP 镜像不依赖 GUI、Neo4j 和 Web Client。
+11. 默认安装和 Docker MCP 镜像不依赖 GUI、外部图数据库和 Web Client。
 12. 所有新增行为有针对性测试；已有 MCP envelope、安全和导入测试继续通过。
 
 ## 17. 关键风险与缓解

@@ -451,8 +451,6 @@ class WikiLint:
     def _fill_empty_page(self, page: dict) -> None:
         """为空页面从知识库检索并填充内容"""
         title = page["title"]
-        from src.services.wiki_compiler import WikiCompiler
-        compiler = WikiCompiler()
 
         # 从知识库搜索相关内容
         try:

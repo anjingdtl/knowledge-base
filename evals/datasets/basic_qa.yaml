@@ -36,10 +36,10 @@
   relevant_knowledge_ids: []
   tags: [mcp, transport]
 
-- question: "如何配置 Neo4j 作为图后端？"
-  expected_answer_summary: "在 config.yaml 中设置 graph_backend.provider 为 neo4j，并配置 uri、user、password"
+- question: "图谱数据默认保存在哪里？"
+  expected_answer_summary: "图谱数据默认保存在本地 SQLite 的 data/kb.db 中，主要通过 blocks、entity_refs 和语义关系表表达"
   relevant_knowledge_ids: []
-  tags: [graph, neo4j, config]
+  tags: [graph, sqlite, config]
 
 - question: "Block 是什么概念？"
   expected_answer_summary: "Block 是文档的逻辑单元，如段落、标题、表格行等，用于细粒度检索"

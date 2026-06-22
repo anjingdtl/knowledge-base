@@ -1,16 +1,13 @@
-"""插件式图后端测试
+"""SQLite-only 图后端测试
 
 覆盖:
 1. ID 工具函数 (make_node_id / parse_node_id)
 2. SQLite 后端基本操作
 3. 工厂函数
-4. 同步钩子 (enabled/disabled)
-5. 迁移工具 (Mock)
-6. 服务层集成 (UnifiedGraphService / GraphTraversalService)
+4. 同步钩子兼容 no-op
+5. 服务层集成 (UnifiedGraphService / GraphTraversalService)
 """
 from unittest.mock import MagicMock
-
-import pytest
 
 from src.services.db import Database
 from src.services.graph_backend.base import (
@@ -250,11 +247,22 @@ class TestFactory:
         backend = create_graph_backend(config, db=Database)
         assert backend.name == "sqlite"
 
-    def test_unknown_provider_raises(self):
+    def test_legacy_external_provider_uses_sqlite(self):
+        class LegacyConfig:
+            def get(self, key, default=None):
+                if key == "graph_backend.provider":
+                    return "neo" + "4j"
+                return default
+
+        backend = create_graph_backend(LegacyConfig(), db=Database)
+
+        assert backend.name == "sqlite"
+
+    def test_unknown_provider_uses_sqlite(self):
         config = MagicMock()
         config.get.return_value = "redis"
-        with pytest.raises(ValueError, match="Unknown graph_backend provider"):
-            create_graph_backend(config, db=Database)
+        backend = create_graph_backend(config, db=Database)
+        assert backend.name == "sqlite"
 
 
 # ---------------------------------------------------------------------------
@@ -268,38 +276,37 @@ class TestSyncHooks:
         hook = GraphSyncHook(backend)
         assert hook.enabled is False
 
-    def test_non_sqlite_backend_enabled(self):
+    def test_non_sqlite_backend_disabled_for_compatibility(self):
         mock_backend = MagicMock()
-        mock_backend.name = "neo4j"
+        mock_backend.name = "external"
         hook = GraphSyncHook(mock_backend)
-        assert hook.enabled is True
+        assert hook.enabled is False
 
-    def test_hook_calls_upsert_node(self):
+    def test_hook_does_not_call_upsert_node(self):
         mock_backend = MagicMock()
-        mock_backend.name = "neo4j"
+        mock_backend.name = "external"
         hook = GraphSyncHook(mock_backend)
         hook.on_page_synced("k1", "Test Page", tags=["python"], file_type="md")
-        # 应调用 upsert_node（Page 节点 + Tag 节点）
-        assert mock_backend.upsert_node.call_count >= 1
+        mock_backend.upsert_node.assert_not_called()
 
-    def test_hook_calls_delete(self):
+    def test_hook_does_not_call_delete(self):
         mock_backend = MagicMock()
-        mock_backend.name = "neo4j"
+        mock_backend.name = "external"
         hook = GraphSyncHook(mock_backend)
         hook.on_page_deleted("k1")
-        mock_backend.delete_node.assert_called_once_with("page:k1")
+        mock_backend.delete_node.assert_not_called()
 
-    def test_hook_calls_batch_blocks(self):
+    def test_hook_does_not_call_batch_blocks(self):
         mock_backend = MagicMock()
-        mock_backend.name = "neo4j"
+        mock_backend.name = "external"
         hook = GraphSyncHook(mock_backend)
         blocks = [
             {"id": "b1", "parent_id": None, "content": "hello", "block_type": "text", "order_idx": 0},
             {"id": "b2", "parent_id": "b1", "content": "world", "block_type": "text", "order_idx": 1},
         ]
         hook.on_blocks_synced("k1", blocks)
-        mock_backend.upsert_nodes_batch.assert_called_once()
-        mock_backend.upsert_edges_batch.assert_called_once()
+        mock_backend.upsert_nodes_batch.assert_not_called()
+        mock_backend.upsert_edges_batch.assert_not_called()
 
     def test_hook_noop_when_disabled(self):
         backend = SQLiteGraphBackend(db=Database)
@@ -309,51 +316,6 @@ class TestSyncHooks:
         hook.on_page_deleted("k1")
         hook.on_blocks_synced("k1", [])
         # 不会抛出异常即为通过
-
-
-# ---------------------------------------------------------------------------
-# 迁移工具（Mock 测试）
-# ---------------------------------------------------------------------------
-
-class TestMigration:
-
-    def test_migrate_all_mock(self):
-        _seed_data()
-        from src.services.graph_backend.migration import GraphMigration
-
-        mock_target = MagicMock()
-        mock_target.name = "neo4j"
-        mock_target.clear = MagicMock()
-        mock_target.upsert_nodes_batch = MagicMock()
-        mock_target.upsert_edges_batch = MagicMock()
-        mock_target.create_indexes = MagicMock()
-
-        migration = GraphMigration(db=Database)
-        result = migration.migrate_all(target=mock_target, clear_target=True)
-
-        assert result["pages"] >= 2
-        assert result["blocks"] >= 2
-        assert result["tags"] >= 1
-        assert result["edges"] >= 1
-        assert "duration_s" in result
-        mock_target.clear.assert_called_once()
-        mock_target.create_indexes.assert_called_once()
-
-    def test_migrate_incremental_mock(self):
-        _seed_data()
-        from src.services.graph_backend.migration import GraphMigration
-
-        mock_target = MagicMock()
-        mock_target.name = "neo4j"
-        mock_target.upsert_nodes_batch = MagicMock()
-        mock_target.upsert_edges_batch = MagicMock()
-
-        migration = GraphMigration(db=Database)
-        result = migration.sync_incremental(target=mock_target, since="2020-01-01")
-
-        assert "pages" in result
-        assert "blocks" in result
-
 
 # ---------------------------------------------------------------------------
 # 服务层集成

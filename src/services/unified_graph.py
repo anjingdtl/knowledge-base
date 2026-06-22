@@ -1,9 +1,4 @@
-"""统一图谱服务 — 通过图后端构建 page/block/tag/entity 统一图结构
-
-当配置了 Neo4j 等外部图后端时，统一图谱的构建委托给后端执行，
-利用图数据库的原生遍历能力显著提升大规模数据下的性能。
-未配置时回退到 SQLite 后端（行为与改造前完全一致）。
-"""
+"""统一图谱服务 — 通过 SQLiteGraphBackend 构建 page/block/tag/entity 统一图结构。"""
 import json
 import logging
 from typing import Optional
@@ -32,7 +27,7 @@ class UnifiedGraphService:
               page_limit: int = 500, block_limit: int | None = 1000,
               ref_limit: int | None = 10000) -> dict:
         """构建统一图谱，返回 {"nodes": [...], "edges": [...]}"""
-        # 委托给图后端 — 无论 SQLite 还是 Neo4j 都通过统一接口处理
+        # 委托给 SQLite 图后端统一处理
         node_types = ["page"]
         if include_blocks:
             node_types.append("block")

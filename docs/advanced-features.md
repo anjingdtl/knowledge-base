@@ -66,8 +66,7 @@ Full content lifecycle: draft → review → published → deprecated.
 ### Knowledge Graph
 
 - `graph_traverse` — multi-hop graph traversal
-- Neo4j backend (optional) — Cypher queries, batch UNWIND, efficient traversal
-- SQLite backend (default) — zero dependency
+- SQLite graph storage — Page, Block, Tag, entity reference, and semantic relation traversal with zero external service dependency
 
 ### Agent Memory
 

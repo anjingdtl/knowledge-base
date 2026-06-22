@@ -130,13 +130,7 @@ mcp:
   bind_host: 127.0.0.1     # MCP HTTP 服务绑定地址
   auth_token: ""            # write_policy=token_required 时使用的认证 token
 graph_backend:
-  provider: sqlite          # sqlite | neo4j
-  # Neo4j 配置（provider=neo4j 时生效）:
-  uri: bolt://localhost:7687
-  user: neo4j
-  # password: <SECRET>    # 通过 keyring 管理，或设置环境变量 SHINEHE_NEO4J_PASSWORD
-  database: neo4j
-  max_connection_pool_size: 50
+  provider: sqlite          # SQLite-only graph storage
 storage:
   chroma_dir: chroma
   data_dir: data

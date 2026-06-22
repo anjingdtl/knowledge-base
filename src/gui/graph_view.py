@@ -1111,35 +1111,10 @@ class GraphView(QWidget):
             self._backend_timer.start(5000)
 
     def _refresh_backend_indicator(self):
-        """刷新工具栏上的后端状态指示器（仅在状态真变化时调 polish）"""
-        try:
-            from src.utils.config import Config
-            provider = Config.get("graph_backend.provider", "sqlite")
-        except Exception:
-            provider = "sqlite"
-
-        is_neo4j = provider == "neo4j"
-        healthy = False
-
-        if is_neo4j:
-            try:
-                from src.services.neo4j_manager import Neo4jManager
-                healthy = Neo4jManager().is_running()
-            except Exception:
-                healthy = False
-        else:
-            # SQLite 始终健康
-            healthy = True
-
-        # 更新显示
-        if is_neo4j:
-            label_text = "Neo4j"
-            status_prop = "online" if healthy else "offline"
-            tooltip = f"Neo4j 后端 — {'已连接' if healthy else '未连接'}"
-        else:
-            label_text = "SQLite"
-            status_prop = "online"
-            tooltip = "SQLite 后端（默认）"
+        """刷新工具栏上的 SQLite 图存储状态指示器。"""
+        label_text = "SQLite"
+        status_prop = "online"
+        tooltip = "SQLite 图谱存储（本地内置）"
 
         # 仅在状态/文字真变化时触碰 widget — SQLite 后端永远 online/text 一样，跳过 polish
         changed = (
