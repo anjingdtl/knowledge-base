@@ -9,6 +9,7 @@
 敏感凭据（api_key）通过 OS keychain（keyring）安全存储，不写入 config.yaml。
 """
 import functools
+import json
 import logging
 import os
 from pathlib import Path
@@ -16,12 +17,18 @@ from typing import Any
 
 import yaml
 
-from src.utils.paths import get_config_path, get_data_dir
+from src.utils.paths import get_config_path, get_data_dir, get_project_root
 
 logger = logging.getLogger(__name__)
 
 # keyring 服务名，用于 OS keychain 中隔离本应用的凭据
 _KEYRING_SERVICE = "ShineHeKnowledge"
+
+# Windows 服务以 LocalSystem 运行时读不到交互式用户的 keyring。
+# 在 Windows 上额外保存一份 DPAPI LocalMachine 加密的密钥包，供服务账户读取。
+_MACHINE_SECRET_FILE = "service_secrets.dpapi"
+_MACHINE_SECRET_ENTROPY = b"ShineHeKnowledge:service-secrets:v1"
+_CRYPTPROTECT_LOCAL_MACHINE = 0x4
 
 # 需要通过 keyring 安全存储的配置键
 _SECRET_KEYS = {
@@ -57,6 +64,87 @@ except Exception:
 def _secret_to_keyring_key(key: str) -> str:
     """将点分隔的配置键转换为 keyring 的用户名格式"""
     return key.replace(".", "/")
+
+
+def _machine_secret_path(config_path: str | None = None) -> Path:
+    root = Path(config_path).resolve().parent if config_path else get_project_root()
+    return root / "data" / _MACHINE_SECRET_FILE
+
+
+def _machine_secret_available() -> bool:
+    if os.name != "nt":
+        return False
+    try:
+        import win32crypt  # noqa: F401
+    except Exception:
+        return False
+    return True
+
+
+def _protect_machine_secret(payload: bytes) -> bytes:
+    import win32crypt
+
+    return win32crypt.CryptProtectData(
+        payload,
+        "ShineHeKnowledge service secrets",
+        _MACHINE_SECRET_ENTROPY,
+        None,
+        None,
+        _CRYPTPROTECT_LOCAL_MACHINE,
+    )
+
+
+def _unprotect_machine_secret(payload: bytes) -> bytes:
+    import win32crypt
+
+    return win32crypt.CryptUnprotectData(
+        payload,
+        _MACHINE_SECRET_ENTROPY,
+        None,
+        None,
+        0,
+    )[1]
+
+
+def _load_machine_secrets(config_path: str | None = None) -> dict[str, str]:
+    if not _machine_secret_available():
+        return {}
+    path = _machine_secret_path(config_path)
+    if not path.exists():
+        return {}
+    try:
+        raw = _unprotect_machine_secret(path.read_bytes())
+        data = json.loads(raw.decode("utf-8"))
+    except Exception as exc:
+        logger.warning("读取 Windows 服务共享密钥失败: %s", exc)
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    return {
+        str(key): str(value)
+        for key, value in data.items()
+        if key in _SECRET_KEYS and value
+    }
+
+
+def _save_machine_secrets(secrets: dict[str, str], config_path: str | None = None) -> bool:
+    if not _machine_secret_available():
+        return False
+    path = _machine_secret_path(config_path)
+    try:
+        if not secrets:
+            path.unlink(missing_ok=True)
+            return True
+        path.parent.mkdir(parents=True, exist_ok=True)
+        payload = json.dumps(secrets, ensure_ascii=False, sort_keys=True).encode("utf-8")
+        path.write_bytes(_protect_machine_secret(payload))
+        return True
+    except Exception as exc:
+        logger.warning(
+            "写入 Windows 服务共享密钥失败，Windows Service 可能仍需系统环境变量注入: %s",
+            exc,
+        )
+        return False
 
 
 class _dualmethod:
@@ -135,7 +223,9 @@ class Config:
             config_path = str(get_config_path())
         with open(config_path, "r", encoding="utf-8") as f:
             self._data = yaml.safe_load(f) or {}
-        # 从环境/keychain 恢复敏感凭据，优先级: 显式环境变量 → 环境兜底 → keyring。
+        machine_secrets: dict[str, str] | None = None
+        # 从环境/服务共享密钥/keychain 恢复敏感凭据。
+        # 优先级: 显式环境变量 → 环境兜底 → Windows 服务共享密钥 → keyring。
         # 环境变量覆盖 keyring 可避免 Windows Service/CLI 继续使用 keyring 中的旧 key。
         for secret_key in _SECRET_KEYS:
             value = None
@@ -149,7 +239,12 @@ class Config:
                     value = os.environ.get(fallback_env_key)
                     if value is not None:
                         break
-            # 3. 环境变量未设置时尝试从 keyring 读取
+            # 3. 环境变量未设置时尝试读取 Windows 服务共享密钥。
+            if value is None:
+                if machine_secrets is None:
+                    machine_secrets = _load_machine_secrets(config_path)
+                value = machine_secrets.get(secret_key)
+            # 4. 最后尝试从当前账户 keyring 读取。
             if value is None and _keyring_available:
                 kr_key = _secret_to_keyring_key(secret_key)
                 try:
@@ -215,6 +310,12 @@ class Config:
                         stored_in_keyring.add(secret_key)
                 except Exception as exc:
                     logger.warning("写入 keyring %s 失败，将回退到文件存储: %s", secret_key, exc)
+            service_secrets = {
+                secret_key: str(secret_val)
+                for secret_key in _SECRET_KEYS
+                if (secret_val := self._get_nested(secret_key))
+            }
+            _save_machine_secrets(service_secrets, config_path)
         else:
             # keyring 不可用时，凭据将照旧写入 config.yaml 明文文件
             # 检查是否有敏感值即将被写入，有则发出警告
@@ -266,7 +367,7 @@ class Config:
         """
         if not self._data:
             self.load()
-        result = dict(env or {})
+        result = env if env is not None else {}
         for secret_key, env_key in _ENV_KEY_MAP.items():
             value = self._get_nested(secret_key)
             if value and (overwrite or not result.get(env_key)):
