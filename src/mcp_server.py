@@ -531,7 +531,11 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
         output.append(item)
 
     # BUG-7 fix: 统一排序 — 将所有层的结果按 fts_score 归一化后排序
+    # BUG-2 fix: 增加 title boost — 标题与查询有重叠的结果优先展示
     from src.models.retrieval import normalize_fts_score
+    import re as _re
+    # 提取查询关键词用于标题匹配
+    _query_terms = set(_re.findall(r'[\u4e00-\u9fffA-Za-z0-9]{2,}', query))
 
     for item in output:
         raw_rank = item.get("fts_rank", 0)
@@ -539,6 +543,16 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
         # Wiki 结构化知识优先：给 wiki 结果加小幅分数 boost
         if item.get("source") == "wiki":
             fts_score = min(fts_score + 0.1, 1.0)
+        # BUG-2: title boost — 标题与查询关键词有重叠的文档提升排名
+        title = item.get("title", "")
+        if title and _query_terms:
+            title_chars = set(title)
+            overlap = len(_query_terms & {t for t in _query_terms if all(c in title_chars for c in t)})
+            if overlap > 0:
+                boost = 0.15 * overlap
+                fts_score = min(fts_score + boost, 1.0)
+                item.setdefault("match_channels", [])
+                item["match_channels"].append("title_boost")
         item["fts_score"] = fts_score
 
     # 按 fts_score 降序排列（高相关性在前）
@@ -2129,17 +2143,21 @@ def graph_traverse(
 
 @_define_tool(
     name="route_query",
-    description="仅路由分析，不执行检索。返回 mode (structured|graph|hybrid) + query_spec + "
-    "traverse + explanation，Agent 据此决定下一步走 execute_query 还是 ask_with_query。",
+    description="路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + "
+    "traverse + explanation + evidence_preview（top 3 匹配标题+摘要），"
+    "Agent 据此决定下一步走 execute_query 还是 ask_with_query。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
     group="kb", side_effect="read",
 )
 @_heartbeat
-def route_query(question: str | None = None, query: str | None = None) -> dict:
-    """路由分析：识别问题是结构化 / 图谱 / 模糊语义。
+def route_query(question: str | None = None, query: str | None = None,
+                include_evidence: bool = True) -> dict:
+    """路由分析：识别问题是结构化 / 图谱 / 模糊语义，并可附带轻量级证据摘要。
 
     Args:
         question: 用户原始问题
+        include_evidence: 是否附带轻量级搜索线索（默认True，
+            返回top 3匹配标题+摘要，不触发LLM，仅FTS快速检索）
 
     Returns:
         envelope.data 字段：
@@ -2147,6 +2165,7 @@ def route_query(question: str | None = None, query: str | None = None) -> dict:
             - query_spec: QuerySpec JSON dict（structured 模式）
             - traverse: 遍历配置（graph 模式，max_depth 等）
             - explanation: 路由选择的理由
+            - evidence_preview: [{title, text_preview, score}] 轻量证据（可选）
     """
     from src.services.agentic_router import AgenticRouter, serialize_route
     container = _get_container()
@@ -2160,6 +2179,80 @@ def route_query(question: str | None = None, query: str | None = None) -> dict:
         router = AgenticRouter(db=container.db, llm=container.llm)
         routing = router.route(question)
         payload = serialize_route(routing)
+
+        # BUG-3 fix: 附带轻量级搜索线索，让Agent能看到相关文档而不需要二次调用
+        # 优先级：blocks_fts（jieba分词，中文匹配可靠）> wiki_fts > LIKE兜底
+        if include_evidence:
+            try:
+                db = container.db
+                evidence = []
+                # 对查询做简化提取：取核心中文词组（去除停用词），避免长句FTS5匹配失败
+                import re as _re
+                _STOP_WORDS = {'的','了','是','在','和','与','或','有','中','及','对','等',
+                               '为','被','把','向','从','到','由','用','以','按','将','给',
+                               '不','没','也','都','就','而','且','但','如','什么','怎么',
+                               '哪些','如何','可以','能够','需要','是否'}
+                # 提取2-6字的中文/字母/数字词组
+                chunks = _re.findall(r'[\u4e00-\u9fffA-Za-z0-9]{2,6}', question)
+                simple_query = ' '.join(c for c in chunks if c not in _STOP_WORDS) or question
+
+                # 第一优先：block FTS（使用jieba分词，中文搜索可靠）
+                block_hits = db.search_blocks_fts(simple_query, limit=5)
+                seen_kids = set()
+                for b in block_hits:
+                    kid = b.get("page_id", "")
+                    if kid in seen_kids:
+                        continue
+                    seen_kids.add(kid)
+                    item = db.get_knowledge(kid) if kid else None
+                    evidence.append({
+                        "title": item.get("title", "") if item else "",
+                        "text_preview": (b.get("content", ""))[:200],
+                        "source": "knowledge",
+                        "knowledge_id": kid,
+                    })
+                    if len(evidence) >= 3:
+                        break
+
+                # 第二优先：wiki FTS（unicode61对中文短语匹配弱，仅作补充）
+                if len(evidence) < 3:
+                    wiki_hits = db.search_wiki_fts(simple_query, limit=2)
+                    for w in wiki_hits:
+                        evidence.append({
+                            "title": w.get("title", ""),
+                            "text_preview": (w.get("concept_summary", "") or w.get("content", ""))[:200],
+                            "source": "wiki",
+                        })
+
+                # 最终兜底：知识项标题模糊匹配（尝试多个chunk）
+                if not evidence:
+                    try:
+                        # 尝试每个chunk，提升命中率
+                        tried = set()
+                        for chunk in (chunks or [question[:4]]):
+                            if chunk in tried or len(chunk) < 2:
+                                continue
+                            tried.add(chunk)
+                            rows = db.get_conn().execute(
+                                "SELECT id, title FROM knowledge_items WHERE title LIKE ? AND deleted_at IS NULL LIMIT 3",
+                                (f"%{chunk}%",),
+                            ).fetchall()
+                            for row in rows:
+                                evidence.append({
+                                    "title": row[1],
+                                    "text_preview": "",
+                                    "source": "knowledge_title_match",
+                                    "knowledge_id": row[0],
+                                })
+                            if evidence:
+                                break
+                    except Exception:
+                        pass
+                payload["evidence_preview"] = evidence[:3]
+            except Exception as e:
+                logger.warning("route_query evidence preview failed (non-fatal): %s", e)
+                payload["evidence_preview"] = []
+
         return ok(payload, mode=payload.get("mode"))
     except Exception as exc:
         logger.exception("route_query failed: %s", exc)
@@ -2257,23 +2350,39 @@ def execute_query(
 
 @_define_tool(
     name="ask_with_query",
-    description="用显式 QuerySpec 控制 RAG 检索阶段，再调用 LLM 生成回答。"
+    description="用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。"
     "返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。"
-    "[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]",
+    "[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\n"
+    "简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\n"
+    "标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\n"
+    "高级模式：传 question + query_spec（支持复杂过滤条件），"
+    "query_spec 格式如 {\"filter\": {\"fulltext\": \"关键词\"}, "
+    "\"sort\": {\"by\": \"updated_at\", \"order\": \"desc\"}}，"
+    "filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。",
     annotations={"readOnlyHint": True, "idempotentHint": False},
     group="kb", side_effect="read",
 )
 @_heartbeat
 def ask_with_query(
-    question: str,
-    query_spec: dict,
+    question: str | None = None,
+    query_spec: dict | None = None,
+    search_query: str | None = None,
+    search_mode: str = "blend",
     top_k: int = 10,
 ) -> dict:
-    """用显式 QuerySpec 控制 RAG 检索，再生成回答。
+    """用显式 QuerySpec 或简化参数控制 RAG 检索，再生成回答。
 
     Args:
-        question: 用户问题
-        query_spec: QuerySpec JSON dict，控制 RAG 检索阶段
+        question: 用户问题（可选，不传时使用 search_query 作为问题）
+        query_spec: QuerySpec JSON dict，控制 RAG 检索阶段（可选，
+            不传时自动根据 search_query 构造简单 fulltext QuerySpec，
+            或完全依赖混合检索）。格式:
+            {"filter": {"fulltext": "关键词"}, "sort": {"by": "updated_at", "order": "desc"}}
+        search_query: 简化参数 — 全文搜索关键词。提供时自动构造
+            fulltext QuerySpec，无需手动构造 query_spec（优先级低于 query_spec）。
+            同时可作为 question 的替代，不传 question 时用 search_query 兜底。
+        search_mode: 检索模式 blend(默认)/keyword/semantic，
+            仅在 query_spec 和 search_query 都未提供时生效
         top_k: 检索阶段召回的候选数
 
     Returns:
@@ -2284,7 +2393,22 @@ def ask_with_query(
 
     container = _get_container()
     try:
-        spec = QuerySpec.from_json(query_spec) if isinstance(query_spec, dict) else query_spec
+        # BUG-4 fix: question 可选，不传时用 search_query 兜底
+        effective_question = question or search_query
+        if not effective_question:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "ask_with_query requires at least one of: question, search_query",
+            )
+
+        # BUG-4 fix: query_spec 可选，支持简化参数模式
+        spec = None
+        if query_spec is not None:
+            spec = QuerySpec.from_json(query_spec) if isinstance(query_spec, dict) else query_spec
+        elif search_query is not None:
+            # 简化模式：自动构造 fulltext QuerySpec
+            spec = QuerySpec.from_json({"filter": {"fulltext": search_query}})
+
         pipeline = RagPipeline(
             pipeline_config=DEFAULT_PIPELINE_CONFIG,
             llm=container.llm,
@@ -2300,7 +2424,7 @@ def ask_with_query(
         # 使用 _run_async 安全执行，避免在已有事件循环中调用 asyncio.run()
         result = _run_async(
             pipeline.execute(
-                question,
+                effective_question,
                 query_spec_override=spec,
                 top_k=top_k,
             ),
