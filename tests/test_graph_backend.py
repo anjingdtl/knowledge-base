@@ -176,6 +176,28 @@ class TestSQLiteGraphBackend:
         assert len(result.nodes) >= 1
         assert result.truncated is False
 
+    def test_traverse_page_includes_contained_blocks_without_entity_refs(self):
+        """第七轮报告 BUG-5：没有 LLM/entity_refs 时，遍历仍应暴露 page->block 结构边。"""
+        Database.insert_knowledge({
+            "id": "k-isolated", "title": "Isolated Page", "content": "hello",
+            "tags": "[]", "file_type": "md",
+            "source_type": "manual", "source_path": "",
+            "content_hash": "iso", "quality": "", "file_size": 0,
+            "file_created_at": "", "file_modified_at": "",
+            "created_at": "", "updated_at": "", "version": 1,
+        })
+        Database.insert_blocks([
+            {"id": "b-isolated", "parent_id": None, "page_id": "k-isolated",
+             "content": "block without explicit refs", "block_type": "text",
+             "properties": "{}", "order_idx": 0, "created_at": "", "updated_at": ""},
+        ])
+
+        backend = SQLiteGraphBackend(db=Database)
+        result = backend.traverse(["page:k-isolated"], max_depth=1)
+
+        edge_pairs = {(e["source"], e["target"], e["type"]) for e in result.edges}
+        assert ("page:k-isolated", "block:b-isolated", "contains") in edge_pairs
+
     def test_traverse_with_depth(self):
         _seed_data()
         backend = SQLiteGraphBackend(db=Database)

@@ -70,6 +70,51 @@ class TestDualMethodConfig:
         assert exported["SHINEHE_EMBEDDING_API_KEY"] == "embedding-secret"
         assert exported["SHINEHE_RERANKER_API_KEY"] == "reranker-secret"
 
+    def test_load_env_secret_overrides_stale_keyring_secret(self, tmp_path, monkeypatch):
+        """第七轮报告 P0：显式环境变量应覆盖 keyring 残留旧 key，避免服务继续 401。"""
+        import yaml
+
+        import src.utils.config as config_mod
+
+        class StaleKeyring:
+            @staticmethod
+            def get_password(service, key):
+                return "stale-keyring-key" if key == "llm/api_key" else None
+
+        path = tmp_path / "config.yaml"
+        path.write_text(yaml.safe_dump({"llm": {"model": "test"}}), encoding="utf-8")
+        monkeypatch.setattr(config_mod, "_keyring_available", True)
+        monkeypatch.setattr(config_mod, "keyring", StaleKeyring)
+        monkeypatch.setenv("SHINEHE_LLM_API_KEY", "fresh-env-key")
+
+        cfg = Config()
+        cfg.load(str(path))
+
+        assert cfg.get("llm.api_key") == "fresh-env-key"
+
+    def test_load_embedding_secret_can_reuse_llm_env_before_stale_keyring(self, tmp_path, monkeypatch):
+        """第七轮报告 P0：未设置专用 embedding env 时，可复用新的 LLM env 覆盖旧 embedding key。"""
+        import yaml
+
+        import src.utils.config as config_mod
+
+        class StaleKeyring:
+            @staticmethod
+            def get_password(service, key):
+                return "stale-embedding-key" if key == "embedding/api_key" else None
+
+        path = tmp_path / "config.yaml"
+        path.write_text(yaml.safe_dump({"embedding": {"model": "test"}}), encoding="utf-8")
+        monkeypatch.setattr(config_mod, "_keyring_available", True)
+        monkeypatch.setattr(config_mod, "keyring", StaleKeyring)
+        monkeypatch.delenv("SHINEHE_EMBEDDING_API_KEY", raising=False)
+        monkeypatch.setenv("SHINEHE_LLM_API_KEY", "fresh-shared-key")
+
+        cfg = Config()
+        cfg.load(str(path))
+
+        assert cfg.get("embedding.api_key") == "fresh-shared-key"
+
 
 class TestDIContainer:
     def test_create_container(self):

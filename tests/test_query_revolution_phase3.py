@@ -109,6 +109,17 @@ def test_dsl_parse_all_filter_types():
     assert children[5].type == "source_type"
 
 
+def test_dsl_parse_title_filter():
+    """第七轮报告 BUG-7：structured_query 应支持按知识标题过滤。"""
+    from src.models.query_dsl import QuerySpec
+
+    spec = QuerySpec.from_json({"filter": {"title": {"contains": "ShineHe KB"}}})
+
+    assert spec.filter_condition.type == "title"
+    assert spec.filter_condition.op == "contains"
+    assert spec.filter_condition.value == "ShineHe KB"
+
+
 def test_dsl_to_json_round_trip():
     from src.models.query_dsl import QuerySpec
 
@@ -188,6 +199,31 @@ def test_query_executor_simple_tag_filter():
 
     assert len(results) == 1
     assert results[0]["id"] == "p1"
+
+
+def test_query_executor_filters_by_title_contains():
+    """第七轮报告 BUG-7：title 过滤应命中 knowledge_items.title。"""
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_executor import QueryExecutor
+
+    _insert_page("title1", "ShineHe KB MCP服务配置", content="配置说明")
+    _insert_page("title2", "企微运营规范", content="运营说明")
+
+    spec = QuerySpec.from_json({"filter": {"title": {"contains": "MCP服务"}}})
+    results = QueryExecutor().execute(spec)
+
+    assert [r["id"] for r in results] == ["title1"]
+
+
+def test_agentic_router_title_signal_uses_title_filter():
+    """第七轮报告 BUG-3/7：标题条件不能误路由成普通 property。"""
+    from src.services.agentic_router import AgenticRouter
+
+    router = AgenticRouter(llm=None)
+    result = router.route("标题为 ShineHe KB MCP服务配置 的知识")
+
+    assert result["mode"] == "structured"
+    assert result["query_spec"].filter_condition.type == "title"
 
 
 def test_query_executor_and_or_not():

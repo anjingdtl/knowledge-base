@@ -81,6 +81,8 @@ class AgentMemoryService:
         except Exception:
             # FTS 不可用时降级到 LIKE
             results = repo.search_like(query, category=category, limit=limit)
+        if not results:
+            results = repo.search_like(query, category=category, limit=limit)
         # 清理 metadata 字段
         for r in results:
             if isinstance(r.get("metadata"), str):
