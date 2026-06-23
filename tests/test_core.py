@@ -70,6 +70,83 @@ class TestDualMethodConfig:
         assert exported["SHINEHE_EMBEDDING_API_KEY"] == "embedding-secret"
         assert exported["SHINEHE_RERANKER_API_KEY"] == "reranker-secret"
 
+    def test_export_secret_env_updates_passed_mapping_for_service_startup(self):
+        """Windows Service 传入 os.environ 时必须原地注入，否则后续延迟加载仍读不到 key。"""
+        cfg = Config()
+        cfg._data = {"llm": {"api_key": "llm-secret"}}
+        env = {}
+
+        exported = cfg.export_secret_env(env)
+
+        assert exported is env
+        assert env["SHINEHE_LLM_API_KEY"] == "llm-secret"
+
+    def test_load_service_account_can_read_machine_secret_when_user_keyring_unavailable(
+        self, tmp_path, monkeypatch
+    ):
+        """GUI 用户保存到 keyring 后，SYSTEM 服务读不到该 keyring 时应仍能加载密钥。"""
+        import yaml
+
+        import src.utils.config as config_mod
+
+        path = tmp_path / "config.yaml"
+        stored = {}
+
+        class UserKeyring:
+            class errors:
+                class PasswordDeleteError(Exception):
+                    pass
+
+            @staticmethod
+            def set_password(service, key, value):
+                stored[(service, key)] = value
+
+            @staticmethod
+            def get_password(service, key):
+                return stored.get((service, key))
+
+        class SystemKeyring:
+            @staticmethod
+            def get_password(service, key):
+                return None
+
+        monkeypatch.setattr(config_mod, "_keyring_available", True)
+        monkeypatch.setattr(config_mod, "keyring", UserKeyring)
+        monkeypatch.setattr(config_mod, "_machine_secret_available", lambda: True, raising=False)
+        monkeypatch.setattr(
+            config_mod,
+            "_protect_machine_secret",
+            lambda payload: b"sealed:" + payload,
+            raising=False,
+        )
+        monkeypatch.setattr(
+            config_mod,
+            "_unprotect_machine_secret",
+            lambda payload: payload.removeprefix(b"sealed:"),
+            raising=False,
+        )
+
+        cfg = Config()
+        cfg._data = {
+            "llm": {"api_key": "gui-llm-key", "model": "test"},
+            "embedding": {"api_key": "gui-embedding-key"},
+        }
+        cfg.save(str(path))
+
+        saved = yaml.safe_load(path.read_text(encoding="utf-8"))
+        assert "api_key" not in saved["llm"]
+        assert "api_key" not in saved["embedding"]
+
+        monkeypatch.setattr(config_mod, "keyring", SystemKeyring)
+        monkeypatch.delenv("SHINEHE_LLM_API_KEY", raising=False)
+        monkeypatch.delenv("SHINEHE_EMBEDDING_API_KEY", raising=False)
+
+        loaded = Config()
+        loaded.load(str(path))
+
+        assert loaded.get("llm.api_key") == "gui-llm-key"
+        assert loaded.get("embedding.api_key") == "gui-embedding-key"
+
     def test_load_env_secret_overrides_stale_keyring_secret(self, tmp_path, monkeypatch):
         """第七轮报告 P0：显式环境变量应覆盖 keyring 残留旧 key，避免服务继续 401。"""
         import yaml

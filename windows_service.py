@@ -19,19 +19,18 @@
     python windows_service.py remove
 """
 
-import sys
 import os
-import logging
+import sys
 
 # 确保项目根目录在 sys.path 中
 SERVICE_DIR = os.path.dirname(os.path.abspath(__file__))
 if SERVICE_DIR not in sys.path:
     sys.path.insert(0, SERVICE_DIR)
 
-import win32serviceutil
-import win32service
-import win32event
-import servicemanager
+import servicemanager  # noqa: E402
+import win32event  # noqa: E402
+import win32service  # noqa: E402
+import win32serviceutil  # noqa: E402
 
 
 class ShineHeMCPService(win32serviceutil.ServiceFramework):
@@ -75,14 +74,13 @@ class ShineHeMCPService(win32serviceutil.ServiceFramework):
             self._diagnose_secrets()
 
             # 注入 Session TTL patch
-            from src.mcp_cli import _patch_session_idle_timeout, SESSION_IDLE_TIMEOUT
+            from src.mcp_cli import SESSION_IDLE_TIMEOUT, _patch_session_idle_timeout
             _patch_session_idle_timeout(SESSION_IDLE_TIMEOUT)
-
-            from src.mcp_server import mcp
 
             # 使用 uvicorn 直接驱动，方便控制生命周期
             import uvicorn
-            from fastmcp.server.mixins.transport import TransportMixin
+
+            from src.mcp_server import mcp
 
             # 获取 ASGI app
             app = mcp.http_app(path="/mcp")
@@ -144,9 +142,10 @@ class ShineHeMCPService(win32serviceutil.ServiceFramework):
                 servicemanager.LogErrorMsg(
                     "ShineHeMCP 服务启动检测到 API Key 缺失: "
                     + ", ".join(missing)
-                    + "。对应功能将不可用。请以管理员身份执行 "
+                    + "。对应功能将不可用。请先在 GUI 设置中保存 API Key，"
+                    "然后重启服务；若仍缺失，再以管理员身份执行 "
                     "`setx SHINEHE_LLM_API_KEY <KEY> /M`（embedding 同理）"
-                    "设置系统环境变量后重启服务，或在服务运行账户下配置 keyring。"
+                    "设置系统环境变量后重启服务。"
                 )
         except Exception as exc:
             servicemanager.LogErrorMsg(f"ShineHeMCP 配置加载失败: {exc}")
