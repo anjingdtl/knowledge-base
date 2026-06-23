@@ -3,10 +3,10 @@ AIGC:
   ContentProducer: '001191110102MAD55U9H0F10002'
   ContentPropagator: '001191110102MAD55U9H0F10002'
   Label: '1'
-  ProduceID: '42d0d9bc-60fb-416e-824f-dce6c865c052'
-  PropagateID: '42d0d9bc-60fb-416e-824f-dce6c865c052'
-  ReservedCode1: '59a8b911-bd6e-4087-9e88-723cad41e3e6'
-  ReservedCode2: '59a8b911-bd6e-4087-9e88-723cad41e3e6'
+  ProduceID: '5b9ab509-0a70-4d9d-b353-b839db11b62c'
+  PropagateID: '5b9ab509-0a70-4d9d-b353-b839db11b62c'
+  ReservedCode1: '0e644d84-7ea0-42c1-b07c-e5ddb9b411c7'
+  ReservedCode2: '0e644d84-7ea0-42c1-b07c-e5ddb9b411c7'
 ---
 
 # KB-Arch-Opt: ShineHe Knowledge-Base 底层架构改造设计
@@ -82,7 +82,7 @@ AIGC:
 
 - 批量处理：BATCH_SIZE=64，每批调用 `EmbeddingService.embed_batch_with_cache()`
 - 断点续传：在 `async_jobs` 表记录已处理 block_id 游标，重启后从断点继续
-- WAL模式：reindex期间自动切 `PRAGMA journal_mode=WAL`，写不阻塞读
+- WAL模式：reindex期间自动切 `PRAGMA journal_mode=WAL`，写不阻塞读；reindex完成后切回 `DELETE`（原始模式），避免 WAL 文件持续增长
 - 孤儿清理：reindex前扫描 `vec_blocks` 中 block_id 已不存在的向量，先删后填
 - 批量写入：新增 `BlockStore.add_block_embeddings_batch(ids, vecs)` 批量接口
 
@@ -397,17 +397,20 @@ AgenticRouter.route() 调用链改为:
 
 ```
 当前:  wiki ∥ vector → rerank → generate → postprocess
-优化后: wiki ∥ vector → rerank → generate ∥ postprocess
+优化后: wiki ∥ vector → rerank → generate + postprocess（流水线重叠）
 ```
 
-- generate 和 postprocess 用 ThreadPoolExecutor 并行
-- generate 产出部分结果时 postprocess 即开始去重截断
-- 两阶段通过 `RagContext` 共享中间状态，postprocess 等待 generate 完成后做最终整合
+- 并行模型：**fork-join**，generate 和 postprocess 用 ThreadPoolExecutor 并行启动
+- generate 执行 LLM 生成，产出完整 answer
+- postprocess 在 generate 运行期间**提前处理不依赖 answer 的工作**（源去重、截断准备、metadata组装）
+- generate 完成后 postprocess 做**最终整合**（将 answer 插入去重后的结果集），此步耗时<5ms
+- 总延迟 ≈ max(generate_time, postprocess_pre_time) + 5ms < generate_time + postprocess_time
 
 **Generate 流式输出**：
 
 - `LLMService.chat()` 新增 `stream=True` 模式
-- generate stage 逐步产出 answer 片段，写入 `RagContext.answer_chunks`
+- generate stage 逐步产出 answer 片段，通过回调写入 `RagContext.answer_chunks`
+- postprocess 可在 generate 运行期间先处理 answer_chunks 中的部分内容（源去重等）
 - MCP ask() 返回时附带完整 answer（对外接口不变），但内部减少总耗时
 - 流式仅作管线内部优化，不改变 MCP 协议层
 
@@ -546,6 +549,7 @@ rag:
   rrf_weight_semantic: 0.4          # P2: 语义通道权重
   rrf_weight_keyword: 0.6           # P2: 关键词通道权重
   route_llm_timeout: 5              # P2: LLM路由超时秒数
+  use_planetary_router: true         # P2: 启用三级行星齿轮路由（False回退旧AgenticRouter）
   pipeline:
     generate_parallel: true         # P3: generate ∥ postprocess
     stream_generate: false          # P3: 流式生成（默认关闭）
