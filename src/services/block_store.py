@@ -102,6 +102,39 @@ class BlockStore:
             if emb:
                 self.add_block_embedding(b["id"], emb)
 
+    def add_block_embeddings_batch(self, block_ids: list[str], embeddings: list[list[float]]):
+        """批量写入 block embeddings，减少 commit 次数，提升 reindex 性能"""
+        if not block_ids or not embeddings:
+            return
+        expected_dim = self._get_dimension()
+        self._ensure_table()
+        conn = self._get_conn()
+        # 批量查询所有 block rowid（避免 N+1）
+        placeholders = ",".join("?" for _ in block_ids)
+        rowid_map = dict(conn.execute(
+            f"SELECT id, rowid FROM blocks WHERE id IN ({placeholders})", block_ids
+        ).fetchall())
+        # 收集有效 (rowid, packed_embedding) 对
+        pairs = []
+        for block_id, emb in zip(block_ids, embeddings):
+            if len(emb) != expected_dim:
+                logging.warning(f"Block {block_id}: embedding dim {len(emb)} != expected {expected_dim}, skip")
+                continue
+            rowid = rowid_map.get(block_id)
+            if rowid is None:
+                logging.warning(f"Block {block_id} not found, skip vec insert")
+                continue
+            pairs.append((rowid, self._pack_embedding(emb)))
+        if not pairs:
+            return
+        # 批量 INSERT OR REPLACE，单次 commit
+        conn.executemany(
+            "INSERT OR REPLACE INTO vec_blocks(rowid, embedding) VALUES (?, ?)",
+            pairs,
+        )
+        conn.commit()
+        logging.debug(f"Batch inserted {len(pairs)} block embeddings")
+
     def search(self, query: str, top_k: int = 5, tags: list[str] | None = None,
                query_embedding: list[float] | None = None) -> list[dict]:
         self._ensure_table()

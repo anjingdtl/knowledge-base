@@ -12,9 +12,87 @@ from src.services.text_splitter import TextChunk, split_code, split_markdown, sp
 from src.services.vectorstore import VectorStore
 from src.utils.config import Config
 
+logger = logging.getLogger(__name__)
+
+
+def _check_content_hash(content: str) -> tuple[str | None, str]:
+    """检查内容hash是否已存在，返回 (已有文档ID或None, 计算出的hash)"""
+    if not content:
+        return None, ""
+    import hashlib
+    content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
+    existing = Database.get_knowledge_by_hash(content_hash)
+    if existing:
+        logger.info(f"Content duplicate detected: existing_id={existing['id']}, title={existing.get('title', '')}")
+        return existing["id"], content_hash
+    return None, content_hash
+
+
+def _validate_content_quality(blocks: list[dict]) -> tuple[int, list[str]]:
+    """评估内容质量，返回 (quality_score, warnings)
+
+    quality_score: 0-100
+      - block_count_score (30%): 0→0, 1-3→40, 4-10→70, 11+→100
+      - text_density_score (40%): 非标题block占比
+      - content_length_score (30%): 总内容长度
+    """
+    warnings = []
+    if not blocks:
+        warnings.append("empty_content")
+        return 0, warnings
+
+    total_blocks = len(blocks)
+    total_content = sum(len(b.get("content", "")) for b in blocks)
+
+    # Block count score
+    if total_blocks <= 3:
+        block_count_score = 40
+    elif total_blocks <= 10:
+        block_count_score = 70
+    else:
+        block_count_score = 100
+
+    # Text density score — 非纯标题block占比
+    substantive_blocks = sum(
+        1 for b in blocks
+        if len(b.get("content", "").strip()) > 30  # 超过30字算有实质内容
+    )
+    text_density_score = int((substantive_blocks / max(total_blocks, 1)) * 100)
+
+    # Content length score
+    if total_content == 0:
+        content_length_score = 0
+    elif total_content < 100:
+        content_length_score = 30
+    elif total_content < 500:
+        content_length_score = 60
+    else:
+        content_length_score = 100
+
+    quality_score = int(
+        block_count_score * 0.3
+        + text_density_score * 0.4
+        + content_length_score * 0.3
+    )
+
+    if quality_score == 0:
+        warnings.append("empty_content")
+    elif quality_score < 30:
+        warnings.append("low_quality")
+
+    return quality_score, warnings
+
 
 def index_knowledge_item(item: KnowledgeItem):
     """将知识条目分块并存入 DB + 向量库 + 全文索引（Block-First 管线）"""
+    # 统一去重拦截入口
+    existing_id, computed_hash = _check_content_hash(item.content)
+    if existing_id:
+        logger.info(f"Skipping duplicate content for {item.id}: already exists as {existing_id}")
+        return existing_id
+    # 将计算出的hash存入item，确保后续insert_knowledge写入DB
+    if computed_hash and not item.content_hash:
+        item.content_hash = computed_hash
     tags_str = ",".join(item.tags)
     chunk_size = Config.get("rag.chunk_size", 500)
     chunk_overlap = Config.get("rag.chunk_overlap", 50)
@@ -78,6 +156,19 @@ def index_knowledge_item(item: KnowledgeItem):
         row["id"] = block_id
         chunk_rows.append(row)
 
+    # 内容质量校验
+    quality_score, quality_warnings = _validate_content_quality(block_rows)
+    if quality_warnings:
+        logger.warning(
+            f"Low quality content for {item.id} (score={quality_score}): {quality_warnings}"
+        )
+
+    # 写入 quality_score 到 knowledge_items（如果字段存在）
+    try:
+        Database.update_knowledge(item.id, quality_score=quality_score)
+    except Exception:
+        pass  # quality_score 字段可能不存在（迁移前）
+
     Database.insert_chunks(chunk_rows)
 
     Database.insert_blocks(block_rows)
@@ -102,17 +193,36 @@ def index_knowledge_item(item: KnowledgeItem):
     except Exception as e:
         logging.error(f"Embedding failed for {item.id}: {e}")
 
-    for i, block in enumerate(block_rows):
-        emb = embeddings[i] if i < len(embeddings) else None
-        if emb:
+    # 批量写入向量（低质量文档quality_score==0时跳过向量索引，但保留FTS）
+    if quality_score > 0:
+        valid_block_ids = []
+        valid_embeddings = []
+        for i, block in enumerate(block_rows):
+            emb = embeddings[i] if i < len(embeddings) else None
+            if emb:
+                valid_block_ids.append(str(block["id"]))
+                valid_embeddings.append(emb)
+        if valid_block_ids:
             try:
-                BlockStore().add_block_embedding(str(block["id"]), emb)
+                BlockStore().add_block_embeddings_batch(valid_block_ids, valid_embeddings)
             except Exception as e:
-                logging.error(f"Vec insert failed for block {block['id']}: {e}")
-            try:
-                VectorStore().add_chunk_embedding(chunk_rows[i]["id"], item.id, emb)
-            except Exception as e:
-                logging.error(f"Legacy vec insert failed for chunk {chunk_rows[i]['id']}: {e}")
+                logger.error(f"Batch vec insert failed for {item.id}: {e}")
+                # 回退: 逐条插入
+                for bid, emb in zip(valid_block_ids, valid_embeddings):
+                    try:
+                        BlockStore().add_block_embedding(bid, emb)
+                    except Exception as e2:
+                        logger.error(f"Vec insert failed for block {bid}: {e2}")
+        # Legacy chunk vectors（保留兼容）
+        for i, block in enumerate(block_rows):
+            emb = embeddings[i] if i < len(embeddings) else None
+            if emb:
+                try:
+                    VectorStore().add_chunk_embedding(chunk_rows[i]["id"], item.id, emb)
+                except Exception as e:
+                    logger.error(f"Legacy vec insert failed for chunk {chunk_rows[i]['id']}: {e}")
+    else:
+        logger.info(f"Skipping vector index for low-quality item {item.id} (score={quality_score})")
 
     try:
         Database.insert_blocks_fts(block_rows)
@@ -137,11 +247,50 @@ def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
     index_knowledge_item(item)
 
 
+def _cleanup_orphan_vectors():
+    """清理 vec_blocks 中 block_id 已不存在的孤儿向量"""
+    with Database._write_lock:
+        conn = Database.get_conn()
+        result = conn.execute(
+            "DELETE FROM vec_blocks WHERE rowid NOT IN (SELECT rowid FROM blocks)"
+        )
+        conn.commit()
+        removed = result.rowcount
+    if removed > 0:
+        logger.info(f"Cleaned up {removed} orphan vectors from vec_blocks")
+    return removed
+
+
+_VALID_JOURNAL_MODES = {"DELETE", "WAL", "TRUNCATE", "PERSIST", "MEMORY"}
+
+
+def _set_journal_mode(mode: str) -> str:
+    """切换 SQLite journal_mode，返回之前的模式"""
+    if mode.upper() not in _VALID_JOURNAL_MODES:
+        raise ValueError(f"Invalid journal_mode: {mode}")
+    with Database._write_lock:
+        conn = Database.get_conn()
+        old_mode = conn.execute("PRAGMA journal_mode").fetchone()[0]
+        if old_mode.lower() != mode.lower():
+            conn.execute(f"PRAGMA journal_mode={mode}")
+            logger.info(f"Switched journal_mode: {old_mode} → {mode}")
+    return old_mode
+
+
 def reindex_all(
     progress_callback: Callable[[int, int, str], None] | None = None,
     dry_run: bool = False,
+    restart: bool = True,
+    batch_size: int = 64,
 ) -> dict:
-    """重建所有知识条目的索引（向量 + FTS）"""
+    """重建所有知识条目的索引（向量 + FTS）
+
+    增强:
+    - 断点续传: restart=True 时从上次中断位置继续（基于 async_jobs 记录）
+    - WAL模式: reindex期间切WAL不阻塞读，完成后切回DELETE
+    - 孤儿清理: reindex前清理vec_blocks中的孤儿向量
+    - 批量向量写入: 使用 add_block_embeddings_batch 减少 commit 次数
+    """
     items = Database.list_knowledge(limit=100000)
     total = len(items)
     if dry_run:
@@ -150,9 +299,9 @@ def reindex_all(
         ).fetchall()
         block_counts = {row["page_id"]: row["cnt"] for row in rows}
         affected_blocks = sum(block_counts.get(row["id"], 0) for row in items)
-        batch_size = int(Config.get("embedding.batch_size", 20) or 20)
+        emb_batch_size = int(Config.get("embedding.batch_size", 20) or 20)
         estimated_batches = (
-            (affected_blocks + batch_size - 1) // batch_size
+            (affected_blocks + emb_batch_size - 1) // emb_batch_size
             if affected_blocks else 0
         )
         return {
@@ -163,43 +312,107 @@ def reindex_all(
             ),
             "estimated_batches": estimated_batches,
         }
+
+    # 断点续传: 从 async_jobs 获取已处理的 item_id 集合
+    processed_ids = set()
+    if restart:
+        try:
+            conn = Database.get_conn()
+            job_rows = conn.execute(
+                "SELECT params FROM async_jobs WHERE job_type = 'reindex_all' "
+                "AND status IN ('completed', 'processing') ORDER BY created_at DESC"
+            ).fetchall()
+            for jr in job_rows:
+                try:
+                    meta = json.loads(jr["params"]) if isinstance(jr["params"], str) else jr["params"]
+                    if isinstance(meta, dict) and "processed_ids" in meta:
+                        processed_ids.update(meta["processed_ids"])
+                except (json.JSONDecodeError, TypeError):
+                    pass
+            if processed_ids:
+                logger.info(f"Resuming reindex: {len(processed_ids)} items already processed")
+        except Exception as e:
+            logger.debug(f"Could not load reindex checkpoint: {e}")
+
+    # 孤儿清理
+    orphans_removed = _cleanup_orphan_vectors()
+
+    # 切换到 WAL 模式
+    old_journal_mode = _set_journal_mode("WAL")
+
     success = 0
     failed = 0
     errors = []
+    skipped = 0
+    processed_this_run: set[str] = set()
 
-    for i, row in enumerate(items):
-        try:
-            tags_raw = row.get("tags", "[]")
-            if isinstance(tags_raw, str):
-                import json
-                try:
-                    tags = json.loads(tags_raw)
-                except (json.JSONDecodeError, TypeError):
-                    tags = []
-            else:
-                tags = tags_raw if isinstance(tags_raw, list) else []
+    try:
+        for i, row in enumerate(items):
+            # 断点续传: 跳过已处理
+            if row["id"] in processed_ids:
+                skipped += 1
+                continue
+            try:
+                tags_raw = row.get("tags", "[]")
+                if isinstance(tags_raw, str):
+                    try:
+                        tags = json.loads(tags_raw)
+                    except (json.JSONDecodeError, TypeError):
+                        tags = []
+                else:
+                    tags = tags_raw if isinstance(tags_raw, list) else []
 
-            item = KnowledgeItem(
-                id=row["id"],
-                title=row["title"],
-                content=row.get("content", ""),
-                tags=tags,
-                source_type=row.get("source_type", "manual"),
-                source_path=row.get("source_path", ""),
-                file_type=row.get("file_type", "txt"),
-            )
-            reindex_knowledge_item(row["id"], item)
-            success += 1
-            if progress_callback:
-                progress_callback(i + 1, total, f"Reindexing {i+1}/{total}")
-            elif (i + 1) % 10 == 0:
-                logging.info(f"Reindex progress: {i + 1}/{total}")
-        except Exception as e:
-            failed += 1
-            errors.append({"id": row["id"], "title": row["title"], "error": str(e)})
-            logging.error(f"Reindex failed for {row.get('title', '')}: {e}")
+                item = KnowledgeItem(
+                    id=row["id"],
+                    title=row["title"],
+                    content=row.get("content", ""),
+                    tags=tags,
+                    source_type=row.get("source_type", "manual"),
+                    source_path=row.get("source_path", ""),
+                    file_type=row.get("file_type", "txt"),
+                )
+                reindex_knowledge_item(row["id"], item)
+                success += 1
+                processed_this_run.add(row["id"])
 
-    return {"total": total, "success": success, "failed": failed, "errors": errors[:10]}
+                # 定期保存断点（每10个item）
+                if len(processed_this_run) % 10 == 0:
+                    _save_reindex_checkpoint(list(processed_ids | processed_this_run))
+
+                if progress_callback:
+                    progress_callback(success + skipped, total, f"Reindexing {success + skipped}/{total}")
+                elif (success) % 10 == 0:
+                    logger.info(f"Reindex progress: {success + skipped}/{total} (success={success}, skipped={skipped})")
+            except Exception as e:
+                failed += 1
+                errors.append({"id": row["id"], "title": row["title"], "error": str(e)})
+                logger.error(f"Reindex failed for {row.get('title', '')}: {e}")
+    finally:
+        # 切回原始 journal 模式
+        _set_journal_mode(old_journal_mode)
+
+    return {
+        "total": total,
+        "success": success,
+        "failed": failed,
+        "skipped": skipped,
+        "orphans_removed": orphans_removed,
+        "errors": errors[:10],
+    }
+
+
+def _save_reindex_checkpoint(processed_ids: list[str]):
+    """保存 reindex 断点到 async_jobs 表"""
+    try:
+        conn = Database.get_conn()
+        conn.execute(
+            "INSERT OR REPLACE INTO async_jobs (id, job_type, status, params, created_at) "
+            "VALUES ('reindex_checkpoint', 'reindex_all', 'processing', ?, datetime('now'))",
+            (json.dumps({"processed_ids": processed_ids[-500:]}),),  # 只保留最近500个避免过大
+        )
+        conn.commit()
+    except Exception as e:
+        logger.debug(f"Could not save reindex checkpoint: {e}")
 
 
 class IndexerService:
