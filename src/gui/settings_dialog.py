@@ -487,8 +487,14 @@ class SettingsDialog(QDialog):
             QMessageBox.warning(self, "提示", "请至少填写 LLM 的供应商名称和 API 地址。")
             return
 
+        # ---- 快照旧值，用于检测 API Key 变更 ----
+        old_llm_key = Config.get("llm.api_key", "")
+        old_emb_key = Config.get("embedding.api_key", "")
+        old_rerank_key = Config.get("reranker.api_key", "")
+
         Config.set("llm.provider", self.llm_provider.text().strip())
-        Config.set("llm.api_key", self.llm_api_key.text().strip())
+        new_llm_key = self.llm_api_key.text().strip()
+        Config.set("llm.api_key", new_llm_key)
         Config.set("llm.base_url", self.llm_base_url.text().strip())
         Config.set("llm.model", self.llm_model.text().strip())
         Config.set("llm.temperature", self.llm_temperature.value() / 100)
@@ -497,12 +503,14 @@ class SettingsDialog(QDialog):
         reuse = self.emb_reuse_llm.isChecked()
         Config.set("embedding.reuse_llm", reuse)
         if reuse:
+            new_emb_key = self.emb_api_key.text().strip() or new_llm_key
             Config.set("embedding.provider", self.emb_provider.text().strip() or self.llm_provider.text().strip())
-            Config.set("embedding.api_key", self.emb_api_key.text().strip() or self.llm_api_key.text().strip())
+            Config.set("embedding.api_key", new_emb_key)
             Config.set("embedding.base_url", self.emb_base_url.text().strip() or self.llm_base_url.text().strip())
         else:
+            new_emb_key = self.emb_api_key.text().strip()
             Config.set("embedding.provider", self.emb_provider.text().strip())
-            Config.set("embedding.api_key", self.emb_api_key.text().strip())
+            Config.set("embedding.api_key", new_emb_key)
             Config.set("embedding.base_url", self.emb_base_url.text().strip())
         Config.set("embedding.model", self.emb_model.text().strip())
 
@@ -512,12 +520,14 @@ class SettingsDialog(QDialog):
         rerank_reuse = self.rerank_reuse_llm.isChecked()
         Config.set("reranker.reuse_llm", rerank_reuse)
         if rerank_reuse:
+            new_rerank_key = self.rerank_api_key.text().strip() or new_llm_key
             Config.set("reranker.provider", self.rerank_provider.text().strip() or self.llm_provider.text().strip())
-            Config.set("reranker.api_key", self.rerank_api_key.text().strip() or self.llm_api_key.text().strip())
+            Config.set("reranker.api_key", new_rerank_key)
             Config.set("reranker.base_url", self.rerank_base_url.text().strip() or self.llm_base_url.text().strip())
         else:
+            new_rerank_key = self.rerank_api_key.text().strip()
             Config.set("reranker.provider", self.rerank_provider.text().strip())
-            Config.set("reranker.api_key", self.rerank_api_key.text().strip())
+            Config.set("reranker.api_key", new_rerank_key)
             Config.set("reranker.base_url", self.rerank_base_url.text().strip())
         Config.set("reranker.model", self.rerank_model.text().strip())
 
@@ -557,7 +567,58 @@ class SettingsDialog(QDialog):
         from src.gui.theme import apply
         apply(QApplication.instance())
 
-        if mcp_changed:
+        # ---- 检测 API Key 是否发生变更 ----
+        api_key_changed = (
+            new_llm_key != old_llm_key
+            or new_emb_key != old_emb_key
+            or new_rerank_key != old_rerank_key
+        )
+
+        if api_key_changed and mcp_changed:
+            # API Key + MCP 配置同时变更
+            reply = QMessageBox.question(
+                self, "已保存",
+                "设置已保存。\n\n"
+                "检测到以下变更：\n"
+                "• API Key（LLM / Embedding / Reranker）\n"
+                "• MCP 配置档\n\n"
+                "Windows MCP 服务需要重启才能加载新 Key 并生效。\n\n"
+                "是否立即重启服务？",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.Yes,
+            )
+            if reply == QMessageBox.StandardButton.Yes:
+                self._on_svc_restart()
+            else:
+                self.accept()
+        elif api_key_changed:
+            # 仅 API Key 变更 — 检查是否以 Windows 服务模式运行
+            from src.services.mcp_launcher import is_service_installed, get_service_status
+            if is_service_installed() and get_service_status() == "running":
+                reply = QMessageBox.question(
+                    self, "API Key 已更新",
+                    "API Key 已保存（通过 DPAPI 加密存储，跨账户安全共享）。\n\n"
+                    "当前 MCP 服务正在运行，需要重启才能加载新 Key。\n\n"
+                    "是否立即重启 Windows 服务？",
+                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                    QMessageBox.StandardButton.Yes,
+                )
+                if reply == QMessageBox.StandardButton.Yes:
+                    self._on_svc_restart()
+                else:
+                    QMessageBox.information(
+                        self, "提示",
+                        "可稍后手动重启：设置页 → 服务管理 →「重启服务」按钮。",
+                    )
+                    self.accept()
+            else:
+                # 服务未安装或未运行，Key 已持久化，下次启动自动加载
+                QMessageBox.information(
+                    self, "API Key 已保存",
+                    "API Key 已保存，下次启动 MCP 服务时自动加载。",
+                )
+                self.accept()
+        elif mcp_changed:
             QMessageBox.information(
                 self, "已保存",
                 "设置已保存。\n\n"

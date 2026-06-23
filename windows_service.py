@@ -123,6 +123,7 @@ class ShineHeMCPService(win32serviceutil.ServiceFramework):
 
         Windows 服务运行在 SYSTEM 账户，读不到交互式账户的 keyring 凭据，
         因此需要通过系统环境变量（setx /M 或服务 Environment 注册表）注入。
+        Config.save() 时也会通过 DPAPI (service_secrets.dpapi) 跨账户共享密钥。
         """
         try:
             from src.utils.config import Config
@@ -133,6 +134,20 @@ class ShineHeMCPService(win32serviceutil.ServiceFramework):
             config.export_secret_env(os.environ, overwrite=False)
             llm_key = config.get("llm.api_key", "")
             emb_key = config.get("embedding.api_key", "") or llm_key
+            rerank_key = config.get("reranker.api_key", "")
+
+            if llm_key and emb_key:
+                # Key 全部就位，记录 INFO 日志便于排查
+                servicemanager.LogMsg(
+                    servicemanager.EVENTLOG_INFORMATION_TYPE,
+                    servicemanager.PYS_SERVICE_STARTED,  # 复用已有消息类型
+                    (self._svc_name_,
+                     f"API Key 就位: LLM={'✓' if llm_key else '✗'} "
+                     f"Embedding={'✓' if emb_key else '✗'} "
+                     f"Reranker={'✓' if rerank_key else '✗/未启用'}"),
+                )
+                return
+
             missing = []
             if not llm_key:
                 missing.append("SHINEHE_LLM_API_KEY (ask/RAG 生成)")
