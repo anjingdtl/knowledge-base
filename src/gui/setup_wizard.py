@@ -554,10 +554,38 @@ class SetupWizard(QDialog):
             emb_url = Config.get("embedding.base_url", "")
             Config.set("embedding.reuse_llm", emb_url == base_url)
 
-            # 持久化（API Key 通过 keyring 安全存储）
+            # 持久化（API Key 通过 keyring + DPAPI 安全存储）
             Config.save()
 
             logger.info("Setup Wizard 配置保存成功")
+
+            # 如果 Windows 服务已注册且正在运行，提示重启以加载新 Key
+            try:
+                from src.services.mcp_launcher import is_service_installed, get_service_status
+                if is_service_installed() and get_service_status() == "running":
+                    reply = QMessageBox.question(
+                        self, "初始配置已完成",
+                        "初始配置已保存！\n\n"
+                        "检测到 Windows MCP 服务正在运行。\n"
+                        "需要重启服务才能加载新配置的 API Key。\n\n"
+                        "是否立即重启服务？",
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                        QMessageBox.StandardButton.Yes,
+                    )
+                    if reply == QMessageBox.StandardButton.Yes:
+                        # 延迟关闭向导，先让用户看到重启操作
+                        from src.services.mcp_launcher import service_restart
+                        msg = service_restart()
+                        if "UAC" in msg:
+                            QMessageBox.information(
+                                self, "服务重启",
+                                msg + "\n\n请先在 UAC 弹窗中确认...",
+                            )
+                        else:
+                            QMessageBox.information(self, "服务重启", msg)
+            except Exception:
+                pass  # 服务检测失败不阻断向导流程
+
             self.accept()
 
         except Exception as exc:
