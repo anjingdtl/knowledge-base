@@ -184,6 +184,21 @@ class SearchService:
                 if title == "未知":
                     logger.debug("Title fallback to '未知' for knowledge_id=%s", kid)
 
+            # BUG-2 fix: title boost — 标题包含查询关键词的结果获得分数加成
+            title_boost = self._cfg("rag.title_boost", 0.15)
+            if title_boost > 0 and title != "未知":
+                query_lower = query.lower()
+                # 检查查询中的核心词是否出现在标题中
+                query_chars = set(query_lower) - {' ', '的', '了', '是', '在', '和', '与', '或', '有', '中', '及'}
+                title_lower = title.lower()
+                overlap = sum(1 for c in query_chars if c in title_lower)
+                if overlap > 0 and len(query_chars) > 0:
+                    boost_ratio = min(overlap / len(query_chars), 1.0) * title_boost
+                    score = min(score + boost_ratio, 1.0)
+                    r.setdefault("match_channels", [])
+                    if "title_boost" not in r["match_channels"]:
+                        r["match_channels"].append("title_boost")
+
             # 构建 citation
             citation = citation_builder.build(r, item)
 
@@ -212,7 +227,8 @@ class SearchService:
 
     def _timed_rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
         """带超时保护的重排序"""
-        if not self._cfg("rag.enable_rerank", False):
+        # BUG-2 fix: 默认启用rerank而非关闭，提升搜索排序相关性
+        if not self._cfg("rag.enable_rerank", True):
             return candidates
         timeout = self._stage_timeout("rerank")
         with ThreadPoolExecutor(max_workers=1) as pool:

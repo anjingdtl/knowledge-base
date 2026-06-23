@@ -3,8 +3,11 @@
 这是唯一的 RAG 实现，旧版 rag.py 已合并到此文件。
 RAGService 类保留为向后兼容的别名。
 """
+import hashlib
 import logging
+import time
 from abc import ABC, abstractmethod
+from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Any
@@ -813,7 +816,7 @@ StageRegistry.init_builtins()
 # ---- 默认管线配置 ----
 
 DEFAULT_PIPELINE_CONFIG = [
-    {"stage": "query_rewrite", "enabled": True, "mode": "llm", "num_variations": 3},
+    {"stage": "query_rewrite", "enabled": False, "mode": "llm", "num_variations": 3},  # BUG-1 fix: 默认禁用query_rewrite，消除一次LLM调用，大幅降低延迟
     {"stage": "wiki_retrieval", "enabled": True, "limit": 3},
     {"stage": "vector_search", "enabled": True, "mode": "blend", "top_k": 10},
     {"stage": "rerank", "enabled": True, "top_n": 5, "min_score": 0.3},
@@ -928,6 +931,49 @@ def create_pipeline_from_config(deps: dict | None = None):
     return pipeline
 
 
+# ---- LRU 缓存（BUG-1 fix: 高频问答缓存减少重复LLM调用） ----
+
+class _RAGResultCache:
+    """轻量级LRU缓存，缓存RAG问答结果避免重复LLM调用。"""
+
+    def __init__(self, maxsize: int = 64, ttl: float = 600.0):
+        self._maxsize = maxsize
+        self._ttl = ttl
+        self._cache: OrderedDict[str, tuple[float, dict]] = OrderedDict()
+
+    def _make_key(self, question: str) -> str:
+        return hashlib.md5(question.strip().lower().encode()).hexdigest()
+
+    def get(self, question: str) -> dict | None:
+        key = self._make_key(question)
+        entry = self._cache.get(key)
+        if entry is None:
+            return None
+        ts, result = entry
+        if time.monotonic() - ts > self._ttl:
+            del self._cache[key]
+            return None
+        self._cache.move_to_end(key)
+        return result
+
+    def put(self, question: str, result: dict) -> None:
+        key = self._make_key(question)
+        self._cache[key] = (time.monotonic(), result)
+        self._cache.move_to_end(key)
+        while len(self._cache) > self._maxsize:
+            self._cache.popitem(last=False)
+
+    def clear(self) -> None:
+        self._cache.clear()
+
+    @property
+    def size(self) -> int:
+        return len(self._cache)
+
+
+_rag_cache = _RAGResultCache()
+
+
 # ---- RAGService（向后兼容的统一入口） ----
 
 class RAGService:
@@ -952,13 +998,20 @@ class RAGService:
         return (self._deps or {}).get("graph_backend")
 
     def query(self, question: str, conversation_history: list[dict] | None = None,
-              phase_callback=None) -> dict:
-        """同步查询（非流式）— 直接通过管线执行，无冗余预处理"""
+              phase_callback=None, skip_cache: bool = False) -> dict:
+        """同步查询（非流式）— 直接通过管线执行，支持LRU缓存"""
         import traceback
+
+        # BUG-1 fix: 缓存命中直接返回，跳过整个管线
+        if not skip_cache:
+            cached = _rag_cache.get(question)
+            if cached is not None:
+                logger.info("RAG cache hit for query=%r", question[:50])
+                return dict(cached)
 
         try:
             # 直接走管线，管线内部会依次执行全部阶段
-            # （query_rewrite → wiki_retrieval → vector_search → rerank → generate → postprocess）
+            # （wiki_retrieval → vector_search → rerank → generate → postprocess）
             if phase_callback:
                 phase_callback("searching", "RAG 管线执行中")
 
@@ -972,6 +1025,10 @@ class RAGService:
                     result.get("sources", []),
                     graph_backend=self._resolve_graph_backend(),
                 )
+            # BUG-1 fix: 缓存成功的RAG结果
+            if not skip_cache and result.get("answer"):
+                _rag_cache.put(question, result)
+                logger.info("RAG result cached for query=%r (cache_size=%d)", question[:50], _rag_cache.size)
             return dict(result)
         except Exception as e:
             err_detail = traceback.format_exc()
