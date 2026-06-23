@@ -17,6 +17,7 @@ class KnowledgeItem:
     file_size: int = 0            # bytes
     content_hash: str = ""        # sha256 of content
     quality: str = ""             # "" | "ok" | "garbled"
+    quality_score: int | None = None  # 0-100 numeric score, None = not evaluated
     file_created_at: str = ""     # 原始文件创建时间戳
     file_modified_at: str = ""    # 原始文件修改时间戳
     tags: list[str] = field(default_factory=list)
@@ -34,6 +35,7 @@ class KnowledgeItem:
             "file_type": self.file_type,
             "file_size": self.file_size,
             "content_hash": self.content_hash,
+            "quality_score": self.quality_score,
             "file_created_at": self.file_created_at,
             "file_modified_at": self.file_modified_at,
             "tags": json.dumps(self.tags, ensure_ascii=False),
@@ -59,6 +61,7 @@ class KnowledgeItem:
             file_type=row.get("file_type", ""),
             file_size=row.get("file_size", 0),
             content_hash=row.get("content_hash", ""),
+            quality_score=row.get("quality_score"),
             file_created_at=row.get("file_created_at", ""),
             file_modified_at=row.get("file_modified_at", ""),
             tags=tags,

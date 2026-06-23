@@ -574,7 +574,11 @@ class Database(metaclass=_DatabaseMeta):
         if "deleted_at" not in cols:
             # Sprint 3 / Phase 4: 软删除列
             self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN deleted_at TEXT DEFAULT NULL")
+        if "quality_score" not in cols:
+            # Phase 1 / data-heal: 内容质量评分列
+            self._base_conn.execute("ALTER TABLE knowledge_items ADD COLUMN quality_score INTEGER DEFAULT NULL")
         self._base_conn.execute("CREATE INDEX IF NOT EXISTS idx_kb_deleted ON knowledge_items(deleted_at)")
+        self._base_conn.execute("CREATE INDEX IF NOT EXISTS idx_kb_quality_score ON knowledge_items(quality_score)")
 
         msg_cols = {row[1] for row in self._base_conn.execute("PRAGMA table_info(chat_messages)").fetchall()}
         if "source_graph" not in msg_cols:
@@ -921,7 +925,7 @@ class Database(metaclass=_DatabaseMeta):
     def update_knowledge(self, item_id: str, **fields):
         if not fields:
             return
-        allowed = {"title", "content", "source_type", "source_path", "file_type", "file_size", "content_hash", "file_created_at", "file_modified_at", "tags", "quality"}
+        allowed = {"title", "content", "source_type", "source_path", "file_type", "file_size", "content_hash", "file_created_at", "file_modified_at", "tags", "quality", "quality_score"}
         invalid = set(fields) - allowed
         if invalid:
             raise ValueError(f"Invalid fields: {invalid}")
@@ -968,6 +972,41 @@ class Database(metaclass=_DatabaseMeta):
             )
             self.get_conn().commit()
             return cursor.rowcount > 0
+
+    def get_tag_vocab(self) -> list[str]:
+        """获取知识库中所有去重标签词表"""
+        conn = self.get_conn()
+        rows = conn.execute(
+            "SELECT DISTINCT tags FROM knowledge_items WHERE deleted_at IS NULL AND tags IS NOT NULL AND tags != '[]'"
+        ).fetchall()
+        vocab = set()
+        for row in rows:
+            try:
+                tags = json.loads(row["tags"]) if isinstance(row["tags"], str) else row["tags"]
+                if isinstance(tags, list):
+                    vocab.update(t for t in tags if isinstance(t, str) and t.strip())
+            except (json.JSONDecodeError, TypeError):
+                pass
+        # 也从 tag_relations 表获取（如果存在）
+        try:
+            tag_rows = conn.execute(
+                "SELECT DISTINCT parent_tag AS tag FROM tag_relations "
+                "UNION SELECT DISTINCT child_tag AS tag FROM tag_relations"
+            ).fetchall()
+            for tr in tag_rows:
+                if tr["tag"] and tr["tag"].strip():
+                    vocab.add(tr["tag"].strip())
+        except Exception:
+            pass  # tag_relations 表可能不存在
+        return sorted(vocab)
+
+    def update_knowledge_tags(self, item_id: str, tags: list[str]):
+        """更新知识条目标签（便捷方法，自动序列化为JSON）
+
+        注：knowledge_au 触发器会自动同步 FTS，无需手动更新 knowledge_fts
+        """
+        tags_json = json.dumps(tags, ensure_ascii=False)
+        self.update_knowledge(item_id, tags=tags_json)
 
     def restore_knowledge(self, item_id: str) -> bool:
         """Phase 4 / Sprint 3：恢复 — 清除 deleted_at。
