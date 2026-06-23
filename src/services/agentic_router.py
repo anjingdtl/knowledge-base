@@ -26,6 +26,7 @@ The DSL supports these filter types:
 - {"tag": "tag_name"} — filter by tag
 - {"property": {"key": "prop_name", "op": "eq|ne|gt|gte|lt|lte|in|contains|like", "value": ...}} — filter by property
 - {"fulltext": "search text"} — full-text search
+- {"title": {"contains": "title text"}} — filter by knowledge title
 - {"link": "[[Page Title]]"} — filter by link to page
 - {"file_type": "md"} — filter by file type
 - {"source_type": "manual"} — filter by source type
@@ -74,6 +75,12 @@ _NL_PROP_RE = re.compile(
     r"(状态|优先级|类型|标题|版本|status|priority|type|title|version)"
     r"\s*(?:为|是|等于|is|eq|=)\s*"
     r"([\w\u4e00-\u9fff-]+)",
+    re.IGNORECASE,
+)
+
+_NL_TITLE_RE = re.compile(
+    r"(?:标题|title)\s*(?:为|是|等于|is|eq|=)\s*"
+    r"(.+?)(?:\s+的(?:知识|条目|文档)?|$)",
     re.IGNORECASE,
 )
 
@@ -153,6 +160,13 @@ class AgenticRouter:
 
     def _try_rule_based(self, question: str) -> "QuerySpec | None":
         conditions: list[dict[str, Any]] = []
+        has_title_condition = False
+
+        for m in _NL_TITLE_RE.finditer(question):
+            title = m.group(1).strip()
+            if title:
+                conditions.append({"title": {"contains": title}})
+                has_title_condition = True
 
         for m in _NL_TAG_RE.finditer(question):
             conditions.append({"tag": m.group(1)})
@@ -168,7 +182,15 @@ class AgenticRouter:
             if key.lower() in _TAG_KEYWORDS:
                 continue
             key = _PROP_NAME_MAP.get(key, key)
-            conditions.append({"property": {"key": key, "op": "eq", "value": value}})
+            if key == "title":
+                if has_title_condition:
+                    continue
+                entry = {"title": {"contains": value}}
+                has_title_condition = True
+            else:
+                entry = {"property": {"key": key, "op": "eq", "value": value}}
+            if entry not in conditions:
+                conditions.append(entry)
 
         for m in _NL_LINK_RE.finditer(question):
             title = m.group(1).strip()

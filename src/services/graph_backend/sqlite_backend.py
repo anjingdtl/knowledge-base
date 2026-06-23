@@ -166,6 +166,22 @@ class SQLiteGraphBackend(GraphBackend):
         # 出边
         if direction in ("out", "both"):
             if node_type in ("page", "knowledge"):
+                if self._edge_type_allowed("contains", edge_types):
+                    block_rows = conn.execute(
+                        """SELECT id, content, page_id, block_type, properties, order_idx
+                           FROM blocks
+                           WHERE page_id = ?
+                           ORDER BY order_idx ASC
+                           LIMIT ?""",
+                        (source_id, limit),
+                    ).fetchall()
+                    for row in block_rows:
+                        block_id = make_node_id("block", row["id"])
+                        edge = GraphEdge(source=node_id, target=block_id, edge_type="contains")
+                        neighbor = self.get_node(block_id)
+                        if neighbor:
+                            results.append((neighbor, edge))
+
                 # page 的出边：通过其 blocks 的 entity_refs
                 rows = conn.execute(
                     f"""SELECT er.target_id, er.target_type, er.ref_type
@@ -210,6 +226,22 @@ class SQLiteGraphBackend(GraphBackend):
                     pass  # knowledge_graph_relations 表可能不存在
 
             elif node_type == "block":
+                if self._edge_type_allowed("parent", edge_types):
+                    child_rows = conn.execute(
+                        """SELECT id
+                           FROM blocks
+                           WHERE parent_id = ?
+                           ORDER BY order_idx ASC
+                           LIMIT ?""",
+                        (source_id, limit),
+                    ).fetchall()
+                    for row in child_rows:
+                        child_id = make_node_id("block", row["id"])
+                        edge = GraphEdge(source=node_id, target=child_id, edge_type="parent")
+                        neighbor = self.get_node(child_id)
+                        if neighbor:
+                            results.append((neighbor, edge))
+
                 rows = conn.execute(
                     f"""SELECT er.target_id, er.target_type, er.ref_type
                         FROM entity_refs er
@@ -226,6 +258,25 @@ class SQLiteGraphBackend(GraphBackend):
 
         # 入边
         if direction in ("in", "both"):
+            if node_type == "block":
+                block_row = conn.execute(
+                    "SELECT parent_id, page_id FROM blocks WHERE id = ?",
+                    (source_id,),
+                ).fetchone()
+                if block_row:
+                    if block_row["page_id"] and self._edge_type_allowed("contains", edge_types):
+                        page_id = make_node_id("page", block_row["page_id"])
+                        edge = GraphEdge(source=page_id, target=node_id, edge_type="contains")
+                        neighbor = self.get_node(page_id)
+                        if neighbor:
+                            results.append((neighbor, edge))
+                    if block_row["parent_id"] and self._edge_type_allowed("parent", edge_types):
+                        parent_id = make_node_id("block", block_row["parent_id"])
+                        edge = GraphEdge(source=parent_id, target=node_id, edge_type="parent")
+                        neighbor = self.get_node(parent_id)
+                        if neighbor:
+                            results.append((neighbor, edge))
+
             db_type = self._to_db_type(node_type)
             rows = conn.execute(
                 f"""SELECT er.source_id, er.source_type, er.ref_type
@@ -600,6 +651,10 @@ class SQLiteGraphBackend(GraphBackend):
             placeholders = ",".join("?" for _ in edge_types)
             return f"AND ref_type IN ({placeholders})", list(edge_types)
         return "", []
+
+    @staticmethod
+    def _edge_type_allowed(edge_type: str, edge_types: list[str] | None) -> bool:
+        return not edge_types or edge_type in edge_types
 
     @staticmethod
     def _to_db_type(node_type: str) -> str:

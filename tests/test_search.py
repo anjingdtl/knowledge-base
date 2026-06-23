@@ -53,6 +53,25 @@ class TestChunkFTS:
         results = Database.search_chunks_fts("测试")
         assert len(results) >= 1
 
+    def test_chunk_fts_searches_cjk_ascii_mixed_terms(self):
+        """第七轮报告 BUG-6：chunk FTS 也应支持 AgentID/C00000/ShineHe 等混合术语。"""
+        item = KnowledgeItem(title="企微消息应用", content="AgentID配置")
+        item.id = "kb-agentid"
+        Database.insert_knowledge(item.to_row())
+        chunks = [{
+            "id": "chunk-agentid",
+            "knowledge_id": "kb-agentid",
+            "chunk_index": 0,
+            "chunk_text": "企微消息应用AgentID需要在后台配置，并记录品牌色C00000。",
+            "created_at": "2026-06-23T00:00:00",
+        }]
+        Database.insert_chunks(chunks)
+        Database.insert_chunks_fts(chunks)
+
+        results = Database.search_chunks_fts("AgentID", limit=5)
+
+        assert any(r["id"] == "chunk-agentid" for r in results)
+
 
 class TestHybridSearch:
     def test_keyword_search_flattens_citation_metadata(self):

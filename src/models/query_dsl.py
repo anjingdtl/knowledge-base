@@ -29,6 +29,8 @@ class Condition:
             return {"property": {"key": self.key, "op": self.op, "value": self.value}}
         if self.type == "fulltext":
             return {"fulltext": self.value}
+        if self.type == "title":
+            return {"title": {self.op: self.value}}
         if self.type == "link":
             return {"link": self.value}
         if self.type == "file_type":
@@ -176,6 +178,19 @@ class QuerySpec:
             )
         if "fulltext" in data:
             return Condition(type="fulltext", value=data["fulltext"])
+        if "title" in data:
+            title_data = data["title"]
+            op = "contains"
+            value = title_data
+            if isinstance(title_data, dict):
+                supported = [k for k in ("eq", "contains", "like") if k in title_data]
+                if not supported:
+                    raise ValueError(f"unknown title operator: {list(title_data.keys())}")
+                op = supported[0]
+                value = title_data[op]
+            if op not in VALID_OPS:
+                raise ValueError(f"unknown operator: {op}")
+            return Condition(type="title", op=op, value=value)
         if "link" in data:
             return Condition(type="link", value=data["link"])
         if "file_type" in data:

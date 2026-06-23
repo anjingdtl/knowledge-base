@@ -39,6 +39,10 @@ _ENV_KEY_MAP = {
     "api.jwt_secret": "SHINEHE_JWT_SECRET",
 }
 
+_ENV_FALLBACK_KEY_MAP = {
+    "embedding.api_key": ("SHINEHE_LLM_API_KEY",),
+}
+
 # keyring 可用性标志
 _keyring_available = False
 try:
@@ -131,21 +135,27 @@ class Config:
             config_path = str(get_config_path())
         with open(config_path, "r", encoding="utf-8") as f:
             self._data = yaml.safe_load(f) or {}
-        # 从 keychain 恢复敏感凭据，优先级: keyring → 环境变量
+        # 从环境/keychain 恢复敏感凭据，优先级: 显式环境变量 → 环境兜底 → keyring。
+        # 环境变量覆盖 keyring 可避免 Windows Service/CLI 继续使用 keyring 中的旧 key。
         for secret_key in _SECRET_KEYS:
             value = None
-            # 1. 尝试从 keyring 读取
-            if _keyring_available:
+            # 1. 显式环境变量优先
+            env_key = _ENV_KEY_MAP.get(secret_key)
+            if env_key:
+                value = os.environ.get(env_key)
+            # 2. 共享环境变量兜底（如 embedding 复用 LLM key）
+            if value is None:
+                for fallback_env_key in _ENV_FALLBACK_KEY_MAP.get(secret_key, ()):
+                    value = os.environ.get(fallback_env_key)
+                    if value is not None:
+                        break
+            # 3. 环境变量未设置时尝试从 keyring 读取
+            if value is None and _keyring_available:
                 kr_key = _secret_to_keyring_key(secret_key)
                 try:
                     value = keyring.get_password(_KEYRING_SERVICE, kr_key)
                 except Exception as exc:
                     logger.debug("从 keyring 读取 %s 失败: %s", secret_key, exc)
-            # 2. keyring 无值时尝试环境变量
-            if value is None:
-                env_key = _ENV_KEY_MAP.get(secret_key)
-                if env_key:
-                    value = os.environ.get(env_key)
             # 写入内存中的 _data
             if value is not None:
                 self._set_nested(secret_key, value)

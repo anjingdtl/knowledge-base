@@ -1336,7 +1336,9 @@ class Database(metaclass=_DatabaseMeta):
     def search_blocks_fts(self, query: str, limit: int = 10) -> list[dict]:
         """Block 级 FTS 搜索"""
         from src.utils.chinese_tokenizer import (
-            sanitize_fts_query, tokenize_chinese_full, tokenize_mixed_query_terms,
+            sanitize_fts_query,
+            tokenize_chinese_full,
+            tokenize_mixed_query_terms,
         )
         sanitized = tokenize_chinese_full(query)
         if not sanitized.strip():
@@ -1547,7 +1549,11 @@ class Database(metaclass=_DatabaseMeta):
 
     def search_chunks_fts(self, query: str, limit: int = 20) -> list[dict]:
         """使用 jieba 全模式分词后的 chunk 级 FTS 搜索"""
-        from src.utils.chinese_tokenizer import sanitize_fts_query, tokenize_chinese_full
+        from src.utils.chinese_tokenizer import (
+            sanitize_fts_query,
+            tokenize_chinese_full,
+            tokenize_mixed_query_terms,
+        )
         tokenized_query = tokenize_chinese_full(query)
         if not tokenized_query.strip():
             return []
@@ -1555,6 +1561,18 @@ class Database(metaclass=_DatabaseMeta):
         if not safe_query:
             return []
         conn = self.get_conn()
+
+        def _hydrate_chunk_rows(rows) -> list[dict]:
+            hydrated = []
+            for r in rows:
+                chunk = conn.execute(
+                    "SELECT id, knowledge_id, chunk_index, chunk_text FROM knowledge_chunks WHERE id = ?",
+                    (r["chunk_id"],),
+                ).fetchone()
+                if chunk:
+                    hydrated.append(dict(chunk) | {"fts_rank": r["fts_rank"]})
+            return hydrated
+
         try:
             rows = conn.execute(
                 """SELECT cf.chunk_id, cf.knowledge_id, rank as fts_rank
@@ -1563,15 +1581,28 @@ class Database(metaclass=_DatabaseMeta):
                    ORDER BY fts_rank LIMIT ?""",
                 (safe_query, limit),
             ).fetchall()
-            results = []
-            for r in rows:
-                chunk = conn.execute(
-                    "SELECT id, knowledge_id, chunk_index, chunk_text FROM knowledge_chunks WHERE id = ?",
-                    (r["chunk_id"],),
-                ).fetchone()
-                if chunk:
-                    results.append(dict(chunk) | {"fts_rank": r["fts_rank"]})
-            return results
+            results = _hydrate_chunk_rows(rows)
+            seen_ids = {r["id"] for r in results}
+
+            if len(results) < limit:
+                mixed_terms = tokenize_mixed_query_terms(query)
+                mixed_query = sanitize_fts_query(" ".join(mixed_terms), is_tokenized=True)
+                if mixed_query and mixed_query != safe_query:
+                    extra_rows = conn.execute(
+                        """SELECT cf.chunk_id, cf.knowledge_id, rank as fts_rank
+                           FROM chunk_fts cf
+                           WHERE chunk_fts MATCH ?
+                           ORDER BY fts_rank LIMIT ?""",
+                        (mixed_query, limit),
+                    ).fetchall()
+                    for chunk in _hydrate_chunk_rows(extra_rows):
+                        if chunk["id"] in seen_ids:
+                            continue
+                        seen_ids.add(chunk["id"])
+                        results.append(chunk)
+                        if len(results) >= limit:
+                            break
+            return results[:limit]
         except Exception:
             return []
 

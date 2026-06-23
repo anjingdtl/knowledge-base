@@ -132,6 +132,18 @@ class TestAgentMemoryService:
         results = memory_service.recall_facts("Python")
         assert len(results) >= 1
 
+    def test_recall_facts_falls_back_when_fts_returns_no_rows(self, memory_service, monkeypatch):
+        """第七轮报告 BUG-4：FTS 正常但 0 命中时，也应立即用 LIKE 回读刚写入记忆。"""
+        memory_service.remember_fact("agent_id", "企微消息应用 AgentID 为 wx-agent-001")
+
+        repo = memory_service._get_repo()
+        monkeypatch.setattr(repo, "search_fts", lambda *args, **kwargs: [])
+
+        results = memory_service.recall_facts("AgentID")
+
+        assert len(results) >= 1
+        assert results[0]["key"] == "agent_id"
+
     def test_update_project_context(self, memory_service):
         result = memory_service.update_project_context("This is a knowledge base project")
         assert result["key"] == "__project_context"

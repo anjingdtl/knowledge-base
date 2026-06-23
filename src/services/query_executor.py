@@ -7,7 +7,7 @@ from src.services.db import Database
 class QueryExecutor:
     VALID_CONDITION_TYPES = frozenset({
         "and", "or", "not", "tag", "property", "fulltext",
-        "link", "file_type", "source_type",
+        "title", "link", "file_type", "source_type",
     })
 
     def __init__(self, db=None):
@@ -186,6 +186,17 @@ class QueryExecutor:
         from src.utils.chinese_tokenizer import sanitize_fts_query
         safe_query = sanitize_fts_query(condition.value)
         return "knowledge_fts MATCH ?", [safe_query], True
+
+    def _compile_title(self, condition: Condition) -> tuple[str, list, bool]:
+        value = str(condition.value)
+        if condition.op == "eq":
+            return "ki.title = ?", [value], False
+        if condition.op == "contains":
+            escaped = value.replace("%", "\\%").replace("_", "\\_")
+            return "ki.title LIKE ? ESCAPE '\\'", [f"%{escaped}%"], False
+        if condition.op == "like":
+            return "ki.title LIKE ?", [value], False
+        return "", [], False
 
     def _compile_link(self, condition: Condition) -> tuple[str, list, bool]:
         title = condition.value
