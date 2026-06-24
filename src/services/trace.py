@@ -7,7 +7,7 @@ import json
 import logging
 import uuid
 from dataclasses import dataclass, field, asdict
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -35,7 +35,9 @@ class QueryTrace:
     question: str
     stages: list[StageTrace]
     total_duration_ms: float
-    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    # 本地时间无偏移，与 OperationLogRepository.insert 保持一致——
+    # operation_logs.created_at 是 TEXT 列按字符串排序，格式必须统一否则 ORDER BY 错乱。
+    created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
     def to_dict(self) -> dict:
         return {
@@ -48,7 +50,14 @@ class QueryTrace:
         }
 
     def save(self) -> None:
-        """将 trace 写入 operation_logs 表"""
+        """将 trace 写入 operation_logs 表。
+
+        operation_logs 真实 schema（见 db.py）:
+            id, operation, target_type, target_id, operator, source,
+            snapshot_before, snapshot_after, metadata, created_at
+        其中 id/operation/target_type/target_id/created_at 为 NOT NULL。
+        trace_id 存入 target_id 便于精确查询，trace JSON 存入 metadata。
+        """
         try:
             from src.services.db import Database
             db = Database._instance
@@ -57,11 +66,14 @@ class QueryTrace:
                 return
 
             trace_json = json.dumps(self.to_dict(), ensure_ascii=False)
+            log_id = f"trace-{self.trace_id}-{uuid.uuid4().hex[:8]}"
             with db.get_conn() as conn:
                 conn.execute(
-                    "INSERT INTO operation_logs (operation, details, timestamp) "
-                    "VALUES (?, ?, ?)",
-                    (f"trace:{self.tool}", trace_json, self.created_at),
+                    "INSERT INTO operation_logs "
+                    "(id, operation, target_type, target_id, metadata, created_at) "
+                    "VALUES (?, ?, ?, ?, ?, ?)",
+                    (log_id, f"trace:{self.tool}", "trace", self.trace_id,
+                     trace_json, self.created_at),
                 )
                 conn.commit()
         except Exception as e:
@@ -69,7 +81,7 @@ class QueryTrace:
 
     @classmethod
     def get_by_id(cls, trace_id: str) -> dict | None:
-        """根据 trace_id 查询追踪记录"""
+        """根据 trace_id 精确查询追踪记录。"""
         try:
             from src.services.db import Database
             db = Database._instance
@@ -77,11 +89,13 @@ class QueryTrace:
                 return None
             with db.get_conn() as conn:
                 row = conn.execute(
-                    "SELECT details FROM operation_logs WHERE details LIKE ? ORDER BY timestamp DESC LIMIT 1",
-                    (f'%{trace_id}%',),
+                    "SELECT metadata FROM operation_logs "
+                    "WHERE target_type = 'trace' AND target_id = ? "
+                    "ORDER BY created_at DESC LIMIT 1",
+                    (trace_id,),
                 ).fetchone()
             if row:
-                return json.loads(row["details"])
+                return json.loads(row["metadata"])
             return None
         except Exception:
             return None

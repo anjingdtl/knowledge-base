@@ -40,11 +40,15 @@ class OperationLogRepository:
         return log_id
 
     def query(self, target_type=None, target_id=None, operation=None,
-              source=None, limit=50, offset=0) -> list[dict]:
+              source=None, limit=50, offset=0, exclude_trace=True) -> list[dict]:
         conditions, params = [], []
         if target_type:
             conditions.append("target_type = ?")
             params.append(target_type)
+        elif exclude_trace:
+            # 默认排除观测 trace 记录：trace 每次 ask 都写一条，量级远大于真实
+            # CRUD 操作，混入会淹没审计列表。显式传 target_type='trace' 可查 trace。
+            conditions.append("target_type != 'trace'")
         if target_id:
             conditions.append("target_id = ?")
             params.append(target_id)
@@ -75,11 +79,13 @@ class OperationLogRepository:
         ).fetchone()
         return dict(row) if row else None
 
-    def count(self, target_type=None, operation=None) -> int:
+    def count(self, target_type=None, operation=None, exclude_trace=True) -> int:
         conditions, params = [], []
         if target_type:
             conditions.append("target_type = ?")
             params.append(target_type)
+        elif exclude_trace:
+            conditions.append("target_type != 'trace'")
         if operation:
             conditions.append("operation = ?")
             params.append(operation)

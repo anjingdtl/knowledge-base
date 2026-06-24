@@ -888,7 +888,7 @@ class RagPipeline:
         except Exception as e:
             logger.warning("Auto-save to Wiki failed (non-fatal): %s", e)
 
-    async def execute(self, question, conversation_history=None, **kwargs):
+    async def execute(self, question, conversation_history=None, *, tool_name="ask", **kwargs):
         ctx = RagContext(question=question, conversation_history=conversation_history or [], **kwargs)
 
         # Phase 3: detect parallel mode for generate ∥ postprocess
@@ -978,7 +978,7 @@ class RagPipeline:
                 ]
                 trace = QueryTrace(
                     trace_id=ctx.trace_id,
-                    tool="ask",
+                    tool=tool_name,
                     question=question,
                     stages=stages,
                     total_duration_ms=total_ms,
@@ -996,6 +996,7 @@ class RagPipeline:
             "block_contexts": block_contexts,
             "warnings": warnings,
             "wiki_context": ctx.wiki_context,
+            "trace_id": ctx.trace_id,
         }
 
 
@@ -1089,7 +1090,12 @@ class RAGService:
             cached = _rag_cache.get(question)
             if cached is not None:
                 logger.info("RAG cache hit for query=%r", question[:50])
-                return dict(cached)
+                result = dict(cached)
+                # 缓存命中：本次未执行管线、未写新 trace，缓存的 trace_id 指向首次
+                # 产生该缓存的那次请求，不代表本次链路。清空并标记 cache_hit。
+                result["trace_id"] = ""
+                result["cache_hit"] = True
+                return result
 
         try:
             # 直接走管线，管线内部会依次执行全部阶段

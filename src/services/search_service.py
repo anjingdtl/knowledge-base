@@ -327,8 +327,13 @@ class SearchService:
         """
         if not text:
             return [0] * num_perm
-        # 字符 bigrams
-        tokens = [text[i:i+2] for i in range(max(len(text)-1, 0))]
+        # 字符 bigrams；文本过短（< 2 字符）无法形成 bigram 时，用整串作为唯一
+        # token，避免不同的短文本（如标签块、单字标题块）退化成全 0 签名，
+        # 被多样性过滤误判为 100% 相似而合并丢失。
+        if len(text) >= 2:
+            tokens = [text[i:i + 2] for i in range(len(text) - 1)]
+        else:
+            tokens = [text]
         if not tokens:
             return [0] * num_perm
         signature = []
@@ -360,7 +365,9 @@ class SearchService:
         # 预计算 minhash 签名
         signatures = []
         for c in candidates:
-            text = c.get("text", "")
+            # c['text'] 显式为 None（block content 为 NULL）时 .get('text','') 仍返回
+            # None，下标 text[:500] 会抛 TypeError；用 `or ""` 把 None 一并兜底。
+            text = c.get("text") or ""
             # 截取前 500 字做签名，避免长文本开销过大
             signatures.append(self._minhash(text[:500]))
 

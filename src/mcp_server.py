@@ -630,6 +630,7 @@ def ask(
         warning_count=len(result.get("warnings", [])),
         route_mode=result.get("route", {}).get("mode", "unknown"),
         graph_truncated=result.get("source_graph", {}).get("truncated", False),
+        trace_id=result.get("trace_id", ""),
     )
 
 
@@ -2469,6 +2470,7 @@ def ask_with_query(
                     effective_question,
                     query_spec_override=spec,
                     top_k=top_k,
+                    tool_name="ask_with_query",
                 ),
                 timeout=total_timeout,
             )
@@ -2827,13 +2829,16 @@ def query_operation_logs(
         limit: 返回数量上限
         offset: 分页偏移量
     """
+    # 默认排除观测 trace（target_type='trace'），保持审计列表纯净；
+    # 显式查 trace 时（target_type='trace'）不排除。
+    exclude_trace = target_type != "trace"
     logs = _get_container().operation_log_repo.query(
         target_type=target_type, target_id=target_id,
         operation=operation, source=source,
-        limit=limit, offset=offset,
+        limit=limit, offset=offset, exclude_trace=exclude_trace,
     )
     total = _get_container().operation_log_repo.count(
-        target_type=target_type, operation=operation,
+        target_type=target_type, operation=operation, exclude_trace=exclude_trace,
     )
     has_more = (offset + len(logs)) < total
     return ok(

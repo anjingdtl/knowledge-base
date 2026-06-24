@@ -116,15 +116,15 @@ def kb_health_check() -> dict[str, Any]:
         if db is not None and not db._shutdown:
             with db.get_conn() as conn:
                 rows = conn.execute(
-                    "SELECT details FROM operation_logs WHERE operation LIKE 'trace:%' "
-                    "ORDER BY timestamp DESC LIMIT 50"
+                    "SELECT metadata FROM operation_logs WHERE operation LIKE 'trace:%' "
+                    "ORDER BY created_at DESC LIMIT 50"
                 ).fetchall()
                 if rows:
                     import json
                     durations = []
                     for r in rows:
                         try:
-                            data = json.loads(r["details"])
+                            data = json.loads(r["metadata"])
                             dur = data.get("total_duration_ms", 0)
                             if dur > 0:
                                 durations.append(dur)
@@ -143,6 +143,16 @@ def kb_health_check() -> dict[str, Any]:
     # 最终状态判定
     if not llm_key and not embedding_key:
         status = "unhealthy"
+
+    # Phase 3: 借健康检查触发 L2 embedding 缓存的过期清理（项目无独立调度器，
+    # 不清理则调小 l2_ttl_hours 后未命中的过期行会持续堆积膨胀 embedding_cache 表）。
+    try:
+        from src.core.embedding_cache import EmbeddingCache
+        cleaned = EmbeddingCache().cleanup_expired()
+        if cleaned:
+            warnings.append(f"清理 {cleaned} 条过期 embedding 缓存")
+    except Exception:
+        pass
 
     return {
         "status": status,

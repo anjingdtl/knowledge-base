@@ -224,6 +224,7 @@ class EmbeddingService:
 
         l2_enabled = bool(self._cfg("rag.cache.l2_enabled", True))
         l1_max = int(self._cfg("rag.cache.l1_embedding_max", 2048) or 2048)
+        l2_ttl = int(self._cfg("rag.cache.l2_ttl_hours", 168) or 168)
 
         # Resize L1 cache if config changed
         if l1_max != _l1_cache._maxsize:
@@ -249,7 +250,7 @@ class EmbeddingService:
         if l2_enabled and to_embed:
             try:
                 from src.core.embedding_cache import EmbeddingCache
-                l2_cache = EmbeddingCache()
+                l2_cache = EmbeddingCache(ttl_hours=l2_ttl)
             except Exception as e:
                 logger.debug("L2 embedding cache unavailable: %s", e)
 
