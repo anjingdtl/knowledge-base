@@ -3,10 +3,10 @@ AIGC:
   ContentProducer: '001191110102MAD55U9H0F10002'
   ContentPropagator: '001191110102MAD55U9H0F10002'
   Label: '1'
-  ProduceID: '5b9ab509-0a70-4d9d-b353-b839db11b62c'
-  PropagateID: '5b9ab509-0a70-4d9d-b353-b839db11b62c'
-  ReservedCode1: '0e644d84-7ea0-42c1-b07c-e5ddb9b411c7'
-  ReservedCode2: '0e644d84-7ea0-42c1-b07c-e5ddb9b411c7'
+  ProduceID: 'a8bc6768-48a8-4879-8516-ce13b02570c4'
+  PropagateID: 'a8bc6768-48a8-4879-8516-ce13b02570c4'
+  ReservedCode1: 'bf579052-dfbe-4824-aeb4-01765a03a3f7'
+  ReservedCode2: 'bf579052-dfbe-4824-aeb4-01765a03a3f7'
 ---
 
 # KB-Arch-Opt: ShineHe Knowledge-Base 底层架构改造设计

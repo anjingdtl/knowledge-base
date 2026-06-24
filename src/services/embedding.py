@@ -1,5 +1,11 @@
-"""Embedding 服务 — 基于 OpenAI 兼容协议，支持任意供应商"""
+"""Embedding 服务 — 基于 OpenAI 兼容协议，支持任意供应商
+
+Phase 3: 三级缓存架构 (L1 进程内 → L2 SQLite → L3 API)
+"""
+import hashlib
 import logging
+import threading
+from collections import OrderedDict
 
 from src.utils.config import Config
 
@@ -7,6 +13,56 @@ logger = logging.getLogger(__name__)
 
 # 标记是否已就 "Embedding API Key 缺失" 告警过一次，避免重复刷屏
 _embedding_key_missing_warned = False
+
+
+# ── Phase 3: L1 进程内 Embedding 缓存 ──
+
+class _L1EmbeddingCache:
+    """L1 进程内 embedding 缓存 (hash → vector)，线程安全，LRU 淘汰。"""
+
+    def __init__(self, maxsize: int = 2048):
+        self._maxsize = max(maxsize, 1)
+        self._cache: OrderedDict[str, list[float]] = OrderedDict()
+        self._lock = threading.Lock()
+        self._hits = 0
+        self._misses = 0
+
+    def get(self, key: str) -> list[float] | None:
+        with self._lock:
+            entry = self._cache.get(key)
+            if entry is not None:
+                self._cache.move_to_end(key)
+                self._hits += 1
+                return entry
+            self._misses += 1
+            return None
+
+    def put(self, key: str, vector: list[float]) -> None:
+        with self._lock:
+            self._cache[key] = vector
+            self._cache.move_to_end(key)
+            while len(self._cache) > self._maxsize:
+                self._cache.popitem(last=False)
+
+    def clear(self) -> None:
+        with self._lock:
+            self._cache.clear()
+            self._hits = 0
+            self._misses = 0
+
+    @property
+    def hit_rate(self) -> float:
+        total = self._hits + self._misses
+        return self._hits / total if total > 0 else 0.0
+
+    @property
+    def size(self) -> int:
+        with self._lock:
+            return len(self._cache)
+
+
+# 模块级 L1 缓存单例
+_l1_cache = _L1EmbeddingCache()
 
 
 class EmbeddingService:
@@ -161,31 +217,77 @@ class EmbeddingService:
         return flat
 
     def embed_batch_with_cache(self, texts: list[str], batch_size: int = 20) -> list[list[float]]:
-        """批量生成 embedding，带 SQLite 缓存"""
+        """批量生成 embedding，三级缓存链: L1(进程内) → L2(SQLite) → L3(API)"""
         import hashlib
 
-        from src.core.embedding_cache import EmbeddingCache
+        l2_enabled = bool(self._cfg("rag.cache.l2_enabled", True))
+        l1_max = int(self._cfg("rag.cache.l1_embedding_max", 2048) or 2048)
 
-        cache = EmbeddingCache()
+        # Resize L1 cache if config changed
+        if l1_max != _l1_cache._maxsize:
+            _l1_cache._maxsize = max(l1_max, 1)
+
         model = self._cfg("embedding.model", "")
 
         results: list[list[float] | None] = [None] * len(texts)
         to_embed: list[tuple[int, str]] = []
 
+        # Pass 1: L1 cache lookup
         for i, text in enumerate(texts):
             content_hash = hashlib.sha256(text.encode("utf-8", errors="surrogatepass")).hexdigest()
-            cached = cache.get(content_hash, model)
+            cache_key = f"{content_hash}:{model}"
+            cached = _l1_cache.get(cache_key)
             if cached is not None:
                 results[i] = cached
             else:
-                to_embed.append((i, text))
+                to_embed.append((i, text, content_hash))
 
-        if to_embed:
-            texts_to_embed = [t for _, t in to_embed]
-            embeddings = self.embed_batch(texts_to_embed, batch_size)
-            for (i, text), emb in zip(to_embed, embeddings):
-                content_hash = hashlib.sha256(text.encode("utf-8", errors="surrogatepass")).hexdigest()
-                cache.put(content_hash, model, emb)
+        # Pass 2: L2 SQLite cache lookup (for L1 misses)
+        l2_cache = None
+        if l2_enabled and to_embed:
+            try:
+                from src.core.embedding_cache import EmbeddingCache
+                l2_cache = EmbeddingCache()
+            except Exception as e:
+                logger.debug("L2 embedding cache unavailable: %s", e)
+
+        still_to_embed: list[tuple[int, str, str]] = []
+        if l2_cache is not None:
+            for i, text, content_hash in to_embed:
+                try:
+                    cached = l2_cache.get(content_hash, model)
+                    if cached is not None:
+                        # L2 hit: promote to L1
+                        cache_key = f"{content_hash}:{model}"
+                        _l1_cache.put(cache_key, cached)
+                        results[i] = cached
+                    else:
+                        still_to_embed.append((i, text, content_hash))
+                except Exception:
+                    # L2 read failure: treat as miss, continue to API
+                    still_to_embed.append((i, text, content_hash))
+        else:
+            still_to_embed = to_embed
+
+        # Pass 3: API call (for L1 + L2 misses)
+        if still_to_embed:
+            texts_to_embed = [t for _, t, _ in still_to_embed]
+            try:
+                embeddings = self.embed_batch(texts_to_embed, batch_size)
+            except Exception:
+                # API call failed: don't cache, propagate error
+                raise
+
+            for (i, text, content_hash), emb in zip(still_to_embed, embeddings):
+                cache_key = f"{content_hash}:{model}"
+                # Write to L1
+                _l1_cache.put(cache_key, emb)
+                # Write to L2
+                if l2_cache is not None:
+                    try:
+                        l2_cache.put(content_hash, model, emb)
+                    except Exception:
+                        logger.debug("L2 embedding cache write failed (non-fatal)")
                 results[i] = emb
 
         if any(result is None for result in results):

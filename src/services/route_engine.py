@@ -77,7 +77,11 @@ class RuleRouter:
         self._db = db or Database
 
     def route(self, question: str) -> dict | None:
-        """返回路由结果或 None（无法判断时交给下一级）"""
+        """返回路由结果或 None（无法判断时交给下一级）
+
+        L1 只返回正则匹配出的精确条件，强信号但没有精确匹配时
+        交给 L2/L3 去获取更精确的 QuerySpec，而非直接 fulltext。
+        """
         # 1. 正则匹配结构化条件
         rule_spec = self._try_rule_based(question)
         if rule_spec is not None:
@@ -88,13 +92,9 @@ class RuleRouter:
         if self._is_graph_query(question):
             return None  # graph 路由交给 LLM 级判断
 
-        # 3. 强信号词 → structured fallback
-        if self._is_structured(question):
-            spec = QuerySpec.from_json({"filter": {"fulltext": question}})
-            return {"mode": "structured", "query_spec": spec,
-                    "explanation": "rule-based structured (L1, strong signal)"}
-
-        return None  # 无法判断，交给下一级
+        # 3. 强信号词 → 不直接返回 fulltext，交给 L2/L3
+        #    强信号只表示"这不是纯语义查询"，但不代表 L1 能构建精确 spec
+        return None
 
     def _is_structured(self, question: str) -> bool:
         lower = question.lower()
@@ -319,7 +319,7 @@ class LLMRouter:
                         text = re.sub(r"\n?```$", "", text)
                     parsed = json.loads(text)
                     if parsed.get("mode") == "hybrid":
-                        result = {"mode": "hybrid", "explanation": "LLM classified as hybrid (L3)"}
+                        result = {"mode": "hybrid", "query_spec": None, "explanation": "LLM classified as hybrid (L3)"}
                     elif "query" in parsed:
                         spec = QuerySpec.from_json(parsed["query"])
                         result = {"mode": parsed.get("mode", "structured"), "query_spec": spec,
@@ -385,7 +385,8 @@ class PlanetaryRouter:
             llm_result = self._llm_router.route(question)
             if llm_result is not None:
                 if llm_result.get("mode") == "hybrid":
-                    # LLM 主动判定为 hybrid
+                    # LLM 主动判定为 hybrid（确保 query_spec key 存在）
+                    llm_result.setdefault("query_spec", None)
                     return llm_result
                 # LLM 返回了 structured/graph
                 return llm_result
@@ -404,10 +405,19 @@ class PlanetaryRouter:
         # Level 3: LLMRouter (5s timeout)
         result = self._llm_router.route(question)
         if result is not None:
+            # 确保 hybrid 结果也包含 query_spec key
+            result.setdefault("query_spec", None)
             logger.debug(f"PlanetaryRouter: L3 LLM resolved → {result.get('mode')}")
             return result
 
-        # 兜底: hybrid
+        # 兜底: 如果有强信号词（"所有/全部/统计"等），走 structured fulltext
+        # 否则走 hybrid（强信号但没有精确匹配时也走 hybrid，比 fulltext 更宽容）
+        if self._rule_router._is_structured(question):
+            logger.debug("PlanetaryRouter: all levels failed, strong signal detected → structured fulltext")
+            return {"mode": "structured", "query_spec": QuerySpec.from_json(
+                {"filter": {"fulltext": question}}
+            ), "explanation": "rule-based structured (L1 strong signal, L2/L3 failed)"}
+
         logger.debug("PlanetaryRouter: all levels failed, fallback to hybrid")
         return {"mode": "hybrid", "query_spec": None,
                 "explanation": "fallback to hybrid search (all router levels failed)"}

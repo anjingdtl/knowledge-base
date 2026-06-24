@@ -37,6 +37,27 @@ rag:
   # Phase 2: planetary router
   use_planetary_router: true
   route_llm_timeout: 5
+  # Phase 3: pipeline parallelization
+  pipeline:
+    generate_parallel: true
+    stream_generate: false
+  # Phase 3: three-level cache
+  cache:
+    l1_embedding_max: 2048
+    l1_rag_max: 256
+    l1_rag_ttl: 600
+    l2_enabled: true
+    l2_ttl_hours: 168
+  # Phase 3: observability
+  observability:
+    trace_enabled: true
+    debug_scores: false
+    health_check_cron: "0 3 * * *"
+  # Phase 3: ask_with_query async & timeout
+  ask_with_query:
+    total_timeout: 120
+    route_timeout: 5
+    async_mode: false
 reranker:
   base_url: https://api.siliconflow.cn/v1
   enabled: true

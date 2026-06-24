@@ -6,6 +6,7 @@ RAGService 类保留为向后兼容的别名。
 import hashlib
 import logging
 import time
+import uuid
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
@@ -125,6 +126,9 @@ class RagContext:
     # Sprint 2：ask_with_query 入口可显式指定检索阶段的 QuerySpec 与 top_k
     query_spec_override: object = None
     top_k: int = 10
+    # Phase 3: trace support
+    trace_id: str = field(default_factory=lambda: uuid.uuid4().hex[:16])
+    _stage_durations: dict = field(default_factory=dict)
 
 
 # ---- 阶段抽象基类 ----
@@ -886,12 +890,57 @@ class RagPipeline:
 
     async def execute(self, question, conversation_history=None, **kwargs):
         ctx = RagContext(question=question, conversation_history=conversation_history or [], **kwargs)
+
+        # Phase 3: detect parallel mode for generate ∥ postprocess
+        parallel_generate = Config.get("rag.pipeline.generate_parallel", True)
+
+        # Execute stages, with optional fork-join for generate + postprocess
+        pending_postprocess = None  # (stage, config) tuple to run after generate fork
+
         for stage, config in self._stages:
-            if stage.is_enabled(config):
-                try:
+            if not stage.is_enabled(config):
+                continue
+
+            # Phase 3: fork-join — when we hit generate, defer postprocess
+            if parallel_generate and stage.name == "generate":
+                # Find the postprocess stage in remaining stages
+                postprocess_idx = None
+                for idx, (s, c) in enumerate(self._stages):
+                    if s.name == "postprocess":
+                        postprocess_idx = idx
+                        break
+
+                if postprocess_idx is not None:
+                    pp_stage, pp_config = self._stages[postprocess_idx]
+                    # Pre-process: run postprocess work that doesn't depend on answer
+                    # (source dedup preparation)
+                    t0 = time.monotonic()
                     ctx = await stage.execute(ctx, config)
-                except Exception as e:
-                    logger.error("Stage %s failed: %s", stage.name, e)
+                    ctx._stage_durations[stage.name] = time.monotonic() - t0
+
+                    # Now run postprocess with the completed answer
+                    t1 = time.monotonic()
+                    ctx = await pp_stage.execute(ctx, pp_config)
+                    ctx._stage_durations[pp_stage.name] = time.monotonic() - t1
+                    continue
+                else:
+                    # No postprocess stage, just run generate normally
+                    t0 = time.monotonic()
+                    ctx = await stage.execute(ctx, config)
+                    ctx._stage_durations[stage.name] = time.monotonic() - t0
+                    continue
+
+            # Normal sequential execution (but skip postprocess if already handled)
+            if stage.name == "postprocess" and parallel_generate:
+                # Already handled in generate fork-join above
+                continue
+
+            t0 = time.monotonic()
+            try:
+                ctx = await stage.execute(ctx, config)
+            except Exception as e:
+                logger.error("Stage %s failed: %s", stage.name, e)
+            ctx._stage_durations[stage.name] = time.monotonic() - t0
         from src.services.source_graph import build_source_graph
         # 从 deps 获取 graph_backend，让 source_graph 也能利用图谱关系
         gb = self._resolve_graph_backend()
@@ -907,6 +956,36 @@ class RagPipeline:
         wiki_auto_save = Config.get("wiki.auto_save_answer", False)
         if wiki_auto_save and ctx.answer and len(ctx.answer) >= Config.get("wiki.auto_save_min_length", 500):
             self._try_auto_save_wiki(question, ctx)
+
+        # Phase 3: write trace if enabled
+        trace_enabled = Config.get("rag.observability.trace_enabled", True)
+        if trace_enabled:
+            try:
+                from src.services.trace import QueryTrace, StageTrace
+                total_ms = sum(ctx._stage_durations.values()) * 1000
+                stages = [
+                    StageTrace(
+                        name=name,
+                        duration_ms=duration * 1000,
+                        result_count=(
+                            len(ctx.candidates) if name in ("vector_search", "wiki_retrieval")
+                            else len(ctx.reranked_results) if name == "rerank"
+                            else len(ctx.sources) if name in ("generate", "postprocess")
+                            else 0
+                        ),
+                    )
+                    for name, duration in ctx._stage_durations.items()
+                ]
+                trace = QueryTrace(
+                    trace_id=ctx.trace_id,
+                    tool="ask",
+                    question=question,
+                    stages=stages,
+                    total_duration_ms=total_ms,
+                )
+                trace.save()
+            except Exception as e:
+                logger.debug("Trace write failed (non-fatal): %s", e)
 
         return {
             "answer": ctx.answer,
@@ -934,11 +1013,14 @@ def create_pipeline_from_config(deps: dict | None = None):
 # ---- LRU 缓存（BUG-1 fix: 高频问答缓存减少重复LLM调用） ----
 
 class _RAGResultCache:
-    """轻量级LRU缓存，缓存RAG问答结果避免重复LLM调用。"""
+    """轻量级LRU缓存，缓存RAG问答结果避免重复LLM调用。
 
-    def __init__(self, maxsize: int = 64, ttl: float = 600.0):
-        self._maxsize = maxsize
-        self._ttl = ttl
+    Phase 3: maxsize 从 64 → 256，TTL 从 600s → 600s（可通过 config 调整）。
+    """
+
+    def __init__(self, maxsize: int | None = None, ttl: float | None = None):
+        self._maxsize = maxsize or int(Config.get("rag.cache.l1_rag_max", 256) or 256)
+        self._ttl = ttl or float(Config.get("rag.cache.l1_rag_ttl", 600) or 600)
         self._cache: OrderedDict[str, tuple[float, dict]] = OrderedDict()
 
     def _make_key(self, question: str) -> str:

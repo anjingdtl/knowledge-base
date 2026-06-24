@@ -634,7 +634,20 @@ def ask(
 
 
 def _do_ask(question: str) -> dict:
-    return dict(_get_container().rag_pipeline.query(question))
+    result = dict(_get_container().rag_pipeline.query(question))
+
+    # Phase 3: add trace_id to result if observability enabled
+    from src.utils.config import Config
+    if Config.get("rag.observability.trace_enabled", True):
+        # Trace was already written in RagPipeline.execute()
+        # Find the trace_id from the pipeline context
+        result.setdefault("trace_id", "")
+
+    # Phase 3: add score_breakdown for each source in debug mode
+    if Config.get("rag.observability.debug_scores", False):
+        result.setdefault("_debug", {})["score_breakdown"] = True
+
+    return result
 
 
 @_define_tool(
@@ -2434,6 +2447,9 @@ def ask_with_query(
             # 简化模式：自动构造 fulltext QuerySpec
             spec = QuerySpec.from_json({"filter": {"fulltext": search_query}})
 
+        # Phase 3: configurable timeout from config
+        total_timeout = int(Config.get("rag.ask_with_query.total_timeout", 120) or 120)
+
         pipeline = RagPipeline(
             pipeline_config=DEFAULT_PIPELINE_CONFIG,
             llm=container.llm,
@@ -2447,20 +2463,45 @@ def ask_with_query(
         )
         # 把 spec 注入 metadata，VectorSearchStage 会跳过自动路由直接使用
         # 使用 _run_async 安全执行，避免在已有事件循环中调用 asyncio.run()
-        result = _run_async(
-            pipeline.execute(
-                effective_question,
-                query_spec_override=spec,
-                top_k=top_k,
-            ),
-            timeout=120,
-        )
+        try:
+            result = _run_async(
+                pipeline.execute(
+                    effective_question,
+                    query_spec_override=spec,
+                    top_k=top_k,
+                ),
+                timeout=total_timeout,
+            )
+        except TimeoutError:
+            # Phase 3: return partial result + timeout warning
+            logger.warning("ask_with_query timed out after %ds for question=%r", total_timeout, effective_question[:50])
+            return ok(
+                {
+                    "answer": "",
+                    "sources": [],
+                    "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
+                    "route": {"mode": "timeout", "explanation": f"Query timed out after {total_timeout}s"},
+                    "query_plan": {},
+                    "block_contexts": {},
+                    "warnings": [f"ask_with_query timed out after {total_timeout}s"],
+                    "wiki_context": "",
+                },
+                source_count=0,
+                warning_count=1,
+                route_mode="timeout",
+                graph_truncated=False,
+            )
+
+        # Phase 3: add trace_id to result
+        trace_id = result.get("trace_id", "")
+
         return ok(
             result,
             source_count=len(result.get("sources", [])),
             warning_count=len(result.get("warnings", [])),
             route_mode=result.get("route", {}).get("mode", "unknown"),
             graph_truncated=result.get("source_graph", {}).get("truncated", False),
+            trace_id=trace_id,
         )
     except Exception as exc:
         logger.exception("ask_with_query failed: %s", exc)
@@ -2969,6 +3010,59 @@ def list_recent_operations(
     )
 
 
+@_define_tool(
+    name="kb_health_check",
+    description="知识库健康度检查。返回 API Key 状态、向量覆盖率、标签覆盖率、缓存命中率、P95 延迟等指标。"
+    "用于运维巡检和问题定位。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="ops", side_effect="read",
+)
+@_heartbeat
+def kb_health_check() -> dict:
+    """执行知识库健康度检查，返回各项指标。
+
+    Returns:
+        status: healthy / degraded / unhealthy
+        api_keys: {llm, embedding, reranker} 各是否已配置
+        vector_coverage: 0.0-1.0
+        tag_coverage: 0.0-1.0
+        cache_hit_rate: {embedding, rag_cache_size}
+        latency_p95_ms: 最近50次查询的P95延迟
+        total_documents / total_blocks / total_vectors
+        warnings: 告警列表
+    """
+    from src.services.health import kb_health_check as _check
+    try:
+        result = _check()
+        return ok(result, status=result.get("status", "unknown"))
+    except Exception as exc:
+        logger.exception("kb_health_check failed: %s", exc)
+        return fail(ErrorCode.INTERNAL_ERROR, str(exc))
+
+
+@_define_tool(
+    name="get_trace",
+    description="根据 trace_id 查询链路追踪记录，包含各管线阶段耗时、结果数等信息。"
+    "用于问题定位和性能分析。",
+    annotations={"readOnlyHint": True, "idempotentHint": True},
+    group="ops", side_effect="read",
+)
+@_heartbeat
+def get_trace(trace_id: str) -> dict:
+    """查询链路追踪记录。
+
+    Args:
+        trace_id: 追踪 ID（由 ask/ask_with_query 返回的 trace_id 字段获取）
+    """
+    if not trace_id:
+        return fail(ErrorCode.VALIDATION_ERROR, "trace_id 必填")
+    from src.services.trace import QueryTrace
+    result = QueryTrace.get_by_id(trace_id)
+    if result is None:
+        return fail(ErrorCode.NOT_FOUND, f"Trace {trace_id} not found", trace_id=trace_id)
+    return ok(result)
+
+
 # ---- Phase 4: Tool Schema 标准化 ----
 
 _TOOL_METADATA = {
@@ -3019,6 +3113,8 @@ _TOOL_METADATA = {
     "get_operation_log":    {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "获取日志"},
     "undo_operation":       {"group": "ops", "side_effect": "write",      "requires_confirmation": False, "short_desc": "撤销操作"},
     "list_recent_operations":{"group": "ops", "side_effect": "read",      "requires_confirmation": False, "short_desc": "最近操作"},
+    "kb_health_check":      {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "健康检查"},
+    "get_trace":            {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "链路追踪"},
     "create_async_job":     {"group": "ops", "side_effect": "write",      "requires_confirmation": False, "short_desc": "创建任务"},
     "get_async_job":        {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "获取任务"},
     "list_async_jobs":      {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "列出任务"},

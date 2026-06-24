@@ -621,7 +621,7 @@ def test_agentic_router_strong_signal_structured_when_llm_unavailable():
     result = router.route("统计全部知识条目的数量")
 
     assert result["mode"] == "structured"
-    assert "LLM unavailable" in result["explanation"]
+    assert "L2/L3 failed" in result["explanation"] or "LLM unavailable" in result["explanation"]
 
 
 def test_dsl_tags_plural_in_produces_or():
