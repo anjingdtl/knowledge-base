@@ -154,6 +154,17 @@ def kb_health_check() -> dict[str, Any]:
     except Exception:
         pass
 
+    # 同步清理过期 trace 记录，避免 operation_logs 里 trace 行无限留存 + 膨胀
+    # （trace 默认 trace_enabled=True 会持续写入）。
+    try:
+        from src.services.trace import QueryTrace
+        retention_days = int(Config.get("rag.observability.trace_retention_days", 30) or 30)
+        cleaned = QueryTrace.cleanup_old(retention_days)
+        if cleaned:
+            warnings.append(f"清理 {cleaned} 条过期 trace 记录")
+    except Exception:
+        pass
+
     return {
         "status": status,
         "api_keys": {

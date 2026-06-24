@@ -212,8 +212,12 @@ def _run_async(coro, timeout: float = 120):
             raise result
         raise RuntimeError(str(result))
     else:
-        # 无事件循环（stdio 线程池场景）
-        return asyncio.run(coro)
+        # 无事件循环（stdio 线程池场景）。用 wait_for 兜住 timeout，否则
+        # 协程内部永久挂起时 total_timeout 形同虚设（旧实现丢弃了 timeout）。
+        try:
+            return asyncio.run(asyncio.wait_for(coro, timeout=timeout))
+        except asyncio.TimeoutError as exc:
+            raise concurrent.futures.TimeoutError() from exc
 
 
 def _op_log(operation, target_type, target_id, operator="system", source="mcp",

@@ -353,6 +353,18 @@ class SearchService:
             return 0.0
         return sum(1 for a, b in zip(sig_a, sig_b) if a == b) / len(sig_a)
 
+    @staticmethod
+    def _candidate_score(c: dict) -> float:
+        """取候选的有效分数，回退链与最终打分一致：
+        rerank_score > rrf_score > final_score > score > 0。
+        用显式 None 检查——0.0 是有效分数，不能被当作"无分"跳过。
+        """
+        for key in ("rerank_score", "rrf_score", "final_score", "score"):
+            v = c.get(key)
+            if v is not None:
+                return v
+        return 0
+
     def _diversity_filter(self, candidates: list[dict], threshold: float = 0.8) -> list[dict]:
         """Phase 2: 多样性过滤 — 内容极度相似的 block 合并保留最高分。
 
@@ -381,17 +393,12 @@ class SearchService:
                     continue
                 sim = self._jaccard_similarity(signatures[i], signatures[j])
                 if sim > threshold:
-                    # 保留分数更高的（显式 None 检查，0.0 是有效分数）
-                    score_i = candidates[i].get("rrf_score")
-                    if score_i is None:
-                        score_i = candidates[i].get("final_score")
-                    if score_i is None:
-                        score_i = 0
-                    score_j = candidates[j].get("rrf_score")
-                    if score_j is None:
-                        score_j = candidates[j].get("final_score")
-                    if score_j is None:
-                        score_j = 0
+                    # 保留分数更高的。回退链须与 search() 最终打分一致
+                    # （rerank_score > rrf_score > final_score > score > 0），
+                    # 否则 rerank 之后仍按旧 rrf_score 决策，会误杀 reranker
+                    # 钦定的高分结果；FTS fallback 候选也能经 "score" 命中。
+                    score_i = self._candidate_score(candidates[i])
+                    score_j = self._candidate_score(candidates[j])
                     if score_i >= score_j:
                         removed.add(j)
                     else:

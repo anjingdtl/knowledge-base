@@ -40,10 +40,18 @@ class QueryTrace:
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
     def to_dict(self) -> dict:
+        # 与全仓库其它日志路径一致，question 落盘前截断——trace 是持久化路径
+        # （operation_logs 随 data/ 落盘 + Syncthing 同步），全量明文留存有
+        # 隐私/PII 风险。长度可由 rag.observability.trace_question_max_len 配置。
+        from src.utils.config import Config
+        max_len = int(Config.get("rag.observability.trace_question_max_len", 80) or 80)
+        question = self.question
+        if max_len > 0 and len(question) > max_len:
+            question = question[:max_len] + "..."
         return {
             "trace_id": self.trace_id,
             "tool": self.tool,
-            "question": self.question,
+            "question": question,
             "stages": [s.to_dict() for s in self.stages],
             "total_duration_ms": round(self.total_duration_ms, 1),
             "created_at": self.created_at,
@@ -99,3 +107,29 @@ class QueryTrace:
             return None
         except Exception:
             return None
+
+    @classmethod
+    def cleanup_old(cls, retention_days: int = 30) -> int:
+        """删除超过 retention_days 天的 trace 记录，返回删除条数。
+
+        trace 默认 trace_enabled=True 会持续写入 operation_logs（target_type='trace'），
+        项目无独立调度器，借 kb_health_check 触发清理，避免无限留存 + 膨胀。
+        """
+        try:
+            from datetime import datetime, timedelta
+            from src.services.db import Database
+            db = Database._instance
+            if db is None or db._shutdown:
+                return 0
+            cutoff = (datetime.now() - timedelta(days=retention_days)).isoformat()
+            with db.get_conn() as conn:
+                cursor = conn.execute(
+                    "DELETE FROM operation_logs "
+                    "WHERE target_type = 'trace' AND created_at < ?",
+                    (cutoff,),
+                )
+                conn.commit()
+                return cursor.rowcount or 0
+        except Exception as e:
+            logger.debug("Trace cleanup failed: %s", e)
+            return 0

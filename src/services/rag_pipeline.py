@@ -51,7 +51,13 @@ def _run_coroutine_sync(coro, timeout: float = 120):
         loop = None
 
     if not (loop and loop.is_running()):
-        return asyncio.run(coro)
+        # 无运行中的事件循环（MCP stdio 同步工具主路径）。必须用 wait_for
+        # 兜住 timeout——否则协程内部永久挂起时，调用方传入的 timeout 形同
+        # 虚设（旧实现直接 asyncio.run(coro) 丢弃了 timeout 参数）。
+        try:
+            return asyncio.run(asyncio.wait_for(coro, timeout=timeout))
+        except asyncio.TimeoutError as exc:
+            raise concurrent.futures.TimeoutError() from exc
 
     result_queue: queue.Queue[tuple[bool, object]] = queue.Queue(maxsize=1)
 
@@ -891,48 +897,42 @@ class RagPipeline:
     async def execute(self, question, conversation_history=None, *, tool_name="ask", **kwargs):
         ctx = RagContext(question=question, conversation_history=conversation_history or [], **kwargs)
 
-        # Phase 3: detect parallel mode for generate ∥ postprocess
-        parallel_generate = Config.get("rag.pipeline.generate_parallel", True)
-
-        # Execute stages, with optional fork-join for generate + postprocess
-        pending_postprocess = None  # (stage, config) tuple to run after generate fork
+        # generate 与 postprocess 的执行关系：postprocess 依赖 generate 产出的
+        # answer/sources，语义上无法并行。这里在遍历到 generate 时把它和 postprocess
+        # 放在同一段顺序执行（generate 完成后再 postprocess），并用标志位避免主循环
+        # 重复执行 postprocess。config 开关 generate_parallel 保留为兼容，实际为顺序执行。
+        link_postprocess = Config.get("rag.pipeline.generate_parallel", True)
+        postprocess_linked = False  # generate 段是否已顺带执行过 postprocess
 
         for stage, config in self._stages:
             if not stage.is_enabled(config):
                 continue
 
-            # Phase 3: fork-join — when we hit generate, defer postprocess
-            if parallel_generate and stage.name == "generate":
-                # Find the postprocess stage in remaining stages
+            # 遍历到 generate 时，顺带把 postprocess 一起执行（顺序，非并行）
+            if link_postprocess and stage.name == "generate":
                 postprocess_idx = None
                 for idx, (s, c) in enumerate(self._stages):
                     if s.name == "postprocess":
                         postprocess_idx = idx
                         break
 
+                t0 = time.monotonic()
+                ctx = await stage.execute(ctx, config)
+                ctx._stage_durations[stage.name] = time.monotonic() - t0
+
                 if postprocess_idx is not None:
                     pp_stage, pp_config = self._stages[postprocess_idx]
-                    # Pre-process: run postprocess work that doesn't depend on answer
-                    # (source dedup preparation)
-                    t0 = time.monotonic()
-                    ctx = await stage.execute(ctx, config)
-                    ctx._stage_durations[stage.name] = time.monotonic() - t0
+                    if pp_stage.is_enabled(pp_config):
+                        t1 = time.monotonic()
+                        ctx = await pp_stage.execute(ctx, pp_config)
+                        ctx._stage_durations[pp_stage.name] = time.monotonic() - t1
+                postprocess_linked = True
+                continue
 
-                    # Now run postprocess with the completed answer
-                    t1 = time.monotonic()
-                    ctx = await pp_stage.execute(ctx, pp_config)
-                    ctx._stage_durations[pp_stage.name] = time.monotonic() - t1
-                    continue
-                else:
-                    # No postprocess stage, just run generate normally
-                    t0 = time.monotonic()
-                    ctx = await stage.execute(ctx, config)
-                    ctx._stage_durations[stage.name] = time.monotonic() - t0
-                    continue
-
-            # Normal sequential execution (but skip postprocess if already handled)
-            if stage.name == "postprocess" and parallel_generate:
-                # Already handled in generate fork-join above
+            # postprocess 若已在 generate 段执行过则跳过；否则正常执行。
+            # 修复：仅当 generate 确实进入上面的分支才跳过——避免 generate 被禁用时
+            # postprocess 被无条件误跳，导致 source 去重 / answer 截断静默丢失。
+            if stage.name == "postprocess" and postprocess_linked:
                 continue
 
             t0 = time.monotonic()
@@ -1020,34 +1020,41 @@ class _RAGResultCache:
     """
 
     def __init__(self, maxsize: int | None = None, ttl: float | None = None):
+        import threading
         self._maxsize = maxsize or int(Config.get("rag.cache.l1_rag_max", 256) or 256)
         self._ttl = ttl or float(Config.get("rag.cache.l1_rag_ttl", 600) or 600)
         self._cache: OrderedDict[str, tuple[float, dict]] = OrderedDict()
+        # 模块级单例被 FastMCP 线程池并发访问，get/put/clear 的多步复合操作
+        # （move_to_end / popitem / del）需加锁，否则 LRU 状态错乱或 KeyError。
+        self._lock = threading.RLock()
 
     def _make_key(self, question: str) -> str:
         return hashlib.md5(question.strip().lower().encode()).hexdigest()
 
     def get(self, question: str) -> dict | None:
         key = self._make_key(question)
-        entry = self._cache.get(key)
-        if entry is None:
-            return None
-        ts, result = entry
-        if time.monotonic() - ts > self._ttl:
-            del self._cache[key]
-            return None
-        self._cache.move_to_end(key)
-        return result
+        with self._lock:
+            entry = self._cache.get(key)
+            if entry is None:
+                return None
+            ts, result = entry
+            if time.monotonic() - ts > self._ttl:
+                del self._cache[key]
+                return None
+            self._cache.move_to_end(key)
+            return result
 
     def put(self, question: str, result: dict) -> None:
         key = self._make_key(question)
-        self._cache[key] = (time.monotonic(), result)
-        self._cache.move_to_end(key)
-        while len(self._cache) > self._maxsize:
-            self._cache.popitem(last=False)
+        with self._lock:
+            self._cache[key] = (time.monotonic(), result)
+            self._cache.move_to_end(key)
+            while len(self._cache) > self._maxsize:
+                self._cache.popitem(last=False)
 
     def clear(self) -> None:
-        self._cache.clear()
+        with self._lock:
+            self._cache.clear()
 
     @property
     def size(self) -> int:

@@ -68,14 +68,24 @@ _GRAPH_SIGNALS = (
     "related to", "links to", "references", "graph",
 )
 
+# 英文标签语法需冒号（tagged: X / tag: X），避免 "tagged with python"
+# 把介词 with 误当 tag；中文 "标记为/标签为 X" 保持原义。value 组用 [\w-]
+# （Python re 默认 Unicode 下 \w 已含中文，等价旧 [\w\u4e00-\u9fff-]）。
 _NL_TAG_RE = re.compile(
-    r"(?:标记为|标签为|tagged?|tag)\s+([\w\u4e00-\u9fff-]+)", re.IGNORECASE
+    r"(?:标记为|标签为|(?:tagged|tag)[:：])\s*([\w-]+)", re.IGNORECASE
 )
 
+# value 用非贪婪 + lookahead：遇到连词(并且/且/和/与)或下一个「属性+分隔符」
+# 或空白/行尾/非值字符即停——既避免多条件被贪婪吞掉，也允许 value 在空格处
+# 自然结束（"状态为 open 的文档" 不再把 open 丢掉）。字符组补 . / - 容纳版本号等。
 _NL_PROP_RE = re.compile(
     r"(状态|优先级|类型|标题|版本|status|priority|type|title|version)"
     r"\s*(?:为|是|等于|is|eq|=)\s*"
-    r"([\w\u4e00-\u9fff-]+)",
+    r"([\w./-]+?)"
+    r"(?=\s*(?:并且|且|和|与|,|，)"
+    r"|(?:状态|优先级|类型|标题|版本|status|priority|type|title|version)"
+    r"\s*(?:为|是|等于|is|eq|=)"
+    r"|\s|$|[^\w./-])",
     re.IGNORECASE,
 )
 

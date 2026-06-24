@@ -131,7 +131,9 @@ class LLMService:
             )
         return message
 
-    def chat(self, messages: list[dict], silent: bool = False, max_tokens_override: int | None = None) -> str:
+    def chat(self, messages: list[dict], silent: bool = False,
+             max_tokens_override: int | None = None,
+             timeout: float | None = None) -> str:
         if not silent:
             _notify_status("running", "LLM 推理")
         try:
@@ -139,12 +141,18 @@ class LLMService:
             model = self._cfg("llm.model", "")
             temperature = self._cfg("llm.temperature", 0.7)
             max_tokens = max_tokens_override or self._cfg("llm.max_tokens", 2048)
-            response = client.chat.completions.create(
-                model=model,
-                messages=messages,
-                temperature=temperature,
-                max_tokens=max_tokens,
-            )
+            kwargs: dict = {
+                "model": model,
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+            }
+            if timeout is not None:
+                # 单次请求超时，覆盖 client 默认。供 LLMRouter 等需要快速失败的
+                # 调用方使用——超时点 httpx 抛异常、调用线程自然返回，避免用
+                # threading 做超时导致的 daemon 线程泄漏。
+                kwargs["timeout"] = timeout
+            response = client.chat.completions.create(**kwargs)
             return response.choices[0].message.content or ""
         except Exception as e:
             message = self._format_error_with_context(e)

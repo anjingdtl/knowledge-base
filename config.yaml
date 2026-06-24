@@ -37,6 +37,8 @@ rag:
   # Phase 2: planetary router
   use_planetary_router: true
   route_llm_timeout: 5
+  # L2 EmbeddingRouter 的 tag embedding 缓存 TTL（秒）；过期重建以感知新增/删除 tag
+  tag_embedding_cache_ttl: 300
   # Phase 3: pipeline parallelization
   pipeline:
     generate_parallel: true
@@ -53,6 +55,10 @@ rag:
     trace_enabled: true
     debug_scores: false
     health_check_cron: "0 3 * * *"
+    # trace question 落盘前截断长度（隐私：避免全量明文留存 operation_logs）
+    trace_question_max_len: 80
+    # trace 记录保留天数（kb_health_check 触发清理）
+    trace_retention_days: 30
   # Phase 3: ask_with_query async & timeout
   ask_with_query:
     total_timeout: 120

@@ -298,4 +298,19 @@ class EmbeddingService:
         return [result for result in results if result is not None]
 
     def reset_client(self):
+        """重置 OpenAI client。同步清空 embedding 两级缓存——切换 api_key/base_url
+        可能换了向量供应商，若保留旧缓存会返回跨向量空间的脏向量（即使 model 名相同，
+        新旧供应商的向量空间不兼容，余弦相似度会系统性失真）。
+        """
         self._client = None
+        try:
+            _l1_cache.clear()
+        except Exception:
+            pass
+        try:
+            model = self._cfg("embedding.model", "")
+            if model:
+                from src.core.embedding_cache import EmbeddingCache
+                EmbeddingCache().invalidate_model(model)
+        except Exception as e:
+            logger.debug("L2 embedding cache invalidation skipped: %s", e)
