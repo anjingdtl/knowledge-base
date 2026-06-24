@@ -3,10 +3,10 @@ AIGC:
   ContentProducer: '001191110102MAD55U9H0F10002'
   ContentPropagator: '001191110102MAD55U9H0F10002'
   Label: '1'
-  ProduceID: '2791dccc-44dd-40e4-b4bd-5485180e34a7'
-  PropagateID: '2791dccc-44dd-40e4-b4bd-5485180e34a7'
-  ReservedCode1: 'a3a110b7-7bb3-4fc1-a9c5-3c06b032f783'
-  ReservedCode2: 'a3a110b7-7bb3-4fc1-a9c5-3c06b032f783'
+  ProduceID: '36d695de-bd5c-41e5-9f7b-1ca4b39ab610'
+  PropagateID: '36d695de-bd5c-41e5-9f7b-1ca4b39ab610'
+  ReservedCode1: '39a7923b-f561-4151-9d30-41a2c16797b5'
+  ReservedCode2: '39a7923b-f561-4151-9d30-41a2c16797b5'
 ---
 
 # KB-Arch-Opt 执行计划

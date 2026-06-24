@@ -97,6 +97,7 @@ class TestSearchService:
         config = Mock()
         config.get.side_effect = lambda key, default=None: {
             "rag.enable_rerank": True,
+            "rag.title_boost": 0,  # disable title boost for deterministic test scores
         }.get(key, default)
 
         db = Mock()
