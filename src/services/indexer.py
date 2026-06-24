@@ -213,14 +213,15 @@ def index_knowledge_item(item: KnowledgeItem):
                         BlockStore().add_block_embedding(bid, emb)
                     except Exception as e2:
                         logger.error(f"Vec insert failed for block {bid}: {e2}")
-        # Legacy chunk vectors（保留兼容）
-        for i, block in enumerate(block_rows):
-            emb = embeddings[i] if i < len(embeddings) else None
-            if emb:
-                try:
-                    VectorStore().add_chunk_embedding(chunk_rows[i]["id"], item.id, emb)
-                except Exception as e:
-                    logger.error(f"Legacy vec insert failed for chunk {chunk_rows[i]['id']}: {e}")
+        # Legacy chunk vectors（Phase 2: 默认关闭，通过 rag.legacy_chunk_vector 可恢复）
+        if Config.get("rag.legacy_chunk_vector", False):
+            for i, block in enumerate(block_rows):
+                emb = embeddings[i] if i < len(embeddings) else None
+                if emb:
+                    try:
+                        VectorStore().add_chunk_embedding(chunk_rows[i]["id"], item.id, emb)
+                    except Exception as e:
+                        logger.error(f"Legacy vec insert failed for chunk {chunk_rows[i]['id']}: {e}")
     else:
         logger.info(f"Skipping vector index for low-quality item {item.id} (score={quality_score})")
 
@@ -240,7 +241,8 @@ def index_knowledge_item(item: KnowledgeItem):
 def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
     """删除旧索引，重新分块索引"""
     BlockStore().delete_by_page(item_id)
-    VectorStore().delete_by_knowledge(item_id)
+    if Config.get("rag.legacy_chunk_vector", False):
+        VectorStore().delete_by_knowledge(item_id)
     Database.delete_blocks_by_page(item_id)
     Database.delete_chunks_fts(item_id)
     Database.delete_chunks(item_id)

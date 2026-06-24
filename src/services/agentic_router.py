@@ -5,6 +5,7 @@ from typing import Any
 
 from src.models.query_dsl import QuerySpec
 from src.services.db import Database
+from src.utils.config import Config
 
 
 def serialize_route(routing: dict) -> dict:
@@ -103,8 +104,18 @@ class AgenticRouter:
     def __init__(self, db=None, llm=None):
         self._db = db or Database
         self._llm = llm
+        self._planetary_router = None  # 缓存实例，避免每次调用重建
 
     def route(self, question: str) -> dict:
+        # Phase 2: 行星齿轮路由开关
+        use_planetary = Config.get("rag.use_planetary_router", True)
+        if use_planetary:
+            if self._planetary_router is None:
+                from src.services.route_engine import PlanetaryRouter
+                self._planetary_router = PlanetaryRouter(db=self._db, llm=self._llm)
+            return self._planetary_router.route(question)
+
+        # Legacy routing path (below)
         rule_spec = self._try_rule_based(question)
         if rule_spec is not None:
             return {"mode": "structured", "query_spec": rule_spec, "explanation": "rule-based routing"}
