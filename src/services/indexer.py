@@ -194,7 +194,8 @@ def index_knowledge_item(item: KnowledgeItem):
         logging.error(f"Embedding failed for {item.id}: {e}")
 
     # 批量写入向量（低质量文档quality_score==0时跳过向量索引，但保留FTS）
-    if quality_score > 0:
+    # quality_score 为 None 时视为有效文档（未评分），默认写入向量
+    if quality_score is None or quality_score > 0:
         valid_block_ids = []
         valid_embeddings = []
         for i, block in enumerate(block_rows):

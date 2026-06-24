@@ -169,14 +169,16 @@ class EmbeddingService:
         max_concurrent = max(1, int(self._cfg("embedding.max_concurrent_batches", 4) or 4))
         logger = logging.getLogger(__name__)
 
-        # 把 texts 切成定长 batch，保留 batch 在原列表中的索引以便拼回结果
-        batches: list[tuple[int, list[str]]] = []
-        for i in range(0, len(texts), batch_size):
-            batches.append((i, texts[i:i + batch_size]))
+        # 把 texts 切成定长 batch
+        # batch_idx 是 batch 在 batches 列表中的位置（0,1,2,...），
+        # text_start 是该 batch 在原 texts 列表中的起始索引，供拼回结果时使用。
+        batches: list[tuple[int, int, list[str]]] = []
+        for batch_idx, start in enumerate(range(0, len(texts), batch_size)):
+            batches.append((batch_idx, start, texts[start:start + batch_size]))
 
         results: list[list[list[float]] | None] = [None] * len(batches)
 
-        def _embed_one(idx: int, batch: list[str]) -> tuple[int, list[list[float]]]:
+        def _embed_one(batch_idx: int, batch: list[str]) -> tuple[int, list[list[float]]]:
             try:
                 response = client.embeddings.create(input=batch, model=model)
             except APIError as e:
@@ -195,18 +197,18 @@ class EmbeddingService:
                 raise RuntimeError(
                     f"Unexpected error during embedding (model={model}, batch_size={len(batch)}): {e}"
                 ) from e
-            return idx, [item.embedding for item in response.data]
+            return batch_idx, [item.embedding for item in response.data]
 
         # 小批量（单 batch 就能装下）直接同步走，避免线程开销
         if len(batches) == 1:
-            _, embs = _embed_one(0, batches[0][1])
+            _, embs = _embed_one(0, batches[0][2])
             return embs
 
         with ThreadPoolExecutor(max_workers=min(max_concurrent, len(batches))) as pool:
-            futures = [pool.submit(_embed_one, idx, batch) for idx, batch in batches]
+            futures = [pool.submit(_embed_one, batch_idx, batch) for batch_idx, _, batch in batches]
             for fut in as_completed(futures):
-                idx, embs = fut.result()
-                results[idx] = embs
+                batch_idx, embs = fut.result()
+                results[batch_idx] = embs
 
         # 按原 batch 顺序拼成扁平结果（任一 batch 失败会在上面抛出，不会到这里）
         flat: list[list[float]] = []
