@@ -152,11 +152,15 @@ class VectorStore:
                 (knowledge_id,),
             ).fetchall()
             if rows:
-                placeholders = ",".join("?" for _ in rows)
-                conn.execute(
-                    f"DELETE FROM vec_chunks WHERE rowid IN ({placeholders})",
-                    [r[0] for r in rows],
-                )
+                rowids = [r[0] for r in rows]
+                SQLITE_VAR_LIMIT = 500
+                for batch_start in range(0, len(rowids), SQLITE_VAR_LIMIT):
+                    batch = rowids[batch_start:batch_start + SQLITE_VAR_LIMIT]
+                    placeholders = ",".join("?" for _ in batch)
+                    conn.execute(
+                        f"DELETE FROM vec_chunks WHERE rowid IN ({placeholders})",
+                        batch,
+                    )
             conn.execute("COMMIT")
         except Exception:
             conn.execute("ROLLBACK")

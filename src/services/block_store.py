@@ -103,37 +103,53 @@ class BlockStore:
                 self.add_block_embedding(b["id"], emb)
 
     def add_block_embeddings_batch(self, block_ids: list[str], embeddings: list[list[float]]):
-        """批量写入 block embeddings，减少 commit 次数，提升 reindex 性能"""
+        """批量写入 block embeddings，减少 commit 次数，提升 reindex 性能
+        
+        自动按 500 个一组分批，避免 SQLite "too many SQL variables" 限制（上限 999）。
+        """
         if not block_ids or not embeddings:
             return
         expected_dim = self._get_dimension()
         self._ensure_table()
         conn = self._get_conn()
-        # 批量查询所有 block rowid（避免 N+1）
-        placeholders = ",".join("?" for _ in block_ids)
-        rowid_map = dict(conn.execute(
-            f"SELECT id, rowid FROM blocks WHERE id IN ({placeholders})", block_ids
-        ).fetchall())
-        # 收集有效 (rowid, packed_embedding) 对
-        pairs = []
-        for block_id, emb in zip(block_ids, embeddings):
-            if len(emb) != expected_dim:
-                logging.warning(f"Block {block_id}: embedding dim {len(emb)} != expected {expected_dim}, skip")
+
+        # SQLite 单次 SQL 变量上限为 999，留足余量按 500 分批
+        SQLITE_VAR_LIMIT = 500
+        total_inserted = 0
+
+        for batch_start in range(0, len(block_ids), SQLITE_VAR_LIMIT):
+            batch_ids = block_ids[batch_start:batch_start + SQLITE_VAR_LIMIT]
+            batch_embs = embeddings[batch_start:batch_start + SQLITE_VAR_LIMIT]
+
+            # 批量查询 block rowid
+            placeholders = ",".join("?" for _ in batch_ids)
+            rowid_map = dict(conn.execute(
+                f"SELECT id, rowid FROM blocks WHERE id IN ({placeholders})", batch_ids
+            ).fetchall())
+
+            # 收集有效 (rowid, packed_embedding) 对
+            pairs = []
+            for block_id, emb in zip(batch_ids, batch_embs):
+                if len(emb) != expected_dim:
+                    logging.warning(f"Block {block_id}: embedding dim {len(emb)} != expected {expected_dim}, skip")
+                    continue
+                rowid = rowid_map.get(block_id)
+                if rowid is None:
+                    logging.warning(f"Block {block_id} not found, skip vec insert")
+                    continue
+                pairs.append((rowid, self._pack_embedding(emb)))
+
+            if not pairs:
                 continue
-            rowid = rowid_map.get(block_id)
-            if rowid is None:
-                logging.warning(f"Block {block_id} not found, skip vec insert")
-                continue
-            pairs.append((rowid, self._pack_embedding(emb)))
-        if not pairs:
-            return
-        # 批量 INSERT OR REPLACE，单次 commit
-        conn.executemany(
-            "INSERT OR REPLACE INTO vec_blocks(rowid, embedding) VALUES (?, ?)",
-            pairs,
-        )
-        conn.commit()
-        logging.debug(f"Batch inserted {len(pairs)} block embeddings")
+
+            conn.executemany(
+                "INSERT OR REPLACE INTO vec_blocks(rowid, embedding) VALUES (?, ?)",
+                pairs,
+            )
+            conn.commit()
+            total_inserted += len(pairs)
+
+        logging.debug(f"Batch inserted {total_inserted} block embeddings (from {len(block_ids)} requested)")
 
     def search(self, query: str, top_k: int = 5, tags: list[str] | None = None,
                query_embedding: list[float] | None = None) -> list[dict]:
@@ -184,11 +200,16 @@ class BlockStore:
                 (page_id,),
             ).fetchall()
             if rows:
-                placeholders = ",".join("?" for _ in rows)
-                conn.execute(
-                    f"DELETE FROM vec_blocks WHERE rowid IN ({placeholders})",
-                    [r[0] for r in rows],
-                )
+                # Split into batches to avoid SQLite "too many SQL variables" limit (999)
+                rowids = [r[0] for r in rows]
+                SQLITE_VAR_LIMIT = 500
+                for batch_start in range(0, len(rowids), SQLITE_VAR_LIMIT):
+                    batch = rowids[batch_start:batch_start + SQLITE_VAR_LIMIT]
+                    placeholders = ",".join("?" for _ in batch)
+                    conn.execute(
+                        f"DELETE FROM vec_blocks WHERE rowid IN ({placeholders})",
+                        batch,
+                    )
             conn.execute("COMMIT")
         except Exception:
             conn.execute("ROLLBACK")
