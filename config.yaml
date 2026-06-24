@@ -28,6 +28,15 @@ rag:
   chunk_size: 1000
   score_threshold: 0.35
   top_k: 5
+  # Phase 2: legacy chunk vector path (vec_chunks), default off
+  legacy_chunk_vector: false
+  # Phase 2: RRF fusion parameters
+  rrf_k: 40
+  rrf_weight_semantic: 0.4
+  rrf_weight_keyword: 0.6
+  # Phase 2: planetary router
+  use_planetary_router: true
+  route_llm_timeout: 5
 reranker:
   base_url: https://api.siliconflow.cn/v1
   enabled: true

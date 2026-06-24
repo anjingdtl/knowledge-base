@@ -1,4 +1,5 @@
 """统一搜索服务 — MCP 和 API 共用"""
+import hashlib
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -129,6 +130,10 @@ class SearchService:
             except Exception as e:
                 logger.warning("Rerank failed: %s", e)
 
+        # ── 阶段 3.5: 多样性过滤（minhash 去重） ──
+        if candidates:
+            candidates = self._diversity_filter(candidates, threshold=0.8)
+
         # ── 阶段 4: 组装结果 ──
         output.extend(wiki_results)
 
@@ -258,7 +263,7 @@ class SearchService:
 
     def _rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
         """重排序，失败保留原序"""
-        enabled = self._cfg("rag.enable_rerank", False)
+        enabled = self._cfg("rag.enable_rerank", True)
         if not enabled:
             return candidates
         try:
@@ -313,3 +318,80 @@ class SearchService:
         except Exception as e:
             logger.warning("Wiki search failed: %s", e)
             return []
+
+    @staticmethod
+    def _minhash(text: str, num_perm: int = 64) -> list[int]:
+        """简易 minhash 签名：对文本按字符 bigram 做 hash 取最小值。
+
+        不依赖外部库，用 hashlib.md5 模拟多个 hash 函数。
+        """
+        if not text:
+            return [0] * num_perm
+        # 字符 bigrams
+        tokens = [text[i:i+2] for i in range(max(len(text)-1, 0))]
+        if not tokens:
+            return [0] * num_perm
+        signature = []
+        for i in range(num_perm):
+            min_hash = float('inf')
+            for token in tokens:
+                h = int(hashlib.md5(f"{i}:{token}".encode("utf-8", errors="replace")).hexdigest()[:8], 16)
+                if h < min_hash:
+                    min_hash = h
+            signature.append(min_hash)
+        return signature
+
+    @classmethod
+    def _jaccard_similarity(cls, sig_a: list[int], sig_b: list[int]) -> float:
+        """基于 minhash 签名的 Jaccard 相似度估计"""
+        if not sig_a or not sig_b or len(sig_a) != len(sig_b):
+            return 0.0
+        return sum(1 for a, b in zip(sig_a, sig_b) if a == b) / len(sig_a)
+
+    def _diversity_filter(self, candidates: list[dict], threshold: float = 0.8) -> list[dict]:
+        """Phase 2: 多样性过滤 — 内容极度相似的 block 合并保留最高分。
+
+        当两个结果的内容 minhash Jaccard > threshold 时，只保留分数更高的那个。
+        这样可以消除同一文档中因分块重叠导致的高相似重复结果。
+        """
+        if len(candidates) <= 1:
+            return candidates
+
+        # 预计算 minhash 签名
+        signatures = []
+        for c in candidates:
+            text = c.get("text", "")
+            # 截取前 500 字做签名，避免长文本开销过大
+            signatures.append(self._minhash(text[:500]))
+
+        # 逐对比较，标记要移除的
+        removed = set()
+        for i in range(len(candidates)):
+            if i in removed:
+                continue
+            for j in range(i + 1, len(candidates)):
+                if j in removed:
+                    continue
+                sim = self._jaccard_similarity(signatures[i], signatures[j])
+                if sim > threshold:
+                    # 保留分数更高的（显式 None 检查，0.0 是有效分数）
+                    score_i = candidates[i].get("rrf_score")
+                    if score_i is None:
+                        score_i = candidates[i].get("final_score")
+                    if score_i is None:
+                        score_i = 0
+                    score_j = candidates[j].get("rrf_score")
+                    if score_j is None:
+                        score_j = candidates[j].get("final_score")
+                    if score_j is None:
+                        score_j = 0
+                    if score_i >= score_j:
+                        removed.add(j)
+                    else:
+                        removed.add(i)
+                        break  # i 被移除了，不需要再比
+
+        if removed:
+            logger.debug(f"Diversity filter: removed {len(removed)} near-duplicate results (threshold={threshold})")
+
+        return [c for i, c in enumerate(candidates) if i not in removed]

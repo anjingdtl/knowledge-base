@@ -16,6 +16,7 @@ class RetrievalCandidate(TypedDict, total=False):
     final_score: float
     match_channels: list[str]
     warnings: list[str]
+    score_breakdown: dict  # Phase 2: debug分解 {semantic_rrf, keyword_rrf, proper_noun_boost}
 
 
 # ---- 分数归一化辅助函数 ----

@@ -2,6 +2,7 @@
 import re
 
 import jieba
+import jieba.posseg as pseg
 
 
 def tokenize_chinese(text: str) -> str:
@@ -17,6 +18,45 @@ def tokenize_chinese_full(text: str) -> str:
         return ""
     words = jieba.lcut(text, cut_all=True)
     return " ".join(w.strip() for w in words if w.strip())
+
+
+_IMPORT_JIEBA_POSSEG = True  # module-level flag
+
+
+_PROPER_NOUN_POS = {"nr", "ns", "nt", "nz", "NR", "NS", "NT", "NZ"}
+_PROPER_NOUN_MIN_LEN = 2  # 专有名词至少2字，过滤单字噪声
+
+
+def detect_proper_nouns(query: str) -> list[str]:
+    """检测查询中的专有名词（人名/地名/机构名/其他专名）。
+
+    使用 jieba POS 标注（nr=人名, ns=地名, nt=机构名, nz=其他专名），
+    过滤掉单字噪声（单字人名/地名误判率高），返回去重列表。
+
+    用途：专有名词在 RRF 融合中增强 keyword 通道权重，
+    因为专有名词在向量搜索中容易被淹没，但在 FTS 中精确匹配价值极高。
+    """
+    if not query or not query.strip():
+        return []
+    proper_nouns = []
+    seen = set()
+    for word, flag in pseg.cut(query):
+        if flag in _PROPER_NOUN_POS and len(word) >= _PROPER_NOUN_MIN_LEN and word not in seen:
+            proper_nouns.append(word)
+            seen.add(word)
+    # 补充：连续大写英文缩写（AI, MCP, RAG）
+    for m in re.finditer(r"\b[A-Z]{2,}\b", query):
+        w = m.group()
+        if w not in seen:
+            proper_nouns.append(w)
+            seen.add(w)
+    # 补充：中英混合术语（"AI介入率"）
+    for m in re.finditer(r"[A-Za-z]+[\u4e00-\u9fff]+|[\u4e00-\u9fff]+[A-Za-z]+", query):
+        w = m.group()
+        if len(w) >= 2 and w not in seen:
+            proper_nouns.append(w)
+            seen.add(w)
+    return proper_nouns
 
 
 def sanitize_fts_query(query: str, is_tokenized: bool = False) -> str:

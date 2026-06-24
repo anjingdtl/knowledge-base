@@ -2180,8 +2180,8 @@ def route_query(question: str | None = None, query: str | None = None,
         routing = router.route(question)
         payload = serialize_route(routing)
 
-        # BUG-3 fix: 附带轻量级搜索线索，让Agent能看到相关文档而不需要二次调用
-        # 优先级：blocks_fts（jieba分词，中文匹配可靠）> wiki_fts > LIKE兜底
+        # BUG-3 fix + Phase 2: 附带轻量级搜索线索，让Agent能看到相关文档而不需要二次调用
+        # 优先级：vector（语义匹配）> blocks_fts（jieba分词，中文精确匹配）> wiki_fts > LIKE兜底
         if include_evidence:
             try:
                 db = container.db
@@ -2196,9 +2196,32 @@ def route_query(question: str | None = None, query: str | None = None,
                 chunks = _re.findall(r'[\u4e00-\u9fffA-Za-z0-9]{2,6}', question)
                 simple_query = ' '.join(c for c in chunks if c not in _STOP_WORDS) or question
 
-                # 第一优先：block FTS（使用jieba分词，中文搜索可靠）
+                # Phase 2: 第一优先 — vector 语义搜索（覆盖语义模糊匹配）
+                if len(evidence) < 5:
+                    try:
+                        from src.services.block_store import BlockStore
+                        vec_results = BlockStore().search(question, top_k=3)
+                        seen_kids_vec = {e.get("knowledge_id") for e in evidence if e.get("knowledge_id")}
+                        for vr in vec_results[:3]:
+                            kid = vr.get("metadata", {}).get("page_id", "") or vr.get("metadata", {}).get("knowledge_id", "")
+                            if kid in seen_kids_vec:
+                                continue
+                            seen_kids_vec.add(kid)
+                            item = db.get_knowledge(kid) if kid else None
+                            evidence.append({
+                                "title": item.get("title", "") if item else "",
+                                "text_preview": (vr.get("text", ""))[:200],
+                                "source": "knowledge",
+                                "knowledge_id": kid,
+                                "source_channel": "vector",
+                                "score": round(max(0, 1 - vr.get("distance", 1.0) / 2), 4),
+                            })
+                    except Exception:
+                        pass
+
+                # 第二优先：block FTS（使用jieba分词，中文搜索可靠）
                 block_hits = db.search_blocks_fts(simple_query, limit=5)
-                seen_kids = set()
+                seen_kids = {e.get("knowledge_id") for e in evidence if e.get("knowledge_id")}
                 for b in block_hits:
                     kid = b.get("page_id", "")
                     if kid in seen_kids:
@@ -2210,24 +2233,25 @@ def route_query(question: str | None = None, query: str | None = None,
                         "text_preview": (b.get("content", ""))[:200],
                         "source": "knowledge",
                         "knowledge_id": kid,
+                        "source_channel": "fts",
                     })
-                    if len(evidence) >= 3:
+                    if len(evidence) >= 5:
                         break
 
-                # 第二优先：wiki FTS（unicode61对中文短语匹配弱，仅作补充）
-                if len(evidence) < 3:
+                # 第三优先：wiki FTS
+                if len(evidence) < 5:
                     wiki_hits = db.search_wiki_fts(simple_query, limit=2)
                     for w in wiki_hits:
                         evidence.append({
                             "title": w.get("title", ""),
                             "text_preview": (w.get("concept_summary", "") or w.get("content", ""))[:200],
                             "source": "wiki",
+                            "source_channel": "fts",
                         })
 
-                # 最终兜底：知识项标题模糊匹配（尝试多个chunk）
+                # 最终兜底：知识项标题模糊匹配
                 if not evidence:
                     try:
-                        # 尝试每个chunk，提升命中率
                         tried = set()
                         for chunk in (chunks or [question[:4]]):
                             if chunk in tried or len(chunk) < 2:
@@ -2243,12 +2267,13 @@ def route_query(question: str | None = None, query: str | None = None,
                                     "text_preview": "",
                                     "source": "knowledge_title_match",
                                     "knowledge_id": row[0],
+                                    "source_channel": "like",
                                 })
                             if evidence:
                                 break
                     except Exception:
                         pass
-                payload["evidence_preview"] = evidence[:3]
+                payload["evidence_preview"] = evidence[:5]
             except Exception as e:
                 logger.warning("route_query evidence preview failed (non-fatal): %s", e)
                 payload["evidence_preview"] = []

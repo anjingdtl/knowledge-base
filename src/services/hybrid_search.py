@@ -1,4 +1,4 @@
-"""混合检索模块 — Block-First 架构（embedding/keywords/blend）+ RRF 融合"""
+"""混合检索模块 — Block-First 架构（embedding/keywords/blend）+ 加权 RRF 融合"""
 import hashlib
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -7,6 +7,7 @@ from src.models.retrieval import normalize_fts_score, normalize_vector_score
 from src.services.block_context import enrich_result_with_context
 from src.services.block_store import BlockStore
 from src.services.db import Database
+from src.utils.chinese_tokenizer import detect_proper_nouns
 from src.utils.config import Config
 
 
@@ -148,11 +149,38 @@ class HybridSearcher:
         with ThreadPoolExecutor(max_workers=2) as pool:
             vec_future = pool.submit(self._vector_search, queries, top_k * 3)
             fts_future = pool.submit(self._keyword_search, queries, top_k * 3)
-            vec_results, vec_warnings = vec_future.result()
-            fts_results = fts_future.result()
+            # 关键：捕获 .result() 可能抛出的异常，确保一个通道失败不连累另一个
+            try:
+                vec_results, vec_warnings = vec_future.result()
+            except Exception as e:
+                vec_results, vec_warnings = [], [f"vector channel failed: {e}"]
+                logging.warning(f"Vector search channel failed in blend: {e}")
+            try:
+                fts_results = fts_future.result()
+            except Exception as e:
+                fts_results = []
+                logging.warning(f"Keyword search channel failed in blend: {e}")
 
-        k = 60
+        # Phase 2: 可配置 RRF 参数
+        k = self._get_config("rag.rrf_k", 40)
+        w_semantic = float(self._get_config("rag.rrf_weight_semantic", 0.4))
+        w_keyword = float(self._get_config("rag.rrf_weight_keyword", 0.6))
+        # 归一化权重，防止用户设置不当导致分数膨胀
+        total_w = w_semantic + w_keyword
+        if total_w > 0:
+            w_semantic /= total_w
+            w_keyword /= total_w
+
+        # Phase 2: 专有名词检测 → keyword 通道加权
+        proper_nouns = []
+        for q in queries:
+            proper_nouns.extend(detect_proper_nouns(q))
+        proper_noun_boost = float(self._get_config("rag.proper_noun_boost", 1.5)) if proper_nouns else 1.0
+        if proper_nouns:
+            logging.debug(f"Proper nouns detected in query: {proper_nouns}, keyword boost={proper_noun_boost}")
+
         rrf_scores: dict[str, float] = {}
+        rrf_breakdown: dict[str, dict] = {}  # Phase 2: score decomposition
         result_map: dict[str, dict] = {}
         # 跟踪每个 item 来自哪个通道
         vec_ids = set()
@@ -160,7 +188,10 @@ class HybridSearcher:
 
         for rank, item in enumerate(vec_results):
             item_id = self._candidate_id(item)
-            rrf_scores[item_id] = rrf_scores.get(item_id, 0) + 1.0 / (k + rank + 1)
+            semantic_rrf = w_semantic / (k + rank + 1)
+            rrf_scores[item_id] = rrf_scores.get(item_id, 0) + semantic_rrf
+            rrf_breakdown.setdefault(item_id, {"semantic_rrf": 0, "keyword_rrf": 0})
+            rrf_breakdown[item_id]["semantic_rrf"] += semantic_rrf
             vec_ids.add(item_id)
             if item_id not in result_map:
                 result_map[item_id] = {
@@ -173,7 +204,10 @@ class HybridSearcher:
 
         for rank, item in enumerate(fts_results):
             item_id = self._candidate_id(item)
-            rrf_scores[item_id] = rrf_scores.get(item_id, 0) + 1.0 / (k + rank + 1)
+            keyword_rrf = w_keyword * proper_noun_boost / (k + rank + 1)
+            rrf_scores[item_id] = rrf_scores.get(item_id, 0) + keyword_rrf
+            rrf_breakdown.setdefault(item_id, {"semantic_rrf": 0, "keyword_rrf": 0})
+            rrf_breakdown[item_id]["keyword_rrf"] += keyword_rrf
             fts_ids.add(item_id)
             if item_id not in result_map:
                 result_map[item_id] = {
@@ -202,11 +236,22 @@ class HybridSearcher:
                 channels.append("semantic")
             if item_id in fts_ids:
                 channels.append("keyword")
+            if proper_nouns and item_id in fts_ids:
+                channels.append("proper_noun_boost")
             item["match_channels"] = channels
 
             # 确保 vector_score 和 keyword_score 都有值
             item.setdefault("vector_score", None)
             item.setdefault("keyword_score", None)
+
+            # Phase 2: score_breakdown (debug)
+            bd = rrf_breakdown.get(item_id, {})
+            item["score_breakdown"] = {
+                "semantic_rrf": round(bd.get("semantic_rrf", 0), 6),
+                "keyword_rrf": round(bd.get("keyword_rrf", 0), 6),
+                "proper_noun_boost": proper_noun_boost if proper_nouns else 1.0,
+                "proper_nouns": proper_nouns,
+            }
 
             results.append(item)
 

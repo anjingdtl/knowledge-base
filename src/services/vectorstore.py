@@ -1,7 +1,13 @@
-"""向量存储 — 基于 sqlite-vec，与 SQLite 数据库共享连接"""
+"""向量存储 — 基于 sqlite-vec（LEGACY，逐步弃用）
+
+Phase 2 / search-optimize: 此模块对应旧的 vec_chunks 索引路径。
+新路径使用 BlockStore + vec_blocks。设置 rag.legacy_chunk_vector=False
+可完全停止写入 vec_chunks。
+"""
 import logging
 import struct
 import threading
+import warnings
 
 import sqlite_vec
 
