@@ -172,7 +172,7 @@ def test_search_basic():
     """search 基本功能"""
     print("\n" + "-" * 50)
     print("7. search 基本检索")
-    r = _request("tools/call", {"name": "search", "arguments": {"query": "企微运营", "limit": 3}})
+    r = _request("tools/call", {"name": "search", "arguments": {"query": "企微运营", "top_k": 3}})
     data = extract(r)
     ok = isinstance(data, list) and len(data) > 0
     return check(f"search('企微运营') result_count={len(data) if isinstance(data, list) else 0}", ok)
