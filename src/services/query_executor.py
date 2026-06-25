@@ -183,9 +183,35 @@ class QueryExecutor:
         return "", [], False
 
     def _compile_fulltext(self, condition: Condition) -> tuple[str, list, bool]:
-        from src.utils.chinese_tokenizer import sanitize_fts_query
-        safe_query = sanitize_fts_query(condition.value)
-        return "knowledge_fts MATCH ?", [safe_query], True
+        """编译 fulltext 条件。
+
+        BUG#1 修复：knowledge_fts 用 unicode61 tokenizer，对 CJK 分词有限
+        （单字/CJK 词组在 FTS5 MATCH 下命中不稳定，见 db.search_knowledge 的
+        多策略召回）。这里对 query 做 jieba 分词后用 LIKE OR 逐词匹配 title/
+        content，保证多词 CJK（如 "CDN 教材"）和单词都能命中，无需依赖 FTS JOIN。
+        """
+        import jieba
+
+        raw = str(condition.value)
+        terms = [w.strip() for w in jieba.cut(raw) if w.strip()]
+        if not terms:
+            terms = [raw]
+        # 同时保留原始整串，覆盖 query 恰好是内容子串的情况
+        if raw.strip() and raw.strip() not in terms:
+            terms.append(raw.strip())
+
+        # 每词 (title LIKE ? OR content LIKE ?)，词间 OR；% _ 转义防通配符注入
+        escaped_terms = []
+        for t in terms:
+            esc = t.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            escaped_terms.append(esc)
+        or_clauses = " OR ".join(
+            ["(ki.title LIKE ? ESCAPE '\\' OR ki.content LIKE ? ESCAPE '\\')"] * len(escaped_terms)
+        )
+        params: list = []
+        for esc in escaped_terms:
+            params.extend([f"%{esc}%", f"%{esc}%"])
+        return f"({or_clauses})", params, False
 
     def _compile_title(self, condition: Condition) -> tuple[str, list, bool]:
         value = str(condition.value)

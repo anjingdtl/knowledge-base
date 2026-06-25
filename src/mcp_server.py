@@ -940,6 +940,9 @@ def delete(item_id: str, dry_run: bool = False) -> dict:
         "content_preview": _content_preview(existing.get("content", "")),
         "source_type": existing.get("source_type", ""),
         "file_type": existing.get("file_type", ""),
+        # BUG#6 修复：快照保留 quality，供 restore/undo 回填（防止恢复后 quality 丢失）
+        "quality": existing.get("quality", ""),
+        "quality_score": existing.get("quality_score"),
     }
 
     if dry_run:
@@ -1030,6 +1033,32 @@ def restore_knowledge(item_id: str) -> dict:
     except Exception as exc:
         logger.warning("MD restore from trash failed for %s: %s", item_id, exc)
         restored_file = None
+
+    # BUG#6 修复：恢复后回填 quality（若当前为空但删除快照中有值）。
+    # 软删本身不动 quality，但某些路径可能已清空；从最近 delete 操作日志的
+    # before 快照恢复，保证有值不丢失。空值属正常不强制回填。
+    try:
+        current = container.db.get_knowledge(item_id, include_deleted=False) or {}
+        if not current.get("quality"):
+            log_row = container.db.get_conn().execute(
+                """SELECT snapshot_before FROM operation_logs
+                   WHERE target_type = 'knowledge' AND target_id = ?
+                     AND operation = 'delete'
+                   ORDER BY created_at DESC LIMIT 1""",
+                (item_id,),
+            ).fetchone()
+            if log_row and log_row["snapshot_before"]:
+                import json as _json6
+                snap = _json6.loads(log_row["snapshot_before"]) \
+                    if isinstance(log_row["snapshot_before"], str) \
+                    else log_row["snapshot_before"]
+                snap_quality = snap.get("quality") if isinstance(snap, dict) else None
+                if snap_quality:
+                    container.db.update_knowledge(
+                        item_id, quality=snap_quality
+                    )
+    except Exception as exc:
+        logger.debug("quality backfill on restore skipped: %s", exc)
 
     log_id = _op_log("restore", "knowledge", item_id, after={
         "restored_from": "soft_delete",
@@ -1672,13 +1701,23 @@ def cancel_job(job_id: str) -> dict:
     experimental=True,
 )
 @_heartbeat
-def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None) -> dict:
+def save_to_wiki(
+    question: str,
+    answer: str,
+    source_ids: list[str] | None = None,
+    auto_publish: bool | None = None,
+    enhance: bool = True,
+) -> dict:
     """将问答保存为 Wiki 页面。
 
     Args:
         question: 用户的问题
         answer: AI 的回答
         source_ids: 引用的知识条目 ID 列表
+        auto_publish: 是否直接发布（True=published, False=draft 走审核流）。
+            None（默认）沿用 Config 'wiki.auto_publish' 配置（默认 True）。
+        enhance: 是否调用 LLM 增强内容（补背景、规范化、生成摘要/标签）。
+            False 时直接用原始 answer 存储。默认 True。
     """
     _guard = _check_write_policy("save_to_wiki")
     if _guard:
@@ -1687,7 +1726,9 @@ def save_to_wiki(question: str, answer: str, source_ids: list[str] | None = None
         return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
     container = _get_container()
     compiler = container.wiki_compiler
-    page_id = compiler.save_answer(question, answer, source_ids)
+    page_id = compiler.save_answer(
+        question, answer, source_ids, auto_publish=auto_publish, enhance=enhance
+    )
     if page_id:
         log_id = _op_log("wiki_create", "wiki_page", page_id, after={
             "question": question[:100], "source_ids": source_ids,
@@ -1925,6 +1966,45 @@ def wiki_restore_version(page_id: str, version: int) -> dict:
     return ok({"success": False, "message": result.message, "page_id": page_id})
 
 
+@_define_tool(
+    name="delete_wiki_page",
+    description="删除 Wiki 页面及其链接与操作日志（硬删除，不可恢复）。",
+    annotations={"destructiveHint": True},
+    group="wiki", side_effect="destructive",
+    experimental=True,
+)
+@_heartbeat
+def delete_wiki_page(page_id: str) -> dict:
+    """删除 Wiki 页面（BUG#12：补齐 wiki 删除能力，此前仅 knowledge 可删）。
+
+    Args:
+        page_id: 要删除的 Wiki 页面 ID
+    """
+    _guard = _check_write_policy("delete_wiki_page")
+    if _guard:
+        return _guard
+    container = _get_container()
+    existing = container.db.get_wiki_page(page_id)
+    if not existing:
+        return fail(
+            ErrorCode.NOT_FOUND,
+            f"Wiki 页面不存在: {page_id}",
+            page_id=page_id,
+        )
+    deleted_page = {
+        "title": existing.get("title", ""),
+        "status": existing.get("status", ""),
+    }
+    log_id = _op_log("delete", "wiki_page", page_id, before=deleted_page)
+    container.wiki_repo.delete_page(page_id)
+    envelope = ok({
+        "page_id": page_id,
+        "deleted": True,
+        "message": "Wiki 页面已删除",
+    })
+    return attach_operation_id(envelope, log_id)
+
+
 # ---- Async Jobs MCP Tools ----
 
 @_define_tool(
@@ -2055,10 +2135,13 @@ def structured_query(
         executor = QueryExecutor(db=container.db)
         results = executor.execute(spec)
         results_list = list(results) if not isinstance(results, list) else results
-        has_more = len(results_list) == limit
+        # BUG#2 修复：meta 的 limit 与 has_more 应基于实际生效的 spec.limit
+        # （DSL limit 与 tool limit 的较小值），而非 tool 参数 limit(默认100)。
+        effective_limit = spec.limit
+        has_more = len(results_list) == effective_limit
         return ok(
             results_list,
-            limit=limit,
+            limit=effective_limit,
             offset=offset,
             next_offset=offset + len(results_list) if has_more else None,
             truncated=has_more,
@@ -3115,6 +3198,7 @@ _TOOL_METADATA = {
     "wiki_workflow_history":{"group": "wiki", "side_effect": "read",  "requires_confirmation": False, "short_desc": "工作流历史"},
     "wiki_list_versions":   {"group": "wiki", "side_effect": "read",  "requires_confirmation": False, "short_desc": "版本列表"},
     "wiki_restore_version": {"group": "wiki", "side_effect": "write", "requires_confirmation": False, "short_desc": "恢复版本"},
+    "delete_wiki_page":     {"group": "wiki", "side_effect": "destructive","requires_confirmation": True,  "short_desc": "删除 Wiki 页面"},
     # --- graph.* ---
     "graph_traverse":       {"group": "graph", "side_effect": "read", "requires_confirmation": False, "short_desc": "图遍历"},
     # --- ops.* ---
@@ -3135,6 +3219,7 @@ _TOOL_METADATA = {
     "search_decisions":     {"group": "memory", "side_effect": "read",  "requires_confirmation": False, "short_desc": "搜索决策"},
     "summarize_recent_changes":{"group": "memory", "side_effect": "read","requires_confirmation": False, "short_desc": "变更总结"},
     "extract_tasks_from_doc":{"group": "memory", "side_effect": "write", "requires_confirmation": False, "short_desc": "提取任务"},
+    "delete_memory":         {"group": "memory", "side_effect": "destructive","requires_confirmation": True, "short_desc": "删除记忆"},
 }
 
 # 工具分组别名映射: namespaced_name → original_function_name
@@ -3176,6 +3261,7 @@ _TOOL_ALIASES = {
     "wiki.history": "wiki_workflow_history",
     "wiki.list_versions": "wiki_list_versions",
     "wiki.restore_version": "wiki_restore_version",
+    "wiki.delete": "delete_wiki_page",
     # graph.*
     "graph.traverse": "graph_traverse",
     # ops.* — Operations
@@ -3195,6 +3281,7 @@ _TOOL_ALIASES = {
     "memory.search_decisions": "search_decisions",
     "memory.summarize_changes": "summarize_recent_changes",
     "memory.extract_tasks": "extract_tasks_from_doc",
+    "memory.delete": "delete_memory",
 }
 
 
@@ -3329,6 +3416,62 @@ def extract_tasks_from_doc(content: str) -> dict:
         return _guard
     result = _get_container().agent_memory.extract_tasks_from_doc(content)
     return ok(result, tasks_found=result.get("total_found", 0), stored=result.get("stored", 0))
+
+
+@_define_tool(
+    name="delete_memory",
+    description="删除 agent_memory 记忆条目（按 item_id 或 key，二选一）。",
+    annotations={"destructiveHint": True},
+    group="memory", side_effect="destructive",
+)
+@_heartbeat
+def delete_memory(item_id: str | None = None, key: str | None = None) -> dict:
+    """删除记忆条目（BUG#12：补齐 memory 删除能力）。
+
+    Args:
+        item_id: 要删除的记忆条目 ID（与 key 二选一）
+        key: 要删除的记忆 key（与 item_id 二选一）
+    """
+    _guard = _check_write_policy("delete_memory")
+    if _guard:
+        return _guard
+    if not item_id and not key:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "delete_memory 需要 item_id 或 key 参数（二选一）",
+        )
+    container = _get_container()
+    repo = container.agent_memory_repo
+    if item_id:
+        existing = repo.get_by_id(item_id)
+        if not existing:
+            return fail(
+                ErrorCode.NOT_FOUND,
+                f"记忆条目不存在: {item_id}",
+                item_id=item_id,
+            )
+        deleted_meta = {"key": existing.get("key", ""), "category": existing.get("category", "")}
+        log_id = _op_log("delete", "agent_memory", item_id, before=deleted_meta)
+        deleted = repo.delete(item_id)
+        envelope = ok({
+            "item_id": item_id, "deleted": deleted, "message": "记忆条目已删除",
+        })
+        return attach_operation_id(envelope, log_id)
+    else:
+        existing = repo.get_by_key(key)
+        if not existing:
+            return fail(
+                ErrorCode.NOT_FOUND,
+                f"记忆条目不存在（key={key}）",
+                key=key,
+            )
+        deleted_meta = {"key": key, "category": existing.get("category", "")}
+        log_id = _op_log("delete", "agent_memory", existing["id"], before=deleted_meta)
+        deleted = repo.delete_by_key(key)
+        envelope = ok({
+            "key": key, "deleted": deleted, "message": "记忆条目已删除",
+        })
+        return attach_operation_id(envelope, log_id)
 
 
 

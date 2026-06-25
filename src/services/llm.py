@@ -163,6 +163,54 @@ class LLMService:
             if not silent:
                 _notify_status("idle")
 
+    def chat_with_usage(self, messages: list[dict], silent: bool = False,
+                        max_tokens_override: int | None = None,
+                        timeout: float | None = None) -> tuple[str, dict]:
+        """同 chat()，但额外返回 token 用量。
+
+        BUG#9 修复：chat() 只返回 content，丢弃了 response.usage。
+        本方法保留 usage（prompt_tokens/completion_tokens/total_tokens），
+        供 rag_pipeline 在 trace 中记录 LLM 阶段的 token 消耗。
+
+        Returns:
+            (content, usage_dict) — usage_dict 含 prompt_tokens/
+            completion_tokens/total_tokens，API 未返回时为空 dict。
+        """
+        if not silent:
+            _notify_status("running", "LLM 推理")
+        try:
+            client = self._get_client()
+            model = self._cfg("llm.model", "")
+            temperature = self._cfg("llm.temperature", 0.7)
+            max_tokens = max_tokens_override or self._cfg("llm.max_tokens", 2048)
+            kwargs: dict = {
+                "model": model,
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+            }
+            if timeout is not None:
+                kwargs["timeout"] = timeout
+            response = client.chat.completions.create(**kwargs)
+            content = response.choices[0].message.content or ""
+            usage = {}
+            u = getattr(response, "usage", None)
+            if u is not None:
+                usage = {
+                    "prompt_tokens": getattr(u, "prompt_tokens", 0) or 0,
+                    "completion_tokens": getattr(u, "completion_tokens", 0) or 0,
+                    "total_tokens": getattr(u, "total_tokens", 0) or 0,
+                }
+            return content, usage
+        except Exception as e:
+            message = self._format_error_with_context(e)
+            if not silent:
+                _notify_status("error", message[:100])
+            raise RuntimeError(message) from e
+        finally:
+            if not silent:
+                _notify_status("idle")
+
     def chat_stream(self, messages: list[dict], silent: bool = False, max_tokens_override: int | None = None):
         if not silent:
             _notify_status("running", "LLM 流式推理")

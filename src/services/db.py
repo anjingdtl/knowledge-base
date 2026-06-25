@@ -4,7 +4,7 @@ import logging
 import sqlite3
 import threading
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -1386,12 +1386,16 @@ class Database(metaclass=_DatabaseMeta):
         if not safe_query:
             return []
         conn = self.get_conn()
+        # BUG#13 修复：过滤软删条目的 block，避免"未知"孤儿泄漏。
+        # LEFT JOIN：无父级记录的 block（历史孤儿）仍可搜，仅排除父级已软删的。
         rows = conn.execute(
             """SELECT b.id, b.page_id, b.content, b.block_type, b.properties,
                       bf.rank
                FROM block_fts bf
                JOIN blocks b ON b.id = bf.block_id
+               LEFT JOIN knowledge_items ki ON ki.id = b.page_id
                WHERE block_fts MATCH ?
+                 AND (ki.id IS NULL OR ki.deleted_at IS NULL)
                ORDER BY bf.rank
                LIMIT ?""",
             (safe_query, limit),
@@ -1425,7 +1429,9 @@ class Database(metaclass=_DatabaseMeta):
                                       bf.rank
                                FROM block_fts bf
                                JOIN blocks b ON b.id = bf.block_id
+                               LEFT JOIN knowledge_items ki ON ki.id = b.page_id
                                WHERE block_fts MATCH ?
+                                 AND (ki.id IS NULL OR ki.deleted_at IS NULL)
                                ORDER BY bf.rank
                                LIMIT ?""",
                             (mixed_query, limit),
@@ -1613,10 +1619,14 @@ class Database(metaclass=_DatabaseMeta):
             return hydrated
 
         try:
+            # BUG#13 修复：LEFT JOIN knowledge_items 过滤软删条目（保留历史孤儿 chunk）
             rows = conn.execute(
                 """SELECT cf.chunk_id, cf.knowledge_id, rank as fts_rank
                    FROM chunk_fts cf
+                   JOIN knowledge_chunks kc ON kc.id = cf.chunk_id
+                   LEFT JOIN knowledge_items ki ON ki.id = kc.knowledge_id
                    WHERE chunk_fts MATCH ?
+                     AND (ki.id IS NULL OR ki.deleted_at IS NULL)
                    ORDER BY fts_rank LIMIT ?""",
                 (safe_query, limit),
             ).fetchall()
@@ -1630,7 +1640,10 @@ class Database(metaclass=_DatabaseMeta):
                     extra_rows = conn.execute(
                         """SELECT cf.chunk_id, cf.knowledge_id, rank as fts_rank
                            FROM chunk_fts cf
+                           JOIN knowledge_chunks kc ON kc.id = cf.chunk_id
+                           LEFT JOIN knowledge_items ki ON ki.id = kc.knowledge_id
                            WHERE chunk_fts MATCH ?
+                             AND (ki.id IS NULL OR ki.deleted_at IS NULL)
                            ORDER BY fts_rank LIMIT ?""",
                         (mixed_query, limit),
                     ).fetchall()
@@ -2061,6 +2074,33 @@ class Database(metaclass=_DatabaseMeta):
         ).fetchone()
         conn.commit()
         return dict(row) if row else None
+
+    def reclaim_stuck_jobs(self, timeout_hours: int = 6) -> int:
+        """回收僵尸任务：status='running' 且 started_at 早于 timeout 的任务回退为 pending。
+
+        BUG#8 修复：claim_next_pending_job 只认 'pending'，进程崩溃后遗留在
+        'running'（或历史非法 'processing'）状态的任务永不被回收。Worker 启动时
+        调用本方法清理上次进程遗留的僵尸任务，使其可被重新认领执行。
+
+        Args:
+            timeout_hours: 认定僵尸的超时阈值（小时）
+
+        Returns:
+            被回退为 pending 的任务数
+        """
+        cutoff = (datetime.now() - timedelta(hours=timeout_hours)).isoformat()
+        conn = self.get_conn()
+        # 含历史非法状态 'processing'，一并回收
+        cursor = conn.execute(
+            """UPDATE async_jobs
+               SET status = 'pending', started_at = NULL
+               WHERE status IN ('running', 'processing')
+                 AND started_at IS NOT NULL
+                 AND started_at < ?""",
+            (cutoff,),
+        )
+        conn.commit()
+        return cursor.rowcount
 
     def cancel_job(self, job_id: str) -> bool:
         """取消任务"""

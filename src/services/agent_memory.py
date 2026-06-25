@@ -9,6 +9,8 @@ import re
 from datetime import datetime, timedelta
 from typing import cast
 
+from src.utils.llm_text import strip_think
+
 logger = logging.getLogger(__name__)
 
 
@@ -196,6 +198,8 @@ class AgentMemoryService:
         try:
             resp = self._llm.chat([{"role": "user", "content": prompt}])
             text = resp.get("content", resp) if isinstance(resp, dict) else str(resp)
+            # BUG#5 修复：剥离 <think> 思维链，避免污染 JSON 解析
+            text = strip_think(text)
             # 尝试提取 JSON
             text = text.strip()
             if text.startswith("```"):
@@ -278,7 +282,9 @@ class AgentMemoryService:
 时间范围: 最近 {stats['since_hours']} 小时
 """
         resp = self._llm.chat([{"role": "user", "content": prompt}])
-        return resp.get("content", resp) if isinstance(resp, dict) else str(resp)
+        text = resp.get("content", resp) if isinstance(resp, dict) else str(resp)
+        # BUG#5 修复：剥离 <think> 思维链，避免泄漏到 summary
+        return strip_think(text)
 
     def _build_basic_summary(self, stats: dict) -> str:
         """构建基础摘要（不需要 LLM）"""

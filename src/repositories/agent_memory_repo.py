@@ -133,11 +133,31 @@ class AgentMemoryRepository:
 
     def search_fts(self, query: str, category: str | None = None,
                    limit: int = 10) -> list[dict]:
-        """FTS5 全文搜索"""
-        params: list = [query, limit]
+        """FTS5 全文搜索
+
+        BUG#4 修复：agent_memory_fts 用 unicode61 tokenizer（不切中文），
+        raw query 直接喂 MATCH 会在 CJK 多词/特殊字符下抛异常或返空。
+        这里复用 knowledge 路径同款 tokenizer + sanitize 流程：先 jieba 全模式
+        分词，再 sanitize 成 OR 词项 FTS 查询。
+        """
+        from src.utils.chinese_tokenizer import (
+            sanitize_fts_query,
+            tokenize_chinese_full,
+            tokenize_mixed_query_terms,
+        )
+
+        tokenized_query = tokenize_chinese_full(query)
+        if not tokenized_query.strip():
+            return []
+        safe_query = sanitize_fts_query(tokenized_query, is_tokenized=True)
+        if not safe_query:
+            return []
+
         cat_clause = "AND m.category = ?" if category else ""
+        params: list = [safe_query]
         if category:
-            params.insert(1, category)
+            params.append(category)
+        params.append(limit)
 
         rows = self._conn().execute(
             f"""SELECT m.*, agent_memory_fts.rank
@@ -148,26 +168,74 @@ class AgentMemoryRepository:
                 LIMIT ?""",
             params,
         ).fetchall()
-        return [dict(r) for r in rows]
+        results = [dict(r) for r in rows]
+
+        # CJK+ASCII 混合术语兜底（与 db.search_knowledge 同款策略）
+        if len(results) < limit:
+            mixed_terms = tokenize_mixed_query_terms(query)
+            if mixed_terms:
+                mixed_query = sanitize_fts_query(" ".join(mixed_terms), is_tokenized=True)
+                if mixed_query and mixed_query != safe_query:
+                    m_params: list = [mixed_query]
+                    if category:
+                        m_params.append(category)
+                    m_params.append(limit)
+                    try:
+                        extra_rows = self._conn().execute(
+                            f"""SELECT m.*, agent_memory_fts.rank
+                                FROM agent_memory_fts
+                                JOIN agent_memory m ON m.rowid = agent_memory_fts.rowid
+                                WHERE agent_memory_fts MATCH ? {cat_clause}
+                                ORDER BY agent_memory_fts.rank
+                                LIMIT ?""",
+                            m_params,
+                        ).fetchall()
+                        seen = {r["id"] for r in results}
+                        for r in extra_rows:
+                            if dict(r)["id"] not in seen:
+                                results.append(dict(r))
+                    except Exception:
+                        pass
+        return results
 
     def search_like(self, query: str, category: str | None = None,
                     limit: int = 10) -> list[dict]:
-        """LIKE 模糊搜索（FTS 不可用时的 fallback）"""
-        pattern = f"%{query}%"
+        """LIKE 模糊搜索（FTS 不可用时的 fallback）
+
+        BUG#4 修复：原实现 `pattern = f"%{query}%"` 做整串连续子串匹配，
+        多词组合（如 "稳定性测试 标记"）在 value 中非连续出现时即漏召回。
+        改为 jieba 分词后逐词 OR：任一词在 key 或 value 命中即返回。
+        """
+        import jieba
+
+        # 分词并保留有意义的词（去掉单字噪声与空白）
+        terms = [w.strip() for w in jieba.cut(query) if w.strip() and len(w.strip()) >= 1]
+        # 退路：分词为空时回退到原始整串（保留旧行为）
+        if not terms:
+            terms = [query]
+        # 同时保留原始 query 整串，覆盖 query 恰好是 value 子串的情况
+        original = query.strip()
+        if original and original not in terms:
+            terms.append(original)
+
+        cat_clause = "AND category = ?" if category else ""
+        # 每词生成 (key LIKE ? OR value LIKE ?)，词间用 OR 连接
+        or_clauses = " OR ".join(
+            ["(key LIKE ? OR value LIKE ?)"] * len(terms)
+        )
+        params: list = []
+        for term in terms:
+            params.extend([f"%{term}%", f"%{term}%"])
         if category:
-            rows = self._conn().execute(
-                """SELECT * FROM agent_memory
-                   WHERE (key LIKE ? OR value LIKE ?) AND category = ?
-                   ORDER BY updated_at DESC LIMIT ?""",
-                (pattern, pattern, category, limit),
-            ).fetchall()
-        else:
-            rows = self._conn().execute(
-                """SELECT * FROM agent_memory
-                   WHERE key LIKE ? OR value LIKE ?
-                   ORDER BY updated_at DESC LIMIT ?""",
-                (pattern, pattern, limit),
-            ).fetchall()
+            params.append(category)
+        params.append(limit)
+
+        rows = self._conn().execute(
+            f"""SELECT * FROM agent_memory
+                WHERE ({or_clauses}) {cat_clause}
+                ORDER BY updated_at DESC LIMIT ?""",
+            params,
+        ).fetchall()
         return [dict(r) for r in rows]
 
     # ---- 统计 ----

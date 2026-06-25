@@ -92,16 +92,24 @@ class AsyncWorker:
         """启动 Worker"""
         if self._running:
             return
-        # 确保所有任务 handler 已注册。src.services.async_tasks 在模块导入时
-        # 调用 register_all_tasks() 注册 file_ingest / url_ingest / reindex_all
-        # 等 handler，但 worker 的导入链不会触及它；若不显式触发，worker
-        # 认领任务后会因 "No handler for <job_type>" 直接置为 FAILED。
-        # 此处延迟导入：async_tasks 顶部又导入了 async_worker，顶部 import
-        # 会形成循环，必须在运行期（async_worker 已加载完毕后）执行。
+        # BUG#7 修复：显式调用 register_all_tasks，而非依赖模块导入副作用。
+        # 旧实现 `import src.services.async_tasks` 包在 bare except 里：
+        # 任何导入失败被静默吞掉，导致 TaskRegistry._handlers 永远为空，
+        # worker 认领的所有任务都因 "No handler for <job_type>" 置为 FAILED。
+        # 改为显式调用并 fail-fast：注册失败应中止启动，而非吞掉后让任务全失败。
+        # 此处延迟导入：async_tasks 顶部又导入 async_worker，顶层 import 会
+        # 形成循环，必须在运行期（async_worker 已加载完毕后）执行。
+        from src.services.async_tasks import register_all_tasks
+        register_all_tasks()
+        # BUG#8 修复：启动时回收上次进程崩溃遗留的僵尸任务（status='running'/
+        # 'processing' 且 started_at 早于阈值），使其可被重新认领执行。
         try:
-            import src.services.async_tasks  # noqa: F401 — 触发 register_all_tasks
-        except Exception as exc:
-            logger.error("Failed to register async task handlers: %s", exc)
+            from src.services.db import Database
+            reclaimed = Database.reclaim_stuck_jobs()
+            if reclaimed:
+                logger.info("Reclaimed %d stuck job(s) on worker start", reclaimed)
+        except Exception:
+            logger.error("Failed to reclaim stuck jobs on start", exc_info=True)
         self._running = True
         # 启动主调度线程
         self._thread = threading.Thread(target=self._run_loop, daemon=True, name="AsyncWorker-Main")
@@ -159,6 +167,15 @@ class AsyncWorker:
     def _execute_job(self, job: AsyncJob):
         """执行单个任务"""
         handler = TaskRegistry.get_handler(job.job_type)
+        if not handler:
+            # BUG#7 加固：长运行 worker 在极端情况下可能丢失注册，这里兜底
+            # 再注册一次；仍无 handler 才真正置 FAILED。
+            try:
+                from src.services.async_tasks import register_all_tasks
+                register_all_tasks()
+            except Exception:
+                logger.error("Re-registration of task handlers failed", exc_info=True)
+            handler = TaskRegistry.get_handler(job.job_type)
         if not handler:
             logger.error(f"No handler registered for job type: {job.job_type}")
             AsyncTaskService.update_status(job.id, JobStatus.FAILED,

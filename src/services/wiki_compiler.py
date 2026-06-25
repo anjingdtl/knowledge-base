@@ -277,26 +277,49 @@ class WikiCompiler:
 
         return {"cleaned": cleaned, "source_ids_removed": total_removed, "details": details}
 
-    def save_answer(self, question: str, answer: str, source_ids: list[str] | None = None) -> str | None:
-        """将问答保存为 Wiki 页面"""
+    def save_answer(
+        self,
+        question: str,
+        answer: str,
+        source_ids: list[str] | None = None,
+        auto_publish: bool | None = None,
+        enhance: bool = True,
+    ) -> str | None:
+        """将问答保存为 Wiki 页面。
+
+        BUG#10：auto_publish（None=沿用 Config 'wiki.auto_publish' 默认 True）；
+                False 时创建为 draft，可走 submit_for_review 审核流。
+        BUG#11：enhance=False 时跳过 LLM 增强，直接用原始 answer 存储
+                （title 取 question 前 N 字，tags 空，concept_summary 空）。
+        """
         min_len = Config.get("wiki.query_save_min_length", 100)
         if len(answer) < min_len:
             return None
 
-        prompt = QUERY_SAVE_PROMPT.format(question=question, answer=answer)
-        try:
-            response = self._llm.chat([{"role": "user", "content": prompt}], silent=True)
-        except Exception as e:
-            logger.warning("Wiki save_answer LLM call failed: %s", e)
-            return None
+        # BUG#11：enhance=False → 跳过 LLM，直接存原始 answer
+        if not enhance:
+            title = question.strip().replace("\n", " ")[:self.QUERY_SAVE_TITLE_TRUNCATE] or "未命名"
+            result = {
+                "title": title,
+                "content": answer,
+                "tags": [],
+                "summary": "",
+            }
+        else:
+            prompt = QUERY_SAVE_PROMPT.format(question=question, answer=answer)
+            try:
+                response = self._llm.chat([{"role": "user", "content": prompt}], silent=True)
+            except Exception as e:
+                logger.warning("Wiki save_answer LLM call failed: %s", e)
+                return None
 
-        result = self._parse_json_response(response)
-        if not isinstance(result, dict) or not result.get("title"):
-            return None
+            result = self._parse_json_response(response)
+            if not isinstance(result, dict) or not result.get("title"):
+                return None
 
-        # 根据配置决定初始状态
-        auto_publish = Config.get("wiki.auto_publish", True)
-        initial_status = "published" if auto_publish else "draft"
+        # BUG#10：显式 auto_publish 优先于 Config 默认
+        _auto = auto_publish if auto_publish is not None else Config.get("wiki.auto_publish", True)
+        initial_status = "published" if _auto else "draft"
 
         page = {
             "id": str(uuid.uuid4()),

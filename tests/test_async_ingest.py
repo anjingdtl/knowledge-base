@@ -531,3 +531,154 @@ class TestBackwardCompat:
         from src.mcp_server import get_async_job
         result = get_async_job(job_id=job_id)
         assert result["ok"] is True
+
+
+# ---------------------------------------------------------------------------
+# 10) 第6轮 BUG#7 回归 — handler 显式注册（不靠 import 副作用）
+# ---------------------------------------------------------------------------
+
+class TestExplicitHandlerRegistration:
+    """BUG#7：start() 应显式调用 register_all_tasks，而非依赖被 bare except
+    吞掉的 import。注册失败应 fail-fast，handler 必存在。"""
+
+    def test_register_all_tasks_restores_handlers(self, setup_db):
+        """清空 _handlers 后调 register_all_tasks，file_ingest/url_ingest 应恢复。"""
+        from src.services.async_tasks import register_all_tasks
+
+        saved = dict(TaskRegistry._handlers)
+        try:
+            TaskRegistry._handlers.clear()
+            # 模拟「worker 启动前 handler 未注册」的生产场景
+            assert TaskRegistry.get_handler("file_ingest") is None
+            assert TaskRegistry.get_handler("url_ingest") is None
+
+            register_all_tasks()  # start() 现在显式调用此函数
+
+            assert TaskRegistry.get_handler("file_ingest") is not None
+            assert TaskRegistry.get_handler("url_ingest") is not None
+            assert TaskRegistry.get_handler("reindex_all") is not None
+        finally:
+            TaskRegistry._handlers.clear()
+            TaskRegistry._handlers.update(saved)
+
+    def test_worker_start_registers_handlers_explicitly(self, setup_db):
+        """AsyncWorker.start() 应显式注册 handler，即使 _handlers 被清空。"""
+        from src.services.async_worker import AsyncWorker
+        from src.services.async_tasks import register_all_tasks
+
+        saved = dict(TaskRegistry._handlers)
+        worker = AsyncWorker()
+        try:
+            TaskRegistry._handlers.clear()
+            assert TaskRegistry.get_handler("file_ingest") is None
+
+            worker.start()  # 内部显式调 register_all_tasks
+            # start 已把 _running=True 并启动线程；立即停止
+            worker.stop()
+
+            assert TaskRegistry.get_handler("file_ingest") is not None
+            assert TaskRegistry.get_handler("url_ingest") is not None
+        finally:
+            worker.stop()
+            TaskRegistry._handlers.clear()
+            TaskRegistry._handlers.update(saved)
+
+
+# ---------------------------------------------------------------------------
+# 11) 第6轮 BUG#8 回归 — reindex checkpoint 清理 + stuck-job reaper
+# ---------------------------------------------------------------------------
+
+class TestReclaimStuckJobs:
+    """BUG#8：回收僵尸任务（status='running'/'processing' 且 started_at 超时）。"""
+
+    def test_reclaim_stuck_running_job(self, setup_db):
+        """started_at 早于阈值的 running 任务应被回退为 pending。"""
+        from datetime import datetime, timedelta
+        from src.services.async_task import AsyncTaskService
+
+        # 创建一个 pending 任务后更新为 running
+        job_id = AsyncTaskService.create_job("file_ingest", {"file_path": "/tmp/x.txt"})
+        conn = Database.get_conn()
+        old_started = (datetime.now() - timedelta(hours=12)).isoformat()
+        conn.execute(
+            "UPDATE async_jobs SET status = 'running', started_at = ? WHERE id = ?",
+            (old_started, job_id),
+        )
+        conn.commit()
+
+        reclaimed = Database.reclaim_stuck_jobs(timeout_hours=6)
+        assert reclaimed >= 1
+
+        row = conn.execute(
+            "SELECT status, started_at FROM async_jobs WHERE id = ?", (job_id,)
+        ).fetchone()
+        assert row["status"] == "pending"
+        assert row["started_at"] is None
+
+    def test_reclaim_keeps_recent_running_job(self, setup_db):
+        """started_at 在阈值内的 running 任务不应被回收。"""
+        from datetime import datetime, timedelta
+        from src.services.async_task import AsyncTaskService
+
+        job_id = AsyncTaskService.create_job("file_ingest", {"file_path": "/tmp/y.txt"})
+        conn = Database.get_conn()
+        # started_at 为 1 小时前，阈值 6 小时 → 不应回收
+        recent_started = (datetime.now() - timedelta(hours=1)).isoformat()
+        conn.execute(
+            "UPDATE async_jobs SET status = 'running', started_at = ? WHERE id = ?",
+            (recent_started, job_id),
+        )
+        conn.commit()
+
+        Database.reclaim_stuck_jobs(timeout_hours=6)
+        row = conn.execute(
+            "SELECT status FROM async_jobs WHERE id = ?", (job_id,)
+        ).fetchone()
+        assert row["status"] == "running", "近期 running 任务不应被回收"
+
+    def test_reclaim_processing_historical_status(self, setup_db):
+        """历史非法状态 'processing'（reindex_checkpoint）也应被回收。"""
+        from datetime import datetime, timedelta
+
+        conn = Database.get_conn()
+        old_started = (datetime.now() - timedelta(hours=48)).isoformat()
+        conn.execute(
+            "INSERT INTO async_jobs (id, job_type, status, params, created_at, started_at) "
+            "VALUES (?, 'reindex_all', 'processing', '{}', ?, ?)",
+            ("zombie-processing", datetime.now().isoformat(), old_started),
+        )
+        conn.commit()
+
+        reclaimed = Database.reclaim_stuck_jobs(timeout_hours=6)
+        assert reclaimed >= 1
+
+        row = conn.execute(
+            "SELECT status FROM async_jobs WHERE id = ?", ("zombie-processing",)
+        ).fetchone()
+        assert row["status"] == "pending"
+
+    def test_worker_start_invokes_reaper(self, setup_db):
+        """AsyncWorker.start() 应回收上次进程遗留的僵尸任务。"""
+        from datetime import datetime, timedelta
+        from src.services.async_worker import AsyncWorker
+
+        conn = Database.get_conn()
+        old_started = (datetime.now() - timedelta(hours=24)).isoformat()
+        conn.execute(
+            "INSERT INTO async_jobs (id, job_type, status, params, created_at, started_at) "
+            "VALUES (?, 'file_ingest', 'running', ?, ?, ?)",
+            ("crashed-job", "{}", datetime.now().isoformat(), old_started),
+        )
+        conn.commit()
+
+        worker = AsyncWorker()
+        try:
+            worker.start()
+            worker.stop()
+        finally:
+            worker.stop()
+
+        row = conn.execute(
+            "SELECT status FROM async_jobs WHERE id = ?", ("crashed-job",)
+        ).fetchone()
+        assert row["status"] == "pending", "worker 启动应回收僵尸任务"

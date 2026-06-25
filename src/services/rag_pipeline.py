@@ -135,6 +135,8 @@ class RagContext:
     # Phase 3: trace support
     trace_id: str = field(default_factory=lambda: uuid.uuid4().hex[:16])
     _stage_durations: dict = field(default_factory=dict)
+    # BUG#9: 各阶段 token 用量（{stage_name: {input_tokens, output_tokens}}）
+    _stage_tokens: dict = field(default_factory=dict)
 
 
 # ---- 阶段抽象基类 ----
@@ -338,8 +340,17 @@ class VectorSearchStage(PipelineStage):
             ctx.candidates = unique[:top_k]
 
             if not ctx.candidates:
-                logger.info("Hybrid search returned empty, falling back to knowledge-level FTS")
-                ctx.metadata.setdefault("warnings", []).append("hybrid_search_empty_fallback_to_fts")
+                # BUG#3 文档说明：此为预期容错，非错误。
+                # hybrid（向量+关键词融合）检索为空时，自动降级到 knowledge 级 FTS，
+                # 保证召回不中断。warning 标记 `hybrid_search_empty_fallback_to_fts`
+                # 仅供诊断，检索结果已正常返回（来自 FTS 兜底）。
+                logger.info(
+                    "Hybrid search returned empty — automatically falling back to "
+                    "knowledge-level FTS (benign; recall continues from FTS)"
+                )
+                ctx.metadata.setdefault("warnings", []).append(
+                    "hybrid_search_empty_fallback_to_fts"
+                )
                 try:
                     fts_results = db.search_knowledge(ctx.question, limit=top_k)
                     if fts_results:
@@ -459,7 +470,17 @@ class GenerateStage(PipelineStage):
             if stream:
                 ctx.stream_generator = llm.chat_stream(messages, silent=True)
             else:
-                ctx.answer = strip_think(llm.chat(messages))
+                # BUG#9：用 chat_with_usage 捕获 token 用量，供 trace 记录
+                if hasattr(llm, "chat_with_usage"):
+                    content, usage = llm.chat_with_usage(messages)
+                    ctx.answer = strip_think(content)
+                    if usage:
+                        ctx._stage_tokens["generate"] = {
+                            "input_tokens": usage.get("prompt_tokens", 0),
+                            "output_tokens": usage.get("completion_tokens", 0),
+                        }
+                else:
+                    ctx.answer = strip_think(llm.chat(messages))
         except Exception as e:
             logger.error("LLM generate failed: %s", e)
             ctx.metadata.setdefault("warnings", []).append(f"generate_failed: {e}")
@@ -972,6 +993,13 @@ class RagPipeline:
                             else len(ctx.reranked_results) if name == "rerank"
                             else len(ctx.sources) if name in ("generate", "postprocess")
                             else 0
+                        ),
+                        # BUG#9：从 _stage_tokens 填充 generate 阶段的 token 用量
+                        input_tokens=(
+                            ctx._stage_tokens.get(name, {}).get("input_tokens", 0)
+                        ),
+                        output_tokens=(
+                            ctx._stage_tokens.get(name, {}).get("output_tokens", 0)
                         ),
                     )
                     for name, duration in ctx._stage_durations.items()

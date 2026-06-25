@@ -160,12 +160,16 @@ class BlockStore:
 
         conn = self._get_conn()
         packed = self._pack_embedding(query_embedding)
+        # BUG#13 修复：过滤软删条目的 block，避免"未知"孤儿泄漏。
+        # LEFT JOIN：无父级记录的 block（历史孤儿）仍可搜，仅排除父级已软删的。
         rows = conn.execute(
             """SELECT b.id, b.page_id, b.content, b.block_type, b.properties,
                       vc.distance
                FROM vec_blocks vc
                JOIN blocks b ON b.rowid = vc.rowid
+               LEFT JOIN knowledge_items ki ON ki.id = b.page_id
                WHERE vc.embedding MATCH ? AND k = ?
+                 AND (ki.id IS NULL OR ki.deleted_at IS NULL)
                ORDER BY vc.distance""",
             (packed, top_k),
         ).fetchall()

@@ -47,6 +47,7 @@ ALIASES: dict[str, str] = {
     "wiki.history": "wiki_workflow_history",
     "wiki.list_versions": "wiki_list_versions",
     "wiki.restore_version": "wiki_restore_version",
+    "wiki.delete": "delete_wiki_page",
     "graph.traverse": "graph_traverse",
     "ops.ping": "ping",
     "ops.query_logs": "query_operation_logs",
@@ -65,6 +66,7 @@ ALIASES: dict[str, str] = {
     "memory.search_decisions": "search_decisions",
     "memory.summarize_changes": "summarize_recent_changes",
     "memory.extract_tasks": "extract_tasks_from_doc",
+    "memory.delete": "delete_memory",
 }
 
 

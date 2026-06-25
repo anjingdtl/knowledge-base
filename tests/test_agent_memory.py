@@ -105,6 +105,30 @@ class TestAgentMemoryRepository:
         results = memory_repo.search_like("machine")
         assert len(results) >= 1
 
+    def test_search_fts_multiterm_cjk(self, memory_repo):
+        """BUG#4 回归：多词 CJK 组合应通过 sanitize + jieba 命中"""
+        memory_repo.store(
+            "agent_id",
+            "企微消息应用 AgentID 为 wx-agent-001，Corpid 为 xxx",
+            category="fact",
+        )
+        # "企微 AgentID" 在 value 中非连续出现，raw MATCH 会漏，OR 词项应命中
+        results = memory_repo.search_fts("企微 AgentID")
+        assert len(results) >= 1
+        assert results[0]["key"] == "agent_id"
+
+    def test_search_like_multiterm_cjk(self, memory_repo):
+        """BUG#4 回归：LIKE 多词逐词 OR 应命中非连续 value"""
+        memory_repo.store(
+            "stability_test",
+            "本轮稳定性测试标记：MCP 接口全覆盖（25 轮）",
+            category="task",
+        )
+        # "stability_test 标记" 在 value 中非连续，旧整串 LIKE 会漏
+        results = memory_repo.search_like("stability_test 标记")
+        assert len(results) >= 1
+        assert results[0]["key"] == "stability_test"
+
     def test_recent_changes(self, memory_repo):
         memory_repo.store("k1", "v1", category="fact")
         memory_repo.store("k2", "v2", category="decision")
@@ -144,6 +168,24 @@ class TestAgentMemoryService:
         assert len(results) >= 1
         assert results[0]["key"] == "agent_id"
 
+    def test_recall_after_write_multiterm_query(self, memory_service):
+        """第6轮 BUG#4 回归：写后用多词组合召回（FTS+LIKE 均经 sanitize）不应返空。
+
+        构造 value 中各词非连续出现的场景，覆盖：
+        - search_fts 经 tokenize+sanitize 转 OR 词项
+        - search_like 逐词 OR
+        两条路径都应命中，recall_facts 返回刚写入的记忆。
+        """
+        memory_service.remember_fact(
+            "stability_run6",
+            "本轮稳定性测试标记：MCP 接口 25 轮全覆盖，知识召回准确",
+            category="task",
+        )
+        # 多词组合，value 中并非连续相邻
+        results = memory_service.recall_facts("稳定性测试 MCP")
+        assert len(results) >= 1
+        assert any(r["key"] == "stability_run6" for r in results)
+
     def test_update_project_context(self, memory_service):
         result = memory_service.update_project_context("This is a knowledge base project")
         assert result["key"] == "__project_context"
@@ -174,6 +216,36 @@ class TestAgentMemoryService:
         content = "This is a simple paragraph with no tasks."
         result = memory_service.extract_tasks_from_doc(content)
         assert result["total_found"] == 0
+
+    def test_summarize_strips_think_tags(self, memory_service):
+        """第6轮 BUG#5 回归：LLM 返回的 <think> 思维链不应泄漏到 summary。"""
+        memory_service.remember_fact("bug5_key", "触发统计的值")
+
+        class _ThinkLLM:
+            def chat(self, messages, silent=False):
+                return "<think>让我分析这些数据...</think>近24h新增记忆1条。"
+
+        memory_service._llm = _ThinkLLM()
+        result = memory_service.summarize_recent_changes(since_hours=24)
+        assert "summary" in result
+        # 核心断言：summary 不含 <think> 标签
+        assert "<think>" not in result["summary"]
+        assert "</think>" not in result["summary"]
+        # 正常内容应保留
+        assert "记忆" in result["summary"] or "新增" in result["summary"]
+
+    def test_extract_tasks_strips_think_before_json_parse(self, memory_service):
+        """第6轮 BUG#5 回归：extract_tasks_llm 在 JSON 解析前剥离 <think>。"""
+        class _ThinkLLM:
+            def chat(self, messages, silent=False):
+                # <think> 出现在 JSON 前，会导致 json.loads 失败
+                return '<think>分析任务...</think>\n[{"task":"修复BUG","priority":"high","category":"bug"}]'
+
+        memory_service._llm = _ThinkLLM()
+        result = memory_service.extract_tasks_from_doc("任意文档内容")
+        assert result["method"] == "llm"
+        assert result["total_found"] >= 1
+        assert result["tasks"][0]["task"] == "修复BUG"
 
 
 # ---- Tool Metadata Tests ----

@@ -561,3 +561,59 @@ class TestDryRunNoSideEffects:
         row = Database.get_knowledge(kid, include_deleted=True)
         assert row is not None
         assert row["deleted_at"] is None
+
+
+# ---------------------------------------------------------------------------
+# 10) 第6轮 BUG#6 回归 — restore 后 quality 保留
+# ---------------------------------------------------------------------------
+
+class TestRestorePreservesQuality:
+    """BUG#6：delete 快照保留 quality，restore 后回填，防止 quality 丢失。"""
+
+    def test_restore_preserves_quality(self, mcp_env):
+        """带 quality=ok 的条目 delete→restore 后 quality 仍为 ok。"""
+        from src.mcp_server import create, delete, read, restore_knowledge
+
+        created = create(title="质量保留测试", content="内容")
+        kid = created["data"]["id"]
+
+        # 设置 quality
+        Database.update_knowledge(kid, quality="ok", quality_score=85)
+        before = Database.get_knowledge(kid)
+        assert before["quality"] == "ok"
+        assert before["quality_score"] == 85
+
+        # delete → restore
+        delete(item_id=kid)
+        restore_knowledge(item_id=kid)
+
+        after = Database.get_knowledge(kid)
+        assert after is not None
+        # 核心断言：quality 应保留
+        assert after["quality"] == "ok", (
+            f"restore 后 quality 应保留为 'ok'，实际 {after['quality']!r}"
+        )
+
+    def test_delete_snapshot_includes_quality(self, mcp_env):
+        """delete 的 operation_log 快照应包含 quality 字段。"""
+        import json
+        from src.mcp_server import create, delete
+
+        created = create(title="快照质量测试", content="内容")
+        kid = created["data"]["id"]
+        Database.update_knowledge(kid, quality="good", quality_score=90)
+
+        delete(item_id=kid)
+
+        # 查最近一条 delete 操作日志的 snapshot_before
+        row = Database.get_conn().execute(
+            """SELECT snapshot_before FROM operation_logs
+               WHERE target_type = 'knowledge' AND target_id = ?
+                 AND operation = 'delete'
+               ORDER BY created_at DESC LIMIT 1""",
+            (kid,),
+        ).fetchone()
+        assert row is not None
+        snap = json.loads(row["snapshot_before"]) if row["snapshot_before"] else {}
+        assert "quality" in snap, "删除快照应包含 quality 字段"
+        assert snap["quality"] == "good"

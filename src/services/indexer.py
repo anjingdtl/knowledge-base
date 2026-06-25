@@ -323,7 +323,7 @@ def reindex_all(
             conn = Database.get_conn()
             job_rows = conn.execute(
                 "SELECT params FROM async_jobs WHERE job_type = 'reindex_all' "
-                "AND status IN ('completed', 'processing') ORDER BY created_at DESC"
+                "AND status IN ('completed', 'running', 'processing') ORDER BY created_at DESC"
             ).fetchall()
             for jr in job_rows:
                 try:
@@ -348,6 +348,7 @@ def reindex_all(
     errors = []
     skipped = 0
     processed_this_run: set[str] = set()
+    _completed_cleanly = False  # BUG#8: 用于决定是否清除断点行
 
     try:
         for i, row in enumerate(items):
@@ -390,9 +391,14 @@ def reindex_all(
                 failed += 1
                 errors.append({"id": row["id"], "title": row["title"], "error": str(e)})
                 logger.error(f"Reindex failed for {row.get('title', '')}: {e}")
+        _completed_cleanly = True  # 循环完整跑完（含单 item 失败已计入 failed）
     finally:
         # 切回原始 journal 模式
         _set_journal_mode(old_journal_mode)
+        # BUG#8 修复：reindex 正常跑完时清除断点行（避免 status='processing'、
+        # started_at=NULL 的僵尸记录永久残留）；异常中断时保留断点供下次续传。
+        if _completed_cleanly:
+            _clear_reindex_checkpoint()
 
     return {
         "total": total,
@@ -405,17 +411,36 @@ def reindex_all(
 
 
 def _save_reindex_checkpoint(processed_ids: list[str]):
-    """保存 reindex 断点到 async_jobs 表"""
+    """保存 reindex 断点到 async_jobs 表
+
+    BUG#8 修复：
+    - status 从非法的 'processing' 改为合法枚举 'running'；
+    - 补 started_at（即使忘清也能被 reclaim_stuck_jobs 识别为僵尸）。
+    """
     try:
         conn = Database.get_conn()
         conn.execute(
-            "INSERT OR REPLACE INTO async_jobs (id, job_type, status, params, created_at) "
-            "VALUES ('reindex_checkpoint', 'reindex_all', 'processing', ?, datetime('now'))",
+            "INSERT OR REPLACE INTO async_jobs "
+            "(id, job_type, status, params, created_at, started_at) "
+            "VALUES ('reindex_checkpoint', 'reindex_all', 'running', ?, datetime('now'), datetime('now'))",
             (json.dumps({"processed_ids": processed_ids[-500:]}),),  # 只保留最近500个避免过大
         )
         conn.commit()
     except Exception as e:
         logger.debug(f"Could not save reindex checkpoint: {e}")
+
+
+def _clear_reindex_checkpoint():
+    """清除 reindex 断点行（reindex 正常完成后调用）
+
+    BUG#8 修复：旧实现从不清理 'reindex_checkpoint'，导致永久僵尸记录。
+    """
+    try:
+        conn = Database.get_conn()
+        conn.execute("DELETE FROM async_jobs WHERE id = 'reindex_checkpoint'")
+        conn.commit()
+    except Exception as e:
+        logger.debug(f"Could not clear reindex checkpoint: {e}")
 
 
 class IndexerService:

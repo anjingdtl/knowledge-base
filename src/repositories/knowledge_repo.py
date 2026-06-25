@@ -406,9 +406,15 @@ class KnowledgeRepository:
             return []
         conn = self._conn()
         try:
+            # BUG#13 修复：LEFT JOIN knowledge_items 过滤软删条目（保留历史孤儿 chunk）
             rows = conn.execute(
                 """SELECT cf.chunk_id, cf.knowledge_id, rank as fts_rank
-                   FROM chunk_fts cf WHERE chunk_fts MATCH ? ORDER BY fts_rank LIMIT ?""",
+                   FROM chunk_fts cf
+                   JOIN knowledge_chunks kc ON kc.id = cf.chunk_id
+                   LEFT JOIN knowledge_items ki ON ki.id = kc.knowledge_id
+                   WHERE chunk_fts MATCH ?
+                     AND (ki.id IS NULL OR ki.deleted_at IS NULL)
+                   ORDER BY fts_rank LIMIT ?""",
                 (safe_query, limit),
             ).fetchall()
             results = []

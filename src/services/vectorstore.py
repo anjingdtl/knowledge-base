@@ -121,8 +121,13 @@ class VectorStore:
                  JOIN knowledge_chunks kc ON kc.rowid = vc.rowid"""
         params: list = [packed, top_k]
 
+        # BUG#13 修复：JOIN knowledge_items 过滤软删条目。
+        # knowledge_chunks 有 FK REFERENCES knowledge_items ON DELETE CASCADE，
+        # 故 chunk 必有父级（软删孤儿除外），用 INNER JOIN 安全。
+        sql += """ JOIN knowledge_items ki ON ki.id = kc.knowledge_id
+                  AND ki.deleted_at IS NULL"""
+
         if tags:
-            sql += """ JOIN knowledge_items ki ON ki.id = kc.knowledge_id"""
             tag_conditions = []
             for tag in tags:
                 tag_conditions.append("ki.tags LIKE ?")

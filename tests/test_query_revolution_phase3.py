@@ -309,6 +309,51 @@ def test_query_executor_fulltext_filter():
     assert not any(r["id"] == "p21" for r in results)
 
 
+def test_query_executor_fulltext_multiterm_cjk():
+    """第6轮 BUG#1 回归：CJK 多词 fulltext 应用 OR 词项，而非 phrase 查询。
+
+    {"fulltext": "CDN 教材"} 应返回含两词中任一的条目；旧实现包成 phrase
+    '"CDN 教材"'（要求相邻有序）在 unicode61 索引下不命中。
+    """
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_executor import QueryExecutor
+
+    _insert_page("p-bug1-a", "CDN 配置", content="CDN 加速与缓存策略说明")
+    _insert_page("p-bug1-b", "培训教材", content="运维培训教材与手册")
+    _insert_page("p-bug1-c", "无关内容", content="数据库索引优化")
+
+    executor = QueryExecutor()
+    spec = QuerySpec.from_json({"filter": {"fulltext": "CDN 教材"}})
+    results = executor.execute(spec)
+    result_ids = {r["id"] for r in results}
+    # 两词任一命中即应返回
+    assert "p-bug1-a" in result_ids, "含 'CDN' 的条目应命中"
+    assert "p-bug1-b" in result_ids, "含 '教材' 的条目应命中"
+    assert "p-bug1-c" not in result_ids, "两词均不含的不应返回"
+
+
+def test_structured_query_meta_reports_dsl_limit():
+    """第6轮 BUG#2 回归：meta.limit 应报告 DSL 生效 limit，而非 tool 参数 limit。
+
+    DSL {limit:3} 不传 tool limit 参数（默认100）→ meta.limit==3，且返回 ≤3 条。
+    """
+    from src.mcp_server import structured_query
+
+    # 插入 5 条同 tag 条目，验证 limit=3 生效
+    for i in range(5):
+        _insert_page(f"p-bug2-{i}", f"Limit 测试 {i}", tags=["bug2-limit"])
+
+    dsl = _json.dumps({"filter": {"tag": "bug2-limit"}, "limit": 3})
+    result = structured_query(query_dsl=dsl)  # 不传 tool limit，默认 100
+
+    assert result["ok"] is True
+    assert len(result["data"]) <= 3
+    # 核心：meta.limit 应是 3（DSL limit 与 tool limit 的较小值），而非 100
+    assert result["meta"]["limit"] == 3, (
+        f"meta.limit 应报告 DSL 生效 limit=3，实际 {result['meta']['limit']!r}"
+    )
+
+
 def test_query_executor_sort_and_pagination():
     from src.models.query_dsl import QuerySpec
     from src.services.query_executor import QueryExecutor
