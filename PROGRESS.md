@@ -33,6 +33,30 @@
 ### 待后续关注
 
 - BUG-1 修复后需重新测试 route_query 在结构化场景下的表现
+
+## v1.4.0 BUG-1 补充修复 + MCP 校验测试 — 已完成 (2026-06-25)
+
+Commit: `18b8fd8`
+
+### 测试发现
+MCP 校验测试（`tests/mcp_post_fix_test.py`）发现 `route_query` 始终调用 `AgenticRouter` 而非 `PlanetaryRouter`（见 `mcp_server.py` L2275），因此第一轮仅修改 `route_engine.py` 无法生效。
+
+### 补充修复
+- `agentic_router.py`: 3 处 hybrid fallback 路径（L136-139, L157-159, L175）均追加 fulltext query_spec，与 PlanetaryRouter 保持一致
+
+### 校验结果
+| 校验项 | 状态 | 备注 |
+|--------|------|------|
+| BUG-5 ask_with_query(query=) | ✅ 通过 | 旧参数兼容正常 |
+| BUG-6 structured_query(filters=) | ✅ 通过 | 旧参数兼容正常 |
+| BUG-7 ask(Block-First) | ✅ 通过 | 返回 1036 字符回答 + 5 个来源 |
+| BUG-1 route_query | ⏳ 待重启验证 | 代码已修复，MCP 需重启 |
+| BUG-4 recommendations | ⏳ 待重启验证 | 代码已修复，MCP 需重启 |
+| auto_tag | ⏳ 待重启验证 | MCP 需重启加载新工具 |
+| search 基本功能 | ✅ 正常 | 含企微知识返回 3 条向量结果 + 39 条全文结果 |
+
+### 下一步
+**重启 MCP 服务**后重新运行 `tests/mcp_post_fix_test.py` 完成全量验证。
 - auto_tag 工具的 LLM token 成本需评估（批处理上限 100 条/次）
 - score_threshold 降低可能引入噪声结果，需观察实际召回质量
 
