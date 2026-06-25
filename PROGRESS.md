@@ -1,6 +1,6 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-06-22
+> 最后更新：2026-06-25
 > 源码版本：`src/version.py` 中的 `1.4.0`
 > 当前分支：`master`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎
@@ -15,6 +15,26 @@
 - [历史设计与已完成计划](docs/archive/README.md)
 
 除上述当前规格和计划外，归档目录中的文档只用于追溯，不代表当前待办。
+
+## v1.4.0 测试报告 BUG 修复 — 已完成 (2026-06-25)
+
+基于 `shineheKB-MCP测试报告-30轮-v1.4.0.docx` 的 5 个 Bug 做代码层根因定位并全量修复。Commit: `1f79f7f`
+
+### 修复清单
+
+| Bug | 严重度 | 结论 | 主要改动 |
+|-----|--------|------|---------|
+| BUG-1 P0 route_query 路由退化 | 严重 | 路由分类器工作正确（测试查询均为语义查询），但 hybrid 模式缺少 query_spec | `route_engine.py`: ①EmbeddingRouter 阈值 0.75→0.60 ②LLMRouter/PlanetaryRouter hybrid 返回附带 fulltext query_spec |
+| BUG-4 P2 标签覆盖率 3.7% | 中等 | 数据层面问题，需自动化补标手段 | `health.py`: 新增 `_get_kb_domain_summary()`、分级告警、recommendations 字段；`mcp_server.py`: 新增 `auto_tag` LLM 批量打标工具；`aliases.py`: 注册别名 |
+| BUG-5 P1 ask_with_query 参数 BC | 中等 | 旧参数 `query` 不再被接受 | `mcp_server.py`: 新增 `query` 向后兼容别名（等价于 `search_query`） |
+| BUG-6 P1 structured_query 参数 BC | 中等 | 旧参数 `filters` 不再被接受 | `mcp_server.py`: 新增 `filters` 向后兼容别名（等价于 `query_dsl`） |
+| BUG-7 P0 ask 返回"未找到" | 中等 | 弱相关召回被 score_threshold 过滤 + 空上下文 LLM 误判 | `config.yaml`: score_threshold 0.35→0.25；`rag_pipeline.py`: GenerateStage 空上下文注入知识库领域概览兜底 |
+
+### 待后续关注
+
+- BUG-1 修复后需重新测试 route_query 在结构化场景下的表现
+- auto_tag 工具的 LLM token 成本需评估（批处理上限 100 条/次）
+- score_threshold 降低可能引入噪声结果，需观察实际召回质量
 
 ## 第5轮稳定性测试报告全量修复 — 已完成（2026-06-22）
 
