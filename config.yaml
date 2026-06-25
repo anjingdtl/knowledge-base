@@ -24,6 +24,8 @@ mcp:
   tool_profile: full
   write_policy: ''
 rag:
+  ask:
+    total_timeout: 90
   ask_with_query:
     async_mode: false
     route_timeout: 5
@@ -50,8 +52,9 @@ rag:
   rrf_k: 40
   rrf_weight_keyword: 0.6
   rrf_weight_semantic: 0.4
-  score_threshold: 0.25  # BUG-7 fix: 0.35→0.25 提高弱相关召回通过率，减少"未找到"
+  score_threshold: 0.25
   tag_embedding_cache_ttl: 300
+  title_embedding_cache_ttl: 600
   top_k: 5
   use_planetary_router: true
 reranker:

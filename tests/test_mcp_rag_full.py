@@ -135,7 +135,8 @@ class TestMCPAskStructuredPayload:
         ]
         fake_pipeline = RagPipeline(pipeline_config=DEFAULT_PIPELINE_CONFIG, llm=mock_llm)
 
-        def fake_query(q, conversation_history=None):
+        # BUG-2 fix: query() 新增 timeout 参数（50轮测试报告），mock 需接受
+        def fake_query(q, conversation_history=None, **kwargs):
             return asyncio.run(fake_pipeline.execute(q, conversation_history=conversation_history))
 
         fake_service = MagicMock()

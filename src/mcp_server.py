@@ -578,7 +578,8 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
     description="向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。"
     "返回结构化 payload：answer / sources / source_graph / route / query_plan / "
     "block_contexts / warnings。"
-    "[耗时提示：通常 5-30 秒，首次调用可能更长，建议客户端超时 ≥ 60s]",
+    "[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），"
+    "超时返回空 answer + warnings，建议客户端超时 ≥ 100s]",
     annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
     group="kb", side_effect="read",
 )
@@ -639,10 +640,37 @@ def ask(
 
 
 def _do_ask(question: str) -> dict:
-    result = dict(_get_container().rag_pipeline.query(question))
+    # BUG-2 fix (50轮测试报告): ask 工具增加总超时控制。
+    # 旧实现直接调用 rag_pipeline.query()，内部超时后会 fallback 到
+    # _direct_query（再次调 LLM），导致大文档（如供应商管理办法、单一来源采购
+    # 合规指引）偶发雪崩超时，触发 MCP error -32001。现在捕获超时返回部分结果。
+    import concurrent.futures
+    from src.utils.config import Config
+
+    total_timeout = int(Config.get("rag.ask.total_timeout", 90) or 90)
+    try:
+        result = dict(_get_container().rag_pipeline.query(question, timeout=total_timeout))
+    except concurrent.futures.TimeoutError:
+        logger.warning(
+            "ask timed out after %ds for question=%r, returning partial result",
+            total_timeout, question[:50],
+        )
+        result = {
+            "answer": "",
+            "sources": [],
+            "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
+            "route": {"mode": "timeout",
+                      "explanation": f"ask timed out after {total_timeout}s"},
+            "query_plan": {},
+            "block_contexts": {},
+            "warnings": [f"ask timed out after {total_timeout}s, "
+                         f"question too complex or document too large"],
+            "wiki_context": "",
+            "trace_id": "",
+        }
+        return result
 
     # Phase 3: add trace_id to result if observability enabled
-    from src.utils.config import Config
     if Config.get("rag.observability.trace_enabled", True):
         # Trace was already written in RagPipeline.execute()
         # Find the trace_id from the pipeline context
@@ -3178,7 +3206,9 @@ def auto_tag(limit: int = 50, force: bool = False) -> dict:
         if db is None or db._shutdown:
             return fail(ErrorCode.INTERNAL_ERROR, "数据库未初始化")
 
-        limit = max(1, min(limit, 100))
+        # BUG-1 fix (50轮测试报告): 上限 100→500，135 条文档需单次批量补标，
+        # 旧上限 100 导致需要多次调用且每次都重建 LLM 连接，效率低。
+        limit = max(1, min(limit, 500))
         llm = container.llm
 
         # 获取无标签条目
@@ -3235,7 +3265,14 @@ def auto_tag(limit: int = 50, force: bool = False) -> dict:
                     f"{'已有标签：' + ', '.join(existing_tags) if existing_tags else ''}"
                 )
 
-                response_text = llm.chat(prompt) if not hasattr(llm, "chat_with_usage") else llm.chat_with_usage(prompt)[0]
+                # BUG-1 fix (50轮测试报告): 旧实现把字符串 prompt 直接传给 llm.chat(messages: list[dict])，
+                # 类型不符导致 auto_tag 调用 LLM 必然失败，标签覆盖率长期停滞在 3.7%，
+                # 进而引发 kb_route_query 路由 100% 退化。这里构造标准 messages 列表。
+                tag_messages = [{"role": "user", "content": prompt}]
+                if hasattr(llm, "chat_with_usage"):
+                    response_text = llm.chat_with_usage(tag_messages, silent=True)[0]
+                else:
+                    response_text = llm.chat(tag_messages, silent=True)
                 # 清理响应，提取 JSON 数组
                 response_text = (response_text or "").strip()
                 # 处理可能的 markdown 包裹

@@ -356,7 +356,10 @@ class TestPhase3QueryRevolution:
         result = router.route("Python 异步编程有哪些最佳实践")
 
         assert result["mode"] == "hybrid"
-        assert result["query_spec"] is None
+        # BUG-1 fix (50轮测试报告): hybrid 兜底现在附带 fulltext query_spec，
+        # 确保 Agent 可直接使用而无需二次构造。旧断言 query_spec is None 已过期。
+        assert result["query_spec"] is not None
+        assert result["query_spec"].filter_condition.type == "fulltext"
 
     def test_query_builder_bridge_or_not_to_dsl(self):
         from src.core.query_builder import HasProperty, HasTag, Not, Or, to_query_spec

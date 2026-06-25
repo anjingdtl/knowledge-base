@@ -203,6 +203,11 @@ class EmbeddingRouter:
 
     对 query 做 embedding，与已知 tag embedding 比对，
     如果最高相似度超过阈值则路由为 structured + tag filter。
+
+    BUG-1 fix (50轮测试报告): 标签覆盖率仅 3.7% 时 tag 匹配几乎必然落空，
+    导致 100% fallback 到 hybrid。新增 title embedding 兜底——当 tag 匹配
+    失败时，用文档标题 embedding 做二次匹配，命中高相似度标题则路由为
+    structured + title contains filter，避免路由功能完全退化。
     """
 
     # 模块级 tag embedding 缓存（类属性，跨实例共享）：[timestamp, {tag: emb}]。
@@ -212,15 +217,25 @@ class EmbeddingRouter:
     # TTL 到期自动重建（新增/删除 tag 后最迟 TTL 秒内生效）。
     _TAG_EMB_CACHE: list | None = None
     _TAG_EMB_LOCK = threading.Lock()
+    # title embedding 缓存：[timestamp, [(title, emb), ...]]
+    _TITLE_EMB_CACHE: list | None = None
+    _TITLE_EMB_LOCK = threading.Lock()
 
-    def __init__(self, db=None, similarity_threshold: float = 0.60):
+    def __init__(self, db=None, similarity_threshold: float = 0.60,
+                 title_similarity_threshold: float = 0.70):
         self._db = db or Database
         # BUG-1 fix: 降低阈值 0.75→0.60，提高冷启动场景下 tag embedding 匹配率
         # 标签覆盖率 3.7% 时较高的 0.75 几乎不可能命中，0.60 在不引入明显噪声的前提下提升路由可用性
         self._similarity_threshold = similarity_threshold
+        # title 匹配阈值略高于 tag：标题语义更具体，要求更高相似度避免误命中
+        self._title_similarity_threshold = title_similarity_threshold
 
     def route(self, question: str) -> dict | None:
-        """返回路由结果或 None（无法判断时交给下一级）"""
+        """返回路由结果或 None（无法判断时交给下一级）
+
+        两级匹配：tag embedding → title embedding。
+        tag 命中即返回（更精准）；tag 落空时尝试 title 兜底。
+        """
         try:
             from src.services.embedding import EmbeddingService
             emb_service = EmbeddingService()
@@ -228,23 +243,52 @@ class EmbeddingRouter:
             if not query_emb:
                 return None
 
+            # ── 第一级：tag embedding 匹配 ──
             tag_embs = self._get_tag_embeddings(emb_service)
-            if not tag_embs:
-                return None
+            if tag_embs:
+                best_tag = None
+                best_sim = 0.0
+                for tag, tag_emb in tag_embs.items():
+                    sim = self._cosine_sim(query_emb, tag_emb)
+                    if sim > best_sim:
+                        best_sim = sim
+                        best_tag = tag
 
-            best_tag = None
-            best_sim = 0.0
-            for tag, tag_emb in tag_embs.items():
-                sim = self._cosine_sim(query_emb, tag_emb)
-                if sim > best_sim:
-                    best_sim = sim
-                    best_tag = tag
+                if best_sim >= self._similarity_threshold and best_tag:
+                    logger.debug(f"EmbeddingRouter: best_tag={best_tag}, sim={best_sim:.3f}")
+                    spec = QuerySpec.from_json({"filter": {"tag": best_tag}})
+                    return {"mode": "structured", "query_spec": spec,
+                            "explanation": f"embedding routing (L2, tag={best_tag}, sim={best_sim:.2f})"}
 
-            if best_sim >= self._similarity_threshold and best_tag:
-                logger.debug(f"EmbeddingRouter: best_tag={best_tag}, sim={best_sim:.3f}")
-                spec = QuerySpec.from_json({"filter": {"tag": best_tag}})
-                return {"mode": "structured", "query_spec": spec,
-                        "explanation": f"embedding routing (L2, tag={best_tag}, sim={best_sim:.2f})"}
+            # ── 第二级：title embedding 兜底（标签覆盖率不足时关键） ──
+            # 50轮测试报告 Bug-1: 标签覆盖率 3.7% 时 tag 匹配几乎必然落空，
+            # 用标题语义匹配作为兜底，命中高相似度标题则路由为 title contains，
+            # 避免 100% fallback 到 hybrid。
+            title_embs = self._get_title_embeddings(emb_service)
+            if title_embs:
+                best_title = None
+                best_title_sim = 0.0
+                for title, title_emb in title_embs:
+                    sim = self._cosine_sim(query_emb, title_emb)
+                    if sim > best_title_sim:
+                        best_title_sim = sim
+                        best_title = title
+
+                if best_title_sim >= self._title_similarity_threshold and best_title:
+                    logger.debug(
+                        f"EmbeddingRouter: title fallback best_title={best_title!r}, sim={best_title_sim:.3f}"
+                    )
+                    spec = QuerySpec.from_json(
+                        {"filter": {"title": {"contains": best_title}}}
+                    )
+                    return {
+                        "mode": "structured",
+                        "query_spec": spec,
+                        "explanation": (
+                            f"embedding routing (L2 title-fallback, "
+                            f"title={best_title}, sim={best_title_sim:.2f})"
+                        ),
+                    }
         except Exception as e:
             logger.debug(f"EmbeddingRouter failed: {e}")
         return None
@@ -277,6 +321,45 @@ class EmbeddingRouter:
                     continue
             EmbeddingRouter._TAG_EMB_CACHE = [time.monotonic(), tag_embs]
             return tag_embs
+
+    def _get_title_embeddings(self, emb_service) -> list[tuple[str, list[float]]]:
+        """获取文档标题 embedding 列表（带 TTL 缓存 + batch embed）。
+
+        标签覆盖率不足时作为 L2 兜底依据。使用 embed_batch 批量请求，
+        避免逐条调用产生大量 API 往返。
+        """
+        ttl = float(Config.get("rag.title_embedding_cache_ttl", 600) or 600)
+        cache = EmbeddingRouter._TITLE_EMB_CACHE
+        if cache is not None and (time.monotonic() - cache[0]) < ttl:
+            return cache[1]
+        with EmbeddingRouter._TITLE_EMB_LOCK:
+            cache = EmbeddingRouter._TITLE_EMB_CACHE
+            if cache is not None and (time.monotonic() - cache[0]) < ttl:
+                return cache[1]
+            try:
+                rows = self._db.get_conn().execute(
+                    "SELECT DISTINCT title FROM knowledge_items "
+                    "WHERE deleted_at IS NULL AND title IS NOT NULL AND title != '' "
+                    "ORDER BY title LIMIT 500"
+                ).fetchall()
+            except Exception:
+                return cache[1] if cache is not None else []
+            titles = [row["title"] for row in rows if row["title"]]
+            if not titles:
+                EmbeddingRouter._TITLE_EMB_CACHE = [time.monotonic(), []]
+                return []
+            try:
+                embs = emb_service.embed_batch(titles, batch_size=32)
+            except Exception as e:
+                logger.debug(f"EmbeddingRouter title embed_batch failed: {e}")
+                return cache[1] if cache is not None else []
+            title_embs = [
+                (title, emb)
+                for title, emb in zip(titles, embs)
+                if emb
+            ]
+            EmbeddingRouter._TITLE_EMB_CACHE = [time.monotonic(), title_embs]
+            return title_embs
 
     @staticmethod
     def _cosine_sim(a: list[float], b: list[float]) -> float:

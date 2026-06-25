@@ -16,6 +16,33 @@
 
 除上述当前规格和计划外，归档目录中的文档只用于追溯，不代表当前待办。
 
+## 50 轮 MCP 测试报告 BUG 修复 — 已完成 (2026-06-25)
+
+基于 `shineheKB-MCP测试报告-50轮.docx`（50 轮，成功率 96.0%）的 2 个 Bug + 2 个待改进项做代码层根因定位并全量修复。
+
+### 修复清单
+
+| Bug | 严重度 | 根因 | 主要改动 |
+|-----|--------|------|---------|
+| Bug-1 P0 kb_route_query 路由 100% 退化 | 严重 | ①标签覆盖率仅 3.7%；②`auto_tag` 工具把字符串 prompt 直接传给 `llm.chat(messages: list[dict])`，类型不符导致批量补标必然失败，标签覆盖率长期停滞 | `mcp_server.py`: auto_tag 构造标准 messages list + limit 上限 100→500；`route_engine.py`: EmbeddingRouter 新增 title embedding 兜底（标签不足时用标题语义匹配，命中则路由为 title contains filter）；`scripts/auto_tag_batch.py`: 新增批量补标 CLI 脚本 |
+| Bug-2 P1 kb_ask 偶发超时 (MCP -32001) | 中等 | `ask` 工具无总超时控制，`rag_pipeline.query()` 内部超时后 fallback 到 `_direct_query`（再次调 LLM）导致雪崩 | `rag_pipeline.py`: query() 新增 timeout 参数（默认从 `rag.ask.total_timeout` 读 90s）+ 超时即抛出不再雪崩；`mcp_server.py`: `_do_ask` 捕获超时返回部分结果+警告；`config.yaml`: 新增 `rag.ask.total_timeout: 90` |
+| 改进项3 大文档输出截断 | 建议 | block_contexts 字段含完整父块内容，大文档（如供应商管理办法）导致 MCP payload >300KB 被传输层截断 | `rag_pipeline.py`: PostProcessStage 新增 `block_context_max_length`（默认 2000）截断每个 block_context；`DEFAULT_PIPELINE_CONFIG` 显式声明 postprocess 配置 |
+
+### 验证
+
+- 新增 `tests/test_50round_bugfix.py`（6 个回归测试）：auto_tag messages 修复、EmbeddingRouter title 兜底、ask 超时返回部分结果、PostProcessStage block_contexts 截断 — 全部通过。
+- 回归测试：`test_mcp_server.py` + `test_mcp_contract.py` + `test_rag_sources.py`（68 passed）、`test_mcp_rag_full.py` + `test_full_pipeline_e2e.py`（24 passed）、`test_db.py` + `test_search.py` 等（43 passed）。
+- 修复了 1 个因前次 BUG-1 修复导致过期的断言（`test_agentic_router_falls_back_for_fuzzy`：hybrid 兜底现附带 fulltext query_spec）。
+
+### 运维建议（执行 auto_tag 提升标签覆盖率）
+
+```bash
+# 在项目根目录执行，对全部无标签文档批量 LLM 打标
+python scripts/auto_tag_batch.py
+# 仅查看当前覆盖率，不写入
+python scripts/auto_tag_batch.py --dry-run
+```
+
 ## v1.4.0 测试报告 BUG 修复 — 已完成 (2026-06-25)
 
 基于 `shineheKB-MCP测试报告-30轮-v1.4.0.docx` 的 5 个 Bug 做代码层根因定位并全量修复。Commit: `1f79f7f`

@@ -607,6 +607,22 @@ class PostProcessStage(PipelineStage):
         if len(ctx.answer) > max_len:
             ctx.answer = ctx.answer[:max_len] + "...(已截断)"
             ctx.metadata.setdefault("warnings", []).append("answer_truncated")
+        # 改进项3 (50轮测试报告): 截断 block_contexts，避免大文档（如供应商管理办法、
+        # 单一来源采购合规指引）的父块上下文导致 MCP payload >300KB 被传输层截断。
+        # 每个 block_context 限制为 block_context_max_length 字符（默认 2000），
+        # 超出部分截断并标注。
+        block_ctx_max = int(config.get("block_context_max_length", 2000) or 2000)
+        block_contexts = ctx.metadata.get("block_contexts")
+        if block_contexts and isinstance(block_contexts, dict):
+            truncated_count = 0
+            for bid, bctx in list(block_contexts.items()):
+                if isinstance(bctx, str) and len(bctx) > block_ctx_max:
+                    block_contexts[bid] = bctx[:block_ctx_max] + "...(block_context 已截断)"
+                    truncated_count += 1
+            if truncated_count:
+                ctx.metadata.setdefault("warnings", []).append(
+                    f"block_contexts_truncated:{truncated_count}"
+                )
         return ctx
 
 
@@ -864,7 +880,8 @@ DEFAULT_PIPELINE_CONFIG = [
     {"stage": "rerank", "enabled": True, "top_n": 5, "min_score": 0.3},
     {"stage": "evidence_compress", "enabled": False, "strategy": "extractive", "max_evidence_tokens": 4000},
     {"stage": "generate", "enabled": True, "stream": False},
-    {"stage": "postprocess", "enabled": True, "dedup": True},
+    {"stage": "postprocess", "enabled": True, "dedup": True,
+     "max_context_length": 8000, "block_context_max_length": 2000},
 ]
 
 
@@ -1127,8 +1144,19 @@ class RAGService:
         return (self._deps or {}).get("graph_backend")
 
     def query(self, question: str, conversation_history: list[dict] | None = None,
-              phase_callback=None, skip_cache: bool = False) -> dict:
-        """同步查询（非流式）— 直接通过管线执行，支持LRU缓存"""
+              phase_callback=None, skip_cache: bool = False,
+              timeout: float | None = None) -> dict:
+        """同步查询（非流式）— 直接通过管线执行，支持LRU缓存
+
+        Args:
+            timeout: 管线执行总超时秒数。None 时从 ``rag.ask.total_timeout``
+                读取（默认 90s）。超时抛 ``concurrent.futures.TimeoutError``，
+                由调用方决定是否返回部分结果。
+                50轮测试报告 Bug-2: 旧实现硬编码 120s 且超时后 fallback 到
+                ``_direct_query``（再次调 LLM），导致 kb_ask 偶发雪崩超时
+                （MCP error -32001）。改为超时即抛出，不再雪崩。
+        """
+        import concurrent.futures
         import traceback
 
         # BUG-1 fix: 缓存命中直接返回，跳过整个管线
@@ -1143,6 +1171,11 @@ class RAGService:
                 result["cache_hit"] = True
                 return result
 
+        # BUG-2 fix (50轮测试报告): 超时从配置读取，默认 90s（比 ask_with_query
+        # 的 120s 略短，给 MCP 客户端留余量，避免触发 -32001）
+        if timeout is None:
+            timeout = float(Config.get("rag.ask.total_timeout", 90) or 90)
+
         try:
             # 直接走管线，管线内部会依次执行全部阶段
             # （wiki_retrieval → vector_search → rerank → generate → postprocess）
@@ -1151,7 +1184,7 @@ class RAGService:
 
             result = _run_coroutine_sync(
                 self._pipeline.execute(question, conversation_history),
-                timeout=120,
+                timeout=timeout,
             )
             if "source_graph" not in result:
                 from src.services.source_graph import build_source_graph
@@ -1164,6 +1197,14 @@ class RAGService:
                 _rag_cache.put(question, result)
                 logger.info("RAG result cached for query=%r (cache_size=%d)", question[:50], _rag_cache.size)
             return dict(result)
+        except concurrent.futures.TimeoutError:
+            # BUG-2 fix: 超时即抛出，不再 fallback 到 _direct_query（避免雪崩）。
+            # 调用方（ask 工具）负责返回部分结果 + 超时警告。
+            logger.warning(
+                "Pipeline timed out after %ss for query=%r, propagating to caller",
+                timeout, question[:50],
+            )
+            raise
         except Exception as e:
             err_detail = traceback.format_exc()
             logger.error("Pipeline execution failed, falling back to direct query: %s\n%s", e, err_detail)
