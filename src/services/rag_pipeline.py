@@ -446,6 +446,17 @@ class GenerateStage(PipelineStage):
         if ctx.wiki_context:
             context_parts.insert(0, f"【Wiki 结构化知识】\n{ctx.wiki_context}")
         context = "\n\n".join(context_parts) if context_parts else "（知识库中未找到相关内容）"
+        # BUG-7 fix: 当检索无结果时，向 LLM 注入知识库领域概览，避免"未找到"型空回答
+        # 让 LLM 至少能告知用户知识库覆盖了哪些领域，而非简单返回"未找到"
+        if not context_parts and not ctx.wiki_context:
+            try:
+                from src.services.health import _get_kb_domain_summary
+                domain_summary = _get_kb_domain_summary(ctx.candidates or [])
+                if domain_summary:
+                    context = f"（知识库中未直接找到相关内容，但以下为知识库当前覆盖的领域概览供参考）\n\n{domain_summary}"
+                    ctx.metadata.setdefault("warnings", []).append("no_exact_match__domain_summary_provided")
+            except Exception:
+                pass  # 非致命：兜底失败时保留原始空上下文
         ctx.sources = sources
         # Sprint 2：构建 block_id → block_context 映射，供 Agent 端溯源
         block_contexts = {

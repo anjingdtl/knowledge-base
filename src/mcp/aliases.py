@@ -55,6 +55,7 @@ ALIASES: dict[str, str] = {
     "ops.undo": "undo_operation",
     "ops.list_recent": "list_recent_operations",
     "ops.health_check": "kb_health_check",
+    "ops.auto_tag": "auto_tag",
     "ops.get_trace": "get_trace",
     "ops.create_job": "create_async_job",
     "ops.get_job": "get_async_job",

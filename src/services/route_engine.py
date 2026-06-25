@@ -213,8 +213,10 @@ class EmbeddingRouter:
     _TAG_EMB_CACHE: list | None = None
     _TAG_EMB_LOCK = threading.Lock()
 
-    def __init__(self, db=None, similarity_threshold: float = 0.75):
+    def __init__(self, db=None, similarity_threshold: float = 0.60):
         self._db = db or Database
+        # BUG-1 fix: 降低阈值 0.75→0.60，提高冷启动场景下 tag embedding 匹配率
+        # 标签覆盖率 3.7% 时较高的 0.75 几乎不可能命中，0.60 在不引入明显噪声的前提下提升路由可用性
         self._similarity_threshold = similarity_threshold
 
     def route(self, question: str) -> dict | None:
@@ -346,8 +348,10 @@ class LLMRouter:
                 text = re.sub(r"\n?```$", "", text)
             parsed = json.loads(text)
             if parsed.get("mode") == "hybrid":
-                return {"mode": "hybrid", "query_spec": None,
-                        "explanation": "LLM classified as hybrid (L3)"}
+                # BUG-1 fix: LLM hybrid 结果也附带 fulltext query_spec，保持与兜底逻辑一致
+                return {"mode": "hybrid", "query_spec": QuerySpec.from_json(
+                    {"filter": {"fulltext": question}}
+                ), "explanation": "LLM classified as hybrid (L3), with fulltext query_spec"}
             if "query" in parsed:
                 spec = QuerySpec.from_json(parsed["query"])
                 result = {"mode": parsed.get("mode", "structured"), "query_spec": spec,
@@ -421,7 +425,10 @@ class PlanetaryRouter:
         # Level 3: LLMRouter (5s timeout)
         result = self._llm_router.route(question)
         if result is not None:
-            # 确保 hybrid 结果也包含 query_spec key
+            # BUG-1 fix: 确保 L3 返回的 hybrid 结果附带 fulltext query_spec（兜底）
+            if result.get("mode") == "hybrid" and result.get("query_spec") is None:
+                result["query_spec"] = QuerySpec.from_json({"filter": {"fulltext": question}})
+                result["explanation"] = (result.get("explanation", "") + " (fulltext query_spec fallback)").strip()
             result.setdefault("query_spec", None)
             logger.debug(f"PlanetaryRouter: L3 LLM resolved → {result.get('mode')}")
             return result
@@ -434,6 +441,9 @@ class PlanetaryRouter:
                 {"filter": {"fulltext": question}}
             ), "explanation": "rule-based structured (L1 strong signal, L2/L3 failed)"}
 
-        logger.debug("PlanetaryRouter: all levels failed, fallback to hybrid")
-        return {"mode": "hybrid", "query_spec": None,
-                "explanation": "fallback to hybrid search (all router levels failed)"}
+        logger.debug("PlanetaryRouter: all levels failed, fallback to hybrid with fulltext query_spec")
+        # BUG-1 fix: hybrid 兜底时附带 fulltext query_spec，确保调用方始终可获得可执行的查询规格
+        # 不再返回 query_spec=None，Agent 可直接使用而无需二次构造
+        return {"mode": "hybrid", "query_spec": QuerySpec.from_json(
+            {"filter": {"fulltext": question}}
+        ), "explanation": "fallback to hybrid search with fulltext query_spec (all router levels failed)"}

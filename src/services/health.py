@@ -12,6 +12,36 @@ from src.utils.config import Config
 logger = logging.getLogger(__name__)
 
 
+def _get_kb_domain_summary(candidates: list[dict] | None = None) -> str:
+    """BUG-7 helper: 构建知识库领域概览，用于检索无结果时的 LLM 上下文兜底。
+
+    Returns:
+        领域概览字符串，包含知识库文档数量、标签列表和主要领域
+    """
+    try:
+        from src.services.db import Database
+        db = Database()
+        total = db.count_knowledge() or 0
+        tags = db.get_all_tags()
+        tag_list = sorted(tags)[:20] if tags else []
+        lines = [
+            f"知识库当前包含 {total} 篇文档，{len(tags)} 个标签。",
+            f"主要标签：{', '.join(tag_list)}" if tag_list else "(暂无标签)",
+        ]
+        # 尝试获取最近的文档标题分布
+        try:
+            recent_docs = db.search_knowledge("", limit=5)
+            if recent_docs:
+                recent_titles = [d.get("title", "")[:30] for d in recent_docs if d.get("title")]
+                if recent_titles:
+                    lines.append(f"最近文档示例：{' | '.join(recent_titles[:3])}")
+        except Exception:
+            pass
+        return "\n".join(lines)
+    except Exception:
+        return "知识库概览暂时无法获取"
+
+
 def kb_health_check() -> dict[str, Any]:
     """执行知识库健康度检查，返回各项指标。
 
@@ -87,8 +117,11 @@ def kb_health_check() -> dict[str, Any]:
                 ).fetchone()
                 tagged = row["cnt"] if row else 0
                 tag_coverage = tagged / total_documents if total_documents > 0 else 0.0
-                if tag_coverage < 0.5:
-                    warnings.append(f"标签覆盖率仅 {tag_coverage:.1%}")
+                if tag_coverage < 0.1:
+                    warnings.append(f"标签覆盖率仅 {tag_coverage:.1%}（严重偏低，建议执行 auto_tag 批量补标）")
+                    status = "degraded"
+                elif tag_coverage < 0.5:
+                    warnings.append(f"标签覆盖率仅 {tag_coverage:.1%}（建议执行 auto_tag 提升标签覆盖率）")
     except Exception as e:
         warnings.append(f"数据库查询失败: {e}")
         status = "unhealthy"
@@ -183,4 +216,8 @@ def kb_health_check() -> dict[str, Any]:
         "total_blocks": total_blocks,
         "total_vectors": total_vectors,
         "warnings": warnings,
+        "recommendations": [r for r in ([
+            "执行 auto_tag 工具对无标签条目进行 LLM 批量自动补标" if tag_coverage < 0.5 else None,
+            "标签覆盖率低于 10%，结构化查询和按标签过滤功能将大范围失效" if tag_coverage < 0.1 else None,
+        ] if tag_coverage < 0.5 else []) if r is not None],
     }

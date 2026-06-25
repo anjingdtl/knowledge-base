@@ -2089,6 +2089,7 @@ def structured_query(
     limit: int = 100,
     offset: int = 0,
     query: str | dict | None = None,
+    filters: str | dict | None = None,  # BUG-6 fix: 向后兼容 v1.3.1 的 filters 参数别名
 ) -> dict:
     """Execute a structured JSON DSL query against the knowledge base.
 
@@ -2099,13 +2100,16 @@ def structured_query(
         query_dsl: JSON string with the query DSL（也接受 dict）
         limit: Maximum results to return
         offset: 分页偏移量
+        filters: （已弃用，向后兼容）等同于 query_dsl。新代码请使用 query_dsl
+        query: （已弃用，向后兼容）等同于 query_dsl
     """
     from src.models.query_dsl import QuerySpec
     from src.services.query_executor import QueryExecutor
 
     container = _get_container()
     try:
-        query_value = query_dsl if query_dsl is not None else query
+        # BUG-6 fix: filters 参数向后兼容，优先使用 query_dsl
+        query_value = query_dsl if query_dsl is not None else (filters if filters is not None else query)
         if query_value is None:
             return fail(
                 ErrorCode.VALIDATION_ERROR,
@@ -2495,6 +2499,7 @@ def ask_with_query(
     search_query: str | None = None,
     search_mode: str = "blend",
     top_k: int = 10,
+    query: str | None = None,  # BUG-5 fix: 向后兼容 v1.3.1 的 query 参数别名
 ) -> dict:
     """用显式 QuerySpec 或简化参数控制 RAG 检索，再生成回答。
 
@@ -2510,7 +2515,7 @@ def ask_with_query(
         search_mode: 检索模式 blend(默认)/keyword/semantic，
             仅在 query_spec 和 search_query 都未提供时生效
         top_k: 检索阶段召回的候选数
-
+        query: （已弃用，向后兼容）等同于 search_query。新代码请使用 search_query
     Returns:
         与 ``ask`` 工具相同的 7 字段结构化 payload（data 内）
     """
@@ -2519,6 +2524,8 @@ def ask_with_query(
 
     container = _get_container()
     try:
+        # BUG-5 fix: query 参数向后兼容，优先使用 search_query
+        search_query = search_query or query
         # BUG-4 fix: question 可选，不传时用 search_query 兜底
         effective_question = question or search_query
         if not effective_question:
@@ -3133,6 +3140,151 @@ def kb_health_check() -> dict:
 
 
 @_define_tool(
+    name="auto_tag",
+    description="使用 LLM 对无标签知识条目进行批量自动打标。提升标签覆盖率，改善按标签过滤和结构化查询的效果。"
+    "建议在标签覆盖率 < 50% 时执行。",
+    annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False},
+    group="ops", side_effect="write",
+    experimental=False,
+)
+@_heartbeat
+def auto_tag(limit: int = 50, force: bool = False) -> dict:
+    """基于 LLM 的批量自动标签工具。
+
+    扫描 tags 为空（或 '[]'）的知识条目，使用 LLM 根据标题+内容摘要
+    自动生成 1-3 个标签并写入数据库。
+
+    Args:
+        limit: 单次最多处理的条目数（默认 50，最大 100）
+        force: 强制重新打标（包括已有标签的条目），默认仅处理无标签条目
+
+    Returns:
+        tagged_count: 已打标数量
+        skipped_count: 跳过的数量
+        errors: 错误列表
+        tags_applied: 新应用的标签列表（去重）
+    """
+    _guard = _check_write_policy("auto_tag")
+    if _guard:
+        return _guard
+
+    from src.services.db import Database
+    container = _get_container()
+
+    try:
+        import json as _json
+
+        db = Database._instance
+        if db is None or db._shutdown:
+            return fail(ErrorCode.INTERNAL_ERROR, "数据库未初始化")
+
+        limit = max(1, min(limit, 100))
+        llm = container.llm
+
+        # 获取无标签条目
+        if force:
+            rows = db.conn.execute(
+                "SELECT id, title, content FROM knowledge_items WHERE deleted_at IS NULL LIMIT ?",
+                (limit,),
+            ).fetchall()
+        else:
+            rows = db.conn.execute(
+                "SELECT id, title, content FROM knowledge_items "
+                "WHERE deleted_at IS NULL AND (tags IS NULL OR tags = '' OR tags = '[]') LIMIT ?",
+                (limit,),
+            ).fetchall()
+
+        if not rows:
+            return ok(
+                {"tagged_count": 0, "skipped_count": 0, "errors": [],
+                 "tags_applied": [], "message": "没有需要打标的条目（所有条目已有标签）"},
+                tagged_count=0,
+            )
+
+        tagged_count = 0
+        skipped_count = 0
+        errors: list[str] = []
+        tags_applied_set: set[str] = set()
+
+        for row in rows:
+            try:
+                kid = row["id"]
+                title = row["title"] or ""
+                # 取前 500 字符作为内容摘要供 LLM 分析
+                content_preview = (row["content"] or "")[:500]
+
+                # 获取已有标签（force 模式）
+                existing_tags_str = row.get("tags", "")
+                existing_tags = []
+                if existing_tags_str and existing_tags_str != "[]":
+                    try:
+                        existing_tags = _json.loads(existing_tags_str)
+                        if not isinstance(existing_tags, list):
+                            existing_tags = []
+                    except _json.JSONDecodeError:
+                        existing_tags = []
+
+                # 使用 LLM 生成标签
+                prompt = (
+                    "你是一个知识库标签专家。请根据以下文档的标题和内容摘要，"
+                    "生成 1-3 个标签（中英文皆可，优先中文）。\n"
+                    "标签应该：简洁（2-6个字）、准确反映主题、便于检索和分类。\n"
+                    "只输出 JSON 数组，例如：[\"Python\", \"FastAPI\", \"后端开发\"]\n\n"
+                    f"标题：{title}\n"
+                    f"内容摘要：{content_preview}\n\n"
+                    f"{'已有标签：' + ', '.join(existing_tags) if existing_tags else ''}"
+                )
+
+                response_text = llm.chat(prompt) if not hasattr(llm, "chat_with_usage") else llm.chat_with_usage(prompt)[0]
+                # 清理响应，提取 JSON 数组
+                response_text = (response_text or "").strip()
+                # 处理可能的 markdown 包裹
+                if response_text.startswith("```"):
+                    response_text = response_text.split("\n", 1)[-1] if "\n" in response_text else response_text
+                    response_text = response_text.rsplit("```", 1)[0] if "```" in response_text else response_text
+
+                new_tags = _json.loads(response_text)
+                if not isinstance(new_tags, list):
+                    raise ValueError(f"LLM 返回了非数组格式: {type(new_tags)}")
+
+                # 合并已有+新标签，去重
+                all_tags = list(dict.fromkeys(existing_tags + new_tags))
+                all_tags = all_tags[:5]  # 最多 5 个标签
+                tags_applied_set.update(all_tags)
+
+                # 写入数据库
+                tags_json = _json.dumps(all_tags, ensure_ascii=False)
+                db.conn.execute(
+                    "UPDATE knowledge_items SET tags = ? WHERE id = ?",
+                    (tags_json, kid),
+                )
+                db.conn.commit()
+                tagged_count += 1
+
+            except Exception as e:
+                err_msg = f"{row.get('id', '?')} | {row.get('title', '?')[:30]}: {e}"
+                errors.append(err_msg)
+                skipped_count += 1
+
+        return ok(
+            {
+                "tagged_count": tagged_count,
+                "skipped_count": skipped_count,
+                "errors": errors[:10],  # 限制错误数量
+                "tags_applied": sorted(tags_applied_set),
+                "message": f"成功打标 {tagged_count} 条，跳过 {skipped_count} 条，应用标签 {len(tags_applied_set)} 个",
+            },
+            tagged_count=tagged_count,
+            skipped_count=skipped_count,
+            error_count=len(errors),
+        )
+
+    except Exception as exc:
+        logger.exception("auto_tag failed: %s", exc)
+        return fail(ErrorCode.INTERNAL_ERROR, str(exc))
+
+
+@_define_tool(
     name="get_trace",
     description="根据 trace_id 查询链路追踪记录，包含各管线阶段耗时、结果数等信息。"
     "用于问题定位和性能分析。",
@@ -3207,6 +3359,7 @@ _TOOL_METADATA = {
     "undo_operation":       {"group": "ops", "side_effect": "write",      "requires_confirmation": False, "short_desc": "撤销操作"},
     "list_recent_operations":{"group": "ops", "side_effect": "read",      "requires_confirmation": False, "short_desc": "最近操作"},
     "kb_health_check":      {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "健康检查"},
+    "auto_tag":             {"group": "ops", "side_effect": "write",      "requires_confirmation": True,  "short_desc": "自动打标"},
     "get_trace":            {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "链路追踪"},
     "create_async_job":     {"group": "ops", "side_effect": "write",      "requires_confirmation": False, "short_desc": "创建任务"},
     "get_async_job":        {"group": "ops", "side_effect": "read",       "requires_confirmation": False, "short_desc": "获取任务"},

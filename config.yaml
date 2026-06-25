@@ -24,46 +24,36 @@ mcp:
   tool_profile: full
   write_policy: ''
 rag:
-  chunk_overlap: 150
-  chunk_size: 1000
-  score_threshold: 0.35
-  top_k: 5
-  # Phase 2: legacy chunk vector path (vec_chunks), default off
-  legacy_chunk_vector: false
-  # Phase 2: RRF fusion parameters
-  rrf_k: 40
-  rrf_weight_semantic: 0.4
-  rrf_weight_keyword: 0.6
-  # Phase 2: planetary router
-  use_planetary_router: true
-  route_llm_timeout: 5
-  # L2 EmbeddingRouter 的 tag embedding 缓存 TTL（秒）；过期重建以感知新增/删除 tag
-  tag_embedding_cache_ttl: 300
-  # Phase 3: pipeline parallelization
-  pipeline:
-    generate_parallel: true
-    stream_generate: false
-  # Phase 3: three-level cache
+  ask_with_query:
+    async_mode: false
+    route_timeout: 5
+    total_timeout: 120
   cache:
     l1_embedding_max: 2048
     l1_rag_max: 256
     l1_rag_ttl: 600
     l2_enabled: true
     l2_ttl_hours: 168
-  # Phase 3: observability
+  chunk_overlap: 150
+  chunk_size: 1000
+  legacy_chunk_vector: false
   observability:
-    trace_enabled: true
     debug_scores: false
-    health_check_cron: "0 3 * * *"
-    # trace question 落盘前截断长度（隐私：避免全量明文留存 operation_logs）
+    health_check_cron: 0 3 * * *
+    trace_enabled: true
     trace_question_max_len: 80
-    # trace 记录保留天数（kb_health_check 触发清理）
     trace_retention_days: 30
-  # Phase 3: ask_with_query async & timeout
-  ask_with_query:
-    total_timeout: 120
-    route_timeout: 5
-    async_mode: false
+  pipeline:
+    generate_parallel: true
+    stream_generate: false
+  route_llm_timeout: 5
+  rrf_k: 40
+  rrf_weight_keyword: 0.6
+  rrf_weight_semantic: 0.4
+  score_threshold: 0.25  # BUG-7 fix: 0.35→0.25 提高弱相关召回通过率，减少"未找到"
+  tag_embedding_cache_ttl: 300
+  top_k: 5
+  use_planetary_router: true
 reranker:
   base_url: https://api.siliconflow.cn/v1
   enabled: true
