@@ -3423,6 +3423,7 @@ def extract_tasks_from_doc(content: str) -> dict:
     description="删除 agent_memory 记忆条目（按 item_id 或 key，二选一）。",
     annotations={"destructiveHint": True},
     group="memory", side_effect="destructive",
+    experimental=True,
 )
 @_heartbeat
 def delete_memory(item_id: str | None = None, key: str | None = None) -> dict:

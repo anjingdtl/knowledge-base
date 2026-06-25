@@ -354,6 +354,35 @@ def test_structured_query_meta_reports_dsl_limit():
     )
 
 
+def test_query_executor_fulltext_combined_with_tag():
+    """BUG#1 加固：fulltext（现 LIKE）与 tag 条件可自由 AND 组合。
+
+    改 LIKE 后 fulltext 不再需要 FTS JOIN，应能与其他条件任意组合而不报
+    'unable to use function MATCH' 错误。
+    """
+    from src.models.query_dsl import QuerySpec
+    from src.services.query_executor import QueryExecutor
+
+    _insert_page("p-bug1-and-a", "CDN 文档", content="CDN 加速配置说明", tags=["infra"])
+    _insert_page("p-bug1-and-b", "运维手册", content="CDN 故障排查", tags=["ops"])
+    _insert_page("p-bug1-and-c", "CDN 运维", content="CDN 运维文档", tags=["ops"])
+
+    executor = QueryExecutor()
+    spec = QuerySpec.from_json({
+        "filter": {"and": [
+            {"fulltext": "CDN"},
+            {"tag": "ops"},
+        ]},
+    })
+    results = executor.execute(spec)
+    result_ids = {r["id"] for r in results}
+    # 含 CDN 且 tag=ops 的条目
+    assert "p-bug1-and-b" in result_ids
+    assert "p-bug1-and-c" in result_ids
+    # CDN 但 tag=infra 的应被 tag 条件排除
+    assert "p-bug1-and-a" not in result_ids
+
+
 def test_query_executor_sort_and_pagination():
     from src.models.query_dsl import QuerySpec
     from src.services.query_executor import QueryExecutor
