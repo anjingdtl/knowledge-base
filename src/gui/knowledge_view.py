@@ -278,6 +278,68 @@ class RenameWorker(QThread):
                 self.progress.emit(int((i + 1) / total * 100), f"已处理 {i + 1}/{total}")
 
 
+class AutoTagWorker(QThread):
+    """后台智能补标线程 — 使用 tag_inference 多级管线（规则 + TF-IDF + LLM 兜底）"""
+    progress = Signal(int, str)
+    finished = Signal(int, int, int)  # tagged_count, skipped_count, total
+
+    def __init__(self, items=None, use_llm=False):
+        super().__init__()
+        self._items = items
+        self._use_llm = use_llm
+
+    def run(self):
+        from src.services.tag_inference import infer_tags
+
+        if self._items is not None:
+            items = self._items
+        else:
+            items = Database.list_knowledge(limit=10000)
+
+        total = len(items)
+        tagged = 0
+        skipped = 0
+        vocab = Database.get_all_tags()
+
+        for i, item in enumerate(items):
+            # 跳过已有足够标签的条目
+            existing_tags = item.get("tags", [])
+            if isinstance(existing_tags, str):
+                try:
+                    import json as _json
+                    existing_tags = _json.loads(existing_tags)
+                except Exception:
+                    existing_tags = []
+            if isinstance(existing_tags, list) and len(existing_tags) >= 2:
+                skipped += 1
+                if i % 20 == 0:
+                    self.progress.emit(int(i / total * 100), f"补标中: {i}/{total}")
+                continue
+
+            # 多级推断
+            try:
+                results = infer_tags(item, vocab=vocab, use_llm=self._use_llm)
+            except Exception:
+                results = []
+
+            if results:
+                new_tags = [r["tag"] for r in results if r.get("tag")]
+                # 合并已有标签
+                merged = list(dict.fromkeys(existing_tags + new_tags))[:5]
+                try:
+                    Database.update_knowledge_tags(item["id"], merged)
+                    tagged += 1
+                except Exception:
+                    skipped += 1
+            else:
+                skipped += 1
+
+            if i % 5 == 0:
+                self.progress.emit(int((i + 1) / total * 100), f"补标中: {i + 1}/{total}")
+
+        self.finished.emit(tagged, skipped, total)
+
+
 def _safe_md_filename(title: str, item_id: str) -> str:
     """Return a Windows-safe Markdown filename for an exported knowledge item."""
     base = re.sub(r'[<>:"/\\|?*]', "_", (title or "").strip())
@@ -436,6 +498,9 @@ class KnowledgeView(QWidget):
 
         self.act_dedup = more_menu.addAction(make_icon(NAV["dedup"]), "知识去重")
         self.act_dedup.triggered.connect(self._deduplicate)
+
+        self.act_autotag = more_menu.addAction(make_icon(NAV["tag"]), "智能补标")
+        self.act_autotag.triggered.connect(self._auto_tag)
 
         self.btn_more.setMenu(more_menu)
         top_row.addWidget(self.btn_more)
@@ -1581,3 +1646,92 @@ class KnowledgeView(QWidget):
             )
         else:
             QMessageBox.information(self, "去重完成", "没有发现重复的知识条目。")
+
+    def _auto_tag(self):
+        """智能补标：使用多级推断管线为无标签/少标签条目自动打标"""
+        all_items = Database.list_knowledge(limit=10000)
+
+        # 筛选缺少标签的条目
+        items = []
+        for it in all_items:
+            tags = it.get("tags", [])
+            if isinstance(tags, str):
+                try:
+                    tags = json.loads(tags)
+                except Exception:
+                    tags = []
+            if not isinstance(tags, list) or len(tags) < 2:
+                items.append(it)
+
+        total = len(all_items)
+        need_tag = len(items)
+
+        if not items:
+            # 计算当前覆盖率
+            tagged_count = sum(
+                1 for it in all_items
+                if (isinstance(it.get("tags"), list) and len(it["tags"]) > 0)
+                or (isinstance(it.get("tags"), str) and it.get("tags", "[]") not in ("", "[]"))
+            )
+            coverage = tagged_count / total * 100 if total else 0
+            QMessageBox.information(
+                self, "智能补标",
+                f"所有 {total} 个条目均已标注（覆盖率 {coverage:.1f}%），无需补标。"
+            )
+            return
+
+        # 显示当前覆盖率
+        tagged_count = total - need_tag
+        coverage_before = tagged_count / total * 100 if total else 0
+
+        reply = QMessageBox.question(
+            self, "智能补标",
+            f"共 {total} 个条目，其中 {need_tag} 个缺少标签（覆盖率 {coverage_before:.1f}%）。\n"
+            f"是否开始智能补标？\n\n"
+            f"补标策略：规则匹配（毫秒级）→ TF-IDF 关键词 → LLM 兜底",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        self.act_autotag.setEnabled(False)
+        progress = QProgressDialog(f"正在补标 {need_tag} 条...", None, 0, 100, self)
+        progress.setWindowModality(Qt.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setCancelButton(None)
+
+        self._autotag_worker = AutoTagWorker(items=items, use_llm=True)
+        self._autotag_worker.progress.connect(
+            lambda v, msg: (progress.setValue(v), progress.setLabelText(msg))
+        )
+        self._autotag_worker.finished.connect(
+            lambda tagged, skipped, t: (progress.close(), self._on_autotag_finished(tagged, skipped, t))
+        )
+        self._autotag_worker.start()
+
+    def _on_autotag_finished(self, tagged: int, skipped: int, total: int):
+        self.act_autotag.setEnabled(True)
+        self._load_knowledge()
+
+        # 计算补标后覆盖率
+        all_items = Database.list_knowledge(limit=10000)
+        after_total = len(all_items)
+        after_tagged = sum(
+            1 for it in all_items
+            if (isinstance(it.get("tags"), list) and len(it["tags"]) > 0)
+            or (isinstance(it.get("tags"), str) and it.get("tags", "[]") not in ("", "[]"))
+        )
+        coverage_after = after_tagged / after_total * 100 if after_total else 0
+
+        if tagged > 0:
+            QMessageBox.information(
+                self, "补标完成",
+                f"成功补标 {tagged} 个条目，跳过 {skipped} 个。\n"
+                f"标签覆盖率: {coverage_after:.1f}%"
+            )
+        else:
+            QMessageBox.information(
+                self, "补标完成",
+                f"未能为新条目推断出标签（可能内容过少或规则未覆盖）。\n"
+                f"标签覆盖率: {coverage_after:.1f}%"
+            )
