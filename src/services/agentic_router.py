@@ -134,9 +134,11 @@ class AgenticRouter:
             llm_route = self._try_llm(question)
             if llm_route is not None:
                 if llm_route.get("mode") == "hybrid":
-                    # LLM 主动判定为 hybrid
-                    return {"mode": "hybrid", "query_spec": None,
-                            "explanation": "LLM classified as hybrid search"}
+                    # BUG-1 fix: LLM hybrid 结果附带 fulltext query_spec
+                    from src.models.query_dsl import QuerySpec
+                    return {"mode": "hybrid", "query_spec": QuerySpec.from_json(
+                        {"filter": {"fulltext": question}}
+                    ), "explanation": "LLM classified as hybrid search, with fulltext query_spec"}
                 return {"mode": "graph", "query_spec": llm_route.get("query_spec"),
                         "traverse": llm_route.get("traverse", {"max_depth": 2}),
                         "explanation": "LLM graph routing"}
@@ -155,8 +157,11 @@ class AgenticRouter:
                 return {"mode": "structured", "query_spec": llm_route["query_spec"],
                         "explanation": "LLM structured routing"}
             if llm_route.get("mode") == "hybrid":
-                return {"mode": "hybrid", "query_spec": None,
-                        "explanation": "LLM classified as hybrid search"}
+                # BUG-1 fix: LLM hybrid 结果附带 fulltext query_spec
+                from src.models.query_dsl import QuerySpec
+                return {"mode": "hybrid", "query_spec": QuerySpec.from_json(
+                    {"filter": {"fulltext": question}}
+                ), "explanation": "LLM classified as hybrid search, with fulltext query_spec"}
 
         # BUG-3 fix: LLM 不可用时，基于规则信号判断路由，而非盲目降级
         if self._is_structured(question):
@@ -167,7 +172,11 @@ class AgenticRouter:
 
         logging.debug("route_query: no rule/LLM match, fallback to hybrid for query=%r",
                        question[:50])
-        return {"mode": "hybrid", "query_spec": None, "explanation": "fallback to hybrid search"}
+        # BUG-1 fix: hybrid 兜底时附带 fulltext query_spec，确保调用方可直接使用
+        from src.models.query_dsl import QuerySpec
+        return {"mode": "hybrid", "query_spec": QuerySpec.from_json(
+            {"filter": {"fulltext": question}}
+        ), "explanation": "fallback to hybrid search with fulltext query_spec"}
 
     def _is_structured(self, question: str) -> bool:
         """LLM 不可用时的兜底：仅匹配强信号词，避免"哪些/状态/包含"等
