@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-extended%20profile%20by%20default-orange.svg)](src/mcp/tool_profiles.py)
@@ -26,6 +26,8 @@ ShineHe Knowledge is a **local-first, privacy-focused MCP knowledge retrieval en
 - **All data stays local** (SQLite + sqlite-vec + FTS5). No cloud storage dependency.
 
 ## Current Health
+
+**v1.4.0** (current) — Phase 3 pipeline hardening, round-6 MCP stability/recall test (13 bug fixes), and trace token observability. Full Python suite: `951 passed, 1 skipped`.
 
 Version `1.3.1` completed a full repository health review on June 13, 2026:
 

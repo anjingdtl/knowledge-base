@@ -1,7 +1,7 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-06-22
-> 源码版本：`src/version.py` 中的 `1.3.1`
+> 源码版本：`src/version.py` 中的 `1.4.0`
 > 当前分支：`master`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎
 
