@@ -658,7 +658,12 @@ def test_agentic_router_falls_back_to_hybrid():
     result = router.route("Python 异步编程的最佳实践是什么")
 
     assert result["mode"] == "hybrid"
-    assert result["query_spec"] is None
+    # BUG-1 修复后（commit 18b8fd8）：hybrid fallback 现附带 fulltext query_spec，
+    # 不再返回 None。Agent 可直接使用而无需二次构造。
+    spec = result["query_spec"]
+    assert spec is not None
+    assert spec.filter_condition.type == "fulltext"
+    assert spec.filter_condition.value == "Python 异步编程的最佳实践是什么"
 
 
 def test_agentic_router_handles_graph_query():

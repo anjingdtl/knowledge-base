@@ -536,8 +536,9 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
 
     # BUG-7 fix: 统一排序 — 将所有层的结果按 fts_score 归一化后排序
     # BUG-2 fix: 增加 title boost — 标题与查询有重叠的结果优先展示
-    from src.models.retrieval import normalize_fts_score
     import re as _re
+
+    from src.models.retrieval import normalize_fts_score
     # 提取查询关键词用于标题匹配
     _query_terms = set(_re.findall(r'[\u4e00-\u9fffA-Za-z0-9]{2,}', query))
 
@@ -645,6 +646,7 @@ def _do_ask(question: str) -> dict:
     # _direct_query（再次调 LLM），导致大文档（如供应商管理办法、单一来源采购
     # 合规指引）偶发雪崩超时，触发 MCP error -32001。现在捕获超时返回部分结果。
     import concurrent.futures
+
     from src.utils.config import Config
 
     total_timeout = int(Config.get("rag.ask.total_timeout", 90) or 90)
@@ -3212,17 +3214,21 @@ def auto_tag(limit: int = 50, force: bool = False) -> dict:
         llm = container.llm
 
         # 获取无标签条目
+        # 修复 C1: 原代码用 db.conn，但 Database 类无 conn 属性（只有 _base_conn 和
+        # get_conn()），真实执行必抛 AttributeError，导致 auto_tag 返回 INTERNAL_ERROR。
+        # 改为项目惯例的 with db.get_conn() as conn（参照 trace.py / health.py）。
         if force:
-            rows = db.conn.execute(
-                "SELECT id, title, content FROM knowledge_items WHERE deleted_at IS NULL LIMIT ?",
-                (limit,),
-            ).fetchall()
+            query_sql = (
+                "SELECT id, title, content, tags FROM knowledge_items "
+                "WHERE deleted_at IS NULL LIMIT ?"
+            )
         else:
-            rows = db.conn.execute(
-                "SELECT id, title, content FROM knowledge_items "
-                "WHERE deleted_at IS NULL AND (tags IS NULL OR tags = '' OR tags = '[]') LIMIT ?",
-                (limit,),
-            ).fetchall()
+            query_sql = (
+                "SELECT id, title, content, tags FROM knowledge_items "
+                "WHERE deleted_at IS NULL AND (tags IS NULL OR tags = '' OR tags = '[]') LIMIT ?"
+            )
+        with db.get_conn() as conn:
+            rows = conn.execute(query_sql, (limit,)).fetchall()
 
         if not rows:
             return ok(
@@ -3244,7 +3250,8 @@ def auto_tag(limit: int = 50, force: bool = False) -> dict:
                 content_preview = (row["content"] or "")[:500]
 
                 # 获取已有标签（force 模式）
-                existing_tags_str = row.get("tags", "")
+                # 修复 C1: sqlite3.Row 无 .get() 方法；SELECT 已补 tags 列，用索引访问
+                existing_tags_str = row["tags"] if "tags" in row.keys() else ""
                 existing_tags = []
                 if existing_tags_str and existing_tags_str != "[]":
                     try:
@@ -3290,12 +3297,13 @@ def auto_tag(limit: int = 50, force: bool = False) -> dict:
                 tags_applied_set.update(all_tags)
 
                 # 写入数据库
+                # 修复 C1: 用 get_conn() 替代不存在的 db.conn；with 退出时自动 commit
                 tags_json = _json.dumps(all_tags, ensure_ascii=False)
-                db.conn.execute(
-                    "UPDATE knowledge_items SET tags = ? WHERE id = ?",
-                    (tags_json, kid),
-                )
-                db.conn.commit()
+                with db.get_conn() as conn:
+                    conn.execute(
+                        "UPDATE knowledge_items SET tags = ? WHERE id = ?",
+                        (tags_json, kid),
+                    )
                 tagged_count += 1
 
             except Exception as e:

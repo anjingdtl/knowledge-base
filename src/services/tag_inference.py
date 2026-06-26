@@ -3,7 +3,6 @@ import json
 import logging
 import re
 from collections import Counter
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +135,16 @@ def infer_tags_by_llm(title: str, content: str, existing_vocab: list[str]) -> li
 示例：[{{"tag": "企微", "confidence": 0.9}}]"""
 
     try:
-        response = llm.chat(prompt, max_tokens=300, temperature=0.1)
+        # 修复 C2: 原代码 llm.chat(prompt, max_tokens=300, temperature=0.1) 有两个错误：
+        # 1) max_tokens/temperature 不是 LLMService.chat 的合法关键字 → TypeError
+        # 2) 第一参数传字符串而非 messages list → 类型不符
+        # TypeError 被下方 except 捕获后静默返回 []，导致 LLM 兜底分支永远失效。
+        # 改为标准 messages list 调用（参照 librarian.py / query_rewriter.py）。
+        response = llm.chat(
+            [{"role": "user", "content": prompt}],
+            max_tokens_override=300,
+            silent=True,
+        )
         # 解析 JSON
         text = response.strip()
         if text.startswith("```"):

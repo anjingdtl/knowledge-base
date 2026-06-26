@@ -8,11 +8,8 @@
 """
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from src.services.rag_pipeline import PostProcessStage, RagContext
 from src.services.route_engine import EmbeddingRouter
-
 
 # ── Bug-1: auto_tag LLM 调用方式修复 ──
 
@@ -26,24 +23,28 @@ class TestAutoTagLLMCallFix:
 
     def test_auto_tag_passes_messages_list_not_string(self):
         """auto_tag 应构造 [{"role":"user","content":...}] 而非裸字符串。"""
-        import json as _json
-
         import src.mcp_server as mcp_mod
+        from src.services.db import Database
 
         # 准备 mock container + db + llm
+        # 注意：mock_db 用 spec=Database 严格限制属性 —— 任何对 Database 不存在
+        # 属性的访问（如早期 bug 中的 db.conn）都会立即抛 AttributeError，避免
+        # MagicMock 自动生成假属性掩盖真实缺陷（C1 回归防护）。
         mock_llm = MagicMock()
         mock_llm.chat_with_usage.return_value = ('["管理办法"]', {})
-        mock_db = MagicMock()
+        mock_db = MagicMock(spec=Database)
         mock_db._shutdown = False
         mock_db._instance = mock_db
         row = MagicMock()
         row.__getitem__ = lambda self, key: {
             "id": "k1", "title": "采购管理办法", "content": "采购流程...", "tags": "",
         }[key]
-        row.get = lambda key, default=None: {
-            "id": "k1", "title": "采购管理办法", "content": "采购流程...", "tags": "",
-        }.get(key, default)
-        mock_db.conn.execute.return_value.fetchall.return_value = [row]
+        row.keys.return_value = ["id", "title", "content", "tags"]
+        # 修复后 auto_tag 用 get_conn()（而非已删除的 db.conn）；配置 mock 连接
+        mock_conn = MagicMock()
+        mock_conn.execute.return_value.fetchall.return_value = [row]
+        mock_db.get_conn.return_value.__enter__ = lambda self: mock_conn
+        mock_db.get_conn.return_value.__exit__ = lambda *a: False
 
         mock_container = MagicMock()
         mock_container.llm = mock_llm
