@@ -27,3 +27,8 @@ config.yaml
 
 # 临时调试产物目录（debug 脚本、日志、截图、一次性验证脚本）
 .temp/
+
+# 本地工具/临时工作残留（非项目产物，不纳入版本控制）
+.workbuddy/
+overview.md
+tests/mcp_validation_test.py
