@@ -12,6 +12,7 @@ import ChatView from './views/ChatView'
 import WikiView from './views/WikiView'
 import WikiDetail from './views/WikiDetail'
 import GraphView from './views/GraphView'
+import MaintenanceView from './views/MaintenanceView'
 import SettingsView from './views/SettingsView'
 
 function ProtectedRoutes() {
@@ -39,6 +40,7 @@ export default function App() {
                 <Route path="wiki" element={<WikiView />} />
                 <Route path="wiki/:id" element={<WikiDetail />} />
                 <Route path="graph" element={<GraphView />} />
+                <Route path="maintenance" element={<MaintenanceView />} />
                 <Route path="settings" element={<SettingsView />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>

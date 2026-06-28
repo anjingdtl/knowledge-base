@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 const NAV_ITEMS = [
   { to: '/', label: '仪表盘', icon: '◉' },
   { to: '/knowledge', label: '知识库', icon: 'KB' },
+  { to: '/maintenance', label: '维护中心', icon: 'MT' },
   { to: '/import', label: '导入中心', icon: '↑' },
   { to: '/chat', label: '智能问答', icon: 'AI' },
   { to: '/wiki', label: 'Wiki', icon: 'WK' },
