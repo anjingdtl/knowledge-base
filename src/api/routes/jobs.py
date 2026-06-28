@@ -12,6 +12,8 @@ ALLOWED_JOB_TYPES = {
     "wiki_site_generate",
     "file_ingest",
     "url_ingest",
+    "version_conflict_scan",
+    "version_conflict_judge",
 }
 
 

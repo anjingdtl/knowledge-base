@@ -575,6 +575,44 @@ def _path_scan_handler(job_id: str, params: dict) -> dict:
 
 
 # 注册所有任务处理器
+def _version_conflict_scan_handler(job_id: str, params: dict) -> dict:
+    """版本冲突扫描任务"""
+    from src.services.async_task import AsyncTaskService
+    from src.services.version_conflict import VersionConflictService
+
+    session_id = params.get("session_id", "")
+    rescan_ignored = params.get("rescan_ignored", False)
+    AsyncTaskService.update_progress(job_id, 10, f"Scanning session {session_id}...")
+
+    svc = VersionConflictService()
+    try:
+        svc._run_scan(session_id, rescan_ignored=rescan_ignored)
+        AsyncTaskService.update_progress(job_id, 100, "Scan completed")
+        return {"status": "success", "session_id": session_id}
+    except Exception as e:
+        logger.error(f"Version conflict scan {job_id} failed: {e}")
+        raise
+
+
+def _version_conflict_judge_handler(job_id: str, params: dict) -> dict:
+    """版本冲突 LLM 判断任务"""
+    from src.services.async_task import AsyncTaskService
+    from src.services.version_conflict import VersionConflictService
+
+    session_id = params.get("session_id", "")
+    limit = params.get("limit", 20)
+    AsyncTaskService.update_progress(job_id, 10, f"Judging session {session_id}...")
+
+    svc = VersionConflictService()
+    try:
+        result = svc.judge_pending_pairs(session_id, limit=limit, run_synchronously=True)
+        AsyncTaskService.update_progress(job_id, 100, "Judge completed")
+        return {"status": "success", **result}
+    except Exception as e:
+        logger.error(f"Version conflict judge {job_id} failed: {e}")
+        raise
+
+
 def register_all_tasks():
     """注册所有任务处理器（在应用启动时调用）"""
     TaskRegistry.register("reindex_all", _reindex_all_handler)
@@ -584,6 +622,8 @@ def register_all_tasks():
     TaskRegistry.register("file_ingest", _file_ingest_handler)
     TaskRegistry.register("url_ingest", _url_ingest_handler)
     TaskRegistry.register("path_scan", _path_scan_handler)
+    TaskRegistry.register("version_conflict_scan", _version_conflict_scan_handler)
+    TaskRegistry.register("version_conflict_judge", _version_conflict_judge_handler)
     logger.info("All async task handlers registered")
 
 
