@@ -13,6 +13,7 @@ from src.api.routes import (
     graph_router,
     jobs_router,
     kb_router,
+    maintenance_router,
     properties_router,
     query_router,
     refs_router,
@@ -102,6 +103,7 @@ def create_app() -> FastAPI:
     app.include_router(properties_router, prefix="/api")
     app.include_router(query_router, prefix="/api")
     app.include_router(settings_router, prefix="/api")
+    app.include_router(maintenance_router, prefix="/api")
 
     @app.get("/api/health")
     def health():
