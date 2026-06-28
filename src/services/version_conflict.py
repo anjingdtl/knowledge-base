@@ -409,6 +409,24 @@ class VersionConflictService:
 
         self._repo.update_session_status(session_id, "judging")
         pairs = self._repo.list_pending_pairs(session_id, limit=limit)
+        result = self._judge_pairs(session_id, pairs)
+        self._repo.update_session_status(session_id, "ready")
+        return result
+
+    def judge_pair(self, pair_id: str, run_synchronously: bool = True) -> dict:
+        """重新判断单个候选对。pair-level API 使用同步执行，避免额外 job 类型。"""
+        pair = self._repo.get_pair(pair_id)
+        if not pair:
+            return {"ok": False, "error": {"code": "NOT_FOUND",
+                                             "message": f"pair 不存在: {pair_id}"}}
+
+        self._repo.update_session_status(pair.session_id, "judging")
+        result = self._judge_pairs(pair.session_id, [pair])
+        self._repo.update_session_status(pair.session_id, "ready")
+        return {"ok": True, **result}
+
+    def _judge_pairs(self, session_id: str, pairs: list[ConflictPair]) -> dict:
+        """执行 LLM 判断的共享实现。"""
         kr = self._get_knowledge_repo()
         llm = self._get_llm()
         judged = 0
@@ -473,7 +491,6 @@ class VersionConflictService:
                     f"判断失败: {e}"
                 )
 
-        self._repo.update_session_status(session_id, "ready")
         return {"judged": judged, "errors": errors}
 
     # ── 用户操作 ──
@@ -520,6 +537,12 @@ class VersionConflictService:
             return {"ok": False, "error": {
                 "code": "PRECONDITION_FAILED",
                 "message": "newer_item_id 缺失，无法确定删除哪条",
+            }}
+
+        if pair.newer_item_id not in (pair.item_a_id, pair.item_b_id):
+            return {"ok": False, "error": {
+                "code": "PRECONDITION_FAILED",
+                "message": f"newer_item_id={pair.newer_item_id} 不属于候选对，拒绝删除",
             }}
 
         # 防止重复删除：pair 已是 deleted 状态直接返回错误

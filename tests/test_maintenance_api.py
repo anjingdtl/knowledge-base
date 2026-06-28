@@ -76,6 +76,14 @@ class TestMaintenanceAPI:
         )
         assert resp.status_code == 404
 
+    def test_judge_pair_not_found(self, api_client):
+        resp = api_client.post(
+            "/api/maintenance/version-conflict/pairs/nonexistent/judge",
+            json={},
+        )
+        assert resp.status_code == 404
+        assert "pair 不存在" in resp.json()["detail"]
+
     def test_list_ignores(self, api_client):
         resp = api_client.get("/api/maintenance/version-conflict/ignores")
         assert resp.status_code == 200

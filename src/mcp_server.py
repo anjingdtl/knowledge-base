@@ -3307,7 +3307,16 @@ def auto_tag(limit: int = 50, force: bool = False) -> dict:
                 tagged_count += 1
 
             except Exception as e:
-                err_msg = f"{row.get('id', '?')} | {row.get('title', '?')[:30]}: {e}"
+                def _row_value(key: str, default: str = "?"):
+                    try:
+                        if hasattr(row, "keys") and key in row.keys():
+                            return row[key] or default
+                    except Exception:
+                        pass
+                    return default
+
+                title = str(_row_value("title"))[:30]
+                err_msg = f"{_row_value('id')} | {title}: {e}"
                 errors.append(err_msg)
                 skipped_count += 1
 

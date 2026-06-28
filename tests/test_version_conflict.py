@@ -181,6 +181,26 @@ def test_judge_handles_llm_failure_gracefully(service_with_mock_llm):
             assert p.get("confidence") in (0, None) or p.get("confidence") == 0.0
 
 
+def test_judge_pair_rejudges_single_pair(service_with_mock_llm):
+    svc, session_id, fake, policies = service_with_mock_llm
+    pairs = svc._repo.list_pairs(session_id, status="pending")
+    assert pairs, "scan should create at least one pending pair"
+    target = pairs[0]
+
+    result = svc.judge_pair(target["id"], run_synchronously=True)
+
+    assert result["ok"] is True
+    assert result["judged"] == 1
+    updated = svc._repo.get_pair(target["id"])
+    assert updated.judged_at is not None
+    assert updated.relation_type in (
+        "supersedes",
+        "superseded_by",
+        "partial_overlap",
+        "unrelated",
+    )
+
+
 # ── 删除 ──
 
 def test_execute_delete_targets_older_version(service_with_mock_llm):
@@ -215,6 +235,31 @@ def test_execute_delete_targets_older_version(service_with_mock_llm):
     # pair 状态应更新
     updated = svc._repo.get_pair(target["id"])
     assert updated.status == "deleted"
+
+
+def test_execute_delete_rejects_newer_item_id_outside_pair(service_with_mock_llm):
+    svc, session_id, fake, policies = service_with_mock_llm
+    pair = ConflictPair(
+        session_id=session_id,
+        item_a_id=policies["old"].id,
+        item_b_id=policies["new"].id,
+        candidate_source="sql_tag",
+        relation_type="supersedes",
+        newer_item_id="not-a-member",
+        confidence=0.9,
+        reason="invalid newer id",
+        status="pending",
+    )
+    svc._repo.create_pair(pair)
+
+    result = svc.execute_delete(pair.id)
+
+    assert result["ok"] is False
+    assert result["error"]["code"] == "PRECONDITION_FAILED"
+    assert "newer_item_id" in result["error"]["message"]
+    kr = svc._get_knowledge_repo()
+    assert kr.get(policies["old"].id) is not None
+    assert kr.get(policies["new"].id) is not None
 
 
 def test_execute_delete_writes_operation_log(service_with_mock_llm):

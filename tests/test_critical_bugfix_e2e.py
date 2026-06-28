@@ -132,6 +132,28 @@ class TestAutoTagRealDb:
             f"force=False 应只打标 1 条无标签条目，实际: {result['data']['tagged_count']}"
         assert _get_tags(kid_untagged) == ["新标签"]
 
+    def test_auto_tag_bad_llm_json_skips_row_without_internal_error(self):
+        """LLM 返回坏 JSON 时应记录单条错误，而不是因为 sqlite3.Row.get 再次崩溃。"""
+        import src.mcp_server as mcp_mod
+        from tests.conftest import insert_test_knowledge
+
+        kid = insert_test_knowledge("坏响应文档", "内容", tags=None)
+
+        mock_llm = MagicMock()
+        mock_llm.chat_with_usage.return_value = ("不是 JSON", {})
+
+        original_get, original_check = self._patch_container(mock_llm)
+        try:
+            result = mcp_mod.auto_tag(limit=1)
+        finally:
+            self._restore(original_get, original_check)
+
+        assert result["ok"] is True, f"auto_tag 应返回部分成功结构，实际: {result}"
+        assert result["data"]["tagged_count"] == 0
+        assert result["data"]["skipped_count"] == 1
+        assert result["meta"]["error_count"] == 1
+        assert _get_tags(kid) == []
+
 
 # ──────────────────────────────────────────────────────────────────
 # C2: infer_tags_by_llm 调用 LLM 的签名正确（修复前抛 TypeError）

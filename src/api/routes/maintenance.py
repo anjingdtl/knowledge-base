@@ -78,6 +78,16 @@ def judge_pairs(session_id: str, limit: int = 20):
     return result
 
 
+@maintenance_router.post("/version-conflict/pairs/{pair_id}/judge")
+def judge_pair(pair_id: str):
+    """重新判断单个候选对。"""
+    svc = _get_service()
+    result = svc.judge_pair(pair_id, run_synchronously=True)
+    if not result.get("ok"):
+        raise HTTPException(404, result.get("error", {}).get("message", f"pair 不存在: {pair_id}"))
+    return result
+
+
 @maintenance_router.post("/version-conflict/pairs/{pair_id}/delete")
 def delete_pair(pair_id: str, req: DeletePairReq):
     """确认删除旧版本。"""
