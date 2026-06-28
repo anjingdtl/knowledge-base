@@ -449,6 +449,52 @@ CREATE TABLE IF NOT EXISTS indexed_files (
 
 CREATE INDEX IF NOT EXISTS idx_indexed_files_status ON indexed_files(status);
 CREATE INDEX IF NOT EXISTS idx_indexed_files_knowledge ON indexed_files(knowledge_id);
+
+-- === Version Conflict Cleanup (i001) ===
+CREATE TABLE IF NOT EXISTS conflict_sessions (
+    id TEXT PRIMARY KEY,
+    status TEXT NOT NULL DEFAULT 'scanning',
+    total_items_scanned INTEGER DEFAULT 0,
+    candidates_found INTEGER DEFAULT 0,
+    pairs_judged INTEGER DEFAULT 0,
+    pairs_deleted INTEGER DEFAULT 0,
+    pairs_ignored INTEGER DEFAULT 0,
+    error TEXT,
+    started_at TEXT NOT NULL,
+    completed_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS conflict_pairs (
+    id TEXT PRIMARY KEY,
+    session_id TEXT NOT NULL,
+    item_a_id TEXT NOT NULL,
+    item_b_id TEXT NOT NULL,
+    candidate_source TEXT NOT NULL,
+    similarity_score REAL,
+    relation_type TEXT,
+    newer_item_id TEXT,
+    confidence REAL,
+    reason TEXT,
+    status TEXT NOT NULL DEFAULT 'pending',
+    created_at TEXT NOT NULL,
+    judged_at TEXT,
+    resolved_at TEXT,
+    FOREIGN KEY (session_id) REFERENCES conflict_sessions(id)
+);
+CREATE INDEX IF NOT EXISTS idx_conflict_pairs_session ON conflict_pairs(session_id);
+CREATE INDEX IF NOT EXISTS idx_conflict_pairs_status ON conflict_pairs(status);
+CREATE INDEX IF NOT EXISTS idx_conflict_pairs_items ON conflict_pairs(item_a_id, item_b_id);
+
+CREATE TABLE IF NOT EXISTS conflict_ignores (
+    id TEXT PRIMARY KEY,
+    item_a_id TEXT NOT NULL,
+    item_b_id TEXT NOT NULL,
+    pair_key TEXT NOT NULL,
+    ignored_at TEXT NOT NULL,
+    source_pair_id TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_conflict_ignores_pair ON conflict_ignores(pair_key);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_conflict_ignores_pair_unique ON conflict_ignores(pair_key);
 """
 
 
