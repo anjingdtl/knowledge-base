@@ -263,6 +263,8 @@ class VersionConflictService:
         candidates = []
 
         # 路径 1：按 tag 分组
+        # 注意：a/b 统一按 id 字符串 min/max 排序，与 embedding 阶段一致，
+        # 保证 pair.item_a_id < pair.item_b_id，使 LLM 的 A/B 标识稳定对应
         tag_groups: dict[str, list[dict]] = {}
         for it in items:
             tags = it.get("tags", [])
@@ -285,7 +287,8 @@ class VersionConflictService:
                     if self._should_skip_pair(a["id"], b["id"], rescan_ignored):
                         continue
                     candidates.append({
-                        "a": a["id"], "b": b["id"],
+                        "a": min(a["id"], b["id"]),
+                        "b": max(a["id"], b["id"]),
                         "source": "sql_tag", "similarity": None,
                     })
 
@@ -304,7 +307,8 @@ class VersionConflictService:
                     if self._should_skip_pair(a["id"], b["id"], rescan_ignored):
                         continue
                     candidates.append({
-                        "a": a["id"], "b": b["id"],
+                        "a": min(a["id"], b["id"]),
+                        "b": max(a["id"], b["id"]),
                         "source": "sql_title", "similarity": None,
                     })
 
@@ -518,6 +522,13 @@ class VersionConflictService:
                 "message": "newer_item_id 缺失，无法确定删除哪条",
             }}
 
+        # 防止重复删除：pair 已是 deleted 状态直接返回错误
+        if pair.status == "deleted":
+            return {"ok": False, "error": {
+                "code": "PRECONDITION_FAILED",
+                "message": f"pair {pair_id} 已删除，不能重复操作",
+            }}
+
         # 确定要删的（旧版）
         if pair.item_a_id == pair.newer_item_id:
             deleted_id = pair.item_b_id
@@ -570,6 +581,14 @@ class VersionConflictService:
                 "code": "INTERNAL_ERROR",
                 "message": f"软删除失败: {deleted_id}",
             }}
+
+        # 清理 vectorstore 中该条目的向量（避免已删旧版仍被检索命中）
+        # 失败不阻断主流程，仅记录日志（软删已成功，向量残留可后续清理）
+        try:
+            vs = self._get_vectorstore()
+            vs.delete_by_knowledge(deleted_id)
+        except Exception as e:
+            logger.warning("Failed to clean vectorstore for %s: %s", deleted_id, e)
 
         # 更新 pair 状态
         self._repo.update_pair_status(pair_id, "deleted")
