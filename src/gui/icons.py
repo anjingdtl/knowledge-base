@@ -57,6 +57,7 @@ NAV = {
     "sync": "fa5s.sync",
     "exchange": "fa5s.exchange-alt",
     "tag": "fa5s.tags",
+    "maintenance": "fa5s.tools",
 }
 
 

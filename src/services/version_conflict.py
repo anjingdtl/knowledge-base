@@ -15,10 +15,12 @@ import json
 import logging
 import re
 import time
-from typing import Optional
 
 from src.models.version_conflict import (
-    ConflictSession, ConflictPair, ConflictIgnore, _make_pair_key,
+    ConflictIgnore,
+    ConflictPair,
+    ConflictSession,
+    _make_pair_key,
 )
 from src.repositories.conflict_repo import ConflictRepository
 from src.services.db import Database
@@ -31,7 +33,7 @@ logger = logging.getLogger(__name__)
 EMBEDDING_QPS = 3                    # 每秒 3 次 = 180 RPM（仅用 9% 配额）
 EMBEDDING_QUERY_MAX_TOKENS = 500
 LLM_BATCH_SIZE = 20
-MAX_CANDIDATES_PER_SESSION = 1000
+MAX_CANDIDATES_PER_SESSION = 50
 EMBEDDING_SIMILARITY_THRESHOLD = 0.85
 
 
@@ -88,11 +90,12 @@ JUDGE_PROMPT = """你是公司制度文档版本分析专家。判断以下两�
 class VersionConflictService:
     """版本冲突扫描与清理编排服务"""
 
-    def __init__(self, repo=None, knowledge_repo=None, llm=None, vectorstore=None):
+    def __init__(self, repo=None, knowledge_repo=None, llm=None, vectorstore=None, blockstore=None):
         self._repo = repo or ConflictRepository()
         self._knowledge_repo = knowledge_repo
         self._llm = llm
         self._vectorstore = vectorstore
+        self._blockstore = blockstore
 
     def _get_knowledge_repo(self):
         if self._knowledge_repo is None:
@@ -112,10 +115,18 @@ class VersionConflictService:
             self._vectorstore = VectorStore()
         return self._vectorstore
 
+    def _get_block_store(self):
+        """Block 级向量存储。用户知识库实际索引在 vec_blocks(block 级),
+        而非 vec_chunks(知识级),故版本冲突扫描改用 BlockStore。"""
+        if self._blockstore is None:
+            from src.services.block_store import BlockStore
+            from src.services.db import Database
+            self._blockstore = BlockStore(db=Database)
+        return self._blockstore
+
     def _get_operation_log_service(self):
         """从 AppContainer 获取 OperationLogService（已注入 repo）。"""
         try:
-            from src.core.container import AppContainer
             # 优先从全局 container 获取
             from src.api.deps import get_container
             container = get_container()
@@ -214,12 +225,8 @@ class VersionConflictService:
         # Phase 2: embedding 补充
         emb_pairs = self._scan_phase_embedding(session_id, sql_pairs, rescan_ignored=rescan_ignored)
 
-        # 合并并去重
-        all_pairs = self._dedupe_pairs(sql_pairs + emb_pairs)
-        if len(all_pairs) > MAX_CANDIDATES_PER_SESSION:
-            logger.warning("Session %s: candidates %d exceed max %d, truncating",
-                           session_id, len(all_pairs), MAX_CANDIDATES_PER_SESSION)
-            all_pairs = all_pairs[:MAX_CANDIDATES_PER_SESSION]
+        # 合并、去重、排序(同名 title 优先,embedding 按相似度降序)、截断
+        all_pairs = self._rank_and_trim(self._dedupe_pairs(sql_pairs + emb_pairs))
 
         # 批量写入
         if all_pairs:
@@ -253,6 +260,22 @@ class VersionConflictService:
                 out.append(p)
         return out
 
+    def _rank_and_trim(self, pairs: list[dict]) -> list[dict]:
+        """排序并截断:同名标题(sql_title)候选优先,embedding 候选按相似度降序。
+
+        同名制度(标题核心词相同)是强信号,即使内容因年份差异导致 embedding 相似度
+        不高也应优先保留;embedding 候选则按 cosine 相似度从高到低排。
+        """
+        def sort_key(p: dict) -> tuple[int, float]:
+            if p.get("source") == "sql_title":
+                return (0, 1.0)  # 同名制度:强信号,最优先
+            return (1, -(p.get("similarity") or 0.0))
+        ranked = sorted(pairs, key=sort_key)
+        if len(ranked) > MAX_CANDIDATES_PER_SESSION:
+            logger.info("Session candidates %d trimmed to top %d",
+                        len(ranked), MAX_CANDIDATES_PER_SESSION)
+        return ranked[:MAX_CANDIDATES_PER_SESSION]
+
     def _scan_phase_sql(self, session_id: str, rescan_ignored: bool = False) -> list[dict]:
         """SQL 粗筛：按 tag + 标题核心词分组。"""
         kr = self._get_knowledge_repo()
@@ -262,37 +285,8 @@ class VersionConflictService:
 
         candidates = []
 
-        # 路径 1：按 tag 分组
-        # 注意：a/b 统一按 id 字符串 min/max 排序，与 embedding 阶段一致，
-        # 保证 pair.item_a_id < pair.item_b_id，使 LLM 的 A/B 标识稳定对应
-        tag_groups: dict[str, list[dict]] = {}
-        for it in items:
-            tags = it.get("tags", [])
-            if isinstance(tags, str):
-                try:
-                    tags = json.loads(tags)
-                except Exception:
-                    tags = []
-            if not isinstance(tags, list):
-                tags = []
-            for t in tags:
-                if t:
-                    tag_groups.setdefault(t, []).append(it)
-        for tag, group in tag_groups.items():
-            if len(group) < 2:
-                continue
-            for i in range(len(group)):
-                for j in range(i + 1, len(group)):
-                    a, b = group[i], group[j]
-                    if self._should_skip_pair(a["id"], b["id"], rescan_ignored):
-                        continue
-                    candidates.append({
-                        "a": min(a["id"], b["id"]),
-                        "b": max(a["id"], b["id"]),
-                        "source": "sql_tag", "similarity": None,
-                    })
-
-        # 路径 2：按标题核心词分组
+        # 按"标题核心词"分组 — 同名制度不同版本(如 2022 vs 2025 同名制度)。
+        # tag 笛卡尔积(同 tag 两两配对)噪音过大,已移除;内容相似度由 embedding 阶段负责。
         title_groups: dict[str, list[dict]] = {}
         for it in items:
             core = extract_title_core(it.get("title", ""))
@@ -322,11 +316,15 @@ class VersionConflictService:
 
     def _scan_phase_embedding(self, session_id: str, sql_pairs: list[dict],
                               rescan_ignored: bool = False) -> list[dict]:
-        """embedding 补充：对未被 SQL 命中的文档跑 vectorstore.search。"""
+        """embedding 全量扫描:用 BlockStore 查 top-k 相似 block,按 knowledge_id 聚合。
+
+        用户知识库实际索引在 vec_blocks(block 级),而非 vec_chunks(知识级),故此处
+        改用 BlockStore,并按 page_id(=knowledge_id)把同知识的多个 block 命中聚合。
+        """
         try:
-            vs = self._get_vectorstore()
+            bs = self._get_block_store()
         except Exception as e:
-            logger.warning("VectorStore unavailable, skipping embedding phase: %s", e)
+            logger.warning("BlockStore unavailable, skipping embedding phase: %s", e)
             return []
 
         kr = self._get_knowledge_repo()
@@ -334,40 +332,36 @@ class VersionConflictService:
         if len(items) < 2:
             return []
 
-        # SQL 已命中的 item_id 集合
-        sql_item_ids = set()
-        for p in sql_pairs:
-            sql_item_ids.add(p["a"])
-            sql_item_ids.add(p["b"])
-
         candidates = []
-        sql_pair_keys = {_make_pair_key(p["a"], p["b"]) for p in sql_pairs}
+        seen_keys: set[str] = set()  # 本阶段内部去重
 
         for it in items:
-            if it["id"] in sql_item_ids:
-                continue  # SQL 已命中，跳过
             content = (it.get("content") or "")[:EMBEDDING_QUERY_MAX_TOKENS]
             if not content.strip():
                 continue
             try:
-                similar = vs.search(query=content, top_k=5)
+                similar = bs.search(query=content, top_k=8)
             except Exception as e:
-                logger.warning("VectorStore.search failed for %s: %s", it["id"], e)
+                logger.warning("BlockStore.search failed for %s: %s", it["id"], e)
                 continue
+            # block 级 hit 按 page_id(=knowledge_id)聚合,取最小 distance(最高相似度)
+            best: dict[str, float] = {}
             for hit in similar:
-                hit_id = hit.get("metadata", {}).get("knowledge_id") or hit.get("id")
-                distance = hit.get("distance", 1.0)
-                # distance 是 cosine distance (0-2)，转成 similarity score (0-1)
-                # score = 1 - distance/2
-                hit_score = max(0.0, 1.0 - distance / 2.0)
+                hit_id = (hit.get("metadata") or {}).get("page_id") or hit.get("id")
                 if not hit_id or hit_id == it["id"]:
                     continue
+                distance = hit.get("distance", 1.0)
+                if distance < best.get(hit_id, float("inf")):
+                    best[hit_id] = distance
+            for hit_id, distance in best.items():
+                # distance 是 cosine distance (0-2),转 similarity score (0-1)
+                hit_score = max(0.0, 1.0 - distance / 2.0)
                 if hit_score < EMBEDDING_SIMILARITY_THRESHOLD:
                     continue
                 if self._should_skip_pair(it["id"], hit_id, rescan_ignored):
                     continue
                 pair_key = _make_pair_key(it["id"], hit_id)
-                if pair_key in sql_pair_keys:
+                if pair_key in seen_keys:
                     continue
                 candidates.append({
                     "a": min(it["id"], hit_id),
@@ -375,7 +369,7 @@ class VersionConflictService:
                     "source": "embedding",
                     "similarity": hit_score,
                 })
-                sql_pair_keys.add(pair_key)  # 避免本阶段内重复
+                seen_keys.add(pair_key)
             # 限流
             time.sleep(1.0 / EMBEDDING_QPS)
 

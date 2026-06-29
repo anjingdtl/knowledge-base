@@ -99,6 +99,7 @@ class MainWindow(QMainWindow):
         from src.gui.graph_view import GraphView
         from src.gui.knowledge_view import KnowledgeView
         from src.gui.llm_indicator import LLMIndicator
+        from src.gui.maintenance_view import MaintenanceView
         from src.gui.trash_view import TrashView
         from src.gui.wiki_view import WikiView
 
@@ -146,6 +147,7 @@ class MainWindow(QMainWindow):
         self.btn_wiki = nav_button("知识 Wiki", "wiki", 3)
         self.btn_graph = nav_button("知识图谱", "graph", 4)
         self.btn_trash = nav_button("回收站", "trash", 5)
+        self.btn_maintenance = nav_button("维护中心", "maintenance", 6)
 
         sidebar_layout.addWidget(self.btn_knowledge)
         sidebar_layout.addWidget(self.btn_chat)
@@ -153,6 +155,7 @@ class MainWindow(QMainWindow):
         sidebar_layout.addWidget(self.btn_wiki)
         sidebar_layout.addWidget(self.btn_graph)
         sidebar_layout.addWidget(self.btn_trash)
+        sidebar_layout.addWidget(self.btn_maintenance)
         sidebar_layout.addStretch()
         sidebar_layout.addSpacing(16)
 
@@ -224,6 +227,7 @@ class MainWindow(QMainWindow):
             (3, WikiView, {}),
             (4, GraphView, {"llm_indicator": self.llm_indicator}),
             (5, TrashView, {}),
+            (6, MaintenanceView, {}),
         ], start=1):
             placeholder = QWidget()
             self.stack.addWidget(placeholder)
@@ -362,7 +366,7 @@ class MainWindow(QMainWindow):
             placeholder.deleteLater()
             self.stack.insertWidget(stack_idx, real_view)
             # 存为属性，方便后续引用
-            attr_names = {1: "chat_view", 2: "catalog_view", 3: "wiki_view", 4: "graph_view", 5: "trash_view"}
+            attr_names = {1: "chat_view", 2: "catalog_view", 3: "wiki_view", 4: "graph_view", 5: "trash_view", 6: "maintenance_view"}
             setattr(self, attr_names[index], real_view)
 
         self.stack.setCurrentIndex(index)
@@ -372,12 +376,16 @@ class MainWindow(QMainWindow):
         self.btn_wiki.setChecked(index == 3)
         self.btn_graph.setChecked(index == 4)
         self.btn_trash.setChecked(index == 5)
+        self.btn_maintenance.setChecked(index == 6)
         # 切换到知识目录时刷新，确保与知识库的标题修改同步
         if index == 2 and hasattr(self, 'catalog_view'):
             self.catalog_view._load_catalog()
         # 切换到回收站时刷新列表
         if index == 5 and hasattr(self, 'trash_view'):
             self.trash_view.refresh()
+        # 切换到维护中心时刷新历史会话与忽略列表
+        if index == 6 and hasattr(self, 'maintenance_view'):
+            self.maintenance_view.refresh_on_show()
 
     def _open_settings(self):
         from src.gui.settings_dialog import SettingsDialog
