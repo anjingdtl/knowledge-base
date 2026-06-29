@@ -93,14 +93,22 @@ def _check_garbled(content: str) -> bool:
 
 
 class DedupWorker(QThread):
-    """后台去重线程"""
+    """后台去重线程：先回填空 content_hash，再执行去重"""
     progress = Signal(int, str)
-    finished = Signal(int, int)  # groups_found, removed_count
+    finished = Signal(int, int, int)  # backfilled_count, groups_found, removed_count
 
     def run(self):
+        # 第一步：为历史空哈希记录补算 content_hash
+        self.progress.emit(0, "正在回填内容指纹...")
+        backfilled = Database.backfill_content_hash()
+        if backfilled > 0:
+            self.progress.emit(10, f"已回填 {backfilled} 条记录的指纹")
+
+        # 第二步：查找重复组
+        self.progress.emit(20, "正在扫描重复条目...")
         groups = Database.find_duplicates()
         if not groups:
-            self.finished.emit(0, 0)
+            self.finished.emit(backfilled, 0, 0)
             return
 
         removed = 0
@@ -111,11 +119,11 @@ class DedupWorker(QThread):
                 _file_graph_service().delete_page(item["id"])
                 removed += 1
                 self.progress.emit(
-                    int(removed / max(total, 1) * 100),
+                    20 + int(removed / max(total, 1) * 80),
                     f"去重中: {removed}/{total}"
                 )
 
-        self.finished.emit(len(groups), removed)
+        self.finished.emit(backfilled, len(groups), removed)
 
 
 class QualityWorker(QThread):
@@ -1570,6 +1578,14 @@ class KnowledgeView(QWidget):
 
     def _deduplicate(self):
         """扫描并去除重复的知识条目"""
+        # 先回填历史空哈希，确保去重覆盖旧记录
+        backfilled = Database.backfill_content_hash()
+        if backfilled > 0:
+            QMessageBox.information(
+                self, "知识去重",
+                f"已为 {backfilled} 条历史记录补充内容指纹，现在开始扫描重复。"
+            )
+
         groups = Database.find_duplicates()
         if not groups:
             QMessageBox.information(self, "知识去重", "没有发现重复的知识条目。")
@@ -1581,8 +1597,8 @@ class KnowledgeView(QWidget):
         from PySide6.QtWidgets import QDialog, QDialogButtonBox, QTextEdit, QVBoxLayout
         dialog = QDialog(self)
         dialog.setWindowTitle("确认去重")
-        dialog.setMinimumWidth(420)
-        dialog.setMaximumHeight(500)
+        dialog.setMinimumWidth(480)
+        dialog.setMaximumHeight(520)
 
         layout = QVBoxLayout(dialog)
 
@@ -1594,14 +1610,19 @@ class KnowledgeView(QWidget):
 
         detail = QTextEdit()
         detail.setReadOnly(True)
-        detail.setMaximumHeight(300)
+        detail.setMaximumHeight(320)
         lines = []
         for i, g in enumerate(groups[:50]):
             keep = g[0]
-            lines.append(f"【{keep['title']}】(保留)")
+            lines.append(f"【{keep.get('title', '')}】(保留)")
             for dup in g[1:]:
+                dup_title = dup.get("title", "")
                 t = dup.get("created_at", "")[:16].replace("T", " ")
-                lines.append(f"  × {t}")
+                # 展示重复条目的标题，方便对比差异
+                if dup_title and dup_title != keep.get("title", ""):
+                    lines.append(f"  × {dup_title}  [{t}]")
+                else:
+                    lines.append(f"  × 同内容  [{t}]")
         if len(groups) > 50:
             lines.append(f"\n... 还有 {len(groups) - 50} 组未显示")
         detail.setPlainText("\n".join(lines))
@@ -1629,7 +1650,7 @@ class KnowledgeView(QWidget):
             lambda v, msg: (progress.setValue(v), progress.setLabelText(msg))
         )
         self._dedup_worker.finished.connect(
-            lambda groups_found, removed: (
+            lambda backfilled_count, groups_found, removed: (
                 progress.close(),
                 self._on_dedup_finished(groups_found, removed),
             )

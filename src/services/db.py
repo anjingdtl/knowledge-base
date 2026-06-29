@@ -1141,29 +1141,74 @@ class Database(metaclass=_DatabaseMeta):
             return True
 
     def find_duplicates(self) -> list[list[dict]]:
-        """查找重复条目组：按 source_path + file_size + file_created_at + file_modified_at 四项完全一致判定重复。
-        每组按 created_at 降序（最新在前）。"""
+        """查找重复条目组，两层策略：
+        1. content_hash 相同 → 内容完全一致（最可靠）
+        2. 标准化标题相同 → 对 content_hash 为空的旧记录兜底
+           （标题末尾的 --<hex> 后缀被剥掉后再比较）
+        每组按 created_at 降序（最新在前），调用方保留首条、删除其余。
+        """
+        import re
         conn = self.get_conn()
         rows = conn.execute(
-            "SELECT id, title, source_path, file_size, file_created_at, file_modified_at, created_at FROM knowledge_items"
+            "SELECT id, title, content, source_path, content_hash, "
+            "file_size, created_at, updated_at FROM knowledge_items "
+            "WHERE deleted_at IS NULL"
         ).fetchall()
 
-        groups: dict[tuple[str, int, str, str], list[dict]] = {}
+        # ---- 策略 1: content_hash 匹配 ----
+        hash_groups: dict[str, list[dict]] = {}
+        no_hash_rows: list[dict] = []
         for row in rows:
-            src = (row["source_path"] or "").strip()
-            size = row["file_size"] or 0
-            fcat = (row["file_created_at"] or "").strip()
-            fmat = (row["file_modified_at"] or "").strip()
-            if src and size > 0:
-                key = (src, size, fcat, fmat)
-                groups.setdefault(key, []).append(dict(row))
+            ch = (row["content_hash"] or "").strip()
+            d = dict(row)
+            if ch:
+                hash_groups.setdefault(ch, []).append(d)
+            else:
+                no_hash_rows.append(d)
 
-        result = []
-        for g in groups.values():
+        # ---- 策略 2: 标准化标题匹配（仅对无 hash 的旧记录兜底） ----
+        _suffix_re = re.compile(r"--[0-9a-fA-F]{6,16}$")
+        title_groups: dict[str, list[dict]] = {}
+        for d in no_hash_rows:
+            raw_title = (d.get("title") or "").strip()
+            norm = _suffix_re.sub("", raw_title).strip()
+            if not norm:
+                continue
+            title_groups.setdefault(norm, []).append(d)
+
+        # ---- 合并两组结果 ----
+        result: list[list[dict]] = []
+        for g in hash_groups.values():
             if len(g) > 1:
-                g.sort(key=lambda x: x.get("created_at", ""), reverse=True)
-                result.append(g)
+                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
+        for g in title_groups.values():
+            if len(g) > 1:
+                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
         return result
+
+    def backfill_content_hash(self) -> int:
+        """为 content_hash 为空的历史记录补算 sha256 并写回。返回回填条数。"""
+        import hashlib
+        conn = self.get_conn()
+        rows = conn.execute(
+            "SELECT id, content FROM knowledge_items "
+            "WHERE (content_hash IS NULL OR content_hash = '') AND deleted_at IS NULL"
+        ).fetchall()
+        if not rows:
+            return 0
+        count = 0
+        for row in rows:
+            content = row["content"] or ""
+            if not content:
+                continue
+            h = hashlib.sha256(content.encode("utf-8", errors="surrogatepass")).hexdigest()
+            conn.execute(
+                "UPDATE knowledge_items SET content_hash = ? WHERE id = ?",
+                (h, row["id"]),
+            )
+            count += 1
+        conn.commit()
+        return count
 
     def count_knowledge(
         self,
