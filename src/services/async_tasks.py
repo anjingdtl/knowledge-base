@@ -208,6 +208,7 @@ def _file_ingest_handler(job_id: str, params: dict) -> dict:
                     "file_created_at": file_created_at,
                     "file_modified_at": file_modified_at,
                 },
+                content_hash=content_hash,
             )
 
             # 统计 block 数

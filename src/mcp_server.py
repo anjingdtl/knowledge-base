@@ -747,6 +747,7 @@ def create(
         content,
         tags=tags,
         metadata={"source_type": source_type, "file_type": file_type},
+        content_hash=content_hash,
     )
     # Wiki 编译
     _try_wiki_compile(item_id)
@@ -1478,6 +1479,7 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
                 "file_created_at": file_created_at,
                 "file_modified_at": file_modified_at,
             },
+            content_hash=content_hash,
         )
         item = db.get_knowledge(item_id) or {"title": parsed.title, "file_type": parsed.file_type}
         _try_wiki_compile(item_id)
@@ -1526,6 +1528,7 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
         blocks,
         tags=tags,
         metadata={"source_type": "web", "source_path": parsed.source_path, "file_type": parsed.file_type},
+        content_hash=content_hash,
     )
     item = db.get_knowledge(item_id) or {"title": parsed.title, "file_type": parsed.file_type}
     _try_wiki_compile(item_id)

@@ -94,7 +94,7 @@ class FileGraphService:
         self._write_manifest({item["id"]: item["path"] for item in synced if item.get("id") and item.get("path")})
         return {"synced": len(synced), "deleted": deleted, "pages": synced}
 
-    def sync_page(self, path_or_id: str) -> dict:
+    def sync_page(self, path_or_id: str, content_hash: str | None = None) -> dict:
         path = self._resolve_page_path(path_or_id)
         text = path.read_text(encoding="utf-8")
         page = self._parser.parse(text)
@@ -108,6 +108,11 @@ class FileGraphService:
         content = self._content_from_page(page)
         now = datetime.now().isoformat()
         stat = path.stat()
+        # 优先使用调用方传入的 content_hash（导入时去重用），
+        # 否则从 content（_content_from_page 输出）计算，确保与知识内容一致。
+        effective_hash = content_hash or hashlib.sha256(
+            content.encode("utf-8", errors="surrogatepass")
+        ).hexdigest()
         item = KnowledgeItem(
             id=page.id,
             title=page.title,
@@ -116,7 +121,7 @@ class FileGraphService:
             source_path=str(path),
             file_type=page.metadata.get("file-type", "md"),
             file_size=stat.st_size,
-            content_hash=hashlib.sha256(text.encode("utf-8", errors="surrogatepass")).hexdigest(),
+            content_hash=effective_hash,
             file_created_at=page.metadata.get("created-at", now),
             file_modified_at=datetime.fromtimestamp(stat.st_mtime).isoformat(),
             tags=page.tags,
@@ -154,7 +159,7 @@ class FileGraphService:
         self._write_manifest(manifest)
         return {"id": page.id, "title": page.title, "path": str(path), "blocks": len(list(self._parser.iter_blocks(page.blocks)))}
 
-    def create_page(self, title: str, blocks, tags=None, metadata=None) -> str:
+    def create_page(self, title: str, blocks, tags=None, metadata=None, content_hash: str | None = None) -> str:
         now = datetime.now().isoformat()
         meta_in = metadata or {}
         page = PageDocument(
@@ -178,7 +183,7 @@ class FileGraphService:
         self._parser.ensure_ids(page)
         path = self._page_path(page.title, page.id)
         path.write_text(self._parser.serialize(page), encoding="utf-8", errors="surrogatepass")
-        self.sync_page(str(path))
+        self.sync_page(str(path), content_hash=content_hash)
         return page.id
 
     def update_page(self, page_id: str, blocks, metadata=None) -> None:
