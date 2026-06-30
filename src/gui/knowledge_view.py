@@ -98,9 +98,9 @@ class DedupWorker(QThread):
     finished = Signal(int, int, int)  # backfilled_count, groups_found, removed_count
 
     def run(self):
-        # 第一步：为历史空哈希记录补算 content_hash
+        # 第一步：为历史记录补算/修复 content_hash（force 模式覆盖旧版错误 hash）
         self.progress.emit(0, "正在回填内容指纹...")
-        backfilled = Database.backfill_content_hash()
+        backfilled = Database.backfill_content_hash(force=True)
         if backfilled > 0:
             self.progress.emit(10, f"已回填 {backfilled} 条记录的指纹")
 
@@ -1578,8 +1578,8 @@ class KnowledgeView(QWidget):
 
     def _deduplicate(self):
         """扫描并去除重复的知识条目"""
-        # 先回填历史空哈希，确保去重覆盖旧记录
-        backfilled = Database.backfill_content_hash()
+        # 先强制回填所有历史记录 content_hash（覆盖旧版错误 hash）
+        backfilled = Database.backfill_content_hash(force=True)
         if backfilled > 0:
             QMessageBox.information(
                 self, "知识去重",

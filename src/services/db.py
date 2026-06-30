@@ -1141,12 +1141,15 @@ class Database(metaclass=_DatabaseMeta):
             return True
 
     def find_duplicates(self) -> list[list[dict]]:
-        """查找重复条目组，两层策略：
+        """查找重复条目组，三层策略：
         1. content_hash 相同 → 内容完全一致（最可靠）
         2. 标准化标题相同 → 对 content_hash 为空的旧记录兜底
            （标题末尾的 --<hex> 后缀被剥掉后再比较）
+        3. 同内容不同 hash → 对标准化标题相同 + content 相同的记录兜底
+           （捕获旧版 sync_page 用 sha256(MD全文) 存 hash 的遗留问题）
         每组按 created_at 降序（最新在前），调用方保留首条、删除其余。
         """
+        import hashlib
         import re
         conn = self.get_conn()
         rows = conn.execute(
@@ -1158,11 +1161,13 @@ class Database(metaclass=_DatabaseMeta):
         # ---- 策略 1: content_hash 匹配 ----
         hash_groups: dict[str, list[dict]] = {}
         no_hash_rows: list[dict] = []
+        has_hash_rows: list[dict] = []
         for row in rows:
             ch = (row["content_hash"] or "").strip()
             d = dict(row)
             if ch:
                 hash_groups.setdefault(ch, []).append(d)
+                has_hash_rows.append(d)
             else:
                 no_hash_rows.append(d)
 
@@ -1176,7 +1181,37 @@ class Database(metaclass=_DatabaseMeta):
                 continue
             title_groups.setdefault(norm, []).append(d)
 
-        # ---- 合并两组结果 ----
+        # ---- 策略 3: 同内容不同 hash 兜底 ----
+        # 收集策略 1 中未命中重复的"孤立"记录（hash 组内只有 1 条）
+        orphan_by_hash: dict[str, dict] = {}
+        repeated_hashes: set[str] = set()
+        for ch, g in hash_groups.items():
+            if len(g) > 1:
+                repeated_hashes.add(ch)
+            else:
+                orphan_by_hash[ch] = g[0]
+
+        # 对孤立的 hash 记录，按 (标准化标题, sha256(content)) 分组
+        # 如果两条孤立的 hash 记录标准化标题相同且 content 相同，则判定为重复
+        content_dedup_groups: dict[str, list[dict]] = {}
+        for d in has_hash_rows:
+            ch = (d.get("content_hash") or "").strip()
+            if ch in repeated_hashes:
+                continue  # 已在策略 1 中处理
+            raw_title = (d.get("title") or "").strip()
+            norm = _suffix_re.sub("", raw_title).strip()
+            if not norm:
+                continue
+            c = d.get("content") or ""
+            if not c:
+                continue
+            content_h = hashlib.sha256(
+                c.encode("utf-8", errors="surrogatepass")
+            ).hexdigest()
+            key = f"{norm}|{content_h}"
+            content_dedup_groups.setdefault(key, []).append(d)
+
+        # ---- 合并三组结果 ----
         result: list[list[dict]] = []
         for g in hash_groups.values():
             if len(g) > 1:
@@ -1184,16 +1219,30 @@ class Database(metaclass=_DatabaseMeta):
         for g in title_groups.values():
             if len(g) > 1:
                 result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
+        for g in content_dedup_groups.values():
+            if len(g) > 1:
+                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
         return result
 
-    def backfill_content_hash(self) -> int:
-        """为 content_hash 为空的历史记录补算 sha256 并写回。返回回填条数。"""
+    def backfill_content_hash(self, force: bool = False) -> int:
+        """为历史记录补算/修复 content_hash。
+
+        force=False（默认）：仅回填 content_hash 为空的记录。
+        force=True：强制覆盖所有未删除记录的 content_hash（用 sha256(content) 重算），
+        用于修复旧版 sync_page 用 sha256(MD全文) 存 hash 导致互不相同的遗留问题。
+        返回回填条数。
+        """
         import hashlib
         conn = self.get_conn()
-        rows = conn.execute(
-            "SELECT id, content FROM knowledge_items "
-            "WHERE (content_hash IS NULL OR content_hash = '') AND deleted_at IS NULL"
-        ).fetchall()
+        if force:
+            rows = conn.execute(
+                "SELECT id, content FROM knowledge_items WHERE deleted_at IS NULL"
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                "SELECT id, content FROM knowledge_items "
+                "WHERE (content_hash IS NULL OR content_hash = '') AND deleted_at IS NULL"
+            ).fetchall()
         if not rows:
             return 0
         count = 0
