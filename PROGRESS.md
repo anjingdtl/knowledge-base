@@ -7,6 +7,7 @@
 
 ## 权威文档
 
+- [下一阶段:Karpathy Wiki-First 对齐 Spec](docs/superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-design.md)
 - [当前优化规格](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md)
 - [当前实施计划](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
 - [MCP 使用文档](docs/mcp/)
