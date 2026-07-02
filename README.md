@@ -100,7 +100,7 @@ Every search result includes document path, block ID, location (page/sheet/slide
 `shinehe watch D:\docs` monitors your documents and automatically re-indexes new, modified, or deleted files with debounce and hash-based diff.
 
 ### MCP Tool Profiles
-Default `core` profile exposes 10 stable tools for AI agents. Advanced users can switch to `extended`, `admin`, `full`, or `legacy` profiles via `config.yaml`.
+Default `extended` profile exposes 20 tools (10 core read tools + Query DSL, source graph, async ingest). Switch to `core`, `admin`, `full`, or `legacy` via `config.yaml`.
 
 ### Local Reranker (Optional)
 Pluggable reranker providers: API-based, local cross-encoder (sentence-transformers), LLM fallback, or disabled. Falls back gracefully on failure.
