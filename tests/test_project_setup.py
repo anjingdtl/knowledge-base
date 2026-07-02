@@ -94,6 +94,57 @@ class TestBuildConfig:
         config = service.build_config({})
         assert config["llm"]["provider"] == "siliconflow"
 
+    def test_local_config_has_knowledge_workflow(self):
+        """local 模式生成 knowledge_workflow 段,默认 wiki_first"""
+        service = ProjectSetupService()
+        config = service.build_config({"local": True})
+        kw = config["knowledge_workflow"]
+        assert kw["mode"] == "wiki_first"
+        assert kw["raw_dir"] == "raw"
+        assert kw["wiki_dir"] == "wiki"
+        assert kw["schema_file"] == "schema/AGENTS.md"
+        assert kw["maintain_index_md"] is True
+        assert kw["maintain_log_md"] is True
+
+    def test_local_config_wiki_safe_defaults(self):
+        """wiki 安全默认:auto_publish=False, lint_contradictions=True"""
+        service = ProjectSetupService()
+        config = service.build_config({"local": True})
+        assert config["wiki"]["auto_publish"] is False
+        assert config["wiki"]["lint_contradictions"] is True
+        assert config["wiki"]["enabled"] is True
+        assert config["wiki"]["auto_compile"] is True
+
+    def test_local_config_mcp_exposes_wiki_tools(self):
+        """local mcp 收敛:experimental_tools_enabled=True"""
+        service = ProjectSetupService()
+        config = service.build_config({"local": True})
+        assert config["mcp"]["experimental_tools_enabled"] is True
+        assert config["mcp"]["allow_http_write"] is False
+
+    def test_provider_config_has_knowledge_workflow(self):
+        """provider 模式同样生成 wiki-first 段"""
+        service = ProjectSetupService()
+        config = service.build_config({"provider": "siliconflow"})
+        assert config["knowledge_workflow"]["mode"] == "wiki_first"
+        assert config["wiki"]["auto_publish"] is False
+
+    def test_provider_config_mcp_safe_defaults(self):
+        """provider mcp 收敛:write_policy=local_confirm"""
+        service = ProjectSetupService()
+        config = service.build_config({"provider": "siliconflow"})
+        assert config["mcp"]["tool_profile"] == "extended"
+        assert config["mcp"]["experimental_tools_enabled"] is True
+        assert config["mcp"]["write_policy"] == "local_confirm"
+        assert config["mcp"]["allow_http_write"] is False
+
+    def test_wiki_first_defaults_helper_structure(self):
+        """_wiki_first_defaults 返回 knowledge_workflow + wiki 两段"""
+        service = ProjectSetupService()
+        defaults = service._wiki_first_defaults()
+        assert set(defaults.keys()) == {"knowledge_workflow", "wiki"}
+        assert defaults["knowledge_workflow"]["mode"] == "wiki_first"
+
 
 # ---------------------------------------------------------------------------
 # write_config 测试

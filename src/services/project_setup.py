@@ -32,6 +32,39 @@ class ProjectSetupService:
     # 配置构建
     # ------------------------------------------------------------------
 
+    @staticmethod
+    def _wiki_first_defaults() -> dict[str, Any]:
+        """wiki-first 模式的公共默认段:knowledge_workflow + wiki 安全默认。
+
+        被 _build_local_config 与 _build_provider_config 共享,保证两种 init
+        路径生成一致的 wiki-first 配置。后续阶段通过
+        Config.get("knowledge_workflow.mode", "legacy") 读取。
+        """
+        return {
+            "knowledge_workflow": {
+                "mode": "wiki_first",
+                "raw_dir": "raw",
+                "wiki_dir": "wiki",
+                "schema_file": "schema/AGENTS.md",
+                "source_summary_dir": "wiki/sources",
+                "entity_dir": "wiki/entities",
+                "concept_dir": "wiki/concepts",
+                "synthesis_dir": "wiki/syntheses",
+                "comparison_dir": "wiki/comparisons",
+                "maintain_index_md": True,
+                "maintain_log_md": True,
+            },
+            "wiki": {
+                "enabled": True,
+                "auto_compile": True,
+                "auto_link": True,
+                "auto_publish": False,           # 收敛:review gate
+                "lint_contradictions": True,     # 收敛:启用 lint 闭环
+                "max_llm_calls_per_ingest": 3,
+                "query_save_min_length": 100,
+            },
+        }
+
     def build_config(self, request: dict[str, Any]) -> dict[str, Any]:
         """根据请求参数构建初始配置字典
 
@@ -72,6 +105,8 @@ class ProjectSetupService:
             "mcp": {
                 "tool_profile": "extended",
                 "write_policy": "disabled",
+                "experimental_tools_enabled": True,
+                "allow_http_write": False,
             },
             "rag": {
                 "search_mode": "blend",
@@ -92,6 +127,7 @@ class ProjectSetupService:
                 "db_name": "kb.db",
             },
         }
+        config.update(self._wiki_first_defaults())
         return config
 
     def _build_provider_config(self, preset: ProviderPreset) -> dict[str, Any]:
@@ -109,6 +145,12 @@ class ProjectSetupService:
                 "provider": preset.canonical_name,
                 "temperature": 0.7,
                 "max_tokens": 2048,
+            },
+            "mcp": {
+                "tool_profile": "extended",
+                "experimental_tools_enabled": True,
+                "write_policy": "local_confirm",
+                "allow_http_write": False,
             },
             "rag": {
                 "chunk_overlap": 180,
@@ -131,6 +173,7 @@ class ProjectSetupService:
                 "provider": preset.canonical_name,
             }
 
+        config.update(self._wiki_first_defaults())
         return config
 
     # ------------------------------------------------------------------
