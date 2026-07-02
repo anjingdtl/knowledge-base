@@ -1,21 +1,65 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-06-25
+> 最后更新：2026-07-02
 > 源码版本：`src/version.py` 中的 `1.4.0`
 > 当前分支：`master`
-> 当前方向：本地优先的 MCP 高精准知识检索引擎
+> 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
 
 ## 权威文档
 
-- [下一阶段:Karpathy Wiki-First 对齐 Spec](docs/superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-design.md)
-- [当前优化规格](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md)
-- [当前实施计划](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
+- [当前主线：Karpathy Wiki-First 对齐 Spec（第一阶段）](docs/superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-design.md)
+- 当前实施计划 Wiki-First：[W1 地基](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w1.md) / [W2 编译](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w2.md) / [W3 闭环](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w3.md) / [W4 收口](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w4.md)
+- [上一阶段（已完成）：MCP 本地检索收束 Spec](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md) / [Plan](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
 - [MCP 使用文档](docs/mcp/)
 - [高级功能](docs/advanced-features.md)
 - [工具配置档迁移指南](docs/migration/mcp-tool-profiles.md)
 - [历史设计与已完成计划](docs/archive/README.md)
 
 除上述当前规格和计划外，归档目录中的文档只用于追溯，不代表当前待办。
+
+## Karpathy Wiki-First 对齐（第一阶段）— W1-W4 核心实现落地 (2026-07-02)
+
+将知识库从「检索即终态」演进为「ingest → 编译为 wiki → 检索 / 回写」的 wiki-first 模型。本轮完成 W1-W4 的核心代码实现与分周计划文档；核心 MCP 检索链路经实测无回归。
+
+### 交付清单
+
+| 周次 | 模块 | 交付 | 主要改动 |
+|-----|------|------|---------|
+| W1 | 目录契约 | `shinehe init` 生成 wiki-first 布局（`raw/` + `wiki/` + `schema/` + `artifacts/` 与 `AGENTS.md`） | `project_setup.py`：`WIKI_FIRST_DIRS` / `AGENTS_MD_TEMPLATE` / `_wiki_first_defaults` / `write_wiki_first_layout`；`cli.py` `_handle_init` 集成 |
+| W1 | 配置地基 | `build_config` 注入 `knowledge_workflow` 段与安全默认值；收敛 `config.example.yaml`；清理 `chroma_dir` legacy | `project_setup.py` / `config.example.yaml` |
+| W2 | 共享工具 | `wiki_slug`（slugify / frontmatter 解析） | `services/wiki_slug.py` |
+| W2 | 源编译器 | 规则式 `wiki_source_compiler`（**零 LLM**，模板化 source summary） | `services/wiki_source_compiler.py` |
+| W2 | 实体更新 | `wiki_entity_updater`（LLM，每文档硬上限 3 次调用） | `services/wiki_entity_updater.py` |
+| W2 | 索引 / 日志 | `wiki_index_compiler` + `wiki_log_compiler` 自动更新 `wiki/index.md`、`wiki/log.md` | `services/wiki_index_compiler.py` / `wiki_log_compiler.py` |
+| W2 | 工作流服务 | `KnowledgeWorkflowService` + `path_indexer` ingest 钩子 | `services/knowledge_workflow.py`；`path_indexer.py` try/except 包裹 |
+| W3 | 查询回写 | `save_mode` + 置信度阈值标准化（高价值 query → wiki 草稿） | `mcp_server.py` / `knowledge_workflow.py` / `rag_pipeline.py` |
+| W3 | lint 增强 | `wiki_lint` 新增 `outdated_claim` + `missing_backlinks` | `services/wiki_lint.py` |
+| W3 | CLI | `shinehe wiki` 子命令组（`lint` / `save-answer` / `ingest-source`） | `cli.py` |
+| W4 | 默认档修正 | README 默认 profile `core→extended` + 文档一致性测试 | `README.md` / `tests/test_docs_consistency.py` |
+| W4 | 迁移 | `shinehe migrate`（legacy → wiki-first） | `cli.py` / `services/migrator.py` |
+| W4 | 评测 | wiki-compilation eval（5 指标） | `evals/run_wiki_eval.py` / `tests/test_wiki_eval.py` |
+| 横切 | 安全 | `config.yaml` 停止跟踪（防密钥泄露）+ gitleaks pre-commit | `.gitignore` / `.pre-commit-config.yaml` |
+
+### 设计要点：为什么没破坏检索
+
+- **wiki hook 隔离**：`path_indexer._ingest_file` 在 `index_knowledge_item` 之后追加 `try_knowledge_workflow_compile`，用 try/except 包裹，失败仅 `logger.warning`，**不阻塞** agent 的索引→检索主链路（`path_indexer.py:398-403 / 447-452`）。
+- **工具面零改动**：`tool_profiles.py` 的 `CORE_TOOLS` / extended / admin / full 配置档本轮未触碰，检索工具面与 v1.4.0 一致。
+- **文件系统层独立**：wiki-first 产物落在 `wiki/*.md`（由 `KnowledgeWorkflowService` 管理），与 SQLite `wiki_pages` 表（旧 wiki 系统）解耦。
+
+### 验证（当次真实执行）
+
+| 门禁 | 结果 |
+|------|------|
+| 今天新增 wiki 模块单测 | `33 passed`（source / entity / index / log / lint / cli / migrate / eval） |
+| MCP 核心 + workflow + docs 一致性 | `89 passed, 1 skipped` |
+| 端到端 RAG + 检索回归 | `65 passed`（rag_full / full_pipeline_e2e / search / rag_sources） |
+| 真实 MCP 工具调用 | `ping`（alive v1.4.0）/ `search`（返回 3 条）/ `ask`（完整回答 + 5 来源）全通 |
+
+### 当前边界与后续
+
+- **本地旧库尚未迁移**：当前 `data/kb.db`（153 条知识 / 10464 blocks）仍是 legacy 布局，`wiki/`、`raw/`、`schema/`、`artifacts/` 目录均不存在。启用文件系统 wiki 层需依次执行 `shinehe init`（生成目录契约）与 `shinehe migrate`（legacy → wiki-first）。数据库 `wiki_pages` 表的 40 条为旧 wiki 系统遗留，非本轮产物。
+- **本轮 wiki 编译能力验证范围 = 单元测试（fixture）+ 检索链路无回归**；真实数据上的端到端编译待迁移后验证。
+- **后续**：W2-W4 完整 plan 文档已就绪，剩余细化任务与全量回归按各 plan 推进。
 
 ## 50 轮 MCP 测试报告 BUG 修复 — 已完成 (2026-06-25)
 
