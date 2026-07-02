@@ -1,6 +1,6 @@
 # Knowledge-Base Karpathy Wiki-First 对齐设计（第二阶段：检索执行层）
 
-- **状态**：Draft（待用户复核 → 进入 writing-plans）
+- **状态**：已复核（2026-07-02，Gap A/B 定稿）→ 待 writing-plans 展开 W1
 - **日期**：2026-07-02
 - **范围**：第二阶段 4 周——补齐 Karpathy 方法论的「检索执行层」（规模自适应路由 + parent-child for wiki + 中文 lexical 强化）
 - **上游依据**：`docs/knowledge-base 仓库对照 Karpathy LLM 知识库方法论的深度评估报告.md`
@@ -79,8 +79,12 @@ query → SizeAwareRouter（规模判定）
 现状 `enrich_with_parent_context` 仅作用于 block 候选。新增 `src/services/wiki_parent_retrieval.py`：
 
 - 输入：wiki 检索候选（entities/concepts/comparisons/syntheses 页）
-- 解析候选页 frontmatter 的 `source_ids` / `key_entities`（由第一阶段 `wiki_source_compiler` / `wiki_entity_updater` 写入）
+- 解析候选页 frontmatter，**按页类型取溯源键**（复核决策 Gap A，2026-07-02）：
+  - `entities`/`concepts` 页：frontmatter 只有 `knowledge_id`（第一阶段 `wiki_entity_updater` 未写 `source_ids`/`key_entities`）→ 用 `knowledge_id` 回查对应 source 页摘要
+  - `syntheses`/`comparisons` 页：frontmatter 带 `source_ids`（列表）→ 回查多个 source 页
+  - `sources` 页：自身即 source，跳过
 - 输出：每个 wiki 候选附加 `parent_context` = 其引用的 source 页摘要（≤ `wiki_parent_context_max_length`，默认 2000）
+- **多 source 关联（未来增强 TODO）**：当前 entity 页只关联触发它的单个 source；完整多 source 关联需后续给 `wiki_entity_updater` 补写 `source_ids`
 - 挂载点：wiki 检索管线的 post-rerank 阶段（与 block parent-child 对称）
 
 **与现有 parent-child 关系**：复用同一 `parent_context` 字段语义与 `CitationBuilder` 渲染路径；block 与 wiki 两路 parent-child 在 `blend` 档共存，RRF 不受影响。
@@ -160,6 +164,8 @@ rag:
 | 3.4 | `shinehe init` 生成空字典/同义词模板 + 配置注入 | `project_setup.py` | init 后两文件存在，可加载 |
 
 ### 6.4 W4 — 收口与 eval 扩展
+
+> **前置（Gap B，复核决策 2026-07-02）**：文件系统 wiki 当前无 lint 命令（`shinehe wiki lint` 查 SQLite `wiki_pages` 旧表，对 `wiki/*.md` 无效），且 `run_wiki_eval.py` 5 指标仅 `source_coverage`/`query_save_rate` 对文件系统有效。W4 eval 扩展前，需先实现一个扫描 `wiki/*.md` 的 lint/统计工具（cross_link / orphan / source_coverage 等），否则 size_aware/wiki_parent 收益无法量化、S4 不可测。
 
 | # | 任务 | 改动位置 | 验收（DoD） |
 |---|---|---|---|
