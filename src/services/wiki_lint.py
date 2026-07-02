@@ -90,6 +90,18 @@ class WikiLint:
                         message=f"有 {len(deleted)} 个来源条目已被删除",
                         detail={"deleted_source_ids": deleted},
                     ))
+                # 2b. 过时 claim — source 更新晚于本页(内容可能过时)
+                page_updated = page.get("updated_at", "")
+                if page_updated:
+                    for sid, src in existing.items():
+                        src_updated = src.get("updated_at", "")
+                        if src_updated and src_updated > page_updated:
+                            findings_for_page.append(LintFinding(
+                                severity="warning", category="outdated_claim",
+                                page_id=page["id"], page_title=page["title"],
+                                message=f"来源 {sid[:8]} 更新({src_updated[:10]})晚于本页({page_updated[:10]})",
+                                detail={"source_id": sid, "source_updated": src_updated, "page_updated": page_updated},
+                            ))
 
             # 3. 内容空洞
             if not page.get("concept_summary") or not page.get("content"):
@@ -160,6 +172,17 @@ class WikiLint:
                     page_id=page["id"], page_title=page["title"],
                     message=f"内容中有 {len(unique_dead)} 个引用指向不存在的页面: {', '.join(unique_dead[:5])}",
                     detail={"missing_titles": unique_dead},
+                ))
+
+        # 6b. 缺失 backlinks — 无任何页面指向它(无入链)
+        target_ids = {link["target_page_id"] for link in all_links}
+        for page in pages:
+            if page["id"] not in target_ids:
+                report.findings.append(LintFinding(
+                    severity="info", category="missing_backlinks",
+                    page_id=page["id"], page_title=page["title"],
+                    message="页面无入链(无其他 wiki 页引用)",
+                    detail={},
                 ))
 
         # 7. 矛盾检测（可选，高成本）

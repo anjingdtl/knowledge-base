@@ -66,3 +66,35 @@ def test_broken_link_detects_truly_dangling_links():
     broken = _broken_link_findings(report)
     assert len(broken) == 1, f"应检出 1 条悬空 broken_link,实际 {len(broken)}: {broken}"
     assert broken[0]["page_id"] == active
+
+
+def test_lint_outdated_claim():
+    """source updated_at 晚于 wiki page updated_at → outdated_claim。"""
+    import json as _json
+    Database.insert_knowledge({
+        "id": "k-outdated", "title": "src", "content": "c",
+        "source_type": "file", "source_path": "r", "file_type": "md",
+        "file_size": 1, "content_hash": "h", "file_created_at": "",
+        "file_modified_at": "", "tags": "[]", "version": 1,
+        "created_at": "2026-07-01T00:00:00", "updated_at": "2026-07-05T00:00:00",
+    })
+    conn = Database.get_conn()
+    conn.execute(
+        "INSERT INTO wiki_pages (id, title, content, source_ids, tags, concept_summary, "
+        "status, lint_score, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        ("w-out", "Out Page", "body", _json.dumps(["k-outdated"]), "[]", "",
+         "published", 1.0, "2026-07-01T00:00:00", "2026-07-02T00:00:00"),
+    )
+    conn.commit()
+    report = WikiLint().run()
+    cats = [f["category"] for f in report["findings"]]
+    assert "outdated_claim" in cats
+
+
+def test_lint_missing_backlinks():
+    """无入链页面 → missing_backlinks。"""
+    _insert_wiki_page(title="Lonely Page", content="body", status="published",
+                      page_id="w-lonely")
+    report = WikiLint().run()
+    cats = [f["category"] for f in report["findings"]]
+    assert "missing_backlinks" in cats
