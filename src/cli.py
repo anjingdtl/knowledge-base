@@ -183,6 +183,53 @@ def _handle_mcp(args: argparse.Namespace) -> int:
     return 0
 
 
+def _handle_wiki(args: argparse.Namespace) -> int:
+    """处理 wiki 子命令组:lint / save-answer / ingest-source。"""
+    cmd = getattr(args, "wiki_command", None)
+    if cmd is None:
+        print("用法: shinehe wiki <lint|save-answer|ingest-source>")
+        return 0
+
+    if cmd == "lint":
+        from src.utils.config import Config
+        from src.services.wiki_lint import WikiLint
+        if not Config.get("wiki.enabled", False):
+            print("[WARN] wiki 未启用(配置 wiki.enabled=true)")
+        report = WikiLint().run()
+        for f in report["findings"]:
+            print(f"  [{f['severity'].upper()}] {f['category']}: {f['page_title']} — {f['message']}")
+        print(f"\n结果: {len(report['findings'])} 个问题, 健康分 {report['score']:.2f}, 共 {report['total_pages']} 页")
+        return 1 if report["findings"] else 0
+
+    if cmd == "save-answer":
+        from datetime import datetime
+        from src.services.knowledge_workflow import KnowledgeWorkflowService
+        result = KnowledgeWorkflowService().save_query(
+            question=args.question, answer=args.answer,
+            source_ids=[], confidence=1.0,
+            page_type="syntheses", save_mode="manual",
+            timestamp=datetime.now().isoformat(),
+        )
+        print(f"[OK] 保存: {result.get('path', result.get('status'))}")
+        return 0
+
+    if cmd == "ingest-source":
+        target = Path(args.path).resolve()
+        if not target.exists():
+            print(f"[ERROR] 路径不存在: {target}", file=sys.stderr)
+            return 1
+        from src.services.path_indexer import PathIndexService
+        from src.core.container import get_active_container
+        container = get_active_container()
+        indexer = container.path_indexer if container else PathIndexService()
+        kid = indexer._ingest_file(target)
+        print(f"[OK] ingest 完成: {kid}")
+        return 0
+
+    print(f"[ERROR] 未知 wiki 子命令: {cmd}", file=sys.stderr)
+    return 1
+
+
 def main(argv: list[str] | None = None) -> None:
     """ShineHeKnowledge CLI 主入口"""
     parser = argparse.ArgumentParser(
@@ -279,6 +326,20 @@ def main(argv: list[str] | None = None) -> None:
         help="HTTP 模式端口（默认: 9000）",
     )
 
+    # --- wiki (嵌套子命令组) ---
+    wiki_parser = subparsers.add_parser(
+        "wiki", help="wiki-first 知识维护",
+        description="wiki 编译/检索闭环:lint / save-answer / ingest-source。",
+    )
+    wiki_sub = wiki_parser.add_subparsers(dest="wiki_command", help="wiki 子命令")
+
+    wiki_sub.add_parser("lint", help="运行 wiki 健康检查")
+    save_p = wiki_sub.add_parser("save-answer", help="保存问答为 wiki 综合页")
+    save_p.add_argument("--question", required=True, help="问题")
+    save_p.add_argument("--answer", required=True, help="回答")
+    ingest_p = wiki_sub.add_parser("ingest-source", help="ingest 单源并触发 wiki 编译")
+    ingest_p.add_argument("path", help="源文件路径")
+
     args = parser.parse_args(argv)
 
     if args.command is None:
@@ -291,6 +352,7 @@ def main(argv: list[str] | None = None) -> None:
         "watch": _handle_watch,
         "doctor": _handle_doctor,
         "mcp": _handle_mcp,
+        "wiki": _handle_wiki,
     }
 
     handler = handlers.get(args.command)
