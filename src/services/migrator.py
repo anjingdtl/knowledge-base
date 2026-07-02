@@ -22,8 +22,21 @@ class MigrationService:
     def __init__(self, project_dir: Path | None = None):
         self.project_dir = Path(project_dir) if project_dir else Path.cwd()
 
+    def _ensure_db(self) -> None:
+        """确保 Database 全局实例已初始化。
+
+        CLI migrate 不走 AppContainer，Database._instance 默认为 None，
+        导致 _DatabaseMeta 无法把类级调用 Database.list_knowledge() 委托到实例
+        （报 missing 'self'）。此处显式连库，与 container 路径对齐。
+        """
+        if Database._instance is None:
+            data_dir = Config.get("storage.data_dir", "data")
+            db_name = Config.get("storage.db_name", "kb.db")
+            Database.connect(str(Path(data_dir) / db_name))
+
     def plan(self) -> dict:
         """扫描 knowledge,输出迁移计划(不写盘)。"""
+        self._ensure_db()
         items = Database.list_knowledge(limit=10000)
         actions = []
         for it in items:
@@ -45,7 +58,13 @@ class MigrationService:
         }
 
     def apply(self, backup: bool = True) -> dict:
-        """备份 data/ + 导出源到 raw/ + 触发重编译。"""
+        """备份 data/ + 导出源到 raw/ + 触发重编译。
+
+        wiki 重编译依赖 active container（try_knowledge_workflow_compile 从中取
+        knowledge_workflow 服务）；CLI 路径由 _handle_migrate 负责调用 create_container()，
+        本方法不自行创建容器，以保持可测试性。
+        """
+        self._ensure_db()
         raw_dir = Path(Config.get("knowledge_workflow.raw_dir", "raw"))
         raw_dir.mkdir(parents=True, exist_ok=True)
 

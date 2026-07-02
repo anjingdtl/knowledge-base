@@ -55,11 +55,30 @@
 | 端到端 RAG + 检索回归 | `65 passed`（rag_full / full_pipeline_e2e / search / rag_sources） |
 | 真实 MCP 工具调用 | `ping`（alive v1.4.0）/ `search`（返回 3 条）/ `ask`（完整回答 + 5 来源）全通 |
 
+### 迁移落地（2026-07-02，零 LLM 模式）
+
+`shinehe init`（生成 raw/wiki/schema/artifacts + AGENTS.md + config）+ `shinehe migrate` 已执行。`data/kb.db` 只读未改（独立备份 `data/kb.db.pre-migrate-20260702`）。
+
+| 产物 | 数量 |
+|------|------|
+| `wiki/sources/*.md` | 11（file 类型 knowledge 全编译，含 2 条源文件缺失） |
+| `raw/` 导出 | 9（source_path 存在的；2 条缺失跳过） |
+| `wiki/index.md` / `log.md` | 已生成，结构正确 |
+| `wiki/entities` / `concepts` | 空（零 LLM 模式；待配 key 补） |
+
+真实文档 source 页 `key_entities` 规则抽取有效（如「创智杯通知」抽出 AI/FTTR/APP/BSS 等）。
+
+**迁移修复 2 个潜伏 bug**（migrate 首次真实执行暴露）：
+- `migrator.py` 加 `_ensure_db()`：CLI 路径 `Database._instance` 未初始化，致类级调用 `list_knowledge()` 报 missing self
+- `cli.py _handle_migrate` apply 前 `create_container()`：否则 `try_knowledge_workflow_compile` 取不到 container 静默返回 None，wiki 不编译
+
+**回归**：migrator + wiki + cli 单测 45 passed；检索链路 24 passed。
+
 ### 当前边界与后续
 
-- **本地旧库尚未迁移**：当前 `data/kb.db`（153 条知识 / 10464 blocks）仍是 legacy 布局，`wiki/`、`raw/`、`schema/`、`artifacts/` 目录均不存在。启用文件系统 wiki 层需依次执行 `shinehe init`（生成目录契约）与 `shinehe migrate`（legacy → wiki-first）。数据库 `wiki_pages` 表的 40 条为旧 wiki 系统遗留，非本轮产物。
-- **本轮 wiki 编译能力验证范围 = 单元测试（fixture）+ 检索链路无回归**；真实数据上的端到端编译待迁移后验证。
-- **后续**：W2-W4 完整 plan 文档已就绪，剩余细化任务与全量回归按各 plan 推进。
+- **entity/concept 待补**：本机 LLM Key 未配/失效，entity 编译失败被隔离跳过（warning 不中断）。补齐需配 `SHINEHE_LLM_API_KEY` 后重跑 `shinehe migrate --apply`（幂等）。
+- **文件系统 wiki 缺测量基础设施**：`shinehe wiki lint` 查 SQLite `wiki_pages` 表（旧系统），对 `wiki/*.md` 无效；`run_wiki_eval.py` 仅 `source_coverage`/`query_save_rate` 对文件系统有效。第二阶段 W4 eval 扩展前需补文件系统 wiki 的 lint/统计工具（phase2 Gap B）。
+- **后续**：第二阶段 phase2 spec 复核（Gap A：entity/concept 页 frontmatter 缺 `source_ids`/`key_entities`）后按 plan 推进。
 
 ## 50 轮 MCP 测试报告 BUG 修复 — 已完成 (2026-06-25)
 

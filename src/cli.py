@@ -244,6 +244,10 @@ def _handle_migrate(args: argparse.Namespace) -> int:
             print(f"  ...(另有 {len(plan['actions']) - 20} 条)")
         print("\n使用 --apply 执行迁移(将备份 data/、导出源到 raw/、重编译 wiki)")
         return 0
+    # apply 需要 active container 驱动 wiki 重编译（try_knowledge_workflow_compile
+    # 从 get_active_container() 取 knowledge_workflow 服务）。
+    from src.core.container import create_container
+    create_container()
     result = svc.apply(backup=not args.no_backup)
     print(f"[OK] 导出 {result['exported']} 源, 跳过 {result['skipped_missing']}, "
           f"重编译 {result['recompiled']}, 备份={'是' if result['backup_created'] else '否'}")
