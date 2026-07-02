@@ -7,8 +7,8 @@
 
 ## 权威文档
 
-- [当前主线：Karpathy Wiki-First 对齐 Spec（第一阶段）](docs/superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-design.md)
-- 当前实施计划 Wiki-First：[W1 地基](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w1.md) / [W2 编译](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w2.md) / [W3 闭环](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w3.md) / [W4 收口](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w4.md)
+- [第一阶段（已完成）：Karpathy Wiki-First 对齐 Spec](docs/superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-design.md)｜实施计划 [W1](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w1.md)/[W2](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w2.md)/[W3](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w3.md)/[W4](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w4.md)
+- [下一阶段（Draft）：Karpathy Wiki-First 第二阶段 Spec（检索执行层）](docs/superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-phase2-design.md)｜[Plan](docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-phase2.md)
 - [上一阶段（已完成）：MCP 本地检索收束 Spec](docs/superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md) / [Plan](docs/superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
 - [MCP 使用文档](docs/mcp/)
 - [高级功能](docs/advanced-features.md)
