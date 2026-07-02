@@ -111,6 +111,23 @@ class ProjectSetupService:
             },
         }
 
+    @staticmethod
+    def _size_aware_defaults() -> dict[str, Any]:
+        """第二阶段规模自适应路由默认段(wiki_first 项目 enabled=true)。
+
+        legacy 项目缺省不注入(走 ``Config.get`` 默认 ``enabled=false``);由
+        ``_build_local_config`` / ``_build_provider_config`` 合入各自 rag 段。
+        不能放进 ``_wiki_first_defaults``,因其经 ``config.update`` 浅合并,
+        会整体覆盖 build 函数已设的 ``rag`` 段。
+        """
+        return {
+            "enabled": True,
+            "small_query_max_tokens": 12,
+            "small_wiki_page_threshold": 3,
+            "intent_words_large": ["哪些", "所有", "对比", "全部", "列举"],
+            "llm_fallback": False,
+        }
+
     def build_config(self, request: dict[str, Any]) -> dict[str, Any]:
         """根据请求参数构建初始配置字典
 
@@ -163,6 +180,7 @@ class ProjectSetupService:
                 "chunk_size": 1200,
                 "score_threshold": 0.35,
                 "top_k": 8,
+                "size_aware": self._size_aware_defaults(),
             },
             "reranker": {
                 "provider": "disabled",
@@ -204,6 +222,7 @@ class ProjectSetupService:
                 "score_threshold": 0.35,
                 "top_k": 8,
                 "search_mode": "blend",
+                "size_aware": self._size_aware_defaults(),
             },
             "storage": {
                 "data_dir": "data",

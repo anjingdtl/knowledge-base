@@ -134,6 +134,10 @@ class AppContainer:
     # --- W2: wiki-first 文件系统层编排 ---
     _knowledge_workflow: Optional[object] = field(default=None, repr=False)
 
+    # --- 第二阶段:规模自适应路由(size-aware retrieval) ---
+    _wiki_page_locator: Optional[object] = field(default=None, repr=False)
+    _size_aware_router: Optional[object] = field(default=None, repr=False)
+
     _initialized_services: list = field(default_factory=list, repr=False)
 
     def _track_service(self, attr_name: str):
@@ -167,6 +171,8 @@ class AppContainer:
                 'reranker': self.reranker,
                 'hybrid_search': self.hybrid_search,
                 'graph_backend': self.graph_backend,
+                'size_aware_router': self.size_aware_router,
+                'wiki_page_locator': self.wiki_page_locator,
             })
             self._track_service("_rag_pipeline")
         return self._rag_pipeline
@@ -348,6 +354,22 @@ class AppContainer:
             self._knowledge_workflow = KnowledgeWorkflowService()
             self._track_service("_knowledge_workflow")
         return self._knowledge_workflow
+
+    @property
+    def wiki_page_locator(self):
+        if self._wiki_page_locator is None:
+            from src.services.wiki_page_locator import WikiPageLocator
+            self._wiki_page_locator = WikiPageLocator()
+            self._track_service("_wiki_page_locator")
+        return self._wiki_page_locator
+
+    @property
+    def size_aware_router(self):
+        if self._size_aware_router is None:
+            from src.services.size_aware_router import SizeAwareRouter
+            self._size_aware_router = SizeAwareRouter(self.wiki_page_locator)
+            self._track_service("_size_aware_router")
+        return self._size_aware_router
 
 
 def create_container(config_path: str | None = None) -> AppContainer:
