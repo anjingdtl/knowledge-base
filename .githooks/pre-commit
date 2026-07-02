@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Pre-commit: gitleaks 密钥扫描（防止 API key / 凭据进入仓库）
+set -euo pipefail
+
+repo_root=$(git rev-parse --show-toplevel)
+
+# 定位 gitleaks：优先环境变量，其次 PATH，最后已知安装位置
+GITLEAKS=""
+for candidate in "${GITLEAKS:-}" "gitleaks" "/d/ClaudeCodeWorkSpace/projects/bin/gitleaks.exe"; do
+    if [ -n "$candidate" ] && command -v "$candidate" >/dev/null 2>&1; then
+        GITLEAKS="$candidate"
+        break
+    fi
+done
+
+if [ -z "$GITLEAKS" ]; then
+    echo "⚠️  未找到 gitleaks，跳过密钥扫描。"
+    echo "   安装: https://github.com/gitleaks/gitleaks/releases"
+    echo "   或运行 scripts/install-hooks.sh"
+    exit 0
+fi
+
+config="$repo_root/.gitleaks.toml"
+
+echo "🔍 gitleaks 扫描暂存区..."
+if [ -f "$config" ]; then
+    "$GITLEAKS" git --pre-commit --staged --redact -c "$config"
+else
+    "$GITLEAKS" git --pre-commit --staged --redact
+fi

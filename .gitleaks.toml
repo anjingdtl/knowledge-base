@@ -1,0 +1,21 @@
+title = "ShineHeKnowledge Secret Scan"
+
+# 继承 gitleaks 内置默认规则（覆盖 OpenAI / AWS / GCP / GitHub / 通用 API key 等）
+[extend]
+useDefault = true
+
+[allowlist]
+description = "项目允许的占位符、模板与测试用假 key"
+regexes = [
+  '''REDACTED_[A-Z_]+API_KEY''',
+  '''<SECRET>''',
+  '''invalid-test-key''',
+  '''embedding-secret''',
+  '''reranker-secret''',
+  '''gui-embedding-key''',
+]
+paths = [
+  '''config\.example\.yaml$''',
+  '''mcp_config_templates/.*\.json$''',
+  '''node_modules/''',
+]
