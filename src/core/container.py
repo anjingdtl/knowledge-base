@@ -131,6 +131,9 @@ class AppContainer:
     # --- M3 业务服务 (lazy init) ---
     _path_indexer: Optional[object] = field(default=None, repr=False)
 
+    # --- W2: wiki-first 文件系统层编排 ---
+    _knowledge_workflow: Optional[object] = field(default=None, repr=False)
+
     _initialized_services: list = field(default_factory=list, repr=False)
 
     def _track_service(self, attr_name: str):
@@ -337,6 +340,14 @@ class AppContainer:
             )
             self._track_service("_path_indexer")
         return self._path_indexer
+
+    @property
+    def knowledge_workflow(self):
+        if self._knowledge_workflow is None:
+            from src.services.knowledge_workflow import KnowledgeWorkflowService
+            self._knowledge_workflow = KnowledgeWorkflowService()
+            self._track_service("_knowledge_workflow")
+        return self._knowledge_workflow
 
 
 def create_container(config_path: str | None = None) -> AppContainer:

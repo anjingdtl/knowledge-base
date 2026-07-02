@@ -394,6 +394,14 @@ class PathIndexService:
         conn.commit()
 
         index_knowledge_item(item)
+
+        # wiki-first 钩子:编译文件系统 wiki 层(失败不阻塞索引)
+        try:
+            from src.services.knowledge_workflow import try_knowledge_workflow_compile
+            try_knowledge_workflow_compile(item_id, ingested_at=item.created_at)
+        except Exception as e:
+            logger.warning("wiki-first hook failed for %s: %s", item_id, e)
+
         return item_id
 
     def _reingest_file(self, path: Path, existing_kid: str | None) -> str:
@@ -435,6 +443,14 @@ class PathIndexService:
                 content_hash=content_hash,
             )
             index_knowledge_item(item)
+
+            # wiki-first 钩子(更新路径同样触发)
+            try:
+                from src.services.knowledge_workflow import try_knowledge_workflow_compile
+                try_knowledge_workflow_compile(existing_kid, ingested_at=item.created_at)
+            except Exception as e:
+                logger.warning("wiki-first hook failed for %s: %s", existing_kid, e)
+
             return existing_kid
         else:
             return self._ingest_file(path)
