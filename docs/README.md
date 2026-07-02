@@ -3,6 +3,7 @@
 ## 当前方向
 
 - [Karpathy Wiki-First 对齐 Spec(第一阶段)](superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-design.md)
+- [Karpathy Wiki-First W1 地基 Plan](superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-w1.md)
 - [MCP 本地高精准检索收束 Spec](superpowers/specs/2026-06-13-mcp-local-retrieval-focus-design.md)
 - [MCP 本地高精准检索实施 Plan](superpowers/plans/2026-06-13-mcp-local-retrieval-focus.md)
 - [项目当前状态](../PROGRESS.md)
