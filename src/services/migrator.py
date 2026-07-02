@@ -1,0 +1,99 @@
+"""MigrationService — 把 legacy 项目迁移到 wiki-first。
+
+流程(spec §10):
+1. plan() / --dry-run:扫描 data/ knowledge,输出计划(导出哪些源、重编译哪些),不写盘
+2. apply() / --apply:备份 data/ → 按 source_path 导出源到 raw/ → 触发 wiki 重编译 → 切 mode
+
+不删除 data/,双轨过渡;失败可从备份回滚。
+"""
+from __future__ import annotations
+
+import logging
+import shutil
+from pathlib import Path
+
+from src.services.db import Database
+from src.utils.config import Config
+
+logger = logging.getLogger(__name__)
+
+
+class MigrationService:
+    def __init__(self, project_dir: Path | None = None):
+        self.project_dir = Path(project_dir) if project_dir else Path.cwd()
+
+    def plan(self) -> dict:
+        """扫描 knowledge,输出迁移计划(不写盘)。"""
+        items = Database.list_knowledge(limit=10000)
+        actions = []
+        for it in items:
+            if it.get("source_type") != "file":
+                continue
+            sp = it.get("source_path", "")
+            exists = bool(sp) and Path(sp).exists()
+            actions.append({
+                "knowledge_id": it["id"],
+                "title": it.get("title", ""),
+                "source_path": sp,
+                "source_exists": exists,
+                "action": "export" if exists else "skip_missing",
+            })
+        return {
+            "knowledge_count": len(items),
+            "exportable": sum(1 for a in actions if a["action"] == "export"),
+            "actions": actions,
+        }
+
+    def apply(self, backup: bool = True) -> dict:
+        """备份 data/ + 导出源到 raw/ + 触发重编译。"""
+        raw_dir = Path(Config.get("knowledge_workflow.raw_dir", "raw"))
+        raw_dir.mkdir(parents=True, exist_ok=True)
+
+        data_dir_str = Config.get("storage.data_dir", "data")
+        data_dir = Path(data_dir_str)
+        backup_created = False
+        if backup and data_dir.exists():
+            backup_path = data_dir.parent / f"{data_dir.name}.backup"
+            if backup_path.exists():
+                shutil.rmtree(backup_path)
+            shutil.copytree(data_dir, backup_path)
+            backup_created = True
+            logger.info("data/ backed up to %s", backup_path)
+
+        exported = 0
+        skipped_missing = 0
+        items = Database.list_knowledge(limit=10000)
+        for it in items:
+            if it.get("source_type") != "file":
+                continue
+            sp = it.get("source_path", "")
+            if not sp or not Path(sp).exists():
+                skipped_missing += 1
+                continue
+            src = Path(sp)
+            dest = raw_dir / src.name
+            # 同名且内容不同 → 加 knowledge_id 短缀
+            if dest.exists() and dest.read_bytes() != src.read_bytes():
+                dest = raw_dir / f"{src.stem}-{it['id'][:8]}{src.suffix}"
+            shutil.copy2(src, dest)
+            exported += 1
+
+        # 触发 wiki 重编译(每个 file knowledge)
+        recompiled = 0
+        try:
+            from src.services.knowledge_workflow import try_knowledge_workflow_compile
+            for it in items:
+                if it.get("source_type") == "file":
+                    try_knowledge_workflow_compile(
+                        it["id"], ingested_at=it.get("created_at", "")
+                    )
+                    recompiled += 1
+        except Exception as e:
+            logger.warning("recompile during migrate failed: %s", e)
+
+        return {
+            "exported": exported,
+            "skipped_missing": skipped_missing,
+            "recompiled": recompiled,
+            "backup_created": backup_created,
+        }

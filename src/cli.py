@@ -230,6 +230,26 @@ def _handle_wiki(args: argparse.Namespace) -> int:
     return 1
 
 
+def _handle_migrate(args: argparse.Namespace) -> int:
+    """处理 migrate 子命令:legacy -> wiki-first。"""
+    from src.services.migrator import MigrationService
+    svc = MigrationService()
+    if not args.apply:
+        plan = svc.plan()
+        print(f"[PLAN] knowledge: {plan['knowledge_count']}, 可导出: {plan['exportable']}")
+        for a in plan["actions"][:20]:
+            mark = "[OK]" if a["action"] == "export" else "[SKIP]"
+            print(f"  {mark} {a['title'][:40]} -> {a['source_path']}")
+        if len(plan["actions"]) > 20:
+            print(f"  ...(另有 {len(plan['actions']) - 20} 条)")
+        print("\n使用 --apply 执行迁移(将备份 data/、导出源到 raw/、重编译 wiki)")
+        return 0
+    result = svc.apply(backup=not args.no_backup)
+    print(f"[OK] 导出 {result['exported']} 源, 跳过 {result['skipped_missing']}, "
+          f"重编译 {result['recompiled']}, 备份={'是' if result['backup_created'] else '否'}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> None:
     """ShineHeKnowledge CLI 主入口"""
     parser = argparse.ArgumentParser(
@@ -340,6 +360,14 @@ def main(argv: list[str] | None = None) -> None:
     ingest_p = wiki_sub.add_parser("ingest-source", help="ingest 单源并触发 wiki 编译")
     ingest_p.add_argument("path", help="源文件路径")
 
+    # --- migrate ---
+    migrate_parser = subparsers.add_parser(
+        "migrate", help="迁移 legacy 项目到 wiki-first",
+        description="扫描 data/ 知识,导出源到 raw/,触发 wiki 重编译。默认 dry-run。",
+    )
+    migrate_parser.add_argument("--apply", action="store_true", help="执行迁移(默认仅计划)")
+    migrate_parser.add_argument("--no-backup", action="store_true", help="apply 时跳过 data/ 备份")
+
     args = parser.parse_args(argv)
 
     if args.command is None:
@@ -353,6 +381,7 @@ def main(argv: list[str] | None = None) -> None:
         "doctor": _handle_doctor,
         "mcp": _handle_mcp,
         "wiki": _handle_wiki,
+        "migrate": _handle_migrate,
     }
 
     handler = handlers.get(args.command)
