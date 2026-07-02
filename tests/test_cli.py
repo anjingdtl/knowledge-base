@@ -119,3 +119,34 @@ def test_handler_warnings_exit_code():
         with pytest.raises(SystemExit) as exc_info:
             main(["doctor"])
         assert exc_info.value.code == 2
+
+
+# ---------------------------------------------------------------------------
+# wiki-first init e2e 测试
+# ---------------------------------------------------------------------------
+
+
+def test_init_creates_wiki_first_layout(tmp_path):
+    """init 命令实际创建 wiki-first 目录契约与 AGENTS.md(e2e,不 mock)"""
+    project_dir = tmp_path / "project"
+    project_dir.mkdir()
+    # 把 config 也写到项目目录,避免污染全局 ~/.shinehe
+    with pytest.raises(SystemExit) as exc:
+        main(["init", "--local", "--force", "--path", str(project_dir)])
+    assert exc.value.code == 0
+
+    # config.yaml
+    assert (project_dir / "config.yaml").exists()
+    # wiki-first 目录契约
+    assert (project_dir / "raw").is_dir()
+    assert (project_dir / "wiki" / "sources").is_dir()
+    assert (project_dir / "wiki" / "entities").is_dir()
+    assert (project_dir / "wiki" / "concepts").is_dir()
+    assert (project_dir / "wiki" / "comparisons").is_dir()
+    assert (project_dir / "wiki" / "syntheses").is_dir()
+    assert (project_dir / "schema").is_dir()
+    assert (project_dir / "artifacts" / "eval").is_dir()
+    # AGENTS.md
+    agents_md = project_dir / "schema" / "AGENTS.md"
+    assert agents_md.exists()
+    assert "Source of truth" in agents_md.read_text(encoding="utf-8")

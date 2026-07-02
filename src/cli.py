@@ -33,6 +33,11 @@ def _handle_init(args: argparse.Namespace) -> int:
     config_path = service.write_config(target, config, force=args.force)
     print(f"[OK] 配置已写入: {config_path}")
 
+    # wiki-first 目录契约:在项目目录创建 raw/wiki/schema/artifacts + AGENTS.md
+    project_dir = Path(args.path) if args.path else Path.cwd()
+    layout = service.write_wiki_first_layout(project_dir)
+    print(f"[OK] wiki-first 目录已就绪: {project_dir} ({len(layout)} 个目录 + AGENTS.md)")
+
     if request["clients"]:
         server_config = service.build_server_config(config_path)
         service.configure_clients(request["clients"], server_config)
