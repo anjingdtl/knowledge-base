@@ -24,6 +24,52 @@ from src.core.provider_presets import ProviderPreset, get_provider_preset
 
 SERVER_NAME = "shinehe-kb"
 
+# wiki-first 目录契约:相对项目根的 8 个目录
+WIKI_FIRST_DIRS: tuple[str, ...] = (
+    "raw",
+    "wiki/sources",
+    "wiki/entities",
+    "wiki/concepts",
+    "wiki/comparisons",
+    "wiki/syntheses",
+    "schema",
+    "artifacts/eval",
+)
+
+AGENTS_MD_TEMPLATE = """\
+# AGENTS.md
+
+> ShineHeKnowledge wiki-first 知识维护规约。由 `shinehe init` 生成,可自由定制。
+
+## Source of truth
+- `raw/` 下所有文件只读,agent 不得直接修改
+- 所有综合结论必须可追溯到 `raw/` 文件或已有 wiki 页
+
+## Page types
+- `wiki/sources/*.md`     单源摘要页(规则模板生成)
+- `wiki/entities/*.md`    实体页(LLM 维护)
+- `wiki/concepts/*.md`    概念页(LLM 维护)
+- `wiki/comparisons/*.md` 对比页(query 回写)
+- `wiki/syntheses/*.md`   综合页(query 回写)
+
+## Ingest workflow
+- 读取 `raw/` 新源
+- 生成 source summary(`wiki/sources/`)
+- 识别并更新相关 entities/concepts
+- 更新 `wiki/index.md`,追加 `wiki/log.md`
+- 与旧结论冲突时显式标注
+
+## Query workflow
+- 先读 `wiki/index.md` 定位相关页
+- 再读相关 wiki 页
+- 证据不足时回到 `raw/` 检索
+- 高价值回答可保存为新 wiki 页(`comparisons/syntheses`,draft 状态)
+
+## Lint workflow
+- 孤儿页、矛盾、过时 claim、缺失 backlinks 四类检查
+- 发现问题标注待修,不自动删除
+"""
+
 
 class ProjectSetupService:
     """项目初始化服务"""
@@ -179,6 +225,32 @@ class ProjectSetupService:
     # ------------------------------------------------------------------
     # 配置文件写入
     # ------------------------------------------------------------------
+
+    def write_wiki_first_layout(self, base_dir: Path) -> list[Path]:
+        """在 base_dir 下创建 wiki-first 目录契约 + schema/AGENTS.md。
+
+        创建 raw/、wiki/{sources,entities,concepts,comparisons,syntheses}/、
+        schema/、artifacts/eval/ 共 8 个目录,并写入 schema/AGENTS.md 模板。
+        幂等:已存在的目录保留;已存在的 AGENTS.md 不覆盖(尊重用户定制)。
+
+        Args:
+            base_dir: 项目根目录
+
+        Returns:
+            创建(或已存在)的目录路径列表
+        """
+        base = Path(base_dir)
+        created: list[Path] = []
+        for rel in WIKI_FIRST_DIRS:
+            d = base / rel
+            d.mkdir(parents=True, exist_ok=True)
+            created.append(d)
+
+        agents_md = base / "schema" / "AGENTS.md"
+        if not agents_md.exists():
+            agents_md.write_text(AGENTS_MD_TEMPLATE, encoding="utf-8")
+
+        return created
 
     def write_config(
         self,

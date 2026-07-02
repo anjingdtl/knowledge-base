@@ -221,6 +221,65 @@ class TestWriteConfig:
 
 
 # ---------------------------------------------------------------------------
+# write_wiki_first_layout 测试
+# ---------------------------------------------------------------------------
+
+
+class TestWikiFirstLayout:
+    """测试 wiki-first 目录契约生成"""
+
+    def test_creates_all_directories(self, tmp_path):
+        """创建全部 8 个目录"""
+        from src.services.project_setup import WIKI_FIRST_DIRS
+
+        service = ProjectSetupService()
+        created = service.write_wiki_first_layout(tmp_path)
+
+        rel = {p.relative_to(tmp_path).as_posix() for p in created}
+        assert rel == set(WIKI_FIRST_DIRS)
+        for rel_dir in WIKI_FIRST_DIRS:
+            assert (tmp_path / rel_dir).is_dir()
+
+    def test_creates_agents_md(self, tmp_path):
+        """生成 schema/AGENTS.md 模板"""
+        service = ProjectSetupService()
+        service.write_wiki_first_layout(tmp_path)
+
+        agents_md = tmp_path / "schema" / "AGENTS.md"
+        assert agents_md.exists()
+        content = agents_md.read_text(encoding="utf-8")
+        assert "Source of truth" in content
+        assert "raw/" in content
+        assert "Page types" in content
+        assert "Ingest workflow" in content
+
+    def test_idempotent(self, tmp_path):
+        """重复调用不抛错"""
+        service = ProjectSetupService()
+        service.write_wiki_first_layout(tmp_path)
+        service.write_wiki_first_layout(tmp_path)  # 不抛异常
+        assert (tmp_path / "schema" / "AGENTS.md").exists()
+
+    def test_preserves_custom_agents_md(self, tmp_path):
+        """已存在的 AGENTS.md 不被覆盖"""
+        service = ProjectSetupService()
+        (tmp_path / "schema").mkdir(parents=True)
+        custom = "# My Custom AGENTS Rules\n"
+        (tmp_path / "schema" / "AGENTS.md").write_text(custom, encoding="utf-8")
+
+        service.write_wiki_first_layout(tmp_path)
+
+        assert (tmp_path / "schema" / "AGENTS.md").read_text(encoding="utf-8") == custom
+
+    def test_returns_created_dir_list(self, tmp_path):
+        """返回值是创建的目录路径列表"""
+        service = ProjectSetupService()
+        created = service.write_wiki_first_layout(tmp_path)
+        assert len(created) == 8
+        assert all(p.is_dir() for p in created)
+
+
+# ---------------------------------------------------------------------------
 # configure_clients 测试
 # ---------------------------------------------------------------------------
 
