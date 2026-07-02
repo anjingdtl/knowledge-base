@@ -78,7 +78,38 @@
 
 - **entity/concept 待补**：本机 LLM Key 未配/失效，entity 编译失败被隔离跳过（warning 不中断）。补齐需配 `SHINEHE_LLM_API_KEY` 后重跑 `shinehe migrate --apply`（幂等）。
 - **文件系统 wiki 缺测量基础设施**：`shinehe wiki lint` 查 SQLite `wiki_pages` 表（旧系统），对 `wiki/*.md` 无效；`run_wiki_eval.py` 仅 `source_coverage`/`query_save_rate` 对文件系统有效。第二阶段 W4 eval 扩展前需补文件系统 wiki 的 lint/统计工具（phase2 Gap B）。
-- **后续**：第二阶段 phase2 spec 复核（Gap A：entity/concept 页 frontmatter 缺 `source_ids`/`key_entities`）后按 plan 推进。
+- **后续**：第二阶段 spec 已复核（Gap A 定 A2 / Gap B 记入 W4 前置），W1 已落地（见下文），W2 待 plan 审批。
+
+## Karpathy Wiki-First 对齐（第二阶段）— W1 规模自适应路由落地 (2026-07-02)
+
+补齐 Karpathy「小规模用 index / 大规模用搜索」原则：新增 `SizeAwareRouter`，按查询规模三档分流——小查询只读 `index.md` + wiki 页（**零向量调用**），大查询走现有 hybrid 搜索，中间档 blend 融合两路。本轮完成第二阶段 W1 全部代码实现与 TDD，全量回归零退化。
+
+### 交付清单
+
+| 模块 | 内容 | 位置 |
+|---|---|---|
+| WikiPageLocator | 扫 `wiki/*.md` 按 query 定位命中页 + 计数；候选对齐统一 schema（`id` 形如 `wiki:<type>:<slug>`，与检索候选 `page_id:block_id` 不冲突） | `src/services/wiki_page_locator.py` |
+| SizeAwareRouter 规则层 | token / wiki 命中数 / 意图词 → 三档分类（spec **S1**），阈值 `rag.size_aware.*` 可配置 | `src/services/size_aware_router.py` |
+| WikiReadStage | wiki_read/blend 档读 wiki 候选；wiki_read 档 `VectorSearchStage` 顶部零向量提前返回（spec **S2**） | `src/services/rag_pipeline.py` |
+| blend RRF 融合 | wiki×检索两路 RRF（`w/(k+rank+1)`，k=40），同 id 累加、`match_channels` 并集 | `src/services/blend_fusion.py` |
+| 装配 + 门控 | container 注入 locator/router + `rag_pipeline` deps；init 注入 `rag.size_aware` 段；config.example 补段 + pipeline `wiki_read` 条目（spec **S6**） | `container.py` / `project_setup.py` / `config.example.yaml` |
+
+### 设计要点：为什么 scale 在 WikiReadStage 算（而非 AgenticRouter）
+
+W1 plan 原写「scale 在 `AgenticRouter.route()` 内算」，源码核实暴露时序 bug：`WikiReadStage` 在调 agentic 的 `VectorSearchStage` **之前**执行，那时 `ctx.metadata["scale"]` 尚不存在。故把 scale 计算放在 `WikiReadStage`（管线最前的 scale-aware 点），缓存到 `ctx.metadata` 供 `VectorSearchStage` 分流——`wiki_read` 档得以在 agentic/hybrid 之前零向量返回，且 route_query 工具与管线不会重复调 SizeAwareRouter。legacy 门控由 stage 层（`mode≠wiki_first` 即空操作）+ config 层（缺省 `enabled=false`）双重保证。
+
+### 验证（当次真实执行）
+
+- 新增 25 个 TDD 测试，全部通过
+- 全量回归 **1126 passed / 1 skipped / 0 failed**（基线 950+，零退化）
+- 真实 `wiki/`（11 source 页）端到端冒烟：`FTTR是什么`→wiki_read（零向量）、`列出所有营销通知`→full_search（意图词）、`创智杯…评价指标`→blend，三档判定正确
+- spec 验收：S1（三档分类）✓ / S2（小查询零向量）✓ / S6（legacy 零变化）✓
+
+### 后续
+
+- **W2（wiki parent-child）**：spec §4.2 + Gap A 的 A2 方案（检索侧用 `knowledge_id` 回查 source 页，不动已交付编译器）。动工前先出 W2 TDD plan 审批。
+- **W3（中文 lexical）**：词典 + 同义词 + 语种权重，目标 `retrieval_zh` Recall@5 ≥ 0.7。
+- **W4（收口）**：含 Gap B 文件系统 wiki 测量基础设施（lint/统计工具），否则 size_aware 收益无法量化；版本 → v1.5.0。
 
 ## 50 轮 MCP 测试报告 BUG 修复 — 已完成 (2026-06-25)
 
