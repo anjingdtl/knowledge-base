@@ -401,6 +401,13 @@ class VectorSearchStage(PipelineStage):
             unique.sort(key=lambda x: x.get("rrf_score", x.get("vec_score", x.get("score", 0))), reverse=True)
             ctx.candidates = unique[:top_k]
 
+            # blend 档(Task 1.3):融合备份的 wiki 候选与 hybrid 检索候选
+            if scale == "blend":
+                from src.services.blend_fusion import blend_fusion
+                wiki_cands = ctx.metadata.pop("_blend_wiki_candidates", [])
+                if wiki_cands and ctx.candidates:
+                    ctx.candidates = blend_fusion(wiki_cands, ctx.candidates)
+
             if not ctx.candidates:
                 # BUG#3 文档说明：此为预期容错，非错误。
                 # hybrid（向量+关键词融合）检索为空时，自动降级到 knowledge 级 FTS，
