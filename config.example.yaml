@@ -124,15 +124,14 @@ safety:
 mcp:
   tool_profile: extended    # core | extended | admin | full | legacy
   enable_legacy_aliases: false
-  experimental_tools_enabled: false
-  write_policy: ""          # 写操作安全策略: "" | preview_only | local_confirm | token_required | disabled
+  experimental_tools_enabled: true     # 暴露 wiki/graph 工具组(wiki-first 对齐)
+  write_policy: local_confirm          # 写操作本地确认("" | preview_only | local_confirm | token_required | disabled)
   allow_http_write: false   # HTTP 模式是否允许写操作
   bind_host: 127.0.0.1     # MCP HTTP 服务绑定地址
   auth_token: ""            # write_policy=token_required 时使用的认证 token
 graph_backend:
   provider: sqlite          # SQLite-only graph storage
 storage:
-  chroma_dir: chroma
   data_dir: data
   db_name: kb.db
   graph_dir: graph
@@ -144,9 +143,9 @@ web:
 wiki:
   auto_compile: true
   auto_link: true
-  auto_publish: true
+  auto_publish: false            # review gate:自动编译、非自动发布、审阅后发布
   enabled: true
-  lint_contradictions: false
+  lint_contradictions: true      # 启用 wiki lint 闭环
   max_llm_calls_per_ingest: 3
   query_save_min_length: 100
   site:

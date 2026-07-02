@@ -3,6 +3,7 @@
 测试配置构建、YAML 写入、客户端配置，不依赖 PySide6。
 """
 import json
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -370,3 +371,34 @@ class TestConfigureClients:
 
         captured = capsys.readouterr()
         assert "WARN" in captured.out or "unknown" in captured.out.lower()
+
+
+# ---------------------------------------------------------------------------
+# config.example.yaml 一致性测试
+# ---------------------------------------------------------------------------
+
+
+class TestConfigExampleConvergence:
+    """config.example.yaml 与 build_config 默认值一致性"""
+
+    @pytest.fixture(scope="class")
+    def example_config(self):
+        project_root = Path(__file__).resolve().parent.parent
+        with open(project_root / "config.example.yaml", "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
+
+    def test_no_chroma_dir(self, example_config):
+        """legacy chroma_dir 已清理"""
+        assert "chroma_dir" not in example_config.get("storage", {})
+
+    def test_wiki_safe_defaults(self, example_config):
+        """wiki 安全默认:auto_publish=False, lint_contradictions=True"""
+        wiki = example_config["wiki"]
+        assert wiki["auto_publish"] is False
+        assert wiki["lint_contradictions"] is True
+
+    def test_mcp_exposes_wiki_tools(self, example_config):
+        """experimental_tools_enabled=True, write_policy=local_confirm"""
+        mcp = example_config["mcp"]
+        assert mcp["experimental_tools_enabled"] is True
+        assert mcp["write_policy"] == "local_confirm"
