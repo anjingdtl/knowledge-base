@@ -1,6 +1,6 @@
 # Knowledge-Base Karpathy Wiki-First 第二阶段 W1 实现层 TDD 计划（规模自适应路由）
 
-- **状态**：实现层 TDD plan，待执行（compact 后照此推进）
+- **状态**：✅ **已完成**（2026-07-02，5 commit `6c80035`→`2c8b42c`）— 全部 TDD 通过，全量回归 1126 passed 零退化，真实 wiki/ 三档冒烟正确。交接见 `docs/superpowers/handoffs/2026-07-02-w2-handoff.md`。
 - **日期**：2026-07-02
 - **范围**：第二阶段 W1 —— `SizeAwareRouter` 规模自适应路由（小查询读 wiki 零向量 / 大查询走向量 / 中间 blend）
 - **上游规划层**：`docs/superpowers/plans/2026-07-02-knowledge-base-karpathy-wiki-first-phase2.md`（W1 §Task 1.1-1.4）

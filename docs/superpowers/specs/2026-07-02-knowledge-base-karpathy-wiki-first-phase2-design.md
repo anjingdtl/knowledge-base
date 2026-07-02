@@ -1,6 +1,6 @@
 # Knowledge-Base Karpathy Wiki-First 对齐设计（第二阶段：检索执行层）
 
-- **状态**：已复核（2026-07-02，Gap A/B 定稿）→ 待 writing-plans 展开 W1
+- **状态**：已复核（2026-07-02，Gap A/B 定稿）→ **W1 已落地**（5 commit `6c80035`→`2c8b42c`，S1/S2/S6 达成）→ W2 待 writing-plans 展开。交接见 `docs/superpowers/handoffs/2026-07-02-w2-handoff.md`
 - **日期**：2026-07-02
 - **范围**：第二阶段 4 周——补齐 Karpathy 方法论的「检索执行层」（规模自适应路由 + parent-child for wiki + 中文 lexical 强化）
 - **上游依据**：`docs/knowledge-base 仓库对照 Karpathy LLM 知识库方法论的深度评估报告.md`
