@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from src.services.db import Database
+from src.services.wiki_slug import read_frontmatter
 from src.services.knowledge_workflow import (
     KnowledgeWorkflowService,
     try_knowledge_workflow_compile,
@@ -137,3 +138,41 @@ def test_path_indexer_triggers_wiki_first_e2e(tmp_path, monkeypatch):
     assert sources, "source summary 未生成"
     assert (project / "wiki" / "index.md").exists(), "index.md 未生成"
     assert (project / "wiki" / "log.md").exists(), "log.md 未生成"
+
+
+def test_save_query_writes_syntheses_draft(tmp_path):
+    """save_query 写文件系统 syntheses/*.md(draft)+ log。"""
+    Config.set("knowledge_workflow.mode", "wiki_first")
+    Config.set("knowledge_workflow.wiki_dir", str(tmp_path / "wiki"))
+    Config.set("knowledge_workflow.synthesis_dir", str(tmp_path / "wiki" / "syntheses"))
+    Config.set("knowledge_workflow.comparison_dir", str(tmp_path / "wiki" / "comparisons"))
+    svc = KnowledgeWorkflowService()
+    result = svc.save_query(
+        question="LLM 与传统搜索的区别?",
+        answer="LLM 检索基于语义..." + "x" * 120,
+        source_ids=["k1", "k2"],
+        confidence=0.8,
+        page_type="syntheses",
+        save_mode="auto",
+        timestamp="2026-07-02T11:00:00",
+    )
+    assert result["status"] == "saved"
+    p = Path(result["path"])
+    assert p.exists()
+    fm = read_frontmatter(p)
+    assert fm["status"] == "draft"
+    assert fm["confidence"] == 0.8
+    assert (tmp_path / "wiki" / "log.md").exists()
+
+
+def test_save_query_auto_below_threshold_skips(tmp_path):
+    """confidence < 0.6 + save_mode=auto → 跳过。"""
+    Config.set("knowledge_workflow.mode", "wiki_first")
+    Config.set("knowledge_workflow.wiki_dir", str(tmp_path / "wiki"))
+    svc = KnowledgeWorkflowService()
+    result = svc.save_query(
+        question="q?", answer="short",
+        source_ids=["k1"], confidence=0.3,
+        save_mode="auto", timestamp="2026-07-02T11:00:00",
+    )
+    assert result["status"] == "skipped"

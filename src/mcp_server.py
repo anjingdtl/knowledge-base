@@ -1740,6 +1740,8 @@ def save_to_wiki(
     source_ids: list[str] | None = None,
     auto_publish: bool | None = None,
     enhance: bool = True,
+    save_mode: str = "manual",
+    confidence: float = 0.0,
 ) -> dict:
     """将问答保存为 Wiki 页面。
 
@@ -1762,6 +1764,15 @@ def save_to_wiki(
     page_id = compiler.save_answer(
         question, answer, source_ids, auto_publish=auto_publish, enhance=enhance
     )
+    # wiki-first 文件系统层回写(comparisons/syntheses;auto 模式按阈值门控)
+    try:
+        container.knowledge_workflow.save_query(
+            question, answer, source_ids,
+            confidence=confidence, save_mode=save_mode,
+            timestamp="",
+        )
+    except Exception as _e:
+        logger.warning("save_to_wiki filesystem saveback failed: %s", _e)
     if page_id:
         log_id = _op_log("wiki_create", "wiki_page", page_id, after={
             "question": question[:100], "source_ids": source_ids,

@@ -9,11 +9,13 @@ mode=wiki_first 时,ingest 后编排 source/entity/index/log 四个编译器。
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 from src.services.db import Database
 from src.services.wiki_entity_updater import WikiEntityUpdater
 from src.services.wiki_index_compiler import WikiIndexCompiler
 from src.services.wiki_log_compiler import WikiLogCompiler
+from src.services.wiki_slug import resolve_slug, write_markdown
 from src.services.wiki_source_compiler import WikiSourceCompiler
 from src.utils.config import Config
 
@@ -88,6 +90,67 @@ class KnowledgeWorkflowService:
             "title": item.get("title", ""),
             "summary": src.get("summary", ""),
         }
+
+    def save_query(
+        self,
+        question: str,
+        answer: str,
+        source_ids: list[str] | None = None,
+        confidence: float = 0.0,
+        page_type: str = "syntheses",
+        save_mode: str = "manual",
+        timestamp: str | None = None,
+    ) -> dict:
+        """把高价值 query 回写为文件系统 wiki 页(comparisons/syntheses)。
+
+        auto 模式按阈值(长度≥query_save_min_length + confidence≥0.6 + source≥2)门控;
+        manual 模式直接写。均写 draft 状态(走 review gate)。
+        """
+        mode = Config.get("knowledge_workflow.mode", "legacy")
+        if mode != "wiki_first":
+            return {"status": "skipped", "reason": f"mode={mode}"}
+
+        min_len = int(Config.get("wiki.query_save_min_length", 100))
+        if save_mode == "auto":
+            if len(answer) < min_len or confidence < 0.6 or len(source_ids or []) < 2:
+                return {"status": "skipped", "reason": "below_threshold"}
+
+        wiki_dir = Config.get("knowledge_workflow.wiki_dir", "wiki")
+        if page_type == "comparisons":
+            target_dir = Path(
+                Config.get("knowledge_workflow.comparison_dir", f"{wiki_dir}/comparisons")
+            )
+        else:
+            target_dir = Path(
+                Config.get("knowledge_workflow.synthesis_dir", f"{wiki_dir}/syntheses")
+            )
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        ts = timestamp or ""
+        slug, target = resolve_slug(target_dir, question[:120], ts or "q")
+        frontmatter = {
+            "title": question[:120],
+            "page_type": page_type,
+            "status": "draft",
+            "confidence": confidence,
+            "source_ids": source_ids or [],
+            "saved_at": ts,
+            "save_mode": save_mode,
+        }
+        body = f"# {question[:120]}\n\n{answer}\n"
+        write_markdown(target, frontmatter, body)
+
+        try:
+            self._log.append({
+                "type": "query_save",
+                "target": question[:60],
+                "timestamp": ts,
+                "detail": f"{page_type} confidence={confidence:.2f}",
+            })
+        except Exception as e:
+            logger.warning("save_query log append failed: %s", e)
+
+        return {"status": "saved", "path": str(target), "slug": slug}
 
 
 def try_knowledge_workflow_compile(
