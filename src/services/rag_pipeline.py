@@ -223,6 +223,56 @@ class WikiRetrievalStage(PipelineStage):
         return ctx
 
 
+class WikiReadStage(PipelineStage):
+    """规模自适应:wiki_read/blend 档读文件系统 wiki 页作候选(spec §4.1 / S2)。
+
+    在 vector_search 前判定查询规模(调 SizeAwareRouter),把 ``scale`` 缓存到
+    ``ctx.metadata["scale"]`` 供 VectorSearchStage 分流;wiki_read/blend 档填 wiki
+    候选,full_search 档跳过。仅 ``mode=wiki_first`` 且 ``rag.size_aware.enabled=true``
+    时介入,否则空操作 —— legacy 项目零影响(S6)。
+
+    设计说明:scale 在本 stage(而非 AgenticRouter)计算,因 WikiReadStage 在
+    VectorSearchStage(调 agentic 处)之前执行,必须自行算出 scale 才能决定是否
+    产出 wiki 候选;算出后缓存 ctx.metadata,供 VectorSearchStage 零向量分流。
+    """
+
+    def __init__(self, size_aware_router=None, wiki_page_locator=None):
+        self._router = size_aware_router
+        self._locator = wiki_page_locator
+
+    @property
+    def name(self):
+        return "wiki_read"
+
+    async def execute(self, ctx, config):
+        if not self.is_enabled(config):
+            return ctx
+        # legacy 门控(S6):仅 wiki_first + size_aware.enabled 介入
+        if Config.get("knowledge_workflow.mode", "legacy") != "wiki_first":
+            return ctx
+        if not Config.get("rag.size_aware.enabled", False):
+            return ctx
+        router = self._router or _get_container_service("size_aware_router", lambda: None)
+        locator = self._locator or _get_container_service("wiki_page_locator", lambda: None)
+        if router is None or locator is None:
+            return ctx
+        try:
+            routing = router.route(ctx.question)
+            scale = routing.get("scale", "full_search")
+            ctx.metadata["scale"] = scale
+            if routing.get("reason"):
+                ctx.metadata["size_aware_reason"] = routing["reason"]
+            # wiki_read / blend 档:wiki 候选作(部分)检索结果
+            if scale in ("wiki_read", "blend"):
+                cands, _ = locator.locate(ctx.question)
+                if cands:
+                    ctx.candidates = cands
+        except Exception as e:
+            logger.warning("WikiRead stage failed (non-fatal): %s", e)
+            ctx.metadata.setdefault("warnings", []).append(f"wiki_read_failed: {e}")
+        return ctx
+
+
 class VectorSearchStage(PipelineStage):
     def __init__(self, db=None, hybrid_search=None, llm=None, graph_backend=None):
         self._db = db
@@ -268,6 +318,18 @@ class VectorSearchStage(PipelineStage):
     async def execute(self, ctx, config):
         if not self.is_enabled(config):
             return ctx
+        # size-aware 分流(第二阶段 Task 1.2):wiki_read 档零向量提前返回(在 agentic/
+        # hybrid 之前,真正零向量+零 agentic LLM);blend 档备份 wiki 候选(hybrid 会覆盖
+        # ctx.candidates,备份供 Task 1.3 RRF 融合)。
+        scale = ctx.metadata.get("scale")
+        if scale == "wiki_read" and ctx.candidates:
+            ctx.metadata.setdefault("route", {
+                "mode": "wiki_read",
+                "explanation": "size-aware wiki_read (zero-vector retrieval)",
+            })
+            return ctx
+        if scale == "blend" and ctx.candidates:
+            ctx.metadata["_blend_wiki_candidates"] = list(ctx.candidates)
         top_k = config.get("top_k", 10)
         db = self._db or Database
         override_spec = ctx.metadata.get("query_spec_override") or ctx.query_spec_override
@@ -807,7 +869,7 @@ class EvidenceCompressStage(PipelineStage):
 class StageRegistry:
     _stages: dict[str, type[PipelineStage]] = {}
     _builtin_stages = [
-        QueryRewriteStage, WikiRetrievalStage, VectorSearchStage,
+        QueryRewriteStage, WikiRetrievalStage, WikiReadStage, VectorSearchStage,
         RerankStage, EvidenceCompressStage, GenerateStage, PostProcessStage,
     ]
 
@@ -876,6 +938,7 @@ StageRegistry.init_builtins()
 DEFAULT_PIPELINE_CONFIG = [
     {"stage": "query_rewrite", "enabled": False, "mode": "llm", "num_variations": 3},  # BUG-1 fix: 默认禁用query_rewrite，消除一次LLM调用，大幅降低延迟
     {"stage": "wiki_retrieval", "enabled": True, "limit": 3},
+    {"stage": "wiki_read", "enabled": True},  # size-aware: 小/混合查询读 wiki(零向量)
     {"stage": "vector_search", "enabled": True, "mode": "blend", "top_k": 10},
     {"stage": "rerank", "enabled": True, "top_n": 5, "min_score": 0.3},
     {"stage": "evidence_compress", "enabled": False, "strategy": "extractive", "max_evidence_tokens": 4000},
