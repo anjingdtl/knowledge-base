@@ -151,8 +151,6 @@ def test_zh_lexical_mechanisms_engage(tmp_path, monkeypatch):
     assert detect_query_language("network routing") == "en"
 
     # --- Recall@5 验证(机制层面的端到端确认) ---
-    searcher = Database.get_conn  # noqa — just ensure DB alive
-
     from src.services.hybrid_search import HybridSearcher
     searcher = HybridSearcher(db=Database, block_store=None, config=cfg)
 

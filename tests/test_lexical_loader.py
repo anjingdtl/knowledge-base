@@ -1,5 +1,4 @@
 """_ensure_lexical_dict 单测：三态（文件不存在/格式错/正常）+ 幂等 + Config 未初始化保护。"""
-import logging
 from src.utils import chinese_tokenizer
 
 

@@ -5,8 +5,6 @@
 """
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from src.services.hybrid_search import HybridSearcher
 
 

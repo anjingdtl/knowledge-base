@@ -33,7 +33,6 @@ def _ensure_lexical_dict() -> None:
         path = Path(dict_path)
         if not path.is_file():
             return  # 可空，静默
-        import jieba
         jieba.load_userdict(str(path))
         logger.info("Loaded lexical zh dict: %s", path)
     except Exception as e:

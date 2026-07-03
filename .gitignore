@@ -10,7 +10,9 @@ dist/
 build/
 chroma_db/
 chroma/
-/data/
+/data/*
+!/data/lexical_zh_dict.txt
+!/data/lexical_zh_synonyms.txt
 *.db
 *.db-shm
 *.db-wal

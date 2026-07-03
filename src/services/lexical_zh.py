@@ -19,7 +19,7 @@ class LexicalZh:
 
     def __init__(self, config=None):
         self._config = config
-        self._synonyms: dict[str, list[str]] | None = None  # 类级缓存，None=未加载
+        self._synonyms: dict[str, list[str]] | None = None  # 实例级缓存，None=未加载
 
     def _get_config(self, key: str, default=None):
         if self._config is not None:
@@ -39,7 +39,7 @@ class LexicalZh:
             return default
 
     def _load_synonyms(self) -> dict[str, list[str]]:
-        """读 synonym_path → {词: [同义词...]}，类级缓存，失败返回 {} + warning。"""
+        """读 synonym_path → {词: [同义词...]}，实例级缓存，失败返回 {} + warning。"""
         if self._synonyms is not None:
             return self._synonyms
         self._synonyms = {}

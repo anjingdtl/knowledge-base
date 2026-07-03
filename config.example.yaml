@@ -55,6 +55,7 @@ rag:
     dict_path: data/lexical_zh_dict.txt
     synonym_path: data/lexical_zh_synonyms.txt
   # RRF keyword 权重按语种（W3，rag 段顶层标量）
+  # 注：替代旧版 rrf_weight_keyword: 0.6；legacy search_mode=blend 部署将从固定 0.6 变为 zh=0.7/en=0.5（微小归一化偏移）
   rrf_weight_keyword_zh: 0.7
   rrf_weight_keyword_en: 0.5
   chunk_overlap: 180
