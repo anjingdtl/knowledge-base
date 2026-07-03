@@ -5,11 +5,26 @@ import asyncio
 
 import pytest
 
+from src.services.blend_fusion import blend_fusion
 from src.services.rag_pipeline import (
     DEFAULT_PIPELINE_CONFIG,
     StageRegistry,
     WikiParentEnrichStage,
 )
+from src.services.wiki_parent_retrieval import WikiParentRetriever
+
+
+class _FakeDb:
+    """Minimal db mock for WikiParentRetriever (mirrors test_wiki_parent_retrieval.py)."""
+
+    def __init__(self, items: dict):
+        self._items = items
+
+    def get_knowledge(self, item_id, include_deleted=False):
+        return self._items.get(item_id)
+
+    def get_knowledge_batch(self, ids, include_deleted=False):
+        return {k: self._items[k] for k in ids if k in self._items}
 
 
 class _StubRetriever:
@@ -150,3 +165,38 @@ def test_stage_fallback_to_container_service(monkeypatch):
                  "metadata": {"page_type": "entities", "knowledge_id": "k"}}])
     _run(stage, ctx)
     assert retriever.called == 1
+
+
+# ── Task 2.3: blend 档共存契约测试 ──────────────────────────────────────────
+
+
+def test_blend_preserves_wiki_parent_content():
+    """blend 融合后 wiki 候选的 parent_content 保留(S3 在 blend 档仍成立)。"""
+    db = _FakeDb({"kid-1": {"id": "kid-1", "content": "wiki source 摘要"}})
+    # 先 enrich wiki 候选(模拟 post-rerank 已挂 parent_content)
+    wiki_cands = WikiParentRetriever(db=db).enrich([
+        {"id": "wiki:entities:foo", "text": "wiki 命中",
+         "metadata": {"page_type": "entities", "knowledge_id": "kid-1"},
+         "match_channels": ["wiki_read"]}])
+    # block 检索候选也带自己的 parent_content(block parent-child 已挂)
+    search_cands = [
+        {"id": "page1:block1", "text": "block 命中", "parent_content": "block 父块",
+         "metadata": {"page_id": "page1"}, "match_channels": ["vector", "keyword"]}]
+    merged = blend_fusion(wiki_cands, search_cands)
+    wiki_merged = [c for c in merged if str(c["id"]).startswith("wiki:")][0]
+    block_merged = [c for c in merged if not str(c["id"]).startswith("wiki:")][0]
+    assert "wiki source 摘要" in wiki_merged["parent_content"]  # wiki parent 不丢
+    assert block_merged["parent_content"] == "block 父块"  # block parent 不被覆盖
+
+
+def test_blend_id_systems_do_not_collide():
+    """wiki 候选(wiki:type:slug)与检索候选(page_id:block_id)id 体系不同,不互覆盖。"""
+    wiki = [{"id": "wiki:entities:foo", "text": "w",
+             "metadata": {"page_type": "entities", "knowledge_id": "k"},
+             "match_channels": ["wiki_read"]}]
+    search = [{"id": "wiki:entities:foo", "text": "s",  # 故意同 id(极端情况)
+               "metadata": {}, "match_channels": ["vector"]}]
+    merged = blend_fusion(wiki, search)
+    # 同 id 累加 RRF 分(并集 match_channels),不丢任一路
+    assert len(merged) == 1
+    assert set(merged[0]["match_channels"]) == {"wiki_read", "vector"}
