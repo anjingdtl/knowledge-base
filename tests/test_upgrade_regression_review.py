@@ -8,14 +8,13 @@ import asyncio
 
 import pytest
 
+from src.services.lexical_zh import LexicalZh
 from src.services.rag_pipeline import (
     RagContext,
     RAGService,
     VectorSearchStage,
     _RAGResultCache,
 )
-from src.services.lexical_zh import LexicalZh
-
 
 # ---------------------------------------------------------------------------
 # S1.2 — LRU 缓存深拷贝隔离(防调用方 mutate 嵌套结构污染缓存)
@@ -107,7 +106,8 @@ class _FakeSearcher:
 
 def test_blend_fusion_failure_preserves_hybrid_candidates(monkeypatch):
     """blend_fusion 抖动抛异常时,已算出的 hybrid 候选必须保留,不能被外层 except 清空。"""
-    from src.services import agentic_router, blend_fusion as bf_mod
+    from src.services import agentic_router
+    from src.services import blend_fusion as bf_mod
 
     # 让 agentic 路由直接失败 → 内层 except → 走 hybrid 检索路径(确定性、无 LLM)
     monkeypatch.setattr(
@@ -185,9 +185,11 @@ def test_i001_upgrade_idempotent_after_app_schema(tmp_path):
     op.create_table(无 IF NOT EXISTS)→ alembic upgrade head 报 table already exists。
     """
     import sqlite3
-    from sqlalchemy import create_engine
+
     from alembic.migration import MigrationContext
     from alembic.operations import Operations
+    from sqlalchemy import create_engine
+
     from src.services.db import _SCHEMA
 
     db_path = tmp_path / "t.db"
@@ -246,8 +248,9 @@ def test_write_markdown_atomic_no_temp_leftover(tmp_path):
 def test_migrator_backup_preserves_old_when_copytree_fails(tmp_path, monkeypatch):
     """S2.5b:copytree 中途失败时,旧备份必须完好(不可被删后丢)。"""
     import shutil
-    from src.utils.config import Config
+
     from src.services.migrator import MigrationService
+    from src.utils.config import Config
 
     data_dir = tmp_path / "data"
     data_dir.mkdir()

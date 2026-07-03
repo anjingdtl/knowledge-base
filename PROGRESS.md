@@ -1,6 +1,6 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-02
+> 最后更新：2026-07-03
 > 源码版本：`src/version.py` 中的 `1.4.0`
 > 当前分支：`master`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
@@ -13,9 +13,42 @@
 - [MCP 使用文档](docs/mcp/)
 - [高级功能](docs/advanced-features.md)
 - [工具配置档迁移指南](docs/migration/mcp-tool-profiles.md)
+- [大规模升级回归 Review & Fix 计划（2026-07-03）](docs/superpowers/plans/2026-07-03-knowledge-base-upgrade-regression-review.md)
 - [历史设计与已完成计划](docs/archive/README.md)
 
 除上述当前规格和计划外，归档目录中的文档只用于追溯，不代表当前待办。
+
+## 大规模升级回归 Review & Fix — 已完成 (2026-07-03)
+
+对 2026-06-23→07-03 升级窗口(6 大功能流:Search-Optimize Phase1-3 / 版本冲突清理 / GUI 去重 / 50轮·v1.4.0 修 bug / Wiki-First 第一阶段 W1-W4 / 第二阶段 W1-W3,59 文件 +7416/-281,21 新文件)做分段回归 review。3 个深度 Explore agent 全段映射 + 真码逐点核实 + TDD 修复,4 个 phase 各自 commit。
+
+### 修复清单(按段)
+
+| 段 | commit | 修复 |
+|---|---|---|
+| S1 检索执行层 | `912436e` | blend_fusion 抖动不清空候选(外层 except 跳过 FTS 兜底);LRU 缓存 get/put 深拷贝隔离(防嵌套结构污染);async bridge 超时无界 queue(防线程泄漏);query() 非 TimeoutError 异常向上传播(不再盲目 fallback `_direct_query` 无超时二次调 LLM,Bug-2 同类雪崩);lexical_zh Latin 词边界匹配(防「AI」命中「available」污染 FTS);title boost distance 分跳过(防语义反转);RRF 双零权重加 warning;清理死代码 `_normalize_fts_rank` + 死配置读取 |
+| S2 Wiki+数据+迁移 | `f5345d0` | alembic i001 幂等化(`if_not_exists`,与 db._SCHEMA 双重建表冲突致 `alembic upgrade head` 必现报错);resolve_slug 空 hash 不误判幂等覆盖;write_markdown 真原子写(tmp+os.replace);version_conflict 补清 vec_blocks(防 block 向量泄漏);migrator Config.load 前置 + 备份改「先写临时成功再换」(防丢旧备份) |
+| S3 MCP 契约 | `9cce4f9` | ask_with_query 自建 pipeline 补全 4 个 deps(graph_backend/size_aware/wiki_page_locator/wiki_parent,原缺致升级核心功能静默失效);_do_ask 补 `except Exception`(承接 S1.4 传播,堵 Bug-2 同类无兜底);_get_operation_log_service 改用 get_active_container(旧 get_container() 缺参必 TypeError,容器注入成死代码) |
+| S4 安全 | `4b82041` | parse_url SSRF 重定向绕过:加 httpx event_hooks 逐跳校验每个重定向目标(旧仅验初始 URL,302 可指向 127.0.0.1/云元数据) |
+
+### 撤销 / 延迟(附理由)
+
+- **S2.3 撤销**:entity 页「一页跨源 LLM 合并」是设计,knowledge_id last-writer-wins 是 Phase2 spec §4.2 明记的未来增强(补 source_ids),非回归 bug;agent 建议的 resolve_slug 会拆多页破坏设计。
+- **S4.2 延迟**(GUI worker closeEvent):GUI-only、LOW-MED(仅关闭窗口时正在扫描的边缘场景)、daemon 线程不挂进程、会话可新建恢复,且无 headless GUI 测试覆盖,贸然改 closeEvent 风险>收益。
+
+### 验证(当次真实执行)
+
+| 门禁 | 结果 |
+|------|------|
+| 全量 pytest | **1197 passed / 1 skipped / 0 failed**(基线 1179 + 18 新回归测试,零功能退化) |
+| 新增回归测试 | 18 条(S1.1 blend 兜底 / S1.2 缓存隔离 / S1.4 异常传播 / S1.5 词边界 / S2.1 i001 幂等 / S2.2 空 hash / S2.6 原子写 / S2.5b 备份 / S3.2 ask 兜底 / S3.3 DI / S4.1 SSRF) |
+| ruff / mypy | **既有基线债务,非本次引入**:af4aa2f(本次工作前)已存在 ruff 98 / mypy 53 错误(wiki-first 升级窗口积累,多为 I001 import 排序与 F401 未用 import,非功能 bug)。本次改动净增 0 新错误,新代码已清 lint。建议单独 `ruff --fix` 清理 pass(F401 删 import 需逐个确认引用,防 NameError) |
+
+### 后续建议(非本轮范围)
+
+- 单独一轮 ruff/mypy 基线清理(98+53 错误),恢复 CI lint/type 门禁绿。
+- Phase2 W4 收口时统一双轨 wiki 编译(MCP→SQLite wiki_compiler vs path_indexer→文件系统 knowledge_workflow,wiki_lint 对文件层盲)——架构级 gap,已记为 spec Gap B。
+
 
 ## Karpathy Wiki-First 对齐（第一阶段）— W1-W4 核心实现落地 (2026-07-02)
 
