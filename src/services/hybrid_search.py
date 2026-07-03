@@ -183,6 +183,13 @@ class HybridSearcher:
         if total_w > 0:
             w_semantic /= total_w
             w_keyword /= total_w
+        else:
+            # 两权重都设 0 时归一化被跳过,rrf_score 全为 0,排序退化为原序。
+            # 原实现静默,这里记 warning 便于诊断(防用户误配后召回质量莫名下降)。
+            logging.warning(
+                "rag.rrf_weight_semantic + rrf_weight_keyword 均为 0,RRF 分数将全部 "
+                "为 0,排序退化为原序——请检查权重配置"
+            )
 
         # Phase 2: 专有名词检测 → keyword 通道加权
         proper_nouns = []
@@ -276,17 +283,6 @@ class HybridSearcher:
             for item in final:
                 item.setdefault("warnings", []).extend(vec_warnings)
         return final
-
-    @staticmethod
-    def _normalize_fts_rank(raw_rank: float) -> float:
-        try:
-            rank = float(raw_rank)
-        except (TypeError, ValueError):
-            return 0
-        if rank < 0:
-            strength = abs(rank)
-            return strength / (strength + 10)
-        return min(rank / 10, 1.0)
 
     @staticmethod
     def _candidate_id(item: dict) -> str:

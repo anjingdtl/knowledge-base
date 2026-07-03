@@ -9,9 +9,36 @@
 from __future__ import annotations
 
 import logging
+import re
 from typing import Any
 
 logger = logging.getLogger(__name__)
+
+
+_CJK_RE = re.compile(r"[一-鿿]")
+# Latin 词边界正则缓存(词典通常很小,复用编译结果)
+_LATIN_BOUNDARY_CACHE: dict[str, "re.Pattern[str]"] = {}
+
+
+def _query_contains_word(word: str, query: str) -> bool:
+    """判断 ``word`` 是否作为词出现在 ``query`` 中。
+
+    - CJK 词(含汉字):子串匹配(CJK 无词边界,「创智杯」应匹配「创智杯通知」)。
+    - Latin/数字词:用「非 ASCII 字母数字邻接」边界,避免「AI」匹配进「available」
+      这类假阳性污染 FTS 召回(原 ``word in query`` 子串匹配的 bug)。
+    """
+    if not word:
+        return False
+    if _CJK_RE.search(word):
+        return word in query
+    pat = _LATIN_BOUNDARY_CACHE.get(word)
+    if pat is None:
+        pat = re.compile(
+            r"(?<![a-zA-Z0-9])" + re.escape(word) + r"(?![a-zA-Z0-9])",
+            re.IGNORECASE,
+        )
+        _LATIN_BOUNDARY_CACHE[word] = pat
+    return bool(pat.search(query))
 
 
 class LexicalZh:
@@ -75,7 +102,7 @@ class LexicalZh:
             return query
         extras: list[str] = []
         for word, syns in synonyms.items():
-            if word in query:
+            if _query_contains_word(word, query):
                 extras.extend(syns)
         if not extras:
             return query

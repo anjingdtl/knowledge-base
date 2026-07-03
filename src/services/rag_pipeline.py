@@ -59,7 +59,10 @@ def _run_coroutine_sync(coro, timeout: float = 120):
         except asyncio.TimeoutError as exc:
             raise concurrent.futures.TimeoutError() from exc
 
-    result_queue: queue.Queue[tuple[bool, object]] = queue.Queue(maxsize=1)
+    # 无界 queue:超时后主线程已 raise,daemon 线程的 put 不能阻塞在满队列上
+    # (maxsize=1 时超时后无消费者,put 永久阻塞 → 线程+queue 泄漏)。无界则 put
+    # 立即返回,daemon 线程跑完协程后自然退出,弃用结果由 GC 回收。
+    result_queue: queue.Queue[tuple[bool, object]] = queue.Queue()
 
     def _runner():
         try:
@@ -445,11 +448,22 @@ class VectorSearchStage(PipelineStage):
             ctx.candidates = unique[:top_k]
 
             # blend 档(Task 1.3):融合备份的 wiki 候选与 hybrid 检索候选
+            # 注意:fusion 单独包 try——此时 hybrid 已成功跑完,若 fusion 抖动抛异常,
+            # 必须保留已算出的 hybrid 候选,不能让它冒泡到外层 except(487)清空候选
+            # 而跳过 FTS 兜底,导致「成功检索却无候选」。
             if scale == "blend":
                 from src.services.blend_fusion import blend_fusion
                 wiki_cands = ctx.metadata.pop("_blend_wiki_candidates", [])
                 if wiki_cands and ctx.candidates:
-                    ctx.candidates = blend_fusion(wiki_cands, ctx.candidates)
+                    try:
+                        ctx.candidates = blend_fusion(wiki_cands, ctx.candidates)
+                    except Exception as e:
+                        logger.warning(
+                            "blend fusion failed, keeping hybrid candidates: %s", e
+                        )
+                        ctx.metadata.setdefault("warnings", []).append(
+                            f"blend_fusion_failed: {e}"
+                        )
 
             if not ctx.candidates:
                 # BUG#3 文档说明：此为预期容错，非错误。
@@ -539,10 +553,6 @@ class GenerateStage(PipelineStage):
         self._build_context(ctx)
 
         stream = config.get("stream", False)
-        config.get("temperature", 0.7)
-        config.get("max_tokens", 2048)
-        config.get("top_k", 5)
-        config.get("rerank_top_n", 5)
         score_threshold = config.get("score_threshold", 0.5)
 
         # 筛选结果（同旧版逻辑）
@@ -1225,12 +1235,18 @@ class _RAGResultCache:
                 del self._cache[key]
                 return None
             self._cache.move_to_end(key)
-            return result
+            # 深拷贝隔离:调用方 mutate 返回值的嵌套结构(sources/warnings 等)时
+            # 不得污染缓存,否则同一 query 在不同请求间会返回被污染的结果。
+            import copy
+            return copy.deepcopy(result)
 
     def put(self, question: str, result: dict) -> None:
         key = self._make_key(question)
         with self._lock:
-            self._cache[key] = (time.monotonic(), result)
+            # 深拷贝快照:缓存持有独立副本,调用方 put 后继续 mutate 原 dict 引用
+            # 也不得污染缓存(模块级共享缓存,被 FastMCP 线程池多调用方访问)。
+            import copy
+            self._cache[key] = (time.monotonic(), copy.deepcopy(result))
             self._cache.move_to_end(key)
             while len(self._cache) > self._maxsize:
                 self._cache.popitem(last=False)
@@ -1333,11 +1349,16 @@ class RAGService:
             )
             raise
         except Exception as e:
-            err_detail = traceback.format_exc()
-            logger.error("Pipeline execution failed, falling back to direct query: %s\n%s", e, err_detail)
-            # fallback：仅用 Wiki 上下文 + LLM 直接生成
-            ctx = RagContext(question=question, conversation_history=conversation_history or [])
-            return self._direct_query(question, conversation_history, ctx)
+            # 50轮测试报告 Bug-2 同类风险:旧实现对任意非超时异常也 fallback 到
+            # ``_direct_query``(再次调 LLM 且本身无超时),管线失败后再叠加一次
+            # 无界 LLM 调用会触发雪崩超时。改为向上传播,由 ask 工具层(_do_ask)
+            # 捕获后返回部分结果 + 警告。``_direct_query`` 方法签名保留供显式/测试
+            # 使用,不再自动触发。
+            logger.error(
+                "Pipeline execution failed, propagating to caller: %s\n%s",
+                e, traceback.format_exc(),
+            )
+            raise
 
     def query_stream(self, question: str, conversation_history: list[dict] | None = None,
                      phase_callback=None):

@@ -163,10 +163,12 @@ class SearchService:
             # 分数回退链: rerank_score > rrf_score > vector_score > distance
             # 使用显式 None 检查，0.0 是有效分数
             score = 0.0
+            score_key = ""
             for key in ("rerank_score", "rrf_score", "vector_score", "distance"):
                 val = r.get(key)
                 if val is not None:
                     score = val
+                    score_key = key
                     break
 
             # BUG-8 fix: 更健壮的 title 回退
@@ -190,8 +192,11 @@ class SearchService:
                     logger.debug("Title fallback to '未知' for knowledge_id=%s", kid)
 
             # BUG-2 fix: title boost — 标题包含查询关键词的结果获得分数加成
+            # 注意:score 为 distance(cosine 距离,越小越好,∈[0,2])时跳过加成——
+            # 直接 ``score + boost_ratio`` 会让低距离(高分)结果变「差」,语义反转。
+            # distance 仅在前三者(rerank/rrf/vector_score)全 None 时胜出,低频。
             title_boost = self._cfg("rag.title_boost", 0.15)
-            if title_boost > 0 and title != "未知":
+            if title_boost > 0 and title != "未知" and score_key != "distance":
                 query_lower = query.lower()
                 # 检查查询中的核心词是否出现在标题中
                 query_chars = set(query_lower) - {' ', '的', '了', '是', '在', '和', '与', '或', '有', '中', '及'}
