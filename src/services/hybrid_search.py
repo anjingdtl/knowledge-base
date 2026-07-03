@@ -7,7 +7,7 @@ from src.models.retrieval import normalize_fts_score, normalize_vector_score
 from src.services.block_context import enrich_result_with_context
 from src.services.block_store import BlockStore
 from src.services.db import Database
-from src.utils.chinese_tokenizer import detect_proper_nouns
+from src.utils.chinese_tokenizer import detect_proper_nouns, detect_query_language
 from src.utils.config import Config
 
 
@@ -172,7 +172,12 @@ class HybridSearcher:
         # Phase 2: 可配置 RRF 参数
         k = self._get_config("rag.rrf_k", 40)
         w_semantic = float(self._get_config("rag.rrf_weight_semantic", 0.4))
-        w_keyword = float(self._get_config("rag.rrf_weight_keyword", 0.6))
+        # W3 Task 3.3: 按查询语种选 keyword 权重（queries[0] 为原始 query）
+        lang = detect_query_language(queries[0] if queries else "")
+        if lang == "zh":
+            w_keyword = float(self._get_config("rag.rrf_weight_keyword_zh", 0.7))
+        else:
+            w_keyword = float(self._get_config("rag.rrf_weight_keyword_en", 0.5))
         # 归一化权重，防止用户设置不当导致分数膨胀
         total_w = w_semantic + w_keyword
         if total_w > 0:
