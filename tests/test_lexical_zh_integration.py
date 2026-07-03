@@ -1,22 +1,16 @@
-"""W3 S4 集成验收:真实 HybridSearcher + 词典 + 索引,中文 Recall@5 >= 0.7。
+"""W3 S4 机制验证:专名词典加载+分词变更+同义词扩展+语言检测。
 
-不走 evals/run_retrieval_eval.py 的 OfflineIndex(它不调 hybrid_search)。
-直接测生产路径:加载专名词典 + 同义词 -> insert_blocks + insert_blocks_fts 建索引 ->
-HybridSearcher.search 中文 query -> 断言 top-5 命中 golden source。
+本测试验证 lexical-enhancement 机制在真实 HybridSearcher+FTS 路径上真正生效:
+1. 全局 Config 启用 lexical_zh → _ensure_lexical_dict 真正调用 jieba.load_userdict
+2. 加载后 jieba 分词产生可观测差异(如"创智杯"从 创智/杯 变为 整词)
+3. LexicalZh.expand_query 追加同义词,FTS 查询被扩展
+4. detect_query_language 对中文 query 返回 "zh"
 
-API 确认 (read db.py / hybrid_search.py / conftest.py):
-- Database.connect(db_path) 设置 Database._instance 单例
-- insert_blocks(blocks) 需要 id/page_id/content/block_type 等 (block_fts JOIN blocks)
-- insert_blocks_fts(blocks) 需要 id/page_id/content (b["id"] not b["block_id"])
-- HybridSearcher(db=Database, config=dict_config).search(queries=[str], top_k=5)
-- search_mode 从 config rag.search_mode 读取
-- 结果 dict: id=block_id, metadata.block_id
+重要: Recall@5=1.0 在此小型 fixture 上是 FTS5+jieba 默认行为即可达到的结果,
+不代表 spec 中 retrieval_zh 0.6→0.7 的数值提升(需要真实 retrieval_zh 数据集+重索引,
+推迟到 W4 端到端验证)。本测试的职责是机制验证,不是数值 S4。
 """
-import json
-
 import pytest
-
-from src.services.hybrid_search import HybridSearcher
 
 
 # golden:5 个中文查询的期望命中 block(id 含关键词)
@@ -33,19 +27,10 @@ FIXTURE_BLOCKS = [
      "block_type": "section"},
 ]
 
-# 专名词典:让 FTTR/创智杯/BSS 等不被切成单字
-DICT_CONTENT = "FTTR 1000 nz\n创智杯 1000 nz\nBSS 1000 nz\n"
-# 同义词:让"光纤"命中 FTTR 上下文
+# 专名词典:创智杯 是关键鉴别词 — jieba 默认切成 创智/杯,词典加载后保持为整词
+DICT_CONTENT = "创智杯 1000 nz\nFTTR 1000 nz\nBSS 1000 nz\n"
+# 同义词:FTTR → 光纤到房间
 SYN_CONTENT = "FTTR 光纤到房间\n"
-
-
-QUERIES_EXPECTED = [
-    ("FTTR是什么", "b1"),
-    ("创智杯评价指标", "b2"),
-    ("营销通知", "b3"),
-    ("APP注册", "b4"),
-    ("BSS系统", "b5"),
-]
 
 
 def _recall_at_5(results, expected_block_id):
@@ -77,62 +62,111 @@ def _make_block_rows(fixture_blocks):
     return rows
 
 
-def test_zh_recall_with_lexical_enhancements(tmp_path, monkeypatch):
-    """加载词典+同义词后,中文 Recall@5 >= 0.7(S4)。"""
+def test_zh_lexical_mechanisms_engage(tmp_path, monkeypatch):
+    """验证 lexical-zh 机制真正生效:词典加载→分词差异+同义词扩展+语言检测。"""
     from src.services.db import Database
     from src.utils import chinese_tokenizer
+    from src.utils.config import Config
 
-    # 准备临时词典/同义词文件
+    # --- Fix 1: 设置全局 Config 使 _ensure_lexical_dict 真正加载 ---
     dict_file = tmp_path / "dict.txt"
     dict_file.write_text(DICT_CONTENT, encoding="utf-8")
     syn_file = tmp_path / "syn.txt"
     syn_file.write_text(SYN_CONTENT, encoding="utf-8")
 
-    # Config dict 模拟
+    Config.set("rag.lexical_zh.enabled", True)
+    Config.set("rag.lexical_zh.dict_path", str(dict_file))
+    Config.set("rag.lexical_zh.synonym_path", str(syn_file))
+
+    # 重置词典加载 flag + 录制 load_userdict 调用
+    monkeypatch.setattr(chinese_tokenizer, "_lexical_dict_loaded", False)
+    load_calls = []
+    _real_load = chinese_tokenizer.jieba.load_userdict
+
+    def _recording_load(path):
+        load_calls.append(str(path))
+        _real_load(path)
+
+    monkeypatch.setattr(chinese_tokenizer.jieba, "load_userdict", _recording_load)
+
+    # Local config dict for HybridSearcher (keyword mode)
     cfg = {
         "rag": {
-            "search_mode": "keywords",  # 强制关键词模式,不走向量(无 mock embedding)
+            "search_mode": "keywords",
             "lexical_zh": {
                 "enabled": True,
                 "dict_path": str(dict_file),
                 "synonym_path": str(syn_file),
             },
-            "rrf_weight_keyword_zh": 0.7,
-            "rrf_weight_keyword_en": 0.5,
-            "rrf_k": 40,
-            "rrf_weight_semantic": 0.4,
         }
     }
 
-    # 重置词典加载 flag,确保本测试能重新加载
-    monkeypatch.setattr(chinese_tokenizer, "_lexical_dict_loaded", False)
-
-    # 真正加载 jieba 词典(不是 monkeypatch 掉),因为我们测的是真实分词路径
-    # insert_blocks_fts -> tokenize_chinese_full -> _ensure_lexical_dict -> jieba.load_userdict
-
-    # 初始化 Database
+    # 初始化 Database + 插入 blocks + FTS 索引(触发 _ensure_lexical_dict)
     Database._instance = None
     Database.connect(str(tmp_path / "test.db"))
-
-    # 先插入 blocks 表 (search_blocks_fts JOIN blocks)
     Database.insert_blocks(_make_block_rows(FIXTURE_BLOCKS))
-
-    # 再插入 block_fts (分词索引,会触发 _ensure_lexical_dict 加载专名词典)
     Database.insert_blocks_fts(FIXTURE_BLOCKS)
 
-    # 验证词典已加载:FTTR 应被 jieba 识别为整词
-    import jieba
-    fttr_tokens = list(jieba.cut("FTTR技术"))
-    assert "FTTR" in fttr_tokens, (
-        f"Dict not loaded: jieba tokenized 'FTTR技术' as {fttr_tokens}, expected 'FTTR' as one token"
+    # --- 机制验证 1: jieba.load_userdict 确实被调用 ---
+    assert len(load_calls) == 1, (
+        f"Expected exactly 1 load_userdict call, got {len(load_calls)}: {load_calls}"
+    )
+    assert load_calls[0] == str(dict_file), (
+        f"load_userdict called with wrong path: {load_calls[0]} != {dict_file}"
     )
 
-    # 创建 HybridSearcher (keyword-only mode, no vector store needed)
+    # --- 机制验证 2: 词典加载导致分词差异(鉴别性断言) ---
+    # jieba 默认把"创智杯"切成 ['创智', '杯']; 加载词典后 jieba.cut 保持整词
+    import jieba
+    tokens_with_dict = list(jieba.cut("创智杯"))
+    assert "创智杯" in tokens_with_dict, (
+        f"Dict loaded but '创智杯' still split: {tokens_with_dict}. "
+        "This proves load_userdict ran but the term wasn't recognized."
+    )
+    # 额外验证: tokenize_chinese_full (FTS 索引路径) 也产出整词
+    from src.utils.chinese_tokenizer import tokenize_chinese_full
+    fts_tokens = tokenize_chinese_full("创智杯大赛")
+    assert "创智杯" in fts_tokens, (
+        f"tokenize_chinese_full should produce '创智杯' after dict load: {fts_tokens}"
+    )
+
+    # --- 机制验证 3: 同义词扩展真正生效 ---
+    from src.services.lexical_zh import LexicalZh
+    lexical = LexicalZh(config=cfg)
+    expanded = lexical.expand_query("FTTR是什么")
+    assert expanded != "FTTR是什么", (
+        f"Synonym expansion did nothing: '{expanded}' == original. "
+        "FTTR should have '光纤到房间' appended."
+    )
+    assert "光纤到房间" in expanded, (
+        f"Expected '光纤到房间' in expanded query: '{expanded}'"
+    )
+
+    # --- 机制验证 4: 语言检测对中文 query 返回 "zh" ---
+    from src.utils.chinese_tokenizer import detect_query_language
+    for q in ["FTTR是什么", "创智杯评价指标", "BSS系统"]:
+        assert detect_query_language(q) == "zh", (
+            f"detect_query_language('{q}') should return 'zh'"
+        )
+    assert detect_query_language("network routing") == "en"
+
+    # --- Recall@5 验证(机制层面的端到端确认) ---
+    searcher = Database.get_conn  # noqa — just ensure DB alive
+
+    from src.services.hybrid_search import HybridSearcher
     searcher = HybridSearcher(db=Database, block_store=None, config=cfg)
+
+    queries_expected = [
+        ("FTTR是什么", "b1"),
+        ("创智杯评价指标", "b2"),
+        ("营销通知", "b3"),
+        ("APP注册", "b4"),
+        ("BSS系统", "b5"),
+    ]
 
     hits = 0.0
     miss_details = []
-    for query, expected in QUERIES_EXPECTED:
+    for query, expected in queries_expected:
         results = searcher.search(queries=[query], top_k=5)
         recall = _recall_at_5(results, expected)
         if recall < 1.0:
@@ -140,7 +174,7 @@ def test_zh_recall_with_lexical_enhancements(tmp_path, monkeypatch):
             miss_details.append(f"  query='{query}' expected={expected} got={top_ids}")
         hits += recall
 
-    recall = hits / len(QUERIES_EXPECTED)
+    recall = hits / len(queries_expected)
     if recall < 0.7:
         pytest.fail(
             f"S4 失败: Recall@5 = {recall} < 0.7\n"
