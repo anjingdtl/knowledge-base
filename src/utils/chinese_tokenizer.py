@@ -1,8 +1,53 @@
 """中文分词工具 — 基于 jieba"""
+import logging
 import re
+from pathlib import Path
 
 import jieba
 import jieba.posseg as pseg
+
+logger = logging.getLogger(__name__)
+
+# 模块级 flag：jieba 词典只加载一次（进程级全局副作用，幂等）
+_lexical_dict_loaded = False
+
+
+def _ensure_lexical_dict() -> None:
+    """一次性加载自定义专名词典进 jieba（查询+索引两路径都受益）。
+
+    进程级全局副作用，flag 保证只加载一次。加载失败仅 warning 不阻塞检索
+    （与 wiki hook 同策略）。Config 未初始化（纯算法测试）时静默跳过。
+    legacy（rag.lexical_zh.enabled 缺省 false）完全 no-op。
+    """
+    global _lexical_dict_loaded
+    if _lexical_dict_loaded:
+        return
+    _lexical_dict_loaded = True  # 先设 flag，避免异常时重复尝试
+    try:
+        from src.utils.config import Config
+        if not Config.get("rag.lexical_zh.enabled", False):
+            return
+        dict_path = Config.get("rag.lexical_zh.dict_path", "")
+        if not dict_path:
+            return
+        path = Path(dict_path)
+        if not path.is_file():
+            return  # 可空，静默
+        import jieba
+        jieba.load_userdict(str(path))
+        logger.info("Loaded lexical zh dict: %s", path)
+    except Exception as e:
+        logger.warning("lexical dict load failed (non-fatal): %s", e)
+
+
+def detect_query_language(text: str) -> str:
+    """返回 'zh' 或 'en'。query 含任意 CJK 基本区字符即判 zh。
+
+    短 query（如 'FTTR 是什么'）仅少量汉字也应判 zh，不做比例阈值。
+    """
+    if not text:
+        return "en"
+    return "zh" if re.search(r"[一-鿿]", text) else "en"
 
 
 def tokenize_chinese(text: str) -> str:
@@ -14,6 +59,7 @@ def tokenize_chinese(text: str) -> str:
 def tokenize_chinese_full(text: str) -> str:
     """jieba 全模式分词（MaxKB 风格），返回空格分隔词组。
     全模式会产出所有可能的词组组合，适合 FTS 索引。"""
+    _ensure_lexical_dict()  # W3: 首次分词前确保专名词典已加载（幂等）
     if not text.strip():
         return ""
     words = jieba.lcut(text, cut_all=True)
