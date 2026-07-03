@@ -671,6 +671,22 @@ def _do_ask(question: str) -> dict:
             "trace_id": "",
         }
         return result
+    except Exception as e:
+        # S3.2:query() 现向上传播非超时异常(S1.4:不再盲目 fallback _direct_query),
+        # ask 必须在此兜住,返回结构化部分结果 + 告警,避免冒泡成未处理 MCP 错误
+        # (与 ask_with_query 的韧性对齐,堵住 Bug-2 同类的「无兜底」缺口)。
+        logger.error("ask pipeline failed for question=%r: %s", question[:50], e)
+        return {
+            "answer": "",
+            "sources": [],
+            "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
+            "route": {"mode": "error", "explanation": f"ask failed: {e}"},
+            "query_plan": {},
+            "block_contexts": {},
+            "warnings": [f"ask failed: {type(e).__name__}: {e}"],
+            "wiki_context": "",
+            "trace_id": "",
+        }
 
     # Phase 3: add trace_id to result if observability enabled
     if Config.get("rag.observability.trace_enabled", True):
@@ -2598,6 +2614,13 @@ def ask_with_query(
                 "query_rewriter": container.query_rewriter,
                 "reranker": container.reranker,
                 "hybrid_search": container.hybrid_search,
+                # 与 container.rag_pipeline 对齐:缺这四项会让 graph 模式无后端,
+                # 且 size-aware 路由 / wiki parent-child(本次升级核心)在
+                # ask_with_query 静默失效,即便项目已启用。
+                "graph_backend": container.graph_backend,
+                "size_aware_router": container.size_aware_router,
+                "wiki_page_locator": container.wiki_page_locator,
+                "wiki_parent_retriever": container.wiki_parent_retriever,
             },
         )
         # 把 spec 注入 metadata，VectorSearchStage 会跳过自动路由直接使用

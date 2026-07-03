@@ -275,3 +275,58 @@ def test_migrator_backup_preserves_old_when_copytree_fails(tmp_path, monkeypatch
     assert (backup_path / "old.txt").read_text() == "old backup content"
     # 临时备份被清理
     assert not (tmp_path / "data.backup.tmp").exists()
+
+
+# ---------------------------------------------------------------------------
+# S3 段 — MCP Server + 工具契约
+# ---------------------------------------------------------------------------
+
+def test_do_ask_catches_non_timeout_exception(monkeypatch):
+    """S3.2:_do_ask 必须兜住非超时异常(S1.4 后 query() 会传播),返回结构化部分结果,
+    不冒泡成未处理 MCP 错误。"""
+    from src import mcp_server
+
+    container = mcp_server._get_container()
+
+    def _boom(question, timeout=None, **kwargs):
+        raise RuntimeError("simulated pipeline failure")
+    monkeypatch.setattr(container.rag_pipeline, "query", _boom)
+
+    result = mcp_server._do_ask("any question")
+    assert result["route"]["mode"] == "error"
+    assert any("simulated pipeline failure" in w for w in result["warnings"])
+    assert result["answer"] == ""
+    assert result["sources"] == []
+
+
+def test_get_operation_log_service_uses_active_container(monkeypatch):
+    """S3.3:有活跃 container 时返回 container.operation_log。
+
+    旧实现调 src.api.deps.get_container()(签名需 request 参数)→ 必 TypeError →
+    永远走 except fallback,容器注入路径成死代码。改用 get_active_container 后才生效。
+    """
+    from src.services import version_conflict as vc_mod
+
+    fake_op_log = object()  # sentinel
+
+    class _FakeContainer:
+        operation_log = fake_op_log
+
+    monkeypatch.setattr("src.core.container.get_active_container",
+                        lambda: _FakeContainer())
+
+    svc = vc_mod.VersionConflictService.__new__(vc_mod.VersionConflictService)
+    assert svc._get_operation_log_service() is fake_op_log
+
+
+def test_get_operation_log_service_fallback_when_no_container(monkeypatch):
+    """S3.3 回归:无活跃 container 时降级自建 OperationLogService(不抛)。"""
+    from src.services import version_conflict as vc_mod
+    from src.services.operation_log import OperationLogService
+
+    monkeypatch.setattr("src.core.container.get_active_container", lambda: None)
+
+    svc = vc_mod.VersionConflictService.__new__(vc_mod.VersionConflictService)
+    svc._knowledge_repo = None
+    ol = svc._get_operation_log_service()
+    assert isinstance(ol, OperationLogService)

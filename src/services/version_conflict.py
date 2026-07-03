@@ -125,20 +125,24 @@ class VersionConflictService:
         return self._blockstore
 
     def _get_operation_log_service(self):
-        """从 AppContainer 获取 OperationLogService（已注入 repo）。"""
+        """从活跃 AppContainer 获取 OperationLogService（已注入 repo）。"""
         try:
-            # 优先从全局 container 获取
-            from src.api.deps import get_container
-            container = get_container()
-            return container.operation_log
+            # 优先从全局活跃 container 获取。旧实现调 src.api.deps.get_container(),
+            # 其签名是 get_container(request: Request) 缺必需参数 → 必 TypeError →
+            # 永远走 except fallback,容器注入路径成死代码。改用 get_active_container。
+            from src.core.container import get_active_container
+            container = get_active_container()
+            if container is not None:
+                return container.operation_log
         except Exception:
-            # 降级：自己构造
-            from src.repositories.operation_log_repo import OperationLogRepository
-            from src.services.operation_log import OperationLogService
-            return OperationLogService(
-                repo=OperationLogRepository(),
-                knowledge_repo=self._get_knowledge_repo(),
-            )
+            pass
+        # 降级：自己构造
+        from src.repositories.operation_log_repo import OperationLogRepository
+        from src.services.operation_log import OperationLogService
+        return OperationLogService(
+            repo=OperationLogRepository(),
+            knowledge_repo=self._get_knowledge_repo(),
+        )
 
     # ── 会话管理 ──
 
