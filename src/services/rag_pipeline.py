@@ -273,6 +273,48 @@ class WikiReadStage(PipelineStage):
         return ctx
 
 
+class WikiParentEnrichStage(PipelineStage):
+    """第二阶段 W2:wiki 候选带回 source 页 parent 上下文(spec §4.2 / S3)。
+
+    挂在 post-rerank:读 ``ctx.reranked_results``,对 wiki 候选调
+    ``WikiParentRetriever.enrich`` 写入 ``parent_content`` 字段,供
+    ``GenerateStage``(:601)消费。仅 ``mode=wiki_first`` 且
+    ``rag.wiki_parent_child.enabled=true`` 时介入,否则空操作 —— legacy 项目
+    零影响(S6)。与 block 的 ``enrich_with_parent_context``(挂 hybrid_search:43)
+    对称但独立,不改 block 挂载点。
+    """
+
+    def __init__(self, wiki_parent_retriever=None):
+        self._retriever = wiki_parent_retriever
+
+    @property
+    def name(self):
+        return "wiki_parent_enrich"
+
+    async def execute(self, ctx, config):
+        if not self.is_enabled(config):
+            return ctx
+        # legacy 门控(S6)
+        if Config.get("knowledge_workflow.mode", "legacy") != "wiki_first":
+            return ctx
+        if not Config.get("rag.wiki_parent_child.enabled", False):
+            return ctx
+        results = getattr(ctx, "reranked_results", None) or []
+        if not results:
+            return ctx
+        retriever = self._retriever or _get_container_service(
+            "wiki_parent_retriever", lambda: None)
+        if retriever is None:
+            return ctx
+        try:
+            ctx.reranked_results = retriever.enrich(results)
+        except Exception as e:
+            logger.warning("WikiParentEnrich stage failed (non-fatal): %s", e)
+            ctx.metadata.setdefault("warnings", []).append(
+                f"wiki_parent_enrich_failed: {e}")
+        return ctx
+
+
 class VectorSearchStage(PipelineStage):
     def __init__(self, db=None, hybrid_search=None, llm=None, graph_backend=None):
         self._db = db
@@ -877,7 +919,7 @@ class StageRegistry:
     _stages: dict[str, type[PipelineStage]] = {}
     _builtin_stages = [
         QueryRewriteStage, WikiRetrievalStage, WikiReadStage, VectorSearchStage,
-        RerankStage, EvidenceCompressStage, GenerateStage, PostProcessStage,
+        RerankStage, WikiParentEnrichStage, EvidenceCompressStage, GenerateStage, PostProcessStage,
     ]
 
     @classmethod
@@ -948,6 +990,7 @@ DEFAULT_PIPELINE_CONFIG = [
     {"stage": "wiki_read", "enabled": True},  # size-aware: 小/混合查询读 wiki(零向量)
     {"stage": "vector_search", "enabled": True, "mode": "blend", "top_k": 10},
     {"stage": "rerank", "enabled": True, "top_n": 5, "min_score": 0.3},
+    {"stage": "wiki_parent_enrich", "enabled": True},  # W2: wiki 候选带回 source 页 parent 上下文(post-rerank)
     {"stage": "evidence_compress", "enabled": False, "strategy": "extractive", "max_evidence_tokens": 4000},
     {"stage": "generate", "enabled": True, "stream": False},
     {"stage": "postprocess", "enabled": True, "dedup": True,
