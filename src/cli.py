@@ -232,6 +232,10 @@ def _handle_wiki(args: argparse.Namespace) -> int:
 
 def _handle_migrate(args: argparse.Namespace) -> int:
     """处理 migrate 子命令:legacy -> wiki-first。"""
+    # 必须先加载配置:plan 分支不走 create_container,否则 _ensure_db 会用默认
+    # data_dir/db_name(误读 ./data/kb.db),与用户实际配置的库不一致。
+    from src.utils.config import Config
+    Config.load()
     from src.services.migrator import MigrationService
     svc = MigrationService()
     if not args.apply:

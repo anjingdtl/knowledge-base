@@ -605,7 +605,15 @@ class VersionConflictService:
             vs = self._get_vectorstore()
             vs.delete_by_knowledge(deleted_id)
         except Exception as e:
-            logger.warning("Failed to clean vectorstore for %s: %s", deleted_id, e)
+            logger.warning("Failed to clean vec_chunks for %s: %s", deleted_id, e)
+
+        # 清理 vec_blocks(block 级向量)。用户知识库实际索引在 vec_blocks,
+        # 仅清 vec_chunks(knowledge 级)会致 block 向量长期泄漏,已删旧版 block 仍
+        # 可能被 BlockStore.search 命中(虽 LEFT JOIN 软删过滤在查询层屏蔽,但表膨胀)。
+        try:
+            self._get_block_store().delete_by_page(deleted_id)
+        except Exception as e:
+            logger.warning("Failed to clean vec_blocks for %s: %s", deleted_id, e)
 
         # 更新 pair 状态
         self._repo.update_pair_status(pair_id, "deleted")

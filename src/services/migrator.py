@@ -73,9 +73,20 @@ class MigrationService:
         backup_created = False
         if backup and data_dir.exists():
             backup_path = data_dir.parent / f"{data_dir.name}.backup"
+            # 先写临时备份,成功后才替换旧备份——避免 ``rmtree(旧) + copytree`` 之间
+            # copytree 中途失败导致旧备份已删、新备份半写的数据丢失(不可逆)。
+            tmp_backup = data_dir.parent / f"{data_dir.name}.backup.tmp"
+            try:
+                if tmp_backup.exists():
+                    shutil.rmtree(tmp_backup)
+                shutil.copytree(data_dir, tmp_backup)
+            except Exception:
+                if tmp_backup.exists():
+                    shutil.rmtree(tmp_backup, ignore_errors=True)
+                raise
             if backup_path.exists():
                 shutil.rmtree(backup_path)
-            shutil.copytree(data_dir, backup_path)
+            shutil.move(str(tmp_backup), str(backup_path))
             backup_created = True
             logger.info("data/ backed up to %s", backup_path)
 

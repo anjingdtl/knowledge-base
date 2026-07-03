@@ -21,7 +21,12 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    """创建 conflict_sessions / conflict_pairs / conflict_ignores 三张表。"""
+    """创建 conflict_sessions / conflict_pairs / conflict_ignores 三张表。
+
+    全部 ``if_not_exists=True``:db.py 的 ``_SCHEMA`` 已用 ``CREATE TABLE IF NOT
+    EXISTS`` 建同名表(app 启动即建),此处再建必须幂等,否则在已跑过 app 的库上
+    执行 ``alembic upgrade head`` 会报 "table already exists"。
+    """
     # 表 1：扫描会话
     op.create_table(
         "conflict_sessions",
@@ -35,6 +40,7 @@ def upgrade() -> None:
         sa.Column("error", sa.Text),
         sa.Column("started_at", sa.Text, nullable=False),
         sa.Column("completed_at", sa.Text),
+        if_not_exists=True,
     )
 
     # 表 2：候选对
@@ -55,10 +61,11 @@ def upgrade() -> None:
         sa.Column("judged_at", sa.Text),
         sa.Column("resolved_at", sa.Text),
         sa.ForeignKeyConstraint(["session_id"], ["conflict_sessions.id"]),
+        if_not_exists=True,
     )
-    op.create_index("idx_conflict_pairs_session", "conflict_pairs", ["session_id"])
-    op.create_index("idx_conflict_pairs_status", "conflict_pairs", ["status"])
-    op.create_index("idx_conflict_pairs_items", "conflict_pairs", ["item_a_id", "item_b_id"])
+    op.create_index("idx_conflict_pairs_session", "conflict_pairs", ["session_id"], if_not_exists=True)
+    op.create_index("idx_conflict_pairs_status", "conflict_pairs", ["status"], if_not_exists=True)
+    op.create_index("idx_conflict_pairs_items", "conflict_pairs", ["item_a_id", "item_b_id"], if_not_exists=True)
 
     # 表 3：忽略列表
     op.create_table(
@@ -69,10 +76,11 @@ def upgrade() -> None:
         sa.Column("pair_key", sa.Text, nullable=False),
         sa.Column("ignored_at", sa.Text, nullable=False),
         sa.Column("source_pair_id", sa.Text),
+        if_not_exists=True,
     )
-    op.create_index("idx_conflict_ignores_pair", "conflict_ignores", ["pair_key"])
+    op.create_index("idx_conflict_ignores_pair", "conflict_ignores", ["pair_key"], if_not_exists=True)
     # pair_key 唯一约束
-    op.execute("CREATE UNIQUE INDEX idx_conflict_ignores_pair_unique ON conflict_ignores(pair_key)")
+    op.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_conflict_ignores_pair_unique ON conflict_ignores(pair_key)")
 
 
 def downgrade() -> None:

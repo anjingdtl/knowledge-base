@@ -1,7 +1,9 @@
 """wiki-first 文件系统层共用工具:slug 生成 + frontmatter 读写。"""
 from __future__ import annotations
 
+import os
 import re
+import tempfile
 from pathlib import Path
 
 import yaml
@@ -35,7 +37,10 @@ def resolve_slug(dir_path: Path, title: str, source_hash: str) -> tuple[str, Pat
     if not candidate.exists():
         return base, candidate
     existing = read_frontmatter(candidate).get("source_hash", "")
-    if existing == source_hash:
+    # 仅当 source_hash 非空且一致才走幂等覆盖。两者皆空时(``"" == ""``)不得判为
+    # 幂等——否则空 hash 条目(如 mcp_server.create 的非文件路径)会覆盖一个不相关
+    # 的同名源页。空 hash 一律走冲突后缀路径。
+    if source_hash and existing == source_hash:
         return base, candidate
     suffix = (source_hash[:8]) if source_hash else "dup"
     conflicted = dir_path / f"{base}-{suffix}.md"
@@ -60,9 +65,24 @@ def read_frontmatter(path: Path) -> dict:
 
 
 def write_markdown(path: Path, frontmatter: dict, body: str) -> None:
-    """原子写入 frontmatter + body。"""
+    """原子写入 frontmatter + body。
+
+    先写同目录临时文件再 ``os.replace``(同文件系统原子替换),避免 ``write_text``
+    中途崩溃留下半写的损坏文件(旧实现注释称原子,实为直接 ``write_text`` 非原子)。
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     fm = yaml.safe_dump(
         frontmatter, allow_unicode=True, default_flow_style=False, sort_keys=False
     )
-    path.write_text(f"---\n{fm}---\n\n{body}\n", encoding="utf-8")
+    content = f"---\n{fm}---\n\n{body}\n"
+    tmp_fd, tmp_path = tempfile.mkstemp(dir=str(path.parent), suffix=".md.tmp")
+    try:
+        with os.fdopen(tmp_fd, "w", encoding="utf-8") as f:
+            f.write(content)
+        os.replace(tmp_path, path)
+    except BaseException:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise

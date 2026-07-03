@@ -162,3 +162,116 @@ def test_query_propagates_pipeline_exception(monkeypatch):
 
     with pytest.raises(RuntimeError, match="pipeline stage boom"):
         service.query("some question")
+
+
+# ---------------------------------------------------------------------------
+# S2 段 — Wiki 编译 + 数据层 + 迁移
+# ---------------------------------------------------------------------------
+
+def _load_i001():
+    """按文件路径加载 alembic i001 迁移(避开项目 alembic/ 目录与包同名)。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "i001_under_test", "alembic/versions/i001_version_conflict.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_i001_upgrade_idempotent_after_app_schema(tmp_path):
+    """S2.1:app schema 已建 conflict_* 表后,alembic i001 upgrade 必须幂等不报错。
+
+    复现必现 bug:db._SCHEMA 用 CREATE TABLE IF NOT EXISTS 建表,旧 i001 用
+    op.create_table(无 IF NOT EXISTS)→ alembic upgrade head 报 table already exists。
+    """
+    import sqlite3
+    from sqlalchemy import create_engine
+    from alembic.migration import MigrationContext
+    from alembic.operations import Operations
+    from src.services.db import _SCHEMA
+
+    db_path = tmp_path / "t.db"
+    # 模拟 app 启动:原生 sqlite3 executescript(_SCHEMA) 建全部表(含 conflict_*)
+    raw = sqlite3.connect(str(db_path))
+    raw.executescript(_SCHEMA)
+    raw.close()
+
+    engine = create_engine(f"sqlite:///{db_path}")
+    i001 = _load_i001()
+    # 表+索引均已存在,upgrade 必须幂等(不抛 table already exists),且可重入
+    with engine.connect() as conn:
+        mc = MigrationContext.configure(conn)
+        with Operations.context(mc):
+            i001.upgrade()
+            i001.upgrade()  # 二次重入同样幂等
+
+
+def test_resolve_slug_empty_hash_does_not_overwrite_unrelated(tmp_path):
+    """S2.2:空 source_hash 不得判为幂等覆盖(否则覆盖不相关同名源页)。"""
+    from src.services.wiki_slug import resolve_slug, write_markdown
+
+    # 已存在同名页,frontmatter source_hash 为空
+    write_markdown(tmp_path / "foo.md", {"title": "foo", "source_hash": ""}, "body A")
+    # 新条目同样空 hash、同名 → 必须走冲突后缀,而非覆盖原页
+    slug, path = resolve_slug(tmp_path, "foo", source_hash="")
+    assert path != tmp_path / "foo.md"
+    assert slug.startswith("foo-")
+    # 原页内容未被触碰
+    assert "body A" in (tmp_path / "foo.md").read_text(encoding="utf-8")
+
+
+def test_resolve_slug_nonempty_hash_idempotent_match(tmp_path):
+    """S2.2 回归:非空 hash 一致仍走幂等覆盖(不应被修复破坏)。"""
+    from src.services.wiki_slug import resolve_slug, write_markdown
+
+    write_markdown(tmp_path / "foo.md", {"title": "foo", "source_hash": "abc12345"}, "body")
+    slug, path = resolve_slug(tmp_path, "foo", source_hash="abc12345")
+    assert path == tmp_path / "foo.md"
+    assert slug == "foo"
+
+
+def test_write_markdown_atomic_no_temp_leftover(tmp_path):
+    """S2.6:原子写后无临时文件残留,内容正确。"""
+    from src.services.wiki_slug import write_markdown
+
+    target = tmp_path / "sub" / "page.md"
+    write_markdown(target, {"title": "x"}, "hello body")
+    text = target.read_text(encoding="utf-8")
+    assert text.startswith("---")
+    assert "hello body" in text
+    # 无残留临时文件
+    assert not list((tmp_path / "sub").glob("*.tmp"))
+
+
+def test_migrator_backup_preserves_old_when_copytree_fails(tmp_path, monkeypatch):
+    """S2.5b:copytree 中途失败时,旧备份必须完好(不可被删后丢)。"""
+    import shutil
+    from src.utils.config import Config
+    from src.services.migrator import MigrationService
+
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "x.txt").write_text("x")
+    # 已存在的旧备份(含重要内容)
+    backup_path = tmp_path / "data.backup"
+    backup_path.mkdir()
+    (backup_path / "old.txt").write_text("old backup content")
+
+    Config.load()
+    Config.set("storage.data_dir", str(data_dir))
+    Config.set("storage.db_name", "t.db")
+
+    # copytree 模拟中途失败
+    monkeypatch.setattr(
+        shutil, "copytree",
+        lambda *a, **k: (_ for _ in ()).throw(RuntimeError("disk full mid-copy")),
+    )
+
+    svc = MigrationService(project_dir=tmp_path)
+    with pytest.raises(RuntimeError, match="disk full mid-copy"):
+        svc.apply(backup=True)
+
+    # 关键:旧备份未被删除,内容完好
+    assert (backup_path / "old.txt").read_text() == "old backup content"
+    # 临时备份被清理
+    assert not (tmp_path / "data.backup.tmp").exists()
