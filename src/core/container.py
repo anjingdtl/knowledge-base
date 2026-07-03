@@ -138,6 +138,9 @@ class AppContainer:
     _wiki_page_locator: Optional[object] = field(default=None, repr=False)
     _size_aware_router: Optional[object] = field(default=None, repr=False)
 
+    # --- 第二阶段 W2:wiki parent-child 检索 ---
+    _wiki_parent_retriever: Optional[object] = field(default=None, repr=False)
+
     _initialized_services: list = field(default_factory=list, repr=False)
 
     def _track_service(self, attr_name: str):
@@ -173,6 +176,7 @@ class AppContainer:
                 'graph_backend': self.graph_backend,
                 'size_aware_router': self.size_aware_router,
                 'wiki_page_locator': self.wiki_page_locator,
+                'wiki_parent_retriever': self.wiki_parent_retriever,
             })
             self._track_service("_rag_pipeline")
         return self._rag_pipeline
@@ -370,6 +374,14 @@ class AppContainer:
             self._size_aware_router = SizeAwareRouter(self.wiki_page_locator)
             self._track_service("_size_aware_router")
         return self._size_aware_router
+
+    @property
+    def wiki_parent_retriever(self):
+        if self._wiki_parent_retriever is None:
+            from src.services.wiki_parent_retrieval import WikiParentRetriever
+            self._wiki_parent_retriever = WikiParentRetriever()
+            self._track_service("_wiki_parent_retriever")
+        return self._wiki_parent_retriever
 
 
 def create_container(config_path: str | None = None) -> AppContainer:

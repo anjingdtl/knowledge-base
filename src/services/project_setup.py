@@ -128,6 +128,21 @@ class ProjectSetupService:
             "llm_fallback": False,
         }
 
+    @staticmethod
+    def _wiki_parent_defaults() -> dict[str, Any]:
+        """第二阶段 W2 wiki parent-child 默认段(wiki_first 项目 enabled=true)。
+
+        wiki 命中 entity/concept/synthesis/comparison 页时,用 knowledge_id 回查
+        source 页摘要写入候选 parent_content(与 block parent-child 对称)。
+        legacy 项目缺省不注入;由 ``_build_local_config`` /
+        ``_build_provider_config`` 合入各自 rag 段(同 ``_size_aware_defaults``,
+        不能放进 ``_wiki_first_defaults`` 浅合并坑)。
+        """
+        return {
+            "enabled": True,
+            "max_parent_chars": 2000,
+        }
+
     def build_config(self, request: dict[str, Any]) -> dict[str, Any]:
         """根据请求参数构建初始配置字典
 
@@ -181,6 +196,7 @@ class ProjectSetupService:
                 "score_threshold": 0.35,
                 "top_k": 8,
                 "size_aware": self._size_aware_defaults(),
+                "wiki_parent_child": self._wiki_parent_defaults(),
             },
             "reranker": {
                 "provider": "disabled",
@@ -223,6 +239,7 @@ class ProjectSetupService:
                 "top_k": 8,
                 "search_mode": "blend",
                 "size_aware": self._size_aware_defaults(),
+                "wiki_parent_child": self._wiki_parent_defaults(),
             },
             "storage": {
                 "data_dir": "data",
