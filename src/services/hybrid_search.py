@@ -16,9 +16,16 @@ class HybridSearcher:
         self._db = db or Database
         self._block_store = block_store or BlockStore()
         self._config = config or Config
+        self._lexical = None  # W3: lazy LexicalZh
 
     def _get_config(self, key: str, default=None):
         return self._config.get(key, default)
+
+    def _get_lexical(self):
+        if self._lexical is None:
+            from src.services.lexical_zh import LexicalZh
+            self._lexical = LexicalZh(config=self._config)
+        return self._lexical
 
     def search(self, queries: list[str], top_k: int = 5) -> list[dict]:
         mode = self._get_config("rag.search_mode", "blend")
@@ -117,7 +124,8 @@ class HybridSearcher:
         seen = set()
         for query in queries:
             try:
-                fts_results = self._db.search_blocks_fts(query, limit=top_k * 2)
+                expanded = self._get_lexical().expand_query(query)  # W3: 同义词扩展
+                fts_results = self._db.search_blocks_fts(expanded, limit=top_k * 2)
                 for r in fts_results:
                     cid = r["id"]
                     if cid not in seen:
