@@ -143,6 +143,22 @@ class ProjectSetupService:
             "max_parent_chars": 2000,
         }
 
+    @staticmethod
+    def _lexical_zh_defaults() -> dict[str, Any]:
+        """第二阶段 W3 中文 lexical 强化默认段。
+
+        专名词典 + 同义词扩展 + 语种权重。legacy 缺省不注入(enabled 走 Config.get
+        默认 false);由 _build_local_config / _build_provider_config 合入各自 rag 段
+        (同 _size_aware/_wiki_parent,不能放进 _wiki_first_defaults 浅合并坑)。
+        """
+        return {
+            "enabled": True,
+            "dict_path": "data/lexical_zh_dict.txt",
+            "synonym_path": "data/lexical_zh_synonyms.txt",
+            "rrf_weight_keyword_zh": 0.7,
+            "rrf_weight_keyword_en": 0.5,
+        }
+
     def build_config(self, request: dict[str, Any]) -> dict[str, Any]:
         """根据请求参数构建初始配置字典
 
@@ -197,6 +213,7 @@ class ProjectSetupService:
                 "top_k": 8,
                 "size_aware": self._size_aware_defaults(),
                 "wiki_parent_child": self._wiki_parent_defaults(),
+                "lexical_zh": self._lexical_zh_defaults(),
             },
             "reranker": {
                 "provider": "disabled",
@@ -240,6 +257,7 @@ class ProjectSetupService:
                 "search_mode": "blend",
                 "size_aware": self._size_aware_defaults(),
                 "wiki_parent_child": self._wiki_parent_defaults(),
+                "lexical_zh": self._lexical_zh_defaults(),
             },
             "storage": {
                 "data_dir": "data",
@@ -285,6 +303,24 @@ class ProjectSetupService:
         agents_md = base / "schema" / "AGENTS.md"
         if not agents_md.exists():
             agents_md.write_text(AGENTS_MD_TEMPLATE, encoding="utf-8")
+
+        # W3: 中文 lexical 强化空模板（幂等，不覆盖用户已填内容）
+        data_dir = base_dir / "data"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        dict_tpl = data_dir / "lexical_zh_dict.txt"
+        if not dict_tpl.exists():
+            dict_tpl.write_text(
+                "# jieba 自定义专名词典（每行: 词 [词频] [词性]，如 'FTTR 1000 nz'）\n"
+                "# 留空则不加载。shinehe init 生成此空模板。\n",
+                encoding="utf-8",
+            )
+        syn_tpl = data_dir / "lexical_zh_synonyms.txt"
+        if not syn_tpl.exists():
+            syn_tpl.write_text(
+                "# 同义词词典（每行: 词 同义词1 同义词2，如 '知识库 知识仓库 KB'）\n"
+                "# 留空则不扩展。shinehe init 生成此空模板。\n",
+                encoding="utf-8",
+            )
 
         return created
 

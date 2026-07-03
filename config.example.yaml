@@ -49,6 +49,14 @@ rag:
   wiki_parent_child:
     enabled: false                # 仅 mode=wiki_first 生效;legacy 强制 false
     max_parent_chars: 2000        # parent_content 截断长度(与 block parent-child 对称命名)
+  # 第二阶段 W3: 中文 lexical 强化（专名词典 + 同义词 + 语种权重）
+  lexical_zh:
+    enabled: false                # 仅 mode=wiki_first 生效；legacy 强制 false
+    dict_path: data/lexical_zh_dict.txt
+    synonym_path: data/lexical_zh_synonyms.txt
+  # RRF keyword 权重按语种（W3，rag 段顶层标量）
+  rrf_weight_keyword_zh: 0.7
+  rrf_weight_keyword_en: 0.5
   chunk_overlap: 180
   chunk_size: 1200
   context_sibling_window: 1
