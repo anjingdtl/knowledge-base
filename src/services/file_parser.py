@@ -803,11 +803,31 @@ def _extract_main_content(soup) -> str:
     return text.strip()
 
 
+def _assert_safe_host(hostname: str | None) -> None:
+    """SSRF 防护:解析主机名并拒绝内网/回环/链路本地/保留地址。
+
+    抽出为独立函数,供初始 URL 与每个重定向目标(httpx event_hooks)复用——
+    旧实现只验初始 URL,follow_redirects 的 302 目标不校验,恶意服务器可重定向到
+    ``127.0.0.1`` 或云元数据 ``169.254.169.254`` 绕过 SSRF。
+    """
+    import ipaddress
+    import socket
+
+    if not hostname:
+        return
+    try:
+        resolved_ips = socket.getaddrinfo(hostname, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
+    except socket.gaierror:
+        raise ValueError(f"无法解析主机名: {hostname}")
+    for _, _, _, _, addr in resolved_ips:
+        ip = ipaddress.ip_address(addr[0])
+        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved:
+            raise ValueError(f"不允许访问内网地址: {hostname} ({ip})")
+
+
 def parse_url(url: str, timeout: float | None = None) -> ParsedFile:
     """抓取网页并提取正文文本"""
-    import ipaddress
     import re
-    import socket
     from urllib.parse import urlparse
 
     import httpx
@@ -816,19 +836,9 @@ def parse_url(url: str, timeout: float | None = None) -> ParsedFile:
     if not url.startswith(("http://", "https://")):
         raise ValueError(f"不支持的 URL 协议: {url}")
 
-    # SSRF 防护：阻止对内网/回环/链路本地地址的请求
+    # SSRF 防护:初始 URL 校验(失败尽早抛错,不建客户端)
     parsed = urlparse(url)
-    hostname = parsed.hostname
-    if hostname:
-        try:
-            # 先尝试 DNS 解析，再检查 IP 是否为私有地址
-            resolved_ips = socket.getaddrinfo(hostname, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
-            for _, _, _, _, addr in resolved_ips:
-                ip = ipaddress.ip_address(addr[0])
-                if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved:
-                    raise ValueError(f"不允许访问内网地址: {hostname} ({ip})")
-        except socket.gaierror:
-            raise ValueError(f"无法解析主机名: {hostname}")
+    _assert_safe_host(parsed.hostname)
 
     if timeout is None:
         from src.utils.config import Config
@@ -840,7 +850,16 @@ def parse_url(url: str, timeout: float | None = None) -> ParsedFile:
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
     }
-    with httpx.Client(timeout=timeout, follow_redirects=True, headers=headers, max_redirects=5) as client:
+
+    # 重定向逐跳 SSRF 校验:event_hooks["request"] 对每个请求(含 302 跟随的
+    # 重定向目标)触发,堵住「初始安全、重定向指向内网」的绕过。
+    def _ssrf_request_hook(request):
+        _assert_safe_host(request.url.host)
+
+    with httpx.Client(
+        timeout=timeout, follow_redirects=True, headers=headers, max_redirects=5,
+        event_hooks={"request": [_ssrf_request_hook]},
+    ) as client:
         response = client.get(url)
         if response.status_code != 200:
             raise RuntimeError(f"HTTP {response.status_code}: {url}")

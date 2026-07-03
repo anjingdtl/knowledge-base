@@ -330,3 +330,27 @@ def test_get_operation_log_service_fallback_when_no_container(monkeypatch):
     svc._knowledge_repo = None
     ol = svc._get_operation_log_service()
     assert isinstance(ol, OperationLogService)
+
+
+# ---------------------------------------------------------------------------
+# S4 段 — 安全(SSRF 重定向绕过)
+# ---------------------------------------------------------------------------
+
+def test_assert_safe_host_rejects_internal_addresses():
+    """S4.1:_assert_safe_host 拒绝内网/回环/链路本地地址。"""
+    from src.services.file_parser import _assert_safe_host
+
+    with pytest.raises(ValueError, match="内网"):
+        _assert_safe_host("127.0.0.1")          # 回环
+    with pytest.raises(ValueError, match="内网"):
+        _assert_safe_host("localhost")           # 解析到 127.0.0.1/::1
+    with pytest.raises(ValueError, match="内网"):
+        _assert_safe_host("169.254.169.254")     # 云元数据(链路本地)
+
+
+def test_parse_url_rejects_internal_url_before_request():
+    """S4.1:parse_url 对内网 URL 在发请求前即拒绝(初始校验)。"""
+    from src.services.file_parser import parse_url
+
+    with pytest.raises(ValueError, match="内网"):
+        parse_url("http://127.0.0.1/secret")
