@@ -278,10 +278,11 @@ class WikiParentEnrichStage(PipelineStage):
 
     挂在 post-rerank:读 ``ctx.reranked_results``,对 wiki 候选调
     ``WikiParentRetriever.enrich`` 写入 ``parent_content`` 字段,供
-    ``GenerateStage``(:601)消费。仅 ``mode=wiki_first`` 且
+    ``GenerateStage._build_context_from_filtered`` 消费。仅 ``mode=wiki_first`` 且
     ``rag.wiki_parent_child.enabled=true`` 时介入,否则空操作 —— legacy 项目
-    零影响(S6)。与 block 的 ``enrich_with_parent_context``(挂 hybrid_search:43)
-    对称但独立,不改 block 挂载点。
+    零影响(S6)。与 block 的 ``enrich_with_parent_context``(挂
+    ``parent_child_retrieval.enrich_with_parent_context``)对称但独立,
+    不改 block 挂载点。
     """
 
     def __init__(self, wiki_parent_retriever=None):

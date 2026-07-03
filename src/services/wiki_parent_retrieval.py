@@ -6,7 +6,7 @@ comparisons/syntheses 页时,按 frontmatter 的 ``knowledge_id`` 回查对应 s
 ``GenerateStage`` 既有渲染路径。
 
 字段名 ``parent_content`` 与 block 侧 ``parent_child_retrieval.py:210`` 一致,
-``GenerateStage`` (rag_pipeline.py:601) 已消费此字段。
+``GenerateStage._build_context_from_filtered`` 已消费此字段。
 """
 from __future__ import annotations
 
