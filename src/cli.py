@@ -191,14 +191,27 @@ def _handle_wiki(args: argparse.Namespace) -> int:
         return 0
 
     if cmd == "lint":
-        from src.services.wiki_lint import WikiLint
         from src.utils.config import Config
-        if not Config.get("wiki.enabled", False):
-            print("[WARN] wiki 未启用(配置 wiki.enabled=true)")
-        report = WikiLint().run()
-        for f in report["findings"]:
+        source = getattr(args, "source", "auto")
+        mode = Config.get("knowledge_workflow.mode", "legacy")
+        use_fs = source == "fs" or (source == "auto" and mode == "wiki_first")
+
+        if use_fs:
+            from src.services.wiki_fs_lint import WikiFsLint
+            wiki_dir = Path(Config.get("knowledge_workflow.wiki_dir", "wiki"))
+            report = WikiFsLint(wiki_dir=wiki_dir).run()
+            print(f"[lint] 数据源: 文件系统 {wiki_dir}")
+        else:
+            from src.services.wiki_lint import WikiLint
+            if not Config.get("wiki.enabled", False):
+                print("[WARN] wiki 未启用(配置 wiki.enabled=true)")
+            report = WikiLint().run()
+            print("[lint] 数据源: SQLite wiki_pages")
+
+        for f in report["findings"][:20]:
             print(f"  [{f['severity'].upper()}] {f['category']}: {f['page_title']} — {f['message']}")
-        print(f"\n结果: {len(report['findings'])} 个问题, 健康分 {report['score']:.2f}, 共 {report['total_pages']} 页")
+        extra = f" (另有 {len(report['findings']) - 20} 条)" if len(report["findings"]) > 20 else ""
+        print(f"\n结果: {len(report['findings'])} 个问题{extra}, 健康分 {report['score']:.2f}, 共 {report['total_pages']} 页")
         return 1 if report["findings"] else 0
 
     if cmd == "save-answer":
@@ -362,7 +375,11 @@ def main(argv: list[str] | None = None) -> None:
     )
     wiki_sub = wiki_parser.add_subparsers(dest="wiki_command", help="wiki 子命令")
 
-    wiki_sub.add_parser("lint", help="运行 wiki 健康检查")
+    lint_p = wiki_sub.add_parser("lint", help="运行 wiki 健康检查")
+    lint_p.add_argument(
+        "--source", choices=["auto", "fs", "sqlite"], default="auto",
+        help="lint 数据源:auto(按 mode) / fs(wiki/*.md) / sqlite(旧表)",
+    )
     save_p = wiki_sub.add_parser("save-answer", help="保存问答为 wiki 综合页")
     save_p.add_argument("--question", required=True, help="问题")
     save_p.add_argument("--answer", required=True, help="回答")
