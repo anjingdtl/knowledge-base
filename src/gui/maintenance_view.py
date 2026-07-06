@@ -83,7 +83,8 @@ def _relation_label(pair: dict) -> str:
 
 def _relation_color(pair: dict) -> str | None:
     """LLM 判断结果对应的标色;未判断返回 None。"""
-    return RELATION_COLORS.get(pair.get("relation_type"))
+    rt = pair.get("relation_type")
+    return RELATION_COLORS.get(rt) if isinstance(rt, str) else None
 
 
 def _older_newer(pair: dict) -> tuple[str | None, str | None]:
@@ -410,8 +411,8 @@ class MaintenanceView(QWidget):
         rel_lbl.setObjectName("hintLabel")
         pairs_header.addWidget(rel_lbl)
         self.combo_relation = QComboBox()
-        for text, _val in RELATION_FILTERS:
-            self.combo_relation.addItem(text)
+        for item in RELATION_FILTERS:
+            self.combo_relation.addItem(item[0])
         self.combo_relation.currentIndexChanged.connect(lambda _i: self._load_pairs())
         pairs_header.addWidget(self.combo_relation)
         pairs_header.addStretch()
@@ -466,8 +467,13 @@ class MaintenanceView(QWidget):
         sessions = _service().list_sessions(limit=50)
         self.history_list.clear()
         for s in sessions:
+            _raw_status = s.get("status")
+            _status_text = (
+                _STATUS_TEXT.get(_raw_status, _raw_status)
+                if isinstance(_raw_status, str) else _raw_status
+            )
             text = (
-                f"{s['id'][:8]}  ·  {_STATUS_TEXT.get(s.get('status'), s.get('status'))}"
+                f"{s['id'][:8]}  ·  {_status_text}"
                 f"  ·  候选 {s.get('candidates_found', 0)} / 删除 {s.get('pairs_deleted', 0)}"
             )
             item = QListWidgetItem(text)

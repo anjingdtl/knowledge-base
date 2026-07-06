@@ -5,6 +5,7 @@ import re
 import threading
 import uuid
 from datetime import datetime
+from typing import Any
 
 from src.data.wiki_schema import (
     DEAD_LINK_REPAIR_PROMPT,
@@ -150,7 +151,7 @@ class WikiCompiler:
         )
         try:
             response = self._llm.chat([{"role": "user", "content": prompt}], silent=True)
-            summary = response.strip()
+            summary: str = response.strip()
             if summary and len(summary) >= 10:
                 return summary[:200]
         except Exception as e:
@@ -299,7 +300,7 @@ class WikiCompiler:
         # BUG#11：enhance=False → 跳过 LLM，直接存原始 answer
         if not enhance:
             title = question.strip().replace("\n", " ")[:self.QUERY_SAVE_TITLE_TRUNCATE] or "未命名"
-            result = {
+            result: dict[str, Any] = {
                 "title": title,
                 "content": answer,
                 "tags": [],
@@ -313,16 +314,18 @@ class WikiCompiler:
                 logger.warning("Wiki save_answer LLM call failed: %s", e)
                 return None
 
-            result = self._parse_json_response(response)
-            if not isinstance(result, dict) or not result.get("title"):
+            parsed = self._parse_json_response(response)
+            if not isinstance(parsed, dict) or not parsed.get("title"):
                 return None
+            result = parsed
 
         # BUG#10：显式 auto_publish 优先于 Config 默认
         _auto = auto_publish if auto_publish is not None else Config.get("wiki.auto_publish", True)
         initial_status = "published" if _auto else "draft"
 
+        page_id = str(uuid.uuid4())
         page = {
-            "id": str(uuid.uuid4()),
+            "id": page_id,
             "title": result["title"],
             "content": result.get("content", ""),
             "source_ids": json.dumps(source_ids or [], ensure_ascii=False),
@@ -334,11 +337,11 @@ class WikiCompiler:
             "updated_at": datetime.now().isoformat(),
         }
         Database.insert_wiki_page(page)
-        Database.insert_wiki_op("query_save", page["id"], {
+        Database.insert_wiki_op("query_save", page_id, {
             "question": question[:self.QUERY_SAVE_TITLE_TRUNCATE],
             "title": result["title"],
         })
-        return str(page["id"])
+        return page_id
 
     def _get_existing_pages_summary(self) -> str:
         pages = Database.list_wiki_pages(status="active", limit=self.EXISTING_PAGES_LIMIT)

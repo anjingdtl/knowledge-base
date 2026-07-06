@@ -19,7 +19,12 @@ def _get_kb_domain_summary(candidates: list[dict] | None = None) -> str:
     """
     try:
         from src.services.db import Database
-        db = Database()
+        # 修复潜伏 bug:旧 `Database()` 无 db_path 必抛 TypeError(元类无 __call__),
+        # 被外层 except 吞掉 → BUG-7 领域概览兜底从未真正生效,恒返回通用字符串。
+        # 改用单例实例(Database._instance 经元类 __getattribute__ 解析)。
+        db = Database._instance
+        if db is None:
+            return "知识库概览暂时无法获取"
         total = db.count_knowledge() or 0
         tags = db.get_all_tags()
         tag_list = sorted(tags)[:20] if tags else []

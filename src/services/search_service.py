@@ -343,7 +343,7 @@ class SearchService:
             return [0] * num_perm
         signature = []
         for i in range(num_perm):
-            min_hash = float('inf')
+            min_hash = 2 ** 32  # int 哨兵(大于任何 8 位 hex 哈希 0xFFFFFFFF),保 signature 为 list[int]
             for token in tokens:
                 h = int(hashlib.md5(f"{i}:{token}".encode("utf-8", errors="replace")).hexdigest()[:8], 16)
                 if h < min_hash:
@@ -367,7 +367,7 @@ class SearchService:
         for key in ("rerank_score", "rrf_score", "final_score", "score"):
             v = c.get(key)
             if v is not None:
-                return v
+                return float(v)
         return 0
 
     def _diversity_filter(self, candidates: list[dict], threshold: float = 0.8) -> list[dict]:

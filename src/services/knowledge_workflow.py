@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from typing import cast
 
 from src.services.db import Database
 from src.services.wiki_entity_updater import WikiEntityUpdater
@@ -163,7 +164,7 @@ def try_knowledge_workflow_compile(
         container = get_active_container()
         if container is None:
             return None
-        return container.knowledge_workflow.compile(knowledge_id, ingested_at)
+        return cast(dict, container.knowledge_workflow.compile(knowledge_id, ingested_at))
     except Exception as e:
         logger.warning("knowledge workflow compile failed (%s): %s", knowledge_id, e)
         return None

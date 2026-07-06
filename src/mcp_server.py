@@ -17,7 +17,7 @@ import logging
 import os
 import secrets
 from contextlib import asynccontextmanager
-from typing import Callable, ParamSpec, TypeVar
+from typing import Callable, ParamSpec, TypeVar, cast
 
 from fastmcp import FastMCP
 from fastmcp.server.auth import AccessToken, TokenVerifier
@@ -2350,7 +2350,7 @@ def route_query(question: str | None = None, query: str | None = None,
         if include_evidence:
             try:
                 db = container.db
-                evidence = []
+                evidence: list[dict] = []
                 # 对查询做简化提取：取核心中文词组（去除停用词），避免长句FTS5匹配失败
                 import re as _re
                 _STOP_WORDS = {'的','了','是','在','和','与','或','有','中','及','对','等',
@@ -3703,7 +3703,7 @@ def delete_memory(item_id: str | None = None, key: str | None = None) -> dict:
         })
         return attach_operation_id(envelope, log_id)
     else:
-        existing = repo.get_by_key(key)
+        existing = repo.get_by_key(cast(str, key))
         if not existing:
             return fail(
                 ErrorCode.NOT_FOUND,
@@ -3712,7 +3712,7 @@ def delete_memory(item_id: str | None = None, key: str | None = None) -> dict:
             )
         deleted_meta = {"key": key, "category": existing.get("category", "")}
         log_id = _op_log("delete", "agent_memory", existing["id"], before=deleted_meta)
-        deleted = repo.delete_by_key(key)
+        deleted = repo.delete_by_key(cast(str, key))
         envelope = ok({
             "key": key, "deleted": deleted, "message": "记忆条目已删除",
         })

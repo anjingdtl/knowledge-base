@@ -85,7 +85,7 @@ class QuerySpec:
     @classmethod
     def _parse_sort_terms(cls, sort_data: Any) -> list[tuple[str, str]]:
         if not sort_data:
-            sort_items = [{}]
+            sort_items: list[Any] = [{}]
         elif isinstance(sort_data, list):
             sort_items = sort_data or [{}]
         elif isinstance(sort_data, dict):

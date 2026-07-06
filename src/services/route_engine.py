@@ -160,7 +160,7 @@ class RuleRouter:
             legacy = QueryRouter(db=self._db).route(question)
             if legacy.mode == "logic":
                 for tag in legacy.tags:
-                    entry: dict[str, Any] = {"tag": tag}
+                    entry = {"tag": tag}
                     if entry not in conditions:
                         conditions.append(entry)
                 for key, value in legacy.properties.items():
@@ -215,10 +215,10 @@ class EmbeddingRouter:
     # PlanetaryRouter 每次请求都 new 一个 EmbeddingRouter，导致每次 L2 路由都
     # 重新 embed 全部 tag（≤200 次 API 调用）。改为类级缓存 + TTL，跨请求复用、
     # TTL 到期自动重建（新增/删除 tag 后最迟 TTL 秒内生效）。
-    _TAG_EMB_CACHE: list | None = None
+    _TAG_EMB_CACHE: tuple[float, dict[str, list[float]]] | None = None
     _TAG_EMB_LOCK = threading.Lock()
-    # title embedding 缓存：[timestamp, [(title, emb), ...]]
-    _TITLE_EMB_CACHE: list | None = None
+    # title embedding 缓存：(timestamp, [(title, emb), ...])
+    _TITLE_EMB_CACHE: tuple[float, list[tuple[str, list[float]]]] | None = None
     _TITLE_EMB_LOCK = threading.Lock()
 
     def __init__(self, db=None, similarity_threshold: float = 0.60,
@@ -319,7 +319,7 @@ class EmbeddingRouter:
                         tag_embs[tag] = emb
                 except Exception:
                     continue
-            EmbeddingRouter._TAG_EMB_CACHE = [time.monotonic(), tag_embs]
+            EmbeddingRouter._TAG_EMB_CACHE = (time.monotonic(), tag_embs)
             return tag_embs
 
     def _get_title_embeddings(self, emb_service) -> list[tuple[str, list[float]]]:
@@ -346,7 +346,7 @@ class EmbeddingRouter:
                 return cache[1] if cache is not None else []
             titles = [row["title"] for row in rows if row["title"]]
             if not titles:
-                EmbeddingRouter._TITLE_EMB_CACHE = [time.monotonic(), []]
+                EmbeddingRouter._TITLE_EMB_CACHE = (time.monotonic(), [])
                 return []
             try:
                 embs = emb_service.embed_batch(titles, batch_size=32)
@@ -358,14 +358,14 @@ class EmbeddingRouter:
                 for title, emb in zip(titles, embs)
                 if emb
             ]
-            EmbeddingRouter._TITLE_EMB_CACHE = [time.monotonic(), title_embs]
+            EmbeddingRouter._TITLE_EMB_CACHE = (time.monotonic(), title_embs)
             return title_embs
 
     @staticmethod
     def _cosine_sim(a: list[float], b: list[float]) -> float:
-        dot = sum(x * y for x, y in zip(a, b))
-        norm_a = sum(x * x for x in a) ** 0.5
-        norm_b = sum(x * x for x in b) ** 0.5
+        dot: float = sum(x * y for x, y in zip(a, b))
+        norm_a: float = sum(x * x for x in a) ** 0.5
+        norm_b: float = sum(x * x for x in b) ** 0.5
         if norm_a == 0 or norm_b == 0:
             return 0.0
         return dot / (norm_a * norm_b)
@@ -478,14 +478,14 @@ class PlanetaryRouter:
         """三级路由：L1 → L2 → L3，任何一级成功即返回"""
 
         # Level 1: RuleRouter (0ms)
-        result = self._rule_router.route(question)
+        result: dict | None = self._rule_router.route(question)
         if result is not None:
             logger.debug(f"PlanetaryRouter: L1 rule resolved → {result.get('mode')}")
             return result
 
         # Level 1.5: Graph 信号检测 + LLM 或 structured 回退
         if self._rule_router._is_graph_query(question):
-            llm_result = self._llm_router.route(question)
+            llm_result: dict | None = self._llm_router.route(question)
             if llm_result is not None:
                 if llm_result.get("mode") == "hybrid":
                     # LLM 主动判定为 hybrid（确保 query_spec key 存在）

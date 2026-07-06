@@ -346,7 +346,7 @@ class PathIndexService:
         existing = self._db.get_knowledge_by_hash(content_hash)
         if existing:
             logger.info("Skip duplicate ingest for %s, reusing existing id=%s", path, existing["id"])
-            return existing["id"]
+            return str(existing["id"])
 
         file_created_at = ""
         file_modified_at = ""

@@ -13,7 +13,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import yaml
 
@@ -84,26 +84,26 @@ def _machine_secret_available() -> bool:
 def _protect_machine_secret(payload: bytes) -> bytes:
     import win32crypt
 
-    return win32crypt.CryptProtectData(
+    return cast(bytes, win32crypt.CryptProtectData(
         payload,
         "ShineHeKnowledge service secrets",
         _MACHINE_SECRET_ENTROPY,
         None,
         None,
         _CRYPTPROTECT_LOCAL_MACHINE,
-    )
+    ))
 
 
 def _unprotect_machine_secret(payload: bytes) -> bytes:
     import win32crypt
 
-    return win32crypt.CryptUnprotectData(
+    return cast(bytes, win32crypt.CryptUnprotectData(
         payload,
         _MACHINE_SECRET_ENTROPY,
         None,
         None,
         0,
-    )[1]
+    )[1])
 
 
 def _load_machine_secrets(config_path: str | None = None) -> dict[str, str]:

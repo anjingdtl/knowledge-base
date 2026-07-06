@@ -1,7 +1,7 @@
 import json
 import logging
 import re
-from typing import Any
+from typing import Any, cast
 
 from src.models.query_dsl import QuerySpec
 from src.services.db import Database
@@ -123,7 +123,7 @@ class AgenticRouter:
             if self._planetary_router is None:
                 from src.services.route_engine import PlanetaryRouter
                 self._planetary_router = PlanetaryRouter(db=self._db, llm=self._llm)
-            return self._planetary_router.route(question)
+            return cast(dict, self._planetary_router.route(question))
 
         # Legacy routing path (below)
         rule_spec = self._try_rule_based(question)
@@ -230,7 +230,7 @@ class AgenticRouter:
         legacy = QueryRouter(db=self._db).route(question)
         if legacy.mode == "logic":
             for tag in legacy.tags:
-                entry: dict[str, Any] = {"tag": tag}
+                entry = {"tag": tag}
                 if entry not in conditions:
                     conditions.append(entry)
             for key, value in legacy.properties.items():

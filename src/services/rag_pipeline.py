@@ -1060,7 +1060,7 @@ class RagPipeline:
             confidence = max((s.get("score", 0.0) for s in ctx.sources), default=0.0)
             if len(ctx.sources) < 2 or critical_warnings or confidence < 0.6:
                 return
-            source_ids = [s.get("knowledge_id") for s in ctx.sources if s.get("knowledge_id")]
+            source_ids = [str(s["knowledge_id"]) for s in ctx.sources if s.get("knowledge_id")]
             page_id = compiler.save_answer(question, ctx.answer, source_ids)
             # wiki-first 文件系统层回写(syntheses,draft)
             try:

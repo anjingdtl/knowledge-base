@@ -357,3 +357,24 @@ def test_parse_url_rejects_internal_url_before_request():
 
     with pytest.raises(ValueError, match="内网"):
         parse_url("http://127.0.0.1/secret")
+
+
+# ---------------------------------------------------------------------------
+# M 段 — mypy 基线清理中发现的潜伏 bug
+# ---------------------------------------------------------------------------
+
+def test_get_kb_domain_summary_returns_real_data():
+    """mypy 清理发现:旧 ``Database()`` 无 db_path 必抛 TypeError(元类无 __call__),
+    被外层 except 吞掉 → BUG-7 领域概览兜底恒返回通用字符串,从未真正生效。
+    修复为 ``Database._instance`` 后,应返回真实文档数。"""
+    from src.services.health import _get_kb_domain_summary
+    from tests.conftest import insert_test_knowledge
+
+    insert_test_knowledge(title="测试文档甲", content="甲的内容", tags=["t1"])
+    insert_test_knowledge(title="测试文档乙", content="乙的内容", tags=["t2"])
+
+    summary = _get_kb_domain_summary()
+    # 不再是通用兜底
+    assert "知识库概览暂时无法获取" not in summary
+    # 返回真实计数
+    assert "2 篇文档" in summary

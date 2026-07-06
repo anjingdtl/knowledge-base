@@ -43,7 +43,7 @@ class ConflictRepository:
     def list_sessions(self, status: str | None = None,
                       limit: int = 50, offset: int = 0) -> list[ConflictSession]:
         sql = "SELECT * FROM conflict_sessions"
-        params = []
+        params: list[object] = []
         if status:
             sql += " WHERE status = ?"
             params.append(status)
@@ -132,7 +132,7 @@ class ConflictRepository:
             LEFT JOIN knowledge_items kb ON kb.id = cp.item_b_id
             WHERE cp.session_id = ?
         """
-        params = [session_id]
+        params: list[object] = [session_id]
         if status:
             sql += " AND cp.status = ?"
             params.append(status)
@@ -198,7 +198,7 @@ class ConflictRepository:
              ignore.ignored_at, ignore.source_pair_id),
         )
         self._conn().commit()
-        return cursor.rowcount > 0
+        return bool(cursor.rowcount > 0)
 
     def is_ignored(self, item_a_id: str, item_b_id: str) -> bool:
         pair_key = _make_pair_key(item_a_id, item_b_id)
@@ -227,4 +227,4 @@ class ConflictRepository:
             "DELETE FROM conflict_ignores WHERE id = ?", (ignore_id,)
         )
         self._conn().commit()
-        return cursor.rowcount > 0
+        return bool(cursor.rowcount > 0)

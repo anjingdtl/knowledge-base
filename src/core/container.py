@@ -435,7 +435,7 @@ def create_container(config_path: str | None = None) -> AppContainer:
     # 启动期 API Key 存在性检查：缺失时告警一次（不阻断，保护纯检索用途）。
     # 用函数属性跨多次 create_container 去重，避免测试频繁调用时刷屏。
     if not getattr(create_container, "_key_check_done", False):
-        create_container._key_check_done = True
+        setattr(create_container, "_key_check_done", True)
         _llm_key = config.get("llm.api_key", "")
         _emb_key = config.get("embedding.api_key", "") or _llm_key
         if not _llm_key:

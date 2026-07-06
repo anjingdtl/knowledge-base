@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 from src.services.llm import LLMService
 from src.services.wiki_slug import slugify, write_markdown
@@ -48,7 +49,7 @@ class WikiEntityUpdater:
         """为新源涉及的实体/概念生成或更新页面。"""
         max_calls = int(Config.get("wiki.max_llm_calls_per_ingest", 3))
         entities = list(source_summary.get("key_entities", []))[:max_calls]
-        result = {
+        result: dict[str, Any] = {
             "entities_created": 0,
             "concepts_created": 0,
             "llm_calls": 0,

@@ -252,7 +252,7 @@ def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
 
 def _cleanup_orphan_vectors():
     """清理 vec_blocks 中 block_id 已不存在的孤儿向量"""
-    with Database._write_lock:
+    with Database._write_lock:  # type: ignore[misc]  # 元类 __getattribute__ 委托到 _instance._write_lock
         conn = Database.get_conn()
         result = conn.execute(
             "DELETE FROM vec_blocks WHERE rowid NOT IN (SELECT rowid FROM blocks)"
@@ -271,13 +271,13 @@ def _set_journal_mode(mode: str) -> str:
     """切换 SQLite journal_mode，返回之前的模式"""
     if mode.upper() not in _VALID_JOURNAL_MODES:
         raise ValueError(f"Invalid journal_mode: {mode}")
-    with Database._write_lock:
+    with Database._write_lock:  # type: ignore[misc]  # 元类 __getattribute__ 委托到 _instance._write_lock
         conn = Database.get_conn()
         old_mode = conn.execute("PRAGMA journal_mode").fetchone()[0]
         if old_mode.lower() != mode.lower():
             conn.execute(f"PRAGMA journal_mode={mode}")
             logger.info(f"Switched journal_mode: {old_mode} → {mode}")
-    return old_mode
+    return str(old_mode)
 
 
 def reindex_all(

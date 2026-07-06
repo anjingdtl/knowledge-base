@@ -1025,7 +1025,7 @@ class Database(metaclass=_DatabaseMeta):
         rows = conn.execute(
             "SELECT DISTINCT tags FROM knowledge_items WHERE deleted_at IS NULL AND tags IS NOT NULL AND tags != '[]'"
         ).fetchall()
-        vocab = set()
+        vocab: set[str] = set()
         for row in rows:
             try:
                 tags = json.loads(row["tags"]) if isinstance(row["tags"], str) else row["tags"]

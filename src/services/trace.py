@@ -8,6 +8,7 @@ import logging
 import uuid
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
+from typing import cast
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +103,7 @@ class QueryTrace:
                     (trace_id,),
                 ).fetchone()
             if row:
-                return json.loads(row["metadata"])
+                return cast(dict, json.loads(row["metadata"]))
             return None
         except Exception:
             return None

@@ -232,7 +232,7 @@ class EmbeddingService:
         model = self._cfg("embedding.model", "")
 
         results: list[list[float] | None] = [None] * len(texts)
-        to_embed: list[tuple[int, str]] = []
+        to_embed: list[tuple[int, str, str]] = []
 
         # Pass 1: L1 cache lookup
         for i, text in enumerate(texts):
