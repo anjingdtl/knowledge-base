@@ -90,8 +90,18 @@ def test_empty_page_detected(tmp_path):
 
 
 def test_healthy_page_score(tmp_path):
+    from src.services.db import Database
+
+    # sources 页需有匹配的 knowledge 行(否则 _check_provenance 标 stale)
+    Database.insert_knowledge({
+        "id": "k1", "title": "Alpha", "content": "x",
+        "source_type": "file", "source_path": "/x.md", "file_type": "md",
+        "file_size": 1, "content_hash": "h1", "file_created_at": "",
+        "file_modified_at": "", "tags": "[]", "version": 1,
+        "created_at": "2026-07-01T00:00:00", "updated_at": "2026-07-01T00:00:00",
+    })
     wiki = tmp_path / "wiki"
-    # 互相链接、有内容、无重复 → 两页都 healthy,score=1.0
+    # 互相链接、有内容、无重复、溯源匹配 → 两页都 healthy,score=1.0
     _page(wiki, "sources", "alpha",
           {"title": "Alpha", "knowledge_id": "k1", "source_hash": "h1"}, "引 [[Beta]]")
     _page(wiki, "entities", "beta", {"title": "Beta", "kind": "entity"}, "引 [[Alpha]]")
@@ -99,3 +109,61 @@ def test_healthy_page_score(tmp_path):
     assert report["total_pages"] == 2
     assert report["healthy_pages"] == 2
     assert report["score"] == 1.0
+
+
+# ---------------------------------------------------------------------------
+# Task 2 — 溯源指标(DB 交叉校验):stale / outdated_claim
+# ---------------------------------------------------------------------------
+
+def test_outdated_claim_when_source_hash_mismatch(tmp_path):
+    """source 页 source_hash 与 knowledge 当前 content_hash 不一致 → outdated_claim。"""
+    from src.services.db import Database
+
+    Database.insert_knowledge({
+        "id": "k1", "title": "Alpha", "content": "新内容",
+        "source_type": "file", "source_path": "/x.md", "file_type": "md",
+        "file_size": 3, "content_hash": "NEW_HASH_aaaa", "file_created_at": "",
+        "file_modified_at": "", "tags": "[]", "version": 1,
+        "created_at": "2026-07-01T00:00:00", "updated_at": "2026-07-01T00:00:00",
+    })
+    wiki = tmp_path / "wiki"
+    _page(wiki, "sources", "alpha",
+          {"title": "Alpha", "knowledge_id": "k1", "source_hash": "OLD_HASH_bbbb"},
+          "正文")
+    report = WikiFsLint(wiki_dir=wiki).run()
+    outdated = [f for f in report["findings"] if f["category"] == "outdated_claim"]
+    assert len(outdated) == 1
+    assert outdated[0]["detail"]["page_hash"] == "OLD_HASH_bbbb"
+
+
+def test_stale_when_knowledge_deleted(tmp_path):
+    """source 页指向的 knowledge_id 不存在 → stale。"""
+    wiki = tmp_path / "wiki"
+    _page(wiki, "sources", "alpha",
+          {"title": "Alpha", "knowledge_id": "ghost-kid", "source_hash": "h1"},
+          "正文")
+    report = WikiFsLint(wiki_dir=wiki).run()
+    stale = [f for f in report["findings"] if f["category"] == "stale"]
+    assert len(stale) == 1
+    assert stale[0]["detail"]["knowledge_id"] == "ghost-kid"
+
+
+def test_no_provenance_finding_when_hash_matches(tmp_path):
+    """source_hash 一致 → 无 stale/outdated_claim。"""
+    from src.services.db import Database
+
+    Database.insert_knowledge({
+        "id": "k1", "title": "Alpha", "content": "x",
+        "source_type": "file", "source_path": "/x.md", "file_type": "md",
+        "file_size": 1, "content_hash": "MATCH_hash", "file_created_at": "",
+        "file_modified_at": "", "tags": "[]", "version": 1,
+        "created_at": "2026-07-01T00:00:00", "updated_at": "2026-07-01T00:00:00",
+    })
+    wiki = tmp_path / "wiki"
+    _page(wiki, "sources", "alpha",
+          {"title": "Alpha", "knowledge_id": "k1", "source_hash": "MATCH_hash"},
+          "正文")
+    report = WikiFsLint(wiki_dir=wiki).run()
+    provenance = [f for f in report["findings"]
+                  if f["category"] in ("stale", "outdated_claim")]
+    assert provenance == []

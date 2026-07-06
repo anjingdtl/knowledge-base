@@ -157,9 +157,50 @@ class WikiFsLint:
                     detail={"page_ids": ids},
                 ))
 
-        # 5. 溯源指标(DB 交叉校验)— Task 2 增补(_check_provenance)
+        # 5. 溯源指标(DB 交叉校验)
+        self._check_provenance(pages, report)
+
         # 汇总
         flagged = {f.page_id for f in report.findings}
         report.healthy_pages = sum(1 for p in pages if p["page_id"] not in flagged)
         report.score = report.healthy_pages / report.total_pages if report.total_pages else 1.0
         return report.to_dict()
+
+    def _check_provenance(self, pages: list[dict], report: LintReport) -> None:
+        """stale / outdated_claim:交叉校验 source 页的 knowledge_id/source_hash。
+
+        仅对 sources 页(带 knowledge_id)生效。DB 不可用或无 knowledge_id 时跳过
+        (不抛 — 与 wiki hook 同策略)。
+        """
+        try:
+            from src.services.db import Database
+        except Exception:  # pragma: no cover - db 不可用环境
+            return
+        for p in pages:
+            if p["page_type"] != "sources":
+                continue
+            fm = p["frontmatter"]
+            kid = fm.get("knowledge_id")
+            if not kid:
+                continue
+            try:
+                item = Database.get_knowledge(kid)
+            except Exception:
+                item = None
+            if not item:
+                report.findings.append(LintFinding(
+                    severity="warning", category="stale",
+                    page_id=p["page_id"], page_title=p["title"],
+                    message=f"来源 knowledge {str(kid)[:8]} 已不存在",
+                    detail={"knowledge_id": kid},
+                ))
+                continue
+            page_hash = fm.get("source_hash", "")
+            cur_hash = item.get("content_hash", "")
+            if page_hash and cur_hash and page_hash != cur_hash:
+                report.findings.append(LintFinding(
+                    severity="warning", category="outdated_claim",
+                    page_id=p["page_id"], page_title=p["title"],
+                    message=f"源已变更(page hash {str(page_hash)[:8]} ≠ 当前 {str(cur_hash)[:8]})",
+                    detail={"page_hash": page_hash, "current_hash": cur_hash},
+                ))
