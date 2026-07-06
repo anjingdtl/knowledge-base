@@ -42,11 +42,25 @@
 |------|------|
 | 全量 pytest | **1197 passed / 1 skipped / 0 failed**(基线 1179 + 18 新回归测试,零功能退化) |
 | 新增回归测试 | 18 条(S1.1 blend 兜底 / S1.2 缓存隔离 / S1.4 异常传播 / S1.5 词边界 / S2.1 i001 幂等 / S2.2 空 hash / S2.6 原子写 / S2.5b 备份 / S3.2 ask 兜底 / S3.3 DI / S4.1 SSRF) |
-| ruff / mypy | **既有基线债务,非本次引入**:af4aa2f(本次工作前)已存在 ruff 98 / mypy 53 错误(wiki-first 升级窗口积累,多为 I001 import 排序与 F401 未用 import,非功能 bug)。本次改动净增 0 新错误,新代码已清 lint。建议单独 `ruff --fix` 清理 pass(F401 删 import 需逐个确认引用,防 NameError) |
+| ruff / mypy | **既有基线债务,非本次引入**:af4aa2f(本次工作前)已存在 ruff 98 / mypy 53 错误(wiki-first 升级窗口积累)。本次改动净增 0 新错误。**已随后续单独一轮清理全部清零(见下节)** |
+
+### ruff / mypy 基线清理 — 已完成 (2026-07-03)
+
+清理 wiki-first 升级窗口积累的 lint/type 基线债务,恢复 CI 门禁绿:
+
+| 门禁 | 结果 |
+|------|------|
+| ruff | **0 错误**(原 98)。`--fix` 安全修复 I001/F541/F811/W293 + 手工 F841/E701/E741;F401 移除经 170 模块 import 冒烟 + 全量 pytest 验证无 NameError。commit `35240a6` |
+| mypy | **0 错误 / 172 文件**(原 53)。commit `0023f81` |
+| pytest | **1198 passed / 0 failed**(基线 1179 + 19 回归测试,零退化) |
+
+**mypy 清理中发现 1 个潜伏功能 bug**(已修 + 回归测试锁定):
+- `health._get_kb_domain_summary` 旧 `Database()` 无 db_path 必抛 TypeError(元类无 `__call__`),被外层 except 吞掉 → **BUG-7「领域概览兜底」从未真正生效,恒返回通用字符串**。改用 `Database._instance` 后,空检索时 LLM 上下文兜底现能正确注入真实文档数/标签。
+
+**其余多为注解收紧**(零运行时变更):embedding `to_embed` 注解、route_engine cache 改 tuple 类型、search_service minhash int 哨兵、wiki_compiler `page_id` 提取、批量 no-any-return cast、元类/函数属性误报 ignore。
 
 ### 后续建议(非本轮范围)
 
-- 单独一轮 ruff/mypy 基线清理(98+53 错误),恢复 CI lint/type 门禁绿。
 - Phase2 W4 收口时统一双轨 wiki 编译(MCP→SQLite wiki_compiler vs path_indexer→文件系统 knowledge_workflow,wiki_lint 对文件层盲)——架构级 gap,已记为 spec Gap B。
 
 
