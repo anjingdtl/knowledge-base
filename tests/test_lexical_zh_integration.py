@@ -12,7 +12,6 @@
 """
 import pytest
 
-
 # golden:5 个中文查询的期望命中 block(id 含关键词)
 FIXTURE_BLOCKS = [
     {"id": "b1", "page_id": "p1", "content": "FTTR 是光纤到房间技术,千兆接入方案。",

@@ -220,7 +220,6 @@ class EmbeddingService:
 
     def embed_batch_with_cache(self, texts: list[str], batch_size: int = 20) -> list[list[float]]:
         """批量生成 embedding，三级缓存链: L1(进程内) → L2(SQLite) → L3(API)"""
-        import hashlib
 
         l2_enabled = bool(self._cfg("rag.cache.l2_enabled", True))
         l1_max = int(self._cfg("rag.cache.l1_embedding_max", 2048) or 2048)

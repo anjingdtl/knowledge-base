@@ -2,14 +2,12 @@
 from pathlib import Path
 from unittest.mock import MagicMock
 
-import pytest
-
 from src.services.db import Database
-from src.services.wiki_slug import read_frontmatter
 from src.services.knowledge_workflow import (
     KnowledgeWorkflowService,
     try_knowledge_workflow_compile,
 )
+from src.services.wiki_slug import read_frontmatter
 from src.utils.config import Config
 
 

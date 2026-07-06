@@ -24,7 +24,6 @@ import subprocess
 import sys
 import tempfile
 import time
-import uuid
 from pathlib import Path
 from typing import Any
 
@@ -719,11 +718,11 @@ async def main():
 
         # 端口打开后稍等片刻，让 StreamableHTTP 应用完成初始化
         time.sleep(2)
-        print(f"[client] connecting", flush=True)
+        print("[client] connecting", flush=True)
 
         from fastmcp import Client
         async with Client(f"http://127.0.0.1:{port}/mcp") as client:
-            print(f"[client] connected", flush=True)
+            print("[client] connected", flush=True)
             await run_tests(client)
     finally:
         proc.terminate()
@@ -732,7 +731,7 @@ async def main():
         except subprocess.TimeoutExpired:
             proc.kill()
             proc.wait(timeout=10)
-        print(f"[server] stopped", flush=True)
+        print("[server] stopped", flush=True)
 
     # 生成报告
     total = len(state["rounds"])

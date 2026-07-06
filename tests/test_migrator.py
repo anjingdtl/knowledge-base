@@ -1,5 +1,4 @@
 """MigrationService 测试(spec §10)。"""
-from pathlib import Path
 
 import pytest
 

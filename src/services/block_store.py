@@ -104,7 +104,7 @@ class BlockStore:
 
     def add_block_embeddings_batch(self, block_ids: list[str], embeddings: list[list[float]]):
         """批量写入 block embeddings，减少 commit 次数，提升 reindex 性能
-        
+
         自动按 500 个一组分批，避免 SQLite "too many SQL variables" 限制（上限 999）。
         """
         if not block_ids or not embeddings:

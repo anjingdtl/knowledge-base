@@ -572,7 +572,7 @@ class TestRestorePreservesQuality:
 
     def test_restore_preserves_quality(self, mcp_env):
         """带 quality=ok 的条目 delete→restore 后 quality 仍为 ok。"""
-        from src.mcp_server import create, delete, read, restore_knowledge
+        from src.mcp_server import create, delete, restore_knowledge
 
         created = create(title="质量保留测试", content="内容")
         kid = created["data"]["id"]
@@ -597,6 +597,7 @@ class TestRestorePreservesQuality:
     def test_delete_snapshot_includes_quality(self, mcp_env):
         """delete 的 operation_log 快照应包含 quality 字段。"""
         import json
+
         from src.mcp_server import create, delete
 
         created = create(title="快照质量测试", content="内容")

@@ -1,5 +1,4 @@
 """WikiEntityUpdater 测试(mock LLM,零真实调用)。"""
-from pathlib import Path
 
 import pytest
 

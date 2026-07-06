@@ -8,7 +8,8 @@ from src.models.knowledge import KnowledgeItem
 from src.models.version_conflict import ConflictIgnore, ConflictPair
 from src.repositories.knowledge_repo import KnowledgeRepository
 from src.services.version_conflict import (
-    VersionConflictService, extract_title_core,
+    VersionConflictService,
+    extract_title_core,
 )
 
 

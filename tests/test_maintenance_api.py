@@ -1,10 +1,10 @@
 """Maintenance API 测试"""
-import pytest
 
 
 def test_endpoints_require_auth(setup_db):
     """未认证请求应 401"""
     from fastapi.testclient import TestClient
+
     from src.api import create_app
     from src.utils.config import Config
     Config.set("wiki.enabled", False)

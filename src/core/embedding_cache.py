@@ -11,7 +11,7 @@ cleaned on read/write and via explicit cleanup_expired() calls.
 from __future__ import annotations
 
 import struct
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -175,7 +175,6 @@ class EmbeddingCache:
     def cleanup_expired(self) -> int:
         """Phase 3: Delete all expired cache entries. Returns deleted row count."""
         deleted = 0
-        now = datetime.now(timezone.utc)
         try:
             with self._db.get_conn() as conn:
                 rows = conn.execute(

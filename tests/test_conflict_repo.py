@@ -1,7 +1,7 @@
 """ConflictRepository 测试"""
 import pytest
 
-from src.models.version_conflict import ConflictSession, ConflictPair, ConflictIgnore
+from src.models.version_conflict import ConflictIgnore, ConflictPair, ConflictSession
 from src.repositories.conflict_repo import ConflictRepository
 
 

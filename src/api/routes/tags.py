@@ -37,7 +37,7 @@ def get_tag_hierarchy(tag: str, container: AppContainer = Depends(get_container)
 def auto_tag(data: AutoTagReq, container: AppContainer = Depends(get_container)):
     """智能补标：使用 tag_inference 多级管线（规则 + TF-IDF + LLM 兜底）为缺少标签的条目自动打标"""
     import json as _json
-    from src.services.db import Database
+
     from src.services.tag_inference import infer_tags
 
     db = container.db

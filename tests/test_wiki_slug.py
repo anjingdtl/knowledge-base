@@ -1,5 +1,4 @@
 """wiki_slug 共用工具测试。"""
-from pathlib import Path
 
 from src.services.wiki_slug import (
     read_frontmatter,

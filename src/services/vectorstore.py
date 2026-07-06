@@ -7,7 +7,6 @@ Phase 2 / search-optimize: 此模块对应旧的 vec_chunks 索引路径。
 import logging
 import struct
 import threading
-import warnings
 
 import sqlite_vec
 

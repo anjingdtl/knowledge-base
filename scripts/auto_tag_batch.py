@@ -27,7 +27,6 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.core.container import create_container  # noqa: E402
-from src.utils.config import Config  # noqa: E402
 
 
 def _parse_args() -> argparse.Namespace:
@@ -184,7 +183,7 @@ def main() -> int:
     print(f"应用标签 {len(tags_applied)} 个: {sorted(tags_applied)[:20]}{'...' if len(tags_applied) > 20 else ''}")
     print(f"标签覆盖率: {coverage:.1f}% → {final_coverage:.1f}%")
     if errors:
-        print(f"错误列表 (前 5 条):")
+        print("错误列表 (前 5 条):")
         for e in errors[:5]:
             print(f"  - {e}")
     print("=" * 60)

@@ -191,8 +191,8 @@ def _handle_wiki(args: argparse.Namespace) -> int:
         return 0
 
     if cmd == "lint":
-        from src.utils.config import Config
         from src.services.wiki_lint import WikiLint
+        from src.utils.config import Config
         if not Config.get("wiki.enabled", False):
             print("[WARN] wiki 未启用(配置 wiki.enabled=true)")
         report = WikiLint().run()
@@ -203,6 +203,7 @@ def _handle_wiki(args: argparse.Namespace) -> int:
 
     if cmd == "save-answer":
         from datetime import datetime
+
         from src.services.knowledge_workflow import KnowledgeWorkflowService
         result = KnowledgeWorkflowService().save_query(
             question=args.question, answer=args.answer,
@@ -218,8 +219,8 @@ def _handle_wiki(args: argparse.Namespace) -> int:
         if not target.exists():
             print(f"[ERROR] 路径不存在: {target}", file=sys.stderr)
             return 1
-        from src.services.path_indexer import PathIndexService
         from src.core.container import get_active_container
+        from src.services.path_indexer import PathIndexService
         container = get_active_container()
         indexer = container.path_indexer if container else PathIndexService()
         kid = indexer._ingest_file(target)

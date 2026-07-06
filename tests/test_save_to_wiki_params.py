@@ -4,7 +4,6 @@ BUG#10：auto_publish=False 时页面应为 draft（而非 published），可走
 BUG#11：enhance=False 时跳过 LLM，直接用原始 answer 存储。
 """
 import json
-from datetime import datetime
 
 import pytest
 
@@ -71,8 +70,8 @@ def test_save_to_wiki_with_auto_publish_true_creates_published(wiki_compiler):
 
 def test_save_to_wiki_auto_publish_none_follows_config(wiki_compiler, monkeypatch):
     """BUG#10：auto_publish=None（默认）→ 沿用 Config 'wiki.auto_publish'。"""
-    from src.utils.config import Config
     from src.services.db import Database
+    from src.utils.config import Config
 
     Config.set("wiki.auto_publish", False)
     try:

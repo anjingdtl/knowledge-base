@@ -31,9 +31,6 @@ def test_init_local_config_has_wiki_parent_child():
 
 def test_init_provider_config_has_wiki_parent_child():
     """shinehe init(provider)注入 rag.wiki_parent_child 段。"""
-    from src.core.provider_presets import get_provider_preset
-
-    preset = get_provider_preset("siliconflow")
     config = ProjectSetupService().build_config({"provider": "siliconflow"})
     rag = config["rag"]
     assert "wiki_parent_child" in rag

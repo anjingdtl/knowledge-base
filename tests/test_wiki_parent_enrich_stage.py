@@ -3,8 +3,6 @@ from __future__ import annotations
 
 import asyncio
 
-import pytest
-
 from src.services.blend_fusion import blend_fusion
 from src.services.rag_pipeline import (
     DEFAULT_PIPELINE_CONFIG,

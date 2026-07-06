@@ -6,8 +6,8 @@
 import json
 import sys
 import time
-import urllib.request
 import urllib.error
+import urllib.request
 
 MCP_URL = "http://127.0.0.1:9000/mcp"
 SESSION_ID = None
@@ -24,7 +24,8 @@ def _request(method: str, params: dict | None = None) -> dict:
         req = urllib.request.Request(MCP_URL, data=json.dumps(payload).encode(), headers=headers, method="POST")
         with urllib.request.urlopen(req, timeout=60) as resp:
             sid = resp.headers.get("Mcp-Session-Id")
-            if sid: SESSION_ID = sid
+            if sid:
+                SESSION_ID = sid
             raw = resp.read()
             ct = resp.headers.get("Content-Type", "")
             text = raw.decode("utf-8", errors="replace")

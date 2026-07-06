@@ -3,7 +3,10 @@ from datetime import datetime
 from typing import Optional
 
 from src.models.version_conflict import (
-    ConflictSession, ConflictPair, ConflictIgnore, _make_pair_key,
+    ConflictIgnore,
+    ConflictPair,
+    ConflictSession,
+    _make_pair_key,
 )
 from src.services.db import Database
 

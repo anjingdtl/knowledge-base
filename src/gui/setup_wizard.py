@@ -561,7 +561,7 @@ class SetupWizard(QDialog):
 
             # 如果 Windows 服务已注册且正在运行，提示重启以加载新 Key
             try:
-                from src.services.mcp_launcher import is_service_installed, get_service_status
+                from src.services.mcp_launcher import get_service_status, is_service_installed
                 if is_service_installed() and get_service_status() == "running":
                     reply = QMessageBox.question(
                         self, "初始配置已完成",

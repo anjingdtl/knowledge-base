@@ -22,16 +22,14 @@
 """
 import json
 from datetime import datetime
-from unittest.mock import MagicMock
 
 import pytest
 
 from src.models.knowledge import KnowledgeItem
-from src.models.version_conflict import ConflictPair, ConflictIgnore
+from src.models.version_conflict import ConflictPair
 from src.repositories.knowledge_repo import KnowledgeRepository
 from src.services.db import Database
 from src.services.version_conflict import VersionConflictService
-
 
 # ── 辅助 ──
 
@@ -89,9 +87,6 @@ class ScriptedLLM:
     def _smart_judge(self, prompt: str) -> str:
         """根据 prompt 中 A/B 标题的年份判断新版。"""
         import re
-        # 提取 A 的标题和 B 的标题
-        a_match = re.search(r'- 标题: (.+?)\n', prompt)
-        b_match = re.search(r'- 标题: (.+?)\n', prompt[prompt.find('知识条目 B'):]) if '知识条目 B' in prompt else None
         # 简单策略：找包含较晚年份的那个
         year_a = re.search(r'(\d{4})年', prompt[:prompt.find('知识条目 B')] if '知识条目 B' in prompt else prompt)
         year_b = re.search(r'(\d{4})年', prompt[prompt.find('知识条目 B'):]) if '知识条目 B' in prompt else None
@@ -245,7 +240,7 @@ class TestEndToEndFlow:
     def test_deleted_version_not_rescanned(self, e2e_setup):
         """删除后再次扫描，不应再产生该对（kr.list 已过滤 deleted_at）。"""
         s = e2e_setup
-        svc, kr = s["svc"], s["kr"]
+        svc = s["svc"]
         old, new = s["old"], s["new"]
 
         # 第一次扫描 + 判断 + 删除
@@ -389,7 +384,6 @@ class TestRobustnessEdges:
         svc = s["svc"]
         # 覆盖 LLM 返回非法 JSON
         svc._llm = ScriptedLLM(responses=["这不是合法的JSON{{"])
-        old, new = s["old"], s["new"]
 
         sid = svc.start_scan_session(run_synchronously=True)
         result = svc.judge_pending_pairs(sid, run_synchronously=True)
@@ -445,7 +439,6 @@ class TestConsistency:
         """会话计数器在 judge + delete + ignore 后应保持一致。"""
         s = e2e_setup
         svc = s["svc"]
-        old, new = s["old"], s["new"]
 
         sid = svc.start_scan_session(run_synchronously=True)
         pairs_before = svc.list_pairs(sid)

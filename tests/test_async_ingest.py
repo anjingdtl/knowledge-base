@@ -564,7 +564,6 @@ class TestExplicitHandlerRegistration:
     def test_worker_start_registers_handlers_explicitly(self, setup_db):
         """AsyncWorker.start() 应显式注册 handler，即使 _handlers 被清空。"""
         from src.services.async_worker import AsyncWorker
-        from src.services.async_tasks import register_all_tasks
 
         saved = dict(TaskRegistry._handlers)
         worker = AsyncWorker()
@@ -594,6 +593,7 @@ class TestReclaimStuckJobs:
     def test_reclaim_stuck_running_job(self, setup_db):
         """started_at 早于阈值的 running 任务应被回退为 pending。"""
         from datetime import datetime, timedelta
+
         from src.services.async_task import AsyncTaskService
 
         # 创建一个 pending 任务后更新为 running
@@ -618,6 +618,7 @@ class TestReclaimStuckJobs:
     def test_reclaim_keeps_recent_running_job(self, setup_db):
         """started_at 在阈值内的 running 任务不应被回收。"""
         from datetime import datetime, timedelta
+
         from src.services.async_task import AsyncTaskService
 
         job_id = AsyncTaskService.create_job("file_ingest", {"file_path": "/tmp/y.txt"})
@@ -660,6 +661,7 @@ class TestReclaimStuckJobs:
     def test_worker_start_invokes_reaper(self, setup_db):
         """AsyncWorker.start() 应回收上次进程遗留的僵尸任务。"""
         from datetime import datetime, timedelta
+
         from src.services.async_worker import AsyncWorker
 
         conn = Database.get_conn()

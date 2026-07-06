@@ -593,7 +593,7 @@ class SettingsDialog(QDialog):
                 self.accept()
         elif api_key_changed:
             # 仅 API Key 变更 — 检查是否以 Windows 服务模式运行
-            from src.services.mcp_launcher import is_service_installed, get_service_status
+            from src.services.mcp_launcher import get_service_status, is_service_installed
             if is_service_installed() and get_service_status() == "running":
                 reply = QMessageBox.question(
                     self, "API Key 已更新",

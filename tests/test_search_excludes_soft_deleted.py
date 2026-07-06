@@ -31,7 +31,6 @@ def _soft_delete(kid):
 def test_block_vector_search_excludes_soft_deleted():
     """BUG#13：BlockStore.search 向量路径过滤软删条目"""
     from src.services.block_store import BlockStore
-    from src.services.db import Database
 
     kid = insert_test_knowledge(
         title="软删向量测试",
@@ -95,8 +94,8 @@ def test_block_fts_search_excludes_soft_deleted():
 
 def test_chunk_fts_search_excludes_soft_deleted():
     """BUG#13：Database.search_chunks_fts 过滤软删条目"""
-    from src.utils.chinese_tokenizer import tokenize_chinese_full
     from src.services.db import Database
+    from src.utils.chinese_tokenizer import tokenize_chinese_full
 
     kid = insert_test_knowledge(
         title="软删Chunk测试",
@@ -133,9 +132,9 @@ def test_chunk_fts_search_excludes_soft_deleted():
 
 def test_repo_chunk_fts_search_excludes_soft_deleted():
     """BUG#13：KnowledgeRepository.search_chunks_fts 过滤软删条目"""
-    from src.utils.chinese_tokenizer import tokenize_chinese_full
     from src.repositories.knowledge_repo import KnowledgeRepository
     from src.services.db import Database
+    from src.utils.chinese_tokenizer import tokenize_chinese_full
 
     kid = insert_test_knowledge(
         title="软删RepoChunk测试",

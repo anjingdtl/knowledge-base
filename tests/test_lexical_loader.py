@@ -20,8 +20,10 @@ def test_missing_dict_file_silent(monkeypatch, tmp_path):
     monkeypatch.setattr("jieba.load_userdict", lambda p: calls.append(p))
 
     def fake_get(k, d=None):
-        if k == "rag.lexical_zh.enabled": return True
-        if k == "rag.lexical_zh.dict_path": return str(tmp_path / "nonexistent.txt")
+        if k == "rag.lexical_zh.enabled":
+            return True
+        if k == "rag.lexical_zh.dict_path":
+            return str(tmp_path / "nonexistent.txt")
         return d
     monkeypatch.setattr("src.utils.config.Config.get", staticmethod(fake_get))
     chinese_tokenizer._ensure_lexical_dict()
@@ -37,8 +39,10 @@ def test_valid_dict_loads_once(monkeypatch, tmp_path):
     monkeypatch.setattr("jieba.load_userdict", lambda p: calls.append(p))
 
     def fake_get(k, d=None):
-        if k == "rag.lexical_zh.enabled": return True
-        if k == "rag.lexical_zh.dict_path": return str(dict_file)
+        if k == "rag.lexical_zh.enabled":
+            return True
+        if k == "rag.lexical_zh.dict_path":
+            return str(dict_file)
         return d
     monkeypatch.setattr("src.utils.config.Config.get", staticmethod(fake_get))
     chinese_tokenizer._ensure_lexical_dict()
