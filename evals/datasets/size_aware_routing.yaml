@@ -1,0 +1,21 @@
+# size_aware 路由准确率数据集(Phase2 W4 Task 4.1)。
+# expected_scale: wiki_read(小) | full_search(大) | blend(中间)
+#
+# 判定规则(SizeAwareRouter):意图词(哪些/所有/对比/全部/列举)→full_search;
+# wiki 命中 0 → full_search;token≤12 且 wiki 命中≤3 → wiki_read;其余 → blend。
+#
+# CI 确定性说明:CI/无 wiki/ 环境下 WikiPageLocator 命中 0 → SizeAwareRouter 全判
+# full_search。故本数据集 expected_scale 全标 full_search,accuracy 应 = 1.0(确定性)。
+# 真实 wiki/ 环境下由用户重跑(届时可补 wiki_read/blend 用例)。
+
+- query: "FTTR 是什么"
+  expected_scale: "full_search"   # 无 wiki/ 时 wiki_hits=0 → full_search
+
+- query: "对比 SQLite 与 Qdrant 的优劣"
+  expected_scale: "full_search"   # 含意图词「对比」
+
+- query: "哪些文档提到了 RRF 融合"
+  expected_scale: "full_search"   # 含意图词「哪些」
+
+- query: "embedding 维度"
+  expected_scale: "full_search"   # 无 wiki/ 时命中 0 → full_search

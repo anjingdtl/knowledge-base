@@ -199,7 +199,7 @@ class OfflineIndex:
         """Split markdown by headings."""
         chunks = []
         current_heading = ""
-        current_lines = []
+        current_lines: list[str] = []
 
         for line in content.split('\n'):
             if line.startswith('#'):
@@ -224,7 +224,7 @@ class OfflineIndex:
     def _split_python(self, content: str) -> list[dict]:
         """Split Python by top-level definitions."""
         chunks = []
-        current_lines = []
+        current_lines: list[str] = []
         current_name = ""
 
         for line in content.split('\n'):
@@ -693,10 +693,53 @@ def run_eval(
     return 0 if passed else 1, report_data
 
 
+def run_routing_eval(dataset_path: Path, wiki_dir: Path | None = None) -> dict:
+    """跑 size_aware 路由准确率(Phase2 W4 Task 4.1)。
+
+    Args:
+        dataset_path: routing yaml 路径(每条 ``{query, expected_scale}``)。
+        wiki_dir: wiki 根目录。``None`` 时从 Config 读;不存在时 locator 返回命中 0
+            (无 wiki/ 环境下 SizeAwareRouter 全判 full_search,确定性)。
+    """
+    from src.services.size_aware_router import SizeAwareRouter
+    from src.services.wiki_page_locator import WikiPageLocator
+
+    items = yaml.safe_load(dataset_path.read_text(encoding="utf-8")) or []
+    locator = WikiPageLocator(wiki_dir=str(wiki_dir) if wiki_dir else None)
+    router = SizeAwareRouter(locator)
+
+    correct = 0
+    details: list[dict] = []
+    for it in items:
+        query = it["query"]
+        expected = it["expected_scale"]
+        actual = router.route(query)["scale"]
+        ok = actual == expected
+        correct += 1 if ok else 0
+        details.append({
+            "query": query, "expected": expected, "actual_scale": actual, "ok": ok,
+        })
+    total = len(items)
+    return {
+        "total": total,
+        "correct": correct,
+        "accuracy": round(correct / total, 4) if total else 1.0,
+        "details": details,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Offline retrieval evaluation")
     parser.add_argument("--all", action="store_true", help="Run all retrieval_* datasets")
     parser.add_argument("--dataset", type=str, help="Run a specific dataset (e.g., retrieval_zh)")
+    parser.add_argument(
+        "--routing", action="store_true",
+        help="跑 size_aware 路由准确率(而非检索 Recall)",
+    )
+    parser.add_argument(
+        "--routing-dataset", type=str, default="size_aware_routing",
+        help="routing 数据集名(evals/datasets/<name>.yaml)",
+    )
     parser.add_argument(
         "--baseline", type=str, default=None,
         help="Path to baseline JSON for comparison"
@@ -719,6 +762,20 @@ def main():
         help="Use deterministic fake embeddings (for CI)"
     )
     args = parser.parse_args()
+
+    if args.routing:
+        ds = DATASETS_DIR / f"{args.routing_dataset}.yaml"
+        if not ds.exists():
+            print(f"ERROR: routing dataset not found: {ds}", file=sys.stderr)
+            sys.exit(1)
+        result = run_routing_eval(ds)
+        print(f"size_aware routing accuracy: {result['accuracy']} "
+              f"({result['correct']}/{result['total']})")
+        for d in result["details"]:
+            mark = "OK" if d["ok"] else "X"
+            print(f"  [{mark}] {d['query'][:30]:30s} expected={d['expected']} "
+                  f"actual={d['actual_scale']}")
+        sys.exit(0 if result["accuracy"] >= 1.0 else 1)
 
     if not args.all and not args.dataset:
         parser.error("Please specify --all or --dataset")
