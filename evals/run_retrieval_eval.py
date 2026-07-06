@@ -22,8 +22,12 @@ import time
 from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import yaml
+
+if TYPE_CHECKING:
+    from evals.real_hybrid_engine import RealHybridIndex
 
 # Ensure project root is in path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -363,8 +367,34 @@ def load_dataset(path: Path) -> list[dict]:
     return data
 
 
-def build_index(use_fake_embedding: bool = False) -> OfflineIndex:
-    """Build an offline index from all fixture documents."""
+def build_index(
+    engine: str = "offline", use_fake_embedding: bool = False
+) -> OfflineIndex | RealHybridIndex:
+    """Build an index from all fixture documents.
+
+    engine="offline" → OfflineIndex(BM25,默认,英文基线 + CI 确定性)。
+    engine="real-hybrid" → RealHybridIndex(真 HybridSearcher keywords 模式,
+    走 FTS5+jieba+synonyms,反映 W3 lexical 强化;需初始化临时 Database)。
+    """
+    if engine == "real-hybrid":
+        import tempfile
+
+        from evals.real_hybrid_engine import RealHybridIndex
+        from src.services.db import Database
+
+        # fresh temp DB(eval 独立进程,不复用项目数据)
+        Database._instance = None
+        fd, tmp_db = tempfile.mkstemp(suffix=".db")
+        import os
+        os.close(fd)
+        Database.connect(tmp_db)
+        index: OfflineIndex | RealHybridIndex = RealHybridIndex()
+        for fixture_path in sorted(FIXTURES_DIR.glob("*")):
+            if fixture_path.is_file() and fixture_path.suffix in (".md", ".markdown", ".py"):
+                content = fixture_path.read_text(encoding="utf-8")
+                index.index_fixture(fixture_path, content)
+        return index
+
     index = OfflineIndex()
     for fixture_path in sorted(FIXTURES_DIR.glob("*")):
         if fixture_path.is_file():
@@ -373,7 +403,7 @@ def build_index(use_fake_embedding: bool = False) -> OfflineIndex:
     return index
 
 
-def run_single_query(index: OfflineIndex, item: dict) -> dict:
+def run_single_query(index: OfflineIndex | RealHybridIndex, item: dict) -> dict:
     """Run a single retrieval query and evaluate against expected sources."""
     query = item["query"]
     expected_sources = item.get("expected_sources", [])
@@ -606,6 +636,7 @@ def run_eval(
     baseline_path: str | None = None,
     max_regression: float = 0.02,
     update_baseline_flag: bool = False,
+    engine: str = "offline",
 ) -> tuple[int, dict]:
     """Run retrieval evaluation.
 
@@ -613,7 +644,7 @@ def run_eval(
     exit_code: 0 = pass, 1 = regression detected.
     """
     # Build index
-    index = build_index(use_fake_embedding=use_fake_embedding)
+    index = build_index(engine=engine, use_fake_embedding=use_fake_embedding)
 
     all_results: dict[str, list[dict]] = {}
     all_metrics: dict[str, RetrievalMetrics] = {}
@@ -761,6 +792,10 @@ def main():
         "--fake-embedding", action="store_true",
         help="Use deterministic fake embeddings (for CI)"
     )
+    parser.add_argument(
+        "--engine", choices=["offline", "real-hybrid"], default="offline",
+        help="检索引擎:offline(BM25,默认,英文基线)/ real-hybrid(真 HybridSearcher+lexical_zh)",
+    )
     args = parser.parse_args()
 
     if args.routing:
@@ -799,6 +834,7 @@ def main():
     exit_code, report_data = run_eval(
         datasets=datasets,
         use_fake_embedding=args.fake_embedding,
+        engine=args.engine,
         baseline_path=args.baseline,
         max_regression=args.max_regression,
         update_baseline_flag=args.update_baseline,
