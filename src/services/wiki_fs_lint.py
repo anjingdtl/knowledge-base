@@ -22,6 +22,7 @@ from src.services.wiki_lint import (
     _strip_pipe,
 )
 from src.services.wiki_slug import read_frontmatter
+from src.services.wiki_source_ids import resolve_source_ids
 from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
@@ -180,9 +181,10 @@ class WikiFsLint:
             if p["page_type"] != "sources":
                 continue
             fm = p["frontmatter"]
-            kid = fm.get("knowledge_id")
-            if not kid:
+            kids = resolve_source_ids(fm)
+            if not kids:
                 continue
+            kid = kids[0]
             try:
                 item = Database.get_knowledge(kid)
             except Exception:

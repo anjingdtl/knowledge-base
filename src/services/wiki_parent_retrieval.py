@@ -13,6 +13,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from src.services.wiki_source_ids import resolve_source_ids
+
 logger = logging.getLogger(__name__)
 
 # page_type 白名单:这些页是 source 的"消费者",需回查 source 摘要。
@@ -68,11 +70,7 @@ class WikiParentRetriever:
         page_type = meta.get("page_type", "")
         if page_type not in _PARENT_PAGE_TYPES:
             return []
-        source_ids = meta.get("source_ids") or []
-        if isinstance(source_ids, list) and source_ids:
-            return [str(s) for s in source_ids if s]
-        kid = meta.get("knowledge_id")
-        return [str(kid)] if kid else []
+        return resolve_source_ids(meta)
 
     def _fetch_summaries(self, db, kids: list[str], max_length: int) -> dict[str, str]:
         """批量回查 source 条目,提炼首段摘要(复用 WikiSourceCompiler._build_summary)。"""

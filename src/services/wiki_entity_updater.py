@@ -163,6 +163,7 @@ class WikiEntityUpdater:
             "title": entity,
             "kind": kind,
             "knowledge_id": knowledge_id,
+            "source_ids": [knowledge_id],
             "ingested_at": ingested_at,
             "updated": is_update,
         }

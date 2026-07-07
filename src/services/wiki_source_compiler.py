@@ -62,6 +62,7 @@ class WikiSourceCompiler:
             "ingested_at": ingested_at,
             "key_entities": entities,
             "knowledge_id": knowledge_id,
+            "source_ids": [knowledge_id],
         }
         body = self._render_body(frontmatter, summary)
         write_markdown(target, frontmatter, body)
