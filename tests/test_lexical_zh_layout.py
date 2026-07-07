@@ -7,8 +7,10 @@ def test_init_local_injects_lexical_zh():
     lz = cfg["rag"]["lexical_zh"]
     assert lz["dict_path"] == "data/lexical_zh_dict.txt"
     assert lz["synonym_path"] == "data/lexical_zh_synonyms.txt"
-    assert lz["rrf_weight_keyword_zh"] == 0.7
-    assert lz["rrf_weight_keyword_en"] == 0.5
+    # rrf_weight 在 rag 段顶层(hybrid_search 读取位置),不在 lexical_zh 子段
+    assert cfg["rag"]["rrf_weight_keyword_zh"] == 0.7
+    assert cfg["rag"]["rrf_weight_keyword_en"] == 0.5
+    assert "rrf_weight_keyword_zh" not in lz
     # 浅合并未覆盖其他 rag 键
     assert cfg["rag"]["search_mode"] == "blend"
 

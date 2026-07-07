@@ -145,18 +145,18 @@ class ProjectSetupService:
 
     @staticmethod
     def _lexical_zh_defaults() -> dict[str, Any]:
-        """第二阶段 W3 中文 lexical 强化默认段。
+        """第二阶段 W3 中文 lexical 强化默认段(专名词典 + 同义词扩展)。
 
-        专名词典 + 同义词扩展 + 语种权重。legacy 缺省不注入(enabled 走 Config.get
-        默认 false);由 _build_local_config / _build_provider_config 合入各自 rag 段
-        (同 _size_aware/_wiki_parent,不能放进 _wiki_first_defaults 浅合并坑)。
+        语种权重 rrf_weight_keyword_zh/en 在 rag 段顶层(见 _build_local_config
+        /_build_provider_config),与 hybrid_search.py 读取位置一致;不放本段
+        (避免嵌套在 lexical_zh 子段读不到)。legacy 缺省不注入(enabled 走
+        Config.get 默认 false);由 _build_local_config / _build_provider_config
+        合入各自 rag 段(同 _size_aware/_wiki_parent 浅合并坑)。
         """
         return {
             "enabled": True,
             "dict_path": "data/lexical_zh_dict.txt",
             "synonym_path": "data/lexical_zh_synonyms.txt",
-            "rrf_weight_keyword_zh": 0.7,
-            "rrf_weight_keyword_en": 0.5,
         }
 
     def build_config(self, request: dict[str, Any]) -> dict[str, Any]:
@@ -211,6 +211,8 @@ class ProjectSetupService:
                 "chunk_size": 1200,
                 "score_threshold": 0.35,
                 "top_k": 8,
+                "rrf_weight_keyword_zh": 0.7,
+                "rrf_weight_keyword_en": 0.5,
                 "size_aware": self._size_aware_defaults(),
                 "wiki_parent_child": self._wiki_parent_defaults(),
                 "lexical_zh": self._lexical_zh_defaults(),
@@ -255,6 +257,8 @@ class ProjectSetupService:
                 "score_threshold": 0.35,
                 "top_k": 8,
                 "search_mode": "blend",
+                "rrf_weight_keyword_zh": 0.7,
+                "rrf_weight_keyword_en": 0.5,
                 "size_aware": self._size_aware_defaults(),
                 "wiki_parent_child": self._wiki_parent_defaults(),
                 "lexical_zh": self._lexical_zh_defaults(),
