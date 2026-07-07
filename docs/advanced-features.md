@@ -155,6 +155,6 @@ keyword 通道(FTS5 + jieba)三项强化,提升中文召回(`retrieval_zh` Recal
   `rrf_weight_keyword_en`(默认 0.5)。
 
 字典/同义词加载失败仅 warning 不阻塞检索。词典只对**新写入**的 block 生效;存量数据
-需 `shinehe index --reindex` 重建 FTS 才能享受专名分词。检索引擎可通过
+需 `reindex_all`(MCP 工具 / `indexer.reindex_all()`)重建 FTS 才能享受专名分词。检索引擎可通过
 `python evals/run_retrieval_eval.py --engine real-hybrid` 走真实 HybridSearcher 验证
 lexical 通道(对比默认 `--engine offline` 的 BM25 基线)。
