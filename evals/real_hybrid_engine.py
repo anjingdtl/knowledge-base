@@ -19,11 +19,22 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+# 项目根(evals/ 的 parent),用于解析 data/ 下字典绝对路径。
+_PROJ_ROOT = Path(__file__).resolve().parent.parent
+_DATA_DIR = _PROJ_ROOT / "data"
+
 # keywords 模式:只走 lexical(FTS5+jieba+synonyms)通道,跳过向量(零 embedding)。
+# synonym_path/dict_path 指向项目 data/ 真实文件 —— LexicalZh 从注入的 dict 读
+# 路径(lexical_zh.py:52-61 dict 分支),使 eval 隔离环境也能加载同义词,
+# 不依赖全局 Config 是否 load 了 config.yaml。
 _HYBRID_CFG = {
     "rag": {
         "search_mode": "keywords",
-        "lexical_zh": {"enabled": True},
+        "lexical_zh": {
+            "enabled": True,
+            "dict_path": str(_DATA_DIR / "lexical_zh_dict.txt"),
+            "synonym_path": str(_DATA_DIR / "lexical_zh_synonyms.txt"),
+        },
         "parent_child": {"enabled": False},
     }
 }

@@ -56,3 +56,33 @@ def test_real_hybrid_deterministic_across_runs(tmp_path):
         return [r.get("source_path") for r in idx.search("RRF 常数", top_k=5)]
 
     assert run_on(tmp_path / "rh1.db") == run_on(tmp_path / "rh2.db")
+
+
+def test_hybrid_cfg_has_synonym_dict_path():
+    """_HYBRID_CFG 必须带 synonym_path/dict_path,指向项目 data/ 真实文件,
+    使 eval 隔离环境也能加载同义词(不依赖全局 Config)。"""
+    from evals.real_hybrid_engine import _HYBRID_CFG
+
+    lexical = _HYBRID_CFG["rag"]["lexical_zh"]
+    assert lexical["enabled"] is True
+    syn_path = Path(lexical["synonym_path"])
+    dict_path = Path(lexical["dict_path"])
+    assert syn_path.is_file(), f"synonym_path 不存在: {syn_path}"
+    assert dict_path.is_file(), f"dict_path 不存在: {dict_path}"
+
+
+def test_lexical_zh_reads_injected_synonym_path(tmp_path):
+    """LexicalZh 从注入的 config dict 读 synonym_path 并加载(机制验证,
+    用临时同义词文件,不依赖项目字典内容)。"""
+    from evals.real_hybrid_engine import _HYBRID_CFG
+    from src.services.lexical_zh import LexicalZh
+
+    syn = tmp_path / "syn.txt"
+    syn.write_text("测试词 test_term\n", encoding="utf-8")
+    cfg = {"rag": {"lexical_zh": {
+        "enabled": True,
+        "synonym_path": str(syn),
+        "dict_path": _HYBRID_CFG["rag"]["lexical_zh"]["dict_path"],
+    }}}
+    lex = LexicalZh(config=cfg)
+    assert "test_term" in lex.expand_query("测试词")
