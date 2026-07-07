@@ -1052,8 +1052,6 @@ class RagPipeline:
             from src.utils.config import Config
             if not Config.get("wiki.enabled", False):
                 return
-            from src.services.wiki_compiler import WikiCompiler
-            compiler = WikiCompiler()
             # 质量门槛：来源数 ≥ 2 + 无严重警告 + confidence ≥ 0.6
             critical_warnings = [w for w in ctx.metadata.get("warnings", [])
                                  if "no sources" in w.lower() or "failed" in w.lower()]
@@ -1061,19 +1059,16 @@ class RagPipeline:
             if len(ctx.sources) < 2 or critical_warnings or confidence < 0.6:
                 return
             source_ids = [str(s["knowledge_id"]) for s in ctx.sources if s.get("knowledge_id")]
-            page_id = compiler.save_answer(question, ctx.answer, source_ids)
-            # wiki-first 文件系统层回写(syntheses,draft)
-            try:
-                from src.core.container import get_active_container as _gac
-                _c = _gac()
-                if _c is not None:
-                    _c.knowledge_workflow.save_query(
-                        question, ctx.answer, source_ids,
-                        confidence=confidence, save_mode="auto",
-                        timestamp=ctx.trace_id or "",
-                    )
-            except Exception:
-                pass
+            from src.core.container import get_active_container as _gac
+            _c = _gac()
+            page_id = None
+            if _c is not None:
+                wr = _c.wiki_write_service.save(
+                    question, ctx.answer, source_ids,
+                    confidence=confidence, save_mode="auto",
+                    timestamp=ctx.trace_id or "",
+                )
+                page_id = wr["sqlite_page_id"]
             if page_id:
                 logger.info("Auto-saved high-quality answer to Wiki: page_id=%s, question=%s",
                             page_id, question[:50])

@@ -1776,19 +1776,14 @@ def save_to_wiki(
     if not Config.get("wiki.enabled", False):
         return fail(ErrorCode.WIKI_DISABLED, "Wiki 功能未启用")
     container = _get_container()
-    compiler = container.wiki_compiler
-    page_id = compiler.save_answer(
-        question, answer, source_ids, auto_publish=auto_publish, enhance=enhance
+    wr = container.wiki_write_service.save(
+        question, answer, source_ids,
+        confidence=confidence, save_mode=save_mode,
+        auto_publish=auto_publish, enhance=enhance, timestamp="",
     )
-    # wiki-first 文件系统层回写(comparisons/syntheses;auto 模式按阈值门控)
-    try:
-        container.knowledge_workflow.save_query(
-            question, answer, source_ids,
-            confidence=confidence, save_mode=save_mode,
-            timestamp="",
-        )
-    except Exception as _e:
-        logger.warning("save_to_wiki filesystem saveback failed: %s", _e)
+    page_id = wr["sqlite_page_id"]
+    if wr["errors"]:
+        logger.warning("save_to_wiki partial failures: %s", wr["errors"])
     if page_id:
         log_id = _op_log("wiki_create", "wiki_page", page_id, after={
             "question": question[:100], "source_ids": source_ids,

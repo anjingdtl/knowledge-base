@@ -105,6 +105,7 @@ class AppContainer:
     _reranker: Optional[object] = field(default=None, repr=False)
     _wiki_compiler: Optional[object] = field(default=None, repr=False)
     _wiki_workflow: Optional[object] = field(default=None, repr=False)
+    _wiki_write_service: Optional[object] = field(default=None, repr=False)
     _graph_builder: Optional[object] = field(default=None, repr=False)
     _librarian: Optional[object] = field(default=None, repr=False)
     _search_service: Optional[object] = field(default=None, repr=False)
@@ -358,6 +359,17 @@ class AppContainer:
             self._knowledge_workflow = KnowledgeWorkflowService()
             self._track_service("_knowledge_workflow")
         return self._knowledge_workflow
+
+    @property
+    def wiki_write_service(self):
+        if self._wiki_write_service is None:
+            from src.services.wiki_write_service import WikiWriteService
+            self._wiki_write_service = WikiWriteService(
+                wiki_compiler=self.wiki_compiler,
+                knowledge_workflow=self.knowledge_workflow,
+            )
+            self._track_service("_wiki_write_service")
+        return self._wiki_write_service
 
     @property
     def wiki_page_locator(self):
