@@ -104,7 +104,7 @@ class AppContainer:
     _query_rewriter: Optional[object] = field(default=None, repr=False)
     _reranker: Optional[object] = field(default=None, repr=False)
     _wiki_compiler: Optional[object] = field(default=None, repr=False)
-    _wiki_workflow: Optional[object] = field(default=None, repr=False)
+    _wiki_repository: Optional[object] = field(default=None, repr=False)
     _wiki_write_service: Optional[object] = field(default=None, repr=False)
     _graph_builder: Optional[object] = field(default=None, repr=False)
     _librarian: Optional[object] = field(default=None, repr=False)
@@ -205,14 +205,6 @@ class AppContainer:
             self._wiki_compiler = WikiCompiler()
             self._track_service("_wiki_compiler")
         return self._wiki_compiler
-
-    @property
-    def wiki_workflow(self):
-        if self._wiki_workflow is None:
-            from src.services.wiki_workflow import WikiWorkflowService
-            self._wiki_workflow = WikiWorkflowService(self.db)
-            self._track_service("_wiki_workflow")
-        return self._wiki_workflow
 
     @property
     def graph_builder(self):
@@ -359,6 +351,23 @@ class AppContainer:
             self._knowledge_workflow = KnowledgeWorkflowService()
             self._track_service("_knowledge_workflow")
         return self._knowledge_workflow
+
+    @property
+    def wiki_repository(self):
+        if self._wiki_repository is None:
+            from pathlib import Path as _Path
+
+            from src.services.wiki_repository import WikiRepository as _WikiRepo
+            wiki_dir = self.config.get("knowledge_workflow.wiki_dir", "wiki")
+            wiki_dir_path = _Path(wiki_dir)
+            self._wiki_repository = _WikiRepo(
+                wiki_dir=wiki_dir_path,
+                registry_path=wiki_dir_path / "_meta" / "pages.json",
+                redirects_path=wiki_dir_path / "_meta" / "redirects.json",
+                outbox_path=_Path(self.config.get("storage.data_dir", "data")) / "wiki_projection_outbox.jsonl",
+            )
+            self._track_service("_wiki_repository")
+        return self._wiki_repository
 
     @property
     def wiki_write_service(self):
