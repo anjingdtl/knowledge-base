@@ -305,6 +305,8 @@ SRC = Path(__file__).resolve().parent.parent / "src"
 ALLOWED_DIRECT_WRITES: dict[tuple[str, str], str] = {
     ("services/wiki_compiler.py", "insert_wiki_page"):
         "A轨 SQLite 写,Phase 4 T4.3 降级为适配器后移除",
+    ("services/wiki_compiler.py", "update_wiki_page"):
+        "A轨 SQLite 写,Phase 4 T4.3 降级为适配器后移除",
     ("services/wiki_entity_updater.py", "write_markdown"):
         "B轨 FS 写,Phase 4 T4.1 改造经 WikiRepository 后移除",
     ("services/knowledge_workflow.py", "write_markdown"):
@@ -313,6 +315,8 @@ ALLOWED_DIRECT_WRITES: dict[tuple[str, str], str] = {
         "B轨 FS 写,Phase 4 T4.1 改造经 WikiRepository 后移除",
     ("services/wiki_index_compiler.py", "write_markdown"):
         "index.md 生成,Phase 4 评估是否经 Repository",
+    ("services/wiki_log_compiler.py", "write_text"):
+        "log.md 直接 write_text 非原子写(C4),Phase 4 改造后移除",
 }
 
 # 守卫覆盖的模块 + 各自禁止的"直接写"调用名
