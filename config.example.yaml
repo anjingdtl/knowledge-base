@@ -58,6 +58,9 @@ rag:
   # 注：替代旧版 rrf_weight_keyword: 0.6；legacy search_mode=blend 部署将从固定 0.6 变为 zh=0.7/en=0.5（微小归一化偏移）
   rrf_weight_keyword_zh: 0.7
   rrf_weight_keyword_en: 0.5
+  # 双轨 wiki 轻量收敛：WikiReadStage 在 FS 无命中时 fallback 查 SQLite
+  wiki_read:
+    sqlite_fallback: true        # 仅 mode=wiki_first 生效；legacy 强制不介入
   chunk_overlap: 180
   chunk_size: 1200
   context_sibling_window: 1

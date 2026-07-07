@@ -216,6 +216,7 @@ class ProjectSetupService:
                 "size_aware": self._size_aware_defaults(),
                 "wiki_parent_child": self._wiki_parent_defaults(),
                 "lexical_zh": self._lexical_zh_defaults(),
+                "wiki_read": {"sqlite_fallback": True},
             },
             "reranker": {
                 "provider": "disabled",
@@ -262,6 +263,7 @@ class ProjectSetupService:
                 "size_aware": self._size_aware_defaults(),
                 "wiki_parent_child": self._wiki_parent_defaults(),
                 "lexical_zh": self._lexical_zh_defaults(),
+                "wiki_read": {"sqlite_fallback": True},
             },
             "storage": {
                 "data_dir": "data",

@@ -39,6 +39,14 @@ def test_advanced_features_config_keys_match_example():
     cfg = _example_config()
     rag = cfg.get("rag", {})
     text = (ROOT / "docs" / "advanced-features.md").read_text(encoding="utf-8")
-    for key in ("size_aware", "wiki_parent_child", "lexical_zh"):
+    for key in ("size_aware", "wiki_parent_child", "lexical_zh", "wiki_read"):
         assert key in rag, f"config.example.yaml 缺 rag.{key}"
         assert key in text, f"advanced-features.md 未提及 rag.{key}"
+
+
+def test_advanced_features_documents_dual_track():
+    """advanced-features.md 含双轨 wiki 协作章节(双轨收敛 Task 5)。"""
+    text = (ROOT / "docs" / "advanced-features.md").read_text(encoding="utf-8")
+    assert "双轨" in text and "Wiki 协作" in text
+    assert "WikiWriteService" in text
+    assert "sqlite_fallback" in text

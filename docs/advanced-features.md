@@ -158,3 +158,20 @@ keyword 通道(FTS5 + jieba)三项强化,提升中文召回(`retrieval_zh` Recal
 需 `reindex_all`(MCP 工具 / `indexer.reindex_all()`)重建 FTS 才能享受专名分词。检索引擎可通过
 `python evals/run_retrieval_eval.py --engine real-hybrid` 走真实 HybridSearcher 验证
 lexical 通道(对比默认 `--engine offline` 的 BM25 基线)。
+
+## 双轨 Wiki 协作
+
+两套 wiki 产物协作(轻量收敛,未合并):
+
+- **A 轨(SQLite `wiki_pages`)**:`WikiCompiler` LLM 抽取的 concept 页 + Q&A,服务
+  GUI 浏览 / lint / 工作流审计。
+- **B 轨(文件系统 `wiki/*.md`)**:`KnowledgeWorkflowService` 的 source/entity/concept
+  页 + comparisons/syntheses,**接入 RAG 主检索链路**(SizeAwareRouter + WikiReadStage)。
+
+`WikiWriteService` 统一两轨写入(`save_to_wiki` / 自动保存),任一失败不阻塞另一个。
+`WikiReadStage` 在 FS 无命中时 fallback 查 SQLite `search_wiki_fts`
+(`rag.wiki_read.sqlite_fallback`,默认 true,仅 `mode=wiki_first` 生效),使 A 轨
+concept 页也能被 `ask` 检索到(解决「只生产不消费」断层)。frontmatter `source_ids`
+跨所有 page_type 统一(`resolve_source_ids` helper,向后兼容 fallback `knowledge_id`)。
+
+主键 / workflow 状态机 / `wiki_links` 图两轨仍独立,完整统一留待后续 spec。
