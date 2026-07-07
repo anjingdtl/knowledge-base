@@ -1,0 +1,24 @@
+{
+  "recorded_at": "2026-07-07T12:10:15",
+  "version": "1.5.2",
+  "pytest": {
+    "collected_tests_rc": 0,
+    "summary": "1243 tests collected in 4.70s"
+  },
+  "ruff": {
+    "rc": 0,
+    "tail": "All checks passed!"
+  },
+  "mypy": {
+    "rc": 0,
+    "tail": "src\\gui\\main_window.py:245: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]\nsrc\\gui\\main_window.py:246: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]\nSuccess: no issues found in 178 source files"
+  },
+  "retrieval_eval": {
+    "rc": 0,
+    "tail": "  },\n  \"baseline_warnings\": [\n    \"WARNING: recall_at_5 slightly dropped from 0.8667 to 0.8667 (diff=0.0000)\",\n    \"WARNING: mrr slightly dropped from 0.7800 to 0.7800 (diff=0.0000)\",\n    \"WARNING: no_answer_accuracy slightly dropped from 0.6667 to 0.6667 (diff=0.0000)\"\n  ],\n  \"passed\": true\n}"
+  },
+  "wiki_eval": {
+    "rc": 1,
+    "tail": "    sys.exit(main())\n             ~~~~^^\n  File \"D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\evals\\run_wiki_eval.py\", line 112, in main\n    metrics = run_on_project(Path(args.project), source=args.source)\n  File \"D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\evals\\run_wiki_eval.py\", line 81, in run_on_project\n    knowledge_count = len(Database.list_knowledge(limit=10000))\n                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\nTypeError: Database.list_knowledge() missing 1 required positional argument: 'self'"
+  }
+}
