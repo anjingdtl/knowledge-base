@@ -6,7 +6,7 @@ strict=False 容忍未知键(向前兼容读取老 canonical 文件)。
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from enum import Enum
 
 

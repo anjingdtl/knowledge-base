@@ -1,10 +1,6 @@
 from __future__ import annotations
 
-from pathlib import Path
-
-import pytest
-
-from src.models.wiki_v2 import Claim, WikiPage
+from src.models.wiki_v2 import WikiPage
 from src.services.wiki_validator import WikiValidator
 
 

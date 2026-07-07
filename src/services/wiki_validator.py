@@ -10,8 +10,11 @@ from pathlib import Path
 from typing import Callable, Optional
 
 from src.models.wiki_v2 import (
-    Claim, ClaimStatus, PageStatus, WikiPage,
+    Claim,
+    ClaimStatus,
+    PageStatus,
     ValidationFinding,
+    WikiPage,
 )
 from src.services.wiki_slug import read_frontmatter
 

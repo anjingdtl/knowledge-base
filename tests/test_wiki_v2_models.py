@@ -3,8 +3,14 @@ from __future__ import annotations
 import pytest
 
 from src.models.wiki_v2 import (
-    Claim, ClaimStatus, Evidence, EvidenceStance, PageRegistryEntry,
-    PageStatus, PageType, SaveResult, ValidationFinding, WikiPage,
+    Claim,
+    ClaimStatus,
+    EvidenceStance,
+    PageRegistryEntry,
+    PageType,
+    SaveResult,
+    ValidationFinding,
+    WikiPage,
 )
 
 
