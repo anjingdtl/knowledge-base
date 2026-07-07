@@ -268,12 +268,44 @@ class WikiReadStage(PipelineStage):
             # wiki_read / blend 档:wiki 候选作(部分)检索结果
             if scale in ("wiki_read", "blend"):
                 cands, _ = locator.locate(ctx.question)
+                if not cands and Config.get("rag.wiki_read.sqlite_fallback", True):
+                    cands = self._sqlite_fallback(ctx.question)
                 if cands:
                     ctx.candidates = cands
         except Exception as e:
             logger.warning("WikiRead stage failed (non-fatal): %s", e)
             ctx.metadata.setdefault("warnings", []).append(f"wiki_read_failed: {e}")
         return ctx
+
+    def _sqlite_fallback(self, query, top_n=10, db=None):
+        """FS 无命中时查 SQLite search_wiki_fts,转 wiki 候选 schema(轻量收敛 Task 4)。
+
+        ``db`` 默认 None → 内部 import Database(生产);测试可注入 fake db
+        避开单例元类 mock 复杂性。查询失败容错返回 [](非致命)。
+        """
+        try:
+            if db is None:
+                from src.services.db import Database
+                db = Database
+            rows = db.search_wiki_fts(query, limit=top_n)
+        except Exception as e:
+            logger.warning("sqlite wiki fallback failed: %s", e)
+            return []
+        from src.services.wiki_source_ids import _parse_json_list
+        out = []
+        for r in rows:
+            out.append({
+                "id": f"wiki:sqlite:{r.get('id')}",
+                "text": r.get("content") or r.get("concept_summary") or "",
+                "metadata": {
+                    "page_type": "sqlite_concept",
+                    "title": r.get("title", ""),
+                    "source_ids": _parse_json_list(r.get("source_ids")),
+                    "wiki_hit_score": float(r.get("fts_rank", 0)),
+                },
+                "match_channels": ["wiki_sqlite"],
+            })
+        return out
 
 
 class WikiParentEnrichStage(PipelineStage):
