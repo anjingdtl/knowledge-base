@@ -1,2 +1,18 @@
 # 同义词词典（每行: 词 同义词1 同义词2，如 '知识库 知识仓库 KB'）
-# 留空则不扩展。shinehe init 生成此空模板。
+# 通用跨语种技术术语映射（中→英），适用于任何中文技术文档。
+# 留空则不扩展。shinehe init 生成空模板；本文件为通用技术术语默认集合。
+数据库 database sqlite
+搜索质量 search quality reranking
+改善 improve
+维度 dimensional dimension
+配置档 profile
+模型 model
+检索 retrieval search
+融合 fusion
+常数 constant
+权重 weight
+选项 option
+缓存 cache
+路由 router routing
+索引 index indexing
+分词 tokenize tokenizer
