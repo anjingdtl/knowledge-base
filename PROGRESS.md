@@ -309,6 +309,33 @@ dict/synonyms + reindex」。本次会话内收尾兑现 spec S4：
 - Spec/Plan：`docs/superpowers/specs/2026-07-07-knowledge-base-retrieval-zh-s4-closure-design.md`
   + `docs/superpowers/plans/2026-07-07-knowledge-base-retrieval-zh-s4-closure.md`。
 
+## 双轨 Wiki 轻量收敛 (2026-07-07, v1.5.2)
+
+W4 收口时双轨 wiki 编译分离记为 Phase 3 候选技术债。本次轻量收敛（用户选
+「轻量收敛 + 浅 fallback」范围），不碰完整迁移的高风险障碍：
+
+- **背景**：两轨——A（MCP→SQLite `WikiCompiler`,concept 页）+ B
+  （path_indexer→文件系统 `KnowledgeWorkflowService`,source/entity 页）。问题:
+  ① A 轨「只生产不消费」断层（SQLite wiki 没进 ask 主链路）;② 双写散落
+  （save_to_wiki + _try_auto_save_wiki 两处）;③ frontmatter 溯源字段异构。
+- **4 组件落地**:
+  1. `resolve_source_ids` helper（`src/services/wiki_source_ids.py`）+ `_parse_json_list`
+     —— 统一 FM 溯源读取（旧文件 fallback knowledge_id）+ SQLite JSON 解析。
+  2. frontmatter `source_ids` 跨所有 page_type 统一（WikiSourceCompiler +
+     WikiEntityUpdater 写入;WikiParentRetriever + WikiFsLint 改用 helper）。
+  3. `WikiWriteService`（新模块）统一双写,A/B 任一失败不阻塞;收敛 save_to_wiki
+     + _try_auto_save_wiki 两处散落双写;AppContainer 注入 lazy property。
+  4. `WikiReadStage._sqlite_fallback`——FS 无命中时查 `search_wiki_fts` 转候选,
+     配置门控 `rag.wiki_read.sqlite_fallback`（默认 true,仅 mode=wiki_first 生效,
+     legacy 零影响 S6）。解决 A 轨断层。
+- **未碰（完整迁移留独立 spec）**:主键统一（uuid4↔路径式）/ workflow 状态机迁移
+  / wiki_links 物化 / A 轨编译器改写。
+- **验证**:新增 18 测试（source_ids 8 + frontmatter 2 + write_service 3 +
+  sqlite_fallback 4 + docs 1）；全量回归绿（基线 1224 +18，零退化）;ruff/mypy 0；
+  gitnexus impact _try_auto_save_wiki risk LOW（1 caller,0 process）。
+- Spec/Plan：`docs/superpowers/specs/2026-07-07-knowledge-base-dual-track-wiki-convergence-design.md`
+  + `docs/superpowers/plans/2026-07-07-knowledge-base-dual-track-wiki-convergence.md`。
+
 ## 50 轮 MCP 测试报告 BUG 修复 — 已完成 (2026-06-25)
 
 基于 `shineheKB-MCP测试报告-50轮.docx`（50 轮，成功率 96.0%）的 2 个 Bug + 2 个待改进项做代码层根因定位并全量修复。
