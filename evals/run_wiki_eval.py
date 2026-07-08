@@ -78,7 +78,9 @@ def run_on_project(project_dir: Path, source: str = "auto") -> dict:
     else:
         report = WikiLint().run()
 
-    knowledge_count = len(Database.list_knowledge(limit=10000))
+    # list_knowledge 是实例方法;Database 是元类单例,取 _instance 或按 db_path 实例化。
+    db = Database._instance if Database._instance is not None else Database(str(Config.get_db_path()))
+    knowledge_count = len(db.list_knowledge(limit=10000))
     orphan_pages = sum(1 for f in report["findings"] if f["category"] == "orphan")
     outdated = sum(1 for f in report["findings"] if f["category"] == "outdated_claim")
     total_wiki_pages = report["total_pages"]
