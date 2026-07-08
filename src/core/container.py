@@ -123,6 +123,9 @@ class AppContainer:
     _graph_traversal: Optional[object] = field(default=None, repr=False)
     _query_explainer: Optional[object] = field(default=None, repr=False)
     _agentic_router: Optional[object] = field(default=None, repr=False)
+    _wiki_claim_extractor: Optional[object] = field(default=None, repr=False)
+    _wiki_claim_matcher: Optional[object] = field(default=None, repr=False)
+    _wiki_merge_engine: Optional[object] = field(default=None, repr=False)
 
     # --- 操作安全服务 (lazy init) ---
     _operation_log: Optional[object] = field(default=None, repr=False)
@@ -382,6 +385,30 @@ class AppContainer:
             )
             self._track_service("_wiki_projection")
         return self._wiki_projection
+
+    @property
+    def wiki_claim_extractor(self):
+        if self._wiki_claim_extractor is None:
+            from src.services.wiki_claim_extractor import ClaimExtractor as _Ext
+            self._wiki_claim_extractor = _Ext(llm=self.llm, config=self.config)
+            self._track_service("_wiki_claim_extractor")
+        return self._wiki_claim_extractor
+
+    @property
+    def wiki_claim_matcher(self):
+        if self._wiki_claim_matcher is None:
+            from src.services.wiki_claim_matcher import ClaimMatcher as _Mat
+            self._wiki_claim_matcher = _Mat(embedding=self.embedding, config=self.config)
+            self._track_service("_wiki_claim_matcher")
+        return self._wiki_claim_matcher
+
+    @property
+    def wiki_merge_engine(self):
+        if self._wiki_merge_engine is None:
+            from src.services.wiki_merge_engine import WikiMergeEngine as _Merge
+            self._wiki_merge_engine = _Merge(repository=self.wiki_repository, config=self.config)
+            self._track_service("_wiki_merge_engine")
+        return self._wiki_merge_engine
 
     @property
     def wiki_write_service(self):
