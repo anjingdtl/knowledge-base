@@ -251,7 +251,29 @@ class TestExactWithConflict:
 
 
 # ---------------------------------------------------------------------------
-# 11. Reasons populated and stable
+# 11. Exact match survives low score (M-3 regression test)
+# ---------------------------------------------------------------------------
+class TestExactMatchSurvivesLowScore:
+    """When embedding is unavailable and scores are all 0, exact hash match must
+    still be detected before the score guard short-circuits to 'new'.
+    Regression test for CD1 degradation scenario (T3.3 container fallback).
+    """
+
+    def test_exact_match_survives_low_score(self):
+        matcher = ClaimMatcher()
+        statement = "FTTR下行速率可达100Mbps"
+        existing = _claim("c1", statement, object_refs=["100Mbps"])
+        new = _claim("n1", statement, object_refs=["100Mbps"])
+        # Inject low score (< unresolved_threshold 0.72) — should still be duplicate
+        decision = matcher.match(new, candidates=[existing], scores={"c1": 0.5})
+        assert decision.action == "duplicate"
+        assert decision.target_claim_id == "c1"
+        assert decision.score == 1.0
+        assert "exact normalized_statement match" in decision.reasons[0]
+
+
+# ---------------------------------------------------------------------------
+# 12. Reasons populated and stable
 # ---------------------------------------------------------------------------
 class TestReasons:
     def test_reasons_populated_and_stable(self):
@@ -290,7 +312,7 @@ class TestReasons:
 
 
 # ---------------------------------------------------------------------------
-# 12. Embedding path — fake embedding service, no crash
+# 13. Embedding path — fake embedding service, no crash
 # ---------------------------------------------------------------------------
 class TestEmbeddingPath:
     def test_embedding_path_optional(self):

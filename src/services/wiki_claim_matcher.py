@@ -29,7 +29,7 @@ class ClaimMatchDecision:
     action: str  # new | supports | refines | contradicts | supersedes | duplicate | unresolved
     target_claim_id: str | None = None
     score: float = 0.0
-    reasons: list = field(default_factory=list)  # list[str]
+    reasons: list[str] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -39,8 +39,9 @@ def _normalize(text: str) -> str:
     """归一化: lower + 去标点 + 去多余空白。
 
     规则与 wiki_claim_extractor.ClaimExtractor._normalize 完全一致:
-    re.sub(r"[^\\w\\s]", "", text, flags=re.UNICODE).lower().strip()
-    + re.sub(r"\\s+", " ", ...)
+    1. re.sub 去除非 word/空白字符 (pattern class: complement of word + whitespace)
+    2. .lower().strip()
+    3. re.sub 多余空白合为单空格
     """
     text = re.sub(r"[^\w\s]", "", text, flags=re.UNICODE)
     text = text.lower().strip()
@@ -91,35 +92,12 @@ class ClaimMatcher:
         unresolved_thresh = self._cfg("wiki.claims.unresolved_threshold", 0.72)
         semantic_thresh = self._cfg("wiki.claims.semantic_match_threshold", 0.88)
 
-        # No candidates → new
+        # Step 1: No candidates → new
         if not candidates:
             return ClaimMatchDecision(action="new", target_claim_id=None, score=0.0,
                                        reasons=["no candidates provided"])
 
-        # Compute or use injected scores
-        if scores is None:
-            scores = self._embed_scores(new_claim, candidates)
-
-        # Find best candidate by score
-        best_claim: Claim | None = None
-        best_score: float = 0.0
-        for c in candidates:
-            s = scores.get(c.claim_id, 0.0)
-            if s > best_score:
-                best_score = s
-                best_claim = c
-
-        if best_claim is None or best_score < unresolved_thresh:
-            return ClaimMatchDecision(
-                action="new",
-                target_claim_id=None,
-                score=best_score,
-                reasons=[f"best score {best_score:.2f} < unresolved threshold {unresolved_thresh}"],
-            )
-
-        # --- From here, best_claim is not None and best_score >= unresolved_thresh ---
-
-        # Step 2: exact match check
+        # Step 2: exact hash match (deterministic truth, independent of scores)
         new_hash = self._exact_hash(new_claim)
         exact_match: Claim | None = None
         for c in candidates:
@@ -155,7 +133,30 @@ class ClaimMatcher:
                 reasons=reasons_exact,
             )
 
-        # Step 3: semantic mid-range (unresolved_threshold <= score < semantic_threshold)
+        # Step 3: Compute or use injected scores
+        if scores is None:
+            scores = self._embed_scores(new_claim, candidates)
+
+        # Find best candidate by score
+        best_claim: Claim | None = None
+        best_score: float = 0.0
+        for c in candidates:
+            s = scores.get(c.claim_id, 0.0)
+            if s > best_score:
+                best_score = s
+                best_claim = c
+
+        if best_claim is None or best_score < unresolved_thresh:
+            return ClaimMatchDecision(
+                action="new",
+                target_claim_id=None,
+                score=best_score,
+                reasons=[f"best score {best_score:.2f} < unresolved threshold {unresolved_thresh}"],
+            )
+
+        # --- From here, best_claim is not None and best_score >= unresolved_thresh ---
+
+        # Step 4: semantic mid-range (unresolved_threshold <= score < semantic_threshold)
         if unresolved_thresh <= best_score < semantic_thresh:
             return ClaimMatchDecision(
                 action="unresolved",
@@ -167,18 +168,20 @@ class ClaimMatcher:
                 ],
             )
 
-        # Step 4: high semantic (best_score >= semantic_threshold, non-exact)
+        # Step 5: high semantic (best_score >= semantic_threshold, non-exact)
         target = best_claim
         reasons_high = [
             f"semantic similarity {best_score:.2f} >= {semantic_thresh}",
         ]
 
-        # 4a: supersedes (temporal update takes priority over plain object conflict
+        # 5a: supersedes (temporal update takes priority over plain object conflict
         #     — fixture-anchored: temporal+object_diff → supersedes, not contradicts)
-        if self._supersedes(new_claim, target):
+        supersedes_field = self._supersedes(new_claim, target)
+        if supersedes_field:
+            target_time_value = target.valid_to if supersedes_field == "valid_to" else target.valid_from
             reasons_high.append(
                 f"temporal supersedes: new valid_from={new_claim.valid_from} "
-                f"> target valid_from={target.valid_from} or valid_to={target.valid_to}"
+                f"> target {supersedes_field}={target_time_value}"
             )
             return ClaimMatchDecision(
                 action="supersedes",
@@ -187,7 +190,7 @@ class ClaimMatcher:
                 reasons=reasons_high,
             )
 
-        # 4b: objects conflict OR new has contradicts stance evidence → contradicts
+        # 5b: objects conflict OR new has contradicts stance evidence → contradicts
         if self._objects_conflict(new_claim, target):
             reasons_high.append(
                 f"object_refs conflict: {set(new_claim.object_refs)} vs {set(target.object_refs)}"
@@ -208,7 +211,7 @@ class ClaimMatcher:
                 reasons=reasons_high,
             )
 
-        # 4c: refines
+        # 5c: refines
         if self._refines(new_claim, target):
             reasons_high.append(
                 f"new claim refines target: "
@@ -222,7 +225,7 @@ class ClaimMatcher:
                 reasons=reasons_high,
             )
 
-        # 4d: supports (fallback)
+        # 5d: supports (fallback)
         reasons_high.append("no conflict, supersedes, or refinement detected")
         return ClaimMatchDecision(
             action="supports",
@@ -297,7 +300,7 @@ class ClaimMatcher:
         )
 
     @staticmethod
-    def _supersedes(new: Claim, target: Claim) -> bool:
+    def _supersedes(new: Claim, target: Claim) -> bool | str:
         """new 时间更晚 + subject+predicate 相同 + object 不同。
 
         条件：
@@ -305,22 +308,28 @@ class ClaimMatcher:
         - subject_refs 有交集
         - predicate 相同
         - object_refs 不同（任一方或双方为空也视为不同）
+
+        Returns:
+            False if not supersedes; a human-readable reason string if supersedes
+            (e.g. "valid_from" or "valid_to") indicating which target field was compared.
         """
         if not new.valid_from:
             return False
-
-        # Compare dates as strings (ISO format is lexicographically comparable)
-        target_time = target.valid_to or target.valid_from
-        if not target_time:
-            return False
-
-        newer = new.valid_from > target_time
 
         same_subject = bool(set(new.subject_refs) & set(target.subject_refs))
         same_predicate = new.predicate == target.predicate
         different_object = set(new.object_refs) != set(target.object_refs)
 
-        return newer and same_subject and same_predicate and different_object
+        if not (same_subject and same_predicate and different_object):
+            return False
+
+        # Compare dates as strings (ISO format is lexicographically comparable)
+        if target.valid_to and new.valid_from > target.valid_to:
+            return "valid_to"
+        if target.valid_from and new.valid_from > target.valid_from:
+            return "valid_from"
+
+        return False
 
     @staticmethod
     def _refines(new: Claim, target: Claim) -> bool:
