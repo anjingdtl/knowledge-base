@@ -159,4 +159,4 @@ mypy src:               0 errors (179 source files)
 
 ### Commit
 
-SHA 在提交后填写。
+`8edaee8` — `fix(wiki-v2): normalize locator path and gate projection enrichment`
