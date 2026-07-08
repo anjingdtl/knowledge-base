@@ -143,6 +143,9 @@ class AppContainer:
     _wiki_page_locator: Optional[object] = field(default=None, repr=False)
     _size_aware_router: Optional[object] = field(default=None, repr=False)
 
+    # --- Phase 3.5 C4:统一 wiki 读取端口 ---
+    _wiki_query_service: Optional[object] = field(default=None, repr=False)
+
     # --- 第二阶段 W2:wiki parent-child 检索 ---
     _wiki_parent_retriever: Optional[object] = field(default=None, repr=False)
 
@@ -444,6 +447,19 @@ class AppContainer:
             self._wiki_parent_retriever = WikiParentRetriever()
             self._track_service("_wiki_parent_retriever")
         return self._wiki_parent_retriever
+
+    @property
+    def wiki_query_service(self):
+        if self._wiki_query_service is None:
+            from src.services.wiki_query_service import WikiQueryService as _QS
+            self._wiki_query_service = _QS(
+                repository=self.wiki_repository,
+                projection=self.wiki_projection,
+                database=self.db,
+                config=self.config,
+            )
+            self._track_service("_wiki_query_service")
+        return self._wiki_query_service
 
 
 def create_container(config_path: str | None = None) -> AppContainer:
