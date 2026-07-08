@@ -88,23 +88,30 @@ class WikiProjection:
     def rebuild(self) -> ProjectionResult:
         """全量重建: 清空 6 v2 表 + FTS, 再从 repository 全灌。
 
+        原子性: 整个 rebuild 在单个事务内执行,中途失败会回滚到重建前状态。
         不受 enabled 影响(手动全量重建总是执行)。
         """
         result = ProjectionResult()
-        self._clear_v2_tables()
-        # 投影所有 page
-        pages = self._repo.list_pages()
-        registry = self._repo.get_registry()
-        for page in pages:
-            entry = registry.get(page.page_id, {})
-            path = entry.get("path", "")
-            self._upsert_page(page, path)
-            result.processed += 1
-        # 投影所有 claim
-        claims = self._repo.list_claims()
-        for claim in claims:
-            self._upsert_claim(claim)
-            result.processed += 1
+        conn = self._db.get_conn()
+        try:
+            self._clear_v2_tables(commit=False)
+            # 投影所有 page
+            pages = self._repo.list_pages()
+            registry = self._repo.get_registry()
+            for page in pages:
+                entry = registry.get(page.page_id, {})
+                path = entry.get("path", "")
+                self._upsert_page(page, path, commit=False)
+                result.processed += 1
+            # 投影所有 claim
+            claims = self._repo.list_claims()
+            for claim in claims:
+                self._upsert_claim(claim, commit=False)
+                result.processed += 1
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
         return result
 
     def verify_parity(self) -> list[ValidationFinding]:
@@ -168,7 +175,7 @@ class WikiProjection:
 
     # ---- 私有投影方法 ----
 
-    def _upsert_page(self, page: WikiPage, path: str) -> None:
+    def _upsert_page(self, page: WikiPage, path: str, *, commit: bool = True) -> None:
         """INSERT OR REPLACE wiki_pages_v2 (by page_id) + FTS + wiki_page_claims。"""
         conn = self._db.get_conn()
         conn.execute(
@@ -199,9 +206,10 @@ class WikiProjection:
                 "INSERT INTO wiki_page_claims (page_id, claim_id, display_order) VALUES (?,?,?)",
                 (page.page_id, cid, idx),
             )
-        conn.commit()
+        if commit:
+            conn.commit()
 
-    def _upsert_claim(self, claim: Claim) -> None:
+    def _upsert_claim(self, claim: Claim, *, commit: bool = True) -> None:
         """INSERT OR REPLACE wiki_claims (by claim_id, claim_scope=NULL) + evidence。"""
         conn = self._db.get_conn()
         conn.execute(
@@ -220,7 +228,7 @@ class WikiProjection:
         conn.execute("DELETE FROM wiki_claim_evidence WHERE claim_id = ?", (claim.claim_id,))
         for ev in claim.evidence:
             conn.execute(
-                "INSERT OR REPLACE INTO wiki_claim_evidence "
+                "INSERT INTO wiki_claim_evidence "
                 "(evidence_id, claim_id, stance, knowledge_id, block_id, "
                 "location_json, source_revision, excerpt_hash, observed_at) "
                 "VALUES (?,?,?,?,?,?,?,?,?)",
@@ -231,24 +239,27 @@ class WikiProjection:
                     ev.source_revision, ev.excerpt_hash, ev.observed_at,
                 ),
             )
-        conn.commit()
+        if commit:
+            conn.commit()
 
-    def _delete_page(self, page_id: str) -> None:
+    def _delete_page(self, page_id: str, *, commit: bool = True) -> None:
         """DELETE FROM wiki_pages_v2 / FTS / wiki_page_claims。"""
         conn = self._db.get_conn()
         conn.execute("DELETE FROM wiki_page_claims WHERE page_id = ?", (page_id,))
         conn.execute("DELETE FROM wiki_pages_v2_fts WHERE page_id = ?", (page_id,))
         conn.execute("DELETE FROM wiki_pages_v2 WHERE page_id = ?", (page_id,))
-        conn.commit()
+        if commit:
+            conn.commit()
 
-    def _delete_claim(self, claim_id: str) -> None:
+    def _delete_claim(self, claim_id: str, *, commit: bool = True) -> None:
         """DELETE FROM wiki_claims / wiki_claim_evidence。"""
         conn = self._db.get_conn()
         conn.execute("DELETE FROM wiki_claim_evidence WHERE claim_id = ?", (claim_id,))
         conn.execute("DELETE FROM wiki_claims WHERE claim_id = ?", (claim_id,))
-        conn.commit()
+        if commit:
+            conn.commit()
 
-    def _clear_v2_tables(self) -> None:
+    def _clear_v2_tables(self, *, commit: bool = True) -> None:
         """DELETE FROM 全部 v2 表 (rebuild 用), wiki_projection_state 保留。"""
         conn = self._db.get_conn()
         tables = [
@@ -261,4 +272,5 @@ class WikiProjection:
         ]
         for t in tables:
             conn.execute(f"DELETE FROM {t}")
-        conn.commit()
+        if commit:
+            conn.commit()

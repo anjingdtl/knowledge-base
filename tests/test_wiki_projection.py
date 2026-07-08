@@ -269,3 +269,42 @@ def test_disabled_skips_processing(repo_and_proj):
     assert result.skipped >= 1
     assert result.processed == 0
     assert _v2_count(db, "wiki_pages_v2") == 0
+
+
+# ---- 测试 11: rebuild 原子性 — 中途失败回滚 ----
+def test_rebuild_atomic_on_failure(repo_and_proj):
+    repo, proj, db = repo_and_proj
+    # 先通过 process_outbox 投影 1 个 page，建立基线
+    page1 = _make_page(page_id="pre_existing_page")
+    repo.save_page(page1)
+    proj.process_outbox()
+    assert _v2_count(db, "wiki_pages_v2") == 1
+
+    # 保存 2 个额外 page 到 repo，rebuild 时会尝试投影全部 3 个
+    page_a = _make_page(page_id="page_a")
+    page_b = _make_page(page_id="page_b")
+    repo.save_page(page_a)
+    repo.save_page(page_b)
+
+    # monkeypatch proj._upsert_page 让 page_b 抛异常
+    original_upsert = proj._upsert_page
+
+    def _failing_upsert(page, path, **kwargs):
+        if page.page_id == "page_b":
+            raise RuntimeError("simulated failure on page_b")
+        return original_upsert(page, path, **kwargs)
+
+    mp = pytest.MonkeyPatch()
+    mp.setattr(proj, "_upsert_page", _failing_upsert)
+    try:
+        with pytest.raises(RuntimeError, match="simulated failure on page_b"):
+            proj.rebuild()
+    finally:
+        mp.undo()
+
+    # 回滚成功: 原有投影数据不受影响（1 行），不是 0（被清空）也不是 3（部分写入）
+    assert _v2_count(db, "wiki_pages_v2") == 1
+    row = db.get_conn().execute(
+        "SELECT page_id FROM wiki_pages_v2",
+    ).fetchone()
+    assert row[0] == "pre_existing_page"
