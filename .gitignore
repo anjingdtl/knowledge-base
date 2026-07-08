@@ -13,6 +13,8 @@ chroma/
 /data/*
 !/data/lexical_zh_dict.txt
 !/data/lexical_zh_synonyms.txt
+# 本地整库备份残留（data 目录副本，含大量 .db，不入库）
+/data.backup/
 *.db
 *.db-shm
 *.db-wal
