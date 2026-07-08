@@ -130,7 +130,9 @@ class ClaimExtractor:
                 fragments, source_summary, _max_llm_calls, call_counter
             )
             result.llm_calls = call_counter[0]
-        except (RuntimeError, ValueError) as exc:
+        except Exception as exc:  # noqa: BLE001
+            # spec §8.1 铁律：extractor 是 ingest 一环，任何 LLM 失败（异常/超时/坏 JSON）
+            # 降级为 warnings/errors 返回空结果，绝不向上抛，不阻断 raw 索引。
             result.llm_calls = call_counter[0]
             result.errors.append(f"LLM 抽取失败: {exc}")
             return result
