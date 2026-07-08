@@ -173,6 +173,32 @@ wiki:
   lint_contradictions: true      # 启用 wiki lint 闭环
   max_llm_calls_per_ingest: 3
   query_save_min_length: 100
+  canonical_v2:                 # Phase 3.5 C5:canonical wiki v2 分阶段切换
+    mode: off                   # off | shadow | canary | primary(off=legacy 零变化)
+    projection_fallback_to_filesystem: true
+    compatibility_read_legacy_sqlite: true
+    compatibility_write_legacy_sqlite: false
+  claims:                       # Claim 抽取/匹配配置(spec §9)
+    enabled: true
+    max_claims_per_ingest: 30
+    max_llm_calls_per_ingest: 4
+    exact_match_threshold: 1.0
+    semantic_match_threshold: 0.88
+    unresolved_threshold: 0.72
+    require_block_evidence: true
+  rebuild:                      # 来源失效传播(Phase 5)
+    auto_on_source_update: false
+    auto_publish_low_risk: false
+    max_pages_per_job: 100
+    max_depth: 5
+  projection:                   # SQLite projection(outbox + 幂等重建)
+    enabled: true
+    auto_consume_outbox: true
+    fallback_to_full_rebuild: true
+    max_retry: 5
+  validation:                   # canonical 校验门控
+    block_publish_on_error: true
+    block_publish_on_warning: false
   site:
     base_url: ''
     enabled: false

@@ -380,7 +380,8 @@ class AppContainer:
     def wiki_projection(self):
         if self._wiki_projection is None:
             from src.services.wiki_projection import WikiProjection as _Proj
-            enabled = bool(self.config.get("canonical_v2.enabled", False))
+            from src.services.wiki_query_service import resolve_canonical_mode
+            enabled = resolve_canonical_mode(self.config) != "off"
             self._wiki_projection = _Proj(
                 repository=self.wiki_repository,
                 database=self.db,
@@ -388,6 +389,11 @@ class AppContainer:
             )
             self._track_service("_wiki_projection")
         return self._wiki_projection
+
+    @property
+    def canonical_mode(self) -> str:
+        from src.services.wiki_query_service import resolve_canonical_mode
+        return resolve_canonical_mode(self.config)
 
     @property
     def wiki_claim_extractor(self):

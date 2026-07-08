@@ -22,11 +22,45 @@ from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any, cast
 
 from src.models.wiki_v2 import Claim, WikiPage
 
 logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Phase 3.5 C5:canonical v2 分阶段切换模式
+# ---------------------------------------------------------------------------
+class WikiCanonicalMode(str, Enum):
+    """canonical v2 切换模式(spec C5)。"""
+
+    OFF = "off"            # 不执行 V2 主流程,legacy 行为零变化
+    SHADOW = "shadow"      # V2 隔离运行,不影响正式 wiki,输出 diff(Phase 4A)
+    CANARY = "canary"      # 仅 allowlist 对象用 V2 主写(Phase 4B)
+    PRIMARY = "primary"    # V2 成为主写路径(Phase 4C)
+
+
+CANONICAL_MODES: tuple[str, ...] = tuple(m.value for m in WikiCanonicalMode)
+
+
+def resolve_canonical_mode(config: Any, default: str = WikiCanonicalMode.OFF.value) -> str:
+    """解析 wiki.canonical_v2.mode;向后兼容旧 canonical_v2.enabled。
+
+    - mode 显式指定(off/shadow/canary/primary)→ 用之
+    - 缺省 → 看旧 canonical_v2.enabled(true→primary, false/缺省→off)
+    - 非法值 → default
+    """
+    mode: str | None = None
+    if config is not None:
+        mode = config.get("wiki.canonical_v2.mode", None)
+    if mode is None:
+        legacy = bool(config.get("canonical_v2.enabled", False)) if config is not None else False
+        mode = WikiCanonicalMode.PRIMARY.value if legacy else default
+    if mode not in CANONICAL_MODES:
+        mode = default
+    return mode
 
 
 @dataclass
