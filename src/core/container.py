@@ -433,8 +433,11 @@ class AppContainer:
     @property
     def wiki_page_locator(self):
         if self._wiki_page_locator is None:
+            from pathlib import Path as _Path
+
             from src.services.wiki_page_locator import WikiPageLocator
-            self._wiki_page_locator = WikiPageLocator(projection=self.wiki_projection)
+            wiki_dir = _Path(self.config.get("knowledge_workflow.wiki_dir", "wiki"))
+            self._wiki_page_locator = WikiPageLocator(wiki_dir=wiki_dir, projection=self.wiki_projection)
             self._track_service("_wiki_page_locator")
         return self._wiki_page_locator
 

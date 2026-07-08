@@ -21,7 +21,6 @@ import jieba
 
 from src.services.wiki_index_compiler import PAGE_TYPE_DIRS
 from src.services.wiki_slug import read_frontmatter
-from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +60,8 @@ class WikiPageLocator:
         if wiki_dir is not None:
             self._wiki_dir = Path(wiki_dir)
         else:
-            self._wiki_dir = Path(Config.get("knowledge_workflow.wiki_dir", "wiki"))
+            # C6:不抓全局 Config;默认 "wiki",生产由 AppContainer 注入解析好的路径
+            self._wiki_dir = Path("wiki")
         self._projection = projection
         self._projection_warned: bool = False
 

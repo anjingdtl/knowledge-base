@@ -196,3 +196,45 @@ def test_allowlist_entries_actually_exist():
             assert _find_calls(tree, {name}), (
                 f"allowlist 条目 {rel}:{name} 在模块中找不到对应调用(已迁移?请移除该豁免)"
             )
+
+
+# ---------------------------------------------------------------------------
+# C6:wiki_v2 新服务禁止直接 import 全局单例(仅最外层 adapter 可解析后注入)
+# ---------------------------------------------------------------------------
+WIKI_V2_SERVICE_MODULES: set[str] = {
+    "services/wiki_repository.py",
+    "services/wiki_projection.py",
+    "services/wiki_claim_extractor.py",
+    "services/wiki_claim_matcher.py",
+    "services/wiki_merge_engine.py",
+    "services/wiki_page_locator.py",
+    "services/wiki_query_service.py",
+}
+
+# 禁止直接 import 的全局单例(完整模块路径)
+FORBIDDEN_GLOBAL_SINGLETONS: set[str] = {
+    "src.core.container.get_active_container",
+    "src.utils.config.Config",
+    "src.services.db.Database",
+}
+
+
+def test_wiki_v2_services_no_global_singleton_imports():
+    """C6:新 wiki_v2 服务不得直接 import 全局单例;仅最外层 adapter(container)可解析后注入。"""
+    for rel in WIKI_V2_SERVICE_MODULES:
+        path = SRC / rel
+        if not path.exists():
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module:
+                for alias in node.names:
+                    full = f"{node.module}.{alias.name}"
+                    assert full not in FORBIDDEN_GLOBAL_SINGLETONS, (
+                        f"{rel} 违规 import 全局单例 {full}(C6:改用构造函数注入)"
+                    )
+            elif isinstance(node, ast.Import):
+                for alias in node.names:
+                    assert alias.name not in FORBIDDEN_GLOBAL_SINGLETONS, (
+                        f"{rel} 违规 import {alias.name}(C6:改用构造函数注入)"
+                    )
