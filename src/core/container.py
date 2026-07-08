@@ -105,6 +105,7 @@ class AppContainer:
     _reranker: Optional[object] = field(default=None, repr=False)
     _wiki_compiler: Optional[object] = field(default=None, repr=False)
     _wiki_repository: Optional[object] = field(default=None, repr=False)
+    _wiki_projection: Optional[object] = field(default=None, repr=False)
     _wiki_write_service: Optional[object] = field(default=None, repr=False)
     _graph_builder: Optional[object] = field(default=None, repr=False)
     _librarian: Optional[object] = field(default=None, repr=False)
@@ -368,6 +369,19 @@ class AppContainer:
             )
             self._track_service("_wiki_repository")
         return self._wiki_repository
+
+    @property
+    def wiki_projection(self):
+        if self._wiki_projection is None:
+            from src.services.wiki_projection import WikiProjection as _Proj
+            enabled = bool(self.config.get("canonical_v2.enabled", False))
+            self._wiki_projection = _Proj(
+                repository=self.wiki_repository,
+                database=self.db,
+                enabled=enabled,
+            )
+            self._track_service("_wiki_projection")
+        return self._wiki_projection
 
     @property
     def wiki_write_service(self):

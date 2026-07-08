@@ -175,6 +175,18 @@ class WikiRepository:
                     pages.append(p)
         return pages
 
+    def list_claims(self) -> list[Claim]:
+        """列出 claims/ 目录下所有非 RETRACTED claim(按文件名排序)。"""
+        claims: list[Claim] = []
+        claims_dir = self._wiki_dir / "claims"
+        if not claims_dir.is_dir():
+            return claims
+        for yaml_path in sorted(claims_dir.glob("*.yaml")):
+            c = self.get_claim(yaml_path.stem)  # get_claim 已过滤 RETRACTED + 校验失败
+            if c is not None:
+                claims.append(c)
+        return claims
+
     def _read_page_file(self, path: Path) -> WikiPage | None:
         fm = read_frontmatter(path)
         if not fm.get("page_id"):
