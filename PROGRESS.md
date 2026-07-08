@@ -50,8 +50,115 @@ C2 修 / 配置状态机 C5 / 读端口 C4)亦闭环。
 详见 `docs/superpowers/reviews/2026-07-08-canonical-wiki-v2-current-state.md`(审计)
 + `docs/architecture/wiki-v2-claim-merge-contract.md`(契约)。
 
-**下一步**:Phase 4A Shadow 主工作流接入(claim 流程接入真实 ingest,但不影响正式 canonical;
-输出 legacy 与 V2 差异报告)。Phase 4 前置门禁已全开。
+### 建设全景与进度
+
+| 阶段 | 状态 | 说明 |
+|---|---|---|
+| Phase 0-3 | ✅ 已完成 | Canonical 地基(模型/Schema/Repository/Projection/Extractor/Matcher/Merge) |
+| Phase 3.5 纠偏门禁 | ✅ 已完成(本轮) | C0-C6,Phase 4 前置门禁全开 |
+| Phase 4A Shadow | ⏳ **下一步** | claim 流程接入真实 ingest,不影响正式 canonical |
+| Phase 4B Canary | ⏳ | 显式对象用 V2 主写,高风险动作强制 review |
+| Phase 4C Primary | ⏳ | V2 成主写路径,4 模块改造,守卫 allowlist 收缩 |
+| Phase 5 失效传播 | ⏳ | 依赖图 + 来源更新/删除级联重编译 |
+| Phase 6 迁移/反馈/评测 | ⏳ | A/B 轨迁移 + 用户反馈 + 知识演进评测 |
+
+---
+
+## Canonical Wiki V2 后续建设方向(交下一个 Agent)
+
+> 权威路线:`docs/superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md` §6。
+> 严格按 4A→4B→4C→5→6 顺序,**未通过上一阶段验收不得进下一阶段**。
+
+### Phase 4A:Shadow 主工作流接入(下一步)
+
+- **目标**:claim 流程(extractor→matcher→merge)接入真实 ingest,但 V2 输出写隔离 staging(`wiki/_shadow/`),不影响正式 canonical(`wiki/*.md`);输出 legacy↔V2 差异报告
+- **前置**:Phase 3.5 门禁(已全开);`wiki.canonical_v2.mode=shadow`(C5 已提供)
+- **关键模块**:`KnowledgeWorkflowService` 增加 shadow claim 链(raw 索引成功后 shadow 抽取→匹配→合并→`_shadow/` 写,不进正式 outbox/projection);新建差异报告生成器
+- **验收**:raw 索引不受影响;legacy wiki 正常;差异报告含(新 Claim 数/自动合并/unresolved/冲突/Evidence 缺失/Page diff/LLM 成本/延迟);退出=至少一组真实个人知识库数据运行 + 抽样人工核验
+- **commit**:`feat(wiki-v2): integrate shadow canonical workflow`
+- **风险**:LLM 成本(受 `wiki.claims.max_llm_calls_per_ingest` 限);shadow 隔离必须严格(C3 transaction + 路径分离);C2 黄金集 5 xfailed 用真实数据收紧
+
+### Phase 4B:Canary Canonical 切换
+
+- **目标**:显式 allowlist 目录/knowledge_id 用 V2 主写;`contradicts`/`supersedes`/低置信 `refines` 强制 review;关闭自动发布
+- **前置**:Phase 4A shadow 真实数据抽样人工核验通过
+- **关键**:canary allowlist 配置;每次操作可回滚 transaction ID(C3 已支持);canary parity(projection verify_parity)
+- **验收**:连续多轮 ingest 无半写;无错误 supersede/contradict;projection drift 自动修复;rollback 实测;核心 MCP 检索无回归;E2E-6
+- **commit**:`feat(wiki-v2): enable canary canonical workflow`
+- **风险**:canary 对象选择;review 积压;canary↔legacy 并存一致性
+
+### Phase 4C:Primary 写路径切换
+
+- **目标**:V2 成主写路径;`KnowledgeWorkflowService` 只编排(source→extractor→matcher→merge→composer→repository tx→outbox);`WikiWriteService` 改 canonical 写入口;`WikiCompiler` 降级 adapter;`WikiEntityUpdater` 改建议服务
+- **前置**:Phase 4B canary 稳定
+- **关键**:改造 4 模块;**T0.2 守卫 allowlist 逐步清空**(C1 已扩至 11 处越界写,4C 改造经 Repository 后逐条移除);`WikiQueryService`(C4)替换 SearchService/RagPipeline/WikiReadStage/MCP/API 各自 wiki 读取
+- **验收**:守卫 allowlist 清空;不双写;旧返回字段兼容(`sqlite_page_id` deprecated + 新 `page_id`);E2E-6
+- **commit**:`refactor(wiki-v2): switch primary canonical write path`
+- **风险**:主路径切换破坏检索(三层门控 + 失败隔离 + 强回归);claim 孤儿边缘收敛
+
+### Phase 5:依赖图与失效传播
+
+- **目标**:来源更新/删除→定位受影响 Evidence/Claim/Page→staging 重编译→diff→review/publish→projection refresh
+- **前置**:Phase 4C Primary 稳定
+- **关键**:新建 `wiki_dependency_service`(source→evidence→claim→page 图,环检测,max_depth)+ `wiki_rebuild_service`(级联重编译);`path_indexer`/`file_watcher` 触发 rebuild job;**启用 C2 `source_update`/`source_delete` 黄金集**(已标注 Phase 5)
+- **验收**:E2E-3(来源更新→stale Evidence→unsupported→review)+ E2E-4(删 A 仍 active,剩 B);unchanged block 不重编译;job cancel;max_pages 保护
+- **commit**:`feat(wiki-v2): add dependency impact planning` + `feat(wiki-v2): add staged source rebuild`
+- **风险**:传播风暴(max_depth=5/max_pages_per_job=100/防环/debounce)
+
+### Phase 6:迁移/反馈/评测
+
+- **目标**:A/B 轨→canonical 迁移 + 用户反馈(confirm/reject/correct/retract)+ 知识演进评测
+- **前置**:Phase 5
+- **关键**:`wiki_v2_migrator`(`--dry-run`/`--apply`/`--rollback`,migration lock + 备份)+ `wiki_feedback_service`(反馈→Claim 状态 + operation log,不改 raw)+ `evals/run_knowledge_evolution_eval.py`(10 项指标)
+- **验收**:migration dry-run/apply/rollback 全测;feedback 形成 operation log + Claim 状态;10 项指标(Claim Provenance≥0.95/Evidence Location≥0.90/Cross-source Merge≥0.85/Update Propagation=1.00/Unsupported Detection≥0.95/Page Identity Stability=1.00/Migration Page Parity=1.00/Projection Parity=1.00/Retrieval+No-answer 不低于基线)
+- **commit**:`feat(wiki-v2): add migration and feedback workflow` + `test(wiki-v2): complete knowledge evolution evaluation`;版本→`1.6.0`;文档更新
+- **风险**:迁移不可逆(lock + 备份 + dry-run 零写 + rollback + parity 100% 才 cutover)
+
+---
+
+## 下一个 Agent 交接指引
+
+### 文档入口(按顺序读)
+
+1. `docs/superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md`(执行方案 + §6 续建顺序 + §7 暂缓事项 + §3 铁律)
+2. `docs/superpowers/specs/2026-07-07-canonical-wiki-claim-provenance-design.md`(权威 Spec:ADR + 数据模型 + 服务设计 + Phase 拆分)
+3. `docs/superpowers/reviews/2026-07-08-canonical-wiki-v2-current-state.md`(C0 审计:模块图/写读路径/数据对象/配置/allowlist/依赖/偏差/阻断项)
+4. `docs/architecture/wiki-v2-claim-merge-contract.md`(C1 契约:7 action 决策矩阵 + 10 reason code + normalize 共用)
+5. `evals/wiki_v2/README.md`(C2 黄金集 + Phase 4 最低门槛表)
+
+### 铁律(必须遵守,违反即停)
+
+- **Raw Source 是最终证据源**:Claim 必须可追溯(knowledge_id→source_revision→block_id→location→excerpt_hash);无有效 Evidence 不得进 active
+- **Claim Matcher 保守**:无法可靠判断→`unresolved`(宁可漏合并进人工,不错误合并污染);contradicts/supersedes 宁降召回不降精确率
+- **Canonical 写入只经 `WikiRepository`**:业务服务不得直接 write_markdown/insert_wiki_page/改 pages.json/写 V2 projection 表;例外只在守卫 allowlist(4C 收缩)
+- **Projection 可重建**:SQLite v2 表可全删后 rebuild;不产生 canonical 不存在的事实;projection 失败不回滚 canonical
+- **新服务纯构造注入**:不抓全局 Config/Database/get_active_container(C6 AST 守卫强制);clock/ID 可注入
+- **不直接 commit master**:从 master 最新稳定提交创建功能分支;每 Task 独立 commit + TDD + 守卫 + ruff + mypy + 两轮 review
+- **不降低标准**:不降断言/阈值;不扩 allowlist 绕过守卫;不吞 warning;不用大范围 except pass
+
+### 已知 gap(后续阶段处理,非本轮范围)
+
+1. **C2 黄金集 5 xfailed**:matcher 无单位/型号/地区/否定/强度词细粒度解析(当前判 contradicts/supports,契约要求 unresolved)。Phase 4A shadow 真实数据收紧
+2. **refines object 超集分支被 objects_conflict 遮蔽**(契约 §5 注):当前 refines 只走 subject 超集。C2 黄金集判定是否细化 objects_conflict(排除真超集)
+3. **transaction publish 中断的 claim 孤儿边缘**(C3 注):page 基于 registry 不污染,claim 在 claims/ 目录可能孤儿。Phase 4C 主路径 + claim registry 收敛
+4. **11 处越界写**(api/routes/wiki.py + wiki_lint + wiki_workflow):已纳入 C1 守卫 allowlist(过渡)。Phase 4C 改造经 Repository 后逐条收缩
+5. **shadow/canary/primary 实际写路径隔离**:C5 提供配置 + 状态机,但 shadow 隔离目录/canary allowlist/primary 4 模块改造的实际逻辑待 Phase 4A-C
+
+### 验收基线(后续阶段不得低于)
+
+- pytest:1412 passed / 2 skipped / 5 xfailed(每阶段只增不减,零回归)
+- ruff 全量 0(src tests evals tools scripts);mypy src 0/183
+- retrieval eval:recall 0.8667 / mrr 0.7800 / no_answer 0.6667
+- wiki eval:5 项 metrics 正常(source_coverage 1.0 / cross_page_update 0.9091 / orphan 0.8182 / query_save 0.0 / stale 0.0)
+
+### 第一步(Phase 4A Shadow 起步)
+
+1. 从 master 最新稳定提交创建分支 `feature/wiki-v2-phase4a-shadow`
+2. 读交接文档(上 5 个入口)
+3. `KnowledgeWorkflowService.compile` 增加 shadow 分支:`wiki.canonical_v2.mode==shadow` 时,raw 索引成功后跑 extractor→matcher→merge,输出到 `wiki/_shadow/`(独立 wiki_dir,不进正式 outbox/projection)
+4. **先写失败测试**:shadow 不污染正式 `wiki/*.md` + 差异报告含统计字段
+5. 每 Task 独立 commit + 跑守卫(C1 扩展 + C6 全局单例)+ ruff + mypy + 规格一致性 review + 代码质量 review
+6. Phase 4A 退出:一组真实个人知识库数据 shadow 运行 + 抽样人工核验 + 差异报告归档
 
 ## 权威文档
 
