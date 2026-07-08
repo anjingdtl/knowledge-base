@@ -11,7 +11,7 @@ import re
 import uuid
 from dataclasses import dataclass, field
 
-from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance
+from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance, normalize_statement
 from src.services.wiki_repository import new_claim_id
 
 logger = logging.getLogger(__name__)
@@ -241,11 +241,8 @@ class ClaimExtractor:
         return kept
 
     def _normalize(self, text: str) -> str:
-        """归一化: lower + 去标点 + 去多余空白。"""
-        text = re.sub(r"[^\w\s]", "", text, flags=re.UNICODE)
-        text = text.lower().strip()
-        text = re.sub(r"\s+", " ", text)
-        return text
+        """归一化(委托 models.normalize_statement,C1 契约:禁止各自重造)。"""
+        return normalize_statement(text)
 
     def _call_llm(
         self, fragments: list[dict], source_summary: str, max_llm_calls: int, call_counter: list[int]

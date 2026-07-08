@@ -1,17 +1,17 @@
 {
-  "recorded_at": "2026-07-07T12:10:15",
+  "recorded_at": "2026-07-08T19:35:52",
   "version": "1.5.2",
   "pytest": {
     "collected_tests_rc": 0,
-    "summary": "1243 tests collected in 4.70s"
+    "summary": "1348 tests collected in 9.31s"
   },
   "ruff": {
-    "rc": 0,
-    "tail": "All checks passed!"
+    "rc": 1,
+    "tail": "\nFound 7 errors.\n[*] 7 fixable with the `--fix` option."
   },
   "mypy": {
-    "rc": 0,
-    "tail": "src\\gui\\main_window.py:245: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]\nsrc\\gui\\main_window.py:246: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]\nSuccess: no issues found in 178 source files"
+    "rc": 1,
+    "tail": "src\\gui\\main_window.py:245: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]\nsrc\\gui\\main_window.py:246: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]\nFound 1 error in 1 file (checked 185 source files)"
   },
   "retrieval_eval": {
     "rc": 0,
@@ -19,6 +19,6 @@
   },
   "wiki_eval": {
     "rc": 1,
-    "tail": "    sys.exit(main())\n             ~~~~^^\n  File \"D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\evals\\run_wiki_eval.py\", line 112, in main\n    metrics = run_on_project(Path(args.project), source=args.source)\n  File \"D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\evals\\run_wiki_eval.py\", line 81, in run_on_project\n    knowledge_count = len(Database.list_knowledge(limit=10000))\n                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\nTypeError: Database.list_knowledge() missing 1 required positional argument: 'self'"
+    "tail": "    sys.exit(main())\n             ~~~~^^\n  File \"F:\\ClaudeWorkSpace\\projects\\knowledge-base\\evals\\run_wiki_eval.py\", line 112, in main\n    metrics = run_on_project(Path(args.project), source=args.source)\n  File \"F:\\ClaudeWorkSpace\\projects\\knowledge-base\\evals\\run_wiki_eval.py\", line 81, in run_on_project\n    knowledge_count = len(Database.list_knowledge(limit=10000))\n                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\nTypeError: Database.list_knowledge() missing 1 required positional argument: 'self'"
   }
 }

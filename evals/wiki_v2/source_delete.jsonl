@@ -1,0 +1,3 @@
+{"id":"d01","scenario":"删除来源但仍有其他有效Evidence→claim仍active","note":"Phase 5 rebuild_service 实现后启用评测","trigger":{"deleted_knowledge_id":"kA","remaining_supports":["kB"]},"expected":"claim stays active, evidence only from kB"}
+{"id":"d02","scenario":"删除来源且无其他有效Evidence→claim unsupported","note":"Phase 5 rebuild_service 实现后启用评测","trigger":{"deleted_knowledge_id":"kA","remaining_supports":[]},"expected":"claim becomes unsupported, affected page enters review"}
+{"id":"d03","scenario":"来源删除不物理删除claim保留审计","note":"Phase 5 rebuild_service 实现后启用评测","trigger":{"deleted_knowledge_id":"kA","remaining_supports":[]},"expected":"claim not physically deleted, audit history retained"}

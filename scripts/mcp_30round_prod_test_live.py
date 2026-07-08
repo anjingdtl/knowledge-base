@@ -15,9 +15,7 @@ from __future__ import annotations
 import http.client
 import json
 import os
-import socket
 import sys
-import tempfile
 import time
 from datetime import datetime
 from pathlib import Path
@@ -632,7 +630,7 @@ def cleanup(client: MCPClient) -> None:
     if state["test_dir"] and Path(state["test_dir"]).exists():
         import shutil
         shutil.rmtree(Path(state["test_dir"]).parent, ignore_errors=True)
-        print(f"[cleanup] removed tmp dir", flush=True)
+        print("[cleanup] removed tmp dir", flush=True)
 
 
 def generate_report() -> tuple[Path, Path]:
@@ -676,7 +674,7 @@ def generate_report() -> tuple[Path, Path]:
         "",
         "## 摘要",
         "",
-        f"本次测试在 ShineHeKnowledge 生产环境中，通过已接入的 `mcp_shinehe-kb` MCP 接口执行 30 轮全工具调用，覆盖核心检索、CRUD、Query DSL、任务/job、图谱、Wiki、Agent Memory 及 legacy 别名等全部 103 个工具类别。测试目标为验证服务在 Agent 高频调用下的稳定性以及关键词召回准确性。",
+        "本次测试在 ShineHeKnowledge 生产环境中，通过已接入的 `mcp_shinehe-kb` MCP 接口执行 30 轮全工具调用，覆盖核心检索、CRUD、Query DSL、任务/job、图谱、Wiki、Agent Memory 及 legacy 别名等全部 103 个工具类别。测试目标为验证服务在 Agent 高频调用下的稳定性以及关键词召回准确性。",
         "",
         "| 指标 | 数值 |",
         "|---|---|",
@@ -688,7 +686,7 @@ def generate_report() -> tuple[Path, Path]:
         f"| 平均精确率 | **{avg_precision:.2%}** |",
         f"| 平均延迟 | {avg_latency:.2f} ms |",
         f"| 最大延迟 | {max_latency:.2f} ms |",
-        f"| 测试环境 | production（真实业务库） |",
+        "| 测试环境 | production（真实业务库） |",
         f"| 测试时间 | {report_time}（北京时间） |",
         "",
         "## 测试背景与目标",
@@ -785,7 +783,7 @@ def generate_report() -> tuple[Path, Path]:
         "## 附录",
         "",
         f"- JSON 原始数据：[{json_path}](file:///{json_path})",
-        f"- 历史测试报告：[reports/mcp_30round_prod_report.md](file:///f:/ClaudeWorkSpace/projects/knowledge-base/reports/mcp_30round_prod_report.md)",
+        "- 历史测试报告：[reports/mcp_30round_prod_report.md](file:///f:/ClaudeWorkSpace/projects/knowledge-base/reports/mcp_30round_prod_report.md)",
         "",
     ])
 

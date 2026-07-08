@@ -143,6 +143,9 @@ class AppContainer:
     _wiki_page_locator: Optional[object] = field(default=None, repr=False)
     _size_aware_router: Optional[object] = field(default=None, repr=False)
 
+    # --- Phase 3.5 C4:统一 wiki 读取端口 ---
+    _wiki_query_service: Optional[object] = field(default=None, repr=False)
+
     # --- 第二阶段 W2:wiki parent-child 检索 ---
     _wiki_parent_retriever: Optional[object] = field(default=None, repr=False)
 
@@ -377,7 +380,8 @@ class AppContainer:
     def wiki_projection(self):
         if self._wiki_projection is None:
             from src.services.wiki_projection import WikiProjection as _Proj
-            enabled = bool(self.config.get("canonical_v2.enabled", False))
+            from src.services.wiki_query_service import resolve_canonical_mode
+            enabled = resolve_canonical_mode(self.config) != "off"
             self._wiki_projection = _Proj(
                 repository=self.wiki_repository,
                 database=self.db,
@@ -385,6 +389,11 @@ class AppContainer:
             )
             self._track_service("_wiki_projection")
         return self._wiki_projection
+
+    @property
+    def canonical_mode(self) -> str:
+        from src.services.wiki_query_service import resolve_canonical_mode
+        return resolve_canonical_mode(self.config)
 
     @property
     def wiki_claim_extractor(self):
@@ -424,8 +433,11 @@ class AppContainer:
     @property
     def wiki_page_locator(self):
         if self._wiki_page_locator is None:
+            from pathlib import Path as _Path
+
             from src.services.wiki_page_locator import WikiPageLocator
-            self._wiki_page_locator = WikiPageLocator(projection=self.wiki_projection)
+            wiki_dir = _Path(self.config.get("knowledge_workflow.wiki_dir", "wiki"))
+            self._wiki_page_locator = WikiPageLocator(wiki_dir=wiki_dir, projection=self.wiki_projection)
             self._track_service("_wiki_page_locator")
         return self._wiki_page_locator
 
@@ -444,6 +456,19 @@ class AppContainer:
             self._wiki_parent_retriever = WikiParentRetriever()
             self._track_service("_wiki_parent_retriever")
         return self._wiki_parent_retriever
+
+    @property
+    def wiki_query_service(self):
+        if self._wiki_query_service is None:
+            from src.services.wiki_query_service import WikiQueryService as _QS
+            self._wiki_query_service = _QS(
+                repository=self.wiki_repository,
+                projection=self.wiki_projection,
+                database=self.db,
+                config=self.config,
+            )
+            self._track_service("_wiki_query_service")
+        return self._wiki_query_service
 
 
 def create_container(config_path: str | None = None) -> AppContainer:

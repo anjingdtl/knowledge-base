@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 import os
 from pathlib import Path
+from typing import Any
 
 from src.services.index_scheduler import IndexScheduler
 
@@ -30,7 +31,7 @@ class FileWatcher:
         self._scheduler = scheduler
         self._root = Path(os.path.normcase(os.path.normpath(str(root))))
         self._recursive = recursive
-        self._observer = None
+        self._observer: Any = None
         self._running = False
 
     def start(self) -> None:

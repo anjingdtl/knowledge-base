@@ -1,9 +1,57 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-03
+> 最后更新：2026-07-08
 > 源码版本：`src/version.py` 中的 `1.4.0`
 > 当前分支：`master`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
+
+## Canonical Wiki V2 纠偏续建 — Phase 3.5 Correction Gate 通过 (2026-07-08)
+
+7 个 commit(`e0d2db8`→`9e70af9`)完成 Phase 3.5 纠偏门禁 C0-C6。不撤销已完成的
+Canonical 模型/Schema/Repository/Projection/Extractor/Matcher/Merge Engine,在 Phase 4
+主路径切换前插入强制门禁。执行依据:
+`docs/superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md`。
+
+### C0-C6 交付
+
+| 阶段 | commit | 内容 |
+|---|---|---|
+| C0 审计冻结 | `e0d2db8` | 现状审计:暴露守卫盲区(11 处越界写)、matcher 缺 reason code、transaction 非严格 staging、读路径三套未统一、canonical_v2 配置缺失、wiki_eval 崩溃 |
+| C1 语义契约 | `eb7095b` | ClaimMergeAction+ReasonCode 枚举冻结(`docs/architecture/wiki-v2-claim-merge-contract.md`);守卫扩展纳入 api/lint/workflow + open 写探测;normalize 共用 |
+| C2 黄金评测 | `65094cc` | `evals/wiki_v2/` 黄金集(matching 12 + merge 4 + extraction 4 + source 骨架) + 确定性测试 + 真实评测脚本;修 wiki_eval 崩溃 |
+| C3 事务恢复 | `88ac399` | WikiRepository 严格 staging transaction(`_staging/<tx_id>` + manifest + COMMITTED + outbox tx_id) + recover 前向/孤儿恢复 + 12 故障注入测试 |
+| C4 读端口统一 | `2f04bf4` | WikiQueryService(projection→FS→legacy SQLite) + 消费 `wiki_pages_v2_fts`(消除零读取) + 11 契约测试 |
+| C5 配置状态机 | `73901a3` | `wiki.canonical_v2.mode` off/shadow/canary/primary 四态 + 向后兼容 + config 补 claims/rebuild/projection/validation |
+| C6 依赖边界 | `9e70af9` | wiki_page_locator 删全局 Config;AST 守卫禁 7 模块 import 全局单例;7 服务全纯构造注入 |
+
+### 验收门禁(Phase 4 前置,全部满足)
+
+| 门禁 | 结果 |
+|---|---|
+| ruff(全量 src tests evals tools scripts) | **0 error**(C0 基线 scripts 7 债务已清:`_tmp_show_fails.py` 删 + `mcp_30round` ruff --fix) |
+| mypy src | **0 error / 183 文件**(`file_watcher.py:73` 基线已修:Any 注解) |
+| pytest 全量 | **1412 passed / 2 skipped / 5 xfailed**(C1-C6 零回归,+66 新测试) |
+| retrieval eval | **passed**(recall 0.8667 / mrr 0.7800 / no_answer 0.6667,不低于基线) |
+| wiki eval | **修复**(5 项 metrics 正常,C0 崩溃 `run_wiki_eval.py:81` 已修) |
+
+### 已知 xfailed(C2 黄金集保守性 gap,待真实数据收紧)
+
+matcher 当前无单位/型号/地区/否定/强度词细粒度解析,5 case 标 xfailed:单位不同
+(1Gbps vs 1000Mbps)/型号不同/地区不同/否定表达/强度词(最高可达 vs 保证达到)——当前
+判 contradicts/supports,契约要求回落 unresolved。由黄金集驱动,Phase 4A shadow 用真实
+数据逐步收紧(契约 §5 保守复核)。
+
+### Phase 4 前阻断项(全部闭环)
+
+C0 审计的 4 高风险阻断项已解决:守卫盲区(C1 扩展)/语义契约(C1 冻结)/事务原子性
+(C3 严格 staging)/黄金评测(C2 建立)。中低风险(locator 全局依赖 C6 修 / wiki_eval
+C2 修 / 配置状态机 C5 / 读端口 C4)亦闭环。
+
+详见 `docs/superpowers/reviews/2026-07-08-canonical-wiki-v2-current-state.md`(审计)
++ `docs/architecture/wiki-v2-claim-merge-contract.md`(契约)。
+
+**下一步**:Phase 4A Shadow 主工作流接入(claim 流程接入真实 ingest,但不影响正式 canonical;
+输出 legacy 与 V2 差异报告)。Phase 4 前置门禁已全开。
 
 ## 权威文档
 
