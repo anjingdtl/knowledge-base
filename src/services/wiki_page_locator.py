@@ -168,7 +168,7 @@ class WikiPageLocator:
                 except ValueError:
                     rel_path = abs_path
                 pid = projection.find_page_id_by_path(rel_path)  # type: ignore[attr-defined]
-                if pid:
+                if pid is not None:
                     cand["id"] = f"wiki:{meta['page_type']}:{pid}"
                     meta["page_id"] = pid
                     meta["canonical"] = True

@@ -308,3 +308,49 @@ def test_rebuild_atomic_on_failure(repo_and_proj):
         "SELECT page_id FROM wiki_pages_v2",
     ).fetchone()
     assert row[0] == "pre_existing_page"
+
+
+# ---- 测试 12: find_page_id_by_path 真实 SQL 路径 ----
+def test_find_page_id_by_path_queries_real_table(repo_and_proj):
+    """验证 find_page_id_by_path 对 wiki_pages_v2 执行真实 SQL 查询。
+
+    直接 INSERT 一行到 wiki_pages_v2, 然后通过 WikiProjection 实例调用
+    find_page_id_by_path, 断言:
+    - 已有路径返回对应 page_id
+    - 缺失路径返回 None
+    - None 输入不抛异常, 返回 None
+    """
+    repo, proj, db = repo_and_proj
+    conn = db.get_conn()
+    conn.execute(
+        "INSERT INTO wiki_pages_v2 "
+        "(page_id, path, title, page_type, status, revision, content, content_hash, "
+        "aliases_json, tags_json, source_ids_json, claim_ids_json, created_at, updated_at) "
+        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        (
+            "page_real_1",
+            "concepts/foo.md",
+            "Foo",
+            "concepts",
+            "published",
+            1,
+            "body",
+            "h",
+            "[]",
+            "[]",
+            "[]",
+            "[]",
+            "2026-07-08",
+            "2026-07-08",
+        ),
+    )
+    conn.commit()
+
+    # 已有路径 → 返回 page_id
+    assert proj.find_page_id_by_path("concepts/foo.md") == "page_real_1"
+
+    # 缺失路径 → None
+    assert proj.find_page_id_by_path("concepts/missing.md") is None
+
+    # None 输入 → 不抛异常, 返回 None (SQL 参数绑定兼容)
+    assert proj.find_page_id_by_path(None) is None  # type: ignore[arg-type]
