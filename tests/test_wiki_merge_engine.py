@@ -15,8 +15,9 @@ from src.models.wiki_v2 import (
     PageStatus,
     PageType,
     WikiPage,
+    normalize_statement,
 )
-from src.services.wiki_claim_matcher import ClaimMatchDecision, _normalize
+from src.services.wiki_claim_matcher import ClaimMatchDecision
 from src.services.wiki_merge_engine import WikiMergeEngine
 from src.services.wiki_repository import WikiRepository
 
@@ -67,7 +68,7 @@ def _claim(
         schema_version=1,
         claim_id=claim_id,
         statement=statement,
-        normalized_statement=normalized or _normalize(statement),
+        normalized_statement=normalized or normalize_statement(statement),
         claim_type="fact",
         status=status,
         confidence=0.9,
@@ -507,8 +508,8 @@ class TestValidateTolerance:
 # M-1: Normalize parity lock between extractor and matcher
 # ---------------------------------------------------------------------------
 class TestNormalizeParity:
-    """Cross-test: ensure ClaimExtractor._normalize and matcher _normalize
-    stay identical. If either drifts, this test turns red immediately.
+    """C1: matcher 与 extractor 共用 models.normalize_statement,不再各自实现。
+    extractor._normalize 必须等价 canonical 实现。
     """
 
     @pytest.fixture
@@ -533,6 +534,6 @@ class TestNormalizeParity:
             "a",
         ],
     )
-    def test_normalize_consistency_across_extractor_matcher(self, text, extractor_normalize):
-        """M-1: both _normalize implementations must produce identical output."""
-        assert extractor_normalize(text) == _normalize(text)
+    def test_normalize_delegates_to_canonical(self, text, extractor_normalize):
+        """C1: extractor._normalize 必须等价 models.normalize_statement。"""
+        assert extractor_normalize(text) == normalize_statement(text)

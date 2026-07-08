@@ -14,8 +14,9 @@ from src.models.wiki_v2 import (
     PageStatus,
     PageType,
     WikiPage,
+    normalize_statement,
 )
-from src.services.wiki_claim_matcher import ClaimMatcher, _normalize
+from src.services.wiki_claim_matcher import ClaimMatcher
 from src.services.wiki_merge_engine import WikiMergeEngine
 from src.services.wiki_repository import WikiRepository
 
@@ -60,7 +61,7 @@ def _claim(
         schema_version=1,
         claim_id=claim_id,
         statement=statement,
-        normalized_statement=_normalize(statement),
+        normalized_statement=normalize_statement(statement),
         claim_type="fact",
         status=ClaimStatus.ACTIVE,
         confidence=0.9,

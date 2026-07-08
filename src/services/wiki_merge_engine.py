@@ -25,6 +25,13 @@ from src.services.wiki_claim_matcher import ClaimMatchDecision
 logger = logging.getLogger(__name__)
 
 
+# C1 契约:ClaimRelation.relation 合法值
+# (见 docs/architecture/wiki-v2-claim-merge-contract.md §3)。新增 relation 必须先扩此集合。
+CLAIM_RELATION_KINDS: frozenset[str] = frozenset({
+    "supersedes", "superseded_by", "refines", "refined_by", "contradicts",
+})
+
+
 # ---------------------------------------------------------------------------
 # MergeResult
 # ---------------------------------------------------------------------------

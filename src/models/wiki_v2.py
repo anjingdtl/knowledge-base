@@ -6,6 +6,7 @@ strict=False 容忍未知键(向前兼容读取老 canonical 文件)。
 """
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass, field
 from enum import Enum
 
@@ -20,6 +21,18 @@ class PageType(str, Enum):
 
 # C3 收敛点:权威 page_type 真源,供 wiki_index_compiler / project_setup 引用
 PAGE_TYPES: tuple[str, ...] = tuple(t.value for t in PageType)
+
+
+def normalize_statement(text: str) -> str:
+    r"""Claim statement 归一化(C1 契约 §4):matcher 与 extractor 共用,禁止各自重造。
+
+    lower + 去标点([^\w\s]) + 去多余空白。matcher._exact_hash 与
+    ClaimExtractor._normalize 必须委托此函数。
+    """
+    text = re.sub(r"[^\w\s]", "", text, flags=re.UNICODE)
+    text = text.lower().strip()
+    text = re.sub(r"\s+", " ", text)
+    return text
 
 
 class PageStatus(str, Enum):

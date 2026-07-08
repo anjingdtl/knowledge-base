@@ -7,8 +7,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance
-from src.services.wiki_claim_matcher import ClaimMatcher, _normalize
+from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance, normalize_statement
+from src.services.wiki_claim_matcher import ClaimMatcher
 
 
 # ---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ def _claim(
         schema_version=1,
         claim_id=claim_id,
         statement=statement,
-        normalized_statement=normalized or _normalize(statement),
+        normalized_statement=normalized or normalize_statement(statement),
         claim_type="fact",
         status=ClaimStatus.ACTIVE,
         confidence=0.9,
@@ -343,3 +343,124 @@ class FakeEmbeddingService:
 
     def embed(self, text: str) -> list[float]:
         return [1.0] * 8
+
+
+# ---------------------------------------------------------------------------
+# 14. C1: 每种 action 必须填充稳定 reason_code
+# ---------------------------------------------------------------------------
+class TestReasonCodes:
+    def test_no_candidates_reason_code(self):
+        matcher = ClaimMatcher()
+        new = _claim("n1", "FTTR下行速率可达100Mbps")
+        d = matcher.match(new, candidates=[], scores=None)
+        assert d.action == "new"
+        assert "no_candidates" in d.reason_codes
+
+    def test_exact_duplicate_reason_code(self):
+        matcher = ClaimMatcher()
+        statement = "FTTR下行速率可达100Mbps"
+        existing = _claim("c1", statement, object_refs=["100Mbps"])
+        new = _claim("n1", statement, object_refs=["100Mbps"])
+        d = matcher.match(new, candidates=[existing], scores={"c1": 1.0})
+        assert d.action == "duplicate"
+        assert "exact_normalized_match" in d.reason_codes
+
+    def test_exact_object_conflict_reason_code(self):
+        matcher = ClaimMatcher()
+        statement = "FTTR下行速率可达100Mbps"
+        existing = _claim("c1", statement, object_refs=["100Mbps"])
+        new = _claim("n1", statement, object_refs=["200Mbps"])
+        d = matcher.match(new, candidates=[existing], scores={"c1": 1.0})
+        assert d.action == "contradicts"
+        assert "exact_normalized_match" in d.reason_codes
+        assert "object_refs_conflict" in d.reason_codes
+
+    def test_low_confidence_reason_code(self):
+        matcher = ClaimMatcher()
+        existing = _claim("c1", "完全不同的甲陈述")
+        new = _claim("n1", "完全不同的乙陈述")
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.3})
+        assert d.action == "new"
+        assert "low_confidence" in d.reason_codes
+
+    def test_ambiguous_unresolved_reason_code(self):
+        matcher = ClaimMatcher()
+        existing = _claim("c1", "FTTR下行速率可达100Mbps")
+        new = _claim("n1", "FTTR下行速率可达大约100兆")
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.8})
+        assert d.action == "unresolved"
+        assert "ambiguous_candidates" in d.reason_codes
+
+    def test_temporal_supersedes_reason_code(self):
+        matcher = ClaimMatcher()
+        existing = _claim("c1", "旧标准速率", subject_refs=["entity:X"],
+                         predicate="speed", object_refs=["100Mbps"], valid_from="2020-01-01")
+        new = _claim("n1", "新标准速率", subject_refs=["entity:X"],
+                     predicate="speed", object_refs=["200Mbps"], valid_from="2024-01-01")
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "supersedes"
+        assert "temporal_supersedes" in d.reason_codes
+
+    def test_refines_reason_code(self):
+        matcher = ClaimMatcher()
+        # subject_refs 真超集 + object_refs 相同(避免被先判的 objects_conflict 遮蔽)。
+        # 注:refines 的 object 超集分支当前被 objects_conflict(set!=)遮蔽不可达,
+        # 留 C2 黄金集判定是否需细化(契约 §5 保守复核)。
+        existing = _claim("c1", "X的速度是100", subject_refs=["entity:X"],
+                         predicate="speed", object_refs=["100Mbps"])
+        new = _claim("n1", "X型号设备的速度是100", subject_refs=["entity:X", "model:A"],
+                     predicate="speed", object_refs=["100Mbps"])
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "refines"
+        assert "refines_superset" in d.reason_codes
+
+    def test_supports_fallback_reason_code(self):
+        matcher = ClaimMatcher()
+        existing = _claim("c1", "FTTR的速度是100兆",
+                         subject_refs=["entity:FTTR"], predicate="speed", object_refs=["100Mbps"])
+        new = _claim("n1", "FTTR能够达到100Mbps下行",
+                     subject_refs=["entity:FTTR"], predicate="speed", object_refs=["100Mbps"])
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "supports"
+        assert "supports_fallback" in d.reason_codes
+
+    def test_new_has_contradicts_evidence_reason_code(self):
+        matcher = ClaimMatcher()
+        existing = _claim("c1", "FTTR的速度是100兆",
+                         subject_refs=["entity:FTTR"], predicate="speed", object_refs=["100Mbps"])
+        new = _claim("n1", "FTTR能够达到200兆下行",
+                     subject_refs=["entity:FTTR"], predicate="speed",
+                     object_refs=["100Mbps"], stance=EvidenceStance.CONTRADICTS)
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "contradicts"
+        assert "new_has_contradicts_evidence" in d.reason_codes
+
+
+# ---------------------------------------------------------------------------
+# 15. C1: matcher 与 extractor 共用 models.normalize_statement(禁止各自重造)
+# ---------------------------------------------------------------------------
+class TestNormalizeShared:
+    def test_normalize_statement_canonical(self):
+        from src.models.wiki_v2 import normalize_statement
+        assert normalize_statement("FTTR的速度，是 100Mbps！") == "fttr的速度是 100mbps"
+        assert normalize_statement("  Hello   World  ") == "hello world"
+        assert normalize_statement("A.B-C") == "abc"
+
+    def test_extractor_normalize_delegates_to_canonical(self):
+        """extractor._normalize 必须委托 models.normalize_statement,不得重造 re.sub。"""
+        import inspect
+
+        from src.services.wiki_claim_extractor import ClaimExtractor
+        src = inspect.getsource(ClaimExtractor._normalize)
+        assert "normalize_statement" in src, "extractor._normalize 未委托共用 normalize_statement"
+        assert "re.sub" not in src, "extractor._normalize 重造了 normalize(违反 C1 契约)"
+
+    def test_matcher_uses_canonical_normalize(self):
+        """matcher._exact_hash 必须用 models.normalize_statement。"""
+        import inspect
+
+        from src.services.wiki_claim_matcher import ClaimMatcher
+        src = inspect.getsource(ClaimMatcher._exact_hash)
+        assert "normalize_statement" in src, "matcher._exact_hash 未使用共用 normalize_statement"
+
+
