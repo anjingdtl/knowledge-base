@@ -34,6 +34,11 @@ class WikiProjection:
         self._db = database
         self._enabled = enabled
 
+    @property
+    def enabled(self) -> bool:
+        """canonical_v2 开关状态,locator enrichment 据此跳过无用的 DB 查询。"""
+        return self._enabled
+
     # ---- 公共接口 ----
 
     def process_outbox(self) -> ProjectionResult:

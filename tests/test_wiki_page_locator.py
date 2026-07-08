@@ -168,3 +168,76 @@ def test_locate_projection_failure_falls_back_to_fs(tmp_path, caplog):
     assert c["id"] == "wiki:sources:fttr"
     assert c["metadata"]["page_id"] is None
     assert any("fallback" in r.message.lower() or "projection" in r.message.lower() for r in caplog.records)
+
+
+def test_locate_real_projection_enriches_with_forward_slash_path(tmp_path):
+    """真实 WikiProjection + 真实 DB + 真实 FS:验证 Windows 路径分隔符归一化。
+
+    在 wiki_pages_v2.path 中用 forward-slash 存储路径(与 WikiRepository._rel 一致),
+    locator 的 _enrich_with_projection 必须将 Windows backslash 路径转为 forward-slash
+    才能匹配。用 .as_posix() 后此测试在 Windows 上通过;用 str() 则会失败。
+    """
+    from src.services.db import Database
+    from src.services.wiki_projection import WikiProjection
+    from src.services.wiki_repository import WikiRepository
+
+    # 1. 在 FS 写一个 legacy 页 (无 page_id)
+    write_markdown(
+        tmp_path / "sources" / "fttr.md",
+        {"title": "FTTR", "key_entities": ["FTTR"]},
+        "FTTR 光纤",
+    )
+
+    # 2. 真实 WikiRepository + WikiProjection
+    data_dir = tmp_path / "canonical"
+    data_dir.mkdir()
+    repo = WikiRepository(
+        wiki_dir=str(tmp_path),
+        registry_path=str(data_dir / "registry.json"),
+        redirects_path=str(data_dir / "redirects.json"),
+        outbox_path=str(data_dir / "outbox.jsonl"),
+    )
+    db = Database._instance
+    proj = WikiProjection(repo, db, enabled=True)
+
+    # 3. 插入 projection 行 — path 用 forward-slash (生产实际存储方式)
+    conn = db.get_conn()
+    conn.execute(
+        "INSERT INTO wiki_pages_v2 "
+        "(page_id, path, title, page_type, status, revision, content, content_hash, "
+        "aliases_json, tags_json, source_ids_json, claim_ids_json, created_at, updated_at) "
+        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        (
+            "page_proj_1", "sources/fttr.md", "FTTR", "sources", "published",
+            1, "FTTR 光纤", "abc123", "[]", "[]", "[]", "[]",
+            "2026-07-08T00:00:00Z", "2026-07-08T00:00:00Z",
+        ),
+    )
+    conn.commit()
+
+    # 4. locate 并断言 enrichment 发生
+    locator = WikiPageLocator(wiki_dir=tmp_path, projection=proj)
+    cands, _ = locator.locate("FTTR")
+    assert len(cands) >= 1
+    c = cands[0]
+    # enrichment 将 slug id "wiki:sources:fttr" 改为 projection page_id
+    assert c["id"] == "wiki:sources:page_proj_1"
+    assert c["metadata"]["page_id"] == "page_proj_1"
+    assert c["metadata"]["canonical"] is True
+
+
+def test_locate_disabled_projection_skips_db_queries(tmp_path):
+    """projection.enabled=False 时 _enrich_with_projection 跳过,不触 DB 查询。"""
+    _make_page(tmp_path, "sources", "fttr", "FTTR光纤", "FTTR 是光纤到房间的技术")
+    proj = MagicMock()
+    proj.enabled = False
+    proj.find_page_id_by_path.return_value = "should_not_be_called"
+
+    locator = WikiPageLocator(wiki_dir=tmp_path, projection=proj)
+    candidates, total = locator.locate("FTTR")
+    assert total >= 1
+    c = candidates[0]
+    # enrichment 被跳过 -> slug id, page_id is None
+    assert c["id"] == "wiki:sources:fttr"
+    assert c["metadata"]["page_id"] is None
+    proj.find_page_id_by_path.assert_not_called()

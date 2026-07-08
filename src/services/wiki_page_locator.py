@@ -156,7 +156,13 @@ class WikiPageLocator:
         """对 metadata.page_id 为 None 的候选,尝试从投影表补全稳定 page_id。
 
         projection 查询任何异常 → 记一次 warning → 保持 FS 结果不变。
+        当 projection 为 None 或 enabled 为 False 时跳过,避免 canonical_v2
+        关闭时在检索热路径上做无用的 DB 查询。
         """
+        if projection is None:
+            return
+        if not getattr(projection, "enabled", True):
+            return
         try:
             for cand in candidates:
                 meta = cand["metadata"]
@@ -164,7 +170,7 @@ class WikiPageLocator:
                     continue
                 abs_path = meta.get("path", "")
                 try:
-                    rel_path = str(Path(abs_path).relative_to(self._wiki_dir))
+                    rel_path = Path(abs_path).relative_to(self._wiki_dir).as_posix()
                 except ValueError:
                     rel_path = abs_path
                 pid = projection.find_page_id_by_path(rel_path)  # type: ignore[attr-defined]
