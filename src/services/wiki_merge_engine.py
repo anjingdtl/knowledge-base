@@ -32,6 +32,7 @@ class MergeResult:
     """Output of WikiMergeEngine.apply()."""
 
     claims_created: list[str] = field(default_factory=list)
+    claims_created_active: list[str] = field(default_factory=list)
     claims_updated: list[str] = field(default_factory=list)
     claims_disputed: list[str] = field(default_factory=list)
     claims_superseded: list[str] = field(default_factory=list)
@@ -162,7 +163,8 @@ class WikiMergeEngine:
         return result
 
     # ------------------------------------------------------------------
-    # Aggregated: supports/duplicate/contradicts/refines → single stage
+    # Aggregated: supports/duplicate/contradicts → single stage
+    # Note: refines is routed to a separate path (creates new claim).
     # ------------------------------------------------------------------
     def _apply_aggregated(
         self,
@@ -193,8 +195,6 @@ class WikiMergeEngine:
             self._do_contradicts(updated, group, result)
         elif action in ("supports", "duplicate"):
             self._do_supports_or_duplicate(updated, group, result)
-        elif action == "refines":
-            self._do_refines_target(updated, group, result)
 
         # Validate before staging
         errors = updated.validate()
@@ -216,7 +216,8 @@ class WikiMergeEngine:
     def _dominant_action(self, group: list[tuple[Claim, ClaimMatchDecision]]) -> str:
         """Most severe action wins: contradicts > duplicate > supports.
 
-        Note: refines is handled in a separate path (creates new claim).
+        Refines items are routed to a separate standalone path in apply()
+        and never reach _apply_aggregated, so refines is not considered here.
         """
         actions = {d.action for _, d in group}
         if "contradicts" in actions:
@@ -280,17 +281,6 @@ class WikiMergeEngine:
             "message": f"Claim {target.claim_id} marked DISPUTED due to conflicting evidence",
         })
 
-    def _do_refines_target(
-        self,
-        target: Claim,
-        group: list[tuple[Claim, ClaimMatchDecision]],
-        result: MergeResult,
-    ) -> None:
-        """Add refined_by relations to target."""
-        for new_claim, decision in group:
-            rel = ClaimRelation(relation="refined_by", target_claim_id=new_claim.claim_id)
-            target.relations.append(rel)
-
     def _apply_new(
         self,
         new_claim: Claim,
@@ -327,7 +317,12 @@ class WikiMergeEngine:
         now: str,
         tx: Any,
     ) -> None:
-        """Supersede old claim, create new ACTIVE claim (CD2)."""
+        """Supersede old claim, create new ACTIVE claim (CD2).
+
+        Atomic: both old (SUPERSEDED) and new (ACTIVE) must pass validate
+        before either is staged.  Prevents half-write where old is SUPERSEDED
+        but no replacement ACTIVE claim exists.
+        """
         old_id = decision.target_claim_id
         if old_id is None:
             return
@@ -338,7 +333,7 @@ class WikiMergeEngine:
             result.skipped.append(new_claim.claim_id)
             return
 
-        # Update old claim: SUPERSEDED + relation
+        # Prepare old claim: SUPERSEDED + relation (not staged yet)
         old_updated = copy.deepcopy(old)
         old_updated.status = ClaimStatus.SUPERSEDED
         old_updated.updated_at = now
@@ -346,17 +341,7 @@ class WikiMergeEngine:
             ClaimRelation(relation="superseded_by", target_claim_id=new_claim.claim_id)
         )
 
-        old_errors = old_updated.validate()
-        if old_errors:
-            result.errors.append(f"superseded claim {old_id} validation: {old_errors}")
-            result.skipped.append(new_claim.claim_id)
-            return
-
-        tx.stage_claim(old_updated, expected_revision=old.revision)
-        result.claims_superseded.append(old_id)
-        result.claims_updated.append(old_id)
-
-        # Create new claim as ACTIVE
+        # Prepare new claim as ACTIVE (not staged yet)
         new_active = copy.deepcopy(new_claim)
         new_active.status = ClaimStatus.ACTIVE
         new_active.updated_at = now
@@ -365,14 +350,27 @@ class WikiMergeEngine:
             ClaimRelation(relation="supersedes", target_claim_id=old_id)
         )
 
+        # Validate BOTH before staging either — atomic (no half-write)
+        old_errors = old_updated.validate()
+        if old_errors:
+            result.errors.append(f"superseded claim {old_id} validation: {old_errors}")
+            result.skipped.append(new_claim.claim_id)
+            return
+
         new_errors = new_active.validate()
         if new_errors:
             result.errors.append(f"new superseding claim {new_active.claim_id} validation: {new_errors}")
-            result.skipped.append(new_active.claim_id)
+            result.skipped.append(new_claim.claim_id)
             return
+
+        # Both valid — stage old (SUPERSEDED) then new (ACTIVE)
+        tx.stage_claim(old_updated, expected_revision=old.revision)
+        result.claims_superseded.append(old_id)
+        result.claims_updated.append(old_id)
 
         tx.stage_claim(new_active, expected_revision=None)
         result.claims_created.append(new_active.claim_id)
+        result.claims_created_active.append(new_active.claim_id)
 
         # Page claim_ids: replace old with new
         if page is not None:
@@ -424,6 +422,12 @@ class WikiMergeEngine:
         new_draft.updated_at = now
         new_draft.created_at = now
 
+        new_errors = new_draft.validate()
+        if new_errors:
+            result.errors.append(f"refines new draft {new_draft.claim_id} validation: {new_errors}")
+            result.skipped.append(new_draft.claim_id)
+            return
+
         tx.stage_claim(new_draft, expected_revision=None)
         result.claims_created.append(new_draft.claim_id)
 
@@ -469,20 +473,23 @@ class WikiMergeEngine:
         """Build human-readable, stable diff text (CD4)."""
         lines: list[str] = []
 
-        # Claims created (sorted)
+        # Claims created (sorted) — distinguish active (supersedes) vs draft
         for cid in sorted(result.claims_created):
-            lines.append(f"[claim:{cid}] created (draft)")
+            if cid in result.claims_created_active:
+                lines.append(f"[claim:{cid}] created (active)")
+            else:
+                lines.append(f"[claim:{cid}] created (draft)")
 
-        # Claims updated (sorted) — evidence changes tracked via result
+        # Claims updated (sorted) — status changes
         for cid in sorted(result.claims_updated):
             if cid in result.claims_disputed:
                 lines.append(f"[claim:{cid}] status: active -> disputed")
             if cid in result.claims_superseded:
                 lines.append(f"[claim:{cid}] status: active -> superseded")
 
-        # Evidence additions
+        # Evidence additions — exclude superseded claims (their change is status/relation, not evidence)
         for cid in sorted(result.claims_updated):
-            if cid not in result.claims_created:
+            if cid not in result.claims_created and cid not in result.claims_superseded:
                 lines.append(f"[claim:{cid}] +evidence merged")
 
         # Pages updated (sorted)

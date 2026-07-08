@@ -418,20 +418,39 @@ class TestBatchAggregation:
 # 12. validate failure is tolerated (not thrown)
 # ---------------------------------------------------------------------------
 class TestValidateTolerance:
-    def test_validate_failure_recorded_as_error(self, repo, engine):
+    def test_validate_failure_recorded_as_error(self, repo, engine, monkeypatch):
         existing = _claim("c1", "FTTR下行速率可达100Mbps")
         repo.save_claim(existing, expected_revision=None)
 
-        # Create a new claim that would violate ACTIVE invariant
-        # when saved as ACTIVE without supports evidence
-        new_claim = _claim("n1", "FTTR下行速率可达100Mbps")
-        new_claim.evidence = []  # No evidence — will fail validate if ACTIVE
+        # A normal "supports" item that should succeed
+        good_claim = _claim("g1", "FTTR下行速率可达100Mbps", knowledge_id="k_good", block_id="b_good")
+        good_decision = _decision("supports", target_claim_id="c1")
 
-        decision = _decision("new")
+        # Force validate() to fail on claim "bad" — monkeypatch class method
+        original_validate = Claim.validate
 
-        result = engine.apply([(new_claim, decision)], now=NOW)
+        def _failing_validate(self):
+            if self.claim_id == "bad":
+                return ["invariant violation: forced failure"]
+            return original_validate(self)
 
-        # Engine should not crash but record error
-        # (new claims are saved as DRAFT, which doesn't require supports evidence,
-        #  so this specific case should succeed. Let's test a real violation path)
+        monkeypatch.setattr(Claim, "validate", _failing_validate)
+
+        bad_claim = _claim("bad", "FTTR下行速率可达100Mbps")
+        bad_decision = _decision("new")
+
+        result = engine.apply(
+            [(bad_claim, bad_decision), (good_claim, good_decision)],
+            now=NOW,
+        )
+
+        # Engine should commit (other items succeed)
         assert result.committed is True
+        # Bad claim should be in errors
+        assert any("invariant violation" in e for e in result.errors)
+        assert "bad" in result.skipped
+        # Bad claim should NOT be in created/updated
+        assert "bad" not in result.claims_created
+        assert "bad" not in result.claims_updated
+        # Good claim should still succeed (failure doesn't block other items)
+        assert "c1" in result.claims_updated
