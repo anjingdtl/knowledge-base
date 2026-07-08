@@ -195,6 +195,53 @@ class TestContradicts:
         assert len(result.review_items) > 0
         assert "active -> disputed" in result.diff
 
+    def test_contradicts_flips_evidence_stance(self, repo, engine):
+        """I-1: contradicts path must force evidence stance to CONTRADICTS.
+
+        When _objects_conflict triggers contradicts, the new claim's evidence
+        may carry stance=SUPPORTS (extractor default). Merging it as-is into
+        the target would mislead projection/lint. Verify stance is forced to
+        CONTRADICTS regardless of the original stance.
+        """
+        # target claim with object_refs=["100"]
+        existing = _claim(
+            "c1",
+            "FTTR下行速率可达100Mbps",
+            object_refs=["100"],
+            knowledge_id="k_a",
+            block_id="b1",
+        )
+        repo.save_claim(existing, expected_revision=None)
+
+        # new claim with object_refs=["120"], evidence stance=SUPPORTS (default)
+        new_claim = _claim(
+            "n1",
+            "FTTR下行速率可达120Mbps",
+            object_refs=["120"],
+            knowledge_id="k_b",
+            block_id="b2",
+            stance=EvidenceStance.SUPPORTS,  # extractor default
+        )
+        decision = _decision("contradicts", target_claim_id="c1")
+
+        result = engine.apply([(new_claim, decision)], now=NOW)
+
+        assert result.committed is True
+        saved = repo.get_claim("c1")
+        assert saved is not None
+        assert saved.status == ClaimStatus.DISPUTED
+
+        # Must have exactly 2 evidence: original (SUPPORTS) + new (flipped)
+        assert len(saved.evidence) == 2
+
+        # Original evidence from k_a/b1 must remain SUPPORTS (untouched)
+        orig_ev = next(e for e in saved.evidence if e.knowledge_id == "k_a")
+        assert orig_ev.stance == EvidenceStance.SUPPORTS
+
+        # New evidence from k_b/b2 must be flipped to CONTRADICTS
+        new_ev = next(e for e in saved.evidence if e.knowledge_id == "k_b")
+        assert new_ev.stance == EvidenceStance.CONTRADICTS
+
 
 # ---------------------------------------------------------------------------
 # 4. supersedes: creates new, links old
@@ -454,3 +501,38 @@ class TestValidateTolerance:
         assert "bad" not in result.claims_updated
         # Good claim should still succeed (failure doesn't block other items)
         assert "c1" in result.claims_updated
+
+
+# ---------------------------------------------------------------------------
+# M-1: Normalize parity lock between extractor and matcher
+# ---------------------------------------------------------------------------
+class TestNormalizeParity:
+    """Cross-test: ensure ClaimExtractor._normalize and matcher _normalize
+    stay identical. If either drifts, this test turns red immediately.
+    """
+
+    @pytest.fixture
+    def extractor_normalize(self):
+        from src.services.wiki_claim_extractor import ClaimExtractor
+
+        extractor = ClaimExtractor.__new__(ClaimExtractor)
+        return extractor._normalize
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "FTTR下行速率可达100Mbps",
+            "Hello, World!",
+            "  多余  空白  ",
+            "Mixed Case 123",
+            "标点！符号？【】",
+            "emoji \U0001f600 test",
+            "line\nbreak\ttab",
+            "",
+            "   ",
+            "a",
+        ],
+    )
+    def test_normalize_consistency_across_extractor_matcher(self, text, extractor_normalize):
+        """M-1: both _normalize implementations must produce identical output."""
+        assert extractor_normalize(text) == _normalize(text)

@@ -18,6 +18,7 @@ from src.models.wiki_v2 import (
     Claim,
     ClaimRelation,
     ClaimStatus,
+    EvidenceStance,
 )
 from src.services.wiki_claim_matcher import ClaimMatchDecision
 
@@ -270,7 +271,9 @@ class WikiMergeEngine:
                 key = (ev.knowledge_id, ev.block_id)
                 if key in existing_keys:
                     continue
-                target.evidence.append(copy.deepcopy(ev))
+                ev_copy = copy.deepcopy(ev)
+                ev_copy.stance = EvidenceStance.CONTRADICTS
+                target.evidence.append(ev_copy)
                 existing_keys.add(key)
 
         target.status = ClaimStatus.DISPUTED
