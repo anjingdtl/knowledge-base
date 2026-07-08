@@ -259,6 +259,17 @@ class WikiProjection:
         if commit:
             conn.commit()
 
+    def find_page_id_by_path(self, path: str) -> str | None:
+        """按 canonical 相对路径查 wiki_pages_v2 的 page_id。表空/无行/异常 -> None。"""
+        try:
+            conn = self._db.get_conn()
+            row = conn.execute(
+                "SELECT page_id FROM wiki_pages_v2 WHERE path = ?", (path,)
+            ).fetchone()
+            return row[0] if row else None
+        except Exception:
+            return None
+
     def _clear_v2_tables(self, *, commit: bool = True) -> None:
         """DELETE FROM 全部 v2 表 (rebuild 用), wiki_projection_state 保留。"""
         conn = self._db.get_conn()

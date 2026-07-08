@@ -5,7 +5,9 @@
 """
 from __future__ import annotations
 
+import logging
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from src.services.wiki_page_locator import WikiPageLocator
 from src.services.wiki_slug import write_markdown
@@ -18,6 +20,7 @@ def _make_page(
     title: str,
     body: str,
     key_entities: list[str] | None = None,
+    page_id: str | None = None,
 ) -> Path:
     """在临时 wiki 目录下生成一个 wiki 页(带 frontmatter)。"""
     d = wiki_dir / page_type
@@ -26,6 +29,8 @@ def _make_page(
     fm: dict = {"title": title}
     if key_entities is not None:
         fm["key_entities"] = key_entities
+    if page_id is not None:
+        fm["page_id"] = page_id
     write_markdown(path, fm, body)
     return path
 
@@ -84,3 +89,82 @@ def test_locate_missing_wiki_dir_returns_empty(tmp_path):
     candidates, total = locator.locate("anything")
     assert candidates == []
     assert total == 0
+
+
+# ---- T2.3 新增: stable page_id + projection enrichment ----
+
+
+def test_locate_id_uses_frontmatter_page_id(tmp_path):
+    """canonical 页 frontmatter 有 page_id -> 候选 id 用 page_id 而非 slug。"""
+    _make_page(
+        tmp_path, "sources", "my-slug", "FTTR光纤",
+        "FTTR 是光纤到房间的技术",
+        page_id="page_abc",
+    )
+    locator = WikiPageLocator(wiki_dir=tmp_path)
+    candidates, total = locator.locate("FTTR")
+    assert total >= 1
+    c = candidates[0]
+    assert c["id"] == "wiki:sources:page_abc"
+    assert c["metadata"]["page_id"] == "page_abc"
+
+
+def test_locate_id_fallback_slug_when_no_page_id(tmp_path):
+    """legacy 页无 frontmatter page_id -> 候选 id 用 slug(旧行为)。"""
+    _make_page(tmp_path, "sources", "fttr", "FTTR光纤", "FTTR 是光纤到房间的技术")
+    locator = WikiPageLocator(wiki_dir=tmp_path)
+    candidates, total = locator.locate("FTTR")
+    assert total >= 1
+    c = candidates[0]
+    assert c["id"] == "wiki:sources:fttr"
+    assert c["metadata"]["page_id"] is None
+
+
+def test_locate_metadata_exposes_page_id(tmp_path):
+    """canonical 和 legacy 页 metadata 都含 page_id 键。"""
+    _make_page(
+        tmp_path, "sources", "canon", "Canonical页", "内容",
+        page_id="pid_canonical",
+    )
+    _make_page(tmp_path, "sources", "legacy", "Legacy页", "内容")
+    locator = WikiPageLocator(wiki_dir=tmp_path)
+    candidates, _ = locator.locate("内容")
+    assert len(candidates) == 2
+    meta_map = {c["metadata"]["title"]: c["metadata"] for c in candidates}
+    assert meta_map["Canonical页"]["page_id"] == "pid_canonical"
+    assert meta_map["Legacy页"]["page_id"] is None
+
+
+def test_locate_projection_enriches_legacy_page_id(tmp_path):
+    """projection 有数据时补全 legacy 页的 page_id,改 id 和 metadata。"""
+    _make_page(tmp_path, "sources", "fttr", "FTTR光纤", "FTTR 是光纤到房间的技术")
+    # 构造 projection 并手动插入一行 wiki_pages_v2
+    proj = MagicMock()
+    proj.find_page_id_by_path.return_value = "proj_page_001"
+
+    locator = WikiPageLocator(wiki_dir=tmp_path, projection=proj)
+    candidates, total = locator.locate("FTTR")
+    assert total >= 1
+    c = candidates[0]
+    assert c["id"] == "wiki:sources:proj_page_001"
+    assert c["metadata"]["page_id"] == "proj_page_001"
+    assert c["metadata"]["canonical"] is True
+    proj.find_page_id_by_path.assert_called_once()
+
+
+def test_locate_projection_failure_falls_back_to_fs(tmp_path, caplog):
+    """projection 异常时 FS fallback,不抛,记 warning(限一次)。"""
+    _make_page(tmp_path, "sources", "fttr", "FTTR光纤", "FTTR 是光纤到房间的技术")
+    proj = MagicMock()
+    proj.find_page_id_by_path.side_effect = RuntimeError("db gone")
+
+    with caplog.at_level(logging.WARNING, logger="src.services.wiki_page_locator"):
+        locator = WikiPageLocator(wiki_dir=tmp_path, projection=proj)
+        candidates, total = locator.locate("FTTR")
+
+    assert total >= 1
+    # FS fallback -> slug id, page_id is None
+    c = candidates[0]
+    assert c["id"] == "wiki:sources:fttr"
+    assert c["metadata"]["page_id"] is None
+    assert any("fallback" in r.message.lower() or "projection" in r.message.lower() for r in caplog.records)

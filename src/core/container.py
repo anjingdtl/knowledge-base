@@ -398,7 +398,7 @@ class AppContainer:
     def wiki_page_locator(self):
         if self._wiki_page_locator is None:
             from src.services.wiki_page_locator import WikiPageLocator
-            self._wiki_page_locator = WikiPageLocator()
+            self._wiki_page_locator = WikiPageLocator(projection=self.wiki_projection)
             self._track_service("_wiki_page_locator")
         return self._wiki_page_locator
 

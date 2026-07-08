@@ -49,13 +49,21 @@ class WikiPageLocator:
         wiki_dir: wiki 根目录。``None`` 时从 ``Config`` 读取
             (``knowledge_workflow.wiki_dir``,默认 ``wiki``)。测试可注入临时目录,
             生产由 ``AppContainer`` 走默认值。
+        projection: WikiProjection 实例或 ``None``。非 None 时对 legacy 页面
+            (frontmatter 无 page_id) 尝试从投影表补全稳定 page_id。
     """
 
-    def __init__(self, wiki_dir: str | Path | None = None) -> None:
+    def __init__(
+        self,
+        wiki_dir: str | Path | None = None,
+        projection: object | None = None,
+    ) -> None:
         if wiki_dir is not None:
             self._wiki_dir = Path(wiki_dir)
         else:
             self._wiki_dir = Path(Config.get("knowledge_workflow.wiki_dir", "wiki"))
+        self._projection = projection
+        self._projection_warned: bool = False
 
     @property
     def wiki_dir(self) -> Path:
@@ -90,11 +98,15 @@ class WikiPageLocator:
                 if cand is not None:
                     scored.append(cand)
 
+        projection = self._projection
+        if projection is not None and scored:
+            self._enrich_with_projection(scored, projection)
+
         scored.sort(key=lambda c: c["metadata"]["wiki_hit_score"], reverse=True)
         return scored[:top_n], len(scored)
 
-    @staticmethod
-    def _score_page(path: Path, page_type: str, tokens: list[str]) -> dict | None:
+    def _score_page(self, path: Path, page_type: str, tokens: list[str]) -> dict | None:
+        """给单个 wiki 页评分,返回候选 dict 或 None(零分)。"""
         fm = read_frontmatter(path)
         title = str(fm.get("title") or path.stem)
         key_entities = fm.get("key_entities") or []
@@ -120,13 +132,18 @@ class WikiPageLocator:
         if score <= 0:
             return None
 
+        page_id = fm.get("page_id")
+        slug = path.stem
+        stable_id = page_id if page_id else slug
+
         return {
-            "id": f"wiki:{page_type}:{path.stem}",
+            "id": f"wiki:{page_type}:{stable_id}",
             "text": body,
             "metadata": {
                 "page_type": page_type,
                 "title": title,
                 "path": str(path),
+                "page_id": page_id,
                 "knowledge_id": fm.get("knowledge_id"),
                 "key_entities": list(key_entities),
                 "source_hash": fm.get("source_hash"),
@@ -134,6 +151,34 @@ class WikiPageLocator:
             },
             "match_channels": ["wiki_read"],
         }
+
+    def _enrich_with_projection(self, candidates: list[dict], projection: object) -> None:
+        """对 metadata.page_id 为 None 的候选,尝试从投影表补全稳定 page_id。
+
+        projection 查询任何异常 → 记一次 warning → 保持 FS 结果不变。
+        """
+        try:
+            for cand in candidates:
+                meta = cand["metadata"]
+                if meta.get("page_id") is not None:
+                    continue
+                abs_path = meta.get("path", "")
+                try:
+                    rel_path = str(Path(abs_path).relative_to(self._wiki_dir))
+                except ValueError:
+                    rel_path = abs_path
+                pid = projection.find_page_id_by_path(rel_path)  # type: ignore[attr-defined]
+                if pid:
+                    cand["id"] = f"wiki:{meta['page_type']}:{pid}"
+                    meta["page_id"] = pid
+                    meta["canonical"] = True
+        except Exception:
+            if not self._projection_warned:
+                self._projection_warned = True
+                logger.warning(
+                    "projection enrichment failed, falling back to FS results",
+                    exc_info=True,
+                )
 
 
 def _tokenize(query: str) -> list[str]:
