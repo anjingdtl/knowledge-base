@@ -187,6 +187,92 @@ CREATE TRIGGER IF NOT EXISTS wiki_au AFTER UPDATE ON wiki_pages BEGIN
     VALUES (new.rowid, new.title, new.content, new.concept_summary);
 END;
 
+-- === Canonical Wiki v2 投影层（Phase 2）===
+-- canonical filesystem (wiki/*.md + claims/*.yaml) 的 SQLite 投影,
+-- 由 WikiProjection 服务消费 outbox 维护。旧 wiki_pages/wiki_links/
+-- wiki_ops_log/wiki_fts 保留供兼容读取,不删除。
+CREATE TABLE IF NOT EXISTS wiki_pages_v2 (
+    page_id TEXT PRIMARY KEY,
+    path TEXT UNIQUE NOT NULL,
+    title TEXT NOT NULL,
+    page_type TEXT NOT NULL,
+    status TEXT NOT NULL,
+    revision INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    content_hash TEXT NOT NULL,
+    aliases_json TEXT NOT NULL DEFAULT '[]',
+    tags_json TEXT NOT NULL DEFAULT '[]',
+    source_ids_json TEXT NOT NULL DEFAULT '[]',
+    claim_ids_json TEXT NOT NULL DEFAULT '[]',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_wiki_pages_v2_type ON wiki_pages_v2(page_type);
+CREATE INDEX IF NOT EXISTS idx_wiki_pages_v2_status ON wiki_pages_v2(status);
+
+CREATE TABLE IF NOT EXISTS wiki_claims (
+    claim_id TEXT PRIMARY KEY,
+    statement TEXT NOT NULL,
+    normalized_statement TEXT NOT NULL,
+    claim_type TEXT NOT NULL,
+    status TEXT NOT NULL,
+    confidence REAL NOT NULL,
+    claim_scope TEXT,
+    valid_from TEXT,
+    valid_to TEXT,
+    revision INTEGER NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_wiki_claims_status ON wiki_claims(status);
+CREATE INDEX IF NOT EXISTS idx_wiki_claims_normalized ON wiki_claims(normalized_statement);
+
+CREATE TABLE IF NOT EXISTS wiki_claim_evidence (
+    evidence_id TEXT PRIMARY KEY,
+    claim_id TEXT NOT NULL,
+    stance TEXT NOT NULL,
+    knowledge_id TEXT NOT NULL,
+    block_id TEXT,
+    location_json TEXT NOT NULL,
+    source_revision TEXT NOT NULL,
+    excerpt_hash TEXT,
+    observed_at TEXT NOT NULL,
+    UNIQUE(claim_id, knowledge_id, block_id, stance, source_revision)
+);
+CREATE INDEX IF NOT EXISTS idx_wiki_evidence_claim ON wiki_claim_evidence(claim_id);
+CREATE INDEX IF NOT EXISTS idx_wiki_evidence_kid ON wiki_claim_evidence(knowledge_id);
+
+CREATE TABLE IF NOT EXISTS wiki_page_claims (
+    page_id TEXT NOT NULL,
+    claim_id TEXT NOT NULL,
+    display_order INTEGER NOT NULL,
+    PRIMARY KEY (page_id, claim_id)
+);
+CREATE INDEX IF NOT EXISTS idx_wiki_page_claims_claim ON wiki_page_claims(claim_id);
+
+CREATE TABLE IF NOT EXISTS wiki_dependencies (
+    from_type TEXT NOT NULL,
+    from_id TEXT NOT NULL,
+    to_type TEXT NOT NULL,
+    to_id TEXT NOT NULL,
+    relation TEXT NOT NULL,
+    PRIMARY KEY (from_type, from_id, to_type, to_id, relation)
+);
+CREATE INDEX IF NOT EXISTS idx_wiki_deps_from ON wiki_dependencies(from_type, from_id);
+CREATE INDEX IF NOT EXISTS idx_wiki_deps_to ON wiki_dependencies(to_type, to_id);
+
+CREATE TABLE IF NOT EXISTS wiki_projection_state (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS wiki_pages_v2_fts USING fts5(
+    page_id UNINDEXED,
+    title,
+    content,
+    tokenize='unicode61'
+);
+
 -- 异步任务队列
 CREATE TABLE IF NOT EXISTS async_jobs (
     id TEXT PRIMARY KEY,
