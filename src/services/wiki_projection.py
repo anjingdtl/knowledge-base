@@ -41,7 +41,7 @@ class WikiProjection:
 
     # ---- 公共接口 ----
 
-    def process_outbox(self) -> ProjectionResult:
+    def process_outbox(self, *, force: bool = False) -> ProjectionResult:
         """读 repository.read_outbox() 全部事件,按 type 投影。
 
         enabled=False -> 全跳过。逐事件 try/except: 单事件失败记 errors 继续下一个。
@@ -49,7 +49,7 @@ class WikiProjection:
         """
         result = ProjectionResult()
         events = self._repo.read_outbox()
-        if not self._enabled:
+        if not self._enabled and not force:
             result.skipped = len(events)
             return result
         for event in events:
@@ -211,6 +211,32 @@ class WikiProjection:
                 "INSERT INTO wiki_page_claims (page_id, claim_id, display_order) VALUES (?,?,?)",
                 (page.page_id, cid, idx),
             )
+        self._upsert_legacy_page(page, commit=False)
+        if commit:
+            conn.commit()
+
+    def _upsert_legacy_page(self, page: WikiPage, *, commit: bool = True) -> None:
+        """Maintain the legacy wiki_pages read model from canonical pages."""
+        conn = self._db.get_conn()
+        conn.execute(
+            "INSERT OR REPLACE INTO wiki_pages "
+            "(id, title, content, source_ids, tags, concept_summary, status, "
+            "lint_score, complex_anomaly, created_at, updated_at) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            (
+                page.page_id,
+                page.title,
+                page.body,
+                json.dumps(page.source_ids, ensure_ascii=False),
+                json.dumps(page.tags, ensure_ascii=False),
+                "",
+                page.status.value,
+                1.0,
+                "",
+                page.created_at,
+                page.updated_at,
+            ),
+        )
         if commit:
             conn.commit()
 

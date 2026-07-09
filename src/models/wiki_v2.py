@@ -40,6 +40,7 @@ class PageStatus(str, Enum):
     REVIEW = "review"
     PUBLISHED = "published"
     DEPRECATED = "deprecated"
+    DELETED = "deleted"
 
 
 class ClaimStatus(str, Enum):

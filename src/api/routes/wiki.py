@@ -1,3 +1,4 @@
+import hashlib
 import uuid
 from datetime import datetime
 from typing import Optional
@@ -8,6 +9,7 @@ from pydantic import BaseModel, Field
 from src.api.deps import get_container
 from src.api.routes.auth import _check_auth, _get_current_user
 from src.core.container import AppContainer
+from src.models.wiki_v2 import PageStatus, PageType, WikiPage
 
 wiki_router = APIRouter(prefix="/wiki", tags=["wiki"], dependencies=[Depends(_check_auth)])
 
@@ -36,6 +38,52 @@ class WikiPageWriteReq(BaseModel):
 class WikiWorkflowReq(BaseModel):
     action: str
     comment: str = ""
+
+
+def _wiki_content_hash(content: str) -> str:
+    return "sha256:" + hashlib.sha256(content.encode("utf-8")).hexdigest()
+
+
+def _legacy_status_to_page_status(status: str | None) -> PageStatus:
+    if status in ("published", "active"):
+        return PageStatus.PUBLISHED
+    if status == "review":
+        return PageStatus.REVIEW
+    if status == "deprecated":
+        return PageStatus.DEPRECATED
+    if status == "deleted":
+        return PageStatus.DELETED
+    return PageStatus.DRAFT
+
+
+def _legacy_page_to_canonical(page: dict) -> WikiPage:
+    now = datetime.now().isoformat()
+    content = page.get("content", "") or ""
+    return WikiPage(
+        schema_version=1,
+        page_id=page["id"],
+        title=page.get("title") or "Untitled",
+        page_type=PageType.SYNTHESES,
+        status=_legacy_status_to_page_status(page.get("status")),
+        revision=0,
+        aliases=[],
+        tags=[],
+        source_ids=[],
+        claim_ids=[],
+        created_at=page.get("created_at") or now,
+        updated_at=page.get("updated_at") or now,
+        content_hash=_wiki_content_hash(content),
+        body=content,
+    )
+
+
+def _process_wiki_projection(container: AppContainer) -> None:
+    projection = getattr(container, "wiki_projection", None)
+    if projection is not None:
+        try:
+            projection.process_outbox(force=True)
+        except TypeError:
+            projection.process_outbox()
 
 
 @wiki_router.post("/save-answer")
@@ -69,18 +117,24 @@ def list_wiki_pages(
 def create_wiki_page(data: WikiPageWriteReq, container: AppContainer = Depends(get_container)):
     now = datetime.now().isoformat()
     page_id = str(uuid.uuid4())
-    container.db.insert_wiki_page({
-        "id": page_id,
-        "title": data.title,
-        "content": data.content,
-        "source_ids": "[]",
-        "tags": "[]",
-        "concept_summary": "",
-        "status": "draft",
-        "lint_score": 1.0,
-        "created_at": now,
-        "updated_at": now,
-    })
+    page = WikiPage(
+        schema_version=1,
+        page_id=page_id,
+        title=data.title,
+        page_type=PageType.SYNTHESES,
+        status=PageStatus.DRAFT,
+        revision=1,
+        aliases=[],
+        tags=[],
+        source_ids=[],
+        claim_ids=[],
+        created_at=now,
+        updated_at=now,
+        content_hash=_wiki_content_hash(data.content),
+        body=data.content,
+    )
+    container.wiki_repository.save_page(page, expected_revision=None)
+    _process_wiki_projection(container)
     return {"id": page_id, "message": "创建成功"}
 
 
@@ -104,7 +158,20 @@ def update_wiki_page(
     if not page:
         raise HTTPException(404, "Wiki 页面不存在")
     container.db.save_wiki_version(page_id, page)
-    container.db.update_wiki_page(page_id, title=data.title, content=data.content)
+    canonical = container.wiki_repository.get_page(page_id)
+    if canonical is not None and canonical.title != data.title:
+        container.wiki_repository.move_page(page_id, data.title, canonical.page_type.value)
+        canonical = container.wiki_repository.get_page(page_id)
+    if canonical is None:
+        canonical = _legacy_page_to_canonical(page)
+        canonical.title = data.title
+    canonical.title = data.title
+    canonical.body = data.content
+    canonical.updated_at = datetime.now().isoformat()
+    canonical.content_hash = _wiki_content_hash(data.content)
+    expected_revision = canonical.revision if canonical.revision else None
+    container.wiki_repository.save_page(canonical, expected_revision=expected_revision)
+    _process_wiki_projection(container)
     return {"message": "保存成功"}
 
 
@@ -141,7 +208,12 @@ def delete_wiki_page(page_id: str, container: AppContainer = Depends(get_contain
     page = container.db.get_wiki_page(page_id)
     if not page:
         raise HTTPException(404, "Wiki 页面不存在")
-    container.db.delete_wiki_page(page_id)
+    canonical = container.wiki_repository.get_page(page_id) or _legacy_page_to_canonical(page)
+    canonical.status = PageStatus.DELETED
+    canonical.updated_at = datetime.now().isoformat()
+    expected_revision = canonical.revision if canonical.revision else None
+    container.wiki_repository.save_page(canonical, expected_revision=expected_revision)
+    _process_wiki_projection(container)
     return {"message": "已移至回收站", "page_id": page_id, "title": page.get("title", "")}
 
 

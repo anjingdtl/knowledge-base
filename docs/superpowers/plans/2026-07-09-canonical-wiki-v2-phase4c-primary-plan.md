@@ -559,6 +559,52 @@ pytest tests/test_wiki_log_compiler.py tests/test_knowledge_workflow.py tests/te
 
 Observed: `26 passed`.
 
+### Task 4F: API Wiki Routes Canonical Write Adapter
+
+**Files:**
+- Modify: `src/api/routes/wiki.py`
+- Modify: `src/models/wiki_v2.py`
+- Modify: `src/services/wiki_projection.py`
+- Add: `tests/test_wiki_api_canonical_routes.py`
+- Modify: `tests/test_wiki_projection.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write failing no-direct-DB route tests**
+
+Added route-level tests for create/update/delete handlers with a fake DB that raises on `insert_wiki_page`, `update_wiki_page`, and `delete_wiki_page`. The tests assert the handlers save `WikiPage` objects through `wiki_repository` and process projection outbox.
+
+- [x] **Step 2: Run the failing route tests**
+
+Run:
+
+```bash
+pytest tests/test_wiki_api_canonical_routes.py -q
+```
+
+Observed: failed because the old handlers called `container.db.insert_wiki_page`, `container.db.update_wiki_page`, and `container.db.delete_wiki_page`.
+
+- [x] **Step 3: Add projection compatibility red/green**
+
+Added `test_project_page_updates_legacy_wiki_pages_compatibility_row` to prove canonical page projection also maintains the legacy `wiki_pages` read model. Added `test_disabled_projection_can_force_process_for_compatibility` so explicit write adapters can force projection while default disabled behavior still skips.
+
+- [x] **Step 4: Route writes through WikiRepository**
+
+Changed API create/update/delete handlers to build or load `WikiPage`, save through `wiki_repository.save_page(...)`, and call `wiki_projection.process_outbox(force=True)`. Added `PageStatus.DELETED` so API soft-delete keeps the legacy recycle-bin status through projection.
+
+- [x] **Step 5: Remove guard allowlist entries**
+
+Removed `api/routes/wiki.py` entries for `insert_wiki_page`, `update_wiki_page`, and `delete_wiki_page` from `ALLOWED_DIRECT_WRITES`, and removed the module from `GUARDED`.
+
+- [x] **Step 6: Verify**
+
+Run:
+
+```bash
+pytest tests/test_wiki_api_canonical_routes.py tests/test_api.py::TestPhase5WebContracts::test_wiki_create_update_and_workflow_contract tests/test_wiki_projection.py tests/test_canonical_write_guards.py -q
+```
+
+Observed: `23 passed`.
+
 - [ ] **Step 1: Remove resolved allowlist entries**
 
 After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:
