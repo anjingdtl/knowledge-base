@@ -1,0 +1,17 @@
+{
+  "status": "completed",
+  "knowledge_id": "e3eb0f42-935e-4291-8889-06510a100a0a",
+  "claims_extracted": 8,
+  "new_claims": 8,
+  "auto_merged": 0,
+  "unresolved": 0,
+  "conflicts": 0,
+  "evidence_missing": 0,
+  "page_diff": "[claim:claim_14d13659-783d-43a7-b09b-0565d96ffedf] created (draft)\n[claim:claim_1d0aba0d-68c7-4ae0-ba5d-68f2066b6206] created (draft)\n[claim:claim_216a1b0f-f2a8-4a3b-814d-601c527ebd4d] created (draft)\n[claim:claim_23e8d959-7606-4b0d-b40f-ddfcd9558317] created (draft)\n[claim:claim_360cfc49-e77d-41f6-ba9e-626fde6c4207] created (draft)\n[claim:claim_44e3ca49-620d-4c5e-be28-0ced73039ead] created (draft)\n[claim:claim_c0f7f6bf-c13f-4b8e-955c-926d1b21d6a4] created (draft)\n[claim:claim_ebac89d1-b33e-4a83-8b68-94b9be821a02] created (draft)",
+  "llm_calls": 1,
+  "latency_ms": 13527,
+  "committed": true,
+  "output_dir": "wiki\\_shadow",
+  "warnings": [],
+  "errors": []
+}
