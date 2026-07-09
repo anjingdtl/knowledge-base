@@ -515,6 +515,50 @@ pytest tests/test_wiki_index_compiler.py tests/test_knowledge_workflow.py tests/
 
 Observed: `25 passed`.
 
+### Task 4E: WikiLogCompiler Log Preparation
+
+**Files:**
+- Modify: `src/services/wiki_log_compiler.py`
+- Modify: `tests/test_wiki_log_compiler.py`
+- Modify: `tests/test_knowledge_workflow.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write the failing no-write log tests**
+
+Added `test_append_prepares_log_without_writing_markdown` and `test_rebuild_prepares_log_without_writing_markdown` to assert append/rebuild return prepared log bodies and do not create `wiki/log.md`.
+
+- [x] **Step 2: Run the failing tests**
+
+Run:
+
+```bash
+pytest tests/test_wiki_log_compiler.py::test_append_prepares_log_without_writing_markdown tests/test_wiki_log_compiler.py::test_rebuild_prepares_log_without_writing_markdown -q
+```
+
+Observed: failed because the old compiler returned `status="appended"` / `status="rebuilt"` and wrote markdown.
+
+- [x] **Step 3: Remove direct markdown writes**
+
+Changed `WikiLogCompiler.append()` to return `status`, `suggested_path`, `event_hash`, and prepared `body` without using `Path.open("a")`. Changed `rebuild()` to return a sorted/deduplicated prepared `body` without using `write_text(...)`.
+
+- [x] **Step 4: Migrate log/workflow tests**
+
+Updated log tests to assert returned body content. Duplicate detection is now covered by seeding an existing `log.md` fixture before calling `append()` again. Updated the path indexer e2e expectation so `log.md` is no longer expected to appear as a direct filesystem write.
+
+- [x] **Step 5: Remove guard allowlist entries**
+
+Removed `("services/wiki_log_compiler.py", "write_text")` and `("services/wiki_log_compiler.py", "open_write")` from `ALLOWED_DIRECT_WRITES`; removed `services/wiki_log_compiler.py` from `GUARDED` and `OPEN_WRITE_GUARDED`.
+
+- [x] **Step 6: Verify**
+
+Run:
+
+```bash
+pytest tests/test_wiki_log_compiler.py tests/test_knowledge_workflow.py tests/test_canonical_write_guards.py -q
+```
+
+Observed: `26 passed`.
+
 - [ ] **Step 1: Remove resolved allowlist entries**
 
 After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:

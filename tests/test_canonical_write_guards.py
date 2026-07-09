@@ -23,8 +23,6 @@ ALLOWED_DIRECT_WRITES: dict[tuple[str, str], str] = {
         "A轨 SQLite 写,Phase 4 T4.3 降级为适配器后移除",
     ("services/wiki_compiler.py", "update_wiki_page"):
         "A轨 SQLite 写,Phase 4 T4.3 降级为适配器后移除",
-    ("services/wiki_log_compiler.py", "write_text"):
-        "log.md rebuild 全量写,Phase 4 改造后移除",
     # --- C1 新增:C0 审计暴露的越界写,登记为过渡 allowlist(Phase 4 移除)---
     ("api/routes/wiki.py", "insert_wiki_page"):
         "A轨 SQLite 写,Phase 4 路由经 WikiRepository 后移除",
@@ -36,14 +34,11 @@ ALLOWED_DIRECT_WRITES: dict[tuple[str, str], str] = {
         "A轨 SQLite lint 回写,Phase 4 经 WikiRepository 后移除",
     ("services/wiki_workflow.py", "update_wiki_page"):
         "A轨 SQLite 工作流写,Phase 4 经 WikiRepository 后移除",
-    ("services/wiki_log_compiler.py", "open_write"):
-        "log.md append 用 Path.open('a') 追加写,Phase 4 改造后移除",
 }
 
 # 守卫覆盖的模块 + 各自禁止的"直接写"方法名
 GUARDED: dict[str, set[str]] = {
     "services/wiki_compiler.py": {"insert_wiki_page", "update_wiki_page"},
-    "services/wiki_log_compiler.py": {"write_text"},
     # C1 新增:C0 审计暴露的盲区模块
     "api/routes/wiki.py": {"insert_wiki_page", "update_wiki_page", "delete_wiki_page"},
     "services/wiki_lint.py": {"update_wiki_page"},
@@ -51,9 +46,7 @@ GUARDED: dict[str, set[str]] = {
 }
 
 # 额外检查 open(...,"a"/"w"/"x"/"+") 写的模块(堵 AST 只认方法调用的盲区)
-OPEN_WRITE_GUARDED: set[str] = {
-    "services/wiki_log_compiler.py",  # append() 用 Path.open("a") 追加写 log.md
-}
+OPEN_WRITE_GUARDED: set[str] = set()
 
 
 def _find_calls(tree: ast.AST, names: set[str]) -> list[str]:

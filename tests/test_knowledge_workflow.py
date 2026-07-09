@@ -303,10 +303,10 @@ def test_path_indexer_triggers_wiki_first_e2e(tmp_path, monkeypatch):
     )
     svc._ingest_file(src_file)
 
-    # Source summary/index 不再绕过 WikiRepository 直接写 markdown;log 仍是待迁移遗留产物。
+    # Source summary/index/log 不再绕过 WikiRepository 直接写 markdown。
     assert not (project / "wiki" / "sources").exists(), "source summary 不应直接写入"
     assert not (project / "wiki" / "index.md").exists(), "index.md 不应直接写入"
-    assert (project / "wiki" / "log.md").exists(), "log.md 未生成"
+    assert not (project / "wiki" / "log.md").exists(), "log.md 不应直接写入"
 
 
 def test_save_query_prepares_syntheses_draft(tmp_path):
