@@ -28,13 +28,14 @@ def test_source_compiler_writes_source_ids(tmp_path, monkeypatch):
     assert fm.get("knowledge_id") == "k1"  # 向后兼容保留
 
 
-def test_entity_page_writes_source_ids(tmp_path):
-    """entities/concepts 页 _write_entity_page 写 source_ids = [kid]。"""
+def test_entity_suggestion_preserves_source_ids(tmp_path):
+    """entities/concepts 建议保留 source_ids = [kid]。"""
     from src.services.wiki_entity_updater import WikiEntityUpdater
 
     parsed = {"summary": "S", "facts": [], "contradictions": []}
-    WikiEntityUpdater._write_entity_page(
+    suggestion = WikiEntityUpdater._build_entity_suggestion(
         tmp_path, "EntityX", "entity", parsed, "k1", "2026-07-07", False)
-    fm = read_frontmatter(tmp_path / "entityx.md")
-    assert fm.get("source_ids") == ["k1"]
-    assert fm.get("knowledge_id") == "k1"
+    assert suggestion["frontmatter"]["source_ids"] == ["k1"]
+    assert suggestion["frontmatter"]["knowledge_id"] == "k1"
+    assert suggestion["source_ids"] == ["k1"]
+    assert not (tmp_path / "entityx.md").exists()

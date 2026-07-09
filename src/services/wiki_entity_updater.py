@@ -1,6 +1,6 @@
 """wiki-first 实体/概念页 LLM 更新器。
 
-根据 source summary 的 key_entities,用 LLM 生成/更新实体页与概念页。
+根据 source summary 的 key_entities,用 LLM 生成实体/概念组织建议。
 硬上限:``wiki.max_llm_calls_per_ingest``(默认 3)。矛盾显式标注。
 """
 from __future__ import annotations
@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from src.services.llm import LLMService
-from src.services.wiki_slug import slugify, write_markdown
+from src.services.wiki_slug import slugify
 from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
@@ -40,18 +40,19 @@ ENTITY_PROMPT_TEMPLATE = """\
 
 
 class WikiEntityUpdater:
-    """LLM 驱动的实体/概念页更新器。"""
+    """LLM 驱动的实体/概念组织建议服务。"""
 
     def __init__(self, llm: LLMService | None = None):
         self._llm = llm or LLMService()
 
     def update(self, knowledge_id: str, source_summary: dict, ingested_at: str) -> dict:
-        """为新源涉及的实体/概念生成或更新页面。"""
+        """为新源涉及的实体/概念生成组织建议,不直接写 canonical 文件。"""
         max_calls = int(Config.get("wiki.max_llm_calls_per_ingest", 3))
         entities = list(source_summary.get("key_entities", []))[:max_calls]
         result: dict[str, Any] = {
             "entities_created": 0,
             "concepts_created": 0,
+            "suggestions": [],
             "llm_calls": 0,
             "contradictions": [],
         }
@@ -61,9 +62,6 @@ class WikiEntityUpdater:
         wiki_dir = Config.get("knowledge_workflow.wiki_dir", "wiki")
         entity_dir = Path(Config.get("knowledge_workflow.entity_dir", f"{wiki_dir}/entities"))
         concept_dir = Path(Config.get("knowledge_workflow.concept_dir", f"{wiki_dir}/concepts"))
-        entity_dir.mkdir(parents=True, exist_ok=True)
-        concept_dir.mkdir(parents=True, exist_ok=True)
-
         source_title = source_summary.get("title", "")
         source_summary_text = source_summary.get("summary", "")
 
@@ -100,14 +98,12 @@ class WikiEntityUpdater:
                 continue
             if parsed.get("contradictions"):
                 result["contradictions"].extend(parsed["contradictions"])
-            self._write_entity_page(
-                target_dir, entity, kind, parsed, knowledge_id, ingested_at,
-                bool(existing_content),
+            result["suggestions"].append(
+                self._build_entity_suggestion(
+                    target_dir, entity, kind, parsed, knowledge_id, ingested_at,
+                    bool(existing_content),
+                )
             )
-            if kind == "entity":
-                result["entities_created"] += 1
-            else:
-                result["concepts_created"] += 1
         return result
 
     @staticmethod
@@ -140,12 +136,11 @@ class WikiEntityUpdater:
         return text.strip()
 
     @staticmethod
-    def _write_entity_page(
+    def _build_entity_suggestion(
         target_dir: Path, entity: str, kind: str, parsed: dict,
         knowledge_id: str, ingested_at: str, is_update: bool,
-    ) -> None:
+    ) -> dict:
         slug = slugify(entity)
-        path = target_dir / f"{slug}.md"
         body_lines = [f"# {entity}", "", parsed.get("summary", ""), ""]
         if parsed.get("facts"):
             body_lines.append("## Facts")
@@ -167,4 +162,18 @@ class WikiEntityUpdater:
             "ingested_at": ingested_at,
             "updated": is_update,
         }
-        write_markdown(path, frontmatter, "\n".join(body_lines))
+        return {
+            "entity": entity,
+            "kind": kind,
+            "slug": slug,
+            "suggested_path": str(target_dir / f"{slug}.md"),
+            "frontmatter": frontmatter,
+            "body": "\n".join(body_lines),
+            "summary": parsed.get("summary", ""),
+            "facts": list(parsed.get("facts") or []),
+            "contradictions": list(parsed.get("contradictions") or []),
+            "knowledge_id": knowledge_id,
+            "source_ids": [knowledge_id],
+            "ingested_at": ingested_at,
+            "updated": is_update,
+        }

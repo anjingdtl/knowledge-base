@@ -335,6 +335,52 @@ Expected: pass.
 - Modify: `tests/test_canonical_write_guards.py`
 - Modify source files from Tasks 1-3 as needed
 
+### Task 4A: WikiEntityUpdater Suggestion Service
+
+**Files:**
+- Modify: `src/services/wiki_entity_updater.py`
+- Modify: `tests/test_wiki_entity_updater.py`
+- Modify: `tests/test_wiki_frontmatter_source_ids.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write the failing no-write suggestion test**
+
+Added `test_update_returns_suggestions_without_writing_pages` to assert `WikiEntityUpdater.update()` returns `suggestions` and does not create `wiki/entities` or `wiki/concepts` directories.
+
+- [x] **Step 2: Run the failing test**
+
+Run:
+
+```bash
+pytest tests/test_wiki_entity_updater.py::test_update_returns_suggestions_without_writing_pages -q
+```
+
+Observed: failed because the old updater incremented `entities_created` and wrote markdown files.
+
+- [x] **Step 3: Replace direct write with suggestion builder**
+
+Changed `WikiEntityUpdater` to keep LLM parsing and contradiction extraction, but return `_build_entity_suggestion(...)` dictionaries instead of calling `write_markdown(...)`.
+
+- [x] **Step 4: Migrate old entity/frontmatter tests**
+
+Updated entity updater tests to assert suggestions, suggestion body, and source ids instead of files.
+
+- [x] **Step 5: Remove the guard allowlist entry**
+
+Removed `("services/wiki_entity_updater.py", "write_markdown")` from `ALLOWED_DIRECT_WRITES` and removed `services/wiki_entity_updater.py` from `GUARDED`.
+
+- [x] **Step 6: Verify**
+
+Run:
+
+```bash
+pytest tests/test_canonical_write_guards.py tests/test_wiki_entity_updater.py tests/test_wiki_frontmatter_source_ids.py tests/test_knowledge_workflow.py -q
+ruff check src tests evals tools scripts
+mypy src tools
+```
+
+Observed: `27 passed`; ruff passed; mypy passed.
+
 - [ ] **Step 1: Remove resolved allowlist entries**
 
 After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:
