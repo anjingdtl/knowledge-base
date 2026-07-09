@@ -293,6 +293,28 @@ class WikiCompiler:
         BUG#11：enhance=False 时跳过 LLM 增强，直接用原始 answer 存储
                 （title 取 question 前 N 字，tags 空，concept_summary 空）。
         """
+        if Config.get("wiki.canonical_v2.mode", "off") == "primary":
+            try:
+                from src.core.container import get_active_container
+
+                container = get_active_container()
+                if container is not None:
+                    logger.warning(
+                        "WikiCompiler.save_answer is deprecated in canonical_v2 primary; "
+                        "delegating to WikiWriteService"
+                    )
+                    saved = container.wiki_write_service.save(
+                        question,
+                        answer,
+                        source_ids or [],
+                        auto_publish=auto_publish,
+                        enhance=enhance,
+                    )
+                    saved_id = saved.get("page_id") or saved.get("sqlite_page_id")
+                    return str(saved_id) if saved_id else None
+            except Exception as e:
+                logger.warning("primary WikiCompiler adapter failed: %s", e)
+
         min_len = Config.get("wiki.query_save_min_length", 100)
         if len(answer) < min_len:
             return None

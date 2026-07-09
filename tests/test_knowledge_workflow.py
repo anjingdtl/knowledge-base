@@ -198,6 +198,64 @@ def test_compile_canary_failure_is_isolated():
     assert "canary" not in result
 
 
+def test_compile_primary_mode_runs_primary_without_legacy_compilers():
+    """canonical_v2 primary:正式 V2 成为主写路径,不再执行 legacy FS 编译器。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "primary")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    primary = MagicMock()
+    primary.run.return_value = {
+        "status": "completed",
+        "knowledge_id": "kid-1",
+        "tx_id": "tx_primary",
+        "new_claims": 1,
+    }
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        primary_workflow=primary,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["mode"] == "wiki_first"
+    assert result["primary"]["tx_id"] == "tx_primary"
+    fakes.source.compile.assert_not_called()
+    fakes.entity.update.assert_not_called()
+    fakes.index.refresh.assert_not_called()
+    fakes.log.append.assert_not_called()
+    primary.run.assert_called_once()
+    assert primary.run.call_args.kwargs["knowledge_id"] == "kid-1"
+
+
+def test_compile_primary_failure_is_isolated_without_legacy_writes():
+    """primary 链路失败时记录错误,也不回退到 legacy 直接写 canonical。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "primary")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    primary = MagicMock()
+    primary.run.side_effect = RuntimeError("primary boom")
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        primary_workflow=primary,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["mode"] == "wiki_first"
+    assert {"stage": "primary", "error": "primary boom"} in result["errors"]
+    assert "primary" not in result
+    fakes.source.compile.assert_not_called()
+    fakes.entity.update.assert_not_called()
+    fakes.index.refresh.assert_not_called()
+    fakes.log.append.assert_not_called()
+
+
 def test_compile_not_found():
     _wiki_first()
     # 不 insert 任何 knowledge

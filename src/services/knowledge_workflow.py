@@ -32,6 +32,7 @@ class KnowledgeWorkflowService:
         log_compiler: WikiLogCompiler | None = None,
         shadow_workflow: Any = None,
         canary_workflow: Any = None,
+        primary_workflow: Any = None,
     ):
         self._source = source_compiler or WikiSourceCompiler()
         self._entity = entity_updater or WikiEntityUpdater()
@@ -39,6 +40,7 @@ class KnowledgeWorkflowService:
         self._log = log_compiler or WikiLogCompiler()
         self._shadow = shadow_workflow
         self._canary = canary_workflow
+        self._primary = primary_workflow
 
     def compile(self, knowledge_id: str, ingested_at: str | None = None) -> dict:
         """编排 wiki-first 编译。失败隔离,不抛。"""
@@ -52,6 +54,26 @@ class KnowledgeWorkflowService:
         ts = ingested_at or item.get("created_at") or ""
 
         result: dict = {"mode": mode, "errors": []}
+
+        try:
+            from src.services.wiki_query_service import resolve_canonical_mode
+
+            canonical_mode = resolve_canonical_mode(Config)
+        except Exception:
+            canonical_mode = "off"
+
+        if self._primary is not None and canonical_mode == "primary":
+            try:
+                result["primary"] = self._primary.run(
+                    knowledge_id=knowledge_id,
+                    item=item,
+                    source_summary=item.get("title", ""),
+                    now=ts,
+                )
+            except Exception as e:
+                logger.warning("primary workflow failed (%s): %s", knowledge_id, e)
+                result["errors"].append({"stage": "primary", "error": str(e)})
+            return result
 
         try:
             src = self._source.compile(knowledge_id, ts)
@@ -85,13 +107,6 @@ class KnowledgeWorkflowService:
         except Exception as e:
             logger.warning("log append failed (%s): %s", knowledge_id, e)
             result["errors"].append({"stage": "log", "error": str(e)})
-
-        try:
-            from src.services.wiki_query_service import resolve_canonical_mode
-
-            canonical_mode = resolve_canonical_mode(Config)
-        except Exception:
-            canonical_mode = "off"
 
         if self._shadow is not None and canonical_mode == "shadow":
             try:

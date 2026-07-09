@@ -37,6 +37,8 @@ class WikiCanaryWorkflow:
         merge_engine: Any | None = None,
         clock: Callable[[], str] | None = None,
         perf_counter: Callable[[], float] | None = None,
+        allow_all: bool = False,
+        report_dir_name: str = "canary_reports",
     ) -> None:
         self._blocks = block_repository
         self._extractor = extractor
@@ -47,6 +49,8 @@ class WikiCanaryWorkflow:
         self._merge_engine = merge_engine
         self._clock = clock or (lambda: "")
         self._perf_counter = perf_counter or time.perf_counter
+        self._allow_all = allow_all
+        self._report_dir_name = report_dir_name
 
     def _cfg(self, key: str, default: Any = None) -> Any:
         if self._config is not None:
@@ -111,6 +115,8 @@ class WikiCanaryWorkflow:
         return report
 
     def is_allowlisted(self, *, knowledge_id: str, item: dict) -> bool:
+        if self._allow_all:
+            return True
         allow = self.allowlist()
         if "*" in allow["knowledge_ids"] or knowledge_id in allow["knowledge_ids"]:
             return True
@@ -125,6 +131,8 @@ class WikiCanaryWorkflow:
         return False
 
     def allowlist(self) -> dict[str, list[str]]:
+        if self._allow_all:
+            return {"knowledge_ids": ["*"], "source_paths": ["*"]}
         return {
             "knowledge_ids": self._cfg_list("wiki.canonical_v2.canary.knowledge_ids"),
             "source_paths": (
@@ -295,7 +303,7 @@ class WikiCanaryWorkflow:
 
     def _write_report(self, knowledge_id: str, report: dict) -> Path:
         wiki_dir = Path(self._cfg("knowledge_workflow.wiki_dir", getattr(self._repo, "_wiki_dir", "wiki")))
-        reports_dir = wiki_dir / "_meta" / "canary_reports"
+        reports_dir = wiki_dir / "_meta" / self._report_dir_name
         reports_dir.mkdir(parents=True, exist_ok=True)
         safe_id = knowledge_id.replace("/", "_").replace("\\", "_")
         path = reports_dir / f"{safe_id}.json"
