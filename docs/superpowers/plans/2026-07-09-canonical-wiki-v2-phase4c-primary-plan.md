@@ -426,6 +426,51 @@ mypy src tools
 
 Observed: `24 passed`; ruff passed; mypy passed.
 
+### Task 4C: WikiSourceCompiler Source Summary Preparation
+
+**Files:**
+- Modify: `src/services/wiki_source_compiler.py`
+- Modify: `tests/test_wiki_source_compiler.py`
+- Modify: `tests/test_wiki_frontmatter_source_ids.py`
+- Modify: `tests/test_knowledge_workflow.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write the failing no-write source summary test**
+
+Added `test_compile_prepares_source_summary_without_writing_markdown` to assert `WikiSourceCompiler.compile()` returns a prepared payload and does not create `wiki/sources`.
+
+- [x] **Step 2: Run the failing test**
+
+Run:
+
+```bash
+pytest tests/test_wiki_source_compiler.py::test_compile_prepares_source_summary_without_writing_markdown -q
+```
+
+Observed: failed because the old compiler returned `status="compiled"` and wrote markdown files.
+
+- [x] **Step 3: Remove direct markdown write**
+
+Changed `WikiSourceCompiler` to build deterministic `frontmatter`, `body`, `slug`, and `suggested_path` fields without calling `write_markdown(...)` or reading `Config` filesystem paths.
+
+- [x] **Step 4: Migrate source/frontmatter/workflow tests**
+
+Updated source compiler and source_ids tests to assert prepared payload fields. Updated the path indexer e2e expectation so source summaries are no longer expected to appear as direct markdown files while index/log remain tracked as pending legacy writers.
+
+- [x] **Step 5: Remove guard allowlist entry**
+
+Removed `("services/wiki_source_compiler.py", "write_markdown")` from `ALLOWED_DIRECT_WRITES` and removed `services/wiki_source_compiler.py` from `GUARDED`.
+
+- [x] **Step 6: Verify**
+
+Run:
+
+```bash
+pytest tests/test_wiki_source_compiler.py tests/test_wiki_frontmatter_source_ids.py tests/test_knowledge_workflow.py tests/test_canonical_write_guards.py -q
+```
+
+Observed: `28 passed`.
+
 - [ ] **Step 1: Remove resolved allowlist entries**
 
 After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:

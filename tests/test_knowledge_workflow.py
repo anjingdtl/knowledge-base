@@ -270,7 +270,7 @@ def test_try_hook_returns_none_without_container(monkeypatch):
 
 
 def test_path_indexer_triggers_wiki_first_e2e(tmp_path, monkeypatch):
-    """spec S2:ingest 后 wiki/sources/ + index.md + log.md 自动出现(e2e)。"""
+    """spec S2:ingest 后触发 wiki_first;source summary 已转为建议载荷。"""
     # 1) mock 掉 index_knowledge_item 的向量化,避免 embedding 调用
     import src.services.indexer as indexer_mod
     monkeypatch.setattr(indexer_mod, "index_knowledge_item", lambda item: None)
@@ -303,9 +303,8 @@ def test_path_indexer_triggers_wiki_first_e2e(tmp_path, monkeypatch):
     )
     svc._ingest_file(src_file)
 
-    # S2 三处产物
-    sources = list((project / "wiki" / "sources").glob("*.md"))
-    assert sources, "source summary 未生成"
+    # Source summary 不再绕过 WikiRepository 直接写 markdown;index/log 仍是待迁移遗留产物。
+    assert not (project / "wiki" / "sources").exists(), "source summary 不应直接写入"
     assert (project / "wiki" / "index.md").exists(), "index.md 未生成"
     assert (project / "wiki" / "log.md").exists(), "log.md 未生成"
 

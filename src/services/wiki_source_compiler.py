@@ -1,18 +1,15 @@
 """wiki-first source summary 编译器(规则模板,零 LLM)。
 
-从 knowledge 条目抽取标题/首段/关键实体,生成 ``wiki/sources/<slug>.md``。
-幂等:同 source_hash 覆盖,不产生重复。
+从 knowledge 条目抽取标题/首段/关键实体,生成 source summary 建议。
 时间戳由调用方传入,内部不取系统时间(可复现)。
 """
 from __future__ import annotations
 
 import logging
 import re
-from pathlib import Path
 
 from src.services.db import Database
-from src.services.wiki_slug import resolve_slug, write_markdown
-from src.utils.config import Config
+from src.services.wiki_slug import slugify
 
 logger = logging.getLogger(__name__)
 
@@ -30,27 +27,22 @@ class WikiSourceCompiler:
     """单源摘要页编译器(规则驱动,无 LLM 调用)。"""
 
     def compile(self, knowledge_id: str, ingested_at: str) -> dict:
-        """为 knowledge 生成 source summary 页。
+        """为 knowledge 准备 source summary 页建议。
 
         Returns:
-            ``{"status","path","slug","key_entities","summary"}``;
+            ``{"status","suggested_path","slug","key_entities","summary","frontmatter","body"}``;
             knowledge 不存在时 ``{"status":"not_found"}``。
         """
         item = Database.get_knowledge(knowledge_id)
         if not item:
             return {"status": "not_found"}
 
-        wiki_dir = Config.get("knowledge_workflow.wiki_dir", "wiki")
-        sources_dir = Path(
-            Config.get("knowledge_workflow.source_summary_dir", f"{wiki_dir}/sources")
-        )
-        sources_dir.mkdir(parents=True, exist_ok=True)
-
         title = item.get("title") or "untitled"
         content = item.get("content") or ""
         source_hash = item.get("content_hash") or ""
 
-        slug, target = resolve_slug(sources_dir, title, source_hash)
+        slug = slugify(title)
+        suggested_path = f"sources/{slug}.md"
         summary = self._build_summary(content)
         entities = self._extract_key_entities(content, title)
 
@@ -65,14 +57,15 @@ class WikiSourceCompiler:
             "source_ids": [knowledge_id],
         }
         body = self._render_body(frontmatter, summary)
-        write_markdown(target, frontmatter, body)
-        logger.info("source summary compiled: %s (kid=%s)", target, knowledge_id)
+        logger.info("source summary prepared: %s (kid=%s)", suggested_path, knowledge_id)
         return {
-            "status": "compiled",
-            "path": str(target),
+            "status": "prepared",
+            "suggested_path": suggested_path,
             "slug": slug,
             "key_entities": entities,
             "summary": summary,
+            "frontmatter": frontmatter,
+            "body": body,
         }
 
     @staticmethod
