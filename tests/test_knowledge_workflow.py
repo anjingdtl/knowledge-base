@@ -1,5 +1,4 @@
 """KnowledgeWorkflowService 编排器 + path_indexer e2e(spec S2)。"""
-from pathlib import Path
 from unittest.mock import MagicMock
 
 from src.services.db import Database
@@ -7,7 +6,6 @@ from src.services.knowledge_workflow import (
     KnowledgeWorkflowService,
     try_knowledge_workflow_compile,
 )
-from src.services.wiki_slug import read_frontmatter
 from src.utils.config import Config
 
 
@@ -312,8 +310,8 @@ def test_path_indexer_triggers_wiki_first_e2e(tmp_path, monkeypatch):
     assert (project / "wiki" / "log.md").exists(), "log.md 未生成"
 
 
-def test_save_query_writes_syntheses_draft(tmp_path):
-    """save_query 写文件系统 syntheses/*.md(draft)+ log。"""
+def test_save_query_prepares_syntheses_draft(tmp_path):
+    """save_query 准备 syntheses draft,不直接写 markdown。"""
     Config.set("knowledge_workflow.mode", "wiki_first")
     Config.set("knowledge_workflow.wiki_dir", str(tmp_path / "wiki"))
     Config.set("knowledge_workflow.synthesis_dir", str(tmp_path / "wiki" / "syntheses"))
@@ -328,13 +326,37 @@ def test_save_query_writes_syntheses_draft(tmp_path):
         save_mode="auto",
         timestamp="2026-07-02T11:00:00",
     )
-    assert result["status"] == "saved"
-    p = Path(result["path"])
-    assert p.exists()
-    fm = read_frontmatter(p)
-    assert fm["status"] == "draft"
-    assert fm["confidence"] == 0.8
-    assert (tmp_path / "wiki" / "log.md").exists()
+    assert result["status"] == "prepared"
+    assert result["page_type"] == "syntheses"
+    assert result["frontmatter"]["status"] == "draft"
+    assert result["frontmatter"]["confidence"] == 0.8
+    assert result["frontmatter"]["source_ids"] == ["k1", "k2"]
+    assert "LLM 检索基于语义" in result["body"]
+    assert not (tmp_path / "wiki" / "syntheses").exists()
+
+
+def test_save_query_prepares_draft_without_writing_markdown(tmp_path):
+    """Phase 4C:save_query 不再绕过 WikiRepository 直接写 markdown。"""
+    Config.set("knowledge_workflow.mode", "wiki_first")
+    Config.set("knowledge_workflow.wiki_dir", str(tmp_path / "wiki"))
+    Config.set("knowledge_workflow.synthesis_dir", str(tmp_path / "wiki" / "syntheses"))
+    svc = KnowledgeWorkflowService()
+
+    result = svc.save_query(
+        question="LLM 与传统搜索的区别?",
+        answer="LLM 检索基于语义..." + "x" * 120,
+        source_ids=["k1", "k2"],
+        confidence=0.8,
+        page_type="syntheses",
+        save_mode="manual",
+        timestamp="2026-07-02T11:00:00",
+    )
+
+    assert result["status"] == "prepared"
+    assert result["frontmatter"]["status"] == "draft"
+    assert result["frontmatter"]["source_ids"] == ["k1", "k2"]
+    assert "LLM 检索基于语义" in result["body"]
+    assert not (tmp_path / "wiki" / "syntheses").exists()
 
 
 def test_save_query_auto_below_threshold_skips(tmp_path):

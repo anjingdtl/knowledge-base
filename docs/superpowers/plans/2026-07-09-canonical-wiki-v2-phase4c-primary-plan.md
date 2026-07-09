@@ -381,6 +381,51 @@ mypy src tools
 
 Observed: `27 passed`; ruff passed; mypy passed.
 
+### Task 4B: KnowledgeWorkflow Save Query Draft Preparation
+
+**Files:**
+- Modify: `src/services/knowledge_workflow.py`
+- Modify: `tests/test_knowledge_workflow.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write the failing no-write save_query test**
+
+Added `test_save_query_prepares_draft_without_writing_markdown` to assert `save_query()` returns a draft payload and does not create the `wiki/syntheses` directory.
+
+- [x] **Step 2: Run the failing test**
+
+Run:
+
+```bash
+pytest tests/test_knowledge_workflow.py::test_save_query_prepares_draft_without_writing_markdown -q
+```
+
+Observed: failed because old behavior returned `status="saved"` and wrote markdown.
+
+- [x] **Step 3: Remove direct markdown write**
+
+Changed `KnowledgeWorkflowService.save_query()` to preserve threshold gating and draft metadata construction, but return `status="prepared"` with `frontmatter` and `body` instead of calling `write_markdown(...)`.
+
+- [x] **Step 4: Migrate old save_query test**
+
+Updated the old syntheses draft test to assert prepared payload fields and no filesystem write.
+
+- [x] **Step 5: Remove guard allowlist entry**
+
+Removed `("services/knowledge_workflow.py", "write_markdown")` from `ALLOWED_DIRECT_WRITES` and removed `services/knowledge_workflow.py` from `GUARDED`.
+
+- [x] **Step 6: Verify**
+
+Run:
+
+```bash
+pytest tests/test_canonical_write_guards.py tests/test_knowledge_workflow.py tests/test_wiki_write_service.py -q
+ruff check src tests evals tools scripts
+mypy src tools
+```
+
+Observed: `24 passed`; ruff passed; mypy passed.
+
 - [ ] **Step 1: Remove resolved allowlist entries**
 
 After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:
