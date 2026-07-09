@@ -144,6 +144,60 @@ def test_compile_shadow_failure_is_isolated():
     assert "shadow" not in result
 
 
+def test_compile_canary_mode_runs_after_legacy_workflow():
+    """canonical_v2 canary:legacy fallback 保留,随后运行正式 V2 canary 链路。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "canary")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    canary = MagicMock()
+    canary.run.return_value = {
+        "status": "completed",
+        "knowledge_id": "kid-1",
+        "tx_id": "tx_test",
+        "new_claims": 1,
+        "auto_publish": False,
+    }
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        canary_workflow=canary,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["mode"] == "wiki_first"
+    assert result["canary"]["tx_id"] == "tx_test"
+    fakes.source.compile.assert_called_once()
+    fakes.entity.update.assert_called_once()
+    fakes.index.refresh.assert_called_once()
+    fakes.log.append.assert_called_once()
+    canary.run.assert_called_once()
+
+
+def test_compile_canary_failure_is_isolated():
+    """canary 链路失败不得阻断 legacy fallback 产物。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "canary")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    canary = MagicMock()
+    canary.run.side_effect = RuntimeError("canary boom")
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        canary_workflow=canary,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["index"]["status"] == "compiled"
+    assert {"stage": "canary", "error": "canary boom"} in result["errors"]
+    assert "canary" not in result
+
+
 def test_compile_not_found():
     _wiki_first()
     # 不 insert 任何 knowledge

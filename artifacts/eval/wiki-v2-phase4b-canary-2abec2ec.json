@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "knowledge_id": "2abec2ec-fe20-4fc9-834b-743a52764cdb",
+  "title": "广西公司全渠道运营中心业-2026-49号-关于开展企业微信无效粉丝清理工作的通知--2abec2ec",
+  "source_path": "D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\data\\graph\\pages\\广西公司全渠道运营中心业-2026-49号-关于开展企业微信无效粉丝清理工作的通知--2abec2ec.md",
+  "temp_root": ".temp\\wiki-v2-phase4b-canary",
+  "runs": [
+    {
+      "tx_id": "tx_b93538aeb2cc",
+      "new_claims": 1,
+      "projection": {
+        "processed": 1,
+        "skipped": 0,
+        "warnings": [],
+        "errors": [],
+        "rebuilt": false,
+        "rebuild_processed": 0,
+        "parity_findings": 0,
+        "parity": []
+      },
+      "diff": "[claim:claim_phase4b_canary_real_1] created (draft)"
+    },
+    {
+      "tx_id": "tx_694c3b1d491e",
+      "new_claims": 0,
+      "projection": {
+        "processed": 1,
+        "skipped": 0,
+        "warnings": [],
+        "errors": [],
+        "rebuilt": false,
+        "rebuild_processed": 0,
+        "parity_findings": 0,
+        "parity": []
+      },
+      "diff": "[skipped] evidence ev_phase4b_canary_real_2 (knowledge_id=2abec2ec-fe20-4fc9-834b-743a52764cdb, block=19fe116c-71b1-47ee-9627-19ae7ce427af) already exists in claim_phase4b_canary_real_1"
+    }
+  ],
+  "claims": {
+    "claim_phase4b_canary_real_1": {
+      "status": "draft",
+      "revision": 1,
+      "evidence_count": 1
+    }
+  },
+  "outbox_tx_ids": [
+    "tx_b93538aeb2cc"
+  ],
+  "parity_after_findings": [],
+  "rollback_probe": {
+    "raised": true,
+    "claim_visible_after_abort": false
+  }
+}

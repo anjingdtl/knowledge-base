@@ -175,6 +175,11 @@ wiki:
   query_save_min_length: 100
   canonical_v2:                 # Phase 3.5 C5:canonical wiki v2 分阶段切换
     mode: off                   # off | shadow | canary | primary(off=legacy 零变化)
+    canary:
+      knowledge_ids: []         # Phase 4B:显式 knowledge_id allowlist
+      source_paths: []          # Phase 4B:显式 source_path/目录 allowlist
+      refines_auto_merge_min_score: 0.90
+      auto_repair_projection: true
     projection_fallback_to_filesystem: true
     compatibility_read_legacy_sqlite: true
     compatibility_write_legacy_sqlite: false
