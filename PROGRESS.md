@@ -2,8 +2,71 @@
 
 > 最后更新：2026-07-08
 > 源码版本：`src/version.py` 中的 `1.4.0`
-> 当前分支：`master`
+> 当前分支：`feature/wiki-v2-phase4a-shadow`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
+
+## Canonical Wiki V2 Phase 4A Shadow 接入 — 代码链路完成，退出核验待补 (2026-07-09)
+
+在 Phase 3.5 Correction Gate 全部通过后，按
+`docs/superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md`
+§6 进入 Phase 4A Shadow 主工作流接入。本轮只启用 `shadow` 模式下的隔离链路，
+不切换 canary/primary，不影响正式 `wiki/*.md`、正式 projection outbox 或 legacy
+Wiki 产物。
+
+### Phase 4A 本轮交付
+
+| 项 | 状态 | 内容 |
+|---|---|---|
+| Shadow workflow 服务 | ✅ | 新增 `WikiShadowWorkflow`：raw blocks/正文 fallback → `ExtractionBlock` → ClaimExtractor → ClaimMatcher → MergeEngine |
+| 隔离写入 | ✅ | Shadow canonical store 写入 `wiki/_shadow/`；outbox 位于 `wiki/_shadow/_meta/projection_outbox.jsonl`，不进入正式 `data/wiki_projection_outbox.jsonl` |
+| 主编排接入 | ✅ | `KnowledgeWorkflowService.compile` 在 legacy source/entity/index/log 成功或失败隔离执行后，仅当 `wiki.canonical_v2.mode=shadow` 时运行 shadow 链路 |
+| 失败隔离 | ✅ | shadow 异常只写入 `result["errors"]` 的 `stage=shadow`，不阻断 raw 索引和 legacy wiki 编译 |
+| 差异报告 | ✅ | 每次 shadow run 生成 `wiki/_shadow/reports/<knowledge_id>.json`，包含新 Claim 数、自动合并数、unresolved、冲突、Evidence 缺失、diff、LLM 调用数、延迟、warnings/errors |
+| DI 接入 | ✅ | `AppContainer.wiki_shadow_workflow` 注入 block_repo、extractor、matcher、config；新服务不抓全局 Config/Database/container |
+
+### 验证(本轮真实执行)
+
+| 门禁 | 结果 |
+|---|---|
+| Shadow TDD 红绿 | ✅ 新增失败测试后实现，目标测试转绿 |
+| 相关 pytest | ✅ `70 passed / 1 skipped`：knowledge workflow、shadow workflow、claim extractor/matcher/merge |
+| C4/C5/守卫相关 pytest | ✅ `39 passed`：canonical write guards、canonical mode、wiki query service、knowledge workflow、shadow workflow |
+| 全量 pytest | ✅ `1416 passed / 2 skipped / 5 xfailed / 8 warnings` |
+| ruff 全量 | ✅ `ruff check src tests evals tools scripts` 0 error |
+| mypy 全量 | ✅ `mypy src tools` 0 error / 187 source files |
+| retrieval eval | ✅ `python evals/run_retrieval_eval.py --all` Overall PASS；code/table 1.0，no_answer 0.6667，zh 维持 0.6000 |
+| wiki eval | ✅ `python evals/run_wiki_eval.py` 不再崩溃；当前本地项目 auto 指标：source_coverage 0.0 / cross_page_update 0.9545 / orphan 0.0 / query_save 0.0 / stale 0.0909 |
+
+### 附带门禁修复
+
+`run_wiki_eval.py` 的 SQLite lint 路径在独立进程中会触发 `WikiLint().run()`，
+而旧 `WikiLint` 依赖测试 fixture 预先设置 `Database._instance`。本轮补成显式 DB
+依赖：`WikiLint(db=...)` 可注入，默认从 `Database._instance` 取，缺失时按
+`Config.get_db_path()` 创建实例；新增回归测试覆盖“无全局 DB 实例也能运行”。
+
+### Phase 4A 仍未满足的退出条件
+
+Phase 4A 的代码链路已接入，但**不得标记为完整通过**，直到完成以下人工/真实数据门禁：
+
+1. 至少一组真实个人知识库数据在 `wiki.canonical_v2.mode=shadow` 下运行；
+2. 归档 shadow 差异报告；
+3. 对抽样 Claim 的 Evidence、自动合并、unresolved 和冲突项做人工核验；
+4. 确认 LLM 调用成本与延迟在 `wiki.claims.max_llm_calls_per_ingest` 保护下可接受；
+5. 根据真实数据回看 C2 黄金集 5 个 xfailed gap，决定是否先收紧 matcher 保守策略。
+
+### 建设全景与进度更新
+
+| 阶段 | 状态 | 说明 |
+|---|---|---|
+| Phase 0-3 | ✅ 已完成 | Canonical 地基(模型/Schema/Repository/Projection/Extractor/Matcher/Merge) |
+| Phase 3.5 纠偏门禁 | ✅ 已完成 | C0-C6,Phase 4 前置门禁全开 |
+| Phase 4A Shadow | 🟡 **代码链路已完成，退出核验待补** | shadow claim 链路已接入真实 ingest 编排；仍需真实个人知识库运行 + 人工抽样核验 |
+| Phase 4B Canary | ⏳ | 未开始；需 Phase 4A 真实数据核验通过 |
+| Phase 4C Primary | ⏳ | 未开始；需 Phase 4B 稳定 |
+| Phase 5 失效传播 | ⏳ | 未开始 |
+| Phase 6 迁移/反馈/评测 | ⏳ | 未开始 |
+
+---
 
 ## Canonical Wiki V2 纠偏续建 — Phase 3.5 Correction Gate 通过 (2026-07-08)
 
@@ -56,7 +119,7 @@ C2 修 / 配置状态机 C5 / 读端口 C4)亦闭环。
 |---|---|---|
 | Phase 0-3 | ✅ 已完成 | Canonical 地基(模型/Schema/Repository/Projection/Extractor/Matcher/Merge) |
 | Phase 3.5 纠偏门禁 | ✅ 已完成(本轮) | C0-C6,Phase 4 前置门禁全开 |
-| Phase 4A Shadow | ⏳ **下一步** | claim 流程接入真实 ingest,不影响正式 canonical |
+| Phase 4A Shadow | 🟡 **代码链路已完成，退出核验待补** | claim 流程已接入真实 ingest 编排,不影响正式 canonical；真实数据运行 + 人工核验待补 |
 | Phase 4B Canary | ⏳ | 显式对象用 V2 主写,高风险动作强制 review |
 | Phase 4C Primary | ⏳ | V2 成主写路径,4 模块改造,守卫 allowlist 收缩 |
 | Phase 5 失效传播 | ⏳ | 依赖图 + 来源更新/删除级联重编译 |

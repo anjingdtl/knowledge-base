@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import cast
+from typing import Any, cast
 
 from src.services.db import Database
 from src.services.wiki_entity_updater import WikiEntityUpdater
@@ -30,11 +30,13 @@ class KnowledgeWorkflowService:
         entity_updater: WikiEntityUpdater | None = None,
         index_compiler: WikiIndexCompiler | None = None,
         log_compiler: WikiLogCompiler | None = None,
+        shadow_workflow: Any = None,
     ):
         self._source = source_compiler or WikiSourceCompiler()
         self._entity = entity_updater or WikiEntityUpdater()
         self._index = index_compiler or WikiIndexCompiler()
         self._log = log_compiler or WikiLogCompiler()
+        self._shadow = shadow_workflow
 
     def compile(self, knowledge_id: str, ingested_at: str | None = None) -> dict:
         """编排 wiki-first 编译。失败隔离,不抛。"""
@@ -81,6 +83,21 @@ class KnowledgeWorkflowService:
         except Exception as e:
             logger.warning("log append failed (%s): %s", knowledge_id, e)
             result["errors"].append({"stage": "log", "error": str(e)})
+
+        if self._shadow is not None:
+            try:
+                from src.services.wiki_query_service import resolve_canonical_mode
+
+                if resolve_canonical_mode(Config) == "shadow":
+                    result["shadow"] = self._shadow.run(
+                        knowledge_id=knowledge_id,
+                        item=item,
+                        source_summary=src.get("summary") or item.get("title", ""),
+                        now=ts,
+                    )
+            except Exception as e:
+                logger.warning("shadow workflow failed (%s): %s", knowledge_id, e)
+                result["errors"].append({"stage": "shadow", "error": str(e)})
 
         return result
 

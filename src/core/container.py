@@ -126,6 +126,7 @@ class AppContainer:
     _wiki_claim_extractor: Optional[object] = field(default=None, repr=False)
     _wiki_claim_matcher: Optional[object] = field(default=None, repr=False)
     _wiki_merge_engine: Optional[object] = field(default=None, repr=False)
+    _wiki_shadow_workflow: Optional[object] = field(default=None, repr=False)
 
     # --- 操作安全服务 (lazy init) ---
     _operation_log: Optional[object] = field(default=None, repr=False)
@@ -355,7 +356,9 @@ class AppContainer:
     def knowledge_workflow(self):
         if self._knowledge_workflow is None:
             from src.services.knowledge_workflow import KnowledgeWorkflowService
-            self._knowledge_workflow = KnowledgeWorkflowService()
+            self._knowledge_workflow = KnowledgeWorkflowService(
+                shadow_workflow=self.wiki_shadow_workflow,
+            )
             self._track_service("_knowledge_workflow")
         return self._knowledge_workflow
 
@@ -418,6 +421,19 @@ class AppContainer:
             self._wiki_merge_engine = _Merge(repository=self.wiki_repository, config=self.config)
             self._track_service("_wiki_merge_engine")
         return self._wiki_merge_engine
+
+    @property
+    def wiki_shadow_workflow(self):
+        if self._wiki_shadow_workflow is None:
+            from src.services.wiki_shadow_workflow import WikiShadowWorkflow as _Shadow
+            self._wiki_shadow_workflow = _Shadow(
+                block_repository=self.block_repo,
+                extractor=self.wiki_claim_extractor,
+                matcher=self.wiki_claim_matcher,
+                config=self.config,
+            )
+            self._track_service("_wiki_shadow_workflow")
+        return self._wiki_shadow_workflow
 
     @property
     def wiki_write_service(self):

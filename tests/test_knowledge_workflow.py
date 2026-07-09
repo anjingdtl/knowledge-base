@@ -82,6 +82,68 @@ def test_compile_isolates_failure():
     fakes.index.refresh.assert_called_once()  # 后续阶段继续执行
 
 
+def test_compile_shadow_mode_runs_after_legacy_workflow():
+    """canonical_v2 shadow:legacy 编译照旧,随后运行隔离 shadow 链路。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "shadow")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    shadow = MagicMock()
+    shadow.run.return_value = {
+        "status": "completed",
+        "knowledge_id": "kid-1",
+        "new_claims": 1,
+        "auto_merged": 0,
+        "unresolved": 0,
+        "conflicts": 0,
+        "evidence_missing": 0,
+        "page_diff": "[claim:claim_1] created (draft)",
+        "llm_calls": 1,
+        "latency_ms": 12,
+    }
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        shadow_workflow=shadow,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["mode"] == "wiki_first"
+    assert result["shadow"]["status"] == "completed"
+    fakes.source.compile.assert_called_once()
+    fakes.entity.update.assert_called_once()
+    fakes.index.refresh.assert_called_once()
+    fakes.log.append.assert_called_once()
+    shadow.run.assert_called_once()
+    call = shadow.run.call_args
+    assert call.kwargs["knowledge_id"] == "kid-1"
+    assert call.kwargs["source_summary"] == "s"
+
+
+def test_compile_shadow_failure_is_isolated():
+    """shadow 链路失败不得阻断 raw/legacy wiki 编译结果。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "shadow")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    shadow = MagicMock()
+    shadow.run.side_effect = RuntimeError("shadow boom")
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        shadow_workflow=shadow,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["index"]["status"] == "compiled"
+    assert {"stage": "shadow", "error": "shadow boom"} in result["errors"]
+    assert "shadow" not in result
+
+
 def test_compile_not_found():
     _wiki_first()
     # 不 insert 任何 knowledge

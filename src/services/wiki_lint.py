@@ -3,6 +3,7 @@ import json
 import logging
 import re
 from dataclasses import dataclass, field
+from typing import Any
 
 from src.services.db import Database
 from src.utils.config import Config
@@ -55,13 +56,20 @@ class LintReport:
 
 
 class WikiLint:
+    def __init__(self, db: Any = None):
+        self._db = db or self._default_db()
+
+    @staticmethod
+    def _default_db() -> Any:
+        return Database._instance if Database._instance is not None else Database(str(Config.get_db_path()))
+
     def run(self) -> dict:
-        pages = Database.list_wiki_pages(limit=500)
+        pages = self._db.list_wiki_pages(limit=500)
         if not pages:
             return LintReport(total_pages=0, healthy_pages=0, score=1.0).to_dict()
 
         report = LintReport(total_pages=len(pages))
-        all_links = Database.get_all_wiki_links()
+        all_links = self._db.get_all_wiki_links()
         linked_page_ids = set()
         for link in all_links:
             linked_page_ids.add(link["source_page_id"])
@@ -81,7 +89,7 @@ class WikiLint:
             # 2. 过时页面 — source_ids 指向已删除的 knowledge_items
             source_ids = json.loads(page.get("source_ids", "[]"))
             if source_ids:
-                existing = Database.get_knowledge_batch(source_ids)
+                existing = self._db.get_knowledge_batch(source_ids)
                 deleted = [sid for sid in source_ids if sid not in existing]
                 if deleted:
                     findings_for_page.append(LintFinding(
@@ -133,7 +141,7 @@ class WikiLint:
 
         # 5. 损坏链接 — wiki_links 中物理悬空的记录(source/target 已被 purge 删除但链接残留)
         #    status=deleted 的软删页面物理仍存在,不算悬空,不在此列。
-        dangling_links = Database.get_dangling_wiki_links()
+        dangling_links = self._db.get_dangling_wiki_links()
         for link in dangling_links:
             src_id = link.get("source_page_id", "")
             tgt_id = link.get("target_page_id", "")
@@ -207,11 +215,11 @@ class WikiLint:
         for pid, penalties in page_scores.items():
             score = max(0.0, base_score + sum(penalties))
             try:
-                Database.update_wiki_page(pid, lint_score=round(score, 2))
+                self._db.update_wiki_page(pid, lint_score=round(score, 2))
             except Exception as e:
                 logger.warning("Failed to update lint_score for %s: %s", pid, e)
 
-        Database.insert_wiki_op("lint", "", {
+        self._db.insert_wiki_op("lint", "", {
             "total_pages": report.total_pages,
             "findings_count": len(report.findings),
             "score": round(report.score, 2),
@@ -223,11 +231,11 @@ class WikiLint:
 
         同时返回已有 complex_anomaly 标记的页面（待修复）。
         """
-        pages = Database.list_wiki_pages(limit=500)
+        pages = self._db.list_wiki_pages(limit=500)
         if not pages:
             return {"scanned": 0, "issues": [], "pre_marked": []}
 
-        all_links = Database.get_all_wiki_links()
+        all_links = self._db.get_all_wiki_links()
         linked_page_ids = set()
         for link in all_links:
             linked_page_ids.add(link["source_page_id"])
@@ -298,12 +306,12 @@ class WikiLint:
     def mark_complex_anomaly(page_id: str, categories: list[str]) -> None:
         """为页面标记复杂异常（不修复）"""
         anomaly_str = ",".join(categories)
-        Database.update_wiki_page(page_id, complex_anomaly=anomaly_str)
+        WikiLint._default_db().update_wiki_page(page_id, complex_anomaly=anomaly_str)
 
     @staticmethod
     def clear_complex_anomaly(page_id: str) -> None:
         """清除页面的复杂异常标记"""
-        Database.update_wiki_page(page_id, complex_anomaly="")
+        WikiLint._default_db().update_wiki_page(page_id, complex_anomaly="")
 
     def repair_complex_issues(self, issues: list[dict] | None = None) -> dict:
         """修复复杂问题：orphan/empty/duplicate
@@ -325,7 +333,7 @@ class WikiLint:
         if not issues:
             return {"status": "clean", "scanned": 0, "fixed": 0}
 
-        pages = Database.list_wiki_pages(limit=500)
+        pages = self._db.list_wiki_pages(limit=500)
         page_map = {p["id"]: p for p in pages}
         all_titles = {p["title"] for p in pages}
         title_to_ids: dict[str, list[str]] = {}
@@ -352,7 +360,7 @@ class WikiLint:
                         title = page["title"]
                         best_match = self._find_similar_page(pid, title, page_map, all_titles)
                         if best_match:
-                            Database.add_wiki_link(pid, best_match["id"], "related", 0.5)
+                            self._db.add_wiki_link(pid, best_match["id"], "related", 0.5)
                             orphan_fixed += 1
                             details.append({
                                 "page_id": pid, "page_title": title, "category": "orphan",
@@ -386,7 +394,7 @@ class WikiLint:
                             compiler = WikiCompiler()
                             generated = compiler._generate_summary(title, content)
                             if generated:
-                                Database.update_wiki_page(pid, concept_summary=generated)
+                                self._db.update_wiki_page(pid, concept_summary=generated)
                                 empty_fixed += 1
                                 details.append({
                                     "page_id": pid, "page_title": title, "category": "empty",
@@ -412,7 +420,7 @@ class WikiLint:
                             for old_id in sorted_ids[1:]:
                                 old_page = page_map.get(old_id)
                                 if old_page and old_page.get("status") not in ("deleted", "deprecated"):
-                                    Database.update_wiki_page(old_id, status="deprecated")
+                                    self._db.update_wiki_page(old_id, status="deprecated")
                                     duplicate_fixed += 1
                                     details.append({
                                         "page_id": old_id,
@@ -429,7 +437,7 @@ class WikiLint:
                     logger.error("Complex repair failed for [%s] %s: %s", cat, page["title"], e)
                     errors += 1
 
-        Database.insert_wiki_op("repair_complex", "", {
+        self._db.insert_wiki_op("repair_complex", "", {
             "orphan_fixed": orphan_fixed,
             "empty_fixed": empty_fixed,
             "duplicate_fixed": duplicate_fixed,
@@ -496,9 +504,9 @@ class WikiLint:
                 summary = content[:200].rsplit("。", 1)[0] + "。" if "。" in content[:200] else content[:200]
 
                 import json
-                Database.update_wiki_page(page["id"], content=content,
-                                         concept_summary=summary,
-                                         source_ids=json.dumps(source_ids, ensure_ascii=False))
+                self._db.update_wiki_page(page["id"], content=content,
+                                          concept_summary=summary,
+                                          source_ids=json.dumps(source_ids, ensure_ascii=False))
             else:
                 WikiLint.mark_complex_anomaly(page["id"], ["empty"])
         except Exception as e:
@@ -511,7 +519,7 @@ class WikiLint:
         from src.data.wiki_schema import LINT_PROMPT
         from src.services.llm import LLMService
 
-        links = all_links or Database.get_all_wiki_links()
+        links = all_links or self._db.get_all_wiki_links()
         related_pairs = set()
         for link in links:
             if link["link_type"] == "related":
