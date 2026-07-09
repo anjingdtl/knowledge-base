@@ -1,9 +1,9 @@
-"""``wiki/index.md`` 生成器:按 page type 分组聚合所有 wiki 页。全量重建。"""
+"""``wiki/index.md`` 建议生成器:按 page type 分组聚合所有 wiki 页。"""
 from __future__ import annotations
 
 from pathlib import Path
 
-from src.services.wiki_slug import read_frontmatter, write_markdown
+from src.services.wiki_slug import read_frontmatter
 from src.utils.config import Config
 
 PAGE_TYPE_DIRS = ["sources", "entities", "concepts", "comparisons", "syntheses"]
@@ -18,9 +18,8 @@ PAGE_TYPE_LABELS = {
 
 class WikiIndexCompiler:
     def refresh(self) -> dict:
-        """扫描 wiki 子目录,全量重建 ``wiki/index.md``。"""
+        """扫描 wiki 子目录,准备 ``wiki/index.md`` 建议载荷。"""
         wiki_dir = Path(Config.get("knowledge_workflow.wiki_dir", "wiki"))
-        wiki_dir.mkdir(parents=True, exist_ok=True)
         sections: list[tuple[str, list[tuple[str, str]]]] = []
         total = 0
         for ptype in PAGE_TYPE_DIRS:
@@ -36,9 +35,13 @@ class WikiIndexCompiler:
             total += len(entries)
             sections.append((label, entries))
         body = self._render(sections)
-        index_path = wiki_dir / "index.md"
-        write_markdown(index_path, {"generated": True}, body)
-        return {"status": "compiled", "path": str(index_path), "page_count": total}
+        return {
+            "status": "prepared",
+            "suggested_path": "index.md",
+            "page_count": total,
+            "frontmatter": {"generated": True},
+            "body": body,
+        }
 
     @staticmethod
     def _render(sections: list[tuple[str, list[tuple[str, str]]]]) -> str:

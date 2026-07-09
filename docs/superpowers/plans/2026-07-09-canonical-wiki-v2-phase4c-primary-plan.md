@@ -471,6 +471,50 @@ pytest tests/test_wiki_source_compiler.py tests/test_wiki_frontmatter_source_ids
 
 Observed: `28 passed`.
 
+### Task 4D: WikiIndexCompiler Index Preparation
+
+**Files:**
+- Modify: `src/services/wiki_index_compiler.py`
+- Modify: `tests/test_wiki_index_compiler.py`
+- Modify: `tests/test_knowledge_workflow.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write the failing no-write index test**
+
+Added `test_refresh_prepares_index_without_writing_markdown` to assert `WikiIndexCompiler.refresh()` returns a prepared index payload and does not create `wiki/index.md`.
+
+- [x] **Step 2: Run the failing test**
+
+Run:
+
+```bash
+pytest tests/test_wiki_index_compiler.py::test_refresh_prepares_index_without_writing_markdown -q
+```
+
+Observed: failed because the old compiler returned `status="compiled"` and wrote markdown.
+
+- [x] **Step 3: Remove direct markdown write**
+
+Changed `WikiIndexCompiler` to scan existing wiki page directories and return `status`, `suggested_path`, `frontmatter`, `body`, and `page_count` without calling `write_markdown(...)` or creating the wiki directory.
+
+- [x] **Step 4: Migrate index/workflow tests**
+
+Updated index compiler tests to assert the returned body instead of reading `index.md`. Updated the path indexer e2e expectation so `index.md` is no longer expected to appear as a direct filesystem write while `log.md` remains tracked as a pending legacy writer.
+
+- [x] **Step 5: Remove guard allowlist entry**
+
+Removed `("services/wiki_index_compiler.py", "write_markdown")` from `ALLOWED_DIRECT_WRITES` and removed `services/wiki_index_compiler.py` from `GUARDED`.
+
+- [x] **Step 6: Verify**
+
+Run:
+
+```bash
+pytest tests/test_wiki_index_compiler.py tests/test_knowledge_workflow.py tests/test_canonical_write_guards.py -q
+```
+
+Observed: `25 passed`.
+
 - [ ] **Step 1: Remove resolved allowlist entries**
 
 After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:
