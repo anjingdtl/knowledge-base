@@ -605,6 +605,50 @@ pytest tests/test_wiki_api_canonical_routes.py tests/test_api.py::TestPhase5WebC
 
 Observed: `23 passed`.
 
+### Task 4G: WikiWorkflow Canonical Status Transitions
+
+**Files:**
+- Modify: `src/services/wiki_workflow.py`
+- Modify: `src/services/wiki_projection.py`
+- Add: `tests/test_wiki_workflow_canonical.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write failing no-direct-DB workflow tests**
+
+Added tests for `submit_for_review()` and `restore_version()` using a fake `Database` that raises on `update_wiki_page`. The tests assert workflow status/version changes save canonical `WikiPage` objects through `WikiRepository`, process projection, and keep workflow history logging.
+
+- [x] **Step 2: Run the failing workflow tests**
+
+Run:
+
+```bash
+pytest tests/test_wiki_workflow_canonical.py -q
+```
+
+Observed: failed because the old workflow called `Database.update_wiki_page(...)` for both status transitions and version restore.
+
+- [x] **Step 3: Route workflow writes through canonical services**
+
+Changed `WikiWorkflow` to resolve active container repository/projection, or construct them from `Config` when no container is active. Status transitions and version restore now save canonical pages and force projection; workflow history and version snapshots remain in the legacy operation tables.
+
+- [x] **Step 4: Preserve restore compatibility fields**
+
+Added `WikiProjection.update_legacy_page_fields(...)` for compatibility-only read-model fields such as `concept_summary`, and made legacy projection preserve existing `concept_summary`, `lint_score`, and `complex_anomaly` when canonical pages are reprojected.
+
+- [x] **Step 5: Remove guard allowlist entry**
+
+Removed `("services/wiki_workflow.py", "update_wiki_page")` from `ALLOWED_DIRECT_WRITES` and removed `services/wiki_workflow.py` from `GUARDED`.
+
+- [x] **Step 6: Verify**
+
+Run:
+
+```bash
+pytest tests/test_wiki_workflow_canonical.py tests/test_api.py::TestPhase5WebContracts::test_wiki_create_update_and_workflow_contract tests/test_canonical_write_guards.py tests/test_wiki_projection.py -q
+```
+
+Observed: `22 passed`.
+
 - [ ] **Step 1: Remove resolved allowlist entries**
 
 After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:

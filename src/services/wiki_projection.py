@@ -218,6 +218,10 @@ class WikiProjection:
     def _upsert_legacy_page(self, page: WikiPage, *, commit: bool = True) -> None:
         """Maintain the legacy wiki_pages read model from canonical pages."""
         conn = self._db.get_conn()
+        existing = conn.execute(
+            "SELECT concept_summary, lint_score, complex_anomaly FROM wiki_pages WHERE id = ?",
+            (page.page_id,),
+        ).fetchone()
         conn.execute(
             "INSERT OR REPLACE INTO wiki_pages "
             "(id, title, content, source_ids, tags, concept_summary, status, "
@@ -229,16 +233,32 @@ class WikiProjection:
                 page.body,
                 json.dumps(page.source_ids, ensure_ascii=False),
                 json.dumps(page.tags, ensure_ascii=False),
-                "",
+                existing["concept_summary"] if existing else "",
                 page.status.value,
-                1.0,
-                "",
+                existing["lint_score"] if existing else 1.0,
+                existing["complex_anomaly"] if existing else "",
                 page.created_at,
                 page.updated_at,
             ),
         )
         if commit:
             conn.commit()
+
+    def update_legacy_page_fields(self, page_id: str, **fields) -> None:
+        """Patch compatibility-only legacy wiki_pages fields."""
+        if not fields:
+            return
+        allowed = {"concept_summary", "lint_score", "complex_anomaly"}
+        invalid = set(fields) - allowed
+        if invalid:
+            raise ValueError(f"Invalid legacy projection fields: {invalid}")
+        conn = self._db.get_conn()
+        sets = ", ".join(f"{field} = ?" for field in fields)
+        conn.execute(
+            f"UPDATE wiki_pages SET {sets} WHERE id = ?",
+            [*fields.values(), page_id],
+        )
+        conn.commit()
 
     def _upsert_claim(self, claim: Claim, *, commit: bool = True) -> None:
         """INSERT OR REPLACE wiki_claims (by claim_id, claim_scope=NULL) + evidence。"""
