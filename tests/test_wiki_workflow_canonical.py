@@ -140,3 +140,20 @@ def test_restore_version_updates_canonical_page_without_direct_db_write(monkeypa
     assert repo.saved[-1].status == PageStatus.DRAFT
     assert repo.saved[-1].tags == ["restored"]
     assert projection.legacy_updates == [("page-1", {"concept_summary": "Restored summary"})]
+
+
+def test_canonical_save_updates_source_ids(monkeypatch):
+    repo = _FakeRepo(_canonical_page())
+    projection = _FakeProjection()
+    monkeypatch.setattr(
+        "src.core.container.get_active_container",
+        lambda: SimpleNamespace(wiki_repository=repo, wiki_projection=projection),
+    )
+
+    WikiWorkflow._save_canonical_page(
+        "page-1",
+        _legacy_page(),
+        source_ids=["knowledge-1", "knowledge-2"],
+    )
+
+    assert repo.saved[-1].source_ids == ["knowledge-1", "knowledge-2"]

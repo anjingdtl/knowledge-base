@@ -117,8 +117,20 @@ class WikiWorkflow:
         return repo, WikiProjection(repo, Database, enabled=True)
 
     @classmethod
-    def _save_canonical_page(cls, page_id: str, legacy_page: dict, **fields) -> None:
-        repo, projection = cls._canonical_services()
+    def _save_canonical_page(
+        cls,
+        page_id: str,
+        legacy_page: dict,
+        *,
+        repository=None,
+        projection=None,
+        **fields,
+    ) -> None:
+        if repository is None or projection is None:
+            default_repository, default_projection = cls._canonical_services()
+            repository = repository or default_repository
+            projection = projection or default_projection
+        repo = repository
         page = repo.get_page(page_id)
         if page is not None and fields.get("title") and page.title != fields["title"]:
             repo.move_page(page_id, fields["title"], page.page_type.value)
@@ -133,6 +145,8 @@ class WikiWorkflow:
             page.content_hash = cls._content_hash(page.body)
         if "tags" in fields:
             page.tags = cls._json_list(fields["tags"])
+        if "source_ids" in fields:
+            page.source_ids = cls._json_list(fields["source_ids"])
         if "status" in fields:
             page.status = cls._page_status(fields["status"])
         page.updated_at = datetime.now().isoformat()

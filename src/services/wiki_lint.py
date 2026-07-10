@@ -56,12 +56,63 @@ class LintReport:
 
 
 class WikiLint:
-    def __init__(self, db: Any = None):
+    def __init__(self, db: Any = None, repository: Any = None, projection: Any = None):
         self._db = db or self._default_db()
+        self._repository = repository
+        self._projection = projection
+        self._uses_default_db = db is None
 
     @staticmethod
     def _default_db() -> Any:
         return Database._instance if Database._instance is not None else Database(str(Config.get_db_path()))
+
+    @staticmethod
+    def _canonical_projection() -> Any:
+        """Resolve the compatibility projection through the canonical writer."""
+        from src.services.wiki_workflow import WikiWorkflow
+        _, projection = WikiWorkflow._canonical_services()
+        return projection
+
+    def _canonical_services(self) -> tuple[Any, Any]:
+        """Resolve canonical services, preserving an explicitly injected database."""
+        from src.services.wiki_workflow import WikiWorkflow
+
+        default_repository, default_projection = WikiWorkflow._canonical_services()
+        repository = self._repository or default_repository
+        if self._projection is not None:
+            return repository, self._projection
+        if self._uses_default_db and self._repository is None:
+            return repository, default_projection
+
+        from src.services.wiki_projection import WikiProjection
+        return repository, WikiProjection(repository, self._db, enabled=True)
+
+    def _compatibility_projection(self) -> Any:
+        return self._canonical_services()[1]
+
+    def _save_canonical_page(self, page_id: str, legacy_page: dict, **fields) -> None:
+        """Apply a canonical page update and refresh its legacy read model."""
+        from src.services.wiki_workflow import WikiWorkflow
+        repository, projection = self._canonical_services()
+        WikiWorkflow._save_canonical_page(
+            page_id,
+            legacy_page,
+            repository=repository,
+            projection=projection,
+            **fields,
+        )
+
+    def _mark_complex_anomaly(self, page_id: str, categories: list[str]) -> None:
+        self._compatibility_projection().update_legacy_page_fields(
+            page_id,
+            complex_anomaly=",".join(categories),
+        )
+
+    def _clear_complex_anomaly(self, page_id: str) -> None:
+        self._compatibility_projection().update_legacy_page_fields(
+            page_id,
+            complex_anomaly="",
+        )
 
     def run(self) -> dict:
         pages = self._db.list_wiki_pages(limit=500)
@@ -215,7 +266,10 @@ class WikiLint:
         for pid, penalties in page_scores.items():
             score = max(0.0, base_score + sum(penalties))
             try:
-                self._db.update_wiki_page(pid, lint_score=round(score, 2))
+                self._compatibility_projection().update_legacy_page_fields(
+                    pid,
+                    lint_score=round(score, 2),
+                )
             except Exception as e:
                 logger.warning("Failed to update lint_score for %s: %s", pid, e)
 
@@ -306,12 +360,18 @@ class WikiLint:
     def mark_complex_anomaly(page_id: str, categories: list[str]) -> None:
         """为页面标记复杂异常（不修复）"""
         anomaly_str = ",".join(categories)
-        WikiLint._default_db().update_wiki_page(page_id, complex_anomaly=anomaly_str)
+        WikiLint._canonical_projection().update_legacy_page_fields(
+            page_id,
+            complex_anomaly=anomaly_str,
+        )
 
     @staticmethod
     def clear_complex_anomaly(page_id: str) -> None:
         """清除页面的复杂异常标记"""
-        WikiLint._default_db().update_wiki_page(page_id, complex_anomaly="")
+        WikiLint._canonical_projection().update_legacy_page_fields(
+            page_id,
+            complex_anomaly="",
+        )
 
     def repair_complex_issues(self, issues: list[dict] | None = None) -> dict:
         """修复复杂问题：orphan/empty/duplicate
@@ -368,7 +428,7 @@ class WikiLint:
                             })
                         else:
                             # 无法自动关联，标记复杂异常
-                            WikiLint.mark_complex_anomaly(pid, ["orphan"])
+                            self._mark_complex_anomaly(pid, ["orphan"])
                             details.append({
                                 "page_id": pid, "page_title": title, "category": "orphan",
                                 "action": "marked", "reason": "找不到相似页面可关联",
@@ -394,16 +454,19 @@ class WikiLint:
                             compiler = WikiCompiler()
                             generated = compiler._generate_summary(title, content)
                             if generated:
-                                self._db.update_wiki_page(pid, concept_summary=generated)
+                                self._compatibility_projection().update_legacy_page_fields(
+                                    pid,
+                                    concept_summary=generated,
+                                )
                                 empty_fixed += 1
                                 details.append({
                                     "page_id": pid, "page_title": title, "category": "empty",
                                     "action": "summary_generated",
                                 })
                             else:
-                                WikiLint.mark_complex_anomaly(pid, ["empty"])
+                                self._mark_complex_anomaly(pid, ["empty"])
                         else:
-                            WikiLint.mark_complex_anomaly(pid, ["empty"])
+                            self._mark_complex_anomaly(pid, ["empty"])
 
                     elif cat == "duplicate":
                         # 保留最新的，旧版本标记 deprecated
@@ -420,7 +483,11 @@ class WikiLint:
                             for old_id in sorted_ids[1:]:
                                 old_page = page_map.get(old_id)
                                 if old_page and old_page.get("status") not in ("deleted", "deprecated"):
-                                    self._db.update_wiki_page(old_id, status="deprecated")
+                                    self._save_canonical_page(
+                                        old_id,
+                                        old_page,
+                                        status="deprecated",
+                                    )
                                     duplicate_fixed += 1
                                     details.append({
                                         "page_id": old_id,
@@ -431,7 +498,7 @@ class WikiLint:
                                     })
 
                     # 修复成功后清除异常标记
-                    WikiLint.clear_complex_anomaly(pid)
+                    self._clear_complex_anomaly(pid)
 
                 except Exception as e:
                     logger.error("Complex repair failed for [%s] %s: %s", cat, page["title"], e)
@@ -503,15 +570,18 @@ class WikiLint:
                 content = "\n\n".join(parts)
                 summary = content[:200].rsplit("。", 1)[0] + "。" if "。" in content[:200] else content[:200]
 
-                import json
-                self._db.update_wiki_page(page["id"], content=content,
-                                          concept_summary=summary,
-                                          source_ids=json.dumps(source_ids, ensure_ascii=False))
+                self._save_canonical_page(
+                    page["id"],
+                    page,
+                    content=content,
+                    concept_summary=summary,
+                    source_ids=source_ids,
+                )
             else:
-                WikiLint.mark_complex_anomaly(page["id"], ["empty"])
+                self._mark_complex_anomaly(page["id"], ["empty"])
         except Exception as e:
             logger.warning("Failed to fill empty page [%s]: %s", title, e)
-            WikiLint.mark_complex_anomaly(page["id"], ["empty"])
+            self._mark_complex_anomaly(page["id"], ["empty"])
 
     def _check_contradictions(self, pages: list[dict], report: LintReport,
                                all_links: list[dict] | None = None):

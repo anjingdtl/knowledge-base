@@ -649,6 +649,57 @@ pytest tests/test_wiki_workflow_canonical.py tests/test_api.py::TestPhase5WebCon
 
 Observed: `22 passed`.
 
+### Task 4H: WikiLint Canonical Compatibility Updates
+
+**Files:**
+- Modify: `src/services/wiki_lint.py`
+- Modify: `src/services/wiki_workflow.py`
+- Add: `tests/test_wiki_lint_canonical.py`
+- Modify: `tests/test_wiki_workflow_canonical.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write failing no-direct-write lint tests**
+
+Added tests with a fake database that raises on `update_wiki_page`. They cover lint-score projection, externally callable complex-anomaly marking, and duplicate-page deprecation through canonical save.
+
+- [x] **Step 2: Run the failing lint tests**
+
+Run:
+
+```bash
+pytest tests/test_wiki_lint_canonical.py -q
+```
+
+Observed: `3 failed`; the old implementation called `Database.update_wiki_page(...)` for all three paths.
+
+- [x] **Step 3: Route lint writes through canonical services**
+
+Compatibility-only fields (`lint_score`, `complex_anomaly`, `concept_summary`) now use `WikiProjection.update_legacy_page_fields(...)`. Canonical content, source IDs, and status changes delegate to `WikiWorkflow._save_canonical_page(...)`, which saves through `WikiRepository` and forces projection. Added `source_ids` support to that shared canonical-save helper.
+
+- [x] **Step 4: Verify source ID propagation**
+
+Added a workflow regression test that first failed, then passed after `source_ids` was applied to the canonical `WikiPage`.
+
+- [x] **Step 5: Remove guard allowlist entry**
+
+Removed `("services/wiki_lint.py", "update_wiki_page")` from `ALLOWED_DIRECT_WRITES` and removed `services/wiki_lint.py` from `GUARDED`.
+
+- [x] **Step 6: Verify**
+
+Run:
+
+```bash
+pytest tests/test_canonical_write_guards.py tests/test_wiki_lint.py tests/test_wiki_lint_canonical.py tests/test_wiki_workflow_canonical.py tests/test_wiki_projection.py -q
+ruff check src/services/wiki_lint.py src/services/wiki_workflow.py tests/test_wiki_lint.py tests/test_wiki_lint_canonical.py tests/test_wiki_workflow_canonical.py tests/test_canonical_write_guards.py
+mypy src/services/wiki_lint.py src/services/wiki_workflow.py
+```
+
+Observed: `33 passed`; Ruff passed; mypy reported no issues.
+
+- [x] **Step 7: Review injected-service boundaries**
+
+Independent review found that the initial fallback ignored an explicitly injected lint database, and that a custom repository without an explicit projection could become detached from the legacy read model. `WikiLint` now accepts optional repository/projection dependencies and constructs a `WikiProjection` with the same injected database whenever needed. Real temporary SQLite tests verify canonical duplicate deprecation and content/source/status projection back to `wiki_pages`.
+
 - [ ] **Step 1: Remove resolved allowlist entries**
 
 After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:
