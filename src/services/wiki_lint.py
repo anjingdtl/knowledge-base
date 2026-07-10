@@ -75,6 +75,9 @@ class WikiLint:
 
     def _canonical_services(self) -> tuple[Any, Any]:
         """Resolve canonical services, preserving an explicitly injected database."""
+        if self._repository is not None and self._projection is not None:
+            return self._repository, self._projection
+
         from src.services.wiki_workflow import WikiWorkflow
 
         default_repository, default_projection = WikiWorkflow._canonical_services()

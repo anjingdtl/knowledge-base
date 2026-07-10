@@ -63,6 +63,20 @@ def test_run_projects_lint_score_without_direct_db_write(monkeypatch):
     assert projection.legacy_updates == [("page-1", {"lint_score": 0.85})]
 
 
+def test_fully_injected_services_do_not_resolve_default_canonical_services(monkeypatch):
+    db = _NoDirectLintDb([])
+    repository = object()
+    projection = _FakeProjection()
+    monkeypatch.setattr(
+        "src.services.wiki_workflow.WikiWorkflow._canonical_services",
+        lambda: (_ for _ in ()).throw(AssertionError("default services must not be resolved")),
+    )
+
+    services = WikiLint(db, repository=repository, projection=projection)._canonical_services()
+
+    assert services == (repository, projection)
+
+
 def test_mark_complex_anomaly_projects_compatibility_field_without_direct_db_write(monkeypatch):
     projection = _FakeProjection()
     monkeypatch.setattr(WikiLint, "_canonical_projection", staticmethod(lambda: projection), raising=False)
@@ -119,12 +133,11 @@ def test_repair_duplicate_projects_canonical_status_to_injected_database(tmp_pat
     old = _page("page-old", title="Duplicate", updated_at="2026-07-09T00:00:00")
     _insert_legacy_page(latest)
     _insert_legacy_page(old)
-    repository, projection = _canonical_services(tmp_path)
+    repository, _ = _canonical_services(tmp_path)
 
     result = WikiLint(
         Database,
         repository=repository,
-        projection=projection,
     ).repair_complex_issues([
         {"page_id": "page-new", "categories": ["duplicate"]},
     ])

@@ -694,11 +694,11 @@ ruff check src/services/wiki_lint.py src/services/wiki_workflow.py tests/test_wi
 mypy src/services/wiki_lint.py src/services/wiki_workflow.py
 ```
 
-Observed: `33 passed`; Ruff passed; mypy reported no issues.
+Observed: `34 passed`; Ruff passed; mypy reported no issues.
 
 - [x] **Step 7: Review injected-service boundaries**
 
-Independent review found that the initial fallback ignored an explicitly injected lint database, and that a custom repository without an explicit projection could become detached from the legacy read model. `WikiLint` now accepts optional repository/projection dependencies and constructs a `WikiProjection` with the same injected database whenever needed. Real temporary SQLite tests verify canonical duplicate deprecation and content/source/status projection back to `wiki_pages`.
+Independent review found that the initial fallback ignored an explicitly injected lint database, and that a custom repository without an explicit projection could become detached from the legacy read model. `WikiLint` now accepts optional repository/projection dependencies and constructs a `WikiProjection` with the same injected database whenever needed. A follow-up review also removed default-service construction when both services are injected, preventing an unintended workspace `wiki/` directory. Real temporary SQLite tests verify canonical duplicate deprecation and content/source/status projection back to `wiki_pages`.
 
 - [ ] **Step 1: Remove resolved allowlist entries**
 
