@@ -1371,16 +1371,19 @@ class Database(metaclass=_DatabaseMeta):
         return int(row["cnt"])
 
     def get_stats(self) -> dict:
-        """返回知识库统计汇总：文件数、存储占用、类型分布、分类覆盖"""
+        """返回知识库统计汇总：文件数、存储占用、类型分布、分类覆盖（默认排除软删）。"""
         conn = self.get_conn()
-        total_files = conn.execute("SELECT COUNT(*) as cnt FROM knowledge_items").fetchone()["cnt"]
+        total_files = conn.execute(
+            "SELECT COUNT(*) as cnt FROM knowledge_items WHERE deleted_at IS NULL"
+        ).fetchone()["cnt"]
         total_size = conn.execute(
-            "SELECT COALESCE(SUM(file_size), 0) as sz FROM knowledge_items"
+            "SELECT COALESCE(SUM(file_size), 0) as sz FROM knowledge_items WHERE deleted_at IS NULL"
         ).fetchone()["sz"]
 
         # 文件类型分布
         type_rows = conn.execute(
-            "SELECT file_type, COUNT(*) as cnt FROM knowledge_items GROUP BY file_type ORDER BY cnt DESC"
+            "SELECT file_type, COUNT(*) as cnt FROM knowledge_items "
+            "WHERE deleted_at IS NULL GROUP BY file_type ORDER BY cnt DESC"
         ).fetchall()
         file_type_dist = {r["file_type"] or "other": r["cnt"] for r in type_rows}
 

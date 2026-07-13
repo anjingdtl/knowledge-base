@@ -143,8 +143,28 @@ class KnowledgeRepository:
                 self._conn().commit()
 
     def _hard_delete_unlocked(self, item_id: str) -> None:
-        """硬删 — 彻底清理 knowledge_items + 关联表。"""
+        """硬删 — 彻底清理 knowledge_items + 关联表。
+
+        向量必须在 DELETE knowledge_chunks 之前清理：VectorStore.delete_by_knowledge
+        通过 knowledge_chunks 反查 rowid。
+        """
         conn = self._conn()
+        try:
+            from src.services.vectorstore import VectorStore
+            VectorStore().delete_by_knowledge(item_id)
+        except Exception:
+            import logging
+            logging.getLogger(__name__).warning(
+                "VectorStore deletion failed for item %s; continuing DB cleanup", item_id, exc_info=True
+            )
+        try:
+            from src.services.block_store import BlockStore
+            BlockStore().delete_by_page(item_id)
+        except Exception:
+            import logging
+            logging.getLogger(__name__).warning(
+                "BlockStore deletion failed for item %s; continuing DB cleanup", item_id, exc_info=True
+            )
         conn.execute("DELETE FROM chunk_fts WHERE knowledge_id = ?", (item_id,))
         conn.execute("DELETE FROM knowledge_chunks WHERE knowledge_id = ?", (item_id,))
         conn.execute("DELETE FROM knowledge_versions WHERE knowledge_id = ?", (item_id,))
@@ -154,21 +174,25 @@ class KnowledgeRepository:
             (item_id,),
         )
         conn.execute(
+            "DELETE FROM block_refs WHERE source_id IN "
+            "(SELECT id FROM blocks WHERE page_id = ?) OR target_id IN "
+            "(SELECT id FROM blocks WHERE page_id = ?)",
+            (item_id, item_id),
+        )
+        conn.execute(
             "DELETE FROM entity_refs WHERE (source_type = 'knowledge' AND source_id = ?) "
             "OR (target_type = 'knowledge' AND target_id = ?)",
             (item_id, item_id),
         )
+        conn.execute(
+            "DELETE FROM knowledge_graph_relations WHERE source_knowledge_id = ? "
+            "OR target_knowledge_id = ?",
+            (item_id, item_id),
+        )
+        conn.execute("DELETE FROM knowledge_graph_nodes WHERE knowledge_id = ?", (item_id,))
         conn.execute("DELETE FROM blocks WHERE page_id = ?", (item_id,))
         conn.execute("DELETE FROM knowledge_items WHERE id = ?", (item_id,))
         conn.commit()
-        try:
-            from src.services.vectorstore import VectorStore
-            VectorStore().delete_by_knowledge(item_id)
-        except Exception:
-            import logging
-            logging.getLogger(__name__).warning(
-                "VectorStore deletion failed for item %s; proceeding with DB cleanup", item_id, exc_info=True
-            )
 
     def restore(self, item_id: str) -> bool:
         """Phase 4: 恢复软删除条目（清除 deleted_at）。"""
@@ -199,21 +223,27 @@ class KnowledgeRepository:
     def count(self, tag: str | None = None) -> int:
         if tag:
             row = self._conn().execute(
-                "SELECT COUNT(*) as cnt FROM knowledge_items WHERE tags LIKE ?",
+                "SELECT COUNT(*) as cnt FROM knowledge_items "
+                "WHERE deleted_at IS NULL AND tags LIKE ?",
                 (f'%"{tag}"%',),
             ).fetchone()
         else:
-            row = self._conn().execute("SELECT COUNT(*) as cnt FROM knowledge_items").fetchone()
+            row = self._conn().execute(
+                "SELECT COUNT(*) as cnt FROM knowledge_items WHERE deleted_at IS NULL"
+            ).fetchone()
         return int(row["cnt"])
 
     def get_stats(self) -> dict:
         conn = self._conn()
-        total_files = conn.execute("SELECT COUNT(*) as cnt FROM knowledge_items").fetchone()["cnt"]
+        total_files = conn.execute(
+            "SELECT COUNT(*) as cnt FROM knowledge_items WHERE deleted_at IS NULL"
+        ).fetchone()["cnt"]
         total_size = conn.execute(
-            "SELECT COALESCE(SUM(file_size), 0) as sz FROM knowledge_items"
+            "SELECT COALESCE(SUM(file_size), 0) as sz FROM knowledge_items WHERE deleted_at IS NULL"
         ).fetchone()["sz"]
         type_rows = conn.execute(
-            "SELECT file_type, COUNT(*) as cnt FROM knowledge_items GROUP BY file_type ORDER BY cnt DESC"
+            "SELECT file_type, COUNT(*) as cnt FROM knowledge_items "
+            "WHERE deleted_at IS NULL GROUP BY file_type ORDER BY cnt DESC"
         ).fetchall()
         file_type_dist = {r["file_type"] or "other": r["cnt"] for r in type_rows}
         cat_count = 0

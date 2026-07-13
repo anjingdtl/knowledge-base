@@ -129,8 +129,11 @@ class FileGraphService:
             updated_at=page.metadata.get("updated-at", now),
         )
 
-        existing = self._db.get_knowledge(page.id)
+        # include_deleted: 软删行仍在库中；恢复/sync 必须清除 deleted_at，不能 INSERT 撞主键
+        existing = self._db.get_knowledge(page.id, include_deleted=True)
         if existing:
+            if existing.get("deleted_at"):
+                self._db.restore_knowledge(page.id)
             self._db.update_knowledge(
                 page.id,
                 title=item.title,
@@ -267,19 +270,67 @@ class FileGraphService:
         return {"restored": True, **result}
 
     def purge_page(self, trash_filename: str) -> None:
-        """永久删除回收站中的文件"""
+        """永久删除回收站中的文件，并硬删对应 DB/向量缓存。"""
         trash_path = self.ensure_graph() / ".trash" / trash_filename
+        page_id = self._page_id_from_trash_path(trash_path)
         if trash_path.exists():
             trash_path.unlink()
+        if page_id:
+            self._delete_cache(page_id, hard=True)
 
     def empty_trash(self) -> int:
-        """清空回收站，返回删除的文件数"""
+        """清空回收站，返回删除的文件数；同步硬删 DB 残留。"""
         trash_dir = self.ensure_graph() / ".trash"
         count = 0
-        for path in trash_dir.glob("*.md"):
+        for path in list(trash_dir.glob("*.md")):
+            page_id = self._page_id_from_trash_path(path)
             path.unlink()
+            if page_id:
+                self._delete_cache(page_id, hard=True)
             count += 1
         return count
+
+    def _page_id_from_trash_path(self, path: Path) -> str | None:
+        """从回收站 MD 解析 page id（frontmatter / id:: / 文件名后缀）。"""
+        if path.exists():
+            try:
+                page = self._parser.parse(path.read_text(encoding="utf-8"))
+                if getattr(page, "id", None):
+                    return str(page.id)
+            except Exception:
+                pass
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line.startswith("id::"):
+                            return line[len("id::"):].strip() or None
+                        if line.startswith("page_id:"):
+                            return line.split(":", 1)[1].strip() or None
+            except Exception:
+                pass
+        stem = path.stem
+        if "--" in stem:
+            # title--{id前8位}；无法还原完整 UUID 时尝试按前缀匹配软删行
+            prefix = stem.rsplit("--", 1)[-1]
+            if prefix and hasattr(self._db, "get_conn"):
+                try:
+                    row = self._db.get_conn().execute(
+                        "SELECT id FROM knowledge_items WHERE id LIKE ? LIMIT 1",
+                        (f"{prefix}%",),
+                    ).fetchone()
+                    if row:
+                        return row[0]
+                    # id 可能是完整 UUID，前缀 8 位匹配
+                    row = self._db.get_conn().execute(
+                        "SELECT id FROM knowledge_items WHERE substr(id,1,?) = ? LIMIT 1",
+                        (len(prefix), prefix),
+                    ).fetchone()
+                    if row:
+                        return row[0]
+                except Exception:
+                    pass
+        return None
 
     def read_page(self, page_id: str) -> PageDocument:
         path = self._resolve_page_path(page_id)
@@ -350,12 +401,24 @@ class FileGraphService:
                 except Exception:
                     pass
 
-    def _delete_cache(self, page_id: str) -> None:
+    def _delete_cache(self, page_id: str, *, hard: bool = False) -> None:
+        """软删只置 deleted_at（保留 blocks/vectors 供过滤与恢复）；硬删清向量+关联。"""
+        if not hard:
+            self._db.soft_delete_knowledge(page_id) if hasattr(self._db, "soft_delete_knowledge") else self._db.delete_knowledge(page_id, hard=False)
+            return
         try:
             self._block_store.delete_by_page(page_id)
         except Exception:
             pass
-        self._db.delete_knowledge(page_id)
+        try:
+            from src.services.vectorstore import VectorStore
+            VectorStore().delete_by_knowledge(page_id)
+        except Exception:
+            pass
+        if hasattr(self._db, "purge_knowledge"):
+            self._db.purge_knowledge(page_id)
+        else:
+            self._db.delete_knowledge(page_id, hard=True)
 
     def _content_from_page(self, page: PageDocument) -> str:
         lines = []
