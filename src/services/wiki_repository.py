@@ -43,6 +43,10 @@ class TransactionValidationError(RuntimeError):
     """transaction commit 前 validate 失败(对象 invariant 不满足)。"""
 
 
+class RegistryCorruptError(RuntimeError):
+    """pages.json registry 损坏；拒绝用空 dict 继续写以免覆盖丢页。"""
+
+
 def new_page_id() -> str:
     return f"page_{uuid.uuid4()}"
 
@@ -147,7 +151,11 @@ class WikiTransaction:
                 canonical.parent.mkdir(parents=True, exist_ok=True)
                 staging = self._staging_dir / f"claim_{claim.claim_id}.yaml"
                 self._repo._write_claim_file(staging, claim)
-                event_type = "claim.created" if current_rev == 0 else "claim.updated"
+                # RETRACTED 软删：投影侧以 claim.deleted 收敛（get_claim 已不可见）
+                if claim.status == ClaimStatus.RETRACTED:
+                    event_type = "claim.deleted"
+                else:
+                    event_type = "claim.created" if current_rev == 0 else "claim.updated"
                 staged_files.append(("claim", staging, canonical, {}))
                 manifest["claims"].append({"claim_id": claim.claim_id, "revision": claim.revision,
                                            "event": event_type})
@@ -260,9 +268,16 @@ class WikiRepository:
         if not self._registry_path.exists():
             return {}
         try:
-            return cast(dict[str, dict], json.loads(self._registry_path.read_text(encoding="utf-8")))
-        except (json.JSONDecodeError, ValueError):
-            return {}
+            data = json.loads(self._registry_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, ValueError) as exc:
+            raise RegistryCorruptError(
+                f"registry corrupt at {self._registry_path}: {exc}"
+            ) from exc
+        if not isinstance(data, dict):
+            raise RegistryCorruptError(
+                f"registry corrupt at {self._registry_path}: expected object, got {type(data).__name__}"
+            )
+        return cast(dict[str, dict], data)
 
     def _write_registry(self, reg: dict) -> None:
         self._registry_path.parent.mkdir(parents=True, exist_ok=True)
@@ -303,13 +318,25 @@ class WikiRepository:
         return [json.loads(ln) for ln in self._outbox_path.read_text(encoding="utf-8").splitlines() if ln.strip()]
 
     def _outbox_tx_ids(self) -> set[str]:
-        """已写入 outbox 的 tx_id 集合(recover 幂等补写用)。"""
+        """已写入 outbox 的 tx_id 集合(观测/兼容用)。"""
         ids: set[str] = set()
         for ev in self.read_outbox():
             tx = ev.get("tx_id")
             if tx:
                 ids.add(tx)
         return ids
+
+    def _outbox_event_keys(self) -> set[tuple]:
+        """已写入 outbox 的 (tx_id, type, object_id) 集合 — recover 按事件幂等补写。"""
+        keys: set[tuple] = set()
+        for ev in self.read_outbox():
+            tx = ev.get("tx_id")
+            etype = ev.get("type")
+            if not tx or not etype:
+                continue
+            obj = ev.get("page_id") or ev.get("claim_id") or ""
+            keys.add((tx, etype, obj))
+        return keys
 
     # ---- page CRUD ----
     def get_page(self, page_id: str) -> WikiPage | None:
@@ -451,7 +478,10 @@ class WikiRepository:
             path = self._claim_path(claim.claim_id)
             self._assert_inside_wiki(path)
             self._write_claim_file(path, claim)
-            event_type = "claim.created" if current_rev == 0 else "claim.updated"
+            if claim.status == ClaimStatus.RETRACTED:
+                event_type = "claim.deleted"
+            else:
+                event_type = "claim.created" if current_rev == 0 else "claim.updated"
             self._append_outbox({"type": event_type, "claim_id": claim.claim_id,
                                  "revision": claim.revision, "tx_id": f"solo_{uuid.uuid4().hex[:8]}"})
             return SaveResult(ok=True, object_id=claim.claim_id, revision=claim.revision, outbox_events=[event_type])
@@ -506,7 +536,7 @@ class WikiRepository:
         if not self._staging_dir.exists():
             return recovered
         with self._lock:
-            existing_tx_ids = self._outbox_tx_ids()
+            existing_keys = self._outbox_event_keys()
             for tx_dir in sorted(self._staging_dir.iterdir()):
                 if not tx_dir.is_dir():
                     continue
@@ -525,23 +555,51 @@ class WikiRepository:
                         shutil.rmtree(tx_dir)
                     continue
 
-                # 判定 registry 是否已写(前向完成 vs 孤儿)
-                reg = self.get_registry()
+                # 判定是否前向完成(registry 已写 / claim 文件已对齐 revision / COMMITTED)
+                try:
+                    reg = self.get_registry()
+                except RegistryCorruptError:
+                    reg = {}
                 page_entries = manifest.get("pages", [])
-                reg_written = all(reg.get(p["page_id"], {}).get("revision") == p["revision"] for p in page_entries) if page_entries else bool(committed)
+                claim_entries = manifest.get("claims", [])
+                if page_entries:
+                    reg_written = all(
+                        reg.get(p["page_id"], {}).get("revision") == p["revision"]
+                        for p in page_entries
+                    )
+                elif claim_entries:
+                    # claim-only: COMMITTED 或磁盘 claim revision 已与 manifest 对齐
+                    reg_written = committed or all(
+                        self._claim_revision_matches(c["claim_id"], c["revision"])
+                        for c in claim_entries
+                    )
+                else:
+                    reg_written = committed
                 if committed or reg_written:
-                    # 前向完成:补 outbox(幂等,按 tx_id 去重)
-                    if tx_id not in existing_tx_ids:
-                        for p in page_entries:
-                            self._append_outbox({"type": p["event"], "page_id": p["page_id"],
-                                                 "revision": p["revision"], "path": p["path"], "tx_id": tx_id})
-                        for c in manifest.get("claims", []):
-                            self._append_outbox({"type": c["event"], "claim_id": c["claim_id"],
-                                                 "revision": c["revision"], "tx_id": tx_id})
-                        existing_tx_ids.add(tx_id)
+                    # 前向完成:按 (tx_id, type, object_id) 幂等补写缺失事件
+                    for p in page_entries:
+                        key = (tx_id, p["event"], p["page_id"])
+                        if key not in existing_keys:
+                            self._append_outbox({
+                                "type": p["event"], "page_id": p["page_id"],
+                                "revision": p["revision"], "path": p["path"], "tx_id": tx_id,
+                            })
+                            existing_keys.add(key)
+                    for c in claim_entries:
+                        key = (tx_id, c["event"], c["claim_id"])
+                        if key not in existing_keys:
+                            self._append_outbox({
+                                "type": c["event"], "claim_id": c["claim_id"],
+                                "revision": c["revision"], "tx_id": tx_id,
+                            })
+                            existing_keys.add(key)
                     recovered.append(tx_id)
                 # 无论前向还是孤儿,canonical 文件已是 os.replace 后的完整状态;
                 # 孤儿(registry 未含)不污染查询(list_pages 基于 registry),保留文件供人工排查或后续重放
                 with contextlib.suppress(OSError):
                     shutil.rmtree(tx_dir)
         return recovered
+
+    def _claim_revision_matches(self, claim_id: str, revision: int) -> bool:
+        raw = self._read_claim_raw(claim_id)
+        return raw is not None and raw.revision == revision
