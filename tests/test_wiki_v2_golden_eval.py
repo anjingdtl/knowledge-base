@@ -21,9 +21,16 @@ from src.models.wiki_v2 import (
     EvidenceStance,
     normalize_statement,
 )
-from src.services.wiki_claim_extractor import ClaimExtractionResult, ClaimExtractor, ExtractionBlock
+from src.services.wiki_claim_extractor import (
+    ClaimExtractionResult,
+    ClaimExtractor,
+    ExtractionBlock,
+    compute_excerpt_hash,
+)
 from src.services.wiki_claim_matcher import ClaimMatcher
+from src.services.wiki_dependency_service import WikiDependencyService
 from src.services.wiki_merge_engine import WikiMergeEngine
+from src.services.wiki_rebuild_service import WikiRebuildService
 from src.services.wiki_repository import WikiRepository
 
 NOW = "2026-07-08T12:00:00+08:00"
@@ -183,7 +190,103 @@ def test_matching_dataset_has_expected_scenarios():
 
 
 def test_source_datasets_marked_phase5():
-    """source_update/source_delete 数据集标注 Phase 5 启用,当前不消费。"""
+    """source_update/source_delete 数据集标注 Phase 5(已启用消费,见下)。"""
     for name in ("source_update.jsonl", "source_delete.jsonl"):
         for case in load_jsonl(name):
             assert case.get("note", "").startswith("Phase 5"), f"{name}:{case['id']} 未标 Phase 5"
+
+
+# ===========================================================================
+# 5. source 失效传播(Phase 5 启用:source_update/source_delete.jsonl)
+# ===========================================================================
+class _FakeBlocks:
+    def __init__(self, mapping):
+        self._m = mapping
+
+    def list_by_page(self, page_id, limit=10000):
+        from src.models.block import Block
+        return [Block(id=bid, page_id=page_id, content=c) for bid, c in self._m.items()]
+
+
+class _NoopProjection:
+    enabled = True
+
+    def process_outbox(self, *, force=False):
+        return type("R", (), {"processed": 0, "skipped": 0, "warnings": [], "errors": []})()
+
+    def verify_parity(self):
+        return []
+
+
+def _rebuild_svc(repo, blocks):
+    return WikiRebuildService(
+        repository=repo, projection=_NoopProjection(), block_repository=blocks,
+        dependency_service=WikiDependencyService(repository=repo),
+        config={"wiki.rebuild.max_pages_per_job": 100, "wiki.rebuild.max_depth": 5},
+        clock=lambda: NOW,
+    )
+
+
+def _seed_active_claim(repo, claim_id, evidence, page_id="p1"):
+    from src.models.wiki_v2 import PageStatus, PageType, WikiPage
+    claim = Claim(
+        schema_version=1, claim_id=claim_id, statement=claim_id, normalized_statement=claim_id,
+        claim_type="fact", status=ClaimStatus.ACTIVE, confidence=0.9, valid_from=None, valid_to=None,
+        subject_refs=["s"], predicate="p", object_refs=["o"], evidence=evidence,
+        relations=[], created_at=NOW, updated_at=NOW, revision=1,
+    )
+    page = WikiPage(
+        schema_version=1, page_id=page_id, title=page_id, page_type=PageType.CONCEPTS,
+        status=PageStatus.PUBLISHED, revision=1, aliases=[], tags=[], source_ids=[],
+        claim_ids=[claim_id], created_at=NOW, updated_at=NOW, content_hash="ch", body="",
+    )
+    with repo.transaction() as tx:
+        tx.stage_claim(claim)
+        tx.stage_page(page)
+        tx.commit()
+
+
+@pytest.mark.parametrize("case", load_jsonl("source_update.jsonl"), ids=lambda c: c["id"])
+def test_source_update_evolution(case: dict, repo: WikiRepository):
+    """source_update.jsonl(u01-u03):来源更新按 block 哈希精准失效。"""
+    t = case["trigger"]
+    kid = t["knowledge_id"]
+    changed = set(t.get("changed_blocks", []))
+    bid = "b1"
+    ev = Evidence(evidence_id="ev1", stance=EvidenceStance.SUPPORTS, knowledge_id=kid,
+                  block_id=bid, source_revision=t.get("old_revision", "v1"),
+                  excerpt_hash=compute_excerpt_hash("OLD"))
+    _seed_active_claim(repo, "c1", [ev])
+    blocks = _FakeBlocks({bid: "NEW" if bid in changed else "OLD"})
+    plan = _rebuild_svc(repo, blocks).plan_rebuild(kid, event="update")
+    exp = case["expected"]
+    if "unchanged" in exp or "no rebuild" in exp:
+        assert plan.affected_evidence == [], case["id"]
+        assert plan.affected_claims == [], case["id"]
+    if "stale" in exp:
+        assert any(e.reason in ("block_changed", "block_deleted") for e in plan.affected_evidence), case["id"]
+    if "review" in exp:
+        assert any(p.proposed_status == "review" for p in plan.affected_pages), case["id"]
+
+
+@pytest.mark.parametrize("case", load_jsonl("source_delete.jsonl"), ids=lambda c: c["id"])
+def test_source_delete_evolution(case: dict, repo: WikiRepository):
+    """source_delete.jsonl(d01-d03):来源删除保守迁移,不物理删除 claim。"""
+    t = case["trigger"]
+    kid = t["deleted_knowledge_id"]
+    remaining = t.get("remaining_supports", [])
+    evidence = [Evidence(evidence_id="evA", stance=EvidenceStance.SUPPORTS, knowledge_id=kid,
+                         block_id="bA", excerpt_hash="sha256:hA")]
+    for i, other in enumerate(remaining):
+        evidence.append(Evidence(evidence_id=f"evO{i}", stance=EvidenceStance.SUPPORTS,
+                                 knowledge_id=other, block_id=f"bO{i}", excerpt_hash=f"sha256:{other}"))
+    _seed_active_claim(repo, "c1", evidence)
+    result = _rebuild_svc(repo, _FakeBlocks({})).rebuild(kid, event="delete")
+    after = repo.get_claim("c1")
+    exp = case["expected"]
+    assert result.committed is True, case["id"]
+    assert after is not None, case["id"]  # 一律不物理删除(d03)
+    if "active" in exp:
+        assert after.status is ClaimStatus.ACTIVE, case["id"]
+    if "unsupported" in exp:
+        assert after.status is ClaimStatus.UNSUPPORTED, case["id"]

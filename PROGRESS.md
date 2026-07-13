@@ -2,8 +2,44 @@
 
 > 最后更新：2026-07-13
 > 源码版本：`src/version.py` 中的 `1.4.0`
-> 当前分支：`feature/wiki-v2-phase4a-shadow`
+> 当前分支：`master`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
+
+## Canonical Wiki V2 Phase 5 依赖图与失效传播 — 验收通过（2026-07-13）
+
+Phase 5 实现来源更新/删除 → block 哈希精准失效 → 保守迁移 claim/page → staging 重编译 → projection 刷新。
+未变化 block 保留(u01/u03),变化 evidence 标 stale(u02);删来源仍有他源 claim 保持 active(E2E-4/d01),
+无他源才 unsupported(E2E-3/d02)且不物理删除(d03)。依赖图按需从 canonical 计算,`wiki_dependencies` 表为
+可重建 read model(planner 不依赖表)。正式 review:`docs/superpowers/reviews/2026-07-13-phase5-review.md`。
+
+| 阶段 | 状态 | 说明 |
+|---|---|---|
+| Phase 0-4C | ✅ 已完成 | Canonical 地基 + shadow/canary/primary 切换 |
+| Phase 5 失效传播 | ✅ 已验收 | 依赖图 + staged rebuild + debounce + cancel + 依赖图表投影 |
+| Phase 6 迁移/反馈/评测 | ⏳ 未开始 | 依赖 Phase 5 |
+
+### 本轮已落盘提交(Phase 5)
+
+| commit | 交付 |
+|---|---|
+| `5ab04c0` | Evidence stale 字段 + 投影列 + alembic j002 |
+| `4f76d12` | WikiDependencyService 依赖图 + 影响规划(验收 E2E-4) |
+| `204e80c` | plan_rebuild dry-run + 抽取 compute_excerpt_hash |
+| `804e35d` | rebuild staging 事务 + projection + cancel(验收 E2E-3) |
+| `813cb9c` | wiki_dependencies 表投影(read model) |
+| `0b12b0c` | RebuildScheduler per-kid debounce |
+| `4e48f77` | 触发接入:workflow 门控 + delete 钩子 + CLI |
+| T5.4 | C2 source 黄金集启用 + E2E-3/E2E-4 + 全量门禁 + 文档 |
+
+### 验证(全量回归)
+
+| 门禁 | 结果 |
+|---|---|
+| 全量 pytest | ✅ `1497 passed / 2 skipped / 5 xfailed`(基线 1455,新增 42;C2 5 xfail 保留) |
+| ruff | ✅ All checks passed |
+| mypy | ✅ 189 source files 无错误 |
+| retrieval eval | ✅ Overall PASS |
+| wiki eval | ✅ cross_page_update 0.9545 / orphan 0.0 / stale 0.0 不退化 |
 
 ## Canonical Wiki V2 Phase 4C Primary — 验收通过（2026-07-13）
 
