@@ -195,6 +195,9 @@ WIKI_V2_SERVICE_MODULES: set[str] = {
     "services/wiki_merge_engine.py",
     "services/wiki_page_locator.py",
     "services/wiki_query_service.py",
+    "services/wiki_dependency_service.py",
+    "services/wiki_rebuild_service.py",
+    "services/wiki_rebuild_scheduler.py",
 }
 
 # 禁止直接 import 的全局单例(完整模块路径)

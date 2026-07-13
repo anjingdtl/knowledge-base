@@ -262,6 +262,11 @@ class PathIndexService:
         except Exception as e:
             logger.warning("Failed to delete indexed path %s: %s", norm_path, e)
             result.failed.append({"path": norm_path, "error": str(e)})
+        # Phase 5:source 删除 → 门控命中时 schedule rebuild(delete)(默认 off,不阻断)
+        if result.deleted and existing.get("knowledge_id"):
+            from src.services.knowledge_workflow import try_schedule_source_delete
+
+            try_schedule_source_delete(existing["knowledge_id"])
         return result
 
     # ------------------------------------------------------------------

@@ -152,6 +152,11 @@ class AppContainer:
     # --- 第二阶段 W2:wiki parent-child 检索 ---
     _wiki_parent_retriever: Optional[object] = field(default=None, repr=False)
 
+    # --- Phase 5:依赖图与失效传播 ---
+    _wiki_dependency_service: Optional[object] = field(default=None, repr=False)
+    _wiki_rebuild_service: Optional[object] = field(default=None, repr=False)
+    _wiki_rebuild_scheduler: Optional[object] = field(default=None, repr=False)
+
     _initialized_services: list = field(default_factory=list, repr=False)
 
     def _track_service(self, attr_name: str):
@@ -362,6 +367,7 @@ class AppContainer:
                 shadow_workflow=self.wiki_shadow_workflow,
                 canary_workflow=self.wiki_canary_workflow,
                 primary_workflow=self.wiki_primary_workflow,
+                rebuild_scheduler=self.wiki_rebuild_scheduler,
             )
             self._track_service("_knowledge_workflow")
         return self._knowledge_workflow
@@ -522,6 +528,39 @@ class AppContainer:
             )
             self._track_service("_wiki_query_service")
         return self._wiki_query_service
+
+    @property
+    def wiki_dependency_service(self):
+        if self._wiki_dependency_service is None:
+            from src.services.wiki_dependency_service import WikiDependencyService as _Dep
+            self._wiki_dependency_service = _Dep(repository=self.wiki_repository, config=self.config)
+            self._track_service("_wiki_dependency_service")
+        return self._wiki_dependency_service
+
+    @property
+    def wiki_rebuild_service(self):
+        if self._wiki_rebuild_service is None:
+            from src.services.wiki_rebuild_service import WikiRebuildService as _RB
+            self._wiki_rebuild_service = _RB(
+                repository=self.wiki_repository,
+                projection=self.wiki_projection,
+                block_repository=self.block_repo,
+                dependency_service=self.wiki_dependency_service,
+                config=self.config,
+            )
+            self._track_service("_wiki_rebuild_service")
+        return self._wiki_rebuild_service
+
+    @property
+    def wiki_rebuild_scheduler(self):
+        if self._wiki_rebuild_scheduler is None:
+            from src.services.wiki_rebuild_scheduler import RebuildScheduler as _Sched
+            self._wiki_rebuild_scheduler = _Sched(
+                rebuild_service=self.wiki_rebuild_service,
+                debounce_ms=int(self.config.get("wiki.rebuild.debounce_ms", 500)),
+            )
+            self._track_service("_wiki_rebuild_scheduler")
+        return self._wiki_rebuild_scheduler
 
 
 def create_container(config_path: str | None = None) -> AppContainer:

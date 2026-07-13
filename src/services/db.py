@@ -237,6 +237,8 @@ CREATE TABLE IF NOT EXISTS wiki_claim_evidence (
     source_revision TEXT NOT NULL,
     excerpt_hash TEXT,
     observed_at TEXT NOT NULL,
+    stale INTEGER NOT NULL DEFAULT 0,
+    stale_at TEXT NOT NULL DEFAULT '',
     UNIQUE(claim_id, knowledge_id, block_id, stance, source_revision)
 );
 CREATE INDEX IF NOT EXISTS idx_wiki_evidence_claim ON wiki_claim_evidence(claim_id);

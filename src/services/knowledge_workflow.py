@@ -31,6 +31,7 @@ class KnowledgeWorkflowService:
         shadow_workflow: Any = None,
         canary_workflow: Any = None,
         primary_workflow: Any = None,
+        rebuild_scheduler: Any = None,
     ):
         self._source = source_compiler or WikiSourceCompiler()
         self._entity = entity_updater or WikiEntityUpdater()
@@ -39,6 +40,7 @@ class KnowledgeWorkflowService:
         self._shadow = shadow_workflow
         self._canary = canary_workflow
         self._primary = primary_workflow
+        self._rebuild = rebuild_scheduler
 
     def compile(self, knowledge_id: str, ingested_at: str | None = None) -> dict:
         """编排 wiki-first 编译。失败隔离,不抛。"""
@@ -71,6 +73,7 @@ class KnowledgeWorkflowService:
             except Exception as e:
                 logger.warning("primary workflow failed (%s): %s", knowledge_id, e)
                 result["errors"].append({"stage": "primary", "error": str(e)})
+            self._maybe_schedule_rebuild(knowledge_id, item, canonical_mode)
             return result
 
         try:
@@ -131,6 +134,20 @@ class KnowledgeWorkflowService:
                 result["errors"].append({"stage": "canary", "error": str(e)})
 
         return result
+
+    def _maybe_schedule_rebuild(self, knowledge_id: str, item: dict, canonical_mode: str) -> None:
+        """Phase 5 门控:auto_on_source_update 或 rebuild.auto_allowlist 命中时 schedule(update)。
+
+        默认 off(auto_on_source_update=false + 空 allowlist)→ 不 schedule,最保守。
+        canary 级:auto_allowlist 显式列出的 knowledge_id/source_path 才自动 rebuild。
+        """
+        if self._rebuild is None or canonical_mode != "primary":
+            return
+        try:
+            if _rebuild_gate_allows(knowledge_id, item):
+                self._rebuild.schedule(knowledge_id, "update")
+        except Exception as e:
+            logger.warning("rebuild schedule failed (%s): %s", knowledge_id, e)
 
     @staticmethod
     def _as_entity_input(src: dict, item: dict) -> dict:
@@ -209,3 +226,34 @@ def try_knowledge_workflow_compile(
     except Exception as e:
         logger.warning("knowledge workflow compile failed (%s): %s", knowledge_id, e)
         return None
+
+
+def _rebuild_gate_allows(knowledge_id: str, item: dict | None) -> bool:
+    """Phase 5 门控:auto_on_source_update=true 或 rebuild.auto_allowlist 命中。默认 false(最保守)。"""
+    if Config.get("wiki.rebuild.auto_on_source_update", False):
+        return True
+    if knowledge_id in (Config.get("wiki.rebuild.auto_allowlist.knowledge_ids", []) or []):
+        return True
+    src = str((item or {}).get("source_path") or "").replace("\\", "/")
+    for prefix in (Config.get("wiki.rebuild.auto_allowlist.source_paths", []) or []):
+        p = str(prefix).replace("\\", "/").rstrip("/")
+        if p and (src == p or src.startswith(f"{p}/")):
+            return True
+    return False
+
+
+def try_schedule_source_delete(knowledge_id: str, item: dict | None = None) -> None:
+    """非阻塞钩子:source 删除后,门控命中时 schedule rebuild(delete)。
+
+    默认 off(auto_on_source_update=false + 空 allowlist)→ 不 schedule。
+    失败不抛(仅 warning),不影响删除主流程。
+    """
+    try:
+        from src.core.container import get_active_container
+
+        container = get_active_container()
+        if container is None or not _rebuild_gate_allows(knowledge_id, item):
+            return
+        container.wiki_rebuild_scheduler.schedule(knowledge_id, "delete")
+    except Exception as e:
+        logger.warning("rebuild delete schedule failed (%s): %s", knowledge_id, e)

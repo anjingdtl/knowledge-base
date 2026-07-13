@@ -196,6 +196,10 @@ wiki:
     auto_publish_low_risk: false
     max_pages_per_job: 100
     max_depth: 5
+    debounce_ms: 500            # per-kid 合并窗口(对齐 watcher.debounce_ms)
+    auto_allowlist:             # canary 级:与 canonical_v2.canary 解耦;默认空=纯 manual
+      knowledge_ids: []
+      source_paths: []
   projection:                   # SQLite projection(outbox + 幂等重建)
     enabled: true
     auto_consume_outbox: true

@@ -5,6 +5,7 @@ import pytest
 from src.models.wiki_v2 import (
     Claim,
     ClaimStatus,
+    Evidence,
     EvidenceStance,
     PageRegistryEntry,
     PageType,
@@ -118,3 +119,31 @@ def test_page_registry_entry_roundtrip():
     e = PageRegistryEntry(path="concepts/fttr.md", title="FTTR",
                           page_type="concepts", revision=1, content_hash="sha256:x")
     assert PageRegistryEntry.from_dict(e.to_dict()) == e
+
+
+def test_evidence_stale_roundtrip():
+    """Evidence.stale/stale_at 序列化往返(Phase 5)。"""
+    ev = Evidence(
+        evidence_id="ev1", stance=EvidenceStance.SUPPORTS, knowledge_id="k1",
+        block_id="b1", source_revision="v1", excerpt_hash="h1",
+        stale=True, stale_at="2026-07-13T10:00:00",
+    )
+    d = ev.to_dict()
+    assert d["stale"] is True
+    assert d["stale_at"] == "2026-07-13T10:00:00"
+    back = Evidence.from_dict(d)
+    assert back.stale is True
+    assert back.stale_at == "2026-07-13T10:00:00"
+
+
+def test_evidence_stale_defaults_and_legacy_compat():
+    """新 Evidence 默认 stale=False;旧 dict 无 stale 字段时 strict=False 兼容。"""
+    ev = Evidence(evidence_id="ev2", stance=EvidenceStance.SUPPORTS, knowledge_id="k1")
+    assert ev.stale is False
+    assert ev.stale_at == ""
+    legacy = {
+        "evidence_id": "ev3", "stance": "supports", "knowledge_id": "k1",
+    }
+    back = Evidence.from_dict(legacy, strict=False)
+    assert back.stale is False
+    assert back.stale_at == ""

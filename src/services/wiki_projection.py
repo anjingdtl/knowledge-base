@@ -211,6 +211,17 @@ class WikiProjection:
                 "INSERT INTO wiki_page_claims (page_id, claim_id, display_order) VALUES (?,?,?)",
                 (page.page_id, cid, idx),
             )
+        # Phase 5:claim→page 边(read model)。先删该 page 的 cited_in 边再插(幂等)。
+        conn.execute(
+            "DELETE FROM wiki_dependencies WHERE to_type='page' AND to_id = ?",
+            (page.page_id,),
+        )
+        if page.claim_ids:
+            conn.executemany(
+                "INSERT OR IGNORE INTO wiki_dependencies(from_type, from_id, to_type, to_id, relation) "
+                "VALUES ('claim', ?, 'page', ?, 'cited_in')",
+                [(cid, page.page_id) for cid in page.claim_ids],
+            )
         self._upsert_legacy_page(page, commit=False)
         if commit:
             conn.commit()
@@ -293,14 +304,33 @@ class WikiProjection:
             conn.execute(
                 "INSERT INTO wiki_claim_evidence "
                 "(evidence_id, claim_id, stance, knowledge_id, block_id, "
-                "location_json, source_revision, excerpt_hash, observed_at) "
-                "VALUES (?,?,?,?,?,?,?,?,?)",
+                "location_json, source_revision, excerpt_hash, observed_at, stale, stale_at) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     ev.evidence_id, claim.claim_id, ev.stance.value,
                     ev.knowledge_id, ev.block_id,
                     json.dumps(ev.location, ensure_ascii=False),
                     ev.source_revision, ev.excerpt_hash, ev.observed_at,
+                    1 if ev.stale else 0, ev.stale_at,
                 ),
+            )
+        # Phase 5:依赖图边(read model)。先删该 claim 相关边再插(幂等)。
+        # 注:source→evidence 边在 evidence 被移除时可能残留(orphan),由 rebuild() 全清重灌修复。
+        conn.execute(
+            "DELETE FROM wiki_dependencies WHERE from_id = ? OR to_id = ?",
+            (claim.claim_id, claim.claim_id),
+        )
+        edge_rows: list[tuple] = []
+        for ev in claim.evidence:
+            edge_rows.append(("source", ev.knowledge_id, "evidence", ev.evidence_id, "produces"))
+            edge_rows.append(("evidence", ev.evidence_id, "claim", claim.claim_id, "evidences"))
+        for rel in claim.relations:
+            edge_rows.append(("claim", claim.claim_id, "claim", rel.target_claim_id, rel.relation))
+        if edge_rows:
+            conn.executemany(
+                "INSERT OR IGNORE INTO wiki_dependencies(from_type, from_id, to_type, to_id, relation) "
+                "VALUES (?,?,?,?,?)",
+                edge_rows,
             )
         if commit:
             conn.commit()

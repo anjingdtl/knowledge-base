@@ -9,7 +9,15 @@ from unittest.mock import MagicMock
 import pytest
 
 from src.models.wiki_v2 import Claim, ClaimStatus
-from src.services.wiki_claim_extractor import ClaimExtractor, ExtractionBlock
+from src.services.wiki_claim_extractor import ClaimExtractor, ExtractionBlock, compute_excerpt_hash
+
+
+def test_compute_excerpt_hash_stable():
+    """compute_excerpt_hash 带 sha256: 前缀,稳定可复现(与 canary/shadow _hash_text 一致)。"""
+    assert compute_excerpt_hash("hello world") == (
+        "sha256:b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9"
+    )
+    assert compute_excerpt_hash("") != compute_excerpt_hash("x")
 
 
 def _blk(

@@ -7,7 +7,6 @@ into review before any repository write.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import tempfile
@@ -322,4 +321,5 @@ class WikiCanaryWorkflow:
 
     @staticmethod
     def _hash_text(text: str) -> str:
-        return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
+        from src.services.wiki_claim_extractor import compute_excerpt_hash
+        return compute_excerpt_hash(text)

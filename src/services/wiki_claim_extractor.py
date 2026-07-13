@@ -5,6 +5,7 @@ LLM 失败降级为 warnings/errors（不阻断 raw 索引）。
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import re
@@ -15,6 +16,15 @@ from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance, nor
 from src.services.wiki_repository import new_claim_id
 
 logger = logging.getLogger(__name__)
+
+
+def compute_excerpt_hash(text: str) -> str:
+    """块内容指纹(sha256: 前缀 + hex)。
+
+    canary/primary/shadow 的 _hash_text 与 Phase 5 rebuild block-diff 共用此函数,
+    保证 evidence.excerpt_hash 与当前 block 哈希可比对(同算法)。
+    """
+    return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 # ---------------------------------------------------------------------------
 # LLM prompt 常量
