@@ -79,6 +79,19 @@ jobs:
           name: retrieval-eval-report
           path: retrieval_report.json
           retention-days: 30
+      - name: Run verified hybrid eval (offline golden set)
+        run: |
+          python evals/run_hybrid_eval.py --strict --json --output hybrid_report.json
+          pytest tests/test_hybrid_eval.py -v --tb=short
+        env:
+          PYTHONPATH: .
+      - name: Upload hybrid report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hybrid-eval-report
+          path: hybrid_report.json
+          retention-days: 30
 
   docker:
     name: Docker Build
