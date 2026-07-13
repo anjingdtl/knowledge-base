@@ -550,6 +550,17 @@ class AppContainer:
             self._track_service("_wiki_rebuild_service")
         return self._wiki_rebuild_service
 
+    @property
+    def wiki_rebuild_scheduler(self):
+        if self._wiki_rebuild_scheduler is None:
+            from src.services.wiki_rebuild_scheduler import RebuildScheduler as _Sched
+            self._wiki_rebuild_scheduler = _Sched(
+                rebuild_service=self.wiki_rebuild_service,
+                debounce_ms=int(self.config.get("wiki.rebuild.debounce_ms", 500)),
+            )
+            self._track_service("_wiki_rebuild_scheduler")
+        return self._wiki_rebuild_scheduler
+
 
 def create_container(config_path: str | None = None) -> AppContainer:
     """创建并初始化应用容器
