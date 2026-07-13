@@ -426,20 +426,17 @@ class WikiMergeEngine:
             ClaimRelation(relation="refined_by", target_claim_id=new_claim.claim_id)
         )
 
+        # New claim as DRAFT — validate BOTH before staging either (atomic, no half-write)
+        new_draft = copy.deepcopy(new_claim)
+        new_draft.status = ClaimStatus.DRAFT
+        new_draft.updated_at = now
+        new_draft.created_at = now
+
         target_errors = target_updated.validate()
         if target_errors:
             result.errors.append(f"refined target {target_id} validation: {target_errors}")
             result.skipped.append(new_claim.claim_id)
             return
-
-        tx.stage_claim(target_updated, expected_revision=target.revision)
-        result.claims_updated.append(target_id)
-
-        # New claim as DRAFT
-        new_draft = copy.deepcopy(new_claim)
-        new_draft.status = ClaimStatus.DRAFT
-        new_draft.updated_at = now
-        new_draft.created_at = now
 
         new_errors = new_draft.validate()
         if new_errors:
@@ -447,6 +444,8 @@ class WikiMergeEngine:
             result.skipped.append(new_draft.claim_id)
             return
 
+        tx.stage_claim(target_updated, expected_revision=target.revision)
+        result.claims_updated.append(target_id)
         tx.stage_claim(new_draft, expected_revision=None)
         result.claims_created.append(new_draft.claim_id)
 
