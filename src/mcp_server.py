@@ -649,23 +649,24 @@ def _do_ask(question: str) -> dict:
 
     from src.utils.config import Config
 
-    total_timeout = int(Config.get("rag.ask.total_timeout", 90) or 90)
+    total_timeout = float(Config.get("rag.ask.total_timeout", 90) or 90)
+    timeout_label = f"{total_timeout:g}s"
     try:
         result = dict(_get_container().rag_pipeline.query(question, timeout=total_timeout))
     except concurrent.futures.TimeoutError:
         logger.warning(
-            "ask timed out after %ds for question=%r, returning partial result",
-            total_timeout, question[:50],
+            "ask timed out after %s for question=%r, returning partial result",
+            timeout_label, question[:50],
         )
         result = {
             "answer": "",
             "sources": [],
             "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
             "route": {"mode": "timeout",
-                      "explanation": f"ask timed out after {total_timeout}s"},
+                      "explanation": f"ask timed out after {timeout_label}"},
             "query_plan": {},
             "block_contexts": {},
-            "warnings": [f"ask timed out after {total_timeout}s, "
+            "warnings": [f"ask timed out after {timeout_label}, "
                          f"question too complex or document too large"],
             "wiki_context": "",
             "trace_id": "",

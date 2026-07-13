@@ -5,6 +5,7 @@ RAGService 类保留为向后兼容的别名。
 """
 import hashlib
 import logging
+import threading
 import time
 import uuid
 from abc import ABC, abstractmethod
@@ -24,6 +25,9 @@ from src.utils.llm_text import strip_think
 
 logger = logging.getLogger(__name__)
 
+RAG_ASYNC_BRIDGE_MAX_WORKERS = 4
+_rag_async_bridge_slots = threading.BoundedSemaphore(RAG_ASYNC_BRIDGE_MAX_WORKERS)
+
 
 def _get_container_service(attr: str, fallback_factory):
     """从 DI 容器获取服务实例，容器不可用时 fallback 到新建。"""
@@ -39,26 +43,22 @@ def _get_container_service(attr: str, fallback_factory):
     return fallback_factory()
 
 def _run_coroutine_sync(coro, timeout: float = 120):
-    """Run an async pipeline from sync entrypoints without blocking its loop."""
+    """Run an async pipeline from sync entrypoints with an enforceable deadline."""
     import asyncio
     import concurrent.futures
     import queue
-    import threading
 
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = None
+    deadline = time.monotonic() + timeout
 
-    if not (loop and loop.is_running()):
-        # 无运行中的事件循环（MCP stdio 同步工具主路径）。必须用 wait_for
-        # 兜住 timeout——否则协程内部永久挂起时，调用方传入的 timeout 形同
-        # 虚设（旧实现直接 asyncio.run(coro) 丢弃了 timeout 参数）。
-        try:
-            return asyncio.run(asyncio.wait_for(coro, timeout=timeout))
-        except asyncio.TimeoutError as exc:
-            raise concurrent.futures.TimeoutError() from exc
+    if not _rag_async_bridge_slots.acquire(blocking=False):
+        close = getattr(coro, "close", None)
+        if callable(close):
+            close()
+        raise concurrent.futures.TimeoutError()
 
+    # 在独立线程中运行整个协程：管线内的同步网络调用可能阻塞自身事件循环，
+    # 此时 asyncio.wait_for 无法按时调度。线程边界使调用方的 deadline 独立于
+    # 管线事件循环，适用于已有和没有运行中事件循环的同步入口。
     # 无界 queue:超时后主线程已 raise,daemon 线程的 put 不能阻塞在满队列上
     # (maxsize=1 时超时后无消费者,put 永久阻塞 → 线程+queue 泄漏)。无界则 put
     # 立即返回,daemon 线程跑完协程后自然退出,弃用结果由 GC 回收。
@@ -66,13 +66,28 @@ def _run_coroutine_sync(coro, timeout: float = 120):
 
     def _runner():
         try:
-            result_queue.put((True, asyncio.run(coro)))
-        except BaseException as exc:  # noqa: BLE001 - pass through to caller
-            result_queue.put((False, exc))
+            try:
+                remaining = max(0.0, deadline - time.monotonic())
+                result_queue.put((
+                    True,
+                    asyncio.run(asyncio.wait_for(coro, timeout=remaining)),
+                ))
+            except BaseException as exc:  # noqa: BLE001 - pass through to caller
+                result_queue.put((False, exc))
+        finally:
+            _rag_async_bridge_slots.release()
 
     thread = threading.Thread(target=_runner, name="RAGPipelineAsyncBridge", daemon=True)
-    thread.start()
-    thread.join(timeout=timeout)
+    try:
+        thread.start()
+    except BaseException:
+        _rag_async_bridge_slots.release()
+        close = getattr(coro, "close", None)
+        if callable(close):
+            close()
+        raise
+
+    thread.join(timeout=max(0.0, deadline - time.monotonic()))
     if thread.is_alive():
         raise concurrent.futures.TimeoutError()
     success, result = result_queue.get_nowait()
