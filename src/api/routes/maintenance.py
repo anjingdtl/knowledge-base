@@ -147,6 +147,7 @@ class SourceEventReq(BaseModel):
     knowledge_id: str
     event_type: str = "updated"  # created | updated | deleted
     source_path: str = ""
+    source_revision: str = ""
     human_confirmed: bool = False
 
 
@@ -190,6 +191,7 @@ def handle_source_event(req: SourceEventReq):
         req.knowledge_id,
         req.event_type,
         source_path=req.source_path,
+        source_revision=req.source_revision,
         human_confirmed=req.human_confirmed,
     )
 

@@ -121,6 +121,20 @@ class TestMaintenanceService:
         d = svc.evaluate_r4("publish", human_confirmed=False)
         assert d["decision"] in (DECIDE_REVIEW, DECIDE_BLOCK)
 
+    def test_r4_review_cannot_be_approved_without_real_confirmation(self):
+        svc = WikiMaintenanceService(config={
+            "knowledge_workflow": {"mode": "authoring"},
+            "maintenance": {"enabled": True, "policy": {"auto_publish": False}},
+        })
+        review = svc._create_review(
+            review_type="publish", priority="P0", risk_level="R4",
+        )
+
+        result = svc.resolve_review(review.review_id, "approve", human_confirmed=False)
+
+        assert result["ok"] is False
+        assert result["error"] == "policy_blocks"
+
     def test_cancel_and_list_jobs(self):
         svc = WikiMaintenanceService(config={
             "maintenance": {"enabled": True, "automation_level": "observe"},

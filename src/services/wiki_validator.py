@@ -11,6 +11,7 @@ from typing import Callable, Optional
 
 from src.models.wiki_v2 import (
     Claim,
+    ClaimServingValidation,
     ClaimStatus,
     EvidenceStance,
     PageStatus,
@@ -23,6 +24,15 @@ ClaimLookup = Callable[[str], Optional[Claim]]
 
 
 class WikiValidator:
+    """Validate Canonical objects and manage proof used by the serving gate.
+
+    The gate is deliberately fail-closed. These helpers are the only place
+    that turns a review-approved Claim into a validation or publication proof;
+    callers still need an explicit publish call after validation succeeds.
+    """
+
+    SERVING_VALIDATOR_VERSION = "wiki-validator/v1"
+
     def __init__(self, wiki_dir: Path | str | None = None):
         self._wiki_dir = Path(wiki_dir) if wiki_dir else None
 
@@ -64,6 +74,92 @@ class WikiValidator:
             category="schema_invalid" if "supports" not in e else "evidence_missing",
             severity="error", message=e,
         ) for e in errors]
+
+    def validate_and_record_serving(
+        self,
+        repository,
+        claim_id: str,
+        *,
+        validated_at: str,
+        operation_id: str | None = None,
+    ) -> ClaimServingValidation | None:
+        """Validate one reviewed Claim and persist a non-published proof."""
+        claim = repository.get_claim(claim_id)
+        if claim is None:
+            return None
+
+        prior = claim.serving_validation
+        supports = [
+            evidence for evidence in claim.evidence
+            if evidence.stance is EvidenceStance.SUPPORTS
+            and not evidence.stale
+            and bool(evidence.block_id)
+            and bool(evidence.excerpt_hash)
+        ]
+        findings = self.validate_claim(claim)
+        passed = not any(f.severity == "error" for f in findings) and bool(supports)
+        next_revision = claim.revision + 1
+        validation = ClaimServingValidation(
+            passed=passed,
+            review_approved=bool(prior and prior.review_approved),
+            validated_revision=next_revision,
+            published_revision=None,
+            serving_evidence_ids=[e.evidence_id for e in supports],
+            validator_version=self.SERVING_VALIDATOR_VERSION,
+            validated_at=validated_at,
+            review_id=prior.review_id if prior else None,
+            operation_id=operation_id or (prior.operation_id if prior else None),
+        )
+        claim.serving_validation = validation
+        with repository.transaction() as tx:
+            tx.stage_claim(claim, expected_revision=claim.revision)
+        return validation
+
+    def publish_serving_revision(
+        self,
+        repository,
+        projection,
+        claim_id: str,
+        *,
+        published_at: str,
+        operation_id: str | None = None,
+    ) -> ClaimServingValidation | None:
+        """Explicitly publish a current validation record after parity passes."""
+        claim = repository.get_claim(claim_id)
+        if claim is None or claim.serving_validation is None:
+            return None
+        validation = claim.serving_validation
+        if not (
+            validation.passed
+            and validation.review_approved
+            and validation.validated_revision == claim.revision
+        ):
+            return None
+        if projection is not None:
+            try:
+                result = projection.process_outbox()
+                if getattr(result, "errors", []):
+                    return None
+                if list(projection.verify_parity()):
+                    return None
+            except Exception:
+                return None
+
+        next_revision = claim.revision + 1
+        claim.serving_validation = ClaimServingValidation(
+            passed=True,
+            review_approved=True,
+            validated_revision=next_revision,
+            published_revision=next_revision,
+            serving_evidence_ids=list(validation.serving_evidence_ids),
+            validator_version=validation.validator_version,
+            validated_at=published_at,
+            review_id=validation.review_id,
+            operation_id=operation_id or validation.operation_id,
+        )
+        with repository.transaction() as tx:
+            tx.stage_claim(claim, expected_revision=claim.revision)
+        return claim.serving_validation
 
     # ---- 目录级校验 ----
     def validate_directory(self) -> list[ValidationFinding]:

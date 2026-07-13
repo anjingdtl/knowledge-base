@@ -144,16 +144,72 @@ class WikiMaintenanceService:
         self._gate = wiki_serving_gate
         self._db = db
         self._clock = clock or _now
+        self._store = None
+        if db is not None:
+            from src.repositories.maintenance_repo import MaintenanceRepository
+            self._store = MaintenanceRepository(db)
+        # Compatibility fallback for isolated callers without SQLite. The
+        # application container always provides the durable repository.
         self._jobs: dict[str, MaintenanceJobRecord] = {}
         self._reviews: dict[str, ReviewItemRecord] = {}
-        self._jobs_by_idempotency: dict[str, str] = {}
-        self._dead_letter: list[str] = []
+
+    def _job_from_dict(self, value: dict[str, Any] | None) -> MaintenanceJobRecord | None:
+        return MaintenanceJobRecord(**value) if value else None
+
+    def _review_from_dict(self, value: dict[str, Any] | None) -> ReviewItemRecord | None:
+        return ReviewItemRecord(**value) if value else None
+
+    def _save_job(self, job: MaintenanceJobRecord) -> None:
+        if self._store is not None:
+            self._store.save_job(job.to_dict())
+        else:
+            self._jobs[job.job_id] = job
+
+    def _get_job(self, job_id: str) -> MaintenanceJobRecord | None:
+        if self._store is not None:
+            return self._job_from_dict(self._store.get_job(job_id))
+        return self._jobs.get(job_id)
+
+    def _find_job_by_idempotency(self, key: str) -> MaintenanceJobRecord | None:
+        if self._store is not None:
+            return self._job_from_dict(self._store.find_job_by_idempotency(key))
+        return next((job for job in self._jobs.values() if job.idempotency_key == key), None)
+
+    def _list_jobs(self, status: str | None = None, limit: int = 50) -> list[MaintenanceJobRecord]:
+        if self._store is not None:
+            return [MaintenanceJobRecord(**row) for row in self._store.list_jobs(status, limit)]
+        rows = list(self._jobs.values())
+        if status:
+            rows = [job for job in rows if job.status == status]
+        return sorted(rows, key=lambda job: job.created_at, reverse=True)[:limit]
+
+    def _save_review(self, review: ReviewItemRecord) -> None:
+        if self._store is not None:
+            self._store.save_review(review.to_dict())
+        else:
+            self._reviews[review.review_id] = review
+
+    def _get_review(self, review_id: str) -> ReviewItemRecord | None:
+        if self._store is not None:
+            return self._review_from_dict(self._store.get_review(review_id))
+        return self._reviews.get(review_id)
+
+    def _list_reviews(self, status: str | None = "open", review_type: str | None = None, limit: int = 50) -> list[ReviewItemRecord]:
+        if self._store is not None:
+            return [ReviewItemRecord(**row) for row in self._store.list_reviews(status, review_type, limit)]
+        rows = list(self._reviews.values())
+        if status:
+            rows = [review for review in rows if review.status == status]
+        if review_type:
+            rows = [review for review in rows if review.review_type == review_type]
+        return sorted(rows, key=lambda review: review.created_at, reverse=True)[:limit]
 
     # ── Health ──────────────────────────────────────────────
 
     def health_snapshot(self) -> dict[str, Any]:
         """Spec §11.2 Health Snapshot (best-effort, never raises)."""
         snap: dict[str, Any] = {
+            "snapshot_id": _id("health"),
             "captured_at": self._clock(),
             "maintenance_enabled": self._policy.maintenance_enabled(),
             "automation_level": self._policy.automation_level(),
@@ -163,7 +219,7 @@ class WikiMaintenanceService:
             "stale_evidence": 0,
             "open_reviews": 0,
             "failed_jobs": 0,
-            "dead_letter_jobs": len(self._dead_letter),
+            "dead_letter_jobs": len(self._store.list_dead_letters()) if self._store else 0,
             "serving_fallback_hint": "raw_retrieval",
             "errors": [],
         }
@@ -189,15 +245,17 @@ class WikiMaintenanceService:
         except Exception as e:  # noqa: BLE001
             snap["errors"].append(f"claims:{e}")
 
-        snap["open_reviews"] = sum(
-            1 for r in self._reviews.values() if r.status in ("open", "assigned")
-        )
-        snap["failed_jobs"] = sum(
-            1 for j in self._jobs.values() if j.status in ("failed", "dead_letter")
-        )
+        jobs = self._list_jobs(limit=10000)
+        snap["open_reviews"] = len(self._list_reviews(status="open", limit=10000)) + len(self._list_reviews(status="assigned", limit=10000))
+        snap["failed_jobs"] = sum(1 for j in jobs if j.status in ("failed", "dead_letter"))
         snap["jobs_by_status"] = {}
-        for j in self._jobs.values():
+        for j in jobs:
             snap["jobs_by_status"][j.status] = snap["jobs_by_status"].get(j.status, 0) + 1
+        if self._store is not None:
+            try:
+                self._store.save_health_snapshot(snap)
+            except Exception as e:  # noqa: BLE001
+                snap["errors"].append(f"health_store:{e}")
         return snap
 
     # ── Source event → impact ───────────────────────────────
@@ -209,6 +267,7 @@ class WikiMaintenanceService:
         *,
         correlation_id: str | None = None,
         source_path: str = "",
+        source_revision: str = "",
         human_confirmed: bool = False,
     ) -> dict[str, Any]:
         """Main automatic maintenance flow entry (Spec §11.3).
@@ -227,9 +286,10 @@ class WikiMaintenanceService:
 
         corr = correlation_id or _id("corr")
         event_id = _id("evt")
-        idem = f"src:{event_type}:{knowledge_id}"
-        if idem in self._jobs_by_idempotency:
-            existing = self._jobs[self._jobs_by_idempotency[idem]]
+        revision = source_revision or "unknown"
+        idem = f"source:{event_type}:{knowledge_id}:{revision}"
+        existing = self._find_job_by_idempotency(idem)
+        if existing is not None:
             return {
                 "ok": True,
                 "deduplicated": True,
@@ -271,6 +331,15 @@ class WikiMaintenanceService:
         decision = self._policy.evaluate(
             job_type, risk_level=risk, human_confirmed=human_confirmed,
         )
+        if self._store is not None and not self._store.record_source_event({
+            "event_id": event_id, "idempotency_key": idem, "event_type": event_type,
+            "knowledge_id": knowledge_id, "source_revision": revision, "source_path": source_path,
+            "correlation_id": corr, "created_at": self._clock(),
+        }):
+            existing = self._find_job_by_idempotency(idem)
+            if existing is not None:
+                return {"ok": True, "deduplicated": True, "job": existing.to_dict(), "correlation_id": existing.correlation_id}
+
         job = self._create_job(
             job_type=job_type,
             risk_level=decision.risk_level,
@@ -301,12 +370,14 @@ class WikiMaintenanceService:
             job.status = "cancelled"
             job.finished_at = self._clock()
             job.result_summary = {"blocked": True, "plan": plan_summary}
+            self._save_job(job)
             return {"ok": True, "job": job.to_dict(), "decision": decision.to_dict()}
 
         if decision.decision in (DECIDE_DRY_RUN,):
             job.status = "completed"
             job.finished_at = self._clock()
             job.result_summary = {"dry_run": True, "plan": plan_summary}
+            self._save_job(job)
             return {"ok": True, "job": job.to_dict(), "decision": decision.to_dict(), "plan": plan_summary}
 
         if decision.decision == DECIDE_REVIEW:
@@ -322,6 +393,7 @@ class WikiMaintenanceService:
             job.status = "waiting_review"
             job.finished_at = self._clock()
             job.result_summary = {"review_id": review.review_id, "plan": plan_summary}
+            self._save_job(job)
             return {
                 "ok": True,
                 "job": job.to_dict(),
@@ -343,6 +415,7 @@ class WikiMaintenanceService:
         job.status = "running"
         job.started_at = self._clock()
         job.attempt += 1
+        self._save_job(job)
         try:
             if self._rebuild is not None and hasattr(self._rebuild, "rebuild"):
                 result = self._rebuild.rebuild(knowledge_id, event=event_type)
@@ -364,6 +437,7 @@ class WikiMaintenanceService:
 
             job.status = "completed"
             job.finished_at = self._clock()
+            self._save_job(job)
             self._log_op(
                 "maintenance_protective",
                 knowledge_id,
@@ -374,13 +448,13 @@ class WikiMaintenanceService:
         except Exception as e:  # noqa: BLE001
             logger.error("protective maintenance failed: %s", e)
             job.error = str(e)
-            max_attempts = 3
+            max_attempts = int(self._config_value("maintenance.jobs.max_attempts", 3))
             if job.attempt >= max_attempts:
                 job.status = "dead_letter"
-                self._dead_letter.append(job.job_id)
             else:
                 job.status = "failed"
             job.finished_at = self._clock()
+            self._save_job(job)
             # Spec: P0 protection failure → keep claims non-serving (rebuild service does this)
             self._log_op(
                 "maintenance_protective_failed",
@@ -393,24 +467,18 @@ class WikiMaintenanceService:
     # ── Jobs / reviews API ──────────────────────────────────
 
     def list_jobs(self, status: str | None = None, limit: int = 50) -> list[dict[str, Any]]:
-        rows = list(self._jobs.values())
-        if status:
-            rows = [j for j in rows if j.status == status]
-        rows.sort(key=lambda j: j.created_at, reverse=True)
-        return [j.to_dict() for j in rows[:limit]]
+        return [job.to_dict() for job in self._list_jobs(status=status, limit=limit)]
 
     def get_job(self, job_id: str) -> dict[str, Any] | None:
-        j = self._jobs.get(job_id)
+        j = self._get_job(job_id)
         return j.to_dict() if j else None
 
     def retry_job(self, job_id: str) -> dict[str, Any]:
-        job = self._jobs.get(job_id)
+        job = self._get_job(job_id)
         if not job:
             return {"ok": False, "error": "job_not_found"}
         if job.status not in ("failed", "dead_letter"):
             return {"ok": False, "error": "not_retryable", "status": job.status}
-        if job.job_id in self._dead_letter:
-            self._dead_letter = [x for x in self._dead_letter if x != job.job_id]
         kid = (job.result_summary.get("plan") or {}).get("knowledge_id") or ""
         event = (job.result_summary.get("plan") or {}).get("event") or "updated"
         decision = self._policy.evaluate(job.job_type, risk_level=job.risk_level)
@@ -419,13 +487,14 @@ class WikiMaintenanceService:
         return self._execute_protective(job, kid, event, job.result_summary.get("plan") or {}, decision)
 
     def cancel_job(self, job_id: str) -> dict[str, Any]:
-        job = self._jobs.get(job_id)
+        job = self._get_job(job_id)
         if not job:
             return {"ok": False, "error": "job_not_found"}
         if job.status in ("completed", "cancelled", "dead_letter"):
             return {"ok": False, "error": "not_cancellable", "status": job.status}
         job.status = "cancelled"
         job.finished_at = self._clock()
+        self._save_job(job)
         return {"ok": True, "job": job.to_dict()}
 
     def list_reviews(
@@ -434,16 +503,10 @@ class WikiMaintenanceService:
         review_type: str | None = None,
         limit: int = 50,
     ) -> list[dict[str, Any]]:
-        rows = list(self._reviews.values())
-        if status:
-            rows = [r for r in rows if r.status == status]
-        if review_type:
-            rows = [r for r in rows if r.review_type == review_type]
-        rows.sort(key=lambda r: r.created_at, reverse=True)
-        return [r.to_dict() for r in rows[:limit]]
+        return [review.to_dict() for review in self._list_reviews(status, review_type, limit)]
 
     def get_review(self, review_id: str) -> dict[str, Any] | None:
-        r = self._reviews.get(review_id)
+        r = self._get_review(review_id)
         return r.to_dict() if r else None
 
     def resolve_review(
@@ -457,7 +520,7 @@ class WikiMaintenanceService:
         human_confirmed: bool = False,
     ) -> dict[str, Any]:
         """confirm / reject / correct / needs_review / defer — Spec §11.6."""
-        review = self._reviews.get(review_id)
+        review = self._get_review(review_id)
         if not review:
             return {"ok": False, "error": "review_not_found"}
         if review.status not in ("open", "assigned"):
@@ -470,9 +533,9 @@ class WikiMaintenanceService:
         # R4 publish/delete path
         if review.risk_level == "R4" and action in ("confirm", "approve", "approved"):
             decision = self._policy.evaluate(
-                "publish", risk_level="R4", human_confirmed=human_confirmed or True,
+                "publish", risk_level="R4", human_confirmed=human_confirmed,
             )
-            if decision.decision == DECIDE_BLOCK:
+            if decision.decision != DECIDE_AUTO:
                 return {"ok": False, "error": "policy_blocks", "decision": decision.to_dict()}
 
         feedback_result = None
@@ -499,6 +562,7 @@ class WikiMaintenanceService:
         else:
             review.status = "approved"
         review.note = note
+        self._save_review(review)
         self._log_op(
             "maintenance_review_resolve",
             review.claim_id or review.page_id or review_id,
@@ -550,6 +614,7 @@ class WikiMaintenanceService:
         job.status = "waiting_review"
         job.finished_at = self._clock()
         job.result_summary = {"review_id": review.review_id}
+        self._save_job(job)
         return {"ok": True, "job": job.to_dict(), "review": review.to_dict(), "decision": decision.to_dict()}
 
     def evaluate_r4(self, job_type: str, *, human_confirmed: bool = False) -> dict[str, Any]:
@@ -566,9 +631,7 @@ class WikiMaintenanceService:
             correlation_id=kwargs.pop("correlation_id", None) or _id("corr"),
             **kwargs,
         )
-        self._jobs[job.job_id] = job
-        if job.idempotency_key:
-            self._jobs_by_idempotency[job.idempotency_key] = job.job_id
+        self._save_job(job)
         return job
 
     def _create_review(self, **kwargs) -> ReviewItemRecord:
@@ -577,8 +640,20 @@ class WikiMaintenanceService:
             created_at=self._clock(),
             **kwargs,
         )
-        self._reviews[review.review_id] = review
+        self._save_review(review)
         return review
+
+    def _config_value(self, path: str, default: Any) -> Any:
+        if self._config is None:
+            return default
+        if hasattr(self._config, "get") and not isinstance(self._config, dict):
+            return self._config.get(path, default)
+        value: Any = self._config
+        for part in path.split("."):
+            if not isinstance(value, dict):
+                return default
+            value = value.get(part)
+        return default if value is None else value
 
     def _log_op(self, operation: str, target_id: str, payload: dict, *, correlation_id: str = "") -> None:
         if self._op_log is None:

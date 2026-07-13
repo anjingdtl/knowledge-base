@@ -20,7 +20,12 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Callable
 
-from src.models.wiki_v2 import ClaimStatus, EvidenceStance, normalize_statement
+from src.models.wiki_v2 import (
+    ClaimServingValidation,
+    ClaimStatus,
+    EvidenceStance,
+    normalize_statement,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -99,8 +104,19 @@ class WikiFeedbackService:
                     errors=["confirm requires at least one non-stale supports evidence"],
                 )
             claim.status = ClaimStatus.ACTIVE
+            # Confirmation is a review decision, not validation or publish.
+            claim.serving_validation = ClaimServingValidation(
+                passed=False,
+                review_approved=True,
+                validated_revision=claim.revision + 1,
+                published_revision=None,
+                serving_evidence_ids=[],
+                validator_version="pending-validation",
+                validated_at=now,
+            )
         elif act is FeedbackAction.REJECT:
             claim.status = ClaimStatus.RETRACTED
+            claim.serving_validation = None
         elif act is FeedbackAction.CORRECT:
             if not correction or not str(correction).strip():
                 return FeedbackResult(
@@ -111,8 +127,10 @@ class WikiFeedbackService:
             claim.statement = str(correction).strip()
             claim.normalized_statement = normalize_statement(claim.statement)
             claim.status = ClaimStatus.DRAFT
+            claim.serving_validation = None
         elif act is FeedbackAction.NEEDS_REVIEW:
             claim.status = ClaimStatus.DISPUTED
+            claim.serving_validation = None
 
         claim.updated_at = now
         # revision 由 transaction 在 commit 时 +1；这里传 expected_revision

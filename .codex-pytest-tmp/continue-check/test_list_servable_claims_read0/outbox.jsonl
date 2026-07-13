@@ -1,0 +1,2 @@
+{"type": "claim.created", "claim_id": "claim_ok", "revision": 1, "tx_id": "solo_dc0b60c8"}
+{"type": "claim.created", "claim_id": "claim_bad", "revision": 1, "tx_id": "solo_4942dff7"}

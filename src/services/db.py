@@ -583,6 +583,56 @@ CREATE TABLE IF NOT EXISTS conflict_ignores (
 );
 CREATE INDEX IF NOT EXISTS idx_conflict_ignores_pair ON conflict_ignores(pair_key);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_conflict_ignores_pair_unique ON conflict_ignores(pair_key);
+
+-- === Verified Hybrid Maintenance Control Plane (j003) ===
+CREATE TABLE IF NOT EXISTS maintenance_source_events (
+    event_id TEXT PRIMARY KEY,
+    idempotency_key TEXT NOT NULL UNIQUE,
+    event_type TEXT NOT NULL,
+    knowledge_id TEXT NOT NULL,
+    source_revision TEXT NOT NULL,
+    source_path TEXT NOT NULL DEFAULT '',
+    correlation_id TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    payload_json TEXT NOT NULL DEFAULT '{}'
+);
+CREATE TABLE IF NOT EXISTS maintenance_jobs (
+    job_id TEXT PRIMARY KEY,
+    idempotency_key TEXT UNIQUE,
+    status TEXT NOT NULL,
+    risk_level TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    lease_until TEXT,
+    due_at TEXT,
+    payload_json TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_maintenance_jobs_status_due ON maintenance_jobs(status, due_at, created_at);
+CREATE TABLE IF NOT EXISTS maintenance_reviews (
+    review_id TEXT PRIMARY KEY,
+    status TEXT NOT NULL,
+    risk_level TEXT NOT NULL,
+    job_id TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    payload_json TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_maintenance_reviews_status ON maintenance_reviews(status, created_at);
+CREATE TABLE IF NOT EXISTS maintenance_dead_letters (
+    job_id TEXT PRIMARY KEY,
+    failed_at TEXT NOT NULL,
+    last_error TEXT NOT NULL DEFAULT '',
+    payload_json TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS maintenance_health_snapshots (
+    snapshot_id TEXT PRIMARY KEY,
+    captured_at TEXT NOT NULL,
+    payload_json TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS maintenance_schedules (
+    schedule_name TEXT PRIMARY KEY,
+    next_run_at TEXT,
+    lease_until TEXT,
+    payload_json TEXT NOT NULL DEFAULT '{}'
+);
 """
 
 

@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -377,6 +378,17 @@ def _handle_wiki(args: argparse.Namespace) -> int:
             return 1
         return 0
 
+    if cmd == "serving-validation-migration":
+        from src.core.container import create_container
+        from src.services.wiki_serving_validation_migrator import WikiServingValidationMigrator
+
+        if getattr(args, "apply", False):
+            print("serving validation apply is gated until Phase 8; use --dry-run")
+            return 2
+        report = WikiServingValidationMigrator(create_container().wiki_repository).dry_run()
+        print(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
+        return 0
+
     if cmd == "claims":
         sub = getattr(args, "claims_command", None)
         from src.core.container import create_container
@@ -703,6 +715,13 @@ def main(argv: list[str] | None = None) -> None:
 
     val_p = wiki_sub.add_parser("validate", help="校验 claim provenance / 目录 invariant")
     val_p.add_argument("--strict", action="store_true", help="有 error 时非零退出")
+
+    svm_p = wiki_sub.add_parser(
+        "serving-validation-migration",
+        help="预览缺少 Serving Validation 证明的 Active Claim（只读）",
+    )
+    svm_p.add_argument("--dry-run", action="store_true", help="只读预览（默认）")
+    svm_p.add_argument("--apply", action="store_true", help="Phase 8 前不可用")
 
     claims_p = wiki_sub.add_parser("claims", help="查看/反馈 claim")
     claims_sub = claims_p.add_subparsers(dest="claims_command")
