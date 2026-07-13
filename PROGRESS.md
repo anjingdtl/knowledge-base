@@ -1,9 +1,44 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-13
-> 源码版本：`src/version.py` 中的 `1.4.0`
-> 当前分支：`master`
+> 源码版本：`src/version.py` 中的 `1.6.0`
+> 当前分支：`feature/wiki-v2-phase6-migration-feedback`（待合入 master）
 > 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
+
+## Canonical Wiki V2 Phase 6 迁移/反馈/评测 — 验收通过（2026-07-13）
+
+Phase 6 完成 A/B 轨 → Canonical Store 迁移（dry-run/apply/lock/backup/rollback）、Claim 层
+用户反馈（confirm/reject/correct/needs_review）、provenance 校验增强，以及知识演进评测门禁。
+**不**在 apply 后自动强制 `canonical_v2.mode=primary`（仅 suggestion）。迁移 claim 一律
+draft/unsupported，不自动 active。正式 review:`docs/superpowers/reviews/2026-07-13-phase6-review.md`。
+用户手册:`docs/migration/wiki-v2-migration.md`。
+
+| 阶段 | 状态 | 说明 |
+|---|---|---|
+| Phase 0-4C | ✅ 已完成 | Canonical 地基 + shadow/canary/primary 切换 |
+| Phase 5 失效传播 | ✅ 已验收 | 依赖图 + staged rebuild + debounce + cancel |
+| Phase 6 迁移/反馈/评测 | ✅ 已验收 | Migrator + Feedback + Validate + evolution eval；版本 1.6.0 |
+
+### 本轮交付（Phase 6）
+
+| 项 | 交付 |
+|---|---|
+| T6.1 Migrator | `WikiV2Migrator` + CLI `shinehe wiki migrate-v2` |
+| T6.2 Validate | `validate_canonical_store` + CLI `shinehe wiki validate [--strict]` |
+| T6.3 Feedback | `WikiFeedbackService` + CLI `shinehe wiki claims list/show/review` |
+| T6.4 Eval | `evals/run_knowledge_evolution_eval.py` Overall PASS |
+| 文档/版本 | migration 手册 + phase6 review；`VERSION=1.6.0` |
+
+### 验证（全量回归）
+
+| 门禁 | 结果 |
+|---|---|
+| 全量 pytest | ✅ `1516 passed / 2 skipped / 5 xfailed`（基线 1497，+19） |
+| ruff | ✅ All checks passed |
+| mypy | ✅ 191 source files 无错误 |
+| retrieval eval | ✅ Overall PASS |
+| wiki eval | ✅ cross_page_update 0.9545 / orphan 0.0 / stale 0.0 不退化 |
+| knowledge evolution | ✅ Overall PASS（8 项门槛指标） |
 
 ## Canonical Wiki V2 Phase 5 依赖图与失效传播 — 验收通过（2026-07-13）
 
@@ -16,7 +51,7 @@ Phase 5 实现来源更新/删除 → block 哈希精准失效 → 保守迁移 
 |---|---|---|
 | Phase 0-4C | ✅ 已完成 | Canonical 地基 + shadow/canary/primary 切换 |
 | Phase 5 失效传播 | ✅ 已验收 | 依赖图 + staged rebuild + debounce + cancel + 依赖图表投影 |
-| Phase 6 迁移/反馈/评测 | ⏳ 未开始 | 依赖 Phase 5 |
+| Phase 6 迁移/反馈/评测 | ✅ 已验收 | 见上文 Phase 6 段 |
 
 ### 本轮已落盘提交(Phase 5)
 

@@ -157,6 +157,10 @@ class AppContainer:
     _wiki_rebuild_service: Optional[object] = field(default=None, repr=False)
     _wiki_rebuild_scheduler: Optional[object] = field(default=None, repr=False)
 
+    # --- Phase 6:迁移与反馈 ---
+    _wiki_v2_migrator: Optional[object] = field(default=None, repr=False)
+    _wiki_feedback_service: Optional[object] = field(default=None, repr=False)
+
     _initialized_services: list = field(default_factory=list, repr=False)
 
     def _track_service(self, attr_name: str):
@@ -561,6 +565,37 @@ class AppContainer:
             )
             self._track_service("_wiki_rebuild_scheduler")
         return self._wiki_rebuild_scheduler
+
+    @property
+    def wiki_v2_migrator(self):
+        if self._wiki_v2_migrator is None:
+            from pathlib import Path as _Path
+
+            from src.services.wiki_v2_migrator import WikiV2Migrator as _Migrator
+            wiki_dir = _Path(self.config.get("knowledge_workflow.wiki_dir", "wiki"))
+            backups = _Path(self.config.get("storage.data_dir", "data")).parent / "backups"
+            if self.config.get("wiki.migration.backups_dir"):
+                backups = _Path(self.config.get("wiki.migration.backups_dir"))
+            self._wiki_v2_migrator = _Migrator(
+                wiki_dir=wiki_dir,
+                repository=self.wiki_repository,
+                database=self.db,
+                projection=self.wiki_projection,
+                backups_dir=backups,
+            )
+            self._track_service("_wiki_v2_migrator")
+        return self._wiki_v2_migrator
+
+    @property
+    def wiki_feedback_service(self):
+        if self._wiki_feedback_service is None:
+            from src.services.wiki_feedback_service import WikiFeedbackService as _Fb
+            self._wiki_feedback_service = _Fb(
+                repository=self.wiki_repository,
+                operation_log=self.operation_log,
+            )
+            self._track_service("_wiki_feedback_service")
+        return self._wiki_feedback_service
 
 
 def create_container(config_path: str | None = None) -> AppContainer:

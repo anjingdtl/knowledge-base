@@ -184,10 +184,10 @@ def _handle_mcp(args: argparse.Namespace) -> int:
 
 
 def _handle_wiki(args: argparse.Namespace) -> int:
-    """处理 wiki 子命令组:lint / save-answer / ingest-source。"""
+    """处理 wiki 子命令组:lint / save-answer / ingest-source / migrate-v2 / validate。"""
     cmd = getattr(args, "wiki_command", None)
     if cmd is None:
-        print("用法: shinehe wiki <lint|save-answer|ingest-source>")
+        print("用法: shinehe wiki <lint|save-answer|ingest-source|migrate-v2|validate|claims>")
         return 0
 
     if cmd == "lint":
@@ -239,6 +239,114 @@ def _handle_wiki(args: argparse.Namespace) -> int:
         kid = indexer._ingest_file(target)
         print(f"[OK] ingest 完成: {kid}")
         return 0
+
+    if cmd == "migrate-v2":
+        from src.core.container import create_container
+
+        container = create_container()
+        migrator = container.wiki_v2_migrator
+        if getattr(args, "rollback", None):
+            report = migrator.rollback(args.rollback)
+            print(f"[ROLLBACK] backup={report.backup_path} errors={report.errors}")
+            if report.suggestion:
+                print(f"  {report.suggestion}")
+            return 1 if report.errors else 0
+        if getattr(args, "apply", False):
+            report = migrator.apply()
+            print(
+                f"[APPLY] writes={report.writes} pages={report.pages_to_create} "
+                f"claims={report.claims_to_create} conflicts={report.conflicts} "
+                f"backup={report.backup_path}"
+            )
+        else:
+            report = migrator.dry_run()
+            print(
+                f"[DRY-RUN] a={report.a_page_count} b={report.b_page_count} "
+                f"create_pages={report.pages_to_create} claims={report.claims_to_create} "
+                f"conflicts={report.conflicts} already_canonical={report.already_canonical} "
+                f"untraceable={report.untraceable_facts}"
+            )
+        if report.errors:
+            for e in report.errors:
+                print(f"  [ERROR] {e}", file=sys.stderr)
+        if report.warnings:
+            for w in report.warnings[:10]:
+                print(f"  [WARN] {w}")
+        if report.suggestion:
+            print(f"  suggestion: {report.suggestion}")
+        return 1 if report.errors else 0
+
+    if cmd == "validate":
+        from src.core.container import create_container
+        from src.services.wiki_validator import WikiValidator
+
+        container = create_container()
+        wiki_dir = Path(container.config.get("knowledge_workflow.wiki_dir", "wiki"))
+        validator = WikiValidator(wiki_dir=wiki_dir)
+        findings = validator.validate_directory()
+        # 扩展:扫描 claims provenance
+        if hasattr(validator, "validate_canonical_store"):
+            findings.extend(validator.validate_canonical_store(container.wiki_repository))
+        errors = [f for f in findings if f.severity == "error"]
+        warnings = [f for f in findings if f.severity == "warning"]
+        for f in findings[:30]:
+            print(f"  [{f.severity.upper()}] {f.category}: {f.object_id} — {f.message}")
+        extra = f" (另有 {len(findings) - 30} 条)" if len(findings) > 30 else ""
+        print(f"\n结果: {len(errors)} errors, {len(warnings)} warnings{extra}")
+        strict = getattr(args, "strict", False)
+        if strict and errors:
+            return 1
+        return 0
+
+    if cmd == "claims":
+        sub = getattr(args, "claims_command", None)
+        from src.core.container import create_container
+
+        container = create_container()
+        if sub == "list":
+            claims = container.wiki_repository.list_claims()
+            status_filter = getattr(args, "status", None)
+            for c in claims:
+                if status_filter and c.status.value != status_filter:
+                    continue
+                print(f"  {c.claim_id} [{c.status.value}] {c.statement[:80]}")
+            print(f"\n共 {len(claims)} 条 claim")
+            return 0
+        if sub == "show":
+            claim = container.wiki_repository.get_claim(args.claim_id)
+            if not claim:
+                print(f"[ERROR] claim 不存在: {args.claim_id}", file=sys.stderr)
+                return 1
+            print(f"id: {claim.claim_id}")
+            print(f"status: {claim.status.value}")
+            print(f"statement: {claim.statement}")
+            print(f"evidence: {len(claim.evidence)}")
+            for ev in claim.evidence:
+                print(
+                    f"  - {ev.evidence_id} {ev.stance.value} kid={ev.knowledge_id} "
+                    f"block={ev.block_id} stale={ev.stale}"
+                )
+            return 0
+        if sub == "review":
+            result = container.wiki_feedback_service.apply(
+                args.claim_id,
+                args.action,
+                correction=getattr(args, "correction", None),
+                operator=getattr(args, "operator", "cli"),
+                note=getattr(args, "note", "") or "",
+            )
+            if result.errors:
+                for e in result.errors:
+                    print(f"[ERROR] {e}", file=sys.stderr)
+                return 1
+            print(
+                f"[OK] {result.action}: {result.claim_id} "
+                f"{result.before_status} → {result.after_status} "
+                f"op={result.op_log_id}"
+            )
+            return 0
+        print("用法: shinehe wiki claims <list|show|review>", file=sys.stderr)
+        return 1
 
     print(f"[ERROR] 未知 wiki 子命令: {cmd}", file=sys.stderr)
     return 1
@@ -393,7 +501,7 @@ def main(argv: list[str] | None = None) -> None:
     # --- wiki (嵌套子命令组) ---
     wiki_parser = subparsers.add_parser(
         "wiki", help="wiki-first 知识维护",
-        description="wiki 编译/检索闭环:lint / save-answer / ingest-source。",
+        description="wiki 编译/检索闭环:lint / save-answer / ingest-source / migrate-v2 / validate / claims。",
     )
     wiki_sub = wiki_parser.add_subparsers(dest="wiki_command", help="wiki 子命令")
 
@@ -407,6 +515,31 @@ def main(argv: list[str] | None = None) -> None:
     save_p.add_argument("--answer", required=True, help="回答")
     ingest_p = wiki_sub.add_parser("ingest-source", help="ingest 单源并触发 wiki 编译")
     ingest_p.add_argument("path", help="源文件路径")
+
+    # Phase 6: migrate-v2 / validate / claims
+    mv2 = wiki_sub.add_parser("migrate-v2", help="A/B 轨 → Canonical Store 迁移(Phase 6)")
+    mv2.add_argument("--apply", action="store_true", help="执行迁移(默认 dry-run)")
+    mv2.add_argument("--rollback", metavar="TIMESTAMP", help="从 backups/wiki-v2-<ts> 回滚")
+
+    val_p = wiki_sub.add_parser("validate", help="校验 claim provenance / 目录 invariant")
+    val_p.add_argument("--strict", action="store_true", help="有 error 时非零退出")
+
+    claims_p = wiki_sub.add_parser("claims", help="查看/反馈 claim")
+    claims_sub = claims_p.add_subparsers(dest="claims_command")
+    claims_list = claims_sub.add_parser("list", help="列出 claims")
+    claims_list.add_argument("--status", default=None, help="按状态过滤")
+    claims_show = claims_sub.add_parser("show", help="显示 claim 详情")
+    claims_show.add_argument("claim_id", help="claim id")
+    claims_rev = claims_sub.add_parser("review", help="对 claim 施加反馈")
+    claims_rev.add_argument("claim_id", help="claim id")
+    claims_rev.add_argument(
+        "--action", required=True,
+        choices=["confirm", "reject", "correct", "needs_review"],
+        help="反馈动作",
+    )
+    claims_rev.add_argument("--correction", default=None, help="correct 时的修正文案")
+    claims_rev.add_argument("--operator", default="cli", help="操作者")
+    claims_rev.add_argument("--note", default="", help="备注")
 
     # --- migrate ---
     migrate_parser = subparsers.add_parser(

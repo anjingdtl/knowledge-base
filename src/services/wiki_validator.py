@@ -12,6 +12,7 @@ from typing import Callable, Optional
 from src.models.wiki_v2 import (
     Claim,
     ClaimStatus,
+    EvidenceStance,
     PageStatus,
     ValidationFinding,
     WikiPage,
@@ -85,5 +86,71 @@ class WikiValidator:
                             path=str(md.relative_to(self._wiki_dir)).replace("\\", "/"),
                             object_id=fm["page_id"], category="claim_missing",
                             severity="error", message=f"Claim 文件缺失: {cid}.yaml",
+                        ))
+        return findings
+
+    def validate_canonical_store(self, repository) -> list[ValidationFinding]:
+        """Phase 6:扫 repository 中的 claims/pages，检查 provenance 与 published 约束。
+
+        - active 无 supports → error (evidence_missing)
+        - supports 无 block_id → warning (page_only_evidence)
+        - published page 引用 disputed claim → warning (unresolved_conflict)
+        - published page 引用 draft claim → error (publish_gate_violation)
+        - projection parity(若 repository 附带 projection 由调用方另查)
+        """
+        findings: list[ValidationFinding] = []
+        claims = {c.claim_id: c for c in repository.list_claims()}
+        for claim in claims.values():
+            findings.extend(self.validate_claim(claim))
+            if claim.status is ClaimStatus.ACTIVE:
+                supports = [
+                    e for e in claim.evidence
+                    if e.stance is EvidenceStance.SUPPORTS and not getattr(e, "stale", False)
+                ]
+                if not supports:
+                    findings.append(ValidationFinding(
+                        path=f"claims/{claim.claim_id}.yaml",
+                        object_id=claim.claim_id,
+                        category="missing_provenance",
+                        severity="error",
+                        message="active Claim 缺少非 stale supports Evidence",
+                    ))
+                for e in supports:
+                    if not e.block_id:
+                        findings.append(ValidationFinding(
+                            path=f"claims/{claim.claim_id}.yaml",
+                            object_id=claim.claim_id,
+                            category="page_only_evidence",
+                            severity="warning",
+                            message=f"Evidence {e.evidence_id} 无 block_id(location_quality=page_only)",
+                        ))
+        for page in repository.list_pages():
+            for cid in page.claim_ids:
+                c = claims.get(cid)
+                if c is None:
+                    findings.append(ValidationFinding(
+                        path=f"{page.page_type.value}/{page.title}.md",
+                        object_id=page.page_id,
+                        category="claim_missing",
+                        severity="error",
+                        message=f"页面引用的 Claim 不存在: {cid}",
+                    ))
+                    continue
+                if page.status is PageStatus.PUBLISHED:
+                    if c.status is ClaimStatus.DRAFT:
+                        findings.append(ValidationFinding(
+                            path=f"{page.page_type.value}/{page.title}.md",
+                            object_id=page.page_id,
+                            category="publish_gate_violation",
+                            severity="error",
+                            message=f"published 页面引用了 draft Claim: {cid}",
+                        ))
+                    if c.status is ClaimStatus.DISPUTED:
+                        findings.append(ValidationFinding(
+                            path=f"{page.page_type.value}/{page.title}.md",
+                            object_id=page.page_id,
+                            category="unresolved_conflict",
+                            severity="warning",
+                            message=f"published 页面引用了 disputed Claim: {cid}",
                         ))
         return findings
