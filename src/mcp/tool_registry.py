@@ -76,20 +76,98 @@ def get_definitions() -> dict[str, ToolDefinition]:
     return dict(_DEFINITIONS)
 
 
-def select_tools(profile: str, experimental_enabled: bool = False) -> list[ToolDefinition]:
-    """Select tools for a given profile."""
+def select_tools(
+    profile: str,
+    experimental_enabled: bool = False,
+    *,
+    write_policy: str | None = None,
+    knowledge_mode: str | None = None,
+    authoring_enabled: bool | None = None,
+) -> list[ToolDefinition]:
+    """Select tools for a given profile with write/authoring policy (Phase 6).
+
+    Spec §9.2–§9.3:
+    - write_policy=disabled → hide write/destructive tools (full/legacy included)
+    - authoring tools only when knowledge_mode=authoring AND authoring_enabled
+      AND write_policy != disabled
+    """
     if profile == "full":
         # full = all non-experimental tools (unless experimental_enabled)
-        return [d for d in _DEFINITIONS.values()
-                if experimental_enabled or not d.experimental]
+        selected = [d for d in _DEFINITIONS.values()
+                    if experimental_enabled or not d.experimental]
     elif profile == "legacy":
-        # legacy = all tools (including experimental)
-        return list(_DEFINITIONS.values())
+        # legacy = all tools (including experimental) — still subject to write_policy
+        selected = list(_DEFINITIONS.values())
     else:
         # core/extended/admin: filter by profile membership
-        return [d for d in _DEFINITIONS.values()
-                if profile in d.profiles
-                and (experimental_enabled or not d.experimental)]
+        selected = [d for d in _DEFINITIONS.values()
+                    if profile in d.profiles
+                    and (experimental_enabled or not d.experimental)]
+
+    policy = (write_policy or "").strip().lower()
+    if policy == "disabled":
+        selected = [
+            d for d in selected
+            if d.side_effect not in ("write", "destructive")
+        ]
+
+    # Authoring / wiki write tools — only filter when mode/flags explicitly set
+    # (backward compatible: omit kwargs → no authoring filter)
+    if knowledge_mode is not None or authoring_enabled is not None or policy == "disabled":
+        from src.utils.knowledge_mode import allows_authoring, resolve_knowledge_mode
+
+        authoring_ok = True
+        if policy == "disabled":
+            authoring_ok = False
+        if authoring_enabled is False:
+            authoring_ok = False
+        if knowledge_mode is not None:
+            try:
+                authoring_ok = authoring_ok and allows_authoring(
+                    resolve_knowledge_mode(knowledge_mode),
+                )
+            except Exception:  # noqa: BLE001
+                authoring_ok = authoring_ok and str(knowledge_mode) == "authoring"
+        if authoring_enabled is True and knowledge_mode is None and policy != "disabled":
+            authoring_ok = True
+
+        if not authoring_ok:
+            selected = [
+                d for d in selected
+                if d.group != "wiki" or d.side_effect == "read"
+            ]
+
+    return selected
+
+
+def list_hidden_by_policy(
+    profile: str,
+    experimental_enabled: bool = False,
+    *,
+    write_policy: str | None = None,
+    knowledge_mode: str | None = None,
+    authoring_enabled: bool | None = None,
+) -> list[str]:
+    """Tool names present in profile but hidden by write/authoring policy."""
+    if profile == "full":
+        unrestricted = [d for d in _DEFINITIONS.values()
+                        if experimental_enabled or not d.experimental]
+    elif profile == "legacy":
+        unrestricted = list(_DEFINITIONS.values())
+    else:
+        unrestricted = [d for d in _DEFINITIONS.values()
+                        if profile in d.profiles
+                        and (experimental_enabled or not d.experimental)]
+    filtered = select_tools(
+        profile,
+        experimental_enabled,
+        write_policy=write_policy,
+        knowledge_mode=knowledge_mode,
+        authoring_enabled=authoring_enabled,
+    )
+    filtered_names = {d.name for d in filtered}
+    unrestricted_names = {d.name for d in unrestricted}
+    return sorted(unrestricted_names - filtered_names)
 
 
 def register_tools(server: FastMCP, definitions: Iterable[ToolDefinition]) -> None:

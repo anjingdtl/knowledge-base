@@ -30,17 +30,17 @@ PROFILES = frozenset({"core", "extended", "admin", "full", "legacy"})
 PROFILE_INFO: dict[str, dict[str, str]] = {
     "core": {
         "label": "core — 最小核心档（10 个工具）",
-        "summary": "10 个稳定的只读检索工具，最适合纯 AI Agent 检索场景。",
+        "summary": "稳定的检索、问答、读取、能力发现与任务查看；索引维护工具仅在写策略允许时注册。",
         "scope": "ping / kb_capabilities / search / ask / read / list_knowledge / index_path / get_job / list_jobs / reindex_all",
-        "use_case": "AI Agent 仅做检索问答；想给 LLM 一个清爽工具面。",
-        "writes": "仅 index_path / reindex_all 触发写，并受 write_policy 控制。",
+        "use_case": "AI Agent 检索问答；Verified 默认档。",
+        "writes": "index_path / reindex_all 为写副作用，write_policy=disabled 时不注册；非纯只读集合。",
     },
     "extended": {
         "label": "extended — 扩展档(20 个工具,推荐 / 默认)",
-        "summary": "core + 高级查询能力(Query DSL、来源图谱、异步任务)。",
+        "summary": "core + 高级查询能力(Query DSL、来源图谱、异步任务)。Verified Wiki 读取是 Core 内部能力。",
         "scope": "在 core 基础上增加 search_fulltext / tags / route_query / execute_query / structured_query / explain_query / ask_with_query / get_source_graph / create_ingest_job / cancel_job",
-        "use_case": "通用 AI 助手的推荐档:既保留只读检索的稳定面,又提供结构化查询、证据链追溯、异步导入大文件等研究型能力。",
-        "writes": "仅 index_path / reindex_all / create_ingest_job 触发写,受 write_policy 控制;不含增删改与撤销。",
+        "use_case": "通用 AI 助手的推荐档:既保留检索问答的稳定面,又提供结构化查询、证据链追溯、异步导入大文件等研究型能力。",
+        "writes": "index_path / reindex_all / create_ingest_job 触发写,受 write_policy 控制;不含增删改与撤销。",
     },
     "admin": {
         "label": "admin — 管理档（30 个工具）",

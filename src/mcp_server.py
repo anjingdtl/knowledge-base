@@ -640,19 +640,47 @@ def ask(
     )
 
 
+def _should_use_verified_ask() -> bool:
+    """Phase 4: verified hybrid answer path when flag + mode allow wiki read."""
+    from src.utils.config import Config
+    if not Config.get("rag.verified_knowledge.enabled", False):
+        return False
+    try:
+        from src.utils.knowledge_mode import allows_wiki_read, get_configured_knowledge_mode
+        return allows_wiki_read(get_configured_knowledge_mode())
+    except Exception:  # noqa: BLE001
+        return True
+
+
 def _do_ask(question: str) -> dict:
     # BUG-2 fix (50轮测试报告): ask 工具增加总超时控制。
-    # 旧实现直接调用 rag_pipeline.query()，内部超时后会 fallback 到
-    # _direct_query（再次调 LLM），导致大文档（如供应商管理办法、单一来源采购
-    # 合规指引）偶发雪崩超时，触发 MCP error -32001。现在捕获超时返回部分结果。
+    # Phase 4: verified hybrid 时优先 SearchService + VerifiedAnswerService
+    # （冲突披露 / claim+evidence 引用 / answer_mode）；否则走 rag_pipeline。
     import concurrent.futures
 
     from src.utils.config import Config
 
     total_timeout = float(Config.get("rag.ask.total_timeout", 90) or 90)
     timeout_label = f"{total_timeout:g}s"
+
+    def _run_verified() -> dict:
+        container = _get_container()
+        from src.services.verified_answer import VerifiedAnswerService
+        svc = VerifiedAnswerService(
+            container.search_service,
+            llm=container.llm,
+            config=container.config,
+        )
+        return dict(svc.ask(question, top_k=int(Config.get("rag.ask.max_sources", 5) or 5)))
+
+    def _run_legacy() -> dict:
+        return dict(_get_container().rag_pipeline.query(question, timeout=total_timeout))
+
+    runner = _run_verified if _should_use_verified_ask() else _run_legacy
     try:
-        result = dict(_get_container().rag_pipeline.query(question, timeout=total_timeout))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(runner)
+            result = dict(future.result(timeout=total_timeout))
     except concurrent.futures.TimeoutError:
         logger.warning(
             "ask timed out after %s for question=%r, returning partial result",
@@ -670,6 +698,12 @@ def _do_ask(question: str) -> dict:
                          f"question too complex or document too large"],
             "wiki_context": "",
             "trace_id": "",
+            "answer_mode": "no_answer",
+            "conflict_disclosed": False,
+            "claims_used": [],
+            "raw_evidence_used": [],
+            "conflicts": [],
+            "fallbacks": [],
         }
         return result
     except Exception as e:
@@ -687,12 +721,24 @@ def _do_ask(question: str) -> dict:
             "warnings": [f"ask failed: {type(e).__name__}: {e}"],
             "wiki_context": "",
             "trace_id": "",
+            "answer_mode": "no_answer",
+            "conflict_disclosed": False,
+            "claims_used": [],
+            "raw_evidence_used": [],
+            "conflicts": [],
+            "fallbacks": [],
         }
+
+    # Ensure Phase 4 fields always present (legacy path defaults)
+    result.setdefault("answer_mode", "raw_only")
+    result.setdefault("conflict_disclosed", False)
+    result.setdefault("claims_used", [])
+    result.setdefault("raw_evidence_used", [])
+    result.setdefault("conflicts", [])
+    result.setdefault("fallbacks", [])
 
     # Phase 3: add trace_id to result if observability enabled
     if Config.get("rag.observability.trace_enabled", True):
-        # Trace was already written in RagPipeline.execute()
-        # Find the trace_id from the pipeline context
         result.setdefault("trace_id", "")
 
     # Phase 3: add score_breakdown for each source in debug mode
@@ -782,9 +828,187 @@ def create(
     return attach_operation_id(envelope, log_id)
 
 
+def _resolve_read_target(
+    *,
+    item_id: str | None = None,
+    block_id: str | None = None,
+    claim_id: str | None = None,
+    page_id: str | None = None,
+    knowledge_id: str | None = None,
+) -> dict | None:
+    """Phase 4 Spec §8.4: read by claim_id / block_id / page_id / knowledge_id.
+
+    Returns an envelope dict when a typed target is resolved; None to fall through
+    to legacy knowledge-item read.
+    """
+    container = _get_container()
+    raw = (claim_id or block_id or page_id or knowledge_id or item_id or "").strip()
+    if not raw and not any([claim_id, block_id, page_id, knowledge_id]):
+        return None
+
+    kind = None
+    value = raw
+    if claim_id:
+        kind, value = "claim", claim_id
+    elif block_id:
+        kind, value = "block", block_id
+    elif page_id:
+        kind, value = "page", page_id
+    elif knowledge_id:
+        kind, value = "knowledge", knowledge_id
+    elif item_id:
+        lower = item_id.lower()
+        if lower.startswith("claim:"):
+            kind, value = "claim", item_id.split(":", 1)[1]
+        elif lower.startswith("block:"):
+            kind, value = "block", item_id.split(":", 1)[1]
+        elif lower.startswith("page:"):
+            kind, value = "page", item_id.split(":", 1)[1]
+        else:
+            # Heuristic: claim_ prefix or looks like claim id in wiki repo
+            if item_id.startswith("claim_") or item_id.startswith("cl_"):
+                kind, value = "claim", item_id
+            else:
+                return None  # legacy knowledge path
+
+    if kind == "claim":
+        try:
+            repo = container.wiki_repository
+            claim = repo.get_claim(value) if repo is not None else None
+        except Exception as e:  # noqa: BLE001
+            return fail(ErrorCode.INTERNAL_ERROR, f"读取 Claim 失败: {e}", claim_id=value)
+        if claim is None:
+            return fail(ErrorCode.NOT_FOUND, f"Claim 不存在: {value}", claim_id=value)
+        # Resolve evidence validity via Serving Gate when available
+        gate = getattr(container, "wiki_serving_gate", None)
+        decision = None
+        if gate is not None:
+            try:
+                decision = gate.evaluate(claim)
+            except Exception:  # noqa: BLE001
+                decision = None
+        evidence_rows = []
+        for ev in claim.evidence:
+            block = None
+            try:
+                if ev.block_id:
+                    block = container.db.get_conn().execute(
+                        "SELECT id, page_id, content, properties FROM blocks WHERE id = ?",
+                        (ev.block_id,),
+                    ).fetchone()
+            except Exception:  # noqa: BLE001
+                block = None
+            block_dict = dict(block) if block is not None and hasattr(block, "keys") else (
+                {"id": block[0], "page_id": block[1], "content": block[2]} if block else None
+            ) if block is not None else None
+            evidence_rows.append({
+                "evidence_id": ev.evidence_id,
+                "knowledge_id": ev.knowledge_id,
+                "block_id": ev.block_id,
+                "stance": ev.stance.value if hasattr(ev.stance, "value") else str(ev.stance),
+                "stale": bool(ev.stale),
+                "excerpt_hash": ev.excerpt_hash,
+                "excerpt": (block_dict or {}).get("content", "")[:500] if block_dict else "",
+                "valid": (not ev.stale) and block_dict is not None,
+            })
+        relations = []
+        for rel in (claim.relations or []):
+            if hasattr(rel, "__dict__"):
+                relations.append({
+                    k: getattr(rel, k) for k in ("relation_type", "target_id", "direction")
+                    if hasattr(rel, k)
+                } or {"raw": str(rel)})
+            elif isinstance(rel, dict):
+                relations.append(rel)
+            else:
+                relations.append({"raw": str(rel)})
+        payload = {
+            "type": "claim",
+            "claim_id": claim.claim_id,
+            "statement": claim.statement,
+            "normalized_statement": claim.normalized_statement,
+            "status": claim.status.value if hasattr(claim.status, "value") else str(claim.status),
+            "revision": claim.revision,
+            "confidence": claim.confidence,
+            "relations": relations,
+            "evidence": evidence_rows,
+            "serving": {
+                "eligible": bool(decision.eligible) if decision else None,
+                "disclose_only": bool(decision.disclose_only) if decision else None,
+                "reason_codes": list(decision.reason_codes) if decision else [],
+            },
+        }
+        return ok(payload, claim_id=value)
+
+    if kind == "block":
+        try:
+            row = container.db.get_conn().execute(
+                "SELECT id, page_id, content, block_type, properties, order_idx "
+                "FROM blocks WHERE id = ?",
+                (value,),
+            ).fetchone()
+        except Exception as e:  # noqa: BLE001
+            return fail(ErrorCode.INTERNAL_ERROR, f"读取 Block 失败: {e}", block_id=value)
+        if row is None:
+            return fail(ErrorCode.NOT_FOUND, f"Block 不存在: {value}", block_id=value)
+        if hasattr(row, "keys"):
+            block = dict(row)
+        else:
+            block = {
+                "id": row[0], "page_id": row[1], "content": row[2],
+                "block_type": row[3], "properties": row[4], "order_idx": row[5],
+            }
+        kid = block.get("page_id") or ""
+        item = container.db.get_knowledge(kid) if kid else None
+        return ok({
+            "type": "block",
+            "block_id": block.get("id"),
+            "knowledge_id": kid,
+            "content": block.get("content"),
+            "block_type": block.get("block_type"),
+            "properties": block.get("properties"),
+            "knowledge": item,
+        }, block_id=value)
+
+    if kind == "page":
+        try:
+            repo = container.wiki_repository
+            page = repo.get_page(value) if repo is not None and hasattr(repo, "get_page") else None
+        except Exception as e:  # noqa: BLE001
+            return fail(ErrorCode.INTERNAL_ERROR, f"读取 Page 失败: {e}", page_id=value)
+        if page is None:
+            # Fall back to knowledge item
+            item = container.db.get_knowledge(value)
+            if item:
+                return ok({"type": "knowledge", **item}, page_id=value)
+            return fail(ErrorCode.NOT_FOUND, f"Page 不存在: {value}", page_id=value)
+        if hasattr(page, "to_dict"):
+            payload = page.to_dict()
+        elif isinstance(page, dict):
+            payload = page
+        else:
+            payload = {
+                "page_id": getattr(page, "page_id", value),
+                "title": getattr(page, "title", ""),
+                "status": str(getattr(page, "status", "")),
+            }
+        payload = dict(payload)
+        payload["type"] = "wiki_page"
+        return ok(payload, page_id=value)
+
+    if kind == "knowledge":
+        item = container.db.get_knowledge(value)
+        if not item:
+            return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {value}", knowledge_id=value)
+        return ok({"type": "knowledge", **item}, knowledge_id=value)
+
+    return None
+
+
 @_define_tool(
     name="read",
-    description="根据 ID 获取指定知识条目的完整信息。",
+    description="根据 ID 读取知识/块/Claim/Wiki 页面。"
+    "支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
     group="kb", side_effect="read",
 )
@@ -797,15 +1021,32 @@ def read(
     include_linked_summaries: bool = False,
     query: str | None = None,
     top_k: int = 1,
+    block_id: str | None = None,
+    claim_id: str | None = None,
+    page_id: str | None = None,
+    knowledge_id: str | None = None,
 ) -> dict:
-    """读取指定 ID 的知识条目。
+    """读取指定 ID 的知识条目、Block、Claim 或 Wiki Page（Spec §8.4）。
 
     Args:
-        item_id: 知识条目的唯一 ID
+        item_id: 知识条目 ID，或 claim:/block:/page: 前缀 ID
+        block_id / claim_id / page_id / knowledge_id: 显式定位（优先于 item_id）
     """
     container = _get_container()
     item_id = _resolve_query_alias(item_id, None)
     query = _resolve_query_alias(None, query)
+
+    # Phase 4: explicit typed IDs
+    typed = _resolve_read_target(
+        item_id=item_id,
+        block_id=block_id,
+        claim_id=claim_id,
+        page_id=page_id,
+        knowledge_id=knowledge_id,
+    )
+    if typed is not None:
+        return typed
+
     if not item_id and query:
         exact = container.db.get_knowledge(query)
         if exact:
@@ -2881,6 +3122,41 @@ def _runtime_diagnostics() -> dict:
 
 # ---- Capabilities (Sprint 1 新增) ----
 
+def _kb_capabilities_verified_fields() -> dict:
+    """Phase 6 Spec §9.4 verified hybrid capability fields."""
+    from src.utils.config import Config
+    from src.utils.knowledge_mode import describe_mode, get_configured_knowledge_mode
+
+    try:
+        mode_info = describe_mode(get_configured_knowledge_mode())
+    except Exception:  # noqa: BLE001
+        mode_info = {
+            "resolved": "verified",
+            "wiki_read_enabled": True,
+            "authoring_enabled": False,
+        }
+    wiki_serving = "unavailable"
+    try:
+        container = _get_container()
+        if not mode_info.get("wiki_read_enabled"):
+            wiki_serving = "disabled"
+        elif not Config.get("rag.verified_knowledge.enabled", False):
+            wiki_serving = "disabled"
+        else:
+            claims = container.search_service.list_servable_wiki_claims(limit=1)
+            wiki_serving = "ready" if claims else "empty"
+    except Exception:  # noqa: BLE001
+        wiki_serving = "degraded"
+    return {
+        "knowledge_mode": mode_info.get("resolved"),
+        "raw_retrieval": True,
+        "verified_wiki_read": bool(mode_info.get("wiki_read_enabled")),
+        "wiki_authoring": bool(mode_info.get("authoring_enabled")),
+        "wiki_serving_status": wiki_serving,
+        "fallback": "raw_retrieval",
+    }
+
+
 @_define_tool(
     name="kb_capabilities",
     description="查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。",
@@ -2956,6 +3232,13 @@ def kb_capabilities() -> dict:
         "visible_tools": sorted({t["name"] for t in tool_summaries if "." not in t["name"]}),
         "hidden_groups": sorted(_compute_hidden_groups(tool_summaries)),
         "legacy_aliases_enabled": _ENABLE_ALIASES,
+        # Phase 6 Spec §9.4
+        **_kb_capabilities_verified_fields(),
+        "registered_tools": sorted({t["name"] for t in tool_summaries if "." not in t["name"]}),
+        "hidden_by_policy": list(_HIDDEN_BY_POLICY) if "_HIDDEN_BY_POLICY" in globals() else [],
+        "serving_claim_statuses": ["active"],
+        "citation_layers": ["claim", "raw_evidence"],
+        "recommended_flow": ["search", "read", "ask"],
     })
 
 
@@ -3736,10 +4019,60 @@ _ENABLE_ALIASES = bool(
     Config.get("mcp.enable_legacy_aliases", _CURRENT_PROFILE == "legacy")
 )
 
-# Select and register tools based on profile
-_selected_tools = select_tools(_CURRENT_PROFILE, experimental_enabled=_EXPERIMENTAL_ENABLED)
+# Select and register tools based on profile + write/authoring policy (Phase 6)
+def _resolve_tool_selection_kwargs() -> dict:
+    from src.utils.knowledge_mode import get_configured_knowledge_mode
+    try:
+        mode = get_configured_knowledge_mode()
+    except Exception:  # noqa: BLE001
+        mode = None
+    authoring = Config.get("wiki.authoring_enabled", None)
+    if authoring is None:
+        authoring = Config.get("knowledge_workflow.authoring_enabled", None)
+    return {
+        "write_policy": str(Config.get("mcp.write_policy", "") or ""),
+        "knowledge_mode": mode,
+        "authoring_enabled": bool(authoring) if authoring is not None else None,
+    }
+
+
+_TOOL_SELECTION_KWARGS = _resolve_tool_selection_kwargs()
+_selected_tools = select_tools(
+    _CURRENT_PROFILE,
+    experimental_enabled=_EXPERIMENTAL_ENABLED,
+    **_TOOL_SELECTION_KWARGS,
+)
+_HIDDEN_BY_POLICY = []
+try:
+    from src.mcp.tool_registry import list_hidden_by_policy as _list_hidden
+    _HIDDEN_BY_POLICY = _list_hidden(
+        _CURRENT_PROFILE,
+        experimental_enabled=_EXPERIMENTAL_ENABLED,
+        **_TOOL_SELECTION_KWARGS,
+    )
+except Exception:  # noqa: BLE001
+    _HIDDEN_BY_POLICY = []
+
 register_tools(mcp, _selected_tools)
 _VISIBLE_TOOL_NAMES = {d.name for d in _selected_tools}
+
+# Startup diagnostics (Phase 6)
+try:
+    from src.utils.knowledge_mode import describe_mode, get_configured_knowledge_mode
+    _mode_info = describe_mode(get_configured_knowledge_mode())
+    logger.info(
+        "MCP start: knowledge_mode=%s wiki_read=%s authoring=%s profile=%s "
+        "write_policy=%s tools=%d hidden_by_policy=%d fallback=raw_retrieval",
+        _mode_info.get("resolved"),
+        _mode_info.get("wiki_read_enabled"),
+        _mode_info.get("authoring_enabled"),
+        _CURRENT_PROFILE,
+        Config.get("mcp.write_policy", ""),
+        len(_VISIBLE_TOOL_NAMES),
+        len(_HIDDEN_BY_POLICY),
+    )
+except Exception as _startup_exc:  # noqa: BLE001
+    logger.info("MCP start: profile=%s tools=%d (%s)", _CURRENT_PROFILE, len(_VISIBLE_TOOL_NAMES), _startup_exc)
 _REGISTERED_TOOL_ALIASES = {
     alias_name: original_name
     for alias_name, original_name in _TOOL_ALIASES.items()
