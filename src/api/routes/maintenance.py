@@ -209,6 +209,16 @@ def get_maintenance_job(job_id: str):
     return job
 
 
+@maintenance_router.get("/dead-letters")
+def list_maintenance_dead_letters(limit: int = 50):
+    return {"dead_letters": _get_wiki_maintenance().list_dead_letters(limit=limit)}
+
+
+@maintenance_router.get("/health/history")
+def maintenance_health_history(limit: int = 50):
+    return {"snapshots": _get_wiki_maintenance().health_history(limit=limit)}
+
+
 @maintenance_router.post("/jobs/{job_id}/retry")
 def retry_maintenance_job(job_id: str):
     result = _get_wiki_maintenance().retry_job(job_id)

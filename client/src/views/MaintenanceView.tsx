@@ -61,6 +61,18 @@ interface MaintReview {
   status: string
   claim_id?: string
   reason_codes?: string[]
+  before?: Record<string, unknown>
+  proposed?: Record<string, unknown>
+  evidence?: Array<Record<string, unknown>>
+}
+
+interface MaintJob {
+  job_id: string
+  job_type: string
+  risk_level: string
+  status: string
+  reason_codes?: string[]
+  error?: string
 }
 
 export default function MaintenanceView() {
@@ -73,6 +85,8 @@ export default function MaintenanceView() {
   const [loading, setLoading] = useState(false)
   const [wikiHealth, setWikiHealth] = useState<WikiHealth | null>(null)
   const [reviews, setReviews] = useState<MaintReview[]>([])
+  const [jobs, setJobs] = useState<MaintJob[]>([])
+  const [selectedReview, setSelectedReview] = useState<MaintReview | null>(null)
   const { toast } = useToast()
 
   const loadSessions = useCallback(async () => {
@@ -145,12 +159,59 @@ export default function MaintenanceView() {
     }
   }, [])
 
+  const loadJobs = useCallback(async () => {
+    try {
+      const data = await apiGet<{ jobs: MaintJob[] }>('/api/maintenance/jobs?limit=20')
+      setJobs(data.jobs || [])
+    } catch {
+      setJobs([])
+    }
+  }, [])
+
   useEffect(() => {
     loadSessions()
     loadIgnores()
     loadWikiHealth()
     loadReviews()
-  }, [loadSessions, loadIgnores, loadWikiHealth, loadReviews])
+    loadJobs()
+  }, [loadSessions, loadIgnores, loadWikiHealth, loadReviews, loadJobs])
+
+  const resolveReview = async (review: MaintReview, action: string) => {
+    let note = ''
+    if (action === 'reject' || review.review_type === 'conflict_resolution') {
+      note = window.prompt('请填写审阅说明：') || ''
+      if (!note) return
+    }
+    if ((action === 'approve' || action === 'confirm') && review.risk_level === 'R4' && !confirm('这是高风险动作，确认继续？')) return
+    try {
+      await apiPost(`/api/maintenance/reviews/${review.review_id}/resolve`, {
+        action, note, human_confirmed: review.risk_level === 'R4',
+      })
+      toast('审阅已处理', 'success')
+      setSelectedReview(null)
+      loadReviews()
+      loadJobs()
+    } catch (e: unknown) {
+      toast(e instanceof Error ? e.message : '审阅操作失败', 'error')
+    }
+  }
+
+  const retryJob = async (job: MaintJob) => {
+    try {
+      await apiPost(`/api/maintenance/jobs/${job.job_id}/retry`, {})
+      toast('已请求重试', 'success')
+      loadJobs()
+    } catch { toast('重试失败', 'error') }
+  }
+
+  const cancelJob = async (job: MaintJob) => {
+    if (!confirm('取消此维护任务？')) return
+    try {
+      await apiPost(`/api/maintenance/jobs/${job.job_id}/cancel`, {})
+      toast('任务已取消', 'success')
+      loadJobs()
+    } catch { toast('取消失败', 'error') }
+  }
 
   useEffect(() => {
     if (currentSession) {
@@ -285,7 +346,7 @@ export default function MaintenanceView() {
               <div className="font-medium mb-1">待审阅 ({reviews.length})</div>
               <ul className="text-sm space-y-1 max-h-40 overflow-auto">
                 {reviews.map(r => (
-                  <li key={r.review_id} className="flex gap-2">
+                  <li key={r.review_id} className="flex gap-2 cursor-pointer hover:underline" onClick={() => setSelectedReview(r)}>
                     <span className="text-[var(--color-text-muted)]">{r.priority}</span>
                     <span>{r.review_type}</span>
                     <span className="text-[var(--color-text-muted)]">{r.risk_level}</span>
@@ -297,6 +358,20 @@ export default function MaintenanceView() {
           )}
         </div>
       )}
+
+      {selectedReview && (
+        <section className="p-4 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)] space-y-3">
+          <div className="flex justify-between"><h2 className="text-lg font-semibold">审阅详情 · {selectedReview.review_type}</h2><button onClick={() => setSelectedReview(null)}>关闭</button></div>
+          <div className="grid md:grid-cols-2 gap-3 text-xs"><pre className="p-2 overflow-auto bg-[var(--color-surface-hover)] rounded">Before{`\n${JSON.stringify(selectedReview.before || {}, null, 2)}`}</pre><pre className="p-2 overflow-auto bg-[var(--color-surface-hover)] rounded">Proposed{`\n${JSON.stringify(selectedReview.proposed || {}, null, 2)}`}</pre></div>
+          <pre className="p-2 text-xs overflow-auto bg-[var(--color-surface-hover)] rounded">Evidence Diff{`\n${JSON.stringify(selectedReview.evidence || [], null, 2)}`}</pre>
+          <div className="flex gap-2"><button onClick={() => resolveReview(selectedReview, 'approve')} className="px-2 py-1 text-sm bg-green-600 text-white rounded">批准</button><button onClick={() => resolveReview(selectedReview, 'reject')} className="px-2 py-1 text-sm bg-red-600 text-white rounded">拒绝</button><button onClick={() => resolveReview(selectedReview, 'defer')} className="px-2 py-1 text-sm border rounded">延期</button></div>
+        </section>
+      )}
+
+      <section className="p-4 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)]">
+        <h2 className="text-lg font-semibold mb-2">维护任务</h2>
+        {jobs.length === 0 ? <p className="text-sm text-[var(--color-text-muted)]">暂无任务</p> : <div className="space-y-2">{jobs.map(job => <div key={job.job_id} className="flex items-center justify-between text-sm border-b border-[var(--color-border)] pb-2"><span>{job.job_type} · {job.risk_level} · {job.status}</span><span className="flex gap-2">{['failed', 'dead_letter'].includes(job.status) && <button onClick={() => retryJob(job)} className="underline">重试</button>}{!['completed', 'cancelled', 'dead_letter'].includes(job.status) && <button onClick={() => cancelJob(job)} className="underline">取消</button>}</span></div>)}</div>}
+      </section>
 
       {/* 当前会话进度 */}
       {currentSession && (

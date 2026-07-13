@@ -137,6 +137,7 @@ class WikiMaintenanceService:
         feedback_service: Any = None,
         operation_log: Any = None,
         wiki_serving_gate: Any = None,
+        projection: Any = None,
         db: Any = None,
         clock: Callable[[], str] | None = None,
     ):
@@ -148,6 +149,7 @@ class WikiMaintenanceService:
         self._feedback = feedback_service
         self._op_log = operation_log
         self._gate = wiki_serving_gate
+        self._projection = projection
         self._db = db
         self._clock = clock or _now
         self._store = None
@@ -507,6 +509,14 @@ class WikiMaintenanceService:
         j = self._get_job(job_id)
         return j.to_dict() if j else None
 
+    def list_dead_letters(self, limit: int = 50) -> list[dict[str, Any]]:
+        return self._store.list_dead_letters(limit) if self._store is not None else [
+            job.to_dict() for job in self._list_jobs(limit=10000) if job.status == "dead_letter"
+        ][:limit]
+
+    def health_history(self, limit: int = 50) -> list[dict[str, Any]]:
+        return self._store.list_health_snapshots(limit) if self._store is not None else []
+
     def retry_job(self, job_id: str) -> dict[str, Any]:
         job = self._get_job(job_id)
         if not job:
@@ -557,12 +567,18 @@ class WikiMaintenanceService:
         review = self._get_review(review_id)
         if not review:
             return {"ok": False, "error": "review_not_found"}
+        action = (action or "").lower().strip()
+        if review.status == "approved" and action in ("confirm", "approve", "approved"):
+            return {"ok": True, "idempotent": True, "review": review.to_dict()}
         if review.status not in ("open", "assigned"):
             return {"ok": False, "error": "review_not_open", "status": review.status}
 
-        action = (action or "").lower().strip()
         if action not in ("confirm", "reject", "correct", "needs_review", "defer", "approve", "approved"):
             return {"ok": False, "error": f"unknown_action:{action}"}
+        if action == "reject" and not note.strip():
+            return {"ok": False, "error": "reject_requires_note"}
+        if review.review_type in ("conflict", "conflict_resolution") and action in ("confirm", "approve", "approved") and not note.strip():
+            return {"ok": False, "error": "conflict_resolution_requires_note"}
 
         # R4 publish/delete path
         if review.risk_level == "R4" and action in ("confirm", "approve", "approved"):
@@ -571,6 +587,13 @@ class WikiMaintenanceService:
             )
             if decision.decision != DECIDE_AUTO:
                 return {"ok": False, "error": "policy_blocks", "decision": decision.to_dict()}
+            if review.claim_id:
+                from src.services.wiki_validator import WikiValidator
+                published = WikiValidator().publish_serving_revision(
+                    self._repo, self._projection, review.claim_id, published_at=self._clock(),
+                )
+                if published is None:
+                    return {"ok": False, "error": "publish_gate_failed"}
 
         feedback_result = None
         if review.claim_id and self._feedback is not None and action in (

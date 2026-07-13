@@ -648,6 +648,7 @@ class AppContainer:
                     feedback_service=self.wiki_feedback_service,
                     operation_log=self.operation_log,
                     wiki_serving_gate=self.wiki_serving_gate,
+                    projection=self.wiki_projection,
                     db=self.db,
                 )
             except Exception as e:  # noqa: BLE001

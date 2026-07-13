@@ -15,6 +15,10 @@ def test_endpoints_require_auth(setup_db):
 
 
 class TestMaintenanceAPI:
+    def test_durable_maintenance_read_endpoints(self, api_client):
+        assert api_client.get("/api/maintenance/dead-letters").status_code == 200
+        assert api_client.get("/api/maintenance/health/history").status_code == 200
+
     def test_create_session(self, api_client):
         resp = api_client.post(
             "/api/maintenance/version-conflict/sessions",

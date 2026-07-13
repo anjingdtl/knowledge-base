@@ -228,6 +228,12 @@ class MaintenanceRepository:
         ).fetchall()
         return [self._load(row[0]) for row in rows]
 
+    def list_health_snapshots(self, limit: int = 50) -> list[dict[str, Any]]:
+        rows = self._conn().execute(
+            "SELECT payload_json FROM maintenance_health_snapshots ORDER BY captured_at DESC LIMIT ?", (limit,),
+        ).fetchall()
+        return [self._load(row[0]) for row in rows]
+
     def claim_schedule(self, name: str, *, now: str, lease_until: str) -> bool:
         """Acquire a cross-process schedule lease exactly once."""
         conn = self._conn()

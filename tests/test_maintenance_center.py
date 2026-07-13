@@ -135,6 +135,20 @@ class TestMaintenanceService:
         assert result["ok"] is False
         assert result["error"] == "policy_blocks"
 
+    def test_reject_requires_note_and_approve_is_idempotent(self):
+        svc = WikiMaintenanceService(config={"maintenance": {"enabled": True}})
+        review = svc._create_review(review_type="correction", priority="P1", risk_level="R3")
+        assert svc.resolve_review(review.review_id, "reject")["error"] == "reject_requires_note"
+        assert svc.resolve_review(review.review_id, "approve")["ok"] is True
+        assert svc.resolve_review(review.review_id, "approve")["idempotent"] is True
+
+    def test_conflict_resolution_requires_note(self):
+        svc = WikiMaintenanceService(config={"maintenance": {"enabled": True}})
+        review = svc._create_review(review_type="conflict_resolution", priority="P0", risk_level="R3")
+        result = svc.resolve_review(review.review_id, "approve")
+        assert result["ok"] is False
+        assert result["error"] == "conflict_resolution_requires_note"
+
     def test_cancel_and_list_jobs(self):
         svc = WikiMaintenanceService(config={
             "maintenance": {"enabled": True, "automation_level": "observe"},
