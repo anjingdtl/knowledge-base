@@ -49,6 +49,7 @@ class MergeResult:
     skipped: list[str] = field(default_factory=list)
     diff: str = ""
     committed: bool = False
+    tx_id: str = ""
     errors: list[str] = field(default_factory=list)
 
 
@@ -132,6 +133,7 @@ class WikiMergeEngine:
 
         try:
             with self._repo.transaction() as tx:
+                result.tx_id = tx.tx_id
                 # Process aggregated items (supports, duplicate, contradicts)
                 for target_id, group in sorted(aggregated.items()):
                     self._apply_aggregated(target_id, group, page, result, now, tx)
@@ -199,10 +201,14 @@ class WikiMergeEngine:
         updated.updated_at = now
         updated.revision = target.revision  # repo will increment on save
 
+        changed = True
         if action == "contradicts":
             self._do_contradicts(updated, group, result)
         elif action in ("supports", "duplicate"):
-            self._do_supports_or_duplicate(updated, group, result)
+            changed = self._do_supports_or_duplicate(updated, group, result)
+
+        if not changed:
+            return
 
         # Validate before staging
         errors = updated.validate()
@@ -242,17 +248,18 @@ class WikiMergeEngine:
         target: Claim,
         group: list[tuple[Claim, ClaimMatchDecision]],
         result: MergeResult,
-    ) -> None:
+    ) -> bool:
         """Add evidence from all items, deduplicating for 'duplicate' actions."""
         # Build set of existing evidence keys for dedup
         existing_keys: set[tuple[str, str | None]] = set()
         for ev in target.evidence:
             existing_keys.add((ev.knowledge_id, ev.block_id))
 
-        for new_claim, decision in group:
+        added = False
+        for new_claim, _decision in group:
             for ev in new_claim.evidence:
                 key = (ev.knowledge_id, ev.block_id)
-                if decision.action == "duplicate" and key in existing_keys:
+                if key in existing_keys:
                     result.skipped.append(
                         f"evidence {ev.evidence_id} (knowledge_id={ev.knowledge_id}, "
                         f"block={ev.block_id}) already exists in {target.claim_id}"
@@ -261,6 +268,8 @@ class WikiMergeEngine:
                 # Add evidence with original stance
                 target.evidence.append(copy.deepcopy(ev))
                 existing_keys.add(key)
+                added = True
+        return added
 
     def _do_contradicts(
         self,

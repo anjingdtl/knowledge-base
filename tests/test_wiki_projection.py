@@ -120,6 +120,23 @@ def test_project_page_creates_row_and_fts(repo_and_proj):
     assert row[2] == "hello world 内容 test\n"  # write_markdown appends trailing newline
 
 
+def test_project_page_updates_legacy_wiki_pages_compatibility_row(repo_and_proj):
+    repo, proj, db = repo_and_proj
+    page = _make_page(body="legacy compatible body", status=PageStatus.DRAFT)
+    repo.save_page(page)
+
+    result = proj.process_outbox()
+
+    assert result.errors == []
+    legacy = db.get_wiki_page("page_test1")
+    assert legacy is not None
+    assert legacy["title"] == "Test Page"
+    assert legacy["content"] == "legacy compatible body\n"
+    assert legacy["status"] == "draft"
+    assert json.loads(legacy["source_ids"]) == ["s1"]
+    assert json.loads(legacy["tags"]) == ["t"]
+
+
 # ---- 测试 2: claim + evidence 投影 ----
 def test_project_claim_creates_claim_and_evidence(repo_and_proj):
     repo, proj, db = repo_and_proj
@@ -269,6 +286,19 @@ def test_disabled_skips_processing(repo_and_proj):
     assert result.skipped >= 1
     assert result.processed == 0
     assert _v2_count(db, "wiki_pages_v2") == 0
+
+
+def test_disabled_projection_can_force_process_for_compatibility(repo_and_proj):
+    repo, _, db = repo_and_proj
+    disabled_proj = WikiProjection(repo, db, enabled=False)
+    repo.save_page(_make_page())
+
+    result = disabled_proj.process_outbox(force=True)
+
+    assert result.processed == 1
+    assert result.skipped == 0
+    assert _v2_count(db, "wiki_pages_v2") == 1
+    assert db.get_wiki_page("page_test1") is not None
 
 
 # ---- 测试 11: rebuild 原子性 — 中途失败回滚 ----

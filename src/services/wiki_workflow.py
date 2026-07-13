@@ -1,8 +1,13 @@
 """Wiki 页面工作流状态机"""
+import hashlib
+import json
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
 
+from src.models.wiki_v2 import PageStatus, PageType, WikiPage
 from src.services.db import Database
 from src.utils.config import Config
 
@@ -38,6 +43,128 @@ class WorkflowResult:
 
 class WikiWorkflow:
     """Wiki 页面工作流管理"""
+
+    @staticmethod
+    def _content_hash(content: str) -> str:
+        return "sha256:" + hashlib.sha256(content.encode("utf-8")).hexdigest()
+
+    @staticmethod
+    def _json_list(value) -> list:
+        if isinstance(value, list):
+            return value
+        if isinstance(value, str):
+            try:
+                parsed = json.loads(value)
+                return parsed if isinstance(parsed, list) else []
+            except json.JSONDecodeError:
+                return []
+        return []
+
+    @classmethod
+    def _page_status(cls, status: str | None) -> PageStatus:
+        normalized = cls._normalize_status(status or "draft")
+        if normalized == "published":
+            return PageStatus.PUBLISHED
+        if normalized == "review":
+            return PageStatus.REVIEW
+        if normalized == "deprecated":
+            return PageStatus.DEPRECATED
+        if normalized == "deleted":
+            return PageStatus.DELETED
+        return PageStatus.DRAFT
+
+    @classmethod
+    def _legacy_page_to_canonical(cls, page: dict) -> WikiPage:
+        now = datetime.now().isoformat()
+        content = page.get("content", "") or ""
+        return WikiPage(
+            schema_version=1,
+            page_id=page["id"],
+            title=page.get("title") or "Untitled",
+            page_type=PageType.SYNTHESES,
+            status=cls._page_status(page.get("status")),
+            revision=0,
+            aliases=[],
+            tags=cls._json_list(page.get("tags", "[]")),
+            source_ids=cls._json_list(page.get("source_ids", "[]")),
+            claim_ids=[],
+            created_at=page.get("created_at") or now,
+            updated_at=page.get("updated_at") or now,
+            content_hash=cls._content_hash(content),
+            body=content,
+        )
+
+    @staticmethod
+    def _canonical_services():
+        try:
+            from src.core.container import get_active_container
+            container = get_active_container()
+        except Exception:
+            container = None
+        if container is not None:
+            return container.wiki_repository, container.wiki_projection
+
+        from src.services.wiki_projection import WikiProjection
+        from src.services.wiki_repository import WikiRepository
+
+        wiki_dir = Path(Config.get("knowledge_workflow.wiki_dir", "wiki"))
+        repo = WikiRepository(
+            wiki_dir=wiki_dir,
+            registry_path=wiki_dir / "_meta" / "pages.json",
+            redirects_path=wiki_dir / "_meta" / "redirects.json",
+            outbox_path=Path(Config.get("storage.data_dir", "data")) / "wiki_projection_outbox.jsonl",
+        )
+        return repo, WikiProjection(repo, Database, enabled=True)
+
+    @classmethod
+    def _save_canonical_page(
+        cls,
+        page_id: str,
+        legacy_page: dict,
+        *,
+        repository=None,
+        projection=None,
+        **fields,
+    ) -> None:
+        if repository is None or projection is None:
+            default_repository, default_projection = cls._canonical_services()
+            repository = repository or default_repository
+            projection = projection or default_projection
+        repo = repository
+        page = repo.get_page(page_id)
+        if page is not None and fields.get("title") and page.title != fields["title"]:
+            repo.move_page(page_id, fields["title"], page.page_type.value)
+            page = repo.get_page(page_id)
+        if page is None:
+            page = cls._legacy_page_to_canonical(legacy_page)
+            if fields.get("title"):
+                page.title = fields["title"]
+
+        if "content" in fields:
+            page.body = fields["content"] or ""
+            page.content_hash = cls._content_hash(page.body)
+        if "tags" in fields:
+            page.tags = cls._json_list(fields["tags"])
+        if "source_ids" in fields:
+            page.source_ids = cls._json_list(fields["source_ids"])
+        if "status" in fields:
+            page.status = cls._page_status(fields["status"])
+        page.updated_at = datetime.now().isoformat()
+
+        expected_revision = page.revision if page.revision else None
+        repo.save_page(page, expected_revision=expected_revision)
+        try:
+            projection.process_outbox(force=True)
+        except TypeError:
+            projection.process_outbox()
+        legacy_fields = {}
+        if "content" in fields:
+            # Markdown serialization normalizes a trailing newline; legacy callers expect exact text.
+            legacy_fields["content"] = fields["content"] or ""
+        if "concept_summary" in fields:
+            legacy_fields["concept_summary"] = fields["concept_summary"] or ""
+        if legacy_fields and hasattr(projection, "update_legacy_page_fields"):
+            projection.update_legacy_page_fields(page_id, **legacy_fields)
 
     @staticmethod
     def can_transition(from_status: str, to_status: str) -> bool:
@@ -158,8 +285,9 @@ class WikiWorkflow:
         current = Database.get_wiki_page(page_id)
         if current:
             Database.save_wiki_version(page_id, current)
-        Database.update_wiki_page(
+        cls._save_canonical_page(
             page_id,
+            current or {"id": page_id, "status": "draft"},
             title=version_data["title"],
             content=version_data["content"],
             concept_summary=version_data["concept_summary"],
@@ -184,7 +312,7 @@ class WikiWorkflow:
             Database.save_wiki_version(page_id, page)
 
         # 更新页面状态
-        Database.update_wiki_page(page_id, status=to_status)
+        cls._save_canonical_page(page_id, page or {"id": page_id, "status": from_status}, status=to_status)
 
         # 记录转换日志
         Database.insert_workflow(page_id, from_status, to_status, operator, comment)

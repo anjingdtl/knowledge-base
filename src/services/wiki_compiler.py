@@ -140,6 +140,12 @@ class WikiCompiler:
     def __init__(self):
         self._llm = LLMService()
 
+    @staticmethod
+    def _save_canonical_page(page_id: str, legacy_page: dict, **fields) -> None:
+        """Persist a legacy compiler page through the canonical repository."""
+        from src.services.wiki_workflow import WikiWorkflow
+        WikiWorkflow._save_canonical_page(page_id, legacy_page, **fields)
+
     def _generate_summary(self, title: str, content: str) -> str | None:
         """用 LLM 为已有内容生成 concept_summary"""
         if not content or len(content) < 20:
@@ -262,9 +268,7 @@ class WikiCompiler:
 
             # 从 source_ids 中移除已删除的 ID
             new_source_ids = [sid for sid in source_ids if sid in existing]
-            new_source_ids_json = json.dumps(new_source_ids, ensure_ascii=False)
-
-            Database.update_wiki_page(page["id"], source_ids=new_source_ids_json)
+            self._save_canonical_page(page["id"], page, source_ids=new_source_ids)
             cleaned += 1
             total_removed += len(deleted_ids)
             details.append({
@@ -293,6 +297,28 @@ class WikiCompiler:
         BUG#11：enhance=False 时跳过 LLM 增强，直接用原始 answer 存储
                 （title 取 question 前 N 字，tags 空，concept_summary 空）。
         """
+        if Config.get("wiki.canonical_v2.mode", "off") == "primary":
+            try:
+                from src.core.container import get_active_container
+
+                container = get_active_container()
+                if container is not None:
+                    logger.warning(
+                        "WikiCompiler.save_answer is deprecated in canonical_v2 primary; "
+                        "delegating to WikiWriteService"
+                    )
+                    saved = container.wiki_write_service.save(
+                        question,
+                        answer,
+                        source_ids or [],
+                        auto_publish=auto_publish,
+                        enhance=enhance,
+                    )
+                    saved_id = saved.get("page_id") or saved.get("sqlite_page_id")
+                    return str(saved_id) if saved_id else None
+            except Exception as e:
+                logger.warning("primary WikiCompiler adapter failed: %s", e)
+
         min_len = Config.get("wiki.query_save_min_length", 100)
         if len(answer) < min_len:
             return None
@@ -336,7 +362,15 @@ class WikiCompiler:
             "created_at": datetime.now().isoformat(),
             "updated_at": datetime.now().isoformat(),
         }
-        Database.insert_wiki_page(page)
+        self._save_canonical_page(
+            page_id,
+            page,
+            content=page["content"],
+            source_ids=source_ids or [],
+            tags=result.get("tags", []),
+            concept_summary=page["concept_summary"],
+            status=initial_status,
+        )
         Database.insert_wiki_op("query_save", page_id, {
             "question": question[:self.QUERY_SAVE_TITLE_TRUNCATE],
             "title": result["title"],
@@ -377,7 +411,15 @@ class WikiCompiler:
             "created_at": datetime.now().isoformat(),
             "updated_at": datetime.now().isoformat(),
         }
-        Database.insert_wiki_page(page)
+        self._save_canonical_page(
+            page["id"],
+            page,
+            content=page["content"],
+            source_ids=[knowledge_id],
+            tags=tags,
+            concept_summary=page["concept_summary"],
+            status=initial_status,
+        )
         self._auto_link_by_tags(page["id"], tags)
         return str(page["id"])
 
@@ -419,8 +461,17 @@ class WikiCompiler:
                 source_ids = json.loads(existing.get("source_ids", "[]"))
                 if knowledge_id not in source_ids:
                     source_ids.append(knowledge_id)
-                updates["source_ids"] = json.dumps(source_ids, ensure_ascii=False)
-                Database.update_wiki_page(page_id, **updates)
+                self._save_canonical_page(
+                    page_id,
+                    existing,
+                    content=updates.get("content", existing.get("content", "")),
+                    source_ids=source_ids,
+                    tags=parse_tags(updates.get("tags", existing.get("tags", "[]"))),
+                    concept_summary=updates.get(
+                        "concept_summary",
+                        existing.get("concept_summary", ""),
+                    ),
+                )
         return str(page_id)
 
     def _auto_link_by_tags(self, page_id: str, tags: list[str]):
@@ -708,7 +759,15 @@ class WikiCompiler:
                         "created_at": datetime.now().isoformat(),
                         "updated_at": datetime.now().isoformat(),
                     }
-                    Database.insert_wiki_page(stub_page)
+                    self._save_canonical_page(
+                        stub_page["id"],
+                        stub_page,
+                        content=stub_page["content"],
+                        source_ids=[page["id"]],
+                        tags=tags,
+                        concept_summary=summary,
+                        status="draft",
+                    )
 
                     # 替换内容中的引用（如果标题变了）
                     if new_title != dead_ref:
@@ -744,7 +803,7 @@ class WikiCompiler:
 
             # 更新页面内容
             if updated_content != content:
-                Database.update_wiki_page(page["id"], content=updated_content)
+                self._save_canonical_page(page["id"], page, content=updated_content)
 
             if page_fixes:
                 fix_details.append({

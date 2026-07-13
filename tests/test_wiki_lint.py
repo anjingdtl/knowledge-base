@@ -12,6 +12,7 @@ from datetime import datetime
 
 from src.services.db import Database
 from src.services.wiki_lint import WikiLint
+from src.utils.config import Config
 
 
 def _insert_wiki_page(title="Wiki Test", content="正文", status="draft", page_id=None):
@@ -98,3 +99,19 @@ def test_lint_missing_backlinks():
     report = WikiLint().run()
     cats = [f["category"] for f in report["findings"]]
     assert "missing_backlinks" in cats
+
+
+def test_lint_run_creates_database_when_no_global_instance(tmp_path, monkeypatch):
+    """独立 eval 进程没有 Database._instance 时,WikiLint 仍应能打开配置库。"""
+    old_instance = Database._instance
+    monkeypatch.setattr(Config, "get_db_path", lambda: tmp_path / "kb.db")
+    Database._instance = None
+    try:
+        report = WikiLint().run()
+        assert report["total_pages"] == 0
+        assert report["score"] == 1.0
+    finally:
+        created = Database._instance
+        if created is not None and created is not old_instance:
+            created.close()
+        Database._instance = old_instance

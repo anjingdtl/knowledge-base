@@ -168,6 +168,38 @@ def test_llm_returns_non_json_degrades_gracefully():
     assert len(result.errors) > 0 or len(result.warnings) > 0
 
 
+def test_llm_json_after_think_prefix_is_parsed():
+    """真实模型可能在 JSON 前输出 <think>...</think>,抽取器应提取后续 JSON。"""
+    blocks = [_blk("b1", "FTTR使用光纤将千兆宽带延伸到房间。")]
+    llm_json = json.dumps({
+        "claims": [
+            {
+                "statement": "FTTR使用光纤将千兆宽带延伸到房间",
+                "claim_type": "fact",
+                "confidence": 0.9,
+                "evidence_block_id": "b1",
+                "stance": "supports",
+                "subject_refs": ["FTTR"],
+                "predicate": "使用",
+                "object_refs": ["光纤"],
+            },
+        ]
+    })
+    extractor = _make_extractor(
+        "<think>先分析片段,然后只输出结构化结果。</think>\n" + llm_json
+    )
+
+    result = extractor.extract(
+        knowledge_id="k1",
+        blocks=blocks,
+        source_summary="宽带技术文档",
+        now="2026-07-08T00:00:00+08:00",
+    )
+
+    assert len(result.extracted_claims) == 1
+    assert result.errors == []
+
+
 # ---------------------------------------------------------------------------
 # 测试 5: LLM 超时降级
 # ---------------------------------------------------------------------------

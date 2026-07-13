@@ -9,14 +9,12 @@ mode=wiki_first 时,ingest 后编排 source/entity/index/log 四个编译器。
 from __future__ import annotations
 
 import logging
-from pathlib import Path
-from typing import cast
+from typing import Any, cast
 
 from src.services.db import Database
 from src.services.wiki_entity_updater import WikiEntityUpdater
 from src.services.wiki_index_compiler import WikiIndexCompiler
 from src.services.wiki_log_compiler import WikiLogCompiler
-from src.services.wiki_slug import resolve_slug, write_markdown
 from src.services.wiki_source_compiler import WikiSourceCompiler
 from src.utils.config import Config
 
@@ -30,11 +28,17 @@ class KnowledgeWorkflowService:
         entity_updater: WikiEntityUpdater | None = None,
         index_compiler: WikiIndexCompiler | None = None,
         log_compiler: WikiLogCompiler | None = None,
+        shadow_workflow: Any = None,
+        canary_workflow: Any = None,
+        primary_workflow: Any = None,
     ):
         self._source = source_compiler or WikiSourceCompiler()
         self._entity = entity_updater or WikiEntityUpdater()
         self._index = index_compiler or WikiIndexCompiler()
         self._log = log_compiler or WikiLogCompiler()
+        self._shadow = shadow_workflow
+        self._canary = canary_workflow
+        self._primary = primary_workflow
 
     def compile(self, knowledge_id: str, ingested_at: str | None = None) -> dict:
         """编排 wiki-first 编译。失败隔离,不抛。"""
@@ -48,6 +52,26 @@ class KnowledgeWorkflowService:
         ts = ingested_at or item.get("created_at") or ""
 
         result: dict = {"mode": mode, "errors": []}
+
+        try:
+            from src.services.wiki_query_service import resolve_canonical_mode
+
+            canonical_mode = resolve_canonical_mode(Config)
+        except Exception:
+            canonical_mode = "off"
+
+        if self._primary is not None and canonical_mode == "primary":
+            try:
+                result["primary"] = self._primary.run(
+                    knowledge_id=knowledge_id,
+                    item=item,
+                    source_summary=item.get("title", ""),
+                    now=ts,
+                )
+            except Exception as e:
+                logger.warning("primary workflow failed (%s): %s", knowledge_id, e)
+                result["errors"].append({"stage": "primary", "error": str(e)})
+            return result
 
         try:
             src = self._source.compile(knowledge_id, ts)
@@ -82,6 +106,30 @@ class KnowledgeWorkflowService:
             logger.warning("log append failed (%s): %s", knowledge_id, e)
             result["errors"].append({"stage": "log", "error": str(e)})
 
+        if self._shadow is not None and canonical_mode == "shadow":
+            try:
+                result["shadow"] = self._shadow.run(
+                    knowledge_id=knowledge_id,
+                    item=item,
+                    source_summary=src.get("summary") or item.get("title", ""),
+                    now=ts,
+                )
+            except Exception as e:
+                logger.warning("shadow workflow failed (%s): %s", knowledge_id, e)
+                result["errors"].append({"stage": "shadow", "error": str(e)})
+
+        if self._canary is not None and canonical_mode == "canary":
+            try:
+                result["canary"] = self._canary.run(
+                    knowledge_id=knowledge_id,
+                    item=item,
+                    source_summary=src.get("summary") or item.get("title", ""),
+                    now=ts,
+                )
+            except Exception as e:
+                logger.warning("canary workflow failed (%s): %s", knowledge_id, e)
+                result["errors"].append({"stage": "canary", "error": str(e)})
+
         return result
 
     @staticmethod
@@ -102,10 +150,10 @@ class KnowledgeWorkflowService:
         save_mode: str = "manual",
         timestamp: str | None = None,
     ) -> dict:
-        """把高价值 query 回写为文件系统 wiki 页(comparisons/syntheses)。
+        """准备高价值 query 的 draft wiki 页建议(comparisons/syntheses)。
 
         auto 模式按阈值(长度≥query_save_min_length + confidence≥0.6 + source≥2)门控;
-        manual 模式直接写。均写 draft 状态(走 review gate)。
+        manual 模式直接准备。Phase 4C 后不再绕过 WikiRepository 直接写 markdown。
         """
         mode = Config.get("knowledge_workflow.mode", "legacy")
         if mode != "wiki_first":
@@ -116,19 +164,7 @@ class KnowledgeWorkflowService:
             if len(answer) < min_len or confidence < 0.6 or len(source_ids or []) < 2:
                 return {"status": "skipped", "reason": "below_threshold"}
 
-        wiki_dir = Config.get("knowledge_workflow.wiki_dir", "wiki")
-        if page_type == "comparisons":
-            target_dir = Path(
-                Config.get("knowledge_workflow.comparison_dir", f"{wiki_dir}/comparisons")
-            )
-        else:
-            target_dir = Path(
-                Config.get("knowledge_workflow.synthesis_dir", f"{wiki_dir}/syntheses")
-            )
-        target_dir.mkdir(parents=True, exist_ok=True)
-
         ts = timestamp or ""
-        slug, target = resolve_slug(target_dir, question[:120], ts or "q")
         frontmatter = {
             "title": question[:120],
             "page_type": page_type,
@@ -139,7 +175,6 @@ class KnowledgeWorkflowService:
             "save_mode": save_mode,
         }
         body = f"# {question[:120]}\n\n{answer}\n"
-        write_markdown(target, frontmatter, body)
 
         try:
             self._log.append({
@@ -151,7 +186,13 @@ class KnowledgeWorkflowService:
         except Exception as e:
             logger.warning("save_query log append failed: %s", e)
 
-        return {"status": "saved", "path": str(target), "slug": slug}
+        return {
+            "status": "prepared",
+            "page_type": page_type,
+            "title": question[:120],
+            "frontmatter": frontmatter,
+            "body": body,
+        }
 
 
 def try_knowledge_workflow_compile(

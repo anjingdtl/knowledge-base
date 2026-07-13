@@ -1,9 +1,191 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-08
+> 最后更新：2026-07-13
 > 源码版本：`src/version.py` 中的 `1.4.0`
-> 当前分支：`master`
+> 当前分支：`feature/wiki-v2-phase4a-shadow`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
+
+## Canonical Wiki V2 Phase 4C Primary — 验收通过（2026-07-13）
+
+Phase 4C 的 Primary 主写切换、直接写守卫收缩、兼容投影与完整门禁均已完成。现在可
+开始 Phase 5 的**规划**，但 Phase 5 实现尚未开始。历史记录仍保留在下文。
+
+| 阶段 | 当前状态 | 可复核证据 / 说明 |
+|---|---|---|
+| Phase 0-3 | ✅ 已完成 | Canonical 模型、Schema、Repository、Projection、Extractor、Matcher、Merge 已完成。 |
+| Phase 3.5 | ✅ 已完成 | C0-C6 门禁已通过。 |
+| Phase 4A Shadow | ✅ 已验收 | 真实样本与报告已归档。 |
+| Phase 4B Canary | ✅ 已验收 | allowlist、review gate、rollback、projection parity 已核验。 |
+| Phase 4C Primary | ✅ 已验收 | Primary 编排、写入口、兼容 adapter、legacy 直写移除、guard 覆盖和全量门禁已通过。 |
+| Phase 5 | ⏳ 待规划 | Phase 4C 已通过；依赖图与失效传播尚未开始。 |
+| Phase 6 | ⏸ 未开始 | 依赖 Phase 5。 |
+
+### 本轮已落盘提交（Phase 4C）
+
+| commit | 交付 |
+|---|---|
+| `1028f1a` | Primary canonical write path 起步。 |
+| `8026112` | `WikiEntityUpdater` 改为 suggestion producer。 |
+| `4a683a9` | `KnowledgeWorkflowService.save_query()` 只准备 draft，不直接写 Markdown。 |
+| `5f6990f` | `WikiSourceCompiler` 只准备 source summary。 |
+| `aee4fe0` | `WikiIndexCompiler` 只准备 index。 |
+| `c1aa2e2` | `WikiLogCompiler` 只准备 log。 |
+| `03663f6` | API wiki routes 改经 Repository + Projection。 |
+| `80b447c` | `WikiWorkflow` 状态转换改经 Repository + Projection。 |
+| `83c33f2`、`2cf77eb` | `WikiLint` 改经 canonical services，并修复 injected service/projection 配对问题。 |
+| `d6ccf02` | `WikiCompiler` 旧入口改经 `WikiWorkflow._save_canonical_page()`；守卫 allowlist 归零。 |
+
+### 验收与审查
+
+- Canonical write guard 的 allowlist 已清空，且仍扫描 API、compiler、workflow、lint 与四个 legacy compiler 等 9 个入口；任何直接写回归都会失败。
+- 完整门禁：`pytest -q` 为 `1455 passed / 2 skipped / 5 xfailed / 8 warnings`；Ruff 通过；mypy 为 `189 source files` 无错误；retrieval eval 为 Overall PASS；wiki eval 正常输出 5 项指标。
+- `d6ccf02` 误提交的 10 个 `wiki/` 运行产物已在验收修复中从 Git 索引移除，并新增 `/wiki/` 忽略规则；测试 fixture 同时隔离 `knowledge_workflow.wiki_dir` 与 active container，防止再次污染工作树。
+- 正式 review：`docs/superpowers/reviews/2026-07-13-phase4c-primary-review.md`。
+- 历史交接单已补充 closure 说明：`docs/superpowers/handoffs/2026-07-13-canonical-wiki-v2-phase4c-handoff.md`。
+
+## Canonical Wiki V2 Phase 4B Canary 切换 — 验收通过 (2026-07-09)
+
+Phase 4A shadow 真实样本核验通过后，按
+`docs/superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md`
+§6 进入 Phase 4B Canary。本轮只对显式 allowlist 对象启用正式 Canonical V2
+主写，legacy read/write fallback 继续保留；`contradicts`、`supersedes` 和低置信
+`refines` 在 merge 前强制转 review，不允许自动 publish。
+
+### Phase 4B 本轮交付
+
+| 项 | 状态 | 内容 |
+|---|---|---|
+| Canary workflow 服务 | ✅ | 新增 `WikiCanaryWorkflow`：allowlist gate → Extractor → Matcher → review gate → MergeEngine → formal Repository → projection parity |
+| 显式 allowlist | ✅ | `wiki.canonical_v2.canary.knowledge_ids/source_paths` 控制 canary 对象；非 allowlist 对象不抽取、不写入 |
+| 主编排接入 | ✅ | `KnowledgeWorkflowService.compile` 在 `wiki.canonical_v2.mode=canary` 时运行 canary 链路，异常只记录 `stage=canary` |
+| 高风险 review gate | ✅ | `contradicts`、`supersedes` 和低于 `refines_auto_merge_min_score` 的 `refines` 转为 `unresolved` review item，无正式 claim/status 写入 |
+| tx_id 审计 | ✅ | `MergeResult.tx_id` 暴露 C3 transaction id；canary report 每轮记录 `tx_id`、diff、review items 和 projection 结果 |
+| Projection parity | ✅ | canary 写入后执行 `process_outbox()` + `verify_parity()`；发现 drift 时按配置自动 `rebuild()` 后复核 |
+| 重复 evidence 去重 | ✅ | 修复 `supports` 重复 evidence 仍 bump revision/污染 projection 的问题；无实际新增 evidence 时不 stage |
+
+### Phase 4B 退出核验
+
+2026-07-09 使用本地真实知识库样本
+`2abec2ec-fe20-4fc9-834b-743a52764cdb` 的临时 DB 备份和临时 formal wiki
+运行 canary 两轮 ingest。归档:
+
+- Review:`docs/superpowers/reviews/2026-07-09-phase4b-canary-review.md`
+- Report:`artifacts/eval/wiki-v2-phase4b-canary-2abec2ec.json`
+
+核验结果:
+
+| 项 | 结果 |
+|---|---|
+| 显式对象 canary | ✅ 仅 allowlist knowledge_id 执行正式 V2 写入 |
+| 连续多轮 ingest | ✅ 第 1 轮创建 draft claim；第 2 轮重复 evidence 被跳过，无无意义 revision bump |
+| transaction id | ✅ 两轮 operation 均返回 `tx_*`；有实际写入的 tx 出现在 outbox |
+| projection parity | ✅ 每轮 projection errors/warnings 为空，最终 `verify_parity()` 无 findings |
+| rollback 实测 | ✅ 事务中抛错后 staged claim 不可见，未留下半写 |
+| 高风险 review gate | ✅ 单元测试覆盖 contradicts/supersedes/低置信 refines 强制 review，target claim 保持 active |
+| 核心检索无回归 | ✅ retrieval eval Overall PASS；全量 pytest 1425 passed / 2 skipped / 5 xfailed |
+
+### Phase 4B 验证(本轮真实执行)
+
+| 门禁 | 结果 |
+|---|---|
+| Canary TDD 红绿 | ✅ 新增 canary allowlist/formal write/review gate/projection repair/tx_id 测试后实现 |
+| 相关 pytest | ✅ `87 passed`：canary、shadow、knowledge workflow、merge、projection、canonical mode、repository、transaction recovery |
+| 全量 pytest | ✅ `1425 passed / 2 skipped / 5 xfailed / 8 warnings` |
+| ruff 全量 | ✅ `ruff check src tests evals tools scripts` 0 error |
+| mypy 全量 | ✅ `mypy src tools` 0 error / 188 source files |
+| retrieval eval | ✅ `python evals/run_retrieval_eval.py --all` Overall PASS；code/table 1.0，no_answer 0.6667，zh 0.6000 |
+| wiki eval | ✅ `python evals/run_wiki_eval.py` 正常输出：source_coverage 0.0 / cross_page_update 0.9545 / orphan 0.0 / query_save 0.0 / stale 0.0 |
+
+### 建设全景与进度更新
+
+| 阶段 | 状态 | 说明 |
+|---|---|---|
+| Phase 0-3 | ✅ 已完成 | Canonical 地基(模型/Schema/Repository/Projection/Extractor/Matcher/Merge) |
+| Phase 3.5 纠偏门禁 | ✅ 已完成 | C0-C6,Phase 4 前置门禁全开 |
+| Phase 4A Shadow | ✅ **真实数据核验通过** | shadow claim 链路已接入真实 ingest 编排,隔离写入 `_shadow/`,真实样本报告已归档 |
+| Phase 4B Canary | ✅ **真实数据核验通过** | allowlist 对象正式 V2 主写,高风险动作强制 review,tx_id/parity/rollback 证据已归档 |
+| Phase 4C Primary | ⏳ **下一步** | V2 成主写路径,需改造 4 模块并收缩守卫 allowlist |
+| Phase 5 失效传播 | ⏳ | 未开始 |
+| Phase 6 迁移/反馈/评测 | ⏳ | 未开始 |
+
+---
+
+## Canonical Wiki V2 Phase 4A Shadow 接入 — 真实数据核验通过 (2026-07-09)
+
+在 Phase 3.5 Correction Gate 全部通过后，按
+`docs/superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md`
+§6 进入 Phase 4A Shadow 主工作流接入。本轮只启用 `shadow` 模式下的隔离链路，
+不切换 canary/primary，不影响正式 `wiki/*.md`、正式 projection outbox 或 legacy
+Wiki 产物。
+
+### Phase 4A 本轮交付
+
+| 项 | 状态 | 内容 |
+|---|---|---|
+| Shadow workflow 服务 | ✅ | 新增 `WikiShadowWorkflow`：raw blocks/正文 fallback → `ExtractionBlock` → ClaimExtractor → ClaimMatcher → MergeEngine |
+| 隔离写入 | ✅ | Shadow canonical store 写入 `wiki/_shadow/`；outbox 位于 `wiki/_shadow/_meta/projection_outbox.jsonl`，不进入正式 `data/wiki_projection_outbox.jsonl` |
+| 主编排接入 | ✅ | `KnowledgeWorkflowService.compile` 在 legacy source/entity/index/log 成功或失败隔离执行后，仅当 `wiki.canonical_v2.mode=shadow` 时运行 shadow 链路 |
+| 失败隔离 | ✅ | shadow 异常只写入 `result["errors"]` 的 `stage=shadow`，不阻断 raw 索引和 legacy wiki 编译 |
+| 差异报告 | ✅ | 每次 shadow run 生成 `wiki/_shadow/reports/<knowledge_id>.json`，包含新 Claim 数、自动合并数、unresolved、冲突、Evidence 缺失、diff、LLM 调用数、延迟、warnings/errors |
+| DI 接入 | ✅ | `AppContainer.wiki_shadow_workflow` 注入 block_repo、extractor、matcher、config；新服务不抓全局 Config/Database/container |
+
+### 验证(本轮真实执行)
+
+| 门禁 | 结果 |
+|---|---|
+| Shadow TDD 红绿 | ✅ 新增失败测试后实现，目标测试转绿 |
+| 相关 pytest | ✅ `70 passed / 1 skipped`：knowledge workflow、shadow workflow、claim extractor/matcher/merge |
+| C4/C5/守卫相关 pytest | ✅ `39 passed`：canonical write guards、canonical mode、wiki query service、knowledge workflow、shadow workflow |
+| 全量 pytest | ✅ `1416 passed / 2 skipped / 5 xfailed / 8 warnings` |
+| ruff 全量 | ✅ `ruff check src tests evals tools scripts` 0 error |
+| mypy 全量 | ✅ `mypy src tools` 0 error / 187 source files |
+| retrieval eval | ✅ `python evals/run_retrieval_eval.py --all` Overall PASS；code/table 1.0，no_answer 0.6667，zh 维持 0.6000 |
+| wiki eval | ✅ `python evals/run_wiki_eval.py` 不再崩溃；当前本地项目 auto 指标：source_coverage 0.0 / cross_page_update 0.9545 / orphan 0.0 / query_save 0.0 / stale 0.0909 |
+
+### 附带门禁修复
+
+`run_wiki_eval.py` 的 SQLite lint 路径在独立进程中会触发 `WikiLint().run()`，
+而旧 `WikiLint` 依赖测试 fixture 预先设置 `Database._instance`。本轮补成显式 DB
+依赖：`WikiLint(db=...)` 可注入，默认从 `Database._instance` 取，缺失时按
+`Config.get_db_path()` 创建实例；新增回归测试覆盖“无全局 DB 实例也能运行”。
+
+### Phase 4A 退出核验
+
+2026-07-09 使用本地真实知识库样本
+`e3eb0f42-935e-4291-8889-06510a100a0a` 在 `wiki.canonical_v2.mode=shadow`
+下完成 shadow run。归档:
+
+- Review:`docs/superpowers/reviews/2026-07-09-phase4a-shadow-real-data-review.md`
+- Report:`artifacts/eval/wiki-v2-phase4a-shadow-e3eb0f42.json`
+
+核验结果:
+
+| 项 | 结果 |
+|---|---|
+| 真实数据运行 | ✅ 1 个真实 indexed knowledge item,1 个 source block |
+| shadow 输出隔离 | ✅ 8 个 draft claims 写入 `wiki/_shadow/claims`;正式 `wiki/claims` 仍 0 |
+| 正式 projection 隔离 | ✅ 正式 `data/wiki_projection_outbox.jsonl` 未生成/未改变;shadow outbox 仅在 `_shadow/_meta/` |
+| 差异报告 | ✅ 含 new claims/auto merged/unresolved/conflicts/evidence missing/diff/LLM calls/latency |
+| 抽样核验 | ✅ 抽查 3 条 claim,均可追溯到 `knowledge_id + block_id + source_revision + excerpt_hash + location` |
+| LLM 成本/延迟 | ✅ `wiki.claims.max_llm_calls_per_ingest=1`;本次 1 call,13.5s |
+
+真实运行暴露并修复 1 个兼容问题:真实模型可能在 JSON 前返回 `<think>...</think>`。
+`ClaimExtractor._parse_llm_json` 已补 fallback 解析,新增
+`test_llm_json_after_think_prefix_is_parsed` 回归测试。
+
+### 建设全景与进度更新
+
+| 阶段 | 状态 | 说明 |
+|---|---|---|
+| Phase 0-3 | ✅ 已完成 | Canonical 地基(模型/Schema/Repository/Projection/Extractor/Matcher/Merge) |
+| Phase 3.5 纠偏门禁 | ✅ 已完成 | C0-C6,Phase 4 前置门禁全开 |
+| Phase 4A Shadow | ✅ **真实数据核验通过** | shadow claim 链路已接入真实 ingest 编排,隔离写入 `_shadow/`,真实样本报告已归档 |
+| Phase 4B Canary | ✅ **真实数据核验通过** | allowlist 对象正式 V2 主写,高风险动作强制 review,tx_id/parity/rollback 证据已归档 |
+| Phase 4C Primary | ⏳ **下一步** | V2 成主写路径,需改造 4 模块并收缩守卫 allowlist |
+| Phase 5 失效传播 | ⏳ | 未开始 |
+| Phase 6 迁移/反馈/评测 | ⏳ | 未开始 |
+
+---
 
 ## Canonical Wiki V2 纠偏续建 — Phase 3.5 Correction Gate 通过 (2026-07-08)
 
@@ -56,9 +238,9 @@ C2 修 / 配置状态机 C5 / 读端口 C4)亦闭环。
 |---|---|---|
 | Phase 0-3 | ✅ 已完成 | Canonical 地基(模型/Schema/Repository/Projection/Extractor/Matcher/Merge) |
 | Phase 3.5 纠偏门禁 | ✅ 已完成(本轮) | C0-C6,Phase 4 前置门禁全开 |
-| Phase 4A Shadow | ⏳ **下一步** | claim 流程接入真实 ingest,不影响正式 canonical |
-| Phase 4B Canary | ⏳ | 显式对象用 V2 主写,高风险动作强制 review |
-| Phase 4C Primary | ⏳ | V2 成主写路径,4 模块改造,守卫 allowlist 收缩 |
+| Phase 4A Shadow | ✅ **真实数据核验通过** | claim 流程已接入真实 ingest 编排,不影响正式 canonical；真实样本报告已归档 |
+| Phase 4B Canary | ✅ **真实数据核验通过** | allowlist 对象正式 V2 主写,高风险动作强制 review,tx_id/parity/rollback 证据已归档 |
+| Phase 4C Primary | ⏳ **下一步** | V2 成主写路径,4 模块改造,守卫 allowlist 收缩 |
 | Phase 5 失效传播 | ⏳ | 依赖图 + 来源更新/删除级联重编译 |
 | Phase 6 迁移/反馈/评测 | ⏳ | A/B 轨迁移 + 用户反馈 + 知识演进评测 |
 
@@ -69,7 +251,7 @@ C2 修 / 配置状态机 C5 / 读端口 C4)亦闭环。
 > 权威路线:`docs/superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md` §6。
 > 严格按 4A→4B→4C→5→6 顺序,**未通过上一阶段验收不得进下一阶段**。
 
-### Phase 4A:Shadow 主工作流接入(下一步)
+### Phase 4A:Shadow 主工作流接入(已完成)
 
 - **目标**:claim 流程(extractor→matcher→merge)接入真实 ingest,但 V2 输出写隔离 staging(`wiki/_shadow/`),不影响正式 canonical(`wiki/*.md`);输出 legacy↔V2 差异报告
 - **前置**:Phase 3.5 门禁(已全开);`wiki.canonical_v2.mode=shadow`(C5 已提供)
@@ -78,14 +260,15 @@ C2 修 / 配置状态机 C5 / 读端口 C4)亦闭环。
 - **commit**:`feat(wiki-v2): integrate shadow canonical workflow`
 - **风险**:LLM 成本(受 `wiki.claims.max_llm_calls_per_ingest` 限);shadow 隔离必须严格(C3 transaction + 路径分离);C2 黄金集 5 xfailed 用真实数据收紧
 
-### Phase 4B:Canary Canonical 切换
+### Phase 4B:Canary Canonical 切换(已完成)
 
 - **目标**:显式 allowlist 目录/knowledge_id 用 V2 主写;`contradicts`/`supersedes`/低置信 `refines` 强制 review;关闭自动发布
 - **前置**:Phase 4A shadow 真实数据抽样人工核验通过
 - **关键**:canary allowlist 配置;每次操作可回滚 transaction ID(C3 已支持);canary parity(projection verify_parity)
 - **验收**:连续多轮 ingest 无半写;无错误 supersede/contradict;projection drift 自动修复;rollback 实测;核心 MCP 检索无回归;E2E-6
 - **commit**:`feat(wiki-v2): enable canary canonical workflow`
-- **风险**:canary 对象选择;review 积压;canary↔legacy 并存一致性
+- **完成证据**:`docs/superpowers/reviews/2026-07-09-phase4b-canary-review.md` + `artifacts/eval/wiki-v2-phase4b-canary-2abec2ec.json`
+- **剩余风险**:canary 对象选择;review 积压;canary↔legacy 并存一致性(4C 前继续保守 review gate)
 
 ### Phase 4C:Primary 写路径切换
 
@@ -142,7 +325,7 @@ C2 修 / 配置状态机 C5 / 读端口 C4)亦闭环。
 2. **refines object 超集分支被 objects_conflict 遮蔽**(契约 §5 注):当前 refines 只走 subject 超集。C2 黄金集判定是否细化 objects_conflict(排除真超集)
 3. **transaction publish 中断的 claim 孤儿边缘**(C3 注):page 基于 registry 不污染,claim 在 claims/ 目录可能孤儿。Phase 4C 主路径 + claim registry 收敛
 4. **11 处越界写**(api/routes/wiki.py + wiki_lint + wiki_workflow):已纳入 C1 守卫 allowlist(过渡)。Phase 4C 改造经 Repository 后逐条收缩
-5. **shadow/canary/primary 实际写路径隔离**:C5 提供配置 + 状态机,但 shadow 隔离目录/canary allowlist/primary 4 模块改造的实际逻辑待 Phase 4A-C
+5. **shadow/canary/primary 实际写路径隔离**:shadow 隔离目录与 canary allowlist 已完成;primary 4 模块改造待 Phase 4C
 
 ### 验收基线(后续阶段不得低于)
 

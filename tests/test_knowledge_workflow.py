@@ -1,5 +1,4 @@
 """KnowledgeWorkflowService 编排器 + path_indexer e2e(spec S2)。"""
-from pathlib import Path
 from unittest.mock import MagicMock
 
 from src.services.db import Database
@@ -7,7 +6,6 @@ from src.services.knowledge_workflow import (
     KnowledgeWorkflowService,
     try_knowledge_workflow_compile,
 )
-from src.services.wiki_slug import read_frontmatter
 from src.utils.config import Config
 
 
@@ -82,6 +80,180 @@ def test_compile_isolates_failure():
     fakes.index.refresh.assert_called_once()  # 后续阶段继续执行
 
 
+def test_compile_shadow_mode_runs_after_legacy_workflow():
+    """canonical_v2 shadow:legacy 编译照旧,随后运行隔离 shadow 链路。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "shadow")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    shadow = MagicMock()
+    shadow.run.return_value = {
+        "status": "completed",
+        "knowledge_id": "kid-1",
+        "new_claims": 1,
+        "auto_merged": 0,
+        "unresolved": 0,
+        "conflicts": 0,
+        "evidence_missing": 0,
+        "page_diff": "[claim:claim_1] created (draft)",
+        "llm_calls": 1,
+        "latency_ms": 12,
+    }
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        shadow_workflow=shadow,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["mode"] == "wiki_first"
+    assert result["shadow"]["status"] == "completed"
+    fakes.source.compile.assert_called_once()
+    fakes.entity.update.assert_called_once()
+    fakes.index.refresh.assert_called_once()
+    fakes.log.append.assert_called_once()
+    shadow.run.assert_called_once()
+    call = shadow.run.call_args
+    assert call.kwargs["knowledge_id"] == "kid-1"
+    assert call.kwargs["source_summary"] == "s"
+
+
+def test_compile_shadow_failure_is_isolated():
+    """shadow 链路失败不得阻断 raw/legacy wiki 编译结果。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "shadow")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    shadow = MagicMock()
+    shadow.run.side_effect = RuntimeError("shadow boom")
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        shadow_workflow=shadow,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["index"]["status"] == "compiled"
+    assert {"stage": "shadow", "error": "shadow boom"} in result["errors"]
+    assert "shadow" not in result
+
+
+def test_compile_canary_mode_runs_after_legacy_workflow():
+    """canonical_v2 canary:legacy fallback 保留,随后运行正式 V2 canary 链路。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "canary")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    canary = MagicMock()
+    canary.run.return_value = {
+        "status": "completed",
+        "knowledge_id": "kid-1",
+        "tx_id": "tx_test",
+        "new_claims": 1,
+        "auto_publish": False,
+    }
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        canary_workflow=canary,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["mode"] == "wiki_first"
+    assert result["canary"]["tx_id"] == "tx_test"
+    fakes.source.compile.assert_called_once()
+    fakes.entity.update.assert_called_once()
+    fakes.index.refresh.assert_called_once()
+    fakes.log.append.assert_called_once()
+    canary.run.assert_called_once()
+
+
+def test_compile_canary_failure_is_isolated():
+    """canary 链路失败不得阻断 legacy fallback 产物。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "canary")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    canary = MagicMock()
+    canary.run.side_effect = RuntimeError("canary boom")
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        canary_workflow=canary,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["index"]["status"] == "compiled"
+    assert {"stage": "canary", "error": "canary boom"} in result["errors"]
+    assert "canary" not in result
+
+
+def test_compile_primary_mode_runs_primary_without_legacy_compilers():
+    """canonical_v2 primary:正式 V2 成为主写路径,不再执行 legacy FS 编译器。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "primary")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    primary = MagicMock()
+    primary.run.return_value = {
+        "status": "completed",
+        "knowledge_id": "kid-1",
+        "tx_id": "tx_primary",
+        "new_claims": 1,
+    }
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        primary_workflow=primary,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["mode"] == "wiki_first"
+    assert result["primary"]["tx_id"] == "tx_primary"
+    fakes.source.compile.assert_not_called()
+    fakes.entity.update.assert_not_called()
+    fakes.index.refresh.assert_not_called()
+    fakes.log.append.assert_not_called()
+    primary.run.assert_called_once()
+    assert primary.run.call_args.kwargs["knowledge_id"] == "kid-1"
+
+
+def test_compile_primary_failure_is_isolated_without_legacy_writes():
+    """primary 链路失败时记录错误,也不回退到 legacy 直接写 canonical。"""
+    _wiki_first()
+    Config.set("wiki.canonical_v2.mode", "primary")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    primary = MagicMock()
+    primary.run.side_effect = RuntimeError("primary boom")
+
+    result = KnowledgeWorkflowService(
+        source_compiler=fakes.source,
+        entity_updater=fakes.entity,
+        index_compiler=fakes.index,
+        log_compiler=fakes.log,
+        primary_workflow=primary,
+    ).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["mode"] == "wiki_first"
+    assert {"stage": "primary", "error": "primary boom"} in result["errors"]
+    assert "primary" not in result
+    fakes.source.compile.assert_not_called()
+    fakes.entity.update.assert_not_called()
+    fakes.index.refresh.assert_not_called()
+    fakes.log.append.assert_not_called()
+
+
 def test_compile_not_found():
     _wiki_first()
     # 不 insert 任何 knowledge
@@ -98,7 +270,7 @@ def test_try_hook_returns_none_without_container(monkeypatch):
 
 
 def test_path_indexer_triggers_wiki_first_e2e(tmp_path, monkeypatch):
-    """spec S2:ingest 后 wiki/sources/ + index.md + log.md 自动出现(e2e)。"""
+    """spec S2:ingest 后触发 wiki_first;source summary 已转为建议载荷。"""
     # 1) mock 掉 index_knowledge_item 的向量化,避免 embedding 调用
     import src.services.indexer as indexer_mod
     monkeypatch.setattr(indexer_mod, "index_knowledge_item", lambda item: None)
@@ -131,15 +303,14 @@ def test_path_indexer_triggers_wiki_first_e2e(tmp_path, monkeypatch):
     )
     svc._ingest_file(src_file)
 
-    # S2 三处产物
-    sources = list((project / "wiki" / "sources").glob("*.md"))
-    assert sources, "source summary 未生成"
-    assert (project / "wiki" / "index.md").exists(), "index.md 未生成"
-    assert (project / "wiki" / "log.md").exists(), "log.md 未生成"
+    # Source summary/index/log 不再绕过 WikiRepository 直接写 markdown。
+    assert not (project / "wiki" / "sources").exists(), "source summary 不应直接写入"
+    assert not (project / "wiki" / "index.md").exists(), "index.md 不应直接写入"
+    assert not (project / "wiki" / "log.md").exists(), "log.md 不应直接写入"
 
 
-def test_save_query_writes_syntheses_draft(tmp_path):
-    """save_query 写文件系统 syntheses/*.md(draft)+ log。"""
+def test_save_query_prepares_syntheses_draft(tmp_path):
+    """save_query 准备 syntheses draft,不直接写 markdown。"""
     Config.set("knowledge_workflow.mode", "wiki_first")
     Config.set("knowledge_workflow.wiki_dir", str(tmp_path / "wiki"))
     Config.set("knowledge_workflow.synthesis_dir", str(tmp_path / "wiki" / "syntheses"))
@@ -154,13 +325,37 @@ def test_save_query_writes_syntheses_draft(tmp_path):
         save_mode="auto",
         timestamp="2026-07-02T11:00:00",
     )
-    assert result["status"] == "saved"
-    p = Path(result["path"])
-    assert p.exists()
-    fm = read_frontmatter(p)
-    assert fm["status"] == "draft"
-    assert fm["confidence"] == 0.8
-    assert (tmp_path / "wiki" / "log.md").exists()
+    assert result["status"] == "prepared"
+    assert result["page_type"] == "syntheses"
+    assert result["frontmatter"]["status"] == "draft"
+    assert result["frontmatter"]["confidence"] == 0.8
+    assert result["frontmatter"]["source_ids"] == ["k1", "k2"]
+    assert "LLM 检索基于语义" in result["body"]
+    assert not (tmp_path / "wiki" / "syntheses").exists()
+
+
+def test_save_query_prepares_draft_without_writing_markdown(tmp_path):
+    """Phase 4C:save_query 不再绕过 WikiRepository 直接写 markdown。"""
+    Config.set("knowledge_workflow.mode", "wiki_first")
+    Config.set("knowledge_workflow.wiki_dir", str(tmp_path / "wiki"))
+    Config.set("knowledge_workflow.synthesis_dir", str(tmp_path / "wiki" / "syntheses"))
+    svc = KnowledgeWorkflowService()
+
+    result = svc.save_query(
+        question="LLM 与传统搜索的区别?",
+        answer="LLM 检索基于语义..." + "x" * 120,
+        source_ids=["k1", "k2"],
+        confidence=0.8,
+        page_type="syntheses",
+        save_mode="manual",
+        timestamp="2026-07-02T11:00:00",
+    )
+
+    assert result["status"] == "prepared"
+    assert result["frontmatter"]["status"] == "draft"
+    assert result["frontmatter"]["source_ids"] == ["k1", "k2"]
+    assert "LLM 检索基于语义" in result["body"]
+    assert not (tmp_path / "wiki" / "syntheses").exists()
 
 
 def test_save_query_auto_below_threshold_skips(tmp_path):

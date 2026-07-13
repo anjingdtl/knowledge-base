@@ -1,5 +1,4 @@
 """WikiSourceCompiler 测试(规则模板,零 LLM)。"""
-from pathlib import Path
 
 import pytest
 
@@ -27,20 +26,35 @@ def wiki_first_dirs(tmp_path):
     return tmp_path
 
 
-def test_compile_generates_source_summary(wiki_first_dirs):
+def test_compile_prepares_source_summary(wiki_first_dirs):
     _insert_knowledge(
         "kid-1", "API Overview",
         "# API Overview\n\nThe MCP API exposes tools.\n\n## Endpoints\n\nPOST /ask",
         content_hash="hashabc12345",
     )
     result = WikiSourceCompiler().compile("kid-1", ingested_at="2026-07-02T10:00:00")
-    assert result["status"] == "compiled"
-    p = Path(result["path"])
-    assert p.exists()
-    text = p.read_text(encoding="utf-8")
-    assert "API Overview" in text
-    assert "hashabc12345" in text  # frontmatter source_hash
-    assert "MCP" in text  # acronym extracted
+    assert result["status"] == "prepared"
+    assert result["suggested_path"] == "sources/api-overview.md"
+    assert result["frontmatter"]["source_hash"] == "hashabc12345"
+    assert "API Overview" in result["body"]
+    assert "MCP" in result["body"]  # acronym extracted
+    assert not (wiki_first_dirs / "wiki" / "sources").exists()
+
+
+def test_compile_prepares_source_summary_without_writing_markdown(wiki_first_dirs):
+    _insert_knowledge(
+        "kid-1", "API Overview",
+        "# API Overview\n\nThe MCP API exposes tools.",
+        content_hash="hashabc12345",
+    )
+    result = WikiSourceCompiler().compile("kid-1", ingested_at="2026-07-02T10:00:00")
+
+    assert result["status"] == "prepared"
+    assert result["frontmatter"]["source_ids"] == ["kid-1"]
+    assert result["frontmatter"]["knowledge_id"] == "kid-1"
+    assert "API Overview" in result["body"]
+    assert "MCP" in result["body"]
+    assert not (wiki_first_dirs / "wiki" / "sources").exists()
 
 
 def test_compile_idempotent(wiki_first_dirs):
@@ -49,9 +63,10 @@ def test_compile_idempotent(wiki_first_dirs):
     c = WikiSourceCompiler()
     r1 = c.compile("kid-1", ingested_at="2026-07-02T10:00:00")
     r2 = c.compile("kid-1", ingested_at="2026-07-02T10:00:00")
-    assert r1["path"] == r2["path"]  # 同路径覆盖
-    sources_dir = Path(r1["path"]).parent
-    assert len(list(sources_dir.glob("*.md"))) == 1  # 无第二文件
+    assert r1["suggested_path"] == r2["suggested_path"]
+    assert r1["frontmatter"] == r2["frontmatter"]
+    assert r1["body"] == r2["body"]
+    assert not (wiki_first_dirs / "wiki" / "sources").exists()
 
 
 def test_compile_not_found(wiki_first_dirs):

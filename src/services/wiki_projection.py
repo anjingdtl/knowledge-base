@@ -41,7 +41,7 @@ class WikiProjection:
 
     # ---- 公共接口 ----
 
-    def process_outbox(self) -> ProjectionResult:
+    def process_outbox(self, *, force: bool = False) -> ProjectionResult:
         """读 repository.read_outbox() 全部事件,按 type 投影。
 
         enabled=False -> 全跳过。逐事件 try/except: 单事件失败记 errors 继续下一个。
@@ -49,7 +49,7 @@ class WikiProjection:
         """
         result = ProjectionResult()
         events = self._repo.read_outbox()
-        if not self._enabled:
+        if not self._enabled and not force:
             result.skipped = len(events)
             return result
         for event in events:
@@ -211,8 +211,66 @@ class WikiProjection:
                 "INSERT INTO wiki_page_claims (page_id, claim_id, display_order) VALUES (?,?,?)",
                 (page.page_id, cid, idx),
             )
+        self._upsert_legacy_page(page, commit=False)
         if commit:
             conn.commit()
+
+    def _upsert_legacy_page(self, page: WikiPage, *, commit: bool = True) -> None:
+        """Maintain the legacy wiki_pages read model from canonical pages."""
+        conn = self._db.get_conn()
+        if not self._legacy_page_table_exists(conn):
+            return
+        existing = conn.execute(
+            "SELECT concept_summary, lint_score, complex_anomaly FROM wiki_pages WHERE id = ?",
+            (page.page_id,),
+        ).fetchone()
+        conn.execute(
+            "INSERT OR REPLACE INTO wiki_pages "
+            "(id, title, content, source_ids, tags, concept_summary, status, "
+            "lint_score, complex_anomaly, created_at, updated_at) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            (
+                page.page_id,
+                page.title,
+                page.body,
+                json.dumps(page.source_ids, ensure_ascii=False),
+                json.dumps(page.tags, ensure_ascii=False),
+                existing["concept_summary"] if existing else "",
+                page.status.value,
+                existing["lint_score"] if existing else 1.0,
+                existing["complex_anomaly"] if existing else "",
+                page.created_at,
+                page.updated_at,
+            ),
+        )
+        if commit:
+            conn.commit()
+
+    @staticmethod
+    def _legacy_page_table_exists(conn) -> bool:
+        """Return whether this projection database exposes the legacy read model."""
+        row = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'wiki_pages'"
+        ).fetchone()
+        return row is not None
+
+    def update_legacy_page_fields(self, page_id: str, **fields) -> None:
+        """Patch compatibility-only legacy wiki_pages fields."""
+        if not fields:
+            return
+        allowed = {"content", "concept_summary", "lint_score", "complex_anomaly"}
+        invalid = set(fields) - allowed
+        if invalid:
+            raise ValueError(f"Invalid legacy projection fields: {invalid}")
+        conn = self._db.get_conn()
+        if not self._legacy_page_table_exists(conn):
+            return
+        sets = ", ".join(f"{field} = ?" for field in fields)
+        conn.execute(
+            f"UPDATE wiki_pages SET {sets} WHERE id = ?",
+            [*fields.values(), page_id],
+        )
+        conn.commit()
 
     def _upsert_claim(self, claim: Claim, *, commit: bool = True) -> None:
         """INSERT OR REPLACE wiki_claims (by claim_id, claim_scope=NULL) + evidence。"""

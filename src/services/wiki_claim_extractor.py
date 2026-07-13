@@ -306,6 +306,16 @@ class ClaimExtractor:
                 return result
             return None
         except (json.JSONDecodeError, ValueError):
+            start = text.find("{")
+            end = text.rfind("}")
+            if start < 0 or end <= start:
+                return None
+            try:
+                result = json.loads(text[start : end + 1])
+                if isinstance(result, dict):
+                    return result
+            except (json.JSONDecodeError, ValueError):
+                return None
             return None
 
     def _build_claim(self, raw: dict, frag: dict, knowledge_id: str, now: str) -> Claim:

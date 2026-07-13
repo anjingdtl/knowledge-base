@@ -18,37 +18,10 @@ SRC = Path(__file__).resolve().parent.parent / "src"
 # WikiRepository 直接落库/落盘 wiki 知识。键=(相对 src 的模块路径, 写签名)。
 # 写签名 = 方法名(insert_wiki_page 等)或 "open_write"(open(...,"a"/"w") 追加/覆盖写)。
 ALLOWED_DIRECT_WRITES: dict[tuple[str, str], str] = {
-    # --- T0.2 既有 7 条(FS/SQLite 写,Phase 4 移除)---
-    ("services/wiki_compiler.py", "insert_wiki_page"):
-        "A轨 SQLite 写,Phase 4 T4.3 降级为适配器后移除",
-    ("services/wiki_compiler.py", "update_wiki_page"):
-        "A轨 SQLite 写,Phase 4 T4.3 降级为适配器后移除",
-    ("services/wiki_entity_updater.py", "write_markdown"):
-        "B轨 FS 写,Phase 4 T4.1 改造经 WikiRepository 后移除",
-    ("services/knowledge_workflow.py", "write_markdown"):
-        "B轨 FS 写,Phase 4 T4.1 改造经 WikiRepository 后移除",
-    ("services/wiki_source_compiler.py", "write_markdown"):
-        "B轨 FS 写,Phase 4 T4.1 改造经 WikiRepository 后移除",
-    ("services/wiki_index_compiler.py", "write_markdown"):
-        "index.md 生成,Phase 4 评估是否经 Repository",
-    ("services/wiki_log_compiler.py", "write_text"):
-        "log.md rebuild 全量写,Phase 4 改造后移除",
-    # --- C1 新增:C0 审计暴露的越界写,登记为过渡 allowlist(Phase 4 移除)---
-    ("api/routes/wiki.py", "insert_wiki_page"):
-        "A轨 SQLite 写,Phase 4 路由经 WikiRepository 后移除",
-    ("api/routes/wiki.py", "update_wiki_page"):
-        "A轨 SQLite 写,Phase 4 路由经 WikiRepository 后移除",
-    ("api/routes/wiki.py", "delete_wiki_page"):
-        "A轨 SQLite 写,Phase 4 路由经 WikiRepository 后移除",
-    ("services/wiki_lint.py", "update_wiki_page"):
-        "A轨 SQLite lint 回写,Phase 4 经 WikiRepository 后移除",
-    ("services/wiki_workflow.py", "update_wiki_page"):
-        "A轨 SQLite 工作流写,Phase 4 经 WikiRepository 后移除",
-    ("services/wiki_log_compiler.py", "open_write"):
-        "log.md append 用 Path.open('a') 追加写,Phase 4 改造后移除",
 }
 
-# 守卫覆盖的模块 + 各自禁止的"直接写"方法名
+# 守卫覆盖的模块 + 各自禁止的"直接写"方法名。
+# Phase 4C 完成后保留扫描范围，但不再保留任何过渡豁免。
 GUARDED: dict[str, set[str]] = {
     "services/wiki_compiler.py": {"insert_wiki_page", "update_wiki_page"},
     "services/wiki_entity_updater.py": {"write_markdown"},
@@ -56,16 +29,29 @@ GUARDED: dict[str, set[str]] = {
     "services/wiki_source_compiler.py": {"write_markdown"},
     "services/wiki_index_compiler.py": {"write_markdown"},
     "services/wiki_log_compiler.py": {"write_text"},
-    # C1 新增:C0 审计暴露的盲区模块
     "api/routes/wiki.py": {"insert_wiki_page", "update_wiki_page", "delete_wiki_page"},
     "services/wiki_lint.py": {"update_wiki_page"},
     "services/wiki_workflow.py": {"update_wiki_page"},
 }
 
 # 额外检查 open(...,"a"/"w"/"x"/"+") 写的模块(堵 AST 只认方法调用的盲区)
-OPEN_WRITE_GUARDED: set[str] = {
-    "services/wiki_log_compiler.py",  # append() 用 Path.open("a") 追加写 log.md
-}
+OPEN_WRITE_GUARDED: set[str] = {"services/wiki_log_compiler.py"}
+
+
+def test_primary_write_guard_keeps_scanning_migrated_entrypoints():
+    """Phase 4C removes exemptions, not the entrypoint coverage itself."""
+    assert set(GUARDED) == {
+        "api/routes/wiki.py",
+        "services/knowledge_workflow.py",
+        "services/wiki_compiler.py",
+        "services/wiki_entity_updater.py",
+        "services/wiki_index_compiler.py",
+        "services/wiki_lint.py",
+        "services/wiki_log_compiler.py",
+        "services/wiki_source_compiler.py",
+        "services/wiki_workflow.py",
+    }
+    assert OPEN_WRITE_GUARDED == {"services/wiki_log_compiler.py"}
 
 
 def _find_calls(tree: ast.AST, names: set[str]) -> list[str]:

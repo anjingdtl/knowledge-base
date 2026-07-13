@@ -1,5 +1,4 @@
 """WikiIndexCompiler 测试。"""
-from pathlib import Path
 
 import pytest
 
@@ -22,21 +21,33 @@ def wiki_with_pages(tmp_path):
 
 def test_refresh_generates_index(wiki_with_pages):
     result = WikiIndexCompiler().refresh()
-    assert result["status"] == "compiled"
+    assert result["status"] == "prepared"
     assert result["page_count"] == 3
-    idx = Path(result["path"])
-    assert idx.exists()
-    text = idx.read_text(encoding="utf-8")
+    assert result["suggested_path"] == "index.md"
+    text = result["body"]
     assert "Sources" in text
     assert "Entities" in text
     assert "API Overview" in text
     assert "LLM Basics" in text
     assert "Foo" in text
+    assert not (wiki_with_pages / "index.md").exists()
+
+
+def test_refresh_prepares_index_without_writing_markdown(wiki_with_pages):
+    result = WikiIndexCompiler().refresh()
+
+    assert result["status"] == "prepared"
+    assert result["suggested_path"] == "index.md"
+    assert result["frontmatter"] == {"generated": True}
+    assert result["page_count"] == 3
+    assert "API Overview" in result["body"]
+    assert "Foo" in result["body"]
+    assert not (wiki_with_pages / "index.md").exists()
 
 
 def test_refresh_groups_by_type(wiki_with_pages):
-    WikiIndexCompiler().refresh()
-    text = (wiki_with_pages / "index.md").read_text(encoding="utf-8")
+    result = WikiIndexCompiler().refresh()
+    text = result["body"]
     sources_section = text.split("## Sources")[1].split("## Entities")[0]
     entities_section = text.split("## Entities")[1].split("## Concepts")[0]
     assert sources_section.count("- [") == 2
@@ -49,8 +60,9 @@ def test_refresh_empty_wiki(tmp_path):
     Config.set("knowledge_workflow.wiki_dir", str(wiki))
     result = WikiIndexCompiler().refresh()
     assert result["page_count"] == 0
-    text = (wiki / "index.md").read_text(encoding="utf-8")
+    text = result["body"]
     assert "_(none)_" in text
+    assert not (wiki / "index.md").exists()
 
 
 def test_refresh_idempotent(wiki_with_pages):

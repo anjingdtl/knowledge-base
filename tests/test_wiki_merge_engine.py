@@ -146,6 +146,44 @@ class TestSupports:
         assert any(e.knowledge_id == "k_b" for e in saved.evidence)
         assert "+evidence" in result.diff
 
+    def test_merge_result_exposes_committed_transaction_id(self, repo, engine):
+        """Canary reports need the committed tx_id for rollback/audit."""
+        existing = _claim("c1", "FTTR下行速率可达100Mbps")
+        repo.save_claim(existing, expected_revision=None)
+
+        new_claim = _claim(
+            "n1",
+            "FTTR下行速率可达100Mbps",
+            knowledge_id="k_b",
+            block_id="b2",
+        )
+        decision = _decision("supports", target_claim_id="c1")
+
+        result = engine.apply([(new_claim, decision)], now=NOW)
+
+        assert result.committed is True
+        assert result.tx_id.startswith("tx_")
+        assert any(ev.get("tx_id") == result.tx_id for ev in repo.read_outbox())
+
+    def test_supports_dedupes_existing_evidence_key(self, repo, engine):
+        """Repeated canary ingest must not add projection-breaking duplicate evidence."""
+        existing = _claim("c1", "FTTR下行速率可达100Mbps", knowledge_id="k_a", block_id="b1")
+        repo.save_claim(existing, expected_revision=None)
+
+        new_claim = _claim("n1", "FTTR下行速率可达100Mbps", knowledge_id="k_a", block_id="b1")
+        decision = _decision("supports", target_claim_id="c1")
+
+        result = engine.apply([(new_claim, decision)], now=NOW)
+
+        assert result.committed is True
+        saved = repo.get_claim("c1")
+        assert saved is not None
+        assert len(saved.evidence) == 1
+        assert saved.revision == 1
+        assert result.claims_updated == []
+        assert "+evidence merged" not in result.diff
+        assert "evidence ev_n1 (knowledge_id=k_a, block=b1) already exists in c1" in result.skipped
+
 
 # ---------------------------------------------------------------------------
 # 2. duplicate: no new claim, dedupes evidence

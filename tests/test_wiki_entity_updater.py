@@ -35,7 +35,7 @@ def wiki_dirs(tmp_path):
     return tmp_path
 
 
-def test_update_creates_entity_pages(wiki_dirs):
+def test_update_returns_entity_suggestions(wiki_dirs):
     fake = FakeLLM()
     updater = WikiEntityUpdater(llm=fake)
     result = updater.update(
@@ -44,9 +44,31 @@ def test_update_creates_entity_pages(wiki_dirs):
         ingested_at="2026-07-02T10:00:00",
     )
     assert result["llm_calls"] == 3
-    total = result["entities_created"] + result["concepts_created"]
-    assert total == 3
-    assert (wiki_dirs / "wiki" / "entities").is_dir()
+    assert result["entities_created"] == 0
+    assert result["concepts_created"] == 0
+    assert len(result["suggestions"]) == 3
+    assert {s["entity"] for s in result["suggestions"]} == {"FooService", "BarModule", "Baz"}
+    assert not (wiki_dirs / "wiki" / "entities").exists()
+    assert not (wiki_dirs / "wiki" / "concepts").exists()
+
+
+def test_update_returns_suggestions_without_writing_pages(wiki_dirs):
+    fake = FakeLLM()
+    updater = WikiEntityUpdater(llm=fake)
+    result = updater.update(
+        "kid-1",
+        {"key_entities": ["FooService"], "title": "T", "summary": "s"},
+        ingested_at="2026-07-02T10:00:00",
+    )
+
+    assert result["entities_created"] == 0
+    assert result["concepts_created"] == 0
+    assert len(result["suggestions"]) == 1
+    suggestion = result["suggestions"][0]
+    assert suggestion["entity"] == "FooService"
+    assert suggestion["source_ids"] == ["kid-1"]
+    assert not (wiki_dirs / "wiki" / "entities").exists()
+    assert not (wiki_dirs / "wiki" / "concepts").exists()
 
 
 def test_update_respects_max_calls(wiki_dirs):
@@ -98,9 +120,9 @@ def test_update_marks_contradictions(wiki_dirs):
         ingested_at="2026-07-02T10:00:00",
     )
     assert result["contradictions"]  # 非空
-    pages = list((wiki_dirs / "wiki" / "entities").glob("*.md"))
-    assert pages, "entity 页未生成"
-    assert "CONTRADICTION" in pages[0].read_text(encoding="utf-8")
+    assert result["suggestions"], "entity 建议未生成"
+    assert "CONTRADICTION" in result["suggestions"][0]["body"]
+    assert not (wiki_dirs / "wiki" / "entities").exists()
 
 
 def test_update_llm_failure_skipped(wiki_dirs):
