@@ -502,6 +502,86 @@ class WikiRepository:
                                  "tx_id": f"solo_{uuid.uuid4().hex[:8]}"})
             return SaveResult(ok=True, object_id=claim_id, revision=0)
 
+    # ---- Serving API (Phase 2: read-only, no staging, no writes) ----
+
+    def _default_serving_gate(self, gate: object | None = None):
+        """Build or reuse WikiServingGate with DB lookups when available."""
+        if gate is not None:
+            return gate
+        from src.services.wiki_serving_gate import (
+            WikiServingGate,
+            default_block_knowledge_lookups,
+        )
+
+        get_block, get_knowledge = default_block_knowledge_lookups()
+        return WikiServingGate(get_block=get_block, get_knowledge=get_knowledge)
+
+    def list_servable_claims(
+        self,
+        *,
+        gate: object | None = None,
+        include_disclose: bool = False,
+        limit: int | None = None,
+    ) -> list[Claim]:
+        """List claims eligible as primary (optionally disclose-only) conclusions.
+
+        Does **not** return draft / stale / unsupported / retracted as primary.
+        Does **not** read staging. No write side effects.
+        """
+        g = self._default_serving_gate(gate)
+        pairs = g.filter_servable(
+            self.list_claims(),
+            include_disclose=include_disclose,
+            limit=limit,
+        )
+        return [c for c, _ in pairs]
+
+    def get_servable_claim(
+        self,
+        claim_id: str,
+        *,
+        gate: object | None = None,
+        include_disclose: bool = False,
+    ) -> Claim | None:
+        """Return claim only if it passes the Serving Gate."""
+        claim = self.get_claim(claim_id)
+        if claim is None:
+            return None
+        g = self._default_serving_gate(gate)
+        decision = g.evaluate(claim)
+        if decision.eligible:
+            return claim
+        if include_disclose and decision.disclose_only:
+            return claim
+        return None
+
+    def resolve_claim_evidence(
+        self,
+        claim: Claim | str,
+        *,
+        gate: object | None = None,
+    ) -> list:
+        """Resolve supports evidence for a claim (block + hash + knowledge).
+
+        Read-only; returns ResolvedEvidence list from the gate.
+        """
+        if isinstance(claim, str):
+            obj = self.get_claim(claim)
+            if obj is None:
+                return []
+            claim = obj
+        g = self._default_serving_gate(gate)
+        return g.resolve_claim_evidence(claim)
+
+    def get_claim_serving_diagnostics(
+        self,
+        *,
+        gate: object | None = None,
+    ) -> dict:
+        """Aggregate serving diagnostics for Doctor / health (no writes)."""
+        g = self._default_serving_gate(gate)
+        return g.diagnostics_for_claims(self.list_claims())
+
     # ---- transaction(C3 严格 staging)----
     @contextlib.contextmanager
     def transaction(self) -> Iterator[WikiTransaction]:

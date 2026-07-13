@@ -28,12 +28,24 @@ class SearchService:
     优化：查询改写与 Wiki 搜索并行执行；各阶段有独立超时保护。
     """
 
-    def __init__(self, config=None, db=None, block_store=None, embedding=None, llm=None):
+    def __init__(
+        self,
+        config=None,
+        db=None,
+        block_store=None,
+        embedding=None,
+        llm=None,
+        wiki_repository=None,
+        wiki_serving_gate=None,
+    ):
         self._config = config or {}
         self._db = db
         self._block_store = block_store
         self._embedding = embedding
         self._llm = llm
+        # Phase 2: unique Claim Serving entry (fusion wiring in Phase 3)
+        self._wiki_repository = wiki_repository
+        self._wiki_serving_gate = wiki_serving_gate
 
     def _stage_timeout(self, stage: str) -> float:
         """获取阶段超时时间，支持 config 覆盖"""
@@ -53,6 +65,27 @@ class SearchService:
                     return default
             return obj if obj is not None else default
         return self._config.get(key, default)
+
+    def list_servable_wiki_claims(
+        self,
+        *,
+        include_disclose: bool = False,
+        limit: int | None = None,
+    ) -> list:
+        """Search/Ask 唯一允许的 Wiki Claim 入口（Phase 2 Serving Gate）。
+
+        不合格 Claim（draft/stale/unsupported/retracted/无证据等）不会返回。
+        Phase 3 融合检索将基于此方法接入；当前不改变 Raw 检索路径。
+        """
+        repo = self._wiki_repository
+        gate = self._wiki_serving_gate
+        if repo is None:
+            return []
+        return repo.list_servable_claims(
+            gate=gate,
+            include_disclose=include_disclose,
+            limit=limit,
+        )
 
     def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
         """完整搜索管线（带阶段超时保护）"""

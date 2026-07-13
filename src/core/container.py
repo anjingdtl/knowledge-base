@@ -160,6 +160,7 @@ class AppContainer:
     # --- Phase 6:迁移与反馈 ---
     _wiki_v2_migrator: Optional[object] = field(default=None, repr=False)
     _wiki_feedback_service: Optional[object] = field(default=None, repr=False)
+    _wiki_serving_gate: Optional[object] = field(default=None, repr=False)
 
     _initialized_services: list = field(default_factory=list, repr=False)
 
@@ -246,7 +247,13 @@ class AppContainer:
         if self._search_service is None:
             from src.services.search_service import SearchService
             self._search_service = SearchService(
-                self.config, self.db, self.block_store, self.embedding, self.llm
+                self.config,
+                self.db,
+                self.block_store,
+                self.embedding,
+                self.llm,
+                wiki_repository=self.wiki_repository,
+                wiki_serving_gate=self.wiki_serving_gate,
             )
             self._track_service("_search_service")
         return self._search_service
@@ -392,6 +399,24 @@ class AppContainer:
             )
             self._track_service("_wiki_repository")
         return self._wiki_repository
+
+    @property
+    def wiki_serving_gate(self):
+        """Phase 2: unique Claim Serving Gate for Search / Ask (no LLM)."""
+        if self._wiki_serving_gate is None:
+            from src.services.wiki_serving_gate import (
+                WikiServingGate,
+                default_block_knowledge_lookups,
+            )
+
+            get_block, get_knowledge = default_block_knowledge_lookups()
+            self._wiki_serving_gate = WikiServingGate(
+                config=self.config.get_all() if hasattr(self.config, "get_all") else None,
+                get_block=get_block,
+                get_knowledge=get_knowledge,
+            )
+            self._track_service("_wiki_serving_gate")
+        return self._wiki_serving_gate
 
     @property
     def wiki_projection(self):

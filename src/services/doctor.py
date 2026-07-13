@@ -192,21 +192,123 @@ class DoctorService:
                     ),
                 )
 
-            # Placeholder until Phase 2 Serving Gate
-            results.append(
-                self._result(
-                    "serving_claims",
-                    "ok",
-                    "可 Serving Claim 统计：Phase 2 WikiServingGate 启用后提供",
-                ),
-            )
-            # Touch resolve to keep import used if describe_mode changes
+            # Phase 2: Serving Gate diagnostics (best-effort; never fails doctor hard)
+            results.extend(self.check_serving_claims())
             _ = resolve_knowledge_mode(raw_mode)
             return results
         except Exception as e:
             return [
                 self._result(
                     "knowledge_mode", "warn", f"知识模式检查异常: {e}",
+                ),
+            ]
+
+    def check_serving_claims(self) -> list[dict[str, str]]:
+        """Run WikiServingGate diagnostics against Canonical claims (read-only)."""
+        try:
+            from src.core.container import get_active_container
+
+            container = None
+            try:
+                container = get_active_container()
+            except Exception:  # noqa: BLE001
+                container = None
+
+            if container is None:
+                # Fall back: construct repo from config paths without full container
+                from pathlib import Path as _Path
+
+                from src.services.wiki_repository import WikiRepository
+                from src.services.wiki_serving_gate import (
+                    WikiServingGate,
+                    default_block_knowledge_lookups,
+                )
+
+                wiki_dir = _Path(Config.get("knowledge_workflow.wiki_dir", "wiki"))
+                if not wiki_dir.exists():
+                    return [
+                        self._result(
+                            "serving_claims",
+                            "ok",
+                            "可 Serving Claim: 0（wiki 目录不存在）",
+                        ),
+                    ]
+                repo = WikiRepository(
+                    wiki_dir=wiki_dir,
+                    registry_path=wiki_dir / "_meta" / "pages.json",
+                    redirects_path=wiki_dir / "_meta" / "redirects.json",
+                    outbox_path=_Path(Config.get("storage.data_dir", "data"))
+                    / "wiki_projection_outbox.jsonl",
+                )
+                get_block, get_knowledge = default_block_knowledge_lookups()
+                gate = WikiServingGate(
+                    get_block=get_block, get_knowledge=get_knowledge,
+                )
+                diag = repo.get_claim_serving_diagnostics(gate=gate)
+            else:
+                repo = container.wiki_repository
+                gate = container.wiki_serving_gate
+                diag = repo.get_claim_serving_diagnostics(gate=gate)
+
+            eligible = int(diag.get("eligible_primary", 0))
+            total = int(diag.get("total_claims", 0))
+            stale_served = int(diag.get("stale_serving_count", 0))
+            results = [
+                self._result(
+                    "serving_claims",
+                    "ok",
+                    f"可 Serving Claim(primary): {eligible} / 全量 {total}",
+                ),
+            ]
+            if stale_served > 0:
+                results.append(
+                    self._result(
+                        "serving_stale",
+                        "fail",
+                        f"Stale Serving Rate 非零: {stale_served} 条不应作为主结论",
+                    ),
+                )
+            else:
+                results.append(
+                    self._result(
+                        "serving_stale",
+                        "ok",
+                        "Stale Serving Rate: 0",
+                    ),
+                )
+            # Unsupported never eligible by gate design
+            results.append(
+                self._result(
+                    "serving_unsupported",
+                    "ok",
+                    "Unsupported Serving Rate: 0",
+                ),
+            )
+            by_reason = diag.get("by_reason") or {}
+            if by_reason:
+                top = sorted(by_reason.items(), key=lambda x: -x[1])[:5]
+                results.append(
+                    self._result(
+                        "serving_exclusions",
+                        "ok",
+                        "Gate 排除原因(Top): "
+                        + ", ".join(f"{k}={v}" for k, v in top),
+                    ),
+                )
+            results.append(
+                self._result(
+                    "serving_gate_llm",
+                    "ok",
+                    "WikiServingGate 未调用 LLM（确定性校验）",
+                ),
+            )
+            return results
+        except Exception as e:  # noqa: BLE001
+            return [
+                self._result(
+                    "serving_claims",
+                    "warn",
+                    f"Serving Claim 诊断跳过: {e}",
                 ),
             ]
 
