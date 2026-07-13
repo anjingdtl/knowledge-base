@@ -15,9 +15,9 @@
 | Phase 1 模式配置 | ✅ | `737d0a9` / `docs/superpowers/reviews/verified-hybrid-phase1-report.md` |
 | Phase 2 Serving Gate | ✅ | `ae62767` / `docs/superpowers/reviews/verified-hybrid-phase2-report.md` |
 | Phase 3 统一检索 | ✅ | `3892ce0` / `docs/superpowers/reviews/verified-hybrid-phase3-report.md` |
-| Phase 4 回答/冲突/引用 | ✅ | `docs/superpowers/reviews/verified-hybrid-phase4-report.md` |
-| Phase 5 维护中心 | ✅ | `docs/superpowers/reviews/verified-hybrid-phase5-report.md` |
-| Phase 6 MCP 边界 | ✅ | `docs/superpowers/reviews/verified-hybrid-phase6-report.md` |
+| Phase 4 回答/冲突/引用 | ✅ | `7a7ac69` / `docs/superpowers/reviews/verified-hybrid-phase4-report.md` |
+| Phase 5 维护中心 | ✅ | `cd2ed9a` / `docs/superpowers/reviews/verified-hybrid-phase5-report.md` |
+| Phase 6 MCP 边界 | ✅ | `0f5f5d9` / `docs/superpowers/reviews/verified-hybrid-phase6-report.md` |
 | Phase 7+ Hybrid Eval / 发布 | ⏸ | 评测集与 v1.7 发布 |
 
 Phase 4–6 要点：`ask` 冲突披露 + Claim/Evidence 引用；MaintenancePolicyEngine + Jobs/Reviews；MCP `write_policy=disabled` 隐藏写工具。全量回归 **1639 passed / 2 skipped**。
