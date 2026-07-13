@@ -42,6 +42,27 @@ interface Ignore {
 
 const POLL_INTERVAL_MS = 2000
 
+interface WikiHealth {
+  knowledge_mode?: string
+  automation_level?: string
+  servable_claims?: number
+  stale_evidence?: number
+  open_reviews?: number
+  failed_jobs?: number
+  claims?: Record<string, number>
+  errors?: string[]
+}
+
+interface MaintReview {
+  review_id: string
+  review_type: string
+  priority: string
+  risk_level: string
+  status: string
+  claim_id?: string
+  reason_codes?: string[]
+}
+
 export default function MaintenanceView() {
   const [sessions, setSessions] = useState<Session[]>([])
   const [currentSession, setCurrentSession] = useState<Session | null>(null)
@@ -50,6 +71,8 @@ export default function MaintenanceView() {
   const [statusFilter, setStatusFilter] = useState<string>('pending')
   const [expandedPair, setExpandedPair] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [wikiHealth, setWikiHealth] = useState<WikiHealth | null>(null)
+  const [reviews, setReviews] = useState<MaintReview[]>([])
   const { toast } = useToast()
 
   const loadSessions = useCallback(async () => {
@@ -103,10 +126,31 @@ export default function MaintenanceView() {
     return () => clearInterval(timer)
   }, [currentSession, loadPairs])
 
+  const loadWikiHealth = useCallback(async () => {
+    try {
+      const data = await apiGet<WikiHealth>('/api/maintenance/health')
+      setWikiHealth(data)
+    } catch {
+      // 维护中心不可用时不影响其他功能
+      setWikiHealth(null)
+    }
+  }, [])
+
+  const loadReviews = useCallback(async () => {
+    try {
+      const data = await apiGet<{ reviews: MaintReview[] }>('/api/maintenance/reviews?status=open&limit=20')
+      setReviews(data.reviews || [])
+    } catch {
+      setReviews([])
+    }
+  }, [])
+
   useEffect(() => {
     loadSessions()
     loadIgnores()
-  }, [loadSessions, loadIgnores])
+    loadWikiHealth()
+    loadReviews()
+  }, [loadSessions, loadIgnores, loadWikiHealth, loadReviews])
 
   useEffect(() => {
     if (currentSession) {
@@ -215,6 +259,44 @@ export default function MaintenanceView() {
           {loading ? '启动中...' : '开始新扫描'}
         </button>
       </div>
+
+      {/* Phase 5: Wiki 健康与审阅 */}
+      {wikiHealth && (
+        <div className="p-4 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)]">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-semibold">Wiki 维护健康</h2>
+            <button
+              onClick={() => { loadWikiHealth(); loadReviews() }}
+              className="px-2 py-1 text-sm border border-[var(--color-border)] rounded"
+            >
+              刷新
+            </button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+            <div>模式: {wikiHealth.knowledge_mode || '-'}</div>
+            <div>自动化: {wikiHealth.automation_level || '-'}</div>
+            <div>可 Serving Claim: {wikiHealth.servable_claims ?? 0}</div>
+            <div>Stale Evidence: {wikiHealth.stale_evidence ?? 0}</div>
+            <div>开放审阅: {wikiHealth.open_reviews ?? 0}</div>
+            <div>失败任务: {wikiHealth.failed_jobs ?? 0}</div>
+          </div>
+          {reviews.length > 0 && (
+            <div className="mt-3">
+              <div className="font-medium mb-1">待审阅 ({reviews.length})</div>
+              <ul className="text-sm space-y-1 max-h-40 overflow-auto">
+                {reviews.map(r => (
+                  <li key={r.review_id} className="flex gap-2">
+                    <span className="text-[var(--color-text-muted)]">{r.priority}</span>
+                    <span>{r.review_type}</span>
+                    <span className="text-[var(--color-text-muted)]">{r.risk_level}</span>
+                    <span className="truncate">{r.claim_id || r.review_id}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 当前会话进度 */}
       {currentSession && (

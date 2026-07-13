@@ -449,6 +449,78 @@ def _handle_rebuild(args: argparse.Namespace) -> int:
     return 0 if (result.committed and not result.cancelled) else 1
 
 
+def _handle_maintenance(args: argparse.Namespace) -> int:
+    """Phase 5 融合收束：维护中心 CLI（health / jobs / reviews / source-event）。"""
+    from src.core.container import create_container
+
+    container = create_container()
+    svc = container.wiki_maintenance_service
+    sub = getattr(args, "maint_command", None) or "health"
+
+    if sub == "health":
+        snap = svc.health_snapshot()
+        print(f"[OK] mode={snap.get('knowledge_mode')} automation={snap.get('automation_level')}")
+        print(f"  servable_claims={snap.get('servable_claims')} stale_evidence={snap.get('stale_evidence')}")
+        print(f"  open_reviews={snap.get('open_reviews')} failed_jobs={snap.get('failed_jobs')}")
+        print(f"  claims={snap.get('claims')}")
+        if snap.get("errors"):
+            for e in snap["errors"]:
+                print(f"  error: {e}")
+        return 0
+
+    if sub == "jobs":
+        jobs = svc.list_jobs(status=getattr(args, "status", None), limit=getattr(args, "limit", 50))
+        print(f"[OK] {len(jobs)} jobs")
+        for j in jobs:
+            print(f"  {j['job_id']} {j['job_type']} {j['risk_level']} {j['status']}")
+        return 0
+
+    if sub == "reviews":
+        reviews = svc.list_reviews(
+            status=getattr(args, "status", "open"),
+            limit=getattr(args, "limit", 50),
+        )
+        print(f"[OK] {len(reviews)} reviews")
+        for r in reviews:
+            print(f"  {r['review_id']} {r['review_type']} {r['risk_level']} {r['status']} claim={r.get('claim_id')}")
+        return 0
+
+    if sub == "source-event":
+        result = svc.handle_source_event(
+            args.knowledge_id,
+            args.event_type,
+            source_path=getattr(args, "source_path", "") or "",
+            human_confirmed=bool(getattr(args, "confirm", False)),
+        )
+        print(f"[OK] source-event handled: {result.get('job', {}).get('job_id')} "
+              f"decision={result.get('decision', {}).get('decision')}")
+        if result.get("review"):
+            print(f"  review={result['review'].get('review_id')}")
+        return 0 if result.get("ok", True) else 1
+
+    if sub == "resolve":
+        result = svc.resolve_review(
+            args.review_id,
+            args.action,
+            operator=getattr(args, "operator", "cli"),
+            note=getattr(args, "note", "") or "",
+            human_confirmed=bool(getattr(args, "confirm", False)),
+        )
+        if not result.get("ok"):
+            print(f"[ERROR] {result.get('error')}", file=sys.stderr)
+            return 1
+        print(f"[OK] review {args.review_id} -> {result['review']['status']}")
+        return 0
+
+    if sub == "evaluate-r4":
+        d = svc.evaluate_r4(args.job_type, human_confirmed=bool(getattr(args, "confirm", False)))
+        print(f"[OK] decision={d.get('decision')} risk={d.get('risk_level')} reasons={d.get('reason_codes')}")
+        return 0 if d.get("decision") != "block" or getattr(args, "confirm", False) else 2
+
+    print(f"[ERROR] unknown maintenance command: {sub}", file=sys.stderr)
+    return 1
+
+
 def main(argv: list[str] | None = None) -> None:
     """ShineHeKnowledge CLI 主入口"""
     parser = argparse.ArgumentParser(
@@ -620,6 +692,37 @@ def main(argv: list[str] | None = None) -> None:
     )
     rebuild_parser.add_argument("--dry-run", action="store_true", help="仅规划,不写")
 
+    # --- maintenance (融合收束 Phase 5) ---
+    maint_parser = subparsers.add_parser(
+        "maintenance", help="Wiki 维护中心",
+        description="健康快照、来源事件、维护任务、审阅队列与 R4 策略预检。",
+    )
+    maint_sub = maint_parser.add_subparsers(dest="maint_command", help="maintenance 子命令")
+    maint_sub.add_parser("health", help="健康快照")
+    jobs_p = maint_sub.add_parser("jobs", help="列出维护任务")
+    jobs_p.add_argument("--status", default=None)
+    jobs_p.add_argument("--limit", type=int, default=50)
+    rev_p = maint_sub.add_parser("reviews", help="列出审阅项")
+    rev_p.add_argument("--status", default="open")
+    rev_p.add_argument("--limit", type=int, default=50)
+    se_p = maint_sub.add_parser("source-event", help="处理来源变更事件")
+    se_p.add_argument("--knowledge-id", required=True)
+    se_p.add_argument("--event-type", default="updated", choices=["created", "updated", "deleted"])
+    se_p.add_argument("--source-path", default="")
+    se_p.add_argument("--confirm", action="store_true", help="人工确认（R4）")
+    res_p = maint_sub.add_parser("resolve", help="审阅决议")
+    res_p.add_argument("review_id")
+    res_p.add_argument(
+        "--action", required=True,
+        choices=["confirm", "reject", "correct", "needs_review", "defer"],
+    )
+    res_p.add_argument("--operator", default="cli")
+    res_p.add_argument("--note", default="")
+    res_p.add_argument("--confirm", action="store_true")
+    r4_p = maint_sub.add_parser("evaluate-r4", help="R4 策略预检")
+    r4_p.add_argument("--job-type", default="publish")
+    r4_p.add_argument("--confirm", action="store_true")
+
     args = parser.parse_args(argv)
 
     if args.command is None:
@@ -635,6 +738,7 @@ def main(argv: list[str] | None = None) -> None:
         "wiki": _handle_wiki,
         "migrate": _handle_migrate,
         "rebuild": _handle_rebuild,
+        "maintenance": _handle_maintenance,
     }
 
     handler = handlers.get(args.command)

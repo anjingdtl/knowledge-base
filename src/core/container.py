@@ -161,6 +161,8 @@ class AppContainer:
     _wiki_v2_migrator: Optional[object] = field(default=None, repr=False)
     _wiki_feedback_service: Optional[object] = field(default=None, repr=False)
     _wiki_serving_gate: Optional[object] = field(default=None, repr=False)
+    _wiki_maintenance_service: Optional[object] = field(default=None, repr=False)
+    _maintenance_policy: Optional[object] = field(default=None, repr=False)
 
     _initialized_services: list = field(default_factory=list, repr=False)
 
@@ -621,6 +623,42 @@ class AppContainer:
             )
             self._track_service("_wiki_feedback_service")
         return self._wiki_feedback_service
+
+    @property
+    def maintenance_policy(self):
+        if self._maintenance_policy is None:
+            from src.services.maintenance_policy import MaintenancePolicyEngine
+            self._maintenance_policy = MaintenancePolicyEngine(self.config)
+            self._track_service("_maintenance_policy")
+        return self._maintenance_policy
+
+    @property
+    def wiki_maintenance_service(self):
+        """Phase 5 Maintenance Center control plane (lazy; failure must not block Raw)."""
+        if self._wiki_maintenance_service is None:
+            from src.services.wiki_maintenance_service import WikiMaintenanceService
+            try:
+                self._wiki_maintenance_service = WikiMaintenanceService(
+                    config=self.config,
+                    policy_engine=self.maintenance_policy,
+                    wiki_repository=self.wiki_repository,
+                    rebuild_service=self.wiki_rebuild_service,
+                    dependency_service=self.wiki_dependency_service,
+                    feedback_service=self.wiki_feedback_service,
+                    operation_log=self.operation_log,
+                    wiki_serving_gate=self.wiki_serving_gate,
+                    db=self.db,
+                )
+            except Exception as e:  # noqa: BLE001
+                logger.warning(
+                    "WikiMaintenanceService init failed (Raw search unaffected): %s", e,
+                )
+                self._wiki_maintenance_service = WikiMaintenanceService(
+                    config=self.config,
+                    policy_engine=self.maintenance_policy,
+                )
+            self._track_service("_wiki_maintenance_service")
+        return self._wiki_maintenance_service
 
 
 def create_container(config_path: str | None = None) -> AppContainer:
