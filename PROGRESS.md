@@ -1,9 +1,48 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-09
+> 最后更新：2026-07-13
 > 源码版本：`src/version.py` 中的 `1.4.0`
 > 当前分支：`feature/wiki-v2-phase4a-shadow`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
+
+## 交接快照：Canonical Wiki V2 Phase 4C Primary（2026-07-13）
+
+Phase 4C 已完成实现层面的主要改造和 Canonical 直接写守卫收缩，但**尚未通过
+Phase 4C 的最终验收，不能进入 Phase 5**。本节覆盖此前 2026-07-09 的“下一步”
+描述；历史记录仍保留在下文。
+
+| 阶段 | 当前状态 | 可复核证据 / 说明 |
+|---|---|---|
+| Phase 0-3 | ✅ 已完成 | Canonical 模型、Schema、Repository、Projection、Extractor、Matcher、Merge 已完成。 |
+| Phase 3.5 | ✅ 已完成 | C0-C6 门禁已通过。 |
+| Phase 4A Shadow | ✅ 已验收 | 真实样本与报告已归档。 |
+| Phase 4B Canary | ✅ 已验收 | allowlist、review gate、rollback、projection parity 已核验。 |
+| Phase 4C Primary | 🟡 实现完成，**验收/phase review 待完成** | Primary 编排、写入口、兼容 adapter、legacy 直写移除均已提交；全量门禁和正式 phase review 尚缺。 |
+| Phase 5 | ⏸ 未开始 | 必须等待 Phase 4C 验收和提交。 |
+| Phase 6 | ⏸ 未开始 | 依赖 Phase 5。 |
+
+### 本轮已落盘提交（Phase 4C）
+
+| commit | 交付 |
+|---|---|
+| `1028f1a` | Primary canonical write path 起步。 |
+| `8026112` | `WikiEntityUpdater` 改为 suggestion producer。 |
+| `4a683a9` | `KnowledgeWorkflowService.save_query()` 只准备 draft，不直接写 Markdown。 |
+| `5f6990f` | `WikiSourceCompiler` 只准备 source summary。 |
+| `aee4fe0` | `WikiIndexCompiler` 只准备 index。 |
+| `c1aa2e2` | `WikiLogCompiler` 只准备 log。 |
+| `03663f6` | API wiki routes 改经 Repository + Projection。 |
+| `80b447c` | `WikiWorkflow` 状态转换改经 Repository + Projection。 |
+| `83c33f2`、`2cf77eb` | `WikiLint` 改经 canonical services，并修复 injected service/projection 配对问题。 |
+| `d6ccf02` | `WikiCompiler` 旧入口改经 `WikiWorkflow._save_canonical_page()`；守卫 allowlist 归零。 |
+
+### 已知验证事实与交接动作
+
+- 最近完成的扩展定向回归为 `32 passed`：覆盖 canonical write guards、compiler canonical adapter、query save、primary adapter、workflow 和 projection。
+- `d6ccf02` 之后**尚未获得**可用于验收的完整 `pytest -q` 输出：一次全量测试被人工中断，其残留子进程已于本次交接清理。不要把历史 `1425 passed` 当作 Phase 4C 的验证结果。
+- `ruff check src tests evals tools scripts`、`mypy src tools`、retrieval eval、wiki eval、完整 pytest，以及独立代码 review 都需要在当前 HEAD 重新执行并记录后，才可更新为 Phase 4C 通过。
+- 当前工作树在本快照时无未提交变更。`d6ccf02` 同时提交了 10 个 `wiki/` 运行产物（`wiki/_meta/*` 与 `wiki/syntheses/*`）。这是一次应被显式复核的提交范围，不可静默删除或假定应保留；下一位 agent 在 phase review 中应决定是否以独立提交移除这些非预期产物。
+- 详细、可执行的交接清单：`docs/superpowers/handoffs/2026-07-13-canonical-wiki-v2-phase4c-handoff.md`。
 
 ## Canonical Wiki V2 Phase 4B Canary 切换 — 验收通过 (2026-07-09)
 

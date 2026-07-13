@@ -700,17 +700,14 @@ Observed: `34 passed`; Ruff passed; mypy reported no issues.
 
 Independent review found that the initial fallback ignored an explicitly injected lint database, and that a custom repository without an explicit projection could become detached from the legacy read model. `WikiLint` now accepts optional repository/projection dependencies and constructs a `WikiProjection` with the same injected database whenever needed. A follow-up review also removed default-service construction when both services are injected, preventing an unintended workspace `wiki/` directory. Real temporary SQLite tests verify canonical duplicate deprecation and content/source/status projection back to `wiki_pages`.
 
-- [ ] **Step 1: Remove resolved allowlist entries**
+- [x] **Step 1: Remove resolved allowlist entries**
 
-After `WikiWriteService` and `WikiCompiler.save_answer()` no longer perform primary direct writes, remove allowlist entries only when the corresponding direct call no longer exists:
+All entries are now removed. The primary write entrypoints and compatibility adapters no longer call
+`Database.insert_wiki_page(...)`, `Database.update_wiki_page(...)`, or
+`Database.delete_wiki_page(...)` directly. `ALLOWED_DIRECT_WRITES`, `GUARDED`, and
+`OPEN_WRITE_GUARDED` are empty; the guard test remains as a future regression tripwire.
 
-```python
-("services/wiki_compiler.py", "insert_wiki_page")
-```
-
-Keep entries for `update_wiki_page`, `wiki_entity_updater.py`, `knowledge_workflow.py`, `wiki_source_compiler.py`, `wiki_index_compiler.py`, and `wiki_log_compiler.py` until their direct calls are removed by actual code changes.
-
-- [ ] **Step 2: Run guard tests**
+- [x] **Step 2: Run guard tests**
 
 Run:
 
@@ -718,7 +715,45 @@ Run:
 pytest tests/test_canonical_write_guards.py -q
 ```
 
-Expected: pass. If `test_allowlist_entries_actually_exist` fails, the allowlist entry was removed before the direct call disappeared or vice versa.
+Observed in the current targeted regression set: `32 passed` (including canonical write guards).
+
+### Task 4I: WikiCompiler Canonical Compatibility Adapter
+
+**Files:**
+- Modify: `src/services/wiki_compiler.py`
+- Modify: `src/services/wiki_workflow.py`
+- Modify: `src/services/wiki_projection.py`
+- Add: `tests/test_wiki_compiler_canonical.py`
+- Modify: `tests/test_wiki_workflow_canonical.py`
+- Modify: `tests/test_canonical_write_guards.py`
+
+- [x] **Step 1: Write failing no-direct-Database tests**
+
+Added `tests/test_wiki_compiler_canonical.py`. A fake database raises on legacy insert/update
+calls while tests exercise query save, stale source cleanup, new-page creation, and existing-page
+update paths.
+
+- [x] **Step 2: Route all compiler page writes through the canonical save helper**
+
+`WikiCompiler` now delegates legacy page persistence to `WikiWorkflow._save_canonical_page()`.
+The helper builds/saves a canonical `WikiPage`, processes Projection, and preserves exact legacy
+content after Markdown serialization.
+
+- [x] **Step 3: Preserve compatibility projection fields**
+
+`WikiProjection.update_legacy_page_fields(...)` now accepts `content` alongside the existing
+compatibility-only fields. This avoids a trailing-newline regression for legacy callers while the
+Canonical store remains the source of truth.
+
+- [x] **Step 4: Verify focused regression set**
+
+Run:
+
+```bash
+pytest tests/test_canonical_write_guards.py tests/test_wiki_compiler_canonical.py tests/test_save_to_wiki_params.py tests/test_wiki_compiler_primary_adapter.py tests/test_wiki_workflow_canonical.py tests/test_wiki_projection.py -q
+```
+
+Observed: `32 passed`.
 
 ## Task 5: Phase 4C Review and Commit
 
@@ -739,7 +774,8 @@ python evals/run_retrieval_eval.py --all
 python evals/run_wiki_eval.py
 ```
 
-Expected: all commands exit 0; retrieval eval reports Overall PASS; wiki eval prints metrics without crashing.
+Status: **not yet run on the final Phase 4C HEAD**. Earlier focused regressions passed, but they
+do not replace this full phase gate.
 
 - [ ] **Step 2: Run full test suite**
 
@@ -749,7 +785,8 @@ Run:
 pytest -q
 ```
 
-Expected: no new failures; existing xfails remain documented.
+Status: **not accepted**. A previous `pytest -q` invocation was interrupted and produced no final
+result; its child processes were stopped during handoff. Re-run from a clean process tree.
 
 - [ ] **Step 3: Update progress and review**
 
