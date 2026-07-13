@@ -1,28 +1,90 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-13
-> 源码版本：`src/version.py` 中的 `1.7.0`
-> 当前分支：`master`
-> 当前方向：Verified Hybrid 融合收束 — **v1.7.0 发布**
+> 最后更新：2026-07-13  
+> 源码版本：`src/version.py` 中的 **`1.7.0`**  
+> 当前分支：`master` @ `1bc8615`（与 `origin/master` 同步）  
+> 当前方向：**Verified Hybrid 融合收束已收口；v1.7.0 已发布** — 无进行中大阶段
+
+---
+
+## 收尾总结（2026-07-13）
+
+### 产品结论
+
+ShineHeKnowledge **v1.7.0** 完成「Raw 证据底座 + 已验证 Wiki 增强 + 维护控制面」统一叙事：
+
+- 默认 **`verified`**：读 Gate 通过的 Claim + Raw；Agent 写默认关闭  
+- Wiki 故障 / 空 Claim → **自动 Raw fallback**  
+- 冲突并列披露；stale/unsupported **不进入 Serving 主结论**  
+- 维护中心 R1 保护自动、R3 审阅、R4 人工；**不建第二事实库**
+
+**GitHub Release：** https://github.com/anjingdtl/knowledge-base/releases/tag/v1.7.0  
+
+### 融合收束 Phase 0–8（全部 ✅）
+
+| 阶段 | 状态 | 代表提交 / 产物 |
+|---|---|---|
+| Phase 0 基线 | ✅ | `abbfa35` |
+| Phase 1 模式配置 | ✅ | `737d0a9` |
+| Phase 2 Serving Gate | ✅ | `ae62767` |
+| Phase 3 统一检索 | ✅ | `3892ce0` |
+| Phase 4 回答/冲突/引用 | ✅ | `7a7ac69` |
+| Phase 5 维护中心 | ✅ | `cd2ed9a` |
+| Phase 6 MCP 边界 | ✅ | `0f5f5d9` |
+| Phase 7 Hybrid Eval | ✅ | `113688d` · 175 cases · gates PASS |
+| Phase 8 文档与发布 | ✅ | `9f66cff` / `bc2f630` · VERSION 1.7.0 |
+
+最终评审：`docs/superpowers/reviews/verified-hybrid-final-review.md`（建议发布）。
+
+### 发布后质量抽检
+
+| 抽检 | 结果 | 说明 |
+|---|---|---|
+| 离线 Hybrid Eval | ✅ PASS | `python evals/run_hybrid_eval.py --strict` · stale/unsupported rate=0 |
+| 真实 Embedding 检索 | ✅ | R@5=1.0 / MRR=1.0 / nDCG@10≈0.86 · `81d3020` · 报告见 Release 附件 |
+| 真实 LLM Ask E2E | ✅ PASS | 15 题 overall **86.7%** · `1bc8615` · `search_llm` 路径 |
+| LLM 改配复测 | ✅ 连通 | Minimax `MiniMax-M3`；`llm.api_key` 直连可用（`fallback_key=False`）；抽 8 题 P50≈9s |
+
+权威报告：
+
+- `docs/superpowers/reviews/2026-07-13-real-embedding-eval.md`  
+- `docs/superpowers/reviews/2026-07-13-ask-e2e-real-llm.md`  
+- Release 附件：`retrieval-real-embedding.json` / `ask-e2e-real-llm.json` 等  
+
+### 回归基线（发布窗口）
+
+- 全量 pytest：约 **1646 passed / 2 skipped**（Hybrid Eval 用例并入后）  
+- ruff 相关改动通过  
+- CI：Retrieval Eval + **Hybrid Eval** 门禁已挂  
+
+### 已知残留（非阻塞发布）
+
+1. 隔离 fixture DB 下完整 `rag_pipeline` hybrid 偶发空转 FTS；E2E 抽检用 `search_llm`（SearchService+LLM）更稳  
+2. Ask E2E 拒答启发式对「未提及云端」等措辞偶发误伤；MiniMax 长 CoT 与关键词门禁需后续打磨  
+3. 维护 Job/Review 默认进程内存储（可审计经 Operation Log）  
+4. 真实模型全量 ask 延迟偏高（远程 API），不进默认 CI  
+
+### 后续可选（未开干）
+
+- Job/Review SQLite 持久化  
+- rag_pipeline 与 SearchService 向量路径在隔离库下对齐  
+- Ask E2E 评分（拒答/CoT）硬化  
+- 生产语料上的持续 Hybrid / Ask 抽检  
+
+---
 
 ## 融合收束 Phase 0–8 — 完成（2026-07-13）
 
-依据 `docs/ShineHeKnowledge 融合收束开发规格说明.md`。
+依据 `docs/ShineHeKnowledge 融合收束开发规格说明.md`。  
+**整线已关闭**；细节见上文「收尾总结」。
 
 | 阶段 | 状态 | 说明 |
 |---|---|---|
-| Phase 0 基线 | ✅ | `abbfa35` / `docs/superpowers/reviews/verified-hybrid-baseline.md` |
-| Phase 1 模式配置 | ✅ | `737d0a9` / `docs/superpowers/reviews/verified-hybrid-phase1-report.md` |
-| Phase 2 Serving Gate | ✅ | `ae62767` / `docs/superpowers/reviews/verified-hybrid-phase2-report.md` |
-| Phase 3 统一检索 | ✅ | `3892ce0` / `docs/superpowers/reviews/verified-hybrid-phase3-report.md` |
-| Phase 4 回答/冲突/引用 | ✅ | `7a7ac69` / `docs/superpowers/reviews/verified-hybrid-phase4-report.md` |
-| Phase 5 维护中心 | ✅ | `cd2ed9a` / `docs/superpowers/reviews/verified-hybrid-phase5-report.md` |
-| Phase 6 MCP 边界 | ✅ | `0f5f5d9` / `docs/superpowers/reviews/verified-hybrid-phase6-report.md` |
-| Phase 7 Hybrid Eval | ✅ | `113688d` · 175 cases · gates PASS |
-| Phase 8 文档与发布 | ✅ | `9f66cff` · VERSION 1.7.0 · final review |
+| Phase 0–8 | ✅ | 见上表；Release `v1.7.0` |
+| 真实模型抽检 | ✅ | embedding + LLM ask E2E 已归档 |
 
-最终评审：`docs/superpowers/reviews/verified-hybrid-final-review.md`。  
-Hybrid Eval：`python evals/run_hybrid_eval.py --strict`（Raw/Wiki/Hybrid 三路，stale/unsupported rate=0）。
+Hybrid Eval：`python evals/run_hybrid_eval.py --strict`  
+Ask E2E：`python evals/run_ask_e2e_eval.py --path search_llm`
 
 ## C2 Matcher 保守收紧 — 5 xfail 转绿（2026-07-13）
 
