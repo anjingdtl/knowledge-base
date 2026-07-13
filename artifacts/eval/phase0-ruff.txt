@@ -1,0 +1,88 @@
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unsorted-imports\I001]8;;\ [0m[[1m[96m*[0m] [1mImport block is un-sorted or un-formatted[0m
+  [1m[94m-->[0m tests\test_v160_stability_report_fixes.py:11:1
+   [1m[94m|[0m
+[1m[94m 9 |[0m   P2 缂撳瓨鍛戒腑鐜囧喎鍚姩涓嶅簲璇姤寮傚父
+[1m[94m10 |[0m   """
+[1m[94m11 |[0m [1m[91m/[0m from __future__ import annotations
+[1m[94m12 |[0m [1m[91m|[0m
+[1m[94m13 |[0m [1m[91m|[0m import json
+[1m[94m14 |[0m [1m[91m|[0m from datetime import datetime, timedelta
+[1m[94m15 |[0m [1m[91m|[0m from unittest.mock import patch
+[1m[94m16 |[0m [1m[91m|[0m
+[1m[94m17 |[0m [1m[91m|[0m import pytest
+[1m[94m18 |[0m [1m[91m|[0m
+[1m[94m19 |[0m [1m[91m|[0m from src.models.knowledge import KnowledgeItem
+[1m[94m20 |[0m [1m[91m|[0m from src.services.db import Database
+[1m[94m21 |[0m [1m[91m|[0m from src.services.indexer import (
+[1m[94m22 |[0m [1m[91m|[0m     index_knowledge_item,
+[1m[94m23 |[0m [1m[91m|[0m     reindex_all,
+[1m[94m24 |[0m [1m[91m|[0m     reindex_knowledge_item,
+[1m[94m25 |[0m [1m[91m|[0m     _clear_reindex_checkpoint,
+[1m[94m26 |[0m [1m[91m|[0m     _save_reindex_checkpoint,
+[1m[94m27 |[0m [1m[91m|[0m )
+   [1m[94m|[0m [1m[91m|_^[0m
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mOrganize imports[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`unittest.mock.patch` imported but unused[0m
+  [1m[94m-->[0m tests\test_v160_stability_report_fixes.py:15:27
+   [1m[94m|[0m
+[1m[94m13 |[0m import json
+[1m[94m14 |[0m from datetime import datetime, timedelta
+[1m[94m15 |[0m from unittest.mock import patch
+   [1m[94m|[0m                           [1m[91m^^^^^[0m
+[1m[94m16 |[0m
+[1m[94m17 |[0m import pytest
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `unittest.mock.patch`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`pytest` imported but unused[0m
+  [1m[94m-->[0m tests\test_v160_stability_report_fixes.py:17:8
+   [1m[94m|[0m
+[1m[94m15 |[0m from unittest.mock import patch
+[1m[94m16 |[0m
+[1m[94m17 |[0m import pytest
+   [1m[94m|[0m        [1m[91m^^^^^^[0m
+[1m[94m18 |[0m
+[1m[94m19 |[0m from src.models.knowledge import KnowledgeItem
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `pytest`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`src.services.indexer._clear_reindex_checkpoint` imported but unused[0m
+  [1m[94m-->[0m tests\test_v160_stability_report_fixes.py:25:5
+   [1m[94m|[0m
+[1m[94m23 |[0m     reindex_all,
+[1m[94m24 |[0m     reindex_knowledge_item,
+[1m[94m25 |[0m     _clear_reindex_checkpoint,
+   [1m[94m|[0m     [1m[91m^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[1m[94m26 |[0m     _save_reindex_checkpoint,
+[1m[94m27 |[0m )
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`src.services.indexer._save_reindex_checkpoint` imported but unused[0m
+  [1m[94m-->[0m tests\test_v160_stability_report_fixes.py:26:5
+   [1m[94m|[0m
+[1m[94m24 |[0m     reindex_knowledge_item,
+[1m[94m25 |[0m     _clear_reindex_checkpoint,
+[1m[94m26 |[0m     _save_reindex_checkpoint,
+   [1m[94m|[0m     [1m[91m^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[1m[94m27 |[0m )
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unsorted-imports\I001]8;;\ [0m[[1m[96m*[0m] [1mImport block is un-sorted or un-formatted[0m
+  [1m[94m-->[0m tests\test_v160_stability_report_fixes.py:37:9
+   [1m[94m|[0m
+[1m[94m35 |[0m       def test_soft_deleted_blocks_not_counted_in_coverage(self, setup_db, monkeypatch):
+[1m[94m36 |[0m           """杞垹鏉＄洰鐨?blocks 涓嶅緱鍘嬩綆 vector_coverage銆?""
+[1m[94m37 |[0m [1m[91m/[0m         from src.services.health import kb_health_check
+[1m[94m38 |[0m [1m[91m|[0m         from src.services.block_store import BlockStore
+   [1m[94m|[0m [1m[91m|_______________________________________________________^[0m
+[1m[94m39 |[0m
+[1m[94m40 |[0m           # 娲昏穬鏉＄洰锛? block + 1 vector
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mOrganize imports[0m
+
+Found 6 errors.
+[[36m*[0m] 6 fixable with the `--fix` option.

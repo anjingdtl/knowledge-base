@@ -1,0 +1,6 @@
+wiki-compilation metrics:
+  source_coverage: 1.0
+  cross_page_update_rate: 0.9167
+  orphan_page_rate: 0.8333
+  query_save_rate: 0.0909
+  stale_claim_ratio: 0.0

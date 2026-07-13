@@ -1,0 +1,12 @@
+Knowledge Evolution Eval (Wiki V2 Phase 6)
+==================================================
+  [PASS] claim_provenance_completeness: 1.0 (thr 0.95) 鈥?1/1 active claims with supports+knowledge_id
+  [PASS] evidence_location_completeness: 1.0 (thr 0.9) 鈥?1/1 supports evidence have block_id
+  [PASS] cross_source_merge_accuracy: 1.0 (thr 0.85) 鈥?action=duplicate
+  [PASS] update_propagation_recall: 1.0 (thr 1.0) 鈥?stale=True unsupported=True
+  [PASS] unsupported_claim_detection: 1.0 (thr 0.95) 鈥?1/1 no-support claims not active
+  [PASS] page_identity_stability: 1.0 (thr 1.0) 鈥?1 unique ids / 1 pages
+  [PASS] migration_page_parity: 1.0 (thr 1.0) 鈥?dry_create=1 actual_migpage=1 writes=2
+  [SKIP] projection_parity: 1.0 (thr 1.0) 鈥?projection not provided; skipped as pass
+==================================================
+Overall: PASS

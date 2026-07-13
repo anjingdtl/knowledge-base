@@ -1,0 +1,14 @@
+
+> client@1.4.0 build
+> tsc && vite build
+
+vite v8.0.16 building client environment for production...
+[2K
+transforming...鉁?44 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.40 kB 鈹?gzip:  0.28 kB
+dist/assets/index-C0WlS_dM.css   23.53 kB 鈹?gzip:  5.27 kB
+dist/assets/index-CjSxfHwA.js   309.47 kB 鈹?gzip: 90.64 kB 鈹?map: 1,446.94 kB
+
+鉁?built in 608ms

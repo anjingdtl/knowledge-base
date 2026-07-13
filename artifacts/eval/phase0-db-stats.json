@@ -1,0 +1,85 @@
+{
+  "db_path": "data\\kb.db",
+  "exists": true,
+  "wiki_related_tables": [
+    "wiki_pages",
+    "wiki_links",
+    "wiki_ops_log",
+    "wiki_fts",
+    "wiki_fts_data",
+    "wiki_fts_idx",
+    "wiki_fts_docsize",
+    "wiki_fts_config",
+    "wiki_workflow",
+    "wiki_page_versions",
+    "wiki_pages_v2",
+    "wiki_claims",
+    "wiki_claim_evidence",
+    "wiki_page_claims",
+    "wiki_dependencies",
+    "wiki_projection_state",
+    "wiki_pages_v2_fts",
+    "wiki_pages_v2_fts_data",
+    "wiki_pages_v2_fts_idx",
+    "wiki_pages_v2_fts_content",
+    "wiki_pages_v2_fts_docsize",
+    "wiki_pages_v2_fts_config"
+  ],
+  "counts": {
+    "wiki_pages": {
+      "count": 20,
+      "by_status": {
+        "deleted": 2,
+        "draft": 1,
+        "published": 17
+      }
+    },
+    "wiki_page_versions": {
+      "count": 0
+    },
+    "wiki_pages_v2": {
+      "count": 0,
+      "by_status": {}
+    },
+    "wiki_claims": {
+      "count": 0,
+      "by_status": {}
+    },
+    "wiki_claim_evidence": {
+      "count": 0
+    },
+    "wiki_page_claims": {
+      "count": 0
+    },
+    "wiki_projection_state": {
+      "count": 0
+    },
+    "wiki_pages_v2_fts": {
+      "count": 0
+    },
+    "wiki_pages_v2_fts_data": {
+      "count": 2
+    },
+    "wiki_pages_v2_fts_idx": {
+      "count": 0
+    },
+    "wiki_pages_v2_fts_content": {
+      "count": 0
+    },
+    "wiki_pages_v2_fts_docsize": {
+      "count": 0
+    },
+    "wiki_pages_v2_fts_config": {
+      "count": 1
+    },
+    "knowledge_items": {
+      "count": 44
+    },
+    "blocks": {
+      "count": 191
+    },
+    "indexed_files": {
+      "count": 11
+    }
+  }
+}
