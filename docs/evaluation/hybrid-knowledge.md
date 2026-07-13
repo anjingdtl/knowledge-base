@@ -22,6 +22,18 @@ python evals/run_hybrid_eval.py --strict
 - Conflict Detection Recall ≥ 0.90  
 - Raw Fallback Success ≈ 1.0  
 
+## 真实模型（可选 / 发布后抽检）
+
+```bash
+# 真实 embedding 检索
+python evals/run_retrieval_eval.py --all --engine real-embedding
+
+# 真实 LLM ask E2E（SearchService + chat）
+python evals/run_ask_e2e_eval.py --path search_llm --json --output artifacts/eval/ask-e2e-real-llm.json
+```
+
+报告示例：`docs/superpowers/reviews/2026-07-13-ask-e2e-real-llm.md`。
+
 ## 相关
 
 - Raw：`python evals/run_retrieval_eval.py --all`  

@@ -1,0 +1,98 @@
+# Real-LLM ask E2E — questions grounded in evals/fixtures/*
+# expected_keywords: all should appear in answer (case-insensitive, Chinese as-is)
+# expect_refuse: true for out-of-corpus questions
+
+- id: e2e_sqlite
+  question: "知识库默认使用什么数据库？它用什么模式做本地索引？"
+  expected_keywords: ["SQLite", "WAL"]
+  fixture_sources: ["architecture.md"]
+  tags: [fact]
+
+- id: e2e_rrf
+  question: "混合检索里 RRF 融合的默认常数 k 是多少？"
+  expected_keywords: ["60"]
+  fixture_sources: ["architecture.md"]
+  tags: [fact, numeric]
+
+- id: e2e_embedding_dim
+  question: "embedding 模型默认输出多少维向量？"
+  expected_keywords: ["1024"]
+  fixture_sources: ["architecture.md"]
+  tags: [fact, numeric]
+
+- id: e2e_tool_profile
+  question: "MCP 工具配置档 tool_profile 有哪些选项？"
+  expected_keywords: ["core", "extended"]
+  fixture_sources: ["config_reference.md"]
+  tags: [config]
+
+- id: e2e_rerank
+  question: "如何改善搜索质量？和 reranker 配置有什么关系？"
+  expected_keywords: ["rerank"]
+  fixture_sources: ["troubleshooting.md"]
+  tags: [ops]
+
+- id: e2e_search_mode
+  question: "配置里 search_mode 支持哪些模式？"
+  expected_keywords: ["blend", "embedding", "keywords"]
+  fixture_sources: ["config_reference.md"]
+  tags: [config]
+
+- id: e2e_hybrid_desc
+  question: "混合搜索管线如何结合向量和关键词？"
+  expected_keywords: ["RRF"]
+  fixture_sources: ["architecture.md"]
+  tags: [concept]
+
+- id: e2e_storage
+  question: "系统的数据是存在云端还是本地？主要用什么存储？"
+  expected_keywords: ["local", "SQLite"]
+  # fixtures may say "local" / "SQLite" / "本地"
+  alt_keywords: [["本地", "SQLite"], ["local", "SQLite"], ["SQLite"]]
+  fixture_sources: ["architecture.md"]
+  tags: [fact]
+
+- id: e2e_citation
+  question: "引用 citation 一般包含哪些定位信息？"
+  expected_keywords: ["block"]
+  alt_keywords: [["block_id"], ["heading"], ["path"], ["定位"]]
+  fixture_sources: ["api_guide.md", "architecture.md"]
+  tags: [citation]
+
+- id: e2e_vector_fix
+  question: "向量覆盖不足时应该怎么处理？"
+  expected_keywords: ["vector"]
+  alt_keywords: [["coverage"], ["reindex"], ["向量"], ["修复"]]
+  fixture_sources: ["troubleshooting.md"]
+  tags: [ops]
+
+- id: e2e_debounce
+  question: "文件监听 watcher 的防抖 debounce 默认大概是多少？"
+  expected_keywords: ["500"]
+  fixture_sources: ["config_reference.md"]
+  tags: [config, numeric]
+
+- id: e2e_code_error
+  question: "代码示例里 hybrid search 遇到致命错误会抛什么异常类？"
+  expected_keywords: ["Hybrid"]
+  alt_keywords: [["Error"], ["exception"], ["异常"]]
+  fixture_sources: ["code_example.py"]
+  tags: [code]
+
+- id: e2e_refuse_k8s
+  question: "如何从零安装 Kubernetes 集群并配置 etcd 高可用？"
+  expect_refuse: true
+  expected_keywords: []
+  tags: [no_answer]
+
+- id: e2e_refuse_food
+  question: "推荐一款适合冬天吃的火锅底料品牌"
+  expect_refuse: true
+  expected_keywords: []
+  tags: [no_answer]
+
+- id: e2e_refuse_privacy
+  question: "CEO 的私人手机号是多少？"
+  expect_refuse: true
+  expected_keywords: []
+  tags: [no_answer]
