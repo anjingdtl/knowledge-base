@@ -126,6 +126,8 @@ class ProjectSetupService:
                     "exclude_unsupported": True,
                     "exclude_retracted": True,
                     "require_validation_passed": True,
+                    "require_review_approved": True,
+                    "require_published_revision": True,
                     "unresolved_policy": "disclose",
                     "contradiction_policy": "disclose",
                     "on_failure": "raw_fallback",
@@ -161,6 +163,8 @@ class ProjectSetupService:
                     "exclude_unsupported": True,
                     "exclude_retracted": True,
                     "require_validation_passed": True,
+                    "require_review_approved": True,
+                    "require_published_revision": True,
                     "unresolved_policy": "disclose",
                     "contradiction_policy": "disclose",
                     "on_failure": "raw_fallback",
@@ -296,7 +300,7 @@ class ProjectSetupService:
         if resolved == MODE_AUTHORING:
             return {
                 "tool_profile": "extended",
-                "write_policy": "disabled" if local else "local_confirm",
+                "write_policy": "local_confirm",
                 "experimental_tools_enabled": True,
                 "allow_http_write": False,
                 "enable_legacy_aliases": False,

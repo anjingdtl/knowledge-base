@@ -207,46 +207,12 @@ wiki:
     exclude_stale: true
     exclude_unsupported: true
     exclude_retracted: true
-
-# 维护中心（融合收束 Spec §5.6 / Phase 5）
-# 与 mcp.write_policy 分离：系统保护性维护可自动执行，语义变更仍需人工
-maintenance:
-  enabled: true
-  center_enabled: true
-  # observe | supervised | managed — verified 默认 supervised
-  automation_level: supervised
-  policy:
-    allow_observation: true
-    auto_protective_actions: true
-    auto_mark_evidence_stale: true
-    auto_downgrade_unsupported_claims: true
-    auto_move_affected_pages_to_review: true
-    auto_exclude_ineligible_claims_from_serving: true
-    auto_retry_failed_jobs: true
-    auto_recover_outbox: true
-    auto_rebuild_projection_on_safe_drift: false
-    auto_reindex_missing_blocks: false
-    auto_generate_claim_drafts: false
-    auto_generate_page_drafts: false
-    auto_generate_correction_suggestions: true
-    auto_merge_claims: false
-    auto_resolve_conflicts: false
-    auto_publish: false
-    auto_retract: false
-    auto_delete: false
-    auto_migrate_primary: false
-  review:
-    require_human_for_risk_at_or_above: R3
-  health:
-    snapshot_enabled: true
     require_validation_passed: true
-    unresolved_policy: disclose
-    contradiction_policy: disclose
+    require_review_approved: true
+    require_published_revision: true
     on_failure: raw_fallback
-    max_claims_per_query: 8
-    max_evidence_per_claim: 3
   canonical_v2:                 # 写入迁移阶段（与回答 Serving 分离）
-    mode: off                   # off | shadow | canary | primary(off=legacy 零变化)
+    mode: "off"                 # off | shadow | canary | primary(off=legacy 零变化)
     canary:
       knowledge_ids: []         # Phase 4B:显式 knowledge_id allowlist
       source_paths: []          # Phase 4B:显式 source_path/目录 allowlist
@@ -291,3 +257,41 @@ maintenance:
     site_description: 企业知识库 Wiki 系统
     site_title: 知识库 Wiki
     static_output_dir: wiki_site
+
+# 维护中心（融合收束 Spec §5.6 / Phase 5）
+# 与 mcp.write_policy 分离：系统保护性维护可自动执行，语义变更仍需人工
+maintenance:
+  enabled: true
+  center_enabled: true
+  # observe | supervised | managed — verified 默认 supervised
+  automation_level: supervised
+  policy:
+    allow_observation: true
+    auto_protective_actions: true
+    auto_mark_evidence_stale: true
+    auto_downgrade_unsupported_claims: true
+    auto_move_affected_pages_to_review: true
+    auto_exclude_ineligible_claims_from_serving: true
+    auto_retry_failed_jobs: true
+    auto_recover_outbox: true
+    auto_rebuild_projection_on_safe_drift: false
+    auto_reindex_missing_blocks: false
+    auto_generate_claim_drafts: false
+    auto_generate_page_drafts: false
+    auto_generate_correction_suggestions: true
+    auto_merge_claims: false
+    auto_resolve_conflicts: false
+    auto_publish: false
+    auto_retract: false
+    auto_delete: false
+    auto_migrate_primary: false
+  review:
+    require_human_for_risk_at_or_above: R3
+  health:
+    snapshot_enabled: true
+    require_validation_passed: true
+    unresolved_policy: disclose
+    contradiction_policy: disclose
+    on_failure: raw_fallback
+    max_claims_per_query: 8
+    max_evidence_per_claim: 3

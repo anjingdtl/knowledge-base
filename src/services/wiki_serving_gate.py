@@ -20,7 +20,6 @@ from typing import Any, Callable, Mapping, Sequence
 
 from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance
 from src.services.wiki_claim_extractor import compute_excerpt_hash
-from src.utils.knowledge_mode import allows_wiki_read, get_configured_knowledge_mode
 
 # ---------------------------------------------------------------------------
 # Reason codes (Spec §6.4) — stable for Trace / Eval
@@ -227,13 +226,16 @@ class WikiServingGate:
             return False
         if self._wiki_read_enabled is True:
             return True
-        mode = self._knowledge_mode
-        if mode is None:
-            try:
-                mode = get_configured_knowledge_mode()
-            except Exception:  # noqa: BLE001
-                mode = "verified"
-        return allows_wiki_read(mode)
+        if self._knowledge_mode is not None:
+            from src.utils.knowledge_mode import allows_wiki_read
+
+            return allows_wiki_read(self._knowledge_mode)
+        try:
+            from src.utils.knowledge_settings import resolve_effective_knowledge_settings
+
+            return resolve_effective_knowledge_settings().wiki_read_enabled
+        except Exception:  # noqa: BLE001
+            return False
 
     def evaluate(self, claim: Claim) -> ServingDecision:
         """Evaluate one claim for primary serving eligibility."""

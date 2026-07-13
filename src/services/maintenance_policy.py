@@ -13,8 +13,8 @@ from src.utils.knowledge_mode import (
     MODE_EVIDENCE_ONLY,
     MODE_VERIFIED,
     allows_authoring,
-    resolve_knowledge_mode,
 )
+from src.utils.knowledge_settings import resolve_effective_knowledge_settings
 
 # Risk levels
 R0, R1, R2, R3, R4 = "R0", "R1", "R2", "R3", "R4"
@@ -106,19 +106,17 @@ class MaintenancePolicyEngine:
         return default
 
     def knowledge_mode(self) -> str:
-        raw = self._cfg("knowledge_workflow.mode") or self._cfg("knowledge_workflow", {})
-        if isinstance(raw, dict):
-            raw = raw.get("mode")
         try:
-            return resolve_knowledge_mode(raw)
+            return resolve_effective_knowledge_settings(self._config).mode
         except Exception:  # noqa: BLE001
             return MODE_VERIFIED
 
     def automation_level(self) -> str:
         # observe | supervised | managed
-        level = self._cfg("maintenance.automation_level")
-        if level:
-            return str(level).lower()
+        try:
+            return resolve_effective_knowledge_settings(self._config).automation_level.lower()
+        except Exception:  # noqa: BLE001
+            pass
         mode = self.knowledge_mode()
         if mode == MODE_EVIDENCE_ONLY:
             return "observe"
@@ -127,7 +125,11 @@ class MaintenancePolicyEngine:
         return "supervised"
 
     def maintenance_enabled(self) -> bool:
-        if self._cfg("maintenance.enabled", True) is False:
+        try:
+            enabled = resolve_effective_knowledge_settings(self._config).maintenance_enabled
+        except Exception:  # noqa: BLE001
+            enabled = self._cfg("maintenance.enabled", True) is not False
+        if not enabled:
             return False
         if self._cfg("maintenance.center_enabled", True) is False:
             return False

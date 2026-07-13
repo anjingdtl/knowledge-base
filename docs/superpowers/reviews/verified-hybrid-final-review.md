@@ -3,6 +3,8 @@
 > 日期：2026-07-13  
 > 版本：1.7.0  
 > Spec：`docs/ShineHeKnowledge 融合收束开发规格说明.md`
+>
+> **状态：Historical / Superseded by correction。** 本文保留 v1.7.0 的历史判断；因缺少严格 Validation/Review/Published Revision Gate、持久化维护闭环、真实 Raw/Hybrid A/B 及完整发布工程门禁，不能作为当前发布或收束完成证据。当前执行依据见 `docs/superpowers/specs/2026-07-13-verified-hybrid-convergence-correction-design.md` 与对应 PLAN。
 
 ## 1. 阶段完成度
 
@@ -52,5 +54,5 @@ Full pytest: 见发布前回归记录
 
 ## 5. 建议
 
-**Go for v1.7.0 release.**  
-后续：Phase 可选真实 embedding 混合评测、Job SQLite 持久化、性能 P95 基线入库。
+历史建议（已失效）：**Go for v1.7.0 release.**
+纠偏工作已接管：真实 embedding 混合评测、Job/Review SQLite 持久化、严格 Serving Gate 和发布门禁均为当前必做项。

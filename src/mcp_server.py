@@ -25,7 +25,7 @@ from fastmcp.server.auth import AccessToken, TokenVerifier
 from src.core.container import AppContainer, create_container, shutdown_container
 from src.mcp.aliases import register_aliases as _register_aliases
 from src.mcp.tool_profiles import EXPERIMENTAL_GROUPS as _EXP_GROUPS
-from src.mcp.tool_registry import get_definitions, register_tools, resolve_tool_profile, select_tools
+from src.mcp.tool_registry import get_definitions, register_tools, select_tools
 from src.services.file_parser import parse_file, parse_url
 from src.services.mcp_heartbeat import beat
 from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
@@ -37,6 +37,7 @@ from src.utils.envelope import (
     fail,
     ok,
 )
+from src.utils.knowledge_settings import resolve_effective_knowledge_settings
 from src.version import VERSION
 
 WIKI_SEARCH_LIMIT = 3  # Wiki 结构化知识搜索结果上限，可通过配置覆盖
@@ -642,14 +643,13 @@ def ask(
 
 def _should_use_verified_ask() -> bool:
     """Phase 4: verified hybrid answer path when flag + mode allow wiki read."""
-    from src.utils.config import Config
-    if not Config.get("rag.verified_knowledge.enabled", False):
-        return False
     try:
-        from src.utils.knowledge_mode import allows_wiki_read, get_configured_knowledge_mode
-        return allows_wiki_read(get_configured_knowledge_mode())
+        from src.utils.knowledge_settings import resolve_effective_knowledge_settings
+
+        settings = resolve_effective_knowledge_settings()
+        return settings.verified_hybrid_enabled and settings.wiki_read_enabled
     except Exception:  # noqa: BLE001
-        return True
+        return False
 
 
 def _do_ask(question: str) -> dict:
@@ -3124,23 +3124,23 @@ def _runtime_diagnostics() -> dict:
 
 def _kb_capabilities_verified_fields() -> dict:
     """Phase 6 Spec §9.4 verified hybrid capability fields."""
-    from src.utils.config import Config
-    from src.utils.knowledge_mode import describe_mode, get_configured_knowledge_mode
+    from src.utils.knowledge_settings import resolve_effective_knowledge_settings
 
     try:
-        mode_info = describe_mode(get_configured_knowledge_mode())
+        settings = resolve_effective_knowledge_settings()
     except Exception:  # noqa: BLE001
-        mode_info = {
-            "resolved": "verified",
-            "wiki_read_enabled": True,
-            "authoring_enabled": False,
+        return {
+            "knowledge_mode": "invalid",
+            "raw_retrieval": True,
+            "verified_wiki_read": False,
+            "wiki_authoring": False,
+            "wiki_serving_status": "disabled",
+            "fallback": "raw_retrieval",
         }
     wiki_serving = "unavailable"
     try:
         container = _get_container()
-        if not mode_info.get("wiki_read_enabled"):
-            wiki_serving = "disabled"
-        elif not Config.get("rag.verified_knowledge.enabled", False):
+        if not settings.wiki_read_enabled or not settings.verified_hybrid_enabled:
             wiki_serving = "disabled"
         else:
             claims = container.search_service.list_servable_wiki_claims(limit=1)
@@ -3148,10 +3148,10 @@ def _kb_capabilities_verified_fields() -> dict:
     except Exception:  # noqa: BLE001
         wiki_serving = "degraded"
     return {
-        "knowledge_mode": mode_info.get("resolved"),
+        "knowledge_mode": settings.mode,
         "raw_retrieval": True,
-        "verified_wiki_read": bool(mode_info.get("wiki_read_enabled")),
-        "wiki_authoring": bool(mode_info.get("authoring_enabled")),
+        "verified_wiki_read": settings.wiki_read_enabled,
+        "wiki_authoring": settings.authoring_enabled,
         "wiki_serving_status": wiki_serving,
         "fallback": "raw_retrieval",
     }
@@ -4006,14 +4006,9 @@ def delete_memory(item_id: str | None = None, key: str | None = None) -> dict:
 
 # ---- Profile-based registration ----
 
-# Determine current profile from config
-_CURRENT_PROFILE = resolve_tool_profile(
-    {k: Config.get(k) for k in [
-        "mcp.tool_profile", "mcp.write_policy", "mcp.allow_http_write",
-        "mcp.auth_token", "mcp.enable_legacy_aliases",
-        "mcp.experimental_tools_enabled",
-    ]}
-)
+# Determine current profile from the shared effective settings contract.
+_EFFECTIVE_SETTINGS = resolve_effective_knowledge_settings()
+_CURRENT_PROFILE = _EFFECTIVE_SETTINGS.mcp_tool_profile
 _EXPERIMENTAL_ENABLED = bool(Config.get("mcp.experimental_tools_enabled", False))
 _ENABLE_ALIASES = bool(
     Config.get("mcp.enable_legacy_aliases", _CURRENT_PROFILE == "legacy")
@@ -4021,18 +4016,10 @@ _ENABLE_ALIASES = bool(
 
 # Select and register tools based on profile + write/authoring policy (Phase 6)
 def _resolve_tool_selection_kwargs() -> dict:
-    from src.utils.knowledge_mode import get_configured_knowledge_mode
-    try:
-        mode = get_configured_knowledge_mode()
-    except Exception:  # noqa: BLE001
-        mode = None
-    authoring = Config.get("wiki.authoring_enabled", None)
-    if authoring is None:
-        authoring = Config.get("knowledge_workflow.authoring_enabled", None)
     return {
-        "write_policy": str(Config.get("mcp.write_policy", "") or ""),
-        "knowledge_mode": mode,
-        "authoring_enabled": bool(authoring) if authoring is not None else None,
+        "write_policy": _EFFECTIVE_SETTINGS.mcp_write_policy,
+        "knowledge_mode": _EFFECTIVE_SETTINGS.mode,
+        "authoring_enabled": _EFFECTIVE_SETTINGS.authoring_enabled,
     }
 
 
@@ -4058,16 +4045,14 @@ _VISIBLE_TOOL_NAMES = {d.name for d in _selected_tools}
 
 # Startup diagnostics (Phase 6)
 try:
-    from src.utils.knowledge_mode import describe_mode, get_configured_knowledge_mode
-    _mode_info = describe_mode(get_configured_knowledge_mode())
     logger.info(
         "MCP start: knowledge_mode=%s wiki_read=%s authoring=%s profile=%s "
         "write_policy=%s tools=%d hidden_by_policy=%d fallback=raw_retrieval",
-        _mode_info.get("resolved"),
-        _mode_info.get("wiki_read_enabled"),
-        _mode_info.get("authoring_enabled"),
+        _EFFECTIVE_SETTINGS.mode,
+        _EFFECTIVE_SETTINGS.wiki_read_enabled,
+        _EFFECTIVE_SETTINGS.authoring_enabled,
         _CURRENT_PROFILE,
-        Config.get("mcp.write_policy", ""),
+        _EFFECTIVE_SETTINGS.mcp_write_policy,
         len(_VISIBLE_TOOL_NAMES),
         len(_HIDDEN_BY_POLICY),
     )

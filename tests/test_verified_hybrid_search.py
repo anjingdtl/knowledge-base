@@ -133,10 +133,9 @@ class TestFusion:
 
 
 class TestSearchServiceVerifiedHybrid:
-    def _config(self, enabled=True):
+    def _config(self, enabled=True, mode=None):
         cfg = Mock()
         data = {
-            "rag.verified_knowledge.enabled": enabled,
             "rag.verified_knowledge.raw_weight": 0.6,
             "rag.verified_knowledge.wiki_weight": 0.4,
             "rag.verified_knowledge.raw_candidate_multiplier": 2,
@@ -146,6 +145,10 @@ class TestSearchServiceVerifiedHybrid:
             "rag.enable_rerank": False,
             "rag.title_boost": 0,
         }
+        if enabled is not None:
+            data["rag.verified_knowledge.enabled"] = enabled
+        if mode is not None:
+            data["knowledge_workflow.mode"] = mode
         cfg.get.side_effect = lambda key, default=None: data.get(key, default)
         return cfg
 
@@ -236,18 +239,23 @@ class TestSearchServiceVerifiedHybrid:
         assert claim_hits[0]["evidence"][0].get("block_id")
         assert claim_hits[0].get("claim_id") == "c1"
 
-    def test_evidence_only_disables_hybrid(self, monkeypatch):
-        from src.utils import knowledge_mode as km
-
-        monkeypatch.setattr(km, "get_configured_knowledge_mode", lambda: "evidence_only")
-        cfg = self._config(enabled=True)  # flag true but mode blocks
-        # _should_use_verified_hybrid checks allows_wiki_read
+    def test_evidence_only_disables_hybrid(self):
+        cfg = self._config(enabled=True, mode="evidence_only")
         service = SearchService(
             cfg, Mock(), Mock(), Mock(), Mock(),
             wiki_repository=Mock(),
             wiki_serving_gate=Mock(),
         )
         assert service._should_use_verified_hybrid() is False
+
+    def test_legacy_wiki_first_without_explicit_flag_uses_verified_hybrid(self):
+        cfg = self._config(enabled=None, mode="wiki_first")
+        service = SearchService(
+            cfg, Mock(), Mock(), Mock(), Mock(),
+            wiki_repository=Mock(), wiki_serving_gate=Mock(),
+        )
+
+        assert service._should_use_verified_hybrid() is True
 
     def test_legacy_path_when_flag_off(self):
         """Regression: existing tests path unchanged when fusion disabled."""

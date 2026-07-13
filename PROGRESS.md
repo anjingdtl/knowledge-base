@@ -2,12 +2,24 @@
 
 > 最后更新：2026-07-13  
 > 源码版本：`src/version.py` 中的 **`1.7.0`**  
-> 当前分支：`master` @ `1bc8615`（与 `origin/master` 同步）  
-> 当前方向：**Verified Hybrid 融合收束已收口；v1.7.0 已发布** — 无进行中大阶段
+> 当前分支：`master` @ `21737ff`（与 `origin/master` 同步）
+> 当前方向：**Verified Hybrid 融合收束纠偏进行中** — v1.8.0 收束纠偏尚未完成，禁止以 v1.7.0 历史发布材料作为当前发布结论
 
 ---
 
-## 收尾总结（2026-07-13）
+## Verified Hybrid 融合收束纠偏（进行中，2026-07-13）
+
+执行依据：
+
+- `docs/superpowers/specs/2026-07-13-verified-hybrid-convergence-correction-design.md`
+- `docs/superpowers/plans/2026-07-13-verified-hybrid-convergence-correction.md`
+- `docs/superpowers/reviews/verified-hybrid-correction-baseline.md`
+
+当前阶段：**Phase 0 — 冻结基线与状态纠偏**。在严格 Serving Validation、持久化 Maintenance Control Plane、真实 Raw/Hybrid A/B 和发布工程门禁完成前，不建议发布 v1.8.0，也不将旧版 v1.7.0 最终评审作为当前验收结论。
+
+## 历史收尾总结（2026-07-13）
+
+> Historical / Superseded by correction：以下内容保留为 v1.7.0 当时的历史记录，不代表当前 v1.8.0 纠偏验收状态。
 
 ### 产品结论
 

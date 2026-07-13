@@ -81,6 +81,25 @@ class TestConfigCheck:
 
 
 class TestKnowledgeModeCheck:
+    def test_explain_config_reports_raw_resolved_source_and_no_secrets(self, tmp_path):
+        import yaml
+
+        config_file = tmp_path / "config.yaml"
+        config_file.write_text(
+            yaml.dump({
+                "knowledge_workflow": {"mode": "wiki_first"},
+                "llm": {"api_key": "do-not-print"},
+            }),
+            encoding="utf-8",
+        )
+
+        explained = DoctorService().explain_config(str(config_file))
+
+        assert explained["raw"]["knowledge_workflow.mode"] == "wiki_first"
+        assert explained["resolved"]["mode"] == "authoring"
+        assert explained["sources"]["verified_hybrid_enabled"] == "derived:mode"
+        assert "api_key" not in str(explained)
+
     def test_verified_mode_ok(self, tmp_path):
         import yaml
 

@@ -29,6 +29,44 @@ from src.utils.paths import get_config_path, get_data_dir
 class DoctorService:
     """系统健康检查服务"""
 
+    def explain_config(self, config_path: str | None = None) -> dict[str, object]:
+        """Return non-secret raw/resolved configuration semantics for operators."""
+        from src.utils.knowledge_settings import resolve_effective_knowledge_settings
+
+        data: dict[str, object] | None = None
+        if config_path:
+            path = Path(config_path)
+            with path.open("r", encoding="utf-8") as f:
+                loaded = yaml.safe_load(f) or {}
+            if not isinstance(loaded, dict):
+                raise ValueError("配置文件格式错误（非 dict）")
+            data = loaded
+
+        settings = resolve_effective_knowledge_settings(data)
+        return {
+            "raw": {"knowledge_workflow.mode": settings.raw_mode},
+            "resolved": {
+                "mode": settings.mode,
+                "wiki_read_enabled": settings.wiki_read_enabled,
+                "authoring_enabled": settings.authoring_enabled,
+                "verified_hybrid_enabled": settings.verified_hybrid_enabled,
+                "maintenance_enabled": settings.maintenance_enabled,
+                "automation_level": settings.automation_level,
+                "mcp_tool_profile": settings.mcp_tool_profile,
+                "mcp_write_policy": settings.mcp_write_policy,
+                "allow_http_write": settings.allow_http_write,
+                "canonical_write_mode": settings.canonical_write_mode,
+            },
+            "sources": dict(settings.sources),
+            "warnings": list(settings.compatibility_warnings),
+            "migration_suggestion": (
+                "将 knowledge_workflow.mode 从旧别名改为 resolved.mode；"
+                "此预览不会写入配置文件。"
+                if settings.raw_mode in {"wiki_first", "legacy"}
+                else None
+            ),
+        }
+
     def run_all_checks(
         self,
         config_path: str | None = None,
@@ -88,11 +126,8 @@ class DoctorService:
         Phase 1：解析模式、弃用别名提示、读写开关一致性。
         Serving Claim 统计留给 Phase 2 WikiServingGate。
         """
-        from src.utils.knowledge_mode import (
-            InvalidKnowledgeModeError,
-            describe_mode,
-            resolve_knowledge_mode,
-        )
+        from src.utils.knowledge_mode import InvalidKnowledgeModeError, is_legacy_mode_alias
+        from src.utils.knowledge_settings import resolve_effective_knowledge_settings
 
         results: list[dict[str, str]] = []
         try:
@@ -103,6 +138,7 @@ class DoctorService:
 
             raw_mode = None
             wiki_cfg: dict = {}
+            data: dict | None = None
             if path.exists():
                 with open(path, "r", encoding="utf-8") as f:
                     data = yaml.safe_load(f) or {}
@@ -122,33 +158,25 @@ class DoctorService:
                 }
 
             try:
-                info = describe_mode(raw_mode)
+                settings = resolve_effective_knowledge_settings(data)
             except InvalidKnowledgeModeError as e:
                 return [self._result("knowledge_mode", "fail", str(e))]
 
-            resolved = info["resolved"]
+            raw_mode = settings.raw_mode
+            resolved = settings.mode
             msg = f"知识模式: {resolved}"
-            if info.get("legacy_alias"):
+            if is_legacy_mode_alias(raw_mode):
                 msg += f"（配置仍为旧值 {raw_mode!r}，未改写文件）"
                 results.append(self._result("knowledge_mode", "warn", msg))
-                if info.get("deprecation_hint"):
-                    results.append(
-                        self._result(
-                            "knowledge_mode_deprecation",
-                            "warn",
-                            str(info["deprecation_hint"]),
-                        ),
-                    )
+                results.append(self._result(
+                    "knowledge_mode_deprecation", "warn",
+                    "旧模式仅在运行时兼容；可用 doctor --explain-config 预览迁移。",
+                ))
             else:
                 results.append(self._result("knowledge_mode", "ok", msg))
 
-            read_flag = wiki_cfg.get("read_enabled")
-            auth_flag = wiki_cfg.get("authoring_enabled")
-            # Infer when flags absent (legacy configs)
-            if read_flag is None:
-                read_flag = resolved in ("verified", "authoring")
-            if auth_flag is None:
-                auth_flag = resolved == "authoring"
+            read_flag = settings.wiki_read_enabled
+            auth_flag = settings.authoring_enabled
 
             results.append(
                 self._result(
@@ -164,6 +192,11 @@ class DoctorService:
                     f"Wiki Authoring: {'enabled' if auth_flag else 'disabled'}",
                 ),
             )
+            results.append(self._result(
+                "verified_hybrid",
+                "ok" if settings.verified_hybrid_enabled else "warn",
+                "Verified Hybrid: " + ("enabled" if settings.verified_hybrid_enabled else "disabled"),
+            ))
 
             if auth_flag and resolved != "authoring":
                 results.append(
@@ -194,7 +227,6 @@ class DoctorService:
 
             # Phase 2: Serving Gate diagnostics (best-effort; never fails doctor hard)
             results.extend(self.check_serving_claims())
-            _ = resolve_knowledge_mode(raw_mode)
             return results
         except Exception as e:
             return [

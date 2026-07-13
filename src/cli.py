@@ -189,9 +189,18 @@ def _handle_watch(args: argparse.Namespace) -> int:
 
 def _handle_doctor(args: argparse.Namespace) -> int:
     """处理 doctor 子命令"""
+    import json
+
     from src.services.doctor import DoctorService
 
     service = DoctorService()
+    if getattr(args, "explain_config", False):
+        try:
+            print(json.dumps(service.explain_config(args.config), ensure_ascii=False, indent=2))
+            return 0
+        except Exception as e:  # noqa: BLE001
+            print(f"[ERROR] 配置解析失败: {e}", file=sys.stderr)
+            return 1
     results = service.run_all_checks(config_path=args.config)
 
     ok_count = sum(1 for r in results if r["status"] == "ok")
@@ -208,6 +217,29 @@ def _handle_doctor(args: argparse.Namespace) -> int:
         return 1
     if warn_count > 0:
         return 2
+    return 0
+
+
+def _handle_config(args: argparse.Namespace) -> int:
+    """Preview verified-hybrid config migration without modifying user files."""
+    import json
+
+    if getattr(args, "config_command", None) != "migrate-verified-hybrid":
+        print("用法: shinehe config migrate-verified-hybrid --dry-run")
+        return 0
+    if not getattr(args, "dry_run", False):
+        print("[ERROR] Phase 1 仅支持 --dry-run；apply 在 Phase 8 迁移门禁后开放", file=sys.stderr)
+        return 1
+
+    from src.services.doctor import DoctorService
+
+    try:
+        report = DoctorService().explain_config(args.config)
+    except Exception as e:  # noqa: BLE001
+        print(f"[ERROR] 配置迁移预览失败: {e}", file=sys.stderr)
+        return 1
+    print("[DRY-RUN] 不会写入配置文件；以下是有效运行时语义和迁移建议：")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0
 
 
@@ -611,6 +643,22 @@ def main(argv: list[str] | None = None) -> None:
         "--config", default=None,
         help="自定义配置文件路径",
     )
+    doctor_parser.add_argument(
+        "--explain-config", action="store_true",
+        help="仅输出脱敏后的 raw/resolved 配置语义与迁移建议，不执行网络检查",
+    )
+
+    # --- config ---
+    config_parser = subparsers.add_parser(
+        "config", help="配置诊断与受控迁移",
+    )
+    config_sub = config_parser.add_subparsers(dest="config_command")
+    config_migrate = config_sub.add_parser(
+        "migrate-verified-hybrid",
+        help="预览 Verified Hybrid 配置迁移（Phase 1 仅 dry-run）",
+    )
+    config_migrate.add_argument("--config", default="config.yaml", help="目标配置文件")
+    config_migrate.add_argument("--dry-run", action="store_true", help="只预览，不写文件")
 
     # --- mcp ---
     mcp_parser = subparsers.add_parser(
@@ -734,6 +782,7 @@ def main(argv: list[str] | None = None) -> None:
         "index": _handle_index,
         "watch": _handle_watch,
         "doctor": _handle_doctor,
+        "config": _handle_config,
         "mcp": _handle_mcp,
         "wiki": _handle_wiki,
         "migrate": _handle_migrate,

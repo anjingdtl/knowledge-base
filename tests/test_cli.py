@@ -92,6 +92,26 @@ def test_doctor_command_parses():
         assert args.config == "/tmp/config.yaml"
 
 
+def test_doctor_explain_config_parses():
+    with patch("src.cli._handle_doctor", return_value=0) as mock_doctor:
+        with pytest.raises(SystemExit):
+            main(["doctor", "--config", "/tmp/config.yaml", "--explain-config"])
+        assert mock_doctor.call_args[0][0].explain_config is True
+
+
+def test_config_migrate_verified_hybrid_dry_run_does_not_write(tmp_path, capsys):
+    config_path = tmp_path / "config.yaml"
+    original = "knowledge_workflow:\n  mode: wiki_first\ncustom: keep\n"
+    config_path.write_text(original, encoding="utf-8")
+
+    with pytest.raises(SystemExit) as exc_info:
+        main(["config", "migrate-verified-hybrid", "--config", str(config_path), "--dry-run"])
+
+    assert exc_info.value.code == 0
+    assert config_path.read_text(encoding="utf-8") == original
+    assert "dry-run" in capsys.readouterr().out.lower()
+
+
 def test_mcp_command_delegates():
     """mcp 子命令委托给 mcp_cli.main"""
     with patch("src.cli._handle_mcp", return_value=0) as mock_mcp:

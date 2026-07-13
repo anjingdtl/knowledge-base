@@ -93,19 +93,16 @@ class SearchService:
 
     def _should_use_verified_hybrid(self) -> bool:
         """Whether to run Phase 3 Verified Hybrid fusion path."""
-        if not self._cfg("rag.verified_knowledge.enabled", False):
-            return False
         if self._wiki_repository is None:
             return False
         try:
-            from src.utils.knowledge_mode import allows_wiki_read, get_configured_knowledge_mode
+            from src.utils.knowledge_settings import resolve_effective_knowledge_settings
 
-            if not allows_wiki_read(get_configured_knowledge_mode()):
-                return False
+            settings = resolve_effective_knowledge_settings(self._config)
+            return settings.verified_hybrid_enabled and settings.wiki_read_enabled
         except Exception:  # noqa: BLE001
-            # Config missing mode → treat as verified-capable if flag set
-            pass
-        return True
+            # A malformed config must not make the Verified path reachable.
+            return False
 
     def _verified_cfg(self, key: str, default=None):
         return self._cfg(f"rag.verified_knowledge.{key}", default)

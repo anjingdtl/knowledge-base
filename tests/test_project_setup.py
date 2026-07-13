@@ -153,7 +153,7 @@ class TestBuildConfig:
         assert config["wiki"]["auto_publish"] is False
         assert config["mcp"]["tool_profile"] == "extended"
         assert config["mcp"]["experimental_tools_enabled"] is True
-        assert config["mcp"]["write_policy"] == "disabled"
+        assert config["mcp"]["write_policy"] == "local_confirm"
         assert config["rag"]["size_aware"]["enabled"] is True
 
     def test_authoring_mode_provider_write_policy(self):
@@ -443,3 +443,22 @@ class TestConfigExampleConvergence:
         assert mcp["experimental_tools_enabled"] is False
         assert mcp["write_policy"] == "disabled"
         assert mcp["tool_profile"] == "core"
+
+    def test_canonical_sections_are_nested_under_wiki(self, example_config):
+        """Example YAML must match the runtime's canonical paths exactly."""
+        wiki = example_config["wiki"]
+        maintenance = example_config["maintenance"]
+        for key in ("canonical_v2", "claims", "rebuild", "projection", "validation", "site"):
+            assert key in wiki, f"wiki.{key} is required"
+            assert key not in maintenance, f"maintenance.{key} is a mis-nested legacy key"
+
+        serving = wiki["serving"]
+        for key in ("require_validation_passed", "require_review_approved", "require_published_revision"):
+            assert serving[key] is True
+        assert wiki["canonical_v2"]["mode"] == "off"
+        assert isinstance(wiki["canonical_v2"]["mode"], str)
+
+    def test_example_and_project_setup_have_same_verified_serving_semantics(self, example_config):
+        generated = ProjectSetupService().build_config({"local": True})
+        for key in ("enabled", "require_block_evidence", "require_validation_passed"):
+            assert generated["wiki"]["serving"][key] == example_config["wiki"]["serving"][key]
