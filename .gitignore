@@ -35,5 +35,6 @@ config.yaml
 
 # 本地工具/临时工作残留（非项目产物，不纳入版本控制）
 .workbuddy/
+.worktrees/
 overview.md
 tests/mcp_validation_test.py
