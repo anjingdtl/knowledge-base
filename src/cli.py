@@ -222,25 +222,27 @@ def _handle_doctor(args: argparse.Namespace) -> int:
 
 
 def _handle_config(args: argparse.Namespace) -> int:
-    """Preview verified-hybrid config migration without modifying user files."""
+    """Run the explicit, backup-first Verified Hybrid configuration migration."""
     import json
 
     if getattr(args, "config_command", None) != "migrate-verified-hybrid":
         print("用法: shinehe config migrate-verified-hybrid --dry-run")
         return 0
-    if not getattr(args, "dry_run", False):
-        print("[ERROR] Phase 1 仅支持 --dry-run；apply 在 Phase 8 迁移门禁后开放", file=sys.stderr)
-        return 1
-
-    from src.services.doctor import DoctorService
+    from src.services.verified_hybrid_config_migrator import VerifiedHybridConfigMigrator
 
     try:
-        report = DoctorService().explain_config(args.config)
+        migrator = VerifiedHybridConfigMigrator(args.config)
+        if getattr(args, "rollback", None):
+            report = migrator.rollback(args.rollback)
+        elif getattr(args, "apply", False):
+            report = migrator.apply(target_mode=args.target_mode)
+        else:
+            report = migrator.dry_run(target_mode=args.target_mode)
     except Exception as e:  # noqa: BLE001
-        print(f"[ERROR] 配置迁移预览失败: {e}", file=sys.stderr)
+        print(f"[ERROR] 配置迁移失败: {e}", file=sys.stderr)
         return 1
-    print("[DRY-RUN] 不会写入配置文件；以下是有效运行时语义和迁移建议：")
-    print(json.dumps(report, ensure_ascii=False, indent=2))
+    prefix = "[DRY-RUN]" if report.dry_run else "[APPLY]"
+    print(f"{prefix} {json.dumps(report.to_dict(), ensure_ascii=False, indent=2)}")
     return 0
 
 
@@ -667,10 +669,16 @@ def main(argv: list[str] | None = None) -> None:
     config_sub = config_parser.add_subparsers(dest="config_command")
     config_migrate = config_sub.add_parser(
         "migrate-verified-hybrid",
-        help="预览 Verified Hybrid 配置迁移（Phase 1 仅 dry-run）",
+        help="Verified Hybrid 配置迁移（默认 dry-run，apply 会备份并原子写入）",
     )
     config_migrate.add_argument("--config", default="config.yaml", help="目标配置文件")
     config_migrate.add_argument("--dry-run", action="store_true", help="只预览，不写文件")
+    config_migrate.add_argument("--apply", action="store_true", help="备份后原子写入")
+    config_migrate.add_argument("--rollback", default=None, help="从指定 .bak 文件恢复字节级原配置")
+    config_migrate.add_argument(
+        "--target-mode", default="keep", choices=["keep", "verified", "authoring", "evidence_only"],
+        help="keep 仅规范旧别名；其余值明确切换运行档位",
+    )
 
     # --- mcp ---
     mcp_parser = subparsers.add_parser(

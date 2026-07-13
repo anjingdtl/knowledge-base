@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.8.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,9 +36,9 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 
 ## Current Health
 
-**v1.7.0** — Verified Hybrid fusion (Phases 0–8). Full Python suite green; Hybrid Eval **175 cases / PASS** (stale & unsupported serving rate = 0, hybrid ≥ raw).
+**v1.8.0 release candidate** — Verified Hybrid convergence correction. Local deterministic gates are complete; Python matrix and Docker remain required remote CI evidence before release.
 
-See [Release Notes](docs/release/v1.7.0-release-notes.md) and [Final Review](docs/superpowers/reviews/verified-hybrid-final-review.md).
+See [Release Notes](docs/release/v1.8.0-release-notes.md), [Migration](docs/migration/v1.7-to-v1.8-convergence-correction.md), and the [Final Review](docs/superpowers/reviews/verified-hybrid-correction-final-review.md).
 
 ## 30-Second Demo
 

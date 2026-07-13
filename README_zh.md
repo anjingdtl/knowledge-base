@@ -6,7 +6,7 @@
 
 [\[English\]](README.md)
 
-[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.8.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,9 +36,9 @@ ShineHe Knowledge 是**本地优先的 AI Agent 知识服务**。
 
 ## 当前健康状态
 
-**v1.7.0** — Verified Hybrid 融合收束（Phase 0–8）。Python 全量测试通过；Hybrid Eval **175 例 / PASS**（Stale/Unsupported Serving Rate = 0，Hybrid ≥ Raw）。
+**v1.8.0 发布候选** — Verified Hybrid 融合收束纠偏。本地确定性门禁已完成；Python matrix 与 Docker 仍需以远端 CI 绿灯作为发布证据。
 
-详见 [发布说明](docs/release/v1.7.0-release-notes.md) 与 [最终评审](docs/superpowers/reviews/verified-hybrid-final-review.md)。
+详见 [发布说明](docs/release/v1.8.0-release-notes.md)、[迁移说明](docs/migration/v1.7-to-v1.8-convergence-correction.md) 与[最终评审](docs/superpowers/reviews/verified-hybrid-correction-final-review.md)。
 
 ## 30 秒演示
 
