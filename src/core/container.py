@@ -367,6 +367,7 @@ class AppContainer:
                 shadow_workflow=self.wiki_shadow_workflow,
                 canary_workflow=self.wiki_canary_workflow,
                 primary_workflow=self.wiki_primary_workflow,
+                rebuild_scheduler=self.wiki_rebuild_scheduler,
             )
             self._track_service("_knowledge_workflow")
         return self._knowledge_workflow

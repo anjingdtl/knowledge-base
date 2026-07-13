@@ -272,6 +272,28 @@ def _handle_migrate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _handle_rebuild(args: argparse.Namespace) -> int:
+    """处理 rebuild 子命令(Phase 5):来源失效重建。"""
+    from src.core.container import create_container
+
+    container = create_container()
+    if args.dry_run:
+        plan = container.wiki_rebuild_service.plan_rebuild(args.knowledge_id, event=args.event)
+        print(f"[PLAN] knowledge_id={args.knowledge_id} event={args.event}")
+        print(f"  affected_evidence={len(plan.affected_evidence)} "
+              f"claims={len(plan.affected_claims)} pages={len(plan.affected_pages)}")
+        print(f"  truncated={plan.truncated} cycle_warnings={len(plan.cycle_warnings)}")
+        return 0
+    result = container.wiki_rebuild_service.rebuild(args.knowledge_id, event=args.event)
+    status = "CANCELLED" if result.cancelled else ("OK" if result.committed else "FAILED")
+    print(f"[{status}] knowledge_id={result.knowledge_id} event={result.event} "
+          f"committed={result.committed} cancelled={result.cancelled}")
+    for w in result.warnings:
+        print(f"  warn: {w}")
+    print(f"  stats: {result.plan.stats}")
+    return 0 if (result.committed and not result.cancelled) else 1
+
+
 def main(argv: list[str] | None = None) -> None:
     """ShineHeKnowledge CLI 主入口"""
     parser = argparse.ArgumentParser(
@@ -394,6 +416,17 @@ def main(argv: list[str] | None = None) -> None:
     migrate_parser.add_argument("--apply", action="store_true", help="执行迁移(默认仅计划)")
     migrate_parser.add_argument("--no-backup", action="store_true", help="apply 时跳过 data/ 备份")
 
+    # --- rebuild (Phase 5) ---
+    rebuild_parser = subparsers.add_parser(
+        "rebuild", help="来源失效重建(Phase 5)",
+        description="对指定 knowledge_id 触发依赖失效重建:标记 stale evidence、迁移 claim/page、刷新 projection。",
+    )
+    rebuild_parser.add_argument("--knowledge-id", required=True, help="目标 knowledge_id")
+    rebuild_parser.add_argument(
+        "--event", choices=["update", "delete"], default="update", help="事件类型(默认 update)",
+    )
+    rebuild_parser.add_argument("--dry-run", action="store_true", help="仅规划,不写")
+
     args = parser.parse_args(argv)
 
     if args.command is None:
@@ -408,6 +441,7 @@ def main(argv: list[str] | None = None) -> None:
         "mcp": _handle_mcp,
         "wiki": _handle_wiki,
         "migrate": _handle_migrate,
+        "rebuild": _handle_rebuild,
     }
 
     handler = handlers.get(args.command)
