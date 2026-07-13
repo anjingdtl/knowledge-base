@@ -22,7 +22,7 @@ import time
 from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import yaml
 
@@ -369,13 +369,29 @@ def load_dataset(path: Path) -> list[dict]:
 
 def build_index(
     engine: str = "offline", use_fake_embedding: bool = False
-) -> OfflineIndex | RealHybridIndex:
+) -> OfflineIndex | RealHybridIndex | Any:
     """Build an index from all fixture documents.
 
     engine="offline" → OfflineIndex(BM25,默认,英文基线 + CI 确定性)。
     engine="real-hybrid" → RealHybridIndex(真 HybridSearcher keywords 模式,
     走 FTS5+jieba+synonyms,反映 W3 lexical 强化;需初始化临时 Database)。
+    engine="real-embedding" → RealEmbeddingIndex(真实 Embedding API + cosine)。
     """
+    if engine == "real-embedding":
+        from evals.real_embedding_engine import RealEmbeddingIndex
+        from src.core.container import create_container
+
+        container = create_container()
+        index = RealEmbeddingIndex(container.embedding)
+        for fixture_path in sorted(FIXTURES_DIR.glob("*")):
+            if fixture_path.is_file() and fixture_path.suffix in (
+                ".md", ".markdown", ".py", ".txt",
+            ):
+                content = fixture_path.read_text(encoding="utf-8")
+                index.index_fixture(fixture_path, content)
+        index.build_vectors()
+        return index
+
     if engine == "real-hybrid":
         import tempfile
 
@@ -435,9 +451,15 @@ def run_single_query(index: OfflineIndex | RealHybridIndex, item: dict) -> dict:
     # For no_answer queries, check that no expected sources were returned
     no_answer_correct = True
     if category == "no_answer":
-        no_answer_correct = len(results) == 0 or all(
-            r.get("score", 0) < 0.1 for r in results
-        )
+        top_score = float(results[0].get("score", 0) or 0) if results else 0.0
+        # BM25 offline scores are often >> 1; real-embedding cosine is in [0, 1].
+        # Use a calibrated cosine threshold so pure vector top-k still measures rejection.
+        if results and top_score <= 1.0 + 1e-9:
+            no_answer_correct = top_score < 0.55
+        else:
+            no_answer_correct = len(results) == 0 or all(
+                float(r.get("score", 0) or 0) < 0.1 for r in results
+            )
 
     return {
         "query": query,
@@ -793,8 +815,13 @@ def main():
         help="Use deterministic fake embeddings (for CI)"
     )
     parser.add_argument(
-        "--engine", choices=["offline", "real-hybrid"], default="offline",
-        help="检索引擎:offline(BM25,默认,英文基线)/ real-hybrid(真 HybridSearcher+lexical_zh)",
+        "--engine",
+        choices=["offline", "real-hybrid", "real-embedding"],
+        default="offline",
+        help=(
+            "检索引擎: offline(BM25)/ real-hybrid(FTS lexical)/ "
+            "real-embedding(真实 Embedding API + cosine)"
+        ),
     )
     args = parser.parse_args()
 
@@ -830,6 +857,7 @@ def main():
     print(f"Running retrieval eval on: {', '.join(datasets)}")
     if args.fake_embedding:
         print("  Mode: fake-embedding (deterministic, for CI)")
+    print(f"  Engine: {args.engine}")
 
     exit_code, report_data = run_eval(
         datasets=datasets,
