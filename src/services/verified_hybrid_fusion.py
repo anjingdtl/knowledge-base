@@ -323,7 +323,18 @@ def package_fused_result(
             "score_breakdown": cand.get("score_breakdown") or {},
             "disclose_only": bool(cand.get("disclose_only")),
         }
-        if citation_builder is not None and bid and db is not None:
+        if citation_builder is not None and hasattr(citation_builder, "build_claim_citation"):
+            try:
+                item["citation"] = citation_builder.build_claim_citation(item)
+            except Exception:  # noqa: BLE001
+                item["citation"] = {
+                    "citation_layer": "claim",
+                    "claim_id": cand.get("claim_id"),
+                    "knowledge_id": kid,
+                    "block_id": bid,
+                    "evidence": item["evidence"],
+                }
+        elif citation_builder is not None and bid and db is not None:
             try:
                 knowledge = db.get_knowledge(kid) if kid else None
                 fake_raw = {
@@ -333,14 +344,19 @@ def package_fused_result(
                 }
                 citation = citation_builder.build(fake_raw, knowledge)
                 item["citation"] = citation.to_dict()
+                item["citation"]["claim_id"] = cand.get("claim_id")
+                item["citation"]["citation_layer"] = "claim"
+                item["citation"]["evidence"] = item["evidence"]
             except Exception:  # noqa: BLE001
                 item["citation"] = {
                     "claim_id": cand.get("claim_id"),
                     "knowledge_id": kid,
                     "block_id": bid,
+                    "evidence": item["evidence"],
                 }
         else:
             item["citation"] = {
+                "citation_layer": "claim",
                 "claim_id": cand.get("claim_id"),
                 "knowledge_id": kid,
                 "block_id": bid,

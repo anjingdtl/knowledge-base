@@ -52,6 +52,8 @@ class SearchService:
         self._wiki_repository = wiki_repository
         self._wiki_serving_gate = wiki_serving_gate
         self.last_search_trace: dict[str, Any] = {}
+        # Phase 4: disclose_only claim rows (side channel for conflict disclosure)
+        self.last_disclose_claims: list[dict[str, Any]] = []
 
     def _stage_timeout(self, stage: str) -> float:
         """获取阶段超时时间，支持 config 覆盖"""
@@ -346,17 +348,23 @@ class SearchService:
 
         citation_builder = CitationBuilder(self._db) if self._db is not None else None
         output: list[dict] = []
+        disclose_rows: list[dict] = []
         seen = set()
         for cand in fused:
             key = (cand.get("candidate_type"), cand.get("candidate_id") or cand.get("id"))
             if key in seen:
                 continue
             seen.add(key)
-            # Primary list excludes disclose_only unless nothing else (Phase 4 expands)
+            # Primary list excludes disclose_only; Phase 4 keeps them for conflict disclosure
             if cand.get("disclose_only") and cand.get("candidate_type") == "claim":
                 self.last_search_trace.setdefault("disclose_claims", []).append(
                     cand.get("claim_id"),
                 )
+                packaged_disclose = package_fused_result(
+                    cand, db=self._db, citation_builder=citation_builder, query=query,
+                )
+                packaged_disclose["disclose_only"] = True
+                disclose_rows.append(packaged_disclose)
                 continue
             packaged = package_fused_result(
                 cand, db=self._db, citation_builder=citation_builder, query=query,
@@ -379,12 +387,52 @@ class SearchService:
                 if len(output) >= top_k:
                     break
 
+        # Freshness-sensitive queries: demote / drop stale claims from primary list
+        try:
+            from src.services.verified_conflict import (
+                filter_stale_claims,
+                is_freshness_sensitive_query,
+            )
+            if is_freshness_sensitive_query(query):
+                claims = [r for r in output if r.get("source") == "verified_claim"]
+                non_claims = [r for r in output if r.get("source") != "verified_claim"]
+                kept, dropped = filter_stale_claims(claims, drop_stale=True)
+                if dropped:
+                    self.last_search_trace.setdefault("stages", {})["freshness_filter"] = {
+                        "dropped_stale": len(dropped),
+                        "ids": [d.get("claim_id") for d in dropped],
+                    }
+                    output = kept + non_claims
+                    # Prefer raw when stale claims removed
+                    if not kept and non_claims:
+                        self.last_search_trace["stages"]["fallback"] = "stale_claims_to_raw"
+        except Exception as e:  # noqa: BLE001
+            logger.debug("freshness filter skipped: %s", e)
+
+        # Phase 4 conflict scan on primary + disclose claims (trace only; ask uses it)
+        try:
+            from src.services.verified_conflict import detect_claim_conflicts
+
+            pool = [r for r in output if r.get("source") == "verified_claim"] + disclose_rows
+            conflicts = detect_claim_conflicts(pool)
+            if conflicts:
+                self.last_search_trace["conflicts"] = conflicts
+                self.last_search_trace["conflict_disclosed"] = True
+        except Exception as e:  # noqa: BLE001
+            logger.debug("conflict scan skipped: %s", e)
+
+        self.last_disclose_claims = disclose_rows
         self.last_search_trace["result_count"] = len(output)
         self.last_search_trace["sources"] = {
             "verified_claim": sum(1 for r in output if r.get("source") == "verified_claim"),
             "knowledge": sum(1 for r in output if r.get("source") == "knowledge"),
+            "disclose_only": len(disclose_rows),
         }
         return output
+
+    def get_disclose_claim_rows(self) -> list[dict[str, Any]]:
+        """Phase 4 side-channel: disclose_only claims from last hybrid search."""
+        return list(self.last_disclose_claims or [])
 
     def _safe_verified_claim_retrieve(self, query: str, limit: int) -> list:
         """Gate-filtered claim pairs; never raises to caller thread."""
@@ -397,8 +445,10 @@ class SearchService:
             if gate is None:
                 from src.services.wiki_serving_gate import WikiServingGate
                 gate = WikiServingGate()
+            # include_disclose=True so Phase 4 conflict side-channel can see them;
+            # primary packaging still skips disclose_only rows.
             pairs = gate.filter_servable(
-                claims, include_disclose=False, limit=limit,
+                claims, include_disclose=True, limit=limit,
             )
             # Optional: light query filter by lexical score to shrink set
             from src.services.verified_hybrid_fusion import claim_retrieval_score

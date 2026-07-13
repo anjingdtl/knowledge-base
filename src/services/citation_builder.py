@@ -1,6 +1,7 @@
 """CitationBuilder — 构建结构化、可解释的引用信息。
 
 search 和 ask 共用，从检索候选 dict 构建 Citation 对象。
+Phase 4: Claim Citation + Evidence 链 + Conflict Citation（向后兼容字段）。
 """
 from __future__ import annotations
 
@@ -32,6 +33,87 @@ class CitationBuilder:
             return self._db
         from src.services.db import Database
         return Database
+
+    def build_claim_citation(self, candidate: dict) -> dict[str, Any]:
+        """Build Claim + Evidence citation dict (Spec §8.1–§8.2).
+
+        Returns a plain dict (not only Citation) so claim-specific fields
+        remain available while embedding a legacy Citation for raw evidence.
+        """
+        evidence_out: list[dict[str, Any]] = []
+        for ev in candidate.get("evidence") or []:
+            if not isinstance(ev, dict):
+                continue
+            evidence_out.append({
+                "knowledge_id": ev.get("knowledge_id") or "",
+                "block_id": ev.get("block_id") or "",
+                "path": ev.get("path") or "",
+                "location": ev.get("location") or {},
+                "excerpt": ev.get("excerpt") or "",
+                "evidence_stance": ev.get("stance") or ev.get("evidence_stance") or "supports",
+                "stale": bool(ev.get("stale")),
+                "ok": ev.get("ok", True),
+            })
+        primary = evidence_out[0] if evidence_out else {}
+        claim_id = candidate.get("claim_id") or candidate.get("candidate_id") or ""
+        knowledge_id = candidate.get("knowledge_id") or primary.get("knowledge_id") or ""
+        block_id = candidate.get("block_id") or primary.get("block_id") or ""
+
+        legacy = Citation(
+            document=candidate.get("title") or f"Claim:{claim_id}",
+            path=primary.get("path") or "",
+            knowledge_id=knowledge_id,
+            block_id=block_id,
+            location=CitationLocation(
+                page=(primary.get("location") or {}).get("page"),
+                sheet=(primary.get("location") or {}).get("sheet"),
+                slide=(primary.get("location") or {}).get("slide"),
+                heading_path=list((primary.get("location") or {}).get("heading_path") or []),
+                paragraph_index=(primary.get("location") or {}).get("paragraph_index"),
+                line_start=(primary.get("location") or {}).get("line_start"),
+                line_end=(primary.get("location") or {}).get("line_end"),
+            ),
+            score=float(candidate.get("score") or 0.0),
+            score_breakdown=dict(candidate.get("score_breakdown") or {}),
+            match_channels=list(candidate.get("match_channels") or ["verified_wiki"]),
+            reason="verified_claim",
+            text=candidate.get("text") or candidate.get("statement") or "",
+        )
+        payload = legacy.to_dict()
+        payload.update({
+            "citation_layer": "claim",
+            "claim_id": claim_id,
+            "statement": candidate.get("text") or candidate.get("statement") or "",
+            "status": candidate.get("status") or "active",
+            "revision": candidate.get("revision"),
+            "page_id": candidate.get("page_id"),
+            "validation": "passed" if candidate.get("eligible", True) else "disclose",
+            "evidence": evidence_out,
+            "source_layer": "canonical",
+            "disclose_only": bool(candidate.get("disclose_only")),
+        })
+        return payload
+
+    def build_conflict_citations(self, conflict: dict) -> dict[str, Any]:
+        """Package both sides of a conflict with evidence (Spec §7.7 / §8.3)."""
+        return {
+            "citation_layer": "conflict",
+            "reason_codes": list(conflict.get("reason_codes") or []),
+            "sides": [
+                {
+                    "claim_id": conflict.get("claim_a_id"),
+                    "statement": conflict.get("statement_a"),
+                    "status": conflict.get("status_a"),
+                    "evidence": list(conflict.get("evidence_a") or []),
+                },
+                {
+                    "claim_id": conflict.get("claim_b_id"),
+                    "statement": conflict.get("statement_b"),
+                    "status": conflict.get("status_b"),
+                    "evidence": list(conflict.get("evidence_b") or []),
+                },
+            ],
+        }
 
     def build(self, candidate: dict, item: dict | None = None) -> Citation:
         """从一条检索候选构建 Citation。
