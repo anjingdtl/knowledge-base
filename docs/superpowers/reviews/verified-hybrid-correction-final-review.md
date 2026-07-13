@@ -1,6 +1,6 @@
 # Verified Hybrid 收束纠偏最终评审
 
-> 状态：本地工程、迁移与确定性验收完成；待最终 push 的 required CI（Python matrix、Docker）成功后方可发布 v1.8.0。
+> 状态：本地工程、迁移与确定性验收，以及 `master` 上的 required CI 已全部通过。尚未创建 GitHub Release 标签；工程发布门禁已满足。
 
 ## 结论
 

@@ -1,7 +1,7 @@
 # Verified Hybrid 收束纠偏 Phase 8 报告
 
 > 日期：2026-07-14
-> 状态：本地迁移、验收与文档完成；待最终 push 的远端 Python matrix/Docker 门禁。
+> 状态：本地迁移、验收与文档完成；`master` 上的远端 Python matrix、Docker/API 健康检查、Windows 冒烟、前端、静态检查和检索评测均已通过。
 
 ## 迁移
 
@@ -23,7 +23,7 @@ knowledge evolution eval: overall_pass=true
 client npm ci && npm run build: passed
 ```
 
-最终完整 pytest：`1693 passed, 2 skipped`（7 个历史测试返回值警告）。此前唯一的 PROGRESS 防误发布护栏已修复；剩余发布前外部条件只有远端 CI。
+最终完整 pytest：`1693 passed, 2 skipped`（7 个历史测试返回值警告）。远端 CI 运行 `29267535492` 全绿；此前唯一的 PROGRESS 防误发布护栏已修复。工程发布门禁已满足，尚未创建 GitHub Release 标签。
 
 ## 文档与版本
 

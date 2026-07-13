@@ -25,10 +25,11 @@ def test_current_final_review_requires_complete_release_evidence() -> None:
     assert not missing, f"当前最终评审缺少发布门禁证据: {missing}"
 
 
-def test_progress_marks_verified_hybrid_correction_as_active() -> None:
-    """PROGRESS must not claim convergence is closed while correction is open."""
+def test_progress_records_verified_hybrid_correction_completion() -> None:
+    """PROGRESS must record completion only with the corrected plan references."""
     text = PROGRESS.read_text(encoding="utf-8")
-    assert "Verified Hybrid 融合收束纠偏进行中" in text
+    assert "Verified Hybrid 融合收束纠偏已完成" in text
+    assert "远端 CI 全绿" in text
     assert "2026-07-13-verified-hybrid-convergence-correction-design.md" in text
     assert "2026-07-13-verified-hybrid-convergence-correction.md" in text
 

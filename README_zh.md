@@ -36,7 +36,7 @@ ShineHe Knowledge 是**本地优先的 AI Agent 知识服务**。
 
 ## 当前健康状态
 
-**v1.8.0 发布候选** — Verified Hybrid 融合收束纠偏。本地确定性门禁已完成；Python matrix 与 Docker 仍需以远端 CI 绿灯作为发布证据。
+**v1.8.0 发布验收已通过** — Verified Hybrid 融合收束纠偏。本地确定性门禁与 `master` 上的远端 CI（Python 3.10–3.12、Docker/API 健康检查、Windows 冒烟、前端、静态检查和检索评测）均已绿灯；尚未创建 GitHub Release 标签。
 
 详见 [发布说明](docs/release/v1.8.0-release-notes.md)、[迁移说明](docs/migration/v1.7-to-v1.8-convergence-correction.md) 与[最终评审](docs/superpowers/reviews/verified-hybrid-correction-final-review.md)。
 

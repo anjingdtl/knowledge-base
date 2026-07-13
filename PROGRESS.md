@@ -2,12 +2,12 @@
 
 > 最后更新：2026-07-14
 > 源码版本：`src/version.py` 中的 **`1.8.0`**
-> 当前分支：`master`（本地 Phase 8 完成，待最终远端 CI）
-> 当前方向：**Verified Hybrid 融合收束纠偏进行中** — 本地验收完成；未经 Python matrix 与 Docker 远端绿灯，不发布 v1.8.0。
+> 当前分支：`master`（Phase 8 与远端 CI 验收均完成）
+> 当前方向：**Verified Hybrid 融合收束纠偏已完成** — 本地验收与远端 CI 全绿；尚未创建 GitHub Release 标签。
 
 ---
 
-## Verified Hybrid 融合收束纠偏（进行中，2026-07-13）
+## Verified Hybrid 融合收束纠偏（已完成，2026-07-14）
 
 执行依据：
 
@@ -15,7 +15,7 @@
 - `docs/superpowers/plans/2026-07-13-verified-hybrid-convergence-correction.md`
 - `docs/superpowers/reviews/verified-hybrid-correction-baseline.md`
 
-当前阶段：**Phase 8 — 迁移、最终 E2E 与发布评审**。配置迁移、确定性验收与文档已完成；最终完整回归与远端 Python matrix/Docker 是唯一剩余发布门槛。当前权威评审：`docs/superpowers/reviews/verified-hybrid-correction-final-review.md`。
+当前阶段：**Phase 8 — 迁移、最终 E2E 与发布评审**。配置迁移、完整回归、远端 Python 3.10–3.12 matrix、Docker/API 健康检查、Windows 冒烟、前端构建、静态检查与检索评测均已通过。当前权威评审：`docs/superpowers/reviews/verified-hybrid-correction-final-review.md`；尚未创建 GitHub Release 标签。
 
 ## 历史收尾总结（2026-07-13）
 

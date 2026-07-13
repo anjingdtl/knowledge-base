@@ -36,7 +36,7 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 
 ## Current Health
 
-**v1.8.0 release candidate** — Verified Hybrid convergence correction. Local deterministic gates are complete; Python matrix and Docker remain required remote CI evidence before release.
+**v1.8.0 release validation passed** — Verified Hybrid convergence correction. Local deterministic gates and required remote CI (Python 3.10–3.12, Docker/API health, Windows smoke, frontend, lint, and retrieval eval) are green on `master`. A GitHub Release tag has not been created yet.
 
 See [Release Notes](docs/release/v1.8.0-release-notes.md), [Migration](docs/migration/v1.7-to-v1.8-convergence-correction.md), and the [Final Review](docs/superpowers/reviews/verified-hybrid-correction-final-review.md).
 
