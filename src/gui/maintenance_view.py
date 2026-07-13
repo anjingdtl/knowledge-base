@@ -563,7 +563,8 @@ class MaintenanceView(QWidget):
     def _relation_filter_key(self) -> str | None:
         idx = self.combo_relation.currentIndex()
         if 0 <= idx < len(RELATION_FILTERS):
-            return RELATION_FILTERS[idx][1]
+            value = RELATION_FILTERS[idx][1]
+            return str(value) if value is not None else None
         return None
 
     def _apply_relation_filter(self, pairs: list[dict]) -> list[dict]:
