@@ -6,6 +6,7 @@
 - [v1.6→v1.7 模式迁移骨架](migration/v1.6-to-v1.7-verified-hybrid.md)
 - [Verified Hybrid Phase 0 基线](superpowers/reviews/verified-hybrid-baseline.md)
 - [Verified Hybrid Phase 2 Serving Gate](superpowers/reviews/verified-hybrid-phase2-report.md)
+- [Verified Hybrid Phase 3 统一检索](superpowers/reviews/verified-hybrid-phase3-report.md)
 - [Canonical Wiki V2 纠偏与续建总方案](superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md)
 - [Canonical Wiki V2 Phase 4C Primary 执行计划](superpowers/plans/2026-07-09-canonical-wiki-v2-phase4c-primary-plan.md)
 - [Canonical Wiki V2 Phase 4C Primary 验收 Review](superpowers/reviews/2026-07-13-phase4c-primary-review.md)
