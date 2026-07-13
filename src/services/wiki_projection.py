@@ -314,10 +314,12 @@ class WikiProjection:
                     1 if ev.stale else 0, ev.stale_at,
                 ),
             )
-        # Phase 5:依赖图边(read model)。先删该 claim 相关边再插(幂等)。
-        # 注:source→evidence 边在 evidence 被移除时可能残留(orphan),由 rebuild() 全清重灌修复。
+        # Phase 5:依赖图边(read model)。
+        # 仅清该 claim 作为 from/to 的非 cited_in 边，再重建 evidence/relation 边；
+        # cited_in 由 page 投影写入，claim-only 更新不得抹掉。
         conn.execute(
-            "DELETE FROM wiki_dependencies WHERE from_id = ? OR to_id = ?",
+            "DELETE FROM wiki_dependencies WHERE "
+            "(from_id = ? OR to_id = ?) AND relation != 'cited_in'",
             (claim.claim_id, claim.claim_id),
         )
         edge_rows: list[tuple] = []
@@ -326,6 +328,13 @@ class WikiProjection:
             edge_rows.append(("evidence", ev.evidence_id, "claim", claim.claim_id, "evidences"))
         for rel in claim.relations:
             edge_rows.append(("claim", claim.claim_id, "claim", rel.target_claim_id, rel.relation))
+        # 若投影表 wiki_page_claims 仍引用该 claim，回补 cited_in
+        page_rows = conn.execute(
+            "SELECT page_id FROM wiki_page_claims WHERE claim_id = ?",
+            (claim.claim_id,),
+        ).fetchall()
+        for (page_id,) in page_rows:
+            edge_rows.append(("claim", claim.claim_id, "page", page_id, "cited_in"))
         if edge_rows:
             conn.executemany(
                 "INSERT OR IGNORE INTO wiki_dependencies(from_type, from_id, to_type, to_id, relation) "
@@ -345,10 +354,15 @@ class WikiProjection:
             conn.commit()
 
     def _delete_claim(self, claim_id: str, *, commit: bool = True) -> None:
-        """DELETE FROM wiki_claims / wiki_claim_evidence。"""
+        """DELETE FROM wiki_claims / wiki_claim_evidence / 依赖边 / page_claims。"""
         conn = self._db.get_conn()
         conn.execute("DELETE FROM wiki_claim_evidence WHERE claim_id = ?", (claim_id,))
         conn.execute("DELETE FROM wiki_claims WHERE claim_id = ?", (claim_id,))
+        conn.execute("DELETE FROM wiki_page_claims WHERE claim_id = ?", (claim_id,))
+        conn.execute(
+            "DELETE FROM wiki_dependencies WHERE from_id = ? OR to_id = ?",
+            (claim_id, claim_id),
+        )
         if commit:
             conn.commit()
 
