@@ -1,7 +1,8 @@
 # Phase 7 阶段报告：Hybrid Eval
 
 > 日期：2026-07-13  
-> Spec：§14 / Phase 7
+> Spec：§14 / Phase 7  
+> 本阶段提交：`113688d`
 
 ## 交付
 

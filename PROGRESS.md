@@ -18,8 +18,8 @@
 | Phase 4 回答/冲突/引用 | ✅ | `7a7ac69` / `docs/superpowers/reviews/verified-hybrid-phase4-report.md` |
 | Phase 5 维护中心 | ✅ | `cd2ed9a` / `docs/superpowers/reviews/verified-hybrid-phase5-report.md` |
 | Phase 6 MCP 边界 | ✅ | `0f5f5d9` / `docs/superpowers/reviews/verified-hybrid-phase6-report.md` |
-| Phase 7 Hybrid Eval | ✅ | `evals/run_hybrid_eval.py` · 175 cases · gates PASS |
-| Phase 8 文档与发布 | ✅ | VERSION 1.7.0 · `docs/release/v1.7.0-release-notes.md` · final review |
+| Phase 7 Hybrid Eval | ✅ | `113688d` · 175 cases · gates PASS |
+| Phase 8 文档与发布 | ✅ | `9f66cff` · VERSION 1.7.0 · final review |
 
 最终评审：`docs/superpowers/reviews/verified-hybrid-final-review.md`。  
 Hybrid Eval：`python evals/run_hybrid_eval.py --strict`（Raw/Wiki/Hybrid 三路，stale/unsupported rate=0）。
