@@ -1,11 +1,11 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-13
-> 源码版本：`src/version.py` 中的 `1.6.0`
+> 源码版本：`src/version.py` 中的 `1.7.0`
 > 当前分支：`master`
-> 当前方向：Verified Hybrid 融合收束（Raw + Wiki V2 统一知识服务）
+> 当前方向：Verified Hybrid 融合收束 — **v1.7.0 发布**
 
-## 融合收束 Phase 0–6 — 进行中（2026-07-13）
+## 融合收束 Phase 0–8 — 完成（2026-07-13）
 
 依据 `docs/ShineHeKnowledge 融合收束开发规格说明.md`。
 
@@ -18,9 +18,11 @@
 | Phase 4 回答/冲突/引用 | ✅ | `7a7ac69` / `docs/superpowers/reviews/verified-hybrid-phase4-report.md` |
 | Phase 5 维护中心 | ✅ | `cd2ed9a` / `docs/superpowers/reviews/verified-hybrid-phase5-report.md` |
 | Phase 6 MCP 边界 | ✅ | `0f5f5d9` / `docs/superpowers/reviews/verified-hybrid-phase6-report.md` |
-| Phase 7+ Hybrid Eval / 发布 | ⏸ | 评测集与 v1.7 发布 |
+| Phase 7 Hybrid Eval | ✅ | `evals/run_hybrid_eval.py` · 175 cases · gates PASS |
+| Phase 8 文档与发布 | ✅ | VERSION 1.7.0 · `docs/release/v1.7.0-release-notes.md` · final review |
 
-Phase 4–6 要点：`ask` 冲突披露 + Claim/Evidence 引用；MaintenancePolicyEngine + Jobs/Reviews；MCP `write_policy=disabled` 隐藏写工具。全量回归 **1639 passed / 2 skipped**。
+最终评审：`docs/superpowers/reviews/verified-hybrid-final-review.md`。  
+Hybrid Eval：`python evals/run_hybrid_eval.py --strict`（Raw/Wiki/Hybrid 三路，stale/unsupported rate=0）。
 
 ## C2 Matcher 保守收紧 — 5 xfail 转绿（2026-07-13）
 

@@ -2,14 +2,14 @@
 
 # ShineHe Knowledge
 
-**Local-First MCP Knowledge Retrieval Engine for AI Assistants**
+**Local-First, Verifiable MCP Knowledge Engine for AI Agents**
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-extended%20profile%20by%20default-orange.svg)](src/mcp/tool_profiles.py)
+[![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
 
 </div>
 
@@ -17,27 +17,28 @@
 
 ## What Is It
 
-ShineHe Knowledge is a **local-first, privacy-focused MCP knowledge retrieval engine** that turns your documents into a high-precision search service for AI assistants like Claude, Cursor, and Cline.
+```text
+Local documents
+→ Raw Evidence Index
+→ Verified Canonical Knowledge
+→ MCP Search / Ask / Read
+→ Traceable Answer
+```
 
-- **Index your local documents** (PDF, DOCX, Markdown, Excel, code, etc.) into a SQLite-based vector + keyword search engine
-- **Expose 10 core MCP tools** for AI agents to search, ask questions, and retrieve cited answers
-- **Return structured citations** with document path, block ID, score breakdown, and match reasons
-- **Incremental directory watching** automatically re-indexes changed files
-- **All data stays local** (SQLite + sqlite-vec + FTS5). No cloud storage dependency.
+ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.  
+**Raw documents and blocks are the final evidence.** Verified Wiki V2 claims enhance answers only when eligible. A maintenance control plane protects serving quality without becoming a second fact store.
+
+- **Index local documents** (PDF, DOCX, Markdown, Excel, code, …) into SQLite + FTS5 + sqlite-vec
+- **Default `verified` mode**: read gated claims + raw retrieval; agent writes off
+- **Unified hybrid search / ask** with claim + evidence citations and conflict disclosure
+- **Maintenance center**: protective automation (R1), drafts for review (R3), human for R4
+- **All data stays local**. No cloud storage dependency.
 
 ## Current Health
 
-**v1.4.0** (current) — Phase 3 pipeline hardening, round-6 MCP stability/recall test (13 bug fixes), and trace token observability. Full Python suite: `951 passed, 1 skipped`.
+**v1.7.0** — Verified Hybrid fusion (Phases 0–8). Full Python suite green; Hybrid Eval **175 cases / PASS** (stale & unsupported serving rate = 0, hybrid ≥ raw).
 
-Version `1.3.1` completed a full repository health review on June 13, 2026:
-
-- `828 passed, 2 skipped` in the full Python test suite
-- Ruff clean across `src`, `tests`, `evals`, `tools`, and `scripts`
-- mypy clean across 157 source/tool files
-- React/Vite production build passed
-- GitHub Actions passed all five Linux gates: Test, Lint, Frontend Build, Retrieval Eval, and Docker Build
-- Retrieval gate passed with Recall@5 `0.8667`, MRR `0.7800`, nDCG@10 `0.7938`, No-Answer Accuracy `0.6667`, and Citation Location Completeness `1.0000`
-- The end-to-end local retrieval demo passed initial search, incremental update, and citation validation
+See [Release Notes](docs/release/v1.7.0-release-notes.md) and [Final Review](docs/superpowers/reviews/verified-hybrid-final-review.md).
 
 ## 30-Second Demo
 
@@ -45,8 +46,9 @@ Version `1.3.1` completed a full repository health review on June 13, 2026:
 # 1. Install
 pip install -e ".[parsers]"
 
-# 2. Initialize local configuration
+# 2. Initialize (default: verified mode — raw + verified wiki read, no agent writes)
 shinehe init --local --path D:\docs --client claude-code
+# authoring: shinehe init --mode authoring --local --path D:\knowledge
 
 # 3. Index your documents
 shinehe index D:\docs
@@ -55,7 +57,7 @@ shinehe index D:\docs
 shinehe mcp --transport stdio
 ```
 
-Your AI assistant can now call `search` or `ask` and receive answers with full citation trails:
+Your AI assistant can call `kb_capabilities`, then `search` / `ask` / `read`, and receive answers with claim + evidence citation trails:
 
 ```json
 {
@@ -90,11 +92,14 @@ Your AI assistant can now call `search` or `ask` and receive answers with full c
 
 ## Core Features
 
-### High-Precision Retrieval
-6-stage configurable RAG pipeline: Query Rewrite → Vector + FTS5 Hybrid Search → RRF Fusion → Rerank → Context Expansion → Citation Packaging.
+### Verified Hybrid Retrieval
+Query routing → parallel verified claims + raw hybrid (vector/FTS/RRF) → Serving Gate → conflict/freshness checks → unified ranking. Wiki failure never blocks raw answers.
 
 ### Structured Citations
-Every search result includes document path, block ID, location (page/sheet/slide/heading/line), score breakdown by channel (vector/keyword/RRF/rerank), match reason, and original text.
+Claim citations link to original evidence blocks. Every raw hit includes path, block ID, location (page/sheet/slide/heading/line), score breakdown, and match reason.
+
+### Three Operating Modes
+`verified` (default) · `authoring` (explicit maintenance) · `evidence_only` (raw-only / ablation). Legacy `wiki_first` / `legacy` map at runtime without rewriting your config file.
 
 ### Incremental Directory Indexing
 `shinehe watch D:\docs` monitors your documents and automatically re-indexes new, modified, or deleted files with debounce and hash-based diff.
