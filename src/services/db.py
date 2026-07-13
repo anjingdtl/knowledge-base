@@ -2307,31 +2307,56 @@ class Database(metaclass=_DatabaseMeta):
         return dict(row) if row else None
 
     def reclaim_stuck_jobs(self, timeout_hours: int = 6) -> int:
-        """回收僵尸任务：status='running' 且 started_at 早于 timeout 的任务回退为 pending。
+        """回收僵尸任务：status='running'/'processing' 且超时的任务回退为 pending。
 
         BUG#8 修复：claim_next_pending_job 只认 'pending'，进程崩溃后遗留在
         'running'（或历史非法 'processing'）状态的任务永不被回收。Worker 启动时
         调用本方法清理上次进程遗留的僵尸任务，使其可被重新认领执行。
 
+        v1.6.0 稳定性报告补充：
+        - 旧 reindex_checkpoint 写 status='processing' 且 started_at=NULL，
+          仅判断 started_at < cutoff 会漏掉；改为同时用 created_at 兜底。
+        - id='reindex_checkpoint' 是断点标记而非可执行任务，超时后应 DELETE，
+          不能回退为 pending（否则会被 worker 当 reindex_all 认领）。
+
         Args:
             timeout_hours: 认定僵尸的超时阈值（小时）
 
         Returns:
-            被回退为 pending 的任务数
+            被回退为 pending 或删除的任务数
         """
         cutoff = (datetime.now() - timedelta(hours=timeout_hours)).isoformat()
         conn = self.get_conn()
-        # 含历史非法状态 'processing'，一并回收
+        total = 0
+
+        # 1) 僵尸 reindex_checkpoint：删除（非回退 pending）
+        cursor = conn.execute(
+            """DELETE FROM async_jobs
+               WHERE id = 'reindex_checkpoint'
+                 AND status IN ('running', 'processing')
+                 AND (
+                     (started_at IS NOT NULL AND started_at < ?)
+                     OR (started_at IS NULL AND created_at < ?)
+                 )""",
+            (cutoff, cutoff),
+        )
+        total += cursor.rowcount
+
+        # 2) 普通任务：回退 pending（含 started_at IS NULL 的历史僵尸）
         cursor = conn.execute(
             """UPDATE async_jobs
                SET status = 'pending', started_at = NULL
-               WHERE status IN ('running', 'processing')
-                 AND started_at IS NOT NULL
-                 AND started_at < ?""",
-            (cutoff,),
+               WHERE id != 'reindex_checkpoint'
+                 AND status IN ('running', 'processing')
+                 AND (
+                     (started_at IS NOT NULL AND started_at < ?)
+                     OR (started_at IS NULL AND created_at < ?)
+                 )""",
+            (cutoff, cutoff),
         )
+        total += cursor.rowcount
         conn.commit()
-        return cursor.rowcount
+        return total
 
     def cancel_job(self, job_id: str) -> bool:
         """取消任务"""

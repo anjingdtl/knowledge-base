@@ -97,23 +97,43 @@ def kb_health_check() -> dict[str, Any]:
                 ).fetchone()
                 total_documents = row["cnt"] if row else 0
 
-                # Block 数
-                row = conn.execute("SELECT COUNT(*) as cnt FROM blocks").fetchone()
+                # Block / 向量数：仅统计未软删知识条目（软删 blocks 保留供 restore，
+                # 计入分母会把覆盖率从 ~70% 误报成 ~33%）
+                row = conn.execute(
+                    """SELECT COUNT(*) as cnt FROM blocks b
+                       JOIN knowledge_items k ON k.id = b.page_id
+                       WHERE k.deleted_at IS NULL"""
+                ).fetchone()
                 total_blocks = row["cnt"] if row else 0
 
-                # 向量数
                 try:
-                    row = conn.execute("SELECT COUNT(*) as cnt FROM vec_blocks").fetchone()
+                    row = conn.execute(
+                        """SELECT COUNT(*) as cnt FROM vec_blocks v
+                           JOIN blocks b ON b.rowid = v.rowid
+                           JOIN knowledge_items k ON k.id = b.page_id
+                           WHERE k.deleted_at IS NULL"""
+                    ).fetchone()
                     total_vectors = row["cnt"] if row else 0
                 except Exception:
-                    total_vectors = 0
+                    # vec0 未加载时回退全表计数（测试/降级环境）
+                    try:
+                        row = conn.execute("SELECT COUNT(*) as cnt FROM vec_blocks").fetchone()
+                        total_vectors = row["cnt"] if row else 0
+                    except Exception:
+                        total_vectors = 0
 
                 # 向量覆盖率
                 if total_blocks > 0:
                     vector_coverage = min(total_vectors / total_blocks, 1.0)
-                if vector_coverage < 0.5:
+                if total_blocks > 0 and vector_coverage < 0.5:
                     warnings.append(f"向量覆盖率仅 {vector_coverage:.1%}")
                     status = "degraded"
+                elif total_blocks > 0 and vector_coverage < 0.95:
+                    warnings.append(
+                        f"向量覆盖率 {vector_coverage:.1%}（建议 reindex_all 补齐未向量化 blocks）"
+                    )
+                    if status == "healthy":
+                        status = "degraded"
 
                 # 标签覆盖率
                 row = conn.execute(
@@ -131,10 +151,16 @@ def kb_health_check() -> dict[str, Any]:
         status = "unhealthy"
 
     # --- 缓存命中率 ---
-    embedding_hit_rate = 0.0
+    # 冷启动无采样时 hit_rate=0.0 是假象；报告 None + samples 以便前端/巡检区分
+    embedding_hit_rate: float | None = None
+    embedding_samples = 0
     try:
         from src.services.embedding import _l1_cache
-        embedding_hit_rate = _l1_cache.hit_rate
+        embedding_samples = int(getattr(_l1_cache, "_hits", 0)) + int(
+            getattr(_l1_cache, "_misses", 0)
+        )
+        if embedding_samples > 0:
+            embedding_hit_rate = _l1_cache.hit_rate
     except Exception:
         pass
     try:
@@ -143,6 +169,16 @@ def kb_health_check() -> dict[str, Any]:
         rag_cache_size = _rag_cache.size
     except Exception:
         rag_cache_size = 0
+    l2_cache_size = 0
+    try:
+        from src.services.db import Database as _Db
+        _db = _Db._instance
+        if _db is not None and not _db._shutdown:
+            with _db.get_conn() as _conn:
+                row = _conn.execute("SELECT COUNT(*) as cnt FROM embedding_cache").fetchone()
+                l2_cache_size = row["cnt"] if row else 0
+    except Exception:
+        pass
 
     # --- 延迟 P95 (从最近的 trace 记录中读取) ---
     latency_p95 = None
@@ -211,16 +247,23 @@ def kb_health_check() -> dict[str, Any]:
         "vector_coverage": round(vector_coverage, 4),
         "tag_coverage": round(tag_coverage, 4),
         "cache_hit_rate": {
-            "embedding": round(embedding_hit_rate, 4),
+            "embedding": (
+                round(embedding_hit_rate, 4) if embedding_hit_rate is not None else None
+            ),
+            "embedding_samples": embedding_samples,
             "rag_cache_size": rag_cache_size,
+            "l2_embedding_cache_size": l2_cache_size,
         },
         "latency_p95_ms": latency_p95,
         "total_documents": total_documents,
         "total_blocks": total_blocks,
         "total_vectors": total_vectors,
         "warnings": warnings,
-        "recommendations": [r for r in ([
+        "recommendations": [r for r in [
             "执行 auto_tag 工具对无标签条目进行 LLM 批量自动补标" if tag_coverage < 0.5 else None,
             "标签覆盖率低于 10%，结构化查询和按标签过滤功能将大范围失效" if tag_coverage < 0.1 else None,
-        ] if tag_coverage < 0.5 else []) if r is not None],
+            "执行 reindex_all（必要时 restart=false）补齐未向量化 blocks" if (
+                total_blocks > 0 and vector_coverage < 0.95
+            ) else None,
+        ] if r is not None],
     }

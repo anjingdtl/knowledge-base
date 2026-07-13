@@ -439,10 +439,14 @@ class TestTaskRegistry:
     """验证 file_ingest / url_ingest handler 已注册。"""
 
     def test_file_ingest_registered(self):
+        from src.services.async_tasks import register_all_tasks
+        register_all_tasks()  # 不依赖其他用例的 import 副作用
         handler = TaskRegistry.get_handler("file_ingest")
         assert handler is not None
 
     def test_url_ingest_registered(self):
+        from src.services.async_tasks import register_all_tasks
+        register_all_tasks()
         handler = TaskRegistry.get_handler("url_ingest")
         assert handler is not None
 

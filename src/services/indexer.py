@@ -2,7 +2,7 @@
 import json
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Callable
 
 from src.models.knowledge import KnowledgeChunk, KnowledgeItem
@@ -83,13 +83,26 @@ def _validate_content_quality(blocks: list[dict]) -> tuple[int, list[str]]:
     return quality_score, warnings
 
 
-def index_knowledge_item(item: KnowledgeItem):
-    """将知识条目分块并存入 DB + 向量库 + 全文索引（Block-First 管线）"""
+def index_knowledge_item(item: KnowledgeItem, *, skip_dedup: bool = False):
+    """将知识条目分块并存入 DB + 向量库 + 全文索引（Block-First 管线）
+
+    Args:
+        item: 知识条目
+        skip_dedup: True 时跳过 content_hash 去重（reindex 场景必须开启，
+            否则删除旧 blocks 后会因命中自身 hash 而跳过重建，留下空索引）
+    """
     # 统一去重拦截入口
-    existing_id, computed_hash = _check_content_hash(item.content)
-    if existing_id:
-        logger.info(f"Skipping duplicate content for {item.id}: already exists as {existing_id}")
-        return existing_id
+    if not skip_dedup:
+        existing_id, computed_hash = _check_content_hash(item.content)
+        if existing_id:
+            logger.info(f"Skipping duplicate content for {item.id}: already exists as {existing_id}")
+            return existing_id
+    else:
+        import hashlib
+        computed_hash = (
+            hashlib.sha256(item.content.encode("utf-8")).hexdigest()
+            if item.content else ""
+        )
     # 将计算出的hash存入item，确保后续insert_knowledge写入DB
     if computed_hash and not item.content_hash:
         item.content_hash = computed_hash
@@ -247,7 +260,8 @@ def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
     Database.delete_blocks_by_page(item_id)
     Database.delete_chunks_fts(item_id)
     Database.delete_chunks(item_id)
-    index_knowledge_item(item)
+    # skip_dedup=True：避免 content_hash 命中自身后跳过重建
+    index_knowledge_item(item, skip_dedup=True)
 
 
 def _cleanup_orphan_vectors():
@@ -317,6 +331,9 @@ def reindex_all(
         }
 
     # 断点续传: 从 async_jobs 获取已处理的 item_id 集合
+    # v1.6.0: 丢弃过期断点；且仅跳过「已完整向量化」的条目，避免 checkpoint
+    # 声称 processed 但实际缺向量时永久漏索引。
+    _clear_stale_reindex_checkpoint(max_age_hours=24)
     processed_ids = set()
     if restart:
         try:
@@ -333,11 +350,25 @@ def reindex_all(
                 except (json.JSONDecodeError, TypeError):
                     pass
             if processed_ids:
-                logger.info(f"Resuming reindex: {len(processed_ids)} items already processed")
+                # 过滤：仅保留 blocks 已全部向量化的 item，缺向量的必须重跑
+                fully_vectorized = _items_fully_vectorized(processed_ids)
+                skipped_incomplete = processed_ids - fully_vectorized
+                if skipped_incomplete:
+                    logger.info(
+                        "Reindex resume: %d checkpoint ids incomplete, will reprocess",
+                        len(skipped_incomplete),
+                    )
+                processed_ids = fully_vectorized
+                if processed_ids:
+                    logger.info(f"Resuming reindex: {len(processed_ids)} items already processed")
         except Exception as e:
             logger.debug(f"Could not load reindex checkpoint: {e}")
 
-    # 孤儿清理
+    # 孤儿清理（确保 vec_blocks 表存在）
+    try:
+        BlockStore()._ensure_table()
+    except Exception as e:
+        logger.debug(f"BlockStore table ensure skipped: {e}")
     orphans_removed = _cleanup_orphan_vectors()
 
     # 切换到 WAL 模式
@@ -441,6 +472,74 @@ def _clear_reindex_checkpoint():
         conn.commit()
     except Exception as e:
         logger.debug(f"Could not clear reindex checkpoint: {e}")
+
+
+def _clear_stale_reindex_checkpoint(max_age_hours: int = 24) -> bool:
+    """删除超时/僵尸 reindex_checkpoint（processing + started_at NULL 等）。
+
+    Returns:
+        True 若删除了断点行
+    """
+    try:
+        conn = Database.get_conn()
+        cutoff = (datetime.now() - timedelta(hours=max_age_hours)).isoformat()
+        cursor = conn.execute(
+            """DELETE FROM async_jobs
+               WHERE id = 'reindex_checkpoint'
+                 AND (
+                     created_at < ?
+                     OR (status = 'processing' AND started_at IS NULL)
+                 )""",
+            (cutoff,),
+        )
+        conn.commit()
+        if cursor.rowcount:
+            logger.info("Cleared stale reindex_checkpoint (age>%sh or zombie processing)", max_age_hours)
+            return True
+    except Exception as e:
+        logger.debug(f"Could not clear stale reindex checkpoint: {e}")
+    return False
+
+
+def _items_fully_vectorized(item_ids: set[str] | list[str]) -> set[str]:
+    """返回在 item_ids 中、全部 blocks 均已有向量的 page_id 集合。
+
+    无 block 的条目视为未完成（需 reindex 重建）。
+    """
+    ids = list(item_ids)
+    if not ids:
+        return set()
+    try:
+        conn = Database.get_conn()
+        try:
+            BlockStore()._ensure_table()
+        except Exception:
+            pass
+        placeholders = ",".join("?" for _ in ids)
+        rows = conn.execute(
+            f"""
+            SELECT b.page_id AS page_id,
+                   COUNT(*) AS blocks,
+                   SUM(CASE WHEN v.rowid IS NOT NULL THEN 1 ELSE 0 END) AS vecd
+            FROM blocks b
+            LEFT JOIN vec_blocks v ON v.rowid = b.rowid
+            WHERE b.page_id IN ({placeholders})
+            GROUP BY b.page_id
+            """,
+            ids,
+        ).fetchall()
+        fully = set()
+        for r in rows:
+            page_id = r["page_id"] if hasattr(r, "keys") else r[0]
+            blocks = r["blocks"] if hasattr(r, "keys") else r[1]
+            vecd = r["vecd"] if hasattr(r, "keys") else r[2]
+            if blocks and vecd is not None and int(vecd) >= int(blocks):
+                fully.add(page_id)
+        return fully
+    except Exception as e:
+        logger.debug(f"Could not check vector completeness: {e}")
+        # 无法判断时保守起见不跳过任何条目
+        return set()
 
 
 class IndexerService:

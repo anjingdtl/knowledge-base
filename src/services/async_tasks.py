@@ -14,17 +14,31 @@ logger = logging.getLogger(__name__)
 
 
 def _reindex_all_handler(job_id: str, params: dict) -> dict:
-    """全量重建索引任务"""
+    """全量重建索引任务
+
+    params:
+        restart: bool = True — 断点续传；缺向量条目仍会重跑（indexer 内判断）
+        force: bool = False — True 时等价 restart=False，忽略断点全量重建
+    """
     from src.services.async_task import AsyncTaskService
 
     def progress_callback(current: int, total: int, message: str = ""):
         pct = int(current / total * 100) if total > 0 else 0
         AsyncTaskService.update_progress(job_id, pct, message)
 
+    force = bool(params.get("force", False))
+    restart = False if force else bool(params.get("restart", True))
     try:
-        result = reindex_all(progress_callback=progress_callback)
+        result = reindex_all(progress_callback=progress_callback, restart=restart)
         AsyncTaskService.update_progress(job_id, 100, "Index rebuild completed")
-        return {"status": "success", "total": result.get("total", 0), "success": result.get("success", 0)}
+        return {
+            "status": "success",
+            "total": result.get("total", 0),
+            "success": result.get("success", 0),
+            "skipped": result.get("skipped", 0),
+            "failed": result.get("failed", 0),
+            "restart": restart,
+        }
     except Exception as e:
         logger.error(f"Reindex job {job_id} failed: {e}")
         raise
