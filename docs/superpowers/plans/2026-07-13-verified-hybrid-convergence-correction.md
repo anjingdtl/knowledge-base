@@ -1,6 +1,6 @@
 # ShineHeKnowledge Verified Hybrid 融合收束纠偏执行计划（Plan）
 
-> **状态：执行中；Phase 0–5 已完成。**
+> **状态：执行中；Phase 0–6 已完成。**
 > **配套 Spec：** `docs/superpowers/specs/2026-07-13-verified-hybrid-convergence-correction-design.md`
 > **执行方式：** TDD；按 Phase 顺序；每个 Task 独立验证、独立提交、可回滚。
 > **目标版本：** v1.8.0
