@@ -12,25 +12,31 @@ from src.services.project_setup import ProjectSetupService
 from src.utils.config import Config
 
 
-def test_init_local_injects_size_aware_config():
-    config = ProjectSetupService().build_config({"local": True})
+def test_init_authoring_injects_size_aware_config():
+    config = ProjectSetupService().build_config({"local": True, "mode": "authoring"})
     size_aware = config.get("rag", {}).get("size_aware")
-    assert size_aware is not None, "init 应注入 rag.size_aware 段"
+    assert size_aware is not None, "authoring init 应注入 rag.size_aware 段"
     assert size_aware["enabled"] is True
     assert size_aware["small_query_max_tokens"] == 12
     assert size_aware["small_wiki_page_threshold"] == 3
     assert "哪些" in size_aware["intent_words_large"]
     assert size_aware["llm_fallback"] is False
-    # 浅 update 未覆盖:knowledge_workflow.mode 仍在
-    assert config["knowledge_workflow"]["mode"] == "wiki_first"
-    # 浅 update 未覆盖:local rag 的其他键仍在
+    assert config["knowledge_workflow"]["mode"] == "authoring"
     assert config["rag"]["search_mode"] == "blend"
 
 
-def test_init_provider_injects_size_aware_config():
-    config = ProjectSetupService().build_config({"provider": "siliconflow"})
+def test_init_provider_authoring_injects_size_aware_config():
+    config = ProjectSetupService().build_config({
+        "provider": "siliconflow", "mode": "authoring",
+    })
     assert config["rag"]["size_aware"]["enabled"] is True
-    assert config["knowledge_workflow"]["mode"] == "wiki_first"
+    assert config["knowledge_workflow"]["mode"] == "authoring"
+
+
+def test_init_verified_disables_size_aware():
+    config = ProjectSetupService().build_config({"local": True})
+    assert config["knowledge_workflow"]["mode"] == "verified"
+    assert config["rag"]["size_aware"]["enabled"] is False
 
 
 def test_container_injects_size_aware_router():

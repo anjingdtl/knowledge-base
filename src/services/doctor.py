@@ -44,6 +44,7 @@ class DoctorService:
         """
         results: list[dict[str, str]] = []
         results.extend(self.check_config(config_path))
+        results.extend(self.check_knowledge_mode(config_path))
         results.extend(self.check_data_dir())
         results.extend(self.check_sqlite())
         results.extend(self.check_fts5())
@@ -78,6 +79,136 @@ class DoctorService:
             return [self._result("config", "ok", f"配置文件可读: {path}")]
         except Exception as e:
             return [self._result("config", "fail", f"配置文件读取失败: {e}")]
+
+    def check_knowledge_mode(
+        self, config_path: str | None = None,
+    ) -> list[dict[str, str]]:
+        """检查知识运行档位（verified / authoring / evidence_only）。
+
+        Phase 1：解析模式、弃用别名提示、读写开关一致性。
+        Serving Claim 统计留给 Phase 2 WikiServingGate。
+        """
+        from src.utils.knowledge_mode import (
+            InvalidKnowledgeModeError,
+            describe_mode,
+            resolve_knowledge_mode,
+        )
+
+        results: list[dict[str, str]] = []
+        try:
+            if config_path:
+                path = Path(config_path)
+            else:
+                path = get_config_path()
+
+            raw_mode = None
+            wiki_cfg: dict = {}
+            if path.exists():
+                with open(path, "r", encoding="utf-8") as f:
+                    data = yaml.safe_load(f) or {}
+                if isinstance(data, dict):
+                    kw = data.get("knowledge_workflow") or {}
+                    if isinstance(kw, dict):
+                        raw_mode = kw.get("mode")
+                    wiki_cfg = data.get("wiki") or {}
+                    if not isinstance(wiki_cfg, dict):
+                        wiki_cfg = {}
+            else:
+                # Fall back to live Config
+                raw_mode = Config.get("knowledge_workflow.mode", None)
+                wiki_cfg = {
+                    "read_enabled": Config.get("wiki.read_enabled", None),
+                    "authoring_enabled": Config.get("wiki.authoring_enabled", None),
+                }
+
+            try:
+                info = describe_mode(raw_mode)
+            except InvalidKnowledgeModeError as e:
+                return [self._result("knowledge_mode", "fail", str(e))]
+
+            resolved = info["resolved"]
+            msg = f"知识模式: {resolved}"
+            if info.get("legacy_alias"):
+                msg += f"（配置仍为旧值 {raw_mode!r}，未改写文件）"
+                results.append(self._result("knowledge_mode", "warn", msg))
+                if info.get("deprecation_hint"):
+                    results.append(
+                        self._result(
+                            "knowledge_mode_deprecation",
+                            "warn",
+                            str(info["deprecation_hint"]),
+                        ),
+                    )
+            else:
+                results.append(self._result("knowledge_mode", "ok", msg))
+
+            read_flag = wiki_cfg.get("read_enabled")
+            auth_flag = wiki_cfg.get("authoring_enabled")
+            # Infer when flags absent (legacy configs)
+            if read_flag is None:
+                read_flag = resolved in ("verified", "authoring")
+            if auth_flag is None:
+                auth_flag = resolved == "authoring"
+
+            results.append(
+                self._result(
+                    "wiki_read",
+                    "ok",
+                    f"Verified Wiki 读取: {'enabled' if read_flag else 'disabled'}",
+                ),
+            )
+            results.append(
+                self._result(
+                    "wiki_authoring",
+                    "ok",
+                    f"Wiki Authoring: {'enabled' if auth_flag else 'disabled'}",
+                ),
+            )
+
+            if auth_flag and resolved != "authoring":
+                results.append(
+                    self._result(
+                        "wiki_authoring_consistency",
+                        "warn",
+                        "wiki.authoring_enabled=true 但 knowledge_workflow.mode "
+                        f"解析为 {resolved}；写路径仍以 mode 为准",
+                    ),
+                )
+
+            if wiki_cfg.get("auto_publish") is True:
+                results.append(
+                    self._result(
+                        "wiki_auto_publish",
+                        "warn",
+                        "wiki.auto_publish=true：与默认安全策略冲突，建议关闭",
+                    ),
+                )
+            else:
+                results.append(
+                    self._result(
+                        "wiki_auto_publish",
+                        "ok",
+                        "自动发布: disabled（安全）",
+                    ),
+                )
+
+            # Placeholder until Phase 2 Serving Gate
+            results.append(
+                self._result(
+                    "serving_claims",
+                    "ok",
+                    "可 Serving Claim 统计：Phase 2 WikiServingGate 启用后提供",
+                ),
+            )
+            # Touch resolve to keep import used if describe_mode changes
+            _ = resolve_knowledge_mode(raw_mode)
+            return results
+        except Exception as e:
+            return [
+                self._result(
+                    "knowledge_mode", "warn", f"知识模式检查异常: {e}",
+                ),
+            ]
 
     # ------------------------------------------------------------------
     # 数据目录检查

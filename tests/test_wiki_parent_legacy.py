@@ -21,8 +21,8 @@ def test_rag_pipeline_deps_include_wiki_parent_retriever():
 
 
 def test_init_local_config_has_wiki_parent_child():
-    """shinehe init(local)注入 rag.wiki_parent_child 段。"""
-    config = ProjectSetupService().build_config({"local": True})
+    """authoring init 注入 rag.wiki_parent_child 且 enabled。"""
+    config = ProjectSetupService().build_config({"local": True, "mode": "authoring"})
     rag = config["rag"]
     assert "wiki_parent_child" in rag
     assert rag["wiki_parent_child"]["enabled"] is True
@@ -30,8 +30,10 @@ def test_init_local_config_has_wiki_parent_child():
 
 
 def test_init_provider_config_has_wiki_parent_child():
-    """shinehe init(provider)注入 rag.wiki_parent_child 段。"""
-    config = ProjectSetupService().build_config({"provider": "siliconflow"})
+    """authoring provider init 注入 rag.wiki_parent_child。"""
+    config = ProjectSetupService().build_config({
+        "provider": "siliconflow", "mode": "authoring",
+    })
     rag = config["rag"]
     assert "wiki_parent_child" in rag
     assert rag["wiki_parent_child"]["enabled"] is True

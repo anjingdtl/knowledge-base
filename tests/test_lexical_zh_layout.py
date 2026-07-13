@@ -3,7 +3,7 @@ from src.services.project_setup import ProjectSetupService
 
 
 def test_init_local_injects_lexical_zh():
-    cfg = ProjectSetupService().build_config({"local": True})
+    cfg = ProjectSetupService().build_config({"local": True, "mode": "authoring"})
     lz = cfg["rag"]["lexical_zh"]
     assert lz["dict_path"] == "data/lexical_zh_dict.txt"
     assert lz["synonym_path"] == "data/lexical_zh_synonyms.txt"
@@ -11,12 +11,14 @@ def test_init_local_injects_lexical_zh():
     assert cfg["rag"]["rrf_weight_keyword_zh"] == 0.7
     assert cfg["rag"]["rrf_weight_keyword_en"] == 0.5
     assert "rrf_weight_keyword_zh" not in lz
-    # 浅合并未覆盖其他 rag 键
+    # authoring 保持 blend；verified 使用 hybrid_verified
     assert cfg["rag"]["search_mode"] == "blend"
 
 
 def test_init_provider_injects_lexical_zh():
-    cfg = ProjectSetupService().build_config({"provider": "siliconflow"})
+    cfg = ProjectSetupService().build_config({
+        "provider": "siliconflow", "mode": "authoring",
+    })
     assert cfg["rag"]["lexical_zh"]["dict_path"] == "data/lexical_zh_dict.txt"
 
 

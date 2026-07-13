@@ -21,6 +21,12 @@ from typing import Any
 import yaml
 
 from src.core.provider_presets import ProviderPreset, get_provider_preset
+from src.utils.knowledge_mode import (
+    MODE_AUTHORING,
+    MODE_EVIDENCE_ONLY,
+    MODE_VERIFIED,
+    resolve_knowledge_mode,
+)
 
 SERVER_NAME = "shinehe-kb"
 
@@ -79,37 +85,137 @@ class ProjectSetupService:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _wiki_first_defaults() -> dict[str, Any]:
-        """wiki-first 模式的公共默认段:knowledge_workflow + wiki 安全默认。
+    def _workflow_paths() -> dict[str, Any]:
+        """Shared knowledge_workflow path keys (all modes that keep wiki dirs)."""
+        return {
+            "raw_dir": "raw",
+            "wiki_dir": "wiki",
+            "schema_file": "schema/AGENTS.md",
+            "source_summary_dir": "wiki/sources",
+            "entity_dir": "wiki/entities",
+            "concept_dir": "wiki/concepts",
+            "synthesis_dir": "wiki/syntheses",
+            "comparison_dir": "wiki/comparisons",
+            "maintain_index_md": True,
+            "maintain_log_md": True,
+        }
 
-        被 _build_local_config 与 _build_provider_config 共享,保证两种 init
-        路径生成一致的 wiki-first 配置。后续阶段通过
-        Config.get("knowledge_workflow.mode", "legacy") 读取。
-        """
+    @staticmethod
+    def _verified_mode_defaults() -> dict[str, Any]:
+        """Default product mode: Raw + verified Wiki read intent, no authoring."""
         return {
             "knowledge_workflow": {
-                "mode": "wiki_first",
-                "raw_dir": "raw",
-                "wiki_dir": "wiki",
-                "schema_file": "schema/AGENTS.md",
-                "source_summary_dir": "wiki/sources",
-                "entity_dir": "wiki/entities",
-                "concept_dir": "wiki/concepts",
-                "synthesis_dir": "wiki/syntheses",
-                "comparison_dir": "wiki/comparisons",
-                "maintain_index_md": True,
-                "maintain_log_md": True,
+                "mode": MODE_VERIFIED,
+                **ProjectSetupService._workflow_paths(),
             },
             "wiki": {
                 "enabled": True,
-                "auto_compile": True,
+                "read_enabled": True,
+                "authoring_enabled": False,
+                "auto_compile": False,
                 "auto_link": True,
-                "auto_publish": False,           # 收敛:review gate
-                "lint_contradictions": True,     # 收敛:启用 lint 闭环
+                "auto_publish": False,
+                "lint_contradictions": True,
                 "max_llm_calls_per_ingest": 3,
                 "query_save_min_length": 100,
+                "serving": {
+                    "enabled": True,
+                    "allowed_claim_statuses": ["active"],
+                    "require_block_evidence": True,
+                    "exclude_stale": True,
+                    "exclude_unsupported": True,
+                    "exclude_retracted": True,
+                    "require_validation_passed": True,
+                    "unresolved_policy": "disclose",
+                    "contradiction_policy": "disclose",
+                    "on_failure": "raw_fallback",
+                    "max_claims_per_query": 8,
+                    "max_evidence_per_claim": 3,
+                },
             },
         }
+
+    @staticmethod
+    def _authoring_mode_defaults() -> dict[str, Any]:
+        """Authoring mode: full Wiki maintenance (replaces wiki_first defaults)."""
+        return {
+            "knowledge_workflow": {
+                "mode": MODE_AUTHORING,
+                **ProjectSetupService._workflow_paths(),
+            },
+            "wiki": {
+                "enabled": True,
+                "read_enabled": True,
+                "authoring_enabled": True,
+                "auto_compile": True,
+                "auto_link": True,
+                "auto_publish": False,  # review gate — never auto-publish
+                "lint_contradictions": True,
+                "max_llm_calls_per_ingest": 3,
+                "query_save_min_length": 100,
+                "serving": {
+                    "enabled": True,
+                    "allowed_claim_statuses": ["active"],
+                    "require_block_evidence": True,
+                    "exclude_stale": True,
+                    "exclude_unsupported": True,
+                    "exclude_retracted": True,
+                    "require_validation_passed": True,
+                    "unresolved_policy": "disclose",
+                    "contradiction_policy": "disclose",
+                    "on_failure": "raw_fallback",
+                    "max_claims_per_query": 8,
+                    "max_evidence_per_claim": 3,
+                },
+            },
+        }
+
+    @staticmethod
+    def _evidence_only_mode_defaults() -> dict[str, Any]:
+        """Evidence-only: Raw Retrieval, Wiki read/authoring off."""
+        return {
+            "knowledge_workflow": {
+                "mode": MODE_EVIDENCE_ONLY,
+                "raw_dir": "raw",
+                "wiki_dir": "wiki",
+                "schema_file": "schema/AGENTS.md",
+                "maintain_index_md": False,
+                "maintain_log_md": False,
+            },
+            "wiki": {
+                "enabled": False,
+                "read_enabled": False,
+                "authoring_enabled": False,
+                "auto_compile": False,
+                "auto_link": False,
+                "auto_publish": False,
+                "lint_contradictions": False,
+                "serving": {
+                    "enabled": False,
+                    "on_failure": "raw_fallback",
+                },
+            },
+        }
+
+    @staticmethod
+    def _wiki_first_defaults() -> dict[str, Any]:
+        """Back-compat alias for authoring defaults (historical name).
+
+        Tests and callers that still invoke ``_wiki_first_defaults`` receive
+        the authoring-mode payload (``mode: authoring``). New code should call
+        ``_authoring_mode_defaults`` or ``_mode_defaults(mode)``.
+        """
+        return ProjectSetupService._authoring_mode_defaults()
+
+    @staticmethod
+    def _mode_defaults(mode: str) -> dict[str, Any]:
+        """Return knowledge_workflow + wiki defaults for a resolved mode."""
+        resolved = resolve_knowledge_mode(mode)
+        if resolved == MODE_AUTHORING:
+            return ProjectSetupService._authoring_mode_defaults()
+        if resolved == MODE_EVIDENCE_ONLY:
+            return ProjectSetupService._evidence_only_mode_defaults()
+        return ProjectSetupService._verified_mode_defaults()
 
     @staticmethod
     def _size_aware_defaults() -> dict[str, Any]:
@@ -168,20 +274,100 @@ class ProjectSetupService:
                 - provider (str): 服务商名称（默认: siliconflow）
                 - path (str|None): 配置文件目标目录
                 - force (bool): 是否覆盖已有配置
+                - mode (str): verified | authoring | evidence_only
+                  （兼容 wiki_first / legacy / evidence-only）
 
         Returns:
             完整的配置字典，可直接序列化为 YAML
         """
+        mode = resolve_knowledge_mode(request.get("mode") or MODE_VERIFIED)
         if request.get("local"):
-            return self._build_local_config()
+            return self._build_local_config(mode)
 
         provider_name = request.get("provider", "siliconflow")
         preset = get_provider_preset(provider_name)
-        return self._build_provider_config(preset)
+        return self._build_provider_config(preset, mode)
 
-    def _build_local_config(self) -> dict[str, Any]:
+    def _mcp_defaults_for_mode(
+        self, mode: str, *, local: bool,
+    ) -> dict[str, Any]:
+        """MCP surface by knowledge mode (Spec §5.2–5.4)."""
+        resolved = resolve_knowledge_mode(mode)
+        if resolved == MODE_AUTHORING:
+            return {
+                "tool_profile": "extended",
+                "write_policy": "disabled" if local else "local_confirm",
+                "experimental_tools_enabled": True,
+                "allow_http_write": False,
+                "enable_legacy_aliases": False,
+            }
+        if resolved == MODE_EVIDENCE_ONLY:
+            return {
+                "tool_profile": "core",
+                "write_policy": "disabled",
+                "experimental_tools_enabled": False,
+                "allow_http_write": False,
+                "enable_legacy_aliases": False,
+            }
+        # verified (default)
+        return {
+            "tool_profile": "core",
+            "write_policy": "disabled",
+            "experimental_tools_enabled": False,
+            "allow_http_write": False,
+            "enable_legacy_aliases": False,
+        }
+
+    def _rag_defaults_for_mode(self, mode: str) -> dict[str, Any]:
+        """RAG defaults; authoring keeps wiki size-aware helpers."""
+        resolved = resolve_knowledge_mode(mode)
+        rag: dict[str, Any] = {
+            "search_mode": "blend",
+            "parent_child": {"enabled": True},
+            "enable_query_rewriting": True,
+            "chunk_overlap": 180,
+            "chunk_size": 1200,
+            "score_threshold": 0.35,
+            "top_k": 8,
+            "rrf_weight_keyword_zh": 0.7,
+            "rrf_weight_keyword_en": 0.5,
+            "verified_knowledge": {
+                "enabled": resolved in {MODE_VERIFIED, MODE_AUTHORING},
+                "raw_candidate_multiplier": 3,
+                "wiki_candidate_multiplier": 2,
+                "raw_weight": 0.60,
+                "wiki_weight": 0.40,
+                "evidence_alignment_enabled": True,
+                "stale_fallback_to_raw": True,
+                "empty_wiki_fallback_to_raw": True,
+            },
+        }
+        if resolved == MODE_AUTHORING:
+            rag["size_aware"] = self._size_aware_defaults()
+            rag["wiki_parent_child"] = self._wiki_parent_defaults()
+            rag["lexical_zh"] = self._lexical_zh_defaults()
+            rag["wiki_read"] = {"sqlite_fallback": True}
+        elif resolved == MODE_VERIFIED:
+            # Read intent on; fusion stages land in Phase 3 — keep helpers off.
+            rag["size_aware"] = {**self._size_aware_defaults(), "enabled": False}
+            rag["wiki_parent_child"] = {
+                **self._wiki_parent_defaults(), "enabled": False,
+            }
+            rag["lexical_zh"] = {
+                **self._lexical_zh_defaults(), "enabled": False,
+            }
+            rag["wiki_read"] = {"sqlite_fallback": True}
+            rag["search_mode"] = "hybrid_verified"
+        else:
+            rag["verified_knowledge"] = {"enabled": False}
+        return rag
+
+    def _build_local_config(self, mode: str = MODE_VERIFIED) -> dict[str, Any]:
         """构建本地模式配置（Ollama + 离线优先）"""
+        resolved = resolve_knowledge_mode(mode)
         preset = get_provider_preset("ollama")
+        rag = self._rag_defaults_for_mode(resolved)
+        rag["enable_rerank"] = False
         config: dict[str, Any] = {
             "embedding": {
                 "base_url": preset.embedding_base_url,
@@ -196,28 +382,8 @@ class ProjectSetupService:
                 "temperature": 0.7,
                 "max_tokens": 2048,
             },
-            "mcp": {
-                "tool_profile": "extended",
-                "write_policy": "disabled",
-                "experimental_tools_enabled": True,
-                "allow_http_write": False,
-            },
-            "rag": {
-                "search_mode": "blend",
-                "parent_child": {"enabled": True},
-                "enable_query_rewriting": True,
-                "enable_rerank": False,
-                "chunk_overlap": 180,
-                "chunk_size": 1200,
-                "score_threshold": 0.35,
-                "top_k": 8,
-                "rrf_weight_keyword_zh": 0.7,
-                "rrf_weight_keyword_en": 0.5,
-                "size_aware": self._size_aware_defaults(),
-                "wiki_parent_child": self._wiki_parent_defaults(),
-                "lexical_zh": self._lexical_zh_defaults(),
-                "wiki_read": {"sqlite_fallback": True},
-            },
+            "mcp": self._mcp_defaults_for_mode(resolved, local=True),
+            "rag": rag,
             "reranker": {
                 "provider": "disabled",
                 "enabled": False,
@@ -227,11 +393,16 @@ class ProjectSetupService:
                 "db_name": "kb.db",
             },
         }
-        config.update(self._wiki_first_defaults())
+        config.update(self._mode_defaults(resolved))
         return config
 
-    def _build_provider_config(self, preset: ProviderPreset) -> dict[str, Any]:
+    def _build_provider_config(
+        self,
+        preset: ProviderPreset,
+        mode: str = MODE_VERIFIED,
+    ) -> dict[str, Any]:
         """构建基于指定服务商的配置"""
+        resolved = resolve_knowledge_mode(mode)
         config: dict[str, Any] = {
             "embedding": {
                 "base_url": preset.embedding_base_url,
@@ -246,32 +417,15 @@ class ProjectSetupService:
                 "temperature": 0.7,
                 "max_tokens": 2048,
             },
-            "mcp": {
-                "tool_profile": "extended",
-                "experimental_tools_enabled": True,
-                "write_policy": "local_confirm",
-                "allow_http_write": False,
-            },
-            "rag": {
-                "chunk_overlap": 180,
-                "chunk_size": 1200,
-                "score_threshold": 0.35,
-                "top_k": 8,
-                "search_mode": "blend",
-                "rrf_weight_keyword_zh": 0.7,
-                "rrf_weight_keyword_en": 0.5,
-                "size_aware": self._size_aware_defaults(),
-                "wiki_parent_child": self._wiki_parent_defaults(),
-                "lexical_zh": self._lexical_zh_defaults(),
-                "wiki_read": {"sqlite_fallback": True},
-            },
+            "mcp": self._mcp_defaults_for_mode(resolved, local=False),
+            "rag": self._rag_defaults_for_mode(resolved),
             "storage": {
                 "data_dir": "data",
                 "db_name": "kb.db",
             },
         }
 
-        if preset.reranker_base_url:
+        if preset.reranker_base_url and resolved != MODE_EVIDENCE_ONLY:
             config["reranker"] = {
                 "base_url": preset.reranker_base_url,
                 "model": preset.reranker_model,
@@ -279,7 +433,7 @@ class ProjectSetupService:
                 "provider": preset.canonical_name,
             }
 
-        config.update(self._wiki_first_defaults())
+        config.update(self._mode_defaults(resolved))
         return config
 
     # ------------------------------------------------------------------

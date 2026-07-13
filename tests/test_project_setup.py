@@ -35,19 +35,20 @@ class TestBuildConfig:
         assert config["llm"]["model"] == "qwen2.5"
 
     def test_local_config_mcp_settings(self):
-        """本地模式 MCP 配置正确"""
+        """本地 verified 默认：core + 写关闭"""
         service = ProjectSetupService()
         config = service.build_config({"local": True})
 
-        assert config["mcp"]["tool_profile"] == "extended"
+        assert config["mcp"]["tool_profile"] == "core"
         assert config["mcp"]["write_policy"] == "disabled"
+        assert config["mcp"]["experimental_tools_enabled"] is False
 
     def test_local_config_rag_settings(self):
-        """本地模式 RAG 配置正确"""
+        """本地 verified RAG：hybrid_verified 意图 + parent_child"""
         service = ProjectSetupService()
         config = service.build_config({"local": True})
 
-        assert config["rag"]["search_mode"] == "blend"
+        assert config["rag"]["search_mode"] == "hybrid_verified"
         assert config["rag"]["parent_child"]["enabled"] is True
         assert config["rag"]["enable_query_rewriting"] is True
         assert config["rag"]["enable_rerank"] is False
@@ -96,11 +97,11 @@ class TestBuildConfig:
         assert config["llm"]["provider"] == "siliconflow"
 
     def test_local_config_has_knowledge_workflow(self):
-        """local 模式生成 knowledge_workflow 段,默认 wiki_first"""
+        """local 模式生成 knowledge_workflow 段,默认 verified"""
         service = ProjectSetupService()
         config = service.build_config({"local": True})
         kw = config["knowledge_workflow"]
-        assert kw["mode"] == "wiki_first"
+        assert kw["mode"] == "verified"
         assert kw["raw_dir"] == "raw"
         assert kw["wiki_dir"] == "wiki"
         assert kw["schema_file"] == "schema/AGENTS.md"
@@ -108,43 +109,79 @@ class TestBuildConfig:
         assert kw["maintain_log_md"] is True
 
     def test_local_config_wiki_safe_defaults(self):
-        """wiki 安全默认:auto_publish=False, lint_contradictions=True"""
+        """verified: 可读、不可 authoring、不自动编译/发布"""
         service = ProjectSetupService()
         config = service.build_config({"local": True})
         assert config["wiki"]["auto_publish"] is False
         assert config["wiki"]["lint_contradictions"] is True
         assert config["wiki"]["enabled"] is True
-        assert config["wiki"]["auto_compile"] is True
+        assert config["wiki"]["read_enabled"] is True
+        assert config["wiki"]["authoring_enabled"] is False
+        assert config["wiki"]["auto_compile"] is False
 
-    def test_local_config_mcp_exposes_wiki_tools(self):
-        """local mcp 收敛:experimental_tools_enabled=True"""
+    def test_local_config_mcp_does_not_expose_wiki_tools_by_default(self):
+        """verified local: experimental_tools 关闭"""
         service = ProjectSetupService()
         config = service.build_config({"local": True})
-        assert config["mcp"]["experimental_tools_enabled"] is True
+        assert config["mcp"]["experimental_tools_enabled"] is False
         assert config["mcp"]["allow_http_write"] is False
 
     def test_provider_config_has_knowledge_workflow(self):
-        """provider 模式同样生成 wiki-first 段"""
+        """provider 默认同样 verified"""
         service = ProjectSetupService()
         config = service.build_config({"provider": "siliconflow"})
-        assert config["knowledge_workflow"]["mode"] == "wiki_first"
+        assert config["knowledge_workflow"]["mode"] == "verified"
         assert config["wiki"]["auto_publish"] is False
+        assert config["wiki"]["authoring_enabled"] is False
 
     def test_provider_config_mcp_safe_defaults(self):
-        """provider mcp 收敛:write_policy=local_confirm"""
+        """verified provider: core + write disabled"""
         service = ProjectSetupService()
         config = service.build_config({"provider": "siliconflow"})
-        assert config["mcp"]["tool_profile"] == "extended"
-        assert config["mcp"]["experimental_tools_enabled"] is True
-        assert config["mcp"]["write_policy"] == "local_confirm"
+        assert config["mcp"]["tool_profile"] == "core"
+        assert config["mcp"]["experimental_tools_enabled"] is False
+        assert config["mcp"]["write_policy"] == "disabled"
         assert config["mcp"]["allow_http_write"] is False
 
+    def test_authoring_mode_local(self):
+        """--mode authoring 恢复完整维护面"""
+        service = ProjectSetupService()
+        config = service.build_config({"local": True, "mode": "authoring"})
+        assert config["knowledge_workflow"]["mode"] == "authoring"
+        assert config["wiki"]["authoring_enabled"] is True
+        assert config["wiki"]["auto_compile"] is True
+        assert config["wiki"]["auto_publish"] is False
+        assert config["mcp"]["tool_profile"] == "extended"
+        assert config["mcp"]["experimental_tools_enabled"] is True
+        assert config["mcp"]["write_policy"] == "disabled"
+        assert config["rag"]["size_aware"]["enabled"] is True
+
+    def test_authoring_mode_provider_write_policy(self):
+        service = ProjectSetupService()
+        config = service.build_config({"provider": "siliconflow", "mode": "authoring"})
+        assert config["mcp"]["write_policy"] == "local_confirm"
+
+    def test_evidence_only_mode(self):
+        service = ProjectSetupService()
+        config = service.build_config({"local": True, "mode": "evidence-only"})
+        assert config["knowledge_workflow"]["mode"] == "evidence_only"
+        assert config["wiki"]["read_enabled"] is False
+        assert config["wiki"]["authoring_enabled"] is False
+        assert config["rag"]["verified_knowledge"]["enabled"] is False
+
+    def test_wiki_first_alias_maps_to_authoring_config(self):
+        """旧 CLI/请求 wiki_first 解析为 authoring 配置"""
+        service = ProjectSetupService()
+        config = service.build_config({"local": True, "mode": "wiki_first"})
+        assert config["knowledge_workflow"]["mode"] == "authoring"
+        assert config["wiki"]["authoring_enabled"] is True
+
     def test_wiki_first_defaults_helper_structure(self):
-        """_wiki_first_defaults 返回 knowledge_workflow + wiki 两段"""
+        """_wiki_first_defaults 兼容别名 → authoring 两段"""
         service = ProjectSetupService()
         defaults = service._wiki_first_defaults()
         assert set(defaults.keys()) == {"knowledge_workflow", "wiki"}
-        assert defaults["knowledge_workflow"]["mode"] == "wiki_first"
+        assert defaults["knowledge_workflow"]["mode"] == "authoring"
 
 
 # ---------------------------------------------------------------------------
@@ -396,9 +433,13 @@ class TestConfigExampleConvergence:
         wiki = example_config["wiki"]
         assert wiki["auto_publish"] is False
         assert wiki["lint_contradictions"] is True
+        assert wiki.get("authoring_enabled") is False
+        assert wiki.get("read_enabled") is True
 
-    def test_mcp_exposes_wiki_tools(self, example_config):
-        """experimental_tools_enabled=True, write_policy=local_confirm"""
+    def test_example_default_verified_mode(self, example_config):
+        """config.example 默认 verified，MCP 不开启写与 experimental"""
+        assert example_config["knowledge_workflow"]["mode"] == "verified"
         mcp = example_config["mcp"]
-        assert mcp["experimental_tools_enabled"] is True
-        assert mcp["write_policy"] == "local_confirm"
+        assert mcp["experimental_tools_enabled"] is False
+        assert mcp["write_policy"] == "disabled"
+        assert mcp["tool_profile"] == "core"

@@ -71,6 +71,26 @@ def test_compile_legacy_skips():
     fakes.source.compile.assert_not_called()
 
 
+def test_compile_authoring_triggers_all():
+    Config.set("knowledge_workflow.mode", "authoring")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    result = _make_svc(fakes).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+    assert result["mode"] == "authoring"
+    assert result.get("skipped") is not True
+    fakes.source.compile.assert_called_once()
+
+
+def test_compile_verified_skips():
+    Config.set("knowledge_workflow.mode", "verified")
+    _insert_knowledge()
+    fakes = FakeCompilers()
+    result = _make_svc(fakes).compile("kid-1", ingested_at="2026-07-02T10:00:00")
+    assert result["skipped"] is True
+    assert result["resolved_mode"] == "verified"
+    fakes.source.compile.assert_not_called()
+
+
 def test_compile_isolates_failure():
     _wiki_first()
     _insert_knowledge()

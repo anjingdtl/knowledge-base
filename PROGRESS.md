@@ -3,7 +3,19 @@
 > 最后更新：2026-07-13
 > 源码版本：`src/version.py` 中的 `1.6.0`
 > 当前分支：`master`
-> 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
+> 当前方向：Verified Hybrid 融合收束（Raw + Wiki V2 统一知识服务）
+
+## 融合收束 Phase 0–1 — 进行中（2026-07-13）
+
+依据 `docs/ShineHeKnowledge 融合收束开发规格说明.md`。
+
+| 阶段 | 状态 | 说明 |
+|---|---|---|
+| Phase 0 基线 | ✅ | `abbfa35` / `docs/superpowers/reviews/verified-hybrid-baseline.md` |
+| Phase 1 模式配置 | ✅ | `d1fa8d1` / `docs/superpowers/reviews/verified-hybrid-phase1-report.md` |
+| Phase 2+ | ⏸ | 未开始（Serving Gate / 融合检索 / …） |
+
+Phase 1 要点：默认 `verified`；`wiki_first`→`authoring`（不切只读）；`legacy`→`evidence_only`；不自动改写用户配置。
 
 ## C2 Matcher 保守收紧 — 5 xfail 转绿（2026-07-13）
 

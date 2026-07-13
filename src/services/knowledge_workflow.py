@@ -1,7 +1,10 @@
-"""KnowledgeWorkflowService — wiki-first 文件系统层编排器。
+"""KnowledgeWorkflowService — Wiki Authoring 文件系统层编排器。
 
-mode=wiki_first 时,ingest 后编排 source/entity/index/log 四个编译器。
+mode=authoring（及兼容旧值 wiki_first）时,ingest 后编排
+source/entity/index/log 四个编译器。
 失败隔离(每步 try/except),整体不抛。时间戳由调用方传入(可复现)。
+
+verified / evidence_only 跳过自动编译（只读或仅证据）。
 
 注意:与现有 ``WikiCompiler``(SQLite ``wiki_pages``)是两套并行产物 ——
 本服务只管"文件系统 wiki 层"(``wiki/*.md``)。
@@ -17,8 +20,17 @@ from src.services.wiki_index_compiler import WikiIndexCompiler
 from src.services.wiki_log_compiler import WikiLogCompiler
 from src.services.wiki_source_compiler import WikiSourceCompiler
 from src.utils.config import Config
+from src.utils.knowledge_mode import allows_authoring, resolve_knowledge_mode
 
 logger = logging.getLogger(__name__)
+
+
+def _workflow_mode_label() -> tuple[str, str]:
+    """Return (display_mode, resolved_mode). display keeps raw config for logs/tests."""
+    raw = Config.get("knowledge_workflow.mode", None)
+    resolved = resolve_knowledge_mode(raw)
+    display = str(raw) if raw is not None and str(raw).strip() else resolved
+    return display, resolved
 
 
 class KnowledgeWorkflowService:
@@ -43,17 +55,22 @@ class KnowledgeWorkflowService:
         self._rebuild = rebuild_scheduler
 
     def compile(self, knowledge_id: str, ingested_at: str | None = None) -> dict:
-        """编排 wiki-first 编译。失败隔离,不抛。"""
-        mode = Config.get("knowledge_workflow.mode", "legacy")
-        if mode != "wiki_first":
-            return {"mode": mode, "skipped": True}
+        """编排 Authoring 编译（wiki_first 兼容）。失败隔离,不抛。"""
+        mode, resolved = _workflow_mode_label()
+        if not allows_authoring(resolved):
+            return {"mode": mode, "resolved_mode": resolved, "skipped": True}
 
         item = Database.get_knowledge(knowledge_id)
         if not item:
-            return {"mode": mode, "skipped": True, "reason": "not_found"}
+            return {
+                "mode": mode,
+                "resolved_mode": resolved,
+                "skipped": True,
+                "reason": "not_found",
+            }
         ts = ingested_at or item.get("created_at") or ""
 
-        result: dict = {"mode": mode, "errors": []}
+        result: dict = {"mode": mode, "resolved_mode": resolved, "errors": []}
 
         try:
             from src.services.wiki_query_service import resolve_canonical_mode
@@ -172,9 +189,9 @@ class KnowledgeWorkflowService:
         auto 模式按阈值(长度≥query_save_min_length + confidence≥0.6 + source≥2)门控;
         manual 模式直接准备。Phase 4C 后不再绕过 WikiRepository 直接写 markdown。
         """
-        mode = Config.get("knowledge_workflow.mode", "legacy")
-        if mode != "wiki_first":
-            return {"status": "skipped", "reason": f"mode={mode}"}
+        mode, resolved = _workflow_mode_label()
+        if not allows_authoring(resolved):
+            return {"status": "skipped", "reason": f"mode={mode}", "resolved_mode": resolved}
 
         min_len = int(Config.get("wiki.query_save_min_length", 100))
         if save_mode == "auto":

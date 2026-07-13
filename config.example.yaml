@@ -38,29 +38,38 @@ rag:
     enabled: true
     prefer_llm: false
     system_prompt_max_tokens: 2000
-  # 第二阶段:规模自适应路由(wiki_first 项目 enabled=true;legacy 缺省 false 零影响)
+  # 规模自适应路由（authoring 默认 enabled；verified/evidence_only 默认 false）
   size_aware:
     enabled: false
     small_query_max_tokens: 12
     small_wiki_page_threshold: 3
     intent_words_large: ["哪些", "所有", "对比", "全部", "列举"]
     llm_fallback: false
-  # 第二阶段 W2:wiki parent-child 检索(wiki 命中页带回 source 页 parent_content)
+  # wiki parent-child（仅 authoring 路径介入）
   wiki_parent_child:
-    enabled: false                # 仅 mode=wiki_first 生效;legacy 强制 false
-    max_parent_chars: 2000        # parent_content 截断长度(与 block parent-child 对称命名)
-  # 第二阶段 W3: 中文 lexical 强化（专名词典 + 同义词 + 语种权重）
+    enabled: false
+    max_parent_chars: 2000
+  # 中文 lexical 强化（authoring 可开）
   lexical_zh:
-    enabled: false                # 仅 mode=wiki_first 生效；legacy 强制 false
+    enabled: false
     dict_path: data/lexical_zh_dict.txt
     synonym_path: data/lexical_zh_synonyms.txt
-  # RRF keyword 权重按语种（W3，rag 段顶层标量）
-  # 注：替代旧版 rrf_weight_keyword: 0.6；legacy search_mode=blend 部署将从固定 0.6 变为 zh=0.7/en=0.5（微小归一化偏移）
+  # RRF keyword 权重按语种
   rrf_weight_keyword_zh: 0.7
   rrf_weight_keyword_en: 0.5
-  # 双轨 wiki 轻量收敛：WikiReadStage 在 FS 无命中时 fallback 查 SQLite
+  # Wiki FS 读：sqlite fallback
   wiki_read:
-    sqlite_fallback: true        # 仅 mode=wiki_first 生效；legacy 强制不介入
+    sqlite_fallback: true
+  # Phase 3 融合将消费；Phase 1 仅配置契约
+  verified_knowledge:
+    enabled: true
+    raw_candidate_multiplier: 3
+    wiki_candidate_multiplier: 2
+    raw_weight: 0.60
+    wiki_weight: 0.40
+    evidence_alignment_enabled: true
+    stale_fallback_to_raw: true
+    empty_wiki_fallback_to_raw: true
   chunk_overlap: 180
   chunk_size: 1200
   context_sibling_window: 1
@@ -127,7 +136,7 @@ rag:
     min_score: 0.15
     top_n: 5
   score_threshold: 0.35
-  search_mode: blend
+  search_mode: hybrid_verified   # verified 默认；evidence_only 用 blend
   stage_timeout:
     hybrid_search: 25
     query_rewrite: 15
@@ -146,11 +155,26 @@ safety:
   operation_log:
     enabled: true
     retention_days: 90
+# 知识运行档位（融合收束 Spec §4–§5）
+# verified（默认）| authoring | evidence_only
+# 兼容旧值：wiki_first → authoring，legacy → evidence_only（不自动改写用户文件）
+knowledge_workflow:
+  mode: verified
+  raw_dir: raw
+  wiki_dir: wiki
+  schema_file: schema/AGENTS.md
+  source_summary_dir: wiki/sources
+  entity_dir: wiki/entities
+  concept_dir: wiki/concepts
+  synthesis_dir: wiki/syntheses
+  comparison_dir: wiki/comparisons
+  maintain_index_md: true
+  maintain_log_md: true
 mcp:
-  tool_profile: extended    # core | extended | admin | full | legacy
+  tool_profile: core           # verified 默认 core；authoring 建议 extended
   enable_legacy_aliases: false
-  experimental_tools_enabled: true     # 暴露 wiki/graph 工具组(wiki-first 对齐)
-  write_policy: local_confirm          # 写操作本地确认("" | preview_only | local_confirm | token_required | disabled)
+  experimental_tools_enabled: false  # verified 关闭；authoring 可 true
+  write_policy: disabled       # verified 默认 disabled；authoring 建议 local_confirm
   allow_http_write: false   # HTTP 模式是否允许写操作
   bind_host: 127.0.0.1     # MCP HTTP 服务绑定地址
   auth_token: ""            # write_policy=token_required 时使用的认证 token
@@ -166,14 +190,30 @@ watcher:
 web:
   timeout: 30
 wiki:
-  auto_compile: true
-  auto_link: true
-  auto_publish: false            # review gate:自动编译、非自动发布、审阅后发布
   enabled: true
+  read_enabled: true             # verified/authoring：读已验证 Claim
+  authoring_enabled: false       # 仅 authoring 模式为 true
+  auto_compile: false            # verified 关闭；authoring 可 true
+  auto_link: true
+  auto_publish: false            # review gate:永不默认自动发布
   lint_contradictions: true      # 启用 wiki lint 闭环
   max_llm_calls_per_ingest: 3
   query_save_min_length: 100
-  canonical_v2:                 # Phase 3.5 C5:canonical wiki v2 分阶段切换
+  serving:                       # Phase 2 Gate 将消费；Phase 1 先落配置契约
+    enabled: true
+    allowed_claim_statuses:
+      - active
+    require_block_evidence: true
+    exclude_stale: true
+    exclude_unsupported: true
+    exclude_retracted: true
+    require_validation_passed: true
+    unresolved_policy: disclose
+    contradiction_policy: disclose
+    on_failure: raw_fallback
+    max_claims_per_query: 8
+    max_evidence_per_claim: 3
+  canonical_v2:                 # 写入迁移阶段（与回答 Serving 分离）
     mode: off                   # off | shadow | canary | primary(off=legacy 零变化)
     canary:
       knowledge_ids: []         # Phase 4B:显式 knowledge_id allowlist

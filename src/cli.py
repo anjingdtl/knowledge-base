@@ -19,6 +19,20 @@ from src.version import APP_NAME, VERSION
 def _handle_init(args: argparse.Namespace) -> int:
     """处理 init 子命令"""
     from src.services.project_setup import ProjectSetupService
+    from src.utils.knowledge_mode import (
+        MODE_EVIDENCE_ONLY,
+        MODE_VERIFIED,
+        InvalidKnowledgeModeError,
+        allows_authoring,
+        allows_wiki_read,
+        resolve_knowledge_mode,
+    )
+
+    try:
+        mode = resolve_knowledge_mode(getattr(args, "mode", None) or MODE_VERIFIED)
+    except InvalidKnowledgeModeError as e:
+        print(f"[ERROR] {e}", file=sys.stderr)
+        return 1
 
     service = ProjectSetupService()
     request = {
@@ -27,20 +41,50 @@ def _handle_init(args: argparse.Namespace) -> int:
         "provider": args.provider,
         "clients": [c.strip() for c in args.client.split(",")] if args.client else [],
         "force": args.force,
+        "mode": mode,
     }
     config = service.build_config(request)
     target = Path(args.path) if args.path else None
     config_path = service.write_config(target, config, force=args.force)
     print(f"[OK] 配置已写入: {config_path}")
+    print(f"[OK] 知识模式: {mode}")
+    print("[OK] 原始文档检索: enabled")
+    if allows_wiki_read(mode):
+        print("[OK] 已验证 Wiki 读取: enabled")
+    else:
+        print("[OK] 已验证 Wiki 读取: disabled")
 
-    # wiki-first 目录契约:在项目目录创建 raw/wiki/schema/artifacts + AGENTS.md
+    # Authoring 目录契约仅在 authoring 模式创建（Spec §10 / §12.2）
     project_dir = Path(args.path) if args.path else Path.cwd()
-    layout = service.write_wiki_first_layout(project_dir)
-    print(f"[OK] wiki-first 目录已就绪: {project_dir} ({len(layout)} 个目录 + AGENTS.md)")
+    if allows_authoring(mode):
+        layout = service.write_wiki_first_layout(project_dir)
+        print(
+            f"[OK] Wiki Authoring 目录已就绪: {project_dir} "
+            f"({len(layout)} 个目录 + AGENTS.md)"
+        )
+        print("[OK] Wiki Authoring: enabled")
+    else:
+        print("[OK] Wiki Authoring: disabled")
+        if mode == MODE_VERIFIED:
+            print(
+                "[INFO] 当前无可用 Canonical Claim 时将自动使用原始文档检索"
+                "（Serving Gate 见后续阶段）"
+            )
+        if mode == MODE_EVIDENCE_ONLY:
+            print("[INFO] evidence_only：仅原始文档检索，适合降级与对照评测")
+
+    wiki_cfg = config.get("wiki") or {}
+    if wiki_cfg.get("authoring_enabled"):
+        print("[OK] Maintenance Center: supervised (authoring + protective)")
+    elif mode == MODE_VERIFIED:
+        print("[OK] Maintenance Center: supervised (protective actions only)")
+    else:
+        print("[OK] Maintenance Center: observe (evidence_only)")
 
     if request["clients"]:
         server_config = service.build_server_config(config_path)
         service.configure_clients(request["clients"], server_config)
+        print(f"[OK] MCP 客户端已配置: {', '.join(request['clients'])}")
 
     return 0
 
@@ -193,8 +237,11 @@ def _handle_wiki(args: argparse.Namespace) -> int:
     if cmd == "lint":
         from src.utils.config import Config
         source = getattr(args, "source", "auto")
-        mode = Config.get("knowledge_workflow.mode", "legacy")
-        use_fs = source == "fs" or (source == "auto" and mode == "wiki_first")
+        from src.utils.knowledge_mode import allows_authoring, get_configured_knowledge_mode
+
+        mode = get_configured_knowledge_mode()
+        # FS wiki eval 面向 Authoring 布局；wiki_first 兼容映射到 authoring
+        use_fs = source == "fs" or (source == "auto" and allows_authoring(mode))
 
         if use_fs:
             from src.services.wiki_fs_lint import WikiFsLint
@@ -417,7 +464,11 @@ def main(argv: list[str] | None = None) -> None:
     # --- init ---
     init_parser = subparsers.add_parser(
         "init", help="初始化项目配置",
-        description="初始化 ShineHeKnowledge 项目，生成配置文件并可选配置 MCP 客户端。",
+        description=(
+            "初始化 ShineHeKnowledge 项目，生成配置文件并可选配置 MCP 客户端。"
+            " 默认 knowledge 模式为 verified（Raw + 已验证 Wiki 读）；"
+            " authoring 开启完整 Wiki 维护；evidence-only 仅原始检索。"
+        ),
     )
     init_parser.add_argument(
         "--local", action="store_true",
@@ -434,6 +485,15 @@ def main(argv: list[str] | None = None) -> None:
     init_parser.add_argument(
         "--provider", default="siliconflow",
         help="AI 服务商预设名称（默认: siliconflow）",
+    )
+    init_parser.add_argument(
+        "--mode",
+        default="verified",
+        help=(
+            "知识运行档位: verified（默认，只读已验证知识）| "
+            "authoring（Wiki 维护）| evidence-only（仅原始检索）。"
+            " 兼容旧值: wiki_first→authoring, legacy→evidence_only"
+        ),
     )
     init_parser.add_argument(
         "--force", action="store_true",

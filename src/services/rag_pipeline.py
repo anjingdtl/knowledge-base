@@ -265,8 +265,10 @@ class WikiReadStage(PipelineStage):
     async def execute(self, ctx, config):
         if not self.is_enabled(config):
             return ctx
-        # legacy 门控(S6):仅 wiki_first + size_aware.enabled 介入
-        if Config.get("knowledge_workflow.mode", "legacy") != "wiki_first":
+        # Authoring 门控(S6):仅 authoring（兼容 wiki_first）+ size_aware.enabled 介入
+        from src.utils.knowledge_mode import allows_authoring, get_configured_knowledge_mode
+
+        if not allows_authoring(get_configured_knowledge_mode()):
             return ctx
         if not Config.get("rag.size_aware.enabled", False):
             return ctx
@@ -345,8 +347,10 @@ class WikiParentEnrichStage(PipelineStage):
     async def execute(self, ctx, config):
         if not self.is_enabled(config):
             return ctx
-        # legacy 门控(S6)
-        if Config.get("knowledge_workflow.mode", "legacy") != "wiki_first":
+        # Authoring 门控(S6): authoring / wiki_first
+        from src.utils.knowledge_mode import allows_authoring, get_configured_knowledge_mode
+
+        if not allows_authoring(get_configured_knowledge_mode()):
             return ctx
         if not Config.get("rag.wiki_parent_child.enabled", False):
             return ctx

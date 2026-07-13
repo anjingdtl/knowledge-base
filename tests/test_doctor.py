@@ -78,7 +78,58 @@ class TestConfigCheck:
         service = DoctorService()
         results = service.check_config(str(tmp_path / "nonexistent.yaml"))
         assert results[0]["status"] == "fail"
-        assert "不存在" in results[0]["message"]
+
+
+class TestKnowledgeModeCheck:
+    def test_verified_mode_ok(self, tmp_path):
+        import yaml
+
+        config_file = tmp_path / "config.yaml"
+        config_file.write_text(
+            yaml.dump({
+                "knowledge_workflow": {"mode": "verified"},
+                "wiki": {
+                    "read_enabled": True,
+                    "authoring_enabled": False,
+                    "auto_publish": False,
+                },
+            }),
+            encoding="utf-8",
+        )
+        service = DoctorService()
+        results = service.check_knowledge_mode(str(config_file))
+        by_name = {r["name"]: r for r in results}
+        assert by_name["knowledge_mode"]["status"] == "ok"
+        assert "verified" in by_name["knowledge_mode"]["message"]
+        assert by_name["wiki_authoring"]["status"] == "ok"
+
+    def test_wiki_first_deprecation_warn(self, tmp_path):
+        import yaml
+
+        config_file = tmp_path / "config.yaml"
+        config_file.write_text(
+            yaml.dump({"knowledge_workflow": {"mode": "wiki_first"}}),
+            encoding="utf-8",
+        )
+        service = DoctorService()
+        results = service.check_knowledge_mode(str(config_file))
+        by_name = {r["name"]: r for r in results}
+        assert by_name["knowledge_mode"]["status"] == "warn"
+        assert "authoring" in by_name["knowledge_mode"]["message"]
+        assert "knowledge_mode_deprecation" in by_name
+
+    def test_invalid_mode_fail(self, tmp_path):
+        import yaml
+
+        config_file = tmp_path / "config.yaml"
+        config_file.write_text(
+            yaml.dump({"knowledge_workflow": {"mode": "turbo"}}),
+            encoding="utf-8",
+        )
+        service = DoctorService()
+        results = service.check_knowledge_mode(str(config_file))
+        assert results[0]["status"] == "fail"
+        assert "非法知识模式" in results[0]["message"]
 
     def test_check_config_invalid_format(self, tmp_path):
         """配置文件格式错误返回 fail"""

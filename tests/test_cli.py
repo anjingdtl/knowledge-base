@@ -40,6 +40,15 @@ def test_init_command_parses():
         assert args.local is True
         assert args.force is True
         assert args.provider == "siliconflow"
+        assert args.mode == "verified"
+
+
+def test_init_command_mode_parses():
+    with patch("src.cli._handle_init", return_value=0) as mock_init:
+        with pytest.raises(SystemExit):
+            main(["init", "--mode", "authoring", "--local"])
+        args = mock_init.call_args[0][0]
+        assert args.mode == "authoring"
 
 
 def test_init_command_with_provider():
@@ -126,18 +135,38 @@ def test_handler_warnings_exit_code():
 # ---------------------------------------------------------------------------
 
 
-def test_init_creates_wiki_first_layout(tmp_path):
-    """init 命令实际创建 wiki-first 目录契约与 AGENTS.md(e2e,不 mock)"""
+def test_init_verified_does_not_create_authoring_layout(tmp_path):
+    """默认 verified：写配置但不强制 Authoring 目录"""
+    import yaml
+
     project_dir = tmp_path / "project"
     project_dir.mkdir()
-    # 把 config 也写到项目目录,避免污染全局 ~/.shinehe
     with pytest.raises(SystemExit) as exc:
         main(["init", "--local", "--force", "--path", str(project_dir)])
     assert exc.value.code == 0
 
-    # config.yaml
     assert (project_dir / "config.yaml").exists()
-    # wiki-first 目录契约
+    cfg = yaml.safe_load((project_dir / "config.yaml").read_text(encoding="utf-8"))
+    assert cfg["knowledge_workflow"]["mode"] == "verified"
+    assert cfg["wiki"]["authoring_enabled"] is False
+    assert cfg["mcp"]["write_policy"] == "disabled"
+    # 不强制创建 authoring 布局
+    assert not (project_dir / "wiki" / "sources").exists()
+    assert not (project_dir / "schema" / "AGENTS.md").exists()
+
+
+def test_init_authoring_creates_wiki_layout(tmp_path):
+    """--mode authoring 创建目录契约与 AGENTS.md"""
+    project_dir = tmp_path / "project"
+    project_dir.mkdir()
+    with pytest.raises(SystemExit) as exc:
+        main([
+            "init", "--mode", "authoring", "--local", "--force",
+            "--path", str(project_dir),
+        ])
+    assert exc.value.code == 0
+
+    assert (project_dir / "config.yaml").exists()
     assert (project_dir / "raw").is_dir()
     assert (project_dir / "wiki" / "sources").is_dir()
     assert (project_dir / "wiki" / "entities").is_dir()
@@ -146,7 +175,6 @@ def test_init_creates_wiki_first_layout(tmp_path):
     assert (project_dir / "wiki" / "syntheses").is_dir()
     assert (project_dir / "schema").is_dir()
     assert (project_dir / "artifacts" / "eval").is_dir()
-    # AGENTS.md
     agents_md = project_dir / "schema" / "AGENTS.md"
     assert agents_md.exists()
     assert "Source of truth" in agents_md.read_text(encoding="utf-8")
