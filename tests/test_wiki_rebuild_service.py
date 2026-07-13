@@ -14,7 +14,7 @@ from src.models.wiki_v2 import (
 )
 from src.services.wiki_claim_extractor import compute_excerpt_hash
 from src.services.wiki_dependency_service import WikiDependencyService
-from src.services.wiki_rebuild_service import WikiRebuildService
+from src.services.wiki_rebuild_service import RebuildJob, RebuildResult, WikiRebuildService
 
 
 def _ev(eid, kid, block_id="b1", excerpt="h1", stance=EvidenceStance.SUPPORTS):
@@ -134,3 +134,100 @@ def test_plan_delete_with_other_supports_active():
     svc = _svc(repo, _FakeBlocks({}))
     plan = svc.plan_rebuild("k1", event="delete")
     assert next(c for c in plan.affected_claims if c.claim_id == "c1").proposed_status == "active"
+
+
+# ---- T5.2b: rebuild staging 事务 + projection + cancel ----
+class _RecordingRepo(_FakeRepo):
+    """模拟 WikiRepository 事务:记录 stage_claim/stage_page。"""
+
+    def __init__(self, claims, pages):
+        super().__init__(claims, pages)
+        self.staged_claims: dict = {}
+        self.staged_pages: dict = {}
+        self.deleted_claims: list = []
+
+    def transaction(self):
+        outer = self
+
+        class _Tx:
+            def stage_claim(self, claim, expected_revision=None):
+                outer.staged_claims[claim.claim_id] = claim
+
+            def stage_page(self, page, expected_revision=None):
+                outer.staged_pages[page.page_id] = page
+
+            def commit(self):
+                return []
+
+        class _Ctx:
+            def __enter__(self):
+                return _Tx()
+
+            def __exit__(self, *a):
+                return False
+
+        return _Ctx()
+
+
+def test_rebuild_update_stages_stale_and_unsupported():
+    """E2E-3:update 删段 → evidence stale + claim unsupported + page review,经事务落盘。"""
+    c1 = _claim("c1", [_ev("e1", "k1", block_id="b1", excerpt="sha256:OLD")])
+    repo = _RecordingRepo([c1], [_page("p1", ["c1"])])
+    blocks = _FakeBlocks({"b1": "NEW"})
+    svc = _svc(repo, blocks)
+    result = svc.rebuild("k1", event="update")
+    assert result.committed is True
+    staged_claim = repo.staged_claims["c1"]
+    assert staged_claim.status is ClaimStatus.UNSUPPORTED
+    assert staged_claim.evidence[0].stale is True
+    assert staged_claim.evidence[0].stale_at == "NOW"
+    assert repo.staged_pages["p1"].status is PageStatus.REVIEW
+
+
+def test_rebuild_delete_keeps_claim_no_physical_delete():
+    """d03:删来源 → claim unsupported 但不物理删除(审计保留)。"""
+    c1 = _claim("c1", [_ev("e1", "k1")])
+    repo = _RecordingRepo([c1], [_page("p1", ["c1"])])
+    svc = _svc(repo, _FakeBlocks({}))
+    result = svc.rebuild("k1", event="delete")
+    assert result.committed is True
+    assert repo.staged_claims["c1"].status is ClaimStatus.UNSUPPORTED
+    assert repo.deleted_claims == []
+
+
+def test_rebuild_cancel_is_cooperative():
+    """cancel:进入即取消 → cancelled=True,committed=False,不写事务。"""
+    c1 = _claim("c1", [_ev("e1", "k1", block_id="b1", excerpt="sha256:OLD")])
+    repo = _RecordingRepo([c1], [_page("p1", ["c1"])])
+    svc = _svc(repo, _FakeBlocks({"b1": "NEW"}))
+    job = RebuildJob()
+    job.cancel()
+    result = svc.rebuild("k1", event="update", job=job)
+    assert result.cancelled is True
+    assert result.committed is False
+
+
+def test_rebuild_max_pages_truncates():
+    """max_pages_per_job 截断:超限 page 不处理,truncated=True。"""
+    claims = []
+    pages = []
+    for i in range(3):
+        c = _claim(f"c{i}", [_ev(f"e{i}", "k1", block_id=f"b{i}", excerpt="sha256:OLD")])
+        claims.append(c)
+        pages.append(_page(f"p{i}", [f"c{i}"]))
+    repo = _RecordingRepo(claims, pages)
+    svc = _svc(repo, _FakeBlocks({f"b{i}": "NEW" for i in range(3)}))
+    result = svc.rebuild("k1", event="update", max_pages_per_job=1)
+    assert result.plan.truncated is True
+    assert len(result.plan.affected_pages) <= 1
+
+
+def test_rebuild_result_exposes_plan_and_stats():
+    """RebuildResult 携带 plan;committed/cancelled/warnings 字段可用。"""
+    c1 = _claim("c1", [_ev("e1", "k1", block_id="b1", excerpt="sha256:OLD")])
+    repo = _RecordingRepo([c1], [_page("p1", ["c1"])])
+    svc = _svc(repo, _FakeBlocks({"b1": "NEW"}))
+    result = svc.rebuild("k1", event="update")
+    assert isinstance(result, RebuildResult)
+    assert result.plan.root == "k1"
+    assert result.plan.stats.get("event") == "update"

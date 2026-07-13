@@ -536,6 +536,20 @@ class AppContainer:
             self._track_service("_wiki_dependency_service")
         return self._wiki_dependency_service
 
+    @property
+    def wiki_rebuild_service(self):
+        if self._wiki_rebuild_service is None:
+            from src.services.wiki_rebuild_service import WikiRebuildService as _RB
+            self._wiki_rebuild_service = _RB(
+                repository=self.wiki_repository,
+                projection=self.wiki_projection,
+                block_repository=self.block_repo,
+                dependency_service=self.wiki_dependency_service,
+                config=self.config,
+            )
+            self._track_service("_wiki_rebuild_service")
+        return self._wiki_rebuild_service
+
 
 def create_container(config_path: str | None = None) -> AppContainer:
     """创建并初始化应用容器

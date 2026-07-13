@@ -7,11 +7,12 @@ plan_rebuild 为 dry-run 语义(不写);rebuild 执行事务(T5.2b)。
 """
 from __future__ import annotations
 
+import threading
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
-from src.models.wiki_v2 import EvidenceStance
+from src.models.wiki_v2 import ClaimStatus, EvidenceStance, PageStatus
 from src.services.wiki_claim_extractor import compute_excerpt_hash
 from src.services.wiki_dependency_service import (
     ClaimImpact,
@@ -30,6 +31,24 @@ class RebuildResult:
     committed: bool = False
     cancelled: bool = False
     warnings: list[str] = field(default_factory=list)
+
+
+class _RebuildCancelled(Exception):
+    """rebuild 执行中协作取消:抛出以让 WikiRepository 事务回滚已 stage 的部分。"""
+
+
+class RebuildJob:
+    """rebuild 协作取消句柄(同步进程内)。"""
+
+    def __init__(self) -> None:
+        self._cancel = threading.Event()
+
+    def cancel(self) -> None:
+        self._cancel.set()
+
+    @property
+    def cancelled(self) -> bool:
+        return self._cancel.is_set()
 
 
 class WikiRebuildService:
@@ -141,3 +160,75 @@ class WikiRebuildService:
             plan.affected_pages = plan.affected_pages[:max_pages]
             plan.truncated = True
         return plan
+
+    def rebuild(self, knowledge_id: str, *, event: str, job: RebuildJob | None = None,
+                dry_run: bool = False, max_depth: int | None = None,
+                max_pages_per_job: int | None = None) -> RebuildResult:
+        """按 plan 执行 staged rebuild。dry_run 只规划;job 协作取消生效。
+
+        取消语义:进入前取消 → 直接返回 cancelled;执行中取消 → 抛 _RebuildCancelled
+        让 WikiRepository 事务回滚已 stage 的部分(一致状态)。projection 刷新失败不回滚
+        canonical(铁律 §3.4),只记 warning。
+        """
+        plan = self.plan_rebuild(knowledge_id, event=event, max_depth=max_depth,
+                                 max_pages_per_job=max_pages_per_job)
+        result = RebuildResult(knowledge_id=knowledge_id, event=event, plan=plan)
+        if dry_run or (job is not None and job.cancelled):
+            result.cancelled = bool(job and job.cancelled)
+            return result
+
+        now = self._clock()
+        impacted_claim_ids = {c.claim_id for c in plan.affected_claims}
+        impacted_page_ids = {p.page_id for p in plan.affected_pages}
+        claims_by_id = {c.claim_id: c for c in self._repo.list_claims()}
+        pages_by_id = {p.page_id: p for p in self._repo.list_pages()}
+        stale_ev_ids = {e.evidence_id for e in plan.affected_evidence}
+
+        try:
+            with self._repo.transaction() as tx:
+                for cid in sorted(impacted_claim_ids):
+                    if job is not None and job.cancelled:
+                        raise _RebuildCancelled()
+                    claim = claims_by_id.get(cid)
+                    if claim is None:
+                        continue
+                    impact = next(c for c in plan.affected_claims if c.claim_id == cid)
+                    mutated = self._mutate_claim(claim, impact, stale_ev_ids, now)
+                    tx.stage_claim(mutated, expected_revision=claim.revision)
+                for pid in sorted(impacted_page_ids):
+                    if job is not None and job.cancelled:
+                        raise _RebuildCancelled()
+                    page = pages_by_id.get(pid)
+                    if page is None:
+                        continue
+                    page.status = PageStatus.REVIEW
+                    page.updated_at = now
+                    tx.stage_page(page, expected_revision=page.revision)
+                if job is not None and job.cancelled:
+                    raise _RebuildCancelled()
+                tx.commit()
+        except _RebuildCancelled:
+            result.cancelled = True
+            result.warnings.append("rebuild cancelled; transaction rolled back")
+            return result
+
+        result.committed = True
+        try:
+            self._projection.process_outbox()
+            drift = self._projection.verify_parity()
+            if drift:
+                result.warnings.append(f"projection drift after rebuild: {len(drift)} findings")
+        except Exception as exc:  # noqa: BLE001 - projection 失败不回滚 canonical
+            result.warnings.append(f"projection refresh failed: {exc}")
+        return result
+
+    def _mutate_claim(self, claim, impact, stale_ev_ids: set[str], now: str):
+        """标 stale evidence + 迁移 status。不 retract(保留审计,对齐 d03)。"""
+        for ev in claim.evidence:
+            if ev.evidence_id in stale_ev_ids:
+                ev.stale = True
+                ev.stale_at = now
+        if impact.proposed_status == "unsupported":
+            claim.status = ClaimStatus.UNSUPPORTED
+        claim.updated_at = now
+        return claim
