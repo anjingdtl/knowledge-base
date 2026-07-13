@@ -248,7 +248,7 @@ class WikiProjection:
         """Patch compatibility-only legacy wiki_pages fields."""
         if not fields:
             return
-        allowed = {"concept_summary", "lint_score", "complex_anomaly"}
+        allowed = {"content", "concept_summary", "lint_score", "complex_anomaly"}
         invalid = set(fields) - allowed
         if invalid:
             raise ValueError(f"Invalid legacy projection fields: {invalid}")

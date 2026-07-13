@@ -139,7 +139,10 @@ def test_restore_version_updates_canonical_page_without_direct_db_write(monkeypa
     assert repo.saved[-1].body == "Restored body"
     assert repo.saved[-1].status == PageStatus.DRAFT
     assert repo.saved[-1].tags == ["restored"]
-    assert projection.legacy_updates == [("page-1", {"concept_summary": "Restored summary"})]
+    assert projection.legacy_updates == [(
+        "page-1",
+        {"content": "Restored body", "concept_summary": "Restored summary"},
+    )]
 
 
 def test_canonical_save_updates_source_ids(monkeypatch):

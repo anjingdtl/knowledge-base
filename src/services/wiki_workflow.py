@@ -157,8 +157,14 @@ class WikiWorkflow:
             projection.process_outbox(force=True)
         except TypeError:
             projection.process_outbox()
-        if "concept_summary" in fields and hasattr(projection, "update_legacy_page_fields"):
-            projection.update_legacy_page_fields(page_id, concept_summary=fields["concept_summary"] or "")
+        legacy_fields = {}
+        if "content" in fields:
+            # Markdown serialization normalizes a trailing newline; legacy callers expect exact text.
+            legacy_fields["content"] = fields["content"] or ""
+        if "concept_summary" in fields:
+            legacy_fields["concept_summary"] = fields["concept_summary"] or ""
+        if legacy_fields and hasattr(projection, "update_legacy_page_fields"):
+            projection.update_legacy_page_fields(page_id, **legacy_fields)
 
     @staticmethod
     def can_transition(from_status: str, to_status: str) -> bool:

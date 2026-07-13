@@ -18,17 +18,10 @@ SRC = Path(__file__).resolve().parent.parent / "src"
 # WikiRepository 直接落库/落盘 wiki 知识。键=(相对 src 的模块路径, 写签名)。
 # 写签名 = 方法名(insert_wiki_page 等)或 "open_write"(open(...,"a"/"w") 追加/覆盖写)。
 ALLOWED_DIRECT_WRITES: dict[tuple[str, str], str] = {
-    # --- T0.2 既有 7 条(FS/SQLite 写,Phase 4 移除)---
-    ("services/wiki_compiler.py", "insert_wiki_page"):
-        "A轨 SQLite 写,Phase 4 T4.3 降级为适配器后移除",
-    ("services/wiki_compiler.py", "update_wiki_page"):
-        "A轨 SQLite 写,Phase 4 T4.3 降级为适配器后移除",
 }
 
 # 守卫覆盖的模块 + 各自禁止的"直接写"方法名
-GUARDED: dict[str, set[str]] = {
-    "services/wiki_compiler.py": {"insert_wiki_page", "update_wiki_page"},
-}
+GUARDED: dict[str, set[str]] = {}
 
 # 额外检查 open(...,"a"/"w"/"x"/"+") 写的模块(堵 AST 只认方法调用的盲区)
 OPEN_WRITE_GUARDED: set[str] = set()
