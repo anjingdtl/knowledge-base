@@ -399,3 +399,43 @@ def test_projection_persists_evidence_stale(repo_and_proj):
     ).fetchone()
     assert row["stale"] == 1
     assert row["stale_at"] == "2026-07-13T10:00:00"
+
+
+# ---- 测试 14: Phase 5 依赖图边投影 ----
+def test_projection_writes_dependency_edges(repo_and_proj):
+    """_upsert_claim + _upsert_page 后,wiki_dependencies 含 source/evidence/claim/page 边。"""
+    from src.models.wiki_v2 import ClaimRelation
+
+    repo, proj, db = repo_and_proj
+    ev = Evidence(evidence_id="ev1", stance=EvidenceStance.SUPPORTS, knowledge_id="k1", block_id="b1")
+    claim = Claim(
+        schema_version=1, claim_id="c1", statement="c1", normalized_statement="c1",
+        claim_type="fact", status=ClaimStatus.ACTIVE, confidence=0.9, valid_from=None, valid_to=None,
+        subject_refs=["s"], predicate="p", object_refs=["o"], evidence=[ev],
+        relations=[ClaimRelation("refines", "c0")],
+        created_at="t", updated_at="t", revision=1,
+    )
+    proj._upsert_claim(claim)
+    page = _make_page(page_id="p1", claim_ids=["c1"])
+    proj._upsert_page(page, path="concepts/p1.md")
+    rows = {
+        (r["from_type"], r["from_id"], r["to_type"], r["to_id"], r["relation"])
+        for r in db.get_conn().execute(
+            "SELECT from_type, from_id, to_type, to_id, relation FROM wiki_dependencies"
+        )
+    }
+    assert ("source", "k1", "evidence", "ev1", "produces") in rows
+    assert ("evidence", "ev1", "claim", "c1", "evidences") in rows
+    assert ("claim", "c1", "claim", "c0", "refines") in rows
+    assert ("claim", "c1", "page", "p1", "cited_in") in rows
+
+
+def test_projection_rebuild_repopulates_dependencies(repo_and_proj):
+    """rebuild() 清空后从 canonical 重灌 wiki_dependencies(read model 可重建)。"""
+    repo, proj, db = repo_and_proj
+    repo.save_claim(_make_claim(claim_id="c1"))
+    repo.save_page(_make_page(page_id="p1", claim_ids=["c1"]))
+    proj._clear_v2_tables()
+    assert _v2_count(db, "wiki_dependencies") == 0
+    proj.rebuild()
+    assert _v2_count(db, "wiki_dependencies") >= 1  # 至少 source→evidence→claim→page 链
