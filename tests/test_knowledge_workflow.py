@@ -393,18 +393,18 @@ def test_save_query_auto_below_threshold_skips(tmp_path):
 
 
 # ---- Phase 5: rebuild 门控触发 ----
-def test_compile_primary_auto_rebuild_schedules_update():
-    """primary + auto_on_source_update=true → compile 后 scheduler 收到 update。"""
+def test_compile_primary_auto_rebuild_enqueues_update():
+    """primary + auto_on_source_update=true → compile 投递 durable update。"""
     _wiki_first()
     Config.set("wiki.canonical_v2.mode", "primary")
     Config.set("wiki.rebuild.auto_on_source_update", True)
     _insert_knowledge()
     primary = MagicMock()
     primary.run.return_value = {"status": "ok"}
-    scheduler = MagicMock()
-    svc = KnowledgeWorkflowService(primary_workflow=primary, rebuild_scheduler=scheduler)
+    adapter = MagicMock()
+    svc = KnowledgeWorkflowService(primary_workflow=primary, maintenance_event_adapter=adapter)
     svc.compile("kid-1", ingested_at="2026-07-02T10:00:00")
-    scheduler.schedule.assert_called_once_with("kid-1", "update")
+    adapter.enqueue_source_event.assert_called_once()
 
 
 def test_compile_primary_auto_off_does_not_schedule():
@@ -423,8 +423,8 @@ def test_compile_primary_auto_off_does_not_schedule():
     scheduler.schedule.assert_not_called()
 
 
-def test_compile_primary_allowlist_canary_schedules():
-    """primary + auto off + allowlist 命中 knowledge_id → schedule(canary 级)。"""
+def test_compile_primary_allowlist_enqueues_maintenance_event():
+    """primary + allowlist 命中 → enqueue durable maintenance event。"""
     _wiki_first()
     Config.set("wiki.canonical_v2.mode", "primary")
     Config.set("wiki.rebuild.auto_on_source_update", False)
@@ -432,29 +432,21 @@ def test_compile_primary_allowlist_canary_schedules():
     _insert_knowledge()
     primary = MagicMock()
     primary.run.return_value = {"status": "ok"}
-    scheduler = MagicMock()
-    svc = KnowledgeWorkflowService(primary_workflow=primary, rebuild_scheduler=scheduler)
+    adapter = MagicMock()
+    svc = KnowledgeWorkflowService(primary_workflow=primary, maintenance_event_adapter=adapter)
     svc.compile("kid-1", ingested_at="2026-07-02T10:00:00")
-    scheduler.schedule.assert_called_once_with("kid-1", "update")
+    adapter.enqueue_source_event.assert_called_once()
 
 
-def test_try_schedule_source_delete_gated(monkeypatch):
-    """auto_on_source_update=true → schedule delete;false + 空 allowlist → 不 schedule。"""
-    scheduler = MagicMock()
+def test_try_schedule_source_delete_uses_maintenance_adapter(monkeypatch):
+    """delete 永远只投递 Maintenance，不向旧 scheduler 双投递。"""
+    adapter = MagicMock()
     mock_container = MagicMock()
-    mock_container.wiki_rebuild_scheduler = scheduler
+    mock_container.maintenance_event_adapter = adapter
     monkeypatch.setattr("src.core.container.get_active_container", lambda: mock_container)
 
-    Config.set("wiki.rebuild.auto_on_source_update", True)
     try_schedule_source_delete("kid-x")
-    scheduler.schedule.assert_called_once_with("kid-x", "delete")
-
-    scheduler.reset_mock()
-    Config.set("wiki.rebuild.auto_on_source_update", False)
-    Config.set("wiki.rebuild.auto_allowlist.knowledge_ids", [])
-    Config.set("wiki.rebuild.auto_allowlist.source_paths", [])
-    try_schedule_source_delete("kid-x")
-    scheduler.schedule.assert_not_called()
+    adapter.enqueue_source_event.assert_called_once()
 
 
 def test_try_schedule_source_delete_no_container_is_safe(monkeypatch):

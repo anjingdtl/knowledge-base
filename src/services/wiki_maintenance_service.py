@@ -50,6 +50,9 @@ class MaintenanceJobRecord:
     created_at: str = ""
     started_at: str | None = None
     finished_at: str | None = None
+    lease_until: str | None = None
+    due_at: str | None = None
+    worker_id: str = ""
     result_summary: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -70,6 +73,9 @@ class MaintenanceJobRecord:
             "created_at": self.created_at,
             "started_at": self.started_at,
             "finished_at": self.finished_at,
+            "lease_until": self.lease_until,
+            "due_at": self.due_at,
+            "worker_id": self.worker_id,
             "result_summary": dict(self.result_summary),
         }
 
@@ -401,8 +407,36 @@ class WikiMaintenanceService:
                 "review": review.to_dict(),
             }
 
-        # DECIDE_AUTO — R1 protective
-        return self._execute_protective(job, knowledge_id, event_type, plan_summary, decision)
+        # R1 work is durable and executed by MaintenanceWorker. Enqueueing is
+        # intentionally non-blocking for Raw indexing and search.
+        job.result_summary = {"plan": plan_summary, "knowledge_id": knowledge_id, "event": event_type}
+        self._save_job(job)
+        return {"ok": True, "queued": True, "job": job.to_dict(), "decision": decision.to_dict()}
+
+    def lease_next_job(self, *, worker_id: str, now: str, lease_until: str) -> MaintenanceJobRecord | None:
+        """Lease one durable due job; used exclusively by MaintenanceWorker."""
+        if self._store is None:
+            job = next((row for row in self._list_jobs(limit=10000) if row.status in ("pending", "retry_wait")), None)
+            if job is None:
+                return None
+            job.status, job.worker_id, job.lease_until = "leased", worker_id, lease_until
+            self._save_job(job)
+            return job
+        value = self._store.claim_next_job(worker_id=worker_id, now=now, lease_until=lease_until)
+        return self._job_from_dict(value)
+
+    def run_leased_job(self, job: MaintenanceJobRecord) -> dict[str, Any]:
+        if job.status != "leased":
+            return {"ok": False, "error": "job_not_leased"}
+        plan = job.result_summary.get("plan") or {}
+        knowledge_id = str(job.result_summary.get("knowledge_id") or plan.get("knowledge_id") or "")
+        event_type = str(job.result_summary.get("event") or plan.get("event") or "updated")
+        decision = self._policy.evaluate(job.job_type, risk_level=job.risk_level)
+        if decision.decision != DECIDE_AUTO:
+            job.status, job.finished_at = "waiting_review", self._clock()
+            self._save_job(job)
+            return {"ok": True, "job": job.to_dict(), "decision": decision.to_dict()}
+        return self._execute_protective(job, knowledge_id, event_type, plan, decision)
 
     def _execute_protective(
         self,

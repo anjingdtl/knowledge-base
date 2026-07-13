@@ -163,6 +163,7 @@ class AppContainer:
     _wiki_serving_gate: Optional[object] = field(default=None, repr=False)
     _wiki_maintenance_service: Optional[object] = field(default=None, repr=False)
     _maintenance_policy: Optional[object] = field(default=None, repr=False)
+    _maintenance_event_adapter: Optional[object] = field(default=None, repr=False)
 
     _initialized_services: list = field(default_factory=list, repr=False)
 
@@ -380,7 +381,7 @@ class AppContainer:
                 shadow_workflow=self.wiki_shadow_workflow,
                 canary_workflow=self.wiki_canary_workflow,
                 primary_workflow=self.wiki_primary_workflow,
-                rebuild_scheduler=self.wiki_rebuild_scheduler,
+                maintenance_event_adapter=self.maintenance_event_adapter,
             )
             self._track_service("_knowledge_workflow")
         return self._knowledge_workflow
@@ -659,6 +660,14 @@ class AppContainer:
                 )
             self._track_service("_wiki_maintenance_service")
         return self._wiki_maintenance_service
+
+    @property
+    def maintenance_event_adapter(self):
+        if self._maintenance_event_adapter is None:
+            from src.services.maintenance_event_adapter import MaintenanceEventAdapter
+            self._maintenance_event_adapter = MaintenanceEventAdapter(self.wiki_maintenance_service)
+            self._track_service("_maintenance_event_adapter")
+        return self._maintenance_event_adapter
 
 
 def create_container(config_path: str | None = None) -> AppContainer:

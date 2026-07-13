@@ -178,6 +178,21 @@ class MaintenanceRepository:
             conn.rollback()
             raise
 
+    def recover_expired_leases(self, *, now: str) -> int:
+        """Return abandoned leases to pending so a restarted worker can resume."""
+        rows = self._conn().execute(
+            "SELECT job_id, payload_json FROM maintenance_jobs WHERE status = 'leased' AND lease_until < ?", (now,),
+        ).fetchall()
+        for row in rows:
+            job = self._load(row[1])
+            job.update({"status": "pending", "lease_until": None, "worker_id": ""})
+            self._conn().execute(
+                "UPDATE maintenance_jobs SET status = 'pending', lease_until = NULL, payload_json = ? WHERE job_id = ?",
+                (self._dump(job), row[0]),
+            )
+        self._conn().commit()
+        return len(rows)
+
     def save_review(self, review: dict[str, Any]) -> None:
         self._conn().execute(
             """INSERT INTO maintenance_reviews(review_id, status, risk_level, job_id, created_at, payload_json)
@@ -212,3 +227,23 @@ class MaintenanceRepository:
             "SELECT payload_json FROM maintenance_dead_letters ORDER BY failed_at DESC LIMIT ?", (limit,),
         ).fetchall()
         return [self._load(row[0]) for row in rows]
+
+    def claim_schedule(self, name: str, *, now: str, lease_until: str) -> bool:
+        """Acquire a cross-process schedule lease exactly once."""
+        conn = self._conn()
+        try:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute("SELECT lease_until FROM maintenance_schedules WHERE schedule_name = ?", (name,)).fetchone()
+            if row is not None and row[0] and row[0] >= now:
+                conn.commit()
+                return False
+            conn.execute(
+                "INSERT INTO maintenance_schedules(schedule_name, next_run_at, lease_until, payload_json) VALUES (?, ?, ?, '{}') "
+                "ON CONFLICT(schedule_name) DO UPDATE SET next_run_at=excluded.next_run_at, lease_until=excluded.lease_until",
+                (name, now, lease_until),
+            )
+            conn.commit()
+            return True
+        except Exception:
+            conn.rollback()
+            raise

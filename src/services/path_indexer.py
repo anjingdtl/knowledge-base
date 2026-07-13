@@ -406,6 +406,7 @@ class PathIndexService:
             try_knowledge_workflow_compile(item_id, ingested_at=item.created_at)
         except Exception as e:
             logger.warning("wiki-first hook failed for %s: %s", item_id, e)
+        self._enqueue_maintenance(item_id, "created", content_hash, str(path))
 
         return item_id
 
@@ -455,6 +456,7 @@ class PathIndexService:
                 try_knowledge_workflow_compile(existing_kid, ingested_at=item.created_at)
             except Exception as e:
                 logger.warning("wiki-first hook failed for %s: %s", existing_kid, e)
+            self._enqueue_maintenance(existing_kid, "updated", content_hash, str(path))
 
             return existing_kid
         else:
@@ -469,6 +471,20 @@ class PathIndexService:
             (now, kid),
         )
         conn.commit()
+        self._enqueue_maintenance(kid, "deleted", f"tombstone:{now}", "")
+
+    @staticmethod
+    def _enqueue_maintenance(knowledge_id: str, event_type: str, revision: str, source_path: str) -> None:
+        """Best-effort post-index hook; failures never undo Raw indexing."""
+        try:
+            from src.core.container import get_active_container
+            container = get_active_container()
+            if container is not None:
+                container.maintenance_event_adapter.enqueue_source_event(
+                    knowledge_id, event_type, source_revision=revision, source_path=source_path,
+                )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("maintenance enqueue failed after index for %s: %s", knowledge_id, exc)
 
     def _record_indexed(
         self, fp: FileFingerprint, kid: str, status: str

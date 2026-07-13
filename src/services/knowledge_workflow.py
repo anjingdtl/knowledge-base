@@ -44,6 +44,7 @@ class KnowledgeWorkflowService:
         canary_workflow: Any = None,
         primary_workflow: Any = None,
         rebuild_scheduler: Any = None,
+        maintenance_event_adapter: Any = None,
     ):
         self._source = source_compiler or WikiSourceCompiler()
         self._entity = entity_updater or WikiEntityUpdater()
@@ -52,7 +53,8 @@ class KnowledgeWorkflowService:
         self._shadow = shadow_workflow
         self._canary = canary_workflow
         self._primary = primary_workflow
-        self._rebuild = rebuild_scheduler
+        self._rebuild = rebuild_scheduler  # legacy constructor compatibility only
+        self._maintenance = maintenance_event_adapter
 
     def compile(self, knowledge_id: str, ingested_at: str | None = None) -> dict:
         """编排 Authoring 编译（wiki_first 兼容）。失败隔离,不抛。"""
@@ -158,11 +160,15 @@ class KnowledgeWorkflowService:
         默认 off(auto_on_source_update=false + 空 allowlist)→ 不 schedule,最保守。
         canary 级:auto_allowlist 显式列出的 knowledge_id/source_path 才自动 rebuild。
         """
-        if self._rebuild is None or canonical_mode != "primary":
+        if self._maintenance is None or canonical_mode != "primary":
             return
         try:
             if _rebuild_gate_allows(knowledge_id, item):
-                self._rebuild.schedule(knowledge_id, "update")
+                self._maintenance.enqueue_source_event(
+                    knowledge_id, "updated",
+                    source_revision=str(item.get("content_hash") or item.get("version") or "unknown"),
+                    source_path=str(item.get("source_path") or ""),
+                )
         except Exception as e:
             logger.warning("rebuild schedule failed (%s): %s", knowledge_id, e)
 
@@ -269,8 +275,12 @@ def try_schedule_source_delete(knowledge_id: str, item: dict | None = None) -> N
         from src.core.container import get_active_container
 
         container = get_active_container()
-        if container is None or not _rebuild_gate_allows(knowledge_id, item):
+        if container is None:
             return
-        container.wiki_rebuild_scheduler.schedule(knowledge_id, "delete")
+        revision = str((item or {}).get("content_hash") or (item or {}).get("version") or "tombstone")
+        container.maintenance_event_adapter.enqueue_source_event(
+            knowledge_id, "deleted", source_revision=f"tombstone:{revision}",
+            source_path=str((item or {}).get("source_path") or ""),
+        )
     except Exception as e:
         logger.warning("rebuild delete schedule failed (%s): %s", knowledge_id, e)
