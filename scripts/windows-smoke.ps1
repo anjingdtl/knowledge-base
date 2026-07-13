@@ -40,10 +40,13 @@ $repo = (Resolve-Path -LiteralPath $RepoRoot).Path
 $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("shinehe-windows-smoke-" + [guid]::NewGuid().ToString("N"))
 $mcpProcess = $null
 $originalHome = $env:SHINEHE_HOME
+$originalPythonIoEncoding = $env:PYTHONIOENCODING
 
 try {
     New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null
     $env:SHINEHE_HOME = $tempRoot
+    # GitHub Windows runners default to cp1252; the CLI help contains Chinese.
+    $env:PYTHONIOENCODING = "utf-8"
     $fixture = Join-Path $tempRoot "fixture.txt"
     Set-Content -LiteralPath $fixture -Value "Windows smoke fixture: raw retrieval must remain available." -Encoding utf8
 
@@ -75,6 +78,7 @@ finally {
         $mcpProcess.WaitForExit()
     }
     $env:SHINEHE_HOME = $originalHome
+    $env:PYTHONIOENCODING = $originalPythonIoEncoding
     if (Test-Path -LiteralPath $tempRoot) {
         Remove-Item -LiteralPath $tempRoot -Recurse -Force
     }
