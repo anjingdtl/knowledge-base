@@ -5,7 +5,7 @@
 > 当前分支：`master`
 > 当前方向：Verified Hybrid 融合收束（Raw + Wiki V2 统一知识服务）
 
-## 融合收束 Phase 0–1 — 进行中（2026-07-13）
+## 融合收束 Phase 0–6 — 进行中（2026-07-13）
 
 依据 `docs/ShineHeKnowledge 融合收束开发规格说明.md`。
 
@@ -15,9 +15,12 @@
 | Phase 1 模式配置 | ✅ | `737d0a9` / `docs/superpowers/reviews/verified-hybrid-phase1-report.md` |
 | Phase 2 Serving Gate | ✅ | `ae62767` / `docs/superpowers/reviews/verified-hybrid-phase2-report.md` |
 | Phase 3 统一检索 | ✅ | `3892ce0` / `docs/superpowers/reviews/verified-hybrid-phase3-report.md` |
-| Phase 4+ | ⏸ | 回答/冲突/引用 / 维护中心 … |
+| Phase 4 回答/冲突/引用 | ✅ | `docs/superpowers/reviews/verified-hybrid-phase4-report.md` |
+| Phase 5 维护中心 | ✅ | `docs/superpowers/reviews/verified-hybrid-phase5-report.md` |
+| Phase 6 MCP 边界 | ✅ | `docs/superpowers/reviews/verified-hybrid-phase6-report.md` |
+| Phase 7+ Hybrid Eval / 发布 | ⏸ | 评测集与 v1.7 发布 |
 
-Phase 1 要点：默认 `verified`；`wiki_first`→`authoring`（不切只读）；`legacy`→`evidence_only`；不自动改写用户配置。
+Phase 4–6 要点：`ask` 冲突披露 + Claim/Evidence 引用；MaintenancePolicyEngine + Jobs/Reviews；MCP `write_policy=disabled` 隐藏写工具。全量回归 **1639 passed / 2 skipped**。
 
 ## C2 Matcher 保守收紧 — 5 xfail 转绿（2026-07-13）
 
