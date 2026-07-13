@@ -8,7 +8,7 @@ import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
-from typing import Any
+from typing import Any, cast
 
 from src.services.citation_builder import CitationBuilder
 from src.services.hybrid_search import HybridSearcher
@@ -85,10 +85,13 @@ class SearchService:
         gate = self._wiki_serving_gate
         if repo is None:
             return []
-        return repo.list_servable_claims(
-            gate=gate,
-            include_disclose=include_disclose,
-            limit=limit,
+        return cast(
+            list,
+            repo.list_servable_claims(
+                gate=gate,
+                include_disclose=include_disclose,
+                limit=limit,
+            ),
         )
 
     def _should_use_verified_hybrid(self) -> bool:
@@ -410,8 +413,8 @@ class SearchService:
         try:
             from src.services.verified_conflict import detect_claim_conflicts
 
-            pool = [r for r in output if r.get("source") == "verified_claim"] + disclose_rows
-            conflicts = detect_claim_conflicts(pool)
+            claim_rows = [r for r in output if r.get("source") == "verified_claim"] + disclose_rows
+            conflicts = detect_claim_conflicts(claim_rows)
             if conflicts:
                 self.last_search_trace["conflicts"] = conflicts
                 self.last_search_trace["conflict_disclosed"] = True

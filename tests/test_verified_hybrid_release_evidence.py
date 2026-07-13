@@ -1,7 +1,6 @@
 """Prevent historical release notes from being treated as current evidence."""
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 FINAL_REVIEW = ROOT / "docs" / "superpowers" / "reviews" / "verified-hybrid-final-review.md"
 PROGRESS = ROOT / "PROGRESS.md"

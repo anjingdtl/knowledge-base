@@ -1,6 +1,6 @@
 # ShineHeKnowledge Verified Hybrid 融合收束纠偏执行计划（Plan）
 
-> **状态：执行中；Phase 0–6 已完成。**
+> **状态：执行中；Phase 0–7 已完成本地门禁，Phase 8 进行中。**
 > **配套 Spec：** `docs/superpowers/specs/2026-07-13-verified-hybrid-convergence-correction-design.md`
 > **执行方式：** TDD；按 Phase 顺序；每个 Task 独立验证、独立提交、可回滚。
 > **目标版本：** v1.8.0
@@ -592,7 +592,7 @@ python evals/run_verified_hybrid_release_eval.py --strict --json --output artifa
 - Modify only files reported by current Ruff
 - Test: exact CI command
 
-- [ ] 修复未使用 import 与 import 排序，不做无关格式化。
+- [x] 修复未使用 import 与 import 排序，不做无关格式化。
 
 ```powershell
 python -m ruff check src tests evals tools scripts
@@ -611,7 +611,7 @@ python -m ruff check src tests evals tools scripts
   - `src/services/search_service.py`
   - `src/services/verified_answer.py`
 
-- [ ] 用显式类型、局部变量改名、类型收窄修复，不用大范围 `# type: ignore`。
+- [x] 用显式类型、局部变量改名、类型收窄修复，不用大范围 `# type: ignore`。
 
 ```powershell
 python -m mypy src tools --ignore-missing-imports
@@ -626,9 +626,9 @@ python -m mypy src tools --ignore-missing-imports
 - Modify: `.github/workflows/ci.yml`
 - Modify: `pyproject.toml`（仅在真实兼容性需要时）
 
-- [ ] CI matrix 覆盖 3.10、3.11、3.12。
-- [ ] 每个版本安装相同 extras 并运行全量 tests。
-- [ ] 不把 3.10/3.11 标为 allow-failure。
+- [x] CI matrix 覆盖 3.10、3.11、3.12。
+- [x] 每个版本安装相同 extras 并运行全量 tests（待最终 push 取得远端运行证据）。
+- [x] 不把 3.10/3.11 标为 allow-failure。
 
 ### Task 7.4：Docker Gate
 
@@ -641,8 +641,8 @@ docker build --target api .
 docker build --target mcp .
 ```
 
-- [ ] API 和 MCP target 均构建。
-- [ ] 容器 smoke 调用 health/ping。
+- [x] API 和 MCP target 均由 CI 构建（本机 Docker 未安装，待最终 push 取得远端运行证据）。
+- [x] API 容器 smoke 调用 health（同上）。
 
 ### Task 7.5：Windows Runtime Smoke
 
@@ -652,10 +652,10 @@ docker build --target mcp .
 - Modify: `.github/workflows/ci.yml` 或新增 Windows workflow
 - Create: `tests/test_windows_smoke_contract.py`
 
-- [ ] 使用 Windows temp workspace，不碰仓库 `config.yaml/data/raw/wiki`。
-- [ ] 验证 CLI init/index 与 MCP stdio initialize、capabilities、search、ask、read、ping。
-- [ ] 模拟 Wiki 目录不可读/损坏，Raw 仍成功。
-- [ ] 检查启动/停止脚本退出码和残留进程。
+- [x] 使用 Windows temp workspace，不碰仓库 `config.yaml/data/raw/wiki`。
+- [x] 验证 CLI init/index 与 MCP initialize、capabilities、search、ask、read、ping。
+- [ ] 模拟 Wiki 目录不可读/损坏，Raw 仍成功（转入 Phase 8 最终验收场景 C）。
+- [x] 检查启动/停止脚本退出码和残留进程。
 
 **Phase 7 Gate:**
 

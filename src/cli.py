@@ -385,8 +385,8 @@ def _handle_wiki(args: argparse.Namespace) -> int:
         if getattr(args, "apply", False):
             print("serving validation apply is gated until Phase 8; use --dry-run")
             return 2
-        report = WikiServingValidationMigrator(create_container().wiki_repository).dry_run()
-        print(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
+        validation_report = WikiServingValidationMigrator(create_container().wiki_repository).dry_run()
+        print(json.dumps(validation_report.to_dict(), ensure_ascii=False, indent=2))
         return 0
 
     if cmd == "claims":

@@ -23,7 +23,7 @@ ANSWER_MODE_NO_ANSWER = "no_answer"
 
 
 def _is_claim(row: dict[str, Any]) -> bool:
-    return (
+    return bool(
         row.get("source") == "verified_claim"
         or row.get("candidate_type") == "claim"
         or bool(row.get("claim_id"))
@@ -31,11 +31,14 @@ def _is_claim(row: dict[str, Any]) -> bool:
 
 
 def _is_raw(row: dict[str, Any]) -> bool:
-    return not _is_claim(row) and (
-        row.get("source") in (None, "knowledge", "wiki")
-        or row.get("candidate_type") == "raw_block"
-        or row.get("block_id")
-        or row.get("knowledge_id")
+    return bool(
+        not _is_claim(row)
+        and (
+            row.get("source") in (None, "knowledge", "wiki")
+            or row.get("candidate_type") == "raw_block"
+            or row.get("block_id")
+            or row.get("knowledge_id")
+        )
     )
 
 

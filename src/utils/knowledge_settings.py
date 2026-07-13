@@ -150,12 +150,24 @@ def resolve_effective_knowledge_settings(
         config, "maintenance.automation_level", default="supervised", parser=_string,
         warnings=warnings, sources=sources, field="automation_level",
     )
+    # Existing MCP configs predate tool_profile.  Their presence is an
+    # integration signal, so retain the legacy surface (including write tools)
+    # until the owner explicitly selects a profile.  A completely absent MCP
+    # section is a new install and keeps the safer mode-derived default.
+    has_legacy_mcp_settings = any(
+        _value(config, path) is not _MISSING
+        for path in ("mcp.write_policy", "mcp.allow_http_write", "mcp.auth_token")
+    )
+    default_profile = (
+        "legacy" if has_legacy_mcp_settings else "extended" if authoring else "core"
+    )
     mcp_tool_profile = _resolved_value(
-        config, "mcp.tool_profile", default="extended" if authoring else "core", parser=_string,
+        config, "mcp.tool_profile", default=default_profile, parser=_string,
         warnings=warnings, sources=sources, field="mcp_tool_profile",
     )
+    default_write_policy = "local_confirm" if authoring or has_legacy_mcp_settings else "disabled"
     mcp_write_policy = _resolved_value(
-        config, "mcp.write_policy", default="local_confirm" if authoring else "disabled", parser=_string,
+        config, "mcp.write_policy", default=default_write_policy, parser=_string,
         warnings=warnings, sources=sources, field="mcp_write_policy",
     )
     allow_http_write = _resolved_value(

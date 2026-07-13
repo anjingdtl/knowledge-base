@@ -49,6 +49,15 @@ def test_wiki_first_missing_verified_switch_still_enables_hybrid():
     assert settings.sources["verified_hybrid_enabled"] == "derived:mode"
 
 
+def test_existing_mcp_config_without_profile_keeps_legacy_surface():
+    settings = resolve_effective_knowledge_settings({
+        "mcp": {"write_policy": "local_confirm"},
+    })
+
+    assert settings.mcp_tool_profile == "legacy"
+    assert settings.mcp_write_policy == "local_confirm"
+
+
 def test_explicit_flags_win_over_mode_defaults():
     settings = resolve_effective_knowledge_settings({
         "knowledge_workflow": {"mode": "authoring"},

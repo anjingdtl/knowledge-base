@@ -320,14 +320,14 @@ class FileGraphService:
                         (f"{prefix}%",),
                     ).fetchone()
                     if row:
-                        return row[0]
+                        return str(row[0])
                     # id 可能是完整 UUID，前缀 8 位匹配
                     row = self._db.get_conn().execute(
                         "SELECT id FROM knowledge_items WHERE substr(id,1,?) = ? LIMIT 1",
                         (len(prefix), prefix),
                     ).fetchone()
                     if row:
-                        return row[0]
+                        return str(row[0])
                 except Exception:
                     pass
         return None

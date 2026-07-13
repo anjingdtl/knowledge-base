@@ -21,7 +21,6 @@ import argparse
 import json
 import logging
 import os
-import re
 import shutil
 import sys
 import tempfile
@@ -170,12 +169,11 @@ def _ensure_chat_credentials() -> dict[str, Any]:
 
 
 def _setup_isolated_env(work: Path) -> None:
+    import src.core.container as container_mod
     from src.services.block_store import BlockStore
     from src.services.db import Database
     from src.services.vectorstore import VectorStore
     from src.utils.config import Config
-
-    import src.core.container as container_mod
 
     Config.load()
     Config.set("storage.data_dir", str(work))

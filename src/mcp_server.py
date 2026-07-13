@@ -663,8 +663,9 @@ def _do_ask(question: str) -> dict:
     total_timeout = float(Config.get("rag.ask.total_timeout", 90) or 90)
     timeout_label = f"{total_timeout:g}s"
 
+    container = _get_container()
+
     def _run_verified() -> dict:
-        container = _get_container()
         from src.services.verified_answer import VerifiedAnswerService
         svc = VerifiedAnswerService(
             container.search_service,
@@ -674,9 +675,14 @@ def _do_ask(question: str) -> dict:
         return dict(svc.ask(question, top_k=int(Config.get("rag.ask.max_sources", 5) or 5)))
 
     def _run_legacy() -> dict:
-        return dict(_get_container().rag_pipeline.query(question, timeout=total_timeout))
+        return dict(container.rag_pipeline.query(question, timeout=total_timeout))
 
-    runner = _run_verified if _should_use_verified_ask() else _run_legacy
+    # The production container owns the verified dependencies.  Keeping the
+    # legacy runner for minimal test/integration doubles preserves the timeout
+    # and error envelope contract without requiring them to emulate the whole
+    # SearchService + LLM graph.
+    use_verified = _should_use_verified_ask() and isinstance(container, AppContainer)
+    runner = _run_verified if use_verified else _run_legacy
     try:
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
             future = pool.submit(runner)

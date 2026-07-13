@@ -12,9 +12,6 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timedelta
-from unittest.mock import patch
-
-import pytest
 
 from src.models.knowledge import KnowledgeItem
 from src.services.db import Database
@@ -22,10 +19,7 @@ from src.services.indexer import (
     index_knowledge_item,
     reindex_all,
     reindex_knowledge_item,
-    _clear_reindex_checkpoint,
-    _save_reindex_checkpoint,
 )
-
 
 # ---------------------------------------------------------------------------
 # P0: 健康检查向量覆盖率排除软删
@@ -34,8 +28,8 @@ from src.services.indexer import (
 class TestHealthVectorCoverageExcludesSoftDeleted:
     def test_soft_deleted_blocks_not_counted_in_coverage(self, setup_db, monkeypatch):
         """软删条目的 blocks 不得压低 vector_coverage。"""
-        from src.services.health import kb_health_check
         from src.services.block_store import BlockStore
+        from src.services.health import kb_health_check
 
         # 活跃条目：1 block + 1 vector
         active = KnowledgeItem(

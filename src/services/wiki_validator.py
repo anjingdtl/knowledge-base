@@ -7,7 +7,7 @@ schema/*.json 是权威契约文档,不强制 jsonschema 依赖。
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable, Optional, cast
 
 from src.models.wiki_v2 import (
     Claim,
@@ -159,7 +159,7 @@ class WikiValidator:
         )
         with repository.transaction() as tx:
             tx.stage_claim(claim, expected_revision=claim.revision)
-        return claim.serving_validation
+        return cast(ClaimServingValidation, claim.serving_validation)
 
     # ---- 目录级校验 ----
     def validate_directory(self) -> list[ValidationFinding]:

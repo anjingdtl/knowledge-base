@@ -72,7 +72,14 @@ class PathIndexService:
     """
 
     def __init__(self, db=None, config=None, indexed_file_repo=None):
-        self._db = db or Database
+        # CLI construction does not go through AppContainer.  Bind its repository
+        # to an actual Database instance instead of the compatibility facade class,
+        # whose instance methods (for example get_conn) cannot be called directly.
+        if db is None:
+            if Database._instance is None:
+                Database.connect()
+            db = Database._instance
+        self._db = db
         self._config = config or Config
         self._repo: IndexedFileRepository = (
             indexed_file_repo or IndexedFileRepository(db=self._db)

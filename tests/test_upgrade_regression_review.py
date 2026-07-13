@@ -289,6 +289,10 @@ def test_do_ask_catches_non_timeout_exception(monkeypatch):
     不冒泡成未处理 MCP 错误。"""
     from src import mcp_server
 
+    # This regression targets the legacy RAG error envelope specifically;
+    # verified mode has its own tested no-answer/fallback path.
+    monkeypatch.setattr(mcp_server, "_should_use_verified_ask", lambda: False)
+
     container = mcp_server._get_container()
 
     def _boom(question, timeout=None, **kwargs):

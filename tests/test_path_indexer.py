@@ -7,6 +7,7 @@ import pytest
 
 from src.models.indexing import FileFingerprint, ManifestDiff
 from src.repositories.indexed_file_repo import IndexedFileRepository, _normalize_path
+from src.services.db import Database
 from src.services.path_indexer import PathIndexService
 
 
@@ -42,6 +43,12 @@ class TestScanManifest:
         assert "readme.md" in names
         assert "notes.txt" in names
         assert "data.csv" in names
+
+    def test_default_service_binds_the_active_database_instance(self):
+        service = PathIndexService()
+
+        assert service._db is Database._instance
+        assert service._db is not Database
 
     def test_scan_skips_hidden(self, service, tmp_path):
         """隐藏文件应被跳过"""

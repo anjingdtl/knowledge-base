@@ -20,13 +20,17 @@ jobs:
       - run: python -m mypy src tools --ignore-missing-imports
 
   test:
-    name: Test
+    name: Test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python-version }}
       - name: Install Qt runtime libraries
         run: sudo apt-get update && sudo apt-get install -y libegl1
       - run: pip install -e ".[dev,api,gui,parsers,wiki]"
@@ -98,5 +102,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - run: docker build --target api .
-      - run: docker build --target mcp .
+      - run: docker build --target api --tag shinehe-api:ci .
+      - run: docker build --target mcp --tag shinehe-mcp:ci .
+      - name: API health smoke
+        run: |
+          docker run --detach --rm --name shinehe-api-smoke -p 8000:8000 shinehe-api:ci
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8000/api/health; then exit 0; fi
+            sleep 1
+          done
+          docker logs shinehe-api-smoke
+          exit 1
+      - name: Stop API smoke
+        if: always()
+        run: docker rm --force shinehe-api-smoke || true
+
+  windows-smoke:
+    name: Windows Runtime Smoke
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install -e ".[dev,api,parsers,wiki]"
+      - name: Run isolated Windows smoke
+        shell: pwsh
+        run: ./scripts/windows-smoke.ps1 -RepoRoot $PWD -PythonExe python

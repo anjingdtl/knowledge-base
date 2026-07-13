@@ -571,7 +571,8 @@ class WikiRepository:
                 return []
             claim = obj
         g = self._default_serving_gate(gate)
-        return g.resolve_claim_evidence(claim)
+        from typing import cast
+        return cast(list, g.resolve_claim_evidence(claim))
 
     def get_claim_serving_diagnostics(
         self,
@@ -580,7 +581,8 @@ class WikiRepository:
     ) -> dict:
         """Aggregate serving diagnostics for Doctor / health (no writes)."""
         g = self._default_serving_gate(gate)
-        return g.diagnostics_for_claims(self.list_claims())
+        from typing import cast
+        return cast(dict, g.diagnostics_for_claims(self.list_claims()))
 
     # ---- transaction(C3 严格 staging)----
     @contextlib.contextmanager

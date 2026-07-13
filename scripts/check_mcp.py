@@ -16,7 +16,14 @@ DEFAULT_PORT = 9000
 DEFAULT_PATH = "/mcp"
 
 
-def _post(host: str, port: int, path: str, body: dict, session_id: str | None = None) -> tuple[int, dict | str, dict]:
+def _post(
+    host: str,
+    port: int,
+    path: str,
+    body: dict,
+    session_id: str | None = None,
+    timeout: int = 40,
+) -> tuple[int, dict | str, dict]:
     """发送 MCP JSON-RPC 请求，返回 (status_code, parsed_body_or_raw, headers)"""
     headers = {
         "Content-Type": "application/json",
@@ -25,7 +32,7 @@ def _post(host: str, port: int, path: str, body: dict, session_id: str | None = 
     if session_id:
         headers["Mcp-Session-Id"] = session_id
 
-    conn = http.client.HTTPConnection(host, port, timeout=10)
+    conn = http.client.HTTPConnection(host, port, timeout=timeout)
     try:
         conn.request("POST", path, body=json.dumps(body), headers=headers)
         resp = conn.getresponse()
@@ -34,7 +41,7 @@ def _post(host: str, port: int, path: str, body: dict, session_id: str | None = 
 
         # 尝试解析 JSON（SSE 格式时提取 data: 行）
         parsed = None
-        if raw.startswith("event:"):
+        if "data: " in raw and (raw.startswith("event:") or raw.startswith(": ping")):
             for line in raw.split("\n"):
                 if line.startswith("data: "):
                     try:
@@ -157,6 +164,45 @@ def check_ping(host: str, port: int, path: str, session_id: str) -> float | None
     return None
 
 
+def check_tool_call(host: str, port: int, path: str, session_id: str, name: str, arguments: dict) -> bool:
+    """Call one MCP tool and require a well-formed tool response.
+
+    This is deliberately transport-level: individual tools may legitimately
+    report a domain error for an empty smoke database, but JSON-RPC/MCP itself
+    must still return a content payload rather than time out or crash.
+    """
+    print(f"[smoke] 调用 {name} ...", end=" ")
+    body = {
+        "jsonrpc": "2.0",
+        "id": f"smoke-{name}",
+        "method": "tools/call",
+        "params": {"name": name, "arguments": arguments},
+    }
+    status, result, _ = _post(host, port, path, body, session_id)
+    if status != 200 or not isinstance(result, dict):
+        detail = str(result)[:240]
+        print(f"FAIL (HTTP {status}: {detail})")
+        return False
+    content = result.get("result", {}).get("content", [])
+    if not isinstance(content, list) or not content:
+        print("FAIL (missing tool content)")
+        return False
+    print("OK")
+    return True
+
+
+def check_read_path(host: str, port: int, path: str, session_id: str) -> bool:
+    """Exercise read without requiring a pre-existing record."""
+    return check_tool_call(
+        host,
+        port,
+        path,
+        session_id,
+        "read",
+        {"item_id": "windows-smoke-missing-item"},
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description="MCP Server 连接诊断")
     parser.add_argument("--host", default=DEFAULT_HOST)
@@ -164,6 +210,11 @@ def main():
     parser.add_argument("--path", default=DEFAULT_PATH)
     parser.add_argument("--ping", action="store_true", help="仅测试 ping")
     parser.add_argument("--tools", action="store_true", help="仅列出工具")
+    parser.add_argument(
+        "--smoke-reads",
+        action="store_true",
+        help="调用 kb_capabilities/search/ask/read，验证真实 MCP 工具调用链",
+    )
     args = parser.parse_args()
 
     print("=" * 60)
@@ -189,6 +240,37 @@ def main():
 
     if args.tools:
         check_tools(args.host, args.port, args.path, session_id)
+        return
+
+    if args.smoke_reads:
+        checks = [
+            check_tool_call(args.host, args.port, args.path, session_id, "kb_capabilities", {}),
+            check_tool_call(
+                args.host,
+                args.port,
+                args.path,
+                session_id,
+                "search",
+                {"query": "Windows smoke raw retrieval", "top_k": 1},
+            ),
+            check_tool_call(
+                args.host,
+                args.port,
+                args.path,
+                session_id,
+                "ask",
+                {
+                    "question": "Windows smoke raw retrieval",
+                    "include_graph": False,
+                    "include_context": False,
+                    "max_sources": 1,
+                },
+            ),
+            check_read_path(args.host, args.port, args.path, session_id),
+            check_ping(args.host, args.port, args.path, session_id) is not None,
+        ]
+        if not all(checks):
+            sys.exit(1)
         return
 
     # Step 3: 列出工具

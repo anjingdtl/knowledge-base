@@ -305,7 +305,7 @@ def package_fused_result(
     title = cand.get("title") or ""
 
     if ctype == "claim":
-        item = {
+        item: dict[str, Any] = {
             "source": "verified_claim",
             "candidate_type": "claim",
             "block_id": bid or None,
@@ -343,10 +343,11 @@ def package_fused_result(
                     "metadata": {"page_id": kid, "knowledge_id": kid, "title": title},
                 }
                 citation = citation_builder.build(fake_raw, knowledge)
-                item["citation"] = citation.to_dict()
-                item["citation"]["claim_id"] = cand.get("claim_id")
-                item["citation"]["citation_layer"] = "claim"
-                item["citation"]["evidence"] = item["evidence"]
+                citation_payload = citation.to_dict()
+                citation_payload["claim_id"] = cand.get("claim_id")
+                citation_payload["citation_layer"] = "claim"
+                citation_payload["evidence"] = item["evidence"]
+                item["citation"] = citation_payload
             except Exception:  # noqa: BLE001
                 item["citation"] = {
                     "claim_id": cand.get("claim_id"),
