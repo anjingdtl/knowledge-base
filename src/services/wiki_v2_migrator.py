@@ -225,16 +225,14 @@ class WikiV2Migrator:
                 report.already_canonical += 1
                 continue
 
-            if pid and not existing_canonical_ids:
-                # 有 page_id 但 registry 空:可能是半 canonical 文件,仍跳过 create
-                # 若 repo 尚未登记,apply 时会 stage 一次以注册
+            if pid and pid not in existing_canonical_ids:
+                # 磁盘已有 page_id 但 registry 未登记 → apply 时 stage 注册，勿 skip 永久遗漏
                 page_plans.append(MigrationPagePlan(
                     track="b", source_ref=rel, title=title, page_type=page_type,
                     source_ids=source_ids, match_page_id=pid,
-                    action="skip_already_canonical", body=body,
-                    reasons=["explicit page_id present on filesystem page"],
+                    action="register_existing", body=body,
+                    reasons=["explicit page_id on filesystem but missing from registry"],
                 ))
-                report.already_canonical += 1
                 continue
 
             # 尝试与 A 轨匹配
@@ -512,7 +510,7 @@ class WikiV2Migrator:
             for pp in plan.page_plans:
                 if pp.action in ("skip_already_canonical", "conflict"):
                     continue
-                if pp.action not in ("create", "match_a_b"):
+                if pp.action not in ("create", "match_a_b", "register_existing"):
                     continue
                 pid = pp.match_page_id or self._id_factory()
                 page_id_by_title[pp.title] = pid
