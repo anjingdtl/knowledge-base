@@ -1,0 +1,212 @@
+{
+  "all_results": {
+    "retrieval_code": [
+      {
+        "query": "calculate_rrf_score function",
+        "category": "code",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.8194270280062366,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 510.87509999979375,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "HybridSearchError exception",
+        "category": "code",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.9197207891481876,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 490.307600000051,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "normalize file path cross-platform",
+        "category": "code",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.7977228895450266,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 506.1860000005254,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      }
+    ],
+    "retrieval_no_answer": [
+      {
+        "query": "如何安装 Kubernetes？",
+        "category": "no_answer",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 502.056100000118,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "PostgreSQL replication setup",
+        "category": "no_answer",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 498.1227999996918,
+        "must_not_violated": true,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "React component lifecycle",
+        "category": "no_answer",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 515.3675000001385,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      }
+    ],
+    "retrieval_table": [
+      {
+        "query": "API search endpoint parameters",
+        "category": "structured",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.9447176050778178,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 496.1879000002227,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "authentication bearer token",
+        "category": "keyword",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.8519590445170673,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 496.9863999995141,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      }
+    ],
+    "retrieval_zh": [
+      {
+        "query": "知识库默认使用什么数据库？",
+        "category": "keyword",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.7920874914199381,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 493.0518999999549,
+        "must_not_violated": true,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "如何改善搜索质量？",
+        "category": "keyword",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.8061503743503469,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 533.6398999997982,
+        "must_not_violated": true,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "RRF 融合的默认常数是多少？",
+        "category": "keyword",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.8529278650606567,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 496.6795000000275,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "MCP 工具配置档有哪些选项？",
+        "category": "keyword",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.8710785440003369,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 513.2988000004843,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      },
+      {
+        "query": "embedding 模型默认维度是多少？",
+        "category": "keyword",
+        "recall": 1.0,
+        "mrr": 1.0,
+        "ndcg": 0.8270433092474515,
+        "citation_location_completeness": 1.0,
+        "latency_ms": 506.2508999999409,
+        "must_not_violated": false,
+        "no_answer_correct": true,
+        "results_count": 10
+      }
+    ]
+  },
+  "all_metrics": {
+    "retrieval_code": {
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_10": 0.8456235688998168,
+      "no_answer_accuracy": 0.0,
+      "citation_location_completeness": 1.0,
+      "latency_p50_ms": 506.1860000005254,
+      "latency_p95_ms": 510.87509999979375,
+      "total_queries": 3
+    },
+    "retrieval_no_answer": {
+      "recall_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_10": 0.0,
+      "no_answer_accuracy": 1.0,
+      "citation_location_completeness": 0.0,
+      "latency_p50_ms": 502.056100000118,
+      "latency_p95_ms": 515.3675000001385,
+      "total_queries": 3
+    },
+    "retrieval_table": {
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_10": 0.8983383247974426,
+      "no_answer_accuracy": 0.0,
+      "citation_location_completeness": 1.0,
+      "latency_p50_ms": 496.1879000002227,
+      "latency_p95_ms": 496.9863999995141,
+      "total_queries": 2
+    },
+    "retrieval_zh": {
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_10": 0.8298575168157459,
+      "no_answer_accuracy": 0.0,
+      "citation_location_completeness": 1.0,
+      "latency_p50_ms": 506.2508999999409,
+      "latency_p95_ms": 533.6398999997982,
+      "total_queries": 5
+    }
+  },
+  "baseline_warnings": [],
+  "passed": true
+}

@@ -1,0 +1,113 @@
+{
+  "cases": 12,
+  "embed_calls": 24,
+  "confusion_matrix": {
+    "duplicate": {
+      "duplicate": 1,
+      "new": 0,
+      "supports": 0,
+      "refines": 0,
+      "contradicts": 0,
+      "supersedes": 0,
+      "unresolved": 0
+    },
+    "contradicts": {
+      "contradicts": 1,
+      "new": 0,
+      "supports": 0,
+      "refines": 0,
+      "supersedes": 0,
+      "duplicate": 0,
+      "unresolved": 0
+    },
+    "unresolved": {
+      "unresolved": 5,
+      "supports": 1,
+      "new": 0,
+      "refines": 0,
+      "contradicts": 0,
+      "supersedes": 0,
+      "duplicate": 0
+    },
+    "supersedes": {
+      "unresolved": 1,
+      "new": 0,
+      "supports": 0,
+      "refines": 0,
+      "contradicts": 0,
+      "supersedes": 0,
+      "duplicate": 0
+    },
+    "refines": {
+      "unresolved": 1,
+      "new": 0,
+      "supports": 0,
+      "refines": 0,
+      "contradicts": 0,
+      "supersedes": 0,
+      "duplicate": 0
+    },
+    "new": {
+      "new": 1,
+      "supports": 0,
+      "refines": 0,
+      "contradicts": 0,
+      "supersedes": 0,
+      "duplicate": 0,
+      "unresolved": 0
+    },
+    "supports": {
+      "supports": 1,
+      "new": 0,
+      "refines": 0,
+      "contradicts": 0,
+      "supersedes": 0,
+      "duplicate": 0,
+      "unresolved": 0
+    }
+  },
+  "per_action": {
+    "new": {
+      "precision": 1.0,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    "supports": {
+      "precision": 0.5,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0
+    },
+    "refines": {
+      "precision": null,
+      "tp": 0,
+      "fp": 0,
+      "fn": 1
+    },
+    "contradicts": {
+      "precision": 1.0,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    "supersedes": {
+      "precision": null,
+      "tp": 0,
+      "fp": 0,
+      "fn": 1
+    },
+    "duplicate": {
+      "precision": 1.0,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    "unresolved": {
+      "precision": 0.7143,
+      "tp": 5,
+      "fp": 2,
+      "fn": 1
+    }
+  }
+}

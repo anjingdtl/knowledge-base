@@ -37,6 +37,11 @@ REASON_EVIDENCE_BLOCK_MISSING = "evidence_block_missing"
 REASON_EVIDENCE_HASH_MISMATCH = "evidence_hash_mismatch"
 REASON_KNOWLEDGE_DELETED = "knowledge_deleted"
 REASON_VALIDATION_FAILED = "validation_failed"
+REASON_SERVING_VALIDATION_MISSING = "serving_validation_missing"
+REASON_REVIEW_NOT_APPROVED = "review_not_approved"
+REASON_VALIDATED_REVISION_STALE = "validated_revision_stale"
+REASON_PUBLISHED_REVISION_STALE = "published_revision_stale"
+REASON_SERVING_EVIDENCE_MISSING = "serving_evidence_missing"
 REASON_REVIEW_REQUIRED = "review_required"
 REASON_SCOPE_MISMATCH = "scope_mismatch"
 REASON_UNIT_INCOMPATIBLE = "unit_incompatible"
@@ -117,7 +122,9 @@ class ServingGateConfig:
     exclude_stale: bool = True
     exclude_unsupported: bool = True
     exclude_retracted: bool = True
-    require_validation_passed: bool = True
+    require_validation_passed: bool = False
+    require_review_approved: bool = False
+    require_published_revision: bool = False
     unresolved_policy: str = "disclose"  # disclose | exclude
     contradiction_policy: str = "disclose"
     on_failure: str = "raw_fallback"
@@ -138,6 +145,8 @@ class ServingGateConfig:
             exclude_unsupported=bool(cfg.get("exclude_unsupported", True)),
             exclude_retracted=bool(cfg.get("exclude_retracted", True)),
             require_validation_passed=bool(cfg.get("require_validation_passed", True)),
+            require_review_approved=bool(cfg.get("require_review_approved", True)),
+            require_published_revision=bool(cfg.get("require_published_revision", True)),
             unresolved_policy=str(cfg.get("unresolved_policy", "disclose")),
             contradiction_policy=str(cfg.get("contradiction_policy", "disclose")),
             on_failure=str(cfg.get("on_failure", "raw_fallback")),
@@ -178,6 +187,8 @@ def load_serving_gate_config(
         "require_validation_passed": Config.get(
             "wiki.serving.require_validation_passed", True,
         ),
+        "require_review_approved": Config.get("wiki.serving.require_review_approved", True),
+        "require_published_revision": Config.get("wiki.serving.require_published_revision", True),
         "unresolved_policy": Config.get("wiki.serving.unresolved_policy", "disclose"),
         "contradiction_policy": Config.get(
             "wiki.serving.contradiction_policy", "disclose",
@@ -327,15 +338,54 @@ class WikiServingGate:
                     diagnostics={**diag, "validation_errors": val_errors},
                 )
 
+        if (
+            self._cfg.require_validation_passed
+            or self._cfg.require_review_approved
+            or self._cfg.require_published_revision
+        ):
+            validation = claim.serving_validation
+            if validation is None:
+                return ServingDecision(
+                    claim_id=claim.claim_id,
+                    eligible=False,
+                    reason_codes=[REASON_SERVING_VALIDATION_MISSING],
+                    diagnostics=diag,
+                )
+            validation_codes: list[str] = []
+            if self._cfg.require_validation_passed and not validation.passed:
+                validation_codes.append(REASON_VALIDATION_FAILED)
+            if validation.validated_revision != claim.revision:
+                validation_codes.append(REASON_VALIDATED_REVISION_STALE)
+            if self._cfg.require_review_approved and not validation.review_approved:
+                validation_codes.append(REASON_REVIEW_NOT_APPROVED)
+            if self._cfg.require_published_revision and validation.published_revision != claim.revision:
+                validation_codes.append(REASON_PUBLISHED_REVISION_STALE)
+            if not validation.serving_evidence_ids:
+                validation_codes.append(REASON_SERVING_EVIDENCE_MISSING)
+            if validation_codes:
+                return ServingDecision(
+                    claim_id=claim.claim_id,
+                    eligible=False,
+                    reason_codes=validation_codes,
+                    diagnostics=diag,
+                )
+
         # Evidence resolution
         resolved = self._resolve_supports(claim)
-        ok_supports = [r for r in resolved if r.ok]
-        diag["ok_supports"] = len(ok_supports)
-        diag["resolved_supports"] = len(resolved)
-
         supports = [
             e for e in claim.evidence if e.stance is EvidenceStance.SUPPORTS
         ]
+        if claim.serving_validation is not None and (
+            self._cfg.require_validation_passed
+            or self._cfg.require_review_approved
+            or self._cfg.require_published_revision
+        ):
+            serving_ids = set(claim.serving_validation.serving_evidence_ids)
+            supports = [e for e in supports if e.evidence_id in serving_ids]
+            resolved = [r for r in resolved if r.evidence.evidence_id in serving_ids]
+        ok_supports = [r for r in resolved if r.ok]
+        diag["ok_supports"] = len(ok_supports)
+        diag["resolved_supports"] = len(resolved)
         if not supports:
             codes.append(REASON_MISSING_EVIDENCE)
             return ServingDecision(

@@ -1,0 +1,289 @@
+{
+  "total": 8,
+  "correct": 5,
+  "overall_accuracy": 0.625,
+  "answer_accuracy": 0.625,
+  "refuse_accuracy": 0.0,
+  "keyword_coverage": 0.75,
+  "citation_rate": 1.0,
+  "error_count": 0,
+  "latency_p50_s": 9.432,
+  "latency_p95_s": 15.176,
+  "gates": {
+    "answer_accuracy_ge_0_5": true,
+    "refuse_accuracy_ge_0_5": true,
+    "citation_rate_ge_0_6": true,
+    "error_rate_zero": true,
+    "case_count_ge_10": false,
+    "keyword_coverage_ge_0_5": true
+  },
+  "overall_pass": false,
+  "meta": {
+    "workdir": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\ask_e2e_64or800o",
+    "path": "search_llm",
+    "llm_base_url": "https://api.minimaxi.com/v1",
+    "llm_model": "MiniMax-M3",
+    "embedding_model": "BAAI/bge-m3",
+    "llm_key_fallback": false,
+    "chat_key_source": "llm.api_key",
+    "indexed_fixtures": 6,
+    "probe_search_hits": 1
+  },
+  "cases": [
+    {
+      "id": "e2e_sqlite",
+      "question": "知识库默认使用什么数据库？它用什么模式做本地索引？",
+      "answer": "## 问题拆解\n\n需要回答两个事实点：\n1. 知识库默认使用的数据库是什么？\n2. 本地索引采用的模式（journal mode）是什么？\n\n## 推理与回答\n\n依据来源1（System Architecture > Storage Layer）：\n\n> \"The knowledge base uses SQLite with WAL mode as the primary database.\"\n\n- **默认数据库**：**SQLite**\n- **本地索引模式**：**WAL 模式（Write-Ahead Logging）**\n\n补充相关上下文（同样来自来源1）：\n- 全文搜索由 SQLite 的 **FTS5** 扩展提供，使用 BM25 排序（来源1）\n- 向量嵌入使用 **sqlite-vec** 存储，默认嵌入模型为 BAAI/bge-m3，维度 1024（来源1）\n\n**简答**：知识库默认使用 SQLite，并以 WAL 模式作为本地数据库的存储模式。",
+      "answer_mode": "raw_only",
+      "sources_count": 2,
+      "latency_s": 13.017,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "architecture",
+          "knowledge_id": "3160de82-4f86-40cd-82f2-ba663f32c9d3",
+          "block_id": "63657845-6b86-42a3-a7bf-1b1eb62c9a67",
+          "source": "knowledge"
+        },
+        {
+          "title": "troubleshooting",
+          "knowledge_id": "844792be-082e-46d6-a7e8-3c8ac1099187",
+          "block_id": "ce0931e0-84f7-4418-b56e-3d6a9ab382cb",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_rrf",
+      "question": "混合检索里 RRF 融合的默认常数 k 是多少？",
+      "answer": "**问题拆解：**\n用户询问 RRF（Reciprocal Rank Fusion，倒数排名融合）融合算法中的默认常数 k 的值。\n\n**推理与回答：**\n\n依据来源1（code_example）中的 `calculate_rrf_score` 函数定义：\n\n- 函数签名中参数 `k` 的默认值为 `k: int = 60`\n- 文档字符串也明确说明：`k: RRF constant, default 60`\n- 对应的计算公式为 `sum(1.0 / (k + r + 1) for r in ranks)`，其中 r 为 0-indexed 的排名位置\n\n**结论：混合检索中 RRF 融合的默认常数 k = 60。**",
+      "answer_mode": "raw_only",
+      "sources_count": 1,
+      "latency_s": 9.432,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "code_example",
+          "knowledge_id": "d944d750-40e7-4167-bf5d-103b5b9ed3aa",
+          "block_id": "4f9ee76d-7e2b-466d-ac0f-705cce954b55",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_embedding_dim",
+      "question": "embedding 模型默认输出多少维向量？",
+      "answer": "# 问题拆解\n\n用户想知道 embedding 模型默认输出向量的维度（dimensions）。这需要从知识库中找到与 embedding 模型输出维度相关的信息。\n\n# 检索与推理\n\n查看来源1（config_reference）中 `## embedding section` 的内容：\n\n> - base_url: URL of the embedding API endpoint\n> - model: Name of the embedding model (e.g., **nomic-embed-text** for Ollama)\n> - provider: Provider identifier (ollama, siliconflow, openai)\n> - timeout: Request timeout in seconds (default: 30)\n\n该章节仅描述了 embedding 的**配置项**（地址、模型名、提供商、超时时间），并提到示例模型为 `nomic-embed-text`，但**未提及该模型的输出向量维度**，也没有任何关于默认维度（dimensions）的配置项或说明。\n\n来源1中的其他章节（`## rag section`、`## mcp section`）均与 embedding 输出维度无关。\n\n# 结论\n\n**知识库中未找到 embedding 模型默认输出维度的相关信息。** \n\n已找到的相关线索仅有：embedding 默认模型示例为 `nomic-embed-text`（Ollama 提供），但其输出向量维度未在配置文档中记录。如需该数值，建议查阅对应模型（`nomic-embed-text` 等）的官方模型说明文档。",
+      "answer_mode": "raw_only",
+      "sources_count": 1,
+      "latency_s": 8.605,
+      "expect_refuse": false,
+      "refused": true,
+      "keyword_hit": false,
+      "keyword_score": 0.0,
+      "correct": false,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "ce7056ef-7a94-4dbe-8c52-3b2efde98440",
+          "block_id": "144256af-0016-4b4c-a8d8-f8051f4f78f6",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_tool_profile",
+      "question": "MCP 工具配置档 tool_profile 有哪些选项？",
+      "answer": "MCP 工具配置档 `tool_profile` 提供以下 5 个选项：\n\n- **core**（核心工具集）\n- **extended**（扩展工具集）\n- **admin**（管理员工具集）\n- **full**（完整工具集）\n- **legacy**（旧版/兼容工具集）\n\n该参数用于控制系统对外暴露哪些 MCP 工具。依据「来源1 config_reference > ## mcp section」：\n\n> `tool_profile`: Controls which tools are exposed (core, extended, admin, full, legacy)\n\n如果还需控制写入操作的严格程度，可搭配同 section 下的 `write_policy` 参数（取值：disabled / preview_only / interactive / token_required）一起使用。",
+      "answer_mode": "raw_only",
+      "sources_count": 5,
+      "latency_s": 8.561,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "ce7056ef-7a94-4dbe-8c52-3b2efde98440",
+          "block_id": "144256af-0016-4b4c-a8d8-f8051f4f78f6",
+          "source": "knowledge"
+        },
+        {
+          "title": "api_guide",
+          "knowledge_id": "1ff385b7-c84a-431f-93bb-43b332a5fb74",
+          "block_id": "f1a0e2d6-f0bd-415e-a33b-d5a29226d3db",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "3160de82-4f86-40cd-82f2-ba663f32c9d3",
+          "block_id": "63657845-6b86-42a3-a7bf-1b1eb62c9a67",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_rerank",
+      "question": "如何改善搜索质量？和 reranker 配置有什么关系？",
+      "answer": "## 问题拆解\n\n用户的提问实际上包含两个相关但不同的问题：\n1. **如何改善搜索质量**——有哪些可调节的杠杆？\n2. **与 reranker 配置的关系**——reranker 在整体搜索质量改善链路中扮演什么角色、配置项是什么？\n\n下面基于知识库内容分别推理。\n\n---\n\n## 一、改善搜索质量的常见手段\n\n依据**来源2（architecture > Search Pipeline / Configuration）**和**来源3（config_reference > rag section）**，搜索管道是一个由多阶段组成的链路，每一阶段都有可改善质量的开关：\n\n| 阶段 | 杠杆 | 对应配置（来源3） | 说明（来源2） |\n|---|---|---|---|\n| 召回方式 | 向量 vs 关键词 vs 混合 | `search_mode`：embedding / keywords / **blend** | 混合通过 RRF 融合向量相似度与 BM25 关键词匹配，默认 k=60 平衡 precision/recall |\n| 召回深度 | 返回候选数量 | `top_k`（默认 8） | 结果越多，召回越高但下游 rerank 压力越大 |\n| 召回门槛 | 最低入选分数 | `score_threshold`（默认 0.35） | 提高可减少噪音 |\n| 查询端 | 查询重写 | `enable_query_rewriting`（默认 true） | 用 LLM 生成多个变体以改善复杂/模糊查询的 recall |\n| **精排端** | **rerank** | `enable_rerank`（默认 true） | 对 top 候选重新打分以**改善 precision** |\n\n> 也就是说，\"改善搜索质量\"是一个由 *查询重写 → 混合召回 → 阈值/数量控制 → 重排序* 组成的整体调优问题，来源 3 中 `rag` 段给出了全部可调入口。\n\n---\n\n## 二、与 reranker 配置的关系\n\n依据**来源2（Configuration）**：\n\n- **功能定位**：Reranking 通过对前 N 个候选进行重新打分来 **improve precision**（提升精确率），它不增加召回，而是从已被混合检索（RRF）召回的候选中\"挑出更对的\"。\n- **实现机制**：优先使用 **dedicated rerank API**；当没有可用 rerank 服务时，**fallback 到 LLM-based scoring**。来源 2 中未给出 fallback 的具体策略细节，这是知识库未覆盖的部分。\n- **对应配置项**（来源 3 `rag` 段）：`enable_rerank`，默认值为 `true`。\n\n可以这样理解两者的关系：\n\n1. **召回**（混合搜索 + 查询重写 + top_k / score_threshold）负责\"找全\"——尽量把相关文档捞上来；\n2. **Rerank** 负责\"排准\"——在捞上来的候选里把最相关的顶到前面。\n\n关闭 rerank（`enable_rerank: false`）会让结果直接以 RRF 分数排序，precision 通常会下降，但响应更快、依赖更少。来源 2 明确把 rerank 定位为\"improve precision\"的精度增强步骤。\n\n---\n\n## 小结\n\n- **改善搜索质量**可从配置 `rag` 段（`search_mode` / `top_k` / `score_threshold` / `enable_query_rewriting` / `enable_rerank`）和检索管道本身（RRF 的 k 常量、混合召回）入手（**依据来源2、来源3**）。\n- **Reranker** 是该管道末端的精度提升步骤，对应配置为 `enable_rerank`（默认 true），由来源 2 描述为\"rerank API 优先，LLM scoring 作为 fallback\"。（**依据来源2、来源3**）\n- **知识库覆盖不到的细节**：例如 rerank API 的具体配置字段、fallback LLM 的打分 prompt、RRF 的 k 是否可调等——这些在当前来源中没有出现，需要更多文档补充。",
+      "answer_mode": "raw_only",
+      "sources_count": 3,
+      "latency_s": 20.321,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "code_example",
+          "knowledge_id": "d944d750-40e7-4167-bf5d-103b5b9ed3aa",
+          "block_id": "4f9ee76d-7e2b-466d-ac0f-705cce954b55",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "3160de82-4f86-40cd-82f2-ba663f32c9d3",
+          "block_id": "63657845-6b86-42a3-a7bf-1b1eb62c9a67",
+          "source": "knowledge"
+        },
+        {
+          "title": "config_reference",
+          "knowledge_id": "ce7056ef-7a94-4dbe-8c52-3b2efde98440",
+          "block_id": "144256af-0016-4b4c-a8d8-f8051f4f78f6",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_search_mode",
+      "question": "配置里 search_mode 支持哪些模式？",
+      "answer": "## 拆解问题\n\n用户想了解**配置中 search_mode 参数支持的模式列表**，需要查找：\n1. 知识库中是否提到 `search_mode` 字段\n2. 该字段的定义及可选值\n\n## 检索结果\n\n我逐一查看了知识库中的来源：\n\n- **来源1 api_guide**：涵盖了 Authentication、Search Endpoint、Indexing Endpoint 等内容。其中 Search Endpoint 只提到了 `query`、`top_k`、`tags` 三个参数，以及返回结果的字段（block_id、knowledge_id、title、text、score、match_channels），**未提及 `search_mode` 字段**。\n\n## 结论\n\n**知识库中未找到关于 `search_mode` 的相关证据。**\n\n依据来源1，仅能确认搜索接口支持 `query`、`top_k`、`tags` 三个入参，无法回答 search_mode 支持哪些模式。如需了解，建议查阅完整的配置文档或 API 参考手册的其他章节。",
+      "answer_mode": "raw_only",
+      "sources_count": 1,
+      "latency_s": 9.041,
+      "expect_refuse": false,
+      "refused": true,
+      "keyword_hit": false,
+      "keyword_score": 0.0,
+      "correct": false,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "api_guide",
+          "knowledge_id": "1ff385b7-c84a-431f-93bb-43b332a5fb74",
+          "block_id": "f1a0e2d6-f0bd-415e-a33b-d5a29226d3db",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_hybrid_desc",
+      "question": "混合搜索管线如何结合向量和关键词？",
+      "answer": "## 问题拆解\n\n用户想知道\"混合搜索管线如何结合向量和关键词\"，需要回答：\n1. 向量检索和关键词检索分别用什么技术实现？\n2. 两者如何融合？\n3. 融合公式是什么？默认参数是什么？\n4. 融合之前/之后还有哪些增强手段？\n\n## 组合推理\n\n**依据来源2（System Architecture > Storage Layer & Search Pipeline）** 和 **来源1（code_example）**，可以按管线流程组织如下：\n\n### 1. 两条并行的检索通道\n\n| 通道 | 技术 | 说明 |\n|------|------|------|\n| 向量相似度 | sqlite-vec，近似最近邻搜索 | 默认嵌入模型 BAAI/bge-m3，输出 1024 维向量 |\n| 关键词匹配 | SQLite FTS5，BM25 排序 | 对全部已索引内容做关键词打分 |\n\n### 2. 通过 RRF（Reciprocal Rank Fusion）融合\n\n两条通道各自产出一组带 rank 的候选列表，再用 RRF 合并成一个统一分数。\n\n**公式**（依据来源1 的 `calculate_rrf_score`）：\n\n$$\n\\text{score} = \\sum_{r \\in \\text{ranks}} \\frac{1}{k + r + 1}\n$$\n\n其中：\n- `r` 是各通道中的排名（0-indexed）\n- `k` 是融合常数，**默认 k = 60**（依据来源2 与来源1 的默认值一致）\n\n### 3. 融合前的查询改写（Query Rewriting）\n\n依据来源2：由配置的 LLM 对原始查询生成多个搜索变体，提升复杂/模糊查询的召回率，再分别送入上述两条通道。\n\n### 4. 融合后的重排序（Reranking）\n\n依据来源2 与来源4：可选开启 reranker，对 RRF 后的 top 候选重新打分以提升精度。推荐使用 BAAI/bge-reranker-v2-m3。\n\n---\n\n## 总结\n\n混合搜索管线的核心路径是：**查询改写 → (向量 ANN + FTS5 BM25) 并行检索 → RRF 融合（k=60） → 可选重排序**。RRF 的关键在于它只依赖排名而非原始分数，因此可以让不同打分体系的向量召回和关键词召回在同一榜单上公平合并。（依据来源1、来源2、来源4）",
+      "answer_mode": "raw_only",
+      "sources_count": 4,
+      "latency_s": 15.176,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "code_example",
+          "knowledge_id": "d944d750-40e7-4167-bf5d-103b5b9ed3aa",
+          "block_id": "4f9ee76d-7e2b-466d-ac0f-705cce954b55",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "3160de82-4f86-40cd-82f2-ba663f32c9d3",
+          "block_id": "63657845-6b86-42a3-a7bf-1b1eb62c9a67",
+          "source": "knowledge"
+        },
+        {
+          "title": "api_guide",
+          "knowledge_id": "1ff385b7-c84a-431f-93bb-43b332a5fb74",
+          "block_id": "f1a0e2d6-f0bd-415e-a33b-d5a29226d3db",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_storage",
+      "question": "系统的数据是存在云端还是本地？主要用什么存储？",
+      "answer": "## 问题拆解\n\n需要回答两个子问题：\n1. **存储位置**：数据存在云端还是本地？\n2. **存储方式**：主要用什么数据库/技术？\n\n## 推理与回答\n\n### 1. 存储位置：本地\n\n依据来源1（System Architecture > Storage Layer）：\n> \"The knowledge base uses **SQLite** with WAL mode as the primary database.\"\n\nSQLite 是**本地文件型数据库**（embedded database），数据直接存储在服务器本地磁盘文件中。知识库内容中**未提及任何云端存储服务**（如 S3、OSS、远程数据库等），因此判断数据存储在**本地**。\n\n### 2. 主要存储方式\n\n依据来源1（Storage Layer），存储层由三部分组成：\n\n| 组件 | 用途 |\n|------|------|\n| **SQLite（WAL 模式）** | 主数据库，存储结构化数据 |\n| **FTS5** | 全文搜索引擎，基于 BM25 排序 |\n| **sqlite-vec** | 向量嵌入存储，1024 维向量（默认模型 BAAI/bge-m3），支持近似最近邻搜索 |\n\n### 综合结论\n\n> 系统的数据存储在**本地**，主要使用 **SQLite（WAL 模式）** 作为主数据库，并通过 **FTS5** 提供关键词检索、**sqlite-vec** 提供向量检索能力，二者通过 RRF（Reciprocal Rank Fusion）融合形成混合搜索管道。\n> （依据来源1）",
+      "answer_mode": "raw_only",
+      "sources_count": 1,
+      "latency_s": 12.77,
+      "expect_refuse": false,
+      "refused": true,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": false,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "architecture",
+          "knowledge_id": "3160de82-4f86-40cd-82f2-ba663f32c9d3",
+          "block_id": "63657845-6b86-42a3-a7bf-1b1eb62c9a67",
+          "source": "knowledge"
+        }
+      ]
+    }
+  ],
+  "failures": [
+    {
+      "id": "e2e_embedding_dim",
+      "question": "embedding 模型默认输出多少维向量？",
+      "correct": false,
+      "refused": true,
+      "keyword_score": 0.0,
+      "error": "",
+      "answer_preview": "# 问题拆解\n\n用户想知道 embedding 模型默认输出向量的维度（dimensions）。这需要从知识库中找到与 embedding 模型输出维度相关的信息。\n\n# 检索与推理\n\n查看来源1（config_reference）中 `## embedding section` 的内容：\n\n> - base_url: URL of the embedding API endpoint\n> - m"
+    },
+    {
+      "id": "e2e_search_mode",
+      "question": "配置里 search_mode 支持哪些模式？",
+      "correct": false,
+      "refused": true,
+      "keyword_score": 0.0,
+      "error": "",
+      "answer_preview": "## 拆解问题\n\n用户想了解**配置中 search_mode 参数支持的模式列表**，需要查找：\n1. 知识库中是否提到 `search_mode` 字段\n2. 该字段的定义及可选值\n\n## 检索结果\n\n我逐一查看了知识库中的来源：\n\n- **来源1 api_guide**：涵盖了 Authentication、Search Endpoint、Indexing Endpoint 等内容。其中 S"
+    },
+    {
+      "id": "e2e_storage",
+      "question": "系统的数据是存在云端还是本地？主要用什么存储？",
+      "correct": false,
+      "refused": true,
+      "keyword_score": 1.0,
+      "error": "",
+      "answer_preview": "## 问题拆解\n\n需要回答两个子问题：\n1. **存储位置**：数据存在云端还是本地？\n2. **存储方式**：主要用什么数据库/技术？\n\n## 推理与回答\n\n### 1. 存储位置：本地\n\n依据来源1（System Architecture > Storage Layer）：\n> \"The knowledge base uses **SQLite** with WAL mode as the p"
+    }
+  ]
+}

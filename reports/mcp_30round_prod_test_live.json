@@ -1,0 +1,399 @@
+{
+  "summary": {
+    "total_rounds": 30,
+    "passed": 30,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "avg_latency_ms": 1957.0,
+    "max_latency_ms": 29194.6,
+    "avg_recall": 1.0,
+    "avg_precision": 0.09,
+    "test_time": "2026-06-23 00:10:56",
+    "environment": "production"
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "name": "R1 预置测试数据",
+      "tools": [
+        "create",
+        "create",
+        "create"
+      ],
+      "ok": true,
+      "latency_ms": 51.61,
+      "detail": "create=OK, create=OK, create=OK",
+      "metrics": {}
+    },
+    {
+      "round": 2,
+      "name": "R2 连通性与能力清单",
+      "tools": [
+        "ping",
+        "kb_capabilities"
+      ],
+      "ok": true,
+      "latency_ms": 26.45,
+      "detail": "ping=OK, capabilities_tools=103",
+      "metrics": {}
+    },
+    {
+      "round": 3,
+      "name": "R3 语义搜索召回",
+      "tools": [
+        "search",
+        "search"
+      ],
+      "ok": true,
+      "latency_ms": 1046.1100000000001,
+      "detail": "ALPHA_found=True(10), GAMMA_found=True(10)",
+      "metrics": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "results_count": 20
+      }
+    },
+    {
+      "round": 4,
+      "name": "R4 全文搜索召回 BETA",
+      "tools": [
+        "search_fulltext"
+      ],
+      "ok": true,
+      "latency_ms": 29.99,
+      "detail": "found=True, results=10",
+      "metrics": {
+        "recall": 1.0,
+        "precision": 0.1,
+        "results_count": 10
+      }
+    },
+    {
+      "round": 5,
+      "name": "R5 RAG 问答召回",
+      "tools": [
+        "ask"
+      ],
+      "ok": true,
+      "latency_ms": 29194.6,
+      "detail": "sources=4, recall_AC=1.0, answer=# 问题拆解\n\n用户希望了解 **MCP生产稳定性测试ALPHA_20260623_TARA** 这一条目的含义。需要从",
+      "metrics": {
+        "recall": 1.0,
+        "precision": 0.25,
+        "results_count": 4
+      }
+    },
+    {
+      "round": 6,
+      "name": "R6 读取与列表",
+      "tools": [
+        "read",
+        "list_knowledge",
+        "tags"
+      ],
+      "ok": true,
+      "latency_ms": 40.28,
+      "detail": "read=OK, items=4, has_tag=True",
+      "metrics": {}
+    },
+    {
+      "round": 7,
+      "name": "R7 CRUD 创建条目 D",
+      "tools": [
+        "create"
+      ],
+      "ok": true,
+      "latency_ms": 31.74,
+      "detail": "{}",
+      "metrics": {}
+    },
+    {
+      "round": 8,
+      "name": "R8 CRUD 读取与更新 D",
+      "tools": [
+        "read",
+        "update"
+      ],
+      "ok": true,
+      "latency_ms": 48.46,
+      "detail": "read=OK, update=OK",
+      "metrics": {}
+    },
+    {
+      "round": 9,
+      "name": "R9 CRUD 删除/恢复 D 与召回验证",
+      "tools": [
+        "search",
+        "delete",
+        "restore_knowledge"
+      ],
+      "ok": true,
+      "latency_ms": 503.6,
+      "detail": "found_d=True, delete=True, restore=True",
+      "metrics": {
+        "recall": 1.0,
+        "results_count": 20
+      }
+    },
+    {
+      "round": 10,
+      "name": "R10 预览操作",
+      "tools": [
+        "preview_operation"
+      ],
+      "ok": true,
+      "latency_ms": 37.54,
+      "detail": "preview_operation=OK, preview_operation=OK, preview_operation=OK",
+      "metrics": {}
+    },
+    {
+      "round": 11,
+      "name": "R11 操作审计",
+      "tools": [
+        "query_operation_logs",
+        "list_recent_operations"
+      ],
+      "ok": true,
+      "latency_ms": 7.380000000000001,
+      "detail": "logs_ok=True, recent=10",
+      "metrics": {}
+    },
+    {
+      "round": 12,
+      "name": "R12 单条日志与撤销操作",
+      "tools": [
+        "update",
+        "get_operation_log",
+        "undo_operation"
+      ],
+      "ok": true,
+      "latency_ms": 65.64999999999999,
+      "detail": "update=True, get_log=True, undo=True, log_id=fdd26aba-8569-4cdb-91f0-05e2b906e2bc",
+      "metrics": {}
+    },
+    {
+      "round": 13,
+      "name": "R13 索引重建",
+      "tools": [
+        "reindex_all"
+      ],
+      "ok": true,
+      "latency_ms": 2354.96,
+      "detail": "dry_run=True, real=True",
+      "metrics": {}
+    },
+    {
+      "round": 14,
+      "name": "R14 目录索引",
+      "tools": [
+        "index_path"
+      ],
+      "ok": true,
+      "latency_ms": 27.53,
+      "detail": "{}",
+      "metrics": {}
+    },
+    {
+      "round": 15,
+      "name": "R15 文件/URL 导入",
+      "tools": [
+        "ingest_file",
+        "ingest_url"
+      ],
+      "ok": true,
+      "latency_ms": 45.58,
+      "detail": "ingest_file=True, ingest_url_dry=True",
+      "metrics": {}
+    },
+    {
+      "round": 16,
+      "name": "R16 Job 生命周期",
+      "tools": [
+        "create_ingest_job",
+        "get_job",
+        "list_jobs",
+        "cancel_job"
+      ],
+      "ok": true,
+      "latency_ms": 50.78,
+      "detail": "create=True, get=True, list=True, cancel=True, job_id=ed6dc6a5-acc1-49b2-8083-e05998fe36a5",
+      "metrics": {}
+    },
+    {
+      "round": 17,
+      "name": "R17 异步任务生命周期",
+      "tools": [
+        "create_async_job",
+        "get_async_job",
+        "list_async_jobs",
+        "cancel_async_job"
+      ],
+      "ok": true,
+      "latency_ms": 73.84,
+      "detail": "create=True, get=True, list=True, cancel=True",
+      "metrics": {}
+    },
+    {
+      "round": 18,
+      "name": "R18 查询路由",
+      "tools": [
+        "route_query"
+      ],
+      "ok": true,
+      "latency_ms": 2287.4,
+      "detail": "{}",
+      "metrics": {}
+    },
+    {
+      "round": 19,
+      "name": "R19 Query DSL 结构化查询",
+      "tools": [
+        "structured_query",
+        "explain_query"
+      ],
+      "ok": true,
+      "latency_ms": 29.09,
+      "detail": "structured_results=6, explain=True",
+      "metrics": {
+        "results_count": 6
+      }
+    },
+    {
+      "round": 20,
+      "name": "R20 查询执行",
+      "tools": [
+        "execute_query",
+        "execute_query"
+      ],
+      "ok": true,
+      "latency_ms": 24.87,
+      "detail": "structured=True(6), graph=True",
+      "metrics": {
+        "results_count": 6
+      }
+    },
+    {
+      "round": 21,
+      "name": "R21 显式 QuerySpec 问答",
+      "tools": [
+        "ask_with_query"
+      ],
+      "ok": true,
+      "latency_ms": 10267.38,
+      "detail": "sources=3, recall_AC=1.0, answer=## 问题拆解\n\n用户询问 **MCP生产稳定性测试ALPHA_20260623_TARA** 的位置/出处，需要从知识",
+      "metrics": {
+        "recall": 1.0,
+        "results_count": 3
+      }
+    },
+    {
+      "round": 22,
+      "name": "R22 来源图谱与图遍历",
+      "tools": [
+        "get_source_graph",
+        "graph_traverse"
+      ],
+      "ok": true,
+      "latency_ms": 20.72,
+      "detail": "get_source_graph=OK, graph_traverse=OK",
+      "metrics": {}
+    },
+    {
+      "round": 23,
+      "name": "R23 Wiki 体检与保存",
+      "tools": [
+        "wiki_lint",
+        "save_to_wiki"
+      ],
+      "ok": true,
+      "latency_ms": 31.029999999999998,
+      "detail": "pages=0, save=OK",
+      "metrics": {}
+    },
+    {
+      "round": 24,
+      "name": "R24 Wiki 工作流与版本",
+      "tools": [
+        "wiki_workflow_history",
+        "wiki_list_versions",
+        "fix_dead_references"
+      ],
+      "ok": true,
+      "latency_ms": 45.050000000000004,
+      "detail": "wiki_workflow_history=OK, wiki_list_versions=OK, fix_dead_references=OK",
+      "metrics": {}
+    },
+    {
+      "round": 25,
+      "name": "R25 Agent Memory 记忆",
+      "tools": [
+        "remember_fact",
+        "recall_facts"
+      ],
+      "ok": true,
+      "latency_ms": 30.08,
+      "detail": "remember=True, recall_results=1",
+      "metrics": {}
+    },
+    {
+      "round": 26,
+      "name": "R26 Agent Memory 上下文与决策",
+      "tools": [
+        "update_project_context",
+        "search_decisions"
+      ],
+      "ok": true,
+      "latency_ms": 28.39,
+      "detail": "update_project_context=OK, search_decisions=OK",
+      "metrics": {}
+    },
+    {
+      "round": 27,
+      "name": "R27 Agent Memory 总结与任务",
+      "tools": [
+        "summarize_recent_changes",
+        "extract_tasks_from_doc"
+      ],
+      "ok": true,
+      "latency_ms": 11709.240000000002,
+      "detail": "summarize_recent_changes=OK, extract_tasks_from_doc=OK",
+      "metrics": {}
+    },
+    {
+      "round": 28,
+      "name": "R28 命名空间别名 A",
+      "tools": [
+        "kb.search",
+        "ops.ping"
+      ],
+      "ok": true,
+      "latency_ms": 555.4399999999999,
+      "detail": "kb.search=True, ops.ping=True",
+      "metrics": {}
+    },
+    {
+      "round": 29,
+      "name": "R29 命名空间别名 B",
+      "tools": [
+        "wiki.lint",
+        "graph.traverse"
+      ],
+      "ok": true,
+      "latency_ms": 36.34,
+      "detail": "wiki.lint=OK, graph.traverse=OK",
+      "metrics": {}
+    },
+    {
+      "round": 30,
+      "name": "R30 命名空间别名 C",
+      "tools": [
+        "memory.remember",
+        "memory.recall"
+      ],
+      "ok": true,
+      "latency_ms": 8.89,
+      "detail": "memory.remember=True, memory.recall=True",
+      "metrics": {}
+    }
+  ]
+}

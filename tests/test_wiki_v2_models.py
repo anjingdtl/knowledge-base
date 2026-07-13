@@ -4,6 +4,7 @@ import pytest
 
 from src.models.wiki_v2 import (
     Claim,
+    ClaimServingValidation,
     ClaimStatus,
     Evidence,
     EvidenceStance,
@@ -77,6 +78,32 @@ def test_claim_roundtrip_strict():
     c = Claim.from_dict(_sample_claim(), strict=True)
     assert c.status is ClaimStatus.ACTIVE and c.evidence[0].stance is EvidenceStance.SUPPORTS
     assert Claim.from_dict(c.to_dict(), strict=True) == c
+
+
+def test_claim_serving_validation_roundtrip_strict():
+    data = _sample_claim(serving_validation={
+        "passed": True,
+        "review_approved": True,
+        "validated_revision": 1,
+        "published_revision": 1,
+        "serving_evidence_ids": ["ev1"],
+        "validator_version": "v1",
+        "validated_at": "2026-07-13T12:00:00+08:00",
+        "review_id": "review_1",
+        "operation_id": "op_1",
+    })
+
+    claim = Claim.from_dict(data, strict=True)
+
+    assert isinstance(claim.serving_validation, ClaimServingValidation)
+    assert claim.to_dict()["serving_validation"]["published_revision"] == 1
+    assert Claim.from_dict(claim.to_dict(), strict=True) == claim
+
+
+def test_legacy_claim_without_serving_validation_remains_readable():
+    claim = Claim.from_dict(_sample_claim(), strict=True)
+
+    assert claim.serving_validation is None
 
 
 def test_active_claim_without_supports_evidence_invalid():

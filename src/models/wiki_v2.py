@@ -109,6 +109,61 @@ class ClaimRelation:
 
 
 @dataclass
+class ClaimServingValidation:
+    """Durable validation/review/publication proof for one Claim revision."""
+
+    passed: bool
+    review_approved: bool
+    validated_revision: int
+    published_revision: int | None
+    serving_evidence_ids: list[str]
+    validator_version: str
+    validated_at: str
+    review_id: str | None = None
+    operation_id: str | None = None
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "ClaimServingValidation":
+        required = {
+            "passed", "review_approved", "validated_revision", "published_revision",
+            "serving_evidence_ids", "validator_version", "validated_at",
+        }
+        missing = required - set(d)
+        if missing:
+            raise ValueError(f"ClaimServingValidation 缺必填字段: {sorted(missing)}")
+        validated_revision = int(d["validated_revision"])
+        published_revision = d["published_revision"]
+        if validated_revision < 1:
+            raise ValueError("validated_revision 必须是正整数")
+        if published_revision is not None and int(published_revision) < 1:
+            raise ValueError("published_revision 必须是正整数或 null")
+        return cls(
+            passed=bool(d["passed"]),
+            review_approved=bool(d["review_approved"]),
+            validated_revision=validated_revision,
+            published_revision=None if published_revision is None else int(published_revision),
+            serving_evidence_ids=[str(item) for item in d["serving_evidence_ids"]],
+            validator_version=str(d["validator_version"]),
+            validated_at=str(d["validated_at"]),
+            review_id=d.get("review_id"),
+            operation_id=d.get("operation_id"),
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "passed": self.passed,
+            "review_approved": self.review_approved,
+            "validated_revision": self.validated_revision,
+            "published_revision": self.published_revision,
+            "serving_evidence_ids": list(self.serving_evidence_ids),
+            "validator_version": self.validator_version,
+            "validated_at": self.validated_at,
+            "review_id": self.review_id,
+            "operation_id": self.operation_id,
+        }
+
+
+@dataclass
 class Claim:
     schema_version: int
     claim_id: str
@@ -127,6 +182,7 @@ class Claim:
     created_at: str
     updated_at: str
     revision: int
+    serving_validation: ClaimServingValidation | None = None
 
     def validate(self) -> list[str]:
         """跨字段 invariant 校验,返回错误描述列表(空=合法)。"""
@@ -144,7 +200,7 @@ class Claim:
         required = ["schema_version", "claim_id", "statement", "normalized_statement",
                     "claim_type", "status", "confidence", "subject_refs", "predicate",
                     "object_refs", "evidence", "created_at", "updated_at", "revision"]
-        known = set(required) | {"valid_from", "valid_to", "relations"}
+        known = set(required) | {"valid_from", "valid_to", "relations", "serving_validation"}
         if strict:
             extra = set(d.keys()) - known
             if extra:
@@ -166,6 +222,10 @@ class Claim:
             evidence=[Evidence.from_dict(e, strict=strict) for e in d.get("evidence", [])],
             relations=[ClaimRelation.from_dict(r) for r in d.get("relations", [])],
             created_at=d["created_at"], updated_at=d["updated_at"], revision=rev,
+            serving_validation=(
+                ClaimServingValidation.from_dict(d["serving_validation"])
+                if d.get("serving_validation") is not None else None
+            ),
         )
 
     def to_dict(self) -> dict:
@@ -179,6 +239,9 @@ class Claim:
             "evidence": [e.to_dict() for e in self.evidence],
             "relations": [r.to_dict() for r in self.relations],
             "created_at": self.created_at, "updated_at": self.updated_at, "revision": self.revision,
+            "serving_validation": (
+                self.serving_validation.to_dict() if self.serving_validation else None
+            ),
         }
 
 

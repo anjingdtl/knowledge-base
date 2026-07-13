@@ -11,7 +11,7 @@ from src.services.verified_hybrid_fusion import (
 )
 from src.services.verified_query_router import route_query
 from src.services.wiki_claim_extractor import compute_excerpt_hash
-from src.services.wiki_serving_gate import WikiServingGate
+from src.services.wiki_serving_gate import ServingGateConfig, WikiServingGate
 
 
 def _claim(
@@ -75,6 +75,7 @@ class TestFusion:
         h = compute_excerpt_hash(content)
         claim = _claim(excerpt_hash=h, statement=content)
         gate = WikiServingGate(
+            config=ServingGateConfig(),
             get_block=lambda bid: {"id": bid, "content": content},
             get_knowledge=lambda kid: {"id": kid, "deleted_at": None},
             wiki_read_enabled=True,
@@ -201,6 +202,7 @@ class TestSearchServiceVerifiedHybrid:
                 return [claim]
 
         gate = WikiServingGate(
+            config=ServingGateConfig(),
             get_block=lambda bid: {"id": bid, "content": content},
             get_knowledge=lambda kid: {"id": kid, "deleted_at": None},
             wiki_read_enabled=True,

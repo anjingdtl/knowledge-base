@@ -1,0 +1,567 @@
+{
+  "total": 15,
+  "correct": 13,
+  "overall_accuracy": 0.8667,
+  "answer_accuracy": 0.8333,
+  "refuse_accuracy": 1.0,
+  "keyword_coverage": 0.9167,
+  "citation_rate": 1.0,
+  "error_count": 0,
+  "latency_p50_s": 43.204,
+  "latency_p95_s": 91.614,
+  "gates": {
+    "answer_accuracy_ge_0_5": true,
+    "refuse_accuracy_ge_0_5": true,
+    "citation_rate_ge_0_6": true,
+    "error_rate_zero": true,
+    "case_count_ge_10": true,
+    "keyword_coverage_ge_0_5": true
+  },
+  "overall_pass": true,
+  "meta": {
+    "workdir": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\ask_e2e_ykcuyj9i",
+    "path": "search_llm",
+    "llm_base_url": "https://api.siliconflow.cn/v1",
+    "llm_model": "Qwen/Qwen3-8B",
+    "embedding_model": "BAAI/bge-m3",
+    "llm_key_fallback": true,
+    "chat_key_source": "embedding.api_key (fallback)",
+    "indexed_fixtures": 6,
+    "probe_search_hits": 6
+  },
+  "cases": [
+    {
+      "id": "e2e_sqlite",
+      "question": "知识库默认使用什么数据库？它用什么模式做本地索引？",
+      "answer": "知识库默认使用 **SQLite** 作为存储数据库，并通过 **FTS5** 模式实现本地全文索引。  \n依据来源1的「Storage Layer」部分明确说明主数据库为 SQLite with WAL mode，且 FTS5 负责全文搜索。来源3的「Database Systems Overview」也确认 PostgreSQL、MongoDB 和 Elasticsearch 不是本系统的主数据库。  \n\n此外，来源5的「rag section」中 `search_mode` 默认为 `blend`（混合模式），表示同时结合向量和关键词搜索，但此描述针对的是搜索模式而非索引模式本身。  \n本地索引的核心技术为 FTS5，其支持 BM25 排名算法。  \n依据来源1、来源2、来源3。",
+      "answer_mode": "raw_only",
+      "sources_count": 6,
+      "latency_s": 78.918,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "troubleshooting",
+          "knowledge_id": "07c97ac1-2ce4-485e-9642-5d3345b96a94",
+          "block_id": "393ec34b-aa0e-4e3f-9b06-b2abf2371602",
+          "source": "knowledge"
+        },
+        {
+          "title": "distractor",
+          "knowledge_id": "c3907058-fabe-4d15-b509-4d9058241611",
+          "block_id": "5192ebeb-45c9-4872-9d45-237684b3c318",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_rrf",
+      "question": "混合检索里 RRF 融合的默认常数 k 是多少？",
+      "answer": "根据知识库内容，混合检索中使用RRF（Reciprocal Rank Fusion）融合时，默认常数k的值为60。该参数在代码示例中被明确设置为60，且函数注释提到这是用于混合检索场景。  \n\n**答案：** 混合检索中RRF融合的默认常数k是60（依据来源1）。",
+      "answer_mode": "raw_only",
+      "sources_count": 1,
+      "latency_s": 27.013,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "code_example",
+          "knowledge_id": "4fc65235-fc25-48cf-a61e-0a17e02eefd6",
+          "block_id": "16c83489-f600-4b29-9a15-df8fffb5feab",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_embedding_dim",
+      "question": "embedding 模型默认输出多少维向量？",
+      "answer": "默认的 embedding 模型是 `BAAI/bge-m3`，其输出向量维度为 **1024**。  \n依据来源3中的描述：「默认 embedding 模型是 BAAI/bge-m3，产生 1024 维的向量」。",
+      "answer_mode": "raw_only",
+      "sources_count": 5,
+      "latency_s": 32.401,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "troubleshooting",
+          "knowledge_id": "07c97ac1-2ce4-485e-9642-5d3345b96a94",
+          "block_id": "393ec34b-aa0e-4e3f-9b06-b2abf2371602",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_tool_profile",
+      "question": "MCP 工具配置档 tool_profile 有哪些选项？",
+      "answer": "MCP 工具配置档 `tool_profile` 的选项包括：`core`、`extended`、`admin`、`full`、`legacy`。这些选项控制暴露的工具类型，具体含义需参考系统文档进一步说明。  \n依据来源1。",
+      "answer_mode": "raw_only",
+      "sources_count": 3,
+      "latency_s": 29.676,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "troubleshooting",
+          "knowledge_id": "07c97ac1-2ce4-485e-9642-5d3345b96a94",
+          "block_id": "393ec34b-aa0e-4e3f-9b06-b2abf2371602",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_rerank",
+      "question": "如何改善搜索质量？和 reranker 配置有什么关系？",
+      "answer": "改善搜索质量可通过以下方式实现：  \n1. **启用混合搜索模式**（`search_mode: blend`），结合向量相似度与关键词匹配，利用Reciprocal Rank Fusion (RRF)融合结果，默认融合常数 `k=60` 平衡精度与召回率（依据来源2）。  \n2. **调整Top-K值**：在搜索端点中设置 `top_k` 参数（默认5），增加返回结果数量以提升召回率，但需结合 `score_threshold`（默认0.35）过滤低质量结果（依据来源1、来源2）。  \n3. **查询重写**：开启 `enable_query_rewriting: true`，通过LLM生成查询变体以覆盖复杂/模糊问题（依据来源1）。  \n4. **重排序配置**：启用 `enable_rerank: true`，通过专用rerank API或LLM重新评分候选结果，进一步优化精度（依据来源1、来源2）。  \n\n**Reranker配置的关系**：  \n- `enable_rerank` 决定是否应用重排序功能，若启用，系统会基于LLM或专用API对初始检索结果进行二次评分，提升最终排序的准确性（依据来源1、来源2）。  \n- Reranking与RRF融合共同作用：RRF通过混合向量和关键词结果提高召回，而reranker通过重新加权提升精度（依据来源2）。  \n\n关键参数需在 `config.yaml` 中配置（依据来源2）。",
+      "answer_mode": "raw_only",
+      "sources_count": 4,
+      "latency_s": 97.3,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "code_example",
+          "knowledge_id": "4fc65235-fc25-48cf-a61e-0a17e02eefd6",
+          "block_id": "16c83489-f600-4b29-9a15-df8fffb5feab",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_search_mode",
+      "question": "配置里 search_mode 支持哪些模式？",
+      "answer": "根据知识库内容，配置中的 `search_mode` 支持以下三种模式：  \n1. `blend`（混合模式，结合向量和关键词搜索）  \n2. `embedding`（向量搜索模式）  \n3. `keywords`（关键词全文搜索模式）  \n\n该配置项的默认值为 `blend`，即混合搜索模式。  \n依据来源1、来源2。",
+      "answer_mode": "raw_only",
+      "sources_count": 6,
+      "latency_s": 47.17,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "api_guide",
+          "knowledge_id": "d7e954a0-ebe3-4a88-81a4-3b8bdf7d908d",
+          "block_id": "2dc1b0a4-a0e9-44e6-9a0f-70e594671bfe",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_hybrid_desc",
+      "question": "混合搜索管线如何结合向量和关键词？",
+      "answer": "混合搜索管线通过 **Reciprocal Rank Fusion (RRF)** 结合向量相似性与关键词匹配。具体方式为：  \n1. **并行检索**：同时从向量搜索引擎（如 `sqlite-vec`）和关键词搜索引擎（如 FTS5）获取结果，分别生成排名列表。  \n2. **分数融合**：对两种来源的排名位置（0-indexed）按公式 `1.0 / (k + r + 1)` 计算权重，其中默认融合常数 `k=60`，最终通过求和得到综合得分。  \n3. **查询重写**：利用配置的 LLM 生成多个查询变体，提升复杂或模糊查询的召回率。  \n\n该机制通过 `search_mode: blend` 启用（见配置参考），且支持通过 `reranker.enabled: true` 进一步优化结果精度。  \n\n依据来源1、来源3、来源5。",
+      "answer_mode": "raw_only",
+      "sources_count": 6,
+      "latency_s": 58.015,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "troubleshooting",
+          "knowledge_id": "07c97ac1-2ce4-485e-9642-5d3345b96a94",
+          "block_id": "393ec34b-aa0e-4e3f-9b06-b2abf2371602",
+          "source": "knowledge"
+        },
+        {
+          "title": "code_example",
+          "knowledge_id": "4fc65235-fc25-48cf-a61e-0a17e02eefd6",
+          "block_id": "16c83489-f600-4b29-9a15-df8fffb5feab",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_storage",
+      "question": "系统的数据是存在云端还是本地？主要用什么存储？",
+      "answer": "系统的数据主要存储在本地，使用 SQLite 作为核心存储数据库，并启用了 WAL（Write-Ahead Logging）模式以提升并发性能。向量嵌入数据通过 sqlite-vec 模块存储，支持高效的近似最近邻搜索。  \n\n其他数据库（如 PostgreSQL、MongoDB、Elasticsearch）仅作为背景信息提及，但明确说明**并非系统的主要存储**。因此，数据存储位置为本地，而非云端。  \n\n依据来源1、来源3。",
+      "answer_mode": "raw_only",
+      "sources_count": 6,
+      "latency_s": 50.103,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "troubleshooting",
+          "knowledge_id": "07c97ac1-2ce4-485e-9642-5d3345b96a94",
+          "block_id": "393ec34b-aa0e-4e3f-9b06-b2abf2371602",
+          "source": "knowledge"
+        },
+        {
+          "title": "distractor",
+          "knowledge_id": "c3907058-fabe-4d15-b509-4d9058241611",
+          "block_id": "5192ebeb-45c9-4872-9d45-237684b3c318",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_citation",
+      "question": "引用 citation 一般包含哪些定位信息？",
+      "answer": "根据知识库内容，引用（citation）的定位信息可能包含以下字段：  \n- **block_id**：标识知识块的唯一编号（来自搜索结果的响应字段）。  \n- **knowledge_id**：标识知识条目的唯一编号（来自搜索结果的响应字段）。  \n- **title**：文档或知识条目的标题。  \n- **text**：文档中的具体文本内容片段。  \n- **score**：相关性评分（基于BM25或向量相似度计算）。  \n- **match_channels**：匹配的渠道或来源信息（如数据库类型、索引方式等）。  \n\n这些信息来源于系统搜索接口的响应结构（来源2）及搜索管道的描述（来源3）。若问题指向学术引用标准格式（如作者、年份、页码等），则知识库中未提供相关线索。",
+      "answer_mode": "raw_only",
+      "sources_count": 5,
+      "latency_s": 54.082,
+      "expect_refuse": false,
+      "refused": true,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": false,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "api_guide",
+          "knowledge_id": "d7e954a0-ebe3-4a88-81a4-3b8bdf7d908d",
+          "block_id": "2dc1b0a4-a0e9-44e6-9a0f-70e594671bfe",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_vector_fix",
+      "question": "向量覆盖不足时应该怎么处理？",
+      "answer": "向量覆盖不足时，可采取以下措施处理：\n\n1. **检查嵌入服务状态**  \n   确认嵌入服务（如Ollama）正常运行，且所需模型（如`nomic-embed-text`）已下载。若未下载，执行 `ollama pull nomic-embed-text`（依据来源1）。\n\n2. **调整搜索模式**  \n   在`config.yaml`中将`rag.search_mode`设置为`blend`，启用混合搜索（结合向量和关键词），以扩大覆盖范围（依据来源2和来源3）。\n\n3. **增加`rag.top_k`值**  \n   提高`rag.top_k`参数（默认8）至更高数值，例如60，以获取更多候选结果，弥补向量搜索的不足（依据来源2和来源3）。\n\n4. **启用查询重写**  \n   确保`enable_query_rewriting`为`true`，利用LLM生成多组查询变体，提升复杂或模糊查询的召回率（依据来源2和来源3）。\n\n5. **重建索引**  \n   若怀疑向量索引损坏，运行`shinehe doctor`诊断并使用`reindex_all`从源文件重新构建索引（依据来源1）。\n\n6. **优化RRF融合常数**  \n   调整`reranker.k`（默认60）参数，平衡向量与关键词结果的权重，可能需通过实验确定最佳值（依据来源2）。\n\n以上步骤需根据实际场景组合使用，优先排查嵌入服务与索引状态，再通过配置调整提升覆盖。",
+      "answer_mode": "raw_only",
+      "sources_count": 6,
+      "latency_s": 91.614,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "troubleshooting",
+          "knowledge_id": "07c97ac1-2ce4-485e-9642-5d3345b96a94",
+          "block_id": "393ec34b-aa0e-4e3f-9b06-b2abf2371602",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_debounce",
+      "question": "文件监听 watcher 的防抖 debounce 默认大概是多少？",
+      "answer": "知识库中未找到关于「文件监听 watcher 的防抖 debounce 默认值」的具体信息。提供的配置和架构文档未提及与文件监听相关参数，也未涉及防抖（debounce）机制的默认设置。建议检查系统配置文件或相关模块的源码以获取更详细的实现细节。",
+      "answer_mode": "raw_only",
+      "sources_count": 6,
+      "latency_s": 47.282,
+      "expect_refuse": false,
+      "refused": true,
+      "keyword_hit": false,
+      "keyword_score": 0.0,
+      "correct": false,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "code_example",
+          "knowledge_id": "4fc65235-fc25-48cf-a61e-0a17e02eefd6",
+          "block_id": "16c83489-f600-4b29-9a15-df8fffb5feab",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_code_error",
+      "question": "代码示例里 hybrid search 遇到致命错误会抛什么异常类？",
+      "answer": "代码示例中，当 hybrid search 遇到致命错误时会抛出 `HybridSearchError` 异常类。该异常文档中明确说明表示 \"both vector and FTS backends have failed\" 的情况，需检查嵌入服务和 FTS5 可用性。  \n\n依据来源3",
+      "answer_mode": "raw_only",
+      "sources_count": 6,
+      "latency_s": 37.376,
+      "expect_refuse": false,
+      "refused": false,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "code_example",
+          "knowledge_id": "4fc65235-fc25-48cf-a61e-0a17e02eefd6",
+          "block_id": "16c83489-f600-4b29-9a15-df8fffb5feab",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_refuse_k8s",
+      "question": "如何从零安装 Kubernetes 集群并配置 etcd 高可用？",
+      "answer": "知识库中未找到与安装 Kubernetes 集群或配置 etcd 高可用相关的直接信息。已知内容主要涉及 API 认证、搜索功能、数据库架构（SQLite + FTS5）、向量嵌入存储及系统配置参数，均与 Kubernetes 或 etcd 无关。若需相关指导，建议参考 Kubernetes 官方文档或 etcd 高可用配置指南。",
+      "answer_mode": "raw_only",
+      "sources_count": 6,
+      "latency_s": 43.204,
+      "expect_refuse": true,
+      "refused": true,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "api_guide",
+          "knowledge_id": "d7e954a0-ebe3-4a88-81a4-3b8bdf7d908d",
+          "block_id": "2dc1b0a4-a0e9-44e6-9a0f-70e594671bfe",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_refuse_food",
+      "question": "推荐一款适合冬天吃的火锅底料品牌",
+      "answer": "知识库中未找到与火锅底料品牌推荐相关的信息。提供的资料均涉及系统配置、数据库架构、搜索技术及API说明，未提及任何食品品牌或消费产品推荐内容。建议参考市场调研、消费者评价或食品行业数据获取此类信息。",
+      "answer_mode": "raw_only",
+      "sources_count": 5,
+      "latency_s": 33.649,
+      "expect_refuse": true,
+      "refused": true,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        },
+        {
+          "title": "troubleshooting",
+          "knowledge_id": "07c97ac1-2ce4-485e-9642-5d3345b96a94",
+          "block_id": "393ec34b-aa0e-4e3f-9b06-b2abf2371602",
+          "source": "knowledge"
+        }
+      ]
+    },
+    {
+      "id": "e2e_refuse_privacy",
+      "question": "CEO 的私人手机号是多少？",
+      "answer": "知识库中未找到关于CEO私人手机号的信息。所有提供的资料均涉及系统配置、API功能、架构设计及故障排查技术细节，未包含任何人事联系方式或隐私数据。  \n\n（依据来源1、来源2、来源3、来源4、来源5）",
+      "answer_mode": "raw_only",
+      "sources_count": 5,
+      "latency_s": 34.122,
+      "expect_refuse": true,
+      "refused": true,
+      "keyword_hit": true,
+      "keyword_score": 1.0,
+      "correct": true,
+      "error": "",
+      "warnings": [],
+      "top_sources": [
+        {
+          "title": "config_reference",
+          "knowledge_id": "85a6017d-2c25-4c94-b245-aa9df00e732f",
+          "block_id": "e09ba3f2-7610-4b5e-9acf-ad7f65f848e8",
+          "source": "knowledge"
+        },
+        {
+          "title": "api_guide",
+          "knowledge_id": "d7e954a0-ebe3-4a88-81a4-3b8bdf7d908d",
+          "block_id": "2dc1b0a4-a0e9-44e6-9a0f-70e594671bfe",
+          "source": "knowledge"
+        },
+        {
+          "title": "architecture",
+          "knowledge_id": "16e7fa94-1150-4530-90a3-45ab5be04aea",
+          "block_id": "452a3ccb-abf9-4d06-9608-add38fe82c52",
+          "source": "knowledge"
+        }
+      ]
+    }
+  ],
+  "failures": [
+    {
+      "id": "e2e_citation",
+      "question": "引用 citation 一般包含哪些定位信息？",
+      "correct": false,
+      "refused": true,
+      "keyword_score": 1.0,
+      "error": "",
+      "answer_preview": "根据知识库内容，引用（citation）的定位信息可能包含以下字段：  \n- **block_id**：标识知识块的唯一编号（来自搜索结果的响应字段）。  \n- **knowledge_id**：标识知识条目的唯一编号（来自搜索结果的响应字段）。  \n- **title**：文档或知识条目的标题。  \n- **text**：文档中的具体文本内容片段。  \n- **score**：相关性评分（基于B"
+    },
+    {
+      "id": "e2e_debounce",
+      "question": "文件监听 watcher 的防抖 debounce 默认大概是多少？",
+      "correct": false,
+      "refused": true,
+      "keyword_score": 0.0,
+      "error": "",
+      "answer_preview": "知识库中未找到关于「文件监听 watcher 的防抖 debounce 默认值」的具体信息。提供的配置和架构文档未提及与文件监听相关参数，也未涉及防抖（debounce）机制的默认设置。建议检查系统配置文件或相关模块的源码以获取更详细的实现细节。"
+    }
+  ]
+}

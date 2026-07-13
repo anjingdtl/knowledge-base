@@ -1,7 +1,14 @@
 """Phase 2: WikiServingGate + Repository serving API tests."""
 from __future__ import annotations
 
-from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance, normalize_statement
+from src.models.wiki_v2 import (
+    Claim,
+    ClaimServingValidation,
+    ClaimStatus,
+    Evidence,
+    EvidenceStance,
+    normalize_statement,
+)
 from src.services.wiki_claim_extractor import compute_excerpt_hash
 from src.services.wiki_repository import WikiRepository
 from src.services.wiki_serving_gate import (
@@ -12,8 +19,13 @@ from src.services.wiki_serving_gate import (
     REASON_EVIDENCE_HASH_MISMATCH,
     REASON_KNOWLEDGE_DELETED,
     REASON_MISSING_EVIDENCE,
+    REASON_PUBLISHED_REVISION_STALE,
+    REASON_REVIEW_NOT_APPROVED,
     REASON_REVIEW_REQUIRED,
     REASON_SCOPE_MISMATCH,
+    REASON_SERVING_EVIDENCE_MISSING,
+    REASON_SERVING_VALIDATION_MISSING,
+    REASON_VALIDATED_REVISION_STALE,
     REASON_VALIDATION_FAILED,
     ServingGateConfig,
     WikiServingGate,
@@ -93,6 +105,63 @@ def _gate(
 
 
 class TestPrimaryEligibility:
+    @staticmethod
+    def _strict_config() -> ServingGateConfig:
+        return ServingGateConfig(
+            require_validation_passed=True,
+            require_review_approved=True,
+            require_published_revision=True,
+        )
+
+    @staticmethod
+    def _validated_claim(*, content: str = "FTTR 可达 1Gbps") -> Claim:
+        claim = _claim(excerpt_hash=compute_excerpt_hash(content))
+        claim.serving_validation = ClaimServingValidation(
+            passed=True,
+            review_approved=True,
+            validated_revision=1,
+            published_revision=1,
+            serving_evidence_ids=[claim.evidence[0].evidence_id],
+            validator_version="test-v1",
+            validated_at="2026-07-13T12:00:00+08:00",
+        )
+        return claim
+
+    def test_strict_gate_requires_persisted_validation_record(self):
+        decision = _gate(cfg=self._strict_config()).evaluate(_claim())
+
+        assert decision.eligible is False
+        assert REASON_SERVING_VALIDATION_MISSING in decision.reason_codes
+
+    def test_strict_gate_accepts_matching_validated_reviewed_published_claim(self):
+        content = "strict body"
+        decision = _gate(content=content, cfg=self._strict_config()).evaluate(
+            self._validated_claim(content=content),
+        )
+
+        assert decision.eligible is True
+
+    def test_strict_gate_rejects_stale_or_unapproved_records(self):
+        claim = self._validated_claim()
+        claim.serving_validation.review_approved = False
+        claim.serving_validation.validated_revision = 0
+        claim.serving_validation.published_revision = None
+
+        decision = _gate(cfg=self._strict_config()).evaluate(claim)
+
+        assert decision.eligible is False
+        assert REASON_REVIEW_NOT_APPROVED in decision.reason_codes
+        assert REASON_VALIDATED_REVISION_STALE in decision.reason_codes
+        assert REASON_PUBLISHED_REVISION_STALE in decision.reason_codes
+
+    def test_strict_gate_rejects_empty_serving_evidence_set(self):
+        claim = self._validated_claim()
+        claim.serving_validation.serving_evidence_ids = []
+
+        decision = _gate(cfg=self._strict_config()).evaluate(claim)
+
+        assert decision.eligible is False
+        assert REASON_SERVING_EVIDENCE_MISSING in decision.reason_codes
     def test_active_with_resolvable_evidence_eligible(self):
         content = "body text"
         h = compute_excerpt_hash(content)
