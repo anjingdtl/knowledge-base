@@ -69,6 +69,8 @@ class Evidence:
     source_revision: str = ""
     excerpt_hash: str | None = None
     observed_at: str = ""
+    stale: bool = False        # Phase 5:来源变更/删除后失效标记(保留可审计,不物理删除)
+    stale_at: str = ""         # Phase 5:失效时间戳
 
     @classmethod
     def from_dict(cls, d: dict, strict: bool = True) -> "Evidence":
@@ -80,6 +82,7 @@ class Evidence:
             block_id=d.get("block_id"), location=d.get("location") or {},
             source_revision=d.get("source_revision", ""), excerpt_hash=d.get("excerpt_hash"),
             observed_at=d.get("observed_at", ""),
+            stale=bool(d.get("stale", False)), stale_at=d.get("stale_at", ""),
         )
 
     def to_dict(self) -> dict:
@@ -88,6 +91,7 @@ class Evidence:
             "knowledge_id": self.knowledge_id, "block_id": self.block_id,
             "location": self.location, "source_revision": self.source_revision,
             "excerpt_hash": self.excerpt_hash, "observed_at": self.observed_at,
+            "stale": self.stale, "stale_at": self.stale_at,
         }
 
 

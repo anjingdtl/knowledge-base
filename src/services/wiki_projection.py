@@ -293,13 +293,14 @@ class WikiProjection:
             conn.execute(
                 "INSERT INTO wiki_claim_evidence "
                 "(evidence_id, claim_id, stance, knowledge_id, block_id, "
-                "location_json, source_revision, excerpt_hash, observed_at) "
-                "VALUES (?,?,?,?,?,?,?,?,?)",
+                "location_json, source_revision, excerpt_hash, observed_at, stale, stale_at) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     ev.evidence_id, claim.claim_id, ev.stance.value,
                     ev.knowledge_id, ev.block_id,
                     json.dumps(ev.location, ensure_ascii=False),
                     ev.source_revision, ev.excerpt_hash, ev.observed_at,
+                    1 if ev.stale else 0, ev.stale_at,
                 ),
             )
         if commit:

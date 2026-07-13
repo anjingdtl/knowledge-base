@@ -254,7 +254,7 @@ def test_projection_replay_idempotent(repo):
                 "CREATE TABLE wiki_pages_v2 (page_id TEXT PRIMARY KEY, path TEXT, title TEXT, page_type TEXT, status TEXT, revision INTEGER, content TEXT, content_hash TEXT, aliases_json TEXT, tags_json TEXT, source_ids_json TEXT, claim_ids_json TEXT, created_at TEXT, updated_at TEXT)",
                 "CREATE TABLE wiki_pages_v2_fts (page_id TEXT, title TEXT, content TEXT)",
                 "CREATE TABLE wiki_page_claims (page_id TEXT, claim_id TEXT, display_order INTEGER)",
-                "CREATE TABLE wiki_claim_evidence (evidence_id TEXT PRIMARY KEY, claim_id TEXT, stance TEXT, knowledge_id TEXT, block_id TEXT, location_json TEXT, source_revision TEXT, excerpt_hash TEXT, observed_at TEXT)",
+                "CREATE TABLE wiki_claim_evidence (evidence_id TEXT PRIMARY KEY, claim_id TEXT, stance TEXT, knowledge_id TEXT, block_id TEXT, location_json TEXT, source_revision TEXT, excerpt_hash TEXT, observed_at TEXT, stale INTEGER DEFAULT 0, stale_at TEXT)",
                 "CREATE TABLE wiki_claims (claim_id TEXT PRIMARY KEY, statement TEXT, normalized_statement TEXT, claim_type TEXT, status TEXT, confidence REAL, claim_scope TEXT, valid_from TEXT, valid_to TEXT, revision INTEGER, created_at TEXT, updated_at TEXT)",
                 "CREATE TABLE wiki_dependencies (from_type TEXT, from_id TEXT, to_type TEXT, to_id TEXT, relation TEXT)",
             ]:

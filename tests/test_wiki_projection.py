@@ -384,3 +384,18 @@ def test_find_page_id_by_path_queries_real_table(repo_and_proj):
 
     # None 输入 → 不抛异常, 返回 None (SQL 参数绑定兼容)
     assert proj.find_page_id_by_path(None) is None  # type: ignore[arg-type]
+
+
+# ---- 测试 13: Phase 5 evidence stale 投影 ----
+def test_projection_persists_evidence_stale(repo_and_proj):
+    """projection._upsert_claim 把 evidence.stale/stale_at 投影到投影列。"""
+    repo, proj, db = repo_and_proj
+    claim = _make_claim()
+    claim.evidence[0].stale = True
+    claim.evidence[0].stale_at = "2026-07-13T10:00:00"
+    proj._upsert_claim(claim)
+    row = db.get_conn().execute(
+        "SELECT stale, stale_at FROM wiki_claim_evidence WHERE evidence_id = ?", ("ev1",)
+    ).fetchone()
+    assert row["stale"] == 1
+    assert row["stale_at"] == "2026-07-13T10:00:00"
