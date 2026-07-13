@@ -3,7 +3,7 @@
 > 日期：2026-07-13  
 > Spec：`docs/ShineHeKnowledge 融合收束开发规格说明.md` §7 / §12.5 / Phase 3  
 > 前置：Phase 0–2（`abbfa35` / `737d0a9` / `ae62767`）  
-> 本阶段提交：见 git log `feat(search): fuse verified claims with raw retrieval`
+> 本阶段提交：`3892ce0`
 
 ---
 

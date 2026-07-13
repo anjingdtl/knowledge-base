@@ -14,7 +14,7 @@
 | Phase 0 基线 | ✅ | `abbfa35` / `docs/superpowers/reviews/verified-hybrid-baseline.md` |
 | Phase 1 模式配置 | ✅ | `737d0a9` / `docs/superpowers/reviews/verified-hybrid-phase1-report.md` |
 | Phase 2 Serving Gate | ✅ | `ae62767` / `docs/superpowers/reviews/verified-hybrid-phase2-report.md` |
-| Phase 3 统一检索 | ✅ | 见 `docs/superpowers/reviews/verified-hybrid-phase3-report.md` |
+| Phase 3 统一检索 | ✅ | `3892ce0` / `docs/superpowers/reviews/verified-hybrid-phase3-report.md` |
 | Phase 4+ | ⏸ | 回答/冲突/引用 / 维护中心 … |
 
 Phase 1 要点：默认 `verified`；`wiki_first`→`authoring`（不切只读）；`legacy`→`evidence_only`；不自动改写用户配置。
