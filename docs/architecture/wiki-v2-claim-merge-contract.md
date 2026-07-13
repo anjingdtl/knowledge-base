@@ -63,7 +63,8 @@
 | `SUPPORTS_FALLBACK` | 高语义相似但无 conflict/supersede/refine 信号 | supports |
 | `INSUFFICIENT_EVIDENCE` | Evidence 质量不足（预留，extractor/match 检测） | unresolved |
 
-> 纠偏方案 §C1 列出的 `SCOPE_MISMATCH` / `TIME_RANGE_MISMATCH` / `NUMERIC_CONFLICT` / `UNIT_INCOMPATIBLE` / `EXPLICIT_REPLACEMENT` 为**未来增强**（需数值/单位/作用域解析，由 C2 黄金评测集驱动）。当前 matcher 不做细粒度数值/单位分析时，这些场景一律以 `AMBIGUOUS_CANDIDATES` 或 `OBJECT_REFS_CONFLICT` 兜底并倾向 `unresolved`。
+> **C2 已落地：** `SCOPE_MISMATCH` / `UNIT_INCOMPATIBLE` / `POLARITY_MISMATCH` / `INTENSITY_MISMATCH` 由 matcher 规则启发式产出，并始终附带 `AMBIGUOUS_CANDIDATES` 回落 `unresolved`。  
+> 仍为未来增强：`TIME_RANGE_MISMATCH` / `NUMERIC_CONFLICT`（细粒度数值区间）/ `EXPLICIT_REPLACEMENT`（自然语言“废止/替代”信号，非仅时间字段）。
 
 ---
 
@@ -118,7 +119,15 @@ best_score ≥ semantic_threshold:
     否则 → supports (SUPPORTS_FALLBACK)
 ```
 
-**保守复核（C1 重点）：** exact-hash + object_refs 不同 → 当前直接判 `contradicts`（score=1.0）。对照 §1.2，若差异源于不同型号/地区/时间/单位，应回落 `unresolved`。当前 matcher 无型号/地区/单位解析能力，故此分支保持 `contradicts` 但在 reason_codes 标 `OBJECT_REFS_CONFLICT`，交 C2 黄金集判定是否需进一步收紧（数值/单位不同 → unresolved）。
+**保守复核（C2 已收紧）：**
+
+- exact-hash / 高语义 + object_refs 不同：
+  - 单位不同（如 1Gbps vs 1000Mbps）→ `unresolved`（`UNIT_INCOMPATIBLE`）
+  - 极性/否定（true vs false）→ `unresolved`（`POLARITY_MISMATCH`）
+  - 同单位不同数值（100Mbps vs 200Mbps）→ `contradicts`（`OBJECT_REFS_CONFLICT`）
+- 高语义 + 同 predicate + subject 无交集（型号/地区）→ `unresolved`（`SCOPE_MISMATCH`）
+- 高语义 + 同 subject/predicate/object + 强度词不同（最高可达 vs 保证达到）→ `unresolved`（`INTENSITY_MISMATCH`）
+- 决策树 step 5 在 supports fallback 前插入上述 demote 检查。
 
 ---
 

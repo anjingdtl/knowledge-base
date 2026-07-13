@@ -2,8 +2,26 @@
 
 > 最后更新：2026-07-13
 > 源码版本：`src/version.py` 中的 `1.6.0`
-> 当前分支：`feature/wiki-v2-phase6-migration-feedback`（待合入 master）
+> 当前分支：`master`
 > 当前方向：本地优先的 MCP 高精准知识检索引擎 + Karpathy Wiki-First 对齐
+
+## C2 Matcher 保守收紧 — 5 xfail 转绿（2026-07-13）
+
+闭环 C2 黄金集长期 xfail：单位不同 / 型号不同 / 地区不同 / 否定极性 / 强度词。
+`WikiClaimMatcher` 在高语义与 exact 路径增加 demote 启发式，回落 `unresolved`
+（附 `ambiguous_candidates` + 细粒度 reason code），同单位数值冲突仍 `contradicts`，
+同义 can_reach 仍 `supports`。契约文档已更新。
+
+| 场景 | 原误判 | 现 action | reason code |
+|---|---|---|---|
+| m03 1Gbps vs 1000Mbps | contradicts | unresolved | unit_incompatible |
+| m04 型号 X-1 vs X-2 | supports | unresolved | scope_mismatch |
+| m05 全国 vs 省级 | supports | unresolved | scope_mismatch |
+| m08 true vs false | contradicts | unresolved | polarity_mismatch |
+| m09 最高可达 vs 保证达到 | supports | unresolved | intensity_mismatch |
+
+验证：`pytest tests/test_wiki_claim_matcher.py tests/test_wiki_v2_golden_eval.py` →
+**62 passed / 0 xfailed**（matching 黄金集 12/12 全绿）。
 
 ## Canonical Wiki V2 Phase 6 迁移/反馈/评测 — 验收通过（2026-07-13）
 

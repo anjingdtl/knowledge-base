@@ -437,7 +437,128 @@ class TestReasonCodes:
 
 
 # ---------------------------------------------------------------------------
-# 15. C1: matcher 与 extractor 共用 models.normalize_statement(禁止各自重造)
+# 15. C2 保守收紧:单位/作用域/极性/强度 → unresolved
+# ---------------------------------------------------------------------------
+class TestConservativeUnresolved:
+    def test_unit_different_unresolved(self):
+        """1Gbps vs 1000Mbps:单位不同不自动 contradicts。"""
+        matcher = ClaimMatcher()
+        existing = _claim(
+            "c1", "FTTR速率是1000Mbps",
+            subject_refs=["entity:FTTR"], predicate="downstream_speed",
+            object_refs=["1000Mbps"],
+        )
+        new = _claim(
+            "n1", "FTTR速率是1Gbps",
+            subject_refs=["entity:FTTR"], predicate="downstream_speed",
+            object_refs=["1Gbps"],
+        )
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "unresolved"
+        assert "ambiguous_candidates" in d.reason_codes
+        assert "unit_incompatible" in d.reason_codes
+
+    def test_same_unit_numeric_still_contradicts(self):
+        """同单位不同数值仍 contradicts(m02 回归)。"""
+        matcher = ClaimMatcher()
+        existing = _claim(
+            "c1", "FTTR下行速率是100Mbps",
+            subject_refs=["entity:FTTR"], predicate="downstream_speed",
+            object_refs=["100Mbps"],
+        )
+        new = _claim(
+            "n1", "FTTR下行速率是200Mbps",
+            subject_refs=["entity:FTTR"], predicate="downstream_speed",
+            object_refs=["200Mbps"],
+        )
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "contradicts"
+        assert "object_refs_conflict" in d.reason_codes
+
+    def test_model_scope_mismatch_unresolved(self):
+        matcher = ClaimMatcher()
+        existing = _claim(
+            "c1", "X-2型号下行速率100Mbps",
+            subject_refs=["entity:FTTR-X2"], predicate="downstream_speed",
+            object_refs=["100Mbps"],
+        )
+        new = _claim(
+            "n1", "X-1型号下行速率100Mbps",
+            subject_refs=["entity:FTTR-X1"], predicate="downstream_speed",
+            object_refs=["100Mbps"],
+        )
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.9})
+        assert d.action == "unresolved"
+        assert "scope_mismatch" in d.reason_codes
+
+    def test_region_scope_mismatch_unresolved(self):
+        matcher = ClaimMatcher()
+        existing = _claim(
+            "c1", "省级规则下行速率100Mbps",
+            subject_refs=["region:province"], predicate="downstream_speed",
+            object_refs=["100Mbps"],
+        )
+        new = _claim(
+            "n1", "全国规则下行速率100Mbps",
+            subject_refs=["region:national"], predicate="downstream_speed",
+            object_refs=["100Mbps"],
+        )
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.9})
+        assert d.action == "unresolved"
+        assert "scope_mismatch" in d.reason_codes
+
+    def test_polarity_negation_unresolved(self):
+        matcher = ClaimMatcher()
+        existing = _claim(
+            "c1", "FTTR支持万兆下行",
+            subject_refs=["entity:FTTR"], predicate="supports_10g",
+            object_refs=["true"],
+        )
+        new = _claim(
+            "n1", "FTTR不支持万兆下行",
+            subject_refs=["entity:FTTR"], predicate="supports_10g",
+            object_refs=["false"],
+        )
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "unresolved"
+        assert "polarity_mismatch" in d.reason_codes
+
+    def test_intensity_mismatch_unresolved(self):
+        matcher = ClaimMatcher()
+        existing = _claim(
+            "c1", "FTTR保证达到1000Mbps",
+            subject_refs=["entity:FTTR"], predicate="downstream_speed",
+            object_refs=["1000Mbps"],
+        )
+        new = _claim(
+            "n1", "FTTR最高可达1000Mbps",
+            subject_refs=["entity:FTTR"], predicate="downstream_speed",
+            object_refs=["1000Mbps"],
+        )
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "unresolved"
+        assert "intensity_mismatch" in d.reason_codes
+
+    def test_synonym_can_reach_still_supports(self):
+        """能够达到 vs 可达 同属 can_reach,不误伤 supports(m11)。"""
+        matcher = ClaimMatcher()
+        existing = _claim(
+            "c1", "FTTR下行速率可达1000Mbps",
+            subject_refs=["entity:FTTR"], predicate="downstream_speed",
+            object_refs=["1Gbps"],
+        )
+        new = _claim(
+            "n1", "FTTR能够达到千兆下行",
+            subject_refs=["entity:FTTR"], predicate="downstream_speed",
+            object_refs=["1Gbps"],
+        )
+        d = matcher.match(new, candidates=[existing], scores={"c1": 0.95})
+        assert d.action == "supports"
+        assert "supports_fallback" in d.reason_codes
+
+
+# ---------------------------------------------------------------------------
+# 16. C1: matcher 与 extractor 共用 models.normalize_statement(禁止各自重造)
 # ---------------------------------------------------------------------------
 class TestNormalizeShared:
     def test_normalize_statement_canonical(self):

@@ -7,12 +7,16 @@
 
 C1 契约: ClaimMergeAction / ReasonCode 枚举 + normalize 共用见
 docs/architecture/wiki-v2-claim-merge-contract.md。
+
+保守收紧(C2 xfail 闭环):单位不同 / 型号地区作用域不同 / 极性否定 /
+强度词不同 → 一律 unresolved,宁回落人工,不自动 contradicts/supports。
 """
 from __future__ import annotations
 
 import hashlib
 import logging
 import math
+import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
@@ -50,6 +54,45 @@ class ReasonCode(str, Enum):
     REFINES_SUPERSET = "refines_superset"
     SUPPORTS_FALLBACK = "supports_fallback"
     INSUFFICIENT_EVIDENCE = "insufficient_evidence"
+    # C2 保守收紧:原先“未来增强”,现由黄金集驱动落地
+    UNIT_INCOMPATIBLE = "unit_incompatible"
+    SCOPE_MISMATCH = "scope_mismatch"
+    POLARITY_MISMATCH = "polarity_mismatch"
+    INTENSITY_MISMATCH = "intensity_mismatch"
+
+
+# 测量值:数字 + 可选单位(Gbps/Mbps/ms 等)
+_MEASURE_RE = re.compile(
+    r"^([+-]?\d+(?:\.\d+)?)\s*"
+    r"(gbps|mbps|kbps|bps|ghz|mhz|khz|hz|tb|gb|mb|kb|ms|s|%|percent)?$",
+    re.IGNORECASE,
+)
+
+# 极性词(小写比较)
+_POLARITY_TRUE = frozenset({
+    "true", "yes", "y", "1", "是", "支持", "允许", "启用", "开启",
+})
+_POLARITY_FALSE = frozenset({
+    "false", "no", "n", "0", "否", "不支持", "禁止", "禁用", "关闭",
+})
+
+# 强度词:长词优先匹配 → 强度类别
+# peak_max / can_reach / guarantee / must / possible / suggest / forbid
+_INTENSITY_PATTERNS: tuple[tuple[str, str], ...] = (
+    ("最高可达", "peak_max"),
+    ("保证达到", "guarantee"),
+    ("必须", "must"),
+    ("应当", "should"),
+    ("应该", "should"),
+    ("禁止", "forbid"),
+    ("不得", "forbid"),
+    ("可能", "possible"),
+    ("建议", "suggest"),
+    ("保证", "guarantee"),
+    ("能够达到", "can_reach"),
+    ("可达", "can_reach"),
+    ("可达到", "can_reach"),
+)
 
 
 # ---------------------------------------------------------------------------
@@ -122,12 +165,21 @@ class ClaimMatcher:
         if exact_match is not None:
             reasons_exact = ["exact normalized_statement match (sha256)"]
             codes_exact = [ReasonCode.EXACT_NORMALIZED_MATCH.value]
-            # Exact match with different object_refs → contradicts (decision tree 2a).
+            # Exact match with different object_refs → 先做保守 demote,再 contradicts。
             if (
                 exact_match.object_refs
                 and new_claim.object_refs
                 and set(new_claim.object_refs) != set(exact_match.object_refs)
             ):
+                demote = self._conservative_object_demote(new_claim, exact_match)
+                if demote is not None:
+                    action, extra_reasons, extra_codes = demote
+                    return ClaimMatchDecision(
+                        action=action,
+                        target_claim_id=exact_match.claim_id, score=1.0,
+                        reasons=reasons_exact + extra_reasons,
+                        reason_codes=codes_exact + extra_codes,
+                    )
                 reasons_exact.append(
                     f"object_refs conflict: {set(new_claim.object_refs)} vs {set(exact_match.object_refs)}"
                 )
@@ -198,8 +250,33 @@ class ClaimMatcher:
                 reasons=reasons_high, reason_codes=codes_high,
             )
 
-        # 5b: objects conflict OR new has contradicts stance evidence → contradicts
+        # 5a2: 作用域/型号/地区不同 → unresolved(契约 §1.2,不得自动 supports/contradicts)
+        if self._scope_mismatch(new_claim, target):
+            reasons_high.append(
+                f"scope mismatch: subjects {set(new_claim.subject_refs)} "
+                f"vs {set(target.subject_refs)} (predicate={new_claim.predicate!r})"
+            )
+            codes_high.extend([
+                ReasonCode.AMBIGUOUS_CANDIDATES.value,
+                ReasonCode.SCOPE_MISMATCH.value,
+            ])
+            return ClaimMatchDecision(
+                action=ClaimMergeAction.UNRESOLVED.value,
+                target_claim_id=target.claim_id, score=best_score,
+                reasons=reasons_high, reason_codes=codes_high,
+            )
+
+        # 5b: objects conflict — 单位/极性保守 demote,否则 contradicts
         if self._objects_conflict(new_claim, target):
+            demote = self._conservative_object_demote(new_claim, target)
+            if demote is not None:
+                action, extra_reasons, extra_codes = demote
+                return ClaimMatchDecision(
+                    action=action,
+                    target_claim_id=target.claim_id, score=best_score,
+                    reasons=reasons_high + extra_reasons,
+                    reason_codes=codes_high + extra_codes,
+                )
             reasons_high.append(
                 f"object_refs conflict: {set(new_claim.object_refs)} vs {set(target.object_refs)}"
             )
@@ -229,6 +306,22 @@ class ClaimMatcher:
             codes_high.append(ReasonCode.REFINES_SUPERSET.value)
             return ClaimMatchDecision(
                 action=ClaimMergeAction.REFINES.value,
+                target_claim_id=target.claim_id, score=best_score,
+                reasons=reasons_high, reason_codes=codes_high,
+            )
+
+        # 5c2: 强度词不同 → unresolved(最高可达 vs 保证达到 等)
+        if self._intensity_mismatch(new_claim, target):
+            reasons_high.append(
+                f"intensity mismatch between statements: "
+                f"{new_claim.statement!r} vs {target.statement!r}"
+            )
+            codes_high.extend([
+                ReasonCode.AMBIGUOUS_CANDIDATES.value,
+                ReasonCode.INTENSITY_MISMATCH.value,
+            ])
+            return ClaimMatchDecision(
+                action=ClaimMergeAction.UNRESOLVED.value,
                 target_claim_id=target.claim_id, score=best_score,
                 reasons=reasons_high, reason_codes=codes_high,
             )
@@ -358,3 +451,153 @@ class ClaimMatcher:
     def _has_contradicts_evidence(claim: Claim) -> bool:
         """检查 claim 是否有 contradicts stance 的 evidence。"""
         return any(e.stance == EvidenceStance.CONTRADICTS for e in claim.evidence)
+
+    # ------------------------------------------------------------------
+    # Private: 保守 demote 启发式(C2 黄金集驱动)
+    # ------------------------------------------------------------------
+    @classmethod
+    def _conservative_object_demote(
+        cls, new: Claim, target: Claim,
+    ) -> tuple[str, list[str], list[str]] | None:
+        """object_refs 不同时,若属单位/极性灰区则 demote 为 unresolved。
+
+        Returns:
+            (action, reasons, reason_codes) 或 None(继续走 contradicts)。
+        """
+        if cls._unit_incompatible(new.object_refs, target.object_refs):
+            return (
+                ClaimMergeAction.UNRESOLVED.value,
+                [
+                    f"unit incompatible or non-safe conversion: "
+                    f"{set(new.object_refs)} vs {set(target.object_refs)}",
+                ],
+                [
+                    ReasonCode.AMBIGUOUS_CANDIDATES.value,
+                    ReasonCode.UNIT_INCOMPATIBLE.value,
+                ],
+            )
+        if cls._polarity_mismatch(new.object_refs, target.object_refs):
+            return (
+                ClaimMergeAction.UNRESOLVED.value,
+                [
+                    f"polarity/negation mismatch: "
+                    f"{set(new.object_refs)} vs {set(target.object_refs)}",
+                ],
+                [
+                    ReasonCode.AMBIGUOUS_CANDIDATES.value,
+                    ReasonCode.POLARITY_MISMATCH.value,
+                ],
+            )
+        return None
+
+    @staticmethod
+    def _parse_measure(token: str) -> tuple[float, str] | None:
+        """解析 '1Gbps' / '1000Mbps' / '100' → (value, unit_lower 或 '')。"""
+        t = (token or "").strip().lower().replace(" ", "")
+        m = _MEASURE_RE.match(t)
+        if not m:
+            return None
+        try:
+            value = float(m.group(1))
+        except ValueError:
+            return None
+        unit = (m.group(2) or "").lower()
+        return value, unit
+
+    @classmethod
+    def _unit_incompatible(cls, new_objs: list[str], tgt_objs: list[str]) -> bool:
+        """双方 object_refs 均像测量值且单位不同 → 无法安全换算,回落 unresolved。
+
+        同单位不同数值 → False(交给 contradicts)。
+        无法解析为单位的 token → False(交给其他分支)。
+        """
+        if len(new_objs) != 1 or len(tgt_objs) != 1:
+            # 多 object 集合:任一对存在单位不同即保守
+            new_measures = [cls._parse_measure(o) for o in new_objs]
+            tgt_measures = [cls._parse_measure(o) for o in tgt_objs]
+            if any(m is None for m in new_measures + tgt_measures):
+                return False
+            new_units = {m[1] for m in new_measures if m is not None and m[1]}
+            tgt_units = {m[1] for m in tgt_measures if m is not None and m[1]}
+            if new_units and tgt_units and new_units != tgt_units:
+                return True
+            return False
+
+        n = cls._parse_measure(new_objs[0])
+        t = cls._parse_measure(tgt_objs[0])
+        if n is None or t is None:
+            return False
+        _, n_unit = n
+        _, t_unit = t
+        # 双方都有单位且单位不同 → 不自动 contradicts(即使可换算也保守)
+        if n_unit and t_unit and n_unit != t_unit:
+            return True
+        return False
+
+    @staticmethod
+    def _polarity_of(token: str) -> bool | None:
+        t = (token or "").strip().lower()
+        if t in _POLARITY_TRUE:
+            return True
+        if t in _POLARITY_FALSE:
+            return False
+        return None
+
+    @classmethod
+    def _polarity_mismatch(cls, new_objs: list[str], tgt_objs: list[str]) -> bool:
+        """object_refs 呈现真/假极性对立 → 保守 unresolved(否定差异不自动 contradicts)。"""
+        if len(new_objs) != 1 or len(tgt_objs) != 1:
+            return False
+        n = cls._polarity_of(new_objs[0])
+        t = cls._polarity_of(tgt_objs[0])
+        if n is None or t is None:
+            return False
+        return n is not t
+
+    @staticmethod
+    def _scope_mismatch(new: Claim, target: Claim) -> bool:
+        """同 predicate、双方 subject 非空且无交集 → 型号/地区/作用域不同。
+
+        真超集(refines)不在此:new ⊃ target 时有交集,本函数返回 False。
+        """
+        if new.predicate != target.predicate:
+            return False
+        if not new.subject_refs or not target.subject_refs:
+            return False
+        new_s = set(new.subject_refs)
+        tgt_s = set(target.subject_refs)
+        if new_s & tgt_s:
+            return False
+        return True
+
+    @staticmethod
+    def _intensity_class(statement: str) -> str | None:
+        """从 statement 提取强度类别;无标记返回 None。长词优先。"""
+        if not statement:
+            return None
+        for phrase, cls in _INTENSITY_PATTERNS:
+            if phrase in statement:
+                return cls
+        return None
+
+    @classmethod
+    def _intensity_mismatch(cls, new: Claim, target: Claim) -> bool:
+        """双方都有强度标记且类别不同 → unresolved。
+
+        仅在 subject 有交集、predicate 相同、object 相容时检查
+        (避免无关句对因偶然词误伤)。
+        """
+        if new.predicate != target.predicate:
+            return False
+        if new.subject_refs and target.subject_refs:
+            if not (set(new.subject_refs) & set(target.subject_refs)):
+                return False
+        # object 明显冲突时由 object 分支处理,此处只看“同 obj 不同强度措辞”
+        if new.object_refs and target.object_refs:
+            if set(new.object_refs) != set(target.object_refs):
+                return False
+        n_cls = cls._intensity_class(new.statement)
+        t_cls = cls._intensity_class(target.statement)
+        if n_cls is None or t_cls is None:
+            return False
+        return n_cls != t_cls

@@ -3,8 +3,8 @@
 消费 evals/wiki_v2/ 下 claim_matching / claim_merge / claim_extraction 黄金集,
 用注入 scores / fake LLM / 固定 clock 跑,零 embedding/LLM 依赖,CI 可跑。
 
-xfail case:当前 matcher 未满足保守契约的(单位/型号/地区/否定/强度词),
-记录 gap,测试体 try/except + pytest.xfail 标记;将来 matcher 收紧后自动转 pass。
+C2 保守收紧已闭环:单位/型号/地区/否定/强度词 5 案现期望 unresolved 且为绿。
+若 case 仍带 xfail 字段,失败时 pytest.xfail 记录(兼容历史)。
 """
 from __future__ import annotations
 
@@ -184,9 +184,20 @@ def test_extraction_behavior(case: dict):
 def test_matching_dataset_has_expected_scenarios():
     cases = load_jsonl("claim_matching.jsonl")
     assert len(cases) >= 12
-    # 至少覆盖:绿 case + xfail gap case
-    assert any(not c.get("xfail") for c in cases), "缺少绿 case(锁定 matcher 正确行为)"
-    assert any(c.get("xfail") for c in cases), "缺少 xfail case(记录保守性 gap)"
+    # 覆盖全部 7 类 action + 保守 unresolved 场景(单位/作用域/极性/强度)
+    actions = {c["expected_action"] for c in cases}
+    assert "unresolved" in actions
+    assert "contradicts" in actions
+    assert "supports" in actions
+    # C2 收紧后不再保留 xfail gap
+    assert not any(c.get("xfail") for c in cases), (
+        "claim_matching.jsonl 仍含 xfail;C2 保守收紧后应全部转绿"
+    )
+    conservative_ids = {"m03", "m04", "m05", "m08", "m09"}
+    by_id = {c["id"]: c for c in cases}
+    for cid in conservative_ids:
+        assert cid in by_id, f"缺少保守场景 {cid}"
+        assert by_id[cid]["expected_action"] == "unresolved"
 
 
 def test_source_datasets_marked_phase5():
