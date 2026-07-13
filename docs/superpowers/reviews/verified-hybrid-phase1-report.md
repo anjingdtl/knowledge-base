@@ -4,7 +4,7 @@
 > Spec：`docs/ShineHeKnowledge 融合收束开发规格说明.md` §16 Phase 1  
 > 前置：Phase 0 baseline `abbfa35`
 
-SHA: `d1fa8d130d0c6bb77443d7d32cc828099164e2e6`
+SHA: `737d0a9930c8cb779e308d109a005b2f1af184fa`
 
 ---
 
@@ -61,7 +61,7 @@ Phase 1 不改检索路径，Raw/Wiki 评测指标应与 Phase 0 持平（不重
 ## 7. 回滚
 
 ```bash
-git revert <phase1-sha>
+git revert 737d0a9
 ```
 
 无 DB schema 变更。用户可将 `mode` 设回 `wiki_first` / `legacy`。
