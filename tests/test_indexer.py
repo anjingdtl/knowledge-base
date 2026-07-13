@@ -1,10 +1,50 @@
 """Block-First Indexer 集成测试"""
 import json
+from datetime import datetime
+
+import pytest
 
 from src.models.knowledge import KnowledgeItem
 from src.services.block_store import BlockStore
 from src.services.db import Database
-from src.services.indexer import index_knowledge_item, reindex_all, reindex_knowledge_item
+from src.services.indexer import (
+    get_vector_coverage,
+    index_knowledge_item,
+    reindex_all,
+    reindex_knowledge_item,
+    repair_missing_block_vectors,
+)
+from src.utils.config import Config
+
+
+def _insert_coverage_item(item_id: str) -> None:
+    Database.insert_knowledge(KnowledgeItem(
+        id=item_id,
+        title=item_id,
+        content="coverage test item",
+        source_type="manual",
+        file_type="txt",
+    ).to_row())
+
+
+def _insert_coverage_block(
+    block_id: str,
+    content: str,
+    order_idx: int,
+    page_id: str = "coverage-page",
+) -> None:
+    now = datetime.now().isoformat()
+    Database.insert_blocks([{
+        "id": block_id,
+        "parent_id": None,
+        "page_id": page_id,
+        "content": content,
+        "block_type": "text",
+        "properties": "{}",
+        "order_idx": order_idx,
+        "created_at": now,
+        "updated_at": now,
+    }])
 
 
 class TestBlockFirstIndexer:
@@ -199,3 +239,126 @@ class TestReindexCheckpoint:
         assert row is not None
         assert row["status"] == "running", f"status 应为 'running'，实际 {row['status']!r}"
         assert row["started_at"] is not None, "started_at 不应为 NULL"
+
+
+class TestVectorCoverageRepair:
+    def test_repair_missing_block_vectors_embeds_only_missing_blocks(self, monkeypatch):
+        Config.set("embedding.model", "test-embedding")
+        Config.set("embedding.api_key", "test-key")
+        _insert_coverage_item("coverage-page")
+        _insert_coverage_block("already-vectorized", "already covered", 0)
+        _insert_coverage_block("missing-vector", "must be embedded", 1)
+        BlockStore().add_block_embedding("already-vectorized", [0.1] * 1024)
+        seen: list[str] = []
+
+        class FakeEmbeddingService:
+            def build_embedding_text(self, block):
+                return f"prepared:{block['content']}"
+
+            def embed_batch_with_cache(self, texts, batch_size=20):
+                seen.extend(texts)
+                return [[0.2] * 1024 for _ in texts]
+
+        monkeypatch.setattr("src.services.embedding.EmbeddingService", FakeEmbeddingService)
+
+        result = repair_missing_block_vectors(batch_size=1)
+
+        assert seen == ["prepared:must be embedded"]
+        assert result == {
+            "total_blocks": 2,
+            "missing_before": 1,
+            "repaired": 1,
+            "failed": 0,
+            "coverage_before": 0.5,
+            "coverage_after": 1.0,
+            "errors": [],
+        }
+        assert get_vector_coverage()["covered_blocks"] == 2
+
+    def test_repair_missing_block_vectors_continues_after_a_failed_batch(self, monkeypatch):
+        Config.set("embedding.model", "test-embedding")
+        Config.set("embedding.api_key", "test-key")
+        _insert_coverage_item("coverage-page")
+        _insert_coverage_block("failing-vector", "provider failure", 0)
+        _insert_coverage_block("successful-vector", "provider success", 1)
+
+        class FakeEmbeddingService:
+            def build_embedding_text(self, block):
+                return block["content"]
+
+            def embed_batch_with_cache(self, texts, batch_size=20):
+                if texts == ["provider failure"]:
+                    raise RuntimeError("embedding unavailable")
+                return [[0.3] * 1024 for _ in texts]
+
+        monkeypatch.setattr("src.services.embedding.EmbeddingService", FakeEmbeddingService)
+
+        result = repair_missing_block_vectors(batch_size=1)
+
+        assert result["repaired"] == 1
+        assert result["failed"] == 1
+        assert result["coverage_after"] == 0.5
+        assert result["errors"] == [{
+            "block_ids": ["failing-vector"],
+            "error": "embedding unavailable",
+        }]
+
+    def test_repair_missing_block_vectors_reports_vectors_rejected_by_store(self, monkeypatch):
+        Config.set("embedding.model", "test-embedding")
+        Config.set("embedding.api_key", "test-key")
+        _insert_coverage_item("coverage-page")
+        _insert_coverage_block("wrong-dimension-vector", "bad dimension", 0)
+
+        class FakeEmbeddingService:
+            def build_embedding_text(self, block):
+                return block["content"]
+
+            def embed_batch_with_cache(self, texts, batch_size=20):
+                return [[0.3] * 512 for _ in texts]
+
+        monkeypatch.setattr("src.services.embedding.EmbeddingService", FakeEmbeddingService)
+
+        result = repair_missing_block_vectors()
+
+        assert result["repaired"] == 0
+        assert result["failed"] == 1
+        assert result["coverage_after"] == 0.0
+
+    def test_repair_missing_block_vectors_requires_embedding_configuration(self):
+        Config.set("embedding.model", "")
+        Config.set("embedding.api_key", "")
+        Config.set("llm.api_key", "")
+
+        with pytest.raises(ValueError, match="Embedding 模型未配置"):
+            repair_missing_block_vectors()
+
+    def test_repair_missing_block_vectors_excludes_soft_deleted_knowledge(self, monkeypatch):
+        Config.set("embedding.model", "test-embedding")
+        Config.set("embedding.api_key", "test-key")
+        _insert_coverage_item("active-coverage-page")
+        _insert_coverage_item("deleted-coverage-page")
+        Database.get_conn().execute(
+            "UPDATE knowledge_items SET deleted_at = ? WHERE id = ?",
+            (datetime.now().isoformat(), "deleted-coverage-page"),
+        )
+        Database.get_conn().commit()
+        _insert_coverage_block("active-missing-vector", "active content", 0, "active-coverage-page")
+        _insert_coverage_block("deleted-missing-vector", "deleted content", 0, "deleted-coverage-page")
+        seen: list[str] = []
+
+        class FakeEmbeddingService:
+            def build_embedding_text(self, block):
+                return block["content"]
+
+            def embed_batch_with_cache(self, texts, batch_size=20):
+                seen.extend(texts)
+                return [[0.4] * 1024 for _ in texts]
+
+        monkeypatch.setattr("src.services.embedding.EmbeddingService", FakeEmbeddingService)
+
+        result = repair_missing_block_vectors()
+
+        assert seen == ["active content"]
+        assert result["total_blocks"] == 1
+        assert result["missing_before"] == 1
+        assert result["coverage_after"] == 1.0

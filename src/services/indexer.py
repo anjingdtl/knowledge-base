@@ -294,6 +294,96 @@ def _set_journal_mode(mode: str) -> str:
     return str(old_mode)
 
 
+def get_vector_coverage() -> dict[str, int | float]:
+    """Return the current block vector coverage from the canonical tables."""
+    BlockStore()._ensure_table()
+    row = Database.get_conn().execute(
+        """
+        SELECT COUNT(*) AS total_blocks,
+               SUM(CASE WHEN v.rowid IS NOT NULL THEN 1 ELSE 0 END) AS covered_blocks
+        FROM blocks AS b
+        JOIN knowledge_items AS k ON k.id = b.page_id
+        LEFT JOIN vec_blocks AS v ON v.rowid = b.rowid
+        WHERE k.deleted_at IS NULL
+        """
+    ).fetchone()
+    total_blocks = int(row["total_blocks"] or 0)
+    covered_blocks = int(row["covered_blocks"] or 0)
+    return {
+        "total_blocks": total_blocks,
+        "covered_blocks": covered_blocks,
+        "missing_blocks": total_blocks - covered_blocks,
+        "coverage": covered_blocks / total_blocks if total_blocks else 1.0,
+    }
+
+
+def repair_missing_block_vectors(
+    progress_callback: Callable[[int, int], None] | None = None,
+    batch_size: int | None = None,
+) -> dict:
+    """Embed blocks without vectors while preserving existing blocks and vectors."""
+    if not Config.get("embedding.model", ""):
+        raise ValueError("Embedding 模型未配置，请先在设置中配置 Embedding 模型")
+    if not (Config.get("embedding.api_key", "") or Config.get("llm.api_key", "")):
+        raise ValueError("Embedding API Key 未配置，请先在设置中配置 API Key")
+
+    before = get_vector_coverage()
+    rows = [dict(row) for row in Database.get_conn().execute(
+        """
+        SELECT b.*
+        FROM blocks AS b
+        JOIN knowledge_items AS k ON k.id = b.page_id
+        LEFT JOIN vec_blocks AS v ON v.rowid = b.rowid
+        WHERE k.deleted_at IS NULL AND v.rowid IS NULL
+        ORDER BY b.rowid
+        """
+    ).fetchall()]
+
+    from src.services.embedding import EmbeddingService
+
+    embedding = EmbeddingService()
+    size = max(1, batch_size or int(Config.get("embedding.batch_size", 20) or 20))
+    repaired = 0
+    errors = []
+    total = len(rows)
+
+    for offset in range(0, total, size):
+        batch = rows[offset:offset + size]
+        block_ids = [row["id"] for row in batch]
+        try:
+            texts = [embedding.build_embedding_text(row) for row in batch]
+            vectors = embedding.embed_batch_with_cache(texts, batch_size=len(batch))
+            if len(vectors) != len(block_ids):
+                raise RuntimeError(
+                    f"Embedding count mismatch: expected {len(block_ids)}, got {len(vectors)}"
+                )
+            BlockStore().add_block_embeddings_batch(block_ids, vectors)
+        except Exception as exc:  # noqa: BLE001
+            logger.error("Vector coverage repair batch failed: %s", exc)
+            errors.append({"block_ids": block_ids, "error": str(exc)})
+        finally:
+            if progress_callback:
+                progress_callback(min(offset + len(batch), total), total)
+
+    after = get_vector_coverage()
+    repaired = max(0, int(after["covered_blocks"]) - int(before["covered_blocks"]))
+    failed = total - repaired
+    if failed and not errors:
+        errors.append({
+            "block_ids": [],
+            "error": "部分向量未写入，请检查 Embedding 模型维度配置",
+        })
+    return {
+        "total_blocks": before["total_blocks"],
+        "missing_before": before["missing_blocks"],
+        "repaired": repaired,
+        "failed": failed,
+        "coverage_before": before["coverage"],
+        "coverage_after": after["coverage"],
+        "errors": errors,
+    }
+
+
 def reindex_all(
     progress_callback: Callable[[int, int, str], None] | None = None,
     dry_run: bool = False,
