@@ -183,6 +183,6 @@ def test_canonical_save_projects_content_source_ids_and_status_to_legacy_databas
     assert canonical.body.strip() == "Canonical replacement body"
     assert canonical.source_ids == ["knowledge-1", "knowledge-2"]
     assert canonical.status.value == "published"
-    assert legacy_row["content"] == canonical.body
+    assert legacy_row["content"] == "Canonical replacement body"
     assert legacy_row["source_ids"] == '["knowledge-1", "knowledge-2"]'
     assert legacy_row["status"] == "published"

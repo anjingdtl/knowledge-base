@@ -1,8 +1,12 @@
 # Canonical Wiki V2 Phase 4C Primary 交接单
 
-> 日期：2026-07-13  
-> 分支：`feature/wiki-v2-phase4a-shadow`  
-> 交接状态：Phase 4C 实现已提交，尚未完成 phase 验收、正式 review 与汇总提交。  
+> Closure update（2026-07-13）：Phase 4C 已通过最终门禁并完成 review；后续从
+> `PROGRESS.md` 和 `docs/superpowers/reviews/2026-07-13-phase4c-primary-review.md` 接续
+> Phase 5 规划。本交接单下方保留的是验收前的历史快照。
+
+> 日期：2026-07-13
+> 分支：`feature/wiki-v2-phase4a-shadow`
+> 交接状态：验收前历史快照。
 > 权威总方案：`docs/superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md`
 
 ## 结论先行

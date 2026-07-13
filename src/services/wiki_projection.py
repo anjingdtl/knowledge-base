@@ -218,6 +218,8 @@ class WikiProjection:
     def _upsert_legacy_page(self, page: WikiPage, *, commit: bool = True) -> None:
         """Maintain the legacy wiki_pages read model from canonical pages."""
         conn = self._db.get_conn()
+        if not self._legacy_page_table_exists(conn):
+            return
         existing = conn.execute(
             "SELECT concept_summary, lint_score, complex_anomaly FROM wiki_pages WHERE id = ?",
             (page.page_id,),
@@ -244,6 +246,14 @@ class WikiProjection:
         if commit:
             conn.commit()
 
+    @staticmethod
+    def _legacy_page_table_exists(conn) -> bool:
+        """Return whether this projection database exposes the legacy read model."""
+        row = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'wiki_pages'"
+        ).fetchone()
+        return row is not None
+
     def update_legacy_page_fields(self, page_id: str, **fields) -> None:
         """Patch compatibility-only legacy wiki_pages fields."""
         if not fields:
@@ -253,6 +263,8 @@ class WikiProjection:
         if invalid:
             raise ValueError(f"Invalid legacy projection fields: {invalid}")
         conn = self._db.get_conn()
+        if not self._legacy_page_table_exists(conn):
+            return
         sets = ", ".join(f"{field} = ?" for field in fields)
         conn.execute(
             f"UPDATE wiki_pages SET {sets} WHERE id = ?",

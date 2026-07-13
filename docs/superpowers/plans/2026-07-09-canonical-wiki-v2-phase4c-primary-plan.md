@@ -762,7 +762,7 @@ Observed: `32 passed`.
 - Create: `docs/superpowers/reviews/2026-07-09-phase4c-primary-review.md`
 - Optional artifact: `artifacts/eval/wiki-v2-phase4c-primary-<sample>.json`
 
-- [ ] **Step 1: Run phase verification**
+- [x] **Step 1: Run phase verification**
 
 Run:
 
@@ -774,10 +774,11 @@ python evals/run_retrieval_eval.py --all
 python evals/run_wiki_eval.py
 ```
 
-Status: **not yet run on the final Phase 4C HEAD**. Earlier focused regressions passed, but they
-do not replace this full phase gate.
+Observed on final Phase 4C HEAD: Ruff passed; mypy reported no issues in 189 source files;
+retrieval eval reported `Overall: PASS`; wiki eval completed with source coverage `0.0`, cross-page
+update rate `0.9545`, orphan rate `0.0`, query-save rate `0.0606`, and stale ratio `0.0`.
 
-- [ ] **Step 2: Run full test suite**
+- [x] **Step 2: Run full test suite**
 
 Run:
 
@@ -785,10 +786,9 @@ Run:
 pytest -q
 ```
 
-Status: **not accepted**. A previous `pytest -q` invocation was interrupted and produced no final
-result; its child processes were stopped during handoff. Re-run from a clean process tree.
+Observed: `1455 passed / 2 skipped / 5 xfailed / 8 warnings`.
 
-- [ ] **Step 3: Update progress and review**
+- [x] **Step 3: Update progress and review**
 
 Update `PROGRESS.md` Phase 4C status only if the direct-write guard shrink and primary-mode write path are verified. Create the review document with:
 
@@ -798,7 +798,7 @@ Update `PROGRESS.md` Phase 4C status only if the direct-write guard shrink and p
 - Verification command outputs.
 - Residual risks for Phase 5.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 Run:
 
@@ -807,7 +807,7 @@ git add PROGRESS.md docs/superpowers/reviews/2026-07-09-phase4c-primary-review.m
 git commit -m "refactor(wiki-v2): switch primary canonical write path"
 ```
 
-Expected: commit succeeds after gitleaks scan.
+Completed by the Phase 4C acceptance commit after gitleaks scan.
 
 ## Self-Review
 

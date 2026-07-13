@@ -20,11 +20,38 @@ SRC = Path(__file__).resolve().parent.parent / "src"
 ALLOWED_DIRECT_WRITES: dict[tuple[str, str], str] = {
 }
 
-# 守卫覆盖的模块 + 各自禁止的"直接写"方法名
-GUARDED: dict[str, set[str]] = {}
+# 守卫覆盖的模块 + 各自禁止的"直接写"方法名。
+# Phase 4C 完成后保留扫描范围，但不再保留任何过渡豁免。
+GUARDED: dict[str, set[str]] = {
+    "services/wiki_compiler.py": {"insert_wiki_page", "update_wiki_page"},
+    "services/wiki_entity_updater.py": {"write_markdown"},
+    "services/knowledge_workflow.py": {"write_markdown"},
+    "services/wiki_source_compiler.py": {"write_markdown"},
+    "services/wiki_index_compiler.py": {"write_markdown"},
+    "services/wiki_log_compiler.py": {"write_text"},
+    "api/routes/wiki.py": {"insert_wiki_page", "update_wiki_page", "delete_wiki_page"},
+    "services/wiki_lint.py": {"update_wiki_page"},
+    "services/wiki_workflow.py": {"update_wiki_page"},
+}
 
 # 额外检查 open(...,"a"/"w"/"x"/"+") 写的模块(堵 AST 只认方法调用的盲区)
-OPEN_WRITE_GUARDED: set[str] = set()
+OPEN_WRITE_GUARDED: set[str] = {"services/wiki_log_compiler.py"}
+
+
+def test_primary_write_guard_keeps_scanning_migrated_entrypoints():
+    """Phase 4C removes exemptions, not the entrypoint coverage itself."""
+    assert set(GUARDED) == {
+        "api/routes/wiki.py",
+        "services/knowledge_workflow.py",
+        "services/wiki_compiler.py",
+        "services/wiki_entity_updater.py",
+        "services/wiki_index_compiler.py",
+        "services/wiki_lint.py",
+        "services/wiki_log_compiler.py",
+        "services/wiki_source_compiler.py",
+        "services/wiki_workflow.py",
+    }
+    assert OPEN_WRITE_GUARDED == {"services/wiki_log_compiler.py"}
 
 
 def _find_calls(tree: ast.AST, names: set[str]) -> list[str]:

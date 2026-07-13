@@ -4,6 +4,7 @@
 
 - [Canonical Wiki V2 纠偏与续建总方案](superpowers/plans/2026-07-08-canonical-wiki-v2-correction-and-continuation.md)
 - [Canonical Wiki V2 Phase 4C Primary 执行计划](superpowers/plans/2026-07-09-canonical-wiki-v2-phase4c-primary-plan.md)
+- [Canonical Wiki V2 Phase 4C Primary 验收 Review](superpowers/reviews/2026-07-13-phase4c-primary-review.md)
 - [Canonical Wiki V2 Phase 4C 交接单（2026-07-13）](superpowers/handoffs/2026-07-13-canonical-wiki-v2-phase4c-handoff.md)
 - [Karpathy Wiki-First 对齐 Spec(第一阶段)](superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-design.md)
 - [Karpathy Wiki-First 第二阶段 Spec(检索执行层)](superpowers/specs/2026-07-02-knowledge-base-karpathy-wiki-first-phase2-design.md)

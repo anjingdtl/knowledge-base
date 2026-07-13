@@ -17,6 +17,7 @@ def setup_db(tmp_path):
     Config.load()
     Config.set("storage.data_dir", str(tmp_path))
     Config.set("storage.db_name", "test.db")
+    Config.set("knowledge_workflow.wiki_dir", str(tmp_path / "wiki"))
     Config.set(
         "security.allowed_ingest_dirs",
         [str(tmp_path), tempfile.gettempdir()],
@@ -24,6 +25,8 @@ def setup_db(tmp_path):
     # 重置 Database 实例
     Database._instance = None
     Database.connect(str(db_path))
+    import src.core.container as container_mod
+    container_mod._active_container = None
     if "src.mcp_server" in sys.modules:
         sys.modules["src.mcp_server"]._container = None
     try:
@@ -42,6 +45,8 @@ def setup_db(tmp_path):
     yield
     if "src.mcp_server" in sys.modules:
         sys.modules["src.mcp_server"]._container = None
+    import src.core.container as container_mod
+    container_mod._active_container = None
     Database.close()
     Database._instance = None
     VectorStore._instance = None
