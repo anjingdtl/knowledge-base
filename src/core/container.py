@@ -152,6 +152,11 @@ class AppContainer:
     # --- 第二阶段 W2:wiki parent-child 检索 ---
     _wiki_parent_retriever: Optional[object] = field(default=None, repr=False)
 
+    # --- Phase 5:依赖图与失效传播 ---
+    _wiki_dependency_service: Optional[object] = field(default=None, repr=False)
+    _wiki_rebuild_service: Optional[object] = field(default=None, repr=False)
+    _wiki_rebuild_scheduler: Optional[object] = field(default=None, repr=False)
+
     _initialized_services: list = field(default_factory=list, repr=False)
 
     def _track_service(self, attr_name: str):
@@ -522,6 +527,14 @@ class AppContainer:
             )
             self._track_service("_wiki_query_service")
         return self._wiki_query_service
+
+    @property
+    def wiki_dependency_service(self):
+        if self._wiki_dependency_service is None:
+            from src.services.wiki_dependency_service import WikiDependencyService as _Dep
+            self._wiki_dependency_service = _Dep(repository=self.wiki_repository, config=self.config)
+            self._track_service("_wiki_dependency_service")
+        return self._wiki_dependency_service
 
 
 def create_container(config_path: str | None = None) -> AppContainer:
