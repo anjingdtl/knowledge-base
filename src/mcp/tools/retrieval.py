@@ -1425,7 +1425,7 @@ def kb_capabilities() -> dict:
         # Phase 6 Spec §9.4
         **_kb_capabilities_verified_fields(),
         "registered_tools": sorted({t["name"] for t in tool_summaries if "." not in t["name"]}),
-        "hidden_by_policy": [],
+        "hidden_by_policy": sorted(state.hidden_by_policy) if state else [],
         "serving_claim_statuses": ["active"],
         "citation_layers": ["claim", "raw_evidence"],
         "recommended_flow": ["search", "read", "ask"],
