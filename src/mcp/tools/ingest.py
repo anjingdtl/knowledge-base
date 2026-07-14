@@ -5,7 +5,6 @@ Implementations registered via tool_definition side-effect on import.
 from __future__ import annotations
 
 import hashlib
-import json
 import logging
 import os
 from dataclasses import asdict
@@ -21,10 +20,17 @@ from src.mcp.envelopes import (
 )
 from src.mcp.tools.support import (
     check_write_policy as _check_write_policy,
-    content_preview as _content_preview,
+)
+from src.mcp.tools.support import (
     define_tool as _define_tool,
+)
+from src.mcp.tools.support import (
     get_container as _get_container,
+)
+from src.mcp.tools.support import (
     heartbeat as _heartbeat,
+)
+from src.mcp.tools.support import (
     op_log as _op_log,
 )
 from src.services.file_parser import parse_file, parse_url
@@ -140,8 +146,6 @@ def index_path(path: str, recursive: bool = True, dry_run: bool = False, force: 
     _guard = _check_write_policy("index_path", dry_run=dry_run)
     if _guard:
         return _guard
-    from dataclasses import asdict
-    from pathlib import Path
 
     try:
         validated_path = _validate_ingest_path(path)
@@ -362,7 +366,6 @@ def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     validated_path = _validate_file_path(file_path)
     parsed_list = _resolve_parse_file()(validated_path)
 
-    import hashlib
     from datetime import datetime, timezone
 
     # 读取文件创建时间戳（使用 UTC 时区避免 naive datetime）
@@ -446,7 +449,6 @@ def _do_ingest_url(url: str, tags: list[str] | None = None) -> dict:
     container = _get_container()
     db = container.db
 
-    import hashlib
     content_hash = hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
     existing = db.get_knowledge_by_hash(content_hash)
     if existing:

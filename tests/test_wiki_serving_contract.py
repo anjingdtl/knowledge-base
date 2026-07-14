@@ -12,7 +12,6 @@ from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance, nor
 from src.services.search_service import SearchService
 from src.services.verified_answer import ANSWER_MODE_CONFLICT, ANSWER_MODE_RAW, VerifiedAnswerService
 from src.services.verified_hybrid_config_migrator import VerifiedHybridConfigMigrator
-from src.services.wiki_claim_extractor import compute_excerpt_hash
 from src.services.wiki_serving_gate import (
     REASON_CLAIM_DRAFT,
     REASON_CLAIM_STALE,

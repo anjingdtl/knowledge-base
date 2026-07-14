@@ -22,7 +22,6 @@ def test_readonly_open_uses_mode_ro_and_skips_schema(tmp_path: Path, monkeypatch
         "_migrate",
         lambda self: (_ for _ in ()).throw(AssertionError("_migrate must not run")),
     )
-    orig_connect_internal = Database._connect_internal
 
     def ban_connect_internal(self):
         raise AssertionError("_connect_internal (write path) must not run in readonly")

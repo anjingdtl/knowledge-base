@@ -8,8 +8,10 @@ Revises: c6c24120aff5
 Create Date: 2026-06-13
 """
 from typing import Sequence, Union
-from alembic import op
+
 import sqlalchemy as sa
+
+from alembic import op
 
 revision: str = 'g001'
 down_revision: Union[str, Sequence[str], None] = 'c6c24120aff5'

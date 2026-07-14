@@ -1,43 +1,52 @@
-# 数据库迁移策略（Phase-3 冻结）
+# 数据库迁移策略（v1.10.1 最终治理）
 
-> **版本：** v1.9.0  
-> **状态：** 运行时 `_migrate()` 已冻结；新增 Schema **必须** 走 Alembic
+> **版本：** v1.10.1  
+> **状态：** Alembic 是运行时唯一的 Schema 创建与升级权威；运行时不再修改 Schema
 
-## 规则
+## 权威规则
 
-1. **`Database._migrate()` 仅用于历史兼容**  
-   - 不得新增字段  
-   - 不得新增表  
-   - 不得增加表重建逻辑  
-   - 允许的例外：纯注释 / 日志文案微调（需同步更新冻结测试清单）
+1. **新数据库只能由 Alembic 创建**  
+   - 文件不存在或完全空库 → `storage.migration_gate.auto_upgrade_empty=true`（默认）触发 `upgrade_to_head`  
+   - 不得通过运行时 `_SCHEMA` 创建正式新库
 
-2. **所有新 Schema 变化必须通过 Alembic revision**  
-   - 路径：`alembic/versions/`  
-   - 命令：`alembic revision --autogenerate -m "..."` → `alembic upgrade head`
+2. **运行时 Database 不修改 Schema**  
+   - 生产启动路径不执行 `_SCHEMA`、不调用 `_migrate()`、不 `ALTER/CREATE TABLE/INDEX`、不重建 FTS  
+   - `_migrate()` 已迁至 `src/compatibility/runtime_schema_migrate.py`，仅供历史迁移命令使用，生产启动不导入  
+   - 新增 Schema 必须只通过 Alembic revision（`alembic/versions/`）
 
-3. **启动与写模式（WP4 已实现）**  
-   - `create_container()` 调用 `src.storage.startup_gate.enforce_startup_gate`  
-   - 写模式：当前 revision 落后 head 时 **拒绝启动**（`MigrationGateError`）  
-   - 只读诊断：`storage.readonly=true` 或环境变量 `SHINEHE_READONLY=1`  
-   - 跳过门禁（紧急）：`SHINEHE_SKIP_MIGRATION_GATE=1`  
+3. **Migration Gate 前置于 Database 打开**  
+   - `inspect_database_bootstrap()` 用只读连接读取 `sqlite_master` / `alembic_version` 并计算 Gate Decision  
+   - Gate 失败时 `Database.open_runtime()` 不会被调用  
+   - 实现：`src/storage/database_bootstrap.py`、`src/storage/startup_gate.py`
+
+4. **启动与写模式**  
+   - 写模式：当前 revision 落后 head → **拒绝启动**（`MigrationGateError`）  
+   - 只读诊断：`storage.readonly=true` 或 `SHINEHE_READONLY=1`（使用 `file:...?mode=ro`，不创建文件/WAL）  
    - 强制门禁（含 pytest）：`SHINEHE_ENFORCE_MIGRATION_GATE=1`  
-   - 无 `alembic_version` 的旧库：默认 `allow_unstamped=true` 仅警告；可设 `false` 严格拒绝  
-   - 升级命令：`alembic upgrade head`  
-   - 实现：`src/storage/migration_status.py`、`src/storage/startup_gate.py`
+   - 跳过门禁（仅紧急诊断，不推荐生产）：`SHINEHE_SKIP_MIGRATION_GATE=1`
 
-4. **Repository 渐进抽取**  
-   - 一次只迁移一个领域  
-   - `Database` Facade 暂时保留  
-   - 不改变事务语义与 Canonical/Projection 权威关系
+5. **Unstamped 旧库**  
+   - `allow_unstamped` 默认 `false`：非空 Unstamped 库写启动被拒绝  
+   - 已知历史版本（v1.8.x / v1.9.x）经 `src/storage/legacy_schema_detector.py` 识别后，可通过 `shinehe db migrate` 安全迁移  
+   - 未知 Schema **不得自动 Stamp**；`shinehe db stamp` 必须显式 `--from-version` 且 Detector 匹配
+
+6. **db CLI（`src/storage/migration_cli.py`）**  
+   - `shinehe db status` / `backup` / `verify` / `migrate` / `stamp`  
+   - 迁移流程：备份（SQLite Backup API）→ 历史识别 → Stamp → Alembic upgrade head → Schema Fingerprint → Integrity Check  
+   - 迁移失败自动恢复备份，失败副本保留为 `<db>.failed-migration-<ts>.sqlite`
+
+7. **Schema 等价性与幂等**  
+   - 空库启动与直接 `alembic upgrade head` 的 Schema Fingerprint 必须一致  
+   - 重复启动幂等，不改 Schema
 
 ## 冻结门禁
 
-自动化：`tests/test_database_migration_policy.py`  
-对 `_migrate()` 中 `ALTER TABLE` / `CREATE TABLE` / `CREATE INDEX` / `DROP TABLE` 语句集合做快照比对。
+- 架构债务：`python tools/report_closure_debt.py --strict`（CI 非零退出码阻断回归）  
+- 迁移矩阵：`pytest tests/migrations/ tests/storage/ tests/test_alembic_baseline.py`  
+- Schema 指纹：`python tools/schema_fingerprint.py --db <path> --json`
 
 ## 回滚
 
-- 不删除旧 Schema  
-- 首次切换时不删除 `_migrate()`  
-- Database Facade 保留  
-- Alembic revision 必须可验证 upgrade
+- 不删除旧 Schema；不执行自动 Downgrade  
+- 代码回滚至 v1.10.0 安全（v1.10.0 可能重跑 `_SCHEMA + _migrate()`，需在发布说明中警告）  
+- 已升级到 head 的数据库保持向前兼容，不因代码回滚而降级

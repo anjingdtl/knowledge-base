@@ -13,9 +13,9 @@ alembic upgrade head 会报 "table already exists"。
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
 
+from alembic import op
 
 revision: str = "j001_wiki_v2_projection"
 down_revision: Union[str, Sequence[str], None] = "i001_version_conflict"

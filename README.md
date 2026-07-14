@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.10.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,16 +36,15 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 
 ## Current Health
 
-**v1.10.0** — Maintainability closure (Spec 04 WP0–WP5) complete:
+**v1.10.1** — Final migration governance closure (Spec 05 WP0–WP6):
 
-- **Unified retrieval only** — `RetrievalOrchestrator` + Policy + `RawRetriever` / `VerifiedFusion` (legacy/shadow dual-path removed)
-- **Answer package** — assemble / citations / fallbacks under `src/answering/`
-- **MCP thin shell** — `src/mcp/server.py` registration only; tools in `src/mcp/tools/*`
-- **Container Providers** — Core / Verified / Authoring / Experimental own construction & lifecycle
-- **Migration head gate** — write-mode boot refuses schema behind Alembic head
-- Built on v1.9.x maintainability train and v1.8.0 Verified Hybrid baseline
+- **Alembic is the sole runtime schema authority** — new DBs via `alembic upgrade head`; runtime no longer runs `_SCHEMA` / `_migrate()`
+- **Migration Gate precedes Database open** — behind-head write boot refused; read-only diagnostic via `file:...?mode=ro`
+- **Unstamped legacy DB safe migration** — `allow_unstamped=false` default; `shinehe db {status,backup,migrate,stamp,verify}`
+- **Strict CI architecture gate** — `report_closure_debt --strict`
+- No public contract / retrieval / Wiki change vs v1.10.0; built on the v1.10.0 maintainability closure
 
-See [v1.10.0 Release Notes](docs/release/v1.10.0-release-notes.md), [v1.9→v1.10 migration](docs/migration/v1.9-to-v1.10-maintainability-closure.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)).
+See [v1.10.1 Release Notes](docs/release/v1.10.1-release-notes.md), [v1.10→v1.10.1 migration](docs/migration/v1.10-to-v1.10.1-migration-governance.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.10.0](docs/release/v1.10.0-release-notes.md) · [v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)).
 
 ## 30-Second Demo
 

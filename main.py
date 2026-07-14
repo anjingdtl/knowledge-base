@@ -4,8 +4,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from src.utils.config import Config
 from src.app import KnowledgeBaseApp
+from src.utils.config import Config
 
 
 def main():

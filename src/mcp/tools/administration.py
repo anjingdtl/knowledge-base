@@ -4,11 +4,8 @@ Implementations registered via tool_definition side-effect on import.
 """
 from __future__ import annotations
 
-import functools
-import json
 import logging
-import os
-from typing import Callable, ParamSpec, TypeVar
+from typing import ParamSpec, TypeVar
 
 from src.mcp.envelopes import (
     ErrorCode,
@@ -19,14 +16,23 @@ from src.mcp.envelopes import (
 )
 from src.mcp.tools.support import (
     check_write_policy as _check_write_policy,
+)
+from src.mcp.tools.support import (
     content_preview as _content_preview,
+)
+from src.mcp.tools.support import (
     define_tool as _define_tool,
+)
+from src.mcp.tools.support import (
     get_container as _get_container,
+)
+from src.mcp.tools.support import (
     heartbeat as _heartbeat,
+)
+from src.mcp.tools.support import (
     op_log as _op_log,
 )
 from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
-from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
 P = ParamSpec("P")
@@ -476,7 +482,9 @@ def preview_operation(
                 "preview_operation: ingest_file 需要 file_path",
                 operation=op,
             )
-        return ingest_file(file_path=file_path, tags=tags, dry_run=True)
+        from src.mcp.tools.ingest import ingest_file as _ingest_file
+
+        return _ingest_file(file_path=file_path, tags=tags, dry_run=True)
     if op in ("reindex_all", "reindex"):
         return _preview_reindex_all(dry_run=True)
     return fail(

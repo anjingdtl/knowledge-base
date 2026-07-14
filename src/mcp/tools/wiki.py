@@ -4,28 +4,30 @@ Implementations registered via tool_definition side-effect on import.
 """
 from __future__ import annotations
 
-import functools
-import json
 import logging
-import os
-from typing import Callable, ParamSpec, TypeVar
+from typing import ParamSpec, TypeVar
 
 from src.mcp.envelopes import (
     ErrorCode,
     attach_operation_id,
-    dry_run_preview,
     fail,
     ok,
 )
 from src.mcp.tools.support import (
     check_write_policy as _check_write_policy,
-    content_preview as _content_preview,
+)
+from src.mcp.tools.support import (
     define_tool as _define_tool,
+)
+from src.mcp.tools.support import (
     get_container as _get_container,
+)
+from src.mcp.tools.support import (
     heartbeat as _heartbeat,
+)
+from src.mcp.tools.support import (
     op_log as _op_log,
 )
-from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
 from src.utils.config import Config
 
 logger = logging.getLogger(__name__)

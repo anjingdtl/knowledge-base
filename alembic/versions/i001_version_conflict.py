@@ -10,9 +10,10 @@ Create Date: 2026-06-28
 - conflict_ignores: 忽略列表（pair_key 归一化，避免 A/B 与 B/A 重复）
 """
 from typing import Sequence, Union
-from alembic import op
+
 import sqlalchemy as sa
 
+from alembic import op
 
 revision: str = "i001_version_conflict"
 down_revision: Union[str, Sequence[str], None] = "h001_quality_score"

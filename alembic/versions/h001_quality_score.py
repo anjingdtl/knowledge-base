@@ -11,9 +11,10 @@ Revises: 711b03e11f10
 Create Date: 2026-06-23
 """
 from typing import Sequence, Union
-from alembic import op
+
 import sqlalchemy as sa
 
+from alembic import op
 
 revision: str = "h001_quality_score"
 down_revision: Union[str, Sequence[str], None] = "711b03e11f10"

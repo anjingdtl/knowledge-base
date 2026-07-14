@@ -4,8 +4,9 @@ Revision ID: d001_users_embedding_cache
 Revises: b001_block_model
 Create Date: 2026-06-02
 """
-from alembic import op
 import sqlalchemy as sa
+
+from alembic import op
 
 revision = "d001_users_embedding_cache"
 down_revision = "b001_block_model"

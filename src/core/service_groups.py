@@ -12,7 +12,7 @@ New code should prefer ``container.groups.core.*`` / ``.verified.*`` etc.
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any, Callable, cast
 
 if TYPE_CHECKING:
     from src.core.container import AppContainer
@@ -269,7 +269,7 @@ class AuthoringProvider(_LazyProviderBase):
     def _build_maintenance_policy(self) -> Any:
         from src.services.maintenance_policy import MaintenancePolicyEngine
 
-        return MaintenancePolicyEngine(self._c.config)
+        return MaintenancePolicyEngine(cast(Any, self._c.config))
 
     def _build_wiki_claim_extractor(self) -> Any:
         from src.services.wiki_claim_extractor import ClaimExtractor as _Ext

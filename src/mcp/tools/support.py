@@ -9,7 +9,7 @@ import concurrent.futures
 import functools
 import logging
 import os
-from typing import Any, Callable, Coroutine, ParamSpec, TypeVar
+from typing import Any, Callable, Coroutine, ParamSpec, TypeVar, cast
 
 from src.core.container import AppContainer
 from src.mcp.envelopes import ErrorCode, fail
@@ -40,7 +40,7 @@ def get_container() -> AppContainer:
         local = getattr(mod, "_container", None)
         if local is not None:
             rt.set_container(local)
-            return local
+            return cast("AppContainer | None", local)
         getter = getattr(mod, "_get_container", None)
         if not callable(getter):
             return None
@@ -50,10 +50,10 @@ def get_container() -> AppContainer:
         code = getattr(getter, "__code__", None)
         if code is None:
             # Builtin or C function — treat as explicit patch
-            return getter()
+            return cast("AppContainer | None", getter())
         filename = code.co_filename or ""
         if code.co_name == "<lambda>" or not filename.endswith("server.py"):
-            return getter()
+            return cast("AppContainer | None", getter())
         return None
 
     for name in ("src.mcp.server", "src.mcp_server"):
@@ -135,7 +135,7 @@ def check_write_policy(tool_name: str, *, dry_run: bool = False) -> dict | None:
         patched = getattr(server, "_check_write_policy", None)
         # Identity differs when tests replace the server attribute
         if callable(patched) and patched is not check_write_policy:
-            return patched(tool_name, dry_run=dry_run)
+            return cast("dict | None", patched(tool_name, dry_run=dry_run))
 
     if dry_run:
         return None

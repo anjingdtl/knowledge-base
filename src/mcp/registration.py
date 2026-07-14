@@ -41,7 +41,7 @@ def compute_hidden_groups(tool_summaries_list: list[dict]) -> set[str]:
         d = all_defs.get(n)
         if d:
             visible_groups.add(d.group)
-    return EXPERIMENTAL_GROUPS - visible_groups
+    return set(EXPERIMENTAL_GROUPS - visible_groups)
 
 
 def bootstrap(mcp: FastMCP) -> RegistrationState:

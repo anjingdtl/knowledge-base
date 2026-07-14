@@ -1,11 +1,30 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-14  
-> 源码版本：`src/version.py` 中的 **`1.10.0`**  
-> 当前分支：`master`（已合并可维护性收尾）  
-> 发布说明：`docs/release/v1.10.0-release-notes.md`  
-> 迁移：`docs/migration/v1.9-to-v1.10-maintainability-closure.md`  
-> 当前方向：**可维护性收尾（Spec 04）WP0–WP5 已完成并发布于 v1.10.0**。
+> 源码版本：`src/version.py` 中的 **`1.10.1`**  
+> 当前分支：`master`（已合并最终迁移治理）  
+> 发布说明：`docs/release/v1.10.1-release-notes.md`  
+> 迁移：`docs/migration/v1.10-to-v1.10.1-migration-governance.md`  
+> 当前方向：**最终迁移治理（Spec 05）WP0–WP6 已完成并发布于 v1.10.1；Alembic 成为唯一运行时 Schema 权威**。
+
+---
+
+## 最终迁移治理 Spec 05：v1.10.1（已完成，2026-07-14）
+
+执行依据：`docs/superpowers/specs/05-final-migration-governance-spec.md`
+
+完成项（WP0–WP6）：
+
+- ✅ **WP0**：最终治理基线冻结 + `tools/schema_fingerprint.py`
+- ✅ **WP1**：CI 架构门禁严格化（`report_closure_debt --strict` + 负向门禁测试）
+- ✅ **WP2**：Migration Gate 前置于 `Database.open_runtime()`；只读启动用 `file:...?mode=ro`（`src/storage/database_bootstrap.py`）
+- ✅ **WP3**：新库完全由 Alembic 创建（`src/storage/alembic_runner.py`，`auto_upgrade_empty`）
+- ✅ **WP4**：Unstamped 旧库安全迁移（`allow_unstamped=false` 默认；`shinehe db {status,backup,migrate,stamp,verify}`；`legacy_schema_detector`；失败自动恢复备份）
+- ✅ **WP5**：运行时停用 `_SCHEMA` / `_migrate()`（迁至 `src/compatibility/runtime_schema_migrate.py`）
+- ✅ **WP6**：全量验收 + 发布；修复 WP2–WP5 期间累积的 ruff/mypy 退化及两个 MCP 工具 `NameError` 类缺陷（`preview_operation(ingest_file)` / `kb_capabilities.hidden_by_policy`）；版本 **1.10.1**
+- 文档：`docs/migration/v1.10-to-v1.10.1-migration-governance.md`、`docs/release/v1.10.1-release-notes.md`、`docs/architecture/database-migration-policy.md`、验收 `docs/superpowers/reviews/final-migration-governance-acceptance.md`
+
+不变量 MIG-001 ~ MIG-012 全部自动化保护；公开 Search/Ask/Wiki/MCP 契约不变；Retrieval/Hybrid Eval 不退化。
 
 ---
 

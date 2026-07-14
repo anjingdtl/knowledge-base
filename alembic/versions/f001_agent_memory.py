@@ -10,9 +10,10 @@ Revises: e001_soft_delete_knowledge
 Create Date: 2026-06-12
 """
 from typing import Sequence, Union
-from alembic import op
+
 import sqlalchemy as sa
 
+from alembic import op
 
 revision: str = "f001_agent_memory"
 down_revision: Union[str, Sequence[str], None] = "e001_soft_delete_knowledge"

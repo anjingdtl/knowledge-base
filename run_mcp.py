@@ -1,7 +1,7 @@
 """ShineHeKnowledge MCP Server 启动入口（源码开发用）"""
-import sys
-import os
 import atexit
+import os
+import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -30,7 +30,7 @@ def _cleanup_devnull():
 
 atexit.register(_cleanup_devnull)
 
-from src.mcp_cli import main
+from src.mcp_cli import main  # noqa: E402
 
 if __name__ == "__main__":
     main()

@@ -4,34 +4,32 @@ Implementations registered via tool_definition side-effect on import.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import logging
-import os
 import time
-from dataclasses import asdict
-from pathlib import Path
-from typing import Any, Callable, ParamSpec, TypeVar
+from typing import ParamSpec, TypeVar
 
 from src.core.container import AppContainer
 from src.mcp.envelopes import (
     ErrorCode,
-    attach_operation_id,
-    dry_run_preview,
     fail,
     ok,
 )
 from src.mcp.tools.support import (
     check_write_policy as _check_write_policy,
-    content_preview as _content_preview,
+)
+from src.mcp.tools.support import (
     define_tool as _define_tool,
+)
+from src.mcp.tools.support import (
     get_container as _get_container,
+)
+from src.mcp.tools.support import (
     heartbeat as _heartbeat,
-    op_log as _op_log,
+)
+from src.mcp.tools.support import (
     run_async as _run_async,
 )
-from src.services.file_parser import parse_file, parse_url
-from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
 from src.utils.config import Config
 from src.version import VERSION
 
@@ -1427,7 +1425,7 @@ def kb_capabilities() -> dict:
         # Phase 6 Spec §9.4
         **_kb_capabilities_verified_fields(),
         "registered_tools": sorted({t["name"] for t in tool_summaries if "." not in t["name"]}),
-        "hidden_by_policy": list(_HIDDEN_BY_POLICY) if "_HIDDEN_BY_POLICY" in globals() else [],
+        "hidden_by_policy": [],
         "serving_claim_statuses": ["active"],
         "citation_layers": ["claim", "raw_evidence"],
         "recommended_flow": ["search", "read", "ask"],

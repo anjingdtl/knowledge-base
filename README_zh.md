@@ -6,7 +6,7 @@
 
 [\[English\]](README.md)
 
-[![Version](https://img.shields.io/badge/version-1.10.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,16 +36,15 @@ ShineHe Knowledge 是**本地优先的 AI Agent 知识服务**。
 
 ## 当前健康状态
 
-**v1.10.0** — 可维护性收尾（Spec 04 WP0–WP5）全部完成：
+**v1.10.1** — 最终迁移治理收尾（Spec 05 WP0–WP6）：
 
-- **仅 Unified 检索** — `RetrievalOrchestrator` + Policy + `RawRetriever` / `VerifiedFusion`（已删除 legacy/shadow 双路径）
-- **Answer 归位** — assemble / citations / fallbacks 在 `src/answering/`
-- **MCP 薄壳** — `src/mcp/server.py` 仅注册；工具在 `src/mcp/tools/*`
-- **Container Provider** — Core / Verified / Authoring / Experimental 拥有构造与生命周期
-- **Migration Head Gate** — 写模式启动拒绝落后 Alembic head 的库
-- 建立在 v1.9.x 可维护性列车与 v1.8.0 Verified Hybrid 基线之上
+- **Alembic 是运行时唯一 Schema 权威** — 新库由 `alembic upgrade head` 创建；运行时不再执行 `_SCHEMA` / `_migrate()`
+- **Migration Gate 前置于 Database 打开** — 落后 head 拒绝写启动；只读诊断用 `file:...?mode=ro`
+- **Unstamped 旧库安全迁移** — `allow_unstamped=false` 默认；`shinehe db {status,backup,migrate,stamp,verify}`
+- **CI 架构门禁严格化** — `report_closure_debt --strict`
+- 相比 v1.10.0 公开契约 / 检索 / Wiki 不变；建立在 v1.10.0 可维护性收尾之上
 
-详见 [v1.10.0 发布说明](docs/release/v1.10.0-release-notes.md)、[v1.9→v1.10 迁移](docs/migration/v1.9-to-v1.10-maintainability-closure.md)、[PROGRESS](PROGRESS.md)，以及 [v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)。
+详见 [v1.10.1 发布说明](docs/release/v1.10.1-release-notes.md)、[v1.10→v1.10.1 迁移](docs/migration/v1.10-to-v1.10.1-migration-governance.md)、[PROGRESS](PROGRESS.md)，以及 [v1.10.0](docs/release/v1.10.0-release-notes.md) · [v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)。
 
 ## 30 秒演示
 

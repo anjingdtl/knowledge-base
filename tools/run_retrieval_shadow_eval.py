@@ -14,9 +14,9 @@ import argparse
 import json
 import sys
 import time
+from contextlib import ExitStack
 from datetime import date
 from pathlib import Path
-from contextlib import ExitStack
 from typing import Any
 from unittest.mock import Mock, patch
 
@@ -24,10 +24,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.models.search_execution import SearchExecution
-from src.retrieval.orchestrator import RetrievalOrchestrator, resolve_orchestrator_mode
-from src.retrieval.shadow_comparator import compare_executions, meets_cutover_gates
-from src.services.search_service import SearchService
+from src.models.search_execution import SearchExecution  # noqa: E402
+from src.retrieval.orchestrator import RetrievalOrchestrator, resolve_orchestrator_mode  # noqa: E402
+from src.retrieval.shadow_comparator import compare_executions, meets_cutover_gates  # noqa: E402
+from src.services.search_service import SearchService  # noqa: E402
 
 
 def _cfg(mode: str = "shadow", *, verified: bool = False) -> Mock:

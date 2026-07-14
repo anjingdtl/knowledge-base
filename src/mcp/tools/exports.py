@@ -1,6 +1,16 @@
 """Re-export public tool callables for server/test compatibility."""
 from __future__ import annotations
 
+# Side-effect: load domain modules so tool_definition registry is populated
+from src.mcp.tools import (  # noqa: F401
+    administration,
+    graph,
+    ingest,
+    memory,
+    operations,
+    retrieval,
+    wiki,
+)
 from src.mcp.tools.administration import (
     create,
     delete,
@@ -69,17 +79,6 @@ from src.mcp.tools.wiki import (
     wiki_restore_version,
     wiki_submit_review,
     wiki_workflow_history,
-)
-
-# Side-effect: load domain modules so tool_definition registry is populated
-from src.mcp.tools import (  # noqa: F401
-    administration,
-    graph,
-    ingest,
-    memory,
-    operations,
-    retrieval,
-    wiki,
 )
 
 __all__ = [

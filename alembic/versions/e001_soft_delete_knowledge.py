@@ -10,9 +10,10 @@ Revises: d001_users_embedding_cache
 Create Date: 2026-06-04
 """
 from typing import Sequence, Union
-from alembic import op
+
 import sqlalchemy as sa
 
+from alembic import op
 
 revision: str = "e001_soft_delete_knowledge"
 down_revision: Union[str, Sequence[str], None] = "d001_users_embedding_cache"

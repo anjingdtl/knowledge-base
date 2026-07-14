@@ -12,7 +12,7 @@ import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
 from src.retrieval.models import RawRetrievalResult
 from src.services.citation_builder import CitationBuilder
@@ -222,7 +222,7 @@ class RawRetriever:
         if self._hybrid_search_fn is not None:
             return self._hybrid_search_fn(queries, top_k)
         if self._hybrid_searcher is not None:
-            return self._hybrid_searcher.search(queries, top_k=top_k)
+            return cast("list[dict]", self._hybrid_searcher.search(queries, top_k=top_k))
         searcher = HybridSearcher(self._db, self._block_store, self._config)
         return searcher.search(queries, top_k=top_k)
 

@@ -10,13 +10,13 @@ from __future__ import annotations
 
 import logging
 import os  # re-export surface for tests (mcp_server.os.environ)
+from typing import cast
 
 from fastmcp import FastMCP
 
 from src.core.container import AppContainer
 from src.mcp.auth import build_auth_provider as _build_auth_provider
 from src.mcp.prompts import register_prompts
-from src.mcp.registration import STATE as _REG_STATE
 from src.mcp.registration import bootstrap as _bootstrap_registration
 from src.mcp.registration import compute_hidden_groups as _compute_hidden_groups
 from src.mcp.resources import register_resources
@@ -24,9 +24,8 @@ from src.mcp.runtime import server_lifespan
 from src.mcp.tool_catalog import TOOL_ALIASES as _TOOL_ALIASES
 from src.mcp.tool_catalog import TOOL_METADATA as _TOOL_METADATA
 from src.mcp.tools.support import check_write_policy as _check_write_policy
-from src.mcp.tools.support import get_container as _support_get_container
 from src.mcp.tools.support import run_async as _run_async
-from src.services.file_parser import parse_file, parse_url  # re-export for tests/patches
+from src.services.file_parser import parse_file, parse_url  # noqa: F401  # re-export for tests/patches
 from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
 from src.utils.config import Config
 from src.version import VERSION
@@ -35,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 # ---- Container (test-patch surface: assign ``_container`` / ``_get_container``) ----
 
-_container = None  # mirrored for tests that assign mcp_server._container
+_container: AppContainer | None = None  # mirrored for tests that assign mcp_server._container
 
 
 def _sync_container_from_runtime():
@@ -58,7 +57,7 @@ def _get_container() -> AppContainer:
         _rt.set_container(None)
     c = _rt.get_container()
     _container = c
-    return c
+    return cast(AppContainer, c)
 
 
 # Keep support.get_container aligned with server patch surface

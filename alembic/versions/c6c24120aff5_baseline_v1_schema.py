@@ -8,8 +8,10 @@ Revises:
 Create Date: 2026-06-01
 """
 from typing import Sequence, Union
-from alembic import op
+
 import sqlalchemy as sa
+
+from alembic import op
 
 revision: str = 'c6c24120aff5'
 down_revision: Union[str, Sequence[str], None] = None
@@ -228,7 +230,6 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     """回退全部 v1 表"""
-    conn = op.get_bind()
     for table in [
         'knowledge_graph_relations', 'knowledge_graph_nodes', 'knowledge_graphs',
         'async_jobs', 'wiki_page_versions', 'wiki_workflow', 'wiki_ops_log',

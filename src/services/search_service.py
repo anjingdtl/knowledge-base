@@ -10,10 +10,8 @@ RawRetriever / VerifiedFusion 为算法权威；本类退化为稳定 Facade。
 """
 import hashlib
 import logging
-import time
 from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures import TimeoutError as FuturesTimeout
-from typing import Any, cast
+from typing import cast
 
 from src.models.search_execution import SearchExecution
 from src.retrieval.packaging import SearchRequestState, to_execution
@@ -198,9 +196,9 @@ class SearchService:
 
         经 RetrievalOrchestrator 统一路径（v1.10.0：仅 unified）。
         """
-        return self._get_orchestrator().search(
+        return cast(SearchExecution, self._get_orchestrator().search(
             query, top_k=top_k, query_spec=query_spec,
-        )
+        ))
 
     def execute_query_spec(self, query_spec, *, top_k: int = 5) -> SearchExecution:
         """Structured query_spec path.

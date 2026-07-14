@@ -5,8 +5,9 @@ Revises: j002_evidence_stale
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
+
+from alembic import op
 
 revision = "j003_maintenance_control_plane"
 down_revision: Union[str, None] = "j002_evidence_stale"

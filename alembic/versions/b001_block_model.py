@@ -4,8 +4,9 @@ Revision ID: b001_block_model
 Revises: c6c24120aff5
 Create Date: 2026-06-01
 """
-from alembic import op
 import sqlalchemy as sa
+
+from alembic import op
 
 revision = "b001_block_model"
 down_revision = "c6c24120aff5"

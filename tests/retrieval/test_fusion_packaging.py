@@ -1,14 +1,14 @@
 """WP1-T2 fusion + packaging unit tests."""
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from src.retrieval.fusion import VerifiedFusion
+from src.retrieval.models import RawRetrievalResult
 from src.retrieval.packaging import (
     SearchRequestState,
     build_evidence_only_execution,
     to_execution,
 )
 from src.retrieval.raw_retriever import RawRetriever
-from src.retrieval.models import RawRetrievalResult
 
 
 def test_build_evidence_only_execution_preserves_candidates():

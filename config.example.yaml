@@ -33,13 +33,13 @@ llm:
   temperature: 0.7
   timeout: 60
   # api_key: <SECRET>   # 通过 keyring 管理，或设置环境变量 SHINEHE_LLM_API_KEY
-# Storage / migration (WP4)
+# Storage / migration (v1.10.1: Alembic is the sole runtime schema authority)
 storage:
-  # readonly: true   # diagnostic boot when schema is behind head
+  # readonly: true   # diagnostic boot when behind head; opens file:...?mode=ro (no file/WAL created)
   migration_gate:
     enabled: true
-    # allow_unstamped: false  # WP4 default: non-empty unstamped DB refuses write boot
-    # auto_upgrade_empty: true  # WP3: missing/empty DB → alembic upgrade head (default true)
+    allow_unstamped: false   # default: non-empty unstamped DB refuses write boot → use `shinehe db migrate`
+    auto_upgrade_empty: true # default: missing/empty DB → alembic upgrade head automatically
 # Phase-2 / closure WP5: retrieval orchestrator is unified only
 # (legacy/shadow config values are deprecated aliases → unified).
 retrieval:

@@ -10,8 +10,6 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-import pytest
-
 ROOT = Path(__file__).resolve().parents[2] / "src"
 
 
@@ -85,9 +83,8 @@ def test_new_packages_avoid_get_active_container():
 
 
 def test_service_groups_exposed_on_container():
-    from src.core.container import AppContainer, get_active_container
     from src.compatibility import container_access
-    from src.core.service_groups import ServiceGroups
+    from src.core.container import AppContainer, get_active_container
 
     assert hasattr(AppContainer, "groups")
     # property exists on class

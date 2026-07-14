@@ -7,8 +7,6 @@ from __future__ import annotations
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance, normalize_statement
 from src.services.search_service import SearchService
 from src.services.wiki_claim_extractor import compute_excerpt_hash

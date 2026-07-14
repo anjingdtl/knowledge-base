@@ -5,8 +5,6 @@ Uses VerifiedAnswerService with deterministic llm_answer / use_llm=False.
 """
 from __future__ import annotations
 
-from unittest.mock import Mock
-
 from src.models.search_execution import SearchExecution
 from src.services.verified_answer import (
     ANSWER_MODE_CONFLICT,

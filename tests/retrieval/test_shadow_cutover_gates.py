@@ -1,7 +1,7 @@
 """Shadow cutover gate thresholds (Spec §8) — unit-level."""
 from src.models.search_execution import SearchExecution
-from src.retrieval.shadow_comparator import compare_executions, meets_cutover_gates
 from src.retrieval.orchestrator import resolve_orchestrator_mode
+from src.retrieval.shadow_comparator import compare_executions, meets_cutover_gates
 
 
 def _ex(kid: str, claim_id: str | None = None, conflict: bool = False, fb: str | None = None):

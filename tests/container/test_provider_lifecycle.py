@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from src.compatibility.container_access import get_active_container, set_active_container
-from src.core.container import create_container, shutdown_container
+from src.core.container import create_container
 from src.core.service_groups import FeatureDisabledError, ServiceGroups
 from src.utils.config import Config
 
