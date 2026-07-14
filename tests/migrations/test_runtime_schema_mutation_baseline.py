@@ -174,7 +174,8 @@ def test_empty_database_alembic_upgrade_head_tables_and_revision(tmp_path: Path)
     alembic_cmd("upgrade", "head", url=sqlite_url(db))
     rev = read_revision(db)
     assert rev == head_revision()
-    assert rev == "j003_maintenance_control_plane"
+    # head advances with new Alembic revisions (WP3 j004, …)
+    assert rev  # non-empty
     tables = table_names(db)
     assert "alembic_version" in tables
     assert "knowledge_items" in tables

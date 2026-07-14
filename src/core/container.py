@@ -671,6 +671,41 @@ def create_container(config_path: str | None = None) -> AppContainer:
                 logger.warning(
                     "Migration gate: write services disabled (%s)", plan.reason,
                 )
+            # WP3: missing/empty DB → Alembic upgrade head (never _SCHEMA)
+            if plan.empty and plan.write_allowed and not plan.readonly:
+                from src.storage.alembic_runner import AlembicUpgradeError, upgrade_to_head
+                from src.storage.startup_gate import resolve_auto_upgrade_empty
+
+                if resolve_auto_upgrade_empty(config):
+                    logger.info(
+                        "Empty/missing database — running alembic upgrade head: %s",
+                        db_path,
+                    )
+                    try:
+                        upgrade_to_head(db_path)
+                    except AlembicUpgradeError:
+                        logger.error("Alembic failed to initialize empty database")
+                        raise
+                    plan = inspect_database_bootstrap(db_path, config=config)
+                    enforce_bootstrap_plan(plan)
+                    _gate_decision = plan
+                    if not plan.migration_status.at_head:
+                        raise MigrationGateError(
+                            plan.migration_status,
+                            message=(
+                                "Alembic upgrade completed but database is not at head: "
+                                f"{plan.migration_status.message}"
+                            ),
+                        )
+                else:
+                    raise MigrationGateError(
+                        plan.migration_status,
+                        message=(
+                            "Empty/missing database and "
+                            "storage.migration_gate.auto_upgrade_empty=false. "
+                            "Run: alembic upgrade head (or enable auto_upgrade_empty)."
+                        ),
+                    )
             db = Database.open_runtime(db_path, readonly=plan.readonly)
             logger.info(
                 "Database runtime opened: %s (readonly=%s action=%s)",

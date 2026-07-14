@@ -72,8 +72,8 @@ def inspect_database_bootstrap(
     ro = resolve_readonly(config)
     allow_unstamped = resolve_allow_unstamped(config)
 
-    # Empty / missing DB: deferred to schema init (WP3 Alembic; transition still
-    # uses runtime _SCHEMA until then). Inspect must not create the file.
+    # Empty / missing DB: create_container runs Alembic upgrade head (WP3).
+    # Inspect must not create the file.
     if empty:
         return DatabaseBootstrapPlan(
             db_path=path,

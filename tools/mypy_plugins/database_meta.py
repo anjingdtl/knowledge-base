@@ -12,6 +12,7 @@ _NATIVE_CLASS_ATTRIBUTES = frozenset({
     "connect",
     "open_runtime",
     "_open_readonly_runtime",
+    "_open_write_runtime",
 })
 
 

@@ -81,6 +81,11 @@ def resolve_allow_unstamped(config: Any = None) -> bool:
     return _cfg_bool(config, "storage.migration_gate.allow_unstamped", True)
 
 
+def resolve_auto_upgrade_empty(config: Any = None) -> bool:
+    """WP3: auto alembic upgrade head for missing/empty DB only (default True)."""
+    return _cfg_bool(config, "storage.migration_gate.auto_upgrade_empty", True)
+
+
 def enforce_startup_gate(
     db_path: str | Path,
     *,

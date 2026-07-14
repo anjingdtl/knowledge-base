@@ -702,12 +702,37 @@ class Database(metaclass=_DatabaseMeta):
     ) -> "Database":
         """Open runtime DB after Migration Gate (caller must gate first).
 
-        - write: transitional _SCHEMA/_migrate until WP5
-        - readonly: SQLite mode=ro; no create / _SCHEMA / _migrate / WAL
+        Runtime open never creates or upgrades formal schema (WP3-T4):
+        only connection, PRAGMA, sqlite-vec, thread-local.
+
+        - write: requires existing file (create via Alembic / legacy Database())
+        - readonly: SQLite mode=ro; no WAL
         """
         if readonly:
             return cls._open_readonly_runtime(db_path)
-        return cls(db_path)
+        return cls._open_write_runtime(db_path)
+
+    @classmethod
+    def _open_write_runtime(cls, db_path: str | Path) -> "Database":
+        """Write-mode runtime open — no _SCHEMA / _migrate."""
+        path = Path(db_path)
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"runtime open requires an existing database file "
+                f"(use Alembic to create schema first): {path}"
+            )
+        obj = object.__new__(cls)
+        obj._db_path = str(path)
+        obj._local = threading.local()
+        obj._write_lock = threading.RLock()
+        obj._shutdown = False
+        obj._readonly = False
+        obj._base_conn = sqlite3.connect(
+            str(path), check_same_thread=False, timeout=30.0
+        )
+        obj._configure_connection(obj._base_conn, readonly=False)
+        Database._instance = obj
+        return obj
 
     @classmethod
     def _open_readonly_runtime(cls, db_path: str | Path) -> "Database":
@@ -731,7 +756,7 @@ class Database(metaclass=_DatabaseMeta):
         return obj
 
     def _connect_internal(self):
-        """内部：初始化连接和 schema（写模式 / 兼容构造路径）"""
+        """Legacy init: connection + _SCHEMA + _migrate (compat only, not production open_runtime)."""
         self._base_conn = sqlite3.connect(
             self._db_path, check_same_thread=False, timeout=30.0
         )

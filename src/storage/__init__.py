@@ -1,4 +1,9 @@
 """Storage / migration startup concerns (WP2+)."""
+from src.storage.alembic_runner import (
+    AlembicUpgradeError,
+    AlembicUpgradeResult,
+    upgrade_to_head,
+)
 from src.storage.database_bootstrap import (
     DatabaseBootstrapPlan,
     enforce_bootstrap_plan,
@@ -8,6 +13,8 @@ from src.storage.migration_status import MigrationStatus, get_migration_status
 from src.storage.startup_gate import MigrationGateError, enforce_startup_gate
 
 __all__ = [
+    "AlembicUpgradeError",
+    "AlembicUpgradeResult",
     "DatabaseBootstrapPlan",
     "MigrationGateError",
     "MigrationStatus",
@@ -15,4 +22,5 @@ __all__ = [
     "enforce_startup_gate",
     "get_migration_status",
     "inspect_database_bootstrap",
+    "upgrade_to_head",
 ]
