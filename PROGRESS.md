@@ -1,9 +1,27 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-14
-> 源码版本：`src/version.py` 中的 **`1.8.2`**
-> 当前分支：`feat/maintainability-phase-2-retrieval-wiki`（待合入 master）
-> 当前方向：**可维护性二期（Retrieval 编排统一 + Wiki Serving 隔离）已完成 v1.8.2**；默认仍 `retrieval.orchestrator=legacy`，unified/shadow 可切换。三期见 phase2 handoff。
+> 源码版本：`src/version.py` 中的 **`1.9.0`**
+> 当前分支：`feat/maintainability-phase-3-app-infra`（待合入 master）
+> 当前方向：**可维护性三期（Answer / MCP / Container / DB 治理）已完成 v1.9.0**。三工期主线收束完毕；后续为工具分域搬迁与 Repository 渐进抽取。
+
+---
+
+## 可维护性三期：Answer、MCP、Container 与存储治理（已完成，2026-07-14）
+
+执行依据：
+
+- Spec：`docs/superpowers/specs/03-maintainability-phase-3-application-infrastructure.md`
+- Plan：`docs/superpowers/plans/2026-07-14-maintainability-phase-3-application-infrastructure.md`
+- 验收：`docs/superpowers/reviews/maintainability-phase3-acceptance.md`
+
+完成项：
+
+- `src/answering/`：AnswerExecution + AnswerService + shadow；VerifiedAnswer / MCP ask 委托
+- MCP：runtime/auth/envelopes/policies；实现迁至 `src/mcp/server.py`；`mcp_server.py` 兼容别名
+- Container：`groups` 四类能力视图 + 架构边界测试
+- DB：`_migrate()` 冻结门禁 + 弃用登记 + Alembic 冒烟
+- 回归：**152 passed / 1 skipped**
 
 ---
 

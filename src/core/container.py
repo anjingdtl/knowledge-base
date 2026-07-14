@@ -166,10 +166,24 @@ class AppContainer:
     _maintenance_event_adapter: Optional[object] = field(default=None, repr=False)
 
     _initialized_services: list = field(default_factory=list, repr=False)
+    # Phase-3 capability groups (lazy view; does not own lifecycle)
+    _service_groups: Optional[object] = field(default=None, repr=False, init=False)
 
     def _track_service(self, attr_name: str):
         if attr_name not in self._initialized_services:
             self._initialized_services.append(attr_name)
+
+    @property
+    def groups(self):
+        """Core / Verified / Authoring / Experimental service views (Phase-3)."""
+        if self._service_groups is None:
+            from src.core.service_groups import ServiceGroups
+
+            self._service_groups = ServiceGroups(self)
+        return self._service_groups
+
+    # Backward-compatible proxies explicitly documented for rollback (Spec §19):
+    # existing flat properties (search_service, wiki_repository, …) remain authoritative.
 
     @property
     def indexer(self):

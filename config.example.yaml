@@ -37,6 +37,10 @@ llm:
 # Default legacy keeps the historical primary pipeline as the official path.
 retrieval:
   orchestrator: legacy
+# Phase-3 answer orchestration: legacy | shadow | unified
+# Default unified (same assemble path as legacy; structural parity).
+answer:
+  orchestrator: unified
 rag:
   agentic_router:
     enabled: true

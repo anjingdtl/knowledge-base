@@ -455,40 +455,19 @@ class VerifiedAnswerService:
         use_llm: bool = True,
         llm_answer: str | None = None,
     ) -> dict[str, Any]:
-        # Phase-1: request-scoped SearchExecution only — never read SearchService last_* state.
-        results, trace, disclose_rows = self._run_search(question, top_k=top_k)
+        """Compatibility facade — Phase-3 AnswerService is the ask orchestrator.
 
-        generate_fn = None
-        if use_llm and llm_answer is None and self._llm is not None:
-            def generate_fn(q: str, context: str) -> str:
-                from src.services.rag_pipeline import build_rag_messages
-                from src.utils.llm_text import strip_think
+        Phase-1: request-scoped SearchExecution only — never read SearchService last_* state.
+        """
+        from src.answering.service import AnswerService
 
-                messages = build_rag_messages(q, context, [])
-                if hasattr(self._llm, "chat_with_usage"):
-                    content, _usage = self._llm.chat_with_usage(messages)
-                    return strip_think(content)
-                return strip_think(self._llm.chat(messages))
-
-        payload = assemble_answer_payload(
+        return AnswerService(
+            self._search,
+            llm=self._llm,
+            config=self._config,
+        ).ask(
             question,
-            results,
+            top_k=top_k,
+            use_llm=use_llm,
             llm_answer=llm_answer,
-            search_trace=trace,
-            disclose_claims=disclose_rows,
-            generate_fn=generate_fn,
         )
-        # Standard ask fields
-        payload.setdefault("source_graph", {
-            "nodes": [], "edges": [], "truncated": False, "node_count": 0,
-        })
-        payload.setdefault("route", {
-            "mode": payload["answer_mode"],
-            "explanation": f"verified answer path: {payload['answer_mode']}",
-            "search_mode": trace.get("mode"),
-            "intent": (trace.get("route") or {}).get("intent"),
-        })
-        payload.setdefault("query_plan", {})
-        payload.setdefault("block_contexts", {})
-        payload.setdefault("wiki_context", "")
-        return payload

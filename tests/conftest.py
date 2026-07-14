@@ -30,6 +30,12 @@ def setup_db(tmp_path):
     if "src.mcp_server" in sys.modules:
         sys.modules["src.mcp_server"]._container = None
     try:
+        import src.mcp.runtime as mcp_runtime
+
+        mcp_runtime.set_container(None)
+    except Exception:
+        pass
+    try:
         import src.api.auth as auth_mod
         auth_mod._users_db.clear()
     except Exception:
@@ -45,6 +51,12 @@ def setup_db(tmp_path):
     yield
     if "src.mcp_server" in sys.modules:
         sys.modules["src.mcp_server"]._container = None
+    try:
+        import src.mcp.runtime as mcp_runtime
+
+        mcp_runtime.set_container(None)
+    except Exception:
+        pass
     import src.core.container as container_mod
     container_mod._active_container = None
     Database.close()
