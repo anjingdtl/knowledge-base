@@ -6,7 +6,7 @@
 
 [\[English\]](README.md)
 
-[![Version](https://img.shields.io/badge/version-1.8.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.9.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,9 +36,15 @@ ShineHe Knowledge 是**本地优先的 AI Agent 知识服务**。
 
 ## 当前健康状态
 
-**v1.8.1** — 可维护性一期：请求级 `SearchExecution`、Search/Ask/Wiki 契约冻结、并发隔离（移除共享 `last_*` 搜索状态）。建立在 v1.8.0 Verified Hybrid 融合收束基线之上。
+**v1.9.0** — 可维护性三期（Phase 1–3）全部完成：
 
-详见 [v1.8.1 发布说明](docs/release/v1.8.1-release-notes.md)、[一期验收](docs/superpowers/reviews/maintainability-phase1-acceptance.md) 与 [v1.8.0 说明](docs/release/v1.8.0-release-notes.md)。
+- **一期：** 请求级 `SearchExecution`；Search/Ask/Wiki 契约冻结；无共享 `last_*` 状态  
+- **二期：** `RetrievalOrchestrator` + VerifiedProvider / RawRetriever；`retrieval.orchestrator` 切换  
+- **三期：** `AnswerService` / `AnswerExecution`；MCP 运行时拆分（`src/mcp/server.py`）；Container 能力分组；DB `_migrate()` 冻结  
+
+建立在 v1.8.0 Verified Hybrid 融合收束基线之上。
+
+详见 [v1.9.0 发布说明](docs/release/v1.9.0-release-notes.md)、[三期验收](docs/superpowers/reviews/maintainability-phase3-acceptance.md)、[PROGRESS](PROGRESS.md)，以及 [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.1](docs/release/v1.8.1-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)。
 
 ## 30 秒演示
 

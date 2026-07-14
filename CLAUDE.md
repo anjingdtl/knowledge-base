@@ -4,9 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目速查: ShineHeKnowledge
 
-本地优先 MCP 知识检索引擎（v1.7.0 Verified Hybrid），面向 AI 助手提供可验证、可解释的私有知识检索服务。桌面 GUI、REST API、MCP Server、Windows 服务四种运行模式共享同一服务层，通过 AppContainer 依赖注入。
+本地优先 MCP 知识检索引擎（**v1.9.0** Verified Hybrid + 可维护性三期收束），面向 AI 助手提供可验证、可解释的私有知识检索服务。桌面 GUI、REST API、MCP Server、Windows 服务四种运行模式共享同一服务层，通过 AppContainer 依赖注入。
 
 **核心定位：** 将本地文档索引为可供 Claude、Cursor、Cline 等 AI Agent 稳定调用的 MCP 知识检索引擎，默认暴露 10 个核心工具，返回带完整溯源的结构化引用。
+
+**架构要点（v1.9.0）：**
+
+- 检索：`SearchService` → `RetrievalOrchestrator`（`src/retrieval/`）→ `SearchExecution`
+- 问答：`AnswerService`（`src/answering/`）→ `AnswerExecution`；MCP 仅协议适配
+- MCP 实现：`src/mcp/server.py`；`src/mcp_server.py` 为兼容入口
+- 配置切换：`retrieval.orchestrator` / `answer.orchestrator`（legacy | shadow | unified）
+- 新 Schema 只允许 Alembic；`Database._migrate()` 已冻结（见 `docs/architecture/database-migration-policy.md`）
 
 当前权威方向、实施计划和历史归档入口见 `docs/README.md` 与根目录 `PROGRESS.md`。不要从 `docs/archive/` 中恢复旧待办。
 
@@ -54,36 +62,24 @@ knowledge-base/
 ├── scripts/                             # 构建、迁移、MCP 配置脚本
 └── src/
     ├── core/
-    │   └── container.py                 # AppContainer — DI 容器，按依赖拓扑创建所有服务
+    │   ├── container.py                 # AppContainer + groups 能力视图
+    │   └── service_groups.py            # Core / Verified / Authoring / Experimental
+    ├── retrieval/                       # Phase-2：Orchestrator / Policy / Provider
+    ├── answering/                       # Phase-3：AnswerService / AnswerExecution
     ├── mcp/
+    │   ├── server.py                    # MCP 实现（工具/prompt/resource/lifespan）
+    │   ├── runtime.py / auth.py / envelopes.py / policies.py
     │   ├── tool_registry.py             # 声明式工具注册，支持配置档过滤
-    │   ├── tool_profiles.py             # core/extended/admin/full/legacy 工具集定义
+    │   ├── tool_profiles.py             # core/extended/admin/full/legacy
+    │   ├── tools/                       # 分域清单（实现过渡期仍在 server.py）
     │   └── aliases.py                   # 旧命名空间别名（仅 legacy 启用）
-    ├── api/
-    │   ├── __init__.py                  # create_app() FastAPI 工厂，lifespan 中创建 Container
-    │   ├── auth.py                      # JWT 认证（python-jose + bcrypt）
-    │   ├── deps.py                      # FastAPI DI: get_container() 从 app.state 提取
-    │   └── routes/                      # auth/chat/graph/jobs/knowledge/settings 等路由
+    ├── api/                             # FastAPI REST
     ├── repositories/                    # 数据访问层，逐步替代 db.py 直接操作
-    ├── services/                        # 核心服务层
-    │   ├── db.py                        # SQLite + FTS5 存储（单例，兼容旧代码）
-    │   ├── vectorstore.py               # sqlite-vec 向量存储（1024 维 bge-m3）
-    │   ├── graph_backend/               # SQLiteGraphBackend，本地 SQLite 图存储
-    │   ├── block_store.py               # Block 级向量存储
-    │   ├── path_indexer.py              # 目录增量索引服务
-    │   ├── file_watcher.py              # watchdog 目录监听
-    │   ├── embedding.py / llm.py        # OpenAI 兼容客户端
-    │   ├── hybrid_search.py             # 向量 + 关键词混合搜索（RRF 融合）
-    │   ├── search_service.py            # 统一搜索管线（MCP + API 共享）
-    │   ├── rag_pipeline.py              # 可配置 RAG 管线（6 阶段）
-    │   ├── citation_builder.py          # 结构化引用构建器
-    │   ├── rerankers/                   # 可插拔重排序器（API/local/LLM/disabled）
-    │   ├── file_graph.py                # 文件优先大纲图谱
-    │   └── wiki_*.py                    # Wiki 系统（compiler/workflow/site/seo/lint）
-    ├── mcp_server.py                    # MCP 工具实现、prompt/resource、server lifespan
+    ├── services/                        # 核心服务层（db / hybrid / wiki / search…）
+    ├── mcp_server.py                    # 兼容入口 → src.mcp.server
     ├── cli.py                           # shinehe init/index/watch/doctor/mcp CLI
-    ├── gui/                             # PySide6 桌面界面（暗色科幻主题）
-    ├── models/                          # 数据模型（RetrievalCandidate/Citation/KnowledgeItem/Block）
+    ├── gui/                             # PySide6 桌面界面
+    ├── models/                          # SearchExecution / Citation / Wiki V2 …
     └── utils/config.py                  # Config 单例 + keyring 密钥管理
 ```
 
@@ -159,7 +155,7 @@ Config → Database → VectorStore → BlockStore → Embedding/LLM → Reposit
 
 ## MCP Server
 
-`src/mcp_server.py` 基于 FastMCP,通过 `src/mcp/tool_registry.py` 按配置档注册工具。
+实现位于 `src/mcp/server.py`（`src/mcp_server.py` 为兼容别名）。基于 FastMCP，通过 `src/mcp/tool_registry.py` 按配置档注册工具。
 
 **默认 extended 配置档(20 个工具:核心检索 + 高级查询):**
 

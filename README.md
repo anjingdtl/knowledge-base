@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.8.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.9.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,9 +36,15 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 
 ## Current Health
 
-**v1.8.1** — Maintainability Phase 1: request-scoped `SearchExecution`, Search/Ask/Wiki contract freeze, concurrent isolation (no shared `last_*` search state). Built on the v1.8.0 Verified Hybrid convergence baseline.
+**v1.9.0** — Maintainability Phases 1–3 complete:
 
-See [v1.8.1 Release Notes](docs/release/v1.8.1-release-notes.md), [Phase-1 acceptance](docs/superpowers/reviews/maintainability-phase1-acceptance.md), and [v1.8.0 notes](docs/release/v1.8.0-release-notes.md).
+- **Phase 1:** request-scoped `SearchExecution`; Search/Ask/Wiki contracts; no shared `last_*` state  
+- **Phase 2:** `RetrievalOrchestrator` + VerifiedProvider / RawRetriever policies; `retrieval.orchestrator` cutover  
+- **Phase 3:** `AnswerService` / `AnswerExecution`; MCP runtime split (`src/mcp/server.py`); Container capability groups; DB `_migrate()` freeze  
+
+Built on the v1.8.0 Verified Hybrid convergence baseline.
+
+See [v1.9.0 Release Notes](docs/release/v1.9.0-release-notes.md), [Phase-3 acceptance](docs/superpowers/reviews/maintainability-phase3-acceptance.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.1](docs/release/v1.8.1-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)).
 
 ## 30-Second Demo
 
