@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 检索：`SearchService` → `RetrievalOrchestrator`（`src/retrieval/`）→ `SearchExecution`
 - 问答：`AnswerService`（`src/answering/`）→ `AnswerExecution`；MCP 仅协议适配
 - MCP 实现：`src/mcp/server.py`；`src/mcp_server.py` 为兼容入口
-- 配置切换：`retrieval.orchestrator` / `answer.orchestrator`（legacy | shadow | unified）
+- 配置切换：`retrieval.orchestrator`（默认 **unified**；legacy 可回滚）/ `answer.orchestrator`（legacy | shadow | unified）
 - 新 Schema 只允许 Alembic；`Database._migrate()` 已冻结（见 `docs/architecture/database-migration-policy.md`）
 
 当前权威方向、实施计划和历史归档入口见 `docs/README.md` 与根目录 `PROGRESS.md`。不要从 `docs/archive/` 中恢复旧待办。
