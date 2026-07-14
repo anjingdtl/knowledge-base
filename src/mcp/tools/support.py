@@ -21,22 +21,44 @@ R = TypeVar("R")
 
 
 def get_container() -> AppContainer:
-    """MCP AppContainer (runtime-backed; test-patchable via server._container).
+    """MCP AppContainer (runtime-backed; test-patchable via server).
 
-    Uses ``sys.modules`` lookup to avoid import cycles when domain tools are
-    imported from ``server.py`` during module init.
+    Patch surfaces (tests):
+      - ``src.mcp.server._container = mock``
+      - ``src.mcp.server._get_container = lambda: mock``
+      - same on ``src.mcp_server`` (compat re-export)
     """
     import sys
 
     from src.mcp import runtime as rt
 
-    server_mod = sys.modules.get("src.mcp.server")
-    if server_mod is not None:
-        # Honor test patches that assign server._container directly
-        local = getattr(server_mod, "_container", None)
+    def _try_module(mod) -> AppContainer | None:
+        if mod is None:
+            return None
+        local = getattr(mod, "_container", None)
         if local is not None:
             rt.set_container(local)
             return local
+        getter = getattr(mod, "_get_container", None)
+        if not callable(getter):
+            return None
+        # Test stubs replace _get_container with a lambda / non-server function.
+        # Production server._get_container lives in server.py — skip that path
+        # here (runtime owns creation) to avoid recursion via support.
+        code = getattr(getter, "__code__", None)
+        if code is None:
+            # Builtin or C function — treat as explicit patch
+            return getter()
+        filename = code.co_filename or ""
+        if code.co_name == "<lambda>" or not filename.endswith("server.py"):
+            return getter()
+        return None
+
+    for name in ("src.mcp.server", "src.mcp_server"):
+        found = _try_module(sys.modules.get(name))
+        if found is not None:
+            return found
+
     return rt.get_container()
 
 

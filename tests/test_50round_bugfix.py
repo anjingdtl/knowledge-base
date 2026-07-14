@@ -40,11 +40,10 @@ class TestAutoTagLLMCallFix:
             "id": "k1", "title": "采购管理办法", "content": "采购流程...", "tags": "",
         }[key]
         row.keys.return_value = ["id", "title", "content", "tags"]
-        # 修复后 auto_tag 用 get_conn()（而非已删除的 db.conn）；配置 mock 连接
+        # TaggingService → KnowledgeTagRepository 通过 get_conn() 访问 DB
         mock_conn = MagicMock()
         mock_conn.execute.return_value.fetchall.return_value = [row]
-        mock_db.get_conn.return_value.__enter__ = lambda self: mock_conn
-        mock_db.get_conn.return_value.__exit__ = lambda *a: False
+        mock_db.get_conn.return_value = mock_conn
 
         mock_container = MagicMock()
         mock_container.llm = mock_llm
@@ -54,6 +53,7 @@ class TestAutoTagLLMCallFix:
         original_check = mcp_mod._check_write_policy
         mcp_mod._get_container = lambda: mock_container
         mcp_mod._check_write_policy = lambda *a, **kw: None
+        mcp_mod._container = mock_container
         # patch Database._instance
         from src.services import db as db_mod
         original_instance = db_mod.Database._instance
@@ -63,6 +63,7 @@ class TestAutoTagLLMCallFix:
         finally:
             mcp_mod._get_container = original
             mcp_mod._check_write_policy = original_check
+            mcp_mod._container = None
             db_mod.Database._instance = original_instance
 
         # 验证 LLM 被调用时传入的是 messages list，而非字符串

@@ -64,22 +64,26 @@ class TestAutoTagRealDb:
     """
 
     def _patch_container(self, mock_llm):
-        """注入只含 .llm 的 mock container；auto_tag 内部 db = Database._instance
-        走真实 DB（setup_db 已建好）。"""
+        """注入 mock container；db 使用 setup_db 的真实 Database 实例。"""
         import src.mcp_server as mcp_mod
+        from src.services.db import Database
 
         mock_container = MagicMock()
         mock_container.llm = mock_llm
+        mock_container.db = Database._instance
         original_get = mcp_mod._get_container
         original_check = mcp_mod._check_write_policy
         mcp_mod._get_container = lambda: mock_container
         mcp_mod._check_write_policy = lambda *a, **kw: None
+        # Also set _container so support.get_container honors the patch
+        mcp_mod._container = mock_container
         return original_get, original_check
 
     def _restore(self, original_get, original_check):
         import src.mcp_server as mcp_mod
         mcp_mod._get_container = original_get
         mcp_mod._check_write_policy = original_check
+        mcp_mod._container = None
 
     def test_auto_tag_writes_tags_with_real_db(self):
         """C1 核心：auto_tag 在真实 DB 上能成功打标并落盘。"""

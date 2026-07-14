@@ -13,6 +13,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any, Callable, ParamSpec, TypeVar
 
+from src.core.container import AppContainer
 from src.mcp.envelopes import (
     ErrorCode,
     attach_operation_id,

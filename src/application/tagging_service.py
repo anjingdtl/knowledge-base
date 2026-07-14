@@ -1,6 +1,6 @@
 """TaggingService — batch auto-tag knowledge items via LLM.
 
-Used by MCP ``auto_tag`` tool. Does not use Database._instance.
+Used by MCP ``auto_tag`` tool. SQL lives in KnowledgeTagRepository (WP4-T4).
 """
 from __future__ import annotations
 
@@ -8,39 +8,24 @@ import json
 import logging
 from typing import Any
 
+from src.repositories.knowledge_tag_repo import KnowledgeTagRepository
+
 logger = logging.getLogger(__name__)
 
 
 class TaggingService:
     """Auto-tag knowledge rows with LLM-generated labels."""
 
-    def __init__(self, db: Any, llm: Any):
+    def __init__(self, db: Any, llm: Any, *, tag_repo: KnowledgeTagRepository | None = None):
         self._db = db
         self._llm = llm
+        self._tags = tag_repo or KnowledgeTagRepository(db)
 
     def list_candidates(self, *, limit: int = 50, force: bool = False) -> list[Any]:
-        limit = max(1, min(int(limit), 500))
-        if force:
-            query_sql = (
-                "SELECT id, title, content, tags FROM knowledge_items "
-                "WHERE deleted_at IS NULL LIMIT ?"
-            )
-        else:
-            query_sql = (
-                "SELECT id, title, content, tags FROM knowledge_items "
-                "WHERE deleted_at IS NULL AND (tags IS NULL OR tags = '' OR tags = '[]') "
-                "LIMIT ?"
-            )
-        with self._db.get_conn() as conn:
-            return list(conn.execute(query_sql, (limit,)).fetchall())
+        return self._tags.list_untagged(limit=limit, force=force)
 
     def apply_tags(self, knowledge_id: str, tags: list[str]) -> None:
-        tags_json = json.dumps(tags, ensure_ascii=False)
-        with self._db.get_conn() as conn:
-            conn.execute(
-                "UPDATE knowledge_items SET tags = ? WHERE id = ?",
-                (tags_json, knowledge_id),
-            )
+        self._tags.update_tags(knowledge_id, tags)
 
     def generate_tags(
         self,

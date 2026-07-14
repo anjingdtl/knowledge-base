@@ -43,7 +43,9 @@
 - ✅ WP4-T2/T3：`src/storage/{migration_status,startup_gate}.py`；`create_container` 写模式 head 门禁
 - ✅ `tests/migrations/*`：empty→head / v1.9→head / idempotent / interrupted recovery
 - ✅ **WP3**：`ServiceGroups` → 真实 Capability Provider（lazy 构造 / close / feature gate）；扁平属性兼容代理；`get_active_container` 收束至 `compatibility.container_access`；生命周期测试
-- 下一步：WP4-T4 最小 Repository / WP4-T5 CI Jobs / WP5 Legacy 删除
+- ✅ **WP4-T4**：`KnowledgeTagRepository`；`TaggingService` 去 SQL
+- ✅ **WP4-T5**：CI jobs `architecture-closure` / `migration-gate` / `contract-gate`
+- 下一步：WP5 Legacy 删除 + v1.10.0 最终验收
 
 ---
 

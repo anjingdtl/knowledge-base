@@ -52,6 +52,61 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+  architecture-closure:
+    name: Architecture Closure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install -e ".[dev]"
+      - name: Report closure debt
+        run: python tools/report_closure_debt.py
+        env:
+          PYTHONPATH: .
+      - name: Architecture tests
+        run: pytest tests/architecture/ -q --tb=short
+        env:
+          PYTHONPATH: .
+
+  migration-gate:
+    name: Migration Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install -e ".[dev]"
+      - name: Strict Alembic / migration suite
+        run: |
+          pytest tests/migrations/ tests/test_alembic_baseline.py tests/storage/ -q --tb=short
+        env:
+          PYTHONPATH: .
+          SHINEHE_ENFORCE_MIGRATION_GATE: "1"
+
+  contract-gate:
+    name: Contract Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install Qt runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1
+      - run: pip install -e ".[dev,api,parsers,wiki]"
+      - name: Public Search/Ask/MCP contracts
+        run: |
+          pytest \
+            tests/test_public_search_contract.py \
+            tests/test_public_ask_contract.py \
+            tests/test_mcp_contract.py \
+            -q --tb=short
+        env:
+          PYTHONPATH: .
+
   retrieval-eval:
     name: Retrieval Eval
     runs-on: ubuntu-latest
