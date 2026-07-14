@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install ruff mypy
-      - run: ruff check src tests evals tools scripts
+      - run: ruff check .
       - run: python -m mypy src tools --ignore-missing-imports
 
   test:
@@ -87,7 +87,7 @@ jobs:
           SHINEHE_ENFORCE_MIGRATION_GATE: "1"
 
   contract-gate:
-    name: Contract Gate
+    name: Contract Gate (Search/Ask/Wiki/MCP)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -97,11 +97,12 @@ jobs:
       - name: Install Qt runtime libraries
         run: sudo apt-get update && sudo apt-get install -y libegl1
       - run: pip install -e ".[dev,api,parsers,wiki]"
-      - name: Public Search/Ask/MCP contracts
+      - name: Public Search/Ask/Wiki/MCP contracts
         run: |
           pytest \
             tests/test_public_search_contract.py \
             tests/test_public_ask_contract.py \
+            tests/test_wiki_serving_contract.py \
             tests/test_mcp_contract.py \
             -q --tb=short
         env:
@@ -170,7 +171,7 @@ jobs:
           exit 1
       - name: Stop API smoke
         if: always()
-        run: docker rm --force shinehe-api-smoke || true
+        run: docker rm --force shinehe-api-smoke 2>/dev/null; true
 
   windows-smoke:
     name: Windows Runtime Smoke
