@@ -36,8 +36,9 @@
 - ✅ 伪 `answer.orchestrator` 双路径清除（legacy/shadow → unified）
 - ✅ `TaggingService` + `RetrievalCommands`；MCP retrieval/auto_tag 委托 application
 - ✅ **ingest / administration / wiki** 工具实拆 → `src/mcp/tools/{ingest,administration,wiki}.py` + `support.py`
-- ✅ `server.py` ~3600 行 → **~2200 行**（工具主体迁出，保留 re-export 兼容）
-- ⏳ graph / memory / remaining retrieval(ask/read 等) 仍可继续压薄 server
+- ✅ **graph / memory / operations / retrieval 全量** 工具实拆（round-2）
+- ✅ `server.py` ~3600 → **~850 行**（注册/re-export/prompt/resource/lifecycle；工具主体在 `tools/*`）
+- ⏳ 最终预算 ≤500：可继续迁 prompt/resource 与 `_TOOL_METADATA` 等壳层
 
 ---
 

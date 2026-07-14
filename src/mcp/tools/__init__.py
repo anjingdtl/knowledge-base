@@ -15,6 +15,14 @@ RETRIEVAL_TOOLS = frozenset({
     "read",
     "list_knowledge",
     "search_fulltext",
+    "structured_query",
+    "explain_query",
+    "route_query",
+    "execute_query",
+    "ask_with_query",
+    "get_trace",
+    "auto_tag",
+    "kb_health_check",
 })
 
 INGEST_TOOLS = frozenset({
@@ -59,6 +67,14 @@ GRAPH_TOOLS = frozenset({
     "graph_query",
     "graph_neighbors",
     "graph_traverse",
+    "get_source_graph",
+})
+
+OPERATIONS_TOOLS = frozenset({
+    "create_async_job",
+    "get_async_job",
+    "list_async_jobs",
+    "cancel_async_job",
 })
 
 MEMORY_TOOLS = frozenset({
@@ -79,4 +95,5 @@ DOMAIN_GROUPS = {
     "wiki": WIKI_TOOLS,
     "graph": GRAPH_TOOLS,
     "memory": MEMORY_TOOLS,
+    "operations": OPERATIONS_TOOLS,
 }
