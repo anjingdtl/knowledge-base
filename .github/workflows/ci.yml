@@ -62,7 +62,7 @@ jobs:
           python-version: '3.12'
       - run: pip install -e ".[dev]"
       - name: Report closure debt
-        run: python tools/report_closure_debt.py
+        run: python tools/report_closure_debt.py --strict
         env:
           PYTHONPATH: .
       - name: Architecture tests

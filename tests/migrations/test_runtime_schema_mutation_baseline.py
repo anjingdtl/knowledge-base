@@ -128,18 +128,10 @@ def test_allow_unstamped_default_is_true():
     assert resolve_allow_unstamped(None) is True
 
 
-def test_architecture_closure_ci_does_not_use_strict():
-    """Current CI: report_closure_debt.py runs without --strict."""
+def test_architecture_closure_ci_uses_strict():
+    """WP1-T1: architecture-closure must run report_closure_debt.py --strict."""
     text = _read(CI_YML)
     assert "report_closure_debt.py" in text
-    # architecture-closure job should not yet pass --strict (WP1 will change this)
-    # Match the debt report step line(s)
-    assert re.search(
-        r"python tools/report_closure_debt\.py\s*$",
-        text,
-        re.M,
-    )
-    # Ensure --strict is not currently on the debt report invocation
     debt_lines = [
         line
         for line in text.splitlines()
@@ -147,9 +139,11 @@ def test_architecture_closure_ci_does_not_use_strict():
     ]
     assert debt_lines, "no report_closure_debt.py invocations found"
     for line in debt_lines:
-        assert "--strict" not in line, (
-            f"baseline expected non-strict debt report, found: {line!r}"
+        assert "--strict" in line, (
+            f"architecture-closure must use --strict, found: {line!r}"
         )
+        assert "|| true" not in line
+        assert "continue-on-error" not in line
 
 
 def test_schema_object_counts_match_current_source():

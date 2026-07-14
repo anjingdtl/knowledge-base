@@ -58,11 +58,11 @@
 
 ### 2.4 architecture-closure CI 是否使用 `--strict`
 
-| 项 | 当前 |
-|---|---|
-| Job | `architecture-closure` |
-| 命令 | `python tools/report_closure_debt.py`（**无** `--strict`） |
-| 严格模式实现 | 工具已支持 `--strict`，但 CI 未启用 |
+| 项 | WP0 基线 | WP1-T1 后 |
+|---|---|---|
+| Job | `architecture-closure` | 同左 |
+| 命令 | `python tools/report_closure_debt.py`（**无** `--strict`） | `python tools/report_closure_debt.py --strict` |
+| 严格模式实现 | 工具已支持 `--strict`，CI 未启用 | **CI 已启用**；禁止 `\|\| true` / `continue-on-error` |
 
 源码位置：`.github/workflows/ci.yml`。
 
