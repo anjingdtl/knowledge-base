@@ -4,10 +4,12 @@ Domain modules import from here instead of src.mcp.server to avoid cycles.
 """
 from __future__ import annotations
 
+import asyncio
+import concurrent.futures
 import functools
 import logging
 import os
-from typing import Any, Callable, ParamSpec, TypeVar
+from typing import Any, Callable, Coroutine, ParamSpec, TypeVar
 
 from src.core.container import AppContainer
 from src.mcp.envelopes import ErrorCode, fail
@@ -97,6 +99,28 @@ def content_preview(text: Any, max_len: int = 200) -> str:
         return ""
     s = str(text)
     return s[:max_len] + ("..." if len(s) > max_len else "")
+
+
+def run_async(coro: Coroutine[Any, Any, R], timeout: float | None = None) -> R:
+    """Run a coroutine from sync code, even if a loop is already running.
+
+    Uses a worker thread + new event loop when called inside a running loop
+    (common under FastMCP / nested ask paths).
+    """
+    def _drive() -> R:
+        if timeout is None:
+            return asyncio.run(coro)
+        return asyncio.run(asyncio.wait_for(coro, timeout=timeout))
+
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return _drive()
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+        fut = pool.submit(_drive)
+        wait = None if timeout is None else float(timeout) + 5.0
+        return fut.result(timeout=wait)
 
 
 def check_write_policy(tool_name: str, *, dry_run: bool = False) -> dict | None:

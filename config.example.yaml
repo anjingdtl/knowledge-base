@@ -39,11 +39,11 @@ storage:
   migration_gate:
     enabled: true
     # allow_unstamped: true  # transition: legacy DBs without alembic_version (warn only)
-# Phase-2 / closure WP1 retrieval orchestration: legacy | shadow | unified
-# Default unified is the formal path; set legacy for emergency rollback.
+# Phase-2 / closure WP5: retrieval orchestrator is unified only
+# (legacy/shadow config values are deprecated aliases → unified).
 retrieval:
   orchestrator: unified
-# Phase-3 / closure WP2 answer orchestration — only unified path (legacy/shadow ignored).
+# Answer orchestration is unified only.
 answer:
   orchestrator: unified
 rag:

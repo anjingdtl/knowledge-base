@@ -9,6 +9,7 @@ Tool implementations live under ``src/mcp/tools/*``.
 from __future__ import annotations
 
 import logging
+import os  # re-export surface for tests (mcp_server.os.environ)
 
 from fastmcp import FastMCP
 
@@ -24,7 +25,9 @@ from src.mcp.tool_catalog import TOOL_ALIASES as _TOOL_ALIASES
 from src.mcp.tool_catalog import TOOL_METADATA as _TOOL_METADATA
 from src.mcp.tools.support import check_write_policy as _check_write_policy
 from src.mcp.tools.support import get_container as _support_get_container
+from src.mcp.tools.support import run_async as _run_async
 from src.services.file_parser import parse_file, parse_url  # re-export for tests/patches
+from src.services.wiki_compiler import try_wiki_compile as _try_wiki_compile
 from src.utils.config import Config
 from src.version import VERSION
 
@@ -71,6 +74,8 @@ mcp = FastMCP(
 # ---- Domain tools (register ToolDefinitions on import) + public re-exports ----
 from src.mcp.tools.exports import *  # noqa: E402, F403
 from src.mcp.tools.exports import _do_ask  # noqa: E402, F401
+from src.mcp.tools.ingest import _do_ingest_file, _validate_file_path  # noqa: E402
+from src.mcp.tools.retrieval import _should_use_verified_ask  # noqa: E402
 
 # ---- Prompts & resources ----
 register_prompts(mcp)
@@ -121,7 +126,12 @@ __all__ = [
     "_compute_hidden_groups",
     "_container",
     "_do_ask",
+    "_do_ingest_file",
     "_get_container",
+    "_run_async",
+    "_should_use_verified_ask",
+    "_try_wiki_compile",
+    "_validate_file_path",
     "get_knowledge_resource",
     "get_stats_resource",
     "get_tags_resource",
@@ -132,4 +142,5 @@ __all__ = [
     "knowledge_qa_prompt",
     "main",
     "mcp",
+    "os",
 ]

@@ -1,0 +1,140 @@
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`typing.Any` imported but unused[0m
+ [1m[94m-->[0m src\answering\shadow.py:6:20
+  [1m[94m|[0m
+[1m[94m4 |[0m import logging
+[1m[94m5 |[0m from dataclasses import dataclass
+[1m[94m6 |[0m from typing import Any
+  [1m[94m|[0m                    [1m[91m^^^[0m
+[1m[94m7 |[0m
+[1m[94m8 |[0m from src.answering.models import AnswerExecution
+  [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `typing.Any`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`src.mcp.auth.StaticTokenVerifier` imported but unused[0m
+  [1m[94m-->[0m src\mcp\server.py:27:49
+   [1m[94m|[0m
+[1m[94m25 |[0m from src.core.container import AppContainer
+[1m[94m26 |[0m from src.mcp.aliases import register_aliases as _register_aliases
+[1m[94m27 |[0m from src.mcp.auth import StaticTokenVerifier as _StaticTokenVerifier
+   [1m[94m|[0m                                                 [1m[91m^^^^^^^^^^^^^^^^^^^^[0m
+[1m[94m28 |[0m from src.mcp.auth import build_auth_provider as _build_auth_provider
+[1m[94m29 |[0m from src.mcp.envelopes import (
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `src.mcp.auth.StaticTokenVerifier`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/missing-newline-at-end-of-file\W292]8;;\ [0m[[1m[96m*[0m] [1mNo newline at end of file[0m
+ [1m[94m-->[0m src\mcp\tools\memory.py:5:26
+  [1m[94m|[0m
+[1m[94m4 |[0m DOMAIN = "memory"
+[1m[94m5 |[0m TOOL_NAMES = MEMORY_TOOLS
+  [1m[94m|[0m                          [1m[91m^[0m
+  [1m[94m|[0m
+[1m[96mhelp[0m: [1mAdd trailing newline[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`time` imported but unused[0m
+ [1m[94m-->[0m src\retrieval\policies\evidence_only.py:4:8
+  [1m[94m|[0m
+[1m[94m2 |[0m from __future__ import annotations
+[1m[94m3 |[0m
+[1m[94m4 |[0m import time
+  [1m[94m|[0m        [1m[91m^^^^[0m
+[1m[94m5 |[0m from typing import TYPE_CHECKING, Any
+  [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `time`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file\E402]8;;\ [0m[1mModule level import not at top of file[0m
+  [1m[94m-->[0m tests\architecture\test_closure_debt_baseline.py:14:1
+   [1m[94m|[0m
+[1m[94m12 |[0m     sys.path.insert(0, str(ROOT))
+[1m[94m13 |[0m
+[1m[94m14 |[0m from tools.report_closure_debt import collect_debt_metrics
+   [1m[94m|[0m [1m[91m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[1m[94m15 |[0m
+[1m[94m16 |[0m REQUIRED_KEYS = {
+   [1m[94m|[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`pytest` imported but unused[0m
+  [1m[94m-->[0m tests\architecture\test_import_boundaries.py:13:8
+   [1m[94m|[0m
+[1m[94m11 |[0m from pathlib import Path
+[1m[94m12 |[0m
+[1m[94m13 |[0m import pytest
+   [1m[94m|[0m        [1m[91m^^^^^^[0m
+[1m[94m14 |[0m
+[1m[94m15 |[0m ROOT = Path(__file__).resolve().parents[2] / "src"
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `pytest`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`src.core.service_groups.ServiceGroups` imported but unused[0m
+  [1m[94m-->[0m tests\architecture\test_import_boundaries.py:89:41
+   [1m[94m|[0m
+[1m[94m87 |[0m def test_service_groups_exposed_on_container():
+[1m[94m88 |[0m     from src.core.container import AppContainer
+[1m[94m89 |[0m     from src.core.service_groups import ServiceGroups
+   [1m[94m|[0m                                         [1m[91m^^^^^^^^^^^^^[0m
+[1m[94m90 |[0m
+[1m[94m91 |[0m     assert hasattr(AppContainer, "groups")
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `src.core.service_groups.ServiceGroups`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unsorted-imports\I001]8;;\ [0m[[1m[96m*[0m] [1mImport block is un-sorted or un-formatted[0m
+ [1m[94m-->[0m tests\retrieval\test_shadow_cutover_gates.py:2:1
+  [1m[94m|[0m
+[1m[94m1 |[0m   """Shadow cutover gate thresholds (Spec 搂8) 鈥?unit-level."""
+[1m[94m2 |[0m [1m[91m/[0m from src.models.search_execution import SearchExecution
+[1m[94m3 |[0m [1m[91m|[0m from src.retrieval.shadow_comparator import compare_executions, meets_cutover_gates
+[1m[94m4 |[0m [1m[91m|[0m from src.retrieval.orchestrator import resolve_orchestrator_mode
+  [1m[94m|[0m [1m[91m|________________________________________________________________^[0m
+  [1m[94m|[0m
+[1m[96mhelp[0m: [1mOrganize imports[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`unittest.mock.Mock` imported but unused[0m
+  [1m[94m-->[0m tests\test_public_ask_contract.py:8:27
+   [1m[94m|[0m
+[1m[94m 6 |[0m from __future__ import annotations
+[1m[94m 7 |[0m
+[1m[94m 8 |[0m from unittest.mock import Mock
+   [1m[94m|[0m                           [1m[91m^^^^[0m
+[1m[94m 9 |[0m
+[1m[94m10 |[0m from src.models.search_execution import SearchExecution
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `unittest.mock.Mock`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`pytest` imported but unused[0m
+  [1m[94m-->[0m tests\test_public_search_contract.py:10:8
+   [1m[94m|[0m
+[1m[94m 8 |[0m from unittest.mock import Mock, patch
+[1m[94m 9 |[0m
+[1m[94m10 |[0m import pytest
+   [1m[94m|[0m        [1m[91m^^^^^^[0m
+[1m[94m11 |[0m
+[1m[94m12 |[0m from src.models.wiki_v2 import Claim, ClaimStatus, Evidence, EvidenceStance, normalize_statement
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `pytest`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`src.services.wiki_claim_extractor.compute_excerpt_hash` imported but unused[0m
+  [1m[94m-->[0m tests\test_wiki_serving_contract.py:15:47
+   [1m[94m|[0m
+[1m[94m13 |[0m from src.services.verified_answer import ANSWER_MODE_CONFLICT, ANSWER_MODE_RAW, VerifiedAnswerService
+[1m[94m14 |[0m from src.services.verified_hybrid_config_migrator import VerifiedHybridConfigMigrator
+[1m[94m15 |[0m from src.services.wiki_claim_extractor import compute_excerpt_hash
+   [1m[94m|[0m                                               [1m[91m^^^^^^^^^^^^^^^^^^^^[0m
+[1m[94m16 |[0m from src.services.wiki_serving_gate import (
+[1m[94m17 |[0m     REASON_CLAIM_DRAFT,
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `src.services.wiki_claim_extractor.compute_excerpt_hash`[0m
+
+[1m[91m]8;;https://docs.astral.sh/ruff/rules/unused-import\F401]8;;\ [0m[[1m[96m*[0m] [1m`sys` imported but unused[0m
+  [1m[94m-->[0m tools\report_closure_debt.py:15:8
+   [1m[94m|[0m
+[1m[94m13 |[0m import json
+[1m[94m14 |[0m import re
+[1m[94m15 |[0m import sys
+   [1m[94m|[0m        [1m[91m^^^[0m
+[1m[94m16 |[0m from pathlib import Path
+[1m[94m17 |[0m from typing import Any
+   [1m[94m|[0m
+[1m[96mhelp[0m: [1mRemove unused import: `sys`[0m
+
+Found 12 errors.
+[[36m*[0m] 11 fixable with the `--fix` option.

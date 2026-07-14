@@ -1,7 +1,6 @@
-"""Adapter path and independent RawRetriever share result shape."""
+"""Independent RawRetriever is the algorithm authority (WP5)."""
 from unittest.mock import Mock, patch
 
-from src.retrieval.raw_retriever import RawRetriever
 from src.services.search_service import SearchService
 
 
@@ -14,7 +13,7 @@ def _make_service() -> SearchService:
     return SearchService(config, db, Mock(), Mock(), Mock())
 
 
-def test_search_service_adapter_delegates_to_raw_retriever():
+def test_raw_retriever_produces_packaged_candidates():
     service = _make_service()
     hit = {
         "id": "b1",
@@ -30,22 +29,18 @@ def test_search_service_adapter_delegates_to_raw_retriever():
              "rerank",
              return_value=[{**hit, "rerank_score": 0.95}],
          ):
-        via_adapter = service.run_raw_retrieval_adapter("q", top_k=3)
         via_raw = raw.retrieve("q", top_k=3)
 
-    assert len(via_adapter.candidates) == len(via_raw.candidates)
-    assert [c.get("block_id") for c in via_adapter.candidates] == [
-        c.get("block_id") for c in via_raw.candidates
-    ]
+    assert len(via_raw.candidates) >= 1
     assert "query_rewrite" in via_raw.trace.get("stages", {})
     assert "raw_retrieval" in via_raw.trace.get("stages", {})
 
 
-def test_legacy_pipeline_uses_raw_retriever_candidates():
+def test_evidence_only_policy_uses_raw_retriever_candidates():
     service = _make_service()
     hit = {
         "id": "b2",
-        "text": "legacy path",
+        "text": "evidence path",
         "metadata": {"page_id": "k2"},
         "rrf_score": 0.8,
     }

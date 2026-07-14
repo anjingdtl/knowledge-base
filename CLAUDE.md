@@ -4,17 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目速查: ShineHeKnowledge
 
-本地优先 MCP 知识检索引擎（**v1.9.0** Verified Hybrid + 可维护性三期收束），面向 AI 助手提供可验证、可解释的私有知识检索服务。桌面 GUI、REST API、MCP Server、Windows 服务四种运行模式共享同一服务层，通过 AppContainer 依赖注入。
+本地优先 MCP 知识检索引擎（**v1.10.0** Verified Hybrid + 可维护性收尾闭合），面向 AI 助手提供可验证、可解释的私有知识检索服务。桌面 GUI、REST API、MCP Server、Windows 服务四种运行模式共享同一服务层，通过 AppContainer 依赖注入。
 
 **核心定位：** 将本地文档索引为可供 Claude、Cursor、Cline 等 AI Agent 稳定调用的 MCP 知识检索引擎，默认暴露 10 个核心工具，返回带完整溯源的结构化引用。
 
-**架构要点（v1.9.0）：**
+**架构要点（v1.10.0）：**
 
-- 检索：`SearchService` → `RetrievalOrchestrator`（`src/retrieval/`）→ `SearchExecution`
+- 检索：`SearchService` Facade → `RetrievalOrchestrator` **unified only** → Policy + `RawRetriever` / `VerifiedFusion` → `SearchExecution`
 - 问答：`AnswerService`（`src/answering/`）→ `AnswerExecution`；MCP 仅协议适配
-- MCP 实现：`src/mcp/server.py`；`src/mcp_server.py` 为兼容入口
-- 配置切换：`retrieval.orchestrator`（默认 **unified**；legacy 可回滚）/ `answer.orchestrator`（legacy | shadow | unified）
-- 新 Schema 只允许 Alembic；`Database._migrate()` 已冻结（见 `docs/architecture/database-migration-policy.md`）
+- MCP 实现：`src/mcp/server.py` 薄壳；工具在 `src/mcp/tools/*`；`src/mcp_server.py` 为兼容入口
+- Container：`groups.core|verified|authoring|experimental` 为真实 Provider（构造/生命周期）
+- 配置：`retrieval.orchestrator` / `answer.orchestrator` 均为 **unified**（legacy/shadow 为弃用别名）
+- 新 Schema 只允许 Alembic；写模式启动校验 migration head（`src/storage/startup_gate.py`）
 
 当前权威方向、实施计划和历史归档入口见 `docs/README.md` 与根目录 `PROGRESS.md`。不要从 `docs/archive/` 中恢复旧待办。
 

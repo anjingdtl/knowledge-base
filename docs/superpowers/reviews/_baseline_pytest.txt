@@ -1,0 +1,262 @@
+........................................................................ [  4%]
+........................................................................ [  8%]
+........................................................................ [ 12%]
+........................................................................ [ 16%]
+........................................................................ [ 20%]
+........................................................................ [ 24%]
+........................................................................ [ 28%]
+........................................................................ [ 32%]
+........................................................................ [ 36%]
+...................s.................................................... [ 40%]
+....F................................................................... [ 44%]
+........................................................................ [ 48%]
+........................................................................ [ 52%]
+........................................................................ [ 56%]
+........................................................................ [ 60%]
+........................................................................ [ 64%]
+........................................................................ [ 68%]
+........................................................................ [ 72%]
+........................F............................................... [ 77%]
+..........................s............................................. [ 81%]
+........................................................................ [ 85%]
+........................................................................ [ 89%]
+........................................................................ [ 93%]
+........................................................................ [ 97%]
+................................................                         [100%]
+================================== FAILURES ===================================
+E   AttributeError: <module 'src.mcp.server' from 'D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\tests\\..\\src\\mcp\\server.py'> has no attribute 'create_container'
+D:\ClaudeCodeWorkSpace\projects\knowledge-base\tests\test_mcp_first_completion_gaps.py:184: AttributeError: <module 'src.mcp.server' from 'D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\tests\\..\\src\\mcp\\server.py'> has no attribute 'create_container'
+E   AssertionError: assert 'Verified Hybrid 铻嶅悎鏀舵潫绾犲亸宸插畬鎴? in '# ShineHeKnowledge 褰撳墠鐘舵€乗n\n> 鏈€鍚庢洿鏂帮細2026-07-14  \n> 婧愮爜鐗堟湰锛歚src/version.py` 涓殑 **`1.9.0`**  \n> 褰撳墠鍒嗘敮锛歚master`锛堜笌 `origin/m... 鍓嶇鏀瑰姩蹇呴』杩愯 `npm --prefix client run build`銆俓n- 鍙戝竷鍓嶅啀杩愯瀹屾暣娴嬭瘯銆丏ocker 鏋勫缓鍜屽疄闄?GUI/MCP 鍚姩楠岃瘉銆俓n- 娴嬭瘯缁撴灉鍙褰曞綋娆＄湡瀹炴墽琛岀粨鏋滐紝涓嶄粠鍘嗗彶鏂囨。澶嶅埗閫氳繃鏁伴噺銆俓n'
+D:\ClaudeCodeWorkSpace\projects\knowledge-base\tests\test_verified_hybrid_release_evidence.py:31: AssertionError: assert 'Verified Hybrid 铻嶅悎鏀舵潫绾犲亸宸插畬鎴? in '# ShineHeKnowledge 褰撳墠鐘舵€乗n\n> 鏈€鍚庢洿鏂帮細2026-07-14  \n> 婧愮爜鐗堟湰锛歚src/version.py` 涓殑 **`1.9.0`**  \n> 褰撳墠鍒嗘敮锛歚master`锛堜笌 `origin/m... 鍓嶇鏀瑰姩蹇呴』杩愯 `npm --prefix client run build`銆俓n- 鍙戝竷鍓嶅啀杩愯瀹屾暣娴嬭瘯銆丏ocker 鏋勫缓鍜屽疄闄?GUI/MCP 鍚姩楠岃瘉銆俓n- 娴嬭瘯缁撴灉鍙褰曞綋娆＄湡瀹炴墽琛岀粨鏋滐紝涓嶄粠鍘嗗彶鏂囨。澶嶅埗閫氳繃鏁伴噺銆俓n'
+============================== warnings summary ===============================
+C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\jieba\_compat.py:18
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+    import pkg_resources
+
+tests/mcp_post_fix_test.py::test_bug1_route_query
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:170: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug1_route_query returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_bug5_ask_with_query
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:170: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug5_ask_with_query returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_bug6_structured_query
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:170: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug6_structured_query returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_bug7_ask
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:170: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug7_ask returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_bug4_health_check
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:170: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug4_health_check returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_auto_tag_exists
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:170: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_auto_tag_exists returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_search_basic
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:170: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_search_basic returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/test_settings_dialog_mcp_profile.py::TestMcpTabPresent::test_mcp_combo_has_five_profiles
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-64 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_settings_dialog_mcp_profile.py::TestMcpTabPresent::test_load_reflects_existing_config
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-70 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_settings_dialog_mcp_profile.py::TestMcpTabPresent::test_detail_updates_on_combo_change
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-76 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_settings_dialog_mcp_profile.py::TestMcpTabPresent::test_aux_switches_exist
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-82 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_settings_dialog_mcp_profile.py::TestWikiSwitch::test_wiki_switch_reflects_config
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-88 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_settings_dialog_mcp_profile.py::TestWikiSwitch::test_wiki_switch_persists_on_save
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-94 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_settings_dialog_service_poll.py::TestServicePollFeedback::test_start_timeout_prompts_troubleshoot
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-100 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_settings_dialog_service_poll.py::TestServicePollFeedback::test_start_success_no_prompt
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-106 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_settings_dialog_service_poll.py::TestServicePollFeedback::test_refresh_only_mode_never_prompts
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-112 (_readerthread)
+  
+  Traceback (most recent call last):
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1613, in _readerthread
+      buffer.append(fh.read())
+                    ~~~~~~~^^
+    File "<frozen codecs>", line 325, in decode
+  UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb3 in position 25: invalid start byte
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_mcp_first_completion_gaps.py::test_mcp_lifespan_starts_and_stops_async_worker
+FAILED tests/test_verified_hybrid_release_evidence.py::test_progress_records_verified_hybrid_correction_completion
+2 failed, 1772 passed, 2 skipped, 17 warnings in 417.26s (0:06:57)

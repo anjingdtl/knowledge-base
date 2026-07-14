@@ -8,8 +8,10 @@
 | `Database._instance` | Repository / 构造注入 | v1.9.0 | v2.0 | 兼容模块可暂留 |
 | `get_active_container()` | 构造注入 `AppContainer` | v1.9.0 | v2.0 | MCP runtime 白名单 |
 | `_get_container()`（业务代码） | 显式注入 | v1.9.0 | v2.0 | 仅限 `src/mcp/runtime.py` / 兼容层 |
-| Legacy Retrieval 主管线 | `RetrievalOrchestrator` + Policy + RawRetriever/VerifiedFusion | v1.8.x | v1.10+（WP5） | 默认已切 **unified**；回滚 `orchestrator=legacy` |
-| Legacy Answer 路径 | `AnswerService` / `AnswerExecution` | v1.9.0 | v2.0 | `answer.orchestrator` 可 shadow |
+| Legacy Retrieval 主管线 | `RetrievalOrchestrator` unified only | v1.8.x | **v1.10.0 已删除** | `legacy`/`shadow` 配置值为弃用别名→unified |
+| `SearchService._search_legacy_pipeline` / `_search_verified_hybrid` | RawRetriever / VerifiedFusion | v1.9.x | **v1.10.0 已删除** | — |
+| `execute_primary_legacy` | `SearchService.execute()` | v1.9.x | v1.10.0 兼容 shim 仅 DeprecationWarning | `src/compatibility/legacy_retrieval.py` |
+| Legacy Answer 路径 | `AnswerService` / `AnswerExecution` | v1.9.0 | v1.10.0 已统一 | 仅 unified |
 | Legacy MCP aliases | 标准工具名 | 已弃用 | v2.0 | `mcp.enable_legacy_aliases` |
 | `src/mcp_server.py` 业务实现 | `src/mcp/server.py` + tools 分域 | v1.9.0 | v2.0 | 现为兼容 re-export |
 | 直接调用 `SearchService` 私有 raw 方法 | `RetrievalOrchestrator.search` | v1.8.2 | v2.0 | 三期 Answer/MCP 禁止 |

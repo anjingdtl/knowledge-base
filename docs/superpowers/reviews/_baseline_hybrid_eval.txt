@@ -1,0 +1,1 @@
+Hybrid Eval PASS: cases=175 raw=1.000 wiki=1.000 hybrid=1.000 stale=0.0 unsup=0.0 cite=1.000 conflict_recall=1.000

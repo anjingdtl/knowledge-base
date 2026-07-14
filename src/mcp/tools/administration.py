@@ -33,6 +33,13 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 
+def _preview_reindex_all(*, dry_run: bool = True) -> dict:
+    """Lazy import to avoid circular import with ingest.reindex_all."""
+    from src.mcp.tools.ingest import reindex_all as _reindex_all_tool
+
+    return _reindex_all_tool(dry_run=dry_run)
+
+
 @_define_tool(
     name="create",
     description="创建新的知识条目。自动将内容分块并向量化索引，支持纯文本、Markdown 和代码。"
@@ -471,7 +478,7 @@ def preview_operation(
             )
         return ingest_file(file_path=file_path, tags=tags, dry_run=True)
     if op in ("reindex_all", "reindex"):
-        return reindex_all(dry_run=True)
+        return _preview_reindex_all(dry_run=True)
     return fail(
         ErrorCode.VALIDATION_ERROR,
         f"preview_operation: 不支持的操作 {operation}",

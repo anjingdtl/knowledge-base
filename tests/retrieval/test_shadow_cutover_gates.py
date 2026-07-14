@@ -48,7 +48,8 @@ def test_cutover_fails_on_fallback_mismatch():
     assert not meets_cutover_gates(compare_executions(a, b))
 
 
-def test_default_mode_is_unified_with_legacy_rollback():
+def test_default_mode_is_unified_only():
     assert resolve_orchestrator_mode(None) == "unified"
     assert resolve_orchestrator_mode({"retrieval": {}}) == "unified"
-    assert resolve_orchestrator_mode({"retrieval": {"orchestrator": "legacy"}}) == "legacy"
+    # WP5: legacy alias no longer selects a separate pipeline
+    assert resolve_orchestrator_mode({"retrieval": {"orchestrator": "legacy"}}) == "unified"

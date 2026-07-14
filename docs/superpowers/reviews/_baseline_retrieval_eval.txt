@@ -1,0 +1,54 @@
+Running retrieval eval on: retrieval_code, retrieval_no_answer, retrieval_table, retrieval_zh
+  Mode: fake-embedding (deterministic, for CI)
+  Engine: offline
+
+============================================================
+Dataset: retrieval_code
+============================================================
+  Queries:      3
+  Recall@5:     1.0000
+  MRR:          1.0000
+  nDCG@10:      1.0000
+  No-Answer:    0.0000
+  Latency P50:  0.4ms
+  Latency P95:  0.5ms
+
+============================================================
+Dataset: retrieval_no_answer
+============================================================
+  Queries:      3
+  Recall@5:     0.0000
+  MRR:          0.0000
+  nDCG@10:      0.0000
+  No-Answer:    0.6667
+  Latency P50:  0.4ms
+  Latency P95:  0.4ms
+
+============================================================
+Dataset: retrieval_table
+============================================================
+  Queries:      2
+  Recall@5:     1.0000
+  MRR:          1.0000
+  nDCG@10:      0.9779
+  No-Answer:    0.0000
+  Latency P50:  0.4ms
+  Latency P95:  0.4ms
+
+============================================================
+Dataset: retrieval_zh
+============================================================
+  Queries:      5
+  Recall@5:     0.6000
+  MRR:          0.3400
+  nDCG@10:      0.4036
+  No-Answer:    0.0000
+  Latency P50:  0.4ms
+  Latency P95:  0.4ms
+
+Baseline Comparison:
+  - WARNING: recall_at_5 slightly dropped from 0.8667 to 0.8667 (diff=0.0000)
+  - WARNING: mrr slightly dropped from 0.7800 to 0.7800 (diff=0.0000)
+  - WARNING: no_answer_accuracy slightly dropped from 0.6667 to 0.6667 (diff=0.0000)
+
+Overall: PASS

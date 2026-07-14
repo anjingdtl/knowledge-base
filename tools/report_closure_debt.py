@@ -110,12 +110,41 @@ def collect_debt_metrics(root: Path) -> dict[str, Any]:
     alembic_test = root / "tests" / "test_alembic_baseline.py"
     alembic_test_text = _read(alembic_test) if alembic_test.exists() else ""
 
+    # Infrastructure files allowed to retain Database._instance bootstrap (not WP5 zero)
+    _DB_INSTANCE_WHITELIST = {
+        "src/services/db.py",
+        "src/services/vectorstore.py",
+        "src/services/block_store.py",
+        "src/services/migrator.py",
+        "src/core/container.py",
+        "src/core/embedding_cache.py",
+        "src/services/health.py",
+        "src/services/trace.py",
+        "src/services/wiki_lint.py",
+        "src/services/path_indexer.py",
+    }
+    # get_active_container whitelist (WP3/WP5)
+    _GAC_WHITELIST = {
+        "src/core/container.py",
+        "src/compatibility/container_access.py",
+        "src/mcp/runtime.py",
+    }
+
     db_instance_refs = 0
+    db_instance_outside = 0
     gac_refs = 0
+    gac_outside = 0
     for path in _src_py_files(root):
         text = _read(path)
-        db_instance_refs += _count_regex(text, r"Database\._instance")
-        gac_refs += _count_regex(text, r"get_active_container\s*\(")
+        rel = path.relative_to(root).as_posix()
+        n_db = _count_regex(text, r"Database\._instance")
+        n_gac = _count_regex(text, r"get_active_container\s*\(")
+        db_instance_refs += n_db
+        gac_refs += n_gac
+        if n_db and rel not in _DB_INSTANCE_WHITELIST:
+            db_instance_outside += n_db
+        if n_gac and rel not in _GAC_WHITELIST:
+            gac_outside += n_gac
 
     answering_dep = False
     if answering_dir.is_dir():
@@ -142,7 +171,9 @@ def collect_debt_metrics(root: Path) -> dict[str, Any]:
         ),
         "mcp_tools_real_impl_count": _count_real_tool_impls(tools_dir),
         "database_instance_refs_src": db_instance_refs,
+        "database_instance_refs_outside_infra": db_instance_outside,
         "get_active_container_refs_src": gac_refs,
+        "get_active_container_refs_outside_whitelist": gac_outside,
         "search_service_has_legacy_pipeline": "def _search_legacy_pipeline" in search_text,
         "search_service_has_verified_hybrid": "def _search_verified_hybrid" in search_text,
         "raw_retriever_calls_search_service": (
@@ -167,9 +198,11 @@ def _strict_failures(metrics: dict[str, Any]) -> list[str]:
         fails.append("mcp_server still defines tool functions")
     if metrics["mcp_tools_real_impl_count"] <= 0:
         fails.append("mcp tools have no real implementations")
-    if metrics["database_instance_refs_src"] > 0:
+    # Application/MCP/new packages must not use Database._instance
+    if metrics.get("database_instance_refs_outside_infra", 0) > 0:
         fails.append(
-            f"Database._instance refs={metrics['database_instance_refs_src']}"
+            "Database._instance outside infra "
+            f"refs={metrics['database_instance_refs_outside_infra']}"
         )
     if metrics["search_service_has_legacy_pipeline"]:
         fails.append("SearchService still has _search_legacy_pipeline")

@@ -5,8 +5,8 @@ Phase 3: Verified Hybrid 编排（Raw + Gate 通过的 Claim）在 search/execut
 Phase-1 maintainability: 一次请求的 results/trace/claims/conflicts/fallbacks
 收敛到 SearchExecution；禁止在实例上保存 last_* 请求状态。
 
-Phase-2 / closure WP1: execute() 经 RetrievalOrchestrator；RawRetriever /
-VerifiedFusion 为算法权威；本类退化为 Facade + Legacy 回滚入口。
+Phase-2 / closure WP1–WP5: execute() 经 RetrievalOrchestrator unified；
+RawRetriever / VerifiedFusion 为算法权威；本类退化为稳定 Facade。
 """
 import hashlib
 import logging
@@ -16,8 +16,7 @@ from concurrent.futures import TimeoutError as FuturesTimeout
 from typing import Any, cast
 
 from src.models.search_execution import SearchExecution
-from src.retrieval.models import RawRetrievalResult
-from src.retrieval.packaging import SearchRequestState, merge_raw_into_state, to_execution
+from src.retrieval.packaging import SearchRequestState, to_execution
 from src.services.citation_builder import CitationBuilder
 from src.services.hybrid_search import HybridSearcher
 from src.services.query_rewriter import QueryRewriter
@@ -197,29 +196,16 @@ class SearchService:
     ) -> SearchExecution:
         """完整搜索管线，返回请求级 SearchExecution（results + trace + side-channels）。
 
-        经 RetrievalOrchestrator 分发（默认 unified；legacy 可回滚）。
+        经 RetrievalOrchestrator 统一路径（v1.10.0：仅 unified）。
         """
         return self._get_orchestrator().search(
             query, top_k=top_k, query_spec=query_spec,
         )
 
-    def execute_primary_legacy(
-        self,
-        query: str,
-        top_k: int = 5,
-        query_spec=None,
-    ) -> SearchExecution:
-        """LEGACY_PRIMARY_PIPELINE — 供 legacy/shadow 主路径与回滚。"""
-        from src.compatibility.legacy_retrieval import execute_primary_legacy
-
-        return execute_primary_legacy(
-            self, query, top_k=top_k, query_spec=query_spec,
-        )
-
     def execute_query_spec(self, query_spec, *, top_k: int = 5) -> SearchExecution:
-        """Structured query_spec path (shared by legacy and unified).
+        """Structured query_spec path.
 
-        返回空 results 时，调用方（legacy 主路径）应回落普通检索。
+        返回空 results 时，调用方应回落普通检索。
         """
         state = SearchRequestState(
             trace={
@@ -277,20 +263,6 @@ class SearchService:
             query, top_k=top_k, query_spec=query_spec,
         )
 
-    def run_raw_retrieval_adapter(
-        self,
-        query: str,
-        *,
-        top_k: int = 5,
-        include_legacy_wiki_fts: bool = True,
-    ) -> RawRetrievalResult:
-        """Compatibility surface — delegates to independent RawRetriever."""
-        return self._get_raw_retriever().retrieve(
-            query,
-            top_k=top_k,
-            include_legacy_wiki_fts=include_legacy_wiki_fts,
-        )
-
     def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
         """兼容入口：返回 results 列表（内部委托 execute）。"""
         return list(
@@ -304,41 +276,6 @@ class SearchService:
     @staticmethod
     def _to_execution(output: list[dict], state: SearchRequestState) -> SearchExecution:
         return to_execution(output, state)
-
-    def _search_legacy_pipeline(
-        self,
-        query: str,
-        top_k: int,
-        t0: float,
-        state: SearchRequestState,
-    ) -> list[dict]:
-        """Legacy evidence-only path — algorithm delegated to RawRetriever."""
-        raw = self._get_raw_retriever().retrieve(
-            query, top_k=top_k, include_legacy_wiki_fts=True,
-        )
-        output = merge_raw_into_state(raw, state)
-        elapsed = time.monotonic() - t0
-        logger.info(
-            "Search completed in %.2fs: %d results for query=%r",
-            elapsed,
-            len(output),
-            (query or "")[:50],
-        )
-        if "elapsed_ms" not in state.trace:
-            state.trace["elapsed_ms"] = round(elapsed * 1000, 2)
-        return output
-
-    def _search_verified_hybrid(
-        self,
-        query: str,
-        top_k: int,
-        t0: float,
-        state: SearchRequestState,
-    ) -> list[dict]:
-        """Verified hybrid path — algorithm delegated to VerifiedFusion."""
-        return self._get_verified_fusion().run(
-            query, top_k=top_k, state=state, t0=t0,
-        )
 
     def _safe_verified_claim_retrieve(
         self,

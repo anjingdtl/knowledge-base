@@ -11,7 +11,7 @@ import os
 import time
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, Callable, ParamSpec, TypeVar
+from typing import Any, Callable, ParamSpec, TypeVar, cast
 
 from src.mcp.envelopes import (
     ErrorCode,

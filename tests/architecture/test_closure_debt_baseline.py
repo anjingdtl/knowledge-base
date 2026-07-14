@@ -50,13 +50,14 @@ def test_debt_metrics_are_non_negative_counts():
 
 
 def test_baseline_reflects_current_debt_shape():
-    """Post WP2 r3 shell: server within Spec budget; domain tools hold implementations."""
+    """WP5 closed shape: no legacy pipelines; server shell only."""
     m = collect_debt_metrics(ROOT)
     # Spec budget: server.py <= 500 lines (registration shell only)
     assert m["mcp_server_lines"] <= 500
     assert m["mcp_server_tool_functions"] == 0
     assert m["mcp_tools_real_impl_count"] >= 40
-    assert m["search_service_has_legacy_pipeline"] is True
+    assert m["search_service_has_legacy_pipeline"] is False
+    assert m["search_service_has_verified_hybrid"] is False
     assert m["raw_retriever_calls_search_service"] is False
     assert m["answering_depends_on_verified_answer"] is False
     # WP4-T1: alembic env honors SHINEHE_TEST_ALEMBIC_URL; tests are strict

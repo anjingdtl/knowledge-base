@@ -125,7 +125,7 @@ def _file_ingest_handler(job_id: str, params: dict) -> dict:
 
     # 路径验证 — 复用 mcp_server 中的 _validate_file_path
     try:
-        from src.mcp_server import _validate_file_path
+        from src.mcp.tools.ingest import _validate_file_path
         validated_path = _validate_file_path(file_path)
     except (FileNotFoundError, PermissionError) as exc:
         raise RuntimeError(str(exc)) from exc

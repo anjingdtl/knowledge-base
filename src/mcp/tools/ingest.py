@@ -343,12 +343,24 @@ def _validate_file_path(file_path: str) -> str:
         raise FileNotFoundError(f"文件不存在: {file_path}")
     return _validate_ingest_path(resolved)
 
+def _resolve_parse_file():
+    """Prefer server.parse_file so tests can monkeypatch src.mcp.server.parse_file."""
+    import sys
+
+    server = sys.modules.get("src.mcp.server")
+    if server is not None:
+        fn = getattr(server, "parse_file", None)
+        if callable(fn):
+            return fn
+    return parse_file
+
+
 def _do_ingest_file(file_path: str, tags: list[str] | None = None) -> dict:
     tags = tags or []
 
     # 安全校验：路径规范化 + 白名单验证
     validated_path = _validate_file_path(file_path)
-    parsed_list = parse_file(validated_path)
+    parsed_list = _resolve_parse_file()(validated_path)
 
     import hashlib
     from datetime import datetime, timezone

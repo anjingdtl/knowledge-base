@@ -1,14 +1,14 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-14  
-> 源码版本：`src/version.py` 中的 **`1.9.0`**（closure WP1 在特性分支推进，目标 v1.9.1）  
-> 当前分支：见工作区；主线曾发布 `v1.9.0`  
-> GitHub Release：`v1.9.0`（见 `docs/release/v1.9.0-release-notes.md`）  
-> 当前方向：**可维护性收尾（Spec 04）**。WP0+WP1 完成：Unified Retrieval 默认、Raw/Fusion 归位；下一批 WP2 Answer+MCP 实拆。
+> 源码版本：`src/version.py` 中的 **`1.10.0`**  
+> 当前分支：见工作区；主线目标合并 `v1.10.0`  
+> GitHub Release：见 `docs/release/v1.10.0-release-notes.md`  
+> 当前方向：**可维护性收尾（Spec 04）已完成 WP0–WP5**。
 
 ---
 
-## 可维护性收尾 WP0–WP1：基线 + Unified Retrieval 默认（进行中，2026-07-14）
+## 可维护性收尾 WP0–WP5：v1.10.0（已完成，2026-07-14）
 
 执行依据：
 
@@ -45,7 +45,8 @@
 - ✅ **WP3**：`ServiceGroups` → 真实 Capability Provider（lazy 构造 / close / feature gate）；扁平属性兼容代理；`get_active_container` 收束至 `compatibility.container_access`；生命周期测试
 - ✅ **WP4-T4**：`KnowledgeTagRepository`；`TaggingService` 去 SQL
 - ✅ **WP4-T5**：CI jobs `architecture-closure` / `migration-gate` / `contract-gate`
-- 下一步：WP5 Legacy 删除 + v1.10.0 最终验收
+- ✅ **WP5**：删除 Legacy/Shadow 检索双路径；SearchService 无 `_search_legacy_pipeline` / `_search_verified_hybrid`；`report_closure_debt --strict` 通过；版本 **1.10.0**
+- 文档：`docs/migration/v1.9-to-v1.10-maintainability-closure.md`、`docs/release/v1.10.0-release-notes.md`
 
 ---
 
