@@ -71,7 +71,16 @@ class PathIndexService:
     扫描文件/目录 → 检测变更 → 增量调用 parser + indexer。
     """
 
-    def __init__(self, db=None, config=None, indexed_file_repo=None):
+    def __init__(
+        self,
+        db=None,
+        config=None,
+        indexed_file_repo=None,
+        knowledge_workflow=None,
+        maintenance_event_adapter=None,
+        knowledge_workflow_provider=None,
+        maintenance_event_adapter_provider=None,
+    ):
         # CLI construction does not go through AppContainer.  Bind its repository
         # to an actual Database instance instead of the compatibility facade class,
         # whose instance methods (for example get_conn) cannot be called directly.
@@ -84,6 +93,32 @@ class PathIndexService:
         self._repo: IndexedFileRepository = (
             indexed_file_repo or IndexedFileRepository(db=self._db)
         )
+        self._knowledge_workflow = knowledge_workflow
+        self._maintenance_event_adapter = maintenance_event_adapter
+        self._knowledge_workflow_provider = knowledge_workflow_provider
+        self._maintenance_event_adapter_provider = maintenance_event_adapter_provider
+
+    def _resolve_knowledge_workflow(self):
+        if self._knowledge_workflow is not None:
+            return self._knowledge_workflow
+        if self._knowledge_workflow_provider is not None:
+            try:
+                self._knowledge_workflow = self._knowledge_workflow_provider()
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("knowledge_workflow provider failed: %s", exc)
+                return None
+        return self._knowledge_workflow
+
+    def _resolve_maintenance_event_adapter(self):
+        if self._maintenance_event_adapter is not None:
+            return self._maintenance_event_adapter
+        if self._maintenance_event_adapter_provider is not None:
+            try:
+                self._maintenance_event_adapter = self._maintenance_event_adapter_provider()
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("maintenance_event_adapter provider failed: %s", exc)
+                return None
+        return self._maintenance_event_adapter
 
     # ------------------------------------------------------------------
     # Public API
@@ -273,7 +308,10 @@ class PathIndexService:
         if result.deleted and existing.get("knowledge_id"):
             from src.services.knowledge_workflow import try_schedule_source_delete
 
-            try_schedule_source_delete(existing["knowledge_id"])
+            try_schedule_source_delete(
+                existing["knowledge_id"],
+                maintenance_event_adapter=self._resolve_maintenance_event_adapter(),
+            )
         return result
 
     # ------------------------------------------------------------------
@@ -410,7 +448,11 @@ class PathIndexService:
         # wiki-first 钩子:编译文件系统 wiki 层(失败不阻塞索引)
         try:
             from src.services.knowledge_workflow import try_knowledge_workflow_compile
-            try_knowledge_workflow_compile(item_id, ingested_at=item.created_at)
+            try_knowledge_workflow_compile(
+                item_id,
+                ingested_at=item.created_at,
+                knowledge_workflow=self._resolve_knowledge_workflow(),
+            )
         except Exception as e:
             logger.warning("wiki-first hook failed for %s: %s", item_id, e)
         self._enqueue_maintenance(item_id, "created", content_hash, str(path))
@@ -460,7 +502,11 @@ class PathIndexService:
             # wiki-first 钩子(更新路径同样触发)
             try:
                 from src.services.knowledge_workflow import try_knowledge_workflow_compile
-                try_knowledge_workflow_compile(existing_kid, ingested_at=item.created_at)
+                try_knowledge_workflow_compile(
+                    existing_kid,
+                    ingested_at=item.created_at,
+                    knowledge_workflow=self._resolve_knowledge_workflow(),
+                )
             except Exception as e:
                 logger.warning("wiki-first hook failed for %s: %s", existing_kid, e)
             self._enqueue_maintenance(existing_kid, "updated", content_hash, str(path))
@@ -480,14 +526,14 @@ class PathIndexService:
         conn.commit()
         self._enqueue_maintenance(kid, "deleted", f"tombstone:{now}", "")
 
-    @staticmethod
-    def _enqueue_maintenance(knowledge_id: str, event_type: str, revision: str, source_path: str) -> None:
+    def _enqueue_maintenance(
+        self, knowledge_id: str, event_type: str, revision: str, source_path: str
+    ) -> None:
         """Best-effort post-index hook; failures never undo Raw indexing."""
         try:
-            from src.core.container import get_active_container
-            container = get_active_container()
-            if container is not None:
-                container.maintenance_event_adapter.enqueue_source_event(
+            adapter = self._resolve_maintenance_event_adapter()
+            if adapter is not None:
+                adapter.enqueue_source_event(
                     knowledge_id, event_type, source_revision=revision, source_path=source_path,
                 )
         except Exception as exc:  # noqa: BLE001

@@ -30,16 +30,12 @@ _rag_async_bridge_slots = threading.BoundedSemaphore(RAG_ASYNC_BRIDGE_MAX_WORKER
 
 
 def _get_container_service(attr: str, fallback_factory):
-    """从 DI 容器获取服务实例，容器不可用时 fallback 到新建。"""
-    try:
-        from src.core.container import get_active_container
-        container = get_active_container()
-        if container is not None:
-            svc = getattr(container, attr, None)
-            if svc is not None:
-                return svc
-    except Exception:
-        pass
+    """Resolve a pipeline dependency.
+
+    Prefer constructor/config deps (callers pass injected services). When missing,
+    build via ``fallback_factory``. Does not read process-global containers.
+    """
+    _ = attr  # kept for call-site compatibility / logging
     return fallback_factory()
 
 def _run_coroutine_sync(coro, timeout: float = 120):
@@ -643,14 +639,7 @@ class GenerateStage(PipelineStage):
         messages = build_rag_messages(ctx.question, context, ctx.conversation_history)
 
         try:
-            llm = self._llm
-            if llm is None:
-                try:
-                    from src.core.container import get_active_container
-                    _c = get_active_container()
-                    llm = _c.llm if _c else LLMService()
-                except Exception:
-                    llm = LLMService()
+            llm = self._llm or LLMService()
             if stream:
                 ctx.stream_generator = llm.chat_stream(messages, silent=True)
             else:
@@ -909,14 +898,7 @@ class EvidenceCompressStage(PipelineStage):
     ) -> list[dict]:
         """摘要式压缩 — 用 LLM 生成精简摘要"""
         try:
-            llm = self._llm
-            if llm is None:
-                try:
-                    from src.core.container import get_active_container
-                    _c = get_active_container()
-                    llm = _c.llm if _c else LLMService()
-                except Exception:
-                    llm = LLMService()
+            llm = self._llm or LLMService()
 
             # 组装所有证据文本
             evidence_parts = []
@@ -1110,11 +1092,10 @@ class RagPipeline:
             if len(ctx.sources) < 2 or critical_warnings or confidence < 0.6:
                 return
             source_ids = [str(s["knowledge_id"]) for s in ctx.sources if s.get("knowledge_id")]
-            from src.core.container import get_active_container as _gac
-            _c = _gac()
+            write_svc = self._deps.get("wiki_write_service")
             page_id = None
-            if _c is not None:
-                wr = _c.wiki_write_service.save(
+            if write_svc is not None:
+                wr = write_svc.save(
                     question, ctx.answer, source_ids,
                     confidence=confidence, save_mode="auto",
                     timestamp=ctx.trace_id or "",

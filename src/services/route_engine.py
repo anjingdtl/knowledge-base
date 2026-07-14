@@ -447,17 +447,8 @@ class LLMRouter:
         return None
 
     def _resolve_llm(self):
-        if self._llm is not None:
-            return self._llm
-        try:
-            from src.core.container import get_active_container
-            container = get_active_container()
-            if container is not None and container.llm is not None:
-                self._llm = container.llm
-                return self._llm
-        except Exception:
-            pass
-        return None
+        # LLM must be constructor-injected (PlanetaryRouter passes llm through).
+        return self._llm
 
 
 class PlanetaryRouter:

@@ -103,8 +103,9 @@ def test_submit_for_review_updates_canonical_status_without_direct_db_write(monk
     monkeypatch.setattr("src.services.wiki_workflow.Database", db)
     monkeypatch.setattr("src.services.wiki_workflow.Config.get", lambda key, default=None: False)
     monkeypatch.setattr(
-        "src.core.container.get_active_container",
-        lambda: SimpleNamespace(wiki_repository=repo, wiki_projection=projection),
+        WikiWorkflow,
+        "_canonical_services",
+        staticmethod(lambda: (repo, projection)),
     )
 
     result = WikiWorkflow.submit_for_review("page-1", operator="tester", comment="please review")
@@ -128,8 +129,9 @@ def test_restore_version_updates_canonical_page_without_direct_db_write(monkeypa
     projection = _FakeProjection()
     monkeypatch.setattr("src.services.wiki_workflow.Database", db)
     monkeypatch.setattr(
-        "src.core.container.get_active_container",
-        lambda: SimpleNamespace(wiki_repository=repo, wiki_projection=projection),
+        WikiWorkflow,
+        "_canonical_services",
+        staticmethod(lambda: (repo, projection)),
     )
 
     result = WikiWorkflow.restore_version("page-1", 1)
@@ -149,8 +151,9 @@ def test_canonical_save_updates_source_ids(monkeypatch):
     repo = _FakeRepo(_canonical_page())
     projection = _FakeProjection()
     monkeypatch.setattr(
-        "src.core.container.get_active_container",
-        lambda: SimpleNamespace(wiki_repository=repo, wiki_projection=projection),
+        WikiWorkflow,
+        "_canonical_services",
+        staticmethod(lambda: (repo, projection)),
     )
 
     WikiWorkflow._save_canonical_page(

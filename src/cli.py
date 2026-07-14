@@ -314,11 +314,9 @@ def _handle_wiki(args: argparse.Namespace) -> int:
         if not target.exists():
             print(f"[ERROR] 路径不存在: {target}", file=sys.stderr)
             return 1
-        from src.core.container import get_active_container
-        from src.services.path_indexer import PathIndexService
-        container = get_active_container()
-        indexer = container.path_indexer if container else PathIndexService()
-        kid = indexer._ingest_file(target)
+        from src.core.container import create_container
+        container = create_container()
+        kid = container.path_indexer._ingest_file(target)
         print(f"[OK] ingest 完成: {kid}")
         return 0
 
@@ -463,11 +461,13 @@ def _handle_migrate(args: argparse.Namespace) -> int:
             print(f"  ...(另有 {len(plan['actions']) - 20} 条)")
         print("\n使用 --apply 执行迁移(将备份 data/、导出源到 raw/、重编译 wiki)")
         return 0
-    # apply 需要 active container 驱动 wiki 重编译（try_knowledge_workflow_compile
-    # 从 get_active_container() 取 knowledge_workflow 服务）。
+    # apply 需要显式注入 knowledge_workflow 以驱动 wiki 重编译。
     from src.core.container import create_container
-    create_container()
-    result = svc.apply(backup=not args.no_backup)
+    container = create_container()
+    result = svc.apply(
+        backup=not args.no_backup,
+        knowledge_workflow=container.knowledge_workflow,
+    )
     print(f"[OK] 导出 {result['exported']} 源, 跳过 {result['skipped_missing']}, "
           f"重编译 {result['recompiled']}, 备份={'是' if result['backup_created'] else '否'}")
     return 0

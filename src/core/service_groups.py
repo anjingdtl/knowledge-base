@@ -140,6 +140,9 @@ class CoreEvidenceProvider(_LazyProviderBase):
             db=c.db,
             config=c.config,
             indexed_file_repo=c.indexed_file_repo,
+            # Lazy providers avoid Core→Authoring circular construction at boot.
+            knowledge_workflow_provider=lambda: c.knowledge_workflow,
+            maintenance_event_adapter_provider=lambda: c.maintenance_event_adapter,
         )
 
 

@@ -221,6 +221,7 @@ class AppContainer:
                 'size_aware_router': self.size_aware_router,
                 'wiki_page_locator': self.wiki_page_locator,
                 'wiki_parent_retriever': self.wiki_parent_retriever,
+                'wiki_write_service': self.wiki_write_service,
             })
             self._track_service("_rag_pipeline")
         return self._rag_pipeline
@@ -245,7 +246,10 @@ class AppContainer:
     def wiki_compiler(self):
         if self._wiki_compiler is None:
             from src.services.wiki_compiler import WikiCompiler
-            self._wiki_compiler = WikiCompiler()
+            # Lazy provider avoids cycle: wiki_write_service also needs wiki_compiler.
+            self._wiki_compiler = WikiCompiler(
+                wiki_write_service_provider=lambda: self.wiki_write_service,
+            )
             self._track_service("_wiki_compiler")
         return self._wiki_compiler
 

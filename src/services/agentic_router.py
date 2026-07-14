@@ -266,19 +266,8 @@ class AgenticRouter:
         return matches
 
     def _try_llm(self, question: str) -> dict | None:
+        # LLM must be constructor-injected (AppContainer passes llm=self.llm).
         llm = self._llm
-        if llm is None:
-            try:
-                from src.core.container import get_active_container
-                container = get_active_container()
-                if container is not None and container.llm is not None:
-                    self._llm = container.llm
-                    llm = self._llm
-                else:
-                    return None
-            except Exception as exc:
-                logging.debug("route_query: LLM container lookup failed: %s", exc)
-                return None
         if llm is None:
             return None
         try:

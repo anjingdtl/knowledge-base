@@ -96,14 +96,7 @@ class WikiWorkflow:
 
     @staticmethod
     def _canonical_services():
-        try:
-            from src.core.container import get_active_container
-            container = get_active_container()
-        except Exception:
-            container = None
-        if container is not None:
-            return container.wiki_repository, container.wiki_projection
-
+        """Build local repo/projection from config (no process-global container)."""
         from src.services.wiki_projection import WikiProjection
         from src.services.wiki_repository import WikiRepository
 

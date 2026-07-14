@@ -140,29 +140,16 @@
 | migration_tests_have_skip_paths | false |
 | `--strict` 退出码（当前） | **0**（注意：`_strict_failures` **尚未**将 `get_active_container_refs_outside_whitelist > 0` 计为失败） |
 
-**风险标记（WP1-T2 阻塞，2026-07-14）：** Spec WP1-T2 要求 `get_active_container_refs_outside_whitelist == 0`，且 WP1-T3 要求非白名单 GAC 令 `--strict` 失败。当前值为 **15**，而 `_strict_failures` 尚未计入该项（故 `--strict` 仍为 0）。
+**WP1-T2 解除（2026-07-14，选项 A）：** 已通过构造注入/本地 fallback 清零非白名单 `get_active_container()`。当前：
 
-现场验证：将 GAC 纳入 `_strict_failures` 后，`--strict` 退出码变为 1，`assert gac_outside == 0` 失败。按 Spec §5.2 **不得**为通过 CI 扩大白名单放宽指标；清零 15 处引用需改动多处 service/CLI/API 构造注入，超出「仅迁移治理 + CI 门禁、不改业务契约」的本轮边界，且易触及 RAG/Wiki 服务路径。
-
-**已停止于 WP1-T2**，未进入 WP1-T3 / WP2。待决策：
-1. 单独 PR 用构造注入清零 15 处 `get_active_container()`；或
-2. 产品确认后扩大白名单（需显式授权，违反当前 Spec 默认禁令）。
-
-残差调用点（`get_active_container\s*\(`，含 1 处注释）：
-
-| 文件 | 次数 |
+| 指标 | 值 |
 |---|---|
-| `src/api/routes/maintenance.py` | 1 |
-| `src/cli.py` | 2（含 1 注释） |
-| `src/services/agentic_router.py` | 1 |
-| `src/services/doctor.py` | 1 |
-| `src/services/knowledge_workflow.py` | 2 |
-| `src/services/path_indexer.py` | 1 |
-| `src/services/rag_pipeline.py` | 3 |
-| `src/services/route_engine.py` | 1 |
-| `src/services/version_conflict.py` | 1 |
-| `src/services/wiki_compiler.py` | 1 |
-| `src/services/wiki_workflow.py` | 1 |
+| `get_active_container_refs_outside_whitelist` | **0** |
+| `get_active_container_refs_src` | **2**（仅 whitelist：`container.py` + `container_access.py`） |
+| `_strict_failures` 含 GAC | **是** |
+| `--strict` 退出码 | **0** |
+
+白名单未放宽。未进入 WP2。
 
 ---
 

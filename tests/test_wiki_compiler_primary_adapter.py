@@ -4,7 +4,7 @@ from src.services.wiki_compiler import WikiCompiler
 from src.utils.config import Config
 
 
-def test_save_answer_primary_delegates_to_write_service(monkeypatch):
+def test_save_answer_primary_delegates_to_write_service():
     Config.set("wiki.canonical_v2.mode", "primary")
     write_service = MagicMock()
     write_service.save.return_value = {
@@ -14,11 +14,8 @@ def test_save_answer_primary_delegates_to_write_service(monkeypatch):
         "fs_saved": False,
         "errors": [],
     }
-    container = MagicMock()
-    container.wiki_write_service = write_service
-    monkeypatch.setattr("src.core.container.get_active_container", lambda: container)
 
-    result = WikiCompiler().save_answer(
+    result = WikiCompiler(wiki_write_service=write_service).save_answer(
         "Q",
         "A" * 120,
         ["k1"],

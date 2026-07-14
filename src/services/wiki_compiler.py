@@ -137,8 +137,21 @@ class WikiCompiler:
     LINK_CANDIDATE_SUMMARY_TRUNCATE = 50
     QUERY_SAVE_TITLE_TRUNCATE = 100
 
-    def __init__(self):
+    def __init__(self, wiki_write_service=None, wiki_write_service_provider=None):
         self._llm = LLMService()
+        self._wiki_write_service = wiki_write_service
+        self._wiki_write_service_provider = wiki_write_service_provider
+
+    def _resolve_wiki_write_service(self):
+        if self._wiki_write_service is not None:
+            return self._wiki_write_service
+        if self._wiki_write_service_provider is not None:
+            try:
+                self._wiki_write_service = self._wiki_write_service_provider()
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("wiki_write_service provider failed: %s", exc)
+                return None
+        return self._wiki_write_service
 
     @staticmethod
     def _save_canonical_page(page_id: str, legacy_page: dict, **fields) -> None:
@@ -298,16 +311,14 @@ class WikiCompiler:
                 （title 取 question 前 N 字，tags 空，concept_summary 空）。
         """
         if Config.get("wiki.canonical_v2.mode", "off") == "primary":
-            try:
-                from src.core.container import get_active_container
-
-                container = get_active_container()
-                if container is not None:
+            write_svc = self._resolve_wiki_write_service()
+            if write_svc is not None:
+                try:
                     logger.warning(
                         "WikiCompiler.save_answer is deprecated in canonical_v2 primary; "
                         "delegating to WikiWriteService"
                     )
-                    saved = container.wiki_write_service.save(
+                    saved = write_svc.save(
                         question,
                         answer,
                         source_ids or [],
@@ -316,8 +327,8 @@ class WikiCompiler:
                     )
                     saved_id = saved.get("page_id") or saved.get("sqlite_page_id")
                     return str(saved_id) if saved_id else None
-            except Exception as e:
-                logger.warning("primary WikiCompiler adapter failed: %s", e)
+                except Exception as e:
+                    logger.warning("primary WikiCompiler adapter failed: %s", e)
 
         min_len = Config.get("wiki.query_save_min_length", 100)
         if len(answer) < min_len:

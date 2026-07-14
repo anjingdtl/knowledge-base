@@ -284,9 +284,8 @@ def test_compile_not_found():
     assert result.get("reason") == "not_found"
 
 
-def test_try_hook_returns_none_without_container(monkeypatch):
-    """无 active container 时返回 None,不抛。"""
-    monkeypatch.setattr("src.core.container.get_active_container", lambda: None)
+def test_try_hook_returns_none_without_workflow():
+    """未注入 knowledge_workflow 时返回 None,不抛。"""
     assert try_knowledge_workflow_compile("kid-1") is None
 
 
@@ -312,15 +311,14 @@ def test_path_indexer_triggers_wiki_first_e2e(tmp_path, monkeypatch):
     Config.set("knowledge_workflow.concept_dir", str(project / "wiki" / "concepts"))
     Config.set("wiki.max_llm_calls_per_ingest", 0)  # 关 LLM,纯验证文件系统层
 
-    # 4) 提供 active container,挂真实编排器
-    mock_container = MagicMock()
-    mock_container.knowledge_workflow = KnowledgeWorkflowService()
-    monkeypatch.setattr("src.core.container.get_active_container", lambda: mock_container)
-
+    # 4) 注入 knowledge_workflow 编排器
     # 5) ingest
     from src.services.path_indexer import PathIndexService
     svc = PathIndexService(
-        db=Database._instance, config=Config, indexed_file_repo=MagicMock()
+        db=Database._instance,
+        config=Config,
+        indexed_file_repo=MagicMock(),
+        knowledge_workflow=KnowledgeWorkflowService(),
     )
     svc._ingest_file(src_file)
 
@@ -438,19 +436,14 @@ def test_compile_primary_allowlist_enqueues_maintenance_event():
     adapter.enqueue_source_event.assert_called_once()
 
 
-def test_try_schedule_source_delete_uses_maintenance_adapter(monkeypatch):
+def test_try_schedule_source_delete_uses_maintenance_adapter():
     """delete 永远只投递 Maintenance，不向旧 scheduler 双投递。"""
     adapter = MagicMock()
-    mock_container = MagicMock()
-    mock_container.maintenance_event_adapter = adapter
-    monkeypatch.setattr("src.core.container.get_active_container", lambda: mock_container)
-
-    try_schedule_source_delete("kid-x")
+    try_schedule_source_delete("kid-x", maintenance_event_adapter=adapter)
     adapter.enqueue_source_event.assert_called_once()
 
 
-def test_try_schedule_source_delete_no_container_is_safe(monkeypatch):
-    """无 active container → 不抛,不 schedule。"""
-    monkeypatch.setattr("src.core.container.get_active_container", lambda: None)
+def test_try_schedule_source_delete_no_adapter_is_safe():
+    """未注入 maintenance_event_adapter → 不抛,不 schedule。"""
     Config.set("wiki.rebuild.auto_on_source_update", True)
     try_schedule_source_delete("kid-x")  # 不抛

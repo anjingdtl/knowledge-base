@@ -236,51 +236,41 @@ class DoctorService:
             ]
 
     def check_serving_claims(self) -> list[dict[str, str]]:
-        """Run WikiServingGate diagnostics against Canonical claims (read-only)."""
+        """Run WikiServingGate diagnostics against Canonical claims (read-only).
+
+        Doctor is a CLI diagnostic tool: construct local repo/gate from config
+        (no process-global container lookup).
+        """
         try:
-            from src.core.container import get_active_container
+            from pathlib import Path as _Path
 
-            container = None
-            try:
-                container = get_active_container()
-            except Exception:  # noqa: BLE001
-                container = None
+            from src.services.wiki_repository import WikiRepository
+            from src.services.wiki_serving_gate import (
+                WikiServingGate,
+                default_block_knowledge_lookups,
+            )
 
-            if container is None:
-                # Fall back: construct repo from config paths without full container
-                from pathlib import Path as _Path
-
-                from src.services.wiki_repository import WikiRepository
-                from src.services.wiki_serving_gate import (
-                    WikiServingGate,
-                    default_block_knowledge_lookups,
-                )
-
-                wiki_dir = _Path(Config.get("knowledge_workflow.wiki_dir", "wiki"))
-                if not wiki_dir.exists():
-                    return [
-                        self._result(
-                            "serving_claims",
-                            "ok",
-                            "可 Serving Claim: 0（wiki 目录不存在）",
-                        ),
-                    ]
-                repo = WikiRepository(
-                    wiki_dir=wiki_dir,
-                    registry_path=wiki_dir / "_meta" / "pages.json",
-                    redirects_path=wiki_dir / "_meta" / "redirects.json",
-                    outbox_path=_Path(Config.get("storage.data_dir", "data"))
-                    / "wiki_projection_outbox.jsonl",
-                )
-                get_block, get_knowledge = default_block_knowledge_lookups()
-                gate = WikiServingGate(
-                    get_block=get_block, get_knowledge=get_knowledge,
-                )
-                diag = repo.get_claim_serving_diagnostics(gate=gate)
-            else:
-                repo = container.wiki_repository
-                gate = container.wiki_serving_gate
-                diag = repo.get_claim_serving_diagnostics(gate=gate)
+            wiki_dir = _Path(Config.get("knowledge_workflow.wiki_dir", "wiki"))
+            if not wiki_dir.exists():
+                return [
+                    self._result(
+                        "serving_claims",
+                        "ok",
+                        "可 Serving Claim: 0（wiki 目录不存在）",
+                    ),
+                ]
+            repo = WikiRepository(
+                wiki_dir=wiki_dir,
+                registry_path=wiki_dir / "_meta" / "pages.json",
+                redirects_path=wiki_dir / "_meta" / "redirects.json",
+                outbox_path=_Path(Config.get("storage.data_dir", "data"))
+                / "wiki_projection_outbox.jsonl",
+            )
+            get_block, get_knowledge = default_block_knowledge_lookups()
+            gate = WikiServingGate(
+                get_block=get_block, get_knowledge=get_knowledge,
+            )
+            diag = repo.get_claim_serving_diagnostics(gate=gate)
 
             eligible = int(diag.get("eligible_primary", 0))
             total = int(diag.get("total_claims", 0))

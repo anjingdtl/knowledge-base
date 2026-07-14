@@ -236,16 +236,19 @@ class KnowledgeWorkflowService:
 
 
 def try_knowledge_workflow_compile(
-    knowledge_id: str, ingested_at: str | None = None
+    knowledge_id: str,
+    ingested_at: str | None = None,
+    *,
+    knowledge_workflow=None,
 ) -> dict | None:
-    """非阻塞钩子:从 active container 取服务并编译。失败返回 None。"""
-    try:
-        from src.core.container import get_active_container
+    """非阻塞钩子: 使用显式注入的 knowledge_workflow 编译。失败返回 None。
 
-        container = get_active_container()
-        if container is None:
-            return None
-        return cast(dict, container.knowledge_workflow.compile(knowledge_id, ingested_at))
+    Callers (PathIndexService / migrator) must pass the service; no process-global lookup.
+    """
+    if knowledge_workflow is None:
+        return None
+    try:
+        return cast(dict, knowledge_workflow.compile(knowledge_id, ingested_at))
     except Exception as e:
         logger.warning("knowledge workflow compile failed (%s): %s", knowledge_id, e)
         return None
@@ -265,20 +268,22 @@ def _rebuild_gate_allows(knowledge_id: str, item: dict | None) -> bool:
     return False
 
 
-def try_schedule_source_delete(knowledge_id: str, item: dict | None = None) -> None:
-    """非阻塞钩子:source 删除后,门控命中时 schedule rebuild(delete)。
+def try_schedule_source_delete(
+    knowledge_id: str,
+    item: dict | None = None,
+    *,
+    maintenance_event_adapter=None,
+) -> None:
+    """非阻塞钩子: source 删除后投递 maintenance 事件。
 
-    默认 off(auto_on_source_update=false + 空 allowlist)→ 不 schedule。
+    Callers must pass maintenance_event_adapter; no process-global lookup.
     失败不抛(仅 warning),不影响删除主流程。
     """
+    if maintenance_event_adapter is None:
+        return
     try:
-        from src.core.container import get_active_container
-
-        container = get_active_container()
-        if container is None:
-            return
         revision = str((item or {}).get("content_hash") or (item or {}).get("version") or "tombstone")
-        container.maintenance_event_adapter.enqueue_source_event(
+        maintenance_event_adapter.enqueue_source_event(
             knowledge_id, "deleted", source_revision=f"tombstone:{revision}",
             source_path=str((item or {}).get("source_path") or ""),
         )

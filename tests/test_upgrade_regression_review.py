@@ -306,35 +306,21 @@ def test_do_ask_catches_non_timeout_exception(monkeypatch):
     assert result["sources"] == []
 
 
-def test_get_operation_log_service_uses_active_container(monkeypatch):
-    """S3.3:有活跃 container 时返回 container.operation_log。
-
-    旧实现调 src.api.deps.get_container()(签名需 request 参数)→ 必 TypeError →
-    永远走 except fallback,容器注入路径成死代码。改用 get_active_container 后才生效。
-    """
+def test_get_operation_log_service_uses_injected_service():
+    """S3.3: 构造注入 operation_log 时直接返回。"""
     from src.services import version_conflict as vc_mod
 
     fake_op_log = object()  # sentinel
-
-    class _FakeContainer:
-        operation_log = fake_op_log
-
-    monkeypatch.setattr("src.core.container.get_active_container",
-                        lambda: _FakeContainer())
-
-    svc = vc_mod.VersionConflictService.__new__(vc_mod.VersionConflictService)
+    svc = vc_mod.VersionConflictService(operation_log=fake_op_log)
     assert svc._get_operation_log_service() is fake_op_log
 
 
-def test_get_operation_log_service_fallback_when_no_container(monkeypatch):
-    """S3.3 回归:无活跃 container 时降级自建 OperationLogService(不抛)。"""
+def test_get_operation_log_service_fallback_when_not_injected():
+    """S3.3 回归:未注入 operation_log 时降级自建 OperationLogService(不抛)。"""
     from src.services import version_conflict as vc_mod
     from src.services.operation_log import OperationLogService
 
-    monkeypatch.setattr("src.core.container.get_active_container", lambda: None)
-
-    svc = vc_mod.VersionConflictService.__new__(vc_mod.VersionConflictService)
-    svc._knowledge_repo = None
+    svc = vc_mod.VersionConflictService()
     ol = svc._get_operation_log_service()
     assert isinstance(ol, OperationLogService)
 

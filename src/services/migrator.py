@@ -57,11 +57,10 @@ class MigrationService:
             "actions": actions,
         }
 
-    def apply(self, backup: bool = True) -> dict:
+    def apply(self, backup: bool = True, knowledge_workflow=None) -> dict:
         """备份 data/ + 导出源到 raw/ + 触发重编译。
 
-        wiki 重编译依赖 active container（try_knowledge_workflow_compile 从中取
-        knowledge_workflow 服务）；CLI 路径由 _handle_migrate 负责调用 create_container()，
+        wiki 重编译需要调用方显式传入 knowledge_workflow（CLI 从 create_container 注入）。
         本方法不自行创建容器，以保持可测试性。
         """
         self._ensure_db()
@@ -115,7 +114,9 @@ class MigrationService:
             for it in items:
                 if it.get("source_type") == "file":
                     try_knowledge_workflow_compile(
-                        it["id"], ingested_at=it.get("created_at", "")
+                        it["id"],
+                        ingested_at=it.get("created_at", ""),
+                        knowledge_workflow=knowledge_workflow,
                     )
                     recompiled += 1
         except Exception as e:
