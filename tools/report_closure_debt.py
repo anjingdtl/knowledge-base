@@ -204,6 +204,12 @@ def _strict_failures(metrics: dict[str, Any]) -> list[str]:
             "Database._instance outside infra "
             f"refs={metrics['database_instance_refs_outside_infra']}"
         )
+    # get_active_container only allowed on runtime/compatibility whitelist
+    if metrics.get("get_active_container_refs_outside_whitelist", 0) > 0:
+        fails.append(
+            "get_active_container outside whitelist "
+            f"refs={metrics['get_active_container_refs_outside_whitelist']}"
+        )
     if metrics["search_service_has_legacy_pipeline"]:
         fails.append("SearchService still has _search_legacy_pipeline")
     if metrics["search_service_has_verified_hybrid"]:
@@ -217,6 +223,11 @@ def _strict_failures(metrics: dict[str, Any]) -> list[str]:
     if metrics["migration_tests_have_skip_paths"]:
         fails.append("migration tests still soft-skip failures")
     return fails
+
+
+def validate_strict_metrics(metrics: dict[str, Any]) -> list[str]:
+    """Public strict-gate validator (WP1-T2). Non-empty list => residual debt."""
+    return _strict_failures(metrics)
 
 
 def main(argv: list[str] | None = None) -> int:

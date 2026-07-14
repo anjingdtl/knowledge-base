@@ -1,6 +1,6 @@
-"""Architecture debt baseline for maintainability closure (WP0).
+"""Architecture debt baseline for maintainability closure.
 
-Initial phase reports debt; does not require all metrics to be zero.
+WP1-T2: strict zero assertions for residual debt gates.
 """
 from __future__ import annotations
 
@@ -14,13 +14,17 @@ assert _spec and _spec.loader
 _mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_mod)
 collect_debt_metrics = _mod.collect_debt_metrics
+validate_strict_metrics = _mod.validate_strict_metrics
+_strict_failures = _mod._strict_failures
 
 REQUIRED_KEYS = {
     "mcp_server_lines",
     "mcp_server_tool_functions",
     "mcp_tools_real_impl_count",
     "database_instance_refs_src",
+    "database_instance_refs_outside_infra",
     "get_active_container_refs_src",
+    "get_active_container_refs_outside_whitelist",
     "search_service_has_legacy_pipeline",
     "search_service_has_verified_hybrid",
     "raw_retriever_calls_search_service",
@@ -43,14 +47,16 @@ def test_debt_metrics_are_non_negative_counts():
         "mcp_server_tool_functions",
         "mcp_tools_real_impl_count",
         "database_instance_refs_src",
+        "database_instance_refs_outside_infra",
         "get_active_container_refs_src",
+        "get_active_container_refs_outside_whitelist",
     ):
         assert isinstance(metrics[key], int)
         assert metrics[key] >= 0
 
 
 def test_baseline_reflects_current_debt_shape():
-    """WP5 closed shape: no legacy pipelines; server shell only."""
+    """WP5/WP1 closed shape: no legacy pipelines; server shell only; zeros enforced."""
     m = collect_debt_metrics(ROOT)
     # Spec budget: server.py <= 500 lines (registration shell only)
     assert m["mcp_server_lines"] <= 500
@@ -63,3 +69,8 @@ def test_baseline_reflects_current_debt_shape():
     # WP4-T1: alembic env honors SHINEHE_TEST_ALEMBIC_URL; tests are strict
     assert m["alembic_env_reads_test_url"] is True
     assert m["migration_tests_have_skip_paths"] is False
+    # WP1-T2: force zero residual for singleton/container access outside whitelist
+    assert m["database_instance_refs_outside_infra"] == 0
+    assert m["get_active_container_refs_outside_whitelist"] == 0
+    assert _strict_failures(m) == []
+    assert validate_strict_metrics(m) == []
