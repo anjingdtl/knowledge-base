@@ -1,0 +1,160 @@
+{
+  "date": "2026-07-14",
+  "summary": {
+    "scenarios": 6,
+    "gate_pass_count": 6,
+    "gate_pass_rate": 1.0,
+    "min_top5_overlap": 1.0,
+    "eligible_claim_match_rate": 1.0,
+    "conflict_match_rate": 1.0,
+    "fallback_match_rate": 1.0,
+    "citation_key_match_rate": 1.0,
+    "exception_types": [],
+    "p95_latency_increase_ratio": -0.17241379310344832,
+    "default_orchestrator": "unified",
+    "thresholds": {
+      "top5_overlap_min": 0.95,
+      "claim_match": 1.0,
+      "conflict_match": 1.0,
+      "fallback_match": 1.0,
+      "citation_match": 1.0,
+      "exceptions": 0,
+      "p95_latency_increase_max": 0.1
+    },
+    "pass": true
+  },
+  "scenarios": [
+    {
+      "scenario": "evidence_only",
+      "query": "FTTR 规格",
+      "meets_gates": true,
+      "source_id_overlap_top_k": 1.0,
+      "claim_ids_match": true,
+      "conflicts_match": true,
+      "fallbacks_match": true,
+      "citation_keys_match": true,
+      "exception_types": [],
+      "latency_ms_primary": 3.93,
+      "latency_ms_candidate": 0.64,
+      "notes": [],
+      "primary_source_ids": [
+        "block:b1"
+      ],
+      "candidate_source_ids": [
+        "block:b1"
+      ],
+      "primary_result_count": 1,
+      "candidate_result_count": 1
+    },
+    {
+      "scenario": "verified_empty_wiki",
+      "query": "FTTR 可达带宽",
+      "meets_gates": true,
+      "source_id_overlap_top_k": 1.0,
+      "claim_ids_match": true,
+      "conflicts_match": true,
+      "fallbacks_match": true,
+      "citation_keys_match": true,
+      "exception_types": [],
+      "latency_ms_primary": 14.42,
+      "latency_ms_candidate": 0.74,
+      "notes": [],
+      "primary_source_ids": [
+        "block:b1"
+      ],
+      "candidate_source_ids": [
+        "block:b1"
+      ],
+      "primary_result_count": 1,
+      "candidate_result_count": 1
+    },
+    {
+      "scenario": "wiki_exception",
+      "query": "网络故障场景",
+      "meets_gates": true,
+      "source_id_overlap_top_k": 1.0,
+      "claim_ids_match": true,
+      "conflicts_match": true,
+      "fallbacks_match": true,
+      "citation_keys_match": true,
+      "exception_types": [],
+      "latency_ms_primary": 0.87,
+      "latency_ms_candidate": 0.72,
+      "notes": [],
+      "primary_source_ids": [
+        "block:b1"
+      ],
+      "candidate_source_ids": [
+        "block:b1"
+      ],
+      "primary_result_count": 1,
+      "candidate_result_count": 1
+    },
+    {
+      "scenario": "query_rewrite_timeout_safe",
+      "query": "timeout rewrite",
+      "meets_gates": true,
+      "source_id_overlap_top_k": 1.0,
+      "claim_ids_match": true,
+      "conflicts_match": true,
+      "fallbacks_match": true,
+      "citation_keys_match": true,
+      "exception_types": [],
+      "latency_ms_primary": 11.11,
+      "latency_ms_candidate": 10.87,
+      "notes": [],
+      "primary_source_ids": [
+        "block:b1"
+      ],
+      "candidate_source_ids": [
+        "block:b1"
+      ],
+      "primary_result_count": 1,
+      "candidate_result_count": 1
+    },
+    {
+      "scenario": "rerank_timeout",
+      "query": "rerank case",
+      "meets_gates": true,
+      "source_id_overlap_top_k": 1.0,
+      "claim_ids_match": true,
+      "conflicts_match": true,
+      "fallbacks_match": true,
+      "citation_keys_match": true,
+      "exception_types": [],
+      "latency_ms_primary": 0.59,
+      "latency_ms_candidate": 0.43,
+      "notes": [],
+      "primary_source_ids": [
+        "block:b1"
+      ],
+      "candidate_source_ids": [
+        "block:b1"
+      ],
+      "primary_result_count": 1,
+      "candidate_result_count": 1
+    },
+    {
+      "scenario": "query_spec_empty_fallback",
+      "query": "spec empty",
+      "meets_gates": true,
+      "source_id_overlap_top_k": 1.0,
+      "claim_ids_match": true,
+      "conflicts_match": true,
+      "fallbacks_match": true,
+      "citation_keys_match": true,
+      "exception_types": [],
+      "latency_ms_primary": 0.0,
+      "latency_ms_candidate": 0.0,
+      "notes": [],
+      "primary_source_ids": [
+        "block:b1"
+      ],
+      "candidate_source_ids": [
+        "block:b1"
+      ],
+      "primary_result_count": 1,
+      "candidate_result_count": 1
+    }
+  ]
+}

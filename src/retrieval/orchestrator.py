@@ -20,18 +20,23 @@ logger = logging.getLogger(__name__)
 
 _VALID_MODES = frozenset({"legacy", "shadow", "unified"})
 
+# WP1-T6: unified is the formal default; legacy remains for rollback.
+_DEFAULT_MODE = "unified"
+
 
 def resolve_orchestrator_mode(config: Any) -> str:
-    """Read retrieval.orchestrator from Config object or nested dict. Default legacy."""
+    """Read retrieval.orchestrator from Config object or nested dict.
+
+    Default: unified (maintainability closure WP1-T6).
+    """
     raw: Any = None
     if config is None:
-        return "legacy"
+        return _DEFAULT_MODE
     if isinstance(config, dict):
         retrieval = config.get("retrieval") or {}
         if isinstance(retrieval, dict):
             raw = retrieval.get("orchestrator")
         if raw is None:
-            # dotted fallback if flattened
             raw = config.get("retrieval.orchestrator")
     else:
         getter = getattr(config, "get", None)
@@ -41,10 +46,16 @@ def resolve_orchestrator_mode(config: Any) -> str:
                 block = getter("retrieval", None)
                 if isinstance(block, dict):
                     raw = block.get("orchestrator")
-    mode = str(raw or "legacy").strip().lower()
+    if raw is None or str(raw).strip() == "":
+        return _DEFAULT_MODE
+    mode = str(raw).strip().lower()
     if mode not in _VALID_MODES:
-        logger.warning("Unknown retrieval.orchestrator=%r; falling back to legacy", raw)
-        return "legacy"
+        logger.warning(
+            "Unknown retrieval.orchestrator=%r; falling back to %s",
+            raw,
+            _DEFAULT_MODE,
+        )
+        return _DEFAULT_MODE
     return mode
 
 
@@ -127,9 +138,15 @@ class RetrievalOrchestrator:
             # empty spec → fall through to normal retrieval (legacy parity)
 
         if self._svc._should_use_verified_hybrid():
-            return VerifiedPolicy(self._svc).execute(
+            return VerifiedPolicy(
+                self._svc,
+                fusion=self._svc._get_verified_fusion(),
+            ).execute(
                 query, top_k=top_k, query_spec=None, deadline=deadline,
             )
-        return EvidenceOnlyPolicy(self._svc).execute(
+        return EvidenceOnlyPolicy(
+            self._svc,
+            raw_retriever=self._svc._get_raw_retriever(),
+        ).execute(
             query, top_k=top_k, query_spec=None, deadline=deadline,
         )

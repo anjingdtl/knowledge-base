@@ -6,12 +6,13 @@ from src.retrieval.orchestrator import RetrievalOrchestrator, resolve_orchestrat
 from src.services.search_service import SearchService
 
 
-def test_resolve_mode_default_legacy():
-    assert resolve_orchestrator_mode(None) == "legacy"
-    assert resolve_orchestrator_mode({}) == "legacy"
+def test_resolve_mode_default_unified():
+    assert resolve_orchestrator_mode(None) == "unified"
+    assert resolve_orchestrator_mode({}) == "unified"
     assert resolve_orchestrator_mode({"retrieval": {"orchestrator": "unified"}}) == "unified"
     assert resolve_orchestrator_mode({"retrieval": {"orchestrator": "SHADOW"}}) == "shadow"
-    assert resolve_orchestrator_mode({"retrieval": {"orchestrator": "nope"}}) == "legacy"
+    assert resolve_orchestrator_mode({"retrieval": {"orchestrator": "legacy"}}) == "legacy"
+    assert resolve_orchestrator_mode({"retrieval": {"orchestrator": "nope"}}) == "unified"
 
 
 def test_legacy_mode_uses_primary_legacy():
@@ -29,7 +30,10 @@ def test_unified_mode_routes_evidence_only():
     svc = SearchService(config, Mock(), Mock(), Mock(), Mock())
     expected = SearchExecution(results=(), trace={"mode": "legacy_raw"})
     with patch.object(svc, "_should_use_verified_hybrid", return_value=False), \
-         patch.object(svc, "execute_evidence_only", return_value=expected) as m:
+         patch(
+             "src.retrieval.orchestrator.EvidenceOnlyPolicy.execute",
+             return_value=expected,
+         ) as m:
         out = RetrievalOrchestrator(svc, config).search("q")
     m.assert_called_once()
     assert out is expected
@@ -40,7 +44,10 @@ def test_unified_mode_routes_verified():
     svc = SearchService(config, Mock(), Mock(), Mock(), Mock())
     expected = SearchExecution(results=(), trace={"mode": "hybrid_verified"})
     with patch.object(svc, "_should_use_verified_hybrid", return_value=True), \
-         patch.object(svc, "execute_verified", return_value=expected) as m:
+         patch(
+             "src.retrieval.orchestrator.VerifiedPolicy.execute",
+             return_value=expected,
+         ) as m:
         out = RetrievalOrchestrator(svc, config).search("q")
     m.assert_called_once()
     assert out is expected

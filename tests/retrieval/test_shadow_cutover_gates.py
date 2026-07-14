@@ -48,6 +48,7 @@ def test_cutover_fails_on_fallback_mismatch():
     assert not meets_cutover_gates(compare_executions(a, b))
 
 
-def test_default_mode_remains_legacy_for_rollback():
-    assert resolve_orchestrator_mode(None) == "legacy"
-    assert resolve_orchestrator_mode({"retrieval": {}}) == "legacy"
+def test_default_mode_is_unified_with_legacy_rollback():
+    assert resolve_orchestrator_mode(None) == "unified"
+    assert resolve_orchestrator_mode({"retrieval": {}}) == "unified"
+    assert resolve_orchestrator_mode({"retrieval": {"orchestrator": "legacy"}}) == "legacy"

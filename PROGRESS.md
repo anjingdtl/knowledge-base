@@ -1,10 +1,34 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-14  
-> 源码版本：`src/version.py` 中的 **`1.9.0`**  
-> 当前分支：`master`（与 `origin/master` 同步）  
+> 源码版本：`src/version.py` 中的 **`1.9.0`**（closure WP1 在特性分支推进，目标 v1.9.1）  
+> 当前分支：见工作区；主线曾发布 `v1.9.0`  
 > GitHub Release：`v1.9.0`（见 `docs/release/v1.9.0-release-notes.md`）  
-> 当前方向：**可维护性三期已发布 v1.9.0**。三工期主线收束完毕；后续为 MCP tools 按域搬迁、Retrieval 默认切 unified 后删 Legacy，以及 Repository 渐进抽取。
+> 当前方向：**可维护性收尾（Spec 04）**。WP0+WP1 完成：Unified Retrieval 默认、Raw/Fusion 归位；下一批 WP2 Answer+MCP 实拆。
+
+---
+
+## 可维护性收尾 WP0–WP1：基线 + Unified Retrieval 默认（进行中，2026-07-14）
+
+执行依据：
+
+- Spec：`docs/superpowers/specs/04-maintainability-closure-spec.md`
+- Plan：`docs/superpowers/plans/2026-07-14-maintainability-closure.md`
+- 基线：`docs/superpowers/reviews/maintainability-closure-baseline.md`
+- Shadow：`evals/reports/retrieval-shadow-2026-07-14.json`
+- 迁移：`docs/migration/v1.9-to-v1.9.1-unified-retrieval.md`
+
+完成项：
+
+- WP0：可执行基线 + `tools/report_closure_debt.py`
+- WP1-T1：`RawRetriever` 算法权威（不持有 SearchService）
+- WP1-T2：`VerifiedFusion` + `packaging`
+- WP1-T3：Policy 直接组合组件（不回调 execute_* 主管线）
+- WP1-T4：`src/compatibility/legacy_retrieval.py` 回滚入口
+- WP1-T5：聚合 Shadow 报告（6/6 门槛通过）
+- WP1-T6：`retrieval.orchestrator` **默认 unified**（legacy 可回滚）
+
+**未做：** Legacy 删除；MCP tools 实拆；Container Provider 生命周期；Alembic head gate。
 
 ---
 
@@ -44,7 +68,7 @@
 - 新增 `src/retrieval/`：models、VerifiedProvider、RawRetriever、Policy、Orchestrator、ShadowComparator
 - `SearchService.execute()` Facade → Orchestrator；Legacy 主管线保留可回滚
 - Claim 检索委托 `VerifiedProvider`（Gate 不可绕过）
-- 配置：`retrieval.orchestrator: legacy | shadow | unified`（example 默认 legacy）
+- 配置：`retrieval.orchestrator: legacy | shadow | unified`（example 默认已在 WP1-T6 改为 **unified**）
 - 测试：`tests/retrieval/` + 契约/隔离/hybrid/answer/MCP 回归 **134 passed / 1 skipped**
 
 **未做：** 删除 Legacy 主管线；默认生产切 unified；算法改写；Container/MCP/DB 改动。

@@ -33,10 +33,10 @@ llm:
   temperature: 0.7
   timeout: 60
   # api_key: <SECRET>   # 通过 keyring 管理，或设置环境变量 SHINEHE_LLM_API_KEY
-# Phase-2 retrieval orchestration switch: legacy | shadow | unified
-# Default legacy keeps the historical primary pipeline as the official path.
+# Phase-2 / closure WP1 retrieval orchestration: legacy | shadow | unified
+# Default unified is the formal path; set legacy for emergency rollback.
 retrieval:
-  orchestrator: legacy
+  orchestrator: unified
 # Phase-3 answer orchestration: legacy | shadow | unified
 # Default unified (same assemble path as legacy; structural parity).
 answer:

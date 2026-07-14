@@ -8,7 +8,7 @@
 | `Database._instance` | Repository / 构造注入 | v1.9.0 | v2.0 | 兼容模块可暂留 |
 | `get_active_container()` | 构造注入 `AppContainer` | v1.9.0 | v2.0 | MCP runtime 白名单 |
 | `_get_container()`（业务代码） | 显式注入 | v1.9.0 | v2.0 | 仅限 `src/mcp/runtime.py` / 兼容层 |
-| Legacy Retrieval 主管线 | `RetrievalOrchestrator` + Policy | v1.8.x | v2.0 | 默认仍可 `retrieval.orchestrator=legacy` |
+| Legacy Retrieval 主管线 | `RetrievalOrchestrator` + Policy + RawRetriever/VerifiedFusion | v1.8.x | v1.10+（WP5） | 默认已切 **unified**；回滚 `orchestrator=legacy` |
 | Legacy Answer 路径 | `AnswerService` / `AnswerExecution` | v1.9.0 | v2.0 | `answer.orchestrator` 可 shadow |
 | Legacy MCP aliases | 标准工具名 | 已弃用 | v2.0 | `mcp.enable_legacy_aliases` |
 | `src/mcp_server.py` 业务实现 | `src/mcp/server.py` + tools 分域 | v1.9.0 | v2.0 | 现为兼容 re-export |
