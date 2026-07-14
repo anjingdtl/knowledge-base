@@ -84,6 +84,8 @@ class SearchService:
         self._wiki_serving_gate = wiki_serving_gate
         # Phase-2 orchestrator (no request state; lazy cache only)
         self._orchestrator = None
+        # WP1-T1: Raw algorithm authority lives in RawRetriever
+        self._raw_retriever = None
 
     def _get_orchestrator(self):
         if self._orchestrator is None:
@@ -91,6 +93,39 @@ class SearchService:
 
             self._orchestrator = RetrievalOrchestrator(self, self._config)
         return self._orchestrator
+
+    def _get_raw_retriever(self):
+        """Lazy RawRetriever with explicit deps (not a whole search-service object).
+
+        Inject callables via lambdas so unit tests that patch SearchService
+        private helpers still hit the same algorithm path.
+        """
+        if self._raw_retriever is None:
+            from src.retrieval.raw_retriever import RawRetriever
+
+            self._raw_retriever = RawRetriever(
+                config=self._config,
+                db=self._db,
+                block_store=self._block_store,
+                llm=self._llm,
+                stage_timeout_fn=lambda stage: self._stage_timeout(stage),
+                query_rewriter=lambda q: self._rewrite_query(q),
+                hybrid_search_fn=lambda queries, top_k: self._hybrid_search(
+                    queries, top_k,
+                ),
+                reranker=lambda q, cands, top_k: self._rerank(q, cands, top_k),
+                knowledge_fts_fn=lambda q, top_k: self._knowledge_fts_search(
+                    q, top_k,
+                ),
+                wiki_search_fn=lambda q: self._safe_wiki_search(q),
+                package_raw_fn=lambda q, cands, top_k=5: self._package_raw_candidates(
+                    q, cands, top_k=top_k,
+                ),
+                diversity_fn=lambda cands, threshold=0.8: self._diversity_filter(
+                    cands, threshold=threshold,
+                ),
+            )
+        return self._raw_retriever
 
     def _stage_timeout(self, stage: str) -> float:
         """获取阶段超时时间，支持 config 覆盖"""
@@ -286,23 +321,11 @@ class SearchService:
         top_k: int = 5,
         include_legacy_wiki_fts: bool = True,
     ) -> RawRetrievalResult:
-        """Adapter surface for RawRetriever — does not change raw algorithms."""
-        t0 = time.monotonic()
-        state = _SearchRequestState(
-            trace={
-                "mode": "raw_adapter",
-                "query": (query or "")[:200],
-                "stages": {},
-            },
-        )
-        output = self._search_legacy_pipeline(query, top_k=top_k, t0=t0, state=state)
-        if not include_legacy_wiki_fts:
-            output = [r for r in output if r.get("source") != "wiki"]
-        return RawRetrievalResult(
-            candidates=tuple(output),
-            trace=state.trace,
-            warnings=tuple(state.warnings),
-            fallbacks=tuple(state.fallbacks),
+        """Compatibility surface — delegates to independent RawRetriever."""
+        return self._get_raw_retriever().retrieve(
+            query,
+            top_k=top_k,
+            include_legacy_wiki_fts=include_legacy_wiki_fts,
         )
 
     def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
@@ -334,63 +357,31 @@ class SearchService:
         t0: float,
         state: _SearchRequestState,
     ) -> list[dict]:
-        """原有管线：改写 + legacy wiki FTS + hybrid + rerank（evidence_only / 未开 fusion）。"""
-        state.trace["mode"] = "legacy_raw"
-        output: list[dict] = []
-
-        # ── 阶段 1: 查询改写 + Wiki 搜索（并行） ──
-        queries = [query]
-        wiki_results: list[dict] = []
-
-        with ThreadPoolExecutor(max_workers=2) as pool:
-            rewrite_future = pool.submit(self._rewrite_query, query)
-            wiki_future = pool.submit(self._safe_wiki_search, query)
-
-            try:
-                queries = rewrite_future.result(timeout=self._stage_timeout("query_rewrite"))
-            except FuturesTimeout:
-                logger.warning("Query rewrite timed out, using original query")
-                queries = [query]
-            except Exception as e:
-                logger.warning("Query rewrite failed: %s", e)
-                queries = [query]
-
-            try:
-                wiki_results = wiki_future.result(timeout=self._stage_timeout("wiki_search"))
-            except FuturesTimeout:
-                logger.warning("Wiki search timed out")
-                wiki_results = []
-            except Exception as e:
-                logger.warning("Wiki search failed: %s", e)
-                wiki_results = []
-
-        state.trace["stages"]["query_rewrite"] = {"count": len(queries)}
-        state.trace["stages"]["legacy_wiki_fts"] = {"count": len(wiki_results)}
-
-        candidates = self._raw_retrieve(queries, query, top_k)
-        state.trace["stages"]["raw_retrieval"] = {"count": len(candidates)}
-
-        if candidates:
-            try:
-                candidates = self._timed_rerank(query, candidates, top_k)
-            except FuturesTimeout:
-                logger.warning("Rerank timed out, keeping original order")
-                state.warnings.append("rerank_timeout")
-            except Exception as e:
-                logger.warning("Rerank failed: %s", e)
-                state.warnings.append(f"rerank_failed:{e}")
-
-        if candidates:
-            candidates = self._diversity_filter(candidates, threshold=0.8)
-
-        output.extend(wiki_results)
-        output.extend(self._package_raw_candidates(query, candidates, top_k=top_k))
-
+        """Legacy evidence-only path — algorithm delegated to RawRetriever."""
+        raw = self._get_raw_retriever().retrieve(
+            query, top_k=top_k, include_legacy_wiki_fts=True,
+        )
+        # Merge request-local state from RawRetriever (no instance last_*)
+        state.trace["mode"] = raw.trace.get("mode", "legacy_raw")
+        if "stages" in raw.trace:
+            state.trace.setdefault("stages", {}).update(raw.trace["stages"])
+        if "elapsed_ms" in raw.trace:
+            state.trace["elapsed_ms"] = raw.trace["elapsed_ms"]
+        if "result_count" in raw.trace:
+            state.trace["result_count"] = raw.trace["result_count"]
+        state.warnings.extend(raw.warnings)
+        state.fallbacks.extend(raw.fallbacks)
+        # Preserve legacy wall-clock log when caller supplied t0
         elapsed = time.monotonic() - t0
-        logger.info("Search completed in %.2fs: %d results for query=%r", elapsed, len(output), query[:50])
-        state.trace["elapsed_ms"] = round(elapsed * 1000, 2)
-        state.trace["result_count"] = len(output)
-        return output
+        logger.info(
+            "Search completed in %.2fs: %d results for query=%r",
+            elapsed,
+            len(raw.candidates),
+            (query or "")[:50],
+        )
+        if "elapsed_ms" not in state.trace:
+            state.trace["elapsed_ms"] = round(elapsed * 1000, 2)
+        return list(raw.candidates)
 
     def _search_verified_hybrid(
         self,
