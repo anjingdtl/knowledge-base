@@ -1,7 +1,20 @@
-from logging.config import fileConfig
+"""Alembic environment — honors explicit test URL overrides (WP4).
 
-from sqlalchemy import engine_from_config, pool, text
+URL resolution priority:
+  1. ``-x url=...`` command-line option
+  2. ``SHINEHE_TEST_ALEMBIC_URL`` environment variable
+  3. ``sqlalchemy.url`` already set in alembic.ini / config
+  4. ShineHe Config db path
+"""
+from __future__ import annotations
+
+import os
+import sys
+from logging.config import fileConfig
+from pathlib import Path
+
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -11,31 +24,43 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# 从 ShineHeKnowledge Config 获取数据库路径
-import sys
-from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from src.utils.config import Config
-Config.load()
 
-db_path = Config.get_db_path()
-config.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
+
+def _resolve_sqlalchemy_url() -> str:
+    # 1) alembic -x url=sqlite:///...
+    x_args = context.get_x_argument(as_dictionary=True)
+    if x_args.get("url"):
+        return str(x_args["url"])
+
+    # 2) explicit test env
+    test_url = os.environ.get("SHINEHE_TEST_ALEMBIC_URL")
+    if test_url:
+        return test_url.strip()
+
+    # 3) existing config option (may come from alembic.ini)
+    existing = config.get_main_option("sqlalchemy.url")
+    if existing and existing.strip() and "driver://" not in existing:
+        # skip placeholder-ish defaults
+        if not existing.startswith("driver:"):
+            return existing.strip()
+
+    # 4) ShineHe Config
+    from src.utils.config import Config
+
+    Config.load()
+    db_path = Config.get_db_path()
+    return f"sqlite:///{Path(db_path).as_posix()}"
+
+
+_url = _resolve_sqlalchemy_url()
+config.set_main_option("sqlalchemy.url", _url)
 
 target_metadata = None
 
 
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode.
-
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
-
-    Calls to context.execute() here emit the given string to the
-    script output.
-
-    """
+    """Run migrations in 'offline' mode."""
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -49,12 +74,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
-
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
-
-    """
+    """Run migrations in 'online' mode."""
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",

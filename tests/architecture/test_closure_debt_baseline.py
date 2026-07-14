@@ -59,4 +59,6 @@ def test_baseline_reflects_current_debt_shape():
     assert m["search_service_has_legacy_pipeline"] is True
     assert m["raw_retriever_calls_search_service"] is False
     assert m["answering_depends_on_verified_answer"] is False
-    assert m["alembic_env_reads_test_url"] is False
+    # WP4-T1: alembic env honors SHINEHE_TEST_ALEMBIC_URL; tests are strict
+    assert m["alembic_env_reads_test_url"] is True
+    assert m["migration_tests_have_skip_paths"] is False
