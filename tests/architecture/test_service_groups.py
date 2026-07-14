@@ -1,12 +1,23 @@
-"""Service group view tests."""
+"""Capability Provider tests (WP3)."""
 from unittest.mock import MagicMock
 
-from src.core.service_groups import ServiceGroups
+import pytest
+
+from src.core.service_groups import (
+    FeatureDisabledError,
+    ServiceGroups,
+)
 
 
-def test_service_groups_views_delegate_to_container():
+def test_service_groups_providers_delegate_shared_infra():
     c = MagicMock()
-    c.config = "cfg"
+    c.config.get = MagicMock(
+        side_effect=lambda key, default=None: {
+            "wiki.authoring_enabled": True,
+            "mcp.experimental_tools_enabled": True,
+            "knowledge_mode": "authoring",
+        }.get(key, default),
+    )
     c.db = "db"
     c.vectorstore = "vs"
     c.block_store = "bs"
@@ -14,24 +25,41 @@ def test_service_groups_views_delegate_to_container():
     c.llm = "llm"
     c.knowledge_repo = "kr"
     c.block_repo = "br"
-    c.search_service = "ss"
-    c.path_indexer = "pi"
-    c.wiki_repository = "wr"
-    c.wiki_serving_gate = "wg"
-    c.wiki_query_service = "wq"
-    c.wiki_write_service = "ww"
-    c.wiki_claim_extractor = "wce"
-    c.wiki_projection = "wp"
-    c.wiki_maintenance_service = "wm"
-    c.wiki_rebuild_service = "wrb"
-    c.maintenance_policy = "mp"
     c.graph_backend = "gb"
-    c.graph_builder = "gbuild"
-    c.unified_graph = "ug"
-    c.agent_memory = "am"
+    c.agent_memory_repo = "amr"
+    c.indexed_file_repo = "ifr"
+    c._track_service = MagicMock()
 
     g = ServiceGroups(c)
-    assert g.core.search_service == "ss"
-    assert g.verified.wiki_serving_gate == "wg"
-    assert g.authoring.wiki_write_service == "ww"
-    assert g.experimental.agent_memory == "am"
+    assert g.core.db == "db"
+    assert g.core.knowledge_repo == "kr"
+    assert g.experimental.enabled is True
+    assert g.authoring.write_enabled is True
+    assert g.experimental.graph_backend == "gb"
+
+
+def test_authoring_write_gate_blocks_when_disabled():
+    c = MagicMock()
+    c.config.get = MagicMock(
+        side_effect=lambda key, default=None: {
+            "wiki.authoring_enabled": False,
+            "mcp.experimental_tools_enabled": False,
+            "knowledge_mode": "verified",
+        }.get(key, default),
+    )
+    c._track_service = MagicMock()
+    g = ServiceGroups(c)
+    assert g.authoring.write_enabled is False
+    with pytest.raises(FeatureDisabledError):
+        _ = g.authoring.wiki_write_service
+    with pytest.raises(FeatureDisabledError):
+        _ = g.experimental.agent_memory
+
+
+def test_provider_close_is_idempotent():
+    c = MagicMock()
+    c.config.get = MagicMock(return_value=False)
+    c._track_service = MagicMock()
+    g = ServiceGroups(c)
+    g.close()
+    g.close()  # must not raise

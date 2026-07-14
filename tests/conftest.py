@@ -25,8 +25,12 @@ def setup_db(tmp_path):
     # 重置 Database 实例
     Database._instance = None
     Database.connect(str(db_path))
-    import src.core.container as container_mod
-    container_mod._active_container = None
+    try:
+        from src.compatibility.container_access import set_active_container
+
+        set_active_container(None)
+    except Exception:
+        pass
     if "src.mcp_server" in sys.modules:
         sys.modules["src.mcp_server"]._container = None
     try:
@@ -57,9 +61,14 @@ def setup_db(tmp_path):
         mcp_runtime.set_container(None)
     except Exception:
         pass
-    import src.core.container as container_mod
-    container_mod._active_container = None
-    Database.close()
+    try:
+        from src.compatibility.container_access import set_active_container
+
+        set_active_container(None)
+    except Exception:
+        pass
+    if Database._instance is not None:
+        Database.close()
     Database._instance = None
     VectorStore._instance = None
     VectorStore._initialized = False

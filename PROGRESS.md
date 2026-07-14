@@ -42,7 +42,8 @@
 - ✅ WP4-T1：`alembic/env.py` 尊重 `SHINEHE_TEST_ALEMBIC_URL`；升级测试 strict
 - ✅ WP4-T2/T3：`src/storage/{migration_status,startup_gate}.py`；`create_container` 写模式 head 门禁
 - ✅ `tests/migrations/*`：empty→head / v1.9→head / idempotent / interrupted recovery
-- 下一步：WP3 Container Provider / WP4-T4 最小 Repository / WP5 Legacy 删除（需观察期）
+- ✅ **WP3**：`ServiceGroups` → 真实 Capability Provider（lazy 构造 / close / feature gate）；扁平属性兼容代理；`get_active_container` 收束至 `compatibility.container_access`；生命周期测试
+- 下一步：WP4-T4 最小 Repository / WP4-T5 CI Jobs / WP5 Legacy 删除
 
 ---
 

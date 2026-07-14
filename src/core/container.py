@@ -44,13 +44,19 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# 模块级引用 — 任何代码可通过 get_active_container() 获取当前容器
-_active_container: "AppContainer | None" = None
-
 
 def get_active_container() -> "AppContainer | None":
-    """获取当前活跃的 DI 容器（替代旧的 Database._container 反向引用）。"""
-    return _active_container
+    """获取当前活跃的 DI 容器（WP3：实现位于 compatibility.container_access）。"""
+    from src.compatibility.container_access import get_active_container as _gac
+
+    return _gac()
+
+
+def set_active_container(container: "AppContainer | None") -> None:
+    """设置活跃容器（兼容入口；新代码应避免全局状态）。"""
+    from src.compatibility.container_access import set_active_container as _sac
+
+    _sac(container)
 
 
 @dataclass
@@ -175,15 +181,15 @@ class AppContainer:
 
     @property
     def groups(self):
-        """Core / Verified / Authoring / Experimental service views (Phase-3)."""
+        """Capability Providers: core / verified / authoring / experimental (WP3)."""
         if self._service_groups is None:
             from src.core.service_groups import ServiceGroups
 
             self._service_groups = ServiceGroups(self)
         return self._service_groups
 
-    # Backward-compatible proxies explicitly documented for rollback (Spec §19):
-    # existing flat properties (search_service, wiki_repository, …) remain authoritative.
+    # Flat properties are compatibility proxies through capability providers (WP3).
+    # Prefer container.groups.core.* / .verified.* in new code.
 
     @property
     def indexer(self):
@@ -245,6 +251,10 @@ class AppContainer:
 
     @property
     def graph_builder(self):
+        # Flat proxy: experimental may be config-disabled; keep flat path working
+        # for legacy callers by constructing without the experimental gate.
+        if self.groups.experimental.has_constructed("graph_builder"):
+            return self.groups.experimental.graph_builder
         if self._graph_builder is None:
             from src.services.graph_builder import GraphBuilder
             self._graph_builder = GraphBuilder(graph_backend=self.graph_backend)
@@ -261,19 +271,7 @@ class AppContainer:
 
     @property
     def search_service(self):
-        if self._search_service is None:
-            from src.services.search_service import SearchService
-            self._search_service = SearchService(
-                self.config,
-                self.db,
-                self.block_store,
-                self.embedding,
-                self.llm,
-                wiki_repository=self.wiki_repository,
-                wiki_serving_gate=self.wiki_serving_gate,
-            )
-            self._track_service("_search_service")
-        return self._search_service
+        return self.groups.core.search_service
 
     @property
     def file_graph_service(self):
@@ -290,6 +288,8 @@ class AppContainer:
 
     @property
     def unified_graph(self):
+        if self.groups.experimental.has_constructed("unified_graph"):
+            return self.groups.experimental.unified_graph
         if self._unified_graph is None:
             from src.services.unified_graph import UnifiedGraphService
             self._unified_graph = UnifiedGraphService(db=self.db, graph_backend=self.graph_backend)
@@ -365,6 +365,8 @@ class AppContainer:
 
     @property
     def agent_memory(self):
+        if self.groups.experimental.has_constructed("agent_memory"):
+            return self.groups.experimental.agent_memory
         if self._agent_memory is None:
             from src.services.agent_memory import AgentMemoryService
             self._agent_memory = AgentMemoryService(
@@ -377,15 +379,7 @@ class AppContainer:
 
     @property
     def path_indexer(self):
-        if self._path_indexer is None:
-            from src.services.path_indexer import PathIndexService
-            self._path_indexer = PathIndexService(
-                db=self.db,
-                config=self.config,
-                indexed_file_repo=self.indexed_file_repo,
-            )
-            self._track_service("_path_indexer")
-        return self._path_indexer
+        return self.groups.core.path_indexer
 
     @property
     def knowledge_workflow(self):
@@ -402,52 +396,16 @@ class AppContainer:
 
     @property
     def wiki_repository(self):
-        if self._wiki_repository is None:
-            from pathlib import Path as _Path
-
-            from src.services.wiki_repository import WikiRepository as _WikiRepo
-            wiki_dir = self.config.get("knowledge_workflow.wiki_dir", "wiki")
-            wiki_dir_path = _Path(wiki_dir)
-            self._wiki_repository = _WikiRepo(
-                wiki_dir=wiki_dir_path,
-                registry_path=wiki_dir_path / "_meta" / "pages.json",
-                redirects_path=wiki_dir_path / "_meta" / "redirects.json",
-                outbox_path=_Path(self.config.get("storage.data_dir", "data")) / "wiki_projection_outbox.jsonl",
-            )
-            self._track_service("_wiki_repository")
-        return self._wiki_repository
+        return self.groups.verified.wiki_repository
 
     @property
     def wiki_serving_gate(self):
         """Phase 2: unique Claim Serving Gate for Search / Ask (no LLM)."""
-        if self._wiki_serving_gate is None:
-            from src.services.wiki_serving_gate import (
-                WikiServingGate,
-                default_block_knowledge_lookups,
-            )
-
-            get_block, get_knowledge = default_block_knowledge_lookups()
-            self._wiki_serving_gate = WikiServingGate(
-                config=self.config.get_all() if hasattr(self.config, "get_all") else None,
-                get_block=get_block,
-                get_knowledge=get_knowledge,
-            )
-            self._track_service("_wiki_serving_gate")
-        return self._wiki_serving_gate
+        return self.groups.verified.wiki_serving_gate
 
     @property
     def wiki_projection(self):
-        if self._wiki_projection is None:
-            from src.services.wiki_projection import WikiProjection as _Proj
-            from src.services.wiki_query_service import resolve_canonical_mode
-            enabled = resolve_canonical_mode(self.config) != "off"
-            self._wiki_projection = _Proj(
-                repository=self.wiki_repository,
-                database=self.db,
-                enabled=enabled,
-            )
-            self._track_service("_wiki_projection")
-        return self._wiki_projection
+        return self.groups.authoring.wiki_projection
 
     @property
     def canonical_mode(self) -> str:
@@ -456,6 +414,9 @@ class AppContainer:
 
     @property
     def wiki_claim_extractor(self):
+        # Flat compat: bypass group write gate so existing call sites keep working.
+        if self.groups.authoring.has_constructed("wiki_claim_extractor"):
+            return self.groups.authoring.wiki_claim_extractor
         if self._wiki_claim_extractor is None:
             from src.services.wiki_claim_extractor import ClaimExtractor as _Ext
             self._wiki_claim_extractor = _Ext(llm=self.llm, config=self.config)
@@ -523,6 +484,8 @@ class AppContainer:
 
     @property
     def wiki_write_service(self):
+        if self.groups.authoring.has_constructed("wiki_write_service"):
+            return self.groups.authoring.wiki_write_service
         if self._wiki_write_service is None:
             from src.services.wiki_write_service import WikiWriteService
             self._wiki_write_service = WikiWriteService(
@@ -564,16 +527,7 @@ class AppContainer:
 
     @property
     def wiki_query_service(self):
-        if self._wiki_query_service is None:
-            from src.services.wiki_query_service import WikiQueryService as _QS
-            self._wiki_query_service = _QS(
-                repository=self.wiki_repository,
-                projection=self.wiki_projection,
-                database=self.db,
-                config=self.config,
-            )
-            self._track_service("_wiki_query_service")
-        return self._wiki_query_service
+        return self.groups.verified.wiki_query_service
 
     @property
     def wiki_dependency_service(self):
@@ -585,17 +539,7 @@ class AppContainer:
 
     @property
     def wiki_rebuild_service(self):
-        if self._wiki_rebuild_service is None:
-            from src.services.wiki_rebuild_service import WikiRebuildService as _RB
-            self._wiki_rebuild_service = _RB(
-                repository=self.wiki_repository,
-                projection=self.wiki_projection,
-                block_repository=self.block_repo,
-                dependency_service=self.wiki_dependency_service,
-                config=self.config,
-            )
-            self._track_service("_wiki_rebuild_service")
-        return self._wiki_rebuild_service
+        return self.groups.authoring.wiki_rebuild_service
 
     @property
     def wiki_rebuild_scheduler(self):
@@ -641,15 +585,14 @@ class AppContainer:
 
     @property
     def maintenance_policy(self):
-        if self._maintenance_policy is None:
-            from src.services.maintenance_policy import MaintenancePolicyEngine
-            self._maintenance_policy = MaintenancePolicyEngine(self.config)
-            self._track_service("_maintenance_policy")
-        return self._maintenance_policy
+        return self.groups.authoring.maintenance_policy
 
     @property
     def wiki_maintenance_service(self):
         """Phase 5 Maintenance Center control plane (lazy; failure must not block Raw)."""
+        if self.groups.authoring.has_constructed("wiki_maintenance_service"):
+            return self.groups.authoring.wiki_maintenance_service
+        # Flat compat path when authoring write group is disabled
         if self._wiki_maintenance_service is None:
             from src.services.wiki_maintenance_service import WikiMaintenanceService
             try:
@@ -821,17 +764,21 @@ def create_container(config_path: str | None = None) -> AppContainer:
 
     logger.info("Repositories initialized")
 
-    # 设置模块级引用（替代旧的 Database._container 反向引用）
-    global _active_container
-    _active_container = container
+    # 设置模块级引用（WP3: via compatibility.container_access）
+    set_active_container(container)
 
     return container
 
 
 def shutdown_container(container: AppContainer):
     """关闭容器，释放资源"""
-    global _active_container
     try:
+        groups = getattr(container, "_service_groups", None)
+        if groups is not None and hasattr(groups, "close"):
+            try:
+                groups.close()
+            except Exception:  # noqa: BLE001
+                logger.debug("groups.close failed", exc_info=True)
         for attr_name in getattr(container, '_initialized_services', []):
             svc = getattr(container, attr_name, None)
             if svc and hasattr(svc, 'close'):
@@ -845,5 +792,7 @@ def shutdown_container(container: AppContainer):
     except Exception as e:
         logger.warning("Error during container shutdown: %s", e)
     finally:
-        if _active_container is container:
-            _active_container = None
+        from src.compatibility.container_access import get_active_container as _gac
+
+        if _gac() is container:
+            set_active_container(None)

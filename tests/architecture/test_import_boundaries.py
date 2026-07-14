@@ -76,8 +76,8 @@ def test_retrieval_does_not_import_graph_or_memory_services():
 
 
 def test_new_packages_avoid_get_active_container():
-    """answering/retrieval should not call get_active_container."""
-    for package in ("answering", "retrieval"):
+    """Closure packages must not call get_active_container (WP3 whitelist)."""
+    for package in ("answering", "retrieval", "application", "storage"):
         for path in _iter_py_files(package):
             text = path.read_text(encoding="utf-8")
             assert "get_active_container(" not in text, path
@@ -85,9 +85,12 @@ def test_new_packages_avoid_get_active_container():
 
 
 def test_service_groups_exposed_on_container():
-    from src.core.container import AppContainer
+    from src.core.container import AppContainer, get_active_container
+    from src.compatibility import container_access
     from src.core.service_groups import ServiceGroups
 
     assert hasattr(AppContainer, "groups")
     # property exists on class
     assert isinstance(AppContainer.groups, property)
+    assert callable(container_access.get_active_container)
+    assert get_active_container() is container_access.get_active_container()
