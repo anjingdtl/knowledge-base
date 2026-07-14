@@ -109,6 +109,12 @@ def collect_debt_metrics(root: Path) -> dict[str, Any]:
     alembic_text = _read(alembic_env) if alembic_env.exists() else ""
     alembic_test = root / "tests" / "test_alembic_baseline.py"
     alembic_test_text = _read(alembic_test) if alembic_test.exists() else ""
+    db_py = root / "src" / "services" / "db.py"
+    db_text = _read(db_py) if db_py.exists() else ""
+    container_py = root / "src" / "core" / "container.py"
+    container_text = _read(container_py) if container_py.exists() else ""
+    startup_gate_py = root / "src" / "storage" / "startup_gate.py"
+    startup_gate_text = _read(startup_gate_py) if startup_gate_py.exists() else ""
 
     # Infrastructure files allowed to retain Database._instance bootstrap (not WP5 zero)
     _DB_INSTANCE_WHITELIST = {
@@ -186,8 +192,89 @@ def collect_debt_metrics(root: Path) -> dict[str, Any]:
         "answering_depends_on_verified_answer": answering_dep,
         "alembic_env_reads_test_url": "SHINEHE_TEST_ALEMBIC_URL" in alembic_text,
         "migration_tests_have_skip_paths": "pytest.skip" in alembic_test_text,
+        # WP5: production runtime must not mutate schema
+        "database_runtime_executes_schema": _runtime_open_executes_schema(db_text),
+        "database_runtime_calls_migrate": _runtime_open_calls_migrate(db_text),
+        "container_gate_after_database_open": _container_gate_after_database_open(
+            container_text
+        ),
+        "allow_unstamped_default_true": _allow_unstamped_default_true(
+            startup_gate_text
+        ),
     }
     return metrics
+
+
+def _extract_method_body(text: str, method_name: str) -> str:
+    """Best-effort extract of a method body from class source."""
+    m = re.search(
+        rf"def {re.escape(method_name)}\(.*?\):(.*?)(?=\n    def |\n    @|\nclass |\Z)",
+        text,
+        re.S,
+    )
+    return m.group(1) if m else ""
+
+
+def _runtime_open_executes_schema(db_text: str) -> bool:
+    """True (bad) if open_runtime paths still executescript(_SCHEMA)."""
+    for name in ("open_runtime", "_open_write_runtime", "_open_readonly_runtime"):
+        body = _extract_method_body(db_text, name)
+        if "executescript(_SCHEMA)" in body or "executescript( _SCHEMA" in body:
+            return True
+        if "apply_legacy_schema" in body:
+            return True
+    return False
+
+
+def _runtime_open_calls_migrate(db_text: str) -> bool:
+    """True (bad) if open_runtime paths call _migrate / legacy migrate."""
+    for name in ("open_runtime", "_open_write_runtime", "_open_readonly_runtime"):
+        body = _extract_method_body(db_text, name)
+        if re.search(r"\._migrate\s*\(", body):
+            return True
+        if "apply_legacy_column_migrate" in body:
+            return True
+    return False
+
+
+def _container_gate_after_database_open(container_text: str) -> bool:
+    """True (bad) if Database.open_runtime appears before bootstrap gate enforce.
+
+    Missing create_container (e.g. minimal pseudo-repo) is not a debt signal.
+    """
+    start = container_text.find("def create_container(")
+    if start < 0:
+        return False
+    rest = container_text[start + 1 :]
+    end_rel = re.search(r"\n(?:def |class )", rest)
+    body = rest[: end_rel.start()] if end_rel else rest
+    open_pos = body.find("Database.open_runtime(")
+    enforce_pos = body.find("enforce_bootstrap_plan(")
+    if open_pos < 0:
+        # No open_runtime → possibly legacy Database() before gate
+        db_ctor = body.find("Database(")
+        gate = body.find("enforce_startup_gate(")
+        if db_ctor >= 0 and gate >= 0 and db_ctor < gate:
+            return True
+        return False
+    if enforce_pos < 0:
+        return True
+    return open_pos < enforce_pos
+
+
+def _allow_unstamped_default_true(startup_gate_text: str) -> bool:
+    """True (bad) if resolve_allow_unstamped defaults to True.
+
+    Missing startup_gate module is not a debt signal for pseudo-repos.
+    """
+    if not startup_gate_text.strip():
+        return False
+    return bool(
+        re.search(
+            r'allow_unstamped["\'],\s*True\s*\)',
+            startup_gate_text,
+        )
+    )
 
 
 def _strict_failures(metrics: dict[str, Any]) -> list[str]:
@@ -222,6 +309,15 @@ def _strict_failures(metrics: dict[str, Any]) -> list[str]:
         fails.append("alembic/env.py does not honor SHINEHE_TEST_ALEMBIC_URL")
     if metrics["migration_tests_have_skip_paths"]:
         fails.append("migration tests still soft-skip failures")
+    # WP5 gates
+    if metrics.get("database_runtime_executes_schema"):
+        fails.append("Database.open_runtime still executes schema DDL")
+    if metrics.get("database_runtime_calls_migrate"):
+        fails.append("Database.open_runtime still calls migrate")
+    if metrics.get("container_gate_after_database_open"):
+        fails.append("create_container opens Database before migration gate")
+    if metrics.get("allow_unstamped_default_true"):
+        fails.append("allow_unstamped still defaults to True")
     return fails
 
 

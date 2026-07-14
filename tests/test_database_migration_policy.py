@@ -1,13 +1,18 @@
-"""Freeze Database._migrate() — no new schema mutations without Alembic."""
+"""Freeze legacy column migrate — no new schema mutations without Alembic.
+
+WP5: production Database._migrate raises; historical DDL lives in
+``src.compatibility.runtime_schema_migrate.apply_legacy_column_migrate``.
+"""
 from __future__ import annotations
 
 import inspect
 import re
 from pathlib import Path
 
+from src.compatibility import runtime_schema_migrate
 from src.services.db import Database
 
-# Frozen inventory of historical runtime migrations (Phase-3).
+# Frozen inventory of historical runtime migrations (Phase-3 / WP5 compat).
 # New schema → Alembic revision; do not grow these sets without policy review.
 _FROZEN_ALTER_TABLES = frozenset({
     "knowledge_items",
@@ -38,10 +43,10 @@ _FROZEN_CREATE_TABLES = frozenset({
 
 
 def test_migrate_alter_tables_frozen():
-    src = inspect.getsource(Database._migrate)
+    src = inspect.getsource(runtime_schema_migrate.apply_legacy_column_migrate)
     alters = re.findall(r"ALTER TABLE (\w+)", src)
     assert len(alters) == _FROZEN_ALTER_COUNT, (
-        f"_migrate() ALTER TABLE count changed: {len(alters)} != {_FROZEN_ALTER_COUNT}. "
+        f"legacy migrate ALTER TABLE count changed: {len(alters)} != {_FROZEN_ALTER_COUNT}. "
         "Use Alembic for new schema."
     )
     assert set(alters) <= _FROZEN_ALTER_TABLES, (
@@ -50,7 +55,7 @@ def test_migrate_alter_tables_frozen():
 
 
 def test_migrate_create_index_frozen():
-    src = inspect.getsource(Database._migrate)
+    src = inspect.getsource(runtime_schema_migrate.apply_legacy_column_migrate)
     indexes = set(re.findall(r"CREATE INDEX IF NOT EXISTS (\w+)", src))
     assert indexes == _FROZEN_CREATE_INDEX_NAMES, (
         f"CREATE INDEX set changed: {indexes} != {_FROZEN_CREATE_INDEX_NAMES}"
@@ -58,13 +63,21 @@ def test_migrate_create_index_frozen():
 
 
 def test_migrate_create_table_frozen():
-    src = inspect.getsource(Database._migrate)
+    src = inspect.getsource(runtime_schema_migrate.apply_legacy_column_migrate)
     tables = set(
         re.findall(r"CREATE (?:VIRTUAL )?TABLE(?: IF NOT EXISTS)? (\w+)", src)
     )
     assert tables == _FROZEN_CREATE_TABLES, (
         f"CREATE TABLE set changed: {tables} != {_FROZEN_CREATE_TABLES}"
     )
+
+
+def test_database_migrate_raises_on_production_path():
+    """WP5: Database._migrate is disabled as runtime authority."""
+    import pytest
+
+    with pytest.raises(RuntimeError, match="schema migration removed"):
+        Database.__dict__["_migrate"](object())  # type: ignore[misc]
 
 
 def test_migration_policy_doc_exists():

@@ -18,6 +18,7 @@ from tests.migrations._helpers import (
 )
 
 DB_PY = ROOT / "src" / "services" / "db.py"
+LEGACY_SCHEMA_PY = ROOT / "src" / "compatibility" / "runtime_schema_migrate.py"
 CONTAINER_PY = ROOT / "src" / "core" / "container.py"
 STARTUP_GATE_PY = ROOT / "src" / "storage" / "startup_gate.py"
 CI_YML = ROOT / ".github" / "workflows" / "ci.yml"
@@ -27,20 +28,23 @@ def _read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def _extract_schema_sql(db_text: str) -> str:
-    match = re.search(r'_SCHEMA\s*=\s*"""(.*?)"""', db_text, re.S)
-    assert match, "_SCHEMA string not found in db.py"
+def _extract_schema_sql(compat_text: str) -> str:
+    match = re.search(r'LEGACY_SCHEMA_SQL\s*=\s*"""(.*?)"""', compat_text, re.S)
+    assert match, "LEGACY_SCHEMA_SQL not found in runtime_schema_migrate.py"
     return match.group(1)
 
 
-def _extract_migrate_body(db_text: str) -> str:
-    match = re.search(
-        r"def _migrate\(self\):(.*?)(?=\n    def |\nclass |\Z)",
-        db_text,
-        re.S,
-    )
-    assert match, "_migrate method not found in db.py"
-    return match.group(1)
+def _extract_migrate_body(compat_text: str) -> str:
+    marker = "def apply_legacy_column_migrate"
+    start = compat_text.find(marker)
+    assert start >= 0, "apply_legacy_column_migrate not found"
+    # Body after first newline following the def line
+    nl = compat_text.find("\n", start)
+    assert nl >= 0
+    rest = compat_text[nl + 1 :]
+    # Until next top-level def/class or EOF
+    end_m = re.search(r"^(?:def |class )", rest, re.M)
+    return rest[: end_m.start()] if end_m else rest
 
 
 def _count_schema_objects(schema_sql: str) -> dict[str, int]:
@@ -79,11 +83,23 @@ def _connect_internal_source() -> str:
     return match.group(1)
 
 
-def test_database_init_executes_schema_and_migrate():
-    """Current behavior: Database construction runs _SCHEMA then _migrate()."""
+def test_database_init_uses_compatibility_schema_helpers():
+    """Legacy constructor applies compatibility helpers; open_runtime does not."""
     body = _connect_internal_source()
-    assert re.search(r"executescript\(\s*_SCHEMA\s*\)", body)
-    assert re.search(r"self\._migrate\s*\(\s*\)", body)
+    assert "apply_legacy_schema" in body
+    assert "apply_legacy_column_migrate" in body
+    # Production open path must stay clean
+    db_text = _read(DB_PY)
+    for name in ("open_runtime", "_open_write_runtime", "_open_readonly_runtime"):
+        m = re.search(
+            rf"def {name}\(.*?\):(.*?)(?=\n    def |\n    @|\nclass |\Z)",
+            db_text,
+            re.S,
+        )
+        assert m, name
+        assert "apply_legacy_schema" not in m.group(1)
+        assert "apply_legacy_column_migrate" not in m.group(1)
+        assert "executescript" not in m.group(1)
 
 
 def test_create_container_enforces_gate_before_open_runtime():
@@ -143,7 +159,7 @@ def test_architecture_closure_ci_uses_strict():
 
 
 def test_schema_object_counts_match_current_source():
-    schema = _extract_schema_sql(_read(DB_PY))
+    schema = _extract_schema_sql(_read(LEGACY_SCHEMA_PY))
     counts = _count_schema_objects(schema)
     total = sum(counts.values())
     # Frozen counts as of WP0-T1 baseline — update only with intentional schema edits
@@ -155,7 +171,7 @@ def test_schema_object_counts_match_current_source():
 
 
 def test_migrate_mutation_statement_count_matches_current_source():
-    body = _extract_migrate_body(_read(DB_PY))
+    body = _extract_migrate_body(_read(LEGACY_SCHEMA_PY))
     n = _count_migrate_mutation_statements(body)
     assert n == 28
 

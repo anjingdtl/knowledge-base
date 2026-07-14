@@ -3,6 +3,7 @@ import json
 import logging
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from src.services.db import Database
@@ -64,7 +65,13 @@ class WikiLint:
 
     @staticmethod
     def _default_db() -> Any:
-        return Database._instance if Database._instance is not None else Database(str(Config.get_db_path()))
+        if Database._instance is not None:
+            return Database._instance
+        path = Path(str(Config.get_db_path()))
+        if path.is_file():
+            return Database.open_runtime(path, readonly=False)
+        # Missing file: legacy constructor only for tests/compat
+        return Database(str(path))
 
     @staticmethod
     def _canonical_projection() -> Any:

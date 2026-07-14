@@ -31,6 +31,10 @@ REQUIRED_KEYS = {
     "answering_depends_on_verified_answer",
     "alembic_env_reads_test_url",
     "migration_tests_have_skip_paths",
+    "database_runtime_executes_schema",
+    "database_runtime_calls_migrate",
+    "container_gate_after_database_open",
+    "allow_unstamped_default_true",
 }
 
 
@@ -72,5 +76,10 @@ def test_baseline_reflects_current_debt_shape():
     # WP1-T2: force zero residual for singleton/container access outside whitelist
     assert m["database_instance_refs_outside_infra"] == 0
     assert m["get_active_container_refs_outside_whitelist"] == 0
+    # WP5: runtime schema authority removed
+    assert m["database_runtime_executes_schema"] is False
+    assert m["database_runtime_calls_migrate"] is False
+    assert m["container_gate_after_database_open"] is False
+    assert m["allow_unstamped_default_true"] is False
     assert _strict_failures(m) == []
     assert validate_strict_metrics(m) == []
