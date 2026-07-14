@@ -38,3 +38,6 @@ config.yaml
 .worktrees/
 overview.md
 tests/mcp_validation_test.py
+
+# pytest/CI 测试运行临时产物（outbox、claims、日志，曾在 65a66d2 误提交）
+.codex-pytest-tmp/
