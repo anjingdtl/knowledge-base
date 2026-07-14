@@ -1,10 +1,11 @@
-"""Answer orchestration package (Phase-3 maintainability).
+"""Answer orchestration package (maintainability closure WP2).
 
 Public flow:
   Question → SearchService.execute (RetrievalOrchestrator) → SearchExecution
-  → ContextBuilder / Generation → AnswerExecution
+  → assemble_answer_payload → AnswerExecution
 """
+from src.answering.assembler import assemble_answer_payload
 from src.answering.models import AnswerExecution
 from src.answering.service import AnswerService
 
-__all__ = ["AnswerExecution", "AnswerService"]
+__all__ = ["AnswerExecution", "AnswerService", "assemble_answer_payload"]

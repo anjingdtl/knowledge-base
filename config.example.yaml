@@ -37,8 +37,7 @@ llm:
 # Default unified is the formal path; set legacy for emergency rollback.
 retrieval:
   orchestrator: unified
-# Phase-3 answer orchestration: legacy | shadow | unified
-# Default unified (same assemble path as legacy; structural parity).
+# Phase-3 / closure WP2 answer orchestration — only unified path (legacy/shadow ignored).
 answer:
   orchestrator: unified
 rag:

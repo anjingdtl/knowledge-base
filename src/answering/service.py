@@ -1,23 +1,24 @@
-"""AnswerService — single application-layer ask orchestrator (Phase-3).
+"""AnswerService — single application-layer ask orchestrator.
 
-Calls SearchService.execute() (which routes through RetrievalOrchestrator).
+Calls SearchService.execute() (RetrievalOrchestrator under the hood).
 Does not touch DB/Wiki/Gate/MCP envelopes directly.
+
+WP2: answer.orchestrator pseudo dual-path removed — only unified assemble path.
 """
 from __future__ import annotations
 
 import logging
 from typing import Any
 
+from src.answering.assembler import assemble_answer_payload
 from src.answering.generation import Generator
 from src.answering.models import AnswerExecution
-from src.answering.shadow import compare_answers, log_answer_shadow
 
 logger = logging.getLogger(__name__)
 
-_VALID_MODES = frozenset({"legacy", "shadow", "unified"})
-
 
 def resolve_answer_orchestrator_mode(config: Any) -> str:
+    """Always unified. Kept for config/docs compatibility (legacy values ignored)."""
     if config is None:
         return "unified"
     raw: Any = None
@@ -36,10 +37,15 @@ def resolve_answer_orchestrator_mode(config: Any) -> str:
                 if isinstance(block, dict):
                     raw = block.get("orchestrator")
     mode = str(raw or "unified").strip().lower()
-    if mode not in _VALID_MODES:
+    if mode and mode not in {"unified", "legacy", "shadow"}:
         logger.warning("Unknown answer.orchestrator=%r; using unified", raw)
-        return "unified"
-    return mode
+    # WP2-T2: no behavioral difference — always unified
+    if mode in {"legacy", "shadow"}:
+        logger.debug(
+            "answer.orchestrator=%s has no separate path; using unified assemble",
+            mode,
+        )
+    return "unified"
 
 
 class AnswerService:
@@ -59,27 +65,12 @@ class AnswerService:
         use_llm: bool = True,
         llm_answer: str | None = None,
     ) -> AnswerExecution:
-        mode = resolve_answer_orchestrator_mode(self._config)
-        if mode == "legacy":
-            return self._execute_legacy_primary(
-                question, top_k=top_k, use_llm=use_llm, llm_answer=llm_answer,
-            )
-        if mode == "shadow":
-            primary = self._execute_legacy_primary(
-                question, top_k=top_k, use_llm=use_llm, llm_answer=llm_answer,
-            )
-            try:
-                candidate = self._execute_unified(
-                    question, top_k=top_k, use_llm=use_llm, llm_answer=llm_answer,
-                )
-                diff = compare_answers(primary, candidate)
-                log_answer_shadow(diff, question_preview=question)
-            except Exception as e:  # noqa: BLE001
-                logger.warning("answer shadow unified path failed: %s", e)
-            return primary
-        return self._execute_unified(
+        # resolve for logging/compatibility only
+        resolve_answer_orchestrator_mode(self._config)
+        payload = self._assemble_payload(
             question, top_k=top_k, use_llm=use_llm, llm_answer=llm_answer,
         )
+        return AnswerExecution.from_payload(payload)
 
     def ask(
         self,
@@ -104,11 +95,10 @@ class AnswerService:
             execution = self._search.execute(question, top_k=top_k)
             results = list(getattr(execution, "results", ()) or ())
             trace = dict(getattr(execution, "trace", None) or {})
-            # Merge fallbacks from SearchExecution into trace for assemble
-            fb = list(getattr(execution, "fallbacks", ()) or ())
+            fb = list(getattr(execution, "fallbacks", ()) or [])
             if fb and "fallbacks" not in trace:
                 trace["fallbacks"] = fb
-            disclose_rows = list(getattr(execution, "disclose_claims", ()) or ())
+            disclose_rows = list(getattr(execution, "disclose_claims", ()) or [])
             return results, trace, disclose_rows
         results = list(self._search.search(question, top_k=top_k) or [])
         return results, {}, []
@@ -121,8 +111,6 @@ class AnswerService:
         use_llm: bool,
         llm_answer: str | None,
     ) -> dict[str, Any]:
-        from src.services.verified_answer import assemble_answer_payload
-
         results, trace, disclose_rows = self._run_search(question, top_k=top_k)
         generate_fn = None
         if use_llm and llm_answer is None:
@@ -152,34 +140,3 @@ class AnswerService:
         payload.setdefault("block_contexts", {})
         payload.setdefault("wiki_context", "")
         return payload
-
-    def _execute_unified(
-        self,
-        question: str,
-        *,
-        top_k: int,
-        use_llm: bool,
-        llm_answer: str | None,
-    ) -> AnswerExecution:
-        payload = self._assemble_payload(
-            question, top_k=top_k, use_llm=use_llm, llm_answer=llm_answer,
-        )
-        return AnswerExecution.from_payload(payload)
-
-    def _execute_legacy_primary(
-        self,
-        question: str,
-        *,
-        top_k: int,
-        use_llm: bool,
-        llm_answer: str | None,
-    ) -> AnswerExecution:
-        """Legacy primary uses the same assemble path (structural parity with unified)."""
-        payload = self._assemble_payload(
-            question, top_k=top_k, use_llm=use_llm, llm_answer=llm_answer,
-        )
-        payload = dict(payload)
-        st = dict(payload.get("search_trace") or {})
-        st.setdefault("answer_path", "legacy_primary")
-        payload["search_trace"] = st
-        return AnswerExecution.from_payload(payload)

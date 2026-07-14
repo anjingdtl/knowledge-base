@@ -28,7 +28,14 @@
 - WP1-T5：聚合 Shadow 报告（6/6 门槛通过）
 - WP1-T6：`retrieval.orchestrator` **默认 unified**（legacy 可回滚）
 
-**未做：** Legacy 删除；MCP tools 实拆；Container Provider 生命周期；Alembic head gate。
+**未做：** Legacy 删除；MCP tools 完整实拆；Container Provider 生命周期；Alembic head gate。
+
+### WP2 进度（Answer 完成；MCP 起步，2026-07-14）
+
+- ✅ Answer assemble → `src/answering/{assembler,citations,fallbacks}`；`verified_answer.py` 仅 re-export
+- ✅ 伪 `answer.orchestrator` 双路径清除（legacy/shadow → unified）
+- ✅ `TaggingService` + `RetrievalCommands`；MCP retrieval/auto_tag 委托 application
+- ⏳ `src/mcp/server.py` 仍大体量；wiki/graph/memory/admin/ingest 待分域
 
 ---
 

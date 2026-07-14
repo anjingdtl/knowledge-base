@@ -120,7 +120,12 @@ def collect_debt_metrics(root: Path) -> dict[str, Any]:
     answering_dep = False
     if answering_dir.is_dir():
         for path in answering_dir.rglob("*.py"):
-            if "verified_answer" in _read(path):
+            text = _read(path)
+            # Business import dependency only (docstrings mentioning history ignored)
+            if re.search(
+                r"from\s+src\.services\.verified_answer|import\s+src\.services\.verified_answer",
+                text,
+            ):
                 answering_dep = True
                 break
 

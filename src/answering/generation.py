@@ -4,6 +4,8 @@ from __future__ import annotations
 import logging
 from typing import Any, Callable
 
+from src.answering.fallbacks import fallback_hybrid_text, fallback_raw_text
+
 logger = logging.getLogger(__name__)
 
 
@@ -37,11 +39,7 @@ class Generator:
         claim_rows: list[dict[str, Any]],
         raw_rows: list[dict[str, Any]],
     ) -> str:
-        from src.services.verified_answer import _fallback_hybrid_text
-
-        return _fallback_hybrid_text(question, claim_rows, raw_rows)
+        return fallback_hybrid_text(question, claim_rows, raw_rows)
 
     def raw_fallback(self, question: str, raw_rows: list[dict[str, Any]]) -> str:
-        from src.services.verified_answer import _fallback_raw_text
-
-        return _fallback_raw_text(question, raw_rows)
+        return fallback_raw_text(question, raw_rows)

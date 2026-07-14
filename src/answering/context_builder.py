@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from src.answering.fallbacks import build_generation_context
+
 
 class ContextBuilder:
     """Build LLM context from claim/raw rows. Does not retrieve or gate."""
@@ -14,9 +16,7 @@ class ContextBuilder:
         *,
         conflicts: list[dict[str, Any]] | None = None,
     ) -> str:
-        from src.services.verified_answer import _build_generation_context
-
-        return _build_generation_context(
+        return build_generation_context(
             claim_rows,
             raw_rows,
             conflicts=list(conflicts or []),

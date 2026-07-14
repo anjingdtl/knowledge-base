@@ -31,9 +31,11 @@ def _claim(cid: str = "c1", text: str = "claim text"):
 
 
 def test_resolve_mode_default_unified():
+    """WP2-T2: legacy/shadow names collapse to unified (no separate path)."""
     assert resolve_answer_orchestrator_mode(None) == "unified"
-    assert resolve_answer_orchestrator_mode({"answer": {"orchestrator": "shadow"}}) == "shadow"
-    assert resolve_answer_orchestrator_mode({"answer": {"orchestrator": "legacy"}}) == "legacy"
+    assert resolve_answer_orchestrator_mode({"answer": {"orchestrator": "shadow"}}) == "unified"
+    assert resolve_answer_orchestrator_mode({"answer": {"orchestrator": "legacy"}}) == "unified"
+    assert resolve_answer_orchestrator_mode({"answer": {"orchestrator": "unified"}}) == "unified"
 
 
 def test_execute_returns_answer_execution():

@@ -379,13 +379,9 @@ def _embedding_context_config() -> dict:
 )
 def ping() -> dict:
     """轻量级连通性检测，返回服务状态和时间戳。"""
-    import time
-    return ok({
-        "status": "alive",
-        "timestamp": time.time(),
-        "version": VERSION,
-        "uptime_hint": "ok",
-    })
+    from src.mcp.tools.retrieval import ping_payload
+
+    return ok(ping_payload())
 
 
 @_define_tool(
@@ -402,7 +398,9 @@ def search(query: str, top_k: int = 5) -> dict:
         query: 搜索查询文本，支持自然语言描述
         top_k: 返回结果数量，默认5条
     """
-    results = _get_container().search_service.search(query, top_k=top_k)
+    from src.mcp.tools.retrieval import semantic_search
+
+    results = semantic_search(_get_container(), query, top_k=top_k)
     return ok(results, total_estimate=len(results), top_k=top_k)
 
 
@@ -625,15 +623,13 @@ def _do_ask(question: str) -> dict:
     container = _get_container()
 
     def _run_verified() -> dict:
-        # Phase-3: AnswerService is the single ask orchestrator (via SearchExecution).
-        from src.answering.service import AnswerService
+        from src.mcp.tools.retrieval import ask_verified
 
-        svc = AnswerService(
-            container.search_service,
-            llm=container.llm,
-            config=container.config,
+        return ask_verified(
+            container,
+            question,
+            top_k=int(Config.get("rag.ask.max_sources", 5) or 5),
         )
-        return dict(svc.ask(question, top_k=int(Config.get("rag.ask.max_sources", 5) or 5)))
 
     def _run_legacy() -> dict:
         return dict(container.rag_pipeline.query(question, timeout=total_timeout))
@@ -3468,7 +3464,7 @@ def auto_tag(limit: int = 50, force: bool = False) -> dict:
     自动生成 1-3 个标签并写入数据库。
 
     Args:
-        limit: 单次最多处理的条目数（默认 50，最大 100）
+        limit: 单次最多处理的条目数（默认 50，最大 500）
         force: 强制重新打标（包括已有标签的条目），默认仅处理无标签条目
 
     Returns:
@@ -3481,135 +3477,33 @@ def auto_tag(limit: int = 50, force: bool = False) -> dict:
     if _guard:
         return _guard
 
-    from src.services.db import Database
     container = _get_container()
-
     try:
-        import json as _json
-
-        db = Database._instance
-        if db is None or db._shutdown:
+        db = container.db
+        if db is None or getattr(db, "_shutdown", False):
             return fail(ErrorCode.INTERNAL_ERROR, "数据库未初始化")
 
-        # BUG-1 fix (50轮测试报告): 上限 100→500，135 条文档需单次批量补标，
-        # 旧上限 100 导致需要多次调用且每次都重建 LLM 连接，效率低。
-        limit = max(1, min(limit, 500))
-        llm = container.llm
+        from src.application.tagging_service import TaggingService
 
-        # 获取无标签条目
-        # 修复 C1: 原代码用 db.conn，但 Database 类无 conn 属性（只有 _base_conn 和
-        # get_conn()），真实执行必抛 AttributeError，导致 auto_tag 返回 INTERNAL_ERROR。
-        # 改为项目惯例的 with db.get_conn() as conn（参照 trace.py / health.py）。
-        if force:
-            query_sql = (
-                "SELECT id, title, content, tags FROM knowledge_items "
-                "WHERE deleted_at IS NULL LIMIT ?"
-            )
-        else:
-            query_sql = (
-                "SELECT id, title, content, tags FROM knowledge_items "
-                "WHERE deleted_at IS NULL AND (tags IS NULL OR tags = '' OR tags = '[]') LIMIT ?"
-            )
-        with db.get_conn() as conn:
-            rows = conn.execute(query_sql, (limit,)).fetchall()
-
-        if not rows:
-            return ok(
-                {"tagged_count": 0, "skipped_count": 0, "errors": [],
-                 "tags_applied": [], "message": "没有需要打标的条目（所有条目已有标签）"},
-                tagged_count=0,
-            )
-
-        tagged_count = 0
-        skipped_count = 0
-        errors: list[str] = []
-        tags_applied_set: set[str] = set()
-
-        for row in rows:
-            try:
-                kid = row["id"]
-                title = row["title"] or ""
-                # 取前 500 字符作为内容摘要供 LLM 分析
-                content_preview = (row["content"] or "")[:500]
-
-                # 获取已有标签（force 模式）
-                # 修复 C1: sqlite3.Row 无 .get() 方法；SELECT 已补 tags 列，用索引访问
-                existing_tags_str = row["tags"] if "tags" in row.keys() else ""
-                existing_tags = []
-                if existing_tags_str and existing_tags_str != "[]":
-                    try:
-                        existing_tags = _json.loads(existing_tags_str)
-                        if not isinstance(existing_tags, list):
-                            existing_tags = []
-                    except _json.JSONDecodeError:
-                        existing_tags = []
-
-                # 使用 LLM 生成标签
-                prompt = (
-                    "你是一个知识库标签专家。请根据以下文档的标题和内容摘要，"
-                    "生成 1-3 个标签（中英文皆可，优先中文）。\n"
-                    "标签应该：简洁（2-6个字）、准确反映主题、便于检索和分类。\n"
-                    "只输出 JSON 数组，例如：[\"Python\", \"FastAPI\", \"后端开发\"]\n\n"
-                    f"标题：{title}\n"
-                    f"内容摘要：{content_preview}\n\n"
-                    f"{'已有标签：' + ', '.join(existing_tags) if existing_tags else ''}"
-                )
-
-                # BUG-1 fix (50轮测试报告): 旧实现把字符串 prompt 直接传给 llm.chat(messages: list[dict])，
-                # 类型不符导致 auto_tag 调用 LLM 必然失败，标签覆盖率长期停滞在 3.7%，
-                # 进而引发 kb_route_query 路由 100% 退化。这里构造标准 messages 列表。
-                tag_messages = [{"role": "user", "content": prompt}]
-                if hasattr(llm, "chat_with_usage"):
-                    response_text = llm.chat_with_usage(tag_messages, silent=True)[0]
-                else:
-                    response_text = llm.chat(tag_messages, silent=True)
-                # 清理响应，提取 JSON 数组
-                response_text = (response_text or "").strip()
-                # 处理可能的 markdown 包裹
-                if response_text.startswith("```"):
-                    response_text = response_text.split("\n", 1)[-1] if "\n" in response_text else response_text
-                    response_text = response_text.rsplit("```", 1)[0] if "```" in response_text else response_text
-
-                new_tags = _json.loads(response_text)
-                if not isinstance(new_tags, list):
-                    raise ValueError(f"LLM 返回了非数组格式: {type(new_tags)}")
-
-                # 合并已有+新标签，去重
-                all_tags = list(dict.fromkeys(existing_tags + new_tags))
-                all_tags = all_tags[:5]  # 最多 5 个标签
-                tags_applied_set.update(all_tags)
-
-                # 写入数据库
-                # 修复 C1: 用 get_conn() 替代不存在的 db.conn；with 退出时自动 commit
-                tags_json = _json.dumps(all_tags, ensure_ascii=False)
-                with db.get_conn() as conn:
-                    conn.execute(
-                        "UPDATE knowledge_items SET tags = ? WHERE id = ?",
-                        (tags_json, kid),
-                    )
-                tagged_count += 1
-
-            except Exception as e:
-                def _row_value(key: str, default: str = "?"):
-                    try:
-                        if hasattr(row, "keys") and key in row.keys():
-                            return row[key] or default
-                    except Exception:
-                        pass
-                    return default
-
-                title = str(_row_value("title"))[:30]
-                err_msg = f"{_row_value('id')} | {title}: {e}"
-                errors.append(err_msg)
-                skipped_count += 1
+        result = TaggingService(db, container.llm).auto_tag(
+            limit=limit, force=force,
+        )
+        tagged_count = int(result.get("tagged_count") or 0)
+        skipped_count = int(result.get("skipped_count") or 0)
+        errors = list(result.get("errors") or [])
+        tags_applied = list(result.get("tags_applied") or [])
+        message = result.get("message") or (
+            f"成功打标 {tagged_count} 条，跳过 {skipped_count} 条，"
+            f"应用标签 {len(tags_applied)} 个"
+        )
 
         return ok(
             {
                 "tagged_count": tagged_count,
                 "skipped_count": skipped_count,
-                "errors": errors[:10],  # 限制错误数量
-                "tags_applied": sorted(tags_applied_set),
-                "message": f"成功打标 {tagged_count} 条，跳过 {skipped_count} 条，应用标签 {len(tags_applied_set)} 个",
+                "errors": errors[:10],
+                "tags_applied": tags_applied,
+                "message": message,
             },
             tagged_count=tagged_count,
             skipped_count=skipped_count,
