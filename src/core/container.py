@@ -712,6 +712,26 @@ def create_container(config_path: str | None = None) -> AppContainer:
         db = Database(str(db_path))
         logger.info("Database instance created: %s", db_path)
 
+    # 2.5 Migration head gate (WP4) — block write boot when schema behind head
+    from src.storage.startup_gate import MigrationGateError, enforce_startup_gate
+
+    _db_path_for_gate = str(getattr(db, "_db_path", None) or config.get_db_path())
+    try:
+        gate = enforce_startup_gate(_db_path_for_gate, config=config)
+        # Attach decision for callers (API/MCP) that want to surface readonly mode
+        # without failing boot.
+        # Note: AppContainer is a dataclass — set dynamic attr after construction
+        # temporarily store on config-like side channel via function local;
+        # re-applied after container is built below.
+        _gate_decision = gate
+        if gate.readonly and not gate.write_allowed:
+            logger.warning(
+                "Migration gate: write services disabled (%s)", gate.reason,
+            )
+    except MigrationGateError:
+        logger.error("Migration gate blocked container creation")
+        raise
+
     # 3. VectorStore（注入 Database 实例）
     from src.services.vectorstore import VectorStore
     vectorstore = VectorStore(db=db)
@@ -762,6 +782,8 @@ def create_container(config_path: str | None = None) -> AppContainer:
         embedding=embedding,
         llm=llm,
     )
+    container.migration_gate = _gate_decision  # type: ignore[attr-defined]
+    container.write_allowed = _gate_decision.write_allowed  # type: ignore[attr-defined]
 
     # 初始化仓库层 — 全部注入 Database 实例
     from src.repositories.block_repo import BlockRepository

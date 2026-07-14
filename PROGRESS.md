@@ -39,8 +39,10 @@
 - ✅ **graph / memory / operations / retrieval 全量** 工具实拆（round-2）
 - ✅ **round-3 壳层收束**：`tool_catalog` / `registration` / `prompts` / `resources` / `tools/exports`
 - ✅ `server.py` ~3600 → **~135 行**（**达标 Spec ≤500**；`mcp_server_tool_functions=0`）
-- ✅ WP4-T1 起步：`alembic/env.py` 尊重 `SHINEHE_TEST_ALEMBIC_URL`；升级测试 strict（无 soft-skip）
-- 下一步：WP3 Container Provider / WP4 启动 head gate + migrations/* 套件（Legacy 删除仍在 WP5）
+- ✅ WP4-T1：`alembic/env.py` 尊重 `SHINEHE_TEST_ALEMBIC_URL`；升级测试 strict
+- ✅ WP4-T2/T3：`src/storage/{migration_status,startup_gate}.py`；`create_container` 写模式 head 门禁
+- ✅ `tests/migrations/*`：empty→head / v1.9→head / idempotent / interrupted recovery
+- 下一步：WP3 Container Provider / WP4-T4 最小 Repository / WP5 Legacy 删除（需观察期）
 
 ---
 

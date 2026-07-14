@@ -15,9 +15,15 @@
    - 路径：`alembic/versions/`  
    - 命令：`alembic revision --autogenerate -m "..."` → `alembic upgrade head`
 
-3. **启动与写模式**  
-   - 写模式启动前应检查 Alembic 版本（后续可增强 doctor / 启动钩子）  
-   - 迁移失败时允许进入只读诊断模式（不在本期强制实现）
+3. **启动与写模式（WP4 已实现）**  
+   - `create_container()` 调用 `src.storage.startup_gate.enforce_startup_gate`  
+   - 写模式：当前 revision 落后 head 时 **拒绝启动**（`MigrationGateError`）  
+   - 只读诊断：`storage.readonly=true` 或环境变量 `SHINEHE_READONLY=1`  
+   - 跳过门禁（紧急）：`SHINEHE_SKIP_MIGRATION_GATE=1`  
+   - 强制门禁（含 pytest）：`SHINEHE_ENFORCE_MIGRATION_GATE=1`  
+   - 无 `alembic_version` 的旧库：默认 `allow_unstamped=true` 仅警告；可设 `false` 严格拒绝  
+   - 升级命令：`alembic upgrade head`  
+   - 实现：`src/storage/migration_status.py`、`src/storage/startup_gate.py`
 
 4. **Repository 渐进抽取**  
    - 一次只迁移一个领域  

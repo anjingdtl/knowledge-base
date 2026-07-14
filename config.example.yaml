@@ -33,6 +33,12 @@ llm:
   temperature: 0.7
   timeout: 60
   # api_key: <SECRET>   # 通过 keyring 管理，或设置环境变量 SHINEHE_LLM_API_KEY
+# Storage / migration (WP4)
+storage:
+  # readonly: true   # diagnostic boot when schema is behind head
+  migration_gate:
+    enabled: true
+    # allow_unstamped: true  # transition: legacy DBs without alembic_version (warn only)
 # Phase-2 / closure WP1 retrieval orchestration: legacy | shadow | unified
 # Default unified is the formal path; set legacy for emergency rollback.
 retrieval:
