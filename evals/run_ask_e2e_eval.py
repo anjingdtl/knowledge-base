@@ -256,13 +256,15 @@ def _run_ask_search_llm(container, question: str) -> dict[str, Any]:
     from src.services.rag_pipeline import build_rag_messages
     from src.utils.llm_text import strip_think
 
-    hits = container.search_service.search(question, top_k=5)
+    execution = container.search_service.execute(question, top_k=5)
+    hits = list(execution.results)
     if not hits:
         return {
             "answer": "知识库中未找到相关内容，无法回答该问题。",
             "answer_mode": "no_answer",
             "sources": [],
             "warnings": ["empty_retrieval"],
+            "search_trace": dict(execution.trace or {}),
         }
 
     parts = []
@@ -303,8 +305,8 @@ def _run_ask_search_llm(container, question: str) -> dict[str, Any]:
         "answer": answer or "",
         "answer_mode": "raw_only",
         "sources": sources,
-        "warnings": [],
-        "search_trace": getattr(container.search_service, "last_search_trace", {}),
+        "warnings": list(execution.warnings or ()),
+        "search_trace": dict(execution.trace or {}),
     }
 
 

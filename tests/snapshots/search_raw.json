@@ -1,0 +1,59 @@
+{
+  "conflicts": [],
+  "disclose_claims": [],
+  "fallbacks": [],
+  "results": [
+    {
+      "block_id": "b1",
+      "citation": {
+        "block_id": "b1",
+        "document": "Doc",
+        "knowledge_id": "k1",
+        "location": {
+          "heading_path": [],
+          "line_end": null,
+          "line_start": null,
+          "page": null,
+          "paragraph_index": null,
+          "sheet": null,
+          "slide": null
+        },
+        "match_channels": [],
+        "path": "",
+        "reason": "match",
+        "score": 0.9,
+        "score_breakdown": {
+          "keyword": null,
+          "rerank": null,
+          "rrf": 0.9,
+          "vector": null
+        },
+        "text": "raw FTTR content"
+      },
+      "knowledge_id": "k1",
+      "match_channels": [],
+      "score": 0.9,
+      "source": "knowledge",
+      "text": "raw FTTR content",
+      "title": "Doc",
+      "warnings": []
+    }
+  ],
+  "trace": {
+    "mode": "legacy_raw",
+    "query": "FTTR 规格",
+    "result_count": 1,
+    "stages": {
+      "legacy_wiki_fts": {
+        "count": 0
+      },
+      "query_rewrite": {
+        "count": 1
+      },
+      "raw_retrieval": {
+        "count": 1
+      }
+    }
+  },
+  "warnings": []
+}

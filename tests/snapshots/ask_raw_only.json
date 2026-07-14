@@ -1,0 +1,55 @@
+{
+  "answer": "基于原始文档检索（未使用可验证 Claim 结论），关于「文档说了什么」：\n\n- [Doc] 仅原始块内容",
+  "answer_mode": "raw_only",
+  "claims_used": [],
+  "conflict_disclosed": false,
+  "conflicts": [],
+  "fallbacks": [],
+  "freshness_sensitive": false,
+  "raw_evidence_used": [
+    {
+      "block_id": "b1",
+      "citation": {
+        "block_id": "b1",
+        "knowledge_id": "k1",
+        "path": "/docs/a.md"
+      },
+      "knowledge_id": "k1",
+      "path": "/docs/a.md",
+      "score": 0.8,
+      "text": "仅原始块内容",
+      "title": "Doc"
+    }
+  ],
+  "route": {
+    "explanation": "verified answer path: raw_only",
+    "intent": null,
+    "mode": "raw_only",
+    "search_mode": "legacy_raw"
+  },
+  "search_trace": {
+    "mode": "legacy_raw",
+    "route": null,
+    "sources": null,
+    "stages": {}
+  },
+  "sources": [
+    {
+      "block_id": "b1",
+      "candidate_type": "raw_block",
+      "citation": {
+        "block_id": "b1",
+        "knowledge_id": "k1",
+        "path": "/docs/a.md"
+      },
+      "knowledge_id": "k1",
+      "score": 0.8,
+      "source": "knowledge",
+      "source_layer": "evidence",
+      "text": "仅原始块内容",
+      "title": "Doc"
+    }
+  ],
+  "trace_id": "",
+  "warnings": []
+}

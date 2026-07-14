@@ -1,9 +1,30 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-14
-> 源码版本：`src/version.py` 中的 **`1.8.0`**
-> 当前分支：`master`（Phase 8 与远端 CI 验收均完成）
-> 当前方向：**Verified Hybrid 融合收束纠偏已完成** — 本地验收与远端 CI 全绿；尚未创建 GitHub Release 标签。
+> 源码版本：`src/version.py` 中的 **`1.8.1`**
+> 当前分支：`master`
+> 当前方向：**可维护性一期（契约冻结 + 请求状态隔离）已完成并发布 v1.8.1**；二期（Retrieval/Wiki）准入条件见 phase1 验收报告。Verified Hybrid 融合收束纠偏此前已完成（v1.8.0）。
+
+---
+
+## 可维护性一期：契约冻结与请求状态隔离（已完成，2026-07-14）
+
+执行依据：
+
+- Spec：`docs/superpowers/specs/01-maintainability-phase-1-contract-isolation.md`
+- Plan：`docs/superpowers/plans/2026-07-14-maintainability-phase-1-contract-isolation.md`
+- 验收：`docs/superpowers/reviews/maintainability-phase1-acceptance.md`
+
+完成项：
+
+- 新增请求级 `SearchExecution`（`src/models/search_execution.py`）
+- `SearchService.execute()` 返回 results+trace+disclose+conflicts+fallbacks+warnings；`search()` 保留兼容
+- 删除 `last_search_trace` / `last_disclose_claims` / `get_disclose_claim_rows` 实例共享状态
+- `VerifiedAnswerService` 仅消费 `execute()`；eval 路径同步
+- Search/Ask 契约快照 + Wiki Serving 不变量（WIKI-001..010）+ 50 并发隔离测试
+
+本地验证：相关子集 **124 passed / 1 skipped**；`src/`+`evals/` 无 `last_*` 读取。  
+合并前建议补跑 Retrieval/Hybrid Eval。进入二期前勿再引入 Service 内请求状态。
 
 ---
 

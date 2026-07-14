@@ -1,0 +1,105 @@
+{
+  "conflicts": [],
+  "disclose_claims": [],
+  "fallbacks": [
+    {
+      "from": "verified_wiki",
+      "reason": "wiki_claim_error:wiki down",
+      "to": "raw_retrieval"
+    },
+    {
+      "from": "verified_wiki",
+      "reason": "empty_wiki_to_raw",
+      "to": "raw_retrieval"
+    }
+  ],
+  "results": [
+    {
+      "block_id": "b1",
+      "candidate_type": "raw_block",
+      "citation": {
+        "block_id": "b1",
+        "document": "Doc",
+        "knowledge_id": "k1",
+        "location": {
+          "heading_path": [],
+          "line_end": null,
+          "line_start": null,
+          "page": null,
+          "paragraph_index": null,
+          "sheet": null,
+          "slide": null
+        },
+        "match_channels": [],
+        "path": "",
+        "reason": "match",
+        "score": 0.0,
+        "score_breakdown": {
+          "keyword": null,
+          "rerank": null,
+          "rrf": null,
+          "vector": null
+        },
+        "text": "raw hit about FTTR"
+      },
+      "knowledge_id": "k1",
+      "match_channels": [
+        "raw"
+      ],
+      "score": 0.014,
+      "score_breakdown": {
+        "rank": 0,
+        "rerank_score": null,
+        "rrf_score": 0.8,
+        "vector_score": null
+      },
+      "source": "knowledge",
+      "source_layer": "evidence",
+      "text": "raw hit about FTTR",
+      "title": "Doc",
+      "warnings": []
+    }
+  ],
+  "trace": {
+    "mode": "hybrid_verified",
+    "query": "FTTR",
+    "result_count": 1,
+    "route": {
+      "freshness_sensitive": false,
+      "intent": "general",
+      "raw_weight": 0.575,
+      "reasons": [
+        "default_general",
+        "config_blend"
+      ],
+      "wiki_weight": 0.425
+    },
+    "sources": {
+      "disclose_only": 0,
+      "knowledge": 1,
+      "verified_claim": 0
+    },
+    "stages": {
+      "fallback": "empty_wiki_to_raw",
+      "fusion": {
+        "count": 1,
+        "raw_weight": 0.575,
+        "wiki_weight": 0.425
+      },
+      "query_rewrite": {
+        "count": 1
+      },
+      "raw_retrieval": {
+        "count": 1
+      },
+      "verified_wiki": {
+        "candidates": 0,
+        "error": "wiki_claim_error:wiki down",
+        "pairs": 0
+      }
+    }
+  },
+  "warnings": [
+    "wiki_degraded:wiki_claim_error:wiki down"
+  ]
+}

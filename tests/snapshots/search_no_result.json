@@ -1,0 +1,23 @@
+{
+  "conflicts": [],
+  "disclose_claims": [],
+  "fallbacks": [],
+  "results": [],
+  "trace": {
+    "mode": "legacy_raw",
+    "query": "zzzz-no-hit",
+    "result_count": 0,
+    "stages": {
+      "legacy_wiki_fts": {
+        "count": 0
+      },
+      "query_rewrite": {
+        "count": 1
+      },
+      "raw_retrieval": {
+        "count": 0
+      }
+    }
+  },
+  "warnings": []
+}

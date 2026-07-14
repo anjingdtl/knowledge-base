@@ -1,0 +1,154 @@
+{
+  "answer": "针对问题「峰值是多少」，知识库中存在相互冲突的已验证结论，系统不会自动选择某一方作为唯一答案。主要分歧如下：\n\n### 分歧 1（numeric_unit_mismatch）\n- 观点 A（claim `c1`）: 峰值 1Gbps\n- 观点 B（claim `c2`）: 峰值 100Mbps\n  - A 证据: knowledge=k1 block=b1\n  - B 证据: knowledge=k2 block=b2\n\n建议：对照双方原始 Evidence，结合来源更新时间与适用范围自行裁决；也可在 Authoring 模式提交冲突审阅。",
+  "answer_mode": "conflict_disclosure",
+  "claims_used": [
+    {
+      "claim_id": "c1",
+      "evidence": [
+        {
+          "block_id": "b1",
+          "evidence_stance": "supports",
+          "excerpt": "峰值 1Gbps",
+          "knowledge_id": "k1",
+          "location": {},
+          "path": "",
+          "stale": false
+        }
+      ],
+      "page_id": null,
+      "revision": null,
+      "statement": "峰值 1Gbps",
+      "status": "active",
+      "validation": "passed"
+    },
+    {
+      "claim_id": "c2",
+      "evidence": [
+        {
+          "block_id": "b2",
+          "evidence_stance": "supports",
+          "excerpt": "峰值 100Mbps",
+          "knowledge_id": "k2",
+          "location": {},
+          "path": "",
+          "stale": false
+        }
+      ],
+      "page_id": null,
+      "revision": null,
+      "statement": "峰值 100Mbps",
+      "status": "active",
+      "validation": "passed"
+    }
+  ],
+  "conflict_disclosed": true,
+  "conflicts": [
+    {
+      "claim_a_id": "c1",
+      "claim_b_id": "c2",
+      "evidence_a": [
+        {
+          "block_id": "b1",
+          "excerpt": "峰值 1Gbps",
+          "knowledge_id": "k1",
+          "stance": "supports"
+        }
+      ],
+      "evidence_b": [
+        {
+          "block_id": "b2",
+          "excerpt": "峰值 100Mbps",
+          "knowledge_id": "k2",
+          "stance": "supports"
+        }
+      ],
+      "reason_codes": [
+        "numeric_unit_mismatch"
+      ],
+      "statement_a": "峰值 1Gbps",
+      "statement_b": "峰值 100Mbps",
+      "status_a": "active",
+      "status_b": "active"
+    }
+  ],
+  "fallbacks": [],
+  "freshness_sensitive": false,
+  "raw_evidence_used": [
+    {
+      "block_id": "b1",
+      "evidence_stance": "supports",
+      "knowledge_id": "k1",
+      "path": "",
+      "score": null,
+      "text": "峰值 1Gbps",
+      "title": "",
+      "via_claim": "c1"
+    },
+    {
+      "block_id": "b2",
+      "evidence_stance": "supports",
+      "knowledge_id": "k2",
+      "path": "",
+      "score": null,
+      "text": "峰值 100Mbps",
+      "title": "",
+      "via_claim": "c2"
+    }
+  ],
+  "route": {
+    "explanation": "verified answer path: conflict_disclosure",
+    "intent": null,
+    "mode": "conflict_disclosure",
+    "search_mode": "hybrid_verified"
+  },
+  "search_trace": {
+    "mode": "hybrid_verified",
+    "route": null,
+    "sources": null,
+    "stages": {}
+  },
+  "sources": [
+    {
+      "block_id": "b1",
+      "candidate_type": "claim",
+      "citation": null,
+      "claim_id": "c1",
+      "evidence": [
+        {
+          "block_id": "b1",
+          "excerpt": "峰值 1Gbps",
+          "knowledge_id": "k1",
+          "stance": "supports"
+        }
+      ],
+      "knowledge_id": "k1",
+      "score": null,
+      "source": "verified_claim",
+      "source_layer": "canonical",
+      "text": "峰值 1Gbps",
+      "title": "Claim: 峰值 1Gbps"
+    },
+    {
+      "block_id": "b2",
+      "candidate_type": "claim",
+      "citation": null,
+      "claim_id": "c2",
+      "evidence": [
+        {
+          "block_id": "b2",
+          "excerpt": "峰值 100Mbps",
+          "knowledge_id": "k2",
+          "stance": "supports"
+        }
+      ],
+      "knowledge_id": "k2",
+      "score": null,
+      "source": "verified_claim",
+      "source_layer": "canonical",
+      "text": "峰值 100Mbps",
+      "title": "Claim: 峰值 100Mbps"
+    }
+  ],
+  "trace_id": "",
+  "warnings": []
+}

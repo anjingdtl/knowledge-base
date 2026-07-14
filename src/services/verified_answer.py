@@ -430,6 +430,23 @@ class VerifiedAnswerService:
             return obj if obj is not None else default
         return self._config.get(key, default)
 
+    def _run_search(
+        self,
+        question: str,
+        *,
+        top_k: int,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any], list[dict[str, Any]]]:
+        """Prefer SearchService.execute(); fall back to search() for test doubles only."""
+        if hasattr(self._search, "execute"):
+            execution = self._search.execute(question, top_k=top_k)
+            results = list(getattr(execution, "results", ()) or ())
+            trace = dict(getattr(execution, "trace", None) or {})
+            disclose_rows = list(getattr(execution, "disclose_claims", ()) or ())
+            return results, trace, disclose_rows
+        # Legacy test doubles that only implement search()
+        results = list(self._search.search(question, top_k=top_k) or [])
+        return results, {}, []
+
     def ask(
         self,
         question: str,
@@ -438,19 +455,8 @@ class VerifiedAnswerService:
         use_llm: bool = True,
         llm_answer: str | None = None,
     ) -> dict[str, Any]:
-        results = self._search.search(question, top_k=top_k)
-        trace = dict(getattr(self._search, "last_search_trace", {}) or {})
-
-        # Side-channel disclose claims collected during search
-        disclose_ids = trace.get("disclose_claims") or []
-        disclose_rows: list[dict[str, Any]] = []
-        if disclose_ids and hasattr(self._search, "get_disclose_claim_rows"):
-            try:
-                disclose_rows = self._search.get_disclose_claim_rows()
-            except Exception:  # noqa: BLE001
-                disclose_rows = []
-        elif hasattr(self._search, "last_disclose_claims"):
-            disclose_rows = list(getattr(self._search, "last_disclose_claims") or [])
+        # Phase-1: request-scoped SearchExecution only — never read SearchService last_* state.
+        results, trace, disclose_rows = self._run_search(question, top_k=top_k)
 
         generate_fn = None
         if use_llm and llm_answer is None and self._llm is not None:

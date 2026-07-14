@@ -1,0 +1,97 @@
+{
+  "answer": "基于已验证知识与原始证据，关于「什么是 FTTR」：\n\n- FTTR 定义是光纤到房间 〔claim:c1〕\n  证据 block=b1 knowledge=k1\n\n补充原始片段：\n- [Doc] 原始文档：光纤到房间",
+  "answer_mode": "hybrid_verified",
+  "claims_used": [
+    {
+      "claim_id": "c1",
+      "evidence": [
+        {
+          "block_id": "b1",
+          "evidence_stance": "supports",
+          "excerpt": "FTTR 定义是光纤到房间",
+          "knowledge_id": "k1",
+          "location": {},
+          "path": "",
+          "stale": false
+        }
+      ],
+      "page_id": null,
+      "revision": null,
+      "statement": "FTTR 定义是光纤到房间",
+      "status": "active",
+      "validation": "passed"
+    }
+  ],
+  "conflict_disclosed": false,
+  "conflicts": [],
+  "fallbacks": [],
+  "freshness_sensitive": false,
+  "raw_evidence_used": [
+    {
+      "block_id": "b1",
+      "citation": {
+        "block_id": "b1",
+        "knowledge_id": "k1",
+        "path": "/docs/a.md"
+      },
+      "knowledge_id": "k1",
+      "path": "/docs/a.md",
+      "score": 0.8,
+      "text": "原始文档：光纤到房间",
+      "title": "Doc"
+    }
+  ],
+  "route": {
+    "explanation": "verified answer path: hybrid_verified",
+    "intent": "definition",
+    "mode": "hybrid_verified",
+    "search_mode": "hybrid_verified"
+  },
+  "search_trace": {
+    "mode": "hybrid_verified",
+    "route": {
+      "intent": "definition"
+    },
+    "sources": null,
+    "stages": {}
+  },
+  "sources": [
+    {
+      "block_id": "b1",
+      "candidate_type": "claim",
+      "citation": null,
+      "claim_id": "c1",
+      "evidence": [
+        {
+          "block_id": "b1",
+          "excerpt": "FTTR 定义是光纤到房间",
+          "knowledge_id": "k1",
+          "stance": "supports"
+        }
+      ],
+      "knowledge_id": "k1",
+      "score": null,
+      "source": "verified_claim",
+      "source_layer": "canonical",
+      "text": "FTTR 定义是光纤到房间",
+      "title": "Claim: FTTR 定义是光纤到房间"
+    },
+    {
+      "block_id": "b1",
+      "candidate_type": "raw_block",
+      "citation": {
+        "block_id": "b1",
+        "knowledge_id": "k1",
+        "path": "/docs/a.md"
+      },
+      "knowledge_id": "k1",
+      "score": 0.8,
+      "source": "knowledge",
+      "source_layer": "evidence",
+      "text": "原始文档：光纤到房间",
+      "title": "Doc"
+    }
+  ],
+  "trace_id": "",
+  "warnings": []
+}

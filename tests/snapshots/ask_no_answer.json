@@ -1,0 +1,27 @@
+{
+  "answer": "知识库中未找到可回答「完全不存在的主题 xyz」的充分证据。未返回仅有 Wiki 页面而无原始 Evidence 的结论。",
+  "answer_mode": "no_answer",
+  "claims_used": [],
+  "conflict_disclosed": false,
+  "conflicts": [],
+  "fallbacks": [],
+  "freshness_sensitive": false,
+  "raw_evidence_used": [],
+  "route": {
+    "explanation": "verified answer path: no_answer",
+    "intent": null,
+    "mode": "no_answer",
+    "search_mode": "hybrid_verified"
+  },
+  "search_trace": {
+    "mode": "hybrid_verified",
+    "route": null,
+    "sources": null,
+    "stages": {}
+  },
+  "sources": [],
+  "trace_id": "",
+  "warnings": [
+    "no_answer"
+  ]
+}

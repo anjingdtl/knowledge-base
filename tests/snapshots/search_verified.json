@@ -1,0 +1,179 @@
+{
+  "conflicts": [],
+  "disclose_claims": [],
+  "fallbacks": [],
+  "results": [
+    {
+      "block_id": "b_other",
+      "candidate_type": "raw_block",
+      "citation": {
+        "block_id": "b_other",
+        "document": "Spec",
+        "knowledge_id": "k2",
+        "location": {
+          "heading_path": [],
+          "line_end": null,
+          "line_start": null,
+          "page": null,
+          "paragraph_index": null,
+          "sheet": null,
+          "slide": null
+        },
+        "match_channels": [],
+        "path": "",
+        "reason": "match",
+        "score": 0.0,
+        "score_breakdown": {
+          "keyword": null,
+          "rerank": null,
+          "rrf": null,
+          "vector": null
+        },
+        "text": "unrelated"
+      },
+      "knowledge_id": "k2",
+      "match_channels": [
+        "raw"
+      ],
+      "score": 0.014,
+      "score_breakdown": {
+        "rank": 0,
+        "rerank_score": null,
+        "rrf_score": 0.1,
+        "vector_score": null
+      },
+      "source": "knowledge",
+      "source_layer": "evidence",
+      "text": "unrelated",
+      "title": "Doc",
+      "warnings": []
+    },
+    {
+      "block_id": "b1",
+      "candidate_type": "claim",
+      "citation": {
+        "block_id": "b1",
+        "citation_layer": "claim",
+        "claim_id": "c1",
+        "disclose_only": false,
+        "document": "Claim: FTTR 可达 1Gbps",
+        "evidence": [
+          {
+            "block_id": "b1",
+            "evidence_stance": "supports",
+            "excerpt": "",
+            "knowledge_id": "k1",
+            "location": {},
+            "ok": true,
+            "path": "",
+            "stale": false
+          }
+        ],
+        "knowledge_id": "k1",
+        "location": {
+          "heading_path": [],
+          "line_end": null,
+          "line_start": null,
+          "page": null,
+          "paragraph_index": null,
+          "sheet": null,
+          "slide": null
+        },
+        "match_channels": [
+          "verified_wiki"
+        ],
+        "page_id": null,
+        "path": "",
+        "reason": "verified_claim",
+        "revision": null,
+        "score": 0.0104,
+        "score_breakdown": {
+          "evidence_coverage": 1.0,
+          "freshness_factor": 1.0,
+          "rank": 0,
+          "retrieval": 0.9,
+          "serving_score": 0.9,
+          "status_factor": 1.0
+        },
+        "source_layer": "canonical",
+        "statement": "FTTR 可达 1Gbps",
+        "status": "active",
+        "text": "FTTR 可达 1Gbps",
+        "validation": "passed"
+      },
+      "claim_id": "c1",
+      "disclose_only": false,
+      "evidence": [
+        {
+          "block_id": "b1",
+          "evidence_id": "ev_c1",
+          "excerpt_hash": "sha256:7cf35107915e988af55ec7e39e1e92d4fc6220f57386138c1a6a374b0d649fd3",
+          "knowledge_id": "k1",
+          "ok": true,
+          "reason_codes": [],
+          "stale": false,
+          "stance": "supports"
+        }
+      ],
+      "freshness": "current",
+      "knowledge_id": "k1",
+      "match_channels": [
+        "verified_wiki"
+      ],
+      "score": 0.0104,
+      "score_breakdown": {
+        "evidence_coverage": 1.0,
+        "freshness_factor": 1.0,
+        "rank": 0,
+        "retrieval": 0.9,
+        "serving_score": 0.9,
+        "status_factor": 1.0
+      },
+      "source": "verified_claim",
+      "source_layer": "canonical",
+      "status": "active",
+      "text": "FTTR 可达 1Gbps",
+      "title": "Claim: FTTR 可达 1Gbps",
+      "warnings": []
+    }
+  ],
+  "trace": {
+    "mode": "hybrid_verified",
+    "query": "FTTR 1Gbps",
+    "result_count": 2,
+    "route": {
+      "freshness_sensitive": false,
+      "intent": "general",
+      "raw_weight": 0.575,
+      "reasons": [
+        "default_general",
+        "config_blend"
+      ],
+      "wiki_weight": 0.425
+    },
+    "sources": {
+      "disclose_only": 0,
+      "knowledge": 1,
+      "verified_claim": 1
+    },
+    "stages": {
+      "fusion": {
+        "count": 2,
+        "raw_weight": 0.575,
+        "wiki_weight": 0.425
+      },
+      "query_rewrite": {
+        "count": 1
+      },
+      "raw_retrieval": {
+        "count": 1
+      },
+      "verified_wiki": {
+        "candidates": 1,
+        "error": null,
+        "pairs": 1
+      }
+    }
+  },
+  "warnings": []
+}

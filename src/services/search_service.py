@@ -1,15 +1,20 @@
 """统一搜索服务 — MCP 和 API 共用
 
-Phase 3: Verified Hybrid 编排（Raw + Gate 通过的 Claim）在 search() 内融合。
+Phase 3: Verified Hybrid 编排（Raw + Gate 通过的 Claim）在 search/execute 内融合。
 编排源唯一为本服务；不重写 HybridSearcher / Raw 算法。
+
+Phase-1 maintainability: 一次请求的 results/trace/claims/conflicts/fallbacks
+收敛到 SearchExecution；禁止在实例上保存 last_* 请求状态。
 """
 import hashlib
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
+from dataclasses import dataclass, field
 from typing import Any, cast
 
+from src.models.search_execution import SearchExecution
 from src.services.citation_builder import CitationBuilder
 from src.services.hybrid_search import HybridSearcher
 from src.services.query_rewriter import QueryRewriter
@@ -24,6 +29,26 @@ _STAGE_TIMEOUTS = {
     "rerank": 20,          # 重排序
     "wiki_search": 5,      # Wiki FTS5 搜索 / verified claim retrieval
 }
+
+
+@dataclass
+class _SearchRequestState:
+    """单次搜索请求的可变局部状态（不得挂到 SearchService 实例上）。"""
+
+    trace: dict[str, Any]
+    disclose_claims: list[dict[str, Any]] = field(default_factory=list)
+    conflicts: list[dict[str, Any]] = field(default_factory=list)
+    fallbacks: list[dict[str, Any]] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    claim_error: str | None = None
+
+    def record_fallback(self, reason: str, *, from_layer: str = "verified_wiki", to_layer: str = "raw_retrieval") -> None:
+        self.trace.setdefault("stages", {})["fallback"] = reason
+        self.fallbacks.append({
+            "from": from_layer,
+            "to": to_layer,
+            "reason": str(reason),
+        })
 
 
 class SearchService:
@@ -51,9 +76,6 @@ class SearchService:
         # Phase 2/3: unique Claim Serving entry + fusion
         self._wiki_repository = wiki_repository
         self._wiki_serving_gate = wiki_serving_gate
-        self.last_search_trace: dict[str, Any] = {}
-        # Phase 4: disclose_only claim rows (side channel for conflict disclosure)
-        self.last_disclose_claims: list[dict[str, Any]] = []
 
     def _stage_timeout(self, stage: str) -> float:
         """获取阶段超时时间，支持 config 覆盖"""
@@ -110,18 +132,25 @@ class SearchService:
     def _verified_cfg(self, key: str, default=None):
         return self._cfg(f"rag.verified_knowledge.{key}", default)
 
-    def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
-        """完整搜索管线（带阶段超时保护）
+    def execute(
+        self,
+        query: str,
+        top_k: int = 5,
+        query_spec=None,
+    ) -> SearchExecution:
+        """完整搜索管线，返回请求级 SearchExecution（results + trace + side-channels）。
 
         Phase 3: 当 ``rag.verified_knowledge.enabled`` 时，在本服务内融合
         Raw Retrieval 与 Gate 通过的 Claim；Wiki 异常永不阻断 Raw。
         """
         t0 = time.monotonic()
-        self.last_search_trace = {
-            "mode": "legacy",
-            "query": (query or "")[:200],
-            "stages": {},
-        }
+        state = _SearchRequestState(
+            trace={
+                "mode": "legacy",
+                "query": (query or "")[:200],
+                "stages": {},
+            },
+        )
 
         if query_spec is not None:
             from src.services.db import Database
@@ -139,24 +168,54 @@ class SearchService:
                     "score": 1.0,
                 })
             if structured:
-                self.last_search_trace["mode"] = "query_spec"
-                return structured
+                state.trace["mode"] = "query_spec"
+                state.trace["result_count"] = len(structured)
+                return self._to_execution(structured, state)
 
         if self._should_use_verified_hybrid():
-            output = self._search_verified_hybrid(query, top_k=top_k, t0=t0)
+            output = self._search_verified_hybrid(query, top_k=top_k, t0=t0, state=state)
             elapsed = time.monotonic() - t0
             logger.info(
                 "Verified hybrid search in %.2fs: %d results for query=%r",
                 elapsed, len(output), query[:50],
             )
-            self.last_search_trace["elapsed_ms"] = round(elapsed * 1000, 2)
-            return output
+            state.trace["elapsed_ms"] = round(elapsed * 1000, 2)
+            return self._to_execution(output, state)
 
-        return self._search_legacy_pipeline(query, top_k=top_k, t0=t0)
+        output = self._search_legacy_pipeline(query, top_k=top_k, t0=t0, state=state)
+        return self._to_execution(output, state)
 
-    def _search_legacy_pipeline(self, query: str, top_k: int, t0: float) -> list[dict]:
+    def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
+        """兼容入口：返回 results 列表（内部委托 execute）。"""
+        return list(
+            self.execute(
+                query=query,
+                top_k=top_k,
+                query_spec=query_spec,
+            ).results,
+        )
+
+    @staticmethod
+    def _to_execution(output: list[dict], state: _SearchRequestState) -> SearchExecution:
+        conflicts = state.conflicts or list(state.trace.get("conflicts") or [])
+        return SearchExecution(
+            results=tuple(output),
+            trace=state.trace,
+            disclose_claims=tuple(state.disclose_claims),
+            conflicts=tuple(conflicts),
+            fallbacks=tuple(state.fallbacks),
+            warnings=tuple(state.warnings),
+        )
+
+    def _search_legacy_pipeline(
+        self,
+        query: str,
+        top_k: int,
+        t0: float,
+        state: _SearchRequestState,
+    ) -> list[dict]:
         """原有管线：改写 + legacy wiki FTS + hybrid + rerank（evidence_only / 未开 fusion）。"""
-        self.last_search_trace["mode"] = "legacy_raw"
+        state.trace["mode"] = "legacy_raw"
         output: list[dict] = []
 
         # ── 阶段 1: 查询改写 + Wiki 搜索（并行） ──
@@ -185,19 +244,21 @@ class SearchService:
                 logger.warning("Wiki search failed: %s", e)
                 wiki_results = []
 
-        self.last_search_trace["stages"]["query_rewrite"] = {"count": len(queries)}
-        self.last_search_trace["stages"]["legacy_wiki_fts"] = {"count": len(wiki_results)}
+        state.trace["stages"]["query_rewrite"] = {"count": len(queries)}
+        state.trace["stages"]["legacy_wiki_fts"] = {"count": len(wiki_results)}
 
         candidates = self._raw_retrieve(queries, query, top_k)
-        self.last_search_trace["stages"]["raw_retrieval"] = {"count": len(candidates)}
+        state.trace["stages"]["raw_retrieval"] = {"count": len(candidates)}
 
         if candidates:
             try:
                 candidates = self._timed_rerank(query, candidates, top_k)
             except FuturesTimeout:
                 logger.warning("Rerank timed out, keeping original order")
+                state.warnings.append("rerank_timeout")
             except Exception as e:
                 logger.warning("Rerank failed: %s", e)
+                state.warnings.append(f"rerank_failed:{e}")
 
         if candidates:
             candidates = self._diversity_filter(candidates, threshold=0.8)
@@ -207,11 +268,17 @@ class SearchService:
 
         elapsed = time.monotonic() - t0
         logger.info("Search completed in %.2fs: %d results for query=%r", elapsed, len(output), query[:50])
-        self.last_search_trace["elapsed_ms"] = round(elapsed * 1000, 2)
-        self.last_search_trace["result_count"] = len(output)
+        state.trace["elapsed_ms"] = round(elapsed * 1000, 2)
+        state.trace["result_count"] = len(output)
         return output
 
-    def _search_verified_hybrid(self, query: str, top_k: int, t0: float) -> list[dict]:
+    def _search_verified_hybrid(
+        self,
+        query: str,
+        top_k: int,
+        t0: float,
+        state: _SearchRequestState,
+    ) -> list[dict]:
         """Phase 3: Router + parallel Raw/Claim + Gate + normalize + RRF fuse."""
         from src.services.verified_hybrid_fusion import (
             claims_to_candidates,
@@ -221,14 +288,14 @@ class SearchService:
         )
         from src.services.verified_query_router import merge_route_with_config, route_query
 
-        self.last_search_trace["mode"] = "hybrid_verified"
+        state.trace["mode"] = "hybrid_verified"
         route = route_query(query)
         route = merge_route_with_config(
             route,
             config_wiki_weight=float(self._verified_cfg("wiki_weight", 0.40)),
             config_raw_weight=float(self._verified_cfg("raw_weight", 0.60)),
         )
-        self.last_search_trace["route"] = route.to_dict()
+        state.trace["route"] = route.to_dict()
 
         raw_mult = int(self._verified_cfg("raw_candidate_multiplier", 3) or 3)
         wiki_mult = int(self._verified_cfg("wiki_candidate_multiplier", 2) or 2)
@@ -239,12 +306,12 @@ class SearchService:
         claim_pairs: list = []
         wiki_error: str | None = None
         raw_candidates: list[dict] = []
-        self._last_claim_error: str | None = None
+        state.claim_error = None
 
         with ThreadPoolExecutor(max_workers=3) as pool:
             rewrite_future = pool.submit(self._rewrite_query, query)
             claim_future = pool.submit(
-                self._safe_verified_claim_retrieve, query, wiki_limit,
+                self._safe_verified_claim_retrieve, query, wiki_limit, state,
             )
             # Raw starts after rewrite when possible; also submit hybrid on original
             # immediately so rewrite timeout cannot block raw.
@@ -258,7 +325,7 @@ class SearchService:
             except Exception as e:
                 logger.warning("Query rewrite failed: %s", e)
                 queries = [query]
-            self.last_search_trace["stages"]["query_rewrite"] = {"count": len(queries)}
+            state.trace["stages"]["query_rewrite"] = {"count": len(queries)}
 
             try:
                 claim_pairs = claim_future.result(timeout=self._stage_timeout("wiki_search"))
@@ -270,8 +337,8 @@ class SearchService:
                 wiki_error = f"wiki_claim_error:{e}"
                 logger.warning("Verified claim retrieval failed: %s — raw continues", e)
                 claim_pairs = []
-            if wiki_error is None and getattr(self, "_last_claim_error", None):
-                wiki_error = f"wiki_claim_error:{self._last_claim_error}"
+            if wiki_error is None and state.claim_error:
+                wiki_error = f"wiki_claim_error:{state.claim_error}"
 
             try:
                 raw_candidates = hybrid_future.result(timeout=self._stage_timeout("hybrid_search"))
@@ -313,8 +380,10 @@ class SearchService:
                 raw_candidates = self._timed_rerank(query, raw_candidates, raw_top)
             except FuturesTimeout:
                 logger.warning("Rerank timed out in verified path")
+                state.warnings.append("rerank_timeout")
             except Exception as e:
                 logger.warning("Rerank failed in verified path: %s", e)
+                state.warnings.append(f"rerank_failed:{e}")
             raw_candidates = self._diversity_filter(raw_candidates, threshold=0.8)
 
         claim_cands = claims_to_candidates(claim_pairs, query=query, limit=wiki_limit)
@@ -322,16 +391,23 @@ class SearchService:
             normalize_raw_candidate(r, rank=i) for i, r in enumerate(raw_candidates)
         ]
 
-        self.last_search_trace["stages"]["verified_wiki"] = {
+        state.trace["stages"]["verified_wiki"] = {
             "pairs": len(claim_pairs),
             "candidates": len(claim_cands),
             "error": wiki_error,
         }
-        self.last_search_trace["stages"]["raw_retrieval"] = {"count": len(raw_norm)}
+        state.trace["stages"]["raw_retrieval"] = {"count": len(raw_norm)}
+        if wiki_error:
+            state.warnings.append(f"wiki_degraded:{wiki_error}")
+            state.fallbacks.append({
+                "from": "verified_wiki",
+                "to": "raw_retrieval",
+                "reason": str(wiki_error),
+            })
 
         empty_wiki_ok = bool(self._verified_cfg("empty_wiki_fallback_to_raw", True))
         if not claim_cands and empty_wiki_ok:
-            self.last_search_trace["stages"]["fallback"] = "empty_wiki_to_raw"
+            state.record_fallback("empty_wiki_to_raw")
 
         fused = fuse_verified_and_raw(
             claim_cands,
@@ -340,7 +416,7 @@ class SearchService:
             raw_weight=route.raw_weight,
             top_n=top_k * 2,
         )
-        self.last_search_trace["stages"]["fusion"] = {
+        state.trace["stages"]["fusion"] = {
             "count": len(fused),
             "wiki_weight": route.wiki_weight,
             "raw_weight": route.raw_weight,
@@ -357,7 +433,7 @@ class SearchService:
             seen.add(key)
             # Primary list excludes disclose_only; Phase 4 keeps them for conflict disclosure
             if cand.get("disclose_only") and cand.get("candidate_type") == "claim":
-                self.last_search_trace.setdefault("disclose_claims", []).append(
+                state.trace.setdefault("disclose_claims", []).append(
                     cand.get("claim_id"),
                 )
                 packaged_disclose = package_fused_result(
@@ -379,7 +455,7 @@ class SearchService:
 
         # Guarantee Raw fallback when fusion produced nothing but raw exists
         if not output and raw_norm:
-            self.last_search_trace["stages"]["fallback"] = "fusion_empty_to_raw"
+            state.record_fallback("fusion_empty_to_raw")
             for i, cand in enumerate(raw_norm):
                 output.append(package_fused_result(
                     cand, db=self._db, citation_builder=citation_builder, query=query,
@@ -398,14 +474,14 @@ class SearchService:
                 non_claims = [r for r in output if r.get("source") != "verified_claim"]
                 kept, dropped = filter_stale_claims(claims, drop_stale=True)
                 if dropped:
-                    self.last_search_trace.setdefault("stages", {})["freshness_filter"] = {
+                    state.trace.setdefault("stages", {})["freshness_filter"] = {
                         "dropped_stale": len(dropped),
                         "ids": [d.get("claim_id") for d in dropped],
                     }
                     output = kept + non_claims
                     # Prefer raw when stale claims removed
                     if not kept and non_claims:
-                        self.last_search_trace["stages"]["fallback"] = "stale_claims_to_raw"
+                        state.record_fallback("stale_claims_to_raw")
         except Exception as e:  # noqa: BLE001
             logger.debug("freshness filter skipped: %s", e)
 
@@ -416,25 +492,27 @@ class SearchService:
             claim_rows = [r for r in output if r.get("source") == "verified_claim"] + disclose_rows
             conflicts = detect_claim_conflicts(claim_rows)
             if conflicts:
-                self.last_search_trace["conflicts"] = conflicts
-                self.last_search_trace["conflict_disclosed"] = True
+                state.conflicts = list(conflicts)
+                state.trace["conflicts"] = conflicts
+                state.trace["conflict_disclosed"] = True
         except Exception as e:  # noqa: BLE001
             logger.debug("conflict scan skipped: %s", e)
 
-        self.last_disclose_claims = disclose_rows
-        self.last_search_trace["result_count"] = len(output)
-        self.last_search_trace["sources"] = {
+        state.disclose_claims = disclose_rows
+        state.trace["result_count"] = len(output)
+        state.trace["sources"] = {
             "verified_claim": sum(1 for r in output if r.get("source") == "verified_claim"),
             "knowledge": sum(1 for r in output if r.get("source") == "knowledge"),
             "disclose_only": len(disclose_rows),
         }
         return output
 
-    def get_disclose_claim_rows(self) -> list[dict[str, Any]]:
-        """Phase 4 side-channel: disclose_only claims from last hybrid search."""
-        return list(self.last_disclose_claims or [])
-
-    def _safe_verified_claim_retrieve(self, query: str, limit: int) -> list:
+    def _safe_verified_claim_retrieve(
+        self,
+        query: str,
+        limit: int,
+        state: _SearchRequestState | None = None,
+    ) -> list:
         """Gate-filtered claim pairs; never raises to caller thread."""
         try:
             repo = self._wiki_repository
@@ -459,7 +537,8 @@ class SearchService:
             scored.sort(key=lambda x: x[0], reverse=True)
             return [(c, d) for s, c, d in scored if s > 0 or len(scored) <= limit][:limit]
         except Exception as e:  # noqa: BLE001
-            self._last_claim_error = str(e)
+            if state is not None:
+                state.claim_error = str(e)
             logger.warning("Verified claim retrieve internal error: %s", e)
             return []
 

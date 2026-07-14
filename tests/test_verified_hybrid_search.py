@@ -183,13 +183,14 @@ class TestSearchServiceVerifiedHybrid:
                 }],
             ),
         ):
-            results = service.search("FTTR", top_k=5)
+            ex = service.execute("FTTR", top_k=5)
 
+        results = list(ex.results)
         assert results
         assert any(r.get("source") == "knowledge" for r in results)
-        assert service.last_search_trace.get("mode") == "hybrid_verified"
+        assert ex.trace.get("mode") == "hybrid_verified"
         # wiki stage recorded error, raw still present
-        wiki_stage = service.last_search_trace["stages"].get("verified_wiki") or {}
+        wiki_stage = ex.trace["stages"].get("verified_wiki") or {}
         assert wiki_stage.get("error")
 
     def test_verified_claim_in_results_with_evidence(self):
@@ -291,6 +292,6 @@ class TestSearchServiceVerifiedHybrid:
                 }],
             ),
         ):
-            results = service.search("q", top_k=5)
-        assert results[0]["source"] == "knowledge"
-        assert service.last_search_trace["mode"] == "legacy_raw"
+            ex = service.execute("q", top_k=5)
+        assert list(ex.results)[0]["source"] == "knowledge"
+        assert ex.trace["mode"] == "legacy_raw"
