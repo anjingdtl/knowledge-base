@@ -23,6 +23,8 @@
 ## 验收期根因修复
 
 - `tools/run_retrieval_shadow_eval.py`：`summary` dict 补 `dict[str, Any]` 注解，消除 mypy 2.1.0 下 11 个 operator/arg-type 错误（`777cb0a`，v1.10.1 基线既有退化，运行时行为不变）。
+- `scripts/windows-smoke.ps1`：MCP 启动等待 30→60s 并在失败时 dump MCP 日志；init 后新增 `alembic upgrade head`，修复 `index --dry-run` 经 `Database.connect()` legacy constructor 建 `_SCHEMA` 表不 stamp、导致 MCP 启动被 migration gate 拦截的根因（`a70b19f` / `feaadcd`）。
+- `tests/test_wiki_rebuild_scheduler.py`：`test_distinct_kids_not_merged` 改用长 debounce，消除 `Timer(0)` 异步 flush 与 `pending_count` 断言的时序竞争（`5870386`，v1.10.1 既有 flaky）。
 
 ## 明确未修改
 
@@ -47,13 +49,13 @@
 | Frontend Build | `cd client && npm ci && npm run build` | client@1.10.2，44 modules，810ms |
 | Version Consistency | `pytest tests/architecture/test_version_consistency.py` | 6 passed |
 | Architecture | `pytest tests/architecture/ -q` | 30 passed |
-| Remote CI | push 后 GitHub Actions | 全绿（见下方发布节） |
+| Remote CI | GitHub Actions run `29347919152` | success — 全部 11 个 job 绿（2026-07-14） |
 
 skipped 说明：2 个 skip 为基线既有的环境条件 skip（`tests/test_mcp_contract.py:129` FastMCP 注册表暴露），非本轮引入、非隐藏失败。
 
 ## 发布
 
-- Release Commit：`release: v1.10.2 one-shot final closure`（本提交）
+- Release Commit：`release: v1.10.2 one-shot final closure`（`758e802`）+ 验收期 CI 根因修复（`777cb0a` / `a70b19f` / `feaadcd` / `5870386`）
 - Tag：`v1.10.2`
 - GitHub Release：引用 `docs/release/v1.10.2-release-notes.md`
 
