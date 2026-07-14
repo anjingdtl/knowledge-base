@@ -72,7 +72,9 @@
 
 ---
 
-## Verified Hybrid 融合收束纠偏（已完成，2026-07-14）
+## Verified Hybrid 融合收束纠偏已完成（2026-07-14）
+
+> 状态标记：**Verified Hybrid 融合收束纠偏已完成**；远端 CI 全绿（Python matrix / Docker / Windows 冒烟 / Frontend / Eval）。
 
 执行依据：
 

@@ -173,7 +173,8 @@ def test_ingest_url_supports_dry_run_without_fetching(mcp_env, monkeypatch):
 
 
 def test_mcp_lifespan_starts_and_stops_async_worker(monkeypatch):
-    import src.mcp_server as mcp_mod
+    # Phase-3: lifespan lives in src.mcp.runtime (server re-exports it).
+    import src.mcp.runtime as runtime_mod
     import src.services.async_worker as worker_mod
 
     calls: list[str] = []
@@ -181,15 +182,19 @@ def test_mcp_lifespan_starts_and_stops_async_worker(monkeypatch):
     async def fake_heartbeat_loop():
         await asyncio.Event().wait()
 
-    monkeypatch.setattr(mcp_mod, "create_container", lambda: object())
-    monkeypatch.setattr(mcp_mod, "shutdown_container", lambda container: calls.append("shutdown"))
-    monkeypatch.setattr(mcp_mod, "beat", lambda: None)
-    monkeypatch.setattr(mcp_mod, "_heartbeat_loop", fake_heartbeat_loop)
-    monkeypatch.setattr(worker_mod, "start_worker", lambda **kwargs: calls.append(f"start:{kwargs}"))
+    monkeypatch.setattr(runtime_mod, "create_container", lambda: object())
+    monkeypatch.setattr(
+        runtime_mod, "shutdown_container", lambda container: calls.append("shutdown")
+    )
+    monkeypatch.setattr(runtime_mod, "beat", lambda: None)
+    monkeypatch.setattr(runtime_mod, "heartbeat_loop", fake_heartbeat_loop)
+    monkeypatch.setattr(
+        worker_mod, "start_worker", lambda **kwargs: calls.append(f"start:{kwargs}")
+    )
     monkeypatch.setattr(worker_mod, "stop_worker", lambda: calls.append("stop"))
 
     async def run_lifespan():
-        async with mcp_mod.server_lifespan(None):
+        async with runtime_mod.server_lifespan(None):
             calls.append("inside")
 
     asyncio.run(run_lifespan())
