@@ -133,3 +133,49 @@ def upgrade_to_head(
         after_revision=after,
         upgraded=True,
     )
+
+
+def stamp_to_revision(
+    db_path: str | Path,
+    revision: str,
+    *,
+    project_root: Path | None = None,
+) -> str:
+    """Stamp alembic_version without running migrations (explicit revision only).
+
+    Never accepts bare ``head`` as a free-form stamp of unknown schema; caller
+    must resolve a concrete revision id first.
+    """
+    if not revision or revision.strip().lower() == "head":
+        raise AlembicUpgradeError(
+            "refusing to stamp free-form 'head' onto unknown schema; "
+            "pass an explicit revision id from a high-confidence detector match"
+        )
+    path = Path(db_path)
+    if not path.is_file():
+        raise AlembicUpgradeError(f"cannot stamp missing database: {path}")
+    root = project_root or _default_project_root()
+    url = sqlite_url_for_path(path)
+    env = os.environ.copy()
+    env["SHINEHE_TEST_ALEMBIC_URL"] = url
+    env.pop("SHINEHE_ENFORCE_MIGRATION_GATE", None)
+    result = subprocess.run(
+        [sys.executable, "-m", "alembic", "stamp", revision],
+        cwd=str(root),
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    if result.returncode != 0:
+        combined = (result.stdout or "") + "\n" + (result.stderr or "")
+        raise AlembicUpgradeError(
+            f"alembic stamp {revision} failed for {path}:\n{combined[-3000:]}"
+        )
+    current = get_current_revision(path)
+    if current != revision:
+        raise AlembicUpgradeError(
+            f"after stamp expected {revision}, got {current}"
+        )
+    return str(current)

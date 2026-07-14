@@ -79,7 +79,8 @@ def test_behind_head_readonly_allowed(tmp_path: Path, enforce_env):
     assert decision.write_allowed is False
 
 
-def test_unstamped_with_tables_warns_but_allows_by_default(tmp_path: Path, enforce_env):
+def test_unstamped_with_tables_blocked_by_default(tmp_path: Path, enforce_env):
+    """WP4: allow_unstamped default False — write boot blocked."""
     db = tmp_path / "legacy.db"
     conn = sqlite3.connect(str(db))
     conn.execute("CREATE TABLE knowledge_items (id TEXT PRIMARY KEY)")
@@ -88,14 +89,12 @@ def test_unstamped_with_tables_warns_but_allows_by_default(tmp_path: Path, enfor
 
     class C:
         def get(self, key, default=None):
-            # allow_unstamped defaults True when missing
             if key == "storage.migration_gate.enabled":
                 return True
             return default
 
-    decision = enforce_startup_gate(db, config=C())
-    assert decision.status.unstamped
-    assert decision.write_allowed is True
+    with pytest.raises(MigrationGateError):
+        enforce_startup_gate(db, config=C())
 
 
 def test_unstamped_strict_blocks(tmp_path: Path, enforce_env):

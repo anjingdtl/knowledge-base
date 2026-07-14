@@ -38,7 +38,7 @@ storage:
   # readonly: true   # diagnostic boot when schema is behind head
   migration_gate:
     enabled: true
-    # allow_unstamped: true  # transition: legacy DBs without alembic_version (warn only)
+    # allow_unstamped: false  # WP4 default: non-empty unstamped DB refuses write boot
     # auto_upgrade_empty: true  # WP3: missing/empty DB → alembic upgrade head (default true)
 # Phase-2 / closure WP5: retrieval orchestrator is unified only
 # (legacy/shadow config values are deprecated aliases → unified).

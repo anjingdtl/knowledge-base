@@ -108,27 +108,20 @@ def test_create_container_enforces_gate_before_open_runtime():
     assert "enforce_startup_gate(" not in body
 
 
-def test_allow_unstamped_default_is_true():
-    """Current default: allow_unstamped=True (transition for legacy DBs)."""
+def test_allow_unstamped_default_is_false():
+    """WP4: allow_unstamped default False (non-empty unstamped write boot blocked)."""
     text = _read(STARTUP_GATE_PY)
-    # resolve_allow_unstamped default argument True
-    assert re.search(
-        r'resolve_allow_unstamped|allow_unstamped["\'].*True|'
-        r'allow_unstamped["\'],\s*True',
-        text,
-    )
-    # Explicit default in _cfg_bool call
     assert (
-        'storage.migration_gate.allow_unstamped", True)' in text
-        or "storage.migration_gate.allow_unstamped', True)" in text
+        'storage.migration_gate.allow_unstamped", False)' in text
+        or "storage.migration_gate.allow_unstamped', False)" in text
         or re.search(
-            r'allow_unstamped["\'],\s*True\s*\)',
+            r'allow_unstamped["\'],\s*False\s*\)',
             text,
         )
     )
     from src.storage.startup_gate import resolve_allow_unstamped
 
-    assert resolve_allow_unstamped(None) is True
+    assert resolve_allow_unstamped(None) is False
 
 
 def test_architecture_closure_ci_uses_strict():

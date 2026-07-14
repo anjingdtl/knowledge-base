@@ -6,6 +6,7 @@
   shinehe watch   — 监听文件变更
   shinehe doctor  — 健康检查
   shinehe mcp     — 启动 MCP 服务（委托给 mcp_cli）
+  shinehe db      — 数据库迁移治理（status/backup/migrate/stamp/verify）
 """
 from __future__ import annotations
 
@@ -567,6 +568,58 @@ def _handle_maintenance(args: argparse.Namespace) -> int:
     return 1
 
 
+def _handle_db(args: argparse.Namespace) -> int:
+    """WP4: shinehe db status|backup|migrate|stamp|verify"""
+    from src.storage.migration_cli import (
+        MigrationWorkflowError,
+        backup_database,
+        db_status,
+        migrate_database,
+        stamp_database,
+        verify_database,
+    )
+    from src.utils.config import Config
+
+    Config.load(getattr(args, "config", None))
+    db_path = Path(args.db) if getattr(args, "db", None) else Config.get_db_path()
+    sub = getattr(args, "db_command", None)
+
+    try:
+        if sub == "status":
+            info = db_status(db_path, config=Config)
+            for k, v in info.items():
+                print(f"{k}: {v}")
+            return 0
+        if sub == "backup":
+            dest = backup_database(db_path)
+            print(f"[OK] backup: {dest}")
+            return 0
+        if sub == "verify":
+            result = verify_database(db_path)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0 if result.get("passed") else 2
+        if sub == "stamp":
+            result = stamp_database(
+                db_path,
+                from_version=args.from_version,
+                force=bool(getattr(args, "force", False)),
+            )
+            print(f"[OK] stamped: {result}")
+            return 0
+        if sub == "migrate":
+            result = migrate_database(db_path)
+            print(f"[OK] migrate: {json.dumps(result, ensure_ascii=False, default=str)}")
+            return 0
+        print(f"[ERROR] unknown db command: {sub}", file=sys.stderr)
+        return 1
+    except MigrationWorkflowError as exc:
+        print(f"[ERROR] {exc}", file=sys.stderr)
+        return 1
+    except Exception as exc:
+        print(f"[ERROR] {exc}", file=sys.stderr)
+        return 1
+
+
 def main(argv: list[str] | None = None) -> None:
     """ShineHeKnowledge CLI 主入口"""
     parser = argparse.ArgumentParser(
@@ -795,6 +848,41 @@ def main(argv: list[str] | None = None) -> None:
     res_p.add_argument("--note", default="")
     res_p.add_argument("--confirm", action="store_true")
     r4_p = maint_sub.add_parser("evaluate-r4", help="R4 策略预检")
+
+    # --- db (WP4 legacy migration) ---
+    db_parser = subparsers.add_parser(
+        "db",
+        help="数据库迁移治理（status/backup/migrate/stamp/verify）",
+    )
+    db_parser.add_argument(
+        "--db",
+        default=None,
+        help="SQLite 路径（默认 Config storage 路径；禁止隐式改用户库请显式传入）",
+    )
+    db_parser.add_argument(
+        "--config",
+        default=None,
+        help="配置文件路径",
+    )
+    db_sub = db_parser.add_subparsers(dest="db_command", help="db 子命令")
+    db_sub.add_parser("status", help="迁移状态与推荐操作")
+    db_sub.add_parser("backup", help="SQLite Backup API 备份")
+    db_sub.add_parser("verify", help="integrity / 行数 / head 校验")
+    db_sub.add_parser("migrate", help="备份→识别→stamp→upgrade head→校验")
+    stamp_p = db_sub.add_parser(
+        "stamp",
+        help="仅 stamp（需 --from-version 且 detector 高置信匹配；禁止 stamp head）",
+    )
+    stamp_p.add_argument(
+        "--from-version",
+        required=True,
+        help="历史版本 id，如 v1.9.x / v1.9.x+maintenance（禁止 head）",
+    )
+    stamp_p.add_argument(
+        "--force",
+        action="store_true",
+        help="允许 stamp 目标与 detector 不完全一致（危险）",
+    )
     r4_p.add_argument("--job-type", default="publish")
     r4_p.add_argument("--confirm", action="store_true")
 
@@ -815,6 +903,7 @@ def main(argv: list[str] | None = None) -> None:
         "migrate": _handle_migrate,
         "rebuild": _handle_rebuild,
         "maintenance": _handle_maintenance,
+        "db": _handle_db,
     }
 
     handler = handlers.get(args.command)

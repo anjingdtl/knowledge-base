@@ -87,8 +87,9 @@ def test_inspect_unstamped_does_not_modify_schema(tmp_path: Path, enforce_env):
 
     plan = inspect_database_bootstrap(db, config=_Cfg())
     assert plan.migration_status.unstamped is True
-    # WP2: default allow_unstamped remains True — inspect may allow write but must not stamp
-    assert plan.action != "block" or plan.write_allowed is False  # flexible: default allows
+    # WP4: default allow_unstamped=false → block write; inspect must not stamp
+    assert plan.action == "block"
+    assert plan.write_allowed is False
     assert "alembic_version" not in tables_before
 
     conn = sqlite3.connect(str(db))

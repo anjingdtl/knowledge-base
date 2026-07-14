@@ -155,8 +155,9 @@ def test_unstamped_inspect_does_not_modify(tmp_path: Path, enforce_env):
 
     plan = inspect_database_bootstrap(db, config=_Cfg())
     assert plan.migration_status.unstamped is True
-    # WP2: default allow_unstamped remains True — must not stamp during inspect
-    assert plan.action != "block" or plan.write_allowed is False
+    # WP4: default allow_unstamped=false → block; inspect must not stamp
+    assert plan.action == "block"
+    assert plan.write_allowed is False
 
     conn = sqlite3.connect(str(db))
     tables_after = {

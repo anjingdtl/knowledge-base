@@ -77,8 +77,8 @@ def resolve_gate_enabled(config: Any = None) -> bool:
 
 
 def resolve_allow_unstamped(config: Any = None) -> bool:
-    """Transition default True so legacy _migrate()-only DBs can still boot with warn."""
-    return _cfg_bool(config, "storage.migration_gate.allow_unstamped", True)
+    """WP4: default False — non-empty unstamped DBs refuse write boot."""
+    return _cfg_bool(config, "storage.migration_gate.allow_unstamped", False)
 
 
 def resolve_auto_upgrade_empty(config: Any = None) -> bool:
