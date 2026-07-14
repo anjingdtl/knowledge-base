@@ -70,6 +70,12 @@ try {
     try {
         Invoke-Python -m src.cli --help
         Invoke-Python -m src.cli init --local --force --path $tempRoot
+        # Initialize the smoke DB via Alembic so it is stamped at head before
+        # any tool touches it. Database.connect() would otherwise take the
+        # legacy constructor on a missing DB and create _SCHEMA tables without
+        # an alembic_version row, tripping the migration gate when the MCP
+        # server starts (v1.10.2 Windows Smoke root cause).
+        Invoke-Python -m alembic upgrade head
         Invoke-Python -m src.cli index $fixture --dry-run
 
         # Keep the process and all state under the Windows temp workspace.
