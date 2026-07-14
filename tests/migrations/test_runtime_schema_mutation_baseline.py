@@ -86,23 +86,26 @@ def test_database_init_executes_schema_and_migrate():
     assert re.search(r"self\._migrate\s*\(\s*\)", body)
 
 
-def test_create_container_calls_gate_after_database():
-    """Current order: Database(...) then enforce_startup_gate(...)."""
+def test_create_container_enforces_gate_before_open_runtime():
+    """WP2: inspect/enforce bootstrap plan then Database.open_runtime(...)."""
     text = _read(CONTAINER_PY)
     start = text.find("def create_container(")
     assert start >= 0, "create_container not found"
-    # Next top-level def/class after create_container
     rest = text[start + 1 :]
     end_rel = re.search(r"\n(?:def |class )", rest)
     body = rest[: end_rel.start()] if end_rel else rest
-    db_pos = body.find("db = Database(")
-    assert db_pos >= 0, "Database construction not found in create_container"
-    gate_pos = body.find("enforce_startup_gate(")
-    assert gate_pos >= 0, "enforce_startup_gate not found in create_container"
-    assert db_pos < gate_pos, (
-        "CURRENT baseline: Database is constructed before Migration Gate "
-        f"(db_pos={db_pos}, gate_pos={gate_pos})"
+    inspect_pos = body.find("inspect_database_bootstrap(")
+    enforce_pos = body.find("enforce_bootstrap_plan(")
+    open_pos = body.find("Database.open_runtime(")
+    assert inspect_pos >= 0, "inspect_database_bootstrap not found"
+    assert enforce_pos >= 0, "enforce_bootstrap_plan not found"
+    assert open_pos >= 0, "Database.open_runtime not found"
+    assert inspect_pos < enforce_pos < open_pos, (
+        f"expected inspect < enforce < open_runtime "
+        f"(inspect={inspect_pos}, enforce={enforce_pos}, open={open_pos})"
     )
+    # Must not reintroduce gate-after-construct pattern
+    assert "enforce_startup_gate(" not in body
 
 
 def test_allow_unstamped_default_is_true():

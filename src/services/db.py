@@ -681,30 +681,78 @@ class Database(metaclass=_DatabaseMeta):
     _instance: "Database | None" = None  # 全局实例引用（向后兼容入口）
 
     def __init__(self, db_path: str | Path):
+        """Legacy constructor — still runs _SCHEMA/_migrate (WP5 removes production use).
+
+        Prefer Database.open_runtime() after bootstrap gate for production boot.
+        """
         self._db_path = str(db_path)
         self._local = threading.local()
         self._write_lock = threading.RLock()  # 可重入锁，防止嵌套调用死锁
         self._shutdown: bool = False
         self._base_conn: Optional[sqlite3.Connection] = None
+        self._readonly: bool = False
         self._connect_internal()
 
+    @classmethod
+    def open_runtime(
+        cls,
+        db_path: str | Path,
+        *,
+        readonly: bool = False,
+    ) -> "Database":
+        """Open runtime DB after Migration Gate (caller must gate first).
+
+        - write: transitional _SCHEMA/_migrate until WP5
+        - readonly: SQLite mode=ro; no create / _SCHEMA / _migrate / WAL
+        """
+        if readonly:
+            return cls._open_readonly_runtime(db_path)
+        return cls(db_path)
+
+    @classmethod
+    def _open_readonly_runtime(cls, db_path: str | Path) -> "Database":
+        path = Path(db_path)
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"readonly open requires an existing database file: {path}"
+            )
+        obj = object.__new__(cls)
+        obj._db_path = str(path)
+        obj._local = threading.local()
+        obj._write_lock = threading.RLock()
+        obj._shutdown = False
+        obj._readonly = True
+        uri = f"file:{path.resolve().as_posix()}?mode=ro"
+        obj._base_conn = sqlite3.connect(
+            uri, uri=True, check_same_thread=False, timeout=30.0
+        )
+        obj._configure_connection(obj._base_conn, readonly=True)
+        Database._instance = obj
+        return obj
+
     def _connect_internal(self):
-        """内部：初始化连接和 schema"""
-        self._base_conn = sqlite3.connect(self._db_path, check_same_thread=False, timeout=30.0)
-        self._configure_connection(self._base_conn)
+        """内部：初始化连接和 schema（写模式 / 兼容构造路径）"""
+        self._base_conn = sqlite3.connect(
+            self._db_path, check_same_thread=False, timeout=30.0
+        )
+        self._configure_connection(self._base_conn, readonly=False)
         self._base_conn.executescript(_SCHEMA)
         self._migrate()
         self._base_conn.commit()
         self._shutdown = False
         Database._instance = self  # 设置全局引用
 
-
-    def _configure_connection(self, conn: sqlite3.Connection) -> sqlite3.Connection:
+    def _configure_connection(
+        self, conn: sqlite3.Connection, *, readonly: bool | None = None
+    ) -> sqlite3.Connection:
         """为新创建的 SQLite 连接设置标准 PRAGMA 和 row_factory。"""
+        ro = self._readonly if readonly is None else readonly
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON")
-        conn.execute("PRAGMA journal_mode = WAL")
-        conn.execute("PRAGMA synchronous = NORMAL")
+        if not ro:
+            # WAL creates -wal/-shm; forbidden in readonly diagnostic mode
+            conn.execute("PRAGMA journal_mode = WAL")
+            conn.execute("PRAGMA synchronous = NORMAL")
         conn.execute("PRAGMA busy_timeout = 30000")
         conn.execute("PRAGMA cache_size = -64000")  # 64MB cache
         self._load_vec_extension(conn)
@@ -917,8 +965,17 @@ class Database(metaclass=_DatabaseMeta):
         if self._db_path is None:
             raise RuntimeError("Database not connected and db_path unknown")
 
-        conn = sqlite3.connect(self._db_path, check_same_thread=False, timeout=30.0)
-        self._configure_connection(conn)
+        if getattr(self, "_readonly", False):
+            uri = f"file:{Path(self._db_path).resolve().as_posix()}?mode=ro"
+            conn = sqlite3.connect(
+                uri, uri=True, check_same_thread=False, timeout=30.0
+            )
+            self._configure_connection(conn, readonly=True)
+        else:
+            conn = sqlite3.connect(
+                self._db_path, check_same_thread=False, timeout=30.0
+            )
+            self._configure_connection(conn, readonly=False)
         self._local.conn = conn
         return conn
 

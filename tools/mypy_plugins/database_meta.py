@@ -8,7 +8,11 @@ from mypy.typeops import bind_self
 from mypy.types import FunctionLike, Type, get_proper_type
 
 _DATABASE_ATTRIBUTE_PREFIX = "src.services.db.Database."
-_NATIVE_CLASS_ATTRIBUTES = frozenset({"connect"})
+_NATIVE_CLASS_ATTRIBUTES = frozenset({
+    "connect",
+    "open_runtime",
+    "_open_readonly_runtime",
+})
 
 
 def _bind_database_method(context: AttributeContext) -> Type:

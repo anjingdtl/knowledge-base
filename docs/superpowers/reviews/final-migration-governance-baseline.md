@@ -33,15 +33,15 @@
 
 ### 2.2 `create_container()` 中 Migration Gate 顺序
 
-| 步骤 | 当前实现 |
-|---|---|
-| 1 | `Config.load` |
-| 2 | `Database(str(db_path))`（**已执行 _SCHEMA + _migrate**） |
-| 2.5 | `enforce_startup_gate(db_path, config=config)` |
-| 3+ | VectorStore / BlockStore / Graph / AI services |
+| 步骤 | WP0 基线 | WP2 后 |
+|---|---|---|
+| 1 | `Config.load` | `Config.load` |
+| 2 | `Database(str(db_path))`（**已执行 _SCHEMA + _migrate**） | `inspect_database_bootstrap`（只读） |
+| 2.5 | `enforce_startup_gate(...)` | `enforce_bootstrap_plan` → **block 则不 open** |
+| 3 | VectorStore… | `Database.open_runtime(..., readonly=plan.readonly)` |
+| 4+ | — | VectorStore / BlockStore / Graph / AI |
 
-**结论（问题现状）：** Migration Gate 发生在 Database 构造**之后**，因此 gate 失败时数据库可能已被 `_SCHEMA` / `_migrate()` 修改。  
-目标顺序（WP2，本基线不实施）：inspect → gate → 仅合法后 open runtime。
+**WP2 结论：** Gate 在任何 Runtime Schema 修改之前；Behind-head 写模式在 `open_runtime` 前失败。
 
 源码位置：`src/core/container.py` → `create_container()`。
 

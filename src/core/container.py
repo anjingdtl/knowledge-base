@@ -637,9 +637,9 @@ def create_container(config_path: str | None = None) -> AppContainer:
 
     按依赖拓扑顺序构建服务:
     1. Config — 加载配置
-    2. Database — 创建 Database 实例（非类级别全局状态）
-    3. VectorStore — 初始化向量存储
-    4. EmbeddingService / LLMService — AI 服务
+    2. Bootstrap inspect + Migration Gate（只读检查，禁止先改 Schema）
+    3. Database.open_runtime — 仅在 Gate 通过后打开
+    4. VectorStore / BlockStore / Graph / AI 服务
     """
     # 1. Config
     from src.utils.config import Config
@@ -647,37 +647,40 @@ def create_container(config_path: str | None = None) -> AppContainer:
     config.load(config_path)
     logger.info("Config loaded")
 
-    # 2. Database — 创建实例（同时设置 Database._instance 供向后兼容）
+    # 2. Database — Gate 必须在任何 Schema 修改之前（WP2）
     from src.services.db import Database
+    from src.storage.database_bootstrap import (
+        enforce_bootstrap_plan,
+        inspect_database_bootstrap,
+    )
+    from src.storage.startup_gate import MigrationGateError
+
     db: Database
+    _gate_decision = None
     if Database._instance is not None:
         # 已有实例（如测试 fixture 已 connect），复用
         db = Database._instance
         logger.info("Database already connected, reusing existing instance")
     else:
         db_path = config.get_db_path()
-        db = Database(str(db_path))
-        logger.info("Database instance created: %s", db_path)
-
-    # 2.5 Migration head gate (WP4) — block write boot when schema behind head
-    from src.storage.startup_gate import MigrationGateError, enforce_startup_gate
-
-    _db_path_for_gate = str(getattr(db, "_db_path", None) or config.get_db_path())
-    try:
-        gate = enforce_startup_gate(_db_path_for_gate, config=config)
-        # Attach decision for callers (API/MCP) that want to surface readonly mode
-        # without failing boot.
-        # Note: AppContainer is a dataclass — set dynamic attr after construction
-        # temporarily store on config-like side channel via function local;
-        # re-applied after container is built below.
-        _gate_decision = gate
-        if gate.readonly and not gate.write_allowed:
-            logger.warning(
-                "Migration gate: write services disabled (%s)", gate.reason,
+        try:
+            plan = inspect_database_bootstrap(db_path, config=config)
+            enforce_bootstrap_plan(plan)
+            _gate_decision = plan
+            if plan.readonly and not plan.write_allowed:
+                logger.warning(
+                    "Migration gate: write services disabled (%s)", plan.reason,
+                )
+            db = Database.open_runtime(db_path, readonly=plan.readonly)
+            logger.info(
+                "Database runtime opened: %s (readonly=%s action=%s)",
+                db_path,
+                plan.readonly,
+                plan.action,
             )
-    except MigrationGateError:
-        logger.error("Migration gate blocked container creation")
-        raise
+        except MigrationGateError:
+            logger.error("Migration gate blocked container creation")
+            raise
 
     # 3. VectorStore（注入 Database 实例）
     from src.services.vectorstore import VectorStore
@@ -729,8 +732,13 @@ def create_container(config_path: str | None = None) -> AppContainer:
         embedding=embedding,
         llm=llm,
     )
-    container.migration_gate = _gate_decision  # type: ignore[attr-defined]
-    container.write_allowed = _gate_decision.write_allowed  # type: ignore[attr-defined]
+    if _gate_decision is not None:
+        container.migration_gate = _gate_decision  # type: ignore[attr-defined]
+        container.write_allowed = _gate_decision.write_allowed  # type: ignore[attr-defined]
+    else:
+        # Reused Database._instance (e.g. test fixtures): no new gate decision
+        container.migration_gate = None  # type: ignore[attr-defined]
+        container.write_allowed = True  # type: ignore[attr-defined]
 
     # 初始化仓库层 — 全部注入 Database 实例
     from src.repositories.block_repo import BlockRepository
