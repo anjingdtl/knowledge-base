@@ -50,13 +50,13 @@ def test_debt_metrics_are_non_negative_counts():
 
 
 def test_baseline_reflects_current_debt_shape():
-    """Post WP1/WP2 shape: large server remaining; retrieval tools real; Raw independent."""
+    """Post WP2 domain extract: server still large; multi-domain tools real."""
     m = collect_debt_metrics(ROOT)
+    # Still above final budget until remaining domains extract
     assert m["mcp_server_lines"] > 500
-    # WP2: domain tools began real implementations
-    assert m["mcp_tools_real_impl_count"] >= 1
+    # ingest/admin/wiki/retrieval now have real implementations
+    assert m["mcp_tools_real_impl_count"] >= 20
     assert m["search_service_has_legacy_pipeline"] is True
     assert m["raw_retriever_calls_search_service"] is False
-    # WP2: answering package no longer depends on services.verified_answer body
     assert m["answering_depends_on_verified_answer"] is False
     assert m["alembic_env_reads_test_url"] is False

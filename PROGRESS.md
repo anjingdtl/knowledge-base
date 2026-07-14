@@ -30,12 +30,14 @@
 
 **未做：** Legacy 删除；MCP tools 完整实拆；Container Provider 生命周期；Alembic head gate。
 
-### WP2 进度（Answer 完成；MCP 起步，2026-07-14）
+### WP2 进度（Answer 完成；MCP 分域进行中，2026-07-14）
 
 - ✅ Answer assemble → `src/answering/{assembler,citations,fallbacks}`；`verified_answer.py` 仅 re-export
 - ✅ 伪 `answer.orchestrator` 双路径清除（legacy/shadow → unified）
 - ✅ `TaggingService` + `RetrievalCommands`；MCP retrieval/auto_tag 委托 application
-- ⏳ `src/mcp/server.py` 仍大体量；wiki/graph/memory/admin/ingest 待分域
+- ✅ **ingest / administration / wiki** 工具实拆 → `src/mcp/tools/{ingest,administration,wiki}.py` + `support.py`
+- ✅ `server.py` ~3600 行 → **~2200 行**（工具主体迁出，保留 re-export 兼容）
+- ⏳ graph / memory / remaining retrieval(ask/read 等) 仍可继续压薄 server
 
 ---
 

@@ -1,11 +1,8 @@
-"""MCP tools by domain (Phase-3).
+"""MCP tools by domain (WP2 maintainability closure).
 
-Domain modules:
-  retrieval / ingest / administration / wiki / graph / memory
-
-Tool *implementations* currently load via ``src.mcp.server`` (moved from
-``mcp_server.py``). Domain modules below document grouping and re-export
-registry names for architecture tests and future extraction PRs.
+Domain modules contain real tool implementations registered via
+``tool_definition`` side-effects. ``src.mcp.server`` imports them for
+FastMCP registration and re-exports public callables.
 """
 from __future__ import annotations
 
@@ -27,28 +24,41 @@ INGEST_TOOLS = frozenset({
     "list_jobs",
     "reindex_all",
     "cancel_job",
+    "ingest_file",
+    "ingest_url",
+    "tags",
 })
 
 ADMINISTRATION_TOOLS = frozenset({
     "create",
     "update",
     "delete",
-    "restore",
-    "list_operation_logs",
+    "restore_knowledge",
+    "query_operation_logs",
+    "preview_operation",
+    "get_operation_log",
     "undo_operation",
+    "list_recent_operations",
 })
 
 WIKI_TOOLS = frozenset({
-    "wiki_search",
-    "wiki_get",
-    "wiki_list",
     "save_to_wiki",
-    "wiki_compile",
+    "wiki_lint",
+    "fix_dead_references",
+    "wiki_submit_review",
+    "wiki_approve",
+    "wiki_reject",
+    "wiki_deprecate",
+    "wiki_workflow_history",
+    "wiki_list_versions",
+    "wiki_restore_version",
+    "delete_wiki_page",
 })
 
 GRAPH_TOOLS = frozenset({
     "graph_query",
     "graph_neighbors",
+    "graph_traverse",
 })
 
 MEMORY_TOOLS = frozenset({
@@ -58,6 +68,8 @@ MEMORY_TOOLS = frozenset({
     "search_decisions",
     "summarize_recent_changes",
     "forget_fact",
+    "delete_memory",
+    "extract_tasks_from_doc",
 })
 
 DOMAIN_GROUPS = {
