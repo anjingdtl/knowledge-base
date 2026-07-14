@@ -1,9 +1,30 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-14
-> 源码版本：`src/version.py` 中的 **`1.8.1`**
-> 当前分支：`master`
-> 当前方向：**可维护性一期（契约冻结 + 请求状态隔离）已完成并发布 v1.8.1**；二期（Retrieval/Wiki）准入条件见 phase1 验收报告。Verified Hybrid 融合收束纠偏此前已完成（v1.8.0）。
+> 源码版本：`src/version.py` 中的 **`1.8.2`**
+> 当前分支：`feat/maintainability-phase-2-retrieval-wiki`（待合入 master）
+> 当前方向：**可维护性二期（Retrieval 编排统一 + Wiki Serving 隔离）已完成 v1.8.2**；默认仍 `retrieval.orchestrator=legacy`，unified/shadow 可切换。三期见 phase2 handoff。
+
+---
+
+## 可维护性二期：Retrieval 编排与 Wiki Serving 隔离（已完成，2026-07-14）
+
+执行依据：
+
+- Spec：`docs/superpowers/specs/02-maintainability-phase-2-retrieval-wiki.md`
+- Plan：`docs/superpowers/plans/2026-07-14-maintainability-phase-2-retrieval-wiki.md`
+- 验收：`docs/superpowers/reviews/maintainability-phase2-acceptance.md`
+- 交接：`docs/superpowers/handoffs/2026-07-14-maintainability-phase2-handoff.md`
+
+完成项：
+
+- 新增 `src/retrieval/`：models、VerifiedProvider、RawRetriever、Policy、Orchestrator、ShadowComparator
+- `SearchService.execute()` Facade → Orchestrator；Legacy 主管线保留可回滚
+- Claim 检索委托 `VerifiedProvider`（Gate 不可绕过）
+- 配置：`retrieval.orchestrator: legacy | shadow | unified`（example 默认 legacy）
+- 测试：`tests/retrieval/` + 契约/隔离/hybrid/answer/MCP 回归 **134 passed / 1 skipped**
+
+**未做：** 删除 Legacy 主管线；默认生产切 unified；算法改写；Container/MCP/DB 改动。
 
 ---
 

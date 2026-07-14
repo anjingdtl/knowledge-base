@@ -5,6 +5,11 @@ Phase 3: Verified Hybrid 编排（Raw + Gate 通过的 Claim）在 search/execut
 
 Phase-1 maintainability: 一次请求的 results/trace/claims/conflicts/fallbacks
 收敛到 SearchExecution；禁止在实例上保存 last_* 请求状态。
+
+Phase-2 maintainability: execute() 经 RetrievalOrchestrator 分发；
+RawRetriever / VerifiedProvider / Policy 适配现有私有管线。
+LEGACY_PRIMARY_PIPELINE: execute_primary_legacy 与 _search_* 保留供回滚，
+在 unified 稳定并跨版本验证前不得删除。
 """
 import hashlib
 import logging
@@ -15,6 +20,7 @@ from dataclasses import dataclass, field
 from typing import Any, cast
 
 from src.models.search_execution import SearchExecution
+from src.retrieval.models import RawRetrievalResult
 from src.services.citation_builder import CitationBuilder
 from src.services.hybrid_search import HybridSearcher
 from src.services.query_rewriter import QueryRewriter
@@ -76,6 +82,15 @@ class SearchService:
         # Phase 2/3: unique Claim Serving entry + fusion
         self._wiki_repository = wiki_repository
         self._wiki_serving_gate = wiki_serving_gate
+        # Phase-2 orchestrator (no request state; lazy cache only)
+        self._orchestrator = None
+
+    def _get_orchestrator(self):
+        if self._orchestrator is None:
+            from src.retrieval.orchestrator import RetrievalOrchestrator
+
+            self._orchestrator = RetrievalOrchestrator(self, self._config)
+        return self._orchestrator
 
     def _stage_timeout(self, stage: str) -> float:
         """获取阶段超时时间，支持 config 覆盖"""
@@ -140,9 +155,21 @@ class SearchService:
     ) -> SearchExecution:
         """完整搜索管线，返回请求级 SearchExecution（results + trace + side-channels）。
 
+        Phase-2: 经 RetrievalOrchestrator 分发（默认 legacy 主路径）。
         Phase 3: 当 ``rag.verified_knowledge.enabled`` 时，在本服务内融合
         Raw Retrieval 与 Gate 通过的 Claim；Wiki 异常永不阻断 Raw。
         """
+        return self._get_orchestrator().search(
+            query, top_k=top_k, query_spec=query_spec,
+        )
+
+    def execute_primary_legacy(
+        self,
+        query: str,
+        top_k: int = 5,
+        query_spec=None,
+    ) -> SearchExecution:
+        """LEGACY_PRIMARY_PIPELINE — 原 execute 主体，供 legacy/shadow 主路径与回滚。"""
         t0 = time.monotonic()
         state = _SearchRequestState(
             trace={
@@ -153,24 +180,10 @@ class SearchService:
         )
 
         if query_spec is not None:
-            from src.services.db import Database
-            from src.services.query_executor import QueryExecutor
-            executor = QueryExecutor(db=self._db or Database)
-            spec_results = executor.execute(query_spec)
-            structured = []
-            for row in spec_results[:top_k]:
-                structured.append({
-                    "source": "knowledge",
-                    "block_id": None,
-                    "knowledge_id": row["id"],
-                    "title": row.get("title", ""),
-                    "text": row.get("content", ""),
-                    "score": 1.0,
-                })
-            if structured:
-                state.trace["mode"] = "query_spec"
-                state.trace["result_count"] = len(structured)
-                return self._to_execution(structured, state)
+            # 仅当 spec 命中时短路；空结果回落普通检索（保持历史语义）
+            spec_exec = self.execute_query_spec(query_spec, top_k=top_k)
+            if spec_exec.results:
+                return spec_exec
 
         if self._should_use_verified_hybrid():
             output = self._search_verified_hybrid(query, top_k=top_k, t0=t0, state=state)
@@ -184,6 +197,113 @@ class SearchService:
 
         output = self._search_legacy_pipeline(query, top_k=top_k, t0=t0, state=state)
         return self._to_execution(output, state)
+
+    def execute_query_spec(self, query_spec, *, top_k: int = 5) -> SearchExecution:
+        """Structured query_spec path (shared by legacy and unified).
+
+        返回空 results 时，调用方（legacy 主路径）应回落普通检索。
+        """
+        state = _SearchRequestState(
+            trace={
+                "mode": "query_spec",
+                "query": "",
+                "stages": {},
+            },
+        )
+        from src.services.db import Database
+        from src.services.query_executor import QueryExecutor
+
+        executor = QueryExecutor(db=self._db or Database)
+        spec_results = executor.execute(query_spec)
+        structured = []
+        for row in spec_results[:top_k]:
+            structured.append({
+                "source": "knowledge",
+                "block_id": None,
+                "knowledge_id": row["id"],
+                "title": row.get("title", ""),
+                "text": row.get("content", ""),
+                "score": 1.0,
+            })
+        if structured:
+            state.trace["result_count"] = len(structured)
+            return self._to_execution(structured, state)
+        state.trace["result_count"] = 0
+        return self._to_execution([], state)
+
+    def execute_evidence_only(
+        self,
+        query: str,
+        *,
+        top_k: int = 5,
+        query_spec=None,
+    ) -> SearchExecution:
+        """EvidenceOnlyPolicy entry — same semantics as legacy non-verified path."""
+        if query_spec is not None:
+            return self.execute_query_spec(query_spec, top_k=top_k)
+        t0 = time.monotonic()
+        state = _SearchRequestState(
+            trace={
+                "mode": "legacy",
+                "query": (query or "")[:200],
+                "stages": {},
+            },
+        )
+        output = self._search_legacy_pipeline(query, top_k=top_k, t0=t0, state=state)
+        return self._to_execution(output, state)
+
+    def execute_verified(
+        self,
+        query: str,
+        *,
+        top_k: int = 5,
+        query_spec=None,
+    ) -> SearchExecution:
+        """VerifiedPolicy entry — same semantics as legacy verified hybrid path."""
+        if query_spec is not None:
+            return self.execute_query_spec(query_spec, top_k=top_k)
+        t0 = time.monotonic()
+        state = _SearchRequestState(
+            trace={
+                "mode": "legacy",
+                "query": (query or "")[:200],
+                "stages": {},
+            },
+        )
+        output = self._search_verified_hybrid(query, top_k=top_k, t0=t0, state=state)
+        elapsed = time.monotonic() - t0
+        logger.info(
+            "Verified hybrid search in %.2fs: %d results for query=%r",
+            elapsed, len(output), query[:50],
+        )
+        state.trace["elapsed_ms"] = round(elapsed * 1000, 2)
+        return self._to_execution(output, state)
+
+    def run_raw_retrieval_adapter(
+        self,
+        query: str,
+        *,
+        top_k: int = 5,
+        include_legacy_wiki_fts: bool = True,
+    ) -> RawRetrievalResult:
+        """Adapter surface for RawRetriever — does not change raw algorithms."""
+        t0 = time.monotonic()
+        state = _SearchRequestState(
+            trace={
+                "mode": "raw_adapter",
+                "query": (query or "")[:200],
+                "stages": {},
+            },
+        )
+        output = self._search_legacy_pipeline(query, top_k=top_k, t0=t0, state=state)
+        if not include_legacy_wiki_fts:
+            output = [r for r in output if r.get("source") != "wiki"]
+        return RawRetrievalResult(
+            candidates=tuple(output),
+            trace=state.trace,
+            warnings=tuple(state.warnings),
+            fallbacks=tuple(state.fallbacks),
+        )
 
     def search(self, query: str, top_k: int = 5, query_spec=None) -> list[dict]:
         """兼容入口：返回 results 列表（内部委托 execute）。"""
@@ -513,34 +633,18 @@ class SearchService:
         limit: int,
         state: _SearchRequestState | None = None,
     ) -> list:
-        """Gate-filtered claim pairs; never raises to caller thread."""
-        try:
-            repo = self._wiki_repository
-            gate = self._wiki_serving_gate
-            if repo is None:
-                return []
-            claims = repo.list_claims()
-            if gate is None:
-                from src.services.wiki_serving_gate import WikiServingGate
-                gate = WikiServingGate()
-            # include_disclose=True so Phase 4 conflict side-channel can see them;
-            # primary packaging still skips disclose_only rows.
-            pairs = gate.filter_servable(
-                claims, include_disclose=True, limit=limit,
-            )
-            # Optional: light query filter by lexical score to shrink set
-            from src.services.verified_hybrid_fusion import claim_retrieval_score
+        """Gate-filtered claim pairs via VerifiedProvider; never raises to caller thread."""
+        from src.retrieval.verified_provider import VerifiedProvider
 
-            scored = [
-                (claim_retrieval_score(query, c), c, d) for c, d in pairs
-            ]
-            scored.sort(key=lambda x: x[0], reverse=True)
-            return [(c, d) for s, c, d in scored if s > 0 or len(scored) <= limit][:limit]
-        except Exception as e:  # noqa: BLE001
-            if state is not None:
-                state.claim_error = str(e)
-            logger.warning("Verified claim retrieve internal error: %s", e)
-            return []
+        provider = VerifiedProvider(
+            wiki_repository=self._wiki_repository,
+            wiki_serving_gate=self._wiki_serving_gate,
+            config=self._config,
+        )
+        result = provider.serve(query, limit=limit)
+        if state is not None and result.fallback_reason:
+            state.claim_error = result.fallback_reason
+        return list(result.claim_pairs)
 
     def _raw_retrieve(self, queries: list[str], query: str, top_k: int) -> list[dict]:
         """Existing raw retrieval path (hybrid → block_store → knowledge FTS)."""
