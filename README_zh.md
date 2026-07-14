@@ -6,7 +6,7 @@
 
 [\[English\]](README.md)
 
-[![Version](https://img.shields.io/badge/version-1.10.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.2-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,15 +36,16 @@ ShineHe Knowledge 是**本地优先的 AI Agent 知识服务**。
 
 ## 当前健康状态
 
-**v1.10.1** — 最终迁移治理收尾（Spec 05 WP0–WP6）：
+**v1.10.2** — 一次性最终收尾（Spec 06）：
 
-- **Alembic 是运行时唯一 Schema 权威** — 新库由 `alembic upgrade head` 创建；运行时不再执行 `_SCHEMA` / `_migrate()`
-- **Migration Gate 前置于 Database 打开** — 落后 head 拒绝写启动；只读诊断用 `file:...?mode=ro`
-- **Unstamped 旧库安全迁移** — `allow_unstamped=false` 默认；`shinehe db {status,backup,migrate,stamp,verify}`
-- **CI 架构门禁严格化** — `report_closure_debt --strict`
-- 相比 v1.10.0 公开契约 / 检索 / Wiki 不变；建立在 v1.10.0 可维护性收尾之上
+- **MCP 能力自描述准确** — `kb_capabilities.hidden_by_policy` 返回真实被策略隐藏的工具
+- **Search/Ask/Wiki/MCP 契约进入独立 CI 门禁** — Wiki 服务不变量不再依赖间接覆盖
+- **全仓库 Ruff** — `ruff check .` 覆盖 Alembic 迁移与整个仓库
+- **版本元数据对齐** — `src/version.py`、`client/package.json`、`client/package-lock.json` 统一 1.10.2
+- **v1.x 可维护性冻结** — 其余兼容层与架构优化转入 v2.0
+- 相比 v1.10.1 公开契约 / 检索 / Wiki / Schema 不变；建立在 v1.10.1 迁移治理之上
 
-详见 [v1.10.1 发布说明](docs/release/v1.10.1-release-notes.md)、[v1.10→v1.10.1 迁移](docs/migration/v1.10-to-v1.10.1-migration-governance.md)、[PROGRESS](PROGRESS.md)，以及 [v1.10.0](docs/release/v1.10.0-release-notes.md) · [v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)。
+详见 [v1.10.2 发布说明](docs/release/v1.10.2-release-notes.md)、[PROGRESS](PROGRESS.md)，以及 [v1.10.1](docs/release/v1.10.1-release-notes.md) · [v1.10.0](docs/release/v1.10.0-release-notes.md) · [v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)。
 
 ## 30 秒演示
 

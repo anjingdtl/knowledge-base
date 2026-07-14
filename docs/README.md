@@ -2,7 +2,7 @@
 
 ## 当前方向（权威入口）
 
-> 产品版本：**v1.9.0** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+> 产品版本：**v1.10.2** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
 
 ### 可维护性三期（2026-07-14，已发布）
 

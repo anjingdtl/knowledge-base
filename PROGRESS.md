@@ -1,11 +1,27 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-14  
-> 源码版本：`src/version.py` 中的 **`1.10.1`**  
-> 当前分支：`master`（已合并最终迁移治理）  
-> 发布说明：`docs/release/v1.10.1-release-notes.md`  
-> 迁移：`docs/migration/v1.10-to-v1.10.1-migration-governance.md`  
-> 当前方向：**最终迁移治理（Spec 05）WP0–WP6 已完成并发布于 v1.10.1；Alembic 成为唯一运行时 Schema 权威**。
+> 源码版本：`src/version.py` 中的 **`1.10.2`**  
+> 当前分支：`master`（已合并一次性最终收尾，v1.x 架构冻结）  
+> 发布说明：`docs/release/v1.10.2-release-notes.md`  
+> 迁移：v1.10.2 无 Schema 变更；最近迁移见 `docs/migration/v1.10-to-v1.10.1-migration-governance.md`  
+> 当前方向：**v1.10.2 一次性最终收尾（Spec 06）已完成；v1.x 可维护性专项正式冻结，剩余技术债转入 v2.0**。
+
+---
+
+## 一次性最终收尾 Spec 06：v1.10.2（已完成，2026-07-14）
+
+执行依据：`docs/superpowers/specs/06-one-shot-final-closure-spec.md`
+
+完成项：
+
+- ✅ **FIX-1**：`kb_capabilities.hidden_by_policy` 返回真实 `RegistrationState.hidden_by_policy`
+- ✅ **FIX-2**：Wiki 契约进入独立 Contract Gate（Search/Ask/Wiki/MCP）
+- ✅ **FIX-3**：`ruff check .` 覆盖全仓库（含 Alembic）
+- ✅ **FIX-4**：前后端版本元数据统一 1.10.2
+- ✅ **FIX-5**：发布与远端 CI 闭环；v1.x 架构冻结文档 `docs/architecture/v1-maintainability-freeze.md`
+
+公开 Search/Ask/Wiki/MCP 契约不变；Retrieval/Hybrid Eval 不退化；无 Schema 变更。v1.x 可维护性专项正式关闭，剩余技术债登记于 `docs/architecture/v1-maintainability-freeze.md` 转入 v2.0。
 
 ---
 

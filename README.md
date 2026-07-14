@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.10.1-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.2-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,15 +36,16 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 
 ## Current Health
 
-**v1.10.1** — Final migration governance closure (Spec 05 WP0–WP6):
+**v1.10.2** — One-shot final closure (Spec 06):
 
-- **Alembic is the sole runtime schema authority** — new DBs via `alembic upgrade head`; runtime no longer runs `_SCHEMA` / `_migrate()`
-- **Migration Gate precedes Database open** — behind-head write boot refused; read-only diagnostic via `file:...?mode=ro`
-- **Unstamped legacy DB safe migration** — `allow_unstamped=false` default; `shinehe db {status,backup,migrate,stamp,verify}`
-- **Strict CI architecture gate** — `report_closure_debt --strict`
-- No public contract / retrieval / Wiki change vs v1.10.0; built on the v1.10.0 maintainability closure
+- **MCP capability self-description accurate** — `kb_capabilities.hidden_by_policy` returns the real policy-hidden tools
+- **Search/Ask/Wiki/MCP contracts in a dedicated CI gate** — Wiki serving invariants no longer rely on indirect coverage
+- **Repository-wide Ruff** — `ruff check .` covers Alembic revisions and the whole repo
+- **Aligned version metadata** — `src/version.py`, `client/package.json`, `client/package-lock.json` all at 1.10.2
+- **v1.x maintainability freeze** — remaining compatibility layers and architectural cleanup deferred to v2.0
+- No public contract / retrieval / Wiki / schema change vs v1.10.1; built on the v1.10.1 migration governance closure
 
-See [v1.10.1 Release Notes](docs/release/v1.10.1-release-notes.md), [v1.10→v1.10.1 migration](docs/migration/v1.10-to-v1.10.1-migration-governance.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.10.0](docs/release/v1.10.0-release-notes.md) · [v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)).
+See [v1.10.2 Release Notes](docs/release/v1.10.2-release-notes.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.10.1](docs/release/v1.10.1-release-notes.md) · [v1.10.0](docs/release/v1.10.0-release-notes.md) · [v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)).
 
 ## 30-Second Demo
 
