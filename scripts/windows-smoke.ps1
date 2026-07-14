@@ -18,7 +18,12 @@ function Invoke-Python {
 }
 
 function Wait-TcpPort {
-    param([int]$Port, [int]$TimeoutSeconds = 30)
+    param(
+        [int]$Port,
+        [int]$TimeoutSeconds = 60,
+        [string]$StdoutLog,
+        [string]$StderrLog
+    )
     $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
     while ((Get-Date) -lt $deadline) {
         $client = [System.Net.Sockets.TcpClient]::new()
@@ -31,6 +36,17 @@ function Wait-TcpPort {
         }
         finally {
             $client.Dispose()
+        }
+    }
+    # Surface MCP process logs so CI failures show why the server did not start.
+    foreach ($pair in @(@("stderr", $StderrLog), @("stdout", $StdoutLog))) {
+        $label = $pair[0]
+        $path = $pair[1]
+        if ($path -and (Test-Path -LiteralPath $path)) {
+            Write-Host "----- MCP $label.log -----"
+            Get-Content -LiteralPath $path -Encoding utf8 -ErrorAction SilentlyContinue |
+                ForEach-Object { Write-Host $_ }
+            Write-Host "---------------------------"
         }
     }
     throw "MCP server did not listen on port $Port within $TimeoutSeconds seconds."
@@ -63,7 +79,7 @@ try {
         $mcpProcess = Start-Process -FilePath $PythonExe `
             -ArgumentList @("-m", "src.mcp_cli", "--transport", "streamable-http", "--host", "127.0.0.1", "--port", "$port") `
             -WorkingDirectory $repo -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru -WindowStyle Hidden
-        Wait-TcpPort -Port $port
+        Wait-TcpPort -Port $port -StdoutLog $stdout -StderrLog $stderr
 
         # Performs initialize and real calls to capabilities/search/ask/read/ping.
         Invoke-Python scripts/check_mcp.py --host 127.0.0.1 --port $port --smoke-reads
