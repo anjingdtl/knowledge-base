@@ -50,12 +50,11 @@ def test_debt_metrics_are_non_negative_counts():
 
 
 def test_baseline_reflects_current_debt_shape():
-    """Post WP2 r2 extract: server thinner; domain tools hold real implementations."""
+    """Post WP2 r3 shell: server within Spec budget; domain tools hold implementations."""
     m = collect_debt_metrics(ROOT)
-    # Still above final 500 budget (prompts/resources/registry remain in server)
-    assert m["mcp_server_lines"] > 500
-    assert m["mcp_server_lines"] < 1500  # round-2 regression guard
-    # multi-domain real implementations
+    # Spec budget: server.py <= 500 lines (registration shell only)
+    assert m["mcp_server_lines"] <= 500
+    assert m["mcp_server_tool_functions"] == 0
     assert m["mcp_tools_real_impl_count"] >= 40
     assert m["search_service_has_legacy_pipeline"] is True
     assert m["raw_retriever_calls_search_service"] is False

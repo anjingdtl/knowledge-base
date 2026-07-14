@@ -37,8 +37,9 @@
 - ✅ `TaggingService` + `RetrievalCommands`；MCP retrieval/auto_tag 委托 application
 - ✅ **ingest / administration / wiki** 工具实拆 → `src/mcp/tools/{ingest,administration,wiki}.py` + `support.py`
 - ✅ **graph / memory / operations / retrieval 全量** 工具实拆（round-2）
-- ✅ `server.py` ~3600 → **~850 行**（注册/re-export/prompt/resource/lifecycle；工具主体在 `tools/*`）
-- ⏳ 最终预算 ≤500：可继续迁 prompt/resource 与 `_TOOL_METADATA` 等壳层
+- ✅ **round-3 壳层收束**：`tool_catalog` / `registration` / `prompts` / `resources` / `tools/exports`
+- ✅ `server.py` ~3600 → **~135 行**（**达标 Spec ≤500**；`mcp_server_tool_functions=0`）
+- 下一步：WP3 Container Provider / WP4 Alembic 严格化（Legacy 删除仍在 WP5）
 
 ---
 

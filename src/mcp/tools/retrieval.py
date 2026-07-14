@@ -1312,30 +1312,35 @@ def _kb_capabilities_verified_fields() -> dict:
 @_heartbeat
 def kb_capabilities() -> dict:
     """返回当前 MCP 服务的能力、限制和推荐调用流程。"""
-    # Module-level profile/metadata live on server (set after tool registration).
-    import src.mcp.server as _server
+    from src.mcp.registration import STATE, compute_hidden_groups
+    from src.mcp.tool_catalog import TOOL_METADATA
     from src.mcp.tool_registry import get_definitions
 
-    _TOOL_METADATA = _server._TOOL_METADATA
-    _REGISTERED_TOOL_ALIASES = _server._REGISTERED_TOOL_ALIASES
-    _CURRENT_PROFILE = _server._CURRENT_PROFILE
-    _EXPERIMENTAL_ENABLED = _server._EXPERIMENTAL_ENABLED
-    _ENABLE_ALIASES = _server._ENABLE_ALIASES
-    _VISIBLE_TOOL_NAMES = _server._VISIBLE_TOOL_NAMES
-    _compute_hidden_groups = _server._compute_hidden_groups
+    state = STATE
+    if state is None:
+        # bootstrap not run (tests importing tools only) — best-effort defaults
+        visible = set(get_definitions().keys())
+        registered_aliases: dict[str, str] = {}
+        profile = "extended"
+        experimental = False
+        aliases_enabled = False
+    else:
+        visible = state.visible_tool_names
+        registered_aliases = state.registered_aliases
+        profile = state.profile
+        experimental = state.experimental_enabled
+        aliases_enabled = state.aliases_enabled
 
-    # 工具签名从注册表生成（兼容 FastMCP 2.x 内部结构变化）
     tool_summaries: list[dict] = []
     try:
         all_defs = get_definitions()
         for name, definition in all_defs.items():
-            if name in _VISIBLE_TOOL_NAMES:
+            if name in visible:
                 tool_summaries.append({
                     "name": name,
                     "description": definition.description,
                 })
-        # 同时列出已启用的命名空间别名
-        for alias_name, original_name in _REGISTERED_TOOL_ALIASES.items():
+        for alias_name, original_name in registered_aliases.items():
             original = all_defs.get(original_name)
             if original:
                 tool_summaries.append({
@@ -1372,8 +1377,8 @@ def kb_capabilities() -> dict:
             "max_graph_nodes": int(Config.get("rag.max_graph_nodes", 200)),
             "max_graph_depth": int(Config.get("rag.max_graph_depth", 3)),
         },
-        "tool_metadata": _TOOL_METADATA,
-        "tool_aliases": _REGISTERED_TOOL_ALIASES,
+        "tool_metadata": TOOL_METADATA,
+        "tool_aliases": registered_aliases,
         "tools": tool_summaries,
         "runtime_diagnostics": _runtime_diagnostics(),
         "recommended_flows": {
@@ -1384,12 +1389,12 @@ def kb_capabilities() -> dict:
             "qna": ["route_query", "ask(include_graph=true, include_context=true)", "get_source_graph", "read"],
             "agent_memory": ["remember_fact", "recall_facts", "update_project_context", "search_decisions", "summarize_recent_changes"],
         },
-        "tool_profile": _CURRENT_PROFILE,
+        "tool_profile": profile,
         "write_policy": Config.get("mcp.write_policy", ""),
-        "experimental_tools_enabled": _EXPERIMENTAL_ENABLED,
+        "experimental_tools_enabled": experimental,
         "visible_tools": sorted({t["name"] for t in tool_summaries if "." not in t["name"]}),
-        "hidden_groups": sorted(_compute_hidden_groups(tool_summaries)),
-        "legacy_aliases_enabled": _ENABLE_ALIASES,
+        "hidden_groups": sorted(compute_hidden_groups(tool_summaries)),
+        "legacy_aliases_enabled": aliases_enabled,
         # Phase 6 Spec §9.4
         **_kb_capabilities_verified_fields(),
         "registered_tools": sorted({t["name"] for t in tool_summaries if "." not in t["name"]}),

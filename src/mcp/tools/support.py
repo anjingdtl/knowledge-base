@@ -78,7 +78,19 @@ def content_preview(text: Any, max_len: int = 200) -> str:
 
 
 def check_write_policy(tool_name: str, *, dry_run: bool = False) -> dict | None:
-    """Return fail envelope if write blocked; None if allowed."""
+    """Return fail envelope if write blocked; None if allowed.
+
+    Honors test monkeypatches on ``src.mcp.server._check_write_policy`` when present.
+    """
+    import sys
+
+    server = sys.modules.get("src.mcp.server")
+    if server is not None:
+        patched = getattr(server, "_check_write_policy", None)
+        # Identity differs when tests replace the server attribute
+        if callable(patched) and patched is not check_write_policy:
+            return patched(tool_name, dry_run=dry_run)
+
     if dry_run:
         return None
 
