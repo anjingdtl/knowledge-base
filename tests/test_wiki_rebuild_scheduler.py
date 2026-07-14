@@ -31,7 +31,11 @@ def test_update_then_delete_merges_to_delete():
 
 def test_distinct_kids_not_merged():
     svc = _FakeRebuild()
-    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=0)
+    # Long debounce so the auto-flush timer cannot fire between schedule()
+    # and the pending_count assertion. With debounce_ms=0 the Timer(0)
+    # thread can flush mid-assertion and made pending_count flaky under
+    # CI load; the merge semantics under test are unaffected by the window.
+    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=60_000)
     sch.schedule("k1", "update")
     sch.schedule("k2", "delete")
     assert sch.pending_count == 2
