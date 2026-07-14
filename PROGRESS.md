@@ -2,9 +2,10 @@
 
 > 最后更新：2026-07-14  
 > 源码版本：`src/version.py` 中的 **`1.10.0`**  
-> 当前分支：见工作区；主线目标合并 `v1.10.0`  
-> GitHub Release：见 `docs/release/v1.10.0-release-notes.md`  
-> 当前方向：**可维护性收尾（Spec 04）已完成 WP0–WP5**。
+> 当前分支：`master`（已合并可维护性收尾）  
+> 发布说明：`docs/release/v1.10.0-release-notes.md`  
+> 迁移：`docs/migration/v1.9-to-v1.10-maintainability-closure.md`  
+> 当前方向：**可维护性收尾（Spec 04）WP0–WP5 已完成并发布于 v1.10.0**。
 
 ---
 
@@ -26,11 +27,9 @@
 - WP1-T3：Policy 直接组合组件（不回调 execute_* 主管线）
 - WP1-T4：`src/compatibility/legacy_retrieval.py` 回滚入口
 - WP1-T5：聚合 Shadow 报告（6/6 门槛通过）
-- WP1-T6：`retrieval.orchestrator` **默认 unified**（legacy 可回滚）
+- WP1-T6：`retrieval.orchestrator` **默认 unified**（WP5 后 legacy 路径已删除）
 
-**未做：** Legacy 删除；MCP tools 完整实拆；Container Provider 生命周期；Alembic head gate。
-
-### WP2 进度（Answer 完成；MCP 分域进行中，2026-07-14）
+### WP2–WP5（已完成并合入 master，2026-07-14）
 
 - ✅ Answer assemble → `src/answering/{assembler,citations,fallbacks}`；`verified_answer.py` 仅 re-export
 - ✅ 伪 `answer.orchestrator` 双路径清除（legacy/shadow → unified）

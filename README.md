@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.9.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.0-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,15 +36,16 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 
 ## Current Health
 
-**v1.9.0** — Maintainability Phases 1–3 complete:
+**v1.10.0** — Maintainability closure (Spec 04 WP0–WP5) complete:
 
-- **Phase 1:** request-scoped `SearchExecution`; Search/Ask/Wiki contracts; no shared `last_*` state  
-- **Phase 2:** `RetrievalOrchestrator` + VerifiedProvider / RawRetriever policies; `retrieval.orchestrator` cutover  
-- **Phase 3:** `AnswerService` / `AnswerExecution`; MCP runtime split (`src/mcp/server.py`); Container capability groups; DB `_migrate()` freeze  
+- **Unified retrieval only** — `RetrievalOrchestrator` + Policy + `RawRetriever` / `VerifiedFusion` (legacy/shadow dual-path removed)
+- **Answer package** — assemble / citations / fallbacks under `src/answering/`
+- **MCP thin shell** — `src/mcp/server.py` registration only; tools in `src/mcp/tools/*`
+- **Container Providers** — Core / Verified / Authoring / Experimental own construction & lifecycle
+- **Migration head gate** — write-mode boot refuses schema behind Alembic head
+- Built on v1.9.x maintainability train and v1.8.0 Verified Hybrid baseline
 
-Built on the v1.8.0 Verified Hybrid convergence baseline.
-
-See [v1.9.0 Release Notes](docs/release/v1.9.0-release-notes.md), [Phase-3 acceptance](docs/superpowers/reviews/maintainability-phase3-acceptance.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.1](docs/release/v1.8.1-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)).
+See [v1.10.0 Release Notes](docs/release/v1.10.0-release-notes.md), [v1.9→v1.10 migration](docs/migration/v1.9-to-v1.10-maintainability-closure.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)).
 
 ## 30-Second Demo
 
