@@ -10,6 +10,7 @@ Revises: j003_maintenance_control_plane
 from typing import Sequence, Union
 
 import sqlalchemy as sa
+
 from alembic import op
 
 revision = "j004_runtime_schema_parity"
