@@ -305,7 +305,7 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
         if p > 0:
             lat_ratio.append((c - p) / p)
 
-    summary = {
+    summary: dict[str, Any] = {
         "scenarios": len(rows),
         "gate_pass_count": gate_pass,
         "gate_pass_rate": gate_pass / n,
