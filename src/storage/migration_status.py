@@ -4,7 +4,6 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 
 @dataclass(frozen=True)
@@ -55,12 +54,18 @@ def _table_names(conn: sqlite3.Connection) -> set[str]:
     return {r[0] for r in rows}
 
 
+def _open_readonly(path: Path) -> sqlite3.Connection:
+    """Open an existing SQLite file read-only (never creates or mutates)."""
+    uri = f"file:{path.resolve().as_posix()}?mode=ro"
+    return sqlite3.connect(uri, uri=True)
+
+
 def get_current_revision(db_path: str | Path) -> str | None:
     """Return alembic_version.version_num or None if unstamped/missing."""
     path = Path(db_path)
-    if not path.exists():
+    if not path.is_file():
         return None
-    conn = sqlite3.connect(str(path))
+    conn = _open_readonly(path)
     try:
         tables = _table_names(conn)
         if "alembic_version" not in tables:
@@ -79,10 +84,14 @@ def get_migration_status(
     project_root: Path | None = None,
     head: str | None = None,
 ) -> MigrationStatus:
-    """Compare DB current revision to Alembic head."""
+    """Compare DB current revision to Alembic head.
+
+    Existing files are opened read-only so inspection never creates WAL or
+    mutates schema.
+    """
     path = Path(db_path)
     head_rev = head or get_alembic_head(project_root)
-    if not path.exists():
+    if not path.is_file():
         return MigrationStatus(
             db_path=str(path),
             head=head_rev,
@@ -94,7 +103,7 @@ def get_migration_status(
             message="database file does not exist yet",
         )
 
-    conn = sqlite3.connect(str(path))
+    conn = _open_readonly(path)
     try:
         tables = _table_names(conn)
         table_count = len(tables)
