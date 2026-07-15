@@ -41,4 +41,4 @@
 3. `tags(limit=..., offset=...)` 可预测分页，空参数保持旧行为。
 4. `extract_tasks_from_doc` 可从 `doc_id` 提取，且缺失或冲突参数返回验证错误。
 5. `ask_with_query` 的描述与空参数错误保持一致。
-6. 定向 MCP 契约测试、全量 Python 测试、Ruff 和 Mypy 均通过。
+6. 定向 MCP 契约测试、全量 Python 测试、Ruff 与本次修改 MCP 模块的 Mypy 检查均通过；全库 Mypy 状态单独记录。

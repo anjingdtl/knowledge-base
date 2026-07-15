@@ -4,7 +4,6 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 
-
 def _insert_test_knowledge(*, tags: list[str], content: str = "MCP stability test content") -> str:
     import json
     import uuid
