@@ -3,6 +3,7 @@ import json
 import logging
 import re
 from collections import Counter
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +106,23 @@ def infer_tags_from_existing_vocab(text: str, vocab: list[str]) -> list[str]:
     return matched
 
 
-def infer_tags_by_llm(title: str, content: str, existing_vocab: list[str]) -> list[dict]:
+def _notify_llm_error(callback: Callable[[Exception], None] | None, error: Exception) -> None:
+    """Notify batch callers of an unavailable LLM without masking the original failure."""
+    if callback is None:
+        return
+    try:
+        callback(error)
+    except Exception:
+        logger.exception("LLM tag inference error callback failed")
+
+
+def infer_tags_by_llm(
+    title: str,
+    content: str,
+    existing_vocab: list[str],
+    timeout: float | None = None,
+    on_error: Callable[[Exception], None] | None = None,
+) -> list[dict]:
     """LLM 批量推断标签（异步，结果需人工确认）
 
     Returns:
@@ -118,6 +135,7 @@ def infer_tags_by_llm(title: str, content: str, existing_vocab: list[str]) -> li
         llm = LLMService()
     except Exception as e:
         logger.warning(f"LLM service unavailable for tag inference: {e}")
+        _notify_llm_error(on_error, e)
         return []
 
     vocab_hint = ", ".join(existing_vocab[:30]) if existing_vocab else "无"
@@ -144,7 +162,14 @@ def infer_tags_by_llm(title: str, content: str, existing_vocab: list[str]) -> li
             [{"role": "user", "content": prompt}],
             max_tokens_override=300,
             silent=True,
+            timeout=timeout,
         )
+    except Exception as e:
+        logger.error(f"LLM tag inference failed: {e}")
+        _notify_llm_error(on_error, e)
+        return []
+
+    try:
         # 解析 JSON
         text = response.strip()
         if text.startswith("```"):
@@ -159,11 +184,17 @@ def infer_tags_by_llm(title: str, content: str, existing_vocab: list[str]) -> li
         logger.warning(f"Failed to parse LLM tag inference response: {e}")
         return []
     except Exception as e:
-        logger.error(f"LLM tag inference failed: {e}")
+        logger.error(f"Failed to process LLM tag inference response: {e}")
         return []
 
 
-def infer_tags(item: dict, vocab: list[str] | None = None, use_llm: bool = False) -> list[dict]:
+def infer_tags(
+    item: dict,
+    vocab: list[str] | None = None,
+    use_llm: bool = False,
+    llm_timeout: float | None = None,
+    on_llm_error: Callable[[Exception], None] | None = None,
+) -> list[dict]:
     """统一标签推理入口
 
     Args:
@@ -206,6 +237,8 @@ def infer_tags(item: dict, vocab: list[str] | None = None, use_llm: bool = False
             item.get("title", ""),
             item.get("content", ""),
             vocab,
+            timeout=llm_timeout,
+            on_error=on_llm_error,
         )
         for r in llm_results:
             _add(r["tag"], "llm", r.get("confidence", 0.5), True)

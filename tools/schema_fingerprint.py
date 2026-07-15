@@ -24,6 +24,24 @@ def _open_readonly(db_path: Path) -> sqlite3.Connection:
     uri = f"file:{db_path.resolve().as_posix()}?mode=ro"
     conn = sqlite3.connect(uri, uri=True)
     conn.row_factory = sqlite3.Row
+    # ``PRAGMA table_info`` opens virtual tables.  Production databases can
+    # contain sqlite-vec's ``vec0`` tables, so load the module on this
+    # read-only inspection connection just as runtime Database connections do.
+    # Loading an extension only registers the module for this connection; it
+    # does not change the inspected database.
+    try:
+        import sqlite_vec
+
+        conn.enable_load_extension(True)
+        try:
+            sqlite_vec.load(conn)
+        finally:
+            conn.enable_load_extension(False)
+    except Exception:
+        # Keep the fingerprint utility useful for databases/environments that
+        # do not use sqlite-vec. A vec0 table will still report SQLite's clear
+        # error below if the extension genuinely is unavailable.
+        pass
     return conn
 
 

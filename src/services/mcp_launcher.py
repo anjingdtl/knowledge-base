@@ -15,6 +15,10 @@ import time
 from pathlib import Path
 from typing import Any
 
+from src.storage.database_bootstrap import inspect_database_bootstrap
+from src.storage.migration_cli import migrate_database
+from src.utils.config import Config
+
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _MCP_SCRIPT = _PROJECT_ROOT / "run_mcp.py"
 _PID_FILE = _PROJECT_ROOT / "data" / "mcp.pid"
@@ -27,6 +31,53 @@ _CREATE_NEW_PROCESS_GROUP = int(
     getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
 )
 _DETACHED_PROCESS = int(getattr(subprocess, "DETACHED_PROCESS", 0))
+_SUCCESSFUL_START_PREFIXES = (
+    "MCP Server 已启动",
+    "MCP Server 已在运行中",
+    "服务已在运行中",
+)
+
+
+def get_migration_requirement() -> str | None:
+    """Return the database migration reason that blocks MCP startup, if any.
+
+    The inspection is read-only, so this can safely run from the GUI before the
+    user confirms the backup-first migration workflow.
+    """
+    plan = inspect_database_bootstrap(
+        Config.get_db_path(),
+        config=Config,
+        project_root=_PROJECT_ROOT,
+    )
+    if plan.action != "block":
+        return None
+    return f"MCP 启动前需要数据库迁移：{plan.migration_status.message}"
+
+
+def migrate_database_for_mcp() -> str:
+    """Run the existing backup-first migration workflow for the configured DB."""
+    result = migrate_database(Config.get_db_path())
+    if not result.get("ok"):
+        raise RuntimeError("数据库迁移未完成")
+    backup = result.get("backup")
+    if not isinstance(backup, str) or not backup.strip():
+        raise RuntimeError("数据库迁移未完成：未返回可用备份路径")
+    return f"数据库已安全迁移，备份：{backup}"
+
+
+def is_start_success_message(message: str) -> bool:
+    """Whether a launcher result is one of the explicit successful outcomes.
+
+    ``start()`` returns user-facing strings rather than a typed result.  Use a
+    conservative allowlist so errors such as UAC elevation rejection are never
+    mistaken for a running MCP server.
+    """
+    return message.startswith(_SUCCESSFUL_START_PREFIXES)
+
+
+def is_start_pending_message(message: str) -> bool:
+    """Whether the launcher accepted a service start request awaiting UAC/ready."""
+    return message.startswith("已请求启动服务")
 
 
 def _run_hidden(args: list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:

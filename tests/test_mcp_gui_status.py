@@ -2,10 +2,516 @@ import os
 import socket
 import subprocess
 import time
+from types import SimpleNamespace
 
 import pytest
 
 from src.services import mcp_heartbeat, mcp_launcher
+
+
+def test_migration_requirement_returns_actionable_message(monkeypatch, tmp_path):
+    """数据库启动门禁阻塞时，GUI 应能展示清晰的迁移原因。"""
+    db_path = tmp_path / "kb.db"
+    plan = SimpleNamespace(
+        action="block",
+        migration_status=SimpleNamespace(message="数据库版本 j003 落后于 j004"),
+    )
+    monkeypatch.setattr(mcp_launcher.Config, "get_db_path", lambda: db_path)
+    monkeypatch.setattr(
+        mcp_launcher,
+        "inspect_database_bootstrap",
+        lambda *args, **kwargs: plan,
+        raising=False,
+    )
+
+    requirement = mcp_launcher.get_migration_requirement()
+
+    assert "数据库迁移" in requirement
+    assert "j003" in requirement
+
+
+def test_migrate_database_for_mcp_delegates_to_safe_workflow(monkeypatch, tmp_path):
+    """GUI 迁移必须复用会备份、升级和校验的既有工作流。"""
+    db_path = tmp_path / "kb.db"
+    calls = []
+    monkeypatch.setattr(mcp_launcher.Config, "get_db_path", lambda: db_path)
+    monkeypatch.setattr(
+        mcp_launcher,
+        "migrate_database",
+        lambda path: calls.append(path) or {"ok": True, "backup": "backup.sqlite"},
+        raising=False,
+    )
+
+    result = mcp_launcher.migrate_database_for_mcp()
+
+    assert calls == [db_path]
+    assert "备份" in result
+    assert "backup.sqlite" in result
+
+
+def test_migrate_database_for_mcp_requires_a_concrete_backup_path(monkeypatch, tmp_path):
+    """迁移结果没有备份位置时，不能向 GUI 报告安全迁移成功。"""
+    monkeypatch.setattr(mcp_launcher.Config, "get_db_path", lambda: tmp_path / "kb.db")
+    monkeypatch.setattr(
+        mcp_launcher,
+        "migrate_database",
+        lambda path: {"ok": True},
+    )
+
+    with pytest.raises(RuntimeError, match="备份"):
+        mcp_launcher.migrate_database_for_mcp()
+
+
+def test_mcp_startup_worker_migrates_then_starts_and_emits_one_result(monkeypatch):
+    """确认迁移后，耗时的迁移和启动由后台 worker 串行完成。"""
+    from src.gui.main_window import MCPStartupWorker
+
+    calls = []
+    monkeypatch.setattr(
+        mcp_launcher,
+        "migrate_database_for_mcp",
+        lambda: calls.append("migrate") or "数据库已安全迁移，备份：backup.sqlite",
+    )
+    monkeypatch.setattr(
+        mcp_launcher,
+        "start",
+        lambda: calls.append("start") or "MCP Server 已启动 (端口 9000)",
+    )
+    monkeypatch.setattr(mcp_heartbeat, "is_mcp_port_available", lambda: True)
+    worker = MCPStartupWorker(migration_required=True)
+    results = []
+    worker.completed.connect(lambda message, ok: results.append((message, ok)))
+
+    worker.run()
+
+    assert calls == ["migrate", "start"]
+    assert results == [
+        ("数据库已安全迁移，备份：backup.sqlite\nMCP Server 已启动 (端口 9000)", True)
+    ]
+
+
+def test_mcp_startup_worker_reports_elevation_failure_and_restores_ui(monkeypatch):
+    """服务模式的 UAC 提权失败必须被当作启动失败，而非保留开启状态。"""
+    from src.gui.main_window import MCPStartupWorker
+
+    monkeypatch.setattr(
+        mcp_launcher,
+        "start",
+        lambda: "提权失败（返回值 5），请手动以管理员身份运行",
+    )
+    worker = MCPStartupWorker(migration_required=False)
+    results = []
+    worker.completed.connect(lambda message, ok: results.append((message, ok)))
+
+    worker.run()
+
+    assert results == [("提权失败（返回值 5），请手动以管理员身份运行", False)]
+
+
+def test_mcp_startup_worker_keeps_accepted_uac_request_pending(monkeypatch):
+    """接受 UAC 请求不等于服务已可用，必须保持待确认/离线状态。"""
+    from src.gui.main_window import MCPStartupWorker
+
+    monkeypatch.setattr(
+        mcp_launcher,
+        "start",
+        lambda: "已请求启动服务，请确认 UAC 弹窗",
+    )
+    monkeypatch.setattr(mcp_heartbeat, "is_mcp_port_available", lambda: False)
+    worker = MCPStartupWorker(
+        migration_required=False,
+        readiness_timeout=0,
+        readiness_poll_interval=0,
+    )
+    results = []
+    worker.completed.connect(lambda message, ok: results.append((message, ok)))
+
+    worker.run()
+
+    assert results == [
+        ("已请求启动服务，请确认 UAC 弹窗\nMCP 服务尚未确认可用，已恢复离线状态。", False)
+    ]
+
+
+def test_mcp_startup_worker_confirms_uac_request_only_after_availability(monkeypatch):
+    """UAC 请求本身是 pending；仅在端口真正可达时才升级为成功。"""
+    from src.gui.main_window import MCPStartupWorker
+
+    monkeypatch.setattr(
+        mcp_launcher,
+        "start",
+        lambda: "已请求启动服务，请确认 UAC 弹窗",
+    )
+    monkeypatch.setattr(mcp_heartbeat, "is_mcp_port_available", lambda: True)
+    worker = MCPStartupWorker(
+        migration_required=False,
+        readiness_timeout=0,
+        readiness_poll_interval=0,
+    )
+    results = []
+    worker.completed.connect(lambda message, ok: results.append((message, ok)))
+
+    worker.run()
+
+    assert results == [("已请求启动服务，请确认 UAC 弹窗", True)]
+
+
+def test_mcp_startup_worker_polls_until_mcp_becomes_available(monkeypatch):
+    """启动后应在限定时间内轮询，覆盖服务稍晚就绪的正常路径。"""
+    from src.gui.main_window import MCPStartupWorker
+
+    availability = iter([False, True])
+    monkeypatch.setattr(mcp_launcher, "start", lambda: "MCP Server 已启动 (端口 9000)")
+    monkeypatch.setattr(mcp_heartbeat, "is_mcp_port_available", lambda: next(availability))
+    worker = MCPStartupWorker(
+        migration_required=False,
+        readiness_timeout=1,
+        readiness_poll_interval=0,
+    )
+    results = []
+    worker.completed.connect(lambda message, ok: results.append((message, ok)))
+
+    worker.run()
+
+    assert results == [("MCP Server 已启动 (端口 9000)", True)]
+
+
+def test_mcp_startup_worker_times_out_when_mcp_never_becomes_available(monkeypatch):
+    """可用性持续离线时必须在超时后恢复离线，而不是无限等待。"""
+    from src.gui.main_window import MCPStartupWorker
+
+    monkeypatch.setattr(mcp_launcher, "start", lambda: "MCP Server 已启动 (端口 9000)")
+    monkeypatch.setattr(mcp_heartbeat, "is_mcp_port_available", lambda: False)
+    worker = MCPStartupWorker(
+        migration_required=False,
+        readiness_timeout=0,
+        readiness_poll_interval=0,
+    )
+    results = []
+    worker.completed.connect(lambda message, ok: results.append((message, ok)))
+
+    worker.run()
+
+    assert results == [
+        ("MCP Server 已启动 (端口 9000)\nMCP 服务尚未确认可用，已恢复离线状态。", False)
+    ]
+
+
+def test_mcp_startup_worker_does_not_confirm_from_fresh_heartbeat_alone(monkeypatch):
+    """新鲜心跳但 TCP 端口不可达时，启动确认必须保持离线。"""
+    from src.gui.main_window import MCPStartupWorker
+
+    monkeypatch.setattr(mcp_launcher, "start", lambda: "MCP Server 已启动 (端口 9000)")
+    monkeypatch.setattr(mcp_heartbeat, "is_mcp_available", lambda: True)
+    monkeypatch.setattr(
+        mcp_heartbeat,
+        "is_mcp_port_available",
+        lambda: False,
+        raising=False,
+    )
+    worker = MCPStartupWorker(
+        migration_required=False,
+        readiness_timeout=0,
+        readiness_poll_interval=0,
+    )
+    results = []
+    worker.completed.connect(lambda message, ok: results.append((message, ok)))
+
+    worker.run()
+
+    assert results == [
+        ("MCP Server 已启动 (端口 9000)\nMCP 服务尚未确认可用，已恢复离线状态。", False)
+    ]
+
+
+class _FakeStatusBar:
+    def __init__(self):
+        self.messages = []
+
+    def showMessage(self, *args):
+        self.messages.append(args)
+
+
+class _FakeMcpToggleWindow:
+    def __init__(self):
+        self.checked_states = []
+        self.worker_requests = []
+        self._status_bar = _FakeStatusBar()
+
+    def _set_mcp_toggle_checked(self, checked):
+        self.checked_states.append(checked)
+
+    def _start_mcp_worker(self, *, migration_required):
+        self.worker_requests.append(migration_required)
+
+    def statusBar(self):
+        return self._status_bar
+
+
+def test_mcp_toggle_declining_migration_restores_unchecked_state(monkeypatch):
+    """用户拒绝迁移时不启动 worker，并将点击后的开关复位。"""
+    from src.gui import main_window
+
+    window = _FakeMcpToggleWindow()
+    monkeypatch.setattr(
+        mcp_launcher,
+        "get_migration_requirement",
+        lambda: "MCP 启动前需要数据库迁移：版本落后",
+    )
+    monkeypatch.setattr(
+        main_window.QMessageBox,
+        "question",
+        lambda *args, **kwargs: main_window.QMessageBox.StandardButton.No,
+    )
+
+    main_window.MainWindow._toggle_mcp(window, True)
+
+    assert window.checked_states == [False]
+    assert window.worker_requests == []
+    assert window._status_bar.messages == [("已取消 MCP 启动", 5000)]
+
+
+def test_mcp_toggle_accepting_migration_starts_worker_with_migration(monkeypatch):
+    """用户确认后，worker 必须收到 migration_required=True。"""
+    from src.gui import main_window
+
+    window = _FakeMcpToggleWindow()
+    monkeypatch.setattr(
+        mcp_launcher,
+        "get_migration_requirement",
+        lambda: "MCP 启动前需要数据库迁移：版本落后",
+    )
+    monkeypatch.setattr(
+        main_window.QMessageBox,
+        "question",
+        lambda *args, **kwargs: main_window.QMessageBox.StandardButton.Yes,
+    )
+
+    main_window.MainWindow._toggle_mcp(window, True)
+
+    assert window.worker_requests == [True]
+
+
+def test_mcp_toggle_skips_confirmation_when_no_migration_is_required(monkeypatch):
+    """数据库已就绪时直接后台启动，不应弹出迁移确认框。"""
+    from src.gui import main_window
+
+    window = _FakeMcpToggleWindow()
+    monkeypatch.setattr(mcp_launcher, "get_migration_requirement", lambda: None)
+    monkeypatch.setattr(
+        main_window.QMessageBox,
+        "question",
+        lambda *args, **kwargs: pytest.fail("无迁移需求时不应要求确认"),
+    )
+
+    main_window.MainWindow._toggle_mcp(window, True)
+
+    assert window.checked_states == []
+    assert window.worker_requests == [False]
+
+
+class _FakeMcpButton:
+    def __init__(self):
+        self.enabled = []
+        self.blocked = []
+        self.checked = []
+        self.text = []
+
+    def setEnabled(self, value):
+        self.enabled.append(value)
+
+    def blockSignals(self, value):
+        self.blocked.append(value)
+
+    def setChecked(self, value):
+        self.checked.append(value)
+
+    def setText(self, value):
+        self.text.append(value)
+
+
+class _FakeMcpLightStyle:
+    def __init__(self):
+        self.polished = []
+
+    def polish(self, light):
+        self.polished.append(light)
+
+
+class _FakeMcpLight:
+    def __init__(self):
+        self.properties = []
+        self.text = []
+        self._style = _FakeMcpLightStyle()
+
+    def setProperty(self, name, value):
+        self.properties.append((name, value))
+
+    def setText(self, value):
+        self.text.append(value)
+
+    def style(self):
+        return self._style
+
+
+class _FakeMcpCompletionWindow:
+    def __init__(self):
+        self.btn_mcp_toggle = _FakeMcpButton()
+        self.mcp_light = _FakeMcpLight()
+        self._status_bar = _FakeStatusBar()
+        self.forced_checks = []
+        self.enabled = []
+        self._mcp_start_worker = object()
+
+    def _set_mcp_toggle_checked(self, checked):
+        from src.gui.main_window import MainWindow
+
+        MainWindow._set_mcp_toggle_checked(self, checked)
+
+    def _check_mcp_status(self, *, force=False):
+        self.forced_checks.append(force)
+        return False
+
+    def setEnabled(self, value):
+        self.enabled.append(value)
+
+    def statusBar(self):
+        return self._status_bar
+
+
+def test_mcp_startup_failure_forces_offline_ui_recovery(monkeypatch):
+    """失败回调强制同步后，离线状态必须复位开关、状态灯与操作按钮。"""
+    from src.gui import main_window
+
+    window = _FakeMcpCompletionWindow()
+    monkeypatch.setattr(main_window, "set_named_icon", lambda *args: None)
+
+    main_window.MainWindow._on_mcp_startup_completed(window, "提权失败", False)
+
+    assert window.forced_checks == []
+    assert window.btn_mcp_toggle.enabled == [True]
+    assert window.btn_mcp_toggle.checked == [False]
+    assert window.mcp_light.properties == [("status", "offline")]
+    assert window.mcp_light.text == ["MCP 离线"]
+    assert window._status_bar.messages == [("提权失败", 8000)]
+    assert window.enabled == [True]
+    assert window._mcp_start_worker is not None
+
+
+class _FakeStaleHeartbeatCompletionWindow(_FakeMcpCompletionWindow):
+    def _check_mcp_status(self, *, force=False):
+        self.forced_checks.append(force)
+        return True
+
+
+def test_mcp_startup_callback_uses_direct_failure_over_stale_heartbeat(monkeypatch):
+    """worker 的 TCP 失败结果不能被新鲜但陈旧的心跳重新标记为在线。"""
+    from src.gui import main_window
+
+    window = _FakeStaleHeartbeatCompletionWindow()
+    monkeypatch.setattr(main_window, "set_named_icon", lambda *args: None)
+
+    main_window.MainWindow._on_mcp_startup_completed(
+        window,
+        "MCP 服务尚未确认可用，已恢复离线状态。",
+        False,
+    )
+
+    assert window.forced_checks == []
+    assert window.btn_mcp_toggle.checked == [False]
+    assert window.mcp_light.properties == [("status", "offline")]
+
+
+class _FakeSignal:
+    def __init__(self):
+        self.callbacks = []
+
+    def connect(self, callback):
+        self.callbacks.append(callback)
+
+
+class _FakeStartupWorker:
+    def __init__(self, migration_required):
+        self.migration_required = migration_required
+        self.completed = _FakeSignal()
+        self.finished = _FakeSignal()
+        self.started = False
+
+    def start(self):
+        self.started = True
+
+    def deleteLater(self):
+        pass
+
+
+class _FakeMcpStartupWindow:
+    def __init__(self):
+        self.btn_mcp_toggle = _FakeMcpButton()
+        self._status_bar = _FakeStatusBar()
+        self.enabled = []
+
+    def _on_mcp_startup_completed(self, *args):
+        pass
+
+    def _clear_mcp_start_worker(self):
+        self._mcp_start_worker = None
+
+    def setEnabled(self, value):
+        self.enabled.append(value)
+
+    def statusBar(self):
+        return self._status_bar
+
+
+def test_mcp_startup_disables_main_window_until_worker_completes(monkeypatch):
+    """迁移/启动期间禁用主窗口，避免并发 GUI 写入同一数据库。"""
+    from src.gui import main_window
+
+    window = _FakeMcpStartupWindow()
+    monkeypatch.setattr(main_window, "MCPStartupWorker", _FakeStartupWorker)
+
+    main_window.MainWindow._start_mcp_worker(window, migration_required=True)
+
+    assert window.enabled == [False]
+    assert window.btn_mcp_toggle.enabled == [False]
+    assert window._mcp_start_worker.migration_required is True
+    assert window._mcp_start_worker.started is True
+
+
+class _FakeCloseWorker:
+    def isRunning(self):
+        return True
+
+
+class _FakeCloseEvent:
+    def __init__(self):
+        self.ignored = False
+
+    def ignore(self):
+        self.ignored = True
+
+
+class _FakeCloseWindow:
+    def __init__(self):
+        self._mcp_start_worker = _FakeCloseWorker()
+
+
+def test_close_event_rejects_while_mcp_startup_worker_is_running(monkeypatch):
+    """运行中的 QThread 不应在窗口销毁时被销毁。"""
+    from src.gui import main_window
+
+    notices = []
+    event = _FakeCloseEvent()
+    monkeypatch.setattr(
+        main_window.QMessageBox,
+        "information",
+        lambda *args, **kwargs: notices.append(args),
+    )
+
+    main_window.MainWindow.closeEvent(_FakeCloseWindow(), event)
+
+    assert event.ignored is True
+    assert notices and notices[0][1] == "MCP 正在启动"
 
 
 def test_status_probe_does_not_spawn_console_process(monkeypatch, tmp_path):

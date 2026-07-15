@@ -206,6 +206,52 @@ class TestInferTagsByLlmSignature:
         assert "temperature" not in kwargs, \
             "不应使用 temperature（chat 不支持，由 config 统一控制）"
 
+    def test_infer_tags_by_llm_passes_explicit_timeout(self):
+        """GUI 补标可为每次 LLM 推理传入一个独立的硬超时。"""
+        mock_llm = MagicMock()
+        mock_llm.chat.return_value = "[]"
+
+        with patch("src.services.llm.LLMService", return_value=mock_llm):
+            infer_tags_by_llm("测试标题", "测试内容", [], timeout=12)
+
+        assert mock_llm.chat.call_args.kwargs["timeout"] == 12
+
+    def test_infer_tags_by_llm_reports_runtime_call_failure(self):
+        """仅 LLM 调用本身失败时，通知批处理端停止后续 LLM 兜底。"""
+        mock_llm = MagicMock()
+        mock_llm.chat.side_effect = RuntimeError("connection refused")
+        errors = []
+
+        with patch("src.services.llm.LLMService", return_value=mock_llm):
+            results = infer_tags_by_llm("测试标题", "测试内容", [], on_error=errors.append)
+
+        assert results == []
+        assert len(errors) == 1
+        assert "connection refused" in str(errors[0])
+
+    def test_infer_tags_by_llm_reports_service_construction_failure(self):
+        """服务配置或初始化失败也应熔断当前批次的 LLM 兜底。"""
+        errors = []
+
+        with patch("src.services.llm.LLMService", side_effect=RuntimeError("missing API key")):
+            results = infer_tags_by_llm("测试标题", "测试内容", [], on_error=errors.append)
+
+        assert results == []
+        assert len(errors) == 1
+        assert "missing API key" in str(errors[0])
+
+    def test_infer_tags_by_llm_does_not_report_malformed_response_as_runtime_error(self):
+        """模型返回坏 JSON 只影响当前条目，不能熔断后续 LLM 推断。"""
+        mock_llm = MagicMock()
+        mock_llm.chat.return_value = "not json"
+        errors = []
+
+        with patch("src.services.llm.LLMService", return_value=mock_llm):
+            results = infer_tags_by_llm("测试标题", "测试内容", [], on_error=errors.append)
+
+        assert results == []
+        assert errors == []
+
     def test_infer_tags_integration_with_llm_fallback(self):
         """集成：规则推理不足时（len(results) < 2），infer_tags(use_llm=True)
         触发 LLM 分支。

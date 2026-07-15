@@ -33,6 +33,11 @@ def is_mcp_available() -> bool:
     if elapsed is not None and elapsed < 300:
         return True
 
+    return is_mcp_port_available()
+
+
+def is_mcp_port_available() -> bool:
+    """Probe the configured MCP TCP endpoint without consulting heartbeat data."""
     return _check_port()
 
 

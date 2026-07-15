@@ -2,6 +2,7 @@
 import hashlib
 import html
 import json
+import logging
 import os
 import re
 from dataclasses import dataclass
@@ -43,6 +44,7 @@ from src.services.db import Database
 from src.utils.config import Config
 
 OUTLINE_RENDER_LIMIT = 500
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -295,57 +297,89 @@ class AutoTagWorker(QThread):
         super().__init__()
         self._items = items
         self._use_llm = use_llm
+        self._interruption_requested = False
+        self.was_cancelled = False
+        self.llm_fallback_disabled = False
+        self.llm_error = ""
+
+    def requestInterruption(self):
+        """Record cancellation even when run() is invoked directly by a test."""
+        self._interruption_requested = True
+        super().requestInterruption()
 
     def run(self):
         from src.services.tag_inference import infer_tags
 
-        if self._items is not None:
-            items = self._items
-        else:
-            items = Database.list_knowledge(limit=10000)
-
-        total = len(items)
         tagged = 0
         skipped = 0
-        vocab = Database.get_all_tags()
-
-        for i, item in enumerate(items):
-            # 跳过已有足够标签的条目
-            existing_tags = item.get("tags", [])
-            if isinstance(existing_tags, str):
-                try:
-                    import json as _json
-                    existing_tags = _json.loads(existing_tags)
-                except Exception:
-                    existing_tags = []
-            if isinstance(existing_tags, list) and len(existing_tags) >= 2:
-                skipped += 1
-                if i % 20 == 0:
-                    self.progress.emit(int(i / total * 100), f"补标中: {i}/{total}")
-                continue
-
-            # 多级推断
-            try:
-                results = infer_tags(item, vocab=vocab, use_llm=self._use_llm)
-            except Exception:
-                results = []
-
-            if results:
-                new_tags = [r["tag"] for r in results if r.get("tag")]
-                # 合并已有标签
-                merged = list(dict.fromkeys(existing_tags + new_tags))[:5]
-                try:
-                    Database.update_knowledge_tags(item["id"], merged)
-                    tagged += 1
-                except Exception:
-                    skipped += 1
+        total = 0
+        try:
+            if self._items is not None:
+                items = self._items
             else:
-                skipped += 1
+                items = Database.list_knowledge(limit=10000)
 
-            if i % 5 == 0:
-                self.progress.emit(int((i + 1) / total * 100), f"补标中: {i + 1}/{total}")
+            total = len(items)
+            vocab = Database.get_all_tags()
+            try:
+                llm_timeout = float(Config.get("tagging.llm_timeout", 12))
+            except (TypeError, ValueError):
+                llm_timeout = 12.0
 
-        self.finished.emit(tagged, skipped, total)
+            def disable_llm_fallback(error: Exception):
+                self.llm_fallback_disabled = True
+                self.llm_error = str(error)
+                logger.warning("Auto-tag LLM fallback disabled after runtime error: %s", error)
+
+            for i, item in enumerate(items):
+                if self._interruption_requested or self.isInterruptionRequested():
+                    self.was_cancelled = True
+                    break
+
+                # 跳过已有足够标签的条目
+                existing_tags = item.get("tags", [])
+                if isinstance(existing_tags, str):
+                    try:
+                        import json as _json
+                        existing_tags = _json.loads(existing_tags)
+                    except Exception:
+                        existing_tags = []
+                if isinstance(existing_tags, list) and len(existing_tags) >= 2:
+                    skipped += 1
+                    if i % 20 == 0:
+                        self.progress.emit(int(i / total * 100), f"补标中: {i}/{total}")
+                    continue
+
+                # 多级推断
+                try:
+                    results = infer_tags(
+                        item,
+                        vocab=vocab,
+                        use_llm=self._use_llm and not self.llm_fallback_disabled,
+                        llm_timeout=llm_timeout,
+                        on_llm_error=disable_llm_fallback,
+                    )
+                except Exception:
+                    results = []
+
+                if results:
+                    new_tags = [r["tag"] for r in results if r.get("tag")]
+                    # 合并已有标签
+                    merged = list(dict.fromkeys(existing_tags + new_tags))[:5]
+                    try:
+                        Database.update_knowledge_tags(item["id"], merged)
+                        tagged += 1
+                    except Exception:
+                        skipped += 1
+                else:
+                    skipped += 1
+
+                if i % 5 == 0:
+                    self.progress.emit(int((i + 1) / total * 100), f"补标中: {i + 1}/{total}")
+        except Exception:
+            logger.exception("Auto-tag worker stopped unexpectedly")
+        finally:
+            self.finished.emit(tagged, skipped, total)
 
 
 def _safe_md_filename(title: str, item_id: str) -> str:
@@ -1716,12 +1750,12 @@ class KnowledgeView(QWidget):
             return
 
         self.act_autotag.setEnabled(False)
-        progress = QProgressDialog(f"正在补标 {need_tag} 条...", None, 0, 100, self)
+        progress = QProgressDialog(f"正在补标 {need_tag} 条...", "取消", 0, 100, self)
         progress.setWindowModality(Qt.WindowModal)
         progress.setMinimumDuration(0)
-        progress.setCancelButton(None)
 
         self._autotag_worker = AutoTagWorker(items=items, use_llm=True)
+        progress.canceled.connect(self._autotag_worker.requestInterruption)
         self._autotag_worker.progress.connect(
             lambda v, msg: (progress.setValue(v), progress.setLabelText(msg))
         )
@@ -1743,6 +1777,14 @@ class KnowledgeView(QWidget):
             or (isinstance(it.get("tags"), str) and it.get("tags", "[]") not in ("", "[]"))
         )
         coverage_after = after_tagged / after_total * 100 if after_total else 0
+
+        if getattr(self._autotag_worker, "was_cancelled", False):
+            QMessageBox.information(
+                self, "补标已取消",
+                f"已补标 {tagged} 个条目，跳过 {skipped} 个。\n"
+                f"当前标签覆盖率: {coverage_after:.1f}%",
+            )
+            return
 
         if tagged > 0:
             QMessageBox.information(

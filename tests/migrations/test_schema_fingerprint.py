@@ -110,6 +110,30 @@ def test_fingerprint_cli_json(tmp_path: Path):
     assert "tables" in data
 
 
+def test_fingerprint_reads_sqlite_vec_virtual_table(tmp_path: Path):
+    """Fingerprinting a production vec0 table must not require a fallback DB restore."""
+    import sqlite_vec
+
+    mod = _load_tool()
+    db = tmp_path / "vec.db"
+    conn = sqlite3.connect(str(db))
+    try:
+        conn.enable_load_extension(True)
+        try:
+            sqlite_vec.load(conn)
+        finally:
+            conn.enable_load_extension(False)
+        conn.execute("CREATE VIRTUAL TABLE vec_blocks USING vec0(embedding float[2])")
+        conn.commit()
+    finally:
+        conn.close()
+
+    fp = mod.compute_schema_fingerprint(db)
+
+    assert "vec_blocks" in fp["tables"]
+    assert "vec_blocks" in fp["virtual_tables"]
+
+
 def test_fingerprint_does_not_use_default_user_db(tmp_path: Path, monkeypatch):
     """CLI and API require explicit --db; no implicit user path fallback."""
     mod = _load_tool()

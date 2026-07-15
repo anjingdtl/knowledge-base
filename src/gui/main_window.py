@@ -4,8 +4,9 @@ import ctypes.wintypes
 import logging
 import sqlite3
 import sys
+import time
 
-from PySide6.QtCore import QPoint, QSettings, Qt, QTimer
+from PySide6.QtCore import QPoint, QSettings, Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QColor, QCursor
 from PySide6.QtWidgets import (
     QFrame,
@@ -32,6 +33,68 @@ class DatabaseInitError(Exception):
     pass
 
 
+class MCPStartupWorker(QThread):
+    """Run an optional database migration and MCP startup outside the GUI thread."""
+
+    completed = Signal(str, bool)
+
+    def __init__(
+        self,
+        migration_required: bool,
+        *,
+        readiness_timeout: float = 8.0,
+        readiness_poll_interval: float = 0.25,
+    ):
+        super().__init__()
+        self._migration_required = migration_required
+        self._readiness_timeout = max(0.0, readiness_timeout)
+        self._readiness_poll_interval = max(0.0, readiness_poll_interval)
+
+    def _wait_for_mcp_available(self, is_mcp_available) -> bool:
+        """Poll availability for a bounded period after a successful launch."""
+        deadline = time.monotonic() + self._readiness_timeout
+        while True:
+            if is_mcp_available():
+                return True
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return False
+            poll_interval = self._readiness_poll_interval or 0.01
+            time.sleep(min(poll_interval, remaining))
+
+    def run(self) -> None:
+        messages: list[str] = []
+        try:
+            from src.services.mcp_heartbeat import is_mcp_port_available
+            from src.services.mcp_launcher import (
+                is_start_pending_message,
+                is_start_success_message,
+                migrate_database_for_mcp,
+                start,
+            )
+
+            if self._migration_required:
+                messages.append(migrate_database_for_mcp())
+            launch_message = start()
+            messages.append(launch_message)
+            launch_pending_or_successful = (
+                is_start_success_message(launch_message)
+                or is_start_pending_message(launch_message)
+            )
+            confirmed = launch_pending_or_successful and self._wait_for_mcp_available(
+                is_mcp_port_available
+            )
+            if launch_pending_or_successful and not confirmed:
+                messages.append("MCP 服务尚未确认可用，已恢复离线状态。")
+            self.completed.emit(
+                "\n".join(messages),
+                confirmed,
+            )
+        except Exception as exc:  # noqa: BLE001 - propagate worker errors to the GUI
+            logger.exception("MCP startup worker failed")
+            self.completed.emit(f"MCP 启动失败：{exc}", False)
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -55,6 +118,15 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         """关闭窗口时保存布局状态"""
+        worker = getattr(self, "_mcp_start_worker", None)
+        if worker is not None and worker.isRunning():
+            QMessageBox.information(
+                self,
+                "MCP 正在启动",
+                "数据库迁移或 MCP 启动仍在进行。请等待完成后再关闭窗口。",
+            )
+            event.ignore()
+            return
         settings = QSettings("ShineHeKnowledge", "MainWindow")
         settings.setValue("geometry", self.saveGeometry())
         if hasattr(self, 'knowledge_view'):
@@ -435,11 +507,11 @@ class MainWindow(QMainWindow):
         self.llm_indicator.set_status(status, detail)
         self._update_status_bar()
 
-    def _check_mcp_status(self):
+    def _check_mcp_status(self, *, force: bool = False) -> bool:
         from src.services.mcp_heartbeat import is_mcp_available
         online = is_mcp_available()
         new_status = "online" if online else "offline"
-        if self.mcp_light.property("status") != new_status:
+        if force or self.mcp_light.property("status") != new_status:
             self.mcp_light.setProperty("status", new_status)
             self.mcp_light.setText(f"MCP {'活跃' if online else '离线'}")
             # polish() 单次足够：dynamic property 变化后 QSS 选择器自动重算。
@@ -451,15 +523,75 @@ class MainWindow(QMainWindow):
             set_named_icon(self.btn_mcp_toggle, "mcp", "danger" if online else "text_dim", 14)
             self.btn_mcp_toggle.blockSignals(False)
             self._update_status_bar()
+        return online
 
     def _toggle_mcp(self, checked: bool):
-        from src.services.mcp_launcher import start, stop
         if checked:
-            msg = start()
-            self.statusBar().showMessage(msg, 5000)
+            from src.services.mcp_launcher import get_migration_requirement
+
+            try:
+                migration_requirement = get_migration_requirement()
+            except Exception as exc:  # noqa: BLE001 - keep the toggle recoverable
+                logger.exception("MCP migration preflight failed")
+                self._set_mcp_toggle_checked(False)
+                self.statusBar().showMessage(f"无法检查 MCP 启动条件：{exc}", 8000)
+                return
+
+            if migration_requirement:
+                reply = QMessageBox.question(
+                    self,
+                    "需要数据库迁移",
+                    f"{migration_requirement}\n\n"
+                    "继续将先创建数据库备份，再执行迁移和校验。是否继续？",
+                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                    QMessageBox.StandardButton.No,
+                )
+                if reply != QMessageBox.StandardButton.Yes:
+                    self._set_mcp_toggle_checked(False)
+                    self.statusBar().showMessage("已取消 MCP 启动", 5000)
+                    return
+
+            self._start_mcp_worker(migration_required=bool(migration_requirement))
         else:
+            from src.services.mcp_launcher import stop
+
             msg = stop()
             self.statusBar().showMessage(msg, 5000)
             self.mcp_light.setProperty("status", "offline")
             self.mcp_light.setText("MCP 离线")
             self.mcp_light.style().polish(self.mcp_light)
+
+    def _set_mcp_toggle_checked(self, checked: bool) -> None:
+        """Update the toggle without recursively invoking the click handler."""
+        self.btn_mcp_toggle.blockSignals(True)
+        self.btn_mcp_toggle.setChecked(checked)
+        self.btn_mcp_toggle.setText("停止 MCP" if checked else "启动 MCP")
+        set_named_icon(self.btn_mcp_toggle, "mcp", "danger" if checked else "text_dim", 14)
+        self.btn_mcp_toggle.blockSignals(False)
+
+    def _start_mcp_worker(self, *, migration_required: bool) -> None:
+        """Start the potentially slow migration/launch sequence in a QThread."""
+        self.setEnabled(False)
+        self.btn_mcp_toggle.setEnabled(False)
+        self.statusBar().showMessage(
+            "正在备份、迁移并启动 MCP…" if migration_required else "正在启动 MCP…"
+        )
+        worker = MCPStartupWorker(migration_required=migration_required)
+        self._mcp_start_worker = worker
+        worker.completed.connect(self._on_mcp_startup_completed)
+        worker.finished.connect(self._clear_mcp_start_worker)
+        worker.finished.connect(worker.deleteLater)
+        worker.start()
+
+    def _on_mcp_startup_completed(self, message: str, _ok: bool) -> None:
+        self.setEnabled(True)
+        self.btn_mcp_toggle.setEnabled(True)
+        self._set_mcp_toggle_checked(_ok)
+        self.mcp_light.setProperty("status", "online" if _ok else "offline")
+        self.mcp_light.setText(f"MCP {'活跃' if _ok else '离线'}")
+        self.mcp_light.style().polish(self.mcp_light)
+        self.statusBar().showMessage(message, 8000)
+
+    def _clear_mcp_start_worker(self) -> None:
+        """Release the worker only after its QThread has fully stopped."""
+        self._mcp_start_worker = None
