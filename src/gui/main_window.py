@@ -98,6 +98,7 @@ class MCPStartupWorker(QThread):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self._mcp_start_worker: MCPStartupWorker | None = None
         self.setWindowTitle(f"ShineHeKnowledge v{VERSION}")
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Window)
         self.setMinimumSize(1100, 700)
