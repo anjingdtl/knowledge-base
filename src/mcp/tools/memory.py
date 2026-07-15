@@ -143,23 +143,39 @@ def summarize_recent_changes(since_hours: int = 24) -> dict:
 
 @_define_tool(
     name="extract_tasks_from_doc",
-    description="从文档内容中提取待办任务。使用 LLM 智能提取（如可用），否则启发式匹配。"
-    "自动将提取结果存为 category=task 的记忆。",
+    description="从文档内容或已索引知识条目中提取待办任务。使用 LLM 智能提取（如可用），否则启发式匹配。"
+    "请且仅提供 content 或 doc_id；自动将提取结果存为 category=task 的记忆。",
     annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False},
     group="memory", side_effect="write",
     experimental=True,
 )
 @_heartbeat
-def extract_tasks_from_doc(content: str) -> dict:
+def extract_tasks_from_doc(content: str | None = None, doc_id: str | None = None) -> dict:
     """从文档中提取待办任务并存储。
 
     Args:
-        content: 文档内容文本
+        content: 直接提供的文档内容文本，与 doc_id 二选一。
+        doc_id: 已索引知识条目 ID；服务从该条目读取内容，与 content 二选一。
     """
     _guard = _check_write_policy("extract_tasks_from_doc")
     if _guard:
         return _guard
-    result = _get_container().agent_memory.extract_tasks_from_doc(content)
+    has_content = content is not None
+    has_doc_id = bool(doc_id)
+    if has_content == has_doc_id:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "extract_tasks_from_doc 请且仅提供 content 或 doc_id",
+        )
+
+    container = _get_container()
+    if doc_id:
+        document = container.db.get_knowledge(doc_id)
+        if document is None:
+            return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {doc_id}", doc_id=doc_id)
+        content = str(document.get("content", ""))
+
+    result = container.agent_memory.extract_tasks_from_doc(content or "")
     return ok(result, tasks_found=result.get("total_found", 0), stored=result.get("stored", 0))
 
 @_define_tool(

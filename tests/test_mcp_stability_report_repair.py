@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 
 
-def _insert_test_knowledge(*, tags: list[str]) -> str:
+def _insert_test_knowledge(*, tags: list[str], content: str = "MCP stability test content") -> str:
     import json
     import uuid
     from datetime import datetime
@@ -16,7 +16,7 @@ def _insert_test_knowledge(*, tags: list[str]) -> str:
     Database.insert_knowledge({
         "id": item_id,
         "title": "MCP stability test",
-        "content": "MCP stability test content",
+        "content": content,
         "source_type": "manual",
         "source_path": "",
         "file_type": "txt",
@@ -102,3 +102,41 @@ def test_tags_without_pagination_keeps_full_list():
     assert result["ok"] is True
     assert result["data"] == ["alpha", "beta"]
     assert result["meta"] == {"count": 2}
+
+
+def test_extract_tasks_reads_indexed_document_by_doc_id(monkeypatch):
+    from src.mcp.tools import memory
+    from src.services.db import Database
+
+    document_id = _insert_test_knowledge(tags=[], content="TODO: repair the MCP contract")
+    captured: list[str] = []
+
+    def extract(content: str) -> dict:
+        captured.append(content)
+        return {"total_found": 1, "stored": 1, "tasks": [{"task": "repair the MCP contract"}]}
+
+    monkeypatch.setattr(
+        memory,
+        "_get_container",
+        lambda: SimpleNamespace(db=Database, agent_memory=SimpleNamespace(extract_tasks_from_doc=extract)),
+    )
+
+    result = memory.extract_tasks_from_doc(doc_id=document_id)
+
+    assert result["ok"] is True
+    assert result["data"]["total_found"] == 1
+    assert captured == ["TODO: repair the MCP contract"]
+
+
+def test_extract_tasks_requires_exactly_one_content_source(monkeypatch):
+    from src.mcp.tools import memory
+
+    monkeypatch.setattr(memory, "_check_write_policy", lambda _tool: None)
+
+    missing = memory.extract_tasks_from_doc()
+    conflicting = memory.extract_tasks_from_doc(content="action", doc_id="document-id")
+
+    assert missing["ok"] is False
+    assert missing["error"]["code"] == "VALIDATION_ERROR"
+    assert conflicting["ok"] is False
+    assert conflicting["error"]["code"] == "VALIDATION_ERROR"
