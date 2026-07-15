@@ -26,7 +26,7 @@ def start_ids(graph_ids):
     return json.dumps([graph_ids[0]])
 
 
-def _traverse(start_ids: str, *, limit: int, offset: int = 0, max_depth: int = 10):
+def _traverse(start_ids: str, *, limit: int, offset: int = 0, max_depth: int = 3):
     from src.mcp.tools.graph import graph_traverse
 
     return graph_traverse(
@@ -52,8 +52,8 @@ def _traverse(start_ids: str, *, limit: int, offset: int = 0, max_depth: int = 1
 def test_graph_traverse_paginates_nodes_edges_paths(
     patch_container, start_ids, total_hint, limit, offset
 ):
-    # 先取全量页（大 limit）作为参照
-    full = _traverse(start_ids, limit=500, offset=0)
+    # 先取全量页（大 limit，受 max_graph_nodes 约束）作为参照
+    full = _traverse(start_ids, limit=200, offset=0)
     assert full["ok"] is True
     all_nodes = full["data"]["nodes"]
     total = len(all_nodes)
@@ -98,12 +98,14 @@ def test_graph_traverse_offset_always_applied_even_when_total_le_limit(
     patch_container, start_ids
 ):
     """offset 必须始终切片，不能只在 len(nodes) > limit 时处理。"""
-    full = _traverse(start_ids, limit=500, offset=0)
+    full = _traverse(start_ids, limit=200, offset=0)
+    assert full["ok"] is True, full
     total = len(full["data"]["nodes"])
-    # limit 大于 total，但 offset 非零
-    limit = total + 5
+    # limit 大于 total，但 offset 非零（limit 仍需 <= max_graph_nodes）
+    limit = min(total + 5, 200)
     offset = min(3, max(total - 1, 0))
     page = _traverse(start_ids, limit=limit, offset=offset)
+    assert page["ok"] is True, page
     assert page["ok"] is True
     expected = full["data"]["nodes"][offset : offset + limit]
     assert [node_id(n) for n in page["data"]["nodes"]] == [node_id(n) for n in expected]
@@ -112,7 +114,8 @@ def test_graph_traverse_offset_always_applied_even_when_total_le_limit(
 def test_graph_traverse_pages_merge_without_duplicates_or_gaps(
     patch_container, start_ids
 ):
-    full = _traverse(start_ids, limit=500, offset=0)
+    full = _traverse(start_ids, limit=200, offset=0)
+    assert full["ok"] is True, full
     all_ids = [node_id(n) for n in full["data"]["nodes"]]
     total = len(all_ids)
     limit = 5

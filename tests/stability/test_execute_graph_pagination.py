@@ -10,7 +10,7 @@ from tests.stability.conftest import (
 )
 
 
-def _execute_graph(start_ids: list[str], *, limit: int, offset: int = 0, max_depth: int = 10):
+def _execute_graph(start_ids: list[str], *, limit: int, offset: int = 0, max_depth: int = 3):
     from src.mcp.tools.retrieval import execute_query
 
     return execute_query(
@@ -32,7 +32,7 @@ def test_execute_query_graph_limit_is_enforced(patch_container, graph_ids):
     assert len(nodes) <= 5
     assert len(nodes) == 5 or result["data"].get("truncated") is False
     # 参照全量
-    full = _execute_graph([graph_ids[0]], limit=500, offset=0)
+    full = _execute_graph([graph_ids[0]], limit=200, offset=0)
     total = len(full["data"]["nodes"])
     if total > 5:
         assert result["data"]["truncated"] is True or (result.get("meta") or {}).get("truncated") is True
@@ -45,7 +45,7 @@ def test_execute_query_graph_limit_is_enforced(patch_container, graph_ids):
 def test_execute_query_graph_pagination_matches_slice(
     patch_container, graph_ids, limit, offset
 ):
-    full = _execute_graph([graph_ids[0]], limit=500, offset=0)
+    full = _execute_graph([graph_ids[0]], limit=200, offset=0)
     all_nodes = full["data"]["nodes"]
     total = len(all_nodes)
     page = _execute_graph([graph_ids[0]], limit=limit, offset=offset)
@@ -69,7 +69,7 @@ def test_graph_traverse_and_execute_query_agree(patch_container, graph_ids):
     limit, offset = 5, 5
     gt = graph_traverse(
         start_ids=json.dumps([graph_ids[0]]),
-        max_depth=10,
+        max_depth=3,
         limit=limit,
         offset=offset,
     )

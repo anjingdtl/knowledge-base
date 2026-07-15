@@ -31,6 +31,111 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 
+def _parse_start_ids(start_ids: str | list[str]) -> list[str] | dict:
+    """Parse/normalize start_ids. Returns list[str] or fail() dict."""
+    raw = start_ids
+    if isinstance(raw, str):
+        try:
+            raw = json.loads(raw)
+        except json.JSONDecodeError:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'",
+            )
+    if not isinstance(raw, list):
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "start_ids 必须是非空字符串数组",
+            start_ids=start_ids,
+        )
+    if len(raw) == 0:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "start_ids 不能为空数组",
+        )
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for item in raw:
+        if not isinstance(item, str):
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "start_ids 每一项必须是非空字符串",
+                invalid_item=item,
+            )
+        value = item.strip()
+        if not value:
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "start_ids 每一项必须是非空字符串",
+            )
+        if value not in seen:
+            seen.add(value)
+            normalized.append(value)
+    max_starts = 50
+    if len(normalized) > max_starts:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            f"start_ids 数量超过上限 {max_starts}",
+            count=len(normalized),
+            max_starts=max_starts,
+        )
+    return normalized
+
+
+def _validate_graph_params(
+    *,
+    limit: int,
+    offset: int,
+    max_depth: int,
+    start_type: str,
+) -> dict | None:
+    """Return fail() envelope if invalid, else None."""
+    from src.utils.config import Config
+
+    max_graph_nodes = int(Config.get("rag.max_graph_nodes", 200) or 200)
+    max_graph_depth = int(Config.get("rag.max_graph_depth", 3) or 3)
+
+    if not isinstance(limit, int) or isinstance(limit, bool) or limit < 1:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            f"limit 必须满足 1 <= limit <= {max_graph_nodes}",
+            limit=limit,
+        )
+    if limit > max_graph_nodes:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            f"limit 必须满足 1 <= limit <= {max_graph_nodes}",
+            limit=limit,
+            max_graph_nodes=max_graph_nodes,
+        )
+    if not isinstance(offset, int) or isinstance(offset, bool) or offset < 0:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "offset 必须 >= 0",
+            offset=offset,
+        )
+    if not isinstance(max_depth, int) or isinstance(max_depth, bool):
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            f"max_depth 必须满足 0 <= max_depth <= {max_graph_depth}",
+            max_depth=max_depth,
+        )
+    if max_depth < 0 or max_depth > max_graph_depth:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            f"max_depth 必须满足 0 <= max_depth <= {max_graph_depth}",
+            max_depth=max_depth,
+            max_graph_depth=max_graph_depth,
+        )
+    if start_type not in ("knowledge", "block"):
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            'start_type 必须是 "knowledge" 或 "block"',
+            start_type=start_type,
+        )
+    return None
+
+
 @_define_tool(
     name="graph_traverse",
     description="从给定节点遍历知识图谱（多跳、限深度、限节点数）。"
@@ -41,7 +146,7 @@ R = TypeVar("R")
 )
 @_heartbeat
 def graph_traverse(
-    start_ids: str,
+    start_ids: str | list[str],
     max_depth: int = 2,
     start_type: str = "knowledge",
     limit: int = 100,
@@ -51,6 +156,7 @@ def graph_traverse(
 
     Args:
         start_ids: JSON array of starting node IDs (e.g. '["page-id-1", "page-id-2"]')
+            or a list[str] (compatible).
         max_depth: Maximum traversal depth
         start_type: Type of start nodes (knowledge or block)
         limit: 节点数上限
@@ -63,9 +169,19 @@ def graph_traverse(
     from src.services.graph_traversal import GraphTraversalService
     from src.utils.config import Config
 
+    param_error = _validate_graph_params(
+        limit=limit, offset=offset, max_depth=max_depth, start_type=start_type
+    )
+    if param_error is not None:
+        return param_error
+
+    parsed = _parse_start_ids(start_ids)
+    if isinstance(parsed, dict):
+        return parsed
+    ids = parsed
+
     container = _get_container()
     try:
-        ids = json.loads(start_ids) if isinstance(start_ids, str) else start_ids
         max_graph_nodes = int(Config.get("rag.max_graph_nodes", 200) or 200)
         fetch_limit = compute_graph_fetch_limit(
             limit=limit, offset=offset, max_graph_nodes=max_graph_nodes
@@ -94,14 +210,9 @@ def graph_traverse(
             truncated=page["truncated"],
             max_depth=max_depth,
         )
-    except json.JSONDecodeError:
-        return fail(
-            ErrorCode.VALIDATION_ERROR,
-            "start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'",
-        )
     except Exception as exc:
         logger.exception("graph_traverse failed: %s", exc)
-        return fail(ErrorCode.QUERY_PARSE_ERROR, str(exc))
+        return fail(ErrorCode.INTERNAL_ERROR, str(exc))
 
 @_define_tool(
     name="get_source_graph",
