@@ -141,10 +141,14 @@ def test_tag_extraction_wecom(route_container):
     result = _route("标签为企微的所有文档")
     assert result["ok"] is True
     data = result["data"]
-    blob = json_dumps(data)
-    assert "企微" in blob
-    # 不得把「企微的所有文档」整体当 tag
-    assert "企微的所有文档" not in blob
+    spec = data.get("query_spec") or data.get("recommended_arguments", {}).get("query_spec") or {}
+    filt = (spec.get("filter") if isinstance(spec, dict) else {}) or {}
+    # tag 必须是「企微」，不得把「企微的所有文档」整体当 tag
+    tag_val = filt.get("tag") if isinstance(filt, dict) else None
+    if tag_val is None and isinstance(filt, dict) and "and" in filt:
+        tags = [c.get("tag") for c in filt["and"] if isinstance(c, dict) and "tag" in c]
+        tag_val = tags[0] if tags else None
+    assert tag_val == "企微", f"expected tag=企微, got filter={filt!r}"
 
 
 def test_recommended_arguments_executable_first_call(route_container, graph_ids):

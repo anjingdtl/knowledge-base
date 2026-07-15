@@ -926,7 +926,7 @@ def route_query(question: str | None = None, query: str | None = None,
             )
         router = AgenticRouter(db=container.db, llm=container.llm)
         routing = router.route(question)
-        payload = serialize_route(routing)
+        payload = serialize_route(routing, question=question)
 
         # BUG-3 fix + Phase 2: 附带轻量级搜索线索，让Agent能看到相关文档而不需要二次调用
         # 优先级：vector（语义匹配）> blocks_fts（jieba分词，中文精确匹配）> wiki_fts > LIKE兜底
