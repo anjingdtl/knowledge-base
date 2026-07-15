@@ -402,12 +402,13 @@ def _do_ask(question: str) -> dict:
     # BUG-2 fix (50轮测试报告): ask 工具增加总超时控制。
     # Phase 4: verified hybrid 时优先 SearchService + AnswerService
     # （冲突披露 / claim+evidence 引用 / answer_mode）；否则走 rag_pipeline。
-    import concurrent.futures
-
+    # Round2: 禁止 ThreadPoolExecutor 硬超时（shutdown 会 join 跑死墙钟并泄漏线程）。
+    from src.mcp.tools.support import run_with_deadline
     from src.utils.config import Config
 
     total_timeout = float(Config.get("rag.ask.total_timeout", 90) or 90)
     timeout_label = f"{total_timeout:g}s"
+    started = time.monotonic()
 
     container = _get_container()
 
@@ -419,7 +420,8 @@ def _do_ask(question: str) -> dict:
         )
 
     def _run_legacy() -> dict:
-        return dict(container.rag_pipeline.query(question, timeout=total_timeout))
+        remaining = max(0.05, total_timeout - (time.monotonic() - started))
+        return dict(container.rag_pipeline.query(question, timeout=remaining))
 
     # The production container owns the verified dependencies.  Keeping the
     # legacy runner for minimal test/integration doubles preserves the timeout
@@ -428,10 +430,9 @@ def _do_ask(question: str) -> dict:
     use_verified = _should_use_verified_ask() and isinstance(container, AppContainer)
     runner = _run_verified if use_verified else _run_legacy
     try:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-            future = pool.submit(runner)
-            result = dict(future.result(timeout=total_timeout))
-    except concurrent.futures.TimeoutError:
+        result = dict(run_with_deadline(runner, total_timeout))
+    except TimeoutError:
+        elapsed_ms = int((time.monotonic() - started) * 1000)
         logger.warning(
             "ask timed out after %s for question=%r, returning partial result",
             timeout_label, question[:50],
@@ -440,8 +441,13 @@ def _do_ask(question: str) -> dict:
             "answer": "",
             "sources": [],
             "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
-            "route": {"mode": "timeout",
-                      "explanation": f"ask timed out after {timeout_label}"},
+            "route": {
+                "mode": "timeout",
+                "explanation": f"ask timed out after {timeout_label}",
+                "configured_timeout_ms": int(total_timeout * 1000),
+                "elapsed_ms": elapsed_ms,
+                "cancelled": True,
+            },
             "query_plan": {},
             "block_contexts": {},
             "warnings": [f"ask timed out after {timeout_label}, "
@@ -1198,8 +1204,9 @@ def ask_with_query(
             # 简化模式：自动构造 fulltext QuerySpec
             spec = QuerySpec.from_json({"filter": {"fulltext": search_query}})
 
-        # Phase 3: configurable timeout from config
-        total_timeout = int(Config.get("rag.ask_with_query.total_timeout", 120) or 120)
+        # Phase 3/4: configurable wall-clock timeout (no ThreadPoolExecutor join)
+        total_timeout = float(Config.get("rag.ask_with_query.total_timeout", 120) or 120)
+        started = time.monotonic()
 
         pipeline = RagPipeline(
             pipeline_config=DEFAULT_PIPELINE_CONFIG,
@@ -1232,17 +1239,26 @@ def ask_with_query(
                 timeout=total_timeout,
             )
         except TimeoutError:
-            # Phase 3: return partial result + timeout warning
-            logger.warning("ask_with_query timed out after %ds for question=%r", total_timeout, effective_question[:50])
+            elapsed_ms = int((time.monotonic() - started) * 1000)
+            logger.warning(
+                "ask_with_query timed out after %gs for question=%r",
+                total_timeout, effective_question[:50],
+            )
             return ok(
                 {
                     "answer": "",
                     "sources": [],
                     "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
-                    "route": {"mode": "timeout", "explanation": f"Query timed out after {total_timeout}s"},
+                    "route": {
+                        "mode": "timeout",
+                        "explanation": f"Query timed out after {total_timeout:g}s",
+                        "configured_timeout_ms": int(total_timeout * 1000),
+                        "elapsed_ms": elapsed_ms,
+                        "cancelled": True,
+                    },
                     "query_plan": {},
                     "block_contexts": {},
-                    "warnings": [f"ask_with_query timed out after {total_timeout}s"],
+                    "warnings": [f"ask_with_query timed out after {total_timeout:g}s"],
                     "wiki_context": "",
                 },
                 source_count=0,
