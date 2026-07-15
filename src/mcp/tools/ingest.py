@@ -177,13 +177,14 @@ def tags(limit: int | None = None, offset: int = 0) -> dict:
         limit: 可选的单页标签数；不传时保持兼容并返回完整列表。
         offset: 分页偏移量，默认 0。
     """
+    if offset < 0:
+        return fail(ErrorCode.VALIDATION_ERROR, "offset 不能小于 0", offset=offset)
+    if limit is not None and limit < 1:
+        return fail(ErrorCode.VALIDATION_ERROR, "limit 必须大于 0", limit=limit)
+
     all_tags = _get_container().db.get_all_tags()
     if limit is None:
         return ok(all_tags, count=len(all_tags))
-    if limit < 1:
-        return fail(ErrorCode.VALIDATION_ERROR, "limit 必须大于 0", limit=limit)
-    if offset < 0:
-        return fail(ErrorCode.VALIDATION_ERROR, "offset 不能小于 0", offset=offset)
 
     page = all_tags[offset:offset + limit]
     next_offset = offset + len(page)
@@ -302,8 +303,23 @@ def ingest_url(url: str, tags: list[str] | None = None, dry_run: bool = False) -
     try:
         result = _do_ingest_url(url, tags)
     except Exception as exc:
+        from src.services.ingest_errors import IngestError, classify_http_exception
+
         logger.exception("ingest_url failed: %s", url)
-        return fail(ErrorCode.INGEST_FAILED, str(exc), url=url)
+        if isinstance(exc, IngestError):
+            err = exc
+        else:
+            err = classify_http_exception(exc, url=url, stage="fetch")
+        return fail(
+            err.code if err.code in {
+                "SSRF_BLOCKED", "DNS_ERROR", "CONNECT_TIMEOUT", "READ_TIMEOUT",
+                "TLS_ERROR", "HTTP_ERROR", "REDIRECT_ERROR", "EMPTY_CONTENT",
+                "PARSE_ERROR", "EMBEDDING_ERROR", "DATABASE_ERROR", "UNKNOWN",
+                ErrorCode.INGEST_FAILED, ErrorCode.VALIDATION_ERROR,
+            } else ErrorCode.INGEST_FAILED,
+            err.message,
+            **err.details,
+        )
     return ok(result, operation_id=result.get("operation_id"))
 
 def _validate_ingest_path(path: str) -> str:

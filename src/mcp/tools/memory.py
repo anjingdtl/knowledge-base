@@ -160,12 +160,23 @@ def extract_tasks_from_doc(content: str | None = None, doc_id: str | None = None
     _guard = _check_write_policy("extract_tasks_from_doc")
     if _guard:
         return _guard
-    has_content = content is not None
-    has_doc_id = bool(doc_id)
-    if has_content == has_doc_id:
+    content_provided = content is not None
+    doc_provided = doc_id is not None
+    if content_provided == doc_provided:
         return fail(
             ErrorCode.VALIDATION_ERROR,
             "extract_tasks_from_doc 请且仅提供 content 或 doc_id",
+        )
+    if doc_provided and not str(doc_id or "").strip():
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "doc_id 不能为空",
+            doc_id=doc_id,
+        )
+    if content_provided and not str(content or "").strip():
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "content 不能为空或仅空白",
         )
 
     container = _get_container()
@@ -174,6 +185,19 @@ def extract_tasks_from_doc(content: str | None = None, doc_id: str | None = None
         if document is None:
             return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {doc_id}", doc_id=doc_id)
         content = str(document.get("content", ""))
+        if not content.strip():
+            # Fall back to blocks when main content is empty
+            try:
+                blocks = container.db.get_blocks_by_page(doc_id) or []
+            except Exception:
+                blocks = []
+            content = "\n".join(str(b.get("content") or "") for b in blocks)
+        if not str(content or "").strip():
+            return fail(
+                ErrorCode.VALIDATION_ERROR,
+                "文档 content 与 blocks 均为空，无法提取任务",
+                doc_id=doc_id,
+            )
 
     result = container.agent_memory.extract_tasks_from_doc(content or "")
     return ok(result, tasks_found=result.get("total_found", 0), stored=result.get("stored", 0))
