@@ -33,7 +33,9 @@ R = TypeVar("R")
 
 @_define_tool(
     name="graph_traverse",
-    description="从给定节点遍历知识图谱（多跳、限深度、限节点数）", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
+    description="从给定节点遍历知识图谱（多跳、限深度、限节点数）。"
+    "start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'；"
+    "使用 limit 限制返回节点数。", annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False},
     group="graph", side_effect="read",
     experimental=True,
 )
@@ -77,6 +79,11 @@ def graph_traverse(
             limit=limit,
             offset=offset,
             max_depth=max_depth,
+        )
+    except json.JSONDecodeError:
+        return fail(
+            ErrorCode.VALIDATION_ERROR,
+            "start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'",
         )
     except Exception as exc:
         logger.exception("graph_traverse failed: %s", exc)

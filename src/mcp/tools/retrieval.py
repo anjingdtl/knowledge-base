@@ -1033,8 +1033,8 @@ def route_query(question: str | None = None, query: str | None = None,
 
 @_define_tool(
     name="execute_query",
-    description="执行显式 QuerySpec DSL。支持 type=structured（条件过滤）/ graph（图遍历）/ "
-    "hybrid（混合搜索）。分页透传 limit/offset/next_offset/truncated。",
+    description="执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。"
+    "混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。",
     annotations={"readOnlyHint": True, "idempotentHint": True},
     group="kb", side_effect="read",
 )
@@ -1049,7 +1049,7 @@ def execute_query(
 
     Args:
         query_spec: QuerySpec JSON dict（含 filter / sort / limit / offset / include_blocks）
-        type: structured | graph | hybrid — 决定走哪个执行器
+        type: structured | graph — 决定走哪个执行器
         limit: 返回结果数量上限
         offset: 分页偏移量
 
@@ -1112,7 +1112,7 @@ def execute_query(
 
         return fail(
             ErrorCode.VALIDATION_ERROR,
-            f"不支持的 type: {type}，仅支持 structured / graph / hybrid",
+            f"不支持的 type: {type}，仅支持 structured / graph",
             type=type,
         )
     except Exception as exc:
@@ -1124,6 +1124,7 @@ def execute_query(
     description="用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。"
     "返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。"
     "[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\n"
+    "调用要求：至少提供 question 或 search_query 其中一个。\n"
     "简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\n"
     "标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\n"
     "高级模式：传 question + query_spec（支持复杂过滤条件），"
