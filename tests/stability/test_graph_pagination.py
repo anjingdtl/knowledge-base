@@ -16,7 +16,6 @@ from tests.stability.conftest import (
     assert_no_dangling_edges,
     assert_paths_in_nodes,
     node_id,
-    seed_chain_graph,
 )
 
 

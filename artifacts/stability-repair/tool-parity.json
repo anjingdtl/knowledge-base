@@ -1,0 +1,35 @@
+{
+  "stdio_http_same_source": true,
+  "aliases_off": {
+    "tools": 49,
+    "aliases": 0,
+    "all": 49
+  },
+  "aliases_on": {
+    "tools": 49,
+    "aliases": 45,
+    "all": 94
+  },
+  "tool_names_sample": [
+    "ask",
+    "ask_with_query",
+    "auto_tag",
+    "cancel_async_job",
+    "cancel_job",
+    "create",
+    "create_async_job",
+    "create_ingest_job",
+    "delete",
+    "delete_memory",
+    "execute_query",
+    "explain_query",
+    "extract_tasks_from_doc",
+    "get_async_job",
+    "get_job",
+    "get_operation_log",
+    "get_source_graph",
+    "get_trace",
+    "graph_traverse",
+    "index_path"
+  ]
+}

@@ -43,8 +43,9 @@ def test_60_meters_does_not_rank_bead_per_meter_as_top(monkeypatch):
     _insert("房间尺寸", "客厅长度约 60 米，宽度 20 米。", "doc-meters")
     _insert("时间参数", "超时时间 60 秒。", "doc-seconds")
 
-    from src.mcp.tools import retrieval
     from types import SimpleNamespace
+
+    from src.mcp.tools import retrieval
 
     monkeypatch.setattr(
         "src.mcp.tools.retrieval._get_container",
@@ -75,8 +76,9 @@ def test_six_month_no_interaction_prefers_wecom_invalid_fans(monkeypatch):
         "新员工有 6个月试用期，期满考核。",
         "doc-probation",
     )
-    from src.mcp.tools import retrieval
     from types import SimpleNamespace
+
+    from src.mcp.tools import retrieval
 
     monkeypatch.setattr(
         "src.mcp.tools.retrieval._get_container",

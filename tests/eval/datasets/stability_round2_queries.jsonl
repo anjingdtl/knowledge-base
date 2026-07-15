@@ -1,0 +1,107 @@
+{"id": "KW-001", "query": "企微", "type": "keyword", "expect": "hit"}
+{"id": "KW-002", "query": "广西电信", "type": "keyword", "expect": "hit"}
+{"id": "KW-003", "query": "知识库", "type": "keyword", "expect": "hit"}
+{"id": "KW-004", "query": "MCP工具", "type": "keyword", "expect": "hit"}
+{"id": "KW-005", "query": "向量检索", "type": "keyword", "expect": "hit"}
+{"id": "KW-006", "query": "混合检索", "type": "keyword", "expect": "hit"}
+{"id": "KW-007", "query": "Wiki编译", "type": "keyword", "expect": "hit"}
+{"id": "KW-008", "query": "标签管理", "type": "keyword", "expect": "hit"}
+{"id": "KW-009", "query": "异步导入", "type": "keyword", "expect": "hit"}
+{"id": "KW-010", "query": "图谱遍历", "type": "keyword", "expect": "hit"}
+{"id": "SYN-001", "query": "企业微信", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-002", "query": "文档问答", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-003", "query": "全文搜索", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-004", "query": "语义搜索", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-005", "query": "关系图谱", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-006", "query": "任务提取", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-007", "query": "健康检查", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-008", "query": "路由查询", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-009", "query": "证据链", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "SYN-010", "query": "无答案", "type": "synonym", "expect": "hit_or_empty"}
+{"id": "NUM-001", "query": "60 米", "type": "numeric_unit", "subtype": "length", "expect": "hit_meters_not_beads"}
+{"id": "NUM-002", "query": "60珠/米", "type": "numeric_unit", "subtype": "density", "expect": "hit_beads"}
+{"id": "NUM-003", "query": "60%", "type": "numeric_unit", "subtype": "percent", "expect": "hit"}
+{"id": "NUM-004", "query": "60秒", "type": "numeric_unit", "subtype": "time", "expect": "hit"}
+{"id": "NUM-005", "query": "60户", "type": "numeric_unit", "subtype": "count", "expect": "hit"}
+{"id": "NUM-006", "query": "2026年60%", "type": "numeric_unit", "subtype": "date_percent", "expect": "hit"}
+{"id": "NUM-007", "query": "6个月无互动", "type": "numeric_unit", "subtype": "phrase", "expect": "hit_wecom"}
+{"id": "NUM-008", "query": "6个月试用期", "type": "numeric_unit", "subtype": "phrase", "expect": "hit_probation"}
+{"id": "NUM-009", "query": "12W功率", "type": "numeric_unit", "subtype": "power", "expect": "hit"}
+{"id": "NUM-010", "query": "3.14米", "type": "numeric_unit", "subtype": "length", "expect": "hit"}
+{"id": "NUM-011", "query": "100万元", "type": "numeric_unit", "subtype": "money", "expect": "hit"}
+{"id": "NUM-012", "query": "2026-07-15", "type": "numeric_unit", "subtype": "date", "expect": "hit_or_empty"}
+{"id": "NOA-001", "query": "今天公司营收是多少", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-002", "query": "今日股价多少", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-003", "query": "量子计算最新突破是什么", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-004", "query": "火星探测任务进度", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-005", "query": "比特币当前价格", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-006", "query": "世界杯冠军是谁", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-007", "query": "明天天气怎么样", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-008", "query": "未公开并购细节", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-009", "query": "实时汇率是多少", "type": "no_answer", "expect": "no_match"}
+{"id": "NOA-010", "query": "股票涨跌幅", "type": "no_answer", "expect": "no_match"}
+{"id": "STR-001", "query": "file_type 为 pdf", "type": "structured", "expect": "route_or_hit"}
+{"id": "STR-002", "query": "标签为企微的所有文档", "type": "structured", "expect": "route_or_hit"}
+{"id": "STR-003", "query": "source_type 为 manual", "type": "structured", "expect": "route_or_hit"}
+{"id": "STR-004", "query": "列出所有 md 文档", "type": "structured", "expect": "route_or_hit"}
+{"id": "STR-005", "query": "统计标签数量", "type": "structured", "expect": "route_or_hit"}
+{"id": "GRF-001", "query": "文档引用了哪些页面", "type": "graph", "expect": "route_graph"}
+{"id": "GRF-002", "query": "上下游依赖关系", "type": "graph", "expect": "route_graph"}
+{"id": "GRF-003", "query": "被哪些文档引用", "type": "graph", "expect": "route_graph"}
+{"id": "GRF-004", "query": "与企微有什么关联", "type": "graph", "expect": "route_graph"}
+{"id": "GRF-005", "query": "图谱关系路径", "type": "graph", "expect": "route_graph"}
+{"id": "HYB-001", "query": "广西电信企微未来应该怎么发展", "type": "hybrid", "expect": "route_hybrid"}
+{"id": "HYB-002", "query": "总结主要问题", "type": "hybrid", "expect": "route_hybrid"}
+{"id": "HYB-003", "query": "对比分析两个方案", "type": "hybrid", "expect": "route_hybrid"}
+{"id": "HYB-004", "query": "给出建议和原因", "type": "hybrid", "expect": "route_hybrid"}
+{"id": "HYB-005", "query": "综合判断项目风险", "type": "hybrid", "expect": "route_hybrid"}
+{"id": "DST-001", "query": "60 米长度规格", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-002", "query": "灯带 60珠", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-003", "query": "试用期考核", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-004", "query": "无效粉丝规则", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-005", "query": "RAG 超时配置", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-006", "query": "线程泄漏排查", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-007", "query": "分页 next_offset", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-008", "query": "硬超时 1 秒", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-009", "query": "stdio HTTP 工具一致性", "type": "distractor", "expect": "context_sensitive"}
+{"id": "DST-010", "query": "SSRF 防护", "type": "distractor", "expect": "context_sensitive"}
+{"id": "PAD-001", "query": "检索 场景1", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-002", "query": "索引 场景2", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-003", "query": "导入 场景3", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-004", "query": "导出 场景4", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-005", "query": "标签 场景5", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-006", "query": "知识 场景6", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-007", "query": "文档 场景7", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-008", "query": "问答 场景8", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-009", "query": "图谱 场景9", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-010", "query": "配置 场景10", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-011", "query": "超时 场景11", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-012", "query": "分页 场景12", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-013", "query": "路由 场景13", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-014", "query": "证据 场景14", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-015", "query": "引用 场景15", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-016", "query": "块 场景16", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-017", "query": "向量 场景17", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-018", "query": "嵌入 场景18", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-019", "query": "重排 场景19", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-020", "query": "融合 场景20", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-021", "query": "检索 场景21", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-022", "query": "索引 场景22", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-023", "query": "导入 场景23", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-024", "query": "导出 场景24", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-025", "query": "标签 场景25", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-026", "query": "知识 场景26", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-027", "query": "文档 场景27", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-028", "query": "问答 场景28", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-029", "query": "图谱 场景29", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-030", "query": "配置 场景30", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-031", "query": "超时 场景31", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-032", "query": "分页 场景32", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-033", "query": "路由 场景33", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-034", "query": "证据 场景34", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-035", "query": "引用 场景35", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-036", "query": "块 场景36", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-037", "query": "向量 场景37", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-038", "query": "嵌入 场景38", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-039", "query": "重排 场景39", "type": "pad", "expect": "hit_or_empty"}
+{"id": "PAD-040", "query": "融合 场景40", "type": "pad", "expect": "hit_or_empty"}

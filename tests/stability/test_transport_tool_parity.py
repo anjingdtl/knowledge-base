@@ -3,10 +3,6 @@ from __future__ import annotations
 
 import inspect
 
-from fastmcp import FastMCP
-
-from src.mcp.registration import bootstrap
-from src.mcp.tool_catalog import TOOL_ALIASES
 from src.utils.config import Config
 
 
@@ -54,8 +50,8 @@ def test_legacy_aliases_enabled_exposes_matching_aliases():
 
 def test_stdio_http_share_registration_bootstrap():
     """两种 transport 必须共用 registration.bootstrap / get_exposed_tool_definitions。"""
-    import src.mcp.server as server
     import src.mcp.registration as registration
+    import src.mcp.server as server
 
     src = inspect.getsource(server)
     assert "bootstrap" in src or "registration" in src
@@ -76,7 +72,7 @@ def test_stdio_http_share_registration_bootstrap():
 def test_tool_functions_reject_var_keyword():
     """工具函数不应 **kwargs 静默吞掉未知参数。"""
     from src.mcp.tools.graph import graph_traverse
-    from src.mcp.tools.retrieval import search, route_query
+    from src.mcp.tools.retrieval import route_query, search
 
     for fn in (graph_traverse, search, route_query):
         sig = inspect.signature(fn)

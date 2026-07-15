@@ -11,8 +11,6 @@ import threading
 import time
 from types import SimpleNamespace
 
-import pytest
-
 
 def _slow(seconds: float = 10.0):
     def _run(*_a, **_k):

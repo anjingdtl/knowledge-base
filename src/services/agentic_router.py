@@ -68,13 +68,19 @@ def _build_recommendations(
         if isinstance(query_spec, dict):
             start_ids = start_ids or query_spec.get("start_ids")
         if start_ids:
-            args = {
+            max_depth_val = 2
+            if isinstance(traverse, dict):
+                max_depth_val = int(traverse.get("max_depth") or 2)
+            g_args: dict[str, Any] = {
                 "start_ids": start_ids if isinstance(start_ids, str) else json.dumps(start_ids, ensure_ascii=False),
-                "max_depth": (traverse or {}).get("max_depth", 2) if isinstance(traverse, dict) else 2,
+                "max_depth": max_depth_val,
             }
-            return "graph_traverse", args, [{"tool": "graph_traverse", "arguments": args}]
+            return "graph_traverse", g_args, [{"tool": "graph_traverse", "arguments": g_args}]
         # 无法解析 ID：先 search 再 graph_traverse
-        search_args = {"query": question}
+        search_args: dict[str, Any] = {"query": question}
+        max_depth_flow = 2
+        if isinstance(traverse, dict):
+            max_depth_flow = int(traverse.get("max_depth") or 2)
         flow = [
             {
                 "tool": "search",
@@ -85,7 +91,7 @@ def _build_recommendations(
                 "tool": "graph_traverse",
                 "arguments": {
                     "start_ids": "$knowledge_ids",
-                    "max_depth": (traverse or {}).get("max_depth", 2) if isinstance(traverse, dict) else 2,
+                    "max_depth": max_depth_flow,
                 },
             },
         ]
@@ -219,11 +225,8 @@ class AgenticRouter:
             if self._planetary_router is None:
                 from src.services.route_engine import PlanetaryRouter
                 self._planetary_router = PlanetaryRouter(db=self._db, llm=self._llm)
-            routed = cast(dict, self._planetary_router.route(question))
-            # 保证下游契约字段始终存在（planetary 可能缺 recommended_*）
-            if "recommended_tool" not in routed:
-                return serialize_route(routed, question=question)
-            return routed
+            # Keep QuerySpec objects here; MCP layer calls serialize_route() for JSON-safe output.
+            return cast(dict, self._planetary_router.route(question))
 
         # Legacy routing path (below)
         # Graph 信号优先于 structured 规则，避免「引用了哪些」被「哪些」类词误伤
@@ -397,9 +400,9 @@ class AgenticRouter:
                 conditions.append({"tag": tag})
 
         for tag in self._known_tags_in_question(question):
-            entry: dict[str, Any] = {"tag": tag}
-            if entry not in conditions:
-                conditions.append(entry)
+            tag_entry: dict[str, Any] = {"tag": tag}
+            if tag_entry not in conditions:
+                conditions.append(tag_entry)
 
         for m in _NL_PROP_RE.finditer(question):
             key = m.group(1)

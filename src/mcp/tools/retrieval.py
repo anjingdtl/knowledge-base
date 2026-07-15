@@ -171,28 +171,6 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
         logger.debug("search semantic path failed, fallback fulltext: %s", exc)
         results = []
 
-    # Lexical fallback: FTS + numeric/unit ranking (also used when semantic empty)
-    if not results:
-        ft = search_fulltext(query, limit=max(k, 10), offset=0)
-        if ft.get("ok"):
-            # re-apply limit and keep no_match meta
-            data = list(ft.get("data") or [])[:k]
-            meta = dict(ft.get("meta") or {})
-            meta["top_k"] = k
-            meta["limit"] = k
-            if meta.get("no_match") or not data:
-                return ok(
-                    [],
-                    total_estimate=0,
-                    top_k=k,
-                    limit=k,
-                    no_match=True,
-                    reason=meta.get("reason") or "all_candidates_below_threshold",
-                    top_score=meta.get("top_score", 0.0),
-                    threshold=meta.get("threshold"),
-                )
-            return ok(data, **{key: meta[key] for key in meta if key not in ()})
-
     apply_numeric_unit_ranking(query, results)
     threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
     scores = [
@@ -200,7 +178,32 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
         for r in results
     ]
     top_score = max(scores) if scores else 0.0
-    if not results or top_score < threshold:
+    semantic_weak = (not results) or top_score < threshold
+
+    def _normalize_hits(items: list) -> list:
+        out = []
+        for item in items:
+            row = dict(item) if isinstance(item, dict) else {"text": str(item)}
+            if not row.get("knowledge_id") and row.get("id"):
+                row["knowledge_id"] = row["id"]
+            out.append(row)
+        return out
+
+    # Lexical fallback when semantic missing/weak — preserves exact keyword e2e hits
+    if semantic_weak:
+        ft = search_fulltext(query, limit=max(k, 10), offset=0)
+        if ft.get("ok") and ft.get("data"):
+            data = _normalize_hits(list(ft.get("data") or [])[:k])
+            meta = dict(ft.get("meta") or {})
+            return ok(
+                data,
+                total_estimate=len(data),
+                top_k=k,
+                limit=k,
+                no_match=False,
+                top_score=meta.get("top_score", 0.0),
+                source_path="fulltext_fallback",
+            )
         return ok(
             [],
             total_estimate=0,
@@ -211,7 +214,13 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             top_score=round(top_score, 4),
             threshold=threshold,
         )
-    return ok(results[:k], total_estimate=len(results), top_k=k, limit=k, no_match=False)
+    return ok(
+        _normalize_hits(results[:k]),
+        total_estimate=len(results),
+        top_k=k,
+        limit=k,
+        no_match=False,
+    )
 
 @_define_tool(
     name="search_fulltext",
@@ -335,22 +344,11 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
 
     apply_numeric_unit_ranking(query, output)
 
-    threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
     scores = [float(x.get("fts_score") or x.get("score") or 0.0) for x in output]
     top_score = max(scores) if scores else 0.0
-    if output and top_score < threshold:
-        return ok(
-            [],
-            limit=limit,
-            offset=offset,
-            next_offset=None,
-            truncated=False,
-            total_estimate=0,
-            no_match=True,
-            reason="all_candidates_below_threshold",
-            top_score=round(top_score, 4),
-            threshold=threshold,
-        )
+    # FTS path keeps keyword hits; no_match gate is applied on the semantic search()
+    # tool after score calibration. Empty FTS naturally returns no_match.
+    no_match = len(output) == 0
 
     has_more = len(kb_results) == limit or len(block_results) > offset + limit or len(chunk_results) > offset + limit
     page = output[:limit] if offset == 0 else output
@@ -361,9 +359,9 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
         next_offset=offset + len(page) if has_more else None,
         truncated=has_more,
         total_estimate=len(output),
-        no_match=False,
+        no_match=no_match,
+        reason="no_fts_hits" if no_match else None,
         top_score=round(top_score, 4),
-        threshold=threshold,
     )
 
 @_define_tool(

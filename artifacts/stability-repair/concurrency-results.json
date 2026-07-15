@@ -1,0 +1,41 @@
+{
+  "ts": "2026-07-15T08:10:21.502267+00:00",
+  "tmp_db": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\shinehe-soak-jq7x46aa\\test.db",
+  "search": {
+    "1": {
+      "n": 100,
+      "errors": 0,
+      "db_locked": 0,
+      "p50_ms": 0.89,
+      "p95_ms": 1.0,
+      "p99_ms": 1.1,
+      "max_ms": 664.21,
+      "qps": 132.76
+    },
+    "5": {
+      "n": 100,
+      "errors": 0,
+      "db_locked": 0,
+      "p50_ms": 3.67,
+      "p95_ms": 5.12,
+      "p99_ms": 9.52,
+      "max_ms": 10.03,
+      "qps": 263.36
+    },
+    "10": {
+      "n": 100,
+      "errors": 0,
+      "db_locked": 0,
+      "p50_ms": 10.67,
+      "p95_ms": 32.76,
+      "p99_ms": 36.39,
+      "max_ms": 40.61,
+      "qps": 81.86
+    }
+  },
+  "errors": [],
+  "ask_concurrency_5": {
+    "n": 30,
+    "errors": 0
+  }
+}

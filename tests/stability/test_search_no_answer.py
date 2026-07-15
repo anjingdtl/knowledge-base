@@ -5,7 +5,6 @@ from types import SimpleNamespace
 
 import pytest
 
-
 NO_ANSWER_QUERIES = [
     "今天公司营收是多少",
     "今日股价多少",

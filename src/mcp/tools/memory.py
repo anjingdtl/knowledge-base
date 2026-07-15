@@ -188,7 +188,12 @@ def extract_tasks_from_doc(content: str | None = None, doc_id: str | None = None
         if not content.strip():
             # Fall back to blocks when main content is empty
             try:
-                blocks = container.db.get_blocks_by_page(doc_id) or []
+                conn = container.db.get_conn()
+                rows = conn.execute(
+                    "SELECT content FROM blocks WHERE page_id = ? ORDER BY order_idx",
+                    (doc_id,),
+                ).fetchall()
+                blocks = [dict(r) if hasattr(r, "keys") else {"content": r[0]} for r in rows]
             except Exception:
                 blocks = []
             content = "\n".join(str(b.get("content") or "") for b in blocks)

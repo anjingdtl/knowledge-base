@@ -153,8 +153,9 @@ def test_tag_extraction_wecom(route_container):
 
 def test_recommended_arguments_executable_first_call(route_container, graph_ids):
     """自动链路：route → 原样调用 recommended_tool 不出现 Schema 错误。"""
-    from src.mcp.tools import retrieval, graph
     import json as _json
+
+    from src.mcp.tools import graph, retrieval
 
     result = _route("列出所有文档")
     assert result["ok"] is True

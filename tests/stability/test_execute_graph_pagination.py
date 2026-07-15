@@ -63,8 +63,9 @@ def test_execute_query_graph_pagination_matches_slice(
 
 
 def test_graph_traverse_and_execute_query_agree(patch_container, graph_ids):
-    from src.mcp.tools.graph import graph_traverse
     import json
+
+    from src.mcp.tools.graph import graph_traverse
 
     limit, offset = 5, 5
     gt = graph_traverse(

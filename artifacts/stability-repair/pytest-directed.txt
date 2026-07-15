@@ -1,0 +1,9 @@
+........................................................................ [ 84%]
+.............                                                            [100%]
+============================== warnings summary ===============================
+tests/stability/test_route_execution_contract.py::test_route_structured_has_executable_contract[\u5217\u51fa\u6240\u6709 PDF \u6587\u6863]
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python314\Lib\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+    import pkg_resources
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+85 passed, 1 warning in 9.81s

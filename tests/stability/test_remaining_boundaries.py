@@ -3,8 +3,6 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-import pytest
-
 from tests.stability.conftest import insert_knowledge
 
 

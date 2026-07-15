@@ -1,11 +1,6 @@
 """Phase 0/7 — URL 导入错误诊断契约。"""
 from __future__ import annotations
 
-from types import SimpleNamespace
-from unittest.mock import MagicMock
-
-import pytest
-
 
 def test_ingest_url_404_has_status_code(monkeypatch):
     from src.mcp.tools import ingest
