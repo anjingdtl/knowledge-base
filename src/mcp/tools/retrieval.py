@@ -141,24 +141,77 @@ def ping() -> dict:
 
 @_define_tool(
     name="search",
-    description="基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。",
+    description="基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。"
+    "支持 top_k 或 limit；低相关结果触发 no_match 门禁。",
     annotations={"readOnlyHint": True, "openWorldHint": False},
     group="kb", side_effect="read",
 )
 @_heartbeat
-def search(query: str, top_k: int = 5) -> dict:
+def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
     """基于语义的向量搜索，查找与查询含义最相关的知识内容。
 
     Args:
         query: 搜索查询文本，支持自然语言描述
         top_k: 返回结果数量，默认5条
+        limit: top_k 别名（兼容 Agent 客户端）
     """
     from src.application.retrieval_commands import RetrievalCommands
+    from src.services.numeric_unit_match import apply_numeric_unit_ranking
 
-    results = RetrievalCommands(_get_container()).semantic_search(
-        query, top_k=top_k,
-    )
-    return ok(results, total_estimate=len(results), top_k=top_k)
+    k = int(limit if limit is not None else top_k)
+    k = max(1, k)
+    results: list = []
+    try:
+        container = _get_container()
+        if getattr(container, "search_service", None) is not None:
+            results = list(
+                RetrievalCommands(container).semantic_search(query, top_k=max(k, 10)) or []
+            )
+    except Exception as exc:  # noqa: BLE001 - fall back to lexical
+        logger.debug("search semantic path failed, fallback fulltext: %s", exc)
+        results = []
+
+    # Lexical fallback: FTS + numeric/unit ranking (also used when semantic empty)
+    if not results:
+        ft = search_fulltext(query, limit=max(k, 10), offset=0)
+        if ft.get("ok"):
+            # re-apply limit and keep no_match meta
+            data = list(ft.get("data") or [])[:k]
+            meta = dict(ft.get("meta") or {})
+            meta["top_k"] = k
+            meta["limit"] = k
+            if meta.get("no_match") or not data:
+                return ok(
+                    [],
+                    total_estimate=0,
+                    top_k=k,
+                    limit=k,
+                    no_match=True,
+                    reason=meta.get("reason") or "all_candidates_below_threshold",
+                    top_score=meta.get("top_score", 0.0),
+                    threshold=meta.get("threshold"),
+                )
+            return ok(data, **{key: meta[key] for key in meta if key not in ()})
+
+    apply_numeric_unit_ranking(query, results)
+    threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
+    scores = [
+        float(r.get("score") or r.get("fts_score") or r.get("similarity") or 0.0)
+        for r in results
+    ]
+    top_score = max(scores) if scores else 0.0
+    if not results or top_score < threshold:
+        return ok(
+            [],
+            total_estimate=0,
+            top_k=k,
+            limit=k,
+            no_match=True,
+            reason="all_candidates_below_threshold",
+            top_score=round(top_score, 4),
+            threshold=threshold,
+        )
+    return ok(results[:k], total_estimate=len(results), top_k=k, limit=k, no_match=False)
 
 @_define_tool(
     name="search_fulltext",
@@ -277,14 +330,40 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
     # 按 fts_score 降序排列（高相关性在前）
     output.sort(key=lambda x: x.get("fts_score", 0), reverse=True)
 
+    # 数字+单位一致性与上下文短语重排
+    from src.services.numeric_unit_match import apply_numeric_unit_ranking
+
+    apply_numeric_unit_ranking(query, output)
+
+    threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
+    scores = [float(x.get("fts_score") or x.get("score") or 0.0) for x in output]
+    top_score = max(scores) if scores else 0.0
+    if output and top_score < threshold:
+        return ok(
+            [],
+            limit=limit,
+            offset=offset,
+            next_offset=None,
+            truncated=False,
+            total_estimate=0,
+            no_match=True,
+            reason="all_candidates_below_threshold",
+            top_score=round(top_score, 4),
+            threshold=threshold,
+        )
+
     has_more = len(kb_results) == limit or len(block_results) > offset + limit or len(chunk_results) > offset + limit
+    page = output[:limit] if offset == 0 else output
     return ok(
-        output,
+        page,
         limit=limit,
         offset=offset,
-        next_offset=offset + len(output) if has_more else None,
+        next_offset=offset + len(page) if has_more else None,
         truncated=has_more,
         total_estimate=len(output),
+        no_match=False,
+        top_score=round(top_score, 4),
+        threshold=threshold,
     )
 
 @_define_tool(
@@ -431,6 +510,27 @@ def _do_ask(question: str) -> dict:
     runner = _run_verified if use_verified else _run_legacy
     try:
         result = dict(run_with_deadline(runner, total_timeout))
+        # Weak-evidence gate: low-score sources must not invent answers.
+        sources = list(result.get("sources") or [])
+        scores = [
+            float(s.get("score") or s.get("fts_score") or s.get("similarity") or 0.0)
+            for s in sources
+        ]
+        top_score = max(scores) if scores else 0.0
+        weak_threshold = float(Config.get("rag.ask.no_answer_threshold", 0.35) or 0.35)
+        if sources and top_score < weak_threshold:
+            result["answer"] = ""
+            result["sources"] = []
+            result["answer_mode"] = "no_answer"
+            result.setdefault("warnings", []).append(
+                f"evidence below threshold (top_score={top_score:.3f} < {weak_threshold})"
+            )
+            route = dict(result.get("route") or {})
+            route.setdefault("mode", "no_answer")
+            route["explanation"] = route.get("explanation") or "insufficient evidence"
+            result["route"] = route
+        elif not sources and result.get("answer_mode") not in ("timeout", "error"):
+            result.setdefault("answer_mode", "no_answer")
     except TimeoutError:
         elapsed_ms = int((time.monotonic() - started) * 1000)
         logger.warning(
