@@ -10,49 +10,67 @@ from src.mcp.tool_catalog import TOOL_ALIASES
 from src.utils.config import Config
 
 
-def test_legacy_aliases_disabled_hides_namespace_tools(monkeypatch):
-    monkeypatch.setenv("SHINEHE_HOME", str(Config._instance and "." or "."))
+def _load_tool_defs() -> None:
+    # Domain modules register ToolDefinitions on import (server.exports side-effect).
+    import src.mcp.tools.exports  # noqa: F401
+
+
+def test_legacy_aliases_disabled_hides_namespace_tools():
+    _load_tool_defs()
     Config.set("mcp.tool_profile", "full")
     Config.set("mcp.enable_legacy_aliases", False)
     Config.set("mcp.experimental_tools_enabled", True)
 
-    mcp = FastMCP("parity-test")
-    state = bootstrap(mcp)
+    from src.mcp.registration import get_exposed_tool_definitions
 
-    assert state.aliases_enabled is False
-    assert state.registered_aliases == {}
+    exposed = get_exposed_tool_definitions(
+        profile="full",
+        experimental_enabled=True,
+        legacy_aliases_enabled=False,
+    )
+    assert exposed.legacy_aliases_enabled is False
+    assert exposed.alias_map == {}
+    assert len(exposed.tool_names) > 0
     for alias in ("kb.search", "ops.ping", "memory.remember", "graph.traverse"):
-        assert alias not in state.registered_aliases
-        assert alias not in state.visible_tool_names
+        assert alias not in exposed.alias_map
+        assert alias not in exposed.tool_names
+        assert alias not in exposed.all_exposed_names
 
 
 def test_legacy_aliases_enabled_exposes_matching_aliases():
-    Config.set("mcp.tool_profile", "full")
-    Config.set("mcp.enable_legacy_aliases", True)
-    Config.set("mcp.experimental_tools_enabled", True)
+    _load_tool_defs()
 
-    mcp = FastMCP("parity-alias-on")
-    state = bootstrap(mcp)
-    assert state.aliases_enabled is True
-    # 至少应注册部分别名（原工具在可见集合中时）
-    assert len(state.registered_aliases) > 0 or len(TOOL_ALIASES) == 0
+    from src.mcp.registration import get_exposed_tool_definitions
+
+    exposed = get_exposed_tool_definitions(
+        profile="full",
+        experimental_enabled=True,
+        legacy_aliases_enabled=True,
+    )
+    assert exposed.legacy_aliases_enabled is True
+    assert len(exposed.tool_names) > 0
+    assert len(exposed.alias_map) > 0
 
 
 def test_stdio_http_share_registration_bootstrap():
-    """两种 transport 必须共用 registration.bootstrap 暴露源。"""
+    """两种 transport 必须共用 registration.bootstrap / get_exposed_tool_definitions。"""
     import src.mcp.server as server
+    import src.mcp.registration as registration
 
     src = inspect.getsource(server)
     assert "bootstrap" in src or "registration" in src
-
-    # 期望最终存在 get_exposed_tool_definitions 统一入口（Phase 5 补齐）
-    import src.mcp.registration as registration
-
     assert hasattr(registration, "bootstrap")
-    # Phase 5 修复后应存在；基线可能失败
-    assert hasattr(registration, "get_exposed_tool_definitions"), (
-        "missing get_exposed_tool_definitions — stdio/http must share one exposure API"
+    assert hasattr(registration, "get_exposed_tool_definitions")
+
+    # 相同策略两次计算结果一致（stdio/http 同配置）
+    a = registration.get_exposed_tool_definitions(
+        profile="full", experimental_enabled=True, legacy_aliases_enabled=False
     )
+    b = registration.get_exposed_tool_definitions(
+        profile="full", experimental_enabled=True, legacy_aliases_enabled=False
+    )
+    assert a.all_exposed_names == b.all_exposed_names
+    assert a.tool_names == b.tool_names
 
 
 def test_tool_functions_reject_var_keyword():
