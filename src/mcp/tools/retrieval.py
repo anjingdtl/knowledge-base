@@ -1066,6 +1066,10 @@ def execute_query(
         spec.offset = offset
 
         if type == "graph":
+            from src.services.graph_pagination import (
+                compute_graph_fetch_limit,
+                paginate_graph_result,
+            )
             from src.services.graph_traversal import GraphTraversalService
             start_ids = (query_spec or {}).get("start_ids", [])
             start_type = (query_spec or {}).get("start_type", "knowledge")
@@ -1075,24 +1079,34 @@ def execute_query(
                     ErrorCode.VALIDATION_ERROR,
                     "graph 模式需要在 query_spec.start_ids 提供起点节点",
                 )
-            traversal = GraphTraversalService(db=container.db, graph_backend=container.graph_backend).traverse(
-                start_ids=start_ids, start_type=start_type, max_depth=max_depth,
+            max_graph_nodes = int(Config.get("rag.max_graph_nodes", 200) or 200)
+            fetch_limit = compute_graph_fetch_limit(
+                limit=limit, offset=offset, max_graph_nodes=max_graph_nodes
             )
-            nodes = traversal.get("nodes", [])
-            has_more = len(nodes) == limit
-            sliced = nodes[offset:offset + limit] if has_more else nodes
+            traversal = GraphTraversalService(
+                db=container.db, graph_backend=container.graph_backend
+            ).traverse(
+                start_ids=start_ids,
+                start_type=start_type,
+                max_depth=max_depth,
+                max_nodes=fetch_limit,
+            )
+            page = paginate_graph_result(traversal, limit=limit, offset=offset)
+            meta = page.pop("meta")
             return ok(
                 {
-                    "nodes": sliced,
-                    "edges": traversal.get("edges", []),
-                    "paths": traversal.get("paths", []),
-                    "truncated": traversal.get("truncated", False) or has_more,
+                    "nodes": page["nodes"],
+                    "edges": page["edges"],
+                    "paths": page["paths"],
+                    "truncated": page["truncated"],
                 },
                 type=type,
-                limit=limit,
-                offset=offset,
-                next_offset=offset + len(sliced) if has_more else None,
-                total_estimate=len(nodes),
+                limit=meta["limit"],
+                offset=meta["offset"],
+                next_offset=meta["next_offset"],
+                total_estimate=meta["total_estimate"],
+                total_estimate_is_exact=meta["total_estimate_is_exact"],
+                truncated=page["truncated"],
             )
 
         if type == "structured":

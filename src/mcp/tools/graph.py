@@ -56,28 +56,42 @@ def graph_traverse(
         limit: 节点数上限
         offset: 分页偏移
     """
+    from src.services.graph_pagination import (
+        compute_graph_fetch_limit,
+        paginate_graph_result,
+    )
     from src.services.graph_traversal import GraphTraversalService
+    from src.utils.config import Config
 
     container = _get_container()
     try:
         ids = json.loads(start_ids) if isinstance(start_ids, str) else start_ids
+        max_graph_nodes = int(Config.get("rag.max_graph_nodes", 200) or 200)
+        fetch_limit = compute_graph_fetch_limit(
+            limit=limit, offset=offset, max_graph_nodes=max_graph_nodes
+        )
         service = GraphTraversalService(db=container.db, graph_backend=container.graph_backend)
-        result = service.traverse(start_ids=ids, start_type=start_type, max_depth=max_depth)
-        # 截断节点数
-        nodes = result.get("nodes", [])
-        edges = result.get("edges", [])
-        truncated = len(nodes) > limit
-        if truncated:
-            nodes = nodes[offset:offset + limit]
+        result = service.traverse(
+            start_ids=ids,
+            start_type=start_type,
+            max_depth=max_depth,
+            max_nodes=fetch_limit,
+        )
+        page = paginate_graph_result(result, limit=limit, offset=offset)
+        meta = page.pop("meta")
         return ok(
             {
-                "nodes": nodes,
-                "edges": edges,
-                "paths": result.get("paths", []),
-                "truncated": truncated or result.get("truncated", False),
+                "nodes": page["nodes"],
+                "edges": page["edges"],
+                "paths": page["paths"],
+                "truncated": page["truncated"],
             },
-            limit=limit,
-            offset=offset,
+            limit=meta["limit"],
+            offset=meta["offset"],
+            next_offset=meta["next_offset"],
+            total_estimate=meta["total_estimate"],
+            total_estimate_is_exact=meta["total_estimate_is_exact"],
+            truncated=page["truncated"],
             max_depth=max_depth,
         )
     except json.JSONDecodeError:
