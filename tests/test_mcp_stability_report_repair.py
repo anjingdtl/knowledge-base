@@ -4,6 +4,34 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 
+
+def _insert_test_knowledge(*, tags: list[str]) -> str:
+    import json
+    import uuid
+    from datetime import datetime
+
+    from src.services.db import Database
+
+    item_id = str(uuid.uuid4())
+    Database.insert_knowledge({
+        "id": item_id,
+        "title": "MCP stability test",
+        "content": "MCP stability test content",
+        "source_type": "manual",
+        "source_path": "",
+        "file_type": "txt",
+        "file_size": 0,
+        "content_hash": "",
+        "file_created_at": "",
+        "file_modified_at": "",
+        "tags": json.dumps(tags),
+        "version": 1,
+        "created_at": datetime.now().isoformat(),
+        "updated_at": datetime.now().isoformat(),
+    })
+    return item_id
+
+
 def test_execute_query_rejects_unimplemented_hybrid_without_advertising_it(monkeypatch):
     from src.mcp.tools import retrieval
 
@@ -44,3 +72,33 @@ def test_ask_with_query_description_requires_a_question_or_search_query():
     description = get_definitions()["ask_with_query"].description
 
     assert "至少提供 question 或 search_query" in description
+
+
+def test_tags_supports_limit_and_offset():
+    from src.mcp.tools.ingest import tags
+
+    _insert_test_knowledge(tags=["alpha", "beta", "gamma"])
+
+    result = tags(limit=2, offset=1)
+
+    assert result["ok"] is True
+    assert result["data"] == ["beta", "gamma"]
+    assert result["meta"] == {
+        "count": 3,
+        "limit": 2,
+        "offset": 1,
+        "next_offset": None,
+        "truncated": False,
+    }
+
+
+def test_tags_without_pagination_keeps_full_list():
+    from src.mcp.tools.ingest import tags
+
+    _insert_test_knowledge(tags=["alpha", "beta"])
+
+    result = tags()
+
+    assert result["ok"] is True
+    assert result["data"] == ["alpha", "beta"]
+    assert result["meta"] == {"count": 2}

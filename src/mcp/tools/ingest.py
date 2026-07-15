@@ -165,15 +165,37 @@ def index_path(path: str, recursive: bool = True, dry_run: bool = False, force: 
 
 @_define_tool(
     name="tags",
-    description="获取知识库中所有已使用的标签列表。",
+    description="获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。",
     annotations={"readOnlyHint": True},
     group="kb", side_effect="read",
 )
 @_heartbeat
-def tags() -> dict:
-    """返回知识库中所有标签的排序列表。"""
+def tags(limit: int | None = None, offset: int = 0) -> dict:
+    """返回知识库中所有标签的排序列表。
+
+    Args:
+        limit: 可选的单页标签数；不传时保持兼容并返回完整列表。
+        offset: 分页偏移量，默认 0。
+    """
     all_tags = _get_container().db.get_all_tags()
-    return ok(all_tags, count=len(all_tags))
+    if limit is None:
+        return ok(all_tags, count=len(all_tags))
+    if limit < 1:
+        return fail(ErrorCode.VALIDATION_ERROR, "limit 必须大于 0", limit=limit)
+    if offset < 0:
+        return fail(ErrorCode.VALIDATION_ERROR, "offset 不能小于 0", offset=offset)
+
+    page = all_tags[offset:offset + limit]
+    next_offset = offset + len(page)
+    truncated = next_offset < len(all_tags)
+    return ok(
+        page,
+        count=len(all_tags),
+        limit=limit,
+        offset=offset,
+        next_offset=next_offset if truncated else None,
+        truncated=truncated,
+    )
 
 @_define_tool(
     name="ingest_file",
