@@ -12,7 +12,7 @@
 | 项 | 值 |
 |----|-----|
 | 基线 Commit SHA | `89e41b9fcdf42f8c31b3be6cb71b7d9fc0b629f3` |
-| 最终 Commit SHA | `7107e1f44100bba960d23e5d33e1b6d232cbf002` |
+| 最终 Commit SHA | `3e10d53`（docs 提交；功能修复收口 `7107e1f`） |
 | 分支 | `fix/mcp-stability-round2` |
 
 ### 提交列表
