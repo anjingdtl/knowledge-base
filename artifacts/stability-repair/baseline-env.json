@@ -1,0 +1,12 @@
+{
+  "git_sha": "89e41b9fcdf42f8c31b3be6cb71b7d9fc0b629f3",
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "sqlite": "3.50.4",
+  "fastmcp": "3.2.4",
+  "app_version": "1.10.2",
+  "thread_count": 1,
+  "formal_db": {
+    "path": "data/kb.db",
+    "size_bytes": 346054656
+  }
+}
