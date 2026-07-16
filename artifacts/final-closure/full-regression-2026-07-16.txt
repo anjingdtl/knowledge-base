@@ -1,0 +1,7 @@
+full_pytest: 2033 passed, 2 skipped (2026-07-16 post-soak)
+ruff: 0 error
+mypy: 0 error
+stability: 120 passed
+formal_db_size: 346054656 unchanged
+soak_http: 7200s ops=8402 errors=0
+soak_stdio: 1800s ops=2123 errors=0
