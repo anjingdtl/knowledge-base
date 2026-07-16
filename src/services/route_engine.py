@@ -73,6 +73,23 @@ _NL_LINK_RE = re.compile(
     r"(?:与|和|to)\s+(.+?)\s+(?:页面|page|相关|linked|链接)", re.IGNORECASE
 )
 
+# Explicit file_type filters / list-all extension queries
+_FILE_TYPE_EQ_RE = re.compile(
+    r"(?:file[_ ]?type|文件类型|类型)\s*(?:为|是|等于|eq|=|:|：)\s*"
+    r"(?P<ext>md|pdf|docx?|xlsx?|pptx?|txt|csv)",
+    re.IGNORECASE,
+)
+_LIST_EXT_RE = re.compile(
+    r"(?:列出|查找|筛选|过滤|所有|全部).{0,12}?"
+    r"(?P<ext>md|pdf|docx?|xlsx?|pptx?|txt|csv)"
+    r"(?:\s*(?:文档|文件|知识|条目))?",
+    re.IGNORECASE,
+)
+_EXT_ONLY_RE = re.compile(
+    r"\b(?P<ext>md|pdf|docx?|xlsx?|pptx?|txt|csv)\b",
+    re.IGNORECASE,
+)
+
 _TAG_KEYWORDS = {"标记", "标签", "tag", "tagged"}
 
 _PROP_NAME_MAP = {
@@ -129,6 +146,11 @@ class RuleRouter:
     def _try_rule_based(self, question: str) -> "QuerySpec | None":
         conditions: list[dict[str, Any]] = []
         has_title_condition = False
+
+        # file_type / extension listing before generic tag matching
+        ft = self._extract_file_type(question)
+        if ft:
+            conditions.append({"file_type": ft})
 
         for m in _NL_TITLE_RE.finditer(question):
             title = m.group(1).strip()
@@ -206,6 +228,23 @@ class RuleRouter:
             if tag in question and tag not in matches:
                 matches.append(tag)
         return matches
+
+    @staticmethod
+    def _extract_file_type(question: str) -> str | None:
+        q = question or ""
+        for pattern in (_FILE_TYPE_EQ_RE, _LIST_EXT_RE):
+            m = pattern.search(q)
+            if m:
+                return m.group("ext").lower()
+        # "所有 md 文档" without 列出
+        m = re.search(
+            r"(?:所有|全部)\s*(?P<ext>md|pdf|docx?|xlsx?|pptx?|txt|csv)\s*(?:文档|文件)?",
+            q,
+            re.IGNORECASE,
+        )
+        if m:
+            return m.group("ext").lower()
+        return None
 
 
 class EmbeddingRouter:
