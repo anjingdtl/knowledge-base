@@ -159,17 +159,141 @@ def abandoned_worker_count() -> int:
         return _abandoned_count
 
 
-def run_with_deadline(fn: Callable[[], R], timeout: float) -> R:
+# Process isolation pool limits (Spec Phase 4)
+_MAX_PROVIDER_WORKERS = 8
+_active_provider_workers = 0
+_provider_worker_lock = threading.Lock()
+_circuit_failures = 0
+_circuit_open_until = 0.0
+_CIRCUIT_FAILURE_THRESHOLD = 20
+_CIRCUIT_COOLDOWN_SEC = 30.0
+
+
+def _process_worker_entry(
+    fn: Callable[..., R],
+    args: tuple,
+    kwargs: dict,
+    out_q: "queue.Queue[tuple[str, object]]",
+) -> None:
+    try:
+        out_q.put(("ok", fn(*args, **kwargs)))
+    except BaseException as exc:  # noqa: BLE001
+        out_q.put(("err", exc))
+
+
+def run_in_terminable_process(
+    fn: Callable[..., R],
+    *,
+    args: tuple = (),
+    kwargs: dict | None = None,
+    timeout: float = 30.0,
+) -> R:
+    """Run a picklable callable in a child process; terminate on timeout.
+
+    Guarantees:
+    - On timeout the child is terminated and joined
+    - ``background_work_may_continue`` is always False
+    - Does not pass DB connections, API keys, or containers
+    """
+    global _active_provider_workers, _circuit_failures, _circuit_open_until
+
+    import multiprocessing as mp
+
+    timeout = max(0.0, float(timeout))
+    kwargs = dict(kwargs or {})
+
+    now = time.monotonic()
+    if now < _circuit_open_until:
+        raise DeadlineTimeout(
+            "provider circuit breaker open",
+            cancelled=True,
+            background_work_may_continue=False,
+            configured_timeout=timeout,
+        )
+
+    with _provider_worker_lock:
+        if _active_provider_workers >= _MAX_PROVIDER_WORKERS:
+            raise DeadlineTimeout(
+                "max_provider_workers exceeded",
+                cancelled=True,
+                background_work_may_continue=False,
+                configured_timeout=timeout,
+            )
+        _active_provider_workers += 1
+
+    ctx = mp.get_context("spawn")
+    out_q: mp.Queue = ctx.Queue(maxsize=1)
+    proc = ctx.Process(
+        target=_process_worker_entry,
+        args=(fn, args, kwargs, out_q),
+        name="ShineHeProviderWorker",
+        daemon=True,
+    )
+    try:
+        proc.start()
+        proc.join(timeout=timeout)
+        if proc.is_alive():
+            proc.terminate()
+            proc.join(timeout=2.0)
+            if proc.is_alive():
+                proc.kill()
+                proc.join(timeout=1.0)
+            _circuit_failures += 1
+            if _circuit_failures >= _CIRCUIT_FAILURE_THRESHOLD:
+                _circuit_open_until = time.monotonic() + _CIRCUIT_COOLDOWN_SEC
+                _circuit_failures = 0
+            raise DeadlineTimeout(
+                f"operation exceeded deadline of {timeout:g}s (process terminated)",
+                cancelled=True,
+                background_work_may_continue=False,
+                configured_timeout=timeout,
+            )
+
+        # Child exited — collect result
+        try:
+            status, payload = out_q.get_nowait()
+        except Exception as exc:  # noqa: BLE001
+            if proc.exitcode not in (0, None):
+                raise DeadlineTimeout(
+                    f"provider worker crashed rc={proc.exitcode}",
+                    cancelled=True,
+                    background_work_may_continue=False,
+                    configured_timeout=timeout,
+                ) from exc
+            raise RuntimeError("provider worker returned no result") from exc
+
+        if status == "ok":
+            _circuit_failures = 0
+            return payload  # type: ignore[return-value]
+        if isinstance(payload, BaseException):
+            raise payload
+        raise RuntimeError(str(payload))
+    finally:
+        with _provider_worker_lock:
+            _active_provider_workers = max(0, _active_provider_workers - 1)
+        try:
+            out_q.close()
+        except Exception:  # noqa: BLE001
+            pass
+
+
+def run_with_deadline(
+    fn: Callable[[], R],
+    timeout: float,
+    *,
+    isolate: str = "thread",
+) -> R:
     """Run ``fn`` under a wall-clock deadline.
 
-    - Returns promptly when ``timeout`` elapses (no ThreadPoolExecutor join).
-    - Sets a cancel event so cooperative code (and HTTP timeouts) can stop.
-    - ``DeadlineTimeout.cancelled`` is True only if the worker finished after
-      cancel (joined within a short grace period).
-    - Does **not** hold a request slot until the worker finishes: abandoned
-      workers cannot permanently block subsequent requests.
+    isolate:
+      - ``thread`` (default): cooperative cancel event; non-coop may set
+        background_work_may_continue=True (legacy honest semantics)
+      - ``process``: terminable process isolation; background always false
     """
     global _abandoned_count
+
+    if isolate == "process":
+        return run_in_terminable_process(fn, timeout=timeout)
 
     timeout = max(0.0, float(timeout))
     deadline = Deadline.start(timeout)
@@ -238,7 +362,9 @@ def run_with_deadline(fn: Callable[[], R], timeout: float) -> R:
             configured_timeout=timeout,
         )
 
-    # Non-cooperative worker still running.
+    # Non-cooperative thread worker still running.
+    # Prefer process isolation for production providers (isolate="process").
+    # Thread mode remains for cooperative callables only.
     with _abandoned_lock:
         _abandoned_count += 1
 
