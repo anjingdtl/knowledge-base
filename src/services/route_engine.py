@@ -42,6 +42,13 @@ _GRAPH_SIGNALS = (
     "related to", "links to", "references", "graph", "upstream", "downstream",
 )
 
+# Analytic / advice questions must stay hybrid even if a tag keyword appears
+_HYBRID_ANALYTIC_SIGNALS = (
+    "怎么发展", "如何发展", "未来应该", "总结", "建议", "原因",
+    "对比", "分析", "判断", "风险", "综合", "应该怎么",
+    "主要问题", "给出建议", "怎么做", "为什么",
+)
+
 # 英文标签语法需冒号（tagged: X / tag: X），避免 "tagged with python"
 # 把介词 with 误当 tag；中文 "标记为/标签为 X" 保持原义。value 组用 [\w-]
 # （Python re 默认 Unicode 下 \w 已含中文，等价旧 [\w\u4e00-\u9fff-]）。
@@ -125,6 +132,17 @@ class RuleRouter:
                 "fallback_used": False,
             }
 
+        # 0.5 Analytic hybrid intent beats incidental tag matches
+        #     (e.g. 「广西电信企微未来应该怎么发展」 is hybrid, not tag:企微)
+        if self._is_hybrid_analytic(question):
+            return {
+                "mode": "hybrid",
+                "query_spec": QuerySpec.from_json({"filter": {"fulltext": question}}),
+                "explanation": "rule-based hybrid analytic routing (L1)",
+                "routing_source": "rules",
+                "fallback_used": False,
+            }
+
         # 1. 正则匹配结构化条件
         rule_spec = self._try_rule_based(question)
         if rule_spec is not None:
@@ -142,6 +160,10 @@ class RuleRouter:
     def _is_graph_query(self, question: str) -> bool:
         lower = question.lower()
         return any(signal in lower for signal in _GRAPH_SIGNALS)
+
+    def _is_hybrid_analytic(self, question: str) -> bool:
+        q = question or ""
+        return any(signal in q for signal in _HYBRID_ANALYTIC_SIGNALS)
 
     def _try_rule_based(self, question: str) -> "QuerySpec | None":
         conditions: list[dict[str, Any]] = []

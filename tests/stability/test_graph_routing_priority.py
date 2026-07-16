@@ -22,3 +22,15 @@ def test_reference_query_is_graph() -> None:
         out = r.route(q)
         assert out is not None, q
         assert out["mode"] == "graph", q
+
+
+def test_analytic_hybrid_beats_tag_match() -> None:
+    r = RuleRouter(db=None)
+    for q in (
+        "广西电信企微未来应该怎么发展",
+        "总结主要问题",
+        "给出建议和原因",
+    ):
+        out = r.route(q)
+        assert out is not None, q
+        assert out["mode"] == "hybrid", q
