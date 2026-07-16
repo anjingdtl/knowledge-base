@@ -169,6 +169,15 @@ _CIRCUIT_FAILURE_THRESHOLD = 20
 _CIRCUIT_COOLDOWN_SEC = 30.0
 
 
+def reset_provider_isolation_state() -> None:
+    """Test/ops helper: clear worker counters and circuit breaker."""
+    global _active_provider_workers, _circuit_failures, _circuit_open_until
+    with _provider_worker_lock:
+        _active_provider_workers = 0
+    _circuit_failures = 0
+    _circuit_open_until = 0.0
+
+
 def _process_worker_entry(
     fn: Callable[..., R],
     args: tuple,

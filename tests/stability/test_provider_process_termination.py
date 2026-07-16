@@ -8,6 +8,7 @@ import pytest
 from src.services.deadline import (
     DeadlineTimeout,
     abandoned_worker_count,
+    reset_provider_isolation_state,
     run_in_terminable_process,
     run_with_deadline,
 )
@@ -55,9 +56,11 @@ def test_process_success_returns_value() -> None:
 
 
 def test_fifty_timeouts_no_abandoned_growth() -> None:
+    reset_provider_isolation_state()
     base = abandoned_worker_count()
     for _ in range(50):
         with pytest.raises(DeadlineTimeout):
             run_in_terminable_process(_eternal_sleep, kwargs={"seconds": 60}, timeout=0.05)
     time.sleep(0.5)
     assert abandoned_worker_count() <= base
+    reset_provider_isolation_state()

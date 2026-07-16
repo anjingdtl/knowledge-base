@@ -5,7 +5,11 @@ import time
 
 import pytest
 
-from src.services.deadline import DeadlineTimeout, run_in_terminable_process
+from src.services.deadline import (
+    DeadlineTimeout,
+    reset_provider_isolation_state,
+    run_in_terminable_process,
+)
 
 
 def _hang(seconds: float = 30) -> str:
@@ -18,6 +22,7 @@ def _quick_ok() -> str:
 
 
 def test_timeout_then_third_request_succeeds() -> None:
+    reset_provider_isolation_state()
     for _ in range(2):
         with pytest.raises(DeadlineTimeout) as ei:
             run_in_terminable_process(_hang, kwargs={"seconds": 30}, timeout=0.15)
