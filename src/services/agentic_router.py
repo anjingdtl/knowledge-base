@@ -48,10 +48,24 @@ def _build_recommendations(
 ) -> tuple[str, dict, list[dict]]:
     """Return (recommended_tool, recommended_arguments, recommended_flow)."""
     if mode == "structured":
+        qs = query_spec if isinstance(query_spec, dict) else {}
         args = {
             "type": "structured",
-            "query_spec": query_spec if isinstance(query_spec, dict) else {},
+            "query_spec": qs,
         }
+        # Promote common structured filters for argument-contract checks
+        filt = qs.get("filter") if isinstance(qs.get("filter"), dict) else {}
+        if isinstance(filt, dict):
+            if "file_type" in filt:
+                args["file_type"] = filt.get("file_type")
+            if "source_type" in filt:
+                args["source_type"] = filt.get("source_type")
+            if "tag" in filt:
+                args["tag"] = filt.get("tag")
+            and_list = filt.get("and") if isinstance(filt.get("and"), list) else []
+            for clause in and_list:
+                if isinstance(clause, dict) and "file_type" in clause:
+                    args.setdefault("file_type", clause.get("file_type"))
         return "execute_query", args, [{"tool": "execute_query", "arguments": args}]
 
     if mode == "hybrid":

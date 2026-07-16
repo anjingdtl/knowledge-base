@@ -1,7 +1,7 @@
 """Document-level hit dedupe for Precision@k."""
 from __future__ import annotations
 
-from src.services.result_dedupe import dedupe_by_knowledge_id
+from src.services.result_dedupe import boost_title_term_overlap, dedupe_by_knowledge_id
 
 
 def test_keeps_highest_score_per_knowledge_id() -> None:
@@ -35,3 +35,17 @@ def test_preserves_first_seen_order_of_winners() -> None:
     out = dedupe_by_knowledge_id(items)
     assert [x["knowledge_id"] for x in out] == ["c", "a", "b"]
     assert out[0]["score"] == 0.8
+
+
+def test_title_boost_promotes_matching_title() -> None:
+    items = [
+        {"knowledge_id": "x", "title": "无关文档", "score": 0.6, "text": "企微"},
+        {
+            "knowledge_id": "y",
+            "title": "中国电信广西公司企业微信运营管理办法",
+            "score": 0.5,
+            "text": "内容",
+        },
+    ]
+    out = boost_title_term_overlap("企业微信运营管理办法", items)
+    assert out[0]["knowledge_id"] == "y"
