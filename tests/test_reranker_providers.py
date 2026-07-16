@@ -5,6 +5,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
+from src.services.deadline import DeadlineTimeout
+from src.services.provider_runtime import ProviderResponse
 from src.services.reranker import LLMReranker, get_reranker
 from src.services.rerankers.api import ApiReranker
 from src.services.rerankers.base import Reranker
@@ -26,32 +28,17 @@ class TestApiReranker:
 
     def test_rerank_with_mock_api(self, monkeypatch):
         """API reranker correctly parses mock response and sorts by score."""
-        import httpx
-
-        mock_response = Mock()
-        mock_response.json.return_value = {
+        provider_data = {
             "results": [
                 {"index": 0, "relevance_score": 0.3},
                 {"index": 1, "relevance_score": 0.9},
                 {"index": 2, "relevance_score": 0.6},
             ]
         }
-        mock_response.raise_for_status = Mock()
-
-        class MockClient:
-            def __init__(self, *a, **kw):
-                pass
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *a):
-                pass
-
-            def post(self, *a, **kw):
-                return mock_response
-
-        monkeypatch.setattr(httpx, "Client", MockClient)
+        monkeypatch.setattr(
+            "src.services.rerankers.api.run_provider_operation",
+            lambda *args, **kwargs: ProviderResponse(ok=True, data=provider_data),
+        )
 
         config = Mock()
         config.get.return_value = 0.1  # min_score
@@ -74,22 +61,12 @@ class TestApiReranker:
 
     def test_api_failure_returns_original(self, monkeypatch):
         """API failure returns original candidates with warning."""
-        import httpx
-
-        class MockClient:
-            def __init__(self, *a, **kw):
-                pass
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *a):
-                pass
-
-            def post(self, *a, **kw):
-                raise httpx.HTTPStatusError("fail", request=Mock(), response=Mock())
-
-        monkeypatch.setattr(httpx, "Client", MockClient)
+        monkeypatch.setattr(
+            "src.services.rerankers.api.run_provider_operation",
+            lambda *args, **kwargs: ProviderResponse(
+                ok=False, error_type="HTTPStatusError", error_message="fail"
+            ),
+        )
 
         reranker = ApiReranker(
             base_url="https://api.test.com/v1",
@@ -106,23 +83,17 @@ class TestApiReranker:
         assert result == original
 
     def test_timeout_returns_original(self, monkeypatch):
-        """Timeout returns original candidates."""
-        import httpx
+        """A terminable provider timeout remains visible to the caller."""
+        def timeout(*args, **kwargs):
+            raise DeadlineTimeout(
+                "timeout",
+                cancelled=True,
+                background_work_may_continue=False,
+                worker_terminated=True,
+                provider_operation="reranker",
+            )
 
-        class MockClient:
-            def __init__(self, *a, **kw):
-                pass
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *a):
-                pass
-
-            def post(self, *a, **kw):
-                raise httpx.TimeoutException("timeout")
-
-        monkeypatch.setattr(httpx, "Client", MockClient)
+        monkeypatch.setattr("src.services.rerankers.api.run_provider_operation", timeout)
 
         reranker = ApiReranker(
             base_url="https://api.test.com/v1",
@@ -131,9 +102,8 @@ class TestApiReranker:
         )
 
         candidates = _make_candidates(3)
-        result = reranker.rerank("查询", candidates, top_n=3)
-
-        assert len(result) == 3
+        with pytest.raises(DeadlineTimeout):
+            reranker.rerank("查询", candidates, top_n=3)
 
     def test_empty_candidates(self):
         """Empty candidate list returns empty list."""
@@ -146,32 +116,17 @@ class TestApiReranker:
 
     def test_min_score_filter(self, monkeypatch):
         """Candidates below min_score are filtered out."""
-        import httpx
-
-        mock_response = Mock()
-        mock_response.json.return_value = {
+        provider_data = {
             "results": [
                 {"index": 0, "relevance_score": 0.1},
                 {"index": 1, "relevance_score": 0.9},
                 {"index": 2, "relevance_score": 0.05},
             ]
         }
-        mock_response.raise_for_status = Mock()
-
-        class MockClient:
-            def __init__(self, *a, **kw):
-                pass
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *a):
-                pass
-
-            def post(self, *a, **kw):
-                return mock_response
-
-        monkeypatch.setattr(httpx, "Client", MockClient)
+        monkeypatch.setattr(
+            "src.services.rerankers.api.run_provider_operation",
+            lambda *args, **kwargs: ProviderResponse(ok=True, data=provider_data),
+        )
 
         config = Mock()
         config.get.return_value = 0.3  # min_score = 0.3
@@ -238,6 +193,10 @@ class TestLocalReranker:
 
             reranker = LocalCrossEncoderReranker(config=config)
             reranker._available = True  # Force available
+            monkeypatch.setattr(
+                "src.services.rerankers.local.run_provider_operation",
+                lambda *args, **kwargs: ProviderResponse(ok=True, data=[0.1, 0.2, 0.3]),
+            )
 
             candidates = _make_candidates(3)
             result = reranker.rerank("查询", candidates, top_n=3)

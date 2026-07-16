@@ -3,6 +3,11 @@ import hashlib
 import logging
 import threading
 
+from src.services.deadline import DeadlineTimeout, remaining_deadline
+from src.services.provider_runtime import (
+    ProviderRequest,
+    run_provider_operation,
+)
 from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
@@ -39,6 +44,9 @@ def _notify_status(status: str, detail: str = ""):
 
 
 class LLMService:
+    GENERATE_ISOLATION_MODE = "process"
+    STREAM_ISOLATION_MODE = "thread_cooperative"
+
     def __init__(self, config=None):
         """初始化 LLM 服务
 
@@ -131,29 +139,61 @@ class LLMService:
             )
         return message
 
+    def _provider_timeout(self, override: float | None = None) -> float:
+        configured = float(
+            override if override is not None else (self._cfg("llm.timeout", 60) or 60)
+        )
+        remaining = remaining_deadline()
+        if remaining is not None:
+            configured = min(configured, max(0.01, remaining))
+        return max(0.01, configured)
+
+    def _run_generate(
+        self,
+        messages: list[dict],
+        *,
+        max_tokens_override: int | None,
+        timeout: float | None,
+    ) -> dict:
+        provider_timeout = self._provider_timeout(timeout)
+        request = ProviderRequest(
+            provider_type="openai_compatible_chat",
+            base_url=str(self._cfg("llm.base_url", "") or ""),
+            model=str(self._cfg("llm.model", "") or ""),
+            payload={
+                "messages": messages,
+                "temperature": self._cfg("llm.temperature", 0.7),
+                "max_tokens": max_tokens_override or self._cfg("llm.max_tokens", 2048),
+            },
+            timeout_seconds=provider_timeout,
+            secret_env_key="SHINEHE_LLM_API_KEY",
+        )
+        response = run_provider_operation(
+            "llm_generate",
+            request,
+            isolation_mode=self.GENERATE_ISOLATION_MODE,
+            timeout=provider_timeout,
+        )
+        if not response.ok:
+            raise RuntimeError(response.error_message or response.error_type or "LLM provider failed")
+        if not isinstance(response.data, dict):
+            raise RuntimeError("LLM provider returned invalid response")
+        return response.data
+
     def chat(self, messages: list[dict], silent: bool = False,
              max_tokens_override: int | None = None,
              timeout: float | None = None) -> str:
         if not silent:
             _notify_status("running", "LLM 推理")
         try:
-            client = self._get_client()
-            model = self._cfg("llm.model", "")
-            temperature = self._cfg("llm.temperature", 0.7)
-            max_tokens = max_tokens_override or self._cfg("llm.max_tokens", 2048)
-            kwargs: dict = {
-                "model": model,
-                "messages": messages,
-                "temperature": temperature,
-                "max_tokens": max_tokens,
-            }
-            if timeout is not None:
-                # 单次请求超时，覆盖 client 默认。供 LLMRouter 等需要快速失败的
-                # 调用方使用——超时点 httpx 抛异常、调用线程自然返回，避免用
-                # threading 做超时导致的 daemon 线程泄漏。
-                kwargs["timeout"] = timeout
-            response = client.chat.completions.create(**kwargs)
-            return response.choices[0].message.content or ""
+            data = self._run_generate(
+                messages,
+                max_tokens_override=max_tokens_override,
+                timeout=timeout,
+            )
+            return str(data.get("content") or "")
+        except DeadlineTimeout:
+            raise
         except Exception as e:
             message = self._format_error_with_context(e)
             if not silent:
@@ -179,29 +219,15 @@ class LLMService:
         if not silent:
             _notify_status("running", "LLM 推理")
         try:
-            client = self._get_client()
-            model = self._cfg("llm.model", "")
-            temperature = self._cfg("llm.temperature", 0.7)
-            max_tokens = max_tokens_override or self._cfg("llm.max_tokens", 2048)
-            kwargs: dict = {
-                "model": model,
-                "messages": messages,
-                "temperature": temperature,
-                "max_tokens": max_tokens,
-            }
-            if timeout is not None:
-                kwargs["timeout"] = timeout
-            response = client.chat.completions.create(**kwargs)
-            content = response.choices[0].message.content or ""
-            usage = {}
-            u = getattr(response, "usage", None)
-            if u is not None:
-                usage = {
-                    "prompt_tokens": getattr(u, "prompt_tokens", 0) or 0,
-                    "completion_tokens": getattr(u, "completion_tokens", 0) or 0,
-                    "total_tokens": getattr(u, "total_tokens", 0) or 0,
-                }
-            return content, usage
+            data = self._run_generate(
+                messages,
+                max_tokens_override=max_tokens_override,
+                timeout=timeout,
+            )
+            usage = data.get("usage") if isinstance(data.get("usage"), dict) else {}
+            return str(data.get("content") or ""), usage
+        except DeadlineTimeout:
+            raise
         except Exception as e:
             message = self._format_error_with_context(e)
             if not silent:
@@ -212,6 +238,8 @@ class LLMService:
                 _notify_status("idle")
 
     def chat_stream(self, messages: list[dict], silent: bool = False, max_tokens_override: int | None = None):
+        isolation_mode = self.STREAM_ISOLATION_MODE
+        assert isolation_mode == "thread_cooperative"
         if not silent:
             _notify_status("running", "LLM 流式推理")
         try:
@@ -225,6 +253,7 @@ class LLMService:
                 temperature=temperature,
                 max_tokens=max_tokens,
                 stream=True,
+                timeout=self._provider_timeout(),
             )
             for chunk in response:
                 if chunk.choices and chunk.choices[0].delta and chunk.choices[0].delta.content:

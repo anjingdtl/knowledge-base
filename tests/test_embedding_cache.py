@@ -1,10 +1,11 @@
 """EmbeddingCache 集成测试 — 验证缓存接入 embedding 管线"""
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
 from src.core.embedding_cache import EmbeddingCache
 from src.services.embedding import EmbeddingService
+from src.services.provider_runtime import ProviderResponse
 
 
 class TestEmbeddingCacheIntegration:
@@ -31,11 +32,10 @@ class TestEmbeddingCacheIntegration:
         """缓存未命中调用 API 并写入缓存"""
         svc = EmbeddingService()
 
-        mock_response = MagicMock()
-        mock_response.data = [MagicMock(embedding=[0.7] * 1024)]
-
-        with patch.object(svc, '_get_client') as mock_client:
-            mock_client.return_value.embeddings.create.return_value = mock_response
+        with patch(
+            "src.services.embedding.run_provider_operation",
+            return_value=ProviderResponse(ok=True, data=[[0.7] * 1024]),
+        ):
             result = svc.embed_batch_with_cache(["未缓存的文本XYZ"])
 
         assert len(result) == 1

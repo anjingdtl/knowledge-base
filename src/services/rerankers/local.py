@@ -6,6 +6,9 @@ import importlib.util
 import logging
 from typing import TYPE_CHECKING
 
+from src.services.deadline import DeadlineTimeout, remaining_deadline
+from src.services.provider_runtime import ProviderRequest, run_provider_operation
+
 if TYPE_CHECKING:
     from src.utils.config import Config
 
@@ -39,7 +42,8 @@ class LocalCrossEncoderReranker:
         """Rerank using local cross-encoder.
 
         If sentence-transformers not installed, return candidates unchanged with warning.
-        Model is loaded on first call and cached.
+        The model is loaded inside a terminable worker for each call so a stuck
+        native inference cannot occupy the parent process indefinitely.
         """
         if not candidates:
             return []
@@ -49,13 +53,33 @@ class LocalCrossEncoderReranker:
             return candidates
 
         try:
-            if self._model is None:
-                from sentence_transformers import CrossEncoder
-
-                self._model = CrossEncoder(self._model_name)
-
             pairs = [[query, c.get("text", "")] for c in candidates]
-            scores = self._model.predict(pairs)  # type: ignore[attr-defined]
+            timeout = 30.0
+            if self._config is not None:
+                timeout = float(self._config.get("reranker.timeout", 30) or 30)
+            remaining = remaining_deadline()
+            if remaining is not None:
+                timeout = min(timeout, max(0.01, remaining))
+            response = run_provider_operation(
+                "reranker_local",
+                ProviderRequest(
+                    provider_type="local_cross_encoder",
+                    base_url="",
+                    model=self._model_name,
+                    payload={"pairs": pairs},
+                    timeout_seconds=timeout,
+                    secret_env_key="",
+                ),
+                isolation_mode="process",
+                timeout=timeout,
+            )
+            if not response.ok or not isinstance(response.data, list):
+                raise RuntimeError(
+                    response.error_message
+                    or response.error_type
+                    or "Local reranker returned invalid response"
+                )
+            scores = response.data
 
             for c, score in zip(candidates, scores):
                 c["rerank_score"] = float(score)
@@ -75,6 +99,8 @@ class LocalCrossEncoderReranker:
 
             return filtered
 
+        except DeadlineTimeout:
+            raise
         except Exception as e:
             logger.warning("Local reranker failed: %s", e)
             return candidates

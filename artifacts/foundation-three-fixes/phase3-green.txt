@@ -1,0 +1,33 @@
+Targeted Provider wiring and process tests:
+- tests/providers/: 3 passed
+- explicit Ask isolation, PID termination, timeout envelope, secret redaction,
+  worker limit, 50 timeouts, and recovery tests passed
+
+Related regressions:
+- tests/stability/: 137 passed before the final additional formal Ask envelope assertion
+- trace token + embedding cache + reranker provider + public Ask: 44 passed
+- Phase 3 modified-file ruff: passed
+
+Real Provider wiring smoke (final run):
+- LLM normal: 3/3 returned non-empty content through process isolation
+- LLM artificial 10ms timeout: 2/2 timed out
+- timeout worker_terminated: 2/2 true
+- timeout background_work_may_continue: 0/2 true (all false)
+- Embedding normal: 3/3 returned 1024-dimensional vectors
+- API Reranker normal: 3/3 returned real rerank scores
+- Formal DB unchanged: true
+
+Transient evidence retained:
+- First 30-second-budget smoke had LLM normal 2/3 and one truthful terminated timeout.
+- Re-run with a 60-second normal-request budget achieved 3/3; the timeout was not
+  counted as success and no threshold/data manipulation was applied.
+
+Resource behavior:
+- Existing 50-timeout regression passed with abandoned-worker count returning to baseline.
+- A normal process-isolated request succeeds after timeouts.
+- Timed-out worker PID is absent after terminate/join.
+- Worker limit rejects excess work without background continuation.
+- Secret redaction test and commit-time gitleaks contain no plaintext provider secret.
+
+Formal DB sha256:
+dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01

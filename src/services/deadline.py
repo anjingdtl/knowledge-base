@@ -97,11 +97,19 @@ class DeadlineTimeout(TimeoutError):
         cancelled: bool,
         background_work_may_continue: bool,
         configured_timeout: float | None = None,
+        worker_terminated: bool = False,
+        worker_pid: int | None = None,
+        worker_exit_code: int | None = None,
+        provider_operation: str | None = None,
     ) -> None:
         super().__init__(message)
         self.cancelled = cancelled
         self.background_work_may_continue = background_work_may_continue
         self.configured_timeout = configured_timeout
+        self.worker_terminated = worker_terminated
+        self.worker_pid = worker_pid
+        self.worker_exit_code = worker_exit_code
+        self.provider_operation = provider_operation
 
 
 def get_cancel_event() -> threading.Event | None:
@@ -167,15 +175,36 @@ _circuit_failures = 0
 _circuit_open_until = 0.0
 _CIRCUIT_FAILURE_THRESHOLD = 20
 _CIRCUIT_COOLDOWN_SEC = 30.0
+_last_timeout_operation = ""
+_last_worker_exit_code: int | None = None
+_last_worker_pid: int | None = None
 
 
 def reset_provider_isolation_state() -> None:
     """Test/ops helper: clear worker counters and circuit breaker."""
     global _active_provider_workers, _circuit_failures, _circuit_open_until
+    global _last_timeout_operation, _last_worker_exit_code, _last_worker_pid
     with _provider_worker_lock:
         _active_provider_workers = 0
     _circuit_failures = 0
     _circuit_open_until = 0.0
+    _last_timeout_operation = ""
+    _last_worker_exit_code = None
+    _last_worker_pid = None
+
+
+def provider_isolation_status() -> dict[str, object]:
+    with _provider_worker_lock:
+        active = _active_provider_workers
+    return {
+        "active_workers": active,
+        "max_workers": _MAX_PROVIDER_WORKERS,
+        "abandoned_workers": 0,
+        "circuit_open": time.monotonic() < _circuit_open_until,
+        "last_timeout_operation": _last_timeout_operation,
+        "last_worker_exit_code": _last_worker_exit_code,
+        "last_worker_pid": _last_worker_pid,
+    }
 
 
 def _process_worker_entry(
@@ -196,6 +225,7 @@ def run_in_terminable_process(
     args: tuple = (),
     kwargs: dict | None = None,
     timeout: float = 30.0,
+    operation: str | None = None,
 ) -> R:
     """Run a picklable callable in a child process; terminate on timeout.
 
@@ -205,6 +235,7 @@ def run_in_terminable_process(
     - Does not pass DB connections, API keys, or containers
     """
     global _active_provider_workers, _circuit_failures, _circuit_open_until
+    global _last_timeout_operation, _last_worker_exit_code, _last_worker_pid
 
     import multiprocessing as mp
 
@@ -218,6 +249,7 @@ def run_in_terminable_process(
             cancelled=True,
             background_work_may_continue=False,
             configured_timeout=timeout,
+            provider_operation=operation,
         )
 
     with _provider_worker_lock:
@@ -227,6 +259,7 @@ def run_in_terminable_process(
                 cancelled=True,
                 background_work_may_continue=False,
                 configured_timeout=timeout,
+                provider_operation=operation,
             )
         _active_provider_workers += 1
 
@@ -240,6 +273,7 @@ def run_in_terminable_process(
     )
     try:
         proc.start()
+        _last_worker_pid = proc.pid
         proc.join(timeout=timeout)
         if proc.is_alive():
             proc.terminate()
@@ -247,6 +281,8 @@ def run_in_terminable_process(
             if proc.is_alive():
                 proc.kill()
                 proc.join(timeout=1.0)
+            _last_timeout_operation = operation or ""
+            _last_worker_exit_code = proc.exitcode
             _circuit_failures += 1
             if _circuit_failures >= _CIRCUIT_FAILURE_THRESHOLD:
                 _circuit_open_until = time.monotonic() + _CIRCUIT_COOLDOWN_SEC
@@ -256,11 +292,15 @@ def run_in_terminable_process(
                 cancelled=True,
                 background_work_may_continue=False,
                 configured_timeout=timeout,
+                worker_terminated=not proc.is_alive(),
+                worker_pid=proc.pid,
+                worker_exit_code=proc.exitcode,
+                provider_operation=operation,
             )
 
         # Child exited — collect result
         try:
-            status, payload = out_q.get_nowait()
+            status, payload = out_q.get(timeout=0.2)
         except Exception as exc:  # noqa: BLE001
             if proc.exitcode not in (0, None):
                 raise DeadlineTimeout(
@@ -268,6 +308,10 @@ def run_in_terminable_process(
                     cancelled=True,
                     background_work_may_continue=False,
                     configured_timeout=timeout,
+                    worker_terminated=True,
+                    worker_pid=proc.pid,
+                    worker_exit_code=proc.exitcode,
+                    provider_operation=operation,
                 ) from exc
             raise RuntimeError("provider worker returned no result") from exc
 
@@ -282,6 +326,7 @@ def run_in_terminable_process(
             _active_provider_workers = max(0, _active_provider_workers - 1)
         try:
             out_q.close()
+            out_q.join_thread()
         except Exception:  # noqa: BLE001
             pass
 

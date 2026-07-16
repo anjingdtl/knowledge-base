@@ -4,6 +4,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from src.services.deadline import DeadlineTimeout, remaining_deadline
+from src.services.provider_runtime import ProviderRequest, run_provider_operation
+
 if TYPE_CHECKING:
     from src.utils.config import Config
 
@@ -23,7 +26,7 @@ class ApiReranker:
     ):
         self._base_url = base_url.rstrip("/")
         self._model = model
-        self._api_key = api_key
+        self._credential_configured = bool(api_key)
         self._config = config
         self._timeout = timeout
 
@@ -32,32 +35,39 @@ class ApiReranker:
         if not candidates:
             return []
 
-        import httpx
-
         # 准备文档文本
         texts = [cand.get("text", "")[:1000] for cand in candidates]
 
         try:
-            headers = {
-                "Authorization": f"Bearer {self._api_key}",
-                "Content-Type": "application/json",
-            }
-
             payload = {
-                "model": self._model,
                 "query": query,
                 "documents": texts,
                 "top_n": min(len(texts), 10),
             }
-
-            with httpx.Client(timeout=self._timeout) as client:
-                resp = client.post(
-                    f"{self._base_url}/rerank",
-                    headers=headers,
-                    json=payload,
+            provider_timeout = float(self._timeout)
+            remaining = remaining_deadline()
+            if remaining is not None:
+                provider_timeout = min(provider_timeout, max(0.01, remaining))
+            response = run_provider_operation(
+                "reranker",
+                ProviderRequest(
+                    provider_type="reranker_api",
+                    base_url=self._base_url,
+                    model=self._model,
+                    payload=payload,
+                    timeout_seconds=provider_timeout,
+                    secret_env_key="SHINEHE_RERANKER_API_KEY",
+                ),
+                isolation_mode="process",
+                timeout=provider_timeout,
+            )
+            if not response.ok or not isinstance(response.data, dict):
+                raise RuntimeError(
+                    response.error_message
+                    or response.error_type
+                    or "Reranker provider returned invalid response"
                 )
-                resp.raise_for_status()
-                result = resp.json()
+            result = response.data
 
             # 解析响应分数
             scores_map: dict[int, float] = {}
@@ -87,6 +97,8 @@ class ApiReranker:
 
             return filtered
 
+        except DeadlineTimeout:
+            raise
         except Exception as e:
             logger.warning("API reranker failed: %s, returning original candidates", e)
             return candidates

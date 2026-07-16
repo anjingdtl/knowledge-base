@@ -133,6 +133,10 @@ def assemble_answer_payload(
             try:
                 answer = (generate_fn(question, context) or "").strip()
             except Exception as e:  # noqa: BLE001
+                from src.services.deadline import DeadlineTimeout
+
+                if isinstance(e, DeadlineTimeout):
+                    raise
                 logger.warning("verified answer LLM failed: %s", e)
                 answer = fallback_hybrid_text(question, claim_rows, raw_rows)
                 warnings.append(f"generate_failed:{e}")
@@ -153,6 +157,10 @@ def assemble_answer_payload(
             try:
                 answer = (generate_fn(question, context) or "").strip()
             except Exception as e:  # noqa: BLE001
+                from src.services.deadline import DeadlineTimeout
+
+                if isinstance(e, DeadlineTimeout):
+                    raise
                 logger.warning("raw-only answer LLM failed: %s", e)
                 answer = fallback_raw_text(question, raw_rows)
                 warnings.append(f"generate_failed:{e}")

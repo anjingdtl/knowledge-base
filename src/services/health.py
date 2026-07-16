@@ -64,6 +64,9 @@ def kb_health_check() -> dict[str, Any]:
     """
     warnings: list[str] = []
     status = "healthy"
+    from src.services.deadline import provider_isolation_status
+
+    provider_isolation = provider_isolation_status()
 
     # --- API Key 检查 ---
     llm_key = bool(Config.get("llm.api_key", ""))
@@ -258,6 +261,7 @@ def kb_health_check() -> dict[str, Any]:
         "total_documents": total_documents,
         "total_blocks": total_blocks,
         "total_vectors": total_vectors,
+        "provider_isolation": provider_isolation,
         "warnings": warnings,
         "recommendations": [r for r in [
             "执行 auto_tag 工具对无标签条目进行 LLM 批量自动补标" if tag_coverage < 0.5 else None,

@@ -597,7 +597,7 @@ def _do_ask(question: str) -> dict:
     use_verified = _should_use_verified_ask() and isinstance(container, AppContainer)
     runner = _run_verified if use_verified else _run_legacy
     try:
-        result = dict(run_with_deadline(runner, total_timeout))
+        result = dict(run_with_deadline(runner, total_timeout, isolate="thread"))
         # Pre/post evidence gate: low-score sources must not invent answers.
         sources = list(result.get("sources") or [])
         decision = evaluate_evidence(question, sources, threshold=weak_threshold)
@@ -651,6 +651,18 @@ def _do_ask(question: str) -> dict:
         if isinstance(exc, DeadlineTimeout):
             cancelled = bool(exc.cancelled)
             background = bool(exc.background_work_may_continue)
+            from src.services.provider_runtime import provider_timeout_envelope
+
+            timeout_details = provider_timeout_envelope(exc)
+        else:
+            timeout_details = {
+                "cancelled": cancelled,
+                "background_work_may_continue": background,
+                "worker_terminated": False,
+                "worker_pid": None,
+                "worker_exit_code": None,
+                "provider_operation": "ask_pipeline",
+            }
         logger.warning(
             "ask timed out after %s for question=%r cancelled=%s background=%s",
             timeout_label, question[:50], cancelled, background,
@@ -666,6 +678,10 @@ def _do_ask(question: str) -> dict:
                 "elapsed_ms": elapsed_ms,
                 "cancelled": cancelled,
                 "background_work_may_continue": background,
+                "worker_terminated": timeout_details["worker_terminated"],
+                "worker_pid": timeout_details["worker_pid"],
+                "worker_exit_code": timeout_details["worker_exit_code"],
+                "provider_operation": timeout_details["provider_operation"],
             },
             "query_plan": {},
             "block_contexts": {},
@@ -673,7 +689,7 @@ def _do_ask(question: str) -> dict:
                          f"question too complex or document too large"],
             "wiki_context": "",
             "trace_id": "",
-            "answer_mode": "no_answer",
+            "answer_mode": "timeout",
             "conflict_disclosed": False,
             "claims_used": [],
             "raw_evidence_used": [],

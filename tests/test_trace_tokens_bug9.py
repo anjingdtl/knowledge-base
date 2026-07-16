@@ -43,8 +43,18 @@ def test_chat_with_usage_returns_content_and_usage(monkeypatch):
     from src.services.llm import LLMService
 
     svc = LLMService()
-    fake_client = _FakeClient("生成的回答", prompt_tokens=120, completion_tokens=45)
-    monkeypatch.setattr(svc, "_get_client", lambda: fake_client)
+    from src.services.provider_runtime import ProviderResponse
+
+    monkeypatch.setattr(
+        "src.services.llm.run_provider_operation",
+        lambda *args, **kwargs: ProviderResponse(
+            ok=True,
+            data={
+                "content": "生成的回答",
+                "usage": {"prompt_tokens": 120, "completion_tokens": 45, "total_tokens": 165},
+            },
+        ),
+    )
     # 规避 api_key 校验
     monkeypatch.setattr(svc, "_api_key_missing", False, raising=False)
 
@@ -61,12 +71,14 @@ def test_chat_with_usage_handles_missing_usage(monkeypatch):
     from src.services.llm import LLMService
 
     svc = LLMService()
-    resp = _FakeResponse("回答", 0, 0)
-    resp.usage = None  # API 偶发不返回 usage
-    fake_client = SimpleNamespace(
-        chat=SimpleNamespace(completions=SimpleNamespace(create=lambda **kw: resp))
+    from src.services.provider_runtime import ProviderResponse
+
+    monkeypatch.setattr(
+        "src.services.llm.run_provider_operation",
+        lambda *args, **kwargs: ProviderResponse(
+            ok=True, data={"content": "回答", "usage": {}}
+        ),
     )
-    monkeypatch.setattr(svc, "_get_client", lambda: fake_client)
     monkeypatch.setattr(svc, "_api_key_missing", False, raising=False)
 
     content, usage = svc.chat_with_usage([{"role": "user", "content": "hi"}])

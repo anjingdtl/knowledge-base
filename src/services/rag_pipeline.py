@@ -16,6 +16,7 @@ from typing import Any
 
 from src.models.retrieval import build_match_channels
 from src.services.db import Database
+from src.services.deadline import DeadlineTimeout
 from src.services.hybrid_search import HybridSearcher
 from src.services.llm import LLMService
 from src.services.query_rewriter import QueryRewriter
@@ -655,6 +656,8 @@ class GenerateStage(PipelineStage):
                 else:
                     ctx.answer = strip_think(llm.chat(messages))
         except Exception as e:
+            if isinstance(e, DeadlineTimeout):
+                raise
             logger.error("LLM generate failed: %s", e)
             ctx.metadata.setdefault("warnings", []).append(f"generate_failed: {e}")
             ctx.answer = f"抱歉，生成回答时发生错误：{str(e)}"
@@ -934,6 +937,8 @@ class EvidenceCompressStage(PipelineStage):
                 },
             }]
         except Exception as e:
+            if isinstance(e, DeadlineTimeout):
+                raise
             logger.warning("Abstractive compress failed, keeping original: %s", e)
             return results
 
@@ -1495,6 +1500,8 @@ class RAGService:
             answer = strip_think(llm.chat(messages))
             return {"answer": answer, "sources": [], "source_graph": {"nodes": [], "edges": []}}
         except Exception as e:
+            if isinstance(e, DeadlineTimeout):
+                raise
             logger.error("Direct query fallback also failed: %s", e)
             return {
                 "answer": f"抱歉，查询过程中发生错误：{str(e)}",

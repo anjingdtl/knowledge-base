@@ -7,6 +7,8 @@ import logging
 import threading
 from collections import OrderedDict
 
+from src.services.deadline import DeadlineTimeout, remaining_deadline
+from src.services.provider_runtime import ProviderRequest, run_provider_operation
 from src.utils.config import Config
 
 logger = logging.getLogger(__name__)
@@ -66,6 +68,8 @@ _l1_cache = _L1EmbeddingCache()
 
 
 class EmbeddingService:
+    ISOLATION_MODE = "process"
+
     def __init__(self, config=None):
         """初始化 Embedding 服务
 
@@ -159,12 +163,9 @@ class EmbeddingService:
         import logging
         from concurrent.futures import ThreadPoolExecutor, as_completed
 
-        from openai import APIError
-
         if not texts:
             return []
 
-        client = self._get_client()
         model = self._cfg("embedding.model", "")
         max_concurrent = max(1, int(self._cfg("embedding.max_concurrent_batches", 4) or 4))
         logger = logging.getLogger(__name__)
@@ -180,15 +181,37 @@ class EmbeddingService:
 
         def _embed_one(batch_idx: int, batch: list[str]) -> tuple[int, list[list[float]]]:
             try:
-                response = client.embeddings.create(input=batch, model=model)
-            except APIError as e:
-                logger.error(
-                    "Embedding API call failed: model=%s, batch_size=%d, error=%s",
-                    model, len(batch), e,
+                provider_timeout = float(self._cfg("embedding.timeout", 15) or 15)
+                remaining = remaining_deadline()
+                if remaining is not None:
+                    provider_timeout = min(provider_timeout, max(0.01, remaining))
+                request = ProviderRequest(
+                    provider_type="openai_compatible_embedding",
+                    base_url=str(
+                        self._cfg("embedding.base_url")
+                        or self._cfg("llm.base_url")
+                        or ""
+                    ),
+                    model=str(model or ""),
+                    payload={"input": batch},
+                    timeout_seconds=provider_timeout,
+                    secret_env_key="SHINEHE_EMBEDDING_API_KEY",
                 )
-                raise RuntimeError(
-                    f"Embedding API call failed (model={model}, batch_size={len(batch)}): {e}"
-                ) from e
+                response = run_provider_operation(
+                    "embedding",
+                    request,
+                    isolation_mode=self.ISOLATION_MODE,
+                    timeout=provider_timeout,
+                )
+                if not response.ok or not isinstance(response.data, list):
+                    raise RuntimeError(
+                        response.error_message
+                        or response.error_type
+                        or "Embedding provider returned invalid response"
+                    )
+                embeddings = [list(item) for item in response.data]
+            except DeadlineTimeout:
+                raise
             except Exception as e:
                 logger.error(
                     "Unexpected error during embedding: model=%s, batch_size=%d, error=%s",
@@ -197,7 +220,7 @@ class EmbeddingService:
                 raise RuntimeError(
                     f"Unexpected error during embedding (model={model}, batch_size={len(batch)}): {e}"
                 ) from e
-            return batch_idx, [item.embedding for item in response.data]
+            return batch_idx, embeddings
 
         # 小批量（单 batch 就能装下）直接同步走，避免线程开销
         if len(batches) == 1:

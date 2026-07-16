@@ -1,0 +1,10 @@
+Command:
+pytest tests/providers/test_llm_process_isolation_wiring.py tests/providers/test_embedding_timeout_cleanup.py tests/providers/test_reranker_timeout_cleanup.py tests/stability/test_ask_uses_explicit_isolation_mode.py tests/stability/test_provider_worker_pid_terminated.py tests/stability/test_provider_timeout_envelope_truthful.py tests/stability/test_provider_secret_not_logged.py tests/stability/test_provider_worker_limit.py -q
+
+Exit code: 1
+
+Observed failure:
+- ModuleNotFoundError: No module named 'src.services.provider_runtime'
+- 5 errors during collection
+
+This is the required pre-implementation failing test evidence for Phase 3.
