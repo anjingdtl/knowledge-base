@@ -11,7 +11,7 @@
 | 项 | 值 |
 |----|-----|
 | 基线 Commit SHA | `02f71b0036703f1c36174b11ef2e7036341436f6` |
-| 最终 Commit SHA | `0eb5773`（CI 全绿收口） |
+| 最终 Commit SHA | 见 `master` HEAD / Tag `v1.10.3` |
 | 分支 | `fix/mcp-final-closure` |
 
 ### 提交列表

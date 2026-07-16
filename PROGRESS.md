@@ -1,11 +1,34 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-14  
-> 源码版本：`src/version.py` 中的 **`1.10.2`**  
-> 当前分支：`master`（已合并一次性最终收尾，v1.x 架构冻结）  
-> 发布说明：`docs/release/v1.10.2-release-notes.md`  
-> 迁移：v1.10.2 无 Schema 变更；最近迁移见 `docs/migration/v1.10-to-v1.10.1-migration-governance.md`  
-> 当前方向：**v1.10.2 一次性最终收尾（Spec 06）已完成；v1.x 可维护性专项正式冻结，剩余技术债转入 v2.0**。
+> 最后更新：2026-07-16  
+> 源码版本：`src/version.py` 中的 **`1.10.3`**  
+> 当前分支：`master`（已合并 MCP 最终收口）  
+> 发布说明：`docs/release/v1.10.3-release-notes.md`  
+> 收口报告：`docs/reports/mcp-final-closure-2026-07-16.md`  
+> 迁移：v1.10.3 无 Schema 变更；最近迁移见 `docs/migration/v1.10-to-v1.10.1-migration-governance.md`  
+> 当前方向：**v1.10.3 MCP 最终收口与本地真实 MCP 验证已完成并达到生产试点门槛；v1.x 架构冻结仍有效，剩余技术债转入 v2.0**。
+
+---
+
+## MCP 最终收口：v1.10.3（已完成，2026-07-16）
+
+执行依据：`docs/superpowers/specs/ShineHeKB_MCP_最终收口与本地真实MCP验证_Spec.md`  
+验收报告：`docs/reports/mcp-final-closure-2026-07-16.md`  
+产物：`artifacts/final-closure/*`
+
+完成项：
+
+- ✅ **Timeout**：`deadline` 真取消语义 + 诚实 `cancelled` / `background_work_may_continue`；slot 可恢复；Py3.10 TimeoutError 兼容
+- ✅ **Graph**：`max_graph_nodes` 硬上限无 `next_offset` 自循环；自动翻页可终止
+- ✅ **Structured**：effective_limit + 多取一条分页；两入口一致
+- ✅ **No-answer / FTS**：统一 `relevance_gate`；当前信息查询短路；弱证据不触发 LLM 编造
+- ✅ **107 Golden**：真实 MCP stdio + streamable-http；指标达标
+- ✅ **真实 MCP E2E**：工具集一致；路由原样执行 100%；timeout 后 ping/search 正常
+- ✅ **HTTP 并发**：search 1–50 / ask 1–10，success_rate=1.00
+- ✅ **长稳**：streamable-http **2h**、stdio **30m**，errors=0；正式库未污染
+- ✅ **工程门禁**：ruff / mypy / 全量 pytest；远程 CI 全绿；Tag `v1.10.3`
+
+结论：**达到生产试点门槛**。
 
 ---
 

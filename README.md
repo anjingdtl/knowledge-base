@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.10.2-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.3-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,16 +36,17 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 
 ## Current Health
 
-**v1.10.2** — One-shot final closure (Spec 06):
+**v1.10.3** — MCP final closure & real local MCP verification:
 
-- **MCP capability self-description accurate** — `kb_capabilities.hidden_by_policy` returns the real policy-hidden tools
-- **Search/Ask/Wiki/MCP contracts in a dedicated CI gate** — Wiki serving invariants no longer rely on indirect coverage
-- **Repository-wide Ruff** — `ruff check .` covers Alembic revisions and the whole repo
-- **Aligned version metadata** — `src/version.py`, `client/package.json`, `client/package-lock.json` all at 1.10.2
-- **v1.x maintainability freeze** — remaining compatibility layers and architectural cleanup deferred to v2.0
-- No public contract / retrieval / Wiki / schema change vs v1.10.1; built on the v1.10.1 migration governance closure
+- **True timeout deadline** — cooperative cancel + honest `cancelled` / `background_work_may_continue`; slot recovery
+- **Graph hard-limit pagination** — no self-loop `next_offset` at `max_graph_nodes`
+- **Structured query pagination** — effective_limit + fetch-one-extra; dual entry consistency
+- **Unified no-answer / FTS gate** — relevance scoring; current-info queries short-circuit
+- **Real MCP validation** — stdio + streamable-http; 107 Golden metrics; HTTP concurrency; 2h/30m soak
+- **Engineering** — full pytest green; remote CI green; tag `v1.10.3`
+- No Schema / Alembic change vs v1.10.2
 
-See [v1.10.2 Release Notes](docs/release/v1.10.2-release-notes.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.10.1](docs/release/v1.10.1-release-notes.md) · [v1.10.0](docs/release/v1.10.0-release-notes.md) · [v1.9.0](docs/release/v1.9.0-release-notes.md) · [v1.8.2](docs/release/v1.8.2-release-notes.md) · [v1.8.0](docs/release/v1.8.0-release-notes.md)).
+See [v1.10.3 Release Notes](docs/release/v1.10.3-release-notes.md), [final-closure report](docs/reports/mcp-final-closure-2026-07-16.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.10.2](docs/release/v1.10.2-release-notes.md) · [v1.10.1](docs/release/v1.10.1-release-notes.md) · [v1.10.0](docs/release/v1.10.0-release-notes.md)).
 
 ## 30-Second Demo
 

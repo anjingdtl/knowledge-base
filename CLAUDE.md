@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目速查: ShineHeKnowledge
 
-本地优先 MCP 知识检索引擎（**v1.10.0** Verified Hybrid + 可维护性收尾闭合），面向 AI 助手提供可验证、可解释的私有知识检索服务。桌面 GUI、REST API、MCP Server、Windows 服务四种运行模式共享同一服务层，通过 AppContainer 依赖注入。
+本地优先 MCP 知识检索引擎（**v1.10.3** Verified Hybrid + MCP 最终收口），面向 AI 助手提供可验证、可解释的私有知识检索服务。桌面 GUI、REST API、MCP Server、Windows 服务四种运行模式共享同一服务层，通过 AppContainer 依赖注入。
 
 **核心定位：** 将本地文档索引为可供 Claude、Cursor、Cline 等 AI Agent 稳定调用的 MCP 知识检索引擎，默认暴露 10 个核心工具，返回带完整溯源的结构化引用。
 
-**架构要点（v1.10.0）：**
+**架构要点（v1.10.3）：**
 
 - 检索：`SearchService` Facade → `RetrievalOrchestrator` **unified only** → Policy + `RawRetriever` / `VerifiedFusion` → `SearchExecution`
 - 问答：`AnswerService`（`src/answering/`）→ `AnswerExecution`；MCP 仅协议适配

@@ -2,7 +2,14 @@
 
 ## 当前方向（权威入口）
 
-> 产品版本：**v1.10.2** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+> 产品版本：**v1.10.3** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+
+### MCP 最终收口（2026-07-16，已发布）
+
+- [v1.10.3 发布说明](release/v1.10.3-release-notes.md)
+- [MCP 最终收口报告](reports/mcp-final-closure-2026-07-16.md)
+- [MCP 最终收口 Spec](superpowers/specs/ShineHeKB_MCP_最终收口与本地真实MCP验证_Spec.md)
+- 产物目录：`artifacts/final-closure/`
 
 ### 可维护性三期（2026-07-14，已发布）
 
