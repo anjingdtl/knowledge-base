@@ -14,7 +14,10 @@ from types import SimpleNamespace
 
 def _slow(seconds: float = 10.0):
     def _run(*_a, **_k):
-        time.sleep(seconds)
+        # Cooperative sleep so deadline cancel is real (no abandoned sleep threads).
+        from src.services.deadline import cooperative_sleep
+
+        cooperative_sleep(seconds)
         return {
             "answer": "should-not-return",
             "sources": [],

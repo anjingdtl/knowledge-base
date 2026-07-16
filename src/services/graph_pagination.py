@@ -60,8 +60,15 @@ def paginate_graph_result(
     *,
     limit: int,
     offset: int,
+    max_graph_nodes: int | None = None,
 ) -> dict:
     """Slice graph payload to a page-local subgraph.
+
+    Invariants:
+      - ``next_offset is None`` OR ``next_offset > current offset``
+      - never returns a self-loop next_offset on an empty page
+      - when the hard ``max_graph_nodes`` ceiling is reached, pagination stops
+        with ``hard_limit_reached=True`` instead of inventing infinite pages
 
     Returns::
 
@@ -69,15 +76,19 @@ def paginate_graph_result(
           "nodes": [...],
           "edges": [...],  # only endpoints in page nodes
           "paths": [...],  # only fully contained paths
-          "truncated": bool,  # more pages available (or service truncated past page)
+          "truncated": bool,  # more pages available within hard cap
           "meta": {
             "limit", "offset", "next_offset",
-            "total_estimate", "total_estimate_is_exact"
+            "total_estimate", "total_estimate_is_exact",
+            "hard_limit_reached", "max_graph_nodes"
           }
         }
     """
     limit = max(0, int(limit))
     offset = max(0, int(offset))
+    hard_cap = int(max_graph_nodes) if max_graph_nodes is not None else None
+    if hard_cap is not None:
+        hard_cap = max(1, hard_cap)
 
     all_nodes = list(result.get("nodes") or [])
     all_edges = list(result.get("edges") or [])
@@ -85,8 +96,31 @@ def paginate_graph_result(
     service_truncated = bool(result.get("truncated"))
 
     total_fetched = len(all_nodes)
+    hard_limit_reached = False
+
+    # Offset past the hard ceiling → empty terminal page (no self-loop).
+    if hard_cap is not None and offset >= hard_cap:
+        return {
+            "nodes": [],
+            "edges": [],
+            "paths": [],
+            "truncated": False,
+            "meta": {
+                "limit": limit,
+                "offset": offset,
+                "next_offset": None,
+                "total_estimate": min(total_fetched, hard_cap),
+                "total_estimate_is_exact": False,
+                "hard_limit_reached": True,
+                "max_graph_nodes": hard_cap,
+            },
+        }
+
     # Always apply offset (even when total_fetched <= limit)
     page_nodes = all_nodes[offset : offset + limit] if limit > 0 else []
+    if hard_cap is not None:
+        # Never return nodes beyond the configured hard ceiling.
+        page_nodes = [n for i, n in enumerate(page_nodes) if offset + i < hard_cap]
     page_ids = _id_set(page_nodes)
 
     def _in_page(raw: str) -> bool:
@@ -107,15 +141,44 @@ def paginate_graph_result(
         ):
             page_paths.append(path)
 
-    has_more = offset + len(page_nodes) < total_fetched
-    # If service hit max_nodes and we consumed the whole fetched window, more may exist.
-    if service_truncated and offset + len(page_nodes) >= total_fetched and total_fetched > 0:
-        has_more = True
+    end = offset + len(page_nodes)
+    has_more = end < total_fetched and len(page_nodes) > 0
 
-    next_offset = offset + len(page_nodes) if has_more else None
+    # Service-level truncation: more graph nodes may exist beyond the fetch
+    # window, but only advertise another page when the cursor would advance
+    # AND we are still strictly below the hard cap.
+    if (
+        service_truncated
+        and len(page_nodes) > 0
+        and end >= total_fetched
+    ):
+        if hard_cap is None or end < hard_cap:
+            has_more = True
+        else:
+            has_more = False
+            hard_limit_reached = True
+
+    # Empty page after a truncated fetch (offset at/past window) → stop.
+    if len(page_nodes) == 0:
+        has_more = False
+        if service_truncated or (hard_cap is not None and offset >= total_fetched):
+            hard_limit_reached = True
+
+    # Consumed up to hard cap on this page.
+    if hard_cap is not None and end >= hard_cap:
+        has_more = False
+        hard_limit_reached = True
+
+    next_offset = end if has_more and len(page_nodes) > 0 else None
+    # Absolute invariant: next_offset must strictly increase or be null.
+    if next_offset is not None and next_offset <= offset:
+        next_offset = None
+        has_more = False
+        hard_limit_reached = True
+
     total_estimate = total_fetched
     # exact only when service did not truncate the underlying traversal
-    total_estimate_is_exact = not service_truncated
+    total_estimate_is_exact = not service_truncated and not hard_limit_reached
 
     return {
         "nodes": page_nodes,
@@ -128,5 +191,7 @@ def paginate_graph_result(
             "next_offset": next_offset,
             "total_estimate": total_estimate,
             "total_estimate_is_exact": total_estimate_is_exact,
+            "hard_limit_reached": hard_limit_reached,
+            "max_graph_nodes": hard_cap,
         },
     }

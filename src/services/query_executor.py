@@ -55,11 +55,16 @@ class QueryExecutor:
 
     @staticmethod
     def _compile_order_clause(spec: QuerySpec) -> str:
-        terms = spec.sort_terms or [(spec.sort_by, spec.sort_order)]
+        terms = list(spec.sort_terms or [(spec.sort_by, spec.sort_order)])
         parts = []
+        seen_fields: set[str] = set()
         for field, order in terms:
             order_dir = "ASC" if order == "asc" else "DESC"
             parts.append(f"ki.{field} {order_dir}")
+            seen_fields.add(str(field))
+        # Stable secondary key so equal primary keys do not reshuffle across pages.
+        if "id" not in seen_fields:
+            parts.append("ki.id ASC")
         return "ORDER BY " + ", ".join(parts)
 
     def _compile(self, condition: Condition) -> tuple[str, list, bool]:

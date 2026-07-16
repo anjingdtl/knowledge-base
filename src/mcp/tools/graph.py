@@ -193,7 +193,12 @@ def graph_traverse(
             max_depth=max_depth,
             max_nodes=fetch_limit,
         )
-        page = paginate_graph_result(result, limit=limit, offset=offset)
+        page = paginate_graph_result(
+            result,
+            limit=limit,
+            offset=offset,
+            max_graph_nodes=max_graph_nodes,
+        )
         meta = page.pop("meta")
         return ok(
             {
@@ -208,6 +213,8 @@ def graph_traverse(
             total_estimate=meta["total_estimate"],
             total_estimate_is_exact=meta["total_estimate_is_exact"],
             truncated=page["truncated"],
+            hard_limit_reached=meta.get("hard_limit_reached", False),
+            max_graph_nodes=meta.get("max_graph_nodes", max_graph_nodes),
             max_depth=max_depth,
         )
     except Exception as exc:

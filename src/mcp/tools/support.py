@@ -102,53 +102,16 @@ def content_preview(text: Any, max_len: int = 200) -> str:
     return s[:max_len] + ("..." if len(s) > max_len else "")
 
 
-# Cap abandoned slow work so consecutive timeouts cannot spawn unbounded threads.
-# Spec: after 50 consecutive timeouts, live thread delta must stay <= 2.
-_DEADLINE_SLOTS = threading.BoundedSemaphore(2)
-
-
-def run_with_deadline(fn: Callable[[], R], timeout: float) -> R:
-    """Run a sync callable with a wall-clock deadline.
-
-    Uses a **daemon** worker thread and never joins past the deadline. A process-wide
-    semaphore bounds concurrent abandoned workers so consecutive timeouts cannot
-    leak threads unboundedly (unlike ``ThreadPoolExecutor`` context shutdown which
-    waits for the in-flight call and extends wall-clock latency).
-    """
-    import queue
-
-    timeout = max(0.0, float(timeout))
-    deadline = time.monotonic() + timeout
-    if not _DEADLINE_SLOTS.acquire(blocking=False):
-        raise TimeoutError("deadline worker pool saturated")
-
-    result_queue: queue.Queue[tuple[bool, object]] = queue.Queue()
-
-    def _runner() -> None:
-        try:
-            try:
-                result_queue.put((True, fn()))
-            except BaseException as exc:  # noqa: BLE001 - re-raise to caller
-                result_queue.put((False, exc))
-        finally:
-            _DEADLINE_SLOTS.release()
-
-    thread = threading.Thread(target=_runner, name="McpDeadlineWorker", daemon=True)
-    try:
-        thread.start()
-    except BaseException:
-        _DEADLINE_SLOTS.release()
-        raise
-
-    thread.join(timeout=max(0.0, deadline - time.monotonic()))
-    if thread.is_alive():
-        raise TimeoutError(f"operation exceeded deadline of {timeout:g}s")
-    ok_flag, result = result_queue.get_nowait()
-    if ok_flag:
-        return cast(R, result)
-    if isinstance(result, BaseException):
-        raise result
-    raise RuntimeError(str(result))
+# Re-export deadline helpers so existing imports keep working.
+from src.services.deadline import (  # noqa: E402
+    Deadline,
+    DeadlineTimeout,
+    abandoned_worker_count,
+    check_cancelled,
+    cooperative_sleep,
+    remaining_deadline,
+    run_with_deadline,
+)
 
 
 def run_async(coro: Coroutine[Any, Any, R], timeout: float | None = None) -> R:
@@ -156,7 +119,8 @@ def run_async(coro: Coroutine[Any, Any, R], timeout: float | None = None) -> R:
 
     Uses a daemon worker + new event loop when called inside a running loop
     (common under FastMCP / nested ask paths). Honors wall-clock timeout without
-    ThreadPoolExecutor shutdown join.
+    ThreadPoolExecutor shutdown join. Async tasks are cancelled via
+    ``asyncio.wait_for`` so cooperative await points actually stop.
     """
     def _drive() -> R:
         if timeout is None:

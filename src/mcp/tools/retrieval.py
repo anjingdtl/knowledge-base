@@ -171,6 +171,8 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
         logger.debug("search semantic path failed, fallback fulltext: %s", exc)
         results = []
 
+    from src.services.relevance_gate import evaluate_evidence, is_current_information_query
+
     apply_numeric_unit_ranking(query, results)
     threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
     scores = [
@@ -189,19 +191,33 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             out.append(row)
         return out
 
-    # Lexical fallback when semantic missing/weak — preserves exact keyword e2e hits
+    if is_current_information_query(query):
+        return ok(
+            [],
+            total_estimate=0,
+            top_k=k,
+            limit=k,
+            no_match=True,
+            reason="requires_current_external_data",
+            top_score=0.0,
+            threshold=threshold,
+            source_path="current_info_gate",
+        )
+
+    # Lexical fallback when semantic missing/weak — still must pass relevance gate.
     if semantic_weak:
         ft = search_fulltext(query, limit=max(k, 10), offset=0)
-        if ft.get("ok") and ft.get("data"):
-            data = _normalize_hits(list(ft.get("data") or [])[:k])
-            meta = dict(ft.get("meta") or {})
+        ft_items = _normalize_hits(list(ft.get("data") or [])[: max(k, 10)]) if ft.get("ok") else []
+        decision = evaluate_evidence(query, ft_items, threshold=threshold)
+        if decision["accept"]:
+            data = decision["items"][:k]
             return ok(
                 data,
                 total_estimate=len(data),
                 top_k=k,
                 limit=k,
                 no_match=False,
-                top_score=meta.get("top_score", 0.0),
+                top_score=decision["top_score"],
                 source_path="fulltext_fallback",
             )
         return ok(
@@ -210,16 +226,33 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             top_k=k,
             limit=k,
             no_match=True,
-            reason="all_candidates_below_threshold",
-            top_score=round(top_score, 4),
+            reason=decision.get("reason") or "all_candidates_below_threshold",
+            top_score=decision.get("top_score", round(top_score, 4)),
             threshold=threshold,
+            source_path="fulltext_fallback",
+        )
+
+    decision = evaluate_evidence(query, _normalize_hits(results[: max(k, 10)]), threshold=threshold)
+    if not decision["accept"]:
+        return ok(
+            [],
+            total_estimate=0,
+            top_k=k,
+            limit=k,
+            no_match=True,
+            reason=decision.get("reason") or "all_candidates_below_threshold",
+            top_score=decision.get("top_score", round(top_score, 4)),
+            threshold=threshold,
+            source_path="semantic",
         )
     return ok(
-        _normalize_hits(results[:k]),
-        total_estimate=len(results),
+        decision["items"][:k],
+        total_estimate=len(decision["items"]),
         top_k=k,
         limit=k,
         no_match=False,
+        top_score=decision["top_score"],
+        source_path="semantic",
     )
 
 @_define_tool(
@@ -344,24 +377,47 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
 
     apply_numeric_unit_ranking(query, output)
 
-    scores = [float(x.get("fts_score") or x.get("score") or 0.0) for x in output]
-    top_score = max(scores) if scores else 0.0
-    # FTS path keeps keyword hits; no_match gate is applied on the semantic search()
-    # tool after score calibration. Empty FTS naturally returns no_match.
-    no_match = len(output) == 0
+    from src.services.relevance_gate import evaluate_evidence, is_current_information_query
 
-    has_more = len(kb_results) == limit or len(block_results) > offset + limit or len(chunk_results) > offset + limit
-    page = output[:limit] if offset == 0 else output
+    threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
+    if is_current_information_query(query):
+        return ok(
+            [],
+            limit=limit,
+            offset=offset,
+            next_offset=None,
+            truncated=False,
+            total_estimate=0,
+            no_match=True,
+            reason="requires_current_external_data",
+            top_score=0.0,
+            threshold=threshold,
+        )
+
+    decision = evaluate_evidence(query, output, threshold=threshold)
+    page = list(decision["items"][:limit])
+    top_score = float(decision.get("top_score") or 0.0)
+    no_match = bool(decision.get("no_match"))
+
+    has_more = (
+        (not no_match)
+        and (
+            len(kb_results) == limit
+            or len(block_results) > offset + limit
+            or len(chunk_results) > offset + limit
+        )
+    )
     return ok(
         page,
         limit=limit,
         offset=offset,
         next_offset=offset + len(page) if has_more else None,
         truncated=has_more,
-        total_estimate=len(output),
+        total_estimate=len(page) if no_match else len(output),
         no_match=no_match,
-        reason="no_fts_hits" if no_match else None,
+        reason=decision.get("reason") or ("no_fts_hits" if no_match and not output else None),
         top_score=round(top_score, 4),
+        threshold=threshold,
     )
 
 @_define_tool(
@@ -479,13 +535,38 @@ def _do_ask(question: str) -> dict:
     # BUG-2 fix (50轮测试报告): ask 工具增加总超时控制。
     # Phase 4: verified hybrid 时优先 SearchService + AnswerService
     # （冲突披露 / claim+evidence 引用 / answer_mode）；否则走 rag_pipeline。
-    # Round2: 禁止 ThreadPoolExecutor 硬超时（shutdown 会 join 跑死墙钟并泄漏线程）。
-    from src.mcp.tools.support import run_with_deadline
+    # Final-closure: true deadline + honest cancelled; pre-LLM evidence gate.
+    from src.mcp.tools.support import DeadlineTimeout, run_with_deadline
+    from src.services.relevance_gate import evaluate_evidence, is_current_information_query
     from src.utils.config import Config
 
     total_timeout = float(Config.get("rag.ask.total_timeout", 90) or 90)
     timeout_label = f"{total_timeout:g}s"
     started = time.monotonic()
+    weak_threshold = float(Config.get("rag.ask.no_answer_threshold", 0.35) or 0.35)
+
+    if is_current_information_query(question):
+        return {
+            "answer": "",
+            "sources": [],
+            "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
+            "route": {
+                "mode": "no_answer",
+                "explanation": "requires_current_external_data",
+            },
+            "query_plan": {},
+            "block_contexts": {},
+            "warnings": ["requires_current_external_data"],
+            "wiki_context": "",
+            "trace_id": "",
+            "answer_mode": "no_answer",
+            "reason": "requires_current_external_data",
+            "conflict_disclosed": False,
+            "claims_used": [],
+            "raw_evidence_used": [],
+            "conflicts": [],
+            "fallbacks": [],
+        }
 
     container = _get_container()
 
@@ -498,6 +579,7 @@ def _do_ask(question: str) -> dict:
 
     def _run_legacy() -> dict:
         remaining = max(0.05, total_timeout - (time.monotonic() - started))
+        # Pre-LLM evidence probe via search when pipeline exposes only query().
         return dict(container.rag_pipeline.query(question, timeout=remaining))
 
     # The production container owns the verified dependencies.  Keeping the
@@ -508,32 +590,34 @@ def _do_ask(question: str) -> dict:
     runner = _run_verified if use_verified else _run_legacy
     try:
         result = dict(run_with_deadline(runner, total_timeout))
-        # Weak-evidence gate: low-score sources must not invent answers.
+        # Pre/post evidence gate: low-score sources must not invent answers.
         sources = list(result.get("sources") or [])
-        scores = [
-            float(s.get("score") or s.get("fts_score") or s.get("similarity") or 0.0)
-            for s in sources
-        ]
-        top_score = max(scores) if scores else 0.0
-        weak_threshold = float(Config.get("rag.ask.no_answer_threshold", 0.35) or 0.35)
-        if sources and top_score < weak_threshold:
+        decision = evaluate_evidence(question, sources, threshold=weak_threshold)
+        if not decision["accept"]:
             result["answer"] = ""
             result["sources"] = []
             result["answer_mode"] = "no_answer"
+            result["reason"] = decision.get("reason") or "insufficient_relevant_evidence"
             result.setdefault("warnings", []).append(
-                f"evidence below threshold (top_score={top_score:.3f} < {weak_threshold})"
+                f"evidence gate blocked generation "
+                f"(top_score={decision.get('top_score', 0)} < {weak_threshold})"
             )
             route = dict(result.get("route") or {})
-            route.setdefault("mode", "no_answer")
-            route["explanation"] = route.get("explanation") or "insufficient evidence"
+            route["mode"] = "no_answer"
+            route["explanation"] = result["reason"]
             result["route"] = route
         elif not sources and result.get("answer_mode") not in ("timeout", "error"):
             result.setdefault("answer_mode", "no_answer")
-    except TimeoutError:
+    except TimeoutError as exc:
         elapsed_ms = int((time.monotonic() - started) * 1000)
+        cancelled = True
+        background = False
+        if isinstance(exc, DeadlineTimeout):
+            cancelled = bool(exc.cancelled)
+            background = bool(exc.background_work_may_continue)
         logger.warning(
-            "ask timed out after %s for question=%r, returning partial result",
-            timeout_label, question[:50],
+            "ask timed out after %s for question=%r cancelled=%s background=%s",
+            timeout_label, question[:50], cancelled, background,
         )
         result = {
             "answer": "",
@@ -544,7 +628,8 @@ def _do_ask(question: str) -> dict:
                 "explanation": f"ask timed out after {timeout_label}",
                 "configured_timeout_ms": int(total_timeout * 1000),
                 "elapsed_ms": elapsed_ms,
-                "cancelled": True,
+                "cancelled": cancelled,
+                "background_work_may_continue": background,
             },
             "query_plan": {},
             "block_contexts": {},
@@ -925,33 +1010,48 @@ def structured_query(
             allow_natural_language=query_dsl is None and query is not None,
         )
         if natural_language and isinstance(query_value, str):
-            rows = container.db.search_knowledge(query_value, limit=limit, offset=offset)
-            has_more = len(rows) == limit
+            from src.services.structured_pagination import paginate_structured_rows
+
+            rows = container.db.search_knowledge(
+                query_value, limit=limit + 1, offset=offset
+            )
+            page_rows, page_meta = paginate_structured_rows(
+                rows, effective_limit=limit, offset=offset
+            )
             return ok(
-                rows,
-                limit=limit,
-                offset=offset,
-                next_offset=offset + len(rows) if has_more else None,
-                truncated=has_more,
+                page_rows,
+                limit=page_meta["limit"],
+                offset=page_meta["offset"],
+                next_offset=page_meta["next_offset"],
+                total_estimate=page_meta["total_estimate"],
+                total_estimate_is_exact=page_meta["total_estimate_is_exact"],
+                truncated=page_meta["truncated"],
                 query_alias_used=query is not None,
                 natural_language_query=True,
             )
+        from src.services.structured_pagination import paginate_structured_rows
+
         spec = QuerySpec.from_json(dsl)
-        spec.limit = min(spec.limit, limit)
+        # effective_limit = min(DSL limit, tool limit); fetch +1 for has_more.
+        effective_limit = min(int(spec.limit), int(limit))
+        spec.limit = effective_limit + 1
         spec.offset = offset
         executor = QueryExecutor(db=container.db)
         results = executor.execute(spec)
         results_list = list(results) if not isinstance(results, list) else results
-        # BUG#2 修复：meta 的 limit 与 has_more 应基于实际生效的 spec.limit
-        # （DSL limit 与 tool limit 的较小值），而非 tool 参数 limit(默认100)。
-        effective_limit = spec.limit
-        has_more = len(results_list) == effective_limit
-        return ok(
+        page_rows, page_meta = paginate_structured_rows(
             results_list,
-            limit=effective_limit,
+            effective_limit=effective_limit,
             offset=offset,
-            next_offset=offset + len(results_list) if has_more else None,
-            truncated=has_more,
+        )
+        return ok(
+            page_rows,
+            limit=page_meta["limit"],
+            offset=page_meta["offset"],
+            next_offset=page_meta["next_offset"],
+            total_estimate=page_meta["total_estimate"],
+            total_estimate_is_exact=page_meta["total_estimate_is_exact"],
+            truncated=page_meta["truncated"],
         )
     except Exception as exc:
         logger.exception("structured_query failed: %s", exc)
@@ -1195,7 +1295,12 @@ def execute_query(
                 max_depth=max_depth,
                 max_nodes=fetch_limit,
             )
-            page = paginate_graph_result(traversal, limit=limit, offset=offset)
+            page = paginate_graph_result(
+                traversal,
+                limit=limit,
+                offset=offset,
+                max_graph_nodes=max_graph_nodes,
+            )
             meta = page.pop("meta")
             return ok(
                 {
@@ -1211,21 +1316,34 @@ def execute_query(
                 total_estimate=meta["total_estimate"],
                 total_estimate_is_exact=meta["total_estimate_is_exact"],
                 truncated=page["truncated"],
+                hard_limit_reached=meta.get("hard_limit_reached", False),
+                max_graph_nodes=meta.get("max_graph_nodes", max_graph_nodes),
             )
 
         if type == "structured":
+            from src.services.structured_pagination import paginate_structured_rows
+
+            effective_limit = min(int(spec.limit), int(limit))
+            # Fetch one extra row to detect has_more without claiming exact totals.
+            spec.limit = effective_limit + 1
+            spec.offset = offset
             executor = QueryExecutor(db=container.db)
             results = executor.execute(spec)
             results_list = list(results) if not isinstance(results, list) else results
-            has_more = len(results_list) == limit
-            return ok(
+            page_rows, page_meta = paginate_structured_rows(
                 results_list,
-                type=type,
-                limit=limit,
+                effective_limit=effective_limit,
                 offset=offset,
-                next_offset=offset + len(results_list) if has_more else None,
-                total_estimate=len(results_list),
-                truncated=has_more,
+            )
+            return ok(
+                page_rows,
+                type=type,
+                limit=page_meta["limit"],
+                offset=page_meta["offset"],
+                next_offset=page_meta["next_offset"],
+                total_estimate=page_meta["total_estimate"],
+                total_estimate_is_exact=page_meta["total_estimate_is_exact"],
+                truncated=page_meta["truncated"],
             )
 
         return fail(
@@ -1336,11 +1454,18 @@ def ask_with_query(
                 ),
                 timeout=total_timeout,
             )
-        except TimeoutError:
+        except TimeoutError as exc:
+            from src.services.deadline import DeadlineTimeout
+
             elapsed_ms = int((time.monotonic() - started) * 1000)
+            cancelled = True
+            background = False
+            if isinstance(exc, DeadlineTimeout):
+                cancelled = bool(exc.cancelled)
+                background = bool(exc.background_work_may_continue)
             logger.warning(
-                "ask_with_query timed out after %gs for question=%r",
-                total_timeout, effective_question[:50],
+                "ask_with_query timed out after %gs for question=%r cancelled=%s",
+                total_timeout, effective_question[:50], cancelled,
             )
             return ok(
                 {
@@ -1352,7 +1477,8 @@ def ask_with_query(
                         "explanation": f"Query timed out after {total_timeout:g}s",
                         "configured_timeout_ms": int(total_timeout * 1000),
                         "elapsed_ms": elapsed_ms,
-                        "cancelled": True,
+                        "cancelled": cancelled,
+                        "background_work_may_continue": background,
                     },
                     "query_plan": {},
                     "block_contexts": {},
