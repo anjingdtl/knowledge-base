@@ -157,15 +157,18 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
     """
     from src.application.retrieval_commands import RetrievalCommands
     from src.services.numeric_unit_match import apply_numeric_unit_ranking
+    from src.services.result_dedupe import dedupe_by_knowledge_id
 
     k = int(limit if limit is not None else top_k)
     k = max(1, k)
+    # Over-fetch so document-level dedupe still leaves enough unique knowledge_ids.
+    fetch_k = max(k * 3, 15)
     results: list = []
     try:
         container = _get_container()
         if getattr(container, "search_service", None) is not None:
             results = list(
-                RetrievalCommands(container).semantic_search(query, top_k=max(k, 10)) or []
+                RetrievalCommands(container).semantic_search(query, top_k=fetch_k) or []
             )
     except Exception as exc:  # noqa: BLE001 - fall back to lexical
         logger.debug("search semantic path failed, fallback fulltext: %s", exc)
@@ -174,6 +177,7 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
     from src.services.relevance_gate import evaluate_evidence, is_current_information_query
 
     apply_numeric_unit_ranking(query, results)
+    results = dedupe_by_knowledge_id(results)
     threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
     scores = [
         float(r.get("score") or r.get("fts_score") or r.get("similarity") or 0.0)
@@ -189,7 +193,7 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             if not row.get("knowledge_id") and row.get("id"):
                 row["knowledge_id"] = row["id"]
             out.append(row)
-        return out
+        return dedupe_by_knowledge_id(out)
 
     if is_current_information_query(query):
         return ok(
@@ -374,8 +378,10 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
 
     # 数字+单位一致性与上下文短语重排
     from src.services.numeric_unit_match import apply_numeric_unit_ranking
+    from src.services.result_dedupe import dedupe_by_knowledge_id
 
     apply_numeric_unit_ranking(query, output)
+    output = dedupe_by_knowledge_id(output)
 
     from src.services.relevance_gate import evaluate_evidence, is_current_information_query
 
