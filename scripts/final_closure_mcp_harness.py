@@ -3,6 +3,11 @@
 Transports: streamable-http (subprocess server) and stdio (FastMCP Client).
 Never mutates formal data/kb.db for write paths — write tests use temp home.
 Golden accuracy eval uses formal DB in read-only tool calls only.
+
+DEPRECATED (production-pilot metrics):
+    Golden scoring that awards full scores when expected_ids is empty, or treats
+    hit_or_empty/PAD as accuracy, is **not** valid for production-pilot decisions.
+    Use scripts/production_pilot_eval.py and evals/production_pilot_metrics.py.
 """
 from __future__ import annotations
 
@@ -877,10 +882,11 @@ async def eval_transport(client, transport: str, rows: list[dict]) -> dict:
         elif expected_no:
             recall1 = recall5 = mrr = 1.0 if no_match else 0.0
         else:
-            # hit_or_empty / soft — success if tool ok
+            # DEPRECATED for production-pilot: hit_or_empty / empty expected full score
             ok = bool(search_rec.get("response_ok"))
             recall1 = recall5 = mrr = 1.0 if ok else 0.0
 
+        # DEPRECATED: empty expected_ids must be excluded, not scored 1.0
         ndcg = _ndcg(got_ids, expected_ids, 10) if expected_ids else (1.0 if search_rec.get("response_ok") else 0.0)
 
         false_answer = False

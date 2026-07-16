@@ -1,0 +1,43 @@
+{
+  "metrics": {
+    "recall_at_1": {
+      "numerator": 35,
+      "denominator": 63,
+      "excluded": 0,
+      "value": 0.5555555555555556
+    },
+    "recall_at_5": {
+      "numerator": 47,
+      "denominator": 63,
+      "excluded": 0,
+      "value": 0.746031746031746
+    },
+    "mrr_at_10": {
+      "numerator": 40.08333333333333,
+      "denominator": 63,
+      "excluded": 0,
+      "value": 0.6362433862433862
+    },
+    "ndcg_at_10": {
+      "numerator": 41.55532248029251,
+      "denominator": 63,
+      "excluded": 0,
+      "value": 0.6596082933379763
+    },
+    "precision_at_5": {
+      "numerator": 35.55,
+      "denominator": 63,
+      "excluded": 0,
+      "value": 0.5642857142857143
+    },
+    "forbidden_hit_rate_at_5": {
+      "numerator": 0,
+      "denominator": 0,
+      "excluded": 0,
+      "value": null
+    },
+    "excluded_empty_expected": 0
+  },
+  "n": 63,
+  "channel": "fts_like_readonly"
+}

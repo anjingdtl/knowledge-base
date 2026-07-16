@@ -1,0 +1,31 @@
+{
+  "status": "NOT_TESTED_runtime",
+  "n": 32,
+  "metrics": {
+    "no_answer_accuracy": {
+      "numerator": 0,
+      "denominator": 0,
+      "excluded": 0,
+      "value": null
+    },
+    "false_answer_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "excluded": 0,
+      "value": null
+    },
+    "false_positive_retrieval_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "excluded": 0,
+      "value": null
+    },
+    "false_negative_refusal_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "excluded": 0,
+      "value": null
+    }
+  },
+  "note": "Runtime MCP results required; empty denominator until filled"
+}
