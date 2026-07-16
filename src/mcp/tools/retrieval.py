@@ -608,7 +608,35 @@ def _do_ask(question: str) -> dict:
             result["route"] = route
         elif not sources and result.get("answer_mode") not in ("timeout", "error"):
             result.setdefault("answer_mode", "no_answer")
-    except TimeoutError as exc:
+    except Exception as exc:
+        # Py3.10: concurrent.futures.TimeoutError is NOT an alias of builtins.TimeoutError
+        # (alias since 3.11). Treat both as hard timeout envelopes.
+        import concurrent.futures
+
+        is_timeout = isinstance(exc, (TimeoutError, concurrent.futures.TimeoutError))
+        if not is_timeout:
+            # Re-raise path handled by outer-style fallthrough below.
+            logger.error("ask pipeline failed for question=%r: %s", question[:50], exc)
+            return {
+                "answer": "",
+                "sources": [],
+                "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
+                "route": {
+                    "mode": "error",
+                    "explanation": f"ask pipeline error: {exc}",
+                },
+                "query_plan": {},
+                "block_contexts": {},
+                "warnings": [f"ask pipeline error: {exc}"],
+                "wiki_context": "",
+                "trace_id": "",
+                "answer_mode": "no_answer",
+                "conflict_disclosed": False,
+                "claims_used": [],
+                "raw_evidence_used": [],
+                "conflicts": [],
+                "fallbacks": [],
+            }
         elapsed_ms = int((time.monotonic() - started) * 1000)
         cancelled = True
         background = False
@@ -645,28 +673,6 @@ def _do_ask(question: str) -> dict:
             "fallbacks": [],
         }
         return result
-    except Exception as e:
-        # S3.2:query() 现向上传播非超时异常(S1.4:不再盲目 fallback _direct_query),
-        # ask 必须在此兜住,返回结构化部分结果 + 告警,避免冒泡成未处理 MCP 错误
-        # (与 ask_with_query 的韧性对齐,堵住 Bug-2 同类的「无兜底」缺口)。
-        logger.error("ask pipeline failed for question=%r: %s", question[:50], e)
-        return {
-            "answer": "",
-            "sources": [],
-            "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
-            "route": {"mode": "error", "explanation": f"ask failed: {e}"},
-            "query_plan": {},
-            "block_contexts": {},
-            "warnings": [f"ask failed: {type(e).__name__}: {e}"],
-            "wiki_context": "",
-            "trace_id": "",
-            "answer_mode": "no_answer",
-            "conflict_disclosed": False,
-            "claims_used": [],
-            "raw_evidence_used": [],
-            "conflicts": [],
-            "fallbacks": [],
-        }
 
     # Ensure Phase 4 fields always present (legacy path defaults)
     result.setdefault("answer_mode", "raw_only")
