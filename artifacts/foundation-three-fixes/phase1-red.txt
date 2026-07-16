@@ -1,0 +1,10 @@
+Command:
+pytest tests/eval/test_ground_truth_review_metadata.py tests/eval/test_frozen_dataset_only.py tests/eval/test_no_rule_assisted_marked_human.py tests/eval/test_answer_fact_has_block_quote.py tests/eval/test_ground_truth_corpus_snapshot.py -q
+
+Exit code: 1
+
+Observed failure:
+- ModuleNotFoundError: No module named 'scripts.freeze_production_pilot_datasets'
+- 3 errors during collection
+
+This is the required pre-implementation failing test evidence for Phase 1.

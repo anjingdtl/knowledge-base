@@ -22,7 +22,7 @@ from evals.production_pilot_metrics import (  # noqa: E402
     score_retrieval,
 )
 
-DATA = ROOT / "tests" / "eval" / "datasets"
+DATA = ROOT / "tests" / "eval" / "datasets" / "frozen"
 ART = ROOT / "artifacts" / "production-pilot-final-validation"
 
 

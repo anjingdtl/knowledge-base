@@ -1,8 +1,8 @@
-"""Build human-grounded production pilot eval datasets.
+"""Build rule-assisted production-pilot annotation candidates.
 
-Candidates may come from title/content keyword inspection of the formal corpus.
-Final expected_ids are only kept after content-level relevance checks (not
-search-result reverse fill, not top-N auto assignment).
+This command is deliberately incapable of publishing ground truth.  Its output
+must pass independent primary and secondary review before the freeze command
+will place any row in the formal evaluation directory.
 """
 from __future__ import annotations
 
@@ -15,8 +15,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / "data" / "kb.db"
-OUT_DIR = ROOT / "tests" / "eval" / "datasets"
-ART = ROOT / "artifacts" / "production-pilot-final-validation"
+OUT_DIR = ROOT / "tests" / "eval" / "datasets" / "candidates"
+ART = ROOT / "artifacts" / "foundation-three-fixes"
 SHA = hashlib.sha256(DB.read_bytes()).hexdigest()[:16]
 CORPUS_SNAPSHOT = f"kb.db:{SHA}"
 
@@ -146,6 +146,16 @@ def write_jsonl(path: Path, rows: list[dict]) -> None:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
 
+def candidate_metadata(generation_rule: dict | None = None) -> dict:
+    return {
+        "generated_by": "scripts/build_production_pilot_datasets.py",
+        "generation_rule": generation_rule or {},
+        "corpus_snapshot_sha": CORPUS_SNAPSHOT,
+        "annotation_source": "rule_assisted_candidate",
+        "human_review_status": "pending",
+    }
+
+
 def ret_row(
     rid: str,
     query: str,
@@ -162,13 +172,12 @@ def ret_row(
         "id": rid,
         "query": query,
         "category": category,
-        "expected_ids": expected,
-        "acceptable_ids": acceptable or [],
-        "forbidden_ids": forbidden or [],
+        "candidate_expected_ids": expected,
+        "candidate_acceptable_ids": acceptable or [],
+        "candidate_forbidden_ids": forbidden or [],
         "difficulty": difficulty,
-        "annotation_source": "human",
-        "annotator_notes": notes,
-        "corpus_snapshot_sha": CORPUS_SNAPSHOT,
+        "candidate_notes": notes,
+        **candidate_metadata({"method": "title_content_rule"}),
     }
 
 
@@ -393,12 +402,11 @@ def build_no_answer(docs: list[Doc]) -> list[dict]:
             {
                 "id": iid,
                 "query": q,
-                "expected_no_answer": True,
-                "reason": reason,
-                "known_distractor_ids": known,
-                "annotation_source": "human",
-                "annotator_notes": notes,
-                "corpus_snapshot_sha": CORPUS_SNAPSHOT,
+                "candidate_expected_no_answer": True,
+                "candidate_reason": reason,
+                "candidate_known_distractor_ids": known,
+                "candidate_notes": notes,
+                **candidate_metadata({"method": "authored_no_answer_hypothesis"}),
             }
         )
     return rows[:40]
@@ -498,14 +506,13 @@ def build_numeric(docs: list[Doc]) -> list[dict]:
             {
                 "id": iid,
                 "query": q,
-                "expected_ids": exp if not no_ans else [],
-                "expected_units": units,
-                "forbidden_units": forb_u,
-                "forbidden_ids": forb_ids,
-                "expected_no_answer": no_ans,
-                "annotation_source": "human",
-                "annotator_notes": notes,
-                "corpus_snapshot_sha": CORPUS_SNAPSHOT,
+                "candidate_expected_ids": exp if not no_ans else [],
+                "candidate_expected_units": units,
+                "candidate_forbidden_units": forb_u,
+                "candidate_forbidden_ids": forb_ids,
+                "candidate_expected_no_answer": no_ans,
+                "candidate_notes": notes,
+                **candidate_metadata({"method": "numeric_unit_regex_rule"}),
             }
         )
     return rows
@@ -570,13 +577,12 @@ def build_routing() -> list[dict]:
             {
                 "id": iid,
                 "query": q,
-                "expected_mode": mode,
-                "expected_tool": tool,
-                "required_argument_keys": keys,
-                "forbidden_tool": forb,
-                "expected_task_outcome": outcome,
-                "annotation_source": "human",
-                "corpus_snapshot_sha": CORPUS_SNAPSHOT,
+                "candidate_expected_mode": mode,
+                "candidate_expected_tool": tool,
+                "candidate_required_argument_keys": keys,
+                "candidate_forbidden_tool": forb,
+                "candidate_expected_task_outcome": outcome,
+                **candidate_metadata({"method": "authored_routing_hypothesis"}),
             }
         )
     return rows
@@ -685,19 +691,19 @@ def build_answer_citations(docs: list[Doc]) -> list[dict]:
             {
                 "id": iid,
                 "question": question,
-                "expected_answer_facts": [
+                "candidate_expected_answer_facts": [
                     {
                         "fact_id": "F1",
                         "statement": fact,
                         "supporting_knowledge_ids": support[:3],
                         "supporting_block_ids": [],
+                        "supporting_quotes": [],
                     }
                 ],
-                "forbidden_claims": ["不在文档中的精确实时数据", "编造的条款编号"],
-                "minimum_sources": 1,
-                "annotation_source": "human",
-                "annotator_notes": "facts grounded in title+content verified docs",
-                "corpus_snapshot_sha": CORPUS_SNAPSHOT,
+                "candidate_forbidden_claims": ["不在文档中的精确实时数据", "编造的条款编号"],
+                "candidate_minimum_sources": 1,
+                "candidate_notes": "title/content rules found these candidate documents; facts require body/block review",
+                **candidate_metadata({"method": "title_content_rule"}),
             }
         )
     return rows
@@ -711,11 +717,11 @@ def main() -> None:
     routing = build_routing()
     answers = build_answer_citations(docs)
 
-    write_jsonl(OUT_DIR / "production_pilot_retrieval.jsonl", retrieval)
-    write_jsonl(OUT_DIR / "production_pilot_no_answer.jsonl", no_answer)
-    write_jsonl(OUT_DIR / "production_pilot_numeric_units.jsonl", numeric)
-    write_jsonl(OUT_DIR / "production_pilot_routing.jsonl", routing)
-    write_jsonl(OUT_DIR / "production_pilot_answer_citations.jsonl", answers)
+    write_jsonl(OUT_DIR / "production_pilot_retrieval.candidates.jsonl", retrieval)
+    write_jsonl(OUT_DIR / "production_pilot_no_answer.candidates.jsonl", no_answer)
+    write_jsonl(OUT_DIR / "production_pilot_numeric_units.candidates.jsonl", numeric)
+    write_jsonl(OUT_DIR / "production_pilot_routing.candidates.jsonl", routing)
+    write_jsonl(OUT_DIR / "production_pilot_answer_citations.candidates.jsonl", answers)
 
     summary = {
         "corpus_snapshot_sha": CORPUS_SNAPSHOT,
@@ -729,16 +735,13 @@ def main() -> None:
         },
         "pad_excluded": True,
         "hit_or_empty_excluded": True,
-        "empty_expected_ids_in_retrieval": sum(
-            1 for r in retrieval if not r.get("expected_ids")
+        "empty_candidate_expected_ids_in_retrieval": sum(
+            1 for r in retrieval if not r.get("candidate_expected_ids")
         ),
-        "annotation_method": (
-            "title+content keyword evidence review on formal corpus; "
-            "not search reverse-fill; not auto top-N from FTS"
-        ),
+        "annotation_method": "rule-assisted candidates only; no human decisions or frozen GT",
     }
     ART.mkdir(parents=True, exist_ok=True)
-    (ART / "dataset-validation.json").write_text(
+    (ART / "candidate-generation-summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
@@ -747,7 +750,7 @@ def main() -> None:
     assert summary["counts"]["numeric_units"] >= 25, summary
     assert summary["counts"]["routing"] >= 40, summary
     assert summary["counts"]["answer_citations"] >= 25, summary
-    assert summary["empty_expected_ids_in_retrieval"] == 0, summary
+    assert summary["empty_candidate_expected_ids_in_retrieval"] == 0, summary
 
 
 if __name__ == "__main__":

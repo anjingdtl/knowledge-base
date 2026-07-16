@@ -36,7 +36,7 @@ from scripts.final_closure_mcp_harness import (  # noqa: E402
 )
 
 ART = ROOT / "artifacts" / "production-pilot-final-validation"
-DATA = ROOT / "tests" / "eval" / "datasets"
+DATA = ROOT / "tests" / "eval" / "datasets" / "frozen"
 
 
 def utc_now() -> str:

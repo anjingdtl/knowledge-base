@@ -1,0 +1,26 @@
+Targeted command result:
+pytest tests/eval/test_ground_truth_review_metadata.py tests/eval/test_frozen_dataset_only.py tests/eval/test_no_rule_assisted_marked_human.py tests/eval/test_answer_fact_has_block_quote.py tests/eval/test_ground_truth_corpus_snapshot.py tests/eval/test_production_pilot_dataset_schema.py -q
+16 passed
+
+Related regression:
+pytest tests/eval/ -q
+33 passed
+
+Lint:
+ruff check <Phase 1 modified scripts and tests>
+All checks passed
+
+Ground truth state:
+- candidate_count: 196
+- reviewed_count: 0
+- frozen_count: 0
+- all 196 candidates explicitly recorded as review_record_missing
+- no candidate is marked human or human_reviewed
+
+Formal DB after Phase 1:
+- size: 346054656
+- sha256: dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01
+- unchanged: true
+
+Note: pytest emitted a Windows temporary pytest-current symlink cleanup PermissionError
+after reporting success; test process exit code was 0.

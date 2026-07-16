@@ -1,0 +1,15 @@
+{
+  "corpus_snapshot_sha": "kb.db:dee013a91eeae27b",
+  "formal_db_sha256_prefix": "dee013a91eeae27b",
+  "counts": {
+    "retrieval": 63,
+    "no_answer": 32,
+    "numeric_units": 28,
+    "routing": 45,
+    "answer_citations": 28
+  },
+  "pad_excluded": true,
+  "hit_or_empty_excluded": true,
+  "empty_candidate_expected_ids_in_retrieval": 0,
+  "annotation_method": "rule-assisted candidates only; no human decisions or frozen GT"
+}
