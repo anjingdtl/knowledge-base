@@ -8,11 +8,14 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-# number + optional space + unit (Chinese / latin)
+# Compound density units first (珠/米) so plain 米 does not swallow them.
 _NUM_UNIT_RE = re.compile(
     r"(?P<number>\d+(?:\.\d+)?)\s*"
-    r"(?P<unit>%|％|米|厘米|毫米|公里|千米|秒|分钟|小时|天|周|月|个月|年|"
-    r"户|人|个|次|倍|珠|元|万元|亿|kg|g|m|cm|mm|km|s|ms|w|kw)",
+    r"(?P<unit>"
+    r"珠/米|珠／米|"
+    r"%|％|米|厘米|毫米|公里|千米|秒|分钟|小时|天|周|月|个月|年|"
+    r"户|人|个|次|倍|珠|元|万元|亿|kg|g|m|cm|mm|km|s|ms|w|kw"
+    r")",
     re.IGNORECASE,
 )
 
@@ -40,7 +43,7 @@ def extract_number_units(text: str) -> list[NumberUnitHit]:
 
 
 def _normalize_unit(unit: str) -> str:
-    u = (unit or "").lower().strip()
+    u = (unit or "").lower().strip().replace("／", "/")
     aliases = {
         "％": "%",
         "个月": "月",
@@ -51,6 +54,7 @@ def _normalize_unit(unit: str) -> str:
         "mm": "毫米",
         "s": "秒",
         "ms": "毫秒",
+        "珠／米": "珠/米",
     }
     return aliases.get(u, u)
 
