@@ -11,7 +11,7 @@
 | 项 | 值 |
 |----|-----|
 | 基线 Commit SHA | `02f71b0036703f1c36174b11ef2e7036341436f6` |
-| 最终 Commit SHA | 见本分支 `HEAD`（含本报告提交） |
+| 最终 Commit SHA | `0eb5773`（CI 全绿收口） |
 | 分支 | `fix/mcp-final-closure` |
 
 ### 提交列表
@@ -183,7 +183,10 @@ docs(final-closure): soak results, full regression, final report
 | PytestUnhandledThreadExceptionWarning（本轮新增路径） | **未再现**（Windows 子进程 UTF-8 已修） |
 | 正式 `data/kb.db` size | **346054656 与基线一致** |
 
-CI：workflow 已包含 `fix/**` 推送触发；最终以远程 Actions 状态为准。
+CI：**成功** — GitHub Actions run `29471039139`  
+https://github.com/anjingdtl/knowledge-base/actions/runs/29471039139  
+
+全部 job 通过：Lint / Test 3.10+3.11+3.12 / Contract / Windows Smoke / Docker / Architecture / Migration / Retrieval Eval / Frontend。
 
 ---
 
