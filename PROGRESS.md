@@ -16,7 +16,10 @@
 执行依据：`docs/superpowers/specs/ShineHeKB_MCP_生产试点前最终验收收尾_Spec.md`  
 基线：`artifacts/production-pilot-final-validation/baseline.json`  
 报告：`docs/reports/mcp-production-pilot-final-validation-2026-07-16.md`  
-状态：**未达到生产试点门槛**（可信指标已重建；Precision/Numeric/Routing/Citation 等强制项未全过）。
+状态：**未达到生产试点门槛**。  
+门禁修复 PLAN：`docs/superpowers/plans/2026-07-16-production-pilot-gate-remediation.md`  
+Delta 报告：`docs/reports/mcp-production-pilot-gate-remediation-2026-07-16.md`  
+进展：Citation/假拒答、Recall/MRR、路由 L1 规则已改善；Precision@5 / nDCG / Numeric 仍未达标。
 
 ---
 

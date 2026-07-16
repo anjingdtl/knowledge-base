@@ -1,0 +1,41 @@
+{
+  "metrics": {
+    "mode_accuracy": {
+      "numerator": 40,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 1.0
+    },
+    "recommended_tool_accuracy": {
+      "numerator": 40,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 1.0
+    },
+    "argument_contract_accuracy": {
+      "numerator": 40,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 1.0
+    },
+    "protocol_execution_rate": {
+      "numerator": 40,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 1.0
+    },
+    "task_completion_rate": {
+      "numerator": 40,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 1.0
+    },
+    "timeout_free_completion_rate": {
+      "numerator": 40,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 1.0
+    }
+  },
+  "n": 40
+}

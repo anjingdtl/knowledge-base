@@ -1,73 +1,34 @@
 {
   "fts": {
     "recall_at_1": {
-      "numerator": 39,
+      "numerator": 40,
       "denominator": 40,
       "excluded": 0,
-      "value": 0.975
+      "value": 1.0
     },
     "recall_at_5": {
-      "numerator": 39,
+      "numerator": 40,
       "denominator": 40,
       "excluded": 0,
-      "value": 0.975
+      "value": 1.0
     },
     "mrr_at_10": {
-      "numerator": 39.0,
+      "numerator": 40.0,
       "denominator": 40,
       "excluded": 0,
-      "value": 0.975
+      "value": 1.0
     },
     "ndcg_at_10": {
-      "numerator": 122.73272399682634,
+      "numerator": 23.683784249489904,
       "denominator": 40,
       "excluded": 0,
-      "value": 3.0683180999206585
+      "value": 0.5920946062372476
     },
     "precision_at_5": {
-      "numerator": 10.483333333333327,
+      "numerator": 20.799999999999994,
       "denominator": 40,
       "excluded": 0,
-      "value": 0.26208333333333317
-    },
-    "forbidden_hit_rate_at_5": {
-      "numerator": 0,
-      "denominator": 0,
-      "excluded": 0,
-      "value": null
-    },
-    "excluded_empty_expected": 0
-  },
-  "vector": {
-    "recall_at_1": {
-      "numerator": 19,
-      "denominator": 20,
-      "excluded": 0,
-      "value": 0.95
-    },
-    "recall_at_5": {
-      "numerator": 19,
-      "denominator": 20,
-      "excluded": 0,
-      "value": 0.95
-    },
-    "mrr_at_10": {
-      "numerator": 19.0,
-      "denominator": 20,
-      "excluded": 0,
-      "value": 0.95
-    },
-    "ndcg_at_10": {
-      "numerator": 56.09544188656391,
-      "denominator": 20,
-      "excluded": 0,
-      "value": 2.8047720943281957
-    },
-    "precision_at_5": {
-      "numerator": 5.283333333333334,
-      "denominator": 20,
-      "excluded": 0,
-      "value": 0.2641666666666667
+      "value": 0.5199999999999998
     },
     "forbidden_hit_rate_at_5": {
       "numerator": 0,
@@ -79,34 +40,34 @@
   },
   "hybrid": {
     "recall_at_1": {
-      "numerator": 39,
+      "numerator": 40,
       "denominator": 40,
       "excluded": 0,
-      "value": 0.975
+      "value": 1.0
     },
     "recall_at_5": {
-      "numerator": 39,
+      "numerator": 40,
       "denominator": 40,
       "excluded": 0,
-      "value": 0.975
+      "value": 1.0
     },
     "mrr_at_10": {
-      "numerator": 39.0,
+      "numerator": 40.0,
       "denominator": 40,
       "excluded": 0,
-      "value": 0.975
+      "value": 1.0
     },
     "ndcg_at_10": {
-      "numerator": 122.73272399682634,
+      "numerator": 21.928492910473476,
       "denominator": 40,
       "excluded": 0,
-      "value": 3.0683180999206585
+      "value": 0.548212322761837
     },
     "precision_at_5": {
-      "numerator": 10.483333333333327,
+      "numerator": 18.399999999999995,
       "denominator": 40,
       "excluded": 0,
-      "value": 0.26208333333333317
+      "value": 0.45999999999999985
     },
     "forbidden_hit_rate_at_5": {
       "numerator": 0,

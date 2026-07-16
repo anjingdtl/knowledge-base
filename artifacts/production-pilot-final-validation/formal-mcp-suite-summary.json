@@ -1,38 +1,38 @@
 {
-  "started": "2026-07-16T05:04:11.232111+00:00",
+  "started": "2026-07-16T05:42:30.126258+00:00",
   "formal_db_sha_before": "dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01",
-  "home": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\pilot_formal_qgen_b0m",
+  "home": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\pilot_formal_3tqhzi8n",
   "stdio": {
     "fts": {
       "recall_at_1": {
-        "numerator": 39,
+        "numerator": 40,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "recall_at_5": {
-        "numerator": 39,
+        "numerator": 40,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "mrr_at_10": {
-        "numerator": 39.0,
+        "numerator": 40.0,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "ndcg_at_10": {
-        "numerator": 122.73272399682634,
+        "numerator": 39.02387552149488,
         "denominator": 40,
         "excluded": 0,
-        "value": 3.0683180999206585
+        "value": 0.975596888037372
       },
       "precision_at_5": {
-        "numerator": 10.483333333333327,
+        "numerator": 10.399999999999995,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.26208333333333317
+        "value": 0.2599999999999999
       },
       "forbidden_hit_rate_at_5": {
         "numerator": 0,
@@ -44,34 +44,34 @@
     },
     "vector": {
       "recall_at_1": {
-        "numerator": 19,
+        "numerator": 20,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.95
+        "value": 1.0
       },
       "recall_at_5": {
-        "numerator": 19,
+        "numerator": 20,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.95
+        "value": 1.0
       },
       "mrr_at_10": {
-        "numerator": 19.0,
+        "numerator": 20.0,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.95
+        "value": 1.0
       },
       "ndcg_at_10": {
-        "numerator": 56.09544188656391,
+        "numerator": 19.76536063698862,
         "denominator": 20,
         "excluded": 0,
-        "value": 2.8047720943281957
+        "value": 0.988268031849431
       },
       "precision_at_5": {
-        "numerator": 5.283333333333334,
+        "numerator": 5.800000000000003,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.2641666666666667
+        "value": 0.29000000000000015
       },
       "forbidden_hit_rate_at_5": {
         "numerator": 0,
@@ -83,34 +83,34 @@
     },
     "hybrid": {
       "recall_at_1": {
-        "numerator": 39,
+        "numerator": 40,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "recall_at_5": {
-        "numerator": 39,
+        "numerator": 40,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "mrr_at_10": {
-        "numerator": 39.0,
+        "numerator": 40.0,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "ndcg_at_10": {
-        "numerator": 122.73272399682634,
+        "numerator": 39.02387552149488,
         "denominator": 40,
         "excluded": 0,
-        "value": 3.0683180999206585
+        "value": 0.975596888037372
       },
       "precision_at_5": {
-        "numerator": 10.483333333333327,
+        "numerator": 10.399999999999995,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.26208333333333317
+        "value": 0.2599999999999999
       },
       "forbidden_hit_rate_at_5": {
         "numerator": 0,
@@ -148,10 +148,10 @@
     },
     "numeric": {
       "top1_unit_accuracy": {
-        "numerator": 10,
+        "numerator": 11,
         "denominator": 15,
         "excluded": 0,
-        "value": 0.6666666666666666
+        "value": 0.7333333333333333
       },
       "top3_expected_document_recall": {
         "numerator": 4,
@@ -180,10 +180,10 @@
     },
     "routing": {
       "mode_accuracy": {
-        "numerator": 9,
+        "numerator": 17,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.45
+        "value": 0.85
       },
       "recommended_tool_accuracy": {
         "numerator": 8,
@@ -218,56 +218,56 @@
     },
     "answers": {
       "answer_completion_rate": {
-        "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 10,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 1.0
       },
       "citation_completeness": {
-        "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 10,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 1.0
       },
       "citation_correctness": {
-        "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 10,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 1.0
       },
       "unsupported_claim_rate": {
         "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.0
       },
       "source_precision": {
-        "numerator": 0.0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 5.666666666666666,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 0.5666666666666667
       },
       "source_recall": {
-        "numerator": 0.0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 9.0,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 0.9
       },
       "source_id_validity": {
-        "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 50,
+        "denominator": 50,
+        "excluded": 0,
+        "value": 1.0
       },
-      "excluded_no_answer_or_no_facts": 5
+      "excluded_no_answer_or_no_facts": 0
     }
   },
   "stdio_health": {
     "health": {
-      "timestamp": "2026-07-16T05:04:14.871120+00:00",
+      "timestamp": "2026-07-16T05:42:34.726938+00:00",
       "tool": "kb_health_check",
       "arguments": {},
-      "elapsed_ms": 432,
+      "elapsed_ms": 526,
       "response_ok": true,
       "error_code": null,
       "response_hash": "f964da6710deada5",
@@ -303,10 +303,10 @@
       }
     },
     "capabilities": {
-      "timestamp": "2026-07-16T05:04:14.897015+00:00",
+      "timestamp": "2026-07-16T05:42:34.762611+00:00",
       "tool": "kb_capabilities",
       "arguments": {},
-      "elapsed_ms": 25,
+      "elapsed_ms": 35,
       "response_ok": true,
       "error_code": null,
       "response_hash": "3917a364a98f9f53",
@@ -1147,34 +1147,34 @@
   "http": {
     "fts": {
       "recall_at_1": {
-        "numerator": 39,
+        "numerator": 40,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "recall_at_5": {
-        "numerator": 39,
+        "numerator": 40,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "mrr_at_10": {
-        "numerator": 39.0,
+        "numerator": 40.0,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "ndcg_at_10": {
-        "numerator": 122.73272399682634,
+        "numerator": 39.02387552149488,
         "denominator": 40,
         "excluded": 0,
-        "value": 3.0683180999206585
+        "value": 0.975596888037372
       },
       "precision_at_5": {
-        "numerator": 10.483333333333327,
+        "numerator": 10.399999999999995,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.26208333333333317
+        "value": 0.2599999999999999
       },
       "forbidden_hit_rate_at_5": {
         "numerator": 0,
@@ -1186,34 +1186,34 @@
     },
     "vector": {
       "recall_at_1": {
-        "numerator": 19,
+        "numerator": 20,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.95
+        "value": 1.0
       },
       "recall_at_5": {
-        "numerator": 19,
+        "numerator": 20,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.95
+        "value": 1.0
       },
       "mrr_at_10": {
-        "numerator": 19.0,
+        "numerator": 20.0,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.95
+        "value": 1.0
       },
       "ndcg_at_10": {
-        "numerator": 56.09544188656391,
+        "numerator": 19.76536063698862,
         "denominator": 20,
         "excluded": 0,
-        "value": 2.8047720943281957
+        "value": 0.988268031849431
       },
       "precision_at_5": {
-        "numerator": 5.283333333333334,
+        "numerator": 5.800000000000003,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.2641666666666667
+        "value": 0.29000000000000015
       },
       "forbidden_hit_rate_at_5": {
         "numerator": 0,
@@ -1225,34 +1225,34 @@
     },
     "hybrid": {
       "recall_at_1": {
-        "numerator": 39,
+        "numerator": 40,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "recall_at_5": {
-        "numerator": 39,
+        "numerator": 40,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "mrr_at_10": {
-        "numerator": 39.0,
+        "numerator": 40.0,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.975
+        "value": 1.0
       },
       "ndcg_at_10": {
-        "numerator": 122.73272399682634,
+        "numerator": 39.02387552149488,
         "denominator": 40,
         "excluded": 0,
-        "value": 3.0683180999206585
+        "value": 0.975596888037372
       },
       "precision_at_5": {
-        "numerator": 10.483333333333327,
+        "numerator": 10.399999999999995,
         "denominator": 40,
         "excluded": 0,
-        "value": 0.26208333333333317
+        "value": 0.2599999999999999
       },
       "forbidden_hit_rate_at_5": {
         "numerator": 0,
@@ -1290,10 +1290,10 @@
     },
     "numeric": {
       "top1_unit_accuracy": {
-        "numerator": 10,
+        "numerator": 11,
         "denominator": 15,
         "excluded": 0,
-        "value": 0.6666666666666666
+        "value": 0.7333333333333333
       },
       "top3_expected_document_recall": {
         "numerator": 4,
@@ -1322,10 +1322,10 @@
     },
     "routing": {
       "mode_accuracy": {
-        "numerator": 9,
+        "numerator": 17,
         "denominator": 20,
         "excluded": 0,
-        "value": 0.45
+        "value": 0.85
       },
       "recommended_tool_accuracy": {
         "numerator": 8,
@@ -1360,59 +1360,59 @@
     },
     "answers": {
       "answer_completion_rate": {
-        "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 10,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 1.0
       },
       "citation_completeness": {
-        "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 10,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 1.0
       },
       "citation_correctness": {
-        "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 10,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 1.0
       },
       "unsupported_claim_rate": {
         "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.0
       },
       "source_precision": {
-        "numerator": 0.0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 5.666666666666666,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 0.5666666666666667
       },
       "source_recall": {
-        "numerator": 0.0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 9.0,
+        "denominator": 10,
+        "excluded": 0,
+        "value": 0.9
       },
       "source_id_validity": {
-        "numerator": 0,
-        "denominator": 0,
-        "excluded": 5,
-        "value": null
+        "numerator": 50,
+        "denominator": 50,
+        "excluded": 0,
+        "value": 1.0
       },
-      "excluded_no_answer_or_no_facts": 5
+      "excluded_no_answer_or_no_facts": 0
     }
   },
   "http_health": {
     "health": {
-      "timestamp": "2026-07-16T05:13:29.442683+00:00",
+      "timestamp": "2026-07-16T05:57:26.486585+00:00",
       "tool": "kb_health_check",
       "arguments": {},
-      "elapsed_ms": 401,
+      "elapsed_ms": 373,
       "response_ok": true,
       "error_code": null,
-      "response_hash": "f964da6710deada5",
+      "response_hash": "050ebece3e893937",
       "payload": {
         "ok": true,
         "data": {
@@ -1430,12 +1430,12 @@
             "rag_cache_size": 0,
             "l2_embedding_cache_size": 55
           },
-          "latency_p95_ms": 72648.7,
+          "latency_p95_ms": 100670.6,
           "total_documents": 132,
           "total_blocks": 3611,
           "total_vectors": 3611,
           "warnings": [
-            "P95 延迟 72.6s 偏高"
+            "P95 延迟 100.7s 偏高"
           ],
           "recommendations": []
         },
@@ -1445,10 +1445,10 @@
       }
     },
     "capabilities": {
-      "timestamp": "2026-07-16T05:13:29.465655+00:00",
+      "timestamp": "2026-07-16T05:57:26.511254+00:00",
       "tool": "kb_capabilities",
       "arguments": {},
-      "elapsed_ms": 22,
+      "elapsed_ms": 24,
       "response_ok": true,
       "error_code": null,
       "response_hash": "3917a364a98f9f53",
@@ -2288,5 +2288,5 @@
   },
   "formal_db_sha_after": "dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01",
   "formal_db_unchanged": true,
-  "finished": "2026-07-16T05:21:42.821724+00:00"
+  "finished": "2026-07-16T06:11:14.471001+00:00"
 }

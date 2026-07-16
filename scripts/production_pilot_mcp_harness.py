@@ -223,7 +223,33 @@ async def run_retrieval_channel(client: Any, mode: str, limit: int = 60) -> dict
             "payload_keys": list(payload.keys()) if isinstance(payload, dict) else type(payload).__name__,
         })
     metrics = score_retrieval(rows)
-    return {"channel": mode, "n": len(rows), "metrics": metrics_to_jsonable(metrics), "rows": rows}
+    # Precision failure dump for remediation
+    failures = []
+    for row in rows:
+        exp = set(row.get("expected_ids") or []) | set(row.get("acceptable_ids") or [])
+        got5 = list(row.get("got_ids") or [])[:5]
+        if not exp:
+            continue
+        hit = len(set(got5) & exp)
+        prec = hit / 5.0
+        if prec < 0.4 or not (set(got5) & exp):
+            failures.append(
+                {
+                    "id": row.get("id"),
+                    "query": row.get("query"),
+                    "channel": mode,
+                    "precision_at_5": prec,
+                    "expected_ids": list(exp)[:10],
+                    "got_ids": got5,
+                }
+            )
+    return {
+        "channel": mode,
+        "n": len(rows),
+        "metrics": metrics_to_jsonable(metrics),
+        "rows": rows,
+        "precision_failures": failures,
+    }
 
 
 async def run_no_answer(client: Any, limit: int = 30) -> dict:
@@ -566,6 +592,11 @@ def main() -> int:
             "vector": stdio_res["vector"]["metrics"],
             "hybrid": stdio_res["hybrid"]["metrics"],
         })
+        write_jsonl(
+            ART / "precision-failures.jsonl",
+            list(stdio_res["hybrid"].get("precision_failures") or [])
+            + list(stdio_res["fts"].get("precision_failures") or []),
+        )
 
     if args.transport in ("http", "both"):
         print("Running HTTP formal suite...", flush=True)
