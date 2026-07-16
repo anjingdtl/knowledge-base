@@ -21,8 +21,21 @@ def is_current_information_query(query: str) -> bool:
 
 
 def extract_query_terms(query: str) -> set[str]:
+    """Extract query terms for coverage scoring.
+
+    Continuous Chinese runs are split into 2–4 character windows so a whole
+    sentence is not treated as a single mega-term (which never matches titles).
+    """
     q = query or ""
-    terms = set(_CJK_TERM_RE.findall(q))
+    terms: set[str] = set()
+    for run in _CJK_TERM_RE.findall(q):
+        if len(run) <= 4:
+            terms.add(run)
+            continue
+        # Prefer multi-char windows (4, then 3, then 2) for institutional nouns
+        for n in (4, 3, 2):
+            for i in range(0, len(run) - n + 1):
+                terms.add(run[i : i + n])
     terms |= {t.lower() for t in _LATIN_TERM_RE.findall(q)}
     # Drop ultra-generic terms that alone never justify an answer
     stop = {
@@ -41,8 +54,18 @@ def extract_query_terms(query: str) -> set[str]:
         "现在",
         "最新",
         "实时",
+        "主题",
+        "内容",
+        "说明",
+        "关于",
+        "进行",
+        "以及",
+        "或者",
+        "一个",
+        "这个",
+        "那个",
     }
-    return {t for t in terms if t not in stop}
+    return {t for t in terms if t not in stop and len(t) >= 2}
 
 
 def _candidate_text(item: dict) -> str:
@@ -127,6 +150,23 @@ def score_candidate_relevance(query: str, item: dict) -> dict[str, Any]:
     if phrase_coverage >= 0.5 and query_term_coverage >= 0.5:
         final = max(final, 0.45)
 
+    # Strong title evidence for institutional / policy documents:
+    # title hits multiple multi-char terms → enough to answer even with weak
+    # raw semantic scores (common when embeddings are sparse).
+    if (
+        not is_current_information_query(query)
+        and not extract_number_units(query)
+        and title_score >= 0.35
+        and query_term_coverage >= 0.35
+    ):
+        final = max(final, 0.55)
+    if (
+        not is_current_information_query(query)
+        and not extract_number_units(query)
+        and title_score >= 0.5
+    ):
+        final = max(final, 0.50)
+
     # Hard penalties
     if features.get("number_match_unit_mismatch"):
         final *= 0.35
@@ -137,7 +177,7 @@ def score_candidate_relevance(query: str, item: dict) -> dict[str, Any]:
         final = min(final, 0.25)
     # Single generic term overlap (e.g. only "营收") is not enough for a
     # specific numeric/entity question with many unused terms.
-    if terms and query_term_coverage < 0.4 and semantic_score < 0.5:
+    if terms and query_term_coverage < 0.4 and semantic_score < 0.5 and title_score < 0.35:
         final = min(final, 0.30)
 
     final = max(0.0, min(1.0, final))
