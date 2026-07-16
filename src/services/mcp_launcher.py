@@ -86,6 +86,11 @@ def _run_hidden(args: list[str], **kwargs: Any) -> subprocess.CompletedProcess[s
         kwargs["creationflags"] = (
             kwargs.get("creationflags", 0) | _CREATE_NO_WINDOW
         )
+    # Windows helpers (wmic/sc/powershell) may emit system code-page bytes.
+    # Always decode with replacement so reader threads never raise UnicodeDecodeError.
+    if kwargs.get("text") or kwargs.get("universal_newlines"):
+        kwargs.setdefault("encoding", "utf-8")
+        kwargs.setdefault("errors", "replace")
     return subprocess.run(args, **kwargs)
 
 

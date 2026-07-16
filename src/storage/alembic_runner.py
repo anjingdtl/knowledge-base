@@ -59,6 +59,8 @@ def _run_alembic_upgrade(
         env=env,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         timeout=300,
         check=False,
     )
@@ -165,6 +167,8 @@ def stamp_to_revision(
         env=env,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         timeout=120,
         check=False,
     )

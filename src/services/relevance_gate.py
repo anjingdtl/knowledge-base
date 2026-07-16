@@ -108,16 +108,25 @@ def score_candidate_relevance(query: str, item: dict) -> dict[str, Any]:
     if is_current_information_query(query):
         freshness_score = 0.1  # local corpus is not live market data
 
-    # Weighted blend — keyword-only FTS cannot dominate
+    # Weighted blend — keyword-only FTS cannot dominate weak partial hits,
+    # but full query-term coverage is strong lexical evidence.
     final = (
-        0.30 * min(1.0, max(0.0, semantic_score))
+        0.25 * min(1.0, max(0.0, semantic_score))
         + 0.15 * min(1.0, max(0.0, fts_score))
         + 0.15 * title_score
-        + 0.15 * query_term_coverage
+        + 0.25 * query_term_coverage
         + 0.10 * phrase_coverage
-        + 0.10 * numeric_unit_score
+        + 0.05 * numeric_unit_score
         + 0.05 * freshness_score
     )
+    # Strong lexical evidence: nearly all query terms appear in the candidate.
+    if query_term_coverage >= 0.8:
+        final = max(final, 0.40 + 0.25 * query_term_coverage)
+    if query_term_coverage >= 1.0 and not extract_number_units(query):
+        final = max(final, 0.55)
+    if phrase_coverage >= 0.5 and query_term_coverage >= 0.5:
+        final = max(final, 0.45)
+
     # Hard penalties
     if features.get("number_match_unit_mismatch"):
         final *= 0.35
