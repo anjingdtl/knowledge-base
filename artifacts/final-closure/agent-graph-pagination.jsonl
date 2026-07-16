@@ -1,0 +1,44 @@
+{
+  "http": {
+    "pages": [
+      {
+        "offset": 0,
+        "count": 5,
+        "next_offset": 5,
+        "truncated": true,
+        "hard_limit_reached": false
+      },
+      {
+        "offset": 5,
+        "count": 2,
+        "next_offset": null,
+        "truncated": false,
+        "hard_limit_reached": false
+      }
+    ],
+    "self_loop": false,
+    "duplicate_or_dangling": false,
+    "terminated": true
+  },
+  "stdio": {
+    "pages": [
+      {
+        "offset": 0,
+        "count": 5,
+        "next_offset": 5,
+        "truncated": true,
+        "hard_limit_reached": false
+      },
+      {
+        "offset": 5,
+        "count": 2,
+        "next_offset": null,
+        "truncated": false,
+        "hard_limit_reached": false
+      }
+    ],
+    "self_loop": false,
+    "duplicate_or_dangling": false,
+    "terminated": true
+  }
+}

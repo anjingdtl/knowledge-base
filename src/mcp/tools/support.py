@@ -8,8 +8,6 @@ import asyncio
 import functools
 import logging
 import os
-import threading
-import time
 from typing import Any, Callable, Coroutine, ParamSpec, TypeVar, cast
 
 from src.core.container import AppContainer
@@ -103,7 +101,7 @@ def content_preview(text: Any, max_len: int = 200) -> str:
 
 
 # Re-export deadline helpers so existing imports keep working.
-from src.services.deadline import (  # noqa: E402
+from src.services.deadline import (  # noqa: E402,F401
     Deadline,
     DeadlineTimeout,
     abandoned_worker_count,
@@ -112,6 +110,16 @@ from src.services.deadline import (  # noqa: E402
     remaining_deadline,
     run_with_deadline,
 )
+
+__all__ = [
+    "Deadline",
+    "DeadlineTimeout",
+    "abandoned_worker_count",
+    "check_cancelled",
+    "cooperative_sleep",
+    "remaining_deadline",
+    "run_with_deadline",
+]
 
 
 def run_async(coro: Coroutine[Any, Any, R], timeout: float | None = None) -> R:

@@ -77,9 +77,12 @@ def test_structured_and_execute_query_consistent(patch_container):
 
     a2 = structured_query(query_dsl=dsl, limit=5, offset=5)
     b2 = execute_query(query_spec=dsl, type="structured", limit=5, offset=5)
+    assert b2["ok"] is True
     ids_a = {r["id"] for r in a["data"]}
     ids_a2 = {r["id"] for r in a2["data"]}
+    ids_b2 = {r["id"] for r in b2["data"]}
     assert ids_a.isdisjoint(ids_a2)
+    assert ids_a2 == ids_b2
     assert len(ids_a | ids_a2) == 10
 
 

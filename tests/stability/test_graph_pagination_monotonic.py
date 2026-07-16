@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 
 from src.services.graph_pagination import paginate_graph_result
-from tests.stability.conftest import assert_no_dangling_edges, assert_paths_in_nodes, node_id
+from tests.stability.conftest import assert_no_dangling_edges, assert_paths_in_nodes
 
 
 def test_paginate_next_offset_monotonic_unit():

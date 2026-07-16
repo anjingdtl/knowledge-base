@@ -1,0 +1,74 @@
+{
+  "http": {
+    "wall_clock_ms": 3173,
+    "ask": {
+      "ok": true,
+      "data_keys": [
+        "answer",
+        "answer_mode",
+        "block_contexts",
+        "claims_used",
+        "conflict_disclosed",
+        "conflicts",
+        "fallbacks",
+        "query_plan",
+        "raw_evidence_used",
+        "route",
+        "source_graph",
+        "sources",
+        "trace_id",
+        "warnings",
+        "wiki_context"
+      ],
+      "answer_mode": "no_answer",
+      "answer_empty": true,
+      "route": {
+        "mode": "timeout",
+        "explanation": "ask timed out after 3s",
+        "configured_timeout_ms": 3000,
+        "elapsed_ms": 3166,
+        "cancelled": false,
+        "background_work_may_continue": true
+      },
+      "meta": {}
+    },
+    "ping_after_ok": true,
+    "search_after_ok": true
+  },
+  "stdio": {
+    "wall_clock_ms": 3162,
+    "ask": {
+      "ok": true,
+      "data_keys": [
+        "answer",
+        "answer_mode",
+        "block_contexts",
+        "claims_used",
+        "conflict_disclosed",
+        "conflicts",
+        "fallbacks",
+        "query_plan",
+        "raw_evidence_used",
+        "route",
+        "source_graph",
+        "sources",
+        "trace_id",
+        "warnings",
+        "wiki_context"
+      ],
+      "answer_mode": "no_answer",
+      "answer_empty": true,
+      "route": {
+        "mode": "timeout",
+        "explanation": "ask timed out after 3s",
+        "configured_timeout_ms": 3000,
+        "elapsed_ms": 3159,
+        "cancelled": false,
+        "background_work_may_continue": true
+      },
+      "meta": {}
+    },
+    "ping_after_ok": true,
+    "search_after_ok": true
+  }
+}

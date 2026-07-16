@@ -1,0 +1,54 @@
+{
+  "stdio": {
+    "n": 107,
+    "Recall@1": 0.9065,
+    "Recall@5": 0.9065,
+    "MRR": 0.9065,
+    "nDCG@10": 0.9065,
+    "No-answer Accuracy": 1.0,
+    "False-answer Rate": 0.0,
+    "Citation completeness": 1.0,
+    "Citation correctness": 1.0,
+    "数字单位准确率": 1.0
+  },
+  "http": {
+    "n": 107,
+    "Recall@1": 0.9065,
+    "Recall@5": 0.9065,
+    "MRR": 0.9065,
+    "nDCG@10": 0.9065,
+    "No-answer Accuracy": 1.0,
+    "False-answer Rate": 0.0,
+    "Citation completeness": 1.0,
+    "Citation correctness": 1.0,
+    "数字单位准确率": 1.0
+  },
+  "Transport 一致率": 1.0,
+  "formal_db_size_before": 346054656,
+  "formal_db_size_after": 346054656,
+  "formal_db_unchanged": true,
+  "thresholds": {
+    "Recall@5": 0.9,
+    "MRR": 0.85,
+    "nDCG@10": 0.85,
+    "No-answer Accuracy": 0.85,
+    "False-answer Rate": 0.1,
+    "Citation completeness": 1.0,
+    "Citation correctness": 0.95,
+    "数字单位准确率": 0.95,
+    "Transport 一致率": 0.95
+  },
+  "combined": {
+    "Recall@5": 0.9065,
+    "MRR": 0.9065,
+    "nDCG@10": 0.9065,
+    "No-answer Accuracy": 1.0,
+    "False-answer Rate": 0.0,
+    "Citation completeness": 1.0,
+    "Citation correctness": 1.0,
+    "数字单位准确率": 1.0,
+    "Transport 一致率": 1.0
+  },
+  "failures": [],
+  "pass": true
+}

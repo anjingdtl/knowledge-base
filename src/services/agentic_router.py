@@ -484,11 +484,14 @@ class AgenticRouter:
         if llm is None:
             return None
         try:
+            # Hard timeout so route_query never blocks on a hung provider socket.
+            route_timeout = float(Config.get("rag.route_llm_timeout", 5) or 5)
             response = llm.chat(
                 messages=[
                     {"role": "system", "content": _SYSTEM_PROMPT},
                     {"role": "user", "content": question},
                 ],
+                timeout=route_timeout,
             )
             text = response.strip()
             if text.startswith("```"):

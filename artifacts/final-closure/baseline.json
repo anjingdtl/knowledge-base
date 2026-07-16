@@ -5,8 +5,8 @@
   "fastmcp_version": "3.2.4",
   "sqlite_version": "3.50.4",
   "config_path": "D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\config.yaml",
-  "stdio_tool_count": "err:'ExposedToolDefinitions' object is not iterable",
-  "http_tool_count": "err:'ExposedToolDefinitions' object is not iterable",
+  "stdio_tool_count": 49,
+  "http_tool_count": 49,
   "tool_profile_intended": {
     "tool_profile": "full",
     "experimental_tools_enabled": true,
@@ -19,5 +19,6 @@
   "thread_count": 1,
   "rss_memory_mb": null,
   "branch": "fix/mcp-final-closure",
-  "note": "Phase 0 baseline; production code not modified in this commit. Real MCP connectivity evidence in phase0-mcp-probe.json."
+  "note": "Phase 0 baseline; production code not modified in this commit. Real MCP connectivity evidence in phase0-mcp-probe.json.",
+  "phase0_probe": "artifacts/final-closure/phase0-mcp-probe.json"
 }
