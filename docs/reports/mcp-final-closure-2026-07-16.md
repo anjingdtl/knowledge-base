@@ -212,3 +212,13 @@ https://github.com/anjingdtl/knowledge-base/actions/runs/29471039139
 **达到生产试点门槛**
 
 依据：Timeout 诚实取消/slot 恢复、Graph 硬上限无自循环、Structured 分页正确、No-answer/FTS 门禁、107 Golden 指标达标、stdio/http 真实 MCP 与路由 100%、HTTP 并发成功率 100%、2h HTTP + 30m stdio 长稳 errors=0、工程门禁全绿、正式库未污染。
+
+---
+
+## 复查说明（2026-07-16 最终验收收尾）
+
+> **本报告结论暂不作为最终生产试点验收依据。**  
+> 状态：**生产试点验收进行中**（或：可进入受控内测，生产试点结论待最终验收）。  
+>
+> 复查原因：Golden 数据大量缺少独立人工 ground truth；`expected_ids` 为空时 Recall/MRR/nDCG 可能自动满分；Citation/数字单位/路由指标分母失真；正式向量索引路径与覆盖率未完成可信验收；真实 Provider 并发与进程级终止未闭环。  
+> 历史原始证据与运行日志保留不变；最终结论以 `docs/reports/mcp-production-pilot-final-validation-YYYY-MM-DD.md` 为准。
