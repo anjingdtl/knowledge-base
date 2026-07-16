@@ -6,7 +6,7 @@
 
 [\[English\]](README.md)
 
-[![Version](https://img.shields.io/badge/version-1.10.4-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.5-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,16 +36,16 @@ ShineHe Knowledge 是**本地优先的 AI Agent 知识服务**。
 
 ## 当前健康状态
 
-**v1.10.4** — 生产试点评估体系 + 检索/路由质量修复：
+**v1.10.5** — 可审计评估基础与真实 Provider/Routing 执行：
 
-- **人工 Ground Truth 试点评估** — retrieval / no-answer / numeric / routing / citation 数据集 + 指标分母校正
-- **检索质量** — knowledge_id 去重；复合数字单位；库内标题强证据（减少假拒答）
-- **路由** — `file_type` 结构化规则；hybrid 分析意图优先于偶然 tag structured
-- **稳定性** — 非协作 Provider 进程可终止；超时风暴后 isolation 重置；正式向量路径统一
-- **诚实试点结论** — Recall/MRR/Citation 改善；Precision@5 / nDCG / Numeric 仍未达生产试点门槛（可受控内测）
-- 相比 v1.10.3 **无 Schema / Alembic 变更**
+- **可审计 Ground Truth 流程** — 规则候选、双人人工审核、严格冻结发布三层分离
+- **冻结安全** — 正式评估只读 `frozen/`；未审核或有争议样本不能进入 Ground Truth
+- **真实 Routing Harness** — 原样执行 Agent 推荐参数，明确区分 empty、timeout、validation、transport 与任务完成
+- **正式 Provider 隔离** — 非流式 LLM、Embedding、API/本地 Reranker 均使用受限且可终止的进程 worker
+- **诚实发布状态** — 196 条候选仍需真实双人审核；冻结 Ground Truth 为空，当前不能进入独立全量验收
+- 相比 v1.10.4 **无 Schema / Alembic 变更**；正式 `data/kb.db` 未变化
 
-详见 [v1.10.4 发布说明](docs/release/v1.10.4-release-notes.md)、[生产试点验收报告](docs/reports/mcp-production-pilot-final-validation-2026-07-16.md)、[PROGRESS](PROGRESS.md)，以及 [v1.10.3](docs/release/v1.10.3-release-notes.md) · [v1.10.2](docs/release/v1.10.2-release-notes.md) · [v1.10.1](docs/release/v1.10.1-release-notes.md)。
+详见 [v1.10.5 发布说明](docs/release/v1.10.5-release-notes.md)、[三项基础问题修复报告](docs/reports/production-pilot-foundation-three-fixes-2026-07-16.md)、[PROGRESS](PROGRESS.md)，以及 [v1.10.4](docs/release/v1.10.4-release-notes.md) · [v1.10.3](docs/release/v1.10.3-release-notes.md) · [v1.10.2](docs/release/v1.10.2-release-notes.md)。
 
 ## 30 秒演示
 

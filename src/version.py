@@ -1,2 +1,2 @@
-VERSION = "1.10.4"
+VERSION = "1.10.5"
 APP_NAME = "ShineHeKnowledge"

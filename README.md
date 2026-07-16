@@ -6,7 +6,7 @@
 
 [\[中文文档\]](README_zh.md)
 
-[![Version](https://img.shields.io/badge/version-1.10.4-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.5-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,16 +36,16 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 
 ## Current Health
 
-**v1.10.4** — Production-pilot evaluation harness + retrieval/routing quality fixes:
+**v1.10.5** — Auditable evaluation foundations and truthful provider/routing execution:
 
-- **Human-grounded pilot eval** — retrieval / no-answer / numeric / routing / citation datasets + corrected metric denominators
-- **Search quality** — knowledge_id dedupe; compound numeric units; strong in-corpus title evidence (fewer false no-answers)
-- **Routing** — structured `file_type` rules; hybrid analytic intent over incidental tag structured
-- **Stability** — provider process termination on non-cooperative calls; isolation reset after timeout storms; formal vector path unified
-- **Honest pilot status** — Recall/MRR/Citation improved; Precision@5 / nDCG / Numeric still below pilot gate (controlled internal use OK)
-- No Schema / Alembic change vs v1.10.3
+- **Auditable Ground Truth workflow** — rule-assisted candidates are separated from primary/secondary human review and strict frozen publication
+- **Freeze safety** — formal evaluation reads only `frozen/`; unreviewed or disputed samples cannot enter Ground Truth
+- **Truthful Routing Harness** — preserves Agent-recommended arguments exactly and separates empty, timeout, validation, transport, and task completion outcomes
+- **Production Provider isolation** — non-streaming LLM, Embedding, API/local Reranker calls use bounded, terminable process workers
+- **Honest release status** — the 196 candidates still require real double review; frozen Ground Truth remains empty, so independent full acceptance is not allowed
+- No Schema / Alembic change vs v1.10.4; formal `data/kb.db` remained unchanged
 
-See [v1.10.4 Release Notes](docs/release/v1.10.4-release-notes.md), [pilot validation report](docs/reports/mcp-production-pilot-final-validation-2026-07-16.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.10.3](docs/release/v1.10.3-release-notes.md) · [v1.10.2](docs/release/v1.10.2-release-notes.md) · [v1.10.1](docs/release/v1.10.1-release-notes.md)).
+See [v1.10.5 Release Notes](docs/release/v1.10.5-release-notes.md), [three-foundation-fix report](docs/reports/production-pilot-foundation-three-fixes-2026-07-16.md), [PROGRESS](PROGRESS.md), and earlier notes ([v1.10.4](docs/release/v1.10.4-release-notes.md) · [v1.10.3](docs/release/v1.10.3-release-notes.md) · [v1.10.2](docs/release/v1.10.2-release-notes.md)).
 
 ## 30-Second Demo
 

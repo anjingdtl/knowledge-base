@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-EXPECTED_VERSION = "1.10.3"
+EXPECTED_VERSION = "1.10.5"
 
 
 def _read_version_py() -> str:

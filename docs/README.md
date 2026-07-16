@@ -2,7 +2,16 @@
 
 ## 当前方向（权威入口）
 
-> 产品版本：**v1.10.4** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+> 产品版本：**v1.10.5** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+
+### 三项基础问题修复（2026-07-16，已发布 v1.10.5）
+
+- [v1.10.5 发布说明](release/v1.10.5-release-notes.md)
+- [三项基础问题修复报告](reports/production-pilot-foundation-three-fixes-2026-07-16.md)
+- [Provider 运行时隔离图](architecture/provider-runtime-isolation-map.md)
+- [执行 Spec](superpowers/specs/ShineHeKB_三项基础问题修复_Spec.md)
+- 产物目录：`artifacts/foundation-three-fixes/`
+- **结论：196 条候选尚未完成真实双人审核，不能进入独立全量验收**
 
 ### 生产试点最终验收（2026-07-16，已发布 v1.10.4）
 

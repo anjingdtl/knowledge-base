@@ -1,14 +1,49 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-16  
-> 源码版本：`src/version.py` 中的 **`1.10.4`**  
-> 当前分支：`master`（已合入生产试点评估与门禁修复，Tag `v1.10.4`）  
-> 发布说明：`docs/release/v1.10.4-release-notes.md`  
-> 验收报告：`docs/reports/mcp-production-pilot-final-validation-2026-07-16.md`  
-> Delta 报告：`docs/reports/mcp-production-pilot-gate-remediation-2026-07-16.md`  
-> 最终验收 Spec：`docs/superpowers/specs/ShineHeKB_MCP_生产试点前最终验收收尾_Spec.md`  
-> 迁移：v1.10.4 无 Schema 变更；最近迁移见 `docs/migration/v1.10-to-v1.10.1-migration-governance.md`  
-> 当前方向：**v1.10.4 已发布** — 生产试点评估体系与检索/路由质量修复已合入；**生产试点门槛未达标**（Precision@5 / nDCG / Numeric），可受控内测，后续继续门禁修复。
+> 源码版本：`src/version.py` 中的 **`1.10.5`**
+>
+> 当前分支：`master`（三项基础问题修复机制已合入，Tag `v1.10.5`）
+>
+> 发布说明：`docs/release/v1.10.5-release-notes.md`
+>
+> 修复报告：`docs/reports/production-pilot-foundation-three-fixes-2026-07-16.md`
+>
+> 执行 Spec：`docs/superpowers/specs/ShineHeKB_三项基础问题修复_Spec.md`
+>
+> 迁移：v1.10.5 无 Schema 变更；正式 `data/kb.db` 大小与 SHA256 未变化
+>
+> 当前方向：**v1.10.5 已发布** — Routing 与 Provider 基础问题已修复，Ground Truth 审核/冻结机制已建立；但 **196 条候选的真实双人审核仍为 0%**，因此不能进入独立全量验收，也未声称达到生产试点门槛。
+
+---
+
+## 三项基础问题修复：v1.10.5（已发布，2026-07-16）
+
+执行依据：`docs/superpowers/specs/ShineHeKB_三项基础问题修复_Spec.md`
+
+修复报告：`docs/reports/production-pilot-foundation-three-fixes-2026-07-16.md`
+
+Provider 隔离图：`docs/architecture/provider-runtime-isolation-map.md`
+
+发布说明：`docs/release/v1.10.5-release-notes.md`
+
+证据目录：`artifacts/foundation-three-fixes/`
+状态：**机制与代码修复已发布；真实双人审核未完成，不能进入独立全量验收。**
+
+完成项：
+
+- ✅ 规则生成数据只进入 `candidates/`，不再标记为 `human`
+- ✅ 人工审核 CLI、双人审核/裁决元数据与严格 freeze 门禁
+- ✅ 正式评估 Harness 只读 `frozen/`
+- ✅ Routing 推荐参数原样执行；empty/timeout/validation/transport/task completion 真实分类
+- ✅ search → graph_traverse 显式推荐 flow 支持
+- ✅ 正式非流式 LLM、Embedding、API/本地 Reranker 接入可终止进程隔离
+- ✅ 50 次 timeout 资源回落、正常恢复、PID 终止、secret 脱敏测试
+- ✅ 定向与相关回归、Ruff、mypy 通过；正式 DB 未变化
+- ❌ Ground Truth：196 candidates / 0 reviewed / 0 frozen，双人审核完成率 0%
+- ❌ 未执行最终生产试点全量指标与门槛判断
+
+最终判定：`三个基础问题尚未全部修复，不能进入全量验收`。
 
 ---
 
