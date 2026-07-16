@@ -1,0 +1,7 @@
+{"gate": "Precision@5", "value": 0.235, "threshold": 0.7, "status": "FAIL"}
+{"gate": "Numeric Top1", "value": 0.667, "threshold": 0.95, "status": "FAIL"}
+{"gate": "Numeric Top3 doc recall", "value": 0.267, "threshold": 0.95, "status": "FAIL"}
+{"gate": "Routing Mode", "value": 0.45, "threshold": 0.95, "status": "FAIL"}
+{"gate": "Citation", "value": null, "threshold": 0.95, "status": "NOT_TESTED", "reason": "all ask samples no_answer"}
+{"gate": "Remote CI", "status": "NOT_TESTED"}
+{"gate": "Formal soak 30m/15m", "status": "NOT_TESTED"}

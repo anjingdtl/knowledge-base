@@ -86,31 +86,36 @@ def score_retrieval(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 break
         mrr_sum += rr
 
-        # binary relevance graded: expected=2, acceptable=1
+        # Graded relevance: expected=2, acceptable=1 (nDCG@10, clamped to [0,1])
+        exp_set = set(expected)
+        acc_set = set(acceptable)
         grades = []
         for gid in top10:
-            if gid in set(expected):
+            if gid in exp_set:
                 grades.append(2.0)
-            elif gid in set(acceptable):
+            elif gid in acc_set:
                 grades.append(1.0)
             else:
                 grades.append(0.0)
-        ideal = sorted(
-            [2.0] * min(len(expected), 10)
-            + [1.0] * min(max(0, len(acceptable)), max(0, 10 - min(len(expected), 10))),
-            reverse=True,
-        )[:10]
-        while len(ideal) < len(grades):
-            ideal.append(0.0)
-        ideal = ideal[: len(grades)]
-        idcg = _dcg(ideal) if any(ideal) else 0.0
+        ideal_grades = [2.0] * min(len(exp_set), 10) + [1.0] * min(
+            len(acc_set - exp_set), max(0, 10 - min(len(exp_set), 10))
+        )
+        ideal_grades = sorted(ideal_grades, reverse=True)[:10]
+        # Pad ideal to same length as grades for fair DCG comparison
+        if len(ideal_grades) < len(grades):
+            ideal_grades = ideal_grades + [0.0] * (len(grades) - len(ideal_grades))
+        idcg = _dcg(ideal_grades)
         dcg = _dcg(grades)
         ndcg_d += 1
-        ndcg_sum += (dcg / idcg) if idcg > 0 else 0.0
+        if idcg > 0:
+            ndcg_sum += min(1.0, max(0.0, dcg / idcg))
+        else:
+            ndcg_sum += 0.0
 
+        # Precision@5: fraction of top-5 that are relevant (expected∪acceptable)
         p5_d += 1
         if top5:
-            p5_sum += len(set(top5) & rel) / min(5, len(top5))
+            p5_sum += len(set(top5) & rel) / 5.0
         else:
             p5_sum += 0.0
 

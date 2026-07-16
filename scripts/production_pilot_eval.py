@@ -18,11 +18,8 @@ sys.path.insert(0, str(ROOT))
 
 from evals.production_pilot_metrics import (  # noqa: E402
     metrics_to_jsonable,
-    score_answer_citations,
     score_no_answer,
-    score_numeric_units,
     score_retrieval,
-    score_routing,
 )
 
 DATA = ROOT / "tests" / "eval" / "datasets"

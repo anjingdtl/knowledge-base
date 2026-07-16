@@ -86,6 +86,24 @@ jobs:
           PYTHONPATH: .
           SHINEHE_ENFORCE_MIGRATION_GATE: "1"
 
+  production-pilot-metric-gate:
+    name: Production Pilot Metric Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install -e ".[dev]"
+      - name: Dataset schema + metric denominators + process isolation
+        run: |
+          pytest tests/eval/ \
+            tests/stability/test_formal_vector_path_resolution.py \
+            tests/stability/test_provider_process_termination.py \
+            tests/stability/test_real_provider_timeout_recovery.py -q --tb=short
+        env:
+          PYTHONPATH: .
+
   contract-gate:
     name: Contract Gate (Search/Ask/Wiki/MCP)
     runs-on: ubuntu-latest

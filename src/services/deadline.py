@@ -273,7 +273,7 @@ def run_in_terminable_process(
 
         if status == "ok":
             _circuit_failures = 0
-            return payload  # type: ignore[return-value]
+            return payload  # type: ignore[return-value, no-any-return]
         if isinstance(payload, BaseException):
             raise payload
         raise RuntimeError(str(payload))

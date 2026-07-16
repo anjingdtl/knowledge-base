@@ -1,0 +1,53 @@
+name: Real Provider Validation
+
+# Manual only — incurs API cost. Secrets must be configured in repo settings.
+on:
+  workflow_dispatch:
+    inputs:
+      answer_limit:
+        description: "Answer citation sample size"
+        required: false
+        default: "5"
+      retrieval_limit:
+        description: "Retrieval sample size"
+        required: false
+        default: "30"
+
+jobs:
+  real-provider:
+    name: Real Provider MCP (optional)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install Qt runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libegl1
+      - run: pip install -e ".[dev,api,parsers,wiki]"
+      - name: Metric + isolation unit gates (no paid API)
+        run: |
+          pytest tests/eval/ tests/stability/test_formal_vector_path_resolution.py \
+            tests/stability/test_provider_process_termination.py \
+            tests/stability/test_real_provider_timeout_recovery.py -q --tb=short
+        env:
+          PYTHONPATH: .
+      - name: Real provider formal suite (if secrets present)
+        if: ${{ secrets.SHINEHE_LLM_API_KEY != '' && secrets.SHINEHE_EMBEDDING_API_KEY != '' }}
+        run: |
+          python scripts/production_pilot_mcp_harness.py \
+            --transport both \
+            --answer-limit ${{ github.event.inputs.answer_limit }} \
+            --retrieval-limit ${{ github.event.inputs.retrieval_limit }} \
+            --skip-concurrency
+        env:
+          PYTHONPATH: .
+          SHINEHE_LLM_API_KEY: ${{ secrets.SHINEHE_LLM_API_KEY }}
+          SHINEHE_EMBEDDING_API_KEY: ${{ secrets.SHINEHE_EMBEDDING_API_KEY }}
+      - name: Upload redacted artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-pilot-artifacts
+          path: artifacts/production-pilot-final-validation/
+          if-no-files-found: ignore

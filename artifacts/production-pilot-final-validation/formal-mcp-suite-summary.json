@@ -1,0 +1,2292 @@
+{
+  "started": "2026-07-16T05:04:11.232111+00:00",
+  "formal_db_sha_before": "dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01",
+  "home": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\pilot_formal_qgen_b0m",
+  "stdio": {
+    "fts": {
+      "recall_at_1": {
+        "numerator": 39,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "recall_at_5": {
+        "numerator": 39,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "mrr_at_10": {
+        "numerator": 39.0,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "ndcg_at_10": {
+        "numerator": 122.73272399682634,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 3.0683180999206585
+      },
+      "precision_at_5": {
+        "numerator": 10.483333333333327,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.26208333333333317
+      },
+      "forbidden_hit_rate_at_5": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 0,
+        "value": null
+      },
+      "excluded_empty_expected": 0
+    },
+    "vector": {
+      "recall_at_1": {
+        "numerator": 19,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.95
+      },
+      "recall_at_5": {
+        "numerator": 19,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.95
+      },
+      "mrr_at_10": {
+        "numerator": 19.0,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.95
+      },
+      "ndcg_at_10": {
+        "numerator": 56.09544188656391,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 2.8047720943281957
+      },
+      "precision_at_5": {
+        "numerator": 5.283333333333334,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.2641666666666667
+      },
+      "forbidden_hit_rate_at_5": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 0,
+        "value": null
+      },
+      "excluded_empty_expected": 0
+    },
+    "hybrid": {
+      "recall_at_1": {
+        "numerator": 39,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "recall_at_5": {
+        "numerator": 39,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "mrr_at_10": {
+        "numerator": 39.0,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "ndcg_at_10": {
+        "numerator": 122.73272399682634,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 3.0683180999206585
+      },
+      "precision_at_5": {
+        "numerator": 10.483333333333327,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.26208333333333317
+      },
+      "forbidden_hit_rate_at_5": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 0,
+        "value": null
+      },
+      "excluded_empty_expected": 0
+    },
+    "no_answer": {
+      "no_answer_accuracy": {
+        "numerator": 15,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 1.0
+      },
+      "false_answer_rate": {
+        "numerator": 0,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.0
+      },
+      "false_positive_retrieval_rate": {
+        "numerator": 0,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.0
+      },
+      "false_negative_refusal_rate": {
+        "numerator": 0,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.0
+      }
+    },
+    "numeric": {
+      "top1_unit_accuracy": {
+        "numerator": 10,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.6666666666666666
+      },
+      "top3_expected_document_recall": {
+        "numerator": 4,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.26666666666666666
+      },
+      "forbidden_unit_confusion_rate": {
+        "numerator": 0,
+        "denominator": 3,
+        "excluded": 0,
+        "value": 0.0
+      },
+      "forbidden_document_hit_rate": {
+        "numerator": 1,
+        "denominator": 3,
+        "excluded": 0,
+        "value": 0.3333333333333333
+      },
+      "numeric_no_answer_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 0,
+        "value": null
+      }
+    },
+    "routing": {
+      "mode_accuracy": {
+        "numerator": 9,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.45
+      },
+      "recommended_tool_accuracy": {
+        "numerator": 8,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.4
+      },
+      "argument_contract_accuracy": {
+        "numerator": 15,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.75
+      },
+      "protocol_execution_rate": {
+        "numerator": 20,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 1.0
+      },
+      "task_completion_rate": {
+        "numerator": 9,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.45
+      },
+      "timeout_free_completion_rate": {
+        "numerator": 9,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.45
+      }
+    },
+    "answers": {
+      "answer_completion_rate": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "citation_completeness": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "citation_correctness": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "unsupported_claim_rate": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "source_precision": {
+        "numerator": 0.0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "source_recall": {
+        "numerator": 0.0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "source_id_validity": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "excluded_no_answer_or_no_facts": 5
+    }
+  },
+  "stdio_health": {
+    "health": {
+      "timestamp": "2026-07-16T05:04:14.871120+00:00",
+      "tool": "kb_health_check",
+      "arguments": {},
+      "elapsed_ms": 432,
+      "response_ok": true,
+      "error_code": null,
+      "response_hash": "f964da6710deada5",
+      "payload": {
+        "ok": true,
+        "data": {
+          "status": "degraded",
+          "api_keys": {
+            "llm": true,
+            "embedding": true,
+            "reranker": true
+          },
+          "vector_coverage": 1.0,
+          "tag_coverage": 1.0,
+          "cache_hit_rate": {
+            "embedding": null,
+            "embedding_samples": 0,
+            "rag_cache_size": 0,
+            "l2_embedding_cache_size": 55
+          },
+          "latency_p95_ms": 72648.7,
+          "total_documents": 132,
+          "total_blocks": 3611,
+          "total_vectors": 3611,
+          "warnings": [
+            "P95 延迟 72.6s 偏高"
+          ],
+          "recommendations": []
+        },
+        "meta": {
+          "status": "degraded"
+        }
+      }
+    },
+    "capabilities": {
+      "timestamp": "2026-07-16T05:04:14.897015+00:00",
+      "tool": "kb_capabilities",
+      "arguments": {},
+      "elapsed_ms": 25,
+      "response_ok": true,
+      "error_code": null,
+      "response_hash": "3917a364a98f9f53",
+      "payload": {
+        "ok": true,
+        "data": {
+          "name": "ShineHeKnowledge",
+          "version": "1.10.3",
+          "envelope": {
+            "ok": "bool — 成功/失败判断字段",
+            "data": "any — 成功时的负载",
+            "error": "{code, message, details} — 失败时的稳定错误码",
+            "meta": "分页/截断/计数等元信息",
+            "operation_id": "写操作的 audit log id（与 get_operation_log 配合）",
+            "dry_run": "预览变更不执行"
+          },
+          "error_codes": {
+            "NOT_FOUND": "资源不存在",
+            "VALIDATION_ERROR": "参数校验失败",
+            "PERMISSION_DENIED": "路径越权",
+            "INGEST_FAILED": "文件/URL 导入失败",
+            "INTERNAL_ERROR": "内部异常",
+            "WIKI_DISABLED": "Wiki 未启用",
+            "JOB_NOT_FOUND": "任务不存在",
+            "QUERY_PARSE_ERROR": "DSL/JSON 解析失败"
+          },
+          "limits": {
+            "default_page_size": 20,
+            "max_payload_bytes": 1000000,
+            "max_graph_nodes": 200,
+            "max_graph_depth": 3
+          },
+          "tool_metadata": {
+            "ping": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "连通性检测"
+            },
+            "kb_capabilities": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "能力清单"
+            },
+            "search": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "语义搜索"
+            },
+            "search_fulltext": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "全文搜索"
+            },
+            "ask": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "RAG 问答"
+            },
+            "ask_with_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "QuerySpec RAG"
+            },
+            "create": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "创建知识"
+            },
+            "read": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "读取知识"
+            },
+            "update": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "更新知识"
+            },
+            "delete": {
+              "group": "kb",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "删除知识"
+            },
+            "restore_knowledge": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "恢复知识"
+            },
+            "reindex_all": {
+              "group": "kb",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "重建索引"
+            },
+            "list_knowledge": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "列出知识"
+            },
+            "index_path": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "索引路径"
+            },
+            "tags": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "列出标签"
+            },
+            "ingest_file": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "导入文件"
+            },
+            "ingest_url": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "导入网页"
+            },
+            "create_ingest_job": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "创建导入任务"
+            },
+            "get_job": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "查询任务"
+            },
+            "list_jobs": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "列出任务"
+            },
+            "cancel_job": {
+              "group": "kb",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "取消任务"
+            },
+            "route_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "路由分析"
+            },
+            "execute_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "执行 DSL"
+            },
+            "structured_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "结构化查询"
+            },
+            "explain_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "查询解释"
+            },
+            "get_source_graph": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "来源图谱"
+            },
+            "preview_operation": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "预览操作"
+            },
+            "save_to_wiki": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "保存到 Wiki"
+            },
+            "wiki_lint": {
+              "group": "wiki",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "Wiki 体检"
+            },
+            "fix_dead_references": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "修复死链"
+            },
+            "wiki_submit_review": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "提交审核"
+            },
+            "wiki_approve": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "审批通过"
+            },
+            "wiki_reject": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "驳回"
+            },
+            "wiki_deprecate": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "弃用"
+            },
+            "wiki_workflow_history": {
+              "group": "wiki",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "工作流历史"
+            },
+            "wiki_list_versions": {
+              "group": "wiki",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "版本列表"
+            },
+            "wiki_restore_version": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "恢复版本"
+            },
+            "delete_wiki_page": {
+              "group": "wiki",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "删除 Wiki 页面"
+            },
+            "graph_traverse": {
+              "group": "graph",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "图遍历"
+            },
+            "query_operation_logs": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "查询日志"
+            },
+            "get_operation_log": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "获取日志"
+            },
+            "undo_operation": {
+              "group": "ops",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "撤销操作"
+            },
+            "list_recent_operations": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "最近操作"
+            },
+            "kb_health_check": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "健康检查"
+            },
+            "auto_tag": {
+              "group": "ops",
+              "side_effect": "write",
+              "requires_confirmation": true,
+              "short_desc": "自动打标"
+            },
+            "get_trace": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "链路追踪"
+            },
+            "create_async_job": {
+              "group": "ops",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "创建任务"
+            },
+            "get_async_job": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "获取任务"
+            },
+            "list_async_jobs": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "列出任务"
+            },
+            "cancel_async_job": {
+              "group": "ops",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "取消任务"
+            },
+            "remember_fact": {
+              "group": "memory",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "记住事实"
+            },
+            "recall_facts": {
+              "group": "memory",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "搜索记忆"
+            },
+            "update_project_context": {
+              "group": "memory",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "更新项目上下文"
+            },
+            "search_decisions": {
+              "group": "memory",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "搜索决策"
+            },
+            "summarize_recent_changes": {
+              "group": "memory",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "变更总结"
+            },
+            "extract_tasks_from_doc": {
+              "group": "memory",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "提取任务"
+            },
+            "delete_memory": {
+              "group": "memory",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "删除记忆"
+            }
+          },
+          "tool_aliases": {},
+          "tools": [
+            {
+              "name": "create",
+              "description": "创建新的知识条目。自动将内容分块并向量化索引，支持纯文本、Markdown 和代码。[耗时提示：短文本 2-5 秒，长文本可能 10-30 秒]"
+            },
+            {
+              "name": "update",
+              "description": "更新已有知识条目的标题、内容或标签。修改内容时会自动创建版本快照。"
+            },
+            {
+              "name": "delete",
+              "description": "删除指定的知识条目（Phase 4 默认软删除，可通过 restore_knowledge 或 undo_operation 恢复）。"
+            },
+            {
+              "name": "restore_knowledge",
+              "description": "恢复已软删除的知识条目。清除 deleted_at 并将 MD 文件从 .trash 移回 pages/。"
+            },
+            {
+              "name": "query_operation_logs",
+              "description": "查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。"
+            },
+            {
+              "name": "preview_operation",
+              "description": "预览写操作而不实际执行。支持 update / create / delete / ingest_file / reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。"
+            },
+            {
+              "name": "get_operation_log",
+              "description": "按 ID 查询单条操作日志的完整记录。"
+            },
+            {
+              "name": "undo_operation",
+              "description": "撤销某条操作。支持 update（恢复字段）/ create（软删新条目）/ delete（恢复软删条目）/ ingest（恢复）。返回 undone_log_id。"
+            },
+            {
+              "name": "list_recent_operations",
+              "description": "列出最近的操作日志（query_operation_logs 的便捷别名）。按 created_at DESC 排序，缺省 limit=20。"
+            },
+            {
+              "name": "ping",
+              "description": "轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。"
+            },
+            {
+              "name": "search",
+              "description": "基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。支持 top_k 或 limit；低相关结果触发 no_match 门禁。"
+            },
+            {
+              "name": "search_fulltext",
+              "description": "基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。"
+            },
+            {
+              "name": "ask",
+              "description": "向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。返回结构化 payload：answer / sources / source_graph / route / query_plan / block_contexts / warnings。[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），超时返回空 answer + warnings，建议客户端超时 ≥ 100s]"
+            },
+            {
+              "name": "read",
+              "description": "根据 ID 读取知识/块/Claim/Wiki 页面。支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。"
+            },
+            {
+              "name": "structured_query",
+              "description": "执行结构化查询 DSL，返回知识条目列表"
+            },
+            {
+              "name": "explain_query",
+              "description": "解释结构化查询的执行计划与匹配条件"
+            },
+            {
+              "name": "route_query",
+              "description": "路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + traverse + explanation + evidence_preview（top 3 匹配标题+摘要），Agent 据此决定下一步走 execute_query 还是 ask_with_query。"
+            },
+            {
+              "name": "execute_query",
+              "description": "执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。"
+            },
+            {
+              "name": "ask_with_query",
+              "description": "用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\n调用要求：至少提供 question 或 search_query 其中一个。\n简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\n标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\n高级模式：传 question + query_spec（支持复杂过滤条件），query_spec 格式如 {\"filter\": {\"fulltext\": \"关键词\"}, \"sort\": {\"by\": \"updated_at\", \"order\": \"desc\"}}，filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。"
+            },
+            {
+              "name": "kb_capabilities",
+              "description": "查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。"
+            },
+            {
+              "name": "kb_health_check",
+              "description": "知识库健康度检查。返回 API Key 状态、向量覆盖率、标签覆盖率、缓存命中率、P95 延迟等指标。用于运维巡检和问题定位。"
+            },
+            {
+              "name": "auto_tag",
+              "description": "使用 LLM 对无标签知识条目进行批量自动打标。提升标签覆盖率，改善按标签过滤和结构化查询的效果。建议在标签覆盖率 < 50% 时执行。"
+            },
+            {
+              "name": "get_trace",
+              "description": "根据 trace_id 查询链路追踪记录，包含各管线阶段耗时、结果数等信息。用于问题定位和性能分析。"
+            },
+            {
+              "name": "graph_traverse",
+              "description": "从给定节点遍历知识图谱（多跳、限深度、限节点数）。start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'；使用 limit 限制返回节点数。"
+            },
+            {
+              "name": "get_source_graph",
+              "description": "根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。"
+            },
+            {
+              "name": "reindex_all",
+              "description": "重建所有知识条目的索引（向量索引、全文索引、分块索引）。当搜索结果异常时使用。[耗时提示：可能数分钟，大量数据时建议客户端超时 ≥ 300s]"
+            },
+            {
+              "name": "list_knowledge",
+              "description": "列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。"
+            },
+            {
+              "name": "index_path",
+              "description": "索引文件或目录。扫描本地路径，自动检测变更并增量导入知识库。支持 PDF、DOCX、TXT、Markdown、代码等文档类型。"
+            },
+            {
+              "name": "tags",
+              "description": "获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。"
+            },
+            {
+              "name": "ingest_file",
+              "description": "解析本地文件并将其内容导入知识库。支持 PDF、DOCX、TXT、Markdown、HTML、图片及代码文件。Excel 文件的每个工作表独立导入。大文件自动转异步任务（返回 job_id）。[耗时提示：小文件 3-10 秒，大文件自动转异步]"
+            },
+            {
+              "name": "ingest_url",
+              "description": "解析网页 URL 并将其内容导入知识库。支持 HTTP/HTTPS 网页，自动提取正文文本。"
+            },
+            {
+              "name": "create_ingest_job",
+              "description": "创建异步文件/URL导入任务。大文件自动走此路径（也可手动调用强制异步）。返回 job_id 供 get_job 轮询。"
+            },
+            {
+              "name": "get_job",
+              "description": "查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。"
+            },
+            {
+              "name": "list_jobs",
+              "description": "列出异步任务，可按状态/类型筛选。"
+            },
+            {
+              "name": "cancel_job",
+              "description": "取消异步任务。仅 pending/running 状态的任务可取消。"
+            },
+            {
+              "name": "remember_fact",
+              "description": "记住一个事实、决策、上下文或任务，持久化到知识库。相同 key 会覆盖已有记忆。category: fact | decision | context | task。"
+            },
+            {
+              "name": "recall_facts",
+              "description": "搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。"
+            },
+            {
+              "name": "update_project_context",
+              "description": "更新项目整体上下文描述。Agent 可通过此工具记住项目的全局背景信息，在后续会话中通过 recall_facts(query='project_context') 回忆。"
+            },
+            {
+              "name": "search_decisions",
+              "description": "搜索架构/技术决策记录（category=decision 的记忆）。"
+            },
+            {
+              "name": "summarize_recent_changes",
+              "description": "总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。"
+            },
+            {
+              "name": "extract_tasks_from_doc",
+              "description": "从文档内容或已索引知识条目中提取待办任务。使用 LLM 智能提取（如可用），否则启发式匹配。请且仅提供 content 或 doc_id；自动将提取结果存为 category=task 的记忆。"
+            },
+            {
+              "name": "delete_memory",
+              "description": "删除 agent_memory 记忆条目（按 item_id 或 key，二选一）。"
+            },
+            {
+              "name": "create_async_job",
+              "description": "创建异步任务"
+            },
+            {
+              "name": "get_async_job",
+              "description": "获取异步任务状态"
+            },
+            {
+              "name": "list_async_jobs",
+              "description": "列出异步任务"
+            },
+            {
+              "name": "cancel_async_job",
+              "description": "取消异步任务"
+            },
+            {
+              "name": "wiki_lint",
+              "description": "对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。"
+            },
+            {
+              "name": "wiki_workflow_history",
+              "description": "获取 Wiki 页面工作流历史"
+            },
+            {
+              "name": "wiki_list_versions",
+              "description": "获取 Wiki 页面版本列表"
+            }
+          ],
+          "runtime_diagnostics": {
+            "api_keys": {
+              "llm": true,
+              "embedding": true,
+              "reranker": true
+            },
+            "vector_index": {
+              "blocks": 9984,
+              "vectors": 3843,
+              "coverage": 0.3849,
+              "sqlite_vec_ok": true,
+              "error": "",
+              "recommendation": "向量索引覆盖率偏低，请执行 reindex_all 回填缺失 block embeddings"
+            },
+            "vector": {
+              "enabled": true,
+              "backend": "sqlite-vec",
+              "storage_path": "D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\data",
+              "block_count": 9984,
+              "vector_count": 3843,
+              "coverage": 0.3849,
+              "model": "BAAI/bge-m3",
+              "dimension": 1024,
+              "healthy": false,
+              "degraded_reason": "vector_coverage_low:0.3849",
+              "recommendation": "向量索引覆盖率偏低，请执行 reindex_all 回填缺失 block embeddings"
+            }
+          },
+          "recommended_flows": {
+            "research": [
+              "kb_capabilities",
+              "route_query",
+              "execute_query|ask",
+              "get_source_graph",
+              "read"
+            ],
+            "safe_update": [
+              "read",
+              "preview_operation",
+              "update(dry_run=true)",
+              "update",
+              "get_operation_log"
+            ],
+            "import": [
+              "kb_capabilities",
+              "create_ingest_job|ingest_file",
+              "get_job",
+              "structured_query",
+              "ask"
+            ],
+            "import_large": [
+              "kb_capabilities",
+              "create_ingest_job",
+              "get_job",
+              "structured_query",
+              "ask"
+            ],
+            "qna": [
+              "route_query",
+              "ask(include_graph=true, include_context=true)",
+              "get_source_graph",
+              "read"
+            ],
+            "agent_memory": [
+              "remember_fact",
+              "recall_facts",
+              "update_project_context",
+              "search_decisions",
+              "summarize_recent_changes"
+            ]
+          },
+          "tool_profile": "full",
+          "write_policy": "deny",
+          "experimental_tools_enabled": true,
+          "visible_tools": [
+            "ask",
+            "ask_with_query",
+            "auto_tag",
+            "cancel_async_job",
+            "cancel_job",
+            "create",
+            "create_async_job",
+            "create_ingest_job",
+            "delete",
+            "delete_memory",
+            "execute_query",
+            "explain_query",
+            "extract_tasks_from_doc",
+            "get_async_job",
+            "get_job",
+            "get_operation_log",
+            "get_source_graph",
+            "get_trace",
+            "graph_traverse",
+            "index_path",
+            "ingest_file",
+            "ingest_url",
+            "kb_capabilities",
+            "kb_health_check",
+            "list_async_jobs",
+            "list_jobs",
+            "list_knowledge",
+            "list_recent_operations",
+            "ping",
+            "preview_operation",
+            "query_operation_logs",
+            "read",
+            "recall_facts",
+            "reindex_all",
+            "remember_fact",
+            "restore_knowledge",
+            "route_query",
+            "search",
+            "search_decisions",
+            "search_fulltext",
+            "structured_query",
+            "summarize_recent_changes",
+            "tags",
+            "undo_operation",
+            "update",
+            "update_project_context",
+            "wiki_lint",
+            "wiki_list_versions",
+            "wiki_workflow_history"
+          ],
+          "hidden_groups": [],
+          "legacy_aliases_enabled": false,
+          "knowledge_mode": "verified",
+          "raw_retrieval": true,
+          "verified_wiki_read": true,
+          "wiki_authoring": false,
+          "wiki_serving_status": "empty",
+          "fallback": "raw_retrieval",
+          "registered_tools": [
+            "ask",
+            "ask_with_query",
+            "auto_tag",
+            "cancel_async_job",
+            "cancel_job",
+            "create",
+            "create_async_job",
+            "create_ingest_job",
+            "delete",
+            "delete_memory",
+            "execute_query",
+            "explain_query",
+            "extract_tasks_from_doc",
+            "get_async_job",
+            "get_job",
+            "get_operation_log",
+            "get_source_graph",
+            "get_trace",
+            "graph_traverse",
+            "index_path",
+            "ingest_file",
+            "ingest_url",
+            "kb_capabilities",
+            "kb_health_check",
+            "list_async_jobs",
+            "list_jobs",
+            "list_knowledge",
+            "list_recent_operations",
+            "ping",
+            "preview_operation",
+            "query_operation_logs",
+            "read",
+            "recall_facts",
+            "reindex_all",
+            "remember_fact",
+            "restore_knowledge",
+            "route_query",
+            "search",
+            "search_decisions",
+            "search_fulltext",
+            "structured_query",
+            "summarize_recent_changes",
+            "tags",
+            "undo_operation",
+            "update",
+            "update_project_context",
+            "wiki_lint",
+            "wiki_list_versions",
+            "wiki_workflow_history"
+          ],
+          "hidden_by_policy": [
+            "delete_wiki_page",
+            "fix_dead_references",
+            "save_to_wiki",
+            "wiki_approve",
+            "wiki_deprecate",
+            "wiki_reject",
+            "wiki_restore_version",
+            "wiki_submit_review"
+          ],
+          "serving_claim_statuses": [
+            "active"
+          ],
+          "citation_layers": [
+            "claim",
+            "raw_evidence"
+          ],
+          "recommended_flow": [
+            "search",
+            "read",
+            "ask"
+          ]
+        }
+      }
+    },
+    "tool_count": 49,
+    "tools": [
+      "ask",
+      "ask_with_query",
+      "auto_tag",
+      "cancel_async_job",
+      "cancel_job",
+      "create",
+      "create_async_job",
+      "create_ingest_job",
+      "delete",
+      "delete_memory",
+      "execute_query",
+      "explain_query",
+      "extract_tasks_from_doc",
+      "get_async_job",
+      "get_job",
+      "get_operation_log",
+      "get_source_graph",
+      "get_trace",
+      "graph_traverse",
+      "index_path",
+      "ingest_file",
+      "ingest_url",
+      "kb_capabilities",
+      "kb_health_check",
+      "list_async_jobs",
+      "list_jobs",
+      "list_knowledge",
+      "list_recent_operations",
+      "ping",
+      "preview_operation",
+      "query_operation_logs",
+      "read",
+      "recall_facts",
+      "reindex_all",
+      "remember_fact",
+      "restore_knowledge",
+      "route_query",
+      "search",
+      "search_decisions",
+      "search_fulltext",
+      "structured_query",
+      "summarize_recent_changes",
+      "tags",
+      "undo_operation",
+      "update",
+      "update_project_context",
+      "wiki_lint",
+      "wiki_list_versions",
+      "wiki_workflow_history"
+    ]
+  },
+  "http": {
+    "fts": {
+      "recall_at_1": {
+        "numerator": 39,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "recall_at_5": {
+        "numerator": 39,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "mrr_at_10": {
+        "numerator": 39.0,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "ndcg_at_10": {
+        "numerator": 122.73272399682634,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 3.0683180999206585
+      },
+      "precision_at_5": {
+        "numerator": 10.483333333333327,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.26208333333333317
+      },
+      "forbidden_hit_rate_at_5": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 0,
+        "value": null
+      },
+      "excluded_empty_expected": 0
+    },
+    "vector": {
+      "recall_at_1": {
+        "numerator": 19,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.95
+      },
+      "recall_at_5": {
+        "numerator": 19,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.95
+      },
+      "mrr_at_10": {
+        "numerator": 19.0,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.95
+      },
+      "ndcg_at_10": {
+        "numerator": 56.09544188656391,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 2.8047720943281957
+      },
+      "precision_at_5": {
+        "numerator": 5.283333333333334,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.2641666666666667
+      },
+      "forbidden_hit_rate_at_5": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 0,
+        "value": null
+      },
+      "excluded_empty_expected": 0
+    },
+    "hybrid": {
+      "recall_at_1": {
+        "numerator": 39,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "recall_at_5": {
+        "numerator": 39,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "mrr_at_10": {
+        "numerator": 39.0,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.975
+      },
+      "ndcg_at_10": {
+        "numerator": 122.73272399682634,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 3.0683180999206585
+      },
+      "precision_at_5": {
+        "numerator": 10.483333333333327,
+        "denominator": 40,
+        "excluded": 0,
+        "value": 0.26208333333333317
+      },
+      "forbidden_hit_rate_at_5": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 0,
+        "value": null
+      },
+      "excluded_empty_expected": 0
+    },
+    "no_answer": {
+      "no_answer_accuracy": {
+        "numerator": 15,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 1.0
+      },
+      "false_answer_rate": {
+        "numerator": 0,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.0
+      },
+      "false_positive_retrieval_rate": {
+        "numerator": 0,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.0
+      },
+      "false_negative_refusal_rate": {
+        "numerator": 0,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.0
+      }
+    },
+    "numeric": {
+      "top1_unit_accuracy": {
+        "numerator": 10,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.6666666666666666
+      },
+      "top3_expected_document_recall": {
+        "numerator": 4,
+        "denominator": 15,
+        "excluded": 0,
+        "value": 0.26666666666666666
+      },
+      "forbidden_unit_confusion_rate": {
+        "numerator": 0,
+        "denominator": 3,
+        "excluded": 0,
+        "value": 0.0
+      },
+      "forbidden_document_hit_rate": {
+        "numerator": 1,
+        "denominator": 3,
+        "excluded": 0,
+        "value": 0.3333333333333333
+      },
+      "numeric_no_answer_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 0,
+        "value": null
+      }
+    },
+    "routing": {
+      "mode_accuracy": {
+        "numerator": 9,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.45
+      },
+      "recommended_tool_accuracy": {
+        "numerator": 8,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.4
+      },
+      "argument_contract_accuracy": {
+        "numerator": 15,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.75
+      },
+      "protocol_execution_rate": {
+        "numerator": 20,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 1.0
+      },
+      "task_completion_rate": {
+        "numerator": 9,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.45
+      },
+      "timeout_free_completion_rate": {
+        "numerator": 9,
+        "denominator": 20,
+        "excluded": 0,
+        "value": 0.45
+      }
+    },
+    "answers": {
+      "answer_completion_rate": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "citation_completeness": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "citation_correctness": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "unsupported_claim_rate": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "source_precision": {
+        "numerator": 0.0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "source_recall": {
+        "numerator": 0.0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "source_id_validity": {
+        "numerator": 0,
+        "denominator": 0,
+        "excluded": 5,
+        "value": null
+      },
+      "excluded_no_answer_or_no_facts": 5
+    }
+  },
+  "http_health": {
+    "health": {
+      "timestamp": "2026-07-16T05:13:29.442683+00:00",
+      "tool": "kb_health_check",
+      "arguments": {},
+      "elapsed_ms": 401,
+      "response_ok": true,
+      "error_code": null,
+      "response_hash": "f964da6710deada5",
+      "payload": {
+        "ok": true,
+        "data": {
+          "status": "degraded",
+          "api_keys": {
+            "llm": true,
+            "embedding": true,
+            "reranker": true
+          },
+          "vector_coverage": 1.0,
+          "tag_coverage": 1.0,
+          "cache_hit_rate": {
+            "embedding": null,
+            "embedding_samples": 0,
+            "rag_cache_size": 0,
+            "l2_embedding_cache_size": 55
+          },
+          "latency_p95_ms": 72648.7,
+          "total_documents": 132,
+          "total_blocks": 3611,
+          "total_vectors": 3611,
+          "warnings": [
+            "P95 延迟 72.6s 偏高"
+          ],
+          "recommendations": []
+        },
+        "meta": {
+          "status": "degraded"
+        }
+      }
+    },
+    "capabilities": {
+      "timestamp": "2026-07-16T05:13:29.465655+00:00",
+      "tool": "kb_capabilities",
+      "arguments": {},
+      "elapsed_ms": 22,
+      "response_ok": true,
+      "error_code": null,
+      "response_hash": "3917a364a98f9f53",
+      "payload": {
+        "ok": true,
+        "data": {
+          "name": "ShineHeKnowledge",
+          "version": "1.10.3",
+          "envelope": {
+            "ok": "bool — 成功/失败判断字段",
+            "data": "any — 成功时的负载",
+            "error": "{code, message, details} — 失败时的稳定错误码",
+            "meta": "分页/截断/计数等元信息",
+            "operation_id": "写操作的 audit log id（与 get_operation_log 配合）",
+            "dry_run": "预览变更不执行"
+          },
+          "error_codes": {
+            "NOT_FOUND": "资源不存在",
+            "VALIDATION_ERROR": "参数校验失败",
+            "PERMISSION_DENIED": "路径越权",
+            "INGEST_FAILED": "文件/URL 导入失败",
+            "INTERNAL_ERROR": "内部异常",
+            "WIKI_DISABLED": "Wiki 未启用",
+            "JOB_NOT_FOUND": "任务不存在",
+            "QUERY_PARSE_ERROR": "DSL/JSON 解析失败"
+          },
+          "limits": {
+            "default_page_size": 20,
+            "max_payload_bytes": 1000000,
+            "max_graph_nodes": 200,
+            "max_graph_depth": 3
+          },
+          "tool_metadata": {
+            "ping": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "连通性检测"
+            },
+            "kb_capabilities": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "能力清单"
+            },
+            "search": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "语义搜索"
+            },
+            "search_fulltext": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "全文搜索"
+            },
+            "ask": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "RAG 问答"
+            },
+            "ask_with_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "QuerySpec RAG"
+            },
+            "create": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "创建知识"
+            },
+            "read": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "读取知识"
+            },
+            "update": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "更新知识"
+            },
+            "delete": {
+              "group": "kb",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "删除知识"
+            },
+            "restore_knowledge": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "恢复知识"
+            },
+            "reindex_all": {
+              "group": "kb",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "重建索引"
+            },
+            "list_knowledge": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "列出知识"
+            },
+            "index_path": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "索引路径"
+            },
+            "tags": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "列出标签"
+            },
+            "ingest_file": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "导入文件"
+            },
+            "ingest_url": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "导入网页"
+            },
+            "create_ingest_job": {
+              "group": "kb",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "创建导入任务"
+            },
+            "get_job": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "查询任务"
+            },
+            "list_jobs": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "列出任务"
+            },
+            "cancel_job": {
+              "group": "kb",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "取消任务"
+            },
+            "route_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "路由分析"
+            },
+            "execute_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "执行 DSL"
+            },
+            "structured_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "结构化查询"
+            },
+            "explain_query": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "查询解释"
+            },
+            "get_source_graph": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "来源图谱"
+            },
+            "preview_operation": {
+              "group": "kb",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "预览操作"
+            },
+            "save_to_wiki": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "保存到 Wiki"
+            },
+            "wiki_lint": {
+              "group": "wiki",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "Wiki 体检"
+            },
+            "fix_dead_references": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "修复死链"
+            },
+            "wiki_submit_review": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "提交审核"
+            },
+            "wiki_approve": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "审批通过"
+            },
+            "wiki_reject": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "驳回"
+            },
+            "wiki_deprecate": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "弃用"
+            },
+            "wiki_workflow_history": {
+              "group": "wiki",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "工作流历史"
+            },
+            "wiki_list_versions": {
+              "group": "wiki",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "版本列表"
+            },
+            "wiki_restore_version": {
+              "group": "wiki",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "恢复版本"
+            },
+            "delete_wiki_page": {
+              "group": "wiki",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "删除 Wiki 页面"
+            },
+            "graph_traverse": {
+              "group": "graph",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "图遍历"
+            },
+            "query_operation_logs": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "查询日志"
+            },
+            "get_operation_log": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "获取日志"
+            },
+            "undo_operation": {
+              "group": "ops",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "撤销操作"
+            },
+            "list_recent_operations": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "最近操作"
+            },
+            "kb_health_check": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "健康检查"
+            },
+            "auto_tag": {
+              "group": "ops",
+              "side_effect": "write",
+              "requires_confirmation": true,
+              "short_desc": "自动打标"
+            },
+            "get_trace": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "链路追踪"
+            },
+            "create_async_job": {
+              "group": "ops",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "创建任务"
+            },
+            "get_async_job": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "获取任务"
+            },
+            "list_async_jobs": {
+              "group": "ops",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "列出任务"
+            },
+            "cancel_async_job": {
+              "group": "ops",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "取消任务"
+            },
+            "remember_fact": {
+              "group": "memory",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "记住事实"
+            },
+            "recall_facts": {
+              "group": "memory",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "搜索记忆"
+            },
+            "update_project_context": {
+              "group": "memory",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "更新项目上下文"
+            },
+            "search_decisions": {
+              "group": "memory",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "搜索决策"
+            },
+            "summarize_recent_changes": {
+              "group": "memory",
+              "side_effect": "read",
+              "requires_confirmation": false,
+              "short_desc": "变更总结"
+            },
+            "extract_tasks_from_doc": {
+              "group": "memory",
+              "side_effect": "write",
+              "requires_confirmation": false,
+              "short_desc": "提取任务"
+            },
+            "delete_memory": {
+              "group": "memory",
+              "side_effect": "destructive",
+              "requires_confirmation": true,
+              "short_desc": "删除记忆"
+            }
+          },
+          "tool_aliases": {},
+          "tools": [
+            {
+              "name": "create",
+              "description": "创建新的知识条目。自动将内容分块并向量化索引，支持纯文本、Markdown 和代码。[耗时提示：短文本 2-5 秒，长文本可能 10-30 秒]"
+            },
+            {
+              "name": "update",
+              "description": "更新已有知识条目的标题、内容或标签。修改内容时会自动创建版本快照。"
+            },
+            {
+              "name": "delete",
+              "description": "删除指定的知识条目（Phase 4 默认软删除，可通过 restore_knowledge 或 undo_operation 恢复）。"
+            },
+            {
+              "name": "restore_knowledge",
+              "description": "恢复已软删除的知识条目。清除 deleted_at 并将 MD 文件从 .trash 移回 pages/。"
+            },
+            {
+              "name": "query_operation_logs",
+              "description": "查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。"
+            },
+            {
+              "name": "preview_operation",
+              "description": "预览写操作而不实际执行。支持 update / create / delete / ingest_file / reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。"
+            },
+            {
+              "name": "get_operation_log",
+              "description": "按 ID 查询单条操作日志的完整记录。"
+            },
+            {
+              "name": "undo_operation",
+              "description": "撤销某条操作。支持 update（恢复字段）/ create（软删新条目）/ delete（恢复软删条目）/ ingest（恢复）。返回 undone_log_id。"
+            },
+            {
+              "name": "list_recent_operations",
+              "description": "列出最近的操作日志（query_operation_logs 的便捷别名）。按 created_at DESC 排序，缺省 limit=20。"
+            },
+            {
+              "name": "ping",
+              "description": "轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。"
+            },
+            {
+              "name": "search",
+              "description": "基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。支持 top_k 或 limit；低相关结果触发 no_match 门禁。"
+            },
+            {
+              "name": "search_fulltext",
+              "description": "基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。"
+            },
+            {
+              "name": "ask",
+              "description": "向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。返回结构化 payload：answer / sources / source_graph / route / query_plan / block_contexts / warnings。[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），超时返回空 answer + warnings，建议客户端超时 ≥ 100s]"
+            },
+            {
+              "name": "read",
+              "description": "根据 ID 读取知识/块/Claim/Wiki 页面。支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。"
+            },
+            {
+              "name": "structured_query",
+              "description": "执行结构化查询 DSL，返回知识条目列表"
+            },
+            {
+              "name": "explain_query",
+              "description": "解释结构化查询的执行计划与匹配条件"
+            },
+            {
+              "name": "route_query",
+              "description": "路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + traverse + explanation + evidence_preview（top 3 匹配标题+摘要），Agent 据此决定下一步走 execute_query 还是 ask_with_query。"
+            },
+            {
+              "name": "execute_query",
+              "description": "执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。"
+            },
+            {
+              "name": "ask_with_query",
+              "description": "用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\n调用要求：至少提供 question 或 search_query 其中一个。\n简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\n标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\n高级模式：传 question + query_spec（支持复杂过滤条件），query_spec 格式如 {\"filter\": {\"fulltext\": \"关键词\"}, \"sort\": {\"by\": \"updated_at\", \"order\": \"desc\"}}，filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。"
+            },
+            {
+              "name": "kb_capabilities",
+              "description": "查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。"
+            },
+            {
+              "name": "kb_health_check",
+              "description": "知识库健康度检查。返回 API Key 状态、向量覆盖率、标签覆盖率、缓存命中率、P95 延迟等指标。用于运维巡检和问题定位。"
+            },
+            {
+              "name": "auto_tag",
+              "description": "使用 LLM 对无标签知识条目进行批量自动打标。提升标签覆盖率，改善按标签过滤和结构化查询的效果。建议在标签覆盖率 < 50% 时执行。"
+            },
+            {
+              "name": "get_trace",
+              "description": "根据 trace_id 查询链路追踪记录，包含各管线阶段耗时、结果数等信息。用于问题定位和性能分析。"
+            },
+            {
+              "name": "graph_traverse",
+              "description": "从给定节点遍历知识图谱（多跳、限深度、限节点数）。start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'；使用 limit 限制返回节点数。"
+            },
+            {
+              "name": "get_source_graph",
+              "description": "根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。"
+            },
+            {
+              "name": "reindex_all",
+              "description": "重建所有知识条目的索引（向量索引、全文索引、分块索引）。当搜索结果异常时使用。[耗时提示：可能数分钟，大量数据时建议客户端超时 ≥ 300s]"
+            },
+            {
+              "name": "list_knowledge",
+              "description": "列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。"
+            },
+            {
+              "name": "index_path",
+              "description": "索引文件或目录。扫描本地路径，自动检测变更并增量导入知识库。支持 PDF、DOCX、TXT、Markdown、代码等文档类型。"
+            },
+            {
+              "name": "tags",
+              "description": "获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。"
+            },
+            {
+              "name": "ingest_file",
+              "description": "解析本地文件并将其内容导入知识库。支持 PDF、DOCX、TXT、Markdown、HTML、图片及代码文件。Excel 文件的每个工作表独立导入。大文件自动转异步任务（返回 job_id）。[耗时提示：小文件 3-10 秒，大文件自动转异步]"
+            },
+            {
+              "name": "ingest_url",
+              "description": "解析网页 URL 并将其内容导入知识库。支持 HTTP/HTTPS 网页，自动提取正文文本。"
+            },
+            {
+              "name": "create_ingest_job",
+              "description": "创建异步文件/URL导入任务。大文件自动走此路径（也可手动调用强制异步）。返回 job_id 供 get_job 轮询。"
+            },
+            {
+              "name": "get_job",
+              "description": "查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。"
+            },
+            {
+              "name": "list_jobs",
+              "description": "列出异步任务，可按状态/类型筛选。"
+            },
+            {
+              "name": "cancel_job",
+              "description": "取消异步任务。仅 pending/running 状态的任务可取消。"
+            },
+            {
+              "name": "remember_fact",
+              "description": "记住一个事实、决策、上下文或任务，持久化到知识库。相同 key 会覆盖已有记忆。category: fact | decision | context | task。"
+            },
+            {
+              "name": "recall_facts",
+              "description": "搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。"
+            },
+            {
+              "name": "update_project_context",
+              "description": "更新项目整体上下文描述。Agent 可通过此工具记住项目的全局背景信息，在后续会话中通过 recall_facts(query='project_context') 回忆。"
+            },
+            {
+              "name": "search_decisions",
+              "description": "搜索架构/技术决策记录（category=decision 的记忆）。"
+            },
+            {
+              "name": "summarize_recent_changes",
+              "description": "总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。"
+            },
+            {
+              "name": "extract_tasks_from_doc",
+              "description": "从文档内容或已索引知识条目中提取待办任务。使用 LLM 智能提取（如可用），否则启发式匹配。请且仅提供 content 或 doc_id；自动将提取结果存为 category=task 的记忆。"
+            },
+            {
+              "name": "delete_memory",
+              "description": "删除 agent_memory 记忆条目（按 item_id 或 key，二选一）。"
+            },
+            {
+              "name": "create_async_job",
+              "description": "创建异步任务"
+            },
+            {
+              "name": "get_async_job",
+              "description": "获取异步任务状态"
+            },
+            {
+              "name": "list_async_jobs",
+              "description": "列出异步任务"
+            },
+            {
+              "name": "cancel_async_job",
+              "description": "取消异步任务"
+            },
+            {
+              "name": "wiki_lint",
+              "description": "对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。"
+            },
+            {
+              "name": "wiki_workflow_history",
+              "description": "获取 Wiki 页面工作流历史"
+            },
+            {
+              "name": "wiki_list_versions",
+              "description": "获取 Wiki 页面版本列表"
+            }
+          ],
+          "runtime_diagnostics": {
+            "api_keys": {
+              "llm": true,
+              "embedding": true,
+              "reranker": true
+            },
+            "vector_index": {
+              "blocks": 9984,
+              "vectors": 3843,
+              "coverage": 0.3849,
+              "sqlite_vec_ok": true,
+              "error": "",
+              "recommendation": "向量索引覆盖率偏低，请执行 reindex_all 回填缺失 block embeddings"
+            },
+            "vector": {
+              "enabled": true,
+              "backend": "sqlite-vec",
+              "storage_path": "D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\data",
+              "block_count": 9984,
+              "vector_count": 3843,
+              "coverage": 0.3849,
+              "model": "BAAI/bge-m3",
+              "dimension": 1024,
+              "healthy": false,
+              "degraded_reason": "vector_coverage_low:0.3849",
+              "recommendation": "向量索引覆盖率偏低，请执行 reindex_all 回填缺失 block embeddings"
+            }
+          },
+          "recommended_flows": {
+            "research": [
+              "kb_capabilities",
+              "route_query",
+              "execute_query|ask",
+              "get_source_graph",
+              "read"
+            ],
+            "safe_update": [
+              "read",
+              "preview_operation",
+              "update(dry_run=true)",
+              "update",
+              "get_operation_log"
+            ],
+            "import": [
+              "kb_capabilities",
+              "create_ingest_job|ingest_file",
+              "get_job",
+              "structured_query",
+              "ask"
+            ],
+            "import_large": [
+              "kb_capabilities",
+              "create_ingest_job",
+              "get_job",
+              "structured_query",
+              "ask"
+            ],
+            "qna": [
+              "route_query",
+              "ask(include_graph=true, include_context=true)",
+              "get_source_graph",
+              "read"
+            ],
+            "agent_memory": [
+              "remember_fact",
+              "recall_facts",
+              "update_project_context",
+              "search_decisions",
+              "summarize_recent_changes"
+            ]
+          },
+          "tool_profile": "full",
+          "write_policy": "deny",
+          "experimental_tools_enabled": true,
+          "visible_tools": [
+            "ask",
+            "ask_with_query",
+            "auto_tag",
+            "cancel_async_job",
+            "cancel_job",
+            "create",
+            "create_async_job",
+            "create_ingest_job",
+            "delete",
+            "delete_memory",
+            "execute_query",
+            "explain_query",
+            "extract_tasks_from_doc",
+            "get_async_job",
+            "get_job",
+            "get_operation_log",
+            "get_source_graph",
+            "get_trace",
+            "graph_traverse",
+            "index_path",
+            "ingest_file",
+            "ingest_url",
+            "kb_capabilities",
+            "kb_health_check",
+            "list_async_jobs",
+            "list_jobs",
+            "list_knowledge",
+            "list_recent_operations",
+            "ping",
+            "preview_operation",
+            "query_operation_logs",
+            "read",
+            "recall_facts",
+            "reindex_all",
+            "remember_fact",
+            "restore_knowledge",
+            "route_query",
+            "search",
+            "search_decisions",
+            "search_fulltext",
+            "structured_query",
+            "summarize_recent_changes",
+            "tags",
+            "undo_operation",
+            "update",
+            "update_project_context",
+            "wiki_lint",
+            "wiki_list_versions",
+            "wiki_workflow_history"
+          ],
+          "hidden_groups": [],
+          "legacy_aliases_enabled": false,
+          "knowledge_mode": "verified",
+          "raw_retrieval": true,
+          "verified_wiki_read": true,
+          "wiki_authoring": false,
+          "wiki_serving_status": "empty",
+          "fallback": "raw_retrieval",
+          "registered_tools": [
+            "ask",
+            "ask_with_query",
+            "auto_tag",
+            "cancel_async_job",
+            "cancel_job",
+            "create",
+            "create_async_job",
+            "create_ingest_job",
+            "delete",
+            "delete_memory",
+            "execute_query",
+            "explain_query",
+            "extract_tasks_from_doc",
+            "get_async_job",
+            "get_job",
+            "get_operation_log",
+            "get_source_graph",
+            "get_trace",
+            "graph_traverse",
+            "index_path",
+            "ingest_file",
+            "ingest_url",
+            "kb_capabilities",
+            "kb_health_check",
+            "list_async_jobs",
+            "list_jobs",
+            "list_knowledge",
+            "list_recent_operations",
+            "ping",
+            "preview_operation",
+            "query_operation_logs",
+            "read",
+            "recall_facts",
+            "reindex_all",
+            "remember_fact",
+            "restore_knowledge",
+            "route_query",
+            "search",
+            "search_decisions",
+            "search_fulltext",
+            "structured_query",
+            "summarize_recent_changes",
+            "tags",
+            "undo_operation",
+            "update",
+            "update_project_context",
+            "wiki_lint",
+            "wiki_list_versions",
+            "wiki_workflow_history"
+          ],
+          "hidden_by_policy": [
+            "delete_wiki_page",
+            "fix_dead_references",
+            "save_to_wiki",
+            "wiki_approve",
+            "wiki_deprecate",
+            "wiki_reject",
+            "wiki_restore_version",
+            "wiki_submit_review"
+          ],
+          "serving_claim_statuses": [
+            "active"
+          ],
+          "citation_layers": [
+            "claim",
+            "raw_evidence"
+          ],
+          "recommended_flow": [
+            "search",
+            "read",
+            "ask"
+          ]
+        }
+      }
+    },
+    "tool_count": 49,
+    "tools": [
+      "ask",
+      "ask_with_query",
+      "auto_tag",
+      "cancel_async_job",
+      "cancel_job",
+      "create",
+      "create_async_job",
+      "create_ingest_job",
+      "delete",
+      "delete_memory",
+      "execute_query",
+      "explain_query",
+      "extract_tasks_from_doc",
+      "get_async_job",
+      "get_job",
+      "get_operation_log",
+      "get_source_graph",
+      "get_trace",
+      "graph_traverse",
+      "index_path",
+      "ingest_file",
+      "ingest_url",
+      "kb_capabilities",
+      "kb_health_check",
+      "list_async_jobs",
+      "list_jobs",
+      "list_knowledge",
+      "list_recent_operations",
+      "ping",
+      "preview_operation",
+      "query_operation_logs",
+      "read",
+      "recall_facts",
+      "reindex_all",
+      "remember_fact",
+      "restore_knowledge",
+      "route_query",
+      "search",
+      "search_decisions",
+      "search_fulltext",
+      "structured_query",
+      "summarize_recent_changes",
+      "tags",
+      "undo_operation",
+      "update",
+      "update_project_context",
+      "wiki_lint",
+      "wiki_list_versions",
+      "wiki_workflow_history"
+    ]
+  },
+  "formal_db_sha_after": "dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01",
+  "formal_db_unchanged": true,
+  "finished": "2026-07-16T05:21:42.821724+00:00"
+}

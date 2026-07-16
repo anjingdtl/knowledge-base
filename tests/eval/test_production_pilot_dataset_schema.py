@@ -4,8 +4,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 DATA = Path(__file__).resolve().parent / "datasets"
 
 RETRIEVAL = DATA / "production_pilot_retrieval.jsonl"

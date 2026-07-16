@@ -11,11 +11,12 @@
 
 ---
 
-## 生产试点最终验收收尾（进行中，2026-07-16）
+## 生产试点最终验收收尾（完成评估，2026-07-16）
 
 执行依据：`docs/superpowers/specs/ShineHeKB_MCP_生产试点前最终验收收尾_Spec.md`  
 基线：`artifacts/production-pilot-final-validation/baseline.json`  
-状态：**生产试点验收进行中**（旧「达到生产试点门槛」结论不作为最终验收依据）。
+报告：`docs/reports/mcp-production-pilot-final-validation-2026-07-16.md`  
+状态：**未达到生产试点门槛**（可信指标已重建；Precision/Numeric/Routing/Citation 等强制项未全过）。
 
 ---
 

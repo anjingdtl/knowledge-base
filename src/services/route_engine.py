@@ -36,8 +36,10 @@ _STRUCTURED_STRONG_SIGNALS = (
 )
 
 _GRAPH_SIGNALS = (
-    "关系", "链接", "引用", "关联", "图谱",
-    "related to", "links to", "references", "graph",
+    "关系", "链接", "引用", "关联", "图谱", "依赖", "上下游",
+    "引用了哪些", "有什么关联", "被哪些文档引用", "链接到",
+    "节点", "边", "关系路径", "引用链路",
+    "related to", "links to", "references", "graph", "upstream", "downstream",
 )
 
 # 英文标签语法需冒号（tagged: X / tag: X），避免 "tagged with python"
@@ -94,17 +96,25 @@ class RuleRouter:
         L1 只返回正则匹配出的精确条件，强信号但没有精确匹配时
         交给 L2/L3 去获取更精确的 QuerySpec，而非直接 fulltext。
         """
+        # 0. Graph signals win over tag/property structured matches
+        #    (e.g. 「与企微有什么关联」 must not become tag:企微 structured)
+        if self._is_graph_query(question):
+            return {
+                "mode": "graph",
+                "query_spec": None,
+                "traverse": {"start_type": "knowledge", "max_depth": 2},
+                "explanation": "rule-based graph routing (L1 graph signals)",
+                "routing_source": "rules",
+                "fallback_used": False,
+            }
+
         # 1. 正则匹配结构化条件
         rule_spec = self._try_rule_based(question)
         if rule_spec is not None:
             return {"mode": "structured", "query_spec": rule_spec,
                     "explanation": "rule-based routing (L1)"}
 
-        # 2. 图谱信号检测
-        if self._is_graph_query(question):
-            return None  # graph 路由交给 LLM 级判断
-
-        # 3. 强信号词 → 不直接返回 fulltext，交给 L2/L3
+        # 2. 强信号词 → 不直接返回 fulltext，交给 L2/L3
         #    强信号只表示"这不是纯语义查询"，但不代表 L1 能构建精确 spec
         return None
 
@@ -474,21 +484,24 @@ class PlanetaryRouter:
             logger.debug(f"PlanetaryRouter: L1 rule resolved → {result.get('mode')}")
             return result
 
-        # Level 1.5: Graph 信号检测 + LLM 或 structured 回退
+        # Level 1.5: Graph 信号检测 — never degrade to structured
         if self._rule_router._is_graph_query(question):
             llm_result: dict | None = self._llm_router.route(question)
-            if llm_result is not None:
-                if llm_result.get("mode") == "hybrid":
-                    # LLM 主动判定为 hybrid（确保 query_spec key 存在）
-                    llm_result.setdefault("query_spec", None)
-                    return llm_result
-                # LLM 返回了 structured/graph
+            if llm_result is not None and llm_result.get("mode") in ("graph", "hybrid"):
+                llm_result.setdefault("query_spec", None)
+                if llm_result.get("mode") == "graph":
+                    llm_result.setdefault(
+                        "traverse", {"start_type": "knowledge", "max_depth": 2}
+                    )
                 return llm_result
-            # LLM 不可用：graph 查询回退到 structured fulltext
-            logging.warning("LLM unavailable for graph routing, falling back to fulltext structured")
-            return {"mode": "structured", "query_spec": QuerySpec.from_json(
-                {"filter": {"fulltext": question}}
-            ), "explanation": "graph signal detected, fallback to structured (LLM unavailable)"}
+            return {
+                "mode": "graph",
+                "query_spec": None,
+                "traverse": {"start_type": "knowledge", "max_depth": 2},
+                "explanation": "graph signal detected (rules; LLM unavailable or non-graph)",
+                "routing_source": "rules",
+                "fallback_used": True,
+            }
 
         # Level 2: EmbeddingRouter (<100ms)
         result = self._embedding_router.route(question)

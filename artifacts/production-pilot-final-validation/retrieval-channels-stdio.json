@@ -1,0 +1,119 @@
+{
+  "fts": {
+    "recall_at_1": {
+      "numerator": 39,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 0.975
+    },
+    "recall_at_5": {
+      "numerator": 39,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 0.975
+    },
+    "mrr_at_10": {
+      "numerator": 39.0,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 0.975
+    },
+    "ndcg_at_10": {
+      "numerator": 122.73272399682634,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 3.0683180999206585
+    },
+    "precision_at_5": {
+      "numerator": 10.483333333333327,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 0.26208333333333317
+    },
+    "forbidden_hit_rate_at_5": {
+      "numerator": 0,
+      "denominator": 0,
+      "excluded": 0,
+      "value": null
+    },
+    "excluded_empty_expected": 0
+  },
+  "vector": {
+    "recall_at_1": {
+      "numerator": 19,
+      "denominator": 20,
+      "excluded": 0,
+      "value": 0.95
+    },
+    "recall_at_5": {
+      "numerator": 19,
+      "denominator": 20,
+      "excluded": 0,
+      "value": 0.95
+    },
+    "mrr_at_10": {
+      "numerator": 19.0,
+      "denominator": 20,
+      "excluded": 0,
+      "value": 0.95
+    },
+    "ndcg_at_10": {
+      "numerator": 56.09544188656391,
+      "denominator": 20,
+      "excluded": 0,
+      "value": 2.8047720943281957
+    },
+    "precision_at_5": {
+      "numerator": 5.283333333333334,
+      "denominator": 20,
+      "excluded": 0,
+      "value": 0.2641666666666667
+    },
+    "forbidden_hit_rate_at_5": {
+      "numerator": 0,
+      "denominator": 0,
+      "excluded": 0,
+      "value": null
+    },
+    "excluded_empty_expected": 0
+  },
+  "hybrid": {
+    "recall_at_1": {
+      "numerator": 39,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 0.975
+    },
+    "recall_at_5": {
+      "numerator": 39,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 0.975
+    },
+    "mrr_at_10": {
+      "numerator": 39.0,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 0.975
+    },
+    "ndcg_at_10": {
+      "numerator": 122.73272399682634,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 3.0683180999206585
+    },
+    "precision_at_5": {
+      "numerator": 10.483333333333327,
+      "denominator": 40,
+      "excluded": 0,
+      "value": 0.26208333333333317
+    },
+    "forbidden_hit_rate_at_5": {
+      "numerator": 0,
+      "denominator": 0,
+      "excluded": 0,
+      "value": null
+    },
+    "excluded_empty_expected": 0
+  }
+}

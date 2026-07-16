@@ -1,0 +1,6 @@
+{
+  "background_work_may_continue": false,
+  "cancelled": true,
+  "tests": "tests/stability/test_provider_process_termination.py + test_real_provider_timeout_recovery.py",
+  "fifty_timeouts_no_abandoned_growth": true
+}

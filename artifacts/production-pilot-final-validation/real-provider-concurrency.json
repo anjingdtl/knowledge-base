@@ -1,0 +1,36 @@
+{
+  "concurrency": {
+    "1": {
+      "concurrency": 1,
+      "n": 10,
+      "success": 10,
+      "success_rate": 1.0,
+      "wall_sec": 34.66910579999967,
+      "p50": 2782,
+      "p95": 5004,
+      "p99": 5004
+    },
+    "5": {
+      "concurrency": 5,
+      "n": 20,
+      "success": 20,
+      "success_rate": 1.0,
+      "wall_sec": 66.34426510000048,
+      "p50": 15662,
+      "p95": 20730,
+      "p99": 21855
+    },
+    "10": {
+      "concurrency": 10,
+      "n": 30,
+      "success": 30,
+      "success_rate": 1.0,
+      "wall_sec": 82.91977829999814,
+      "p50": 25518,
+      "p95": 33849,
+      "p99": 33886
+    }
+  },
+  "formal_db_unchanged": true,
+  "sha": "dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01"
+}
