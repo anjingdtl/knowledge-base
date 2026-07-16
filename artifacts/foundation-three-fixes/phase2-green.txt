@@ -1,0 +1,27 @@
+Targeted routing tests:
+- 16 passed
+
+Related eval regression after Routing changes:
+- 49 passed
+
+Lint:
+- ruff check for the Routing harness, metrics, and six new test modules: passed
+
+10-row real stdio MCP candidate smoke (not Ground Truth; not final acceptance):
+- rows: 10
+- raw argument preservation: 10/10
+- classified timeout: 0
+- task completed: 2/10
+- outcomes: validation_error=7, non_empty=2, empty=1
+- empty result was preserved as empty, not non_empty
+- validation errors were preserved as failures, not task completion
+- Agent-recommended execute_query(file_type/tag) calls were executed unchanged and
+  truthfully failed MCP schema validation; no argument reconstruction was applied
+
+Graph recommended-flow execution is covered by the isolated two-step unit test:
+- search result knowledge_id mapped to graph_traverse.start_ids
+- final outcome graph_result
+- task_completed=true
+
+Formal DB sha256 remained:
+dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01

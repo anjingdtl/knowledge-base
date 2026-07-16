@@ -1,0 +1,10 @@
+Command:
+pytest tests/eval/test_routing_harness_preserves_arguments.py tests/eval/test_routing_empty_is_not_non_empty.py tests/eval/test_routing_timeout_is_not_complete.py tests/eval/test_routing_validation_error_classification.py tests/eval/test_routing_graph_flow_execution.py tests/eval/test_routing_raw_response_saved.py -q
+
+Exit code: 1
+
+Observed failure:
+- ImportError: cannot import name 'classify_task_outcome' from scripts.production_pilot_mcp_harness
+- 1 error during collection
+
+This is the required pre-implementation failing test evidence for Phase 2.

@@ -361,6 +361,10 @@ def score_routing(rows: list[dict[str, Any]]) -> dict[str, Any]:
     proto_n = proto_d = 0
     task_n = task_d = 0
     tfree_n = tfree_d = 0
+    raw_arg_n = raw_arg_d = 0
+    empty_honesty_n = empty_honesty_d = 0
+    timeout_class_n = timeout_class_d = 0
+    flow_n = flow_d = 0
 
     for row in rows:
         exp_mode = (row.get("expected_mode") or "").lower()
@@ -368,7 +372,7 @@ def score_routing(rows: list[dict[str, Any]]) -> dict[str, Any]:
         got_mode = (row.get("got_mode") or "").lower()
         got_tool = (row.get("got_tool") or "").lower()
         req_keys = list(row.get("required_argument_keys") or [])
-        args = row.get("got_arguments") or {}
+        args = row.get("got_arguments") or row.get("recommended_arguments_raw") or {}
         protocol_ok = bool(row.get("protocol_ok"))
         timed_out = bool(row.get("timed_out"))
         exp_outcome = row.get("expected_task_outcome")
@@ -383,7 +387,19 @@ def score_routing(rows: list[dict[str, Any]]) -> dict[str, Any]:
             tool_n += 1
 
         arg_d += 1
-        if all(k in args for k in req_keys):
+        argument_contract = row.get("argument_contract")
+        if isinstance(argument_contract, dict):
+            argument_ok = all(
+                bool(argument_contract.get(key))
+                for key in (
+                    "required_keys_present",
+                    "types_valid",
+                    "raw_equals_executed",
+                )
+            ) and argument_contract.get("forbidden_keys_absent", True) is not False
+        else:
+            argument_ok = all(k in args for k in req_keys)
+        if argument_ok:
             arg_n += 1
 
         proto_d += 1
@@ -391,17 +407,40 @@ def score_routing(rows: list[dict[str, Any]]) -> dict[str, Any]:
             proto_n += 1
 
         task_d += 1
-        # timeout never task complete
-        if timed_out or got_outcome == "timeout":
-            pass
-        elif got_outcome == exp_outcome:
-            task_n += 1
-        elif exp_outcome == "non_empty" and got_outcome == "non_empty":
+        successful_outcomes = {"non_empty", "no_answer", "graph_result", "structured_result"}
+        task_completed = row.get("task_completed")
+        if task_completed is None:
+            task_completed = (
+                protocol_ok
+                and not timed_out
+                and got_outcome in successful_outcomes
+            )
+        if task_completed and got_outcome == exp_outcome:
             task_n += 1
 
         tfree_d += 1
-        if (not timed_out) and got_outcome == exp_outcome and got_outcome != "timeout":
+        if (not timed_out) and task_completed and got_outcome == exp_outcome:
             tfree_n += 1
+
+        if "arguments_exact_match" in row:
+            raw_arg_d += 1
+            if row.get("arguments_exact_match") is True:
+                raw_arg_n += 1
+
+        if row.get("empty_result_detected") is True:
+            empty_honesty_d += 1
+            if got_outcome == "empty" and not row.get("task_completed"):
+                empty_honesty_n += 1
+
+        if row.get("timeout_signal_detected") is True:
+            timeout_class_d += 1
+            if timed_out and got_outcome == "timeout" and not row.get("task_completed"):
+                timeout_class_n += 1
+
+        if row.get("recommended_flow"):
+            flow_d += 1
+            if row.get("recommended_flow_executed") is True:
+                flow_n += 1
 
     return {
         "mode_accuracy": MetricValue(mode_n, mode_d),
@@ -410,6 +449,10 @@ def score_routing(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "protocol_execution_rate": MetricValue(proto_n, proto_d),
         "task_completion_rate": MetricValue(task_n, task_d),
         "timeout_free_completion_rate": MetricValue(tfree_n, tfree_d),
+        "raw_argument_preservation_rate": MetricValue(raw_arg_n, raw_arg_d),
+        "empty_result_honesty_rate": MetricValue(empty_honesty_n, empty_honesty_d),
+        "timeout_classification_accuracy": MetricValue(timeout_class_n, timeout_class_d),
+        "recommended_flow_execution_rate": MetricValue(flow_n, flow_d),
     }
 
 
