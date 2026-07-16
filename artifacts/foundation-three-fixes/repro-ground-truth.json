@@ -1,0 +1,35 @@
+{
+  "captured_at": "2026-07-16T08:33:13.2187169Z",
+  "reproduced": true,
+  "issue": "Rule-assisted dataset generation is mislabeled as human ground truth.",
+  "evidence": [
+    {
+      "path": "scripts/build_production_pilot_datasets.py",
+      "observation": "build_retrieval derives expected and acceptable IDs from title/content keyword and regex rules, then ret_row writes annotation_source=human."
+    },
+    {
+      "path": "scripts/build_production_pilot_datasets.py",
+      "observation": "build_no_answer, build_numeric, build_routing, and build_answer_citations also write annotation_source=human without reviewer identities or review timestamps."
+    },
+    {
+      "path": "tests/eval/datasets/production_pilot_answer_citations.jsonl",
+      "observation": "Generated facts have empty supporting_block_ids and no supporting_quotes."
+    }
+  ],
+  "dataset_source_counts": {
+    "retrieval": {"count": 63, "human": 63},
+    "no_answer": {"count": 32, "human": 32},
+    "numeric_units": {"count": 28, "human": 28},
+    "routing": {"count": 45, "human": 45},
+    "answer_citations": {"count": 28, "human": 28}
+  },
+  "missing_audit_controls": [
+    "candidate/reviewed/frozen role separation",
+    "primary reviewer",
+    "secondary reviewer",
+    "ISO-8601 review timestamps",
+    "evidence_checked title/body decisions",
+    "adjudication gate",
+    "freeze snapshot validation"
+  ]
+}

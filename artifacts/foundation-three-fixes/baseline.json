@@ -1,0 +1,36 @@
+{
+  "captured_at": "2026-07-16T08:33:13.2187169Z",
+  "baseline_commit_sha": "c43fe37d058555031707cf354c4b76a71e3496e1",
+  "version": "1.10.4",
+  "branch": "fix/production-pilot-foundation-three",
+  "python_version": "3.14.3",
+  "formal_db_path": "D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\data\\kb.db",
+  "formal_db_size": 346054656,
+  "formal_db_sha256": "dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01",
+  "retrieval_dataset_count": 63,
+  "no_answer_dataset_count": 32,
+  "numeric_dataset_count": 28,
+  "routing_dataset_count": 45,
+  "answer_citation_dataset_count": 28,
+  "current_annotation_source_counts": {
+    "retrieval": {"human": 63},
+    "no_answer": {"human": 32},
+    "numeric_units": {"human": 28},
+    "routing": {"human": 45},
+    "answer_citations": {"human": 28}
+  },
+  "current_provider_timeout_path": {
+    "ask": "src/mcp/tools/retrieval.py:_do_ask -> run_with_deadline(runner, total_timeout), implicit isolate=thread",
+    "llm": "src/answering/generation.py:Generator.make_generate_fn -> LLMService.chat_with_usage/chat, direct synchronous SDK call",
+    "embedding": "src/services/embedding.py:EmbeddingService.embed_batch -> OpenAI embeddings.create, direct synchronous SDK call",
+    "reranker": "src/services/rerankers/api.py:ApiReranker.rerank -> httpx.Client.post, direct synchronous call"
+  },
+  "current_routing_harness_sha": "b7327d0aa65a6c2ae89931b6a3127c7c2ed98f04c191b2d069a97fdf783125bd",
+  "git_pull": {
+    "attempted": true,
+    "succeeded": false,
+    "reason": "schannel: failed to receive handshake, SSL/TLS connection failed",
+    "local_master_equals_origin_master": true
+  },
+  "formal_db_read_only_policy": true
+}

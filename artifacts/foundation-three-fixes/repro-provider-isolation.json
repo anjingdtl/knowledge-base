@@ -1,0 +1,39 @@
+{
+  "captured_at": "2026-07-16T08:33:13.2187169Z",
+  "reproduced": true,
+  "issue": "Terminable process helper exists but production providers bypass it.",
+  "helper": {
+    "path": "src/services/deadline.py",
+    "available": [
+      "run_in_terminable_process",
+      "run_with_deadline(..., isolate='process')"
+    ]
+  },
+  "production_paths": [
+    {
+      "operation": "ask envelope",
+      "path": "src/mcp/tools/retrieval.py:_do_ask",
+      "current_call": "run_with_deadline(runner, total_timeout)",
+      "isolation": "implicit thread"
+    },
+    {
+      "operation": "llm generation",
+      "path": "src/answering/generation.py:Generator.make_generate_fn",
+      "current_call": "llm.chat_with_usage(messages) or llm.chat(messages)",
+      "isolation": "none"
+    },
+    {
+      "operation": "embedding",
+      "path": "src/services/embedding.py:EmbeddingService.embed_batch",
+      "current_call": "client.embeddings.create(input=batch, model=model)",
+      "isolation": "none"
+    },
+    {
+      "operation": "reranker",
+      "path": "src/services/rerankers/api.py:ApiReranker.rerank",
+      "current_call": "httpx.Client(...).post(...)",
+      "isolation": "none"
+    }
+  ],
+  "conclusion": "Existing tests prove the helper, not that formal provider call paths use terminable isolation."
+}
