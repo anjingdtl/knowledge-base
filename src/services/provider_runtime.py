@@ -92,13 +92,13 @@ def _execute_provider_request(request: ProviderRequest) -> ProviderResponse:
 
             if not secret:
                 raise RuntimeError(f"provider credential unavailable via {request.secret_env_key}")
-            client = OpenAI(
+            openai_client = OpenAI(
                 api_key=secret,
                 base_url=request.base_url or None,
                 timeout=float(request.timeout_seconds),
                 max_retries=0,
             )
-            response = client.chat.completions.create(
+            response = openai_client.chat.completions.create(
                 model=request.model,
                 **request.payload,
                 timeout=float(request.timeout_seconds),
@@ -120,13 +120,13 @@ def _execute_provider_request(request: ProviderRequest) -> ProviderResponse:
 
             if not secret:
                 raise RuntimeError(f"provider credential unavailable via {request.secret_env_key}")
-            client = OpenAI(
+            embedding_client = OpenAI(
                 api_key=secret,
                 base_url=request.base_url or None,
                 timeout=float(request.timeout_seconds),
                 max_retries=0,
             )
-            response = client.embeddings.create(
+            response = embedding_client.embeddings.create(
                 input=request.payload.get("input") or [],
                 model=request.model,
                 timeout=float(request.timeout_seconds),
@@ -143,8 +143,8 @@ def _execute_provider_request(request: ProviderRequest) -> ProviderResponse:
                 timeout=httpx.Timeout(timeout, connect=min(5.0, timeout)),
                 limits=limits,
                 follow_redirects=False,
-            ) as client:
-                response = client.post(
+            ) as http_client:
+                response = http_client.post(
                     f"{request.base_url.rstrip('/')}/rerank",
                     headers={
                         "Authorization": f"Bearer {secret}",

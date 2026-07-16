@@ -49,7 +49,7 @@ def _build_recommendations(
     """Return (recommended_tool, recommended_arguments, recommended_flow)."""
     if mode == "structured":
         qs = query_spec if isinstance(query_spec, dict) else {}
-        args = {
+        args: dict[str, Any] = {
             "type": "structured",
             "query_spec": qs,
         }
@@ -57,15 +57,24 @@ def _build_recommendations(
         filt = qs.get("filter") if isinstance(qs.get("filter"), dict) else {}
         if isinstance(filt, dict):
             if "file_type" in filt:
-                args["file_type"] = filt.get("file_type")
+                file_type = filt.get("file_type")
+                if file_type is not None:
+                    args["file_type"] = file_type
             if "source_type" in filt:
-                args["source_type"] = filt.get("source_type")
+                source_type = filt.get("source_type")
+                if source_type is not None:
+                    args["source_type"] = source_type
             if "tag" in filt:
-                args["tag"] = filt.get("tag")
-            and_list = filt.get("and") if isinstance(filt.get("and"), list) else []
+                tag = filt.get("tag")
+                if tag is not None:
+                    args["tag"] = tag
+            raw_and = filt.get("and")
+            and_list: list[Any] = raw_and if isinstance(raw_and, list) else []
             for clause in and_list:
                 if isinstance(clause, dict) and "file_type" in clause:
-                    args.setdefault("file_type", clause.get("file_type"))
+                    file_type = clause.get("file_type")
+                    if file_type is not None:
+                        args.setdefault("file_type", file_type)
         return "execute_query", args, [{"tool": "execute_query", "arguments": args}]
 
     if mode == "hybrid":

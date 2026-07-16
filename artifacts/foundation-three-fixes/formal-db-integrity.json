@@ -1,0 +1,9 @@
+{
+  "formal_db_path": "D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\data\\kb.db",
+  "formal_db_sha256_before": "dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01",
+  "formal_db_sha256_after": "dee013a91eeae27b0224dbe3c756b2d815b1d11803efc0925f53d621fa0e2c01",
+  "formal_db_size_before": 346054656,
+  "formal_db_size_after": 346054656,
+  "formal_db_unchanged": true,
+  "access_policy": "read_only"
+}

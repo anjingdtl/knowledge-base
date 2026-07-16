@@ -6,6 +6,7 @@ import hashlib
 import logging
 import threading
 from collections import OrderedDict
+from typing import Literal
 
 from src.services.deadline import DeadlineTimeout, remaining_deadline
 from src.services.provider_runtime import ProviderRequest, run_provider_operation
@@ -68,7 +69,7 @@ _l1_cache = _L1EmbeddingCache()
 
 
 class EmbeddingService:
-    ISOLATION_MODE = "process"
+    ISOLATION_MODE: Literal["process"] = "process"
 
     def __init__(self, config=None):
         """初始化 Embedding 服务

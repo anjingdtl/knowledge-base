@@ -1,0 +1,60 @@
+{
+  "date": "2026-07-16",
+  "targeted_tests": {
+    "ground_truth_review_metadata": {"passed": 3, "failed": 0, "exit_code": 0},
+    "frozen_dataset_only": {"passed": 2, "failed": 0, "exit_code": 0},
+    "routing_preserves_arguments": {"passed": 2, "failed": 0, "exit_code": 0},
+    "routing_empty_honesty": {"passed": 5, "failed": 0, "exit_code": 0},
+    "routing_timeout_classification": {"passed": 5, "failed": 0, "exit_code": 0},
+    "providers": {"passed": 3, "failed": 0, "exit_code": 0},
+    "ask_explicit_isolation": {"passed": 2, "failed": 0, "exit_code": 0},
+    "provider_worker_pid_terminated": {"passed": 1, "failed": 0, "exit_code": 0}
+  },
+  "related_regressions": {
+    "tests_eval": {"passed": 49, "failed": 0, "exit_code": 0},
+    "tests_stability": {"passed": 138, "failed": 0, "warnings": 1, "exit_code": 0},
+    "test_mcp_contract": {"passed": 44, "skipped": 1, "failed": 0, "warnings": 1, "exit_code": 0},
+    "test_public_search_contract": {"passed": 9, "failed": 0, "warnings": 1, "exit_code": 0},
+    "test_public_ask_contract": {"passed": 6, "failed": 0, "warnings": 1, "exit_code": 0},
+    "routing_related_extra": {"passed": 10, "failed": 0, "warnings": 1, "exit_code": 0}
+  },
+  "static_checks": {
+    "ruff_check_src_tests_scripts_evals": {"status": "passed", "exit_code": 0},
+    "mypy_src": {"status": "passed", "checked_source_files": 272, "exit_code": 0}
+  },
+  "real_smoke": {
+    "routing_candidate_stdio": {
+      "rows": 10,
+      "raw_arguments_preserved": 10,
+      "empty_honestly_classified": 1,
+      "validation_error": 7,
+      "non_empty": 2,
+      "task_completed": 2,
+      "ground_truth_role": "candidate_smoke_only_not_final_acceptance"
+    },
+    "provider_wiring": {
+      "llm_normal_passed": 3,
+      "llm_normal_total": 3,
+      "llm_short_timeout_classified": 2,
+      "llm_short_timeout_total": 2,
+      "llm_timeout_worker_terminated": 2,
+      "embedding_normal_passed": 3,
+      "embedding_normal_total": 3,
+      "reranker_normal_passed": 3,
+      "reranker_normal_total": 3,
+      "secrets_recorded": false
+    }
+  },
+  "ground_truth_gate": {
+    "candidate_count": 196,
+    "reviewed_count": 0,
+    "frozen_count": 0,
+    "double_review_completion_rate": 0.0,
+    "answer_block_quote_coverage_rate": 0.0,
+    "gate_passed": false,
+    "reason": "No real primary and secondary human reviews have been supplied; automatic acceptance and fabricated reviewer identities are forbidden."
+  },
+  "pytest_environment_warning": "Successful pytest processes repeatedly emitted a non-fatal Windows PermissionError while cleaning the pytest-current temporary symlink.",
+  "all_three_foundation_fixes_complete": false,
+  "independent_full_acceptance_allowed": false
+}

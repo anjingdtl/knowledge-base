@@ -2,6 +2,7 @@
 import hashlib
 import logging
 import threading
+from typing import Literal
 
 from src.services.deadline import DeadlineTimeout, remaining_deadline
 from src.services.provider_runtime import (
@@ -44,8 +45,8 @@ def _notify_status(status: str, detail: str = ""):
 
 
 class LLMService:
-    GENERATE_ISOLATION_MODE = "process"
-    STREAM_ISOLATION_MODE = "thread_cooperative"
+    GENERATE_ISOLATION_MODE: Literal["process"] = "process"
+    STREAM_ISOLATION_MODE: Literal["thread_cooperative"] = "thread_cooperative"
 
     def __init__(self, config=None):
         """初始化 LLM 服务
@@ -224,7 +225,8 @@ class LLMService:
                 max_tokens_override=max_tokens_override,
                 timeout=timeout,
             )
-            usage = data.get("usage") if isinstance(data.get("usage"), dict) else {}
+            usage_value = data.get("usage")
+            usage: dict = usage_value if isinstance(usage_value, dict) else {}
             return str(data.get("content") or ""), usage
         except DeadlineTimeout:
             raise
