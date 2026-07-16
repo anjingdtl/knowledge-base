@@ -1,0 +1,23 @@
+{
+  "baseline_commit_sha": "02f71b0036703f1c36174b11ef2e7036341436f6",
+  "timestamp": "2026-07-16T00:37:13.038150+00:00",
+  "python_version": "3.14.3",
+  "fastmcp_version": "3.2.4",
+  "sqlite_version": "3.50.4",
+  "config_path": "D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\config.yaml",
+  "stdio_tool_count": "err:'ExposedToolDefinitions' object is not iterable",
+  "http_tool_count": "err:'ExposedToolDefinitions' object is not iterable",
+  "tool_profile_intended": {
+    "tool_profile": "full",
+    "experimental_tools_enabled": true,
+    "enable_legacy_aliases": false
+  },
+  "formal_db_size": 346054656,
+  "formal_document_count": 155,
+  "formal_block_count": 9984,
+  "formal_vector_count": 6155,
+  "thread_count": 1,
+  "rss_memory_mb": null,
+  "branch": "fix/mcp-final-closure",
+  "note": "Phase 0 baseline; production code not modified in this commit. Real MCP connectivity evidence in phase0-mcp-probe.json."
+}
