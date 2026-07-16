@@ -6,7 +6,7 @@
 
 [\[English\]](README.md)
 
-[![Version](https://img.shields.io/badge/version-1.10.3-blue.svg)](https://github.com/anjingdtl/knowledge-base)
+[![Version](https://img.shields.io/badge/version-1.10.4-blue.svg)](https://github.com/anjingdtl/knowledge-base)
 [![Python](https://img.shields.io/badge/python-%E2%89%A53.10-3776AB.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-verified%20hybrid-orange.svg)](src/mcp/tool_profiles.py)
@@ -36,17 +36,16 @@ ShineHe Knowledge 是**本地优先的 AI Agent 知识服务**。
 
 ## 当前健康状态
 
-**v1.10.3** — MCP 最终收口与本地真实 MCP 验证：
+**v1.10.4** — 生产试点评估体系 + 检索/路由质量修复：
 
-- **Timeout 真取消与诚实语义** — cooperative cancel；`cancelled` / `background_work_may_continue`；slot 可恢复
-- **Graph 硬上限分页** — `max_graph_nodes` 边界无 `next_offset` 自循环
-- **Structured 分页** — effective_limit + 多取一条；两入口一致
-- **统一 no-answer / FTS 门禁** — 相关性评分；实时类查询短路
-- **真实 MCP 验收** — stdio + streamable-http；107 Golden；HTTP 并发；2h/30m 长稳
-- **工程门禁** — 全量 pytest / 远程 CI 全绿；Tag `v1.10.3`
-- 相比 v1.10.2 **无 Schema / Alembic 变更**
+- **人工 Ground Truth 试点评估** — retrieval / no-answer / numeric / routing / citation 数据集 + 指标分母校正
+- **检索质量** — knowledge_id 去重；复合数字单位；库内标题强证据（减少假拒答）
+- **路由** — `file_type` 结构化规则；hybrid 分析意图优先于偶然 tag structured
+- **稳定性** — 非协作 Provider 进程可终止；超时风暴后 isolation 重置；正式向量路径统一
+- **诚实试点结论** — Recall/MRR/Citation 改善；Precision@5 / nDCG / Numeric 仍未达生产试点门槛（可受控内测）
+- 相比 v1.10.3 **无 Schema / Alembic 变更**
 
-详见 [v1.10.3 发布说明](docs/release/v1.10.3-release-notes.md)、[最终收口报告](docs/reports/mcp-final-closure-2026-07-16.md)、[PROGRESS](PROGRESS.md)，以及 [v1.10.2](docs/release/v1.10.2-release-notes.md) · [v1.10.1](docs/release/v1.10.1-release-notes.md) · [v1.10.0](docs/release/v1.10.0-release-notes.md)。
+详见 [v1.10.4 发布说明](docs/release/v1.10.4-release-notes.md)、[生产试点验收报告](docs/reports/mcp-production-pilot-final-validation-2026-07-16.md)、[PROGRESS](PROGRESS.md)，以及 [v1.10.3](docs/release/v1.10.3-release-notes.md) · [v1.10.2](docs/release/v1.10.2-release-notes.md) · [v1.10.1](docs/release/v1.10.1-release-notes.md)。
 
 ## 30 秒演示
 

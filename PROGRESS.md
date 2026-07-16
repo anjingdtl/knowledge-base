@@ -1,25 +1,35 @@
 # ShineHeKnowledge 当前状态
 
 > 最后更新：2026-07-16  
-> 源码版本：`src/version.py` 中的 **`1.10.3`**  
-> 当前分支：`fix/mcp-production-pilot-final-validation`（生产试点最终验收收尾进行中）  
-> 发布说明：`docs/release/v1.10.3-release-notes.md`  
-> 收口报告：`docs/reports/mcp-final-closure-2026-07-16.md`（历史证据保留；结论已回退为「验收进行中」）  
+> 源码版本：`src/version.py` 中的 **`1.10.4`**  
+> 当前分支：`master`（已合入生产试点评估与门禁修复，Tag `v1.10.4`）  
+> 发布说明：`docs/release/v1.10.4-release-notes.md`  
+> 验收报告：`docs/reports/mcp-production-pilot-final-validation-2026-07-16.md`  
+> Delta 报告：`docs/reports/mcp-production-pilot-gate-remediation-2026-07-16.md`  
 > 最终验收 Spec：`docs/superpowers/specs/ShineHeKB_MCP_生产试点前最终验收收尾_Spec.md`  
-> 迁移：v1.10.3 无 Schema 变更；最近迁移见 `docs/migration/v1.10-to-v1.10.1-migration-governance.md`  
-> 当前方向：**生产试点验收进行中** — v1.10.3 Transport/协议收口证据保留，最终生产试点结论须待人工 Ground Truth、指标分母、正式向量与真实 Provider 闭环后重新判定。
+> 迁移：v1.10.4 无 Schema 变更；最近迁移见 `docs/migration/v1.10-to-v1.10.1-migration-governance.md`  
+> 当前方向：**v1.10.4 已发布** — 生产试点评估体系与检索/路由质量修复已合入；**生产试点门槛未达标**（Precision@5 / nDCG / Numeric），可受控内测，后续继续门禁修复。
 
 ---
 
-## 生产试点最终验收收尾（完成评估，2026-07-16）
+## 生产试点最终验收 + 门禁修复：v1.10.4（已发布，2026-07-16）
 
 执行依据：`docs/superpowers/specs/ShineHeKB_MCP_生产试点前最终验收收尾_Spec.md`  
+PLAN：`docs/superpowers/plans/2026-07-16-production-pilot-gate-remediation.md`  
 基线：`artifacts/production-pilot-final-validation/baseline.json`  
 报告：`docs/reports/mcp-production-pilot-final-validation-2026-07-16.md`  
-状态：**未达到生产试点门槛**。  
-门禁修复 PLAN：`docs/superpowers/plans/2026-07-16-production-pilot-gate-remediation.md`  
-Delta 报告：`docs/reports/mcp-production-pilot-gate-remediation-2026-07-16.md`  
-进展：Citation/假拒答、Recall/MRR、路由 L1 规则已改善；Precision@5 / nDCG / Numeric 仍未达标。
+Delta：`docs/reports/mcp-production-pilot-gate-remediation-2026-07-16.md`  
+发布说明：`docs/release/v1.10.4-release-notes.md`  
+状态：**已发布 v1.10.4；未达到生产试点门槛**。
+
+完成项：
+
+- ✅ 人工 Ground Truth 数据集 + 指标分母/scope 校正
+- ✅ knowledge_id 结果去重；复合数字单位；标题强证据减假拒答
+- ✅ file_type 结构化路由；hybrid 分析意图优先
+- ✅ Provider 进程终止与超时后 isolation 重置；正式向量路径统一
+- ✅ 相关单测与评估脚本合入；正式 `data/kb.db` 未污染
+- ❌ Precision@5 / nDCG@10 / Numeric Top1·Top3 仍未达 Spec 强制线
 
 ---
 

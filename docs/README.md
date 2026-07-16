@@ -2,9 +2,19 @@
 
 ## 当前方向（权威入口）
 
-> 产品版本：**v1.10.3** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+> 产品版本：**v1.10.4** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
 
-### MCP 最终收口（2026-07-16，已发布）
+### 生产试点最终验收（2026-07-16，已发布 v1.10.4）
+
+- [v1.10.4 发布说明](release/v1.10.4-release-notes.md)
+- [生产试点最终验收报告](reports/mcp-production-pilot-final-validation-2026-07-16.md)
+- [门禁修复 Delta 报告](reports/mcp-production-pilot-gate-remediation-2026-07-16.md)
+- [生产试点最终验收 Spec](superpowers/specs/ShineHeKB_MCP_生产试点前最终验收收尾_Spec.md)
+- [门禁修复 PLAN](superpowers/plans/2026-07-16-production-pilot-gate-remediation.md)
+- 产物目录：`artifacts/production-pilot-final-validation/`
+- **结论：未达生产试点门槛**（可受控内测）
+
+### MCP 最终收口（2026-07-16，已发布 v1.10.3）
 
 - [v1.10.3 发布说明](release/v1.10.3-release-notes.md)
 - [MCP 最终收口报告](reports/mcp-final-closure-2026-07-16.md)
