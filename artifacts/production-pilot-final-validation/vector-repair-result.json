@@ -1,0 +1,25 @@
+{
+  "before": {
+    "total_blocks": 3611,
+    "covered_blocks": 3611,
+    "missing_blocks": 0,
+    "coverage": 1.0
+  },
+  "after": {
+    "total_blocks": 3611,
+    "covered_blocks": 3611,
+    "missing_blocks": 0,
+    "coverage": 1.0
+  },
+  "result": {
+    "total_blocks": 3611,
+    "missing_before": 0,
+    "repaired": 0,
+    "failed": 0,
+    "coverage_before": 1.0,
+    "coverage_after": 1.0,
+    "errors": []
+  },
+  "elapsed_sec": 0.2184457778930664,
+  "backup": "D:\\ClaudeCodeWorkSpace\\projects\\knowledge-base\\artifacts\\production-pilot-final-validation\\kb.db.vector-repair-backup-20260716T045426Z"
+}

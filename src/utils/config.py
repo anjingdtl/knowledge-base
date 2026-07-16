@@ -17,7 +17,12 @@ from typing import Any, cast
 
 import yaml
 
-from src.utils.paths import get_config_path, get_data_dir, get_project_root
+from src.utils.paths import (
+    get_config_path,
+    get_data_dir,
+    get_project_root,
+    resolve_storage_paths,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -376,10 +381,32 @@ class Config:
 
     @_dualmethod
     def get_data_dir(self) -> Path:
+        """Resolve storage data dir; absolute storage.data_dir wins over SHINEHE_HOME."""
+        storage_data = self.get("storage.data_dir", None)
+        if storage_data:
+            paths = resolve_storage_paths(
+                shinehe_home=get_project_root(),
+                storage_data_dir=storage_data,
+                db_name=str(self.get("storage.db_name", "kb.db")),
+                graph_dir=self.get("storage.graph_dir", "graph"),
+            )
+            data_dir = paths["data_dir"]
+            data_dir.mkdir(parents=True, exist_ok=True)
+            return data_dir
         return get_data_dir()
 
     @_dualmethod
     def get_db_path(self) -> Path:
-        return Path(self.get_data_dir()) / str(self.get("storage.db_name", "kb.db"))
+        storage_data = self.get("storage.data_dir", None)
+        db_name = str(self.get("storage.db_name", "kb.db"))
+        if storage_data:
+            paths = resolve_storage_paths(
+                shinehe_home=get_project_root(),
+                storage_data_dir=storage_data,
+                db_name=db_name,
+                graph_dir=self.get("storage.graph_dir", "graph"),
+            )
+            return paths["db_path"]
+        return Path(self.get_data_dir()) / db_name
 
 

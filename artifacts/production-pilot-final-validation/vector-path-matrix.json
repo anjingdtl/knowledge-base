@@ -1,0 +1,30 @@
+{
+  "resolved_paths": {
+    "project_root_SHINEHE_HOME": {
+      "shinehe_home": "project_root",
+      "storage_data_dir": "data",
+      "db_path": "D:/ClaudeCodeWorkSpace/projects/knowledge-base/data/kb.db",
+      "vector_storage_path": "D:/ClaudeCodeWorkSpace/projects/knowledge-base/data"
+    },
+    "temp_SHINEHE_HOME_absolute_formal_data": {
+      "shinehe_home": "temp",
+      "storage_data_dir": "absolute:formal/data",
+      "db_path_behavior": "honors absolute storage.data_dir (fixed)",
+      "vector_storage_path_behavior": "same as formal data_dir"
+    }
+  },
+  "active_vector_coverage": {
+    "total_active_blocks": 3611,
+    "covered_blocks": 3611,
+    "coverage": 1.0,
+    "note": "Coverage computed over non-deleted knowledge blocks only"
+  },
+  "raw_table_counts": {
+    "blocks_table": 9984,
+    "vec_blocks_rowids": 3843,
+    "note": "Raw table includes orphan blocks from deleted items; not used for health gate"
+  },
+  "backend": "sqlite-vec",
+  "path_resolution_function": "src.utils.paths.resolve_vector_storage_path / resolve_storage_paths",
+  "config_fix": "Config.get_db_path honors absolute storage.data_dir"
+}

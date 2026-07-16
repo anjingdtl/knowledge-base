@@ -100,19 +100,29 @@ class HybridSearcher:
         覆盖率，便于定位是"索引没建"还是"凭据/网络问题"。
         """
         try:
-            vec_count = self._block_store.count()
-            block_count = self._db.get_conn().execute(
-                "SELECT count(*) FROM blocks"
-            ).fetchone()[0]
-            if vec_count == 0:
+            # Prefer active knowledge coverage (excludes orphan blocks from deleted items).
+            row = self._db.get_conn().execute(
+                """
+                SELECT COUNT(*) AS total_blocks,
+                       SUM(CASE WHEN v.rowid IS NOT NULL THEN 1 ELSE 0 END) AS covered_blocks
+                FROM blocks AS b
+                JOIN knowledge_items AS k ON k.id = b.page_id
+                LEFT JOIN vec_blocks AS v ON v.rowid = b.rowid
+                WHERE k.deleted_at IS NULL
+                """
+            ).fetchone()
+            block_count = int(row[0] or 0) if not hasattr(row, "keys") else int(row["total_blocks"] or 0)
+            vec_count = int(row[1] or 0) if not hasattr(row, "keys") else int(row["covered_blocks"] or 0)
+            if block_count and vec_count == 0:
                 logging.warning(
-                    "Vector index is EMPTY (%d blocks, 0 embeddings). "
+                    "Vector index is EMPTY (%d active blocks, 0 embeddings). "
+                    "Semantic search unavailable; FTS fallback only. "
                     "Run reindex_all to rebuild vector index.",
                     block_count,
                 )
             elif block_count > 0 and vec_count / block_count < 0.5:
                 logging.warning(
-                    "Vector index coverage very low: %d/%d (%.1f%%). "
+                    "Vector index coverage very low: %d/%d active blocks (%.1f%%). "
                     "Semantic search degraded. Run reindex_all to rebuild.",
                     vec_count, block_count, vec_count / block_count * 100,
                 )

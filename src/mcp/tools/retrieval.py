@@ -1536,14 +1536,41 @@ def _runtime_diagnostics() -> dict:
         vector_error = f"sqlite-vec unavailable: {type(exc).__name__}: {str(exc)[:120]}"
 
     coverage = (vector_count / block_count) if block_count else 0.0
+    healthy = bool(not vector_error and (block_count == 0 or coverage >= 0.95))
+    degraded_reason = None
+    if vector_error:
+        degraded_reason = vector_error
+        healthy = False
+    elif block_count and vector_count == 0:
+        degraded_reason = "vector_index_empty"
+        healthy = False
+    elif block_count and coverage < 0.95:
+        degraded_reason = f"vector_coverage_low:{coverage:.4f}"
+        healthy = False
+
     if not key_state["embedding"]:
         recommendation = "配置 embedding.api_key 或 llm.api_key 后重建向量索引"
     elif block_count and vector_count == 0:
         recommendation = "向量索引为空，请执行 reindex_all 或迁移脚本回填 block embeddings"
-    elif block_count and coverage < 0.8:
+    elif block_count and coverage < 0.95:
         recommendation = "向量索引覆盖率偏低，请执行 reindex_all 回填缺失 block embeddings"
     else:
         recommendation = "向量索引状态正常"
+
+    try:
+        from src.utils.paths import resolve_vector_storage_path
+
+        storage_path = str(
+            resolve_vector_storage_path(
+                storage_data_dir=Config.get("storage.data_dir", "data"),
+                vector_backend="sqlite-vec",
+            )
+        )
+    except Exception:
+        storage_path = str(Config.get_data_dir())
+
+    emb_model = str(Config.get("embedding.model", "") or "")
+    emb_dim = int(Config.get("embedding.dimension", 1024) or 1024)
 
     return {
         "api_keys": key_state,
@@ -1553,6 +1580,19 @@ def _runtime_diagnostics() -> dict:
             "coverage": round(coverage, 4),
             "sqlite_vec_ok": not bool(vector_error),
             "error": vector_error,
+            "recommendation": recommendation,
+        },
+        "vector": {
+            "enabled": True,
+            "backend": "sqlite-vec",
+            "storage_path": storage_path,
+            "block_count": block_count,
+            "vector_count": vector_count,
+            "coverage": round(coverage, 4),
+            "model": emb_model,
+            "dimension": emb_dim,
+            "healthy": healthy,
+            "degraded_reason": degraded_reason,
             "recommendation": recommendation,
         },
     }
