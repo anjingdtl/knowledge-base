@@ -1,19 +1,24 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-16  
-> 源码版本：`src/version.py` 中的 **`1.10.5`**
+> 最后更新：2026-07-20  
+> 源码版本：`src/version.py` 中的 **`1.11.0`**
 >
-> 当前分支：`master`（三项基础问题修复机制已合入，Tag `v1.10.5`）
+> 当前分支：`master`（Golden Time UI 重设计已合入，Tag `v1.11.0`）
 >
-> 发布说明：`docs/release/v1.10.5-release-notes.md`
+> 发布说明：Golden Time 暖色编辑感双主题系统，衬线字体，大圆角扁平无阴影
 >
-> 修复报告：`docs/reports/production-pilot-foundation-three-fixes-2026-07-16.md`
+> 迁移：v1.11.0 无 Schema 变更；GUI 主题与样式表全面重写
 >
-> 执行 Spec：`docs/superpowers/specs/ShineHeKB_三项基础问题修复_Spec.md`
->
-> 迁移：v1.10.5 无 Schema 变更；正式 `data/kb.db` 大小与 SHA256 未变化
->
-> 当前方向：**v1.10.5 已发布** — Routing 与 Provider 基础问题已修复，Ground Truth 审核/冻结机制已建立；但 **196 条候选的真实双人审核仍为 0%**，因此不能进入独立全量验收，也未声称达到生产试点门槛。
+> 当前方向：**v1.11.0 已发布** — GUI 界面采用 Golden Time 设计系统重设计，暖白羊皮纸底色 + 深可可棕主色 + 橄榄辅色，衬线字体优先，32px 大圆角扁平无阴影；全量回归测试 2117 passed / 2 skipped / 0 failed。
+
+---
+
+## Golden Time UI 重设计：v1.11.0（已发布，2026-07-20）
+
+- `src/gui/theme.py` — 颜色 token 全面替换为 Golden Time 暖色系（保持 dict key 与常量名不变）
+- `src/gui/resources/style.qss` / `style-dark.qss` — 浅色/深色样式表重写，大圆角（面板 20px / 按钮 16px）、扁平无阴影、衬线字体
+- `src/gui/main_window.py` / `knowledge_view.py` / `catalog_view.py` / `graph_view.py` / `wiki_view.py` — 移除所有 `QGraphicsDropShadowEffect`，适配扁平设计
+- 设计原型：`shinehe-gui-goldentime/` 目录含 4 个视图高保真 HTML 原型
 
 ---
 

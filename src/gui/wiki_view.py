@@ -289,13 +289,6 @@ class WikiView(QWidget):
         self.detail_panel.setFixedWidth(self._detail_width)
         self.detail_panel.setVisible(False)
 
-        from PySide6.QtWidgets import QGraphicsDropShadowEffect
-        detail_shadow = QGraphicsDropShadowEffect(self.detail_panel)
-        detail_shadow.setBlurRadius(30)
-        detail_shadow.setOffset(-4, 0)
-        detail_shadow.setColor(QColor(0, 0, 0, 40))
-        self.detail_panel.setGraphicsEffect(detail_shadow)
-
         detail_layout = QVBoxLayout(self.detail_panel)
         detail_layout.setContentsMargins(12, 12, 12, 12)
 

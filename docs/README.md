@@ -2,7 +2,13 @@
 
 ## 当前方向（权威入口）
 
-> 产品版本：**v1.10.5** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+> 产品版本：**v1.11.0** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+
+### Golden Time UI 重设计（2026-07-20，已发布 v1.11.0）
+
+- GUI 主题系统全面重写：暖白羊皮纸 + 深可可棕 + 橄榄辅色，衬线字体，大圆角扁平无阴影
+- 全量回归测试通过：2117 passed / 2 skipped / 0 failed
+- 设计原型：`shinehe-gui-goldentime/`
 
 ### 三项基础问题修复（2026-07-16，已发布 v1.10.5）
 

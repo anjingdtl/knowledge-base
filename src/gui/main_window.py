@@ -10,7 +10,6 @@ from PySide6.QtCore import QPoint, QSettings, Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QColor, QCursor
 from PySide6.QtWidgets import (
     QFrame,
-    QGraphicsDropShadowEffect,
     QHBoxLayout,
     QLabel,
     QMainWindow,
@@ -276,13 +275,6 @@ class MainWindow(QMainWindow):
         sidebar_layout.addWidget(version_label)
 
         layout.addWidget(sidebar)
-
-        # 侧边栏阴影
-        sidebar_shadow = QGraphicsDropShadowEffect(sidebar)
-        sidebar_shadow.setBlurRadius(18)
-        sidebar_shadow.setOffset(2, 0)
-        sidebar_shadow.setColor(QColor(31, 74, 72, 18))
-        sidebar.setGraphicsEffect(sidebar_shadow)
 
         # ---- 内容区 ----
         self.stack = QStackedWidget()

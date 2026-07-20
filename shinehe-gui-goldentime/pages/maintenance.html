@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShineHeKnowledge</title>
+    <style id="theme-vars">
+/* Source: structured-spec */
+:root {
+  /* bg */
+  --background: 40 16% 98%;
+  --card: 40 16% 98%;
+  --popover: 40 16% 98%;
+
+  /* text */
+  --foreground: 37.5000 15.6863% 20%;
+  --card-foreground: 37.5000 15.6863% 20%;
+  --popover-foreground: 37.5000 15.6863% 20%;
+  --muted-foreground: 36.0000 19.8413% 49.4118%;
+
+  /* accent */
+  --primary: 37.5000 15.6863% 20%;
+  --primary-foreground: 40 16% 98%;
+  --secondary: 55.0000 24.0000% 49.0196%;
+  --secondary-foreground: 40 16% 98%;
+  --muted: 44.0000 26.3158% 88.8235%;
+  --accent: 40.0000 24.0876% 73.1373%;
+  --accent-foreground: 30 14.0000% 30%;
+
+  /* status */
+  --destructive: 0 84.2000% 60.2000%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* border */
+  --border: 43.3333 23.0769% 84.7059%;
+  --input: 44.0000 26.3158% 88.8235%;
+  --ring: 37.5000 15.6863% 20%;
+
+  /* chart */
+  --chart-1: 55 20% 80%;
+  --chart-2: 0 15.3374% 31.9608%;
+  --chart-3: 70.5882 10.0592% 66.8627%;
+  --chart-4: 55.0000 24.0000% 49.0196%;
+  --chart-5: 28.9888 91.7526% 61.9608%;
+
+  /* sidebar */
+  --sidebar: 40 16% 98%;
+  --sidebar-foreground: 37.5000 15.6863% 20%;
+  --sidebar-primary: 37.5000 15.6863% 20%;
+  --sidebar-primary-foreground: 40 16% 98%;
+  --sidebar-accent: 40.0000 24.0876% 73.1373%;
+  --sidebar-accent-foreground: 37.5000 15.6863% 20%;
+  --sidebar-border: 43.3333 23.0769% 84.7059%;
+  --sidebar-ring: 37.5000 15.6863% 20%;
+
+  --font-sans: Fraunces, ui-serif, serif;
+  --font-serif: Fraunces, ui-serif, serif;
+  --font-mono: monospace;
+  --radius: 2rem;
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 6px);
+  --radius-lg: var(--radius);
+  --shadow-x: 0px;
+  --shadow-y: 2px;
+  --shadow-blur: 4px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0;
+  --shadow-color: hsl(35 15% 50%);
+  --shadow-2xs: 0px 2px 4px 0px hsl(35 15% 50% / 0.00);
+  --shadow-xs: 0px 2px 4px 0px hsl(35 15% 50% / 0.00);
+  --shadow-sm: 0px 2px 4px 0px hsl(35 15% 50% / 0.00), 0px 1px 2px -1px hsl(35 15% 50% / 0.00);
+  --shadow: 0px 2px 4px 0px hsl(35 15% 50% / 0.00), 0px 1px 2px -1px hsl(35 15% 50% / 0.00);
+  --shadow-md: 0px 2px 4px 0px hsl(35 15% 50% / 0.00), 0px 2px 4px -1px hsl(35 15% 50% / 0.00);
+  --shadow-lg: 0px 2px 4px 0px hsl(35 15% 50% / 0.00), 0px 4px 6px -1px hsl(35 15% 50% / 0.00);
+  --shadow-xl: 0px 2px 4px 0px hsl(35 15% 50% / 0.00), 0px 8px 10px -1px hsl(35 15% 50% / 0.00);
+  --shadow-2xl: 0px 2px 4px 0px hsl(35 15% 50% / 0.00);
+  --tracking-normal: 0.01em;
+  --spacing: 0.3rem;
+}
+
+.dark {
+  /* bg */
+  --background: 12 71.4286% 1.3725%;
+  --card: 12 71.4286% 1.3725%;
+  --popover: 12 71.4286% 1.3725%;
+
+  /* text */
+  --foreground: 41.5385 18.8406% 86.4706%;
+  --card-foreground: 41.5385 18.8406% 86.4706%;
+  --popover-foreground: 41.5385 18.8406% 86.4706%;
+  --muted-foreground: 35 15% 60%;
+
+  /* accent */
+  --primary: 41.5385 18.8406% 86.4706%;
+  --primary-foreground: 12 71.4286% 1.3725%;
+  --secondary: 35 25% 30%;
+  --secondary-foreground: 41.5385 18.8406% 86.4706%;
+  --muted: 35 15% 20%;
+  --accent: 35 25% 40%;
+  --accent-foreground: 41.5385 18.8406% 86.4706%;
+
+  /* status */
+  --destructive: 0 84.2000% 60.2000%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* border */
+  --border: 42.8571 8.4337% 16.2745%;
+  --input: 35 15% 20%;
+  --ring: 35.4545 29.7297% 70.9804%;
+
+  /* chart */
+  --chart-1: 35 25% 60%;
+  --chart-2: 20 20% 40%;
+  --chart-3: 34.5000 60.6061% 87.0588%;
+  --chart-4: 10 10% 50%;
+  --chart-5: 13.7430 78.1659% 55.0980%;
+
+  /* sidebar */
+  --sidebar: 12 71.4286% 1.3725%;
+  --sidebar-foreground: 41.5385 18.8406% 86.4706%;
+  --sidebar-primary: 41.5385 18.8406% 86.4706%;
+  --sidebar-primary-foreground: 12 71.4286% 1.3725%;
+  --sidebar-accent: 35 25% 40%;
+  --sidebar-accent-foreground: 41.5385 18.8406% 86.4706%;
+  --sidebar-border: 35 15% 25%;
+  --sidebar-ring: 41.5385 18.8406% 86.4706%;
+
+  --font-sans: Fraunces, ui-serif, serif;
+  --font-serif: Fraunces, ui-serif, serif;
+  --font-mono: monospace;
+  --radius: 2rem;
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 6px);
+  --radius-lg: var(--radius);
+  --shadow-x: 0px;
+  --shadow-y: 2px;
+  --shadow-blur: 4px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0;
+  --shadow-color: hsl(35 15% 5%);
+  --shadow-2xs: 0px 2px 4px 0px hsl(35 15% 5% / 0.00);
+  --shadow-xs: 0px 2px 4px 0px hsl(35 15% 5% / 0.00);
+  --shadow-sm: 0px 2px 4px 0px hsl(35 15% 5% / 0.00), 0px 1px 2px -1px hsl(35 15% 5% / 0.00);
+  --shadow: 0px 2px 4px 0px hsl(35 15% 5% / 0.00), 0px 1px 2px -1px hsl(35 15% 5% / 0.00);
+  --shadow-md: 0px 2px 4px 0px hsl(35 15% 5% / 0.00), 0px 2px 4px -1px hsl(35 15% 5% / 0.00);
+  --shadow-lg: 0px 2px 4px 0px hsl(35 15% 5% / 0.00), 0px 4px 6px -1px hsl(35 15% 5% / 0.00);
+  --shadow-xl: 0px 2px 4px 0px hsl(35 15% 5% / 0.00), 0px 8px 10px -1px hsl(35 15% 5% / 0.00);
+  --shadow-2xl: 0px 2px 4px 0px hsl(35 15% 5% / 0.00);
+}
+
+body {
+  letter-spacing: var(--tracking-normal);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-secondary { background-color: var(--secondary); }
+      .text-secondary { color: var(--secondary); }
+      .border-secondary { border-color: var(--secondary); }
+      .ring-secondary { --tw-ring-color: var(--secondary); }
+      .bg-secondary-foreground { background-color: var(--secondary-foreground); }
+      .text-secondary-foreground { color: var(--secondary-foreground); }
+      .border-secondary-foreground { border-color: var(--secondary-foreground); }
+      .ring-secondary-foreground { --tw-ring-color: var(--secondary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-accent { background-color: var(--accent); }
+      .text-accent { color: var(--accent); }
+      .border-accent { border-color: var(--accent); }
+      .ring-accent { --tw-ring-color: var(--accent); }
+      .bg-accent-foreground { background-color: var(--accent-foreground); }
+      .text-accent-foreground { color: var(--accent-foreground); }
+      .border-accent-foreground { border-color: var(--accent-foreground); }
+      .ring-accent-foreground { --tw-ring-color: var(--accent-foreground); }
+      .bg-destructive { background-color: var(--destructive); }
+      .text-destructive { color: var(--destructive); }
+      .border-destructive { border-color: var(--destructive); }
+      .ring-destructive { --tw-ring-color: var(--destructive); }
+      .bg-destructive-foreground { background-color: var(--destructive-foreground); }
+      .text-destructive-foreground { color: var(--destructive-foreground); }
+      .border-destructive-foreground { border-color: var(--destructive-foreground); }
+      .ring-destructive-foreground { --tw-ring-color: var(--destructive-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+      .bg-chart-1 { background-color: var(--chart-1); }
+      .text-chart-1 { color: var(--chart-1); }
+      .border-chart-1 { border-color: var(--chart-1); }
+      .ring-chart-1 { --tw-ring-color: var(--chart-1); }
+      .bg-chart-2 { background-color: var(--chart-2); }
+      .text-chart-2 { color: var(--chart-2); }
+      .border-chart-2 { border-color: var(--chart-2); }
+      .ring-chart-2 { --tw-ring-color: var(--chart-2); }
+      .bg-chart-3 { background-color: var(--chart-3); }
+      .text-chart-3 { color: var(--chart-3); }
+      .border-chart-3 { border-color: var(--chart-3); }
+      .ring-chart-3 { --tw-ring-color: var(--chart-3); }
+      .bg-chart-4 { background-color: var(--chart-4); }
+      .text-chart-4 { color: var(--chart-4); }
+      .border-chart-4 { border-color: var(--chart-4); }
+      .ring-chart-4 { --tw-ring-color: var(--chart-4); }
+      .bg-chart-5 { background-color: var(--chart-5); }
+      .text-chart-5 { color: var(--chart-5); }
+      .border-chart-5 { border-color: var(--chart-5); }
+      .ring-chart-5 { --tw-ring-color: var(--chart-5); }
+      .bg-sidebar { background-color: var(--sidebar); }
+      .text-sidebar { color: var(--sidebar); }
+      .border-sidebar { border-color: var(--sidebar); }
+      .ring-sidebar { --tw-ring-color: var(--sidebar); }
+      .bg-sidebar-foreground { background-color: var(--sidebar-foreground); }
+      .text-sidebar-foreground { color: var(--sidebar-foreground); }
+      .border-sidebar-foreground { border-color: var(--sidebar-foreground); }
+      .ring-sidebar-foreground { --tw-ring-color: var(--sidebar-foreground); }
+      .bg-sidebar-primary { background-color: var(--sidebar-primary); }
+      .text-sidebar-primary { color: var(--sidebar-primary); }
+      .border-sidebar-primary { border-color: var(--sidebar-primary); }
+      .ring-sidebar-primary { --tw-ring-color: var(--sidebar-primary); }
+      .bg-sidebar-primary-foreground { background-color: var(--sidebar-primary-foreground); }
+      .text-sidebar-primary-foreground { color: var(--sidebar-primary-foreground); }
+      .border-sidebar-primary-foreground { border-color: var(--sidebar-primary-foreground); }
+      .ring-sidebar-primary-foreground { --tw-ring-color: var(--sidebar-primary-foreground); }
+      .bg-sidebar-accent { background-color: var(--sidebar-accent); }
+      .text-sidebar-accent { color: var(--sidebar-accent); }
+      .border-sidebar-accent { border-color: var(--sidebar-accent); }
+      .ring-sidebar-accent { --tw-ring-color: var(--sidebar-accent); }
+      .bg-sidebar-accent-foreground { background-color: var(--sidebar-accent-foreground); }
+      .text-sidebar-accent-foreground { color: var(--sidebar-accent-foreground); }
+      .border-sidebar-accent-foreground { border-color: var(--sidebar-accent-foreground); }
+      .ring-sidebar-accent-foreground { --tw-ring-color: var(--sidebar-accent-foreground); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="h-screen overflow-hidden font-sans antialiased" data-viewport-mode="app-shell">
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="应用导航栏">
+      <div class="sidebar-brand">
+        <span class="brand-kicker">本地优先 · MCP 知识检索</span>
+        <div class="brand-name">ShineHeKnowledge</div>
+      </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <span class="nav-section-label">工作区</span>
+        <a class="nav-item" data-nav-key="knowledge" data-dom-id="nav-knowledge" href="#">
+          <span class="nav-icon" data-icon="box" aria-hidden="true"></span>
+          <span class="nav-label">知识库</span>
+        </a>
+        <a class="nav-item" data-nav-key="chat" data-dom-id="nav-chat" href="#">
+          <span class="nav-icon" data-icon="message-circle-more" aria-hidden="true"></span>
+          <span class="nav-label">智能问答</span>
+        </a>
+        <a class="nav-item" data-nav-key="catalog" data-dom-id="nav-catalog" href="#">
+          <span class="nav-icon" data-icon="folder-open" aria-hidden="true"></span>
+          <span class="nav-label">知识目录</span>
+        </a>
+        <a class="nav-item" data-nav-key="wiki" data-dom-id="nav-wiki" href="#">
+          <span class="nav-icon" data-icon="file" aria-hidden="true"></span>
+          <span class="nav-label">知识 Wiki</span>
+        </a>
+        <a class="nav-item" data-nav-key="graph" data-dom-id="nav-graph" href="#">
+          <span class="nav-icon" data-icon="grip" aria-hidden="true"></span>
+          <span class="nav-label">知识图谱</span>
+        </a>
+        <a class="nav-item" data-nav-key="trash" data-dom-id="nav-trash" href="#">
+          <span class="nav-icon" data-icon="trash-2" aria-hidden="true"></span>
+          <span class="nav-label">回收站</span>
+        </a>
+        <a class="nav-item is-active" data-nav-key="maintenance" data-dom-id="nav-maintenance" href="#">
+          <span class="nav-icon" data-icon="pen-line" aria-hidden="true"></span>
+          <span class="nav-label">维护中心</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="mcp-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span class="mcp-status-text">MCP 服务运行中</span>
+        </div>
+        <div class="version-meta">v1.10.5 · 本地索引</div>
+      </div>
+    </aside>
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title" id="page-title">维护中心</h1>
+          <p class="page-subtitle" id="page-subtitle">索引健康、数据库维护与性能监控</p>
+        </div>
+        <div class="topbar-right">
+          <div class="search-field">
+            <span data-icon="funnel" aria-hidden="true"></span>
+            <input type="search" class="search-input" placeholder="搜索知识库…" aria-label="搜索知识库">
+          </div>
+          <button class="btn btn-primary" type="button" data-dom-id="topbar-index-new">
+            <span data-icon="circle-plus" aria-hidden="true"></span>
+            <span>索引新内容</span>
+          </button>
+        </div>
+      </header>
+      <main class="content overflow-y-auto" id="content" data-scroll-region="primary">
+        <div class="maint-page">
+          <div class="maint-kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">索引健康度</div>
+              <div class="kpi-value">98%</div>
+              <div class="kpi-trend">
+                <span class="trend-dot" aria-hidden="true"></span>
+                <span>良好</span>
+              </div>
+              <div class="kpi-progress" aria-hidden="true">
+                <div class="kpi-progress-fill" style="width: 98%;"></div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">数据库大小</div>
+              <div class="kpi-value">248 MB</div>
+              <div class="kpi-trend"><span>较上周 +12 MB</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">最后索引</div>
+              <div class="kpi-value">2 小时前</div>
+              <div class="kpi-trend"><span>自动索引已开启</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">活跃任务</div>
+              <div class="kpi-value">3</div>
+              <div class="kpi-trend"><span>1 运行中 · 2 排队</span></div>
+            </div>
+          </div>
+
+          <div class="maint-body">
+            <section class="maint-tasks-panel" aria-label="维护任务">
+              <header class="panel-header">
+                <h2>维护任务</h2>
+                <span class="panel-meta">5 项可用</span>
+              </header>
+              <div class="task-list">
+                <div class="task-card">
+                  <span class="task-icon" aria-hidden="true">
+                    <span data-icon="file"></span>
+                  </span>
+                  <div class="task-main">
+                    <div class="task-name">重建全文索引</div>
+                    <div class="task-desc">重新生成 FTS5 全文索引</div>
+                  </div>
+                  <span class="task-status is-running">运行中</span>
+                  <button class="task-run-btn is-disabled" type="button" disabled>
+                    <svg class="spinner" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="40 20"></circle>
+                    </svg>
+                    <span>运行中</span>
+                  </button>
+                </div>
+                <div class="task-card">
+                  <span class="task-icon" aria-hidden="true">
+                    <span data-icon="trash-2"></span>
+                  </span>
+                  <div class="task-main">
+                    <div class="task-name">清理孤儿块</div>
+                    <div class="task-desc">移除无引用的知识块</div>
+                  </div>
+                  <span class="task-status is-queued">排队中</span>
+                  <button class="task-run-btn" type="button">
+                    <span data-icon="circle-play" aria-hidden="true"></span>
+                    <span>执行</span>
+                  </button>
+                </div>
+                <div class="task-card">
+                  <span class="task-icon" aria-hidden="true">
+                    <span data-icon="box"></span>
+                  </span>
+                  <div class="task-main">
+                    <div class="task-name">压缩数据库</div>
+                    <div class="task-desc">VACUUM 优化存储空间</div>
+                  </div>
+                  <span class="task-status is-ready">可执行</span>
+                  <button class="task-run-btn" type="button">
+                    <span data-icon="circle-play" aria-hidden="true"></span>
+                    <span>执行</span>
+                  </button>
+                </div>
+                <div class="task-card">
+                  <span class="task-icon" aria-hidden="true">
+                    <span data-icon="grip"></span>
+                  </span>
+                  <div class="task-main">
+                    <div class="task-name">重建向量索引</div>
+                    <div class="task-desc">重新计算所有嵌入向量</div>
+                  </div>
+                  <span class="task-status is-ready">可执行</span>
+                  <button class="task-run-btn" type="button">
+                    <span data-icon="circle-play" aria-hidden="true"></span>
+                    <span>执行</span>
+                  </button>
+                </div>
+                <div class="task-card">
+                  <span class="task-icon" aria-hidden="true">
+                    <span data-icon="folder-open"></span>
+                  </span>
+                  <div class="task-main">
+                    <div class="task-name">同步 Wiki 知识</div>
+                    <div class="task-desc">将 Wiki 页面同步到索引</div>
+                  </div>
+                  <span class="task-status is-queued">排队中</span>
+                  <button class="task-run-btn" type="button">
+                    <span data-icon="circle-play" aria-hidden="true"></span>
+                    <span>执行</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <section class="maint-health-panel" aria-label="系统健康">
+              <header class="panel-header">
+                <h2>系统健康</h2>
+              </header>
+              <div class="health-body">
+                <div class="health-section">
+                  <h3 class="health-section-title">存储用量</h3>
+                  <div class="storage-bars">
+                    <div class="storage-row">
+                      <span class="storage-label">知识库</span>
+                      <div class="storage-bar-track">
+                        <div class="storage-bar-fill" style="width: 68%; background: hsl(var(--chart-4));"></div>
+                      </div>
+                      <span class="storage-value">168 MB</span>
+                    </div>
+                    <div class="storage-row">
+                      <span class="storage-label">向量索引</span>
+                      <div class="storage-bar-track">
+                        <div class="storage-bar-fill" style="width: 22%; background: hsl(var(--chart-1));"></div>
+                      </div>
+                      <span class="storage-value">55 MB</span>
+                    </div>
+                    <div class="storage-row">
+                      <span class="storage-label">Wiki</span>
+                      <div class="storage-bar-track">
+                        <div class="storage-bar-fill" style="width: 6%; background: hsl(var(--chart-3));"></div>
+                      </div>
+                      <span class="storage-value">15 MB</span>
+                    </div>
+                    <div class="storage-row">
+                      <span class="storage-label">图谱</span>
+                      <div class="storage-bar-track">
+                        <div class="storage-bar-fill" style="width: 4%; background: hsl(var(--chart-5));"></div>
+                      </div>
+                      <span class="storage-value">10 MB</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="health-section">
+                  <h3 class="health-section-title">索引覆盖率</h3>
+                  <div class="coverage-stats">
+                    <div class="cov-item">
+                      <div class="cov-label">全文索引</div>
+                      <div class="cov-value">98.6%</div>
+                      <div class="cov-bar">
+                        <div class="cov-bar-fill" style="width: 98.6%;"></div>
+                      </div>
+                    </div>
+                    <div class="cov-item">
+                      <div class="cov-label">向量索引</div>
+                      <div class="cov-value">96.2%</div>
+                      <div class="cov-bar">
+                        <div class="cov-bar-fill" style="width: 96.2%;"></div>
+                      </div>
+                    </div>
+                    <div class="cov-item">
+                      <div class="cov-label">实体抽取</div>
+                      <div class="cov-value">87.4%</div>
+                      <div class="cov-bar">
+                        <div class="cov-bar-fill" style="width: 87.4%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="health-section">
+                  <h3 class="health-section-title">检索性能（近 7 日）</h3>
+                  <div class="perf-chart-wrap">
+                    <svg class="perf-chart" viewBox="0 0 280 80" width="100%" height="80" preserveAspectRatio="xMidYMid meet" aria-label="近 7 日检索性能">
+                      <g class="perf-bars">
+                        <rect x="8" y="19" width="24" height="45" rx="3" fill="hsl(var(--chart-4))"></rect>
+                        <rect x="48" y="26" width="24" height="38" rx="3" fill="hsl(var(--chart-4))"></rect>
+                        <rect x="88" y="12" width="24" height="52" rx="3" fill="hsl(var(--chart-4))"></rect>
+                        <rect x="128" y="23" width="24" height="41" rx="3" fill="hsl(var(--chart-4))"></rect>
+                        <rect x="168" y="28" width="24" height="36" rx="3" fill="hsl(var(--chart-4))"></rect>
+                        <rect x="208" y="16" width="24" height="48" rx="3" fill="hsl(var(--chart-4))"></rect>
+                        <rect x="248" y="22" width="24" height="42" rx="3" fill="hsl(var(--chart-4))"></rect>
+                      </g>
+                      <g class="perf-labels">
+                        <text x="20" y="76" text-anchor="middle">一</text>
+                        <text x="60" y="76" text-anchor="middle">二</text>
+                        <text x="100" y="76" text-anchor="middle">三</text>
+                        <text x="140" y="76" text-anchor="middle">四</text>
+                        <text x="180" y="76" text-anchor="middle">五</text>
+                        <text x="220" y="76" text-anchor="middle">六</text>
+                        <text x="260" y="76" text-anchor="middle">日</text>
+                      </g>
+                      <text x="278" y="9" text-anchor="end" class="perf-avg">平均 43ms</text>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="maint-log-panel" aria-label="任务日志">
+            <header class="panel-header">
+              <h2>任务日志</h2>
+              <span class="panel-meta">最近 5 条</span>
+              <button class="log-view-all-btn" type="button">查看全部</button>
+            </header>
+            <div class="log-body">
+              <div class="log-entry">
+                <span class="log-time">14:32:08</span>
+                <span class="log-level">完成</span>
+                <span class="log-text">重建全文索引完成，处理 1,284 条</span>
+              </div>
+              <div class="log-entry">
+                <span class="log-time">14:28:51</span>
+                <span class="log-level">完成</span>
+                <span class="log-text">清理孤儿块完成，移除 23 条</span>
+              </div>
+              <div class="log-entry">
+                <span class="log-time">14:15:33</span>
+                <span class="log-level">完成</span>
+                <span class="log-text">自动索引 docs/architecture.md</span>
+              </div>
+              <div class="log-entry">
+                <span class="log-time">13:58:02</span>
+                <span class="log-level">完成</span>
+                <span class="log-text">向量索引重建完成</span>
+              </div>
+              <div class="log-entry">
+                <span class="log-time">13:40:17</span>
+                <span class="log-level">完成</span>
+                <span class="log-text">同步 Wiki 页面 12 篇</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <style id="project-shell-style">
+    /* ========== 应用骨架：ShineHeKnowledge 桌面端外壳 ==========
+       FLAT 设计（无阴影），大圆角，Fraunces 衬线优先。
+       颜色变量为 HSL 分量格式，引用时统一使用 hsl(var(--token)) 包裹。 */
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      height: 100vh;
+      overflow: hidden;
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      font-family: var(--font-sans);
+    }
+
+    /* ---------- 侧边栏 ---------- */
+    .sidebar {
+      background: hsl(var(--sidebar));
+      color: hsl(var(--sidebar-foreground));
+      border-right: 1px solid hsl(var(--sidebar-border));
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 1);
+      padding: calc(var(--spacing) * 5) calc(var(--spacing) * 5) calc(var(--spacing) * 4);
+      border-bottom: 1px solid hsl(var(--sidebar-border));
+    }
+
+    .brand-kicker {
+      color: hsl(var(--muted-foreground));
+      font-size: 0.76rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .brand-name {
+      font-family: var(--font-sans);
+      font-size: 1.4rem;
+      font-weight: 600;
+      line-height: 1.12;
+      color: hsl(var(--sidebar-foreground));
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 1.5);
+      padding: calc(var(--spacing) * 4) calc(var(--spacing) * 4);
+    }
+
+    .nav-section-label {
+      color: hsl(var(--muted-foreground));
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding-left: calc(var(--spacing) * 2.5);
+      padding-bottom: calc(var(--spacing) * 0.5);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2.5);
+      min-height: 44px;
+      padding: calc(var(--spacing) * 2) calc(var(--spacing) * 2.5);
+      border-radius: calc(var(--radius) - 9px);
+      border: 1px solid transparent;
+      background: transparent;
+      color: hsl(var(--sidebar-foreground));
+      text-decoration: none;
+      font-family: var(--font-sans);
+      font-size: 0.98rem;
+      line-height: 1.2;
+      transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .nav-item:hover {
+      background: hsl(var(--sidebar-accent));
+      color: hsl(var(--sidebar-accent-foreground));
+    }
+
+    .nav-item:focus-visible {
+      outline: 2px solid hsl(var(--ring));
+      outline-offset: 2px;
+    }
+
+    .nav-item.is-active {
+      background: hsl(var(--sidebar-primary));
+      color: hsl(var(--sidebar-primary-foreground));
+    }
+
+    .nav-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex: 0 0 auto;
+    }
+
+    .nav-label {
+      white-space: nowrap;
+    }
+
+    .sidebar-footer {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 1.5);
+      padding: calc(var(--spacing) * 4) calc(var(--spacing) * 5);
+      border-top: 1px solid hsl(var(--sidebar-border));
+    }
+
+    .mcp-status {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 1.8);
+      font-size: 0.86rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: hsl(var(--secondary));
+      flex: 0 0 auto;
+    }
+
+    .version-meta {
+      font-size: 0.76rem;
+      color: hsl(var(--muted-foreground));
+      letter-spacing: 0.02em;
+    }
+
+    /* ---------- 主区域 + 顶栏 ---------- */
+    .main-area {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 4);
+      padding: calc(var(--spacing) * 4) calc(var(--spacing) * 6);
+      border-bottom: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      flex: 0 0 auto;
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 1);
+      min-width: 0;
+    }
+
+    .page-title {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.15;
+      color: hsl(var(--foreground));
+      text-wrap: balance;
+    }
+
+    .page-subtitle {
+      margin: 0;
+      font-size: 0.9rem;
+      color: hsl(var(--muted-foreground));
+      line-height: 1.4;
+    }
+
+    .topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2.5);
+      flex: 0 0 auto;
+    }
+
+    .search-field {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 1.8);
+      min-width: 16rem;
+      padding: 0 calc(var(--spacing) * 2.5);
+      background: hsl(var(--background));
+      border: 1px solid hsl(var(--input));
+      border-radius: calc(var(--radius) - 8px);
+      min-height: 40px;
+      transition: border-color 0.18s ease;
+    }
+
+    .search-field [data-icon] {
+      width: 1rem;
+      height: 1rem;
+      color: hsl(var(--muted-foreground));
+      flex: 0 0 auto;
+    }
+
+    .search-input {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: hsl(var(--foreground));
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: hsl(var(--muted-foreground));
+    }
+
+    .search-field:focus-within {
+      border-color: hsl(var(--ring));
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: calc(var(--spacing) * 1.6);
+      min-height: 44px;
+      padding: calc(var(--spacing) * 2.2) calc(var(--spacing) * 4);
+      border: 1px solid transparent;
+      border-radius: calc(var(--radius) - 8px);
+      font-family: var(--font-sans);
+      font-size: 0.96rem;
+      font-weight: 500;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .btn-primary {
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+    }
+
+    .btn-primary:hover {
+      background: hsl(var(--primary));
+      filter: brightness(0.96);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary:focus-visible {
+      outline: 2px solid hsl(var(--ring));
+      outline-offset: 2px;
+    }
+
+    .btn [data-icon] {
+      width: 1rem;
+      height: 1rem;
+      flex: 0 0 auto;
+    }
+
+    /* ---------- 内容容器（叶子页填充区） ---------- */
+    .content {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: calc(var(--spacing) * 4);
+      background: hsl(var(--background));
+    }
+
+    /* ---------- 图标 mask 映射（图标位于项目 assets/icons/dl_builtin_golden_time/） ---------- */
+    [data-icon="box"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/box.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/box.svg');
+    }
+    [data-icon="message-circle-more"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/message-circle-more.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/message-circle-more.svg');
+    }
+    [data-icon="folder-open"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/folder-open.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/folder-open.svg');
+    }
+    [data-icon="file"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/file.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/file.svg');
+    }
+    [data-icon="grip"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/grip.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/grip.svg');
+    }
+    [data-icon="trash-2"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/trash-2.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/trash-2.svg');
+    }
+    [data-icon="pen-line"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/pen-line.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/pen-line.svg');
+    }
+    [data-icon="funnel"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/funnel.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/funnel.svg');
+    }
+    [data-icon="circle-plus"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/circle-plus.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/circle-plus.svg');
+    }
+
+    /* ---------- 动效无障碍降级 ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      .nav-item, .btn, .search-field {
+        transition: none;
+      }
+      .btn-primary:hover {
+        transform: none;
+      }
+    }
+
+    /* ---------- 侧栏滚动条收起 ---------- */
+    .sidebar-nav {
+      scrollbar-width: thin;
+      scrollbar-color: hsl(var(--sidebar-border)) transparent;
+    }
+    .sidebar-nav::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar-nav::-webkit-scrollbar-thumb {
+      background: hsl(var(--sidebar-border));
+      border-radius: 999px;
+    }
+  </style>
+  <style id="page-style">
+    /* ========== 维护中心页面样式 ==========
+       FLAT 设计（无阴影），大圆角，Fraunces 衬线优先。
+       颜色变量为 HSL 分量格式，引用时统一使用 hsl(var(--token)) 包裹。 */
+
+    /* ---------- 额外图标 mask 映射 ---------- */
+    [data-icon="circle-play"] {
+      -webkit-mask-image: url('../assets/icons/dl_builtin_golden_time/circle-play.svg');
+      mask-image: url('../assets/icons/dl_builtin_golden_time/circle-play.svg');
+    }
+
+    /* ---------- 页面骨架 ---------- */
+    .maint-page {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 3);
+      height: 100%;
+      min-height: 0;
+    }
+
+    /* ---------- KPI 行 ---------- */
+    .maint-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: calc(var(--spacing) * 3);
+      align-items: start;
+      flex: 0 0 auto;
+    }
+
+    .kpi-card {
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius-md);
+      padding: calc(var(--spacing) * 4);
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 1.5);
+      min-width: 0;
+    }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      color: hsl(var(--muted-foreground));
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .kpi-value {
+      font-family: var(--font-sans);
+      font-size: 2rem;
+      font-weight: 600;
+      color: hsl(var(--foreground));
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .kpi-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 1);
+      font-size: 0.8rem;
+      color: hsl(var(--muted-foreground));
+      white-space: nowrap;
+    }
+
+    .trend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: hsl(var(--chart-4));
+      flex: 0 0 auto;
+    }
+
+    .kpi-progress {
+      height: 6px;
+      background: hsl(var(--muted));
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: calc(var(--spacing) * 1);
+    }
+
+    .kpi-progress-fill {
+      height: 100%;
+      background: hsl(var(--chart-4));
+      border-radius: 999px;
+    }
+
+    /* ---------- Body 双栏 ---------- */
+    .maint-body {
+      display: grid;
+      grid-template-columns: 1fr 0.92fr;
+      gap: calc(var(--spacing) * 3);
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ---------- 通用面板 ---------- */
+    .maint-tasks-panel,
+    .maint-health-panel,
+    .maint-log-panel {
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+      padding: calc(var(--spacing) * 3.5) calc(var(--spacing) * 4);
+      border-bottom: 1px solid hsl(var(--border));
+      flex: 0 0 auto;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: hsl(var(--foreground));
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    .panel-meta {
+      font-size: 0.78rem;
+      color: hsl(var(--muted-foreground));
+      white-space: nowrap;
+    }
+
+    /* ---------- 任务列表 ---------- */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 2);
+      padding: calc(var(--spacing) * 3) calc(var(--spacing) * 4);
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .task-card {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 3);
+      padding: calc(var(--spacing) * 3);
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius-sm);
+      background: hsl(var(--background));
+      transition: border-color 0.18s ease;
+    }
+
+    .task-card:hover {
+      border-color: hsl(var(--ring));
+    }
+
+    .task-icon {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 auto;
+      background: hsl(var(--muted));
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: hsl(var(--foreground));
+    }
+
+    .task-icon [data-icon] {
+      width: 1.1rem;
+      height: 1.1rem;
+      flex: 0 0 auto;
+    }
+
+    .task-main {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 0.5);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-name {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 500;
+      color: hsl(var(--foreground));
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .task-desc {
+      font-size: 0.82rem;
+      color: hsl(var(--muted-foreground));
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .task-status {
+      display: inline-flex;
+      align-items: center;
+      padding: calc(var(--spacing) * 0.8) calc(var(--spacing) * 2);
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 500;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .task-status.is-ready {
+      background: hsl(var(--muted));
+      color: hsl(var(--muted-foreground));
+    }
+
+    .task-status.is-running {
+      background: hsl(var(--secondary));
+      color: hsl(var(--secondary-foreground));
+    }
+
+    .task-status.is-queued {
+      background: hsl(var(--accent));
+      color: hsl(var(--accent-foreground));
+    }
+
+    .task-run-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: calc(var(--spacing) * 1.2);
+      padding: calc(var(--spacing) * 1.6) calc(var(--spacing) * 3);
+      min-height: 36px;
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: hsl(var(--foreground));
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+      flex: 0 0 auto;
+    }
+
+    .task-run-btn [data-icon] {
+      width: 0.95rem;
+      height: 0.95rem;
+      flex: 0 0 auto;
+    }
+
+    .task-run-btn:hover {
+      background: hsl(var(--muted));
+      border-color: hsl(var(--ring));
+    }
+
+    .task-run-btn:active {
+      transform: scale(0.98);
+    }
+
+    .task-run-btn:focus-visible {
+      outline: 2px solid hsl(var(--ring));
+      outline-offset: 2px;
+    }
+
+    .task-run-btn.is-disabled,
+    .task-run-btn:disabled {
+      background: transparent;
+      color: hsl(var(--muted-foreground));
+      border-color: hsl(var(--border));
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .task-run-btn.is-disabled:hover,
+    .task-run-btn:disabled:hover {
+      background: transparent;
+      border-color: hsl(var(--border));
+    }
+
+    .spinner {
+      animation: maint-spin 0.8s linear infinite;
+      flex: 0 0 auto;
+    }
+
+    @keyframes maint-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ---------- 健康面板 ---------- */
+    .health-body {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 4);
+      padding: calc(var(--spacing) * 3.5) calc(var(--spacing) * 4);
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .health-section {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 2.5);
+    }
+
+    .health-section-title {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: hsl(var(--muted-foreground));
+      letter-spacing: 0.01em;
+    }
+
+    /* ---------- 存储条形图 ---------- */
+    .storage-bars {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 2);
+    }
+
+    .storage-row {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2.5);
+    }
+
+    .storage-label {
+      width: 100px;
+      font-size: 0.82rem;
+      color: hsl(var(--foreground));
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .storage-bar-track {
+      flex: 1;
+      height: 10px;
+      background: hsl(var(--muted));
+      border-radius: 999px;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .storage-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .storage-value {
+      width: 60px;
+      font-size: 0.8rem;
+      color: hsl(var(--muted-foreground));
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      flex: 0 0 auto;
+    }
+
+    /* ---------- 覆盖率统计 ---------- */
+    .coverage-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: calc(var(--spacing) * 2.5);
+    }
+
+    .cov-item {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 1.2);
+      padding: calc(var(--spacing) * 2.5);
+      background: hsl(var(--background));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius-sm);
+      min-width: 0;
+    }
+
+    .cov-label {
+      font-size: 0.78rem;
+      color: hsl(var(--muted-foreground));
+      white-space: nowrap;
+    }
+
+    .cov-value {
+      font-family: var(--font-sans);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: hsl(var(--foreground));
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .cov-bar {
+      height: 6px;
+      background: hsl(var(--muted));
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .cov-bar-fill {
+      height: 100%;
+      background: hsl(var(--secondary));
+      border-radius: 999px;
+    }
+
+    /* ---------- 性能图表 ---------- */
+    .perf-chart-wrap {
+      width: 100%;
+    }
+
+    .perf-chart {
+      display: block;
+      width: 100%;
+      height: 80px;
+      font-family: var(--font-sans);
+    }
+
+    .perf-chart text {
+      font-family: var(--font-sans);
+      font-size: 9px;
+      fill: hsl(var(--muted-foreground));
+    }
+
+    .perf-chart .perf-avg {
+      font-size: 9px;
+      fill: hsl(var(--muted-foreground));
+    }
+
+    /* ---------- 任务日志面板 ---------- */
+    .maint-log-panel {
+      max-height: 200px;
+      flex: 0 0 auto;
+    }
+
+    .log-view-all-btn {
+      margin-left: auto;
+      padding: calc(var(--spacing) * 1) calc(var(--spacing) * 2.5);
+      background: transparent;
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius-sm);
+      color: hsl(var(--foreground));
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background-color 0.18s ease, border-color 0.18s ease;
+      flex: 0 0 auto;
+    }
+
+    .log-view-all-btn:hover {
+      background: hsl(var(--muted));
+      border-color: hsl(var(--ring));
+    }
+
+    .log-view-all-btn:focus-visible {
+      outline: 2px solid hsl(var(--ring));
+      outline-offset: 2px;
+    }
+
+    .log-body {
+      display: flex;
+      flex-direction: column;
+      padding: 0 calc(var(--spacing) * 4);
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .log-entry {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2.5);
+      padding: calc(var(--spacing) * 1.8) 0;
+      border-bottom: 1px solid hsl(var(--border) / 0.5);
+      flex: 0 0 auto;
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .log-time {
+      width: 80px;
+      font-size: 0.78rem;
+      color: hsl(var(--muted-foreground));
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .log-level {
+      display: inline-flex;
+      align-items: center;
+      padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 2);
+      background: hsl(var(--secondary));
+      color: hsl(var(--secondary-foreground));
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .log-text {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      color: hsl(var(--foreground));
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ---------- 滚动条 ---------- */
+    .task-list::-webkit-scrollbar,
+    .health-body::-webkit-scrollbar,
+    .log-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .task-list::-webkit-scrollbar-thumb,
+    .health-body::-webkit-scrollbar-thumb,
+    .log-body::-webkit-scrollbar-thumb {
+      background: hsl(var(--border));
+      border-radius: 999px;
+    }
+
+    .task-list::-webkit-scrollbar-track,
+    .health-body::-webkit-scrollbar-track,
+    .log-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* ---------- 动效无障碍降级 ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      .task-card,
+      .task-run-btn,
+      .log-view-all-btn,
+      .storage-bar-fill {
+        transition: none;
+      }
+      .spinner {
+        animation: none;
+      }
+    }
+
+    /* ---------- 响应式收缩 ---------- */
+    @media (max-width: 1100px) {
+      .maint-kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .maint-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .maint-kpi-row {
+        grid-template-columns: 1fr;
+      }
+      .task-card {
+        flex-wrap: wrap;
+      }
+      .log-entry {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

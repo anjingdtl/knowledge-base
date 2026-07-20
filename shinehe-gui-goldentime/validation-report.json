@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.07.06.8",
+    "version_source": "skill-version.json",
+    "runtime_skill_dir": "c:\\Users\\Administrator\\.trae-cn\\builtin\\design\\default\\skills\\solo-design",
+    "recorded_at": "2026-07-20T00:00:00+08:00",
+    "read_status": "ok"
+  },
+  "operatingMode": "library-bound",
+  "renderBlockingErrorCount": 0,
+  "softWarningCount": 8,
+  "renderBlockingErrors": [],
+  "softWarnings": [
+    "[library-bound-css] chat.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.app-shell, .sidebar, .sidebar-brand, .brand-kicker, .brand-name, .sidebar-nav, .nav-section-label, .nav-item). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] chat.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.chat-page, .chat-body, .citation-panel, .citation-header, .panel-meta, .thread-messages, .msg, .msg-user). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] graph.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.app-shell, .sidebar, .sidebar-brand, .brand-kicker, .brand-name, .sidebar-nav, .nav-section-label, .nav-item). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] graph.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.graph-page, .graph-filter-bar, .filter-group, .filter-label, .filter-chips, .filter-chip, .is-active, .filter-divider). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] knowledge.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.app-shell, .sidebar, .sidebar-brand, .brand-kicker, .brand-name, .sidebar-nav, .nav-section-label, .nav-item). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] knowledge.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.kb-page, .kpi-row, .kpi-card, .kpi-label, .kpi-value, .kpi-trend, .trend-arrow, .kb-body). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] maintenance.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.app-shell, .sidebar, .sidebar-brand, .brand-kicker, .brand-name, .sidebar-nav, .nav-section-label, .nav-item). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] maintenance.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.maint-page, .maint-kpi-row, .kpi-card, .kpi-label, .kpi-value, .kpi-trend, .trend-dot, .kpi-progress). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead."
+  ],
+  "repairPlanHints": [],
+  "errorCount": 0,
+  "warningCount": 8,
+  "errors": [],
+  "warnings": [
+    "[library-bound-css] chat.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.app-shell, .sidebar, .sidebar-brand, .brand-kicker, .brand-name, .sidebar-nav, .nav-section-label, .nav-item). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] chat.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.chat-page, .chat-body, .citation-panel, .citation-header, .panel-meta, .thread-messages, .msg, .msg-user). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] graph.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.app-shell, .sidebar, .sidebar-brand, .brand-kicker, .brand-name, .sidebar-nav, .nav-section-label, .nav-item). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] graph.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.graph-page, .graph-filter-bar, .filter-group, .filter-label, .filter-chips, .filter-chip, .is-active, .filter-divider). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] knowledge.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.app-shell, .sidebar, .sidebar-brand, .brand-kicker, .brand-name, .sidebar-nav, .nav-section-label, .nav-item). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] knowledge.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.kb-page, .kpi-row, .kpi-card, .kpi-label, .kpi-value, .kpi-trend, .trend-arrow, .kb-body). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] maintenance.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.app-shell, .sidebar, .sidebar-brand, .brand-kicker, .brand-name, .sidebar-nav, .nav-section-label, .nav-item). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead.",
+    "[library-bound-css] maintenance.html: Library-bound mode discourages custom CSS class definitions in <style> blocks (.maint-page, .maint-kpi-row, .kpi-card, .kpi-label, .kpi-value, .kpi-trend, .trend-dot, .kpi-progress). Prefer Tailwind utilities plus Library brand CSS variables/component JSON instead."
+  ],
+  "designDir": "f:\\ClaudeWorkSpace\\projects\\knowledge-base\\shinehe-gui-goldentime",
+  "expectedPages": 4,
+  "requireInteractions": null,
+  "checkedAt": "2026-07-20T12:12:11.331Z"
+}

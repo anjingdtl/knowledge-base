@@ -1,0 +1,58 @@
+{
+  "root": {
+    "nodeId": "gen-project-shell",
+    "kind": "project-shell",
+    "pageIds": ["page-knowledge", "page-chat", "page-graph", "page-maintenance"],
+    "output": "partials/project-shell.html",
+    "sharedRegions": ["app frame", "sidebar with 7 nav items + MCP status", "topbar with title/subtitle/actions", "content container"],
+    "privateRegions": [],
+    "mutableSlots": ["activeNavItem", "pageTitle", "pageSubtitle"],
+    "status": "generated",
+    "children": [
+      {
+        "nodeId": "gen-page-knowledge",
+        "kind": "page-leaf",
+        "pageIds": ["page-knowledge"],
+        "output": "pages/knowledge.html",
+        "sharedRegions": [],
+        "privateRegions": ["knowledge list + detail panel + stats cards"],
+        "mutableSlots": ["activeNavItem:knowledge", "pageTitle:知识库", "pageSubtitle:管理已索引的知识条目与来源"],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-chat",
+        "kind": "page-leaf",
+        "pageIds": ["page-chat"],
+        "output": "pages/chat.html",
+        "sharedRegions": [],
+        "privateRegions": ["chat message thread + citation panel + input dock"],
+        "mutableSlots": ["activeNavItem:chat", "pageTitle:智能问答", "pageSubtitle:向知识库提问，获取带溯源的回答"],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-graph",
+        "kind": "page-leaf",
+        "pageIds": ["page-graph"],
+        "output": "pages/graph.html",
+        "sharedRegions": [],
+        "privateRegions": ["graph canvas + entity detail side panel + filter bar"],
+        "mutableSlots": ["activeNavItem:graph", "pageTitle:知识图谱", "pageSubtitle:浏览实体关系与知识脉络"],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-maintenance",
+        "kind": "page-leaf",
+        "pageIds": ["page-maintenance"],
+        "output": "pages/maintenance.html",
+        "sharedRegions": [],
+        "privateRegions": ["maintenance task list + system health panels + task log"],
+        "mutableSlots": ["activeNavItem:maintenance", "pageTitle:维护中心", "pageSubtitle:索引健康、数据库维护与性能监控"],
+        "status": "generated",
+        "children": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "data": [
+    {
+      "id": "page-knowledge",
+      "title": "知识库",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1784547600000,
+      "canvasData": {
+        "x": 0,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/knowledge.html",
+        "interactions": [
+          {
+            "domId": "nav-chat",
+            "targetPageId": "page-chat"
+          },
+          {
+            "domId": "nav-graph",
+            "targetPageId": "page-graph"
+          },
+          {
+            "domId": "nav-maintenance",
+            "targetPageId": "page-maintenance"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-chat",
+      "title": "智能问答",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1784547600000,
+      "canvasData": {
+        "x": 620,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/chat.html",
+        "interactions": [
+          {
+            "domId": "nav-knowledge",
+            "targetPageId": "page-knowledge"
+          },
+          {
+            "domId": "nav-graph",
+            "targetPageId": "page-graph"
+          },
+          {
+            "domId": "nav-maintenance",
+            "targetPageId": "page-maintenance"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-graph",
+      "title": "知识图谱",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1784547600000,
+      "canvasData": {
+        "x": 620,
+        "y": 377,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/graph.html",
+        "interactions": [
+          {
+            "domId": "nav-knowledge",
+            "targetPageId": "page-knowledge"
+          },
+          {
+            "domId": "nav-chat",
+            "targetPageId": "page-chat"
+          },
+          {
+            "domId": "nav-maintenance",
+            "targetPageId": "page-maintenance"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-maintenance",
+      "title": "维护中心",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1784547600000,
+      "canvasData": {
+        "x": 620,
+        "y": 754,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/maintenance.html",
+        "interactions": [
+          {
+            "domId": "nav-knowledge",
+            "targetPageId": "page-knowledge"
+          },
+          {
+            "domId": "nav-chat",
+            "targetPageId": "page-chat"
+          },
+          {
+            "domId": "nav-graph",
+            "targetPageId": "page-graph"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": true,
+    "deviceType": "desktop",
+    "projectName": "ShineHeKnowledge 界面重设计",
+    "designLibrary": {
+      "name": "Golden Time",
+      "id": "dl_builtin_golden_time",
+      "version": null,
+      "scope": "built-in-global",
+      "path": "c:\\Users\\Administrator\\.trae-cn\\design_libraries\\dl_builtin_golden_time",
+      "versionSource": "metadata.json"
+    },
+    "visualEditorEnabled": false
+  }
+}

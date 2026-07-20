@@ -1,6 +1,5 @@
 """知识目录浏览视图 — 分类树 + 条目详情"""
 from PySide6.QtCore import QEasingCurve, QPoint, QPropertyAnimation, Qt, QThread, Signal
-from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QFrame,
     QHBoxLayout,
@@ -183,13 +182,6 @@ class CatalogView(QWidget):
         self.detail_panel.setObjectName("detailCard")
         self.detail_panel.setFixedWidth(self._detail_width)
         self.detail_panel.setVisible(False)
-
-        from PySide6.QtWidgets import QGraphicsDropShadowEffect
-        detail_shadow = QGraphicsDropShadowEffect(self.detail_panel)
-        detail_shadow.setBlurRadius(30)
-        detail_shadow.setOffset(-4, 0)
-        detail_shadow.setColor(QColor(0, 0, 0, 40))
-        self.detail_panel.setGraphicsEffect(detail_shadow)
 
         detail_layout = QVBoxLayout(self.detail_panel)
         detail_layout.setContentsMargins(12, 12, 12, 12)
