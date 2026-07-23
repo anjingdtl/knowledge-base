@@ -56,7 +56,7 @@ python scripts/build_docs.py                # 用户说明文档
 ```
 knowledge-base/
 ├── main.py / run_api.py / run_mcp.py   # GUI/API/MCP 入口 → create_container() 初始化
-├── config.yaml                          # 驱动所有模式的主配置
+├── config.example.yaml                 # 配置模板（**不要直接修改**；真实配置走 ~/.shinehe/）
 ├── alembic/                             # 数据库迁移
 ├── client/                              # React 19 + Vite + TypeScript Web 前端
 ├── mcp_config_templates/                # 一键 MCP 配置 JSON（Claude/Cursor/Cline 等）
@@ -68,20 +68,29 @@ knowledge-base/
     ├── retrieval/                       # Phase-2：Orchestrator / Policy / Provider
     ├── answering/                       # Phase-3：AnswerService / AnswerExecution
     ├── mcp/
-    │   ├── server.py                    # MCP 实现（工具/prompt/resource/lifespan）
+    │   ├── server.py                    # MCP 实现（薄壳：工具/prompt/resource/lifespan 注册）
+    │   ├── tools/                       # 分域工具实现(retrieval/ingest/graph/wiki/memory/operations/administration/exports/support)
     │   ├── runtime.py / auth.py / envelopes.py / policies.py
     │   ├── tool_registry.py             # 声明式工具注册，支持配置档过滤
     │   ├── tool_profiles.py             # core/extended/admin/full/legacy
-    │   ├── tools/                       # 分域清单（实现过渡期仍在 server.py）
     │   └── aliases.py                   # 旧命名空间别名（仅 legacy 启用）
     ├── api/                             # FastAPI REST
     ├── repositories/                    # 数据访问层，逐步替代 db.py 直接操作
-    ├── services/                        # 核心服务层（db / hybrid / wiki / search…）
+    ├── services/                        # 核心服务层（db / hybrid / wiki / graph_backend / search…）
+    ├── storage/                         # 启动门禁与 schema 校验（startup_gate.py）
+    ├── application/                     # 应用层用例编排
+    ├── data/                            # 数据导入/导出、迁移工具
+    ├── compatibility/                   # 向后兼容垫片
+    ├── plugins/                         # 插件加载点
     ├── mcp_server.py                    # 兼容入口 → src.mcp.server
     ├── cli.py                           # shinehe init/index/watch/doctor/mcp CLI
-    ├── gui/                             # PySide6 桌面界面
+    ├── gui/                             # PySide6 桌面界面（Golden Time 设计系统）
     ├── models/                          # SearchExecution / Citation / Wiki V2 …
     └── utils/config.py                  # Config 单例 + keyring 密钥管理
+
+# 平行文件: AGENTS.md（Codex 入口，内容与本文件一致）。
+# 配置说明: 仓库中只有 config.example.yaml；运行时真实配置位于 ~/.shinehe/config.yaml，
+# 密钥通过 keyring / SHINEHE_* 环境变量注入，不写入仓库。
 ```
 
 ## 核心设计模式
@@ -137,7 +146,7 @@ Config → Database → VectorStore → BlockStore → Embedding/LLM → Reposit
 
 ## RAG 管线
 
-可配置阶段（config.yaml → rag.pipeline.stages）：
+可配置阶段（`~/.shinehe/config.yaml` → `rag.pipeline.stages`，模板见 `config.example.yaml`）：
 
 1. **query_rewrite** — 查询改写（LLM 生成多版本）
 2. **wiki_retrieval** — Wiki 知识检索（FTS5）
