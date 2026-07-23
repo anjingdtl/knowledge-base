@@ -22,47 +22,49 @@ export default function Layout() {
   }
 
   return (
-    <div className="flex h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <nav className="w-56 bg-[var(--color-sidebar)] border-r border-[var(--color-border)] flex flex-col p-4 gap-2 shrink-0">
-        <div className="px-2 py-3">
+    <div className="flex h-screen min-w-0 bg-[var(--color-bg)] text-[var(--color-text)]">
+      <nav className="app-sidebar w-72 min-w-64 bg-[var(--color-sidebar)] border-r border-[var(--color-border)] flex flex-col px-4 py-5 gap-2 shrink-0">
+        <div className="px-3 py-2">
           <NavLink to="/" className="block">
-            <h1 className="text-xl font-bold text-[var(--color-primary)]">ShineHeKnowledge</h1>
-            <p className="mt-1 text-xs text-[var(--color-text-muted)]">ShineHe Knowledge Engine</p>
+            <div className="brand-lockup">
+              <h1 className="brand-name"><span>ShineHe</span><span>Knowledge</span></h1>
+              <p className="brand-tagline mt-2">本地优先 · 知识检索引擎</p>
+            </div>
           </NavLink>
-          <div className="mt-3 h-0.5 rounded bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)]" />
+          <div className="mt-4 h-px rounded bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-accent)] to-transparent" />
         </div>
 
-        <div className="mt-2 flex flex-col gap-1">
+        <div className="mt-3 flex flex-col gap-1">
           {NAV_ITEMS.map(item => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                `flex min-w-0 items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-[var(--color-primary-soft)] text-[var(--color-primary)] border-l-4 border-[var(--color-primary)]'
-                    : 'text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-primary)] border-l-4 border-transparent'
+                    ? 'bg-[var(--color-primary-soft)] text-[var(--color-primary)] shadow-[inset_3px_0_0_var(--color-primary)]'
+                    : 'text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-primary)]'
                 }`
               }
             >
-              <span className="w-7 text-xs font-semibold">{item.icon}</span>
-              <span>{item.label}</span>
+              <span className="nav-item-icon" aria-hidden="true">{item.icon}</span>
+              <span className="nav-item-label">{item.label}</span>
             </NavLink>
           ))}
         </div>
 
-        <div className="mt-auto pt-4 border-t border-[var(--color-border)]">
+        <div className="mt-auto px-1 pt-5 border-t border-[var(--color-border)]">
           <button
             onClick={handleLogout}
-            className="w-full px-3 py-2 rounded-lg text-sm text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover)]"
+            className="w-full px-3 py-2.5 rounded-lg text-left text-sm font-medium text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-primary)]"
           >
             退出登录
           </button>
         </div>
       </nav>
 
-      <main className="flex-1 overflow-auto p-6">
+      <main className="min-w-0 flex-1 overflow-auto p-6 lg:p-8">
         <Outlet />
       </main>
     </div>

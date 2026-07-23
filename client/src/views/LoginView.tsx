@@ -36,9 +36,11 @@ export default function LoginView() {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex items-center justify-center px-4">
-      <div className="w-full max-w-sm border border-[var(--color-border)] bg-[var(--color-surface)] rounded-lg p-6 shadow-sm">
-        <h1 className="text-xl font-bold text-[var(--color-primary)]">ShineHeKnowledge</h1>
-        <p className="mt-1 text-sm text-[var(--color-text-muted)]">登录后访问本地知识库 API</p>
+      <div className="w-full max-w-sm border border-[var(--color-border)] bg-[var(--color-surface)] rounded-xl p-7 shadow-[0_16px_48px_rgba(15,92,103,0.08)]">
+        <div className="brand-lockup">
+          <h1 className="brand-name"><span>ShineHe</span><span>Knowledge</span></h1>
+          <p className="brand-tagline mt-2">安全访问本地知识库</p>
+        </div>
 
         <form onSubmit={e => { e.preventDefault(); submit() }} className="mt-5 space-y-3">
           <input
@@ -46,7 +48,7 @@ export default function LoginView() {
             onChange={e => setUsername(e.target.value)}
             placeholder="用户名"
             aria-label="用户名"
-            className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-input)] text-sm"
+            className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-input)] text-sm placeholder:text-[var(--color-text-muted)]"
           />
           <input
             value={password}
@@ -54,13 +56,13 @@ export default function LoginView() {
             placeholder="密码"
             aria-label="密码"
             type="password"
-            className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-input)] text-sm"
+            className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-input)] text-sm placeholder:text-[var(--color-text-muted)]"
           />
           {error && <div className="text-xs text-[var(--color-danger)]">{error}</div>}
           <button
             type="submit"
             disabled={loading || !username.trim() || !password.trim()}
-            className="w-full px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg text-sm disabled:opacity-50"
+            className="w-full px-4 py-2.5 bg-[var(--color-primary)] text-white rounded-lg text-sm font-semibold hover:bg-[var(--color-primary-strong)] disabled:opacity-50"
           >
             {loading ? '处理中...' : mode === 'login' ? '登录' : '注册首个用户'}
           </button>
