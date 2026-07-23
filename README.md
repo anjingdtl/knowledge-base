@@ -34,6 +34,12 @@ ShineHe Knowledge is a **local-first knowledge retrieval engine for AI agents**.
 - **Maintenance center**: protective automation (R1), drafts for review (R3), human for R4
 - **All data stays local**. No cloud storage dependency.
 
+## Interface Policy
+
+The **PySide6 desktop GUI** (`python main.py`) is the primary daily-use interface and the only UI receiving active product and visual maintenance.
+
+The React Web UI in `client/` remains available only as a **backup interface** for limited local/API access. It is temporarily not maintained: do not add features, redesign it, or treat it as the release-quality administrative interface unless a new explicit product decision reactivates it.
+
 ## Current Health
 
 **v1.10.5** — Auditable evaluation foundations and truthful provider/routing execution:

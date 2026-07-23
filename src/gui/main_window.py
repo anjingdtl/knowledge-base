@@ -179,18 +179,18 @@ class MainWindow(QMainWindow):
         sidebar = QWidget()
         sidebar.setObjectName("sidebar")
         sidebar_layout = QVBoxLayout(sidebar)
-        sidebar_layout.setContentsMargins(0, 28, 0, 20)
+        sidebar_layout.setContentsMargins(0, 24, 0, 18)
         sidebar_layout.setSpacing(6)
 
-        # 品牌标题（渐变文字）
-        brand = QLabel("ShineHeKnowledge")
+        # 两行品牌锁定，避免在侧栏中截断长英文名。
+        brand = QLabel("ShineHe\nKnowledge")
         brand.setObjectName("brandLabel")
         brand.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        brand.setFixedHeight(36)
+        brand.setFixedHeight(52)
         sidebar_layout.addWidget(brand)
 
         # 品牌 slogan
-        brand_slogan = QLabel("ShineHe Knowledge Engine")
+        brand_slogan = QLabel("本地优先 · 知识检索引擎")
         brand_slogan.setObjectName("brandSlogan")
         brand_slogan.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         sidebar_layout.addWidget(brand_slogan)

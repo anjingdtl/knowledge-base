@@ -1,8 +1,4 @@
-"""主题管理器 — Golden Time 暖色编辑感双主题系统
-
-设计基调：暖白羊皮纸底色 + 深可可棕主色 + 橄榄/沙色辅色，
-衬线字体优先，大圆角扁平无阴影，低对比暖色调，安静书桌气质。
-"""
+"""主题管理器 — 桌面工作台的湖蓝金色双主题系统。"""
 from pathlib import Path
 
 from PySide6.QtGui import QFont
@@ -12,15 +8,14 @@ from src.utils.config import Config
 
 RESOURCES_DIR = Path(__file__).parent / "resources"
 
-# 浅色基础色 — Golden Time 暖色系
-COCOA = "#3B352B"      # 深可可棕 — 主色（替代原 TEAL）
-OLIVE = "#9B965F"      # 橄榄 — 辅色（替代原 GOLD）
-PARCHMENT = "#FBFAF9"  # 羊皮纸暖白 — 底色（替代原 CREAM）
-# 深色基础色 — 暖色暗调
-WARM_NOIR = "#1C1B1A"  # 暖深棕黑（替代原 NOIR）
-WARM_MOON = "#F5F2EC"  # 暖白（替代原 MOON）
-AMBER = "#C9976C"      # 琥珀暖橙 — 警告/装饰（保留）
-CORAL = "#EF4444"      # 暖红 — 危险/错误（替代原 CORAL 冷调）
+# 桌面端主色：深湖蓝负责操作与层级，暖金负责状态与强调。
+COCOA = "#0F5C67"
+OLIVE = "#E2A64A"
+PARCHMENT = "#F4F8F8"
+WARM_NOIR = "#102426"
+WARM_MOON = "#E7F2F1"
+AMBER = "#E2A64A"
+CORAL = "#BA4E55"
 
 # 兼容旧常量名（外部模块可能直接 import 这些名称）
 TEAL = COCOA
@@ -34,100 +29,100 @@ EMERALD = OLIVE
 LIGHT = {
     "bg": PARCHMENT,
     "surface": "#FFFFFF",
-    "surface_alt": "#F5F2EC",
-    "surface_hover": "#EFE9DD",
+    "surface_alt": "#F9FBFB",
+    "surface_hover": "#EEF6F5",
     "panel": "#FFFFFF",
     "primary": COCOA,
-    "on_accent": PARCHMENT,
+    "on_accent": "#FFFFFF",
     "accent": OLIVE,
     "accent_2": COCOA,
-    "accent_3": "#CBC0AA",
-    "primary_hover": "#2A2519",
-    "primary_light": "rgba(59,53,43,10)",
-    "accent_hover": "#8A8553",
-    "accent_light": "rgba(155,150,95,12)",
-    "accent_soft": "rgba(59,53,43,8)",
-    "text": COCOA,
-    "text_secondary": "#6B6358",
-    "text_dim": "#9B9387",
-    "text_light": "#BCB4A8",
-    "sidebar_bg": "#F5F2EC",
-    "sidebar_text": "#6B6358",
+    "accent_3": "#C7D8D9",
+    "primary_hover": "#09424B",
+    "primary_light": "rgba(15,92,103,10)",
+    "accent_hover": "#C98B32",
+    "accent_light": "rgba(226,166,74,14)",
+    "accent_soft": "rgba(15,92,103,8)",
+    "text": "#163034",
+    "text_secondary": "#60757A",
+    "text_dim": "#8A9DA1",
+    "text_light": "#B5C6C8",
+    "sidebar_bg": "#F9FBFB",
+    "sidebar_text": "#60757A",
     "sidebar_active_text": COCOA,
-    "border": "rgba(59,53,43,12)",
-    "border_hover": "rgba(59,53,43,35)",
+    "border": "rgba(15,92,103,13)",
+    "border_hover": "rgba(15,92,103,35)",
     "border_focus": COCOA,
-    "border_card": "rgba(59,53,43,15)",
+    "border_card": "rgba(15,92,103,15)",
     "indicator_idle": OLIVE,
-    "indicator_running": COCOA,
+    "indicator_running": "#0F5C67",
     "indicator_error": CORAL,
-    "mcp_online": OLIVE,
+    "mcp_online": "#0F5C67",
     "mcp_offline": CORAL,
-    "success": OLIVE,
+    "success": "#0F5C67",
     "warning": AMBER,
     "danger": CORAL,
-    "danger_bg": "rgba(239,68,68,10)",
-    "danger_border": "rgba(239,68,68,55)",
-    "scroll_handle": "rgba(155,147,135,30)",
-    "scroll_handle_hover": "rgba(59,53,43,40)",
-    "progress_bg": "rgba(155,147,135,20)",
+    "danger_bg": "rgba(186,78,85,10)",
+    "danger_border": "rgba(186,78,85,55)",
+    "scroll_handle": "rgba(96,117,122,30)",
+    "scroll_handle_hover": "rgba(15,92,103,40)",
+    "progress_bg": "rgba(96,117,122,20)",
     "garbled_fg": AMBER,
-    "typing_dots": COCOA,
-    "tag_bg": "rgba(59,53,43,10)",
-    "tag_text": COCOA,
-    "chat_user_bubble": "rgba(59,53,43,8)",
+    "typing_dots": "#0F5C67",
+    "tag_bg": "rgba(15,92,103,10)",
+    "tag_text": "#0F5C67",
+    "chat_user_bubble": "rgba(15,92,103,8)",
     "chat_ai_bubble": "#FFFFFF",
-    "accent_surface": "rgba(59,53,43,8)",
-    "shadow": "rgba(59,53,43,0)",
+    "accent_surface": "rgba(15,92,103,8)",
+    "shadow": "rgba(15,92,103,0)",
 }
 
 DARK = {
     "bg": WARM_NOIR,
-    "surface": "#2A2825",
-    "surface_alt": "#252320",
-    "surface_hover": "#353230",
-    "panel": "#2A2825",
-    "primary": "#E8E2D4",
+    "surface": "#172C2E",
+    "surface_alt": "#13292B",
+    "surface_hover": "#20383B",
+    "panel": "#172C2E",
+    "primary": "#D8EBEA",
     "on_accent": WARM_NOIR,
-    "accent": "#B5AB97",
-    "accent_2": "#E8E2D4",
-    "accent_3": "#9B965F",
-    "primary_hover": "#F5F2EC",
-    "primary_light": "rgba(232,226,212,12)",
-    "accent_hover": "#C8BEAA",
-    "accent_light": "rgba(181,171,151,14)",
-    "accent_soft": "rgba(232,226,212,10)",
+    "accent": "#E2A64A",
+    "accent_2": "#D8EBEA",
+    "accent_3": "#E2A64A",
+    "primary_hover": "#E7F2F1",
+    "primary_light": "rgba(216,235,234,12)",
+    "accent_hover": "#F0BC67",
+    "accent_light": "rgba(226,166,74,16)",
+    "accent_soft": "rgba(216,235,234,10)",
     "text": WARM_MOON,
-    "text_secondary": "#BCB4A8",
-    "text_dim": "#8E8678",
-    "text_light": "#6B6358",
-    "sidebar_bg": "#161513",
-    "sidebar_text": "#BCB4A8",
+    "text_secondary": "#A8C0C2",
+    "text_dim": "#789397",
+    "text_light": "#5B777B",
+    "sidebar_bg": "#0C1C1E",
+    "sidebar_text": "#A8C0C2",
     "sidebar_active_text": WARM_MOON,
-    "border": "rgba(245,242,236,10)",
-    "border_hover": "rgba(232,226,212,35)",
-    "border_focus": "#B5AB97",
-    "border_card": "rgba(245,242,236,8)",
-    "indicator_idle": "#B5AB97",
+    "border": "rgba(231,242,241,10)",
+    "border_hover": "rgba(216,235,234,35)",
+    "border_focus": "#E2A64A",
+    "border_card": "rgba(231,242,241,8)",
+    "indicator_idle": "#E2A64A",
     "indicator_running": WARM_MOON,
-    "indicator_error": "#F87171",
-    "mcp_online": "#B5AB97",
-    "mcp_offline": "#F87171",
-    "success": "#B5AB97",
+    "indicator_error": "#F27B82",
+    "mcp_online": "#E2A64A",
+    "mcp_offline": "#F27B82",
+    "success": "#E2A64A",
     "warning": AMBER,
-    "danger": "#F87171",
-    "danger_bg": "rgba(248,113,113,12)",
-    "danger_border": "rgba(248,113,113,50)",
-    "scroll_handle": "rgba(188,180,168,30)",
-    "scroll_handle_hover": "rgba(232,226,212,45)",
-    "progress_bg": "rgba(188,180,168,20)",
+    "danger": "#F27B82",
+    "danger_bg": "rgba(242,123,130,12)",
+    "danger_border": "rgba(242,123,130,50)",
+    "scroll_handle": "rgba(168,192,194,30)",
+    "scroll_handle_hover": "rgba(216,235,234,45)",
+    "progress_bg": "rgba(168,192,194,20)",
     "garbled_fg": AMBER,
-    "typing_dots": WARM_MOON,
-    "tag_bg": "rgba(181,171,151,15)",
-    "tag_text": "#B5AB97",
-    "chat_user_bubble": "rgba(232,226,212,10)",
-    "chat_ai_bubble": "#2A2825",
-    "accent_surface": "rgba(232,226,212,8)",
+    "typing_dots": "#D8EBEA",
+    "tag_bg": "rgba(226,166,74,15)",
+    "tag_text": "#E2A64A",
+    "chat_user_bubble": "rgba(216,235,234,10)",
+    "chat_ai_bubble": "#172C2E",
+    "accent_surface": "rgba(216,235,234,8)",
     "shadow": "rgba(0,0,0,0)",
 }
 
@@ -167,8 +162,8 @@ def _gradient_accent_v() -> str:
     )
 
 
-# 衬线字体优先 — 英文走 Georgia/Cambria，中文自动 fallback 到宋体
-FONT_FAMILY = '"Georgia", "Cambria", "SimSun", "Songti SC", serif'
+# GUI 以 Windows 中文无衬线为首选，避免宋体/衬线字体造成的字面不齐。
+FONT_FAMILY = '"Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif'
 
 
 def apply(app: QApplication):
@@ -195,7 +190,6 @@ def apply(app: QApplication):
         qss_text = qss_text.replace("{{gradient_accent_v}}", _gradient_accent_v())
         app.setStyleSheet(qss_text)
 
-    # 衬线字体：Georgia 优先，Qt 会为中文自动 fallback 到系统宋体
-    font = QFont("Georgia", font_size)
-    font.setStyleHint(QFont.StyleHint.Serif)
+    font = QFont("Microsoft YaHei UI", font_size)
+    font.setStyleHint(QFont.StyleHint.SansSerif)
     app.setFont(font)
