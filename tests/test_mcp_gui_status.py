@@ -550,6 +550,61 @@ def test_launcher_status_does_not_query_windows_service(monkeypatch):
     assert mcp_launcher.is_running() is False
 
 
+def test_service_registration_requires_pywin32_python_class(monkeypatch):
+    """A leftover SCM entry alone must not hijack the GUI start button."""
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+
+    class Result:
+        returncode = 1
+        stdout = ""
+
+    monkeypatch.setattr(mcp_launcher, "_run_hidden", lambda *args, **kwargs: Result())
+
+    assert mcp_launcher.is_service_registration_valid() is False
+
+
+def test_start_falls_back_to_child_process_for_incomplete_service_registration(
+    monkeypatch, tmp_path
+):
+    """GUI MCP start remains usable when an old service lacks PythonClass."""
+    launched = {}
+
+    class Process:
+        pid = 24680
+
+        def poll(self):
+            return None
+
+    def fake_popen(command, **kwargs):
+        launched["command"] = command
+        return Process()
+
+    monkeypatch.setattr(mcp_launcher, "_process", None)
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_running", lambda: bool(mcp_launcher._process))
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_registration_valid", lambda: False)
+    monkeypatch.setattr(
+        mcp_launcher,
+        "service_start",
+        lambda: pytest.fail("incomplete service must not receive the start request"),
+    )
+    monkeypatch.setattr(mcp_launcher, "_resolve_mcp_python", lambda: tmp_path / "python.exe")
+    monkeypatch.setattr(mcp_launcher, "_MCP_SCRIPT", tmp_path / "run_mcp.py")
+    monkeypatch.setattr(mcp_launcher, "_STARTUP_LOG_FILE", tmp_path / "mcp-startup.log")
+    monkeypatch.setattr(mcp_launcher, "_write_pid", lambda pid: None)
+    monkeypatch.setattr(mcp_launcher.subprocess, "Popen", fake_popen)
+    monkeypatch.setattr(mcp_launcher.time, "sleep", lambda seconds: None)
+
+    result = mcp_launcher.start(host="127.0.0.1", port=9000)
+
+    assert result.startswith("MCP Server 已启动")
+    assert launched["command"][-2:] == ["-p", "9000"]
+    mcp_launcher._close_process_log()
+    mcp_launcher._process = None
+
+
 @pytest.mark.skipif(os.name != "nt", reason="Windows creation flags only")
 def test_service_queries_hide_console_window(monkeypatch):
     captured = {}

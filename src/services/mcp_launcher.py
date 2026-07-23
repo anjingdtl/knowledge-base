@@ -7,6 +7,7 @@ MCP 以独立进程组运行，关闭 GUI 后 MCP 继续存活。
 - 进程模式: 直接启动子进程（默认）
 - 服务模式: 通过 Windows 服务管理（ShineHeMCP）
 """
+import logging
 import os
 import signal
 import subprocess
@@ -19,6 +20,8 @@ from typing import Any
 from src.storage.database_bootstrap import inspect_database_bootstrap
 from src.storage.migration_cli import migrate_database
 from src.utils.config import Config
+
+logger = logging.getLogger(__name__)
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _MCP_SCRIPT = _PROJECT_ROOT / "run_mcp.py"
@@ -135,6 +138,36 @@ def is_service_installed() -> bool:
             capture_output=True, text=True, timeout=5,
         )
         return result.returncode == 0
+    except Exception:
+        return False
+
+
+def is_service_registration_valid() -> bool:
+    """Whether the registered service can load its Python service class.
+
+    ``sc query`` only proves that a service name exists.  A partially removed
+    or old packaged installation can leave that entry behind without the
+    pywin32 ``Parameters\\PythonClass`` value.  Sending the sidebar button to
+    such a service merely opens UAC and then leaves MCP offline.  Treat it as
+    an unavailable optional service and let the normal child-process launcher
+    handle the request instead.
+    """
+    if not _is_windows() or not is_service_installed():
+        return False
+    try:
+        result = _run_hidden(
+            [
+                "reg.exe",
+                "query",
+                rf"HKLM\\SYSTEM\\CurrentControlSet\\Services\\{_SERVICE_NAME}\\Parameters",
+                "/v",
+                "PythonClass",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        return result.returncode == 0 and bool(result.stdout.strip())
     except Exception:
         return False
 
@@ -575,8 +608,8 @@ def _resolve_mcp_python() -> Path:
 def start(host: str | None = None, port: int | None = None) -> str:
     """启动 MCP Server。
 
-    如果 Windows 服务已注册，自动走服务模式启动；
-    否则走子进程模式。
+    如果 Windows 服务已注册且配置完整，自动走服务模式启动；
+    已残留但配置不完整的服务会自动回退到子进程模式。
 
     Returns:
         启动结果描述文本
@@ -589,7 +622,15 @@ def start(host: str | None = None, port: int | None = None) -> str:
 
     # Windows 服务模式
     if _is_windows() and is_service_installed():
-        return service_start()
+        if is_service_registration_valid():
+            return service_start()
+        # A broken pywin32 registration must not make the ordinary GUI button
+        # unusable.  The settings page can still be used to remove/reinstall
+        # the service when the user wants the auto-start service mode.
+        logger.warning(
+            "ShineHeMCP service is registered without PythonClass; "
+            "falling back to the GUI-managed MCP process"
+        )
 
     # 子进程模式
 
