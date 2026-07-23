@@ -1,9 +1,9 @@
-"""首次启动配置向导 — 4 步引导新用户完成 AI 服务配置
+"""首次启动配置向导 — 4 步引导新用户完成独立的 AI 模型配置
 
 步骤:
 1. 欢迎 — 项目简介、功能预览
-2. AI 服务商 — 预设模板选择 + API Key 输入
-3. 连通性测试 — 验证 Embedding API 可用性
+2. AI 模型配置 — 分别选择 LLM、RAG 向量与重排序服务商
+3. 连通性测试 — 可选验证 RAG Embedding API 可用性
 4. 完成 — 配置摘要 + 可选导入示例知识包
 """
 import logging
@@ -13,12 +13,16 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
     QDialog,
+    QFormLayout,
+    QFrame,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
     QLineEdit,
     QMessageBox,
     QProgressBar,
     QPushButton,
+    QScrollArea,
     QStackedWidget,
     QTextEdit,
     QVBoxLayout,
@@ -231,81 +235,56 @@ class SetupWizard(QDialog):
         lay.setContentsMargins(40, 32, 40, 16)
         lay.setSpacing(14)
 
-        title = QLabel("选择 AI 服务商")
+        title = QLabel("配置 AI 模型服务")
         title.setObjectName("wizardPageTitle")
         lay.addWidget(title)
 
-        desc = QLabel("选择你已有 API Key 的服务商，我们将自动填充配置。")
+        desc = QLabel(
+            "LLM、RAG 向量模型和重排序模型分别配置。它们可以使用不同的服务商；"
+            "RAG 与重排序均可暂不配置。"
+        )
         desc.setWordWrap(True)
         desc.setObjectName("hintLabel")
         lay.addWidget(desc)
 
         lay.addSpacing(8)
 
-        # 服务商选择
-        form = QVBoxLayout()
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        content = QWidget()
+        form = QVBoxLayout(content)
+        form.setContentsMargins(0, 0, 8, 0)
         form.setSpacing(10)
 
-        prov_row = QHBoxLayout()
-        prov_label = QLabel("服务商：")
-        prov_label.setFixedWidth(90)
-        self._provider_combo = QComboBox()
-        self._provider_combo.addItems(list(PROVIDER_PRESETS))
-        self._provider_combo.currentTextChanged.connect(self._on_provider_changed)
-        prov_row.addWidget(prov_label)
-        prov_row.addWidget(self._provider_combo, 1)
-        form.addLayout(prov_row)
-
-        # API Key
-        key_row = QHBoxLayout()
-        key_label = QLabel("API Key：")
-        key_label.setFixedWidth(90)
-        self._api_key_input = QLineEdit()
-        self._api_key_input.setEchoMode(QLineEdit.EchoMode.Password)
-        self._api_key_input.setPlaceholderText("sk-...")
-        self._show_key_cb = QCheckBox("显示")
-        self._show_key_cb.setFixedWidth(56)
-        self._show_key_cb.toggled.connect(
-            lambda on: self._api_key_input.setEchoMode(
-                QLineEdit.EchoMode.Normal if on else QLineEdit.EchoMode.Password
-            )
+        self._add_service_config(
+            form,
+            role="llm",
+            title="LLM（问答与知识处理）",
+            model_label="LLM 模型：",
+            model_placeholder="例如：gpt-4o-mini、deepseek-chat",
+            optional=False,
         )
-        key_row.addWidget(key_label)
-        key_row.addWidget(self._api_key_input, 1)
-        key_row.addWidget(self._show_key_cb)
-        form.addLayout(key_row)
-
-        # API Base URL（可编辑）
-        url_row = QHBoxLayout()
-        url_label = QLabel("API 地址：")
-        url_label.setFixedWidth(90)
-        self._base_url_input = QLineEdit()
-        self._base_url_input.setPlaceholderText("https://api.example.com/v1")
-        url_row.addWidget(url_label)
-        url_row.addWidget(self._base_url_input, 1)
-        form.addLayout(url_row)
-
-        # Embedding 模型
-        emb_row = QHBoxLayout()
-        emb_label = QLabel("Embedding：")
-        emb_label.setFixedWidth(90)
-        self._emb_model_input = QLineEdit()
-        self._emb_model_input.setPlaceholderText("用于文本向量化的模型")
-        emb_row.addWidget(emb_label)
-        emb_row.addWidget(self._emb_model_input, 1)
-        form.addLayout(emb_row)
-
-        # LLM 模型
-        llm_row = QHBoxLayout()
-        llm_label = QLabel("LLM 模型：")
-        llm_label.setFixedWidth(90)
-        self._llm_model_input = QLineEdit()
-        self._llm_model_input.setPlaceholderText("用于问答和知识处理的模型")
-        llm_row.addWidget(llm_label)
-        llm_row.addWidget(self._llm_model_input, 1)
-        form.addLayout(llm_row)
-
-        lay.addLayout(form)
+        self._add_service_config(
+            form,
+            role="rag",
+            title="RAG 向量模型（可选）",
+            model_label="Embedding 模型：",
+            model_placeholder="例如：text-embedding-3-small、BAAI/bge-m3",
+            optional=True,
+        )
+        self._add_service_config(
+            form,
+            role="reranker",
+            title="重排序模型（可选）",
+            model_label="重排序模型：",
+            model_placeholder="例如：BAAI/bge-reranker-v2-m3",
+            optional=True,
+            with_enabled_switch=True,
+        )
+        form.addStretch(1)
+        scroll.setWidget(content)
+        lay.addWidget(scroll, 1)
 
         lay.addSpacing(8)
         hint = QLabel(
@@ -316,8 +295,90 @@ class SetupWizard(QDialog):
         hint.setWordWrap(True)
         lay.addWidget(hint)
 
-        lay.addStretch(1)
         return page
+
+    def _add_service_config(
+        self,
+        layout: QVBoxLayout,
+        *,
+        role: str,
+        title: str,
+        model_label: str,
+        model_placeholder: str,
+        optional: bool,
+        with_enabled_switch: bool = False,
+    ) -> None:
+        """添加一组独立的模型服务商配置控件。"""
+        group = QGroupBox(title)
+        form = QFormLayout(group)
+        form.setSpacing(8)
+
+        if with_enabled_switch:
+            enabled = QCheckBox("启用专用重排序模型")
+            enabled.setChecked(False)
+            enabled.toggled.connect(
+                lambda checked, service_role=role: self._set_service_fields_enabled(
+                    service_role, checked
+                )
+            )
+            setattr(self, f"_{role}_enabled_cb", enabled)
+            form.addRow(enabled)
+
+        provider = QComboBox()
+        provider.addItem("暂不配置（可稍后设置）" if optional else "请选择服务商")
+        provider.addItems(list(PROVIDER_PRESETS))
+        provider.currentTextChanged.connect(
+            lambda name, service_role=role: self._on_service_provider_changed(
+                service_role, name
+            )
+        )
+
+        api_key = QLineEdit()
+        api_key.setEchoMode(QLineEdit.EchoMode.Password)
+        api_key.setPlaceholderText("sk-...（此服务商专用）")
+        show_key = QCheckBox("显示")
+        show_key.toggled.connect(
+            lambda on, field=api_key: field.setEchoMode(
+                QLineEdit.EchoMode.Normal if on else QLineEdit.EchoMode.Password
+            )
+        )
+        key_row = QHBoxLayout()
+        key_row.addWidget(api_key, 1)
+        key_row.addWidget(show_key)
+
+        base_url = QLineEdit()
+        base_url.setPlaceholderText("https://api.example.com/v1")
+        model = QLineEdit()
+        model.setPlaceholderText(model_placeholder)
+
+        for field_name, field in {
+            "provider_combo": provider,
+            "api_key_input": api_key,
+            "show_key_cb": show_key,
+            "base_url_input": base_url,
+            "model_input": model,
+        }.items():
+            setattr(self, f"_{role}_{field_name}", field)
+
+        form.addRow("服务商：", provider)
+        form.addRow("API Key：", key_row)
+        form.addRow("API 地址：", base_url)
+        form.addRow(model_label, model)
+        layout.addWidget(group)
+
+        if with_enabled_switch:
+            self._set_service_fields_enabled(role, False)
+
+    def _set_service_fields_enabled(self, role: str, enabled: bool) -> None:
+        """禁用可选服务的输入，避免未启用时误以为会保存。"""
+        for suffix in (
+            "provider_combo",
+            "api_key_input",
+            "show_key_cb",
+            "base_url_input",
+            "model_input",
+        ):
+            getattr(self, f"_{role}_{suffix}").setEnabled(enabled)
 
     # ---- Page 2: 连通性测试 ----
 
@@ -327,18 +388,18 @@ class SetupWizard(QDialog):
         lay.setContentsMargins(40, 32, 40, 16)
         lay.setSpacing(14)
 
-        title = QLabel("连通性测试")
+        title = QLabel("RAG 向量模型连通性测试（可选）")
         title.setObjectName("wizardPageTitle")
         lay.addWidget(title)
 
-        desc = QLabel("验证你的 API Key 和模型配置是否正确可用。")
+        desc = QLabel("验证 RAG 向量模型的 API Key、地址和模型是否可用。未配置 RAG 时可直接跳过。")
         desc.setWordWrap(True)
         desc.setObjectName("hintLabel")
         lay.addWidget(desc)
 
         lay.addSpacing(16)
 
-        self._test_btn = QPushButton("🔍 开始测试")
+        self._test_btn = QPushButton("🔍 测试 RAG 向量模型")
         self._test_btn.setObjectName("wizardTestBtn")
         self._test_btn.setFixedHeight(42)
         self._test_btn.clicked.connect(self._run_connectivity_test)
@@ -428,43 +489,57 @@ class SetupWizard(QDialog):
 
         # 从 provider 页面进入时，校验必填
         if idx == 1:
-            if not self._base_url_input.text().strip():
-                QMessageBox.warning(self, "提示", "请填写 API 地址或选择服务商")
+            if not self._llm_base_url_input.text().strip() or not self._llm_model_input.text().strip():
+                QMessageBox.warning(self, "提示", "请为 LLM 选择服务商，并填写 API 地址和模型。")
                 return
-            # 如果没有填写 embedding 模型，给出提示但允许继续
-            if not self._emb_model_input.text().strip():
-                reply = QMessageBox.question(
-                    self, "提示",
-                    "未填写 Embedding 模型，RAG 检索将不可用。\n是否继续？",
-                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                )
-                if reply == QMessageBox.StandardButton.No:
-                    return
+            if self._rag_provider_combo.currentIndex() > 0 and (
+                not self._rag_base_url_input.text().strip()
+                or not self._rag_model_input.text().strip()
+            ):
+                QMessageBox.warning(self, "提示", "已选择 RAG 服务商，请填写 API 地址和 Embedding 模型。")
+                return
+            if self._reranker_enabled_cb.isChecked() and (
+                self._reranker_provider_combo.currentIndex() == 0
+                or not self._reranker_base_url_input.text().strip()
+                or not self._reranker_model_input.text().strip()
+            ):
+                QMessageBox.warning(self, "提示", "已启用重排序，请选择服务商并填写 API 地址和模型。")
+                return
 
         if idx < self._stack.count() - 1:
             self._go_to_page(idx + 1)
 
     # ---- 服务商选择 ----
 
-    def _on_provider_changed(self, name: str):
+    def _on_service_provider_changed(self, role: str, name: str):
+        """只填充当前服务的预设，绝不修改其他模型配置。"""
         preset = PROVIDER_PRESETS.get(name, {})
-        self._base_url_input.setText(preset.get("llm_base_url", ""))
-        self._emb_model_input.setText(preset.get("embedding_model", ""))
-        self._llm_model_input.setText(preset.get("llm_model", ""))
+        if role == "llm":
+            base_url = preset.get("llm_base_url", "")
+            model = preset.get("llm_model", "")
+        elif role == "rag":
+            base_url = preset.get("embedding_base_url", "")
+            model = preset.get("embedding_model", "")
+        else:
+            base_url = preset.get("reranker_base_url", "")
+            model = preset.get("reranker_model", "")
 
-        # 更新 API Key 占位符
+        getattr(self, f"_{role}_base_url_input").setText(base_url)
+        getattr(self, f"_{role}_model_input").setText(model)
         placeholder = preset.get("api_key_placeholder", "sk-...")
-        self._api_key_input.setPlaceholderText(placeholder)
+        getattr(self, f"_{role}_api_key_input").setPlaceholderText(
+            f"{placeholder}（此服务商专用）"
+        )
 
     # ---- 连通性测试 ----
 
     def _run_connectivity_test(self):
-        base_url = self._base_url_input.text().strip()
-        api_key = self._api_key_input.text().strip()
-        model = self._emb_model_input.text().strip()
+        base_url = self._rag_base_url_input.text().strip()
+        api_key = self._rag_api_key_input.text().strip()
+        model = self._rag_model_input.text().strip()
 
         if not base_url:
-            self._test_result.setText("❌ 请先填写 API 地址")
+            self._test_result.setText("⚠️ 未配置 RAG 向量模型，跳过测试")
             return
         if not model:
             self._test_result.setText("⚠️ 未配置 Embedding 模型，跳过测试")
@@ -488,71 +563,75 @@ class SetupWizard(QDialog):
 
     # ---- 完成并保存配置 ----
 
-    def _build_summary(self):
-        provider = self._provider_combo.currentText()
-        api_key = self._api_key_input.text().strip()
-        base_url = self._base_url_input.text().strip()
-        emb_model = self._emb_model_input.text().strip()
-        llm_model = self._llm_model_input.text().strip()
+    def _service_values(self, role: str) -> dict[str, str]:
+        """读取一组服务配置，保持三类模型完全隔离。"""
+        return {
+            "provider": getattr(self, f"_{role}_provider_combo").currentText(),
+            "api_key": getattr(self, f"_{role}_api_key_input").text().strip(),
+            "base_url": getattr(self, f"_{role}_base_url_input").text().strip(),
+            "model": getattr(self, f"_{role}_model_input").text().strip(),
+        }
 
-        key_display = f"{api_key[:8]}...{api_key[-4:]}" if len(api_key) > 12 else "(未设置)"
+    @staticmethod
+    def _key_display(api_key: str) -> str:
+        return f"{api_key[:8]}...{api_key[-4:]}" if len(api_key) > 12 else "(未设置)"
+
+    @staticmethod
+    def _value_or_unconfigured(value: str, *, is_configured: bool = True) -> str:
+        return value if is_configured and value else "(未配置)"
+
+    def _build_summary(self):
+        llm = self._service_values("llm")
+        rag = self._service_values("rag")
+        reranker = self._service_values("reranker")
+        rag_configured = self._rag_provider_combo.currentIndex() > 0
+        reranker_configured = self._reranker_enabled_cb.isChecked()
 
         self._summary.setHtml(f"""
         <table style="width:100%; font-size:13px;">
-          <tr><td style="padding:4px; color:gray;">服务商</td>
-              <td style="padding:4px;"><b>{provider}</b></td></tr>
-          <tr><td style="padding:4px; color:gray;">API Key</td>
-              <td style="padding:4px;">{key_display}</td></tr>
-          <tr><td style="padding:4px; color:gray;">API 地址</td>
-              <td style="padding:4px;">{base_url}</td></tr>
-          <tr><td style="padding:4px; color:gray;">Embedding 模型</td>
-              <td style="padding:4px;">{emb_model or '(未设置)'}</td></tr>
-          <tr><td style="padding:4px; color:gray;">LLM 模型</td>
-              <td style="padding:4px;">{llm_model or '(未设置)'}</td></tr>
+          <tr><td style="padding:4px; color:gray;">LLM 服务商</td>
+              <td style="padding:4px;"><b>{llm['provider']}</b></td></tr>
+          <tr><td style="padding:4px; color:gray;">LLM 模型 / Key</td>
+              <td style="padding:4px;">{llm['model']} / {self._key_display(llm['api_key'])}</td></tr>
+          <tr><td style="padding:4px; color:gray;">RAG 服务商</td>
+              <td style="padding:4px;">{self._value_or_unconfigured(rag['provider'], is_configured=rag_configured)}</td></tr>
+          <tr><td style="padding:4px; color:gray;">Embedding 模型 / Key</td>
+              <td style="padding:4px;">{self._value_or_unconfigured(rag['model'], is_configured=rag_configured)} / {self._key_display(rag['api_key'])}</td></tr>
+          <tr><td style="padding:4px; color:gray;">重排序服务商</td>
+              <td style="padding:4px;">{self._value_or_unconfigured(reranker['provider'], is_configured=reranker_configured)}</td></tr>
+          <tr><td style="padding:4px; color:gray;">重排序模型 / Key</td>
+              <td style="padding:4px;">{self._value_or_unconfigured(reranker['model'], is_configured=reranker_configured)} / {self._key_display(reranker['api_key'])}</td></tr>
         </table>
         """)
 
     def _on_finish(self):
         """保存配置并关闭向导"""
         try:
-            api_key = self._api_key_input.text().strip()
-            base_url = self._base_url_input.text().strip()
-            emb_model = self._emb_model_input.text().strip()
-            llm_model = self._llm_model_input.text().strip()
+            llm = self._service_values("llm")
+            rag = self._service_values("rag")
+            reranker = self._service_values("reranker")
+            rag_configured = self._rag_provider_combo.currentIndex() > 0
+            reranker_enabled = self._reranker_enabled_cb.isChecked()
 
-            # 获取当前 provider 对应的 preset
-            provider_name = self._provider_combo.currentText()
-            preset = PROVIDER_PRESETS.get(provider_name, {})
+            # 每个模型组独立保存，绝不从 LLM 自动继承供应商、地址或 API Key。
+            Config.set("llm.provider", llm["provider"])
+            Config.set("llm.base_url", llm["base_url"])
+            Config.set("llm.model", llm["model"])
+            Config.set("llm.api_key", llm["api_key"])
 
-            # 设置 LLM 配置
-            Config.set("llm.base_url", base_url)
-            Config.set("llm.model", llm_model or preset.get("llm_model", ""))
-            Config.set("llm.provider", provider_name)
-            if api_key:
-                Config.set("llm.api_key", api_key)
+            Config.set("embedding.reuse_llm", False)
+            Config.set("embedding.provider", rag["provider"] if rag_configured else "")
+            Config.set("embedding.base_url", rag["base_url"] if rag_configured else "")
+            Config.set("embedding.model", rag["model"] if rag_configured else "")
+            Config.set("embedding.api_key", rag["api_key"] if rag_configured else "")
 
-            # 设置 Embedding 配置
-            emb_base_url = preset.get("embedding_base_url", base_url)
-            Config.set("embedding.base_url", emb_base_url)
-            Config.set("embedding.model", emb_model or preset.get("embedding_model", ""))
-            Config.set("embedding.provider", provider_name)
-            if api_key and emb_base_url == base_url:
-                # 同服务商复用同一个 key
-                Config.set("embedding.api_key", api_key)
-
-            # 设置 Reranker 配置（如果 preset 有）
-            reranker_url = preset.get("reranker_base_url")
-            reranker_model = preset.get("reranker_model")
-            if reranker_url:
-                Config.set("reranker.base_url", reranker_url)
-                Config.set("reranker.model", reranker_model)
-                Config.set("reranker.enabled", True)
-                if api_key and reranker_url == base_url:
-                    Config.set("reranker.api_key", api_key)
-
-            # Embedding reuse_llm 根据是否同服务商自动设置
-            emb_url = Config.get("embedding.base_url", "")
-            Config.set("embedding.reuse_llm", emb_url == base_url)
+            Config.set("reranker.enabled", reranker_enabled)
+            Config.set("reranker.reuse_llm", False)
+            # 工厂以 provider=api 识别兼容 API；显示名称仅用于本向导的选择与摘要。
+            Config.set("reranker.provider", "api" if reranker_enabled else "disabled")
+            Config.set("reranker.base_url", reranker["base_url"] if reranker_enabled else "")
+            Config.set("reranker.model", reranker["model"] if reranker_enabled else "")
+            Config.set("reranker.api_key", reranker["api_key"] if reranker_enabled else "")
 
             # 持久化（API Key 通过 keyring + DPAPI 安全存储）
             Config.save()

@@ -183,6 +183,30 @@ class TestProviderPresets:
 
 
 # ---------------------------------------------------------------------------
+# Setup Wizard 模型配置隔离（无需 PySide6）
+# ---------------------------------------------------------------------------
+
+class TestWizardModelConfigurationSeparation:
+    """首次配置不能把 LLM、RAG 与重排序隐式绑定为同一服务商。"""
+
+    def test_wizard_exposes_three_independent_service_groups(self):
+        source = (_SOURCE_DIR / "gui" / "setup_wizard.py").read_text(encoding="utf-8")
+
+        for role in ('role="llm"', 'role="rag"', 'role="reranker"'):
+            assert role in source
+        assert '"暂不配置（可稍后设置）"' in source
+        assert '"启用专用重排序模型"' in source
+
+    def test_wizard_saves_each_service_without_llm_reuse(self):
+        source = (_SOURCE_DIR / "gui" / "setup_wizard.py").read_text(encoding="utf-8")
+
+        assert 'Config.set("embedding.reuse_llm", False)' in source
+        assert 'Config.set("reranker.reuse_llm", False)' in source
+        assert 'Config.set("reranker.enabled", reranker_enabled)' in source
+        assert 'Config.set("embedding.api_key", rag["api_key"] if rag_configured else "")' in source
+
+
+# ---------------------------------------------------------------------------
 # app.py 集成测试
 # ---------------------------------------------------------------------------
 
