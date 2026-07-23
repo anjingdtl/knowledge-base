@@ -12,6 +12,7 @@ import signal
 import subprocess
 import sys
 import time
+from importlib.util import find_spec
 from pathlib import Path
 from typing import Any
 
@@ -22,10 +23,12 @@ from src.utils.config import Config
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _MCP_SCRIPT = _PROJECT_ROOT / "run_mcp.py"
 _PID_FILE = _PROJECT_ROOT / "data" / "mcp.pid"
+_STARTUP_LOG_FILE = _PROJECT_ROOT / "data" / "logs" / "mcp-startup.log"
 _SERVICE_NAME = "ShineHeMCP"
 _SERVICE_PORT = 9000  # windows_service.py 硬编码的服务监听端口
 
 _process: subprocess.Popen | None = None
+_process_log_handle = None
 _CREATE_NO_WINDOW = int(getattr(subprocess, "CREATE_NO_WINDOW", 0))
 _CREATE_NEW_PROCESS_GROUP = int(
     getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
@@ -496,23 +499,80 @@ def _kill_process_windows(pid: int):
 
 
 def is_running() -> bool:
-    """MCP 是否存活；周期调用路径不启动外部命令。"""
+    """Whether the GUI-managed HTTP MCP process is running.
+
+    A heartbeat can come from a previous, already-exited process (or a stdio
+    MCP client), so it must not prevent the GUI from launching its HTTP server.
+    Only the tracked child process or the configured HTTP port is authoritative
+    for this launcher.
+    """
     global _process
     if _process is not None and _process.poll() is None:
         return True
+    if _process is not None:
+        _close_process_log()
+        _process = None
 
-    from src.services.mcp_heartbeat import is_mcp_available
-    if is_mcp_available():
+    from src.services.mcp_heartbeat import is_mcp_port_available
+    if is_mcp_port_available():
         return True
 
-    # 不信任陈旧 PID；实际服务应由心跳或端口证明存活。
+    # 不信任陈旧 PID；实际服务应由受管进程或 TCP 端口证明存活。
     pid = _read_pid()
     if pid:
         _remove_pid()
     return False
 
 
-def start(host: str = "127.0.0.1", port: int = 9000) -> str:
+def _startup_error_summary() -> str:
+    """Return the last useful launcher error without exposing a full traceback."""
+    try:
+        lines = _STARTUP_LOG_FILE.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return "未记录到错误日志"
+    useful = [line.strip() for line in lines if line.strip()]
+    if not useful:
+        return "未记录到错误日志"
+    return " ".join(useful[-3:])[:500]
+
+
+def get_startup_diagnostic() -> str:
+    """A concise MCP launch diagnostic suitable for the GUI."""
+    return f"启动日志：{_STARTUP_LOG_FILE}\n最近输出：{_startup_error_summary()}"
+
+
+def _close_process_log() -> None:
+    global _process_log_handle
+    if _process_log_handle is not None:
+        try:
+            _process_log_handle.close()
+        except OSError:
+            pass
+        _process_log_handle = None
+
+
+def _resolve_mcp_python() -> Path:
+    """Prefer the interpreter that has the MCP dependency installed.
+
+    During source development the GUI may be opened with a system Python while
+    project dependencies live in ``.venv``.  Starting ``run_mcp.py`` with the
+    former makes the subprocess exit immediately with ``No module named
+    fastmcp``.  The project virtual environment is a safe fallback.
+    """
+    if find_spec("fastmcp") is not None:
+        python_dir = Path(sys.executable).parent
+        python = python_dir / "python.exe"
+        return python if python.exists() else Path(sys.executable)
+
+    venv_scripts = _PROJECT_ROOT / ".venv" / "Scripts"
+    for filename in ("python.exe", "pythonw.exe"):
+        candidate = venv_scripts / filename
+        if candidate.exists():
+            return candidate
+    return Path(sys.executable)
+
+
+def start(host: str | None = None, port: int | None = None) -> str:
     """启动 MCP Server。
 
     如果 Windows 服务已注册，自动走服务模式启动；
@@ -521,7 +581,9 @@ def start(host: str = "127.0.0.1", port: int = 9000) -> str:
     Returns:
         启动结果描述文本
     """
-    global _process
+    global _process, _process_log_handle
+    host = host or str(Config.get("mcp.bind_host", "127.0.0.1") or "127.0.0.1")
+    port = int(port if port is not None else (Config.get("mcp.port", 9000) or 9000))
     if is_running():
         return "MCP Server 已在运行中"
 
@@ -531,12 +593,9 @@ def start(host: str = "127.0.0.1", port: int = 9000) -> str:
 
     # 子进程模式
 
-    # 使用 pythonw.exe 避免 Windows 弹出终端窗口
-    python_dir = Path(sys.executable).parent
-    pythonw = python_dir / "pythonw.exe"
-    if not pythonw.exists():
-        pythonw = Path(sys.executable)
-    cmd = [str(pythonw), str(_MCP_SCRIPT), "-t", "streamable-http", "--host", host, "-p", str(port)]
+    # CREATE_NO_WINDOW 会隐藏 python.exe 的控制台，同时保留 stderr 以记录启动失败原因。
+    python_executable = _resolve_mcp_python()
+    cmd = [str(python_executable), str(_MCP_SCRIPT), "-t", "streamable-http", "--host", host, "-p", str(port)]
 
     try:
         # CREATE_NEW_PROCESS_GROUP: 独立进程组，关闭 GUI 不影响
@@ -549,11 +608,13 @@ def start(host: str = "127.0.0.1", port: int = 9000) -> str:
                 | _CREATE_NO_WINDOW
             )
 
+        _STARTUP_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+        _process_log_handle = _STARTUP_LOG_FILE.open("w", encoding="utf-8")
         _process = subprocess.Popen(
             cmd,
             cwd=str(_PROJECT_ROOT),
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stdout=_process_log_handle,
+            stderr=_process_log_handle,
             creationflags=flags,
         )
         _write_pid(_process.pid)
@@ -562,7 +623,8 @@ def start(host: str = "127.0.0.1", port: int = 9000) -> str:
             return f"MCP Server 已启动 (端口 {port})，关闭应用后将继续运行"
         else:
             _remove_pid()
-            return "MCP Server 启动失败（进程已退出）"
+            detail = _startup_error_summary()
+            return f"MCP Server 启动失败（进程已退出）：{detail}\n日志：{_STARTUP_LOG_FILE}"
     except Exception as e:
         return f"MCP Server 启动失败: {e}"
 
@@ -597,6 +659,7 @@ def stop() -> str:
         except Exception:
             pass
         _process = None
+        _close_process_log()
 
     # 再通过 PID 文件停止独立进程
     pid = _read_pid()
@@ -620,4 +683,5 @@ def stop() -> str:
             pass
 
     _remove_pid()
+    _close_process_log()
     return "MCP Server 已停止" if stopped else "MCP Server 未在运行"

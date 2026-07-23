@@ -1,5 +1,7 @@
 """设置对话框"""
-from PySide6.QtCore import Qt, QTimer
+import time
+
+from PySide6.QtCore import QThread, Qt, QTimer, Signal
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -26,6 +28,39 @@ from src.gui.icons import set_named_icon
 from src.utils.config import Config
 
 
+class ConnectionTestWorker(QThread):
+    """Run one provider connection test without saving settings first."""
+
+    completed = Signal(bool, str)
+
+    def __init__(self, request, label: str, parent=None):
+        super().__init__(parent)
+        self._request = request
+        self._label = label
+
+    def run(self) -> None:
+        from src.services.provider_runtime import run_provider_operation
+
+        started = time.monotonic()
+        try:
+            response = run_provider_operation(
+                "connection_test",
+                self._request,
+                isolation_mode="process",
+                timeout=self._request.timeout_seconds,
+            )
+            elapsed = response.elapsed_ms or int((time.monotonic() - started) * 1000)
+            if response.ok:
+                self.completed.emit(True, f"{self._label}连接成功（{elapsed} ms）")
+            else:
+                self.completed.emit(
+                    False,
+                    f"{self._label}连接失败：{response.error_message or response.error_type or '未知错误'}",
+                )
+        except Exception as exc:  # noqa: BLE001 - surface a concise UI diagnostic
+            self.completed.emit(False, f"{self._label}连接失败：{str(exc)[:300]}")
+
+
 class SettingsDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -43,6 +78,14 @@ class SettingsDialog(QDialog):
         self._svc_poll.timeout.connect(self._on_svc_poll_tick)
         self._svc_poll_ticks = 0
         self._svc_poll_expect_running: bool | None = None
+
+    def reject(self) -> None:
+        """Keep the dialog alive while a worker owns a provider subprocess."""
+        worker = getattr(self, "_connection_test_worker", None)
+        if worker is not None and worker.isRunning():
+            QMessageBox.information(self, "连接测试中", "请等待当前连接测试完成后再关闭设置窗口。")
+            return
+        super().reject()
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -79,6 +122,10 @@ class SettingsDialog(QDialog):
         llm_form.addRow("Temperature：", self.llm_temperature)
         llm_form.addRow("Max Tokens：", self.llm_max_tokens)
 
+        self.llm_test_button, self.llm_test_status = self._add_connection_test_row(
+            llm_form, "测试 LLM 连接", self._test_llm_connection
+        )
+
         hint_llm = QLabel("说明：API 地址填写供应商的 OpenAI 兼容接口地址。\n"
                           "国内常见：DeepSeek(https://api.deepseek.com/v1)、智谱(https://open.bigmodel.cn/api/paas/v4)、\n"
                           "Moonshot(https://api.moonshot.cn/v1)、硅基流动(https://api.siliconflow.cn/v1) 等。\n"
@@ -108,6 +155,10 @@ class SettingsDialog(QDialog):
         emb_form.addRow("API Key：", self.emb_api_key)
         emb_form.addRow("API 地址：", self.emb_base_url)
         emb_form.addRow("模型：", self.emb_model)
+
+        self.embedding_test_button, self.embedding_test_status = self._add_connection_test_row(
+            emb_form, "测试 Embedding 连接", self._test_embedding_connection
+        )
 
         hint_emb = QLabel("说明：大多数供应商的 Embedding 接口与 LLM 接口共享同一个地址和 Key，\n"
                           '只需改模型名即可。勾选「与 LLM 相同」后留空的字段会自动复用 LLM 设置。')
@@ -142,6 +193,10 @@ class SettingsDialog(QDialog):
         rerank_form.addRow("API 地址：", self.rerank_base_url)
         rerank_form.addRow("模型：", self.rerank_model)
 
+        self.rerank_test_button, self.rerank_test_status = self._add_connection_test_row(
+            rerank_form, "测试重排序连接", self._test_rerank_connection
+        )
+
         hint_rerank = QLabel("说明：专用重排序模型（如 BAAI/bge-reranker-v2-mini）比 LLM 打分更快更准。\n"
                              "如不配置模型，将使用 LLM 打分作为重排序方式。\n"
                              "硅基流动支持 rerank API，请确保模型名称正确。")
@@ -170,6 +225,13 @@ class SettingsDialog(QDialog):
         rag_form.addRow("Chunk Size：", self.rag_chunk_size)
         rag_form.addRow("Chunk Overlap：", self.rag_chunk_overlap)
         rag_form.addRow("Score Threshold：", self.rag_score_threshold)
+        self.rag_test_button, self.rag_test_status = self._add_connection_test_row(
+            rag_form, "测试 RAG 向量连接", self._test_embedding_connection
+        )
+        rag_hint = QLabel("说明：RAG 的联网能力由 Embedding（向量模型）提供；此测试会验证当前输入的向量模型地址、Key 和模型名，无需先保存设置。")
+        rag_hint.setObjectName("hintLabel")
+        rag_hint.setWordWrap(True)
+        rag_form.addRow(rag_hint)
         tabs.addTab(rag_tab, "RAG")
 
         # ---- 外观设置 ----
@@ -429,6 +491,127 @@ class SettingsDialog(QDialog):
         btn_row.addWidget(btn_cancel)
         layout.addLayout(btn_row)
 
+    def _add_connection_test_row(self, form: QFormLayout, text: str, callback):
+        """Add a non-blocking connection-test control to a settings form."""
+        container = QWidget()
+        row = QHBoxLayout(container)
+        row.setContentsMargins(0, 0, 0, 0)
+        button = QPushButton(text)
+        button.clicked.connect(callback)
+        status = QLabel("未测试")
+        status.setObjectName("hintLabel")
+        status.setWordWrap(True)
+        row.addWidget(button)
+        row.addWidget(status, 1)
+        form.addRow("连接测试：", container)
+        return button, status
+
+    @staticmethod
+    def _field_value(field: QLineEdit) -> str:
+        return field.text().strip()
+
+    def _start_connection_test(self, *, request, label: str, buttons, statuses) -> None:
+        for button in buttons:
+            button.setEnabled(False)
+        for status in statuses:
+            status.setText("测试中…")
+
+        worker = ConnectionTestWorker(request, label, self)
+        self._connection_test_worker = worker
+
+        def finish(ok: bool, message: str) -> None:
+            for button in buttons:
+                button.setEnabled(True)
+            for status in statuses:
+                status.setText(message)
+                status.setProperty("connectionStatus", "success" if ok else "error")
+                status.style().polish(status)
+            self._connection_test_worker = None
+
+        worker.completed.connect(finish)
+        worker.start()
+
+    def _test_llm_connection(self) -> None:
+        from src.services.provider_runtime import ProviderRequest
+
+        base_url = self._field_value(self.llm_base_url)
+        model = self._field_value(self.llm_model)
+        api_key = self._field_value(self.llm_api_key)
+        if not base_url or not model or not api_key:
+            self.llm_test_status.setText("请填写 API 地址、模型和 API Key 后再测试。")
+            return
+        self._start_connection_test(
+            request=ProviderRequest(
+                provider_type="openai_compatible_chat",
+                base_url=base_url,
+                model=model,
+                payload={"messages": [{"role": "user", "content": "Reply with OK."}], "max_tokens": 8, "temperature": 0},
+                timeout_seconds=15,
+                secret_env_key="SHINEHE_LLM_API_KEY",
+                credential=api_key,
+            ),
+            label="LLM ",
+            buttons=(self.llm_test_button,),
+            statuses=(self.llm_test_status,),
+        )
+
+    def _embedding_connection_fields(self) -> tuple[str, str, str]:
+        reuse_llm = self.emb_reuse_llm.isChecked()
+        return (
+            self._field_value(self.emb_base_url) or (self._field_value(self.llm_base_url) if reuse_llm else ""),
+            self._field_value(self.emb_model),
+            self._field_value(self.emb_api_key) or (self._field_value(self.llm_api_key) if reuse_llm else ""),
+        )
+
+    def _test_embedding_connection(self) -> None:
+        from src.services.provider_runtime import ProviderRequest
+
+        base_url, model, api_key = self._embedding_connection_fields()
+        if not base_url or not model or not api_key:
+            message = "请填写 Embedding 的 API 地址、模型和 API Key 后再测试。"
+            self.embedding_test_status.setText(message)
+            self.rag_test_status.setText(message)
+            return
+        self._start_connection_test(
+            request=ProviderRequest(
+                provider_type="openai_compatible_embedding",
+                base_url=base_url,
+                model=model,
+                payload={"input": ["连接测试"]},
+                timeout_seconds=15,
+                secret_env_key="SHINEHE_EMBEDDING_API_KEY",
+                credential=api_key,
+            ),
+            label="Embedding / RAG ",
+            buttons=(self.embedding_test_button, self.rag_test_button),
+            statuses=(self.embedding_test_status, self.rag_test_status),
+        )
+
+    def _test_rerank_connection(self) -> None:
+        from src.services.provider_runtime import ProviderRequest
+
+        reuse_llm = self.rerank_reuse_llm.isChecked()
+        base_url = self._field_value(self.rerank_base_url) or (self._field_value(self.llm_base_url) if reuse_llm else "")
+        model = self._field_value(self.rerank_model)
+        api_key = self._field_value(self.rerank_api_key) or (self._field_value(self.llm_api_key) if reuse_llm else "")
+        if not base_url or not model or not api_key:
+            self.rerank_test_status.setText("请填写重排序的 API 地址、模型和 API Key 后再测试。")
+            return
+        self._start_connection_test(
+            request=ProviderRequest(
+                provider_type="reranker_api",
+                base_url=base_url,
+                model=model,
+                payload={"query": "连接测试", "documents": ["用于验证重排序服务的测试文本"], "top_n": 1},
+                timeout_seconds=15,
+                secret_env_key="SHINEHE_RERANKER_API_KEY",
+                credential=api_key,
+            ),
+            label="重排序 ",
+            buttons=(self.rerank_test_button,),
+            statuses=(self.rerank_test_status,),
+        )
+
     def _load_values(self):
         self.llm_provider.setText(Config.get("llm.provider", ""))
         self.llm_api_key.setText(Config.get("llm.api_key", ""))
@@ -589,8 +772,6 @@ class SettingsDialog(QDialog):
             )
             if reply == QMessageBox.StandardButton.Yes:
                 self._on_svc_restart()
-            else:
-                self.accept()
         elif api_key_changed:
             # 仅 API Key 变更 — 检查是否以 Windows 服务模式运行
             from src.services.mcp_launcher import get_service_status, is_service_installed
@@ -610,14 +791,12 @@ class SettingsDialog(QDialog):
                         self, "提示",
                         "可稍后手动重启：设置页 → 服务管理 →「重启服务」按钮。",
                     )
-                    self.accept()
             else:
                 # 服务未安装或未运行，Key 已持久化，下次启动自动加载
                 QMessageBox.information(
                     self, "API Key 已保存",
                     "API Key 已保存，下次启动 MCP 服务时自动加载。",
                 )
-                self.accept()
         elif mcp_changed:
             QMessageBox.information(
                 self, "已保存",
@@ -627,7 +806,6 @@ class SettingsDialog(QDialog):
             )
         else:
             QMessageBox.information(self, "已保存", "设置已保存并生效。")
-        self.accept()
 
     # ---- 服务管理 ----
 
@@ -832,4 +1010,3 @@ class SettingsDialog(QDialog):
         self._mcp_scope_label.setText(info["scope"])
         self._mcp_usecase_label.setText(info["use_case"])
         self._mcp_writes_label.setText(info["writes"])
-

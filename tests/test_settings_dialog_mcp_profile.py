@@ -140,10 +140,20 @@ class TestWikiSwitch:
         monkeypatch.setattr(theme_mod, "apply", lambda *a, **kw: None)
         monkeypatch.setattr(sd_mod.QMessageBox, "information", lambda *a, **kw: None)
         monkeypatch.setattr(sd_mod.QMessageBox, "warning", lambda *a, **kw: None)
-        monkeypatch.setattr(settings_dialog, "accept", lambda *a, **kw: None)
+        closed = []
+        monkeypatch.setattr(settings_dialog, "accept", lambda *a, **kw: closed.append(True))
 
         settings_dialog.mcp_enable_wiki.setChecked(True)
         settings_dialog._save()
 
         # wiki.enabled 应被持久化到 Config(操作 _default_instance = isolated)
         assert Config.get("wiki.enabled", False) is True
+        assert closed == [], "保存设置不应关闭设置窗口"
+
+
+class TestConnectionTests:
+    def test_connection_test_controls_exist(self, settings_dialog):
+        assert settings_dialog.llm_test_button.text() == "测试 LLM 连接"
+        assert settings_dialog.embedding_test_button.text() == "测试 Embedding 连接"
+        assert settings_dialog.rag_test_button.text() == "测试 RAG 向量连接"
+        assert settings_dialog.rerank_test_button.text() == "测试重排序连接"

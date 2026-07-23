@@ -59,6 +59,22 @@ class TestApiReranker:
         assert result[1]["rerank_score"] == 0.6
         assert result[2]["rerank_score"] == 0.3
 
+    def test_passes_explicit_api_key_to_isolated_provider(self, monkeypatch):
+        """The worker process must receive the configured key, not only global Config."""
+        captured = {}
+
+        def fake_run(_operation, request, **_kwargs):
+            captured["credential"] = request.credential
+            return ProviderResponse(ok=True, data={"results": [{"index": 0, "relevance_score": 1.0}]})
+
+        monkeypatch.setattr("src.services.rerankers.api.run_provider_operation", fake_run)
+        result = ApiReranker("https://api.test.com/v1/rerank", "test-model", "test-secret").rerank(
+            "q", [{"text": "candidate"}]
+        )
+
+        assert captured["credential"] == "test-secret"
+        assert result[0]["rerank_score"] == 1.0
+
     def test_api_failure_returns_original(self, monkeypatch):
         """API failure returns original candidates with warning."""
         monkeypatch.setattr(

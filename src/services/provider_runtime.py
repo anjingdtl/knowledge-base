@@ -20,6 +20,10 @@ class ProviderRequest:
     payload: dict[str, Any]
     timeout_seconds: float
     secret_env_key: str
+    # Connection tests can use credentials that the user has entered but has not
+    # saved yet.  The value is sent only to the short-lived worker process and is
+    # redacted from any error returned to the UI.
+    credential: str = ""
 
 
 @dataclass
@@ -71,10 +75,26 @@ def _bounded_data(data: Any, max_bytes: int) -> Any:
     return data
 
 
+def _openai_base_url(base_url: str) -> str | None:
+    """Accept both an OpenAI API root and a copied endpoint URL from provider docs."""
+    normalized = base_url.rstrip("/")
+    for endpoint in ("/chat/completions", "/embeddings"):
+        if normalized.lower().endswith(endpoint):
+            normalized = normalized[:-len(endpoint)]
+            break
+    return normalized or None
+
+
+def _rerank_url(base_url: str) -> str:
+    """Avoid appending /rerank twice when a provider's full endpoint was pasted."""
+    normalized = base_url.rstrip("/")
+    return normalized if normalized.lower().endswith("/rerank") else f"{normalized}/rerank"
+
+
 def _execute_provider_request(request: ProviderRequest) -> ProviderResponse:
     """Child-process entry.  Never logs request payloads or secrets."""
     started = time.monotonic()
-    secret = _resolve_secret(request.secret_env_key)
+    secret = request.credential or _resolve_secret(request.secret_env_key)
     try:
         if request.provider_type == "test_control":
             action = request.payload.get("action")
@@ -94,7 +114,7 @@ def _execute_provider_request(request: ProviderRequest) -> ProviderResponse:
                 raise RuntimeError(f"provider credential unavailable via {request.secret_env_key}")
             openai_client = OpenAI(
                 api_key=secret,
-                base_url=request.base_url or None,
+                base_url=_openai_base_url(request.base_url),
                 timeout=float(request.timeout_seconds),
                 max_retries=0,
             )
@@ -122,7 +142,7 @@ def _execute_provider_request(request: ProviderRequest) -> ProviderResponse:
                 raise RuntimeError(f"provider credential unavailable via {request.secret_env_key}")
             embedding_client = OpenAI(
                 api_key=secret,
-                base_url=request.base_url or None,
+                base_url=_openai_base_url(request.base_url),
                 timeout=float(request.timeout_seconds),
                 max_retries=0,
             )
@@ -145,7 +165,7 @@ def _execute_provider_request(request: ProviderRequest) -> ProviderResponse:
                 follow_redirects=False,
             ) as http_client:
                 response = http_client.post(
-                    f"{request.base_url.rstrip('/')}/rerank",
+                    _rerank_url(request.base_url),
                     headers={
                         "Authorization": f"Bearer {secret}",
                         "Content-Type": "application/json",

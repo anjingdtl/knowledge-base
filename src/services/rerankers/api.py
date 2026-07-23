@@ -26,6 +26,7 @@ class ApiReranker:
     ):
         self._base_url = base_url.rstrip("/")
         self._model = model
+        self._api_key = api_key
         self._credential_configured = bool(api_key)
         self._config = config
         self._timeout = timeout
@@ -57,6 +58,7 @@ class ApiReranker:
                     payload=payload,
                     timeout_seconds=provider_timeout,
                     secret_env_key="SHINEHE_RERANKER_API_KEY",
+                    credential=self._api_key,
                 ),
                 isolation_mode="process",
                 timeout=provider_timeout,
