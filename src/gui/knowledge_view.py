@@ -1630,21 +1630,29 @@ class KnowledgeView(QWidget):
                 QMessageBox.information(self, "知识去重", "没有发现重复的知识条目。")
             return
 
-        total_dupes = sum(len(g) - 1 for g in groups)
+        groups_to_process = groups[:50]
+        total_dupes = sum(len(g) - 1 for g in groups_to_process)
 
-        # 用自定义对话框代替 QMessageBox，限制高度可滚动
-        from PySide6.QtWidgets import QDialog, QDialogButtonBox, QTextEdit, QVBoxLayout
+        # 用自定义对话框展示可逐行核对的去重清单。
+        from PySide6.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout
         dialog = QDialog(self)
         dialog.setWindowTitle("确认去重")
-        dialog.setMinimumWidth(760)
-        dialog.setMaximumHeight(640)
+        dialog.setMinimumWidth(980)
+        dialog.setMaximumHeight(700)
 
         layout = QVBoxLayout(dialog)
 
-        summary_text = (
-            f"发现 {len(groups)} 组正文内容完全一致的条目，共 {total_dupes} 个重复项。\n"
-            "将保留每组最近导入的一条，其余条目移入回收站，可恢复。"
-        )
+        if len(groups) > len(groups_to_process):
+            summary_text = (
+                f"发现 {len(groups)} 组正文内容完全一致的条目。为保持清单可读性，"
+                f"本次仅展示并处理前 {len(groups_to_process)} 组、共 {total_dupes} 个重复项。\n"
+                "将保留每组最近导入的一条，其余条目移入回收站，可恢复。"
+            )
+        else:
+            summary_text = (
+                f"发现 {len(groups)} 组正文内容完全一致的条目，共 {total_dupes} 个重复项。\n"
+                "将保留每组最近导入的一条，其余条目移入回收站，可恢复。"
+            )
         if title_candidates:
             summary_text += (
                 f"\n另有 {len(title_candidates)} 组仅标题相同且正文为空的候选项，"
@@ -1655,32 +1663,71 @@ class KnowledgeView(QWidget):
         summary.setWordWrap(True)
         layout.addWidget(summary)
 
-        detail = QTextEdit()
-        detail.setReadOnly(True)
-        detail.setMaximumHeight(420)
-        lines = []
-        for i, g in enumerate(groups[:50]):
+        comparison = QTableWidget(0, 5, dialog)
+        comparison.setHorizontalHeaderLabels([
+            "组别 / 内容指纹", "处理", "知识标题", "导入时间", "来源文件",
+        ])
+        comparison.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        comparison.setSelectionMode(QAbstractItemView.NoSelection)
+        comparison.setAlternatingRowColors(True)
+        comparison.setSortingEnabled(False)
+        comparison.setWordWrap(False)
+        comparison.verticalHeader().setVisible(False)
+        comparison.verticalHeader().setDefaultSectionSize(38)
+        comparison.setShowGrid(False)
+        comparison.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
+        comparison.horizontalHeader().setSectionResizeMode(1, QHeaderView.Fixed)
+        comparison.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        comparison.horizontalHeader().setSectionResizeMode(3, QHeaderView.Fixed)
+        comparison.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
+        comparison.setColumnWidth(0, 160)
+        comparison.setColumnWidth(1, 112)
+        comparison.setColumnWidth(3, 170)
+
+        def _cell(text: str, *, tooltip: str = "", color: str = "") -> QTableWidgetItem:
+            item = QTableWidgetItem(text)
+            if tooltip:
+                item.setToolTip(tooltip)
+            if color:
+                item.setForeground(QColor(color))
+            return item
+
+        row = 0
+        for i, g in enumerate(groups_to_process):
             keep = g[0]
             fingerprint = keep.get("content_fingerprint", "")
-            lines.append(f"第 {i + 1} 组 · {keep.get('dedupe_reason', '内容一致')}"
-                         f"（SHA-256：{fingerprint[:12]}…）")
-            lines.append(f"  保留（最近导入）: {keep.get('title', '')}")
-            lines.append(
-                f"    导入时间: {keep.get('created_at', '').replace('T', ' ')}"
-                f" | 来源: {keep.get('source_path', '') or '未记录'}"
-            )
-            for dup in g[1:]:
-                dup_title = dup.get("title", "")
-                lines.append(f"  移入回收站: {dup_title or '未命名条目'}")
-                lines.append(
-                    f"    导入时间: {dup.get('created_at', '').replace('T', ' ')}"
-                    f" | 来源: {dup.get('source_path', '') or '未记录'}"
+            for item_index, item in enumerate(g):
+                source_path = item.get("source_path", "") or ""
+                source_name = Path(source_path).name if source_path else "未记录"
+                imported_at = item.get("created_at", "").replace("T", " ")
+                imported_display = imported_at.split(".", 1)[0]
+                action = "保留" if item_index == 0 else "移入回收站"
+                action_color = get_color("success") if item_index == 0 else get_color("danger")
+
+                comparison.insertRow(row)
+                group_text = (
+                    f"第 {i + 1} 组\n{fingerprint[:12]}…"
+                    if item_index == 0 else f"第 {i + 1} 组"
                 )
-            lines.append("")
-        if len(groups) > 50:
-            lines.append(f"\n... 还有 {len(groups) - 50} 组未显示")
-        detail.setPlainText("\n".join(lines))
-        layout.addWidget(detail)
+                comparison.setItem(
+                    row, 0,
+                    _cell(
+                        group_text,
+                        tooltip=(
+                            f"{item.get('dedupe_reason', '内容一致')}\n"
+                            f"完整 SHA-256：{fingerprint}"
+                        ),
+                    ),
+                )
+                comparison.setItem(row, 1, _cell(action, color=action_color))
+                comparison.setItem(
+                    row, 2,
+                    _cell(item.get("title", "") or "未命名条目", tooltip=item.get("title", "")),
+                )
+                comparison.setItem(row, 3, _cell(imported_display, tooltip=imported_at))
+                comparison.setItem(row, 4, _cell(source_name, tooltip=source_path or "未记录"))
+                row += 1
+        layout.addWidget(comparison)
 
         btns = QDialogButtonBox(QDialogButtonBox.Yes | QDialogButtonBox.No)
         btns.button(QDialogButtonBox.Yes).setText("确认去重")
@@ -1699,7 +1746,7 @@ class KnowledgeView(QWidget):
         progress.setMinimumDuration(0)
         progress.setCancelButton(None)
 
-        self._dedup_worker = DedupWorker(groups)
+        self._dedup_worker = DedupWorker(groups_to_process)
         self._dedup_worker.progress.connect(
             lambda v, msg: (progress.setValue(v), progress.setLabelText(msg))
         )
