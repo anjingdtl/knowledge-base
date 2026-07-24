@@ -32,7 +32,7 @@ def _strip_pipe(ref_title: str) -> str:
 
 def try_wiki_compile(knowledge_id: str):
     """尝试对已导入的知识条目执行 Wiki 编译（供 MCP/API 层共享调用）"""
-    if not Config.get("wiki.enabled", False) or not Config.get("wiki.auto_compile", True):
+    if not Config.get("wiki.enabled", False) or not Config.get("wiki.auto_compile", False):
         return
     if not _compile_slot.acquire(blocking=False):
         logger.info("Wiki compile skipped for %s: previous compile still running", knowledge_id)

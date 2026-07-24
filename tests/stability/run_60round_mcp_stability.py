@@ -81,9 +81,9 @@ def setup_env():
     Config.load()
 
     # 重置单例
+    from src.services.block_store import BlockStore
     from src.services.db import Database
     from src.services.vectorstore import VectorStore
-    from src.services.block_store import BlockStore
 
     Database._instance = None
     VectorStore._instance = None
@@ -323,7 +323,6 @@ def run_round(round_num, container, seed_ids, tmp, tools):
     create_res = call_tool("create", tools["create"], issues, round_num,
                            kwargs={"title": f"轮{round_num} 新建 {q}", "content": f"{q} 自动创建内容", "tags": [q]})
     new_id = _data(create_res, "id")
-    op_create = create_res.get("operation_id") if isinstance(create_res, dict) else None
 
     if new_id:
         call_tool("read", tools["read"], issues, round_num, kwargs={"item_id": new_id})
@@ -339,8 +338,7 @@ def run_round(round_num, container, seed_ids, tmp, tools):
                   kwargs={"limit": 5})
         call_tool("list_recent_operations", tools["list_recent_operations"], issues, round_num,
                   kwargs={"limit": 5})
-        del_res = call_tool("delete", tools["delete"], issues, round_num, kwargs={"item_id": new_id})
-        op_delete = del_res.get("operation_id") if isinstance(del_res, dict) else None
+        call_tool("delete", tools["delete"], issues, round_num, kwargs={"item_id": new_id})
         call_tool("restore_knowledge", tools["restore_knowledge"], issues, round_num,
                   kwargs={"item_id": new_id})
         if op_update:

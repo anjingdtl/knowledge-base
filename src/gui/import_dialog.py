@@ -219,7 +219,7 @@ class ImportWorker(QThread):
             # Wiki 编译（导入完成后统一触发）
             if inserted_ids:
                 from src.utils.config import Config
-                if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", True):
+                if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", False):
                     try:
                         from src.services.wiki_compiler import WikiCompiler
                         compiler = WikiCompiler()
@@ -294,7 +294,7 @@ class UrlImportWorker(QThread):
 
             if inserted_ids:
                 from src.utils.config import Config
-                if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", True):
+                if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", False):
                     try:
                         from src.services.wiki_compiler import WikiCompiler
                         compiler = WikiCompiler()
@@ -635,7 +635,7 @@ class ImportDialog(QDialog):
         )
 
         from src.utils.config import Config
-        if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", True):
+        if Config.get("wiki.enabled", False) and Config.get("wiki.auto_compile", False):
             try:
                 from src.services.wiki_compiler import WikiCompiler
                 WikiCompiler().ingest(item_id)

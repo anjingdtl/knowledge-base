@@ -189,7 +189,7 @@ def is_service_registration_valid() -> bool:
 
     ``sc query`` only proves that a service name exists.  A partially removed
     or old packaged installation can leave that entry behind without the
-    pywin32 ``Parameters\\PythonClass`` value.  Sending the sidebar button to
+    pywin32 ``PythonClass`` registry key.  Sending the sidebar button to
     such a service merely opens UAC and then leaves MCP offline.  Treat it as
     an unavailable optional service and let the normal child-process launcher
     handle the request instead.
@@ -197,17 +197,30 @@ def is_service_registration_valid() -> bool:
     if not _is_windows() or not is_service_installed():
         return False
     try:
-        # 修复:旧代码写成 rf"HKLM\\SYSTEM\\..." — 在 raw 字符串里 \\ 是两个
-        # 字面反斜杠,reg.exe 会判 "Invalid key name",导致本函数永远返回 False,
-        # 让侧边栏「启动 MCP」按钮永远走子进程模式而不调用已注册的 Windows 服务。
-        # 改为普通 f-string + 单反斜杠(Python 字符串字面量中 \\ = 一个反斜杠)。
+        # v1.11.1+ uses the small native .NET service dispatcher.  It avoids
+        # pywin32/pythonservice.exe failing before it can report SERVICE_RUNNING
+        # when a virtual environment lacks the base Python DLL.
+        config = _run_hidden(
+            ["sc.exe", "qc", _SERVICE_NAME],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if (
+            config.returncode == 0
+            and "ShineHeMCPServiceHost.exe" in config.stdout
+        ):
+            return True
+        # pywin32 把服务类写为独立子键的默认值：
+        # HKLM\System\CurrentControlSet\Services\ShineHeMCP\PythonClass。
+        # 此前查询了错误的 Parameters 子键，令每个正常服务也被误判无效，
+        # 侧边栏因此启动子进程并与服务争抢 9000 端口。
         result = _run_hidden(
             [
                 "reg.exe",
                 "query",
-                f"HKLM\\SYSTEM\\CurrentControlSet\\Services\\{_SERVICE_NAME}\\Parameters",
-                "/v",
-                "PythonClass",
+                f"HKLM\\SYSTEM\\CurrentControlSet\\Services\\{_SERVICE_NAME}\\PythonClass",
+                "/ve",
             ],
             capture_output=True,
             text=True,
@@ -328,6 +341,14 @@ def service_start() -> str:
     if not _is_windows():
         return "仅支持 Windows 服务模式"
     try:
+        if not is_service_installed():
+            return "服务未注册，请先点「注册为 Windows 服务」"
+        if not is_service_registration_valid():
+            return (
+                "Windows 服务注册不完整，缺少 pywin32 的 PythonClass 服务类信息，"
+                "无法启动。\n"
+                "请在「服务管理」中点击「修复 Windows 服务」，完成提权后再启动。"
+            )
         # 先检查服务是否已在运行
         if get_service_status() == "running":
             return "服务已在运行中"
@@ -410,25 +431,26 @@ def service_restart() -> str:
 
 
 def service_install() -> str:
-    """注册 Windows 服务（通过 UAC 提权）
-
-    通过 UAC 提权执行 python windows_service.py install
-    """
+    """注册或更新由原生服务宿主承载的 Windows 服务（通过 UAC 提权）。"""
     if not _is_windows():
         return "仅支持 Windows 服务模式"
     try:
-        script = _PROJECT_ROOT / "windows_service.py"
-        # 使用 ShellExecute 以管理员身份运行
+        script = _PROJECT_ROOT / "scripts" / "register_windows_service_host.ps1"
+        # 原先直接注册 pywin32 的 pythonservice.exe。该可执行文件在 venv
+        # 根目录无法加载 pythonXY.dll 时会在服务类导入前触发 SCM 7009。改用
+        # 原生服务分发器承载 MCP 子进程，启动后立即向 SCM 报告 RUNNING。
         ret = _shell_execute_elevated(
-            sys.executable,
-            f'"{script}" install',
+            "powershell.exe",
+            f'-NoProfile -ExecutionPolicy Bypass -File "{script}"',
         )
         if _is_elevation_failed_or_cancelled(ret):
             return (
                 f"注册未执行:{_elevation_failure_reason(ret)}。\n"
-                f"如需手动以管理员身份运行: python windows_service.py install"
+                "如需手动以管理员身份运行: "
+                "powershell -ExecutionPolicy Bypass -File "
+                "scripts/register_windows_service_host.ps1"
             )
-        return "已请求注册服务，请确认 UAC 弹窗"
+        return "已请求注册/修复服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"注册异常: {e}"
 
@@ -444,7 +466,7 @@ def service_remove() -> str:
             time.sleep(3)
         script = _PROJECT_ROOT / "windows_service.py"
         ret = _shell_execute_elevated(
-            sys.executable,
+            str(_resolve_service_python()),
             f'"{script}" remove',
         )
         if _is_elevation_failed_or_cancelled(ret):
@@ -694,6 +716,20 @@ def _resolve_mcp_python() -> Path:
         candidate = venv_scripts / filename
         if candidate.exists():
             return candidate
+    return Path(sys.executable)
+
+
+def _resolve_service_python() -> Path:
+    """Return an interpreter that can execute the pywin32 service installer.
+
+    The GUI may be launched with a global Python that has FastMCP but not
+    pywin32.  In that case using ``sys.executable`` makes the elevated install
+    command fail at ``import servicemanager`` and leaves the old service in
+    place.  The project virtual environment is the packaged service runtime.
+    """
+    venv_python = _PROJECT_ROOT / ".venv" / "Scripts" / "python.exe"
+    if venv_python.exists():
+        return venv_python
     return Path(sys.executable)
 
 

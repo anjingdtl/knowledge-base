@@ -564,6 +564,27 @@ def test_service_registration_requires_pywin32_python_class(monkeypatch):
     assert mcp_launcher.is_service_registration_valid() is False
 
 
+def test_service_registration_reads_pywin32_python_class_default_value(monkeypatch):
+    """pywin32 stores PythonClass as a child key's default value, not Parameters."""
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+    captured = {}
+
+    class Result:
+        returncode = 0
+        stdout = "(Default)    REG_SZ    windows_service.ShineHeMCPService\n"
+
+    def fake_run(args, **kwargs):
+        captured["args"] = args
+        return Result()
+
+    monkeypatch.setattr(mcp_launcher, "_run_hidden", fake_run)
+
+    assert mcp_launcher.is_service_registration_valid() is True
+    assert captured["args"][-1] == "/ve"
+    assert captured["args"][-2].endswith("\\ShineHeMCP\\PythonClass")
+
+
 def test_start_falls_back_to_child_process_for_incomplete_service_registration(
     monkeypatch, tmp_path
 ):
@@ -735,6 +756,8 @@ def test_service_start_blocks_when_port_occupied(monkeypatch):
     表现为「点启动后状态仍是已停止」。预检把这条路径前移为明确提示。
     """
     monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_registration_valid", lambda: True)
     monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
     # 迁移预检放行:让测试专注端口冲突分支,不触发真实的 inspect_database_bootstrap
     monkeypatch.setattr(mcp_launcher, "get_migration_requirement", lambda: None)
@@ -750,9 +773,53 @@ def test_service_start_blocks_when_port_occupied(monkeypatch):
     assert escalated == [], "端口被占时不应触发 UAC 提权"
 
 
+def test_service_start_requires_a_valid_pywin32_registration(monkeypatch):
+    """损坏的服务注册不能再进入无响应的 SCM 启动流程。"""
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_registration_valid", lambda: False)
+    escalated = []
+    monkeypatch.setattr(
+        mcp_launcher,
+        "_shell_execute_elevated",
+        lambda *args: escalated.append(args) or 99,
+    )
+
+    message = mcp_launcher.service_start()
+
+    assert "PythonClass" in message
+    assert "修复 Windows 服务" in message
+    assert escalated == []
+
+
+def test_service_install_uses_native_service_registration_script(monkeypatch, tmp_path):
+    """不再依赖易在 venv 中失效的 pywin32 pythonservice.exe。"""
+    monkeypatch.setattr(mcp_launcher, "_PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    calls = []
+    monkeypatch.setattr(
+        mcp_launcher,
+        "_shell_execute_elevated",
+        lambda executable, parameters: calls.append((executable, parameters)) or 99,
+    )
+
+    message = mcp_launcher.service_install()
+
+    assert "注册/修复" in message
+    assert calls == [
+        (
+            "powershell.exe",
+            "-NoProfile -ExecutionPolicy Bypass -File "
+            f'"{tmp_path / "scripts" / "register_windows_service_host.ps1"}"',
+        )
+    ]
+
+
 def test_service_start_proceeds_when_port_free(monkeypatch):
     """端口空闲 → 正常走 UAC 提权 sc start。"""
     monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_registration_valid", lambda: True)
     monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
     monkeypatch.setattr(mcp_launcher, "get_migration_requirement", lambda: None)
     monkeypatch.setattr(mcp_launcher, "_port_in_use", lambda port: None)
@@ -776,6 +843,8 @@ def test_service_start_blocks_when_migration_needed(monkeypatch):
     旧版没有迁移预检,即用户看到的「点启动后状态一直是已停止」表象。
     """
     monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_registration_valid", lambda: True)
     monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
     monkeypatch.setattr(
         mcp_launcher,
@@ -802,6 +871,8 @@ def test_service_start_reports_uac_cancellation_instead_of_pending(monkeypatch):
     修复后必须把 122 当作失败,返回不含 "UAC" 的失败提示让 GUI 走单次刷新分支。
     """
     monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_registration_valid", lambda: True)
     monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
     monkeypatch.setattr(mcp_launcher, "get_migration_requirement", lambda: None)
     monkeypatch.setattr(mcp_launcher, "_port_in_use", lambda port: None)

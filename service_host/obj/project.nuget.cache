@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "phZgWzdmG3E=",
+  "success": true,
+  "projectFilePath": "D:\\AiWorkSpace\\knowledge-base\\service_host\\ShineHeMCPServiceHost.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\anjin\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.29\\microsoft.net.illink.tasks.8.0.29.nupkg.sha512"
+  ],
+  "logs": []
+}

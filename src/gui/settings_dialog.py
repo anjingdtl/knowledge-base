@@ -1,7 +1,7 @@
 """设置对话框"""
 import time
 
-from PySide6.QtCore import QThread, Qt, QTimer, Signal
+from PySide6.QtCore import Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -70,6 +70,7 @@ class SettingsDialog(QDialog):
         self.resize(820, 760)
         self._setup_ui()
         self._load_values()
+        self._connection_test_worker: ConnectionTestWorker | None = None
 
         # 服务操作异步轮询:ShellExecuteW runas 触发 UAC 后不等待操作完成,
         # 立即刷新会读到旧状态。用 QTimer 周期性刷新,跟踪真实结果。
@@ -815,6 +816,7 @@ class SettingsDialog(QDialog):
             get_service_failure_config,
             get_service_status,
             is_service_installed,
+            is_service_registration_valid,
         )
         installed = is_service_installed()
         if installed:
@@ -843,7 +845,15 @@ class SettingsDialog(QDialog):
             self._btn_svc_start.setEnabled(not running)
             self._btn_svc_stop.setEnabled(running)
             self._btn_svc_restart.setEnabled(running)
-            self._btn_svc_install.setEnabled(False)
+            valid_registration = is_service_registration_valid()
+            # 旧版本可能留下没有 PythonClass 的 pywin32 服务。保留修复入口，
+            # 由注册命令的 update 分支补齐服务宿主和类注册信息。
+            self._btn_svc_install.setText(
+                "修复 Windows 服务" if not valid_registration else "更新 Windows 服务"
+            )
+            # 保留更新入口：旧版本注册的服务需要补上 auto-start 配置，且更新
+            # 操作也会把服务宿主切换到项目 venv 的 pywin32 运行时。
+            self._btn_svc_install.setEnabled(True)
             self._btn_svc_remove.setEnabled(True)
             self._btn_svc_set_failure.setEnabled(True)
         else:
@@ -854,6 +864,7 @@ class SettingsDialog(QDialog):
             self._btn_svc_stop.setEnabled(False)
             self._btn_svc_restart.setEnabled(False)
             self._btn_svc_install.setEnabled(True)
+            self._btn_svc_install.setText("注册为 Windows 服务")
             self._btn_svc_remove.setEnabled(False)
             self._btn_svc_set_failure.setEnabled(False)
 
@@ -893,14 +904,27 @@ class SettingsDialog(QDialog):
         self._poll_svc_after_uac(expect_running=True)
 
     def _on_svc_install(self):
-        reply = QMessageBox.question(
-            self, "注册 Windows 服务",
-            "将 MCP Server 注册为 Windows 服务后：\n"
+        from src.services.mcp_launcher import (
+            is_service_installed,
+            is_service_registration_valid,
+        )
+
+        installed = is_service_installed()
+        valid_registration = installed and is_service_registration_valid()
+        action = "修复" if installed and not valid_registration else "更新" if installed else "注册"
+        details = (
+            "检测到当前服务注册不完整。修复会更新服务宿主，并补回 PythonClass 服务类信息。\n"
+            if installed and not valid_registration
+            else "更新会将服务切换至项目运行时，并应用开机自动启动配置。\n"
+            if installed
+            else "将 MCP Server 注册为 Windows 服务后：\n"
             "• 开机自动启动\n"
             "• 崩溃自动重启\n"
-            "• 侧边栏 MCP 按钮自动切换为服务模式\n\n"
-            "需要管理员权限（会弹出 UAC 确认框）。\n\n"
-            "确定注册？",
+            "• 侧边栏 MCP 按钮自动切换为服务模式\n"
+        )
+        reply = QMessageBox.question(
+            self, f"{action} Windows 服务",
+            f"{details}\n需要管理员权限（会弹出 UAC 确认框）。\n\n确定{action}？",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
         if reply != QMessageBox.StandardButton.Yes:
@@ -908,9 +932,9 @@ class SettingsDialog(QDialog):
         from src.services.mcp_launcher import service_install
         msg = service_install()
         if "UAC" in msg:
-            QMessageBox.information(self, "服务安装", msg + "\n\n请先在 UAC 弹窗中确认,再点击此处「确定」开始跟踪注册结果...")
+            QMessageBox.information(self, f"服务{action}", msg + f"\n\n请先在 UAC 弹窗中确认,再点击此处「确定」开始跟踪{action}结果...")
         else:
-            QMessageBox.information(self, "服务安装", msg + "\n\n点击确定后刷新状态...")
+            QMessageBox.information(self, f"服务{action}", msg + "\n\n点击确定后刷新状态...")
         # 注册后状态语义不同(可能 stopped),仅刷新不判定成败
         self._poll_svc_after_uac(expect_running=None)
 

@@ -1,0 +1,2 @@
+D:\AiWorkSpace\knowledge-base\service_host\runtime\ShineHeMCPServiceHost.pdb
+D:\AiWorkSpace\knowledge-base\service_host\runtime\ShineHeMCPServiceHost.exe

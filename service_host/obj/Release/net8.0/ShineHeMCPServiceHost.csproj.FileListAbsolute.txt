@@ -1,0 +1,15 @@
+D:\AiWorkSpace\knowledge-base\service_host\bin\Release\net8.0\ShineHeMCPServiceHost.exe
+D:\AiWorkSpace\knowledge-base\service_host\bin\Release\net8.0\ShineHeMCPServiceHost.deps.json
+D:\AiWorkSpace\knowledge-base\service_host\bin\Release\net8.0\ShineHeMCPServiceHost.runtimeconfig.json
+D:\AiWorkSpace\knowledge-base\service_host\bin\Release\net8.0\ShineHeMCPServiceHost.dll
+D:\AiWorkSpace\knowledge-base\service_host\bin\Release\net8.0\ShineHeMCPServiceHost.pdb
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ShineHeMCPServiceHost.GeneratedMSBuildEditorConfig.editorconfig
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ShineHeMCPServiceHost.AssemblyInfoInputs.cache
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ShineHeMCPServiceHost.AssemblyInfo.cs
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ShineHeMCPServiceHost.csproj.CoreCompileInputs.cache
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ShineHeMCPServiceHost.sourcelink.json
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ShineHeMCPServiceHost.dll
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\refint\ShineHeMCPServiceHost.dll
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ShineHeMCPServiceHost.pdb
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ShineHeMCPServiceHost.genruntimeconfig.cache
+D:\AiWorkSpace\knowledge-base\service_host\obj\Release\net8.0\ref\ShineHeMCPServiceHost.dll

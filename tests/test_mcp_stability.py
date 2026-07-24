@@ -245,6 +245,26 @@ def test_try_wiki_compile_does_not_block_caller_when_auto_compile_is_enabled(
     assert completed.wait(timeout=1)
 
 
+def test_try_wiki_compile_is_disabled_when_auto_compile_is_not_configured(monkeypatch):
+    """缺省配置不得在写入后触发后台 LLM 编译。"""
+    from src.services import wiki_compiler
+
+    calls: list[str] = []
+
+    def get_config(key, default=None):
+        return True if key == "wiki.enabled" else default
+
+    def ingest(self, knowledge_id: str):
+        calls.append(knowledge_id)
+
+    monkeypatch.setattr(wiki_compiler.Config, "get", get_config)
+    monkeypatch.setattr(wiki_compiler.WikiCompiler, "ingest", ingest)
+
+    wiki_compiler.try_wiki_compile("kid-default-off")
+
+    assert calls == []
+
+
 def test_legacy_external_graph_factory_config_uses_sqlite():
     from src.services.graph_backend import factory
 
