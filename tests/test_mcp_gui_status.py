@@ -736,6 +736,8 @@ def test_service_start_blocks_when_port_occupied(monkeypatch):
     """
     monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
     monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
+    # 迁移预检放行:让测试专注端口冲突分支,不触发真实的 inspect_database_bootstrap
+    monkeypatch.setattr(mcp_launcher, "get_migration_requirement", lambda: None)
     monkeypatch.setattr(mcp_launcher, "_port_in_use", lambda port: 12345)
     escalated = []
     monkeypatch.setattr(
@@ -752,6 +754,7 @@ def test_service_start_proceeds_when_port_free(monkeypatch):
     """端口空闲 → 正常走 UAC 提权 sc start。"""
     monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
     monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
+    monkeypatch.setattr(mcp_launcher, "get_migration_requirement", lambda: None)
     monkeypatch.setattr(mcp_launcher, "_port_in_use", lambda port: None)
     called = {}
 
@@ -763,3 +766,75 @@ def test_service_start_proceeds_when_port_free(monkeypatch):
     msg = mcp_launcher.service_start()
     assert "UAC" in msg
     assert called["args"][0] == "sc.exe"
+
+
+def test_service_start_blocks_when_migration_needed(monkeypatch):
+    """DB 需要迁移时,service_start 不触发 UAC,直接返回迁移提示。
+
+    服务启动后会触发 lifespan → startup_gate,若 schema 落后于 head 会抛
+    MigrationGateError 让 uvicorn 立即崩溃,SCM 把状态留在 STOPPED。
+    旧版没有迁移预检,即用户看到的「点启动后状态一直是已停止」表象。
+    """
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
+    monkeypatch.setattr(
+        mcp_launcher,
+        "get_migration_requirement",
+        lambda: "MCP 启动前需要数据库迁移：版本 j003 落后于 j004",
+    )
+    escalated = []
+    monkeypatch.setattr(
+        mcp_launcher,
+        "_shell_execute_elevated",
+        lambda *a, **kw: escalated.append(a) or 99,
+    )
+    msg = mcp_launcher.service_start()
+    assert "数据库迁移" in msg
+    assert escalated == [], "迁移阻塞时不应触发 UAC"
+    assert "UAC" not in msg, "迁移阻塞消息不应含 UAC (避免误进 GUI 轮询分支)"
+
+
+def test_service_start_reports_uac_cancellation_instead_of_pending(monkeypatch):
+    """用户取消 UAC 时,ShellExecuteW 返回 122 (ERROR_CANCELLED)。
+
+    旧版仅判断 ret<=32,把 122 当作成功,GUI 提示「已请求启动服务」并开始
+    8 秒轮询,最后才弹超时排查 —— 即用户看到的「服务状态一直是已停止」。
+    修复后必须把 122 当作失败,返回不含 "UAC" 的失败提示让 GUI 走单次刷新分支。
+    """
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "get_service_status", lambda: "stopped")
+    monkeypatch.setattr(mcp_launcher, "get_migration_requirement", lambda: None)
+    monkeypatch.setattr(mcp_launcher, "_port_in_use", lambda port: None)
+    monkeypatch.setattr(mcp_launcher, "_shell_execute_elevated", lambda *a, **kw: 122)
+    msg = mcp_launcher.service_start()
+    assert "UAC" not in msg, "取消消息不应含 UAC,否则 GUI 会误启动轮询"
+    assert "取消" in msg
+
+
+def test_service_configure_failure_reports_uac_cancellation(monkeypatch):
+    """崩溃重启策略:用户取消 UAC 时返回失败提示,不再误报「已请求配置」。
+
+    旧实现走 cmd.exe + SW_HIDE 静默 bat,且忽略 122,即使用户取消 UAC 也提示
+    「已请求配置崩溃重启策略」—— 即用户看到的「配置崩溃重启也没生效」。
+    """
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "_shell_execute_elevated", lambda *a, **kw: 122)
+    msg = mcp_launcher.service_configure_failure()
+    assert "UAC" not in msg
+    assert "取消" in msg
+
+
+def test_service_configure_failure_blocks_when_service_not_installed(monkeypatch):
+    """服务未注册时点「配置崩溃重启」应给出明确提示,而不是走 UAC。"""
+    monkeypatch.setattr(mcp_launcher, "_is_windows", lambda: True)
+    monkeypatch.setattr(mcp_launcher, "is_service_installed", lambda: False)
+    escalated = []
+    monkeypatch.setattr(
+        mcp_launcher,
+        "_shell_execute_elevated",
+        lambda *a, **kw: escalated.append(a) or 99,
+    )
+    msg = mcp_launcher.service_configure_failure()
+    assert "未注册" in msg
+    assert escalated == [], "服务未注册时不应触发 UAC"

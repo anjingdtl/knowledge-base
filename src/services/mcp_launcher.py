@@ -36,7 +36,9 @@ _CREATE_NO_WINDOW = int(getattr(subprocess, "CREATE_NO_WINDOW", 0))
 _CREATE_NEW_PROCESS_GROUP = int(
     getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
 )
-_DETACHED_PROCESS = int(getattr(subprocess, "DETACHED_PROCESS", 0))
+# 不再使用 DETACHED_PROCESS:它与 CREATE_NO_WINDOW 互斥(MSDN 明确规定),
+# 同时设置时 CREATE_NO_WINDOW 会被忽略,导致子进程新建可见控制台窗口。
+
 _SUCCESSFUL_START_PREFIXES = (
     "MCP Server 已启动",
     "MCP Server 已在运行中",
@@ -128,6 +130,46 @@ def _shell_execute_elevated(
     )
 
 
+# ShellExecuteW 返回值约定:返回值 > 32 表示调用本身成功触发(并不保证后续命令成功),
+# <= 32 表示触发失败。但 122 (ERROR_CANCELLED) 是个特例 —— 它 > 32 但代表用户在 UAC
+# 弹窗中点了「否」,根本没执行提权命令。旧代码仅检查 <= 32,把 122 当作成功,
+# 导致用户点了「启动服务」但取消了 UAC 后,GUI 仍提示「已请求启动服务」,并开始 8 秒
+# 轮询,最后才弹出超时排查 —— 即用户看到的「点了启动服务后状态一直是已停止」。
+_ERROR_CANCELLED = 122
+
+
+def _is_elevation_failed_or_cancelled(ret: int) -> bool:
+    """ShellExecuteW runas 是否真的失败了。
+
+    <= 32 是常规失败;122 是 ERROR_CANCELLED(用户在 UAC 弹窗点了「否」)。
+    两者都视为「提权未发生」,调用方应当直接返回失败提示而非开始轮询。
+    """
+    return ret <= 32 or ret == _ERROR_CANCELLED
+
+
+def _elevation_failure_reason(ret: int) -> str:
+    """把 ShellExecuteW 错误码翻译成用户可读的中文提示。
+
+    重要:不能出现 "UAC" 字样 —— GUI 通过 ``"UAC" in msg`` 判定「操作已挂起、
+    等待用户在 UAC 弹窗中确认」并启动轮询。失败消息出现 "UAC" 会让取消/失败
+    也误入轮询分支,显示「服务启动未生效」等错误排查提示,体验混乱。
+    使用「提权」一词替代。
+    """
+    if ret == _ERROR_CANCELLED:
+        return "提权被取消(用户在弹窗中点了「否」)"
+    if ret == 0:
+        return "内存不足或 shell 不可用"
+    if ret == 2:
+        return "可执行文件未找到"
+    if ret == 3:
+        return "路径未找到"
+    if ret == 5:
+        return "拒绝访问"
+    if ret == 8:
+        return "内存不足"
+    return f"返回值 {ret}"
+
+
 def is_service_installed() -> bool:
     """ShineHeMCP Windows 服务是否已注册"""
     if not _is_windows():
@@ -155,11 +197,15 @@ def is_service_registration_valid() -> bool:
     if not _is_windows() or not is_service_installed():
         return False
     try:
+        # 修复:旧代码写成 rf"HKLM\\SYSTEM\\..." — 在 raw 字符串里 \\ 是两个
+        # 字面反斜杠,reg.exe 会判 "Invalid key name",导致本函数永远返回 False,
+        # 让侧边栏「启动 MCP」按钮永远走子进程模式而不调用已注册的 Windows 服务。
+        # 改为普通 f-string + 单反斜杠(Python 字符串字面量中 \\ = 一个反斜杠)。
         result = _run_hidden(
             [
                 "reg.exe",
                 "query",
-                rf"HKLM\\SYSTEM\\CurrentControlSet\\Services\\{_SERVICE_NAME}\\Parameters",
+                f"HKLM\\SYSTEM\\CurrentControlSet\\Services\\{_SERVICE_NAME}\\Parameters",
                 "/v",
                 "PythonClass",
             ],
@@ -285,6 +331,16 @@ def service_start() -> str:
         # 先检查服务是否已在运行
         if get_service_status() == "running":
             return "服务已在运行中"
+        # 数据库迁移预检:服务启动后会通过 lifespan 触发 startup_gate,若 schema 落后
+        # 于 head 会抛 MigrationGateError 让 uvicorn 立即退出 —— 表现为「点启动后状态
+        # 一直是已停止」。在 UAC 之前先做只读检查,给用户清晰的迁移提示。
+        migration_required = get_migration_requirement()
+        if migration_required:
+            return (
+                f"{migration_required}\n"
+                "请先在侧边栏点「启动 MCP」走子进程模式完成自动迁移,"
+                "或在命令行执行 alembic upgrade head 后再启动服务。"
+            )
         # 端口冲突预检:服务监听 _SERVICE_PORT,被占用则 bind 必失败
         holder = _port_in_use(_SERVICE_PORT)
         if holder is not None:
@@ -294,8 +350,14 @@ def service_start() -> str:
             )
         # 通过 ShellExecuteW "runas" 触发 UAC 提权
         ret = _shell_execute_elevated("sc.exe", f"start {_SERVICE_NAME}")
-        if ret <= 32:
-            return f"提权失败（返回值 {ret}），请手动以管理员身份运行: sc start {_SERVICE_NAME}"
+        if _is_elevation_failed_or_cancelled(ret):
+            # 关键修复:旧版仅判断 ret<=32,忽略 122 (ERROR_CANCELLED),
+            # 导致用户取消 UAC 后 GUI 仍提示「已请求启动服务」并启动 8 秒轮询,
+            # 最终才弹超时排查 —— 即「服务状态一直是已停止」表象。
+            return (
+                f"启动未执行:{_elevation_failure_reason(ret)}。\n"
+                f"如需手动以管理员身份运行: sc start {_SERVICE_NAME}"
+            )
         return "已请求启动服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"启动异常: {e}"
@@ -310,8 +372,11 @@ def service_stop() -> str:
             return "服务未在运行"
         # 通过 ShellExecuteW "runas" 触发 UAC 提权
         ret = _shell_execute_elevated("sc.exe", f"stop {_SERVICE_NAME}")
-        if ret <= 32:
-            return f"提权失败（返回值 {ret}），请手动以管理员身份运行: sc stop {_SERVICE_NAME}"
+        if _is_elevation_failed_or_cancelled(ret):
+            return (
+                f"停止未执行:{_elevation_failure_reason(ret)}。\n"
+                f"如需手动以管理员身份运行: sc stop {_SERVICE_NAME}"
+            )
         return "已请求停止服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"停止异常: {e}"
@@ -333,8 +398,12 @@ def service_restart() -> str:
         bat_path.parent.mkdir(parents=True, exist_ok=True)
         bat_path.write_text(bat_content, encoding="ascii")
         ret = _shell_execute_elevated("cmd.exe", f'/c "{bat_path}"')
-        if ret <= 32:
-            return f"提权失败（返回值 {ret}），请手动以管理员身份运行重启操作"
+        if _is_elevation_failed_or_cancelled(ret):
+            return (
+                f"重启未执行:{_elevation_failure_reason(ret)}。\n"
+                f"如需手动以管理员身份运行:先 sc stop {_SERVICE_NAME},"
+                f"再 sc start {_SERVICE_NAME}"
+            )
         return "已请求重启服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"重启异常: {e}"
@@ -354,8 +423,11 @@ def service_install() -> str:
             sys.executable,
             f'"{script}" install',
         )
-        if ret <= 32:
-            return f"提权失败（返回值 {ret}），请手动以管理员身份运行: python windows_service.py install"
+        if _is_elevation_failed_or_cancelled(ret):
+            return (
+                f"注册未执行:{_elevation_failure_reason(ret)}。\n"
+                f"如需手动以管理员身份运行: python windows_service.py install"
+            )
         return "已请求注册服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"注册异常: {e}"
@@ -375,8 +447,11 @@ def service_remove() -> str:
             sys.executable,
             f'"{script}" remove',
         )
-        if ret <= 32:
-            return "提权失败，请手动以管理员身份运行: python windows_service.py remove"
+        if _is_elevation_failed_or_cancelled(ret):
+            return (
+                f"卸载未执行:{_elevation_failure_reason(ret)}。\n"
+                f"如需手动以管理员身份运行: python windows_service.py remove"
+            )
         return "已请求卸载服务，请确认 UAC 弹窗"
     except Exception as e:
         return f"卸载异常: {e}"
@@ -387,17 +462,25 @@ def service_configure_failure() -> str:
     if not _is_windows():
         return "仅支持 Windows 服务模式"
     try:
-        # 通过 bat 脚本以管理员身份执行 sc failure
-        bat_content = (
-            '@echo off\n'
-            f'sc failure {_SERVICE_NAME} reset= 86400 actions= restart/5000/restart/10000/restart/30000\n'
+        if not is_service_installed():
+            return "服务未注册，请先点「注册为 Windows 服务」"
+        # 直接以管理员身份执行 sc.exe,无需 cmd.exe + bat 中间层。
+        # 旧实现用 SW_HIDE 的 cmd.exe 静默执行 bat —— 若 bat 中 sc failure 因
+        # 任何原因失败,用户无任何反馈,UI 后续 qfailure 查询仍是「未配置」,
+        # 即「配置崩溃重启也没生效」表象。
+        # 直接调用 sc.exe 后:ShellExecuteW 触发 UAC,确认后 sc.exe 自己执行
+        # (无中间 cmd 进程,更直接、错误码更清晰)。
+        ret = _shell_execute_elevated(
+            "sc.exe",
+            f"failure {_SERVICE_NAME} reset= 86400 "
+            f"actions= restart/5000/restart/10000/restart/30000",
         )
-        bat_path = _PROJECT_ROOT / "data" / "_set_failure.bat"
-        bat_path.parent.mkdir(parents=True, exist_ok=True)
-        bat_path.write_text(bat_content, encoding="ascii")
-        ret = _shell_execute_elevated("cmd.exe", f'/c "{bat_path}"')
-        if ret <= 32:
-            return "提权失败，请手动以管理员身份运行: sc failure ShineHeMCP reset= 86400 actions= restart/5000/restart/10000/restart/30000"
+        if _is_elevation_failed_or_cancelled(ret):
+            return (
+                f"配置未执行:{_elevation_failure_reason(ret)}。\n"
+                f"如需手动以管理员身份运行: sc failure {_SERVICE_NAME} "
+                f"reset= 86400 actions= restart/5000/restart/10000/restart/30000"
+            )
         return "已请求配置崩溃重启策略，请确认 UAC 弹窗"
     except Exception as e:
         return f"配置异常: {e}"
@@ -591,14 +674,23 @@ def _resolve_mcp_python() -> Path:
     project dependencies live in ``.venv``.  Starting ``run_mcp.py`` with the
     former makes the subprocess exit immediately with ``No module named
     fastmcp``.  The project virtual environment is a safe fallback.
+
+    优先选择 ``pythonw.exe`` (无控制台子系统的 GUI 子系统可执行文件) — 即便
+    漏掉 ``CREATE_NO_WINDOW`` 标志也不会弹出终端窗口。
+    ``run_mcp.py`` 顶部已对 ``pythonw.exe`` 的 None stdout/stderr 做了 devnull 兜底。
     """
     if find_spec("fastmcp") is not None:
         python_dir = Path(sys.executable).parent
+        # 优先 pythonw.exe:无控制台子系统,任何场景都不会弹窗
+        pythonw = python_dir / "pythonw.exe"
+        if pythonw.exists():
+            return pythonw
         python = python_dir / "python.exe"
         return python if python.exists() else Path(sys.executable)
 
     venv_scripts = _PROJECT_ROOT / ".venv" / "Scripts"
-    for filename in ("python.exe", "pythonw.exe"):
+    # 同样优先 pythonw.exe
+    for filename in ("pythonw.exe", "python.exe"):
         candidate = venv_scripts / filename
         if candidate.exists():
             return candidate
@@ -639,15 +731,16 @@ def start(host: str | None = None, port: int | None = None) -> str:
     cmd = [str(python_executable), str(_MCP_SCRIPT), "-t", "streamable-http", "--host", host, "-p", str(port)]
 
     try:
-        # CREATE_NEW_PROCESS_GROUP: 独立进程组，关闭 GUI 不影响
-        # DETACHED_PROCESS: 脱离父进程控制台
+        # CREATE_NEW_PROCESS_GROUP: 独立进程组,关闭 GUI 不影响子进程
+        # CREATE_NO_WINDOW: 不为子进程分配控制台窗口
+        # NOTE: 不要叠加 _DETACHED_PROCESS —— MSDN 明确 CREATE_NO_WINDOW
+        # 在与 DETACHED_PROCESS 同用时会被忽略,反而导致子进程新建可见控制台
+        # 窗口(即用户在 GUI 里点「启动 MCP」时看到的终端弹窗)。
+        # pythonw.exe (在 _resolve_mcp_python 中优先) 本身就无控制台子系统,
+        # 与 CREATE_NO_WINDOW 组合可彻底杜绝任何终端闪现。
         flags = 0
         if sys.platform == "win32":
-            flags = (
-                _CREATE_NEW_PROCESS_GROUP
-                | _DETACHED_PROCESS
-                | _CREATE_NO_WINDOW
-            )
+            flags = _CREATE_NEW_PROCESS_GROUP | _CREATE_NO_WINDOW
 
         _STARTUP_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
         _process_log_handle = _STARTUP_LOG_FILE.open("w", encoding="utf-8")
