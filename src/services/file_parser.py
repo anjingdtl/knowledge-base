@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable
 
+from src.services.text_encoding import decode_text_bytes, repair_mojibake
+
 if TYPE_CHECKING:
     from src.models.parsed_content import StructuredBlock
 
@@ -11,15 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 def _read_file_text(path: Path) -> str:
-    """自动检测编码并读取文本文件"""
+    """自动检测编码并读取文本文件（UTF-8 / GB18030 / GBK 等）。"""
     raw = path.read_bytes()
-    if not raw:
-        return ""
-    from charset_normalizer import from_bytes
-    result = from_bytes(raw)
-    if result and result.best():
-        return str(result.best())
-    return raw.decode("utf-8", errors="replace")
+    decoded = decode_text_bytes(raw)
+    logger.debug("Decoded text file %s using %s (%s confidence)", path, decoded.encoding, decoded.confidence)
+    repaired_text, repaired = repair_mojibake(decoded.text)
+    if repaired:
+        logger.info("Recovered mojibake while reading text file: %s", path.name)
+    return repaired_text
 
 
 @dataclass
@@ -102,10 +103,12 @@ def _clean_blocks(blocks: list) -> None:
 
 
 def _clean_surrogates(text: str) -> str:
-    """清理 UTF-16 代理半字符（PDF 等二进制提取时可能混入，导致 encode('utf-8') 报错）"""
+    """清理代理半字符，并对所有解析器输出做保守的错码修复。"""
     if not text:
         return text
-    return text.encode("utf-8", errors="surrogatepass").decode("utf-8", errors="replace")
+    normalized = text.encode("utf-8", errors="surrogatepass").decode("utf-8", errors="replace")
+    repaired, _ = repair_mojibake(normalized)
+    return repaired
 
 
 MAX_ROWS_PER_SHEET = 500
@@ -600,7 +603,12 @@ def _parse_pdf(path: Path) -> ParsedFile:
             logger.debug("Failed to extract text from PDF page %d", i)
             text = ""
         if text:
-            raw_pages.append(text)
+            # 部分生成器会把 UTF-8 文本以错误单字节编码写进 PDF；可安全
+            # 逆转的情况在这里修复。字体字形映射缺失则保留给质量审查/OCR。
+            repaired_text, repaired = repair_mojibake(text)
+            if repaired:
+                logger.info("Recovered mojibake while extracting PDF page %d: %s", i + 1, path.name)
+            raw_pages.append(repaired_text)
 
     # 去除水印文本
     cleaned_pages = _remove_pdf_watermarks(raw_pages)

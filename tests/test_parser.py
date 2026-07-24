@@ -2,9 +2,49 @@
 import pytest
 
 from src.services.file_parser import _extract_pptx_shapes, _remove_pdf_watermarks, parse_file
+from src.services.text_encoding import decode_text_bytes, repair_mojibake
 
 
 class TestTextParser:
+    @pytest.mark.parametrize("encoding", ["gbk", "gb18030"])
+    def test_decodes_mainland_chinese_legacy_encodings(self, encoding):
+        source = "中国电信广西分公司\n智慧家庭场景化展陈规范"
+
+        decoded = decode_text_bytes(source.encode(encoding))
+
+        assert decoded.text == source
+        assert decoded.encoding in {"gb18030", "gbk"}
+
+    def test_parse_text_transcodes_gbk_file(self, tmp_path):
+        source = "第一章总则：中国电信"
+        f = tmp_path / "legacy.txt"
+        f.write_bytes(source.encode("gbk"))
+
+        result = parse_file(str(f))[0]
+
+        assert result.content == source
+
+    def test_parse_text_repairs_utf8_mojibake_saved_to_file(self, tmp_path):
+        source = "中国电信智慧家庭场景化展陈规范"
+        f = tmp_path / "mojibake.md"
+        f.write_text(source.encode("utf-8").decode("latin1"), encoding="utf-8")
+
+        result = parse_file(str(f))[0]
+
+        assert result.content == source
+
+    def test_repairs_only_clear_mojibake(self):
+        source = "中国电信智慧家庭"
+        garbled = source.encode("utf-8").decode("latin1")
+
+        repaired, changed = repair_mojibake(garbled)
+
+        assert changed is True
+        assert repaired == source
+        unchanged, changed = repair_mojibake("Normal English content")
+        assert changed is False
+        assert unchanged == "Normal English content"
+
     def test_pptx_group_extraction_failure_is_skipped(self):
         class BrokenGroupShape:
             shape_type = 6

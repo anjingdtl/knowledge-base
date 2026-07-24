@@ -1347,6 +1347,14 @@ class KnowledgeView(QWidget):
         try:
             parsed_list = parse_file(path)
             parsed = parsed_list[0]
+            if _check_garbled(parsed.content):
+                QMessageBox.warning(
+                    self,
+                    "无法自动修复",
+                    "已按 UTF-8、GB18030/GBK 等编码重新解析，但文本仍然不可读。"
+                    "这通常是 PDF 字体映射或扫描件问题，请换用原始 Word/文本文件或 OCR 后再导入。",
+                )
+                return
             hashlib.sha256(parsed.content.encode("utf-8", errors="surrogatepass")).hexdigest()
             title = data.get("title", "")
             from src.gui.import_dialog import generate_title
