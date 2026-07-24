@@ -4,8 +4,8 @@ import sys
 from pathlib import Path
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtGui import QAction, QIcon, QPixmap
+from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QSystemTrayIcon
 
 from src.utils.config import Config
 from src.version import APP_NAME
@@ -138,10 +138,51 @@ class KnowledgeBaseApp:
             QMessageBox.critical(None, "数据库错误", f"无法连接数据库：\n\n{exc}")
             sys.exit(1)
         self.window.setWindowIcon(self.app.windowIcon())
+        self._setup_system_tray()
 
     def _apply_theme(self):
         from src.gui.theme import apply
         apply(self.app)
+
+    def _setup_system_tray(self) -> None:
+        """Create a dependable entry point for restoring a minimized GUI window."""
+        if not QSystemTrayIcon.isSystemTrayAvailable():
+            logger.warning("系统通知区域不可用，无法创建 GUI 托盘图标")
+            self.tray_icon = None
+            return
+
+        self.tray_icon = QSystemTrayIcon(self.app.windowIcon(), self.app)
+        self.tray_icon.setToolTip(APP_NAME)
+
+        self.tray_menu = QMenu()
+        restore_action = QAction("显示主界面", self.tray_menu)
+        restore_action.triggered.connect(self.restore_main_window)
+        quit_action = QAction("退出", self.tray_menu)
+        quit_action.triggered.connect(self.window.close)
+        self.tray_menu.addAction(restore_action)
+        self.tray_menu.addSeparator()
+        self.tray_menu.addAction(quit_action)
+
+        self.tray_icon.setContextMenu(self.tray_menu)
+        self.tray_icon.activated.connect(self._on_tray_activated)
+        self.tray_icon.show()
+
+    def _on_tray_activated(self, reason: QSystemTrayIcon.ActivationReason) -> None:
+        """Restore the main window on normal single/double tray-icon activation."""
+        if reason in {
+            QSystemTrayIcon.ActivationReason.Trigger,
+            QSystemTrayIcon.ActivationReason.DoubleClick,
+        }:
+            self.restore_main_window()
+
+    def restore_main_window(self) -> None:
+        """Bring the GUI back from the taskbar or system tray without losing state."""
+        state = self.window.windowState()
+        if state & Qt.WindowState.WindowMinimized:
+            self.window.setWindowState(state & ~Qt.WindowState.WindowMinimized)
+        self.window.show()
+        self.window.raise_()
+        self.window.activateWindow()
 
     def run(self):
         self.window.show()
