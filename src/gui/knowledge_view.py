@@ -95,37 +95,32 @@ def _check_garbled(content: str) -> bool:
 
 
 class DedupWorker(QThread):
-    """后台去重线程：先回填空 content_hash，再执行去重"""
+    """后台执行用户已确认的安全去重清单。"""
     progress = Signal(int, str)
     finished = Signal(int, int, int)  # backfilled_count, groups_found, removed_count
 
-    def run(self):
-        # 第一步：为历史记录补算/修复 content_hash（force 模式覆盖旧版错误 hash）
-        self.progress.emit(0, "正在回填内容指纹...")
-        backfilled = Database.backfill_content_hash(force=True)
-        if backfilled > 0:
-            self.progress.emit(10, f"已回填 {backfilled} 条记录的指纹")
+    def __init__(self, groups: list[list[dict]]):
+        super().__init__()
+        self._groups = groups
 
-        # 第二步：查找重复组
-        self.progress.emit(20, "正在扫描重复条目...")
-        groups = Database.find_duplicates()
-        if not groups:
-            self.finished.emit(backfilled, 0, 0)
+    def run(self):
+        if not self._groups:
+            self.finished.emit(0, 0, 0)
             return
 
         removed = 0
-        total = sum(len(g) - 1 for g in groups)
-        for i, group in enumerate(groups):
-            # 保留第一条（最新的），删除其余
+        total = sum(len(g) - 1 for g in self._groups)
+        for group in self._groups:
+            # groups 是确认框展示并由用户确认过的快照，不能重新扫描后扩大范围。
             for item in group[1:]:
                 _file_graph_service().delete_page(item["id"])
                 removed += 1
                 self.progress.emit(
-                    20 + int(removed / max(total, 1) * 80),
+                    int(removed / max(total, 1) * 100),
                     f"去重中: {removed}/{total}"
                 )
 
-        self.finished.emit(backfilled, len(groups), removed)
+        self.finished.emit(0, len(self._groups), removed)
 
 
 class QualityWorker(QThread):
@@ -1614,8 +1609,25 @@ class KnowledgeView(QWidget):
             )
 
         groups = Database.find_duplicates()
+        title_candidates = Database.find_title_duplicate_candidates()
         if not groups:
-            QMessageBox.information(self, "知识去重", "没有发现重复的知识条目。")
+            if title_candidates:
+                titles = "\n".join(
+                    f"• {g[0].get('title', '')}（{len(g)} 条，正文为空）"
+                    for g in title_candidates[:10]
+                )
+                if len(title_candidates) > 10:
+                    titles += f"\n… 另有 {len(title_candidates) - 10} 组"
+                QMessageBox.information(
+                    self,
+                    "知识去重：需人工核查",
+                    "未发现可安全自动处理的重复项。\n\n"
+                    "以下条目仅标题相同，但正文为空，可能是解析失败；"
+                    "为避免误删，未纳入自动去重，请核对来源后手动处理：\n"
+                    f"{titles}",
+                )
+            else:
+                QMessageBox.information(self, "知识去重", "没有发现重复的知识条目。")
             return
 
         total_dupes = sum(len(g) - 1 for g in groups)
@@ -1624,32 +1636,47 @@ class KnowledgeView(QWidget):
         from PySide6.QtWidgets import QDialog, QDialogButtonBox, QTextEdit, QVBoxLayout
         dialog = QDialog(self)
         dialog.setWindowTitle("确认去重")
-        dialog.setMinimumWidth(480)
-        dialog.setMaximumHeight(520)
+        dialog.setMinimumWidth(760)
+        dialog.setMaximumHeight(640)
 
         layout = QVBoxLayout(dialog)
 
-        summary = QLabel(f"发现 {len(groups)} 组重复条目，共 {total_dupes} 个重复项。\n"
-                         f"将删除旧条目，保留每组最新的一个。")
+        summary_text = (
+            f"发现 {len(groups)} 组正文内容完全一致的条目，共 {total_dupes} 个重复项。\n"
+            "将保留每组最近导入的一条，其余条目移入回收站，可恢复。"
+        )
+        if title_candidates:
+            summary_text += (
+                f"\n另有 {len(title_candidates)} 组仅标题相同且正文为空的候选项，"
+                "为避免误删，未纳入本次自动处理。"
+            )
+        summary = QLabel(summary_text)
         summary.setObjectName("hintLabel")
         summary.setWordWrap(True)
         layout.addWidget(summary)
 
         detail = QTextEdit()
         detail.setReadOnly(True)
-        detail.setMaximumHeight(320)
+        detail.setMaximumHeight(420)
         lines = []
         for i, g in enumerate(groups[:50]):
             keep = g[0]
-            lines.append(f"【{keep.get('title', '')}】(保留)")
+            fingerprint = keep.get("content_fingerprint", "")
+            lines.append(f"第 {i + 1} 组 · {keep.get('dedupe_reason', '内容一致')}"
+                         f"（SHA-256：{fingerprint[:12]}…）")
+            lines.append(f"  保留（最近导入）: {keep.get('title', '')}")
+            lines.append(
+                f"    导入时间: {keep.get('created_at', '').replace('T', ' ')}"
+                f" | 来源: {keep.get('source_path', '') or '未记录'}"
+            )
             for dup in g[1:]:
                 dup_title = dup.get("title", "")
-                t = dup.get("created_at", "")[:16].replace("T", " ")
-                # 展示重复条目的标题，方便对比差异
-                if dup_title and dup_title != keep.get("title", ""):
-                    lines.append(f"  × {dup_title}  [{t}]")
-                else:
-                    lines.append(f"  × 同内容  [{t}]")
+                lines.append(f"  移入回收站: {dup_title or '未命名条目'}")
+                lines.append(
+                    f"    导入时间: {dup.get('created_at', '').replace('T', ' ')}"
+                    f" | 来源: {dup.get('source_path', '') or '未记录'}"
+                )
+            lines.append("")
         if len(groups) > 50:
             lines.append(f"\n... 还有 {len(groups) - 50} 组未显示")
         detail.setPlainText("\n".join(lines))
@@ -1672,7 +1699,7 @@ class KnowledgeView(QWidget):
         progress.setMinimumDuration(0)
         progress.setCancelButton(None)
 
-        self._dedup_worker = DedupWorker()
+        self._dedup_worker = DedupWorker(groups)
         self._dedup_worker.progress.connect(
             lambda v, msg: (progress.setValue(v), progress.setLabelText(msg))
         )

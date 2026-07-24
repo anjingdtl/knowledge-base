@@ -1,8 +1,8 @@
 """find_duplicates + backfill_content_hash 去重逻辑测试
 
 覆盖场景：
-- 同 content_hash 的不同标题条目应被识别为重复
-- content_hash 为空但标准化标题相同的条目应被识别为重复
+- 非空且内容指纹相同的不同标题条目应被识别为重复
+- 正文为空但标准化标题相同的条目只能作为人工核查候选
 - backfill_content_hash 能为空哈希记录补算哈希值
 - 内容不同的条目不应被误判为重复
 """
@@ -52,11 +52,11 @@ def _clean_tables():
 
 
 # ---------------------------------------------------------------------------
-# tests: find_duplicates — content_hash 策略
+# tests: find_duplicates — 非空正文内容指纹策略
 # ---------------------------------------------------------------------------
 
-class TestFindDuplicatesByHash:
-    """相同 content_hash 的条目应被分为一组重复。"""
+class TestFindDuplicatesByContentFingerprint:
+    """只有正文内容完全一致的条目才可进入自动去重组。"""
 
     def test_same_hash_different_titles(self):
         """同内容但标题含不同 hex 后缀 → 应识别为重复。"""
@@ -96,6 +96,26 @@ class TestFindDuplicatesByHash:
         groups = Database.find_duplicates()
         assert len(groups) == 0
 
+    def test_same_stored_hash_but_different_content_not_deduped(self):
+        """历史 content_hash 碰撞或错误时，不能据此自动删除。"""
+        conn = Database.get_conn()
+        _insert(conn, title="文档A", content="content_A", content_hash="stale_hash")
+        _insert(conn, title="文档B", content="content_B", content_hash="stale_hash")
+        conn.commit()
+
+        assert Database.find_duplicates() == []
+
+    def test_same_content_with_different_stored_hashes_is_deduped(self):
+        """正文相同即使遗留哈希不同，也应被正确识别。"""
+        conn = Database.get_conn()
+        _insert(conn, title="文档A", content="同一正文", content_hash="legacy_hash_a")
+        _insert(conn, title="文档B", content="同一正文", content_hash="legacy_hash_b")
+        conn.commit()
+
+        groups = Database.find_duplicates()
+        assert len(groups) == 1
+        assert groups[0][0]["dedupe_reason"] == "内容指纹完全一致"
+
     def test_deleted_items_excluded(self):
         """软删除的条目不参与去重扫描。"""
         content = "已删除的重复"
@@ -125,11 +145,11 @@ class TestFindDuplicatesByHash:
 
 
 # ---------------------------------------------------------------------------
-# tests: find_duplicates — 标准化标题策略（兜底）
+# tests: 标准化标题候选（仅人工核查）
 # ---------------------------------------------------------------------------
 
-class TestFindDuplicatesByNormalizedTitle:
-    """content_hash 为空时，剥掉 --<hex> 后缀后标题相同 → 视为重复。"""
+class TestTitleDuplicateCandidates:
+    """正文为空时，同名只是人工核查候选，不能自动去重。"""
 
     def test_no_hash_same_normalized_title(self):
         conn = Database.get_conn()
@@ -137,9 +157,11 @@ class TestFindDuplicatesByNormalizedTitle:
         _insert(conn, title="社会渠道费用标准--8ee13658", content="", content_hash="")
         conn.commit()
 
-        groups = Database.find_duplicates()
-        assert len(groups) == 1
-        assert len(groups[0]) == 2
+        assert Database.find_duplicates() == []
+        candidates = Database.find_title_duplicate_candidates()
+        assert len(candidates) == 1
+        assert len(candidates[0]) == 2
+        assert candidates[0][0]["dedupe_reason"] == "标题相同，但正文为空，需人工核查"
 
     def test_no_hash_different_titles_not_deduped(self):
         """标题不同（去掉后缀后仍不同）不应误判。"""
@@ -148,8 +170,8 @@ class TestFindDuplicatesByNormalizedTitle:
         _insert(conn, title="文档B--22222222", content="", content_hash="")
         conn.commit()
 
-        groups = Database.find_duplicates()
-        assert len(groups) == 0
+        assert Database.find_duplicates() == []
+        assert Database.find_title_duplicate_candidates() == []
 
     def test_mixed_hash_and_no_hash(self):
         """一条有 hash，一条无 hash，但标准化标题相同且 hash 条不参与标题兜底。"""
@@ -160,9 +182,10 @@ class TestFindDuplicatesByNormalizedTitle:
         _insert(conn, title="合同--11223344", content="", content_hash="")
         conn.commit()
 
-        # 有 hash 的单独一组（只有1条，不构成重复），无 hash 的单独一组（也只有1条）
+        # 有正文的单独一条和空正文的同名候选都不构成自动重复组。
         groups = Database.find_duplicates()
         assert len(groups) == 0
+        assert Database.find_title_duplicate_candidates() == []
 
 
 # ---------------------------------------------------------------------------
@@ -224,7 +247,7 @@ class TestBackfillContentHash:
         _insert(conn, title="文档--bbb22222", content=content, content_hash="")
         conn.commit()
 
-        # 回填前：两条都无 hash，靠标题兜底能找到 1 组重复
+        # 回填前：直接以非空正文的指纹判定，也能找到 1 组重复。
         groups_before = Database.find_duplicates()
         assert len(groups_before) == 1
 

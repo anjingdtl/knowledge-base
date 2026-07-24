@@ -256,77 +256,63 @@ class KnowledgeRepository:
                 "file_type_dist": file_type_dist, "category_coverage": cat_count}
 
     def find_duplicates(self) -> List[List[dict]]:
-        """查找重复知识条目，三层策略：
-        1. content_hash 相同 → 内容完全一致（最可靠）
-        2. 标准化标题相同 → 对 content_hash 为空的旧记录兜底
-           （标题末尾的 --<hex> 后缀被剥掉后再比较）
-        3. 同内容不同 hash → 对标准化标题相同 + content 相同的记录兜底
-           （捕获旧版 sync_page 用 sha256(MD全文) 存 hash 的遗留问题）
-        每组按 created_at 降序排列，调用方保留第一条、删除其余。
+        """返回可安全自动去重的非空正文内容指纹组。
+
+        同名空正文记录由 :meth:`find_title_duplicate_candidates` 返回，
+        仅能供人工核查，不能作为自动删除依据。
         """
         import hashlib
-        import re
         rows = self._conn().execute(
             "SELECT id, title, content, source_path, content_hash, "
-            "file_size, created_at, updated_at FROM knowledge_items "
+            "file_size, created_at, updated_at, rowid FROM knowledge_items "
             "WHERE deleted_at IS NULL"
         ).fetchall()
 
-        # ---- 策略 1: content_hash 匹配 ----
-        hash_groups: dict[str, List[dict]] = {}
-        no_hash_rows: list[dict] = []
-        has_hash_rows: list[dict] = []
+        content_groups: dict[str, List[dict]] = {}
         for row in rows:
-            ch = (row["content_hash"] or "").strip()
             d = dict(row)
-            if ch:
-                hash_groups.setdefault(ch, []).append(d)
-                has_hash_rows.append(d)
-            else:
-                no_hash_rows.append(d)
-
-        # ---- 策略 2: 标准化标题匹配（仅对无 hash 的旧记录兜底） ----
-        _suffix_re = re.compile(r"--[0-9a-fA-F]{6,16}$")
-        title_groups: dict[str, List[dict]] = {}
-        for d in no_hash_rows:
-            raw_title = (d.get("title") or "").strip()
-            norm = _suffix_re.sub("", raw_title).strip()
-            if not norm:
+            content = d.get("content") or ""
+            if not content.strip():
                 continue
-            title_groups.setdefault(norm, []).append(d)
-
-        # ---- 策略 3: 同内容不同 hash 兜底 ----
-        repeated_hashes: set[str] = {ch for ch, g in hash_groups.items() if len(g) > 1}
-        content_dedup_groups: dict[str, List[dict]] = {}
-        for d in has_hash_rows:
-            ch = (d.get("content_hash") or "").strip()
-            if ch in repeated_hashes:
-                continue
-            raw_title = (d.get("title") or "").strip()
-            norm = _suffix_re.sub("", raw_title).strip()
-            if not norm:
-                continue
-            c = d.get("content") or ""
-            if not c:
-                continue
-            content_h = hashlib.sha256(
-                c.encode("utf-8", errors="surrogatepass")
+            fingerprint = hashlib.sha256(
+                content.encode("utf-8", errors="surrogatepass")
             ).hexdigest()
-            key = f"{norm}|{content_h}"
-            content_dedup_groups.setdefault(key, []).append(d)
+            d["dedupe_reason"] = "内容指纹完全一致"
+            d["content_fingerprint"] = fingerprint
+            content_groups.setdefault(fingerprint, []).append(d)
 
-        # ---- 合并三组结果 ----
         result: List[List[dict]] = []
-        for g in hash_groups.values():
+        for g in content_groups.values():
             if len(g) > 1:
-                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
-        for g in title_groups.values():
-            if len(g) > 1:
-                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
-        for g in content_dedup_groups.values():
-            if len(g) > 1:
-                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
+                result.append(sorted(g, key=lambda x: (x.get("created_at", ""), x.get("rowid", 0)), reverse=True))
         return result
+
+    def find_title_duplicate_candidates(self) -> List[List[dict]]:
+        """返回仅供人工核查的同名空正文候选项，不可用于自动删除。"""
+        import re
+
+        rows = self._conn().execute(
+            "SELECT id, title, content, source_path, file_size, created_at, "
+            "updated_at, rowid FROM knowledge_items "
+            "WHERE deleted_at IS NULL"
+        ).fetchall()
+        suffix_re = re.compile(r"--[0-9a-fA-F]{6,16}$")
+        groups: dict[str, List[dict]] = {}
+        for row in rows:
+            item = dict(row)
+            if (item.get("content") or "").strip():
+                continue
+            title = suffix_re.sub("", (item.get("title") or "").strip()).strip()
+            if not title:
+                continue
+            item["dedupe_reason"] = "标题相同，但正文为空，需人工核查"
+            groups.setdefault(title, []).append(item)
+
+        return [
+            sorted(group, key=lambda x: (x.get("created_at", ""), x.get("rowid", 0)), reverse=True)
+            for group in groups.values()
+            if len(group) > 1
+        ]
 
     def backfill_content_hash(self, force: bool = False) -> int:
         """为历史记录补算/修复 content_hash。
