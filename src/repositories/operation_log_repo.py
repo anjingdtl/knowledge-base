@@ -60,14 +60,15 @@ class OperationLogRepository:
             params.append(source)
         where = " WHERE " + " AND ".join(conditions) if conditions else ""
         rows = self._conn().execute(
-            f"SELECT * FROM operation_logs{where} ORDER BY created_at DESC LIMIT ? OFFSET ?",
+            f"SELECT * FROM operation_logs{where} ORDER BY created_at DESC, rowid DESC LIMIT ? OFFSET ?",
             params + [limit, offset],
         ).fetchall()
         return [dict(r) for r in rows]
 
     def get_by_target(self, target_type: str, target_id: str, limit=20) -> list[dict]:
         rows = self._conn().execute(
-            "SELECT * FROM operation_logs WHERE target_type = ? AND target_id = ? ORDER BY created_at DESC LIMIT ?",
+            "SELECT * FROM operation_logs WHERE target_type = ? AND target_id = ? "
+            "ORDER BY created_at DESC, rowid DESC LIMIT ?",
             (target_type, target_id, limit),
         ).fetchall()
         return [dict(r) for r in rows]

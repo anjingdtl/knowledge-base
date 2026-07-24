@@ -656,7 +656,7 @@ class Database(metaclass=_DatabaseMeta):
         conn = self.get_conn()
         rows = conn.execute(
             "SELECT id, title, content, source_path, content_hash, "
-            "file_size, created_at, updated_at FROM knowledge_items "
+            "file_size, created_at, updated_at, rowid FROM knowledge_items "
             "WHERE deleted_at IS NULL"
         ).fetchall()
 
@@ -714,16 +714,18 @@ class Database(metaclass=_DatabaseMeta):
             content_dedup_groups.setdefault(key, []).append(d)
 
         # ---- 合并三组结果 ----
+        # 排序：created_at 降序（最新在前），rowid DESC 作为次序兜底，
+        # 避免 fast machine 上同毫秒时间戳导致顺序不确定。
         result: list[list[dict]] = []
         for g in hash_groups.values():
             if len(g) > 1:
-                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
+                result.append(sorted(g, key=lambda x: (x.get("created_at", ""), x.get("rowid", 0)), reverse=True))
         for g in title_groups.values():
             if len(g) > 1:
-                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
+                result.append(sorted(g, key=lambda x: (x.get("created_at", ""), x.get("rowid", 0)), reverse=True))
         for g in content_dedup_groups.values():
             if len(g) > 1:
-                result.append(sorted(g, key=lambda x: x.get("created_at", ""), reverse=True))
+                result.append(sorted(g, key=lambda x: (x.get("created_at", ""), x.get("rowid", 0)), reverse=True))
         return result
 
     def backfill_content_hash(self, force: bool = False) -> int:

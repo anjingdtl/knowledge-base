@@ -13,7 +13,7 @@ class _FakeRebuild:
 
 def test_update_update_merges_to_single_update():
     svc = _FakeRebuild()
-    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=0)
+    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=60_000)
     sch.schedule("k1", "update")
     sch.schedule("k1", "update")
     sch.flush()
@@ -22,7 +22,7 @@ def test_update_update_merges_to_single_update():
 
 def test_update_then_delete_merges_to_delete():
     svc = _FakeRebuild()
-    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=0)
+    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=60_000)
     sch.schedule("k1", "update")
     sch.schedule("k1", "delete")  # delete 主导
     sch.flush()
@@ -45,7 +45,7 @@ def test_distinct_kids_not_merged():
 
 def test_pending_count_after_delete_dominating_update():
     svc = _FakeRebuild()
-    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=0)
+    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=60_000)
     sch.schedule("k1", "update")
     sch.schedule("k1", "delete")
     sch.schedule("k1", "update")  # delete + update → delete(不 drop)
@@ -54,7 +54,7 @@ def test_pending_count_after_delete_dominating_update():
 
 def test_flush_clears_pending_and_returns_result():
     svc = _FakeRebuild()
-    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=0)
+    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=60_000)
     sch.schedule("k1", "update")
     result = sch.flush()
     assert sch.pending_count == 0
@@ -64,6 +64,6 @@ def test_flush_clears_pending_and_returns_result():
 
 def test_invalid_event_ignored():
     svc = _FakeRebuild()
-    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=0)
+    sch = RebuildScheduler(rebuild_service=svc, debounce_ms=60_000)
     sch.schedule("k1", "bogus")  # 非 update/delete → 忽略
     assert sch.pending_count == 0
