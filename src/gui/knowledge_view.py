@@ -232,7 +232,7 @@ class QualityWorker(QThread):
 
 
 class RenameWorker(QThread):
-    """后台批量智能重命名线程 — 批量调用 LLM，每次处理最多 BATCH_SIZE 条"""
+    """后台智能重命名线程 — 每次以 BATCH_SIZE 条调用一次 LLM。"""
     progress = Signal(int, str)
     finished = Signal(int)
 
@@ -252,7 +252,7 @@ class RenameWorker(QThread):
             self.finished.emit(getattr(self, "_renamed", 0))
 
     def _do_rename(self):
-        from src.gui.import_dialog import generate_title
+        from src.gui.import_dialog import generate_titles_batch
 
         if self._items is not None:
             items = self._items
@@ -260,27 +260,47 @@ class RenameWorker(QThread):
             items = Database.list_knowledge(limit=10000)
         total = len(items)
         self._renamed = 0
-
-        for i, item in enumerate(items):
-            content = item.get("content", "")
+        candidates = []
+        for item in items:
             source_path = item.get("source_path", "")
-            filename = ""
             if source_path and os.path.isfile(source_path):
                 filename = os.path.splitext(os.path.basename(source_path))[0]
             elif source_path:
                 filename = os.path.splitext(os.path.basename(source_path))[0]
+            else:
+                filename = ""
             if not filename:
                 continue
-            try:
-                new_title = generate_title(content, filename=filename)
+
+            candidates.append({
+                "item": item,
+                "id": str(item["id"]),
+                "filename": filename,
+                "content": item.get("content", ""),
+            })
+
+        processed = 0
+        for start in range(0, len(candidates), self.BATCH_SIZE):
+            batch = candidates[start:start + self.BATCH_SIZE]
+            new_titles = generate_titles_batch(batch)
+            for candidate in batch:
+                item = candidate["item"]
+                new_title = new_titles.get(candidate["id"], candidate["filename"][:60])
                 old_title = item.get("title", "")
                 if new_title and new_title != old_title:
-                    Database.update_knowledge(item["id"], title=new_title)
-                    self._renamed += 1
-            except Exception:
-                pass
-            if i % 5 == 0:
-                self.progress.emit(int((i + 1) / total * 100), f"已处理 {i + 1}/{total}")
+                    try:
+                        # Keep the existing per-item versioning and FTS update behavior.
+                        Database.update_knowledge(item["id"], title=new_title)
+                        self._renamed += 1
+                    except Exception:
+                        # A failed item must not abandon the remaining batches.
+                        logger.exception("智能重命名写入失败: %s", item.get("id"))
+            processed += len(batch)
+            if total:
+                self.progress.emit(int(processed / total * 100), f"已处理 {processed}/{total}")
+
+        if total and processed < total:
+            self.progress.emit(100, f"已处理 {total}/{total}")
 
 
 class AutoTagWorker(QThread):
