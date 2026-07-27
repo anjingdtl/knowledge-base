@@ -1,0 +1,958 @@
+{
+  "case": {
+    "case_id": "KB-030",
+    "category": "无答案或越界问题",
+    "query": "中国电信广西公司2026年营收预测是多少亿元",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体营收预测数字"
+    ],
+    "expected_no_answer": true,
+    "notes": "知识库无未来营收预测；应拒答或说明证据不足"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "candidate_type": "raw_block",
+          "block_id": "694df35c-71e1-4740-b5e8-3619e5fee44c",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "中国电信广西公司办公室 2026年6月2日印发",
+          "score": 1.0,
+          "match_channels": [
+            "keyword",
+            "proper_noun_boost",
+            "raw"
+          ],
+          "warnings": [],
+          "source_layer": "evidence",
+          "score_breakdown": {
+            "rerank_score": 0.0,
+            "rrf_score": 0.01704545454545454,
+            "vector_score": null,
+            "rank": 13
+          },
+          "citation": {
+            "document": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "block_id": "694df35c-71e1-4740-b5e8-3619e5fee44c",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.0,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": null,
+              "rrf": null,
+              "rerank": null
+            },
+            "match_channels": [],
+            "reason": "match",
+            "text": "中国电信广西公司办公室 2026年6月2日印发"
+          },
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": true
+          },
+          "fts_score": 1.0,
+          "final_relevance_score": 0.55,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false
+          },
+          "relevance": {
+            "semantic_score": 0.4524,
+            "fts_score": 1.0,
+            "title_score": 0.4524,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4524,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": true
+            }
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "7048b3ca-65c0-48d8-b665-1cf441502cbb",
+          "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+          "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+          "text": "中国电信广西公司办公室 2026年1月19日印发",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+            "chunk_index": 1056,
+            "depth": 1
+          },
+          "fts_rank": -26.17226780675122,
+          "fts_score": 0.7044,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": true
+          },
+          "score": 0.7044,
+          "relevance": {
+            "semantic_score": 0.5079,
+            "fts_score": 0.7044,
+            "title_score": 0.5556,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4762,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": true
+            }
+          },
+          "final_relevance_score": 0.55,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "b9f87e76-ad43-4305-93d6-11b7089405ce",
+          "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+          "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+          "text": "中国电信广西公司关于印发2026年",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "chunk_index": 3,
+            "depth": 1
+          },
+          "fts_rank": -32.80544837378852,
+          "fts_score": 0.7000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": true
+          },
+          "score": 0.7000000000000001,
+          "relevance": {
+            "semantic_score": 0.4714,
+            "fts_score": 0.7,
+            "title_score": 0.5,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4524,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": true
+            }
+          },
+          "final_relevance_score": 0.55,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "8b27a34c-435f-4355-81d2-21e0f9df262b",
+          "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+          "title": "中电信桂-2026-118号-关于印发中国电信广西公司资本性研发项目立项操作指引-试行-的通知--e5cc6504",
+          "text": "（1）新建项目：中国电信2026年广西公司无线智慧运",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+            "chunk_index": 103,
+            "depth": 1
+          },
+          "fts_rank": -28.063740813309824,
+          "fts_score": 0.7000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": true
+          },
+          "score": 0.7000000000000001,
+          "relevance": {
+            "semantic_score": 0.4524,
+            "fts_score": 0.7,
+            "title_score": 0.4524,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4524,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": true
+            }
+          },
+          "final_relevance_score": 0.55,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "f06aa833-b60b-4b4c-ad25-fd4bbab80614",
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+          "text": "中国电信广西公司办公室 2026年3月12日印发",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "chunk_index": 622,
+            "depth": 1
+          },
+          "fts_rank": -26.17226780675122,
+          "fts_score": 0.7000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": true
+          },
+          "score": 0.7000000000000001,
+          "relevance": {
+            "semantic_score": 0.4714,
+            "fts_score": 0.7,
+            "title_score": 0.5,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4524,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": true
+            }
+          },
+          "final_relevance_score": 0.55,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 9,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 33034.45
+  },
+  "read": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "type": "knowledge",
+        "id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+        "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+        "content": "[第1页]\n  — 1 —\n  中电信桂〔2026〕158号\n  关于印发中国电信广西公司技能竞赛\n  管理办法（修订）的通知\n  各市分公司及同级工会，各专业公司，区公司各部门：\n  自《中国电信广西公司技能竞赛管理办法》（中电信桂\n  〔2023〕278号）印发实施以来，在激发员工活力和内生动力，\n  促进企业高质量发展和员工成长成才等方面发挥了积极作用。\n  为进一步激发各单位和员工参赛热情，持续完善公司技能人才\n  培养与激励机制，强化以赛促学、以赛促练的导向，结合近年\n  竞赛工作实际开展情况，区公司、区电信工会修订了该办法,\n[第2页]\n  — 2 —现印发给你们，请认真组织学习，严格遵照执行。\n  中国电信广西公司 中国电信广西区工会\n  2026年5月29日\n[第3页]\n  — 3 — 中国电信广西公司技能竞赛管理办法\n  （修订）\n  第一章 总则\n  第一条 为深入学习贯彻习近平新时代中国特色社会主义\n  思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技\n  能型、创新型职工队伍，弘扬劳模精神、劳动精神、工匠精神，\n  营造发展光荣的企业风尚和全心全意为客户服务的敬业风气，\n  积极倡导与企业共同发展文化，增强员工的职业荣誉感、自豪\n  感和获得感，进一步发挥技能竞赛在高技能人才队伍建设中的\n  作用，根据《中国电信集团技能竞赛管理办法》，结合中国电\n  信广西公司（以下简称“广西公司”）实际，制订本办法。\n  第二条 技能竞赛是指为引导和鼓励员工立足本职、刻苦\n  钻研、岗位成才，依据国家及行业职业技能要求、企业岗位技\n  能要求，以及业务发展和客户服务实际需要组织开展的，以提\n  高员工岗位技能和解决实际问题能力为重点的竞赛活动。\n  第三条 技能竞赛应坚持以下原则\n  （一）围绕中心和突出重点的原则。竞赛要围绕企业发展\n  对员工技能的要求，结合员工职业发展的需要，重点选择覆盖\n  面广的关键岗位、工种和新技术、新业务开展竞赛。\n  （二）普遍提高与择优选拔相结合的原则。竞赛要体现广\n  泛性和先进性，通过组织广泛的学习培训、岗位练兵，调动员\n[第4页]\n  — 4 —工学习知识和提升技能的积极性和主动性，在推动员工业务素\n  质和岗位技能水平整体提高的基础上，发现和培养优秀技能人\n  才。\n  （三）正向激励和注重实效的原则。竞赛要与岗位资格认\n  证、教育培训、职位晋升等员工职业发展相结合，激励员工成\n  长成才。适度把握竞赛的频次和范围，保证竞赛公平、公正，\n  精心组织、节约办赛、注重实效。\n  第四条 本办法适用于中国电信股份有限公司广西分公司\n  及其所属单位和同级工会。\n  第二章 组织管理\n  第五条 广西公司围绕企业发展重点领域开展技能竞赛，\n  由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n  合举办。\n  第六条 广西公司成立由人力资源部门、财务部门、区电\n  信工会和竞赛专业主管部门组成的技能竞赛委员会，负责技能\n  竞赛的组织领导工作。技能竞赛委员会下设办公室。\n  第七条 技能竞赛委员会主要职责是:\n  （一）审定技能竞赛组织实施方案;\n  （二）审定承办或参加同专业外部技能竞赛的方案;\n  （三）审定报上级主管部门备案的技能竞赛方案;\n  （四）其他需竞赛委员会审定的重大事项。\n  第八条 竞赛委员会办公室主要职责是:\n[第5页]\n  — 5 — （一）制订技能竞赛实施方案;\n  （二）负责技能竞赛的组织实施;\n  （三）提出承办或参加同专业外部技能竞赛的方案;\n  （四）向上级主管部门备案技能竞赛方案;\n  （五）落实技能竞赛委员会交办的其他事项。\n  第九条 各部门应按各自职能积极发挥在技能竞赛中的作\n  用，形成齐抓共管、高效协同、各司其职的工作格局。\n  （一）人力资源部门应结合人才队伍建设、岗位培训和岗\n  位资格认证要求，组织研究制定技能竞赛相关政策、制度和办\n  法。\n  （二）财务部门应依据国家及企业有关规定，为技能竞赛\n  提供经费保障，确保经费使用和管理规范。\n  （三）专业部门应紧密结合企业发展需要和员工岗位技能\n  要求，提出技能竞赛计划，制订实施方案，负责竞赛的具体组\n  织实施。\n  （四）工会应发挥支撑和服务作用，提出技能竞赛规划、\n  计划草案，做好竞赛日常协调、组织管理和员工动员，配合专\n  业部门完善竞赛实施方案，协助组织实施。\n  第十条 广西公司承办自治区级技能竞赛，应报公司总经\n  理办公会审批，参加自治区级技能竞赛应报公司分管领导审批。\n  各市级企业承办或参加自治区级技能竞赛应报区电信工会备\n  案。\n[第6页]\n  — 6 —第三章 组织实施\n  第十一条 技能竞赛由专业部门于每年2月底前提出年度\n  竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n  内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n  全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n  技能竞赛。\n  第十二条 全区电信职业技能竞赛是广西公司、区电信工\n  会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n  并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n  赛管理办法》规定，向集团公司提交备案申请。\n  第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n  赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n  评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n  成情况、竞赛经费预算、奖励办法等。\n  第十四条 技能竞赛应依据国家、行业职业技能标准和企\n  业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n  等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n  证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n  国内、国际同类标准进行命题。\n  第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n  一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n  为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n[第7页]\n  — 7 — 不同，但实际操作成绩所占比例不得少于70%。\n  第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n  强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n  批竞赛品牌。\n  第四章 表彰奖励\n  第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n  要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n  要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n  各级企业可以个人或团队（单位）名称命名，并组织宣传推广。\n  第十八条 全区电信职业技能竞赛每个项目的个人第1-6\n  名经审核可授予“中国电信广西公司技术能手”称号（D2级），\n  其中每个项目的第1名视竞赛情况可向集团公司申报“中国电\n  信集团技术能手”（C2级）。广西公司其他技能竞赛根据获奖\n  情况可授予个人第1名D2级荣誉；竞赛有多个项目的，可授\n  予每个项目个人第1名D3级荣誉。单次比赛的荣誉获得人数\n  不得超过参加现场决赛人数的三分之一。\n  第十九条 联合劳务派遣、业务外包单位开展的技能竞赛，\n  在遵守相关法律规定的前提下，竞赛组织领导机构可以与其协\n  商对获奖人员进行表彰奖励。\n  第二十条 广西公司组队参加自治区级及以上技能竞赛\n  （含受集团指派参加全国性竞赛）获奖的，执行竞赛主办方统\n  一要求的奖励规定。如主办方、集团公司未向获奖选手、团队\n[第8页]\n  — 8 —授予荣誉称号及颁发物质奖励的，则获个人前三名或一、二等\n  奖的选手可由广西公司授予“中国电信广西公司技术能手”称号\n  （D2级），并给予相应物质奖励；获团体项目一、二、三等奖\n  的，广西公司可给予团队总额不超过15000元且平均每人不超\n  过1200元的物质奖励。同一赛事选手分获团体奖和个人奖的，\n  就高不重复奖励。\n  第五章 竞赛经费\n  第二十一条 技能竞赛奖励经费纳入广西公司人工成本预\n  算管理，由劳动竞赛委员会归口管理。广西公司承办或参加的\n  自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n  申请流程按照公司内控权限列表的预算外项目进行审批。\n  第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n  本部门年度预算列支或向公司另行申请。另行申请流程按照公\n  司内控权限列表的预算外项目进行审批。\n  第六章 附则\n  第二十三条 各市分公司可参照本办法，结合实际，制订\n  本单位技能竞赛管理办法细则，并积极组织员工参加各级技能\n  竞赛，提升技能竞赛的广泛性和参与度。\n  第二十四条 本办法由区电信工会负责解释。\n  第二十五条 本办法自印发之日起实施，《中国电信广西\n  公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废\n  止。\n[第9页]\n  中国电信广西公司办公室 2026年6月2日印发",
+        "source_type": "file",
+        "source_path": "D:\\AiWorkSpace\\knowledge-base\\data\\graph\\pages\\中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216.md",
+        "file_type": "pdf",
+        "tags": "[\"劳动竞赛\", \"竞赛\", \"技能\", \"公司\"]",
+        "version": 4,
+        "file_created_at": "2026-07-24T17:37:44.069184",
+        "file_modified_at": "2026-07-24T17:37:44.072018",
+        "created_at": "2026-07-24T17:37:44.069184",
+        "updated_at": "2026-07-24T17:58:24.486881",
+        "deleted_at": null,
+        "file_size": 22235,
+        "content_hash": "22846b1daa4d32871c21b5930d608dcfd66037cbd27b381c15200f727ac09de8",
+        "quality": "ok",
+        "quality_score": null
+      },
+      "meta": {
+        "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      }
+    },
+    "latency_ms": 25.51,
+    "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+  },
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "## 问题拆解\n\n用户询问的是：**中国电信广西公司2026年的营收预测具体数值（亿元）**，这是一个需要具体数字的事实性问题。\n\n## 知识库检索情况\n\n我逐一检视了所有提供的证据片段：\n\n| 证据 | 内容摘要 | 是否包含营收预测数值 |\n|------|---------|-------------------|\n| 证据1 | \"中国电信广西公司关于印发2026年……\"（标题片段） | ❌ 无 |\n| 证据2 | \"关于印发中国电信广西公司营收资金……\"（标题片段） | ❌ 无 |\n| 证据3 | \"中国电信广西公司营收资金管理办法\"（管理办法标题） | ❌ 无 |\n| 证据4 | \"……〔2026〕23号精神，为落实……2026年网络和……\" | ❌ 无 |\n| 证据5 | \"新建项目：中国电信2026年广西公司无线智慧运……\" | ❌ 无 |\n\n## 回答\n\n**知识库中未找到中国电信广西公司2026年营收预测的具体数值。**\n\n**已找到的相关线索：**\n- 存在一份《中国电信广西公司营收资金管理办法》（证据2、3），但从标题判断，该文件是关于营收**资金管理**的制度规范，并非营收预测数据。\n- 另有〔2026〕23号文件涉及\"2026年网络\"相关部署，以及\"无线智慧运\"营类新建项目（证据4、5），但这些是项目计划类内容，不涉及整体营收预测金额。\n\n**缺少的关键事实：** 2026年营收预测的具体数字（亿元）。\n\n**建议：** 该数据可能存在于以下途径，但当前知识库未覆盖：\n1. 中国电信广西公司2026年度经营计划或预算文件中；\n2. 集团公司下达的2026年收入目标分解指标中；\n3. 营收资金管理办法的正文具体条款中（如有收入目标章节）。\n\n如您能提供包含具体数字的文档，我可以进一步帮您解读。",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "b9f87e76-ad43-4305-93d6-11b7089405ce",
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "中国电信广西公司关于印发2026年",
+            "score": 0.016656751933372994,
+            "citation": {
+              "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+              "path": "",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "block_id": "b9f87e76-ad43-4305-93d6-11b7089405ce",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "中国电信广西公司关于印发2026年"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+            "block_id": "7cbfec6b-84a3-422e-b68f-40b171da8171",
+            "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+            "text": "关于印发中国电信广西公司营收资金",
+            "score": 0.016260162601626018,
+            "citation": {
+              "document": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+              "path": "",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "block_id": "7cbfec6b-84a3-422e-b68f-40b171da8171",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "关于印发中国电信广西公司营收资金"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+            "block_id": "b0fe8a77-aff5-4e19-80ac-0c0be2018f4b",
+            "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+            "text": "— 3 — 中国电信广西公司营收资金管理办法",
+            "score": 0.015882019285309135,
+            "citation": {
+              "document": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+              "path": "",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "block_id": "b0fe8a77-aff5-4e19-80ac-0c0be2018f4b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "— 3 — 中国电信广西公司营收资金管理办法"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "fabc14f3-5f51-4efc-afcf-76391fbecf6a",
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "〔2026〕23号）精神，为落实中国电信广西公司2026年网络和",
+            "score": 0.015521064301552107,
+            "citation": {
+              "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+              "path": "",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "block_id": "fabc14f3-5f51-4efc-afcf-76391fbecf6a",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "〔2026〕23号）精神，为落实中国电信广西公司2026年网络和"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+            "block_id": "8b27a34c-435f-4355-81d2-21e0f9df262b",
+            "title": "中电信桂-2026-118号-关于印发中国电信广西公司资本性研发项目立项操作指引-试行-的通知--e5cc6504",
+            "text": "（1）新建项目：中国电信2026年广西公司无线智慧运",
+            "score": 0.015176151761517617,
+            "citation": {
+              "document": "中电信桂-2026-118号-关于印发中国电信广西公司资本性研发项目立项操作指引-试行-的通知--e5cc6504",
+              "path": "",
+              "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+              "block_id": "8b27a34c-435f-4355-81d2-21e0f9df262b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "（1）新建项目：中国电信2026年广西公司无线智慧运"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          }
+        ],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "b9f87e76-ad43-4305-93d6-11b7089405ce",
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "中国电信广西公司关于印发2026年",
+            "score": 0.016656751933372994,
+            "citation": {
+              "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+              "path": "",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "block_id": "b9f87e76-ad43-4305-93d6-11b7089405ce",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "中国电信广西公司关于印发2026年"
+            }
+          },
+          {
+            "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+            "block_id": "7cbfec6b-84a3-422e-b68f-40b171da8171",
+            "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+            "path": "",
+            "text": "关于印发中国电信广西公司营收资金",
+            "score": 0.016260162601626018,
+            "citation": {
+              "document": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+              "path": "",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "block_id": "7cbfec6b-84a3-422e-b68f-40b171da8171",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "关于印发中国电信广西公司营收资金"
+            }
+          },
+          {
+            "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+            "block_id": "b0fe8a77-aff5-4e19-80ac-0c0be2018f4b",
+            "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+            "path": "",
+            "text": "— 3 — 中国电信广西公司营收资金管理办法",
+            "score": 0.015882019285309135,
+            "citation": {
+              "document": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+              "path": "",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "block_id": "b0fe8a77-aff5-4e19-80ac-0c0be2018f4b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "— 3 — 中国电信广西公司营收资金管理办法"
+            }
+          },
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "fabc14f3-5f51-4efc-afcf-76391fbecf6a",
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "〔2026〕23号）精神，为落实中国电信广西公司2026年网络和",
+            "score": 0.015521064301552107,
+            "citation": {
+              "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+              "path": "",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "block_id": "fabc14f3-5f51-4efc-afcf-76391fbecf6a",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "〔2026〕23号）精神，为落实中国电信广西公司2026年网络和"
+            }
+          },
+          {
+            "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+            "block_id": "8b27a34c-435f-4355-81d2-21e0f9df262b",
+            "title": "中电信桂-2026-118号-关于印发中国电信广西公司资本性研发项目立项操作指引-试行-的通知--e5cc6504",
+            "path": "",
+            "text": "（1）新建项目：中国电信2026年广西公司无线智慧运",
+            "score": 0.015176151761517617,
+            "citation": {
+              "document": "中电信桂-2026-118号-关于印发中国电信广西公司资本性研发项目立项操作指引-试行-的通知--e5cc6504",
+              "path": "",
+              "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+              "block_id": "8b27a34c-435f-4355-81d2-21e0f9df262b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "（1）新建项目：中国电信2026年广西公司无线智慧运"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "exact_lookup",
+            "wiki_weight": 0.3170731707317074,
+            "raw_weight": 0.6829268292682927,
+            "reasons": [
+              "exact_lookup_keywords",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 13
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.3170731707317074,
+              "raw_weight": 0.6829268292682927
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "type": "knowledge",
+              "label": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9"
+            },
+            {
+              "id": "b9f87e76-ad43-4305-93d6-11b7089405ce",
+              "type": "block",
+              "label": "中国电信广西公司关于印发2026年",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "f17b56c9-90aa-4b4b-8f68-cebf9d8f8c3d",
+              "type": "block",
+              "label": "[第1页]",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "type": "knowledge",
+              "label": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593"
+            },
+            {
+              "id": "7cbfec6b-84a3-422e-b68f-40b171da8171",
+              "type": "block",
+              "label": "关于印发中国电信广西公司营收资金",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+            },
+            {
+              "id": "e218731e-de11-4fc3-b5a1-ff796ca0be11",
+              "type": "block",
+              "label": "[第1页]",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+            },
+            {
+              "id": "b0fe8a77-aff5-4e19-80ac-0c0be2018f4b",
+              "type": "block",
+              "label": "— 3 — 中国电信广西公司营收资金管理办法",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+            },
+            {
+              "id": "f633bb4a-959b-4696-8f58-2109a9416dd2",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+            },
+            {
+              "id": "fabc14f3-5f51-4efc-afcf-76391fbecf6a",
+              "type": "block",
+              "label": "〔2026〕23号）精神，为落实中国电信广西公司2026年网络和",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+              "type": "knowledge",
+              "label": "中电信桂-2026-118号-关于印发中国电信广西公司资本性研发项目立项操作指引-试行-的通知--e5cc6504"
+            },
+            {
+              "id": "8b27a34c-435f-4355-81d2-21e0f9df262b",
+              "type": "block",
+              "label": "（1）新建项目：中国电信2026年广西公司无线智慧运",
+              "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a"
+            },
+            {
+              "id": "4ea79c67-ffc3-4339-9a92-e50d2e22b349",
+              "type": "block",
+              "label": "[第7页]",
+              "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a"
+            },
+            {
+              "id": "19d5b42f-42ce-4c05-b4c7-ce87e8cd74f6",
+              "type": "knowledge",
+              "label": "中电信桂-2021-430号-关于印发中国电信广西公司往来账款管理办法-2021年-的通知--19d5b42f"
+            },
+            {
+              "id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "type": "knowledge",
+              "label": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150"
+            },
+            {
+              "id": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "type": "knowledge",
+              "label": "中电信桂-2019-370号-关于印发中国电信广西公司数据安全管理办法-试行-的通知--5fd963e8"
+            },
+            {
+              "id": "6246d57f-6fe0-4592-b172-c11822200aa9",
+              "type": "knowledge",
+              "label": "中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f"
+            },
+            {
+              "id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "type": "knowledge",
+              "label": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5"
+            }
+          ],
+          "edges": [
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "b9f87e76-ad43-4305-93d6-11b7089405ce",
+              "type": "contains"
+            },
+            {
+              "source": "f17b56c9-90aa-4b4b-8f68-cebf9d8f8c3d",
+              "target": "b9f87e76-ad43-4305-93d6-11b7089405ce",
+              "type": "parent"
+            },
+            {
+              "source": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "target": "7cbfec6b-84a3-422e-b68f-40b171da8171",
+              "type": "contains"
+            },
+            {
+              "source": "e218731e-de11-4fc3-b5a1-ff796ca0be11",
+              "target": "7cbfec6b-84a3-422e-b68f-40b171da8171",
+              "type": "parent"
+            },
+            {
+              "source": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "target": "b0fe8a77-aff5-4e19-80ac-0c0be2018f4b",
+              "type": "contains"
+            },
+            {
+              "source": "f633bb4a-959b-4696-8f58-2109a9416dd2",
+              "target": "b0fe8a77-aff5-4e19-80ac-0c0be2018f4b",
+              "type": "parent"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "fabc14f3-5f51-4efc-afcf-76391fbecf6a",
+              "type": "contains"
+            },
+            {
+              "source": "f17b56c9-90aa-4b4b-8f68-cebf9d8f8c3d",
+              "target": "fabc14f3-5f51-4efc-afcf-76391fbecf6a",
+              "type": "parent"
+            },
+            {
+              "source": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+              "target": "8b27a34c-435f-4355-81d2-21e0f9df262b",
+              "type": "contains"
+            },
+            {
+              "source": "4ea79c67-ffc3-4339-9a92-e50d2e22b349",
+              "target": "8b27a34c-435f-4355-81d2-21e0f9df262b",
+              "type": "parent"
+            },
+            {
+              "source": "19d5b42f-42ce-4c05-b4c7-ce87e8cd74f6",
+              "target": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "type": "related"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "6246d57f-6fe0-4592-b172-c11822200aa9",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 17
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "hybrid_verified",
+          "intent": "exact_lookup"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": ""
+      },
+      "meta": {
+        "source_count": 5,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 60577.97
+  },
+  "top_candidate_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+  "candidates": [
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 1.0,
+      "final_relevance_score": 0.55,
+      "text": "中国电信广西公司办公室 2026年6月2日印发"
+    },
+    {
+      "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+      "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+      "score": 0.7044,
+      "final_relevance_score": 0.55,
+      "text": "中国电信广西公司办公室 2026年1月19日印发"
+    },
+    {
+      "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+      "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+      "score": 0.7000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "中国电信广西公司关于印发2026年"
+    },
+    {
+      "knowledge_id": "e5cc6504-4696-4d13-93ad-564f4a2eb93a",
+      "title": "中电信桂-2026-118号-关于印发中国电信广西公司资本性研发项目立项操作指引-试行-的通知--e5cc6504",
+      "score": 0.7000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "（1）新建项目：中国电信2026年广西公司无线智慧运"
+    },
+    {
+      "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+      "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+      "score": 0.7000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "中国电信广西公司办公室 2026年3月12日印发"
+    }
+  ]
+}

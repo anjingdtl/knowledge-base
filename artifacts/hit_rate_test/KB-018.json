@@ -1,0 +1,301 @@
+{
+  "case": {
+    "case_id": "KB-018",
+    "category": "多条件组合",
+    "query": "涉骚扰电话 代理商一个自然月内每个号码处罚金额",
+    "expected_knowledge_ids": [
+      "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+    ],
+    "expected_title_keywords": [
+      "涉骚扰",
+      "2026"
+    ],
+    "required_facts": [
+      "30元",
+      "涉骚扰"
+    ],
+    "forbidden_facts": [
+      "2000元"
+    ],
+    "expected_no_answer": false,
+    "notes": "组合'涉骚扰+代理商+单号处罚'；正确30元，禁忌2000元(涉诈值)"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "insufficient_relevant_evidence",
+        "top_score": 0.3,
+        "threshold": 0.35,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 34860.33
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "80fcdbfa-f4f3-44c0-8eb3-c8fc1cb60172",
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "path": "",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "block_id": "80fcdbfa-f4f3-44c0-8eb3-c8fc1cb60172",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，"
+            }
+          },
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "7b6a3626-4951-4f61-a3e2-703117515475",
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "扰号码每个号码处罚 30 元",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "path": "",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "block_id": "7b6a3626-4951-4f61-a3e2-703117515475",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "扰号码每个号码处罚 30 元"
+            }
+          },
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "519fedde-2270-49d4-91f8-32b331ed04b9",
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "2.代理商入网号码涉骚扰处置规则",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "path": "",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "block_id": "519fedde-2270-49d4-91f8-32b331ed04b9",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "2.代理商入网号码涉骚扰处置规则"
+            }
+          },
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "25269d78-0b70-405f-9418-db270f06246d",
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "一个自然月内涉",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "path": "",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "block_id": "25269d78-0b70-405f-9418-db270f06246d",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "一个自然月内涉"
+            }
+          },
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "9c9fd90e-62a3-4ac5-82ee-70f0a6d377fa",
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "责提供骚扰电话数据、垃圾短信数据，负责涉诈涉骚扰号码每月",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "path": "",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "block_id": "9c9fd90e-62a3-4ac5-82ee-70f0a6d377fa",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "责提供骚扰电话数据、垃圾短信数据，负责涉诈涉骚扰号码每月"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.1808 < 0.35)"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 13
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": "",
+        "reason": "insufficient_relevant_evidence"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 29368.05
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

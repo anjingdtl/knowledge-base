@@ -1,0 +1,299 @@
+{
+  "case": {
+    "case_id": "KB-021",
+    "category": "多条件组合",
+    "query": "产品问需工单 审核初审和产品评估的工作日时限",
+    "expected_knowledge_ids": [
+      "b40b8949-e458-408a-aa75-292b0540516b"
+    ],
+    "expected_title_keywords": [
+      "产品问需",
+      "2026"
+    ],
+    "required_facts": [
+      "1个工作日",
+      "5个工作日"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "市场〔2026〕5号第十七条；组合'问需+初审+评估时限'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "insufficient_relevant_evidence",
+        "top_score": 0.3,
+        "threshold": 0.35,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 26695.8
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "block_id": "0289563d-76a9-479f-8b33-a611f03fb294",
+            "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+            "path": "",
+            "text": "问需审核人在收到工单后1个工作日内完成初审，审核工单",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+              "path": "",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "block_id": "0289563d-76a9-479f-8b33-a611f03fb294",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "问需审核人在收到工单后1个工作日内完成初审，审核工单"
+            }
+          },
+          {
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "block_id": "41c20baa-d088-4021-8773-53fd3d0b29e0",
+            "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+            "path": "",
+            "text": "（三）问需评估。产品单位接单处理人应在接到工单后5个",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+              "path": "",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "block_id": "41c20baa-d088-4021-8773-53fd3d0b29e0",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "（三）问需评估。产品单位接单处理人应在接到工单后5个"
+            }
+          },
+          {
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "block_id": "96bfad05-a0fc-4bee-980b-e7172ea0cd0d",
+            "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+            "path": "",
+            "text": "工作日内完成产品问题或需求的评估，评估需求合规性、技术可",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+              "path": "",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "block_id": "96bfad05-a0fc-4bee-980b-e7172ea0cd0d",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "工作日内完成产品问题或需求的评估，评估需求合规性、技术可"
+            }
+          },
+          {
+            "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+            "block_id": "338c4ed3-ed3f-41fe-84dd-442852491865",
+            "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+            "path": "",
+            "text": "承诺时限内（承诺时限不得超过 7个工作日，无承诺时限的，以 7个工",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+              "path": "",
+              "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+              "block_id": "338c4ed3-ed3f-41fe-84dd-442852491865",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "承诺时限内（承诺时限不得超过 7个工作日，无承诺时限的，以 7个工"
+            }
+          },
+          {
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "block_id": "8d05cd78-874d-47f3-ba11-51e3cb589829",
+            "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+            "path": "",
+            "text": "（二）问需审核。问需发起人所发起的问需工单，首先提交",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+              "path": "",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "block_id": "8d05cd78-874d-47f3-ba11-51e3cb589829",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "（二）问需审核。问需发起人所发起的问需工单，首先提交"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.1315 < 0.35)"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 9
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 9,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": "",
+        "reason": "insufficient_relevant_evidence"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 29062.06
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

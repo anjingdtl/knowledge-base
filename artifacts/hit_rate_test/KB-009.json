@@ -1,0 +1,526 @@
+{
+  "case": {
+    "case_id": "KB-009",
+    "category": "同义词与口语表达",
+    "query": "员工出差的住宿费和伙食补助每天能报多少",
+    "expected_knowledge_ids": [
+      "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+    ],
+    "expected_title_keywords": [
+      "差旅费",
+      "2025"
+    ],
+    "required_facts": [
+      "100元",
+      "伙食补助"
+    ],
+    "forbidden_facts": [
+      "区内出差每人每天80元"
+    ],
+    "expected_no_answer": false,
+    "notes": "口语化问报销标准；正确版本为2025年〔2025〕256号"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "e8ed1d5f-b65e-4b49-8804-32e1e6479e0b",
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+          "text": "地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+            "chunk_index": 48,
+            "depth": 1
+          },
+          "fts_rank": -39.36717180522087,
+          "fts_score": 0.797436238813615,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 0.797436238813615,
+          "relevance": {
+            "semantic_score": 0.7974,
+            "fts_score": 0.7974,
+            "title_score": 0.0,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.22,
+            "query_term_coverage": 0.22,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.446,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.446
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "362dc83b-072e-4584-99c9-e91f054d97d1",
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+          "text": "地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "chunk_index": 70,
+            "depth": 1
+          },
+          "fts_rank": -39.36717180522087,
+          "fts_score": 0.797436238813615,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 0.797436238813615,
+          "relevance": {
+            "semantic_score": 0.7974,
+            "fts_score": 0.7974,
+            "title_score": 0.0,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.22,
+            "query_term_coverage": 0.22,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.446,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.446
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "230690e6-20af-4524-9292-c89af64b8c1a",
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+          "text": "地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "chunk_index": 50,
+            "depth": 1
+          },
+          "fts_rank": -39.36717180522087,
+          "fts_score": 0.797436238813615,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 0.797436238813615,
+          "relevance": {
+            "semantic_score": 0.7974,
+            "fts_score": 0.7974,
+            "title_score": 0.0,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.22,
+            "query_term_coverage": 0.22,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.446,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.446
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "6f50fd16-808a-4e24-8d32-1705dacc94da",
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+          "text": "间交通费、临时住宿费、伙食补助费和市内交通费，按调入单位",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "chunk_index": 171,
+            "depth": 1
+          },
+          "fts_rank": -35.16679298019443,
+          "fts_score": 0.7785984051516568,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 0.7785984051516568,
+          "relevance": {
+            "semantic_score": 0.7786,
+            "fts_score": 0.7786,
+            "title_score": 0.0,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.2,
+            "query_term_coverage": 0.2,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4314,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4314
+        }
+      ],
+      "meta": {
+        "total_estimate": 4,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.446,
+        "source_path": "fulltext_fallback"
+      }
+    },
+    "latency_ms": 23680.39
+  },
+  "read": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "type": "knowledge",
+        "id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+        "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+        "content": "[第1页]\n  \u0001\u0001 — 1 —\n  中电信桂〔2018〕477 号\n  关于印发中国电信广西公司差旅费\n  管理办法（2018 年）的通知\n  各市分公司，各专业公司，区公司各部门：\n  现将《中国电信广西公司差旅费管理办法（ 2018年）》印发\n  给你们，请遵照执行，有关事项通知如下：\n  一、本次修订的主要内容\n  （一）补充校招新生入职交通报销规则，明确校招新生毕业\n  离校入职时可按一定标准报销城市间交通费。\n  （二）提高住宿标准。参照股份公司总部及广西区本级党政\n  机关文件，修订员工差旅住宿费标准，其中南宁市与区外其他城市住宿标准持平，县级城市与区内其他城市住宿标准持平，员工何世恒(全渠道运营中心)\n[第2页]\n  — 2 —\n  与部门经理住宿标准持平。\n  （三）补充住宿安排要求。除区公司领导、区公司部门经理\n  及相当职级人员安排单人间或标准间外， 其余人员原则上同性别\n  两人安排一个标准间。\n  （四）提高伙食补助标准，员工区内出差伙食补助由原 50\n  元/天提升至 80元/天。\n  （五）提高市内交通费标准。员工区外出差往返两天的市内\n  交通费报销限额由 80元/天提升至 150元/天，且往返机场、火车\n  站等发生的公共交通费不占用限额； 区内出差的市内交通费报销\n  限额由 30元/天提升至 50元/天。\n  （六）明确因锻炼、支援等性质离开常驻地工作人员的报销\n  管理。\n  二、各单位应当严格按照差旅费管理办法和厉行节约反对浪\n  费的有关规定，加强出差审批管理 ，从严控制出差人数和天数，\n  严格差旅费预算管理和报销审核，控制差旅费支出规模。\n  三、各单位应在不高于区公司标准的原则下制定本单位的差\n  旅费标准，并报区公司财务部（财 务共享服务中心）备案。\n  实施过程中遇到的问题和建议，请及时上报区公司财务部\n  （财务共享服务中心） 。\n  区公司财务部联系人：谢萍，电话： 0771-2628376\n  中国电信广西公司 2018 年12 月 18 日 何世恒(全渠道运营中心)\n[第3页]\n  \u0001\u0001 — 3 — 中国电信广西公司差旅费管理办法\n  (2018 年)\n  第一章 总 则\n  第一条 为加强和规范公司国内差旅费管理，推进厉行节约\n  反对浪费，根据《关于调整差旅住宿费标准的通知》 （中国电信\n  〔2015〕431号）和《关于印发中国电信股份有限公司总部差旅\n  费管理办法的通知》 （中电信厅财务〔 2015〕2号）相关规定，\n  结合公司实际，制定本办法。\n  第二条 本办法适用于区公司各部门、各市分公司以及各专\n  业分公司（以下统称 “各单位 ”）。\n  第三条 本办法所称差旅费是指工作人员临时到常驻地以外\n  地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市\n  内交通费。\n  第四条 出差实行审批制度，各单位要加强定任务、定人数、\n  定地点、定时间、定费用、定交通工具等关键环节管理，从严控\n  制出差人数和天数； 严格差旅费预算管理， 控制差旅费支出规模；\n  严禁无实质内容、无明确公务目的的差旅活动，严禁以任何名义\n  和方式变相旅游， 严禁异地部门间无实质内容的学习交流和考察\n  调研。\n  （一）境内出差，按公司有关规定和内控审批权限进行事前\n  审批。 何世恒(全渠道运营中心)\n[第4页]\n  — 4 — （二）境外（含港澳台）出差，执行集团公司和区公司因公\n  出国（境）相关审批程序。\n  第五条 区公司按照分级别、 分项目的原则制定差旅费标准，\n  并根据相关规定适时调整。各单位应根据本地区经济状况，在不\n  高于本办法规定标准的原则下，从 严制定本单位差旅费标准。\n  第二章 城市间交通费\n  第六条 城市间交通费是指工作人员因公到常驻地以外地区\n  出差乘坐汽车、火车、轮船、飞机 等交通工具所发生的费用。\n  第七条 出差人员应当按规定等级乘坐交通工具，凭据报销\n  交通费。未按规定等级乘坐交通工具的，超支部分自理。乘坐交通工具标准详见附件 1。\n  第八条 到出差目的地有多种交通工具可选择时，出差人员\n  在不影响公务、确保安全的前提下， 应当选乘经济便捷的交通工\n  具。\n  第九条 出差人员乘坐飞机须按公司内控要求经相关领导批\n  准，并应通过 4008118114 订购机票。出差人员乘坐火车（含全\n  列软席列车）或长途公共汽车，直接凭票报销。乘坐火车，从当\n  日晚 8 时至次日晨 7 时乘车 6 小时以上的， 或连续乘车超过 12\n  小时的，可购同席卧铺票。\n  第十条 员工趁出差之便事先经部门以上领导批准就近探\n  亲办事的，其绕道交通费以出差直线单程交通费为核定依据，绕何世恒(全渠道运营中心)\n[第5页]\n  \u0001\u0001 — 5 — 道交通费少于直线交通费的，按实 际报销，超过部分自理。\n  第十一条 出差使用公车由各单位严格掌握。除特殊以及紧\n  急情况外，区外长途出差不得派公车，区内出差提倡乘坐公共交\n  通工具，若出差人员较多时，可按规定派车。\n  第十二条 乘坐飞机发生的民航发展基金、燃油附加费，可\n  以凭据报销。\n  第十三条 乘坐飞机、火车、轮船等交通工具的，每人次可\n  以购买交通意外保险一份。所在单 位统一购买交通意外保险的，\n  不再重复购买。\n  第十四条 校招新生毕业离校入职可凭据报销学校所在地或\n  家庭住址到入职地的城市间交通费。 校招新生报销票据目的地不\n  是入职地的，报销金额原则上不能 超过同等交通工具直线费用。\n  同等交通工具无直达或其他特殊原因确需中途转车的， 报销金额\n  应按最短线路计算确认。乘坐交通工具的标准详见附件 1。\n  第三章 住宿费\n  第十五条 住宿费是指工作人员因公出差期间入住宾馆发生\n  的房租费用。\n  第十六条 出差住宿根据出差地点及季节执行不同的标准，\n  具体详见附件 2。\n  （一）区外及区内南宁市出差\n  1.区公司领导出差住宿费标准每人每天 550 元，其他人员住何世恒(全渠道运营中心)\n[第6页]\n  — 6 — 宿费标准每人每天 400 元。考虑到不同地区的物价差异，北京、\n  上海的住宿费标准在上述标准的基础上各上浮 100 元，天津、\n  重庆、省会城市（南宁除外）和计划单列市住宿费标准在上述标\n  准的基础上各上浮 50元。\n  2.拉萨、西宁、海口等受地理、气候等自然条件限制和季节\n  性热点影响较大的城市，实行差旅住宿费淡旺季标准。\n  （二）区内其他城市及县出差\n  区公司领导住宿费标准每人每天 550 元，其他人员住宿费\n  标准每人每天 350 元。\n  第十七条 出差人员按照降本增效、 节约从简的原则安排住\n  宿。区公司领导、区公司部门经理及相当职级人员安排单人间或标准间，其余人员原则上同性别两人安排一个标准间。\n  第十八条 出差人员应当在职务级别对应住宿费限额内优先\n  选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n  据实报销。\n  第十九条 住宿费按出差自然（日历）天数计算，在规定的\n  限额标准内凭有效票据按实际住宿天数报销。\n  第四章 伙食补助费\n  第二十条 伙食补助费是指工作人员因公出差期间给予的\n  伙食补助费用。 何世恒(全渠道运营中心)\n[第7页]\n  \u0001\u0001 — 7 — 第二十一条 伙食补助标准为区外出差每人每天 100 元，区\n  内出差每人每天 80元。\n  第二十二条 出差人员应当自行用餐。凡由接待单位统一安\n  排用餐的，应当向接待单位交纳伙食费，接待单位负责向出差人\n  员出具收款收据。\n  第二十三条 出差人员参加会议、培训期间已由主办单位收\n  取食宿费或安排食宿的，可以按照 往返各一天报销伙食补助费；\n  当天往返的，报销一天的出差伙食补助费。\n  第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n  外结算相关费用或冲减原支出列支费用项目。\n  第五章 市内交通费\n  第二十五条 市内交通费是指工作人员因公出差期间发生\n  的市内交通费用。\n  第二十六条 市内交通费实行限额内凭票报销，报销标准为\n  区外往返两天每人每天 150元，中途每人每天 80元；区内每人\n  每天 50元。出差往返机场、火车站、客运站、码头等发生的大\n  巴、地铁、公交等公共交通费用凭 据报销，不占用限额标准。\n  第二十七条 参加会议、培训的出差，只能报销往返在途期\n  间的市内交通费。出差期间由接待单位提供交通工具的，或由单位派车的，不再另行报销市内交通费。\n[第8页]\n  — 8 — 第六章 调动差旅费\n  第二十八条 员工因工作调动所发生的交通费、住宿费、伙\n  食补助费， 按出差办理， 由调入单位报销。 随同调动的同居父母、\n  配偶、子女所需的交通费按普通员工 出差标准报销，不得乘坐飞\n  机。\n  第二十九条 因工作调动所发生的行李、家具等托运费，每\n  人（包括员工和家属）在不超过 500 公斤，其中快件托运不超\n  过50 公斤的范围内，凭据按实报销，超过部分个人自理。\n  第七章 报销管理\n  第三十条 出差人员应当严格按规定开支差旅费，费用由所\n  在单位承担，不得向下级单位或其他单位转嫁。\n  第三十一条 除特殊情况外，工作人员出差所需资金，由本\n  人先行垫付，后凭有效票据报销。\n  第三十二条 工作人员出差结束后应在 7个工作日内办理报\n  销手续。差旅费报销时应当提供出差审批单、机票、车船票、住\n  宿费发票等凭证， 在原始凭证贴签单上签字后在财辅系统发起报\n  账，并申报相关事项，按流程完成报销审批。\n  第三十三条 财务部门应当严格按规定审核差旅费开支，对\n  未经批准出差以及超范围、超标准开支的费用不予报销。实际发生住宿而无住宿费发票的，不得报 销住宿费以及城市间交通费、\n  伙食补助费和市内交通费。 特殊情况需要说明原因并按内控审批何世恒(全渠道运营中心)\n[第9页]\n  \u0001\u0001 — 9 — 权限履行审批手续后方可报销。\n  第三十四条 按照组织安排，到常驻地以外地区单位实（见）\n  习、工作锻炼、支援工作以及参加各种工作队的人员，在途期间\n  （仅指首次前往和期满返回） 的差旅费回原单位按本办法规定报\n  销；工作期间的差旅标准有规定文件的从其规定，无规定文件的执行所在单位规定，费用由所在单位承担。\n  第八章 监督问责\n  第三十五条 各单位应当加强对本单位工作人员出差活动和\n  经费报销的内控管理，对本单位出差审批制度、差旅费预算及规\n  模控制负责， 相关领导、 财务人员等对差旅费报销进行审核把关，\n  确保票据来源合法， 内容真实完整、 合规。对未经批准擅自出差、\n  不按规定开支和报销差旅费的人员进行严肃处理。\n  各单位应加强对下属单位的监督检 查，发现问题及时处理，\n  重大问题向区公司报告。\n  各单位应当自觉接受审计部门对出差活动及相关经费支出\n  的审计监督。\n  第三十六条 区公司有关部门对各单位差旅费管理和使用情\n  况进行监督检查。主要内容包括：\n  （一）差旅审批制度是否健全，出差活动是否按规定履行审\n  批手续；\n  （二）差旅费开支范围和标准是否符合规定； 何世恒(全渠道运营中心)\n[第10页]\n  — 10 — （三）差旅费报销是否符合规定；\n  （四）是否向下级单位或其他单位转嫁差旅费；\n  （五）差旅费管理和使用的其他情况。\n  第三十七条 出差人员不得向接待单位提出正常公务活动以\n  外的要求，不得在出差期间接受违反规定用公款支付的宴请、游览和非工作需要的参观，不得接受 礼品、礼金和土特产品等。\n  第三十八条 违反本办法规定，有下列行为之一的，依法依\n  规追究相关单位和人员的责任：\n  （一）单位无出差审批制度或出差审批控制不严的；\n  （二）虚报冒领差旅费的；\n  （三）擅自扩大差旅费开支范围和提高开支标准的；\n  （四）不按规定报销差旅费的；\n  （五）转嫁差旅费的；\n  （六）其他违反本办法行为的。\n  第三十九条 有前款所列行为之一的，责令其改正，违规资\n  金应予追回，并视情况予以通报。 对直接责任人和相关负责人，\n  按规定给予行政处分。涉嫌违法的，移送司法机关处理。\n  第九章 附 则\n  第四十条 接待单位提供住宿、伙食、交通等接待条件的，\n  应严格执行本办法规定的相关标准； 出差人员包括领导人员的随\n  行人员，应督促接待单位提供的接待条件符合相关标准。 何世恒(全渠道运营中心)\n[第11页]\n  \u0001\u0001 — 11 — 第四十一条 本办法由区公司财务部（财务共享服务中心）\n  负责解释。\n  第四十二条 本办法自印发之日起执行。原《中国电信广西\n  公司差旅费管理办法（ 2016年修订）》（中电信桂〔 2016〕3号）\n  同时废止。其他规定与本办法相悖的，以本办法为准。\n  附件： 1.中国电信广西公司出差人员乘坐交通工具标准\n  2.中国电信广西公司出差人员住宿标准\n[第12页]\n  — 12 — 附件 1\n  中国电信广西公司出差人员乘坐交通工具标准\n  项目\n  职务 交通工具（等级）\n  火 车\n  （含高铁、动车、全列\n  软席列车） 轮船（不含\n  旅游船） 飞机 汽车等其他交\n  通工具（不含出租小汽车）\n  区公司领导 软席（软座、软卧及全\n  列软席列车的一等软座和软卧） ，高铁/动车\n  一等座 二等 普通舱\n  位（经济\n  舱） 凭有效票据报\n  销\n  其他员工 硬席（硬座、硬卧及全\n  列软席列车的二等软座和软卧） ，高铁/动车\n  二等座 三等 普通舱\n  位（经济\n  舱） 凭有效票据报\n  销\n  校招新生 高铁/动车（二等座） 、\n  火车硬席（硬座、硬卧）三等 凭有效票据报\n  销\n[第13页]\n  \u0001\u0001 — 13 — 附件 2\n  中国电信广西公司出差人员住宿标准\n  单位：元/天.人\n  出差地 出差时间 住宿标准\n  区公司领导 其他员工\n  北京、上海\n  1-12 月 650 500\n  天津、重庆 600 450\n  大连、青岛、宁波、\n  厦门、深圳 600 450\n  拉萨、西宁 6-9 月 750 530\n  10-5 月 600 450\n  海口 11-2 月 650 450\n  3-10 月 600 450\n  未单列省会城市\n  （ 不含南宁） 1-12 月 600 450\n  区外其他城市、南宁市 1-12 月 550 400\n  区内其他城市及县 1-12 月 550 350\n[第14页]\n  中国电信广西公司办公室 2018 年 12月 18 日印发 何世恒(全渠道运营中心)",
+        "source_type": "file",
+        "source_path": "D:\\AiWorkSpace\\knowledge-base\\data\\graph\\pages\\中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691.md",
+        "file_type": "pdf",
+        "tags": "[\"出差\", \"标准\", \"报销\"]",
+        "version": 4,
+        "file_created_at": "2026-07-24T17:35:35.784676",
+        "file_modified_at": "2026-07-24T17:35:35.788753",
+        "created_at": "2026-07-24T17:35:35.784676",
+        "updated_at": "2026-07-24T18:05:33.130243",
+        "deleted_at": null,
+        "file_size": 35748,
+        "content_hash": "e54ce1fde119063c220260e0ff770108352cd0c5f7de66fb600478b4657fb321",
+        "quality": "ok",
+        "quality_score": null
+      },
+      "meta": {
+        "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+      }
+    },
+    "latency_ms": 23.15,
+    "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+  },
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+            "block_id": "9533b383-448f-46c0-adec-1f548b527ebe",
+            "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+            "path": "",
+            "text": "区公司领导住宿费标准每人每天 550 元，其他人员住宿费",
+            "score": 0.016656751933372994,
+            "citation": {
+              "document": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+              "path": "",
+              "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+              "block_id": "9533b383-448f-46c0-adec-1f548b527ebe",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "区公司领导住宿费标准每人每天 550 元，其他人员住宿费"
+            }
+          },
+          {
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "block_id": "370403f4-be27-4c1e-a6b1-3311656289e8",
+            "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+            "path": "",
+            "text": "— 6 —1. 号百分公司全体员工出差住宿费标准每人每天 400 元。 考",
+            "score": 0.016260162601626018,
+            "citation": {
+              "document": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+              "path": "",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "block_id": "370403f4-be27-4c1e-a6b1-3311656289e8",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "— 6 —1. 号百分公司全体员工出差住宿费标准每人每天 400 元。 考"
+            }
+          },
+          {
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "block_id": "fc71a0c4-bdba-4412-8a86-25cd7f1b695c",
+            "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+            "path": "",
+            "text": "号百分公司全体员工住宿费标准每人每天 350 元。",
+            "score": 0.015882019285309135,
+            "citation": {
+              "document": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+              "path": "",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "block_id": "fc71a0c4-bdba-4412-8a86-25cd7f1b695c",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "号百分公司全体员工住宿费标准每人每天 350 元。"
+            }
+          },
+          {
+            "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "block_id": "76bf2d84-1f1c-4ae3-9706-a25d71b5d32e",
+            "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+            "path": "",
+            "text": "1.区公司领导及相当职级人员出差住宿费标准每人每天550",
+            "score": 0.015521064301552107,
+            "citation": {
+              "document": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+              "path": "",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "block_id": "76bf2d84-1f1c-4ae3-9706-a25d71b5d32e",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "1.区公司领导及相当职级人员出差住宿费标准每人每天550"
+            }
+          },
+          {
+            "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "block_id": "6d508e7d-4d41-432c-a093-ae3d0a93eee7",
+            "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+            "path": "",
+            "text": "其他人员住宿费标准每人每天350 元。",
+            "score": 0.015176151761517617,
+            "citation": {
+              "document": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+              "path": "",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "block_id": "6d508e7d-4d41-432c-a093-ae3d0a93eee7",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "其他人员住宿费标准每人每天350 元。"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.1241 < 0.35)"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "exact_lookup",
+            "wiki_weight": 0.3170731707317074,
+            "raw_weight": 0.6829268292682927,
+            "reasons": [
+              "exact_lookup_keywords",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 10
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.3170731707317074,
+              "raw_weight": 0.6829268292682927
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence",
+          "search_mode": "hybrid_verified",
+          "intent": "exact_lookup"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": "",
+        "reason": "insufficient_relevant_evidence"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 31450.71
+  },
+  "top_candidate_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+  "candidates": [
+    {
+      "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+      "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+      "score": 0.797436238813615,
+      "final_relevance_score": 0.446,
+      "text": "地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市"
+    },
+    {
+      "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+      "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+      "score": 0.797436238813615,
+      "final_relevance_score": 0.446,
+      "text": "地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市"
+    },
+    {
+      "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+      "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+      "score": 0.797436238813615,
+      "final_relevance_score": 0.446,
+      "text": "地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市"
+    },
+    {
+      "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+      "score": 0.7785984051516568,
+      "final_relevance_score": 0.4314,
+      "text": "间交通费、临时住宿费、伙食补助费和市内交通费，按调入单位"
+    }
+  ]
+}

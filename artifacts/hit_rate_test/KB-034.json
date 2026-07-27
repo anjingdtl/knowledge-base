@@ -1,0 +1,293 @@
+{
+  "case": {
+    "case_id": "KB-034",
+    "category": "无答案或越界问题",
+    "query": "推荐一款好吃的火锅底料品牌",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体火锅底料品牌"
+    ],
+    "expected_no_answer": true,
+    "notes": "与知识库完全无关；应明确拒答"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "no_candidates",
+        "top_score": 0.0,
+        "threshold": 0.35,
+        "source_path": "fulltext_fallback"
+      }
+    },
+    "latency_ms": 12660.31
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "7c63a4fe-a841-432c-8db1-ef7bd24b4011",
+            "block_id": "c50962e3-a0ea-432f-ad2a-b82789560bd1",
+            "title": "中电信桂-2022-455号-关于印发中国电信广西公司业务广告宣传管理办法-2022年修订-的通知--7c63a4fe",
+            "path": "",
+            "text": "括的企业品牌、客户品牌、业务品牌及产品品牌，“业务”是指",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2022-455号-关于印发中国电信广西公司业务广告宣传管理办法-2022年修订-的通知--7c63a4fe",
+              "path": "",
+              "knowledge_id": "7c63a4fe-a841-432c-8db1-ef7bd24b4011",
+              "block_id": "c50962e3-a0ea-432f-ad2a-b82789560bd1",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "括的企业品牌、客户品牌、业务品牌及产品品牌，“业务”是指"
+            }
+          },
+          {
+            "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+            "block_id": "995fb53a-a3f0-43d8-93d4-e8b69afc90f7",
+            "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+            "path": "",
+            "text": "品牌策划 品牌培训 品牌培训策划 针对团队的品牌理念、视觉规范、话语体系",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+              "path": "",
+              "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+              "block_id": "995fb53a-a3f0-43d8-93d4-e8b69afc90f7",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "品牌策划 品牌培训 品牌培训策划 针对团队的品牌理念、视觉规范、话语体系"
+            }
+          },
+          {
+            "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+            "block_id": "6d80a4f2-8422-4f99-8843-4e21f89c5b78",
+            "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+            "path": "",
+            "text": "做好品牌识别、品牌规范、品牌创建、品牌废止相关工作。",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+              "path": "",
+              "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+              "block_id": "6d80a4f2-8422-4f99-8843-4e21f89c5b78",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "做好品牌识别、品牌规范、品牌创建、品牌废止相关工作。"
+            }
+          },
+          {
+            "knowledge_id": "cccb71c2-ac78-4588-96fb-c4b97b679759",
+            "block_id": "c17d825a-79ed-4013-9ed2-dfcc6028fea5",
+            "title": "中电信桂-2021-68号-关于印发中国电信广西公司内聘培训师管理办法的通知--cccb71c2",
+            "path": "",
+            "text": "推荐意见",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2021-68号-关于印发中国电信广西公司内聘培训师管理办法的通知--cccb71c2",
+              "path": "",
+              "knowledge_id": "cccb71c2-ac78-4588-96fb-c4b97b679759",
+              "block_id": "c17d825a-79ed-4013-9ed2-dfcc6028fea5",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "推荐意见"
+            }
+          },
+          {
+            "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+            "block_id": "4d61ad0b-ec39-41de-a8db-30ec0f54b7c5",
+            "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+            "path": "",
+            "text": "品牌策划 品牌内容创意 品牌联名/跨界合作策划 策划品牌与其他品牌/IP的联名合作方案，",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+              "path": "",
+              "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+              "block_id": "4d61ad0b-ec39-41de-a8db-30ec0f54b7c5",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "品牌策划 品牌内容创意 品牌联名/跨界合作策划 策划品牌与其他品牌/IP的联名合作方案，"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.0686 < 0.35)"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 25
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": "",
+        "reason": "insufficient_relevant_evidence"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 67212.77
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

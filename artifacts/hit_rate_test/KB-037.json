@@ -1,0 +1,85 @@
+{
+  "case": {
+    "case_id": "KB-037",
+    "category": "新旧规则冲突",
+    "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+    "expected_knowledge_ids": [
+      "2b63b216-9850-4e82-803e-4006cb9f62ad"
+    ],
+    "expected_title_keywords": [
+      "技能竞赛",
+      "2026"
+    ],
+    "required_facts": [
+      "2026",
+      "158号"
+    ],
+    "forbidden_facts": [
+      "一级竞赛",
+      "二级竞赛"
+    ],
+    "expected_no_answer": false,
+    "notes": "〔2026〕158号取消分级；不应返回2023版〔2023〕278号"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "requires_current_external_data",
+        "top_score": 0.0,
+        "threshold": 0.35,
+        "source_path": "current_info_gate"
+      }
+    },
+    "latency_ms": 34500.59
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "sources": [],
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "requires_current_external_data"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "warnings": [
+          "requires_current_external_data"
+        ],
+        "wiki_context": "",
+        "trace_id": "",
+        "answer_mode": "no_answer",
+        "reason": "requires_current_external_data",
+        "conflict_disclosed": false,
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": []
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 15.15
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

@@ -1,6 +1,10 @@
 """Answer payload assembly (conflict, citations, modes).
 
 Canonical home for ask payload assembly (maintainability closure WP2).
+
+SPEC Phase 5 (KB-019): numeric answers must be anchored to the evidence — a
+generated value that does not appear in the accepted evidence is stripped to
+prevent the II类/III类 substitution bug.
 """
 from __future__ import annotations
 
@@ -13,6 +17,7 @@ from src.answering.citations import (
     is_claim,
     is_raw,
 )
+from src.answering.fact_guard import strip_unanchored_numeric_assertions
 from src.answering.fallbacks import (
     build_generation_context,
     fallback_hybrid_text,
@@ -169,6 +174,29 @@ def assemble_answer_payload(
 
     if freshness_q and answer_mode == ANSWER_MODE_HYBRID and dropped_stale:
         warnings.append("freshness_sensitive_stale_excluded")
+
+    # SPEC Phase 5 (KB-019): strip numeric assertions that are not present in
+    # the accepted evidence. Prevents the II类/III类 substitution where a
+    # truncated context made the LLM cite "10万元" (II类) for a III类 question.
+    # Only strips values with explicit amount/percent units — never touches
+    # category labels, dates, or prose. If stripping would empty the answer,
+    # downgrade to no_answer rather than show an unverifiable number.
+    if answer and answer_mode in (ANSWER_MODE_HYBRID, ANSWER_MODE_RAW):
+        evidence_blob = " ".join(
+            str(r.get("text") or "") for r in (claim_rows + raw_rows)
+        )
+        cleaned, stripped_any = strip_unanchored_numeric_assertions(
+            answer, evidence=evidence_blob
+        )
+        if stripped_any:
+            warnings.append("numeric_fact_guard_stripped_unanchored_value")
+            answer = cleaned
+            if not answer.strip() and answer_mode != ANSWER_MODE_NO_ANSWER:
+                answer_mode = ANSWER_MODE_NO_ANSWER
+                answer = format_no_answer(question, freshness=freshness_q)
+                warnings.append("numeric_fact_guard_emptied_answer")
+        else:
+            answer = cleaned
 
     sources = build_sources(results, claim_rows, raw_rows)
 

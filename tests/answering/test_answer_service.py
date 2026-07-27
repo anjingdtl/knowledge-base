@@ -86,3 +86,52 @@ def test_ask_dict_has_required_keys():
         "raw_evidence_used", "conflicts", "fallbacks", "warnings", "trace_id", "route",
     ):
         assert key in payload
+
+
+def test_numeric_fact_guard_strips_unanchored_ii_class_value():
+    """KB-019: an LLM answer that cites the II类 value (10万元) when the
+    evidence only contains the III类 value (20万元) must have the unanchored
+    value stripped by the fact guard."""
+    from src.answering.assembler import assemble_answer_payload
+
+    # Evidence: only the III类 clause reached the context (truncation).
+    raw_rows = [{
+        "source": "knowledge",
+        "knowledge_id": "27922ca4",
+        "block_id": "b1",
+        "title": "翼支付业务管理办法",
+        "text": "III类支付账户，其余额年付款限额为20万元（不含提现）。",
+    }]
+    # LLM produced an answer that incorrectly asserts the II类 value 10万元.
+    answer = "翼支付III类支付账户的余额年付款限额为10万元。"
+    payload = assemble_answer_payload(
+        "翼支付III类支付账户 年付款限额",
+        raw_rows,
+        llm_answer=answer,
+        search_trace={},
+    )
+    # 10万元 must be stripped (not in evidence); 20万元 is preserved.
+    assert "10万元" not in payload["answer"], payload["answer"]
+    assert "numeric_fact_guard_stripped_unanchored_value" in payload["warnings"]
+
+
+def test_numeric_fact_guard_keeps_anchored_value():
+    """When the LLM answer matches the evidence, the guard leaves it intact."""
+    from src.answering.assembler import assemble_answer_payload
+
+    raw_rows = [{
+        "source": "knowledge",
+        "knowledge_id": "27922ca4",
+        "block_id": "b1",
+        "title": "翼支付业务管理办法",
+        "text": "III类支付账户，其余额年付款限额为20万元（不含提现）。",
+    }]
+    answer = "翼支付III类支付账户的余额年付款限额为20万元。"
+    payload = assemble_answer_payload(
+        "翼支付III类支付账户 年付款限额",
+        raw_rows,
+        llm_answer=answer,
+        search_trace={},
+    )
+    assert "20万元" in payload["answer"]
+    assert "numeric_fact_guard_stripped_unanchored_value" not in payload["warnings"]

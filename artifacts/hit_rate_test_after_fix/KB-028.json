@@ -1,0 +1,751 @@
+{
+  "case": {
+    "case_id": "KB-028",
+    "category": "易混淆知识",
+    "query": "技能竞赛团体奖金限额 2026年修订",
+    "expected_knowledge_ids": [
+      "2b63b216-9850-4e82-803e-4006cb9f62ad"
+    ],
+    "expected_title_keywords": [
+      "技能竞赛",
+      "2026"
+    ],
+    "required_facts": [
+      "15000元",
+      "1200元"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕158号第二十条；团体奖金限额为2026版新增"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts"
+          ],
+          "block_id": "73c5533c-21cb-4199-aa68-25a93782d477",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "技能竞赛。",
+          "block_type": "text",
+          "properties": {
+            "block_type": "text",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "chunk_index": 90,
+            "depth": 1
+          },
+          "fts_rank": -18.536174108992693,
+          "fts_score": 0.5730999999999999,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 0.5730999999999999,
+          "relevance": {
+            "semantic_score": 0.3462,
+            "fts_score": 0.5731,
+            "title_score": 0.4615,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.2692,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.359,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.359,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.359,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 87251.2
+  },
+  "read": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "type": "knowledge",
+        "id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+        "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+        "content": "[第1页]\n  — 1 —\n  中电信桂〔2026〕158号\n  关于印发中国电信广西公司技能竞赛\n  管理办法（修订）的通知\n  各市分公司及同级工会，各专业公司，区公司各部门：\n  自《中国电信广西公司技能竞赛管理办法》（中电信桂\n  〔2023〕278号）印发实施以来，在激发员工活力和内生动力，\n  促进企业高质量发展和员工成长成才等方面发挥了积极作用。\n  为进一步激发各单位和员工参赛热情，持续完善公司技能人才\n  培养与激励机制，强化以赛促学、以赛促练的导向，结合近年\n  竞赛工作实际开展情况，区公司、区电信工会修订了该办法,\n[第2页]\n  — 2 —现印发给你们，请认真组织学习，严格遵照执行。\n  中国电信广西公司 中国电信广西区工会\n  2026年5月29日\n[第3页]\n  — 3 — 中国电信广西公司技能竞赛管理办法\n  （修订）\n  第一章 总则\n  第一条 为深入学习贯彻习近平新时代中国特色社会主义\n  思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技\n  能型、创新型职工队伍，弘扬劳模精神、劳动精神、工匠精神，\n  营造发展光荣的企业风尚和全心全意为客户服务的敬业风气，\n  积极倡导与企业共同发展文化，增强员工的职业荣誉感、自豪\n  感和获得感，进一步发挥技能竞赛在高技能人才队伍建设中的\n  作用，根据《中国电信集团技能竞赛管理办法》，结合中国电\n  信广西公司（以下简称“广西公司”）实际，制订本办法。\n  第二条 技能竞赛是指为引导和鼓励员工立足本职、刻苦\n  钻研、岗位成才，依据国家及行业职业技能要求、企业岗位技\n  能要求，以及业务发展和客户服务实际需要组织开展的，以提\n  高员工岗位技能和解决实际问题能力为重点的竞赛活动。\n  第三条 技能竞赛应坚持以下原则\n  （一）围绕中心和突出重点的原则。竞赛要围绕企业发展\n  对员工技能的要求，结合员工职业发展的需要，重点选择覆盖\n  面广的关键岗位、工种和新技术、新业务开展竞赛。\n  （二）普遍提高与择优选拔相结合的原则。竞赛要体现广\n  泛性和先进性，通过组织广泛的学习培训、岗位练兵，调动员\n[第4页]\n  — 4 —工学习知识和提升技能的积极性和主动性，在推动员工业务素\n  质和岗位技能水平整体提高的基础上，发现和培养优秀技能人\n  才。\n  （三）正向激励和注重实效的原则。竞赛要与岗位资格认\n  证、教育培训、职位晋升等员工职业发展相结合，激励员工成\n  长成才。适度把握竞赛的频次和范围，保证竞赛公平、公正，\n  精心组织、节约办赛、注重实效。\n  第四条 本办法适用于中国电信股份有限公司广西分公司\n  及其所属单位和同级工会。\n  第二章 组织管理\n  第五条 广西公司围绕企业发展重点领域开展技能竞赛，\n  由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n  合举办。\n  第六条 广西公司成立由人力资源部门、财务部门、区电\n  信工会和竞赛专业主管部门组成的技能竞赛委员会，负责技能\n  竞赛的组织领导工作。技能竞赛委员会下设办公室。\n  第七条 技能竞赛委员会主要职责是:\n  （一）审定技能竞赛组织实施方案;\n  （二）审定承办或参加同专业外部技能竞赛的方案;\n  （三）审定报上级主管部门备案的技能竞赛方案;\n  （四）其他需竞赛委员会审定的重大事项。\n  第八条 竞赛委员会办公室主要职责是:\n[第5页]\n  — 5 — （一）制订技能竞赛实施方案;\n  （二）负责技能竞赛的组织实施;\n  （三）提出承办或参加同专业外部技能竞赛的方案;\n  （四）向上级主管部门备案技能竞赛方案;\n  （五）落实技能竞赛委员会交办的其他事项。\n  第九条 各部门应按各自职能积极发挥在技能竞赛中的作\n  用，形成齐抓共管、高效协同、各司其职的工作格局。\n  （一）人力资源部门应结合人才队伍建设、岗位培训和岗\n  位资格认证要求，组织研究制定技能竞赛相关政策、制度和办\n  法。\n  （二）财务部门应依据国家及企业有关规定，为技能竞赛\n  提供经费保障，确保经费使用和管理规范。\n  （三）专业部门应紧密结合企业发展需要和员工岗位技能\n  要求，提出技能竞赛计划，制订实施方案，负责竞赛的具体组\n  织实施。\n  （四）工会应发挥支撑和服务作用，提出技能竞赛规划、\n  计划草案，做好竞赛日常协调、组织管理和员工动员，配合专\n  业部门完善竞赛实施方案，协助组织实施。\n  第十条 广西公司承办自治区级技能竞赛，应报公司总经\n  理办公会审批，参加自治区级技能竞赛应报公司分管领导审批。\n  各市级企业承办或参加自治区级技能竞赛应报区电信工会备\n  案。\n[第6页]\n  — 6 —第三章 组织实施\n  第十一条 技能竞赛由专业部门于每年2月底前提出年度\n  竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n  内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n  全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n  技能竞赛。\n  第十二条 全区电信职业技能竞赛是广西公司、区电信工\n  会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n  并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n  赛管理办法》规定，向集团公司提交备案申请。\n  第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n  赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n  评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n  成情况、竞赛经费预算、奖励办法等。\n  第十四条 技能竞赛应依据国家、行业职业技能标准和企\n  业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n  等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n  证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n  国内、国际同类标准进行命题。\n  第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n  一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n  为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n[第7页]\n  — 7 — 不同，但实际操作成绩所占比例不得少于70%。\n  第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n  强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n  批竞赛品牌。\n  第四章 表彰奖励\n  第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n  要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n  要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n  各级企业可以个人或团队（单位）名称命名，并组织宣传推广。\n  第十八条 全区电信职业技能竞赛每个项目的个人第1-6\n  名经审核可授予“中国电信广西公司技术能手”称号（D2级），\n  其中每个项目的第1名视竞赛情况可向集团公司申报“中国电\n  信集团技术能手”（C2级）。广西公司其他技能竞赛根据获奖\n  情况可授予个人第1名D2级荣誉；竞赛有多个项目的，可授\n  予每个项目个人第1名D3级荣誉。单次比赛的荣誉获得人数\n  不得超过参加现场决赛人数的三分之一。\n  第十九条 联合劳务派遣、业务外包单位开展的技能竞赛，\n  在遵守相关法律规定的前提下，竞赛组织领导机构可以与其协\n  商对获奖人员进行表彰奖励。\n  第二十条 广西公司组队参加自治区级及以上技能竞赛\n  （含受集团指派参加全国性竞赛）获奖的，执行竞赛主办方统\n  一要求的奖励规定。如主办方、集团公司未向获奖选手、团队\n[第8页]\n  — 8 —授予荣誉称号及颁发物质奖励的，则获个人前三名或一、二等\n  奖的选手可由广西公司授予“中国电信广西公司技术能手”称号\n  （D2级），并给予相应物质奖励；获团体项目一、二、三等奖\n  的，广西公司可给予团队总额不超过15000元且平均每人不超\n  过1200元的物质奖励。同一赛事选手分获团体奖和个人奖的，\n  就高不重复奖励。\n  第五章 竞赛经费\n  第二十一条 技能竞赛奖励经费纳入广西公司人工成本预\n  算管理，由劳动竞赛委员会归口管理。广西公司承办或参加的\n  自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n  申请流程按照公司内控权限列表的预算外项目进行审批。\n  第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n  本部门年度预算列支或向公司另行申请。另行申请流程按照公\n  司内控权限列表的预算外项目进行审批。\n  第六章 附则\n  第二十三条 各市分公司可参照本办法，结合实际，制订\n  本单位技能竞赛管理办法细则，并积极组织员工参加各级技能\n  竞赛，提升技能竞赛的广泛性和参与度。\n  第二十四条 本办法由区电信工会负责解释。\n  第二十五条 本办法自印发之日起实施，《中国电信广西\n  公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废\n  止。\n[第9页]\n  中国电信广西公司办公室 2026年6月2日印发",
+        "source_type": "file",
+        "source_path": "D:\\AiWorkSpace\\knowledge-base\\data\\graph\\pages\\中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216.md",
+        "file_type": "pdf",
+        "tags": "[\"劳动竞赛\", \"竞赛\", \"技能\", \"公司\"]",
+        "version": 4,
+        "file_created_at": "2026-07-24T17:37:44.069184",
+        "file_modified_at": "2026-07-24T17:37:44.072018",
+        "created_at": "2026-07-24T17:37:44.069184",
+        "updated_at": "2026-07-24T17:58:24.486881",
+        "deleted_at": null,
+        "file_size": 22235,
+        "content_hash": "22846b1daa4d32871c21b5930d608dcfd66037cbd27b381c15200f727ac09de8",
+        "quality": "ok",
+        "quality_score": null
+      },
+      "meta": {
+        "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      }
+    },
+    "latency_ms": 28.57,
+    "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+  },
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "# 问题拆解\n\n用户问题包含三个核心要素需要回答：\n1. **技能竞赛** — 限定领域\n2. **团体奖金限额** — 团体奖（一、二、三等奖）对应金额及年度封顶\n3. **2026年修订** — 必须是 2026 年版规定\n\n# 知识库检索情况\n\n我逐一核查了知识库提供的 5 条原始证据：\n\n| 证据 | 内容片段 | 与问题的关联 |\n|------|---------|-------------|\n| 证据1 | \"竞赛取得团体一、二、三等奖每次分别加……\" | ✅ 直接提到团体一二三等奖，但**被截断**，没有给出具体金额 |\n| 证据2 | \"（2026年版）\" | ✅ 证实属于 2026 年版规定 |\n| 证据3 | \"年最高赠送限额，超过限额原则上当……\" | ⚠️ 涉及\"年度最高限额\"，但**被截断**，未显示限额数值 |\n| 证据4 | \"技能竞赛\" | ✅ 关键定位词 |\n| 证据5 | \"项技能竞赛\" | ✅ 再次印证主题 |\n\n# 推理与结论\n\n**能确认的事实（依据证据1、证据2、证据4、证据5）：**\n- 知识库中确实存在一份 2026 年版的规定，涉及技能竞赛的团体奖内容；\n- 该规定对\"竞赛取得团体一、二、三等奖\"分别设有加（分/计）规则；\n- 存在\"年最高赠送限额\"的封顶机制（证据3）。\n\n**无法确认的关键事实：**\n1. 团体一等、二等、三等奖对应的**具体金额**（证据1在\"分别加\"之后被截断）；\n2. \"年最高赠送限额\"的具体**数值**（证据3在\"当\"字后被截断）；\n3. \"超过限额原则上当……\"后的处理方式（如\"当年度不得再发放\"之类的表述）。\n\n# 回答\n\n依据当前知识库内容，**只能确认该 2026 年版规定中确实包含\"技能竞赛团体一、二、三等奖分别计发\"与\"年度最高赠送限额\"两项条款**，但所有涉及具体金额和限额数值的部分均**因证据被截断而缺失**，无法给出数字。\n\n⚠️ **建议**：如需准确数字，请提供完整版的原始文档（如《技能竞赛团体奖励实施细则 2026 年版》全文），尤其是证据 1 在\"分别加\"之后、以及证据 3 在\"超过限额原则上当\"之后的完整段落，我才能给出确定的答复。",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "f19a2fdf-e671-4edb-a0df-fb441b01cb9f",
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "竞赛取得团体一、二、三等奖每次分别加",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+              "path": "",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "block_id": "f19a2fdf-e671-4edb-a0df-fb441b01cb9f",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "竞赛取得团体一、二、三等奖每次分别加"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "block_id": "d5a054b2-1b0d-4c45-9a81-1e757157a2be",
+            "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+            "text": "（2026年版）",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+              "path": "",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "block_id": "d5a054b2-1b0d-4c45-9a81-1e757157a2be",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "（2026年版）"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "f1ffb5d9-72d4-4b69-9cee-584265efb7c7",
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "text": "年最高赠送限额，超过限额原则上当",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "path": "",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "block_id": "f1ffb5d9-72d4-4b69-9cee-584265efb7c7",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "年最高赠送限额，超过限额原则上当"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "block_id": "73c5533c-21cb-4199-aa68-25a93782d477",
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "text": "技能竞赛。",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+              "path": "",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "block_id": "73c5533c-21cb-4199-aa68-25a93782d477",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "技能竞赛。"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+            "block_id": "e7986f6d-ce8c-47f2-9f50-7aca638bff33",
+            "title": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4",
+            "text": "项技能竞赛。",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4",
+              "path": "",
+              "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+              "block_id": "e7986f6d-ce8c-47f2-9f50-7aca638bff33",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "项技能竞赛。"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          }
+        ],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "f19a2fdf-e671-4edb-a0df-fb441b01cb9f",
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "竞赛取得团体一、二、三等奖每次分别加",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+              "path": "",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "block_id": "f19a2fdf-e671-4edb-a0df-fb441b01cb9f",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "竞赛取得团体一、二、三等奖每次分别加"
+            }
+          },
+          {
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "block_id": "d5a054b2-1b0d-4c45-9a81-1e757157a2be",
+            "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+            "path": "",
+            "text": "（2026年版）",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+              "path": "",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "block_id": "d5a054b2-1b0d-4c45-9a81-1e757157a2be",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "（2026年版）"
+            }
+          },
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "f1ffb5d9-72d4-4b69-9cee-584265efb7c7",
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": "年最高赠送限额，超过限额原则上当",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "path": "",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "block_id": "f1ffb5d9-72d4-4b69-9cee-584265efb7c7",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "年最高赠送限额，超过限额原则上当"
+            }
+          },
+          {
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "block_id": "73c5533c-21cb-4199-aa68-25a93782d477",
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "text": "技能竞赛。",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+              "path": "",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "block_id": "73c5533c-21cb-4199-aa68-25a93782d477",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "技能竞赛。"
+            }
+          },
+          {
+            "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+            "block_id": "e7986f6d-ce8c-47f2-9f50-7aca638bff33",
+            "title": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4",
+            "path": "",
+            "text": "项技能竞赛。",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4",
+              "path": "",
+              "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+              "block_id": "e7986f6d-ce8c-47f2-9f50-7aca638bff33",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "项技能竞赛。"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 25
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "type": "knowledge",
+              "label": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9"
+            },
+            {
+              "id": "f19a2fdf-e671-4edb-a0df-fb441b01cb9f",
+              "type": "block",
+              "label": "竞赛取得团体一、二、三等奖每次分别加",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "3be8ec58-a28b-4c4d-8fe1-6a28d7e39c3c",
+              "type": "block",
+              "label": "[第19页]",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "type": "knowledge",
+              "label": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4"
+            },
+            {
+              "id": "d5a054b2-1b0d-4c45-9a81-1e757157a2be",
+              "type": "block",
+              "label": "（2026年版）",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+            },
+            {
+              "id": "d9d07807-9822-4c06-ab9a-dfdd44f8bf28",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+            },
+            {
+              "id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "type": "knowledge",
+              "label": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0"
+            },
+            {
+              "id": "f1ffb5d9-72d4-4b69-9cee-584265efb7c7",
+              "type": "block",
+              "label": "年最高赠送限额，超过限额原则上当",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+            },
+            {
+              "id": "97cecfac-bbde-4425-8e88-fde19b81d4f0",
+              "type": "block",
+              "label": "[第1315页]",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+            },
+            {
+              "id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "type": "knowledge",
+              "label": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+            },
+            {
+              "id": "73c5533c-21cb-4199-aa68-25a93782d477",
+              "type": "block",
+              "label": "技能竞赛。",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "df76c8e4-9135-41df-8b62-2a6de1374bc9",
+              "type": "block",
+              "label": "[第6页]",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+              "type": "knowledge",
+              "label": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4"
+            },
+            {
+              "id": "e7986f6d-ce8c-47f2-9f50-7aca638bff33",
+              "type": "block",
+              "label": "项技能竞赛。",
+              "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+            },
+            {
+              "id": "3d12a5b5-6531-4ede-bfb9-c111c22ece10",
+              "type": "block",
+              "label": "[第5页]",
+              "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+            },
+            {
+              "id": "dfe59a14-9903-488e-9257-a523defaaef3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-371号-关于印发中国电信广西公司原子能力管理办法-试行-的通知--dfe59a14"
+            },
+            {
+              "id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "type": "knowledge",
+              "label": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150"
+            },
+            {
+              "id": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "type": "knowledge",
+              "label": "中电信桂-2019-370号-关于印发中国电信广西公司数据安全管理办法-试行-的通知--5fd963e8"
+            },
+            {
+              "id": "6246d57f-6fe0-4592-b172-c11822200aa9",
+              "type": "knowledge",
+              "label": "中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f"
+            },
+            {
+              "id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "type": "knowledge",
+              "label": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5"
+            },
+            {
+              "id": "3177663d-3e8d-496e-acef-f5a785119b8a",
+              "type": "knowledge",
+              "label": "中电信桂-2017-186号-关于印发中国电信广西公司与财务报告相关的内部控制管理办法的通知--3177663d"
+            }
+          ],
+          "edges": [
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "f19a2fdf-e671-4edb-a0df-fb441b01cb9f",
+              "type": "contains"
+            },
+            {
+              "source": "3be8ec58-a28b-4c4d-8fe1-6a28d7e39c3c",
+              "target": "f19a2fdf-e671-4edb-a0df-fb441b01cb9f",
+              "type": "parent"
+            },
+            {
+              "source": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "target": "d5a054b2-1b0d-4c45-9a81-1e757157a2be",
+              "type": "contains"
+            },
+            {
+              "source": "d9d07807-9822-4c06-ab9a-dfdd44f8bf28",
+              "target": "d5a054b2-1b0d-4c45-9a81-1e757157a2be",
+              "type": "parent"
+            },
+            {
+              "source": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "target": "f1ffb5d9-72d4-4b69-9cee-584265efb7c7",
+              "type": "contains"
+            },
+            {
+              "source": "97cecfac-bbde-4425-8e88-fde19b81d4f0",
+              "target": "f1ffb5d9-72d4-4b69-9cee-584265efb7c7",
+              "type": "parent"
+            },
+            {
+              "source": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "target": "73c5533c-21cb-4199-aa68-25a93782d477",
+              "type": "contains"
+            },
+            {
+              "source": "df76c8e4-9135-41df-8b62-2a6de1374bc9",
+              "target": "73c5533c-21cb-4199-aa68-25a93782d477",
+              "type": "parent"
+            },
+            {
+              "source": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+              "target": "e7986f6d-ce8c-47f2-9f50-7aca638bff33",
+              "type": "contains"
+            },
+            {
+              "source": "3d12a5b5-6531-4ede-bfb9-c111c22ece10",
+              "target": "e7986f6d-ce8c-47f2-9f50-7aca638bff33",
+              "type": "parent"
+            },
+            {
+              "source": "dfe59a14-9903-488e-9257-a523defaaef3",
+              "target": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "type": "related"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "6246d57f-6fe0-4592-b172-c11822200aa9",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "type": "related"
+            },
+            {
+              "source": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "target": "3177663d-3e8d-496e-acef-f5a785119b8a",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 21
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": ""
+      },
+      "meta": {
+        "source_count": 5,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 125729.07
+  },
+  "top_candidate_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+  "candidates": [
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 0.5730999999999999,
+      "final_relevance_score": 0.359,
+      "text": "技能竞赛。"
+    }
+  ]
+}

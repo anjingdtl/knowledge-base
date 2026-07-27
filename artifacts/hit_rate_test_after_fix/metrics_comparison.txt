@@ -1,0 +1,38 @@
+======================================================================
+METRIC COMPARISON (baseline -> after-fix)
+======================================================================
+Metric                      Baseline       After       Delta      Goal
+Top-1 Accuracy                59.38%      84.38%+     25.00%    85.00%
+Recall@5                      65.62%      87.50%+     21.88%    95.00%
+Answer Groundedness           40.62%      84.38%+     43.76%    96.00%
+Citation Validity             70.48%      63.89%     -6.59%    98.00%
+Hallucination Rate             3.12%       6.25%+      3.13%     2.00%
+False Positive Rate            0.00%       0.00%+      0.00%✓    5.00%
+
+DEFECT DELTA
+  P0: baseline=0 after=0
+  P1: baseline=18 after=3
+    resolved: KB-007, KB-009, KB-010, KB-011, KB-012, KB-014, KB-015, KB-016, KB-018, KB-020, KB-023, KB-027, KB-028, KB-035, KB-037
+  P2: baseline=0 after=1
+    NEW regressions: KB-037
+  P3: baseline=0 after=0
+
+PER-CASE DETAIL (previously P1)
+  KB-007: top1 True->False  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-009: top1 False->True  grounded False->False  no_halluc True->True  severity P1->OK
+  KB-010: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-011: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-012: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-014: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-015: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-016: top1 True->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-017: top1 True->False  grounded False->False  no_halluc True->True  severity P1->P1
+  KB-018: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-019: top1 True->True  grounded False->False  no_halluc False->False  severity P1->P1
+  KB-020: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-021: top1 False->False  grounded False->False  no_halluc True->True  severity P1->P1
+  KB-023: top1 True->False  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-027: top1 True->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-028: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-035: top1 False->True  grounded False->True  no_halluc True->True  severity P1->OK
+  KB-037: top1 False->False  grounded False->False  no_halluc True->False  severity P1->P2

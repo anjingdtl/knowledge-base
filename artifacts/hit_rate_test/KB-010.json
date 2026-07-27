@@ -1,0 +1,300 @@
+{
+  "case": {
+    "case_id": "KB-010",
+    "category": "同义词与口语表达",
+    "query": "防诈骗和骚扰电话 代理商被罚多少钱",
+    "expected_knowledge_ids": [
+      "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+    ],
+    "expected_title_keywords": [
+      "涉诈",
+      "涉骚扰",
+      "2026"
+    ],
+    "required_facts": [
+      "2000元",
+      "涉诈"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "市场〔2026〕8号附件1；口语'防诈骗/罚多少钱'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "insufficient_relevant_evidence",
+        "top_score": 0.3,
+        "threshold": 0.35,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 26804.69
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "3a01af4f-d73d-4da8-b2c7-162298a572ee",
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": "罚的代理",
+            "score": 0.016656751933372994,
+            "citation": {
+              "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "path": "",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "block_id": "3a01af4f-d73d-4da8-b2c7-162298a572ee",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "罚的代理"
+            }
+          },
+          {
+            "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+            "block_id": "b9b29d00-aaeb-40e0-b51c-b83ad42987a1",
+            "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+            "path": "",
+            "text": "对于代理商违反通信信息诈骗及实名制违规的， 按照代理商",
+            "score": 0.016260162601626018,
+            "citation": {
+              "document": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+              "path": "",
+              "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "block_id": "b9b29d00-aaeb-40e0-b51c-b83ad42987a1",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "对于代理商违反通信信息诈骗及实名制违规的， 按照代理商"
+            }
+          },
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "519fedde-2270-49d4-91f8-32b331ed04b9",
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "2.代理商入网号码涉骚扰处置规则",
+            "score": 0.015882019285309135,
+            "citation": {
+              "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "path": "",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "block_id": "519fedde-2270-49d4-91f8-32b331ed04b9",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "2.代理商入网号码涉骚扰处置规则"
+            }
+          },
+          {
+            "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+            "block_id": "e2ee0be5-9ffb-4247-b44c-65722f99ca1f",
+            "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+            "path": "",
+            "text": "4.代理商通讯信息诈骗及实名制违规处罚规则",
+            "score": 0.015521064301552107,
+            "citation": {
+              "document": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+              "path": "",
+              "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "block_id": "e2ee0be5-9ffb-4247-b44c-65722f99ca1f",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "4.代理商通讯信息诈骗及实名制违规处罚规则"
+            }
+          },
+          {
+            "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+            "block_id": "b3a854d1-6cb7-4bd0-beed-4d91dad7c42b",
+            "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+            "path": "",
+            "text": "实体渠道代理商通讯信息诈骗",
+            "score": 0.015176151761517617,
+            "citation": {
+              "document": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+              "path": "",
+              "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "block_id": "b3a854d1-6cb7-4bd0-beed-4d91dad7c42b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "实体渠道代理商通讯信息诈骗"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.144 < 0.35)"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "exact_lookup",
+            "wiki_weight": 0.3170731707317074,
+            "raw_weight": 0.6829268292682927,
+            "reasons": [
+              "exact_lookup_keywords",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 15
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.3170731707317074,
+              "raw_weight": 0.6829268292682927
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence",
+          "search_mode": "hybrid_verified",
+          "intent": "exact_lookup"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": "",
+        "reason": "insufficient_relevant_evidence"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 30648.29
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

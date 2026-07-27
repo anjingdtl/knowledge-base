@@ -1,0 +1,300 @@
+{
+  "case": {
+    "case_id": "KB-011",
+    "category": "同义词与口语表达",
+    "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+    "expected_knowledge_ids": [
+      "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+    ],
+    "expected_title_keywords": [
+      "线上合作",
+      "2025"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万",
+      "等级保护"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕155号第九条；口语'线上店铺入驻'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "insufficient_relevant_evidence",
+        "top_score": 0.2259,
+        "threshold": 0.35,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 33464.49
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "282365bf-7db9-4aeb-83ca-5a0a266d2d68",
+            "block_id": "d94d258f-47a8-4c17-941e-23957a11876d",
+            "title": "关于印发企业微信-天翼微店运营管理规范1.0版的通知中国电信渠道业-2020-70号--282365bf",
+            "path": "",
+            "text": "要载体，还应具备线上店铺管理、销售品管理、订单受理、一人一码",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "关于印发企业微信-天翼微店运营管理规范1.0版的通知中国电信渠道业-2020-70号--282365bf",
+              "path": "",
+              "knowledge_id": "282365bf-7db9-4aeb-83ca-5a0a266d2d68",
+              "block_id": "d94d258f-47a8-4c17-941e-23957a11876d",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "要载体，还应具备线上店铺管理、销售品管理、订单受理、一人一码"
+            }
+          },
+          {
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "block_id": "372718f3-3b3b-4124-b957-466116a1cf8f",
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "path": "",
+            "text": "第四章 线上合作引入管控",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+              "path": "",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "block_id": "372718f3-3b3b-4124-b957-466116a1cf8f",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第四章 线上合作引入管控"
+            }
+          },
+          {
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "block_id": "693727e6-cabc-463e-93ac-ce2b542550bd",
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "path": "",
+            "text": "4.负责分公司线上合作商的引入等工作的指导和监督。",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+              "path": "",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "block_id": "693727e6-cabc-463e-93ac-ce2b542550bd",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "4.负责分公司线上合作商的引入等工作的指导和监督。"
+            }
+          },
+          {
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "block_id": "34366723-2bc5-422c-9ab9-52879c711e00",
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "path": "",
+            "text": "（1）负责线上合作的谈判、合作运营模式、负责合作商的",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+              "path": "",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "block_id": "34366723-2bc5-422c-9ab9-52879c711e00",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "（1）负责线上合作的谈判、合作运营模式、负责合作商的"
+            }
+          },
+          {
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "block_id": "fbd19e4a-2ddc-4c91-bcd8-18a91fa66e35",
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "path": "",
+            "text": "3.负责线上合作的谈判、合作运营模式、负责合作商的引入、",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+              "path": "",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "block_id": "fbd19e4a-2ddc-4c91-bcd8-18a91fa66e35",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "3.负责线上合作的谈判、合作运营模式、负责合作商的引入、"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.0903 < 0.35)"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 29
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": "",
+        "reason": "insufficient_relevant_evidence"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 40929.58
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

@@ -1,0 +1,76 @@
+{
+  "case": {
+    "case_id": "KB-033",
+    "category": "无答案或越界问题",
+    "query": "火星探测任务最新进展",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "火星探测具体内容"
+    ],
+    "expected_no_answer": true,
+    "notes": "与知识库领域完全无关；应明确拒答"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "requires_current_external_data",
+        "top_score": 0.0,
+        "threshold": 0.35,
+        "source_path": "current_info_gate"
+      }
+    },
+    "latency_ms": 17673.36
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "sources": [],
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "requires_current_external_data"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "warnings": [
+          "requires_current_external_data"
+        ],
+        "wiki_context": "",
+        "trace_id": "",
+        "answer_mode": "no_answer",
+        "reason": "requires_current_external_data",
+        "conflict_disclosed": false,
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": []
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 20.26
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

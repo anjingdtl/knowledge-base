@@ -1,0 +1,82 @@
+{
+  "case": {
+    "case_id": "KB-035",
+    "category": "新旧规则冲突",
+    "query": "中国电信广西公司差旅费管理办法最新版本是哪一年的",
+    "expected_knowledge_ids": [
+      "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+    ],
+    "expected_title_keywords": [
+      "差旅费",
+      "2025"
+    ],
+    "required_facts": [
+      "2025",
+      "256号"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "最新为2025年〔2025〕256号；不应优先返回2018/2022旧版"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "requires_current_external_data",
+        "top_score": 0.0,
+        "threshold": 0.35,
+        "source_path": "current_info_gate"
+      }
+    },
+    "latency_ms": 29107.38
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "sources": [],
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "requires_current_external_data"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "warnings": [
+          "requires_current_external_data"
+        ],
+        "wiki_context": "",
+        "trace_id": "",
+        "answer_mode": "no_answer",
+        "reason": "requires_current_external_data",
+        "conflict_disclosed": false,
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": []
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 23.91
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

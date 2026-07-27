@@ -1,0 +1,674 @@
+{
+  "case": {
+    "case_id": "KB-008",
+    "category": "精确关键词",
+    "query": "授权管理办法 特定事项授权 一事一授权 MSS法律辅助系统",
+    "expected_knowledge_ids": [
+      "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+    ],
+    "expected_title_keywords": [
+      "授权",
+      "2024"
+    ],
+    "required_facts": [
+      "一事一授权",
+      "MSS法律辅助系统"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2024〕423号第十八条/第二十条"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts",
+            "title_boost"
+          ],
+          "block_id": "9827d899-194f-4a62-8e1c-bfc58481a44b",
+          "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+          "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+          "text": "项，需要按照一事一授权的原则进行特定事项授权，特定事项授",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "chunk_index": 133,
+            "depth": 1
+          },
+          "fts_rank": -40.92987644773833,
+          "fts_score": 0.7585000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 0.7585000000000001,
+          "relevance": {
+            "semantic_score": 0.7045,
+            "fts_score": 0.7585,
+            "title_score": 0.375,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.7045,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5723,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5723,
+          "version_rank": {
+            "version_year": 2024,
+            "deprecated": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.5723,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 34743.44
+  },
+  "read": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "type": "knowledge",
+        "id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+        "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+        "content": "[第1页]\n  — 1 —\n  中电信桂〔2024〕423号\n  关于印发中国电信广西公司授权管理办法\n  （2024年版）的通知\n  各市分公司，各专业公司，区公司各部门：\n  根据集团公司授权管理相关规定，结合业务实际，公司修订\n  了《中国电信广西公司授权管理办法》，主要调整了适用范围、\n  授权类型、遵循原则、职责分工、审批流程、责任追究等相关要\n  求。\n  现将修订后的《中国电信广西公司授权管理办法（2024年邹碧华(全渠道运营中心)\n[第2页]\n  — 2 —版）》印发你们，请遵照执行。\n  中国电信广西公司\n  2024年10月14日\n[第3页]\n  — 3 — 中国电信广西公司授权管理办法\n  （2024年版）\n  第一章 总则\n  第一条 为加强中国电信股份有限公司广西分公司（以下简\n  称“公司”）授权管理，规范企业经营活动，提高公司运营效率，\n  防范经营管理风险，根据国家有关法律法规和集团公司关于授权\n  管理的规定，结合公司实际，制定本办法。\n  第二条 本办法所称区公司授权，指区公司负责人根据中国\n  电信股份有限公司（以下简称“集团总部”）的授权内容，委托\n  各市分公司、各专业公司、区公司本部部门的负责人或相关人员，\n  代表公司对外进行一般经济往来事项和其它特定事项。区公司本\n  部各部门根据职责分工开展的经营管理活动，不在本办法适用范\n  围之内。\n  本办法所称分公司授权，是指被授权的各市分公司负责人在\n  其被授予的权限范围内，授权本市分公司内设部门负责人、所辖\n  县（市）分公司、城区分公司负责人或相关人员，代表分公司对\n  外进行一般经济往来事项和其它特定事项。\n  本办法所称专业公司授权，是指被授权的各专业公司负责人\n  在其被授予的权限范围内，授权内设部门负责人或相关人员，代\n  表专业公司对外进行一般经济往来事项和其它特定事项。 邹碧华(全渠道运营中心)\n[第4页]\n  — 4 —第三条 本办法所称授权委托书，是指证明授权委托关系及\n  被授权单位/人员权利义务的法律文书。\n  第四条 被授权人在授权范围内依法从事对外民事活动时，\n  必须遵守国家相关法律法规和本办法的规定。被授权人对授权人\n  负责，在授权范围内行使权利并承担责任。除另有规定外，被授\n  权人不得再次转授权。\n  第五条 本办法适用于各市分公司、各专业公司、区公司本\n  部各部门，中国电信集团有限公司广西分公司授权管理参照本办\n  法执行。\n  第二章 授权类型及遵循原则\n  第六条 授权委托分为年度授权、签约授权和特定事项授权\n  三类。\n  （一）年度授权，是指区公司对各市分公司、各专业公司经\n  营管理事项作出的授权，各市分公司根据区公司授权对县（城区）\n  分公司在经营管理事项作出的转授权。\n  （二）签约授权，是指区公司、各市分公司、各专业公司对\n  所属专业部门负责人出具在本年度内代表本单位对外签署合同\n  作出的授权。\n  （三）特定事项授权，是指区公司、各市分公司、各专业公\n  司对所属分支机构和/或员工代表本单位对外进行特定事项作出\n  的授权。\n  本办法涉及的特定事项主要包括：政企项目投标、合同签订、邹碧华(全渠道运营中心)\n[第5页]\n  — 5 — 纠纷案件代理、工商事项、知识产权相关事项、其他应当经授权\n  单位授权的特定事项。\n  第七条 授权委托应遵循以下原则：\n  （一）分级负责原则。区公司负责年度授权、签约授权和特\n  定事项授权的统筹管理工作。各市分公司如需对年度授权进行转\n  授权，需符合公司内控制度等相关规定，并履行本单位相应决策\n  程序。\n  （二）动态管理原则。区公司根据集团总部授权事项、权限\n  以及期限，结合实际情况对各单位作出转授权。区公司可根据工\n  作需要和情况变化适时调整授权权限。各单位再次转授权不得超\n  出上一级单位授权事项、权限以及期限。特定事项授权原则上不\n  得转授权。\n  （三）有限授权原则。年度授权的被授权人应当为单位负责\n  人。签约授权的被授权人原则上为单位/部门负责人。特定事项\n  授权除纠纷案件代理、专项调查委托外，原则上不对各单位或员\n  工以外的其他组织或个人作出授权。\n  第三章 授权管理的职责分工\n  第八条 各单位法律部门（指区公司法律部，分公司及专业\n  公司办公室，下同）为授权综合管理部门，提出授权委托需求部\n  门为授权送审部门，相关部门为授权职能管理部门。授权实行综\n  合管理部门、职能管理部门和送审部门协作共同管理。\n  第九条 授权综合管理部门的主要职责： 邹碧华(全渠道运营中心)\n[第6页]\n  — 6 —（一）区公司法律部主要负责：\n  1.统筹管理公司授权委托事项；\n  2.制定授权管理制度，并负责组织实施和监督检查；\n  3.对授权委托书内容的合法合规性进行审核；\n  4.其他应当由授权综合管理部门承担的职责。\n  （二）各市分公司、各专业公司法律部门主要负责：\n  1.牵头制订本单位授权委托书模板；\n  2.对授权委托书内容的合法合规性进行审核；\n  3.指导、监督、检查本单位授权管理工作；\n  4.履行公司规定的其他职责。\n  第十条 授权送审部门的主要职责：\n  （一）负责提出授权委托需求，起草授权委托书，保证授权\n  委托书的规范性；对授权委托的决策依据、背景说明、授权委托\n  书进行实质审核；\n  （二）提请职能部门审核其送审的授权委托书；\n  （三）负责办理其送审授权委托书的用印事项；\n  （四）负责在委托权限和期限内具体执行授权委托事项；\n  （五）其他应当由授权送审部门承担的职责。\n  第十一条 授权职能管理部门按照各自的职责范围对授权委\n  托事项进行专业审核。\n  第四章 年度授权\n  第十二条 各市分公司、各专业公司的年度授权，由区公司邹碧华(全渠道运营中心)\n[第7页]\n  — 7 — 法律部根据集团总部授权拟订转授权书，对授权对象和授权事\n  项、权限以及期限等予以明确，呈区公司负责人签发后，下发至\n  各单位。\n  第十三条 县（城区）分公司的年度授权，由各市分公司法\n  律部门根据区公司转授权书拟订转授权书，对授权对象和授权事\n  项、权限以及期限等予以明确，呈市分公司负责人签发后，下发\n  至相关单位。\n  第十四条 年度授权的期限不得超过上一级单位授权书的有\n  效期。授权事项及权限需符合公司内控制度等相关规定。根据各\n  市分公司、各专业公司、县（城区）分公司负责人的任免情况，\n  各单位法律部门及时对年度授权进行调整。\n  第五章 签约授权\n  第十五条 区公司签约授权由区公司法律部拟订授权委托\n  书，对授权对象和期限等予以明确，呈区公司负责人签发后，由\n  被授权人对外签订合同，合同须同时加盖授权单位合同专用章方\n  为有效。\n  第十六条 市分公司、专业公司签约授权由市分公司、专业\n  公司法律部门订授权委托书，对授权对象和期限等予以明确，呈\n  本单位负责人签发后，由被授权人对外签订合同，合同须同时加\n  盖授权单位合同专用章方为有效。\n  第十七条 签约授权对象应当为各单位相关部门负责人，如\n  相关部门负责人调整，各单位法律部门及时对签约授权进行调邹碧华(全渠道运营中心)\n[第8页]\n  — 8 —整。签约授权期限一般为一个自然年，授权事项应当严格遵守合\n  同管理相关制度。签约授权对象不包括各部门负责人以外人员。\n  第六章 特定事项授权\n  第十八条 除年度授权与签约授权以外的其他需要授权的事\n  项，需要按照一事一授权的原则进行特定事项授权，特定事项授\n  权授权期限一般至该事项结束时止。\n  第十九条 分公司副总经理、未获得签约授权的部门负责人、\n  部门负责人以外的人员因工作需要对外签订合同的，需要按照一\n  事一授权的原则进行特定事项授权。\n  第二十条 特定事项授权委托应通过MSS法律辅助系统进行\n  线上审批。涉密或其他敏感事项的，应按照公司保密制度要求执\n  行。\n  第二十一条 特定事项授权由承办部门起草授权委托书，并\n  附决策依据、背景说明等材料，授权委托书应当明确被授权单位\n  /人员名称、授权的具体事项、权限、期限以及签发时间，履行\n  相应审批流程并经系统生成统一编号，由承办部门办理用印后生\n  效。\n  第七章 授权委托管理\n  第二十二条 各级授权书由各单位负责人签署，其他人员无\n  权进行授权。\n  第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)\n[第9页]\n  — 9 — （一）需要本单位授权的，由送审部门根据职责权限、内控\n  管理等相关规定，履行本单位内部审批程序，经本单位法律部门\n  对授权委托事项进行合法合规性审核后，报公司领导签批。\n  （二）需要区公司授权的，由送审部门根据职责权限、内控\n  管理等相关规定，履行本单位内部审批程序后，报区公司法律部\n  审核，并按规定履行区公司内部审批流程。\n  （三）需要集团总部授权的，由送审部门根据职责权限、内\n  控管理等相关规定，履行本单位内部审批程序后，报区公司法律\n  部审核，并通过区公司相关业务部门审核后，提交集团总部相关\n  业务部门、法律部（合规管理部）审核。\n  第二十四条 被授权单位/人员应当按照授权委托书规定的\n  事项、权限、期限等各项内容具体执行授权委托事项，不得超越\n  授权事项、权限、期限范围。\n  第二十五条 出现下列情况之一，授权委托书失效，被授权\n  单位/人员如有需要应重新履行授权委托审批程序：\n  （一）授权期限届满的；\n  （二）授权事项已完成的；\n  （三）授权单位撤销全部或部分授权委托的；\n  （四）年度授权和签约授权委托虽在授权期限内，但被授权\n  单位/部门负责人变更的；\n  （五）被授权单位合并、分立、破产、重组、吊销/注销的；\n  （六）被授权部门组织架构发生变更、撤销的； 邹碧华(全渠道运营中心)\n[第10页]\n  — 10 —（七）被授权人与所在单位解除、终止劳动合同或达到法定\n  退休年龄的；\n  （八）在授权期限内发生权限变更，自新的变更权限生效之\n  日起，原授权终止；\n  （九）其他应当视为失效的情况。\n  第八章 责任追究\n  第二十六条 授权管理过程中，存在下列行为，造成公司损\n  失或者损害公司形象的，根据公司相关规章制度开展责任追究；\n  涉嫌违法违纪的，按照规定移交相关机构或者部门处理。\n  （一）未经授权单位授权委托，以授权单位名义对外实施行\n  为的；\n  （二）被授权单位/人员超越权限的；\n  （三）被授权单位/人员在授权范围内未履职尽责的；\n  （四）授权委托终止后，被授权单位/人员仍以被委托身份\n  对外实施行为的；\n  （五）其他应当追究责任的行为。\n  各责任单位（部门）在自查自纠中主动发现上述问题，责任\n  人及时整改处理的，可根据相关规章制度从轻处理。对于不担当、\n  不作为、不尽责、放任损害公司利益的严肃追究责任，根据事实、\n  性质和情节对负有责任的相关人员从重处罚。\n  第六章 附则\n  第二十七条 本办法由区公司法律部负责解释。 邹碧华(全渠道运营中心)\n[第11页]\n  — 11 — 第二十八条 本办法自印发之日起执行。\n[第12页]\n  中国电信广西公司办公室 2024年10月14日印发 邹碧华(全渠道运营中心)",
+        "source_type": "file",
+        "source_path": "D:\\AiWorkSpace\\knowledge-base\\data\\graph\\pages\\中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e.md",
+        "file_type": "pdf",
+        "tags": "[\"授权\", \"公司\", \"部门\"]",
+        "version": 4,
+        "file_created_at": "2026-07-24T17:37:19.313375",
+        "file_modified_at": "2026-07-24T17:37:19.323587",
+        "created_at": "2026-07-24T17:37:19.313375",
+        "updated_at": "2026-07-24T17:59:46.212763",
+        "deleted_at": null,
+        "file_size": 28338,
+        "content_hash": "f281bbd2ca3fbaf1a75addb8a9a0fefd188f217a5553c2effaa90aa2beca7cc2",
+        "quality": "ok",
+        "quality_score": null
+      },
+      "meta": {
+        "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+      }
+    },
+    "latency_ms": 4.47,
+    "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+  },
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "# 授权管理办法中\"特定事项授权\"相关要点解析\n\n## 一、问题拆解\n\n用户的问题围绕四个关键词展开：**授权管理办法**、**特定事项授权**、**一事一授权**、**MSS法律辅助系统**。需要从知识库中组合这些信息，理清它们之间的逻辑关系。\n\n---\n\n## 二、知识库推理分析\n\n### 1. 授权委托的分类（来源：原始证据 4）\n\n依据**来源4（第六条）**，授权管理办法将授权委托分为**三类**：\n\n| 类型 | 说明 |\n|------|------|\n| 年度授权 | 按年度进行的一般性授权 |\n| 签约授权 | 针对合同签约事项的授权 |\n| **特定事项授权** | 针对某一特定事项的专项授权 |\n\n### 2. 特定事项授权的原则（来源：原始证据 1、2）\n\n依据**来源1、来源2**，特定事项授权必须遵循 **\"一事一授权\"** 的原则，即：\n- 每一项特定事项都需要单独进行授权；\n- 不能将多个事项打包合并授权；\n- 这是防范法律风险、规范授权行为的核心原则。\n\n### 3. 特定事项授权的章节（来源：原始证据 5）\n\n依据**来源5**，管理办法设有 **第六章 特定事项授权**，对特定事项授权进行专门章节的规定。\n\n### 4. 特定事项授权的操作工具（来源：原始证据 3）\n\n依据**来源3（第二十条）**，特定事项授权委托应 **通过MSS法律辅助系统进行**，这是执行特定事项授权的强制性和规范性要求。\n\n---\n\n## 三、综合结论\n\n依据以上证据，可以形成如下知识链条：\n\n> **授权管理办法**将授权委托分为年度授权、签约授权和**特定事项授权**三类（来源4）；\n> 其中**特定事项授权**需遵循**\"一事一授权\"**原则（来源1、2），并在办法的第六章中专门规定（来源5）；\n> 具体操作上，特定事项授权委托**应通过 MSS法律辅助系统**完成（来源3）。\n\n这四个关键词之间存在明确的层级关系：**管理办法（框架）→ 特定事项授权（类别）→ 一事一授权（原则）→ MSS法律辅助系统（操作工具）**。\n\n---\n\n## 四、证据局限说明\n\n⚠️ 当前知识库中检索到的证据均为**片段式表述**，具体细节尚不完整：\n- 未获取到第六章（特定事项授权）的**完整条款内容**；\n- 未获取到第二十条关于 MSS法律辅助系统操作的**具体流程描述**；\n- \"一事一授权\"原则的**适用范围与例外情形**未在现有证据中体现。\n\n如需了解更详细的规定，建议查阅**第六章完整内容**及办法的正式发布版本。",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "9827d899-194f-4a62-8e1c-bfc58481a44b",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "text": "项，需要按照一事一授权的原则进行特定事项授权，特定事项授",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "9827d899-194f-4a62-8e1c-bfc58481a44b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "项，需要按照一事一授权的原则进行特定事项授权，特定事项授"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "text": "事一授权的原则进行特定事项授权。",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "事一授权的原则进行特定事项授权。"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "text": "第二十条 特定事项授权委托应通过MSS法律辅助系统进行",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第二十条 特定事项授权委托应通过MSS法律辅助系统进行"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "30cbf30f-75b8-4c95-ba7c-e6ef98e23ddb",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "text": "第六条 授权委托分为年度授权、签约授权和特定事项授权",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "30cbf30f-75b8-4c95-ba7c-e6ef98e23ddb",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第六条 授权委托分为年度授权、签约授权和特定事项授权"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "57c26a1d-c785-4310-8809-4249d6fac65b",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "text": "第六章 特定事项授权",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "57c26a1d-c785-4310-8809-4249d6fac65b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第六章 特定事项授权"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          }
+        ],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "9827d899-194f-4a62-8e1c-bfc58481a44b",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "path": "",
+            "text": "项，需要按照一事一授权的原则进行特定事项授权，特定事项授",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "9827d899-194f-4a62-8e1c-bfc58481a44b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "项，需要按照一事一授权的原则进行特定事项授权，特定事项授"
+            }
+          },
+          {
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "path": "",
+            "text": "事一授权的原则进行特定事项授权。",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "事一授权的原则进行特定事项授权。"
+            }
+          },
+          {
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "path": "",
+            "text": "第二十条 特定事项授权委托应通过MSS法律辅助系统进行",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第二十条 特定事项授权委托应通过MSS法律辅助系统进行"
+            }
+          },
+          {
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "30cbf30f-75b8-4c95-ba7c-e6ef98e23ddb",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "path": "",
+            "text": "第六条 授权委托分为年度授权、签约授权和特定事项授权",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "30cbf30f-75b8-4c95-ba7c-e6ef98e23ddb",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第六条 授权委托分为年度授权、签约授权和特定事项授权"
+            }
+          },
+          {
+            "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+            "block_id": "57c26a1d-c785-4310-8809-4249d6fac65b",
+            "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+            "path": "",
+            "text": "第六章 特定事项授权",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "path": "",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "block_id": "57c26a1d-c785-4310-8809-4249d6fac65b",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第六章 特定事项授权"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 15
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "type": "knowledge",
+              "label": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e"
+            },
+            {
+              "id": "9827d899-194f-4a62-8e1c-bfc58481a44b",
+              "type": "block",
+              "label": "项，需要按照一事一授权的原则进行特定事项授权，特定事项授",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+            },
+            {
+              "id": "39efe1d9-cd5a-4b56-8d67-e2d1e53f026e",
+              "type": "block",
+              "label": "[第8页]",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+            },
+            {
+              "id": "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+              "type": "block",
+              "label": "事一授权的原则进行特定事项授权。",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+            },
+            {
+              "id": "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+              "type": "block",
+              "label": "第二十条 特定事项授权委托应通过MSS法律辅助系统进行",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+            },
+            {
+              "id": "30cbf30f-75b8-4c95-ba7c-e6ef98e23ddb",
+              "type": "block",
+              "label": "第六条 授权委托分为年度授权、签约授权和特定事项授权",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+            },
+            {
+              "id": "110ec7c6-9186-4a02-b0e2-9895cadda4e2",
+              "type": "block",
+              "label": "[第4页]",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+            },
+            {
+              "id": "57c26a1d-c785-4310-8809-4249d6fac65b",
+              "type": "block",
+              "label": "第六章 特定事项授权",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+            },
+            {
+              "id": "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+              "type": "knowledge",
+              "label": "中电信桂-2020-381号-关于印发中国电信广西公司印章管理办法-2020年修订-的通知--5b7cff87"
+            },
+            {
+              "id": "c8c0ef9e-1275-4f0d-9e30-45479d651385",
+              "type": "knowledge",
+              "label": "市场-2024-9号-关于印发中国电信广西公司前端业务外包实施细则的通知--c8c0ef9e"
+            }
+          ],
+          "edges": [
+            {
+              "source": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "target": "9827d899-194f-4a62-8e1c-bfc58481a44b",
+              "type": "contains"
+            },
+            {
+              "source": "39efe1d9-cd5a-4b56-8d67-e2d1e53f026e",
+              "target": "9827d899-194f-4a62-8e1c-bfc58481a44b",
+              "type": "parent"
+            },
+            {
+              "source": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "target": "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+              "type": "contains"
+            },
+            {
+              "source": "39efe1d9-cd5a-4b56-8d67-e2d1e53f026e",
+              "target": "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+              "type": "parent"
+            },
+            {
+              "source": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "target": "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+              "type": "contains"
+            },
+            {
+              "source": "39efe1d9-cd5a-4b56-8d67-e2d1e53f026e",
+              "target": "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+              "type": "parent"
+            },
+            {
+              "source": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "target": "30cbf30f-75b8-4c95-ba7c-e6ef98e23ddb",
+              "type": "contains"
+            },
+            {
+              "source": "110ec7c6-9186-4a02-b0e2-9895cadda4e2",
+              "target": "30cbf30f-75b8-4c95-ba7c-e6ef98e23ddb",
+              "type": "parent"
+            },
+            {
+              "source": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "target": "57c26a1d-c785-4310-8809-4249d6fac65b",
+              "type": "contains"
+            },
+            {
+              "source": "39efe1d9-cd5a-4b56-8d67-e2d1e53f026e",
+              "target": "57c26a1d-c785-4310-8809-4249d6fac65b",
+              "type": "parent"
+            },
+            {
+              "source": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "target": "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+              "type": "related"
+            },
+            {
+              "source": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "target": "c8c0ef9e-1275-4f0d-9e30-45479d651385",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 10
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": ""
+      },
+      "meta": {
+        "source_count": 5,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 61285.47
+  },
+  "top_candidate_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+  "candidates": [
+    {
+      "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+      "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+      "score": 0.7585000000000001,
+      "final_relevance_score": 0.5723,
+      "text": "项，需要按照一事一授权的原则进行特定事项授权，特定事项授"
+    }
+  ]
+}

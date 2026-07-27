@@ -1,0 +1,684 @@
+{
+  "case": {
+    "case_id": "KB-012",
+    "category": "同义词与口语表达",
+    "query": "公司大额对外投资并购决策要不要先过法律审核",
+    "expected_knowledge_ids": [
+      "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+    ],
+    "expected_title_keywords": [
+      "重要决策",
+      "法律合规审核",
+      "2025"
+    ],
+    "required_facts": [
+      "法律合规审核",
+      "重大对外投融资"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕505号第三条/第四条；口语'大额投资并购'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts",
+            "title_boost"
+          ],
+          "block_id": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "重要决策法律合规审核单（模板）",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "chunk_index": 160,
+            "depth": 1
+          },
+          "fts_rank": -15.692349388322807,
+          "fts_score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 1.0,
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 1.0,
+            "title_score": 0.3202,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0702,
+            "query_term_coverage": 0.0702,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4101,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4101,
+          "alias_fts_match": true,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.4101,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 129199.27
+  },
+  "read": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "type": "knowledge",
+        "id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+        "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+        "content": "[第1页]\n  — 1 —\n  中电信桂〔2025〕505号\n  关于印发中国电信广西公司重要决策法律合规\n  审核管理办法的通知\n  各市分公司，各专业公司，区公司各部门：\n  为建立健全公司重要决策法律合规审核机制，防范化解经营\n  风险，维护公司合法权益，区公司制定了《中国电信广西公司重\n  要决策法律合规审核办法》，现印发你们，请遵照执行。\n  执行中有任何问题或建议，请向区公司法律合规部反馈。\n  中国电信广西公司\n  2025年12月18日\n[第2页]\n  — 2 —中国电信广西公司重要决策法律合规\n  审核管理办法\n  第一章 总则\n  第一条 为进一步规范中国电信股份有限广西分公司（以下\n  简称“公司”）重要决策法律合规审核工作，提升法律支撑服务\n  水平，强化公司法律风险防范能力，促进公司依法合规运营，维\n  护公司合法权益，根据国家相关法律、法规，结合公司实际，制\n  定本办法。\n  第二条 本办法所称法律合规审核，是指公司法律工作人员\n  或外聘律师，根据国家政策法律法规、政府规范性文件和公司规\n  章制度，对公司经营管理中涉及的重要决策进行法律分析、开展\n  合法合规性论证，提出法律意见、建议或解决方案（以下统称“法\n  律意见”）的活动。\n  第三条 本办法所称重要决策是指对企业生存发展有重大\n  影响，列入党委研究决策重大事项清单中需要经过法律审核的经\n  营管理决策，具体包括：\n  （一）重大对外投融资、资本运作事项；\n  （二）重大资产重组、资产处置等事项；\n  （三）重大对外担保事项；\n  （四）企业民主管理、职工分流安置等涉及职工权益方面的\n  重要事项；\n[第3页]\n  — 3 — （五）涉及职工重大切身利益方面的重要事项 ；\n  （六）合并、分立、解散或变更公司形式的方案 ；\n  （七）各级分支机构的设立 、合并或撤销 ；\n  （八）代管子公司的合并 、分立或重组 ；\n  （九）知识产权发展规划以及重大知识产权转让事项 ；\n  （十）其他对公司经营管理有重大影响的决策事项 。\n  第四条 重要决策作出之前 ，应当进行法律合规审核 。\n  第五条 各单位法律部门应当认真履行工作职责 ，充分利用\n  单位法律工作人员或外聘律师等法律资源 ，在认真分析具体情况\n  的基础上 ，提出切实可行的法律意见 。\n  各级单位应充分重视法律部门提出的法律意见 ，采取有效措\n  施防范、控制、化解法律风险 ，最大限度地维护公司合法权益 。\n  第六条 本办法适用于中国电信股份有限公司广西分公司\n  及其所属企业 （以下简称 “各单位”）。\n  第二章 管理职责\n  第七条 法律合规审核管理实行归口管理 、分级负责的管理\n  体制。\n  第八条 区公司法律合规部是法律合规审核的归口管理部\n  门，主要职责为 ：\n  （一）负责制定法律合规审核相关规章制度并组织实施 ；\n  （二）负责对规章制度的落实情况进行检查 ；\n  （三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n[第4页]\n  — 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n  上报的重大法律问题进行分析，提供法律意见；\n  （五）负责统计全区法律审核总体情况，上报集团公司；\n  （六）其它应当由归口部门承担的管理职责。\n  第九条 各单位法律部门负责本单位的重要决策法律合规\n  审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n  及本单位法律审核情况的归纳、总结、汇总和统计。\n  第十条 各单位法律部门也可根据实际需要，委托外聘律师\n  承担部分法律审核工作，并对其进行必要的监督管理。\n  第十一条 各单位的业务、职能部门为法律合规审核需求发\n  起部门，主要职责为：\n  （一）对本办法规定应当提起法律合规审核的重要决策或视\n  情况认为应当提起法律合规审核的事项发生时，应及时提起法律\n  合规审核需求；\n  （二）如实提供与法律合规审核事项有关的事实及证据资\n  料，应法律部门的需求予以必要配合协助；\n  （三）及时反馈法律合规审核事项的处理情况；\n  （四）妥善保存法律合规审核事项的有关文件资料；\n  （五）其它应当由需求发起部门承担的职责。\n  第十二条 其他相关部门根据各自部门职责及公司规章制\n  度，对法律合规审核提供必要的协助。\n[第5页]\n  — 5 — 第三章 法律审核流程\n  第十三条 重要决策法律合规审核可以在以下环节进行：\n  （一）经办部门制定方案或计划时，征求法律部门的意见；\n  （二）方案或计划在提交党委会、总经理办公会议决策前，\n  征求法律部门意见或提请法律部门会签。\n  （三）方案或计划进行审议时，征求法律部门的意见；\n  （四）方案或计划在执行过程中遇到重大法律问题，征求法\n  律部门的意见。\n  第十四条 经办部门对重要决策应通过书面形式提出法律\n  合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业\n  务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部\n  门负责人同意，可通过发文会签、工作协同单等方式提出，后续\n  进行系统补录。重大决策会议管理部门应做好上会事项管控，原\n  则上按规定应经法律审核事项，未经法律前置审核不得安排上会\n  审议。\n  第四章 法律合规审核原则及工作要求\n  第十五条 法律合规审核应遵循合法性、有效性、及时性、\n  规范性的基本原则。\n  （一）合法性原则。法律合规审核应当严格依据国家现行法\n  律、法规、规范性文件的有关规定进行。国家法律、法规、规范\n  性文件没有明文规定的，可依据一般法律原则或公司相关规章制\n  度进行；\n[第6页]\n  — 6 —（二）有效性原则。法律合规审核应当有助于公司依法运营、\n  防范法律风险，同时充分考虑公司实际，从提高公司经营管理效\n  率的角度提出切实可行的法律解决方案；\n  （三）及时性原则。法律合规审核应当及时进行，严格遵\n  守工作时限，确保工作效率；\n  （四）规范性原则。法律合规审核应当依据充分、分析准确、\n  表述清晰，形式规范。\n  第十六条 法律人员应掌握、提高分析法律问题和解决法\n  律问题的能力。一般情况下除进行合法性论证外，尽量提出解\n  决法律问题的有效途径和措施。\n  第十七条 法律合规审核应在规定的时限内完成。法律部\n  门对重大事项进行法律合规审核的，一般应自受理之日起四个\n  工作日内完成；特殊紧急情况由经办部门主要负责人签字书面\n  说明紧急事由，自受理之日起一个工作日内完成；\n  第十八条 法律合规审核意见应采用规范的形式。重要决\n  策法律合规审核，应当采取书面形式出具法律意见，一般应出\n  具正式的法律审核单（模板见附件1）或法律意见书（模板见附\n  件2）。\n  第十九条 重大决策法律审核单或法律意见书应当至少包\n  括以下内容：\n  （一）法律、法规、规范性文件相关规定及政策依据；\n  （二）合法性方面的基本分析及结论；\n[第7页]\n  — 7 — （三）存在的主要法律风险及应对措施；\n  （四）需要考虑的其它相关问题。\n  第二十条 法律部门出具重大决策法律审核单或法律意见\n  书，应当经部门领导审核同意。其它一般事项法律审核意见，可\n  视情况提交部门领导审核或抄送部门领导。\n  法律部门出具的法律意见应直接反馈需求发起部门。重要\n  决策法律审核意见，法律部门在反馈需求部门的同时应抄送公司\n  总法律顾问。\n  第二十一条 法律合规审核结束后，法律部门应跟踪审核事\n  项的进展情况，根据情况变化及时调整法律意见。同时对法律合\n  规审核情况进行经验总结，提供给相关部门和人员作为参考。\n  第二十二条 对于需由外聘律师进行的法律合规审核，应通\n  过本单位法律部门统筹安排，外聘律师出具的法律意见事先经法\n  律部门审核后，反馈需求部门。\n  第二十三条 法律部门应做好法律合规审核的工作记录和\n  档案保管工作。\n  第五章 责任追究\n  第二十四条 法律部门在法律审核工作中出现重大失误，给\n  公司造成损失的，按照有关规定追究部门和相关人员的责任。\n  第二十五条 各单位未按照国家有关规定建立健全法律监\n  督机制，经办部门对按本办法规定应当法律合规审核重大决策事\n  项未及时送审，导致程序上违规决策的，法律部门应给予风险提\n[第8页]\n  — 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n  项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n  风险造成损失的，追究相关领导人员责任。\n  第六章 附则\n  第二十六条 本办法由区公司法律合规部负责解释。\n  第二十七条 本部分自印发之日起施行，过去规定与本办法\n  相悖的，以本办法为准。\n  附件：1.重要决策法律合规审核单（模板）\n  2.法律意见书（模板）\n[第9页]\n  — 9 — 附件1\n  重要决策法律合规审核单（模板）\n  编号 中电信X法审﹝202X﹞XX号\n  申请单位\n  审核事项\n  所提交的文件\n  法律部门意见\n  初审法律人员： 电话： 时间：\n  法律部门领导：\n  备注：\n[第10页]\n  — 10 — 附件2\n  关于XXXX的法律意见书\n  XXXXXX（部/中心/分公司）\n  贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\n  XXXX出具法律意见。\n  贵（部/中心/分公司）向我部提供的材料包括：\n  1.XXXX\n  2.XXXX\n  3.XXXX\n  我部根据上述材料及我国现行有效的相关法律、法规和规范\n  性文件，经分析研究，提出以下法律意见：\n  一、XXXXXXXX\n  XXXXXXX\n  二、XXXXXX\n  XXXXXX\n  以上法律意见供参考。\n  XXXX部\n  20XX年X月X日\n[第11页]\n  抄送：区电信工会。\n  中国电信广西公司办公室 2025年12月18日印发",
+        "source_type": "file",
+        "source_path": "D:\\AiWorkSpace\\knowledge-base\\data\\graph\\pages\\中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6.md",
+        "file_type": "pdf",
+        "tags": "[\"法律\", \"审核\", \"合规\"]",
+        "version": 4,
+        "file_created_at": "2026-07-24T17:37:26.519200",
+        "file_modified_at": "2026-07-24T17:37:26.776100",
+        "created_at": "2026-07-24T17:37:26.519200",
+        "updated_at": "2026-07-24T17:59:08.451565",
+        "deleted_at": null,
+        "file_size": 25782,
+        "content_hash": "42cca408b254ac97910abe3e789d61b4099707ebf91b250dd55bc41bd14337a4",
+        "quality": "ok",
+        "quality_score": null
+      },
+      "meta": {
+        "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+      }
+    },
+    "latency_ms": 19.84,
+    "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+  },
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "## 问题拆解\n\n用户问题的核心是：**大额对外投资并购**这类决策，是否在作出之前必须经过**法律合规审核**？\n\n要回答这个问题，需要确认两个关键事实：\n1. \"大额对外投资并购\"是否属于知识库中\"重要决策\"的范畴；\n2. 公司制度对\"重要决策\"作出前的法律审核程序是怎样规定的。\n\n---\n\n## 推理与回答\n\n### 一、\"大额对外投资并购\"属于\"重要决策\"\n\n虽然知识库中没有单独出现\"投资\"或\"并购\"字样，但来源1明确写明制度适用于\"重要决策\"，并配套了**重要决策法律合规审核单（模板）**（来源3、来源4），以及法律部门出具审核单或法律意见的规定（来源5）。这表明公司对\"重要决策\"建立了专门的审核流程。\n\n**大额对外投资并购**涉及巨额资金支出、公司资产变动、重大合同签署与风险敞口，显然属于公司经营中的\"重大/重要决策\"范畴，理应纳入该审核流程。\n\n### 二、制度明确要求\"先审核、后决策\"\n\n依据来源1（《第四条》）：\n> \"重要决策作出之前，**应当**进行法律合规审核。\"\n\n\"应当\"在规章制度语境中是强制性规范用语，并非可选项。结合来源5（第二十条），法律部门负责出具审核单或法律意见——也就是说，**法律审核是决策流程的前置必经环节，没有审核单或法律意见，决策不应作出**。\n\n---\n\n## 结论\n\n**是的，公司大额对外投资并购决策必须先过法律审核。**\n\n依据来源1、来源3、来源4、来源5：\n- 《第四条》明确规定\"重要决策作出之前，应当进行法律合规审核\"，大额对外投资并购属于典型的\"重要决策\"；\n- 实务操作上，须填写《重要决策法律合规审核单》（来源3、来源4），并由法律部门出具审核单或法律意见（来源5），作为决策的前置程序。\n\n建议：在发起大额对外投资并购项目时，应同步启动法律合规审核流程，取得法律部门的书面审核意见后再行上会决策。",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "75aeefe2-5768-4065-a102-0a92e51fb31f",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "第四条 重要决策作出之前 ，应当进行法律合规审核 。",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "75aeefe2-5768-4065-a102-0a92e51fb31f",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第四条 重要决策作出之前 ，应当进行法律合规审核 。"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "fcf08348-9672-4896-8db7-793d92511673",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "简称“公司”）重要决策法律合规审核工作，提升法律支撑服务",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "fcf08348-9672-4896-8db7-793d92511673",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "简称“公司”）重要决策法律合规审核工作，提升法律支撑服务"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "重要决策法律合规审核单（模板）",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "重要决策法律合规审核单（模板）"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "附件：1.重要决策法律合规审核单（模板）",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "附件：1.重要决策法律合规审核单（模板）"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "ffe50d44-bc7f-4e4b-8f97-1bc7fc944398",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "第二十条 法律部门出具重大决策法律审核单或法律意见",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "ffe50d44-bc7f-4e4b-8f97-1bc7fc944398",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第二十条 法律部门出具重大决策法律审核单或法律意见"
+            },
+            "candidate_type": "raw_block",
+            "source_layer": "evidence"
+          }
+        ],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "75aeefe2-5768-4065-a102-0a92e51fb31f",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "第四条 重要决策作出之前 ，应当进行法律合规审核 。",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "75aeefe2-5768-4065-a102-0a92e51fb31f",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第四条 重要决策作出之前 ，应当进行法律合规审核 。"
+            }
+          },
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "fcf08348-9672-4896-8db7-793d92511673",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "简称“公司”）重要决策法律合规审核工作，提升法律支撑服务",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "fcf08348-9672-4896-8db7-793d92511673",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "简称“公司”）重要决策法律合规审核工作，提升法律支撑服务"
+            }
+          },
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "重要决策法律合规审核单（模板）",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "重要决策法律合规审核单（模板）"
+            }
+          },
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "附件：1.重要决策法律合规审核单（模板）",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "附件：1.重要决策法律合规审核单（模板）"
+            }
+          },
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "ffe50d44-bc7f-4e4b-8f97-1bc7fc944398",
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "第二十条 法律部门出具重大决策法律审核单或法律意见",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "path": "",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "block_id": "ffe50d44-bc7f-4e4b-8f97-1bc7fc944398",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "第二十条 法律部门出具重大决策法律审核单或法律意见"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 29
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "type": "knowledge",
+              "label": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+            },
+            {
+              "id": "75aeefe2-5768-4065-a102-0a92e51fb31f",
+              "type": "block",
+              "label": "第四条 重要决策作出之前 ，应当进行法律合规审核 。",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "d6b3d715-2654-4b43-8f5e-3771880e3beb",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "fcf08348-9672-4896-8db7-793d92511673",
+              "type": "block",
+              "label": "简称“公司”）重要决策法律合规审核工作，提升法律支撑服务",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "08f2a946-c57b-44a2-a666-6b0863fc61e5",
+              "type": "block",
+              "label": "[第2页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+              "type": "block",
+              "label": "重要决策法律合规审核单（模板）",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "67addf17-d187-4d2a-85dd-e0d09d10b633",
+              "type": "block",
+              "label": "[第9页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+              "type": "block",
+              "label": "附件：1.重要决策法律合规审核单（模板）",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "5184e027-a67a-4998-ba7e-afb206d39683",
+              "type": "block",
+              "label": "[第8页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "ffe50d44-bc7f-4e4b-8f97-1bc7fc944398",
+              "type": "block",
+              "label": "第二十条 法律部门出具重大决策法律审核单或法律意见",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "ec5f1f15-3271-4e89-9bd4-398781a9db80",
+              "type": "block",
+              "label": "[第7页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9"
+            }
+          ],
+          "edges": [
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "75aeefe2-5768-4065-a102-0a92e51fb31f",
+              "type": "contains"
+            },
+            {
+              "source": "d6b3d715-2654-4b43-8f5e-3771880e3beb",
+              "target": "75aeefe2-5768-4065-a102-0a92e51fb31f",
+              "type": "parent"
+            },
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "fcf08348-9672-4896-8db7-793d92511673",
+              "type": "contains"
+            },
+            {
+              "source": "08f2a946-c57b-44a2-a666-6b0863fc61e5",
+              "target": "fcf08348-9672-4896-8db7-793d92511673",
+              "type": "parent"
+            },
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+              "type": "contains"
+            },
+            {
+              "source": "67addf17-d187-4d2a-85dd-e0d09d10b633",
+              "target": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+              "type": "parent"
+            },
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+              "type": "contains"
+            },
+            {
+              "source": "5184e027-a67a-4998-ba7e-afb206d39683",
+              "target": "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+              "type": "parent"
+            },
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "ffe50d44-bc7f-4e4b-8f97-1bc7fc944398",
+              "type": "contains"
+            },
+            {
+              "source": "ec5f1f15-3271-4e89-9bd4-398781a9db80",
+              "target": "ffe50d44-bc7f-4e4b-8f97-1bc7fc944398",
+              "type": "parent"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 12
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": ""
+      },
+      "meta": {
+        "source_count": 5,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 148278.73
+  },
+  "top_candidate_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+  "candidates": [
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 1.0,
+      "final_relevance_score": 0.4101,
+      "text": "重要决策法律合规审核单（模板）"
+    }
+  ]
+}

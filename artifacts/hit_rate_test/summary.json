@@ -1,0 +1,302 @@
+{
+  "session_id": "e46f188be1094cf882ece2d5520d7e1c",
+  "total": 37,
+  "cases": [
+    {
+      "case_id": "KB-001",
+      "category": "精确关键词",
+      "query": "营收资金管理办法 收支两条线",
+      "top_candidate_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-002",
+      "category": "精确关键词",
+      "query": "翼支付业务管理办法 个人支付账户余额年付款限额",
+      "top_candidate_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-003",
+      "category": "精确关键词",
+      "query": "合同专用章管理办法 一个主体只允许制作一个",
+      "top_candidate_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-004",
+      "category": "精确关键词",
+      "query": "保密工作管理办法 不得使用外部互联网邮箱",
+      "top_candidate_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-005",
+      "category": "精确关键词",
+      "query": "合规管理办法 首席合规官 总法律顾问",
+      "top_candidate_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-006",
+      "category": "精确关键词",
+      "query": "商业秘密保护管理办法 核心商密 普通商密 保密期限",
+      "top_candidate_id": "102bee52-4b83-438d-9296-c852579473b6",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-007",
+      "category": "精确关键词",
+      "query": "安全生产管理办法 专职安全员 南宁分公司不少于5人",
+      "top_candidate_id": "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-008",
+      "category": "精确关键词",
+      "query": "授权管理办法 特定事项授权 一事一授权 MSS法律辅助系统",
+      "top_candidate_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-009",
+      "category": "同义词与口语表达",
+      "query": "员工出差的住宿费和伙食补助每天能报多少",
+      "top_candidate_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-010",
+      "category": "同义词与口语表达",
+      "query": "防诈骗和骚扰电话 代理商被罚多少钱",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-011",
+      "category": "同义词与口语表达",
+      "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-012",
+      "category": "同义词与口语表达",
+      "query": "公司大额对外投资并购决策要不要先过法律审核",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-013",
+      "category": "同义词与口语表达",
+      "query": "公司搞比赛给员工发奖金 上限是多少",
+      "top_candidate_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-014",
+      "category": "同义词与口语表达",
+      "query": "异业合作给客户送权益优惠券的合作方准入条件",
+      "top_candidate_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-015",
+      "category": "同义词与口语表达",
+      "query": "客户提出对产品的需求 公司怎么响应处理",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-016",
+      "category": "多条件组合",
+      "query": "2025年差旅费管理办法 区外往返市内交通费报销标准",
+      "top_candidate_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-017",
+      "category": "多条件组合",
+      "query": "涉诈电话 代理商一个自然月内每个号码处罚金额",
+      "top_candidate_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-018",
+      "category": "多条件组合",
+      "query": "涉骚扰电话 代理商一个自然月内每个号码处罚金额",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-019",
+      "category": "多条件组合",
+      "query": "翼支付III类支付账户 年付款限额",
+      "top_candidate_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-020",
+      "category": "多条件组合",
+      "query": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-021",
+      "category": "多条件组合",
+      "query": "产品问需工单 审核初审和产品评估的工作日时限",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-022",
+      "category": "跨文档综合",
+      "query": "中国电信广西公司涉诈和涉骚扰电话处置 分别由哪个部门牵头",
+      "top_candidate_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-023",
+      "category": "跨文档综合",
+      "query": "合同实体章和合同电子章的法律效力关系",
+      "top_candidate_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-024",
+      "category": "跨文档综合",
+      "query": "广西公司差旅费伙食补助标准历年变化",
+      "top_candidate_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-025",
+      "category": "跨文档综合",
+      "query": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+      "top_candidate_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-026",
+      "category": "易混淆知识",
+      "query": "号百分公司差旅费管理办法 适用范围",
+      "top_candidate_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-027",
+      "category": "易混淆知识",
+      "query": "技能竞赛 实际操作成绩占比不得少于",
+      "top_candidate_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-028",
+      "category": "易混淆知识",
+      "query": "技能竞赛团体奖金限额 2026年修订",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-029",
+      "category": "易混淆知识",
+      "query": "权益业务合作方单产品类权益结算价不应高于",
+      "top_candidate_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-030",
+      "category": "无答案或越界问题",
+      "query": "中国电信广西公司2026年营收预测是多少亿元",
+      "top_candidate_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-031",
+      "category": "无答案或越界问题",
+      "query": "广西电信员工的工资薪级表和岗位津贴具体数额",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-032",
+      "category": "无答案或越界问题",
+      "query": "中国电信集团总部北京的办公楼地址",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-033",
+      "category": "无答案或越界问题",
+      "query": "火星探测任务最新进展",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-034",
+      "category": "无答案或越界问题",
+      "query": "推荐一款好吃的火锅底料品牌",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-035",
+      "category": "新旧规则冲突",
+      "query": "中国电信广西公司差旅费管理办法最新版本是哪一年的",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-036",
+      "category": "新旧规则冲突",
+      "query": "差旅费管理办法 取消交通意外险在差旅费中报账",
+      "top_candidate_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "search_ok": true,
+      "ask_ok": true
+    },
+    {
+      "case_id": "KB-037",
+      "category": "新旧规则冲突",
+      "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+      "top_candidate_id": null,
+      "search_ok": true,
+      "ask_ok": true
+    }
+  ]
+}

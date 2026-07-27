@@ -1,0 +1,293 @@
+{
+  "case": {
+    "case_id": "KB-031",
+    "category": "无答案或越界问题",
+    "query": "广西电信员工的工资薪级表和岗位津贴具体数额",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体薪级或津贴数额"
+    ],
+    "expected_no_answer": true,
+    "notes": "知识库为管理制度类文档，不含薪酬数据；应拒答"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "insufficient_relevant_evidence",
+        "top_score": 0.2319,
+        "threshold": 0.35,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 28404.55
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "96965cd4-da4a-44a5-a71b-10a75820bcbc",
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": "《中国电信广西公司全业务经营岗位和薪酬体系》 （中电",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "path": "",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "block_id": "96965cd4-da4a-44a5-a71b-10a75820bcbc",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "《中国电信广西公司全业务经营岗位和薪酬体系》 （中电"
+            }
+          },
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "8878b867-5193-43d6-a334-031aacbcd6d3",
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": "《中国电信广西公司本部员工绩效工资分配办法》（中电信",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "path": "",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "block_id": "8878b867-5193-43d6-a334-031aacbcd6d3",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "《中国电信广西公司本部员工绩效工资分配办法》（中电信"
+            }
+          },
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "d4dcef47-8219-4797-9f06-11e994ffc30a",
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": "（二） 《中国电信广西公司本部员工绩效工资分配办法",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "path": "",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "block_id": "d4dcef47-8219-4797-9f06-11e994ffc30a",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "（二） 《中国电信广西公司本部员工绩效工资分配办法"
+            }
+          },
+          {
+            "knowledge_id": "4eedd6e2-51bc-477c-9b38-25f71026d17e",
+            "block_id": "8f76907b-851a-40ee-bc7b-44e5bd54aa21",
+            "title": "中电信桂-2020-83号-关于印发中国电信广西公司专业岗位动态管理办法的通知--4eedd6e2",
+            "path": "",
+            "text": "专家为 11等级。原岗位工资档次和岗位等级记入档案，每年根据",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "中电信桂-2020-83号-关于印发中国电信广西公司专业岗位动态管理办法的通知--4eedd6e2",
+              "path": "",
+              "knowledge_id": "4eedd6e2-51bc-477c-9b38-25f71026d17e",
+              "block_id": "8f76907b-851a-40ee-bc7b-44e5bd54aa21",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "专家为 11等级。原岗位工资档次和岗位等级记入档案，每年根据"
+            }
+          },
+          {
+            "knowledge_id": "4eedd6e2-51bc-477c-9b38-25f71026d17e",
+            "block_id": "b7a4c7b7-5d6d-497e-af5f-39d4f7cdc709",
+            "title": "中电信桂-2020-83号-关于印发中国电信广西公司专业岗位动态管理办法的通知--4eedd6e2",
+            "path": "",
+            "text": "岗位等级不变的，岗位工资不变。绩效工资的调整根据各单位绩",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "中电信桂-2020-83号-关于印发中国电信广西公司专业岗位动态管理办法的通知--4eedd6e2",
+              "path": "",
+              "knowledge_id": "4eedd6e2-51bc-477c-9b38-25f71026d17e",
+              "block_id": "b7a4c7b7-5d6d-497e-af5f-39d4f7cdc709",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "岗位等级不变的，岗位工资不变。绩效工资的调整根据各单位绩"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.098 < 0.35)"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 24
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 10,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": "",
+        "reason": "insufficient_relevant_evidence"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 44751.64
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

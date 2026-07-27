@@ -139,6 +139,109 @@ def ping() -> dict:
         "uptime_hint": "ok",
     })
 
+def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
+    """Shared retrieval used by ``search`` and ``ask`` pre-LLM evidence probe.
+
+    Runs semantic search (same path as the ``search`` tool) with the same
+    numeric-unit ranking, document-level dedupe, title-overlap boost and
+    version-freshness re-rank. This guarantees ``search`` and ``ask`` evaluate
+    the SAME candidate set with the SAME scores (SPEC Phase 1.4) and that the
+    newest effective version of a regulation ranks first (SPEC Phase 4, KB-009).
+
+    SPEC Phase 3.3: colloquial queries are also expanded with domain synonym
+    aliases (e.g. "防诈骗"→"涉诈") so the retriever can surface formal-policy
+    documents that the raw phrasing would miss. The original query always runs
+    first and wins score ties.
+    """
+    from src.application.retrieval_commands import RetrievalCommands
+    from src.services.numeric_unit_match import apply_numeric_unit_ranking
+    from src.services.query_rewrite import expand_query, merge_candidates_by_query
+    from src.services.result_dedupe import boost_title_term_overlap, dedupe_by_knowledge_id
+    from src.services.version_rank import rank_with_freshness
+
+    def _semantic(q: str) -> list:
+        try:
+            container = _get_container()
+            if getattr(container, "search_service", None) is not None:
+                hits = list(
+                    RetrievalCommands(container).semantic_search(q, top_k=fetch_k) or []
+                )
+                # Tag genuine vector-similarity scores so the relevance gate can
+                # credit high-confidence semantic matches (KB-017: vector score
+                # 1.0 for a synonym match that lexical coverage underestimates).
+                # This tag is only set on candidates from the semantic_search
+                # path — never on ask's pipeline source dicts — so it preserves
+                # the search/ask symmetry invariant.
+                for h in hits:
+                    if isinstance(h, dict) and h.get("score") is not None:
+                        try:
+                            h["_semantic_similarity"] = float(h["score"])
+                        except (TypeError, ValueError):
+                            pass
+                return hits
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("shared retrieval semantic path failed: %s", exc)
+        return []
+
+    # SPEC Phase 3.3: run the original query AND alias-expanded variants, then
+    # merge. The original query runs first so its hits win score ties.
+    variants = expand_query(query)
+    if len(variants) <= 1:
+        results = _semantic(query)
+    else:
+        candidate_lists = [_semantic(v) for v in variants]
+        results = merge_candidates_by_query(query, candidate_lists)
+
+    # SPEC Phase 3.3 (FTS recall aid): if semantic retrieval is weak/empty, also
+    # run alias-expanded FTS so colloquial queries (防诈骗→涉诈) can hit
+    # knowledge_fts. This mirrors the search tool's FTS fallback and keeps
+    # search/ask retrieval symmetric. FTS hits from a CANONICAL expansion term
+    # (not the original query) are tagged ``alias_fts_match`` so the gate can
+    # credit them as verifiable lexical matches — this is what lets a
+    # colloquial query's evidence clear the gate without lowering the threshold.
+    # FTS5 multi-word queries are implicit-AND (any missing term zeroes the
+    # result), so we run EACH canonical term separately for OR semantics.
+    if not results or max(
+        (float(r.get("score") or r.get("fts_score") or 0.0) for r in results),
+        default=0.0,
+    ) < 0.35:
+        from src.services.query_rewrite import canonical_terms
+
+        ft_lists = []
+        # Original query as one FTS pass (idx 0 — not tagged).
+        ft = search_fulltext(query, limit=max(fetch_k, 10), offset=0)
+        if ft.get("ok"):
+            ft_lists.append(list(ft.get("data") or [])[: max(fetch_k, 10)])
+        # Each canonical expansion term as its own FTS pass (tagged).
+        for term in canonical_terms(query):
+            ft = search_fulltext(term, limit=max(fetch_k, 10), offset=0)
+            if ft.get("ok"):
+                hits = list(ft.get("data") or [])[: max(fetch_k, 10)]
+                for h in hits:
+                    if isinstance(h, dict):
+                        h["alias_fts_match"] = True
+                ft_lists.append(hits)
+        if ft_lists:
+            ft_items = merge_candidates_by_query(query, ft_lists)
+            # Merge FTS hits with semantic hits (semantic wins ties).
+            results = merge_candidates_by_query(query, [results, ft_items])
+
+    apply_numeric_unit_ranking(query, results)
+    results = dedupe_by_knowledge_id(results)
+    results = boost_title_term_overlap(query, results)
+    # Version freshness re-rank: newest effective version first. Conservative —
+    # only fires when a reliable year can be parsed; never lowers relevance.
+    results = rank_with_freshness(results)
+
+    out = []
+    for item in results:
+        row = dict(item) if isinstance(item, dict) else {"text": str(item)}
+        if not row.get("knowledge_id") and row.get("id"):
+            row["knowledge_id"] = row["id"]
+        out.append(row)
+    return out
+
+
 @_define_tool(
     name="search",
     description="基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。"
@@ -155,47 +258,18 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
         top_k: 返回结果数量，默认5条
         limit: top_k 别名（兼容 Agent 客户端）
     """
-    from src.application.retrieval_commands import RetrievalCommands
-    from src.services.numeric_unit_match import apply_numeric_unit_ranking
-    from src.services.result_dedupe import boost_title_term_overlap, dedupe_by_knowledge_id
+    from src.services.relevance_gate import (
+        evaluate_evidence_unified,
+        is_current_information_query,
+    )
 
     k = int(limit if limit is not None else top_k)
     k = max(1, k)
     # Over-fetch so document-level dedupe still leaves enough unique knowledge_ids.
     fetch_k = max(k * 3, 15)
-    results: list = []
-    try:
-        container = _get_container()
-        if getattr(container, "search_service", None) is not None:
-            results = list(
-                RetrievalCommands(container).semantic_search(query, top_k=fetch_k) or []
-            )
-    except Exception as exc:  # noqa: BLE001 - fall back to lexical
-        logger.debug("search semantic path failed, fallback fulltext: %s", exc)
-        results = []
-
-    from src.services.relevance_gate import evaluate_evidence, is_current_information_query
-
-    apply_numeric_unit_ranking(query, results)
-    results = dedupe_by_knowledge_id(results)
-    results = boost_title_term_overlap(query, results)
     threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
-    scores = [
-        float(r.get("score") or r.get("fts_score") or r.get("similarity") or 0.0)
-        for r in results
-    ]
-    top_score = max(scores) if scores else 0.0
-    semantic_weak = (not results) or top_score < threshold
 
-    def _normalize_hits(items: list) -> list:
-        out = []
-        for item in items:
-            row = dict(item) if isinstance(item, dict) else {"text": str(item)}
-            if not row.get("knowledge_id") and row.get("id"):
-                row["knowledge_id"] = row["id"]
-            out.append(row)
-        return dedupe_by_knowledge_id(out)
-
+    # Only true live-external queries short-circuit (SPEC Phase 2).
     if is_current_information_query(query):
         return ok(
             [],
@@ -209,11 +283,44 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             source_path="current_info_gate",
         )
 
-    # Lexical fallback when semantic missing/weak — still must pass relevance gate.
+    results = _retrieve_candidates(query, fetch_k=fetch_k)
+    scores = [
+        float(r.get("score") or r.get("fts_score") or r.get("similarity") or 0.0)
+        for r in results
+    ]
+    top_score = max(scores) if scores else 0.0
+    semantic_weak = (not results) or top_score < threshold
+
+    def _normalize_hits(items: list) -> list:
+        from src.services.result_dedupe import dedupe_by_knowledge_id
+        return dedupe_by_knowledge_id(list(items))
+
+    def _fts_fallback_items(limit_k: int) -> list:
+        """Alias-expanded FTS fallback (SPEC Phase 3.3). Runs the original query
+        plus each canonical expansion term separately (FTS5 multi-word queries
+        are implicit-AND), tags expansion-term hits with ``alias_fts_match``."""
+        from src.services.query_rewrite import canonical_terms, merge_candidates_by_query
+
+        ft_lists = []
+        ft = search_fulltext(query, limit=max(limit_k, 10), offset=0)
+        if ft.get("ok"):
+            ft_lists.append(list(ft.get("data") or [])[: max(limit_k, 10)])
+        for term in canonical_terms(query):
+            ft = search_fulltext(term, limit=max(limit_k, 10), offset=0)
+            if ft.get("ok"):
+                hits = list(ft.get("data") or [])[: max(limit_k, 10)]
+                for h in hits:
+                    if isinstance(h, dict):
+                        h["alias_fts_match"] = True
+                ft_lists.append(hits)
+        return merge_candidates_by_query(query, ft_lists) if ft_lists else []
+
+    # Lexical fallback when semantic missing/weak — still must pass relevance
+    # gate. SPEC Phase 3.3: also try alias-expanded variants here so colloquial
+    # queries (防诈骗→涉诈) can hit knowledge_fts / block_fts.
     if semantic_weak:
-        ft = search_fulltext(query, limit=max(k, 10), offset=0)
-        ft_items = _normalize_hits(list(ft.get("data") or [])[: max(k, 10)]) if ft.get("ok") else []
-        decision = evaluate_evidence(query, ft_items, threshold=threshold)
+        ft_items = _normalize_hits(_fts_fallback_items(k))
+        decision = evaluate_evidence_unified(query, ft_items, threshold=threshold)
         if decision["accept"]:
             data = decision["items"][:k]
             return ok(
@@ -237,8 +344,52 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             source_path="fulltext_fallback",
         )
 
-    decision = evaluate_evidence(query, _normalize_hits(results[: max(k, 10)]), threshold=threshold)
+    decision = evaluate_evidence_unified(query, _normalize_hits(results[: max(k, 10)]), threshold=threshold)
     if not decision["accept"]:
+        # SPEC Phase 3: even when semantic retrieval found something but the
+        # unified gate rejected it, try the alias-expanded FTS fallback — FTS
+        # often surfaces exact-lexical hits (knowledge_fts) that weak vector
+        # scores miss for colloquial queries (KB-010 etc.).
+        ft_items = _normalize_hits(_fts_fallback_items(k))
+        if ft_items:
+            ft_decision = evaluate_evidence_unified(query, ft_items, threshold=threshold)
+            if ft_decision["accept"]:
+                data = ft_decision["items"][:k]
+                return ok(
+                    data,
+                    total_estimate=len(data),
+                    top_k=k,
+                    limit=k,
+                    no_match=False,
+                    top_score=ft_decision["top_score"],
+                    source_path="fulltext_fallback",
+                )
+            # SPEC Phase 3.2: FTS matched the right document via alias expansion
+            # but the colloquial query's lexical coverage is below the
+            # high-confidence threshold. Return the top FTS hit as a
+            # low-confidence candidate so search can still surface it (and ask's
+            # pre-LLM probe can read it). The candidate is explicitly marked
+            # low_confidence; ask still decides answerability via the gate.
+            from src.services.query_rewrite import canonical_terms
+
+            if canonical_terms(query) and ft_items:
+                low_conf = []
+                for it in ft_items[:k]:
+                    row = dict(it)
+                    row["low_confidence"] = True
+                    row["confidence_reason"] = "colloquial_alias_fts_match"
+                    low_conf.append(row)
+                return ok(
+                    low_conf,
+                    total_estimate=len(low_conf),
+                    top_k=k,
+                    limit=k,
+                    no_match=False,
+                    low_confidence=True,
+                    top_score=ft_decision.get("top_score", round(top_score, 4)),
+                    threshold=threshold,
+                    source_path="fulltext_fallback_low_confidence",
+                )
         return ok(
             [],
             total_estimate=0,
@@ -385,7 +536,10 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
     output = dedupe_by_knowledge_id(output)
     output = boost_title_term_overlap(query, output)
 
-    from src.services.relevance_gate import evaluate_evidence, is_current_information_query
+    from src.services.relevance_gate import (
+        evaluate_evidence_unified,
+        is_current_information_query,
+    )
 
     threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
     if is_current_information_query(query):
@@ -402,7 +556,7 @@ def search_fulltext(query: str, limit: int = 20, offset: int = 0) -> dict:
             threshold=threshold,
         )
 
-    decision = evaluate_evidence(query, output, threshold=threshold)
+    decision = evaluate_evidence_unified(query, output, threshold=threshold)
     page = list(decision["items"][:limit])
     top_score = float(decision.get("top_score") or 0.0)
     no_match = bool(decision.get("no_match"))
@@ -544,15 +698,24 @@ def _do_ask(question: str) -> dict:
     # Phase 4: verified hybrid 时优先 SearchService + AnswerService
     # （冲突披露 / claim+evidence 引用 / answer_mode）；否则走 rag_pipeline。
     # Final-closure: true deadline + honest cancelled; pre-LLM evidence gate.
+    # Hit-rate SPEC Phase 1: unified evidence judgment via
+    # ``evaluate_evidence_unified`` — search and ask now score the same evidence
+    # identically (fixes KB-017 ask=0.0957 vs search=1.0 divergence).
     from src.mcp.tools.support import DeadlineTimeout, run_with_deadline
-    from src.services.relevance_gate import evaluate_evidence, is_current_information_query
+    from src.services.relevance_gate import (
+        classify_query_intent,
+        evaluate_evidence_unified,
+        is_current_information_query,
+    )
     from src.utils.config import Config
 
     total_timeout = float(Config.get("rag.ask.total_timeout", 90) or 90)
-    timeout_label = f"{total_timeout:g}s"
+    timeout_label = f"{total_timeout:g}"
     started = time.monotonic()
     weak_threshold = float(Config.get("rag.ask.no_answer_threshold", 0.35) or 0.35)
 
+    # Only true live-external queries (today/live quotes/news) short-circuit.
+    # Local-version queries ("最新版本/最新修订版") proceed to retrieval.
     if is_current_information_query(question):
         return {
             "answer": "",
@@ -578,6 +741,58 @@ def _do_ask(question: str) -> dict:
 
     container = _get_container()
 
+    # --- SPEC Phase 1: pre-LLM evidence probe ------------------------------
+    # Run the SAME retrieval as ``search`` and judge with the unified gate. If
+    # no evidence is accepted, short-circuit to no_answer WITHOUT calling the
+    # generation pipeline. This makes ask/search agreement deterministic for
+    # the accept/reject decision (KB-017: search score=1.0, ask must accept too).
+    # The probe is SKIPPED when the production retrieval path is unavailable
+    # (e.g. test doubles that only stub rag_pipeline) so legacy timeout/error
+    # envelopes still surface instead of being masked as no_answer.
+    pre_decision = None
+    accepted_kids: set[str] = set()
+    accepted_blocks: set[str] = set()
+    probe_available = getattr(container, "search_service", None) is not None
+    if probe_available:
+        try:
+            probe_k = int(Config.get("rag.ask.max_sources", 5) or 5)
+            probe_candidates = _retrieve_candidates(question, fetch_k=max(probe_k * 3, 15))
+            pre_decision = evaluate_evidence_unified(
+                question, probe_candidates[: max(probe_k, 10)], threshold=weak_threshold
+            )
+            for r in pre_decision.get("items") or []:
+                accepted_kids.add((r.get("knowledge_id") or "").strip())
+                accepted_blocks.add((r.get("block_id") or "").strip())
+        except Exception as exc:  # noqa: BLE001 - probe is best-effort
+            logger.debug("ask pre-LLM evidence probe failed: %s", exc)
+            pre_decision = None
+
+    if pre_decision is not None and not pre_decision["accept"]:
+        return {
+            "answer": "",
+            "sources": [],
+            "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
+            "route": {
+                "mode": "no_answer",
+                "explanation": pre_decision.get("reason") or "insufficient_relevant_evidence",
+            },
+            "query_plan": {},
+            "block_contexts": {},
+            "warnings": [
+                f"evidence gate blocked generation "
+                f"(top_score={pre_decision.get('top_score', 0)} < {weak_threshold})"
+            ],
+            "wiki_context": "",
+            "trace_id": "",
+            "answer_mode": "no_answer",
+            "reason": pre_decision.get("reason") or "insufficient_relevant_evidence",
+            "conflict_disclosed": False,
+            "claims_used": [],
+            "raw_evidence_used": [],
+            "conflicts": [],
+            "fallbacks": [],
+        }
+
     def _run_verified() -> dict:
         return ask_verified(
             container,
@@ -598,24 +813,105 @@ def _do_ask(question: str) -> dict:
     runner = _run_verified if use_verified else _run_legacy
     try:
         result = dict(run_with_deadline(runner, total_timeout, isolate="thread"))
-        # Pre/post evidence gate: low-score sources must not invent answers.
         sources = list(result.get("sources") or [])
-        decision = evaluate_evidence(question, sources, threshold=weak_threshold)
-        if not decision["accept"]:
+        raw_ev = list(result.get("raw_evidence_used") or [])
+        claims_used = list(result.get("claims_used") or [])
+
+        if pre_decision is None:
+            # Pre-LLM probe did not run (test doubles / legacy without
+            # search_service). Fall back to the post-generation evidence gate on
+            # the pipeline's own sources, so weak evidence still blocks a
+            # fabricated answer (anti-hallucination, SPEC Phase 1.5).
+            post_decision = evaluate_evidence_unified(
+                question, sources, threshold=weak_threshold
+            )
+            if not post_decision["accept"]:
+                result["answer"] = ""
+                result["sources"] = []
+                result["answer_mode"] = "no_answer"
+                result["reason"] = post_decision.get("reason") or "insufficient_relevant_evidence"
+                result.setdefault("warnings", []).append(
+                    f"evidence gate blocked generation "
+                    f"(top_score={post_decision.get('top_score', 0)} < {weak_threshold})"
+                )
+                route = dict(result.get("route") or {})
+                route["mode"] = "no_answer"
+                route["explanation"] = result["reason"]
+                result["route"] = route
+                # Ensure Phase 4 fields and return early.
+                result.setdefault("conflict_disclosed", False)
+                result.setdefault("claims_used", [])
+                result.setdefault("raw_evidence_used", [])
+                result.setdefault("conflicts", [])
+                result.setdefault("fallbacks", [])
+                if Config.get("rag.observability.trace_enabled", True):
+                    result.setdefault("trace_id", "")
+                return result
+            for r in post_decision.get("items") or []:
+                accepted_kids.add((r.get("knowledge_id") or "").strip())
+                accepted_blocks.add((r.get("block_id") or "").strip())
+
+        # SPEC Phase 1.3: citation integrity check. The accept/reject decision
+        # was made by the pre-LLM probe (or the post-generation fallback gate
+        # above). Here we verify final sources are traceable to accepted
+        # evidence and drop any un-traceable ones.
+        # Expand the accepted set with evidence the pipeline surfaced (claims
+        # and raw_evidence) so a source pointing at the same knowledge item is
+        # still valid even if the probe saw a different block.
+        for ev in raw_ev:
+            if isinstance(ev, dict):
+                accepted_kids.add((ev.get("knowledge_id") or "").strip())
+                accepted_blocks.add((ev.get("block_id") or "").strip())
+        for c in claims_used:
+            if isinstance(c, dict):
+                accepted_kids.add((c.get("knowledge_id") or "").strip())
+                for ev in c.get("evidence") or []:
+                    if isinstance(ev, dict):
+                        accepted_kids.add((ev.get("knowledge_id") or "").strip())
+                        accepted_blocks.add((ev.get("block_id") or "").strip())
+        accepted_kids.discard("")
+        accepted_blocks.discard("")
+
+        if not sources and result.get("answer_mode") not in ("timeout", "error"):
+            # Pipeline returned no sources — fall back to no_answer rather than
+            # show an unsourced answer (anti-hallucination).
             result["answer"] = ""
-            result["sources"] = []
             result["answer_mode"] = "no_answer"
-            result["reason"] = decision.get("reason") or "insufficient_relevant_evidence"
+            result["reason"] = "insufficient_relevant_evidence"
             result.setdefault("warnings", []).append(
-                f"evidence gate blocked generation "
-                f"(top_score={decision.get('top_score', 0)} < {weak_threshold})"
+                "evidence gate blocked generation (no traceable sources)"
             )
             route = dict(result.get("route") or {})
             route["mode"] = "no_answer"
             route["explanation"] = result["reason"]
             result["route"] = route
-        elif not sources and result.get("answer_mode") not in ("timeout", "error"):
-            result.setdefault("answer_mode", "no_answer")
+        elif accepted_kids or accepted_blocks:
+            # Drop sources that are NOT traceable to accepted evidence.
+            kept = []
+            dropped = []
+            for s in sources:
+                if not isinstance(s, dict):
+                    continue
+                kid = (s.get("knowledge_id") or "").strip()
+                bid = (s.get("block_id") or "").strip()
+                ok = (kid and kid in accepted_kids) or (bid and bid in accepted_blocks)
+                (kept if ok else dropped).append(s)
+            if dropped and kept:
+                result["sources"] = kept
+            # If ALL sources are un-traceable, the pipeline produced citations
+            # we cannot verify — refuse rather than risk a hallucinated answer.
+            if dropped and not kept and result.get("answer_mode") != "no_answer":
+                result["answer"] = ""
+                result["sources"] = []
+                result["answer_mode"] = "no_answer"
+                result["reason"] = "unverifiable_citations"
+                result.setdefault("warnings", []).append(
+                    "citation integrity: final sources not traceable to accepted evidence"
+                )
+                route = dict(result.get("route") or {})
+                route["mode"] = "no_answer"
+                route["explanation"] = result["reason"]
+                result["route"] = route
     except Exception as exc:
         # Py3.10: concurrent.futures.TimeoutError is NOT an alias of builtins.TimeoutError
         # (alias since 3.11). Treat both as hard timeout envelopes.

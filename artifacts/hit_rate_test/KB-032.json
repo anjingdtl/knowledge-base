@@ -1,0 +1,293 @@
+{
+  "case": {
+    "case_id": "KB-032",
+    "category": "无答案或越界问题",
+    "query": "中国电信集团总部北京的办公楼地址",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体办公地址"
+    ],
+    "expected_no_answer": true,
+    "notes": "知识库为广西公司制度文档，无集团总部地址；应拒答"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "insufficient_relevant_evidence",
+        "top_score": 0.3,
+        "threshold": 0.35,
+        "source_path": "semantic"
+      }
+    },
+    "latency_ms": 15423.14
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "357dc258-d588-44b9-bd7a-a2d5e1452ad6",
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": "单位或者中国电信集团",
+            "score": 0.014024390243902438,
+            "citation": {
+              "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "path": "",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "block_id": "357dc258-d588-44b9-bd7a-a2d5e1452ad6",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "单位或者中国电信集团"
+            }
+          },
+          {
+            "knowledge_id": "3877ffb3-da65-48cf-9efe-e753fd87a5b0",
+            "block_id": "9a4168cb-eea8-43e2-aeaf-f6e39276195a",
+            "title": "《关于印发2020年资源效能提升工作方案的通知》（中国电信〔2020〕162号）",
+            "path": "",
+            "text": "中国电信集团有限公司",
+            "score": 0.013690476190476189,
+            "citation": {
+              "document": "《关于印发2020年资源效能提升工作方案的通知》（中国电信〔2020〕162号）",
+              "path": "",
+              "knowledge_id": "3877ffb3-da65-48cf-9efe-e753fd87a5b0",
+              "block_id": "9a4168cb-eea8-43e2-aeaf-f6e39276195a",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "中国电信集团有限公司"
+            }
+          },
+          {
+            "knowledge_id": "282365bf-7db9-4aeb-83ca-5a0a266d2d68",
+            "block_id": "4bdaa6fd-c383-4dc1-9bad-83ae51e799f3",
+            "title": "关于印发企业微信-天翼微店运营管理规范1.0版的通知中国电信渠道业-2020-70号--282365bf",
+            "path": "",
+            "text": "中国电信集团全渠道运营中心",
+            "score": 0.013372093023255814,
+            "citation": {
+              "document": "关于印发企业微信-天翼微店运营管理规范1.0版的通知中国电信渠道业-2020-70号--282365bf",
+              "path": "",
+              "knowledge_id": "282365bf-7db9-4aeb-83ca-5a0a266d2d68",
+              "block_id": "4bdaa6fd-c383-4dc1-9bad-83ae51e799f3",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "中国电信集团全渠道运营中心"
+            }
+          },
+          {
+            "knowledge_id": "3877ffb3-da65-48cf-9efe-e753fd87a5b0",
+            "block_id": "044f7184-a0e9-4a18-8fd4-d1430a506c26",
+            "title": "《关于印发2020年资源效能提升工作方案的通知》（中国电信〔2020〕162号）",
+            "path": "",
+            "text": "二、中国电信集团效能先进单位",
+            "score": 0.013068181818181817,
+            "citation": {
+              "document": "《关于印发2020年资源效能提升工作方案的通知》（中国电信〔2020〕162号）",
+              "path": "",
+              "knowledge_id": "3877ffb3-da65-48cf-9efe-e753fd87a5b0",
+              "block_id": "044f7184-a0e9-4a18-8fd4-d1430a506c26",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "二、中国电信集团效能先进单位"
+            }
+          },
+          {
+            "knowledge_id": "3877ffb3-da65-48cf-9efe-e753fd87a5b0",
+            "block_id": "59d30757-f78d-4dca-9736-7621c6f44338",
+            "title": "《关于印发2020年资源效能提升工作方案的通知》（中国电信〔2020〕162号）",
+            "path": "",
+            "text": "一、中国电信集团效能提升先进团队",
+            "score": 0.012777777777777777,
+            "citation": {
+              "document": "《关于印发2020年资源效能提升工作方案的通知》（中国电信〔2020〕162号）",
+              "path": "",
+              "knowledge_id": "3877ffb3-da65-48cf-9efe-e753fd87a5b0",
+              "block_id": "59d30757-f78d-4dca-9736-7621c6f44338",
+              "location": {
+                "page": null,
+                "sheet": null,
+                "slide": null,
+                "heading_path": [],
+                "paragraph_index": null,
+                "line_start": null,
+                "line_end": null
+              },
+              "score": 0.0,
+              "score_breakdown": {
+                "vector": null,
+                "keyword": null,
+                "rrf": null,
+                "rerank": null
+              },
+              "match_channels": [],
+              "reason": "match",
+              "text": "一、中国电信集团效能提升先进团队"
+            }
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          },
+          {
+            "from": "verified_wiki",
+            "to": "raw_retrieval",
+            "reason": "empty_wiki_to_raw"
+          }
+        ],
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.1749 < 0.35)"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "hybrid_verified",
+          "route": {
+            "intent": "general",
+            "wiki_weight": 0.42500000000000004,
+            "raw_weight": 0.575,
+            "reasons": [
+              "default_general",
+              "config_blend"
+            ],
+            "freshness_sensitive": false
+          },
+          "stages": {
+            "query_rewrite": {
+              "count": 1
+            },
+            "verified_wiki": {
+              "pairs": 0,
+              "candidates": 0,
+              "error": null
+            },
+            "raw_retrieval": {
+              "count": 9
+            },
+            "fallback": "empty_wiki_to_raw",
+            "fusion": {
+              "count": 9,
+              "wiki_weight": 0.42500000000000004,
+              "raw_weight": 0.575
+            }
+          },
+          "sources": {
+            "verified_claim": 0,
+            "knowledge": 5,
+            "disclose_only": 0
+          }
+        },
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence",
+          "search_mode": "hybrid_verified",
+          "intent": "general"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "wiki_context": "",
+        "reason": "insufficient_relevant_evidence"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 27174.94
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}
