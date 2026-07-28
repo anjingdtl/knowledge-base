@@ -219,30 +219,118 @@ class AnswerService:
         else:
             results, trace, disclose_rows = self._run_search(question, top_k=top_k)
 
-        # Adjacent block expansion for clause integrity (KB-019) — production path.
-        # Only annotate the trace when neighbors are actually appended, so
-        # existing public ask contract snapshots stay stable for single-block
-        # fixtures that have no adjacent rows in the DB.
-        before_n = len(results)
-        results = self._expand_adjacent_into_results(results)
-        if len(results) > before_n:
+        # Adjacent block expansion for clause integrity (KB-019).
+        # SPEC v4: skip micro-block expansion when candidates are already
+        # semantic passages (they already contain full clause context).
+        has_passage = any(
+            isinstance(r, dict)
+            and (
+                r.get("passage_id")
+                or r.get("retrieval_unit") == "passage"
+                or r.get("candidate_type") == "passage"
+            )
+            for r in results
+        )
+        if not has_passage:
+            before_n = len(results)
+            results = self._expand_adjacent_into_results(results)
+            if len(results) > before_n:
+                stages = dict(trace.get("stages") or {})
+                stages["adjacent_expanded"] = True
+                stages["context_block_count"] = len(results)
+                stages["adjacent_added"] = len(results) - before_n
+                trace["stages"] = stages
+        else:
             stages = dict(trace.get("stages") or {})
-            stages["adjacent_expanded"] = True
-            stages["context_block_count"] = len(results)
-            stages["adjacent_added"] = len(results) - before_n
+            stages["adjacent_expanded"] = False
+            stages["passage_context"] = True
             trace["stages"] = stages
 
-        generate_fn = None
-        if use_llm and llm_answer is None:
-            generate_fn = self._generator.make_generate_fn()
-        payload = assemble_answer_payload(
-            question,
-            results,
-            llm_answer=llm_answer,
-            search_trace=trace,
-            disclose_claims=disclose_rows,
-            generate_fn=generate_fn,
+        # SPEC v4: structured claim protocol is primary when passage evidence
+        # is present. Wiki/claim hybrid and block-only fixtures keep legacy
+        # assemble_answer_payload for compatibility.
+        from src.answering.claim_protocol import structured_answer_from_evidence
+        from src.answering.passage_evidence import normalize_to_passage_evidence
+
+        prefer_latest = bool(
+            (trace.get("gate") or {}).get("intent") == "local_version"
+            or (evidence_snapshot or {}).get("intent") == "local_version"
         )
+        has_claims = any(
+            isinstance(r, dict) and (r.get("claim_id") or r.get("candidate_type") == "claim")
+            for r in results
+        )
+        norm_rows = []
+        has_any_passage = False
+        for r in results:
+            if not isinstance(r, dict):
+                continue
+            pe = normalize_to_passage_evidence(r)
+            row = pe.to_row()
+            if pe.passage_id:
+                has_any_passage = True
+            if r.get("score") is not None:
+                row["score"] = r.get("score")
+            if r.get("final_relevance_score") is not None:
+                row["final_relevance_score"] = r.get("final_relevance_score")
+            norm_rows.append(row)
+
+        use_structured = bool(has_any_passage) and not has_claims
+        structured: dict[str, Any] = {}
+        if use_structured:
+            llm_json = None
+            if use_llm and llm_answer is None and self._llm is not None:
+                llm_json = self._try_claim_json(question, norm_rows)
+            elif isinstance(llm_answer, str) and llm_answer.strip().startswith("{"):
+                llm_json = llm_answer
+            structured = structured_answer_from_evidence(
+                question=question,
+                evidence_rows=norm_rows,
+                llm_json=llm_json,
+                prefer_latest_family=prefer_latest,
+                require_passage=True,
+            )
+
+        if use_structured:
+            payload = {
+                "answer": structured.get("answer") or "",
+                "answer_mode": structured.get("answer_mode") or "no_answer",
+                "conflict_disclosed": False,
+                "claims_used": structured.get("claims_used") or [],
+                "raw_evidence_used": structured.get("raw_evidence_used") or [],
+                "conflicts": [],
+                "fallbacks": list(trace.get("fallbacks") or []),
+                "warnings": list(structured.get("warnings") or []),
+                "sources": structured.get("sources") or [],
+                "freshness_sensitive": prefer_latest,
+                "trace_id": trace.get("trace_id") or "",
+                "search_trace": {
+                    "mode": trace.get("mode"),
+                    "route": trace.get("route"),
+                    "stages": trace.get("stages"),
+                    "sources": trace.get("sources"),
+                },
+                "reason": structured.get("reason") or "",
+                "user_notice": structured.get("user_notice") or "",
+                "numeric_fact_audit": structured.get("numeric_fact_audit") or {},
+                "claim_audit": structured.get("claim_audit") or [],
+            }
+            if structured.get("answer_mode") == "no_answer":
+                payload["sources"] = []
+                payload["raw_evidence_used"] = []
+                payload["answer"] = ""
+        else:
+            generate_fn = None
+            if use_llm and llm_answer is None:
+                generate_fn = self._generator.make_generate_fn()
+            payload = assemble_answer_payload(
+                question,
+                results,
+                llm_answer=llm_answer,
+                search_trace=trace,
+                disclose_claims=disclose_rows,
+                generate_fn=generate_fn,
+            )
         payload.setdefault(
             "source_graph",
             {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
@@ -270,6 +358,9 @@ class AnswerService:
                 "accepted_block_ids": list(
                     evidence_snapshot.get("accepted_block_ids") or []
                 ),
+                "accepted_passage_ids": list(
+                    evidence_snapshot.get("accepted_passage_ids") or []
+                ),
                 "adjacent_allowlist": list(
                     evidence_snapshot.get("adjacent_allowlist") or []
                 ),
@@ -278,3 +369,33 @@ class AnswerService:
                 ),
             }
         return payload
+
+    def _try_claim_json(self, question: str, evidence_rows: list[dict[str, Any]]) -> str | None:
+        """Ask LLM for claim JSON only; never use free-form prose as answer."""
+        try:
+            from src.answering.fallbacks import build_generation_context
+            ctx = build_generation_context([], evidence_rows, conflicts=[])
+            prompt = (
+                "你是知识库事实抽取器。只输出 JSON，不要 Markdown。\n"
+                "格式: {\"claims\":[{\"text\":\"...\",\"evidence_passage_ids\":[\"...\"],"
+                "\"fact_type\":\"numeric|policy|scope|version|other\",\"condition\":\"...\"}]}\n"
+                "规则: 仅陈述证据包明示事实；禁止问题拆解/推理过程/建议/复述问题；"
+                "每条 claim 必须引用 evidence_passage_ids。\n"
+                f"问题: {question}\n证据:\n{ctx[:6000]}"
+            )
+            if hasattr(self._llm, "generate"):
+                out = self._llm.generate(prompt)
+            elif callable(self._llm):
+                out = self._llm(prompt)
+            else:
+                return None
+            text = (out if isinstance(out, str) else str(out or "")).strip()
+            if text.startswith("{"):
+                return text
+            # Try extract first JSON object
+            import re
+            m = re.search(r"\{[\s\S]*\}", text)
+            return m.group(0) if m else None
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("claim JSON generation failed: %s", exc)
+            return None

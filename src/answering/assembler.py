@@ -292,7 +292,7 @@ def build_sources(
     claim_rows: list[dict[str, Any]],
     raw_rows: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    """Backward-compatible sources list for MCP ask."""
+    """Backward-compatible sources list for MCP ask (SPEC v4 passage fields)."""
     sources: list[dict[str, Any]] = []
     for c in claim_rows:
         primary_ev = (c.get("evidence") or [{}])[0]
@@ -300,25 +300,39 @@ def build_sources(
             "source": "verified_claim",
             "claim_id": c.get("claim_id"),
             "knowledge_id": c.get("knowledge_id") or primary_ev.get("knowledge_id") or "",
+            "passage_id": c.get("passage_id") or primary_ev.get("passage_id") or "",
             "block_id": c.get("block_id") or primary_ev.get("block_id") or "",
+            "block_ids": list(c.get("block_ids") or primary_ev.get("block_ids") or []),
             "title": c.get("title") or f"Claim: {(c.get('text') or '')[:60]}",
             "text": c.get("text") or "",
             "score": c.get("score"),
+            "document_family_id": c.get("document_family_id") or "",
+            "version_year": c.get("version_year"),
             "evidence": c.get("evidence") or [],
             "citation": c.get("citation"),
             "candidate_type": "claim",
             "source_layer": "canonical",
         })
     for r in raw_rows:
+        passage_id = str(r.get("passage_id") or "").strip()
+        is_passage = bool(passage_id) or r.get("retrieval_unit") == "passage" or r.get("candidate_type") == "passage"
         sources.append({
             "source": r.get("source") or "knowledge",
             "knowledge_id": r.get("knowledge_id") or "",
+            "passage_id": passage_id,
             "block_id": r.get("block_id") or "",
+            "block_ids": list(r.get("block_ids") or []),
             "title": r.get("title") or "",
             "text": r.get("text") or "",
             "score": r.get("score"),
+            "document_family_id": r.get("document_family_id") or "",
+            "version_year": r.get("version_year"),
+            "section_path": r.get("section_path") or "",
             "citation": r.get("citation"),
-            "candidate_type": "raw_block",
+            "candidate_type": "passage" if is_passage else "raw_block",
+            "retrieval_unit": "passage" if is_passage else "block",
+            "retrieval_fallback": r.get("retrieval_fallback") or "",
             "source_layer": "evidence",
+            "is_adjacent_extension": bool(r.get("is_adjacent_extension")),
         })
     return sources

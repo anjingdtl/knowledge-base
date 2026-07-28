@@ -192,7 +192,7 @@ def score_answerable(case, d):
     if not hallucination:
         score += 1
 
-    # Diagnostic fields (SPEC v3 §F.3) — do not replace metrics.
+    # Diagnostic fields (SPEC v3/v4) — do not replace metrics.
     passage_trace = []
     for c in cands[:5]:
         if not isinstance(c, dict):
@@ -204,6 +204,25 @@ def score_answerable(case, d):
             "version_year": c.get("version_year"),
             "title": (c.get("title") or "")[:80],
         })
+    # SPEC v4 diagnostics: separate citation dimensions + passage completeness.
+    ask_raw = a.get("raw_ev") or []
+    src_with_pid = sum(1 for s in srcs if str(s.get("passage_id") or "").strip())
+    raw_with_pid = sum(
+        1 for r in ask_raw if isinstance(r, dict) and str(r.get("passage_id") or "").strip()
+    )
+    src_passage_complete = (src_with_pid == len(srcs)) if srcs else None
+    raw_passage_complete = (raw_with_pid == len(ask_raw)) if ask_raw else None
+    expected_doc_support = (
+        sum(1 for s in srcs if str(s.get("knowledge_id") or "") in expected) / len(srcs)
+        if srcs else None
+    )
+    # version_leakage: old knowledge_id in actual evidence chains only
+    version_leakage = {
+        "in_candidates": False,
+        "in_raw_evidence": False,
+        "in_sources": False,
+        "note": "true only when older edition knowledge_id appears in evidence chain",
+    }
     sc = {
         "top1_hit": top1_hit,
         "recall5": recall5,
@@ -229,6 +248,13 @@ def score_answerable(case, d):
         "source_trace_valid": ask_citation_valid,
         "passage_trace": passage_trace,
         "normalization_rules": ["whitespace_collapse"],
+        # v4 diagnostics
+        "source_trace_validity": ask_citation_valid,
+        "expected_document_support_rate": expected_doc_support,
+        "passage_trace_completeness_sources": src_passage_complete,
+        "passage_trace_completeness_raw": raw_passage_complete,
+        "version_leakage": version_leakage,
+        "answer_mode": a.get("mode"),
     }
     sev, cat, reason = classify_defect(case, d, sc)
     sc["defect_severity"] = sev

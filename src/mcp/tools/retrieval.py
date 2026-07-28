@@ -894,6 +894,12 @@ def _do_ask(question: str) -> dict:
             snapshot = None
 
     if snapshot is not None and not snapshot.get("accept"):
+        warn = (
+            f"evidence gate blocked generation "
+            f"(top_score={snapshot.get('top_score', 0)} < {weak_threshold})"
+        )
+        if snapshot.get("direct_slot_audit"):
+            warn += f"; direct_slot={snapshot.get('direct_slot_audit')}"
         return {
             "answer": "",
             "sources": [],
@@ -904,14 +910,12 @@ def _do_ask(question: str) -> dict:
             },
             "query_plan": {},
             "block_contexts": {},
-            "warnings": [
-                f"evidence gate blocked generation "
-                f"(top_score={snapshot.get('top_score', 0)} < {weak_threshold})"
-            ],
+            "warnings": [warn],
             "wiki_context": "",
             "trace_id": "",
             "answer_mode": "no_answer",
             "reason": snapshot.get("reason") or "insufficient_relevant_evidence",
+            "user_notice": "知识库中未找到可直接支持该问题的证据。",
             "conflict_disclosed": False,
             "claims_used": [],
             "raw_evidence_used": [],
@@ -920,8 +924,11 @@ def _do_ask(question: str) -> dict:
             "evidence_snapshot": {
                 "accepted_knowledge_ids": list(snapshot.get("accepted_knowledge_ids") or []),
                 "accepted_block_ids": list(snapshot.get("accepted_block_ids") or []),
+                "accepted_passage_ids": list(snapshot.get("accepted_passage_ids") or []),
                 "top_score": snapshot.get("top_score"),
                 "intent": snapshot.get("intent"),
+                "direct_slot_evidence": bool(snapshot.get("direct_slot_evidence")),
+                "direct_slot_audit": snapshot.get("direct_slot_audit") or {},
             },
         }
 
@@ -1037,11 +1044,19 @@ def _do_ask(question: str) -> dict:
                     continue
                 kid = (s.get("knowledge_id") or "").strip()
                 bid = (s.get("block_id") or "").strip()
+                accepted_passages = {
+                    p for p in (snapshot or {}).get("accepted_passage_ids") or [] if p
+                }
+                if snap_meta.get("accepted_passage_ids"):
+                    accepted_passages |= {
+                        p for p in snap_meta["accepted_passage_ids"] if p
+                    }
                 ok_src = source_in_allowlist(
                     s,
                     accepted_knowledge_ids=accepted_kids,
                     accepted_block_ids=accepted_blocks,
                     adjacent_allowlist=adjacent_allowlist,
+                    accepted_passage_ids=accepted_passages,
                 )
                 if ok_src:
                     # Annotate source provenance for scoring / audit.
@@ -1083,6 +1098,7 @@ def _do_ask(question: str) -> dict:
             result["evidence_snapshot"] = {
                 "accepted_knowledge_ids": list(snapshot.get("accepted_knowledge_ids") or []),
                 "accepted_block_ids": list(snapshot.get("accepted_block_ids") or []),
+                "accepted_passage_ids": list(snapshot.get("accepted_passage_ids") or []),
                 "generation_knowledge_ids": list(
                     snapshot.get("generation_knowledge_ids") or []
                 ),
@@ -1091,7 +1107,18 @@ def _do_ask(question: str) -> dict:
                 "adjacent_count": sum(
                     1 for e in adjacent_allowlist if e.get("is_adjacent_extension")
                 ),
+                "direct_slot_evidence": bool(snapshot.get("direct_slot_evidence")),
+                "direct_slot_audit": snapshot.get("direct_slot_audit") or {},
             }
+            # SPEC v4: structured no_answer must keep answer empty and sources empty.
+            if result.get("answer_mode") == "no_answer":
+                result["answer"] = ""
+                result["sources"] = []
+                result["raw_evidence_used"] = []
+                result.setdefault(
+                    "user_notice",
+                    "知识库中未找到可直接支持该问题的证据。",
+                )
     except Exception as exc:
         # Py3.10: concurrent.futures.TimeoutError is NOT an alias of builtins.TimeoutError
         # (alias since 3.11). Treat both as hard timeout envelopes.

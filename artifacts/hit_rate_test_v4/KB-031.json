@@ -1,0 +1,94 @@
+{
+  "case": {
+    "case_id": "KB-031",
+    "category": "无答案或越界问题",
+    "query": "广西电信员工的工资薪级表和岗位津贴具体数额",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体薪级或津贴数额"
+    ],
+    "expected_no_answer": true,
+    "notes": "知识库为管理制度类文档，不含薪酬数据；应拒答"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "insufficient_relevant_evidence",
+        "top_score": 0.3,
+        "threshold": 0.35,
+        "source_path": "canonical_snapshot"
+      }
+    },
+    "latency_ms": 63603.28
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "sources": [],
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.3 < 0.35); direct_slot={'matched_slots': [], 'passage_id': None, 'knowledge_id': None, 'spans': [], 'reason': 'query_slots_lt_2', 'query_slots': [], 'score': 0.0}"
+        ],
+        "wiki_context": "",
+        "trace_id": "",
+        "answer_mode": "no_answer",
+        "reason": "insufficient_relevant_evidence",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "conflict_disclosed": false,
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [],
+          "accepted_block_ids": [],
+          "accepted_passage_ids": [],
+          "top_score": 0.3,
+          "intent": "ordinary",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {
+            "matched_slots": [],
+            "passage_id": null,
+            "knowledge_id": null,
+            "spans": [],
+            "reason": "query_slots_lt_2",
+            "query_slots": [],
+            "score": 0.0
+          }
+        }
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 59784.53
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}

@@ -1,0 +1,40 @@
+==============================================================================================================
+METRIC COMPARISON (baseline / r1 / r2 / r3 / r4)
+==============================================================================================================
+Metric                        Baseline      Round1      Round2      Round3      Round4   MinGate  R4Pass
+Top-1 Accuracy                  59.38%      84.38%      84.38%      87.50%      90.62%    75.00%       ✓
+Recall@5                        65.62%      87.50%      87.50%      93.75%      96.88%    88.00%       ✓
+Ask Fact Correctness               n/a         n/a      34.38%      62.50%      18.75%    90.00%       ✗
+Ask Citation Validity              n/a         n/a      93.75%      84.38%      68.75%    95.00%       ✗
+E2E Pass Rate                      n/a         n/a      31.25%      62.50%      18.75%    90.00%       ✗
+Hallucination Rate               3.12%       6.25%       6.25%      12.50%       6.25%     5.00%       ✗
+False Positive Rate              0.00%       0.00%       0.00%      20.00%       0.00%     5.00%       ✓
+
+RELEASE VERDICTS
+  Baseline: n/a
+  Round1: n/a
+  Round2: 不通过放行
+  Round3: 不通过放行
+  Round4: 不通过放行
+
+PASSAGE INDEX HEALTH (round4)
+  retrieval_index_unit: passage
+  passages: 6456
+  embedded: 6456
+  fts: 6456
+  vector_coverage: 1.0
+  fts_coverage: 1.0
+  avg_char_count: 646.1
+  p50_char_count: 596.0
+  p95_char_count: 1107.0
+  short_passage_count: 0
+  length_gate_ok: True
+
+V4 DIAGNOSTICS
+  successful_answerable_with_answer: 22
+  passage_trace_complete_sources: 22
+  passage_trace_complete_raw: 22
+  passage_trace_completeness_rate_sources: 1.0
+  passage_trace_completeness_rate_raw: 1.0
+
+ROUND-4 OVERALL GATE: FAIL / verdict=不通过放行

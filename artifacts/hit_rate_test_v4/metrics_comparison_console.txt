@@ -1,0 +1,33 @@
+====================================================================================================
+METRIC COMPARISON (baseline / round-1 / round-2 v2 / round-3 v3)
+====================================================================================================
+Metric                        Baseline      Round1      Round2      Round3   MinGate  R3Pass
+Top-1 Accuracy                  59.38%      84.38%      84.38%      90.62%    75.00%       鉁?
+Recall@5                        65.62%      87.50%      87.50%      96.88%    88.00%       鉁?
+Ask Fact Correctness               n/a         n/a      34.38%      12.50%    90.00%       鉁?
+Answer Groundedness             40.62%      84.38%      34.38%      12.50%    90.00%       鉁?
+Ask Citation Validity              n/a         n/a      93.75%      78.12%    95.00%       鉁?
+Citation Validity               70.48%      63.89%      68.94%      69.70%    95.00%       鉁?
+E2E Pass Rate                      n/a         n/a      31.25%      12.50%    90.00%       鉁?
+Hallucination Rate               3.12%       6.25%       6.25%       0.00%     5.00%       鉁?
+False Positive Rate              0.00%       0.00%       0.00%       0.00%     5.00%       鉁?
+
+RELEASE VERDICTS
+  Baseline: (no verdict field)
+  Round1: (no verdict field)
+  Round2: 涓嶉€氳繃鏀捐
+  Round3: 涓嶉€氳繃鏀捐
+
+DEFECT COUNTS
+  Baseline: P0=0 P1=18 P2=0 P3=0
+    P1: KB-007, KB-009, KB-010, KB-011, KB-012, KB-014, KB-015, KB-016, KB-017, KB-018, KB-019, KB-020, KB-021, KB-023, KB-027, KB-028, KB-035, KB-037
+  Round1: P0=0 P1=3 P2=1 P3=0
+    P1: KB-017, KB-019, KB-021
+    P2: KB-037
+  Round2: P0=0 P1=20 P2=0 P3=0
+    P1: KB-001, KB-002, KB-006, KB-009, KB-010, KB-011, KB-012, KB-013, KB-014, KB-015, KB-016, KB-017, KB-018, KB-021, KB-022, KB-024, KB-028, KB-035, KB-036, KB-037
+  Round3: P0=0 P1=28 P2=0 P3=0
+    P1: KB-001, KB-002, KB-003, KB-004, KB-005, KB-006, KB-007, KB-008, KB-009, KB-010, KB-011, KB-012, KB-013, KB-014, KB-015, KB-017, KB-018, KB-019, KB-020, KB-021, KB-022, KB-023, KB-024, KB-025, KB-026, KB-028, KB-029, KB-036
+
+ROUND-3 OVERALL GATE: FAIL / verdict=涓嶉€氳繃鏀捐
+

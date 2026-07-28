@@ -1,0 +1,115 @@
+[step] initialize MCP session ... OK session=3faab6a435dc45a4994d5e95f9f325e6
+[step] ping ok=True caps ok=True
+
+[1/37] KB-001 category=绮剧‘鍏抽敭璇?q=钀ユ敹璧勯噾绠＄悊鍔炴硶 鏀舵敮涓ゆ潯绾?
+   top=574f1593-2a9f-455d-ab16-bbc5b6d0d879 search_t=27687ms ask_t=54779ms
+
+[2/37] KB-002 category=绮剧‘鍏抽敭璇?q=缈兼敮浠樹笟鍔＄鐞嗗姙娉?涓汉鏀粯璐︽埛浣欓骞翠粯娆鹃檺棰?
+   top=27922ca4-aa1a-4cee-bf16-b4ee182a5201 search_t=41528ms ask_t=26636ms
+
+[3/37] KB-003 category=绮剧‘鍏抽敭璇?q=鍚堝悓涓撶敤绔犵鐞嗗姙娉?涓€涓富浣撳彧鍏佽鍒朵綔涓€涓?
+   top=940317f3-1c33-4afc-9cad-b838ebdcf12d search_t=43058ms ask_t=36162ms
+
+[4/37] KB-004 category=绮剧‘鍏抽敭璇?q=淇濆瘑宸ヤ綔绠＄悊鍔炴硶 涓嶅緱浣跨敤澶栭儴浜掕仈缃戦偖绠?
+   top=e8f52cfa-2e86-4048-9358-0649094a41b9 search_t=39966ms ask_t=42677ms
+
+[5/37] KB-005 category=绮剧‘鍏抽敭璇?q=鍚堣绠＄悊鍔炴硶 棣栧腑鍚堣瀹?鎬绘硶寰嬮【闂?
+   top=3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3 search_t=40897ms ask_t=39122ms
+
+[6/37] KB-006 category=绮剧‘鍏抽敭璇?q=鍟嗕笟绉樺瘑淇濇姢绠＄悊鍔炴硶 鏍稿績鍟嗗瘑 鏅€氬晢瀵?淇濆瘑鏈熼檺
+   top=102bee52-4b83-438d-9296-c852579473b6 search_t=53050ms ask_t=29428ms
+
+[7/37] KB-007 category=绮剧‘鍏抽敭璇?q=瀹夊叏鐢熶骇绠＄悊鍔炴硶 涓撹亴瀹夊叏鍛?鍗楀畞鍒嗗叕鍙镐笉灏戜簬5浜?
+   top=acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7 search_t=35106ms ask_t=41888ms
+
+[8/37] KB-008 category=绮剧‘鍏抽敭璇?q=鎺堟潈绠＄悊鍔炴硶 鐗瑰畾浜嬮」鎺堟潈 涓€浜嬩竴鎺堟潈 MSS娉曞緥杈呭姪绯荤粺
+   top=f39e6e2e-1c71-484e-a24d-276cde30f0a9 search_t=30375ms ask_t=39165ms
+
+[9/37] KB-009 category=鍚屼箟璇嶄笌鍙ｈ琛ㄨ揪 q=鍛樺伐鍑哄樊鐨勪綇瀹胯垂鍜屼紮椋熻ˉ鍔╂瘡澶╄兘鎶ュ灏?
+   top=906b7eaf-82fe-4ea3-b860-36d465ee0400 search_t=81388ms ask_t=77391ms
+
+[10/37] KB-010 category=鍚屼箟璇嶄笌鍙ｈ琛ㄨ揪 q=闃茶瘓楠楀拰楠氭壈鐢佃瘽 浠ｇ悊鍟嗚缃氬灏戦挶
+   top=e0a6c23a-bf1e-4bd7-a07c-41046b17ed29 search_t=138801ms ask_t=159132ms
+
+[11/37] KB-011 category=鍚屼箟璇嶄笌鍙ｈ琛ㄨ揪 q=鍏徃鍜屽閮ㄥ晢瀹跺悎浣滃崠涓滆タ鐨勭嚎涓婂簵閾哄叆椹婚棬妲?
+   top=35c01dbd-bf6a-49a7-a111-6f65fd689111 search_t=118448ms ask_t=121878ms
+
+[12/37] KB-012 category=鍚屼箟璇嶄笌鍙ｈ琛ㄨ揪 q=鍏徃澶ч瀵瑰鎶曡祫骞惰喘鍐崇瓥瑕佷笉瑕佸厛杩囨硶寰嬪鏍?
+   top=0b5f5cf6-d4bc-42e9-afcf-73173c428a68 search_t=114089ms ask_t=114514ms
+
+[13/37] KB-013 category=鍚屼箟璇嶄笌鍙ｈ琛ㄨ揪 q=鍏徃鎼炴瘮璧涚粰鍛樺伐鍙戝閲?涓婇檺鏄灏?
+   top=8a8fb5a7-42b8-4a35-b7fe-fdc352c55011 search_t=83609ms ask_t=86250ms
+
+[14/37] KB-014 category=鍚屼箟璇嶄笌鍙ｈ琛ㄨ揪 q=寮備笟鍚堜綔缁欏鎴烽€佹潈鐩婁紭鎯犲埜鐨勫悎浣滄柟鍑嗗叆鏉′欢
+   top=ad35a556-0c08-41c9-bbdb-5216e5d9bb1d search_t=101141ms ask_t=106443ms
+
+[15/37] KB-015 category=鍚屼箟璇嶄笌鍙ｈ琛ㄨ揪 q=瀹㈡埛鎻愬嚭瀵逛骇鍝佺殑闇€姹?鍏徃鎬庝箞鍝嶅簲澶勭悊
+   top=b40b8949-e458-408a-aa75-292b0540516b search_t=141271ms ask_t=110016ms
+
+[16/37] KB-016 category=澶氭潯浠剁粍鍚?q=2025骞村樊鏃呰垂绠＄悊鍔炴硶 鍖哄寰€杩斿競鍐呬氦閫氳垂鎶ラ攢鏍囧噯
+   top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search_t=99033ms ask_t=101723ms
+
+[17/37] KB-017 category=澶氭潯浠剁粍鍚?q=娑夎瘓鐢佃瘽 浠ｇ悊鍟嗕竴涓嚜鐒舵湀鍐呮瘡涓彿鐮佸缃氶噾棰?
+   top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search_t=32894ms ask_t=56987ms
+
+[18/37] KB-018 category=澶氭潯浠剁粍鍚?q=娑夐獨鎵扮數璇?浠ｇ悊鍟嗕竴涓嚜鐒舵湀鍐呮瘡涓彿鐮佸缃氶噾棰?
+   top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search_t=42668ms ask_t=43517ms
+
+[19/37] KB-019 category=澶氭潯浠剁粍鍚?q=缈兼敮浠業II绫绘敮浠樿处鎴?骞翠粯娆鹃檺棰?
+   top=27922ca4-aa1a-4cee-bf16-b4ee182a5201 search_t=28800ms ask_t=24846ms
+
+[20/37] KB-020 category=澶氭潯浠剁粍鍚?q=缃戠粶淇℃伅瀹夊叏鑰冩牳 鐢佃瘽瀹炲悕鍒跺疄鍚嶇櫥璁扮巼鏈揪鏍囨墸鍒嗛槇鍊?
+   top=24a0fd9e-a285-4230-b58c-09715016758f search_t=96455ms ask_t=86519ms
+
+[21/37] KB-021 category=澶氭潯浠剁粍鍚?q=浜у搧闂渶宸ュ崟 瀹℃牳鍒濆鍜屼骇鍝佽瘎浼扮殑宸ヤ綔鏃ユ椂闄?
+   top=b40b8949-e458-408a-aa75-292b0540516b search_t=54759ms ask_t=67733ms
+
+[22/37] KB-022 category=璺ㄦ枃妗ｇ患鍚?q=涓浗鐢典俊骞胯タ鍏徃娑夎瘓鍜屾秹楠氭壈鐢佃瘽澶勭疆 鍒嗗埆鐢卞摢涓儴闂ㄧ壍澶?
+   top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search_t=62410ms ask_t=36180ms
+
+[23/37] KB-023 category=璺ㄦ枃妗ｇ患鍚?q=鍚堝悓瀹炰綋绔犲拰鍚堝悓鐢靛瓙绔犵殑娉曞緥鏁堝姏鍏崇郴
+   top=940317f3-1c33-4afc-9cad-b838ebdcf12d search_t=23419ms ask_t=34857ms
+
+[24/37] KB-024 category=璺ㄦ枃妗ｇ患鍚?q=骞胯タ鍏徃宸梾璐逛紮椋熻ˉ鍔╂爣鍑嗗巻骞村彉鍖?
+   top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search_t=36076ms ask_t=46320ms
+
+[25/37] KB-025 category=璺ㄦ枃妗ｇ患鍚?q=涓浗鐢典俊骞胯タ鍏徃鍚勭被绠＄悊鍔炴硶鐨勫綊鍙ｇ鐞嗛儴闂?娉曞緥鍚堣瀹℃牳鐢辫皝璐熻矗
+   top=0b5f5cf6-d4bc-42e9-afcf-73173c428a68 search_t=36507ms ask_t=47954ms
+
+[26/37] KB-026 category=鏄撴贩娣嗙煡璇?q=鍙风櫨鍒嗗叕鍙稿樊鏃呰垂绠＄悊鍔炴硶 閫傜敤鑼冨洿
+   top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search_t=58943ms ask_t=35509ms
+
+[27/37] KB-027 category=鏄撴贩娣嗙煡璇?q=鎶€鑳界珵璧?瀹為檯鎿嶄綔鎴愮哗鍗犳瘮涓嶅緱灏戜簬
+   top=2b63b216-9850-4e82-803e-4006cb9f62ad search_t=30876ms ask_t=44436ms
+
+[28/37] KB-028 category=鏄撴贩娣嗙煡璇?q=鎶€鑳界珵璧涘洟浣撳閲戦檺棰?2026骞翠慨璁?
+   top=2b63b216-9850-4e82-803e-4006cb9f62ad search_t=120806ms ask_t=119944ms
+
+[29/37] KB-029 category=鏄撴贩娣嗙煡璇?q=鏉冪泭涓氬姟鍚堜綔鏂瑰崟浜у搧绫绘潈鐩婄粨绠椾环涓嶅簲楂樹簬
+   top=ad35a556-0c08-41c9-bbdb-5216e5d9bb1d search_t=64586ms ask_t=42687ms
+
+[30/37] KB-030 category=鏃犵瓟妗堟垨瓒婄晫闂 q=涓浗鐢典俊骞胯タ鍏徃2026骞磋惀鏀堕娴嬫槸澶氬皯浜垮厓
+   top=574f1593-2a9f-455d-ab16-bbc5b6d0d879 search_t=20872ms ask_t=27654ms
+
+[31/37] KB-031 category=鏃犵瓟妗堟垨瓒婄晫闂 q=骞胯タ鐢典俊鍛樺伐鐨勫伐璧勮柂绾ц〃鍜屽矖浣嶆触璐村叿浣撴暟棰?
+   top=None search_t=63603ms ask_t=59785ms
+
+[32/37] KB-032 category=鏃犵瓟妗堟垨瓒婄晫闂 q=涓浗鐢典俊闆嗗洟鎬婚儴鍖椾含鐨勫姙鍏ゼ鍦板潃
+   top=423eb665-1382-4fc3-9805-8597e3c25276 search_t=64556ms ask_t=52662ms
+
+[33/37] KB-033 category=鏃犵瓟妗堟垨瓒婄晫闂 q=鐏槦鎺㈡祴浠诲姟鏈€鏂拌繘灞?
+   top=None search_t=21ms ask_t=15ms
+
+[34/37] KB-034 category=鏃犵瓟妗堟垨瓒婄晫闂 q=鎺ㄨ崘涓€娆惧ソ鍚冪殑鐏攨搴曟枡鍝佺墝
+   top=None search_t=19090ms ask_t=16842ms
+
+[35/37] KB-035 category=鏂版棫瑙勫垯鍐茬獊 q=涓浗鐢典俊骞胯タ鍏徃宸梾璐圭鐞嗗姙娉曟渶鏂扮増鏈槸鍝竴骞寸殑
+   top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search_t=50585ms ask_t=33807ms
+
+[36/37] KB-036 category=鏂版棫瑙勫垯鍐茬獊 q=宸梾璐圭鐞嗗姙娉?鍙栨秷浜ら€氭剰澶栭櫓鍦ㄥ樊鏃呰垂涓姤璐?
+   top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search_t=55924ms ask_t=51633ms
+
+[37/37] KB-037 category=鏂版棫瑙勫垯鍐茬獊 q=鎶€鑳界珵璧涚鐞嗗姙娉曟渶鏂颁慨璁㈢増 鍙栨秷涓€绾т簩绾х珵璧涘垎绾?
+   top=2b63b216-9850-4e82-803e-4006cb9f62ad search_t=44020ms ask_t=66205ms
+
+[done] 37 cases (skipped_resume=0) -> artifacts\hit_rate_test_v4

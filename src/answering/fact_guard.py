@@ -27,7 +27,7 @@ _CLAUSE_SPLIT_RE = re.compile(r"[；;。\n]|（[一二三四五六七八九十0-
 # Subjects that require clause-level anchoring when present in the question.
 _SUBJECT_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"III\s*类|Ⅲ\s*类|三类"), "III类"),
-    (re.compile(r"II\s*类|Ⅱ\s*类|二类"), "II类"),
+    (re.compile(r"(?<![IⅠ])II\s*类|Ⅱ\s*类|二类"), "II类"),
     (re.compile(r"(?<![IⅠ二三])I\s*类|(?<![IⅠ二三])Ⅰ\s*类|一类"), "I类"),
     (re.compile(r"区外"), "区外"),
     (re.compile(r"区内"), "区内"),

@@ -204,6 +204,17 @@ def build_canonical_snapshot(
     decision = evaluate_evidence_unified(
         q, pool[: max(top_k, 10)], threshold=threshold,
     )
+    # SPEC v4 §E: keep global threshold; multi-slot direct evidence may accept.
+    try:
+        from src.answering.direct_slot_gate import apply_direct_slot_accept
+        decision = apply_direct_slot_accept(
+            q,
+            pool[: max(top_k, 20)],
+            base_decision=decision,
+            threshold=threshold,
+        )
+    except Exception:
+        pass
     intent = decision.get("intent") or classify_query_intent(q)
     accepted = list(decision.get("items") or [])
     # Freshness AFTER relevance ranking (SPEC v2).
@@ -216,17 +227,23 @@ def build_canonical_snapshot(
 
     accepted_kids: list[str] = []
     accepted_blocks: list[str] = []
+    accepted_passages: list[str] = []
     seen_k: set[str] = set()
     seen_b: set[str] = set()
+    seen_p: set[str] = set()
     for r in accepted:
         kid = str(r.get("knowledge_id") or "").strip()
         bid = str(r.get("block_id") or "").strip()
+        pid = str(r.get("passage_id") or "").strip()
         if kid and kid not in seen_k:
             seen_k.add(kid)
             accepted_kids.append(kid)
         if bid and bid not in seen_b:
             seen_b.add(bid)
             accepted_blocks.append(bid)
+        if pid and pid not in seen_p:
+            seen_p.add(pid)
+            accepted_passages.append(pid)
 
     allowlist = build_adjacent_allowlist(
         accepted[:top_k],
@@ -239,14 +256,7 @@ def build_canonical_snapshot(
         for r in generation_items
         if r.get("knowledge_id")
     }
-    # SPEC v3: passage IDs + family/version audit for generation isolation.
-    accepted_passages: list[str] = []
-    seen_p: set[str] = set()
-    for r in accepted:
-        pid = str(r.get("passage_id") or "").strip()
-        if pid and pid not in seen_p:
-            seen_p.add(pid)
-            accepted_passages.append(pid)
+    # SPEC v3/v4: family/version audit for generation isolation.
     gen_passages = [
         str(r.get("passage_id") or "").strip()
         for r in generation_items
@@ -311,11 +321,15 @@ def build_canonical_snapshot(
                 "top_score": decision.get("top_score"),
                 "threshold": threshold,
                 "reason": decision.get("reason"),
+                "direct_slot_evidence": bool(decision.get("direct_slot_evidence")),
             },
             "freshness_applied_after_relevance": True,
             "local_version_filtered": intent == "local_version",
             "retrieval_unit": "passage",
+            "direct_slot_audit": decision.get("direct_slot_audit") or {},
         },
+        "direct_slot_evidence": bool(decision.get("direct_slot_evidence")),
+        "direct_slot_audit": decision.get("direct_slot_audit") or {},
     }
 
 
@@ -325,17 +339,23 @@ def source_in_allowlist(
     accepted_knowledge_ids: set[str],
     accepted_block_ids: set[str],
     adjacent_allowlist: list[dict[str, Any]] | None = None,
+    accepted_passage_ids: set[str] | None = None,
 ) -> bool:
     """True if source is pre-accepted or an explicit adjacent extension."""
     if not isinstance(source, dict):
         return False
     kid = str(source.get("knowledge_id") or "").strip()
     bid = str(source.get("block_id") or "").strip()
+    pid = str(source.get("passage_id") or "").strip()
+    if pid and accepted_passage_ids and pid in accepted_passage_ids:
+        return True
     if bid and bid in accepted_block_ids:
         return True
-    if kid and kid in accepted_knowledge_ids and not bid:
+    if kid and kid in accepted_knowledge_ids and not bid and not pid:
         # Knowledge-level citation without block is acceptable only when the
         # knowledge item itself was pre-accepted.
+        return True
+    if kid and kid in accepted_knowledge_ids and (bid in accepted_block_ids or pid):
         return True
     if kid and bid and kid in accepted_knowledge_ids and bid in accepted_block_ids:
         return True
@@ -344,6 +364,8 @@ def source_in_allowlist(
             str(entry.get("knowledge_id") or "").strip() == kid
             and str(entry.get("block_id") or "").strip() == bid
         ):
+            return True
+        if pid and str(entry.get("passage_id") or "").strip() == pid:
             return True
     return False
 

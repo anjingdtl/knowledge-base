@@ -110,9 +110,11 @@
   "sources": [
     {
       "block_id": "b1",
+      "block_ids": [],
       "candidate_type": "claim",
       "citation": null,
       "claim_id": "c1",
+      "document_family_id": "",
       "evidence": [
         {
           "block_id": "b1",
@@ -122,17 +124,21 @@
         }
       ],
       "knowledge_id": "k1",
+      "passage_id": "",
       "score": null,
       "source": "verified_claim",
       "source_layer": "canonical",
       "text": "峰值 1Gbps",
-      "title": "Claim: 峰值 1Gbps"
+      "title": "Claim: 峰值 1Gbps",
+      "version_year": null
     },
     {
       "block_id": "b2",
+      "block_ids": [],
       "candidate_type": "claim",
       "citation": null,
       "claim_id": "c2",
+      "document_family_id": "",
       "evidence": [
         {
           "block_id": "b2",
@@ -142,11 +148,13 @@
         }
       ],
       "knowledge_id": "k2",
+      "passage_id": "",
       "score": null,
       "source": "verified_claim",
       "source_layer": "canonical",
       "text": "峰值 100Mbps",
-      "title": "Claim: 峰值 100Mbps"
+      "title": "Claim: 峰值 100Mbps",
+      "version_year": null
     }
   ],
   "trace_id": "",
