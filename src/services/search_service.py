@@ -25,7 +25,9 @@ logger = logging.getLogger(__name__)
 # 各阶段超时（秒），可通过 config 覆盖
 _STAGE_TIMEOUTS = {
     "query_rewrite": 15,   # LLM 改写查询
-    "hybrid_search": 25,   # 向量 + 关键词检索
+    # SPEC v3: passage hybrid includes embedding + FTS + RRF; 25s caused
+    # TimeoutError → BlockStore fallback (micro-blocks) and empty evidence.
+    "hybrid_search": 90,   # 向量 + 关键词检索（passage 单元）
     "rerank": 20,          # 重排序
     "wiki_search": 5,      # Wiki FTS5 搜索 / verified claim retrieval
 }

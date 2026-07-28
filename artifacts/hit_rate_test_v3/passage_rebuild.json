@@ -1,0 +1,23 @@
+{
+  "items": 108,
+  "passages_built": 6456,
+  "failed_items": 0,
+  "embedded": 6456,
+  "embed_errors": [],
+  "errors": [],
+  "health": {
+    "retrieval_index_unit": "passage",
+    "passages": 6456,
+    "embedded": 6456,
+    "fts": 6456,
+    "vector_coverage": 1.0,
+    "fts_coverage": 1.0,
+    "avg_char_count": 646.1,
+    "p50_char_count": 596.0,
+    "p95_char_count": 1107.0,
+    "short_passage_count": 0,
+    "length_gate_ok": true,
+    "blocks_note": "blocks/vectors reported separately; not retrieval unit"
+  },
+  "elapsed_sec": 721.3
+}

@@ -139,6 +139,114 @@ def ping() -> dict:
         "uptime_hint": "ok",
     })
 
+def _passage_fts_hits(query: str, *, limit: int = 10) -> list[dict]:
+    """SPEC v3: FTS over retrieval_passages (not micro-blocks)."""
+    try:
+        from src.services.passage_store import PassageStore
+        store = PassageStore()
+        hits = store.fts_search(query, top_k=limit) or []
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("passage FTS failed: %s", exc)
+        return []
+    out: list[dict] = []
+    for h in hits:
+        if not isinstance(h, dict):
+            continue
+        meta = h.get("metadata") or {}
+        kid = h.get("knowledge_id") or meta.get("knowledge_id") or meta.get("page_id") or ""
+        pid = h.get("passage_id") or h.get("id") or meta.get("passage_id") or ""
+        primary_block = h.get("block_id") or meta.get("block_id") or ""
+        if not primary_block:
+            bids = meta.get("block_ids") or h.get("block_ids") or []
+            primary_block = bids[0] if bids else ""
+        out.append({
+            "source": "knowledge",
+            "match_channel": "passage_fts",
+            "match_channels": ["passage_fts", "keyword"],
+            "block_id": primary_block,
+            "knowledge_id": kid,
+            "passage_id": pid,
+            "title": h.get("title") or meta.get("title") or "",
+            "text": h.get("text") or "",
+            "document_family_id": h.get("document_family_id") or meta.get("document_family_id") or "",
+            "version_year": h.get("version_year") or meta.get("version_year"),
+            "section_path": meta.get("section_path") or "",
+            "block_ids": meta.get("block_ids") or h.get("block_ids") or [],
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "fts_rank": h.get("fts_rank", 0),
+            "fts_score": h.get("keyword_score") or h.get("fts_rank") or 0,
+            "score": float(h.get("keyword_score") or h.get("rrf_score") or 0.5),
+        })
+    return out
+
+
+def _enrich_with_passages(results: list[dict]) -> list[dict]:
+    """Replace truncated micro-block text with owning passage when available."""
+    if not results:
+        return results
+    try:
+        from src.services.passage_store import PassageStore
+        store = PassageStore()
+    except Exception:
+        return results
+    cache: dict[str, list[dict]] = {}
+    out: list[dict] = []
+    for item in results:
+        row = dict(item) if isinstance(item, dict) else {"text": str(item)}
+        text = str(row.get("text") or "")
+        kid = str(row.get("knowledge_id") or "").strip()
+        # Already a full passage.
+        if row.get("retrieval_unit") == "passage" or row.get("passage_id") or len(text) >= 200:
+            out.append(row)
+            continue
+        if not kid:
+            out.append(row)
+            continue
+        if kid not in cache:
+            try:
+                cache[kid] = store.get_by_knowledge(kid) or []
+            except Exception:
+                cache[kid] = []
+        passages = cache[kid]
+        if not passages:
+            out.append(row)
+            continue
+        bid = str(row.get("block_id") or "").strip()
+        best = None
+        # Prefer passage that includes the hit block_id.
+        if bid:
+            for p in passages:
+                bids = p.get("block_ids") or []
+                if bid in bids:
+                    best = p
+                    break
+        # Else prefer passage containing the short snippet / query-ish text.
+        if best is None and text:
+            for p in passages:
+                if text[:20] and text[:20] in (p.get("text") or ""):
+                    best = p
+                    break
+        if best is None:
+            # Fall back to longest passage of the document (better than 20-char block).
+            best = max(passages, key=lambda p: int(p.get("char_count") or len(p.get("text") or "")))
+        if best:
+            row["text"] = best.get("text") or text
+            row["passage_id"] = best.get("id")
+            row["retrieval_unit"] = "passage"
+            row["candidate_type"] = "passage"
+            row["document_family_id"] = best.get("document_family_id") or row.get("document_family_id") or ""
+            row["version_year"] = best.get("version_year") or row.get("version_year")
+            row["section_path"] = best.get("section_path") or ""
+            try:
+                import json as _json
+                row["block_ids"] = _json.loads(best.get("block_ids_json") or "[]") if isinstance(best.get("block_ids_json"), str) else (best.get("block_ids") or [])
+            except Exception:
+                row["block_ids"] = best.get("block_ids") or []
+        out.append(row)
+    return out
+
+
 def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
     """Shared retrieval used by ``search`` and ``ask`` pre-LLM evidence probe.
 
@@ -152,6 +260,9 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
     aliases (e.g. "防诈骗"→"涉诈") so the retriever can surface formal-policy
     documents that the raw phrasing would miss. The original query always runs
     first and wins score ties.
+
+    SPEC v3: prefer passage units for both semantic and FTS channels; enrich
+    any residual micro-block hits with owning passage text.
     """
     from src.application.retrieval_commands import RetrievalCommands
     from src.services.numeric_unit_match import apply_numeric_unit_ranking
@@ -191,21 +302,25 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
         candidate_lists = [_semantic(v) for v in variants]
         results = merge_candidates_by_query(query, candidate_lists)
 
-    # SPEC Phase 3.3 (FTS recall aid): if semantic retrieval is weak/empty, also
-    # run alias-expanded FTS so colloquial queries (防诈骗→涉诈) can hit
-    # knowledge_fts. This mirrors the search tool's FTS fallback and keeps
-    # search/ask retrieval symmetric. FTS hits from a CANONICAL expansion term
-    # (not the original query) are tagged ``alias_fts_match`` so the gate can
-    # credit them as verifiable lexical matches — this is what lets a
-    # colloquial query's evidence clear the gate without lowering the threshold.
-    # FTS5 multi-word queries are implicit-AND (any missing term zeroes the
-    # result), so we run EACH canonical term separately for OR semantics.
+    # SPEC v3: always merge passage FTS (semantic unit) — do not rely on block FTS.
+    from src.services.query_rewrite import canonical_terms
+
+    passage_lists = [_passage_fts_hits(query, limit=max(fetch_k, 10))]
+    for term in canonical_terms(query):
+        hits = _passage_fts_hits(term, limit=max(fetch_k, 10))
+        for h in hits:
+            h["alias_fts_match"] = True
+        passage_lists.append(hits)
+    passage_items = merge_candidates_by_query(query, [x for x in passage_lists if x]) if any(passage_lists) else []
+    if passage_items:
+        results = merge_candidates_by_query(query, [results, passage_items])
+
+    # SPEC Phase 3.3 (legacy FTS recall aid): if still weak, also run block/knowledge FTS
+    # then enrich to passages. Keep gate threshold unchanged.
     if not results or max(
         (float(r.get("score") or r.get("fts_score") or 0.0) for r in results),
         default=0.0,
     ) < 0.35:
-        from src.services.query_rewrite import canonical_terms
-
         ft_lists = []
         # Original query as one FTS pass (idx 0 — not tagged).
         ft = search_fulltext(query, limit=max(fetch_k, 10), offset=0)
@@ -224,6 +339,9 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
             ft_items = merge_candidates_by_query(query, ft_lists)
             # Merge FTS hits with semantic hits (semantic wins ties).
             results = merge_candidates_by_query(query, [results, ft_items])
+
+    # Prefer passage text over micro-block snippets for evidence quality.
+    results = _enrich_with_passages(results)
 
     apply_numeric_unit_ranking(query, results)
     results = dedupe_by_knowledge_id(results)

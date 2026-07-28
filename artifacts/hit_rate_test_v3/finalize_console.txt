@@ -1,0 +1,52 @@
+{
+  "metrics": {
+    "answerable_total": 32,
+    "no_answer_total": 5,
+    "top1_correct": 28,
+    "recall5_correct": 30,
+    "ask_fact_correct_count": 20,
+    "ask_citation_valid_count": 27,
+    "e2e_pass_count": 20,
+    "grounded_count": 20,
+    "Top-1 Accuracy": 0.875,
+    "Recall@5": 0.9375,
+    "Ask Fact Correctness": 0.625,
+    "Ask Citation Validity": 0.8438,
+    "E2E Pass Rate": 0.625,
+    "Answer Groundedness": 0.625,
+    "Citation Validity": 0.7391,
+    "citation_total": 115,
+    "citation_valid": 85,
+    "citation_buckets": {
+      "preaccepted": 44,
+      "adjacent_extension": 71,
+      "expected_id": 0,
+      "rejected": 0
+    },
+    "Hallucination Rate": 0.125,
+    "False Positive Rate": 0.2
+  },
+  "release_verdict": "涓嶉€氳繃鏀捐",
+  "defects": {
+    "P0": [],
+    "P1": [
+      "KB-009",
+      "KB-010",
+      "KB-011",
+      "KB-013",
+      "KB-014",
+      "KB-015",
+      "KB-017",
+      "KB-018",
+      "KB-019",
+      "KB-021",
+      "KB-022",
+      "KB-032",
+      "KB-037"
+    ],
+    "P2": [
+      "KB-026"
+    ],
+    "P3": []
+  }
+}

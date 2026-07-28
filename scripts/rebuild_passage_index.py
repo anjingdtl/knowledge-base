@@ -21,7 +21,12 @@ if str(ROOT) not in sys.path:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Rebuild retrieval passage index")
     parser.add_argument("--no-embed", action="store_true", help="Skip embedding write")
-    parser.add_argument("--batch-size", type=int, default=8, help="Embedding batch size")
+    parser.add_argument(
+        "--embed-only",
+        action="store_true",
+        help="Skip text rebuild; only embed missing passage vectors (resume)",
+    )
+    parser.add_argument("--batch-size", type=int, default=16, help="Embedding batch size")
     parser.add_argument("--timeout", type=float, default=120.0, help="Embedding timeout seconds")
     parser.add_argument(
         "--out",
@@ -91,6 +96,7 @@ def main() -> int:
         embed=not args.no_embed,
         embed_batch_size=args.batch_size,
         embed_timeout=args.timeout,
+        rebuild_text=not args.embed_only,
     )
     result["elapsed_sec"] = round(time.time() - t0, 1)
     print(json.dumps(result.get("health") or result, ensure_ascii=False, indent=2))

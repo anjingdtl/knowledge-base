@@ -420,11 +420,13 @@ def rebuild_passage_index(
     knowledge_ids: list[str] | None = None,
     embed_batch_size: int = 8,
     embed_timeout: float = 120.0,
+    rebuild_text: bool = True,
 ) -> dict:
     """SPEC v3: rebuild independent retrieval_passages (+ FTS/vectors).
 
     Does not rewrite graph blocks. Safe to run after alembic upgrade to
     k001_retrieval_passages on an existing corpus.
+    Set ``rebuild_text=False`` to only fill missing passage embeddings.
     """
     from src.services.passage_store import PassageStore
 
@@ -436,6 +438,7 @@ def rebuild_passage_index(
         knowledge_ids=knowledge_ids,
         embed_batch_size=embed_batch_size,
         embed_timeout=embed_timeout,
+        rebuild_text=rebuild_text,
     )
 
 

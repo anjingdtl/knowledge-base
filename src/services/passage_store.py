@@ -78,10 +78,22 @@ class PassageStore:
         return Database
 
     def _get_conn(self):
-        db = self._get_db()
-        if hasattr(db, "get_conn"):
-            return db.get_conn()
-        return db  # raw connection
+        # Mirror BlockStore: prefer injected db instance; else Database singleton.
+        if self._db is not None:
+            if hasattr(self._db, "get_conn"):
+                return self._db.get_conn()
+            return self._db
+        from src.services.db import Database
+        # Database may be a dualmethod/singleton facade (same as BlockStore).
+        try:
+            return Database.get_conn()
+        except TypeError:
+            # Instance method path
+            inst = getattr(Database, "_instance", None)
+            if inst is None:
+                Database()  # ensure singleton
+                inst = Database._instance
+            return inst.get_conn()
 
     def _get_dimension(self) -> int:
         return int(Config.get("embedding.dimension", 1024))
@@ -507,11 +519,13 @@ class PassageStore:
         knowledge_ids: list[str] | None = None,
         embed_batch_size: int = 8,
         embed_timeout: float = 120.0,
+        rebuild_text: bool = True,
     ) -> dict[str, Any]:
         """Rebuild passages for all (or selected) knowledge items.
 
         Strategy (SPEC v3 rebuild reliability):
-          1. Build + write all passages without embedding (fast, deterministic).
+          1. Build + write all passages without embedding (fast, deterministic)
+             unless ``rebuild_text=False`` (resume embed only).
           2. Batch-embed missing passage vectors with raised timeout and small
              batches so process-isolation deadlines do not kill multi-passage docs.
         """
@@ -533,44 +547,55 @@ class PassageStore:
         errors: list[dict[str, str]] = []
         all_rows: list[dict[str, Any]] = []
 
-        for i, item in enumerate(items):
-            kid = item.get("id") if isinstance(item, dict) else getattr(item, "id", "")
-            title = item.get("title") if isinstance(item, dict) else getattr(item, "title", "")
-            content = item.get("content") if isinstance(item, dict) else getattr(item, "content", "")
-            try:
-                blocks = []
-                if hasattr(db, "get_blocks_by_page"):
-                    blocks = db.get_blocks_by_page(kid) or []
-                elif hasattr(db, "list_blocks"):
-                    blocks = db.list_blocks(kid) or []
-                else:
-                    conn = self._get_conn()
-                    blocks = [
-                        dict(r) if hasattr(r, "keys") else {
-                            "id": r[0], "content": r[1], "order_idx": r[2],
-                        }
-                        for r in conn.execute(
-                            "SELECT id, content, order_idx FROM blocks "
-                            "WHERE page_id = ? ORDER BY order_idx",
-                            (kid,),
-                        ).fetchall()
-                    ]
-                # Phase 1: text + FTS only (no embed) for reliability.
-                rows = self.rebuild_for_knowledge(
-                    knowledge_id=kid,
-                    title=title or "",
-                    content=content or "",
-                    blocks=blocks,
-                    embed=False,
-                )
-                built += len(rows)
-                all_rows.extend(rows)
-            except Exception as e:
-                failed += 1
-                errors.append({"knowledge_id": kid, "error": str(e)[:300]})
-                logger.error("passage rebuild failed for %s: %s", kid, e)
-            if progress_callback:
-                progress_callback(i + 1, total, kid)
+        if rebuild_text:
+            for i, item in enumerate(items):
+                kid = item.get("id") if isinstance(item, dict) else getattr(item, "id", "")
+                title = item.get("title") if isinstance(item, dict) else getattr(item, "title", "")
+                content = item.get("content") if isinstance(item, dict) else getattr(item, "content", "")
+                try:
+                    blocks = []
+                    if hasattr(db, "get_blocks_by_page"):
+                        blocks = db.get_blocks_by_page(kid) or []
+                    elif hasattr(db, "list_blocks"):
+                        blocks = db.list_blocks(kid) or []
+                    else:
+                        conn = self._get_conn()
+                        blocks = [
+                            dict(r) if hasattr(r, "keys") else {
+                                "id": r[0], "content": r[1], "order_idx": r[2],
+                            }
+                            for r in conn.execute(
+                                "SELECT id, content, order_idx FROM blocks "
+                                "WHERE page_id = ? ORDER BY order_idx",
+                                (kid,),
+                            ).fetchall()
+                        ]
+                    # Phase 1: text + FTS only (no embed) for reliability.
+                    rows = self.rebuild_for_knowledge(
+                        knowledge_id=kid,
+                        title=title or "",
+                        content=content or "",
+                        blocks=blocks,
+                        embed=False,
+                    )
+                    built += len(rows)
+                    all_rows.extend(rows)
+                except Exception as e:
+                    failed += 1
+                    errors.append({"knowledge_id": kid, "error": str(e)[:300]})
+                    logger.error("passage rebuild failed for %s: %s", kid, e)
+                if progress_callback:
+                    progress_callback(i + 1, total, kid)
+        else:
+            # Resume: load existing passage rows from DB.
+            conn = self._get_conn()
+            for r in conn.execute(
+                "SELECT * FROM retrieval_passages "
+                "WHERE deleted_at IS NULL OR deleted_at = '' "
+                "ORDER BY knowledge_id, passage_index"
+            ).fetchall():
+                all_rows.append(self._row_to_dict(r))
+            built = len(all_rows)
 
         embed_errors: list[dict[str, str]] = []
         embedded = 0
@@ -624,6 +649,13 @@ class PassageStore:
             emb = EmbeddingService()
             # Force client rebuild with new timeout.
             emb._client = None  # type: ignore[attr-defined]
+            # Rebuilds are offline batch jobs: prefer async isolation over
+            # process-spawn-per-batch (much faster for multi-thousand passages).
+            old_iso = getattr(EmbeddingService, "ISOLATION_MODE", "process")
+            try:
+                EmbeddingService.ISOLATION_MODE = "async"  # type: ignore[assignment]
+            except Exception:
+                old_iso = None
         except Exception as e:
             logger.warning("EmbeddingService unavailable for passage embed: %s", e)
             return 0, [{"error": str(e)}]
@@ -632,8 +664,28 @@ class PassageStore:
         embedded = 0
         size = max(1, int(batch_size))
         total = len(rows)
+        # Skip passages that already have vectors (resume-friendly).
+        try:
+            conn = self._get_conn()
+            existing = {
+                r[0]
+                for r in conn.execute(
+                    """
+                    SELECT p.id FROM retrieval_passages p
+                    JOIN vec_passages v ON v.rowid = p.rowid
+                    """
+                ).fetchall()
+            }
+        except Exception:
+            existing = set()
+        pending = [r for r in rows if r.get("id") not in existing]
+        logger.info(
+            "Passage embed: %d total, %d already embedded, %d pending",
+            total, len(existing), len(pending),
+        )
+        total = len(pending)
         for offset in range(0, total, size):
-            batch = rows[offset:offset + size]
+            batch = pending[offset:offset + size]
             ids = [r["id"] for r in batch]
             texts = [r.get("text") or "" for r in batch]
             try:
@@ -656,8 +708,17 @@ class PassageStore:
                             embedded += 1
                     except Exception as e2:
                         errors.append({"passage_id": pid, "error": str(e2)[:200]})
-            if progress_callback:
+            if progress_callback and (offset // size) % 5 == 0:
                 progress_callback(min(offset + size, total), total, f"embed@{offset}")
+                logger.info("Passage embed progress %d/%d", min(offset + size, total), total)
+
+        # Restore isolation mode
+        try:
+            if old_iso is not None:
+                EmbeddingService.ISOLATION_MODE = old_iso  # type: ignore[assignment]
+        except Exception:
+            pass
+        embedded += len(existing)
 
         # Restore timeout
         try:
