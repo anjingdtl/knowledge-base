@@ -496,3 +496,262 @@ class TestNormalizeEvidenceCandidate:
             "text": "a much longer text body",
         })
         assert out["text"] == "a much longer text body"
+
+
+# ===========================================================================
+# SPEC v2 Phase 1 — shared snapshot: search/ask same candidates
+# ===========================================================================
+
+class TestSharedCandidateSnapshot:
+    """search and ask must share one canonical evidence snapshot."""
+
+    def test_build_snapshot_projects_to_search_execution(self):
+        from src.retrieval.canonical_snapshot import (
+            build_canonical_snapshot,
+            snapshot_to_search_execution,
+        )
+
+        cands = [
+            {
+                "knowledge_id": "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+                "block_id": "b-safety-1",
+                "title": "中电信桂-2023-118号-安全生产管理办法-2023",
+                "text": "南宁分公司专职安全生产管理人员配备不少于5人。",
+                "score": 0.9,
+            }
+        ]
+        snap = build_canonical_snapshot(
+            "安全生产管理办法 专职安全员 南宁分公司不少于5人",
+            cands,
+            threshold=0.35,
+            top_k=5,
+        )
+        assert snap["accept"] is True
+        assert snap["accepted_items"][0]["knowledge_id"].startswith("acf5e2d6")
+        ex = snapshot_to_search_execution(snap)
+        assert list(ex.results)[0]["knowledge_id"].startswith("acf5e2d6")
+        assert ex.trace["gate"]["accept"] is True
+
+    def test_answer_service_uses_snapshot_not_re_retrieval(self):
+        """AnswerService with evidence_snapshot must NOT call search.execute."""
+        from src.answering.service import AnswerService
+
+        class _BoomSearch:
+            def execute(self, *a, **k):
+                raise AssertionError("must not re-retrieve when snapshot given")
+
+            def search(self, *a, **k):
+                raise AssertionError("must not re-retrieve when snapshot given")
+
+        kid = "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7"
+        snap = {
+            "query": "安全生产管理办法 专职安全员 南宁分公司不少于5人",
+            "accept": True,
+            "accepted_items": [
+                {
+                    "knowledge_id": kid,
+                    "block_id": "b1",
+                    "title": "安全生产管理办法-2023",
+                    "text": "南宁分公司专职安全生产管理人员配备不少于5人。",
+                    "score": 0.8,
+                    "source": "knowledge",
+                }
+            ],
+            "generation_items": [
+                {
+                    "knowledge_id": kid,
+                    "block_id": "b1",
+                    "title": "安全生产管理办法-2023",
+                    "text": "南宁分公司专职安全生产管理人员配备不少于5人。",
+                    "score": 0.8,
+                    "source": "knowledge",
+                }
+            ],
+            "accepted_knowledge_ids": [kid],
+            "accepted_block_ids": ["b1"],
+            "adjacent_allowlist": [],
+            "top_score": 0.8,
+            "threshold": 0.35,
+            "intent": "ordinary",
+            "stages": {},
+        }
+        svc = AnswerService(_BoomSearch(), llm=None, config={})
+        # Force no-LLM path: provide llm_answer so generate_fn is unused.
+        payload = svc.ask(
+            "安全生产管理办法 专职安全员 南宁分公司不少于5人",
+            evidence_snapshot=snap,
+            llm_answer="南宁分公司专职安全生产管理人员不少于5人。",
+        )
+        assert payload["answer"]
+        assert any(
+            (s.get("knowledge_id") or "").startswith("acf5e2d6")
+            for s in payload.get("sources") or []
+        )
+        assert "不少于5人" in payload["answer"]
+
+    def test_unlisted_source_fails_citation_allowlist(self):
+        """A source not in pre-accepted/adjacent allowlist is rejected."""
+        from src.retrieval.canonical_snapshot import source_in_allowlist
+
+        ok = source_in_allowlist(
+            {"knowledge_id": "evil-doc", "block_id": "x"},
+            accepted_knowledge_ids={"good-doc"},
+            accepted_block_ids={"b1"},
+            adjacent_allowlist=[],
+        )
+        assert ok is False
+        ok2 = source_in_allowlist(
+            {"knowledge_id": "good-doc", "block_id": "b1"},
+            accepted_knowledge_ids={"good-doc"},
+            accepted_block_ids={"b1"},
+            adjacent_allowlist=[],
+        )
+        assert ok2 is True
+        ok3 = source_in_allowlist(
+            {"knowledge_id": "good-doc", "block_id": "b-adj", "is_adjacent_extension": True},
+            accepted_knowledge_ids={"good-doc"},
+            accepted_block_ids={"b1"},
+            adjacent_allowlist=[
+                {
+                    "knowledge_id": "good-doc",
+                    "block_id": "b-adj",
+                    "is_adjacent_extension": True,
+                    "parent_hit_block_id": "b1",
+                }
+            ],
+        )
+        assert ok3 is True
+
+
+# ===========================================================================
+# SPEC v2 Phase 2 — version isolation (KB-037)
+# ===========================================================================
+
+class TestVersionEvidenceIsolation:
+    def test_filter_to_latest_drops_old_edition(self):
+        from src.services.version_rank import filter_to_latest_versions
+
+        items = [
+            {
+                "knowledge_id": "old",
+                "title": "中电信桂-2023-278号-技能竞赛管理办法",
+                "text": "分为一级竞赛、二级竞赛",
+            },
+            {
+                "knowledge_id": "new",
+                "title": "中电信桂-2026-158号-技能竞赛管理办法-修订",
+                "text": "取消分级管理",
+            },
+        ]
+        kept = filter_to_latest_versions(items)
+        kids = {k.get("knowledge_id") for k in kept}
+        assert "new" in kids
+        assert "old" not in kids
+
+    def test_freshness_after_relevance_puts_2026_first(self):
+        from src.retrieval.canonical_snapshot import apply_post_relevance_freshness
+
+        items = [
+            {
+                "knowledge_id": "1acb61b4",
+                "title": "中电信桂-2023-278号-技能竞赛管理办法",
+                "text": "一级竞赛",
+                "final_relevance_score": 0.55,
+                "score": 0.55,
+            },
+            {
+                "knowledge_id": "2b63b216",
+                "title": "中电信桂-2026-158号-技能竞赛管理办法-修订",
+                "text": "修订",
+                "final_relevance_score": 0.50,
+                "score": 0.50,
+            },
+        ]
+        ranked = apply_post_relevance_freshness(
+            "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+            items,
+        )
+        assert ranked[0]["knowledge_id"] == "2b63b216"
+
+
+# ===========================================================================
+# SPEC v2 Phase 3 — subject anchoring + adjacent production path (KB-019)
+# ===========================================================================
+
+class TestSubjectAnchoringAndAdjacent:
+    def test_answer_service_context_includes_adjacent_iii_value(self):
+        """Production AnswerService expansion must join III类 + 20万元."""
+        from src.answering.service import AnswerService
+        from src.answering.fallbacks import build_generation_context
+        from src.retrieval.canonical_snapshot import expand_results_with_adjacent
+
+        blocks = {
+            KID_WINGPAY: [
+                {
+                    "id": "b190",
+                    "block_id": "b190",
+                    "page_id": KID_WINGPAY,
+                    "knowledge_id": KID_WINGPAY,
+                    "order_idx": 190,
+                    "content": "账户，其余额年付款限额为10万元（不含提现）；III类支付账",
+                    "text": "账户，其余额年付款限额为10万元（不含提现）；III类支付账",
+                },
+                {
+                    "id": "b191",
+                    "block_id": "b191",
+                    "page_id": KID_WINGPAY,
+                    "knowledge_id": KID_WINGPAY,
+                    "order_idx": 191,
+                    "content": "户，其余额年付款限额为20万元（不含提现）。",
+                    "text": "户，其余额年付款限额为20万元（不含提现）。",
+                },
+            ]
+        }
+
+        def list_blocks(kid: str):
+            return list(blocks.get(kid) or [])
+
+        hits = [
+            {
+                "knowledge_id": KID_WINGPAY,
+                "block_id": "b190",
+                "title": "翼支付业务管理办法-2026",
+                "text": blocks[KID_WINGPAY][0]["text"],
+                "score": 0.8,
+                "source": "knowledge",
+            }
+        ]
+        expanded = expand_results_with_adjacent(hits, list_blocks_fn=list_blocks, window=1)
+        joined = "".join(r.get("text") or "" for r in expanded)
+        assert "III类" in joined
+        assert "20万元" in joined
+
+        # Subject guard: III类 answer must not keep II类 10万元 as the answer.
+        from src.answering.fact_guard import (
+            select_numeric_fact_for_subject,
+            strip_unanchored_numeric_assertions,
+        )
+        assert select_numeric_fact_for_subject(
+            subject="III类", evidence=joined,
+        ) == "20万元"
+        cleaned, stripped = strip_unanchored_numeric_assertions(
+            "III类年付款限额为10万元，超过10万元。",
+            evidence=joined,
+            question="翼支付III类支付账户 年付款限额",
+        )
+        assert "10万元" not in cleaned.replace(" ", "")
+        assert stripped is True
+
+    def test_subject_anchor_rejects_neighbor_value(self):
+        from src.answering.fact_guard import answer_value_is_anchored
+
+        evidence = (
+            "II类支付账户，其余额年付款限额为10万元（不含提现）；"
+            "III类支付账户，其余额年付款限额为20万元（不含提现）。"
+        )
+        assert answer_value_is_anchored(
+            subject="III类", evidence=evidence, claimed_value="20万元",
+        )
+        assert not answer_value_is_anchored(
+            subject="III类", evidence=evidence, claimed_value="10万元",
+        )

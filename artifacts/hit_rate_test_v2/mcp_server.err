@@ -1,0 +1,27 @@
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 3.4.4                                 │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│                  🖥  Server:      ShineHeKnowledge, 1.11.1                    │
+│                  🚀 Deploy free: https://horizon.prefect.io                  │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+[07/27/26 18:03:40] INFO     Starting MCP server                transport.py:361
+                             'ShineHeKnowledge' with transport                  
+                             'streamable-http' on                               
+                             http://127.0.0.1:9000/mcp                          
+INFO:     Started server process [11140]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:9000 (Press CTRL+C to quit)

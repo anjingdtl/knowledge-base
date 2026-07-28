@@ -1,13 +1,10 @@
-"""Compare hit-rate metrics between baseline and after-fix artifacts.
-
-Reads ``final_scored.json`` from two artifact directories and prints a
-side-by-side metric table plus the per-case delta. Used to populate the
-after-fix remediation report.
+"""Compare hit-rate metrics across baseline / round-1 / round-2 artifacts.
 
 Usage:
     python scripts/hit_rate_compare.py \
         --baseline artifacts/hit_rate_test \
-        --after artifacts/hit_rate_test_after_fix
+        --round1 artifacts/hit_rate_test_after_fix \
+        --round2 artifacts/hit_rate_test_v2
 """
 from __future__ import annotations
 
@@ -16,94 +13,144 @@ import json
 from pathlib import Path
 
 METRIC_KEYS = [
-    ("Top-1 Accuracy", "Top-1 Accuracy", True),
-    ("Recall@5", "Recall@5", True),
-    ("Answer Groundedness", "Answer Groundedness", True),
-    ("Citation Validity", "Citation Validity", True),
-    ("Hallucination Rate", "Hallucination Rate", False),  # lower is better
-    ("False Positive Rate", "False Positive Rate", False),
+    ("Top-1 Accuracy", True),
+    ("Recall@5", True),
+    ("Ask Fact Correctness", True),
+    ("Answer Groundedness", True),
+    ("Ask Citation Validity", True),
+    ("Citation Validity", True),
+    ("E2E Pass Rate", True),
+    ("Hallucination Rate", False),
+    ("False Positive Rate", False),
 ]
+
+GOALS = {
+    "Top-1 Accuracy": 0.75,
+    "Recall@5": 0.88,
+    "Ask Fact Correctness": 0.90,
+    "Answer Groundedness": 0.90,
+    "Ask Citation Validity": 0.95,
+    "Citation Validity": 0.95,
+    "E2E Pass Rate": 0.90,
+    "Hallucination Rate": 0.05,
+    "False Positive Rate": 0.05,
+}
 
 
 def _load(d: Path) -> dict:
     return json.loads((d / "final_scored.json").read_text(encoding="utf-8"))
 
 
-def _pct(x: float) -> str:
-    return f"{x * 100:.2f}%"
+def _pct(x) -> str:
+    if x is None:
+        return "   n/a"
+    return f"{float(x) * 100:.2f}%"
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--baseline", default="artifacts/hit_rate_test")
-    ap.add_argument("--after", default="artifacts/hit_rate_test_after_fix")
+    ap.add_argument("--round1", default="artifacts/hit_rate_test_after_fix")
+    ap.add_argument("--round2", default="artifacts/hit_rate_test_v2")
+    ap.add_argument("--out", default=None, help="optional path to write text report")
     args = ap.parse_args()
 
-    base = _load(Path(args.baseline))
-    after = _load(Path(args.after))
-    bm = base["metrics"]
-    am = after["metrics"]
+    rounds = []
+    for label, path in [
+        ("Baseline", args.baseline),
+        ("Round1", args.round1),
+        ("Round2", args.round2),
+    ]:
+        p = Path(path)
+        if (p / "final_scored.json").exists():
+            rounds.append((label, path, _load(p)))
+        else:
+            rounds.append((label, path, None))
 
-    print("=" * 70)
-    print("METRIC COMPARISON (baseline -> after-fix)")
-    print("=" * 70)
-    print(f"{'Metric':<24}{'Baseline':>12}{'After':>12}{'Delta':>12}{'Goal':>10}")
-    goals = {
-        "Top-1 Accuracy": 0.85,
-        "Recall@5": 0.95,
-        "Answer Groundedness": 0.96,
-        "Citation Validity": 0.98,
-        "Hallucination Rate": 0.02,
-        "False Positive Rate": 0.05,
-    }
-    for key, _, higher_better in METRIC_KEYS:
-        b = bm.get(key, 0.0)
-        a = am.get(key, 0.0)
-        delta = a - b
-        sign = "+" if delta >= 0 else ""
-        good = (delta > 0) if higher_better else (delta < 0)
-        mark = "✓" if (a == goals[key] or (higher_better and a >= goals[key]) or (not higher_better and a <= goals[key])) else " "
-        flag = "↑" if good else ("↓" if delta != 0 else "=")
-        print(
-            f"{key:<24}{_pct(b):>12}{_pct(a):>12}"
-            f"{sign}{_pct(delta):>11}{mark}{_pct(goals[key]):>9}"
+    lines: list[str] = []
+    lines.append("=" * 88)
+    lines.append("METRIC COMPARISON (baseline / round-1 after-fix / round-2 v2)")
+    lines.append("=" * 88)
+    header = f"{'Metric':<26}"
+    for label, _, _ in rounds:
+        header += f"{label:>12}"
+    header += f"{'MinGate':>10}{'R2Pass':>8}"
+    lines.append(header)
+
+    r2_metrics = rounds[-1][2]["metrics"] if rounds[-1][2] else {}
+    all_pass = True
+    for key, higher in METRIC_KEYS:
+        row = f"{key:<26}"
+        for _, _, data in rounds:
+            if data is None:
+                row += f"{'n/a':>12}"
+            else:
+                row += f"{_pct(data['metrics'].get(key)):>12}"
+        thr = GOALS.get(key)
+        row += f"{_pct(thr):>10}"
+        val = r2_metrics.get(key)
+        if val is None or thr is None:
+            mark = " n/a"
+        else:
+            ok = (val >= thr) if higher else (val <= thr)
+            mark = "  ✓" if ok else "  ✗"
+            if rounds[-1][2] is not None and not ok:
+                all_pass = False
+        row += f"{mark:>8}"
+        lines.append(row)
+
+    lines.append("")
+    lines.append("RELEASE VERDICTS")
+    for label, path, data in rounds:
+        if data is None:
+            lines.append(f"  {label} ({path}): missing final_scored.json")
+            continue
+        verdict = data.get("release_verdict") or "(legacy, no verdict field)"
+        lines.append(f"  {label}: {verdict}")
+
+    lines.append("")
+    lines.append("DEFECT COUNTS")
+    for label, _, data in rounds:
+        if data is None:
+            continue
+        d = data.get("defects", {})
+        lines.append(
+            f"  {label}: P0={len(d.get('P0', []))} P1={len(d.get('P1', []))} "
+            f"P2={len(d.get('P2', []))} P3={len(d.get('P3', []))}"
         )
+        for sev in ("P0", "P1", "P2"):
+            items = d.get(sev) or []
+            if items:
+                lines.append(f"    {sev}: {', '.join(items)}")
 
-    # Defect delta
-    print()
-    print("DEFECT DELTA")
-    bd = base.get("defects", {})
-    ad = after.get("defects", {})
-    for sev in ("P0", "P1", "P2", "P3"):
-        bset = set(bd.get(sev, []))
-        aset = set(ad.get(sev, []))
-        resolved = sorted(bset - aset)
-        new = sorted(aset - bset)
-        print(f"  {sev}: baseline={len(bset)} after={len(aset)}")
-        if resolved:
-            print(f"    resolved: {', '.join(resolved)}")
-        if new:
-            print(f"    NEW regressions: {', '.join(new)}")
+    # Per-case hard-acceptance cases from SPEC v2 §9.1
+    hard = ["KB-007", "KB-009", "KB-017", "KB-019", "KB-021", "KB-023", "KB-037"]
+    lines.append("")
+    lines.append("HARD ACCEPTANCE CASES (round2 detail if present)")
+    if rounds[-1][2]:
+        detail = {x["case_id"]: x for x in rounds[-1][2].get("detail", [])}
+        for cid in hard:
+            row = detail.get(cid, {})
+            lines.append(
+                f"  {cid}: top1={row.get('top1_hit')} recall5={row.get('recall5')} "
+                f"ask_fact={row.get('ask_fact_correct', row.get('facts_correct'))} "
+                f"ask_cite={row.get('ask_citation_valid', row.get('citation_valid'))} "
+                f"e2e={row.get('e2e_pass')} sev={row.get('defect_severity')}"
+            )
 
-    # Per-case detail for previously-failing cases
-    print()
-    print("PER-CASE DETAIL (previously P1)")
-    base_detail = {d["case_id"]: d for d in base.get("detail", [])}
-    after_detail = {d["case_id"]: d for d in after.get("detail", [])}
-    p1_cases = sorted(set(bd.get("P1", [])))
-    for cid in p1_cases:
-        b = base_detail.get(cid, {})
-        a = after_detail.get(cid, {})
-        b_top1 = b.get("top1_hit")
-        a_top1 = a.get("top1_hit")
-        b_grounded = b.get("grounded")
-        a_grounded = a.get("grounded")
-        b_hall = b.get("no_hallucination")
-        a_hall = a.get("no_hallucination")
-        print(
-            f"  {cid}: top1 {b_top1}->{a_top1}  grounded {b_grounded}->{a_grounded}  "
-            f"no_halluc {b_hall}->{a_hall}  severity {b.get('defect_severity')}->{a.get('defect_severity') or 'OK'}"
-        )
+    lines.append("")
+    lines.append(
+        f"ROUND-2 OVERALL GATE: {'PASS' if all_pass and rounds[-1][2] else 'FAIL'} "
+        f"/ verdict={rounds[-1][2].get('release_verdict') if rounds[-1][2] else 'n/a'}"
+    )
+
+    text = "\n".join(lines)
+    print(text)
+    if args.out:
+        Path(args.out).write_text(text + "\n", encoding="utf-8")
+    elif rounds[-1][2] is not None:
+        out_path = Path(args.round2) / "metrics_comparison.txt"
+        out_path.write_text(text + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

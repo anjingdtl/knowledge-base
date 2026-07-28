@@ -83,6 +83,10 @@ def rank_with_freshness(
     relevant candidate. Deprecated items are pushed down. Items without a
     parseable year keep their original score (no guessing).
 
+    Also writes ``ranking_score`` (relevance + freshness) so callers can sort
+    AFTER a later relevance re-score without losing the version signal
+    (SPEC v2 §5.1.5 — freshness must still win within a regulation family).
+
     Mutates copies (the returned list items are shallow copies with an updated
     ``score``/``final_relevance_score`` and a ``version_rank`` trace field);
     the input list is not modified.
@@ -96,6 +100,7 @@ def rank_with_freshness(
     out: list[dict[str, Any]] = []
     for it, year in zip(items, years):
         row = dict(it)
+        # Preserve pre-freshness relevance for ranking_score base.
         base = _score_of(row)
         boost = 0.0
         trace = {"version_year": year, "deprecated": is_deprecated(row)}
@@ -109,22 +114,107 @@ def rank_with_freshness(
             boost = max_boost - boost  # newest ⇒ full max_boost
         if trace["deprecated"]:
             boost -= deprecate_penalty
-        new_score = max(0.0, min(1.0, base + boost))
-        row["score"] = new_score
-        if "final_relevance_score" in row or "fts_score" in row:
-            row["final_relevance_score"] = new_score
-            if "fts_score" in row:
-                row["fts_score"] = new_score
+        ranking_score = max(0.0, min(1.0, base + boost))
+        # Do NOT overwrite final_relevance_score with freshness — keep
+        # relevance pure; expose ranking_score for post-relevance sort.
+        row["ranking_score"] = ranking_score
+        # Keep score as ranking_score for legacy sort consumers, but restore
+        # final_relevance_score if it was already computed.
+        if row.get("final_relevance_score") is None:
+            row["score"] = ranking_score
+        else:
+            row["score"] = ranking_score
         row["version_rank"] = trace
         out.append(row)
 
+    # Within the same regulation family, ensure the newest year outranks older
+    # editions even when lexical relevance slightly favors the old text
+    # (KB-037: 2023 "一级竞赛" vs 2026 revision). Adjustment is family-local
+    # — it must not reorder unrelated documents globally.
+    family_newest: dict[str, int] = {}
+    for row in out:
+        key = _normalize_title_for_grouping(row.get("title") or "")
+        year = extract_version_year(row)
+        if key and year is not None:
+            family_newest[key] = max(family_newest.get(key, 0), year)
+
+    for row in out:
+        key = _normalize_title_for_grouping(row.get("title") or "")
+        year = extract_version_year(row)
+        newest_in_family = family_newest.get(key)
+        rs = float(row.get("ranking_score") or 0.0)
+        if key and year is not None and newest_in_family is not None:
+            if year == newest_in_family:
+                # Strong enough to beat a same-family older doc whose
+                # lexical score is modestly higher (typical 0.05–0.15 gap).
+                rs = min(1.0, rs + 0.20)
+            else:
+                rs = max(0.0, rs - 0.22)
+            row["ranking_score"] = rs
+            row["score"] = rs
+            vr = dict(row.get("version_rank") or {})
+            vr["family_newest_year"] = newest_in_family
+            vr["is_family_newest"] = year == newest_in_family
+            row["version_rank"] = vr
+
     out.sort(
         key=lambda r: (
-            r.get("version_rank", {}).get("deprecated", False),
-            -_score_of(r),
+            bool((r.get("version_rank") or {}).get("deprecated")),
+            -float(r.get("ranking_score") or _score_of(r) or 0.0),
+            -(extract_version_year(r) or 0),
         )
     )
     return out
+
+
+def filter_to_latest_versions(
+    items: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Keep only the newest year within each regulation title family.
+
+    Used when the user asks for the latest/current version so generation
+    context does not mix superseded amounts or grading rules (KB-037).
+    Unrelated documents (different title keys) are retained.
+    Items without a parseable year are retained as-is.
+    """
+    if not items:
+        return []
+    # Group by normalized title.
+    groups: dict[str, list[dict[str, Any]]] = {}
+    ungrouped: list[dict[str, Any]] = []
+    order: list[str] = []
+    for it in items:
+        if not isinstance(it, dict):
+            continue
+        key = _normalize_title_for_grouping(it.get("title") or "")
+        year = extract_version_year(it)
+        if not key or year is None:
+            ungrouped.append(it)
+            continue
+        if key not in groups:
+            groups[key] = []
+            order.append(key)
+        groups[key].append(it)
+
+    kept: list[dict[str, Any]] = []
+    for key in order:
+        group = groups[key]
+        years = [extract_version_year(g) for g in group]
+        newest = max(y for y in years if y is not None)
+        for g in group:
+            if extract_version_year(g) == newest:
+                row = dict(g)
+                row.setdefault("version_rank", {})
+                if isinstance(row["version_rank"], dict):
+                    row["version_rank"] = {
+                        **row["version_rank"],
+                        "kept_as_latest": True,
+                        "newest_year": newest,
+                    }
+                kept.append(row)
+    # Preserve relative order: latest-filtered groups first (original order),
+    # then ungrouped.
+    return kept + ungrouped
 
 
 def _score_of(item: dict[str, Any]) -> float:

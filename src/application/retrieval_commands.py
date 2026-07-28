@@ -90,7 +90,13 @@ class RetrievalCommands:
                     break
         return output
 
-    def ask_verified(self, question: str, *, top_k: int = 5) -> dict[str, Any]:
+    def ask_verified(
+        self,
+        question: str,
+        *,
+        top_k: int = 5,
+        evidence_snapshot: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         from src.answering.service import AnswerService
 
         svc = AnswerService(
@@ -98,4 +104,10 @@ class RetrievalCommands:
             llm=self._c.llm,
             config=self._c.config,
         )
-        return dict(svc.ask(question, top_k=top_k))
+        return dict(
+            svc.ask(
+                question,
+                top_k=top_k,
+                evidence_snapshot=evidence_snapshot,
+            )
+        )

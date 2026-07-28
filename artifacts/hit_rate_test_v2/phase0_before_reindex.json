@@ -1,0 +1,15 @@
+{
+  "recorded_at": "2026-07-27T17:22:42",
+  "knowledge_items": 108,
+  "blocks": 128348,
+  "vector_index_before": {
+    "total_blocks": 128348,
+    "covered_blocks": 0,
+    "missing_blocks": 128348,
+    "coverage": 0.0
+  },
+  "embedding_model": "BAAI/bge-m3",
+  "embedding_base_url": "https://api.siliconflow.cn/v1/embeddings",
+  "embedding_batch_size": 20,
+  "note": "Phase0 baseline before vector rebuild. Old artifacts frozen."
+}

@@ -1,0 +1,74 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.6, pytest-9.1.1, pluggy-1.6.0 -- D:\AiWorkSpace\knowledge-base\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\AiWorkSpace\knowledge-base
+configfile: pyproject.toml
+plugins: anyio-4.14.2, langsmith-0.10.9
+collecting ... collected 57 items
+
+tests/mcp/test_hit_rate_regressions.py::TestUnifiedEvidenceJudgment::test_ask_source_dict_without_score_field_is_not_refused PASSED [  1%]
+tests/mcp/test_hit_rate_regressions.py::TestUnifiedEvidenceJudgment::test_weak_evidence_does_not_accept_and_keeps_reason PASSED [  3%]
+tests/mcp/test_hit_rate_regressions.py::TestUnifiedEvidenceJudgment::test_search_and_ask_accept_same_evidence[\u6d89\u8bc8\u7535\u8bdd \u4ee3\u7406\u5546\u4e00\u4e2a\u81ea\u7136\u6708\u5185\u6bcf\u4e2a\u53f7\u7801\u5904\u7f5a\u91d1\u989d-51b17abe-8fe3-42fb-8c90-2b9b3d6fb934-\u5e02\u573a-2026-8\u53f7-\u6d89\u8bc8\u6d89\u9a9a\u6270\u7535\u8bdd\u53f7\u7801\u5165\u7f51\u6e20\u9053\u5904\u7f6e\u7ec6\u5219-2026-\u7b2c\u516d\u6761 \u6d89\u8bc8\u53f7\u7801\u6bcf\u4e2a\u53f7\u7801\u4e00\u4e2a\u81ea\u7136\u6708\u5185\u5904\u7f5a2000\u5143\uff0c\u4ee3\u7406\u5546\u5165\u7f51\u53f7\u7801\u6d89\u8bc8\u5904\u7f6e\u89c4\u5219\u3002-2000\u5143] PASSED [  5%]
+tests/mcp/test_hit_rate_regressions.py::TestUnifiedEvidenceJudgment::test_search_and_ask_accept_same_evidence[\u5408\u540c\u5b9e\u4f53\u7ae0\u548c\u5408\u540c\u7535\u5b50\u7ae0\u7684\u6cd5\u5f8b\u6548\u529b\u5173\u7cfb-16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69-\u4e2d\u7535\u4fe1\u6842-2023-44\u53f7-\u5408\u540c\u4e13\u7528\u7ae0\u7ba1\u7406\u529e\u6cd5-\u7b2c\u4e94\u6761 \u5408\u540c\u5b9e\u4f53\u7ae0\u4e0e\u5408\u540c\u7535\u5b50\u7ae0\u5177\u6709\u540c\u7b49\u6cd5\u5f8b\u6548\u529b\u3002-\u540c\u7b49\u6cd5\u5f8b\u6548\u529b] PASSED [  7%]
+tests/mcp/test_hit_rate_regressions.py::TestUnifiedEvidenceJudgment::test_search_and_ask_accept_same_evidence[\u6280\u80fd\u7ade\u8d5b \u5b9e\u9645\u64cd\u4f5c\u6210\u7ee9\u5360\u6bd4\u4e0d\u5f97\u5c11\u4e8e-2b63b216-9850-4e82-803e-4006cb9f62ad-\u4e2d\u7535\u4fe1\u6842-2026-158\u53f7-\u6280\u80fd\u7ade\u8d5b\u7ba1\u7406\u529e\u6cd5-\u5b9e\u9645\u64cd\u4f5c\u6210\u7ee9\u5360\u6bd4\u4e0d\u5f97\u5c11\u4e8e70%\uff0c\u7406\u8bba\u6210\u7ee9\u5360\u6bd4\u4e0d\u8d85\u8fc730%\u3002-70%] PASSED [  8%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_intent_classification[\u4e2d\u56fd\u7535\u4fe1\u80a1\u4ef7\u4eca\u5929\u591a\u5c11-live_external] PASSED [ 10%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_intent_classification[\u91cf\u5b50\u8ba1\u7b97\u6700\u65b0\u8fdb\u5c55-live_external] PASSED [ 12%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_intent_classification[\u5f53\u524d\u5b9e\u65f6\u884c\u60c5-live_external] PASSED [ 14%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_intent_classification[\u706b\u661f\u63a2\u6d4b\u4efb\u52a1\u6700\u65b0\u8fdb\u5c55-live_external] PASSED [ 15%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_intent_classification[\u5dee\u65c5\u8d39\u7ba1\u7406\u529e\u6cd5\u6700\u65b0\u7248\u672c\u662f\u54ea\u4e00\u5e74-local_version] PASSED [ 17%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_intent_classification[\u6280\u80fd\u7ade\u8d5b\u7ba1\u7406\u529e\u6cd5\u6700\u65b0\u4fee\u8ba2\u7248 \u53d6\u6d88\u4e00\u7ea7\u4e8c\u7ea7\u7ade\u8d5b\u5206\u7ea7-local_version] PASSED [ 19%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_intent_classification[\u8425\u6536\u8d44\u91d1\u7ba1\u7406\u529e\u6cd5 \u6536\u652f\u4e24\u6761\u7ebf-ordinary] PASSED [ 21%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_intent_classification[\u9632\u8bc8\u9a97\u548c\u9a9a\u6270\u7535\u8bdd \u4ee3\u7406\u5546\u88ab\u7f5a\u591a\u5c11\u94b1-ordinary] PASSED [ 22%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_live_external_short_circuits PASSED [ 24%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_local_version_is_not_live_external PASSED [ 26%]
+tests/mcp/test_hit_rate_regressions.py::TestLocalVersionRouting::test_local_version_enters_retrieval_not_short_circuit PASSED [ 28%]
+tests/mcp/test_hit_rate_regressions.py::TestColloquialRecall::test_colloquial_query_search_and_ask_agree[\u9632\u8bc8\u9a97\u548c\u9a9a\u6270\u7535\u8bdd \u4ee3\u7406\u5546\u88ab\u7f5a\u591a\u5c11\u94b1-51b17abe-8fe3-42fb-8c90-2b9b3d6fb934-\u5e02\u573a-2026-8\u53f7-\u6d89\u8bc8\u6d89\u9a9a\u6270\u7535\u8bdd\u53f7\u7801\u5165\u7f51\u6e20\u9053\u5904\u7f6e\u7ec6\u5219-2026-\u7b2c\u516d\u6761 \u6d89\u8bc8\u53f7\u7801\u6bcf\u4e2a\u53f7\u7801\u5904\u7f5a2000\u5143\uff0c\u6d89\u9a9a\u6270\u53f7\u7801\u5904\u7f5a30\u5143\u3002] PASSED [ 29%]
+tests/mcp/test_hit_rate_regressions.py::TestColloquialRecall::test_colloquial_query_search_and_ask_agree[\u6d89\u9a9a\u6270\u7535\u8bdd \u4ee3\u7406\u5546\u4e00\u4e2a\u81ea\u7136\u6708\u5185\u6bcf\u4e2a\u53f7\u7801\u5904\u7f5a\u91d1\u989d-51b17abe-8fe3-42fb-8c90-2b9b3d6fb934-\u5e02\u573a-2026-8\u53f7-\u6d89\u8bc8\u6d89\u9a9a\u6270\u7535\u8bdd\u53f7\u7801\u5165\u7f51\u6e20\u9053\u5904\u7f6e\u7ec6\u5219-2026-\u7b2c\u516d\u6761 \u6d89\u9a9a\u6270\u53f7\u7801\u6bcf\u4e2a\u53f7\u7801\u5904\u7f5a30\u5143/\u4e2a\uff0c\u4e00\u4e2a\u81ea\u7136\u6708\u5185\u7d2f\u8ba1\u3002] PASSED [ 31%]
+tests/mcp/test_hit_rate_regressions.py::TestVersionRanking::test_extract_year_helper PASSED [ 33%]
+tests/mcp/test_hit_rate_regressions.py::TestVersionRanking::test_kb009_newest_version_ranks_first PASSED [ 35%]
+tests/mcp/test_hit_rate_regressions.py::TestClauseEvidenceIntegrity::test_adjacent_context_recovers_full_clause PASSED [ 36%]
+tests/mcp/test_hit_rate_regressions.py::TestClauseEvidenceIntegrity::test_iii_class_answer_does_not_use_ii_class_value PASSED [ 38%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_original_query_always_first PASSED [ 40%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_colloquial_expands_to_canonical_term[\u9632\u8bc8\u9a97\u548c\u9a9a\u6270\u7535\u8bdd \u4ee3\u7406\u5546\u88ab\u7f5a\u591a\u5c11\u94b1-\u6d89\u8bc8] PASSED [ 42%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_colloquial_expands_to_canonical_term[\u516c\u53f8\u548c\u5916\u90e8\u5546\u5bb6\u5408\u4f5c\u5356\u4e1c\u897f\u7684\u7ebf\u4e0a\u5e97\u94fa\u5165\u9a7b\u95e8\u69db-\u7ebf\u4e0a\u5408\u4f5c] PASSED [ 43%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_colloquial_expands_to_canonical_term[\u516c\u53f8\u5927\u989d\u5bf9\u5916\u6295\u8d44\u5e76\u8d2d\u51b3\u7b56\u8981\u4e0d\u8981\u5148\u8fc7\u6cd5\u5f8b\u5ba1\u6838-\u91cd\u8981\u51b3\u7b56] PASSED [ 45%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_colloquial_expands_to_canonical_term[\u516c\u53f8\u641e\u6bd4\u8d5b\u7ed9\u5458\u5de5\u53d1\u5956\u91d1 \u4e0a\u9650\u662f\u591a\u5c11-\u52b3\u52a8\u7ade\u8d5b] PASSED [ 47%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_colloquial_expands_to_canonical_term[\u5f02\u4e1a\u5408\u4f5c\u7ed9\u5ba2\u6237\u9001\u6743\u76ca\u4f18\u60e0\u5238\u7684\u5408\u4f5c\u65b9\u51c6\u5165\u6761\u4ef6-\u6743\u76ca\u4e1a\u52a1] PASSED [ 49%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_colloquial_expands_to_canonical_term[\u5ba2\u6237\u63d0\u51fa\u5bf9\u4ea7\u54c1\u7684\u9700\u6c42 \u516c\u53f8\u600e\u4e48\u54cd\u5e94\u5904\u7406-\u4ea7\u54c1\u95ee\u9700] PASSED [ 50%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_unknown_query_unchanged PASSED [ 52%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_canonical_terms_for_per_term_fts PASSED [ 54%]
+tests/mcp/test_hit_rate_regressions.py::TestQueryRewrite::test_merge_keeps_highest_score_per_kid PASSED [ 56%]
+tests/mcp/test_hit_rate_regressions.py::TestNoAnswerProtection::test_no_answer_queries_do_not_accept_random_evidence[\u4e2d\u56fd\u7535\u4fe1\u5e7f\u897f\u516c\u53f82026\u5e74\u8425\u6536\u9884\u6d4b\u662f\u591a\u5c11\u4ebf\u5143] PASSED [ 57%]
+tests/mcp/test_hit_rate_regressions.py::TestNoAnswerProtection::test_no_answer_queries_do_not_accept_random_evidence[\u5e7f\u897f\u7535\u4fe1\u5458\u5de5\u7684\u5de5\u8d44\u85aa\u7ea7\u8868\u548c\u5c97\u4f4d\u6d25\u8d34\u5177\u4f53\u6570\u989d] PASSED [ 59%]
+tests/mcp/test_hit_rate_regressions.py::TestNoAnswerProtection::test_no_answer_queries_do_not_accept_random_evidence[\u4e2d\u56fd\u7535\u4fe1\u96c6\u56e2\u603b\u90e8\u5317\u4eac\u7684\u529e\u516c\u697c\u5730\u5740] PASSED [ 61%]
+tests/mcp/test_hit_rate_regressions.py::TestNoAnswerProtection::test_no_answer_queries_do_not_accept_random_evidence[\u706b\u661f\u63a2\u6d4b\u4efb\u52a1\u6700\u65b0\u8fdb\u5c55] PASSED [ 63%]
+tests/mcp/test_hit_rate_regressions.py::TestNoAnswerProtection::test_no_answer_queries_do_not_accept_random_evidence[\u63a8\u8350\u4e00\u6b3e\u597d\u5403\u7684\u706b\u9505\u5e95\u6599\u54c1\u724c] PASSED [ 64%]
+tests/mcp/test_hit_rate_regressions.py::TestNoAnswerProtection::test_live_external_still_short_circuits PASSED [ 66%]
+tests/mcp/test_hit_rate_regressions.py::TestNormalizeEvidenceCandidate::test_fills_knowledge_id_from_page_id PASSED [ 68%]
+tests/mcp/test_hit_rate_regressions.py::TestNormalizeEvidenceCandidate::test_fills_title_from_citation_document PASSED [ 70%]
+tests/mcp/test_hit_rate_regressions.py::TestNormalizeEvidenceCandidate::test_prefers_longest_text PASSED [ 71%]
+tests/mcp/test_hit_rate_regressions.py::TestSharedCandidateSnapshot::test_build_snapshot_projects_to_search_execution PASSED [ 73%]
+tests/mcp/test_hit_rate_regressions.py::TestSharedCandidateSnapshot::test_answer_service_uses_snapshot_not_re_retrieval PASSED [ 75%]
+tests/mcp/test_hit_rate_regressions.py::TestSharedCandidateSnapshot::test_unlisted_source_fails_citation_allowlist PASSED [ 77%]
+tests/mcp/test_hit_rate_regressions.py::TestVersionEvidenceIsolation::test_filter_to_latest_drops_old_edition PASSED [ 78%]
+tests/mcp/test_hit_rate_regressions.py::TestVersionEvidenceIsolation::test_freshness_after_relevance_puts_2026_first PASSED [ 80%]
+tests/mcp/test_hit_rate_regressions.py::TestSubjectAnchoringAndAdjacent::test_answer_service_context_includes_adjacent_iii_value PASSED [ 82%]
+tests/mcp/test_hit_rate_regressions.py::TestSubjectAnchoringAndAdjacent::test_subject_anchor_rejects_neighbor_value PASSED [ 84%]
+tests/stability/test_current_information_no_answer.py::test_current_info_detector[\u4e2d\u56fd\u7535\u4fe1\u80a1\u4ef7\u4eca\u5929\u591a\u5c11] PASSED [ 85%]
+tests/stability/test_current_information_no_answer.py::test_current_info_detector[\u91cf\u5b50\u8ba1\u7b97\u6700\u65b0\u8fdb\u5c55] PASSED [ 87%]
+tests/stability/test_current_information_no_answer.py::test_current_info_detector[\u5f53\u524d\u5b9e\u65f6\u884c\u60c5] PASSED [ 89%]
+tests/stability/test_current_information_no_answer.py::test_search_current_info_no_match PASSED [ 91%]
+tests/stability/test_current_information_no_answer.py::test_ask_current_info_no_answer PASSED [ 92%]
+tests/stability/test_pre_llm_evidence_gate.py::test_ask_clears_fabricated_answer_on_weak_evidence PASSED [ 94%]
+tests/services/test_relevance_gate_in_corpus.py::test_extract_query_terms_splits_long_cjk_run PASSED [ 96%]
+tests/services/test_relevance_gate_in_corpus.py::test_accepts_strong_title_match_even_if_semantic_score_low PASSED [ 98%]
+tests/services/test_relevance_gate_in_corpus.py::test_current_info_still_rejected PASSED [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\config\__init__.py:1464
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\config\__init__.py:1464: PytestConfigWarning: Unknown config option: asyncio_mode
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 57 passed, 1 warning in 2.91s ========================

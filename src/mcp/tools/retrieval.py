@@ -157,7 +157,6 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
     from src.services.numeric_unit_match import apply_numeric_unit_ranking
     from src.services.query_rewrite import expand_query, merge_candidates_by_query
     from src.services.result_dedupe import boost_title_term_overlap, dedupe_by_knowledge_id
-    from src.services.version_rank import rank_with_freshness
 
     def _semantic(q: str) -> list:
         try:
@@ -229,9 +228,9 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
     apply_numeric_unit_ranking(query, results)
     results = dedupe_by_knowledge_id(results)
     results = boost_title_term_overlap(query, results)
-    # Version freshness re-rank: newest effective version first. Conservative —
-    # only fires when a reliable year can be parsed; never lowers relevance.
-    results = rank_with_freshness(results)
+    # NOTE: rank_with_freshness is intentionally NOT applied here. SPEC v2
+    # requires freshness to run AFTER final relevance ranking so a later
+    # re-score cannot bury the newest edition (KB-037).
 
     out = []
     for item in results:
@@ -240,6 +239,39 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
             row["knowledge_id"] = row["id"]
         out.append(row)
     return out
+
+
+def _list_blocks_for_snapshot(page_id: str) -> list[dict]:
+    """Block loader for adjacent allowlist / expansion (production path)."""
+    try:
+        return _list_blocks_for_page(page_id)
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("snapshot block list failed for %s: %s", page_id, exc)
+        return []
+
+
+def _build_shared_snapshot(
+    query: str,
+    *,
+    top_k: int,
+    threshold: float,
+    fetch_k: int | None = None,
+) -> dict:
+    """Build the single canonical retrieval snapshot for search and ask."""
+    from src.retrieval.canonical_snapshot import build_canonical_snapshot
+    from src.services.query_rewrite import expand_query
+
+    fk = int(fetch_k if fetch_k is not None else max(top_k * 3, 15))
+    candidates = _retrieve_candidates(query, fetch_k=fk)
+    return build_canonical_snapshot(
+        query,
+        candidates,
+        threshold=threshold,
+        top_k=top_k,
+        expanded_queries=expand_query(query),
+        list_blocks_fn=_list_blocks_for_snapshot,
+        adjacent_window=1,
+    )
 
 
 @_define_tool(
@@ -283,77 +315,50 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             source_path="current_info_gate",
         )
 
-    results = _retrieve_candidates(query, fetch_k=fetch_k)
-    scores = [
-        float(r.get("score") or r.get("fts_score") or r.get("similarity") or 0.0)
-        for r in results
-    ]
-    top_score = max(scores) if scores else 0.0
-    semantic_weak = (not results) or top_score < threshold
+    # SPEC v2 Phase 1: one canonical snapshot for search (ask uses the same
+    # builder). Freshness is applied after relevance inside the snapshot.
+    snapshot = _build_shared_snapshot(
+        query, top_k=k, threshold=threshold, fetch_k=fetch_k,
+    )
+    if snapshot.get("accept") and snapshot.get("accepted_items"):
+        data = list(snapshot["accepted_items"])[:k]
+        return ok(
+            data,
+            total_estimate=len(data),
+            top_k=k,
+            limit=k,
+            no_match=False,
+            top_score=snapshot.get("top_score", 0.0),
+            source_path="canonical_snapshot",
+            intent=snapshot.get("intent"),
+            accepted_knowledge_ids=list(snapshot.get("accepted_knowledge_ids") or []),
+        )
 
-    def _normalize_hits(items: list) -> list:
-        from src.services.result_dedupe import dedupe_by_knowledge_id
-        return dedupe_by_knowledge_id(list(items))
+    # Low-confidence colloquial surface: when the gate rejects but alias FTS
+    # found something, return marked low_confidence hits so the agent can still
+    # read them. Ask still decides answerability via the gate (no threshold cut).
+    from src.services.query_rewrite import canonical_terms, merge_candidates_by_query
+    from src.services.result_dedupe import dedupe_by_knowledge_id
 
-    def _fts_fallback_items(limit_k: int) -> list:
-        """Alias-expanded FTS fallback (SPEC Phase 3.3). Runs the original query
-        plus each canonical expansion term separately (FTS5 multi-word queries
-        are implicit-AND), tags expansion-term hits with ``alias_fts_match``."""
-        from src.services.query_rewrite import canonical_terms, merge_candidates_by_query
-
+    if canonical_terms(query):
         ft_lists = []
-        ft = search_fulltext(query, limit=max(limit_k, 10), offset=0)
+        ft = search_fulltext(query, limit=max(k, 10), offset=0)
         if ft.get("ok"):
-            ft_lists.append(list(ft.get("data") or [])[: max(limit_k, 10)])
+            ft_lists.append(list(ft.get("data") or [])[: max(k, 10)])
         for term in canonical_terms(query):
-            ft = search_fulltext(term, limit=max(limit_k, 10), offset=0)
+            ft = search_fulltext(term, limit=max(k, 10), offset=0)
             if ft.get("ok"):
-                hits = list(ft.get("data") or [])[: max(limit_k, 10)]
+                hits = list(ft.get("data") or [])[: max(k, 10)]
                 for h in hits:
                     if isinstance(h, dict):
                         h["alias_fts_match"] = True
                 ft_lists.append(hits)
-        return merge_candidates_by_query(query, ft_lists) if ft_lists else []
-
-    # Lexical fallback when semantic missing/weak — still must pass relevance
-    # gate. SPEC Phase 3.3: also try alias-expanded variants here so colloquial
-    # queries (防诈骗→涉诈) can hit knowledge_fts / block_fts.
-    if semantic_weak:
-        ft_items = _normalize_hits(_fts_fallback_items(k))
-        decision = evaluate_evidence_unified(query, ft_items, threshold=threshold)
-        if decision["accept"]:
-            data = decision["items"][:k]
-            return ok(
-                data,
-                total_estimate=len(data),
-                top_k=k,
-                limit=k,
-                no_match=False,
-                top_score=decision["top_score"],
-                source_path="fulltext_fallback",
-            )
-        return ok(
-            [],
-            total_estimate=0,
-            top_k=k,
-            limit=k,
-            no_match=True,
-            reason=decision.get("reason") or "all_candidates_below_threshold",
-            top_score=decision.get("top_score", round(top_score, 4)),
-            threshold=threshold,
-            source_path="fulltext_fallback",
+        ft_items = dedupe_by_knowledge_id(
+            merge_candidates_by_query(query, ft_lists) if ft_lists else []
         )
-
-    decision = evaluate_evidence_unified(query, _normalize_hits(results[: max(k, 10)]), threshold=threshold)
-    if not decision["accept"]:
-        # SPEC Phase 3: even when semantic retrieval found something but the
-        # unified gate rejected it, try the alias-expanded FTS fallback — FTS
-        # often surfaces exact-lexical hits (knowledge_fts) that weak vector
-        # scores miss for colloquial queries (KB-010 etc.).
-        ft_items = _normalize_hits(_fts_fallback_items(k))
         if ft_items:
             ft_decision = evaluate_evidence_unified(query, ft_items, threshold=threshold)
-            if ft_decision["accept"]:
+            if ft_decision.get("accept"):
                 data = ft_decision["items"][:k]
                 return ok(
                     data,
@@ -364,51 +369,34 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
                     top_score=ft_decision["top_score"],
                     source_path="fulltext_fallback",
                 )
-            # SPEC Phase 3.2: FTS matched the right document via alias expansion
-            # but the colloquial query's lexical coverage is below the
-            # high-confidence threshold. Return the top FTS hit as a
-            # low-confidence candidate so search can still surface it (and ask's
-            # pre-LLM probe can read it). The candidate is explicitly marked
-            # low_confidence; ask still decides answerability via the gate.
-            from src.services.query_rewrite import canonical_terms
+            low_conf = []
+            for it in ft_items[:k]:
+                row = dict(it)
+                row["low_confidence"] = True
+                row["confidence_reason"] = "colloquial_alias_fts_match"
+                low_conf.append(row)
+            return ok(
+                low_conf,
+                total_estimate=len(low_conf),
+                top_k=k,
+                limit=k,
+                no_match=False,
+                low_confidence=True,
+                top_score=ft_decision.get("top_score", snapshot.get("top_score", 0.0)),
+                threshold=threshold,
+                source_path="fulltext_fallback_low_confidence",
+            )
 
-            if canonical_terms(query) and ft_items:
-                low_conf = []
-                for it in ft_items[:k]:
-                    row = dict(it)
-                    row["low_confidence"] = True
-                    row["confidence_reason"] = "colloquial_alias_fts_match"
-                    low_conf.append(row)
-                return ok(
-                    low_conf,
-                    total_estimate=len(low_conf),
-                    top_k=k,
-                    limit=k,
-                    no_match=False,
-                    low_confidence=True,
-                    top_score=ft_decision.get("top_score", round(top_score, 4)),
-                    threshold=threshold,
-                    source_path="fulltext_fallback_low_confidence",
-                )
-        return ok(
-            [],
-            total_estimate=0,
-            top_k=k,
-            limit=k,
-            no_match=True,
-            reason=decision.get("reason") or "all_candidates_below_threshold",
-            top_score=decision.get("top_score", round(top_score, 4)),
-            threshold=threshold,
-            source_path="semantic",
-        )
     return ok(
-        decision["items"][:k],
-        total_estimate=len(decision["items"]),
+        [],
+        total_estimate=0,
         top_k=k,
         limit=k,
-        no_match=False,
-        top_score=decision["top_score"],
-        source_path="semantic",
+        no_match=True,
+        reason=snapshot.get("reason") or "all_candidates_below_threshold",
+        top_score=snapshot.get("top_score", 0.0),
+        threshold=threshold,
+        source_path="canonical_snapshot",
     )
 
 @_define_tool(
@@ -686,11 +674,19 @@ def _should_use_verified_ask_impl() -> bool:
         return False
 
 
-def ask_verified(container: AppContainer, question: str, *, top_k: int = 5) -> dict:
+def ask_verified(
+    container: AppContainer,
+    question: str,
+    *,
+    top_k: int = 5,
+    evidence_snapshot: dict | None = None,
+) -> dict:
     """Verified hybrid ask via Application RetrievalCommands / AnswerService."""
     from src.application.retrieval_commands import RetrievalCommands
 
-    return RetrievalCommands(container).ask_verified(question, top_k=top_k)
+    return RetrievalCommands(container).ask_verified(
+        question, top_k=top_k, evidence_snapshot=evidence_snapshot,
+    )
 
 
 def _do_ask(question: str) -> dict:
@@ -741,56 +737,74 @@ def _do_ask(question: str) -> dict:
 
     container = _get_container()
 
-    # --- SPEC Phase 1: pre-LLM evidence probe ------------------------------
-    # Run the SAME retrieval as ``search`` and judge with the unified gate. If
-    # no evidence is accepted, short-circuit to no_answer WITHOUT calling the
-    # generation pipeline. This makes ask/search agreement deterministic for
-    # the accept/reject decision (KB-017: search score=1.0, ask must accept too).
-    # The probe is SKIPPED when the production retrieval path is unavailable
-    # (e.g. test doubles that only stub rag_pipeline) so legacy timeout/error
-    # envelopes still surface instead of being masked as no_answer.
-    pre_decision = None
+    # --- SPEC v2 Phase 1: shared canonical snapshot ------------------------
+    # Build the SAME snapshot search uses. If the gate rejects, short-circuit
+    # to no_answer WITHOUT calling the LLM. When accepted, the snapshot is
+    # passed into AnswerService so it cannot re-retrieve unconstrained
+    # evidence for the same question (KB-007/023).
+    snapshot: dict | None = None
     accepted_kids: set[str] = set()
     accepted_blocks: set[str] = set()
+    adjacent_allowlist: list[dict] = []
     probe_available = getattr(container, "search_service", None) is not None
     if probe_available:
         try:
             probe_k = int(Config.get("rag.ask.max_sources", 5) or 5)
-            probe_candidates = _retrieve_candidates(question, fetch_k=max(probe_k * 3, 15))
-            pre_decision = evaluate_evidence_unified(
-                question, probe_candidates[: max(probe_k, 10)], threshold=weak_threshold
+            snapshot = _build_shared_snapshot(
+                question,
+                top_k=probe_k,
+                threshold=weak_threshold,
+                fetch_k=max(probe_k * 3, 15),
             )
-            for r in pre_decision.get("items") or []:
-                accepted_kids.add((r.get("knowledge_id") or "").strip())
-                accepted_blocks.add((r.get("block_id") or "").strip())
+            accepted_kids = {
+                k for k in (snapshot.get("accepted_knowledge_ids") or []) if k
+            }
+            accepted_blocks = {
+                b for b in (snapshot.get("accepted_block_ids") or []) if b
+            }
+            adjacent_allowlist = list(snapshot.get("adjacent_allowlist") or [])
+            # Also allow adjacent block ids explicitly.
+            for entry in adjacent_allowlist:
+                bid = (entry.get("block_id") or "").strip()
+                kid = (entry.get("knowledge_id") or "").strip()
+                if bid:
+                    accepted_blocks.add(bid)
+                if kid:
+                    accepted_kids.add(kid)
         except Exception as exc:  # noqa: BLE001 - probe is best-effort
-            logger.debug("ask pre-LLM evidence probe failed: %s", exc)
-            pre_decision = None
+            logger.debug("ask shared snapshot probe failed: %s", exc)
+            snapshot = None
 
-    if pre_decision is not None and not pre_decision["accept"]:
+    if snapshot is not None and not snapshot.get("accept"):
         return {
             "answer": "",
             "sources": [],
             "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
             "route": {
                 "mode": "no_answer",
-                "explanation": pre_decision.get("reason") or "insufficient_relevant_evidence",
+                "explanation": snapshot.get("reason") or "insufficient_relevant_evidence",
             },
             "query_plan": {},
             "block_contexts": {},
             "warnings": [
                 f"evidence gate blocked generation "
-                f"(top_score={pre_decision.get('top_score', 0)} < {weak_threshold})"
+                f"(top_score={snapshot.get('top_score', 0)} < {weak_threshold})"
             ],
             "wiki_context": "",
             "trace_id": "",
             "answer_mode": "no_answer",
-            "reason": pre_decision.get("reason") or "insufficient_relevant_evidence",
+            "reason": snapshot.get("reason") or "insufficient_relevant_evidence",
             "conflict_disclosed": False,
             "claims_used": [],
             "raw_evidence_used": [],
             "conflicts": [],
             "fallbacks": [],
+            "evidence_snapshot": {
+                "accepted_knowledge_ids": list(snapshot.get("accepted_knowledge_ids") or []),
+                "accepted_block_ids": list(snapshot.get("accepted_block_ids") or []),
+                "top_score": snapshot.get("top_score"),
+                "intent": snapshot.get("intent"),
+            },
         }
 
     def _run_verified() -> dict:
@@ -798,6 +812,7 @@ def _do_ask(question: str) -> dict:
             container,
             question,
             top_k=int(Config.get("rag.ask.max_sources", 5) or 5),
+            evidence_snapshot=snapshot,
         )
 
     def _run_legacy() -> dict:
@@ -814,10 +829,8 @@ def _do_ask(question: str) -> dict:
     try:
         result = dict(run_with_deadline(runner, total_timeout, isolate="thread"))
         sources = list(result.get("sources") or [])
-        raw_ev = list(result.get("raw_evidence_used") or [])
-        claims_used = list(result.get("claims_used") or [])
 
-        if pre_decision is None:
+        if snapshot is None:
             # Pre-LLM probe did not run (test doubles / legacy without
             # search_service). Fall back to the post-generation evidence gate on
             # the pipeline's own sources, so weak evidence still blocks a
@@ -851,24 +864,24 @@ def _do_ask(question: str) -> dict:
                 accepted_kids.add((r.get("knowledge_id") or "").strip())
                 accepted_blocks.add((r.get("block_id") or "").strip())
 
-        # SPEC Phase 1.3: citation integrity check. The accept/reject decision
-        # was made by the pre-LLM probe (or the post-generation fallback gate
-        # above). Here we verify final sources are traceable to accepted
-        # evidence and drop any un-traceable ones.
-        # Expand the accepted set with evidence the pipeline surfaced (claims
-        # and raw_evidence) so a source pointing at the same knowledge item is
-        # still valid even if the probe saw a different block.
-        for ev in raw_ev:
-            if isinstance(ev, dict):
-                accepted_kids.add((ev.get("knowledge_id") or "").strip())
-                accepted_blocks.add((ev.get("block_id") or "").strip())
-        for c in claims_used:
-            if isinstance(c, dict):
-                accepted_kids.add((c.get("knowledge_id") or "").strip())
-                for ev in c.get("evidence") or []:
-                    if isinstance(ev, dict):
-                        accepted_kids.add((ev.get("knowledge_id") or "").strip())
-                        accepted_blocks.add((ev.get("block_id") or "").strip())
+        # SPEC v2 §4.2.5 / §5.1.1: citation integrity against the PRE-ACCEPTED
+        # allowlist only. Do NOT enlarge the allowlist from pipeline
+        # raw_evidence_used / claims — that was the bypass that made 104/288
+        # final citations untraceable to the search evidence set.
+        from src.retrieval.canonical_snapshot import source_in_allowlist
+
+        # Prefer allowlist carried back from AnswerService if present.
+        snap_meta = result.pop("_evidence_snapshot", None) or {}
+        if snap_meta.get("accepted_knowledge_ids"):
+            accepted_kids |= {
+                k for k in snap_meta["accepted_knowledge_ids"] if k
+            }
+        if snap_meta.get("accepted_block_ids"):
+            accepted_blocks |= {
+                b for b in snap_meta["accepted_block_ids"] if b
+            }
+        if snap_meta.get("adjacent_allowlist"):
+            adjacent_allowlist = list(snap_meta["adjacent_allowlist"])
         accepted_kids.discard("")
         accepted_blocks.discard("")
 
@@ -885,21 +898,53 @@ def _do_ask(question: str) -> dict:
             route["mode"] = "no_answer"
             route["explanation"] = result["reason"]
             result["route"] = route
-        elif accepted_kids or accepted_blocks:
-            # Drop sources that are NOT traceable to accepted evidence.
+        elif accepted_kids or accepted_blocks or adjacent_allowlist:
             kept = []
             dropped = []
+            citation_stats = {
+                "preaccepted": 0,
+                "adjacent_extension": 0,
+                "rejected": 0,
+            }
+            adj_pairs = {
+                (
+                    str(e.get("knowledge_id") or "").strip(),
+                    str(e.get("block_id") or "").strip(),
+                )
+                for e in adjacent_allowlist
+                if e.get("is_adjacent_extension")
+            }
             for s in sources:
                 if not isinstance(s, dict):
                     continue
                 kid = (s.get("knowledge_id") or "").strip()
                 bid = (s.get("block_id") or "").strip()
-                ok = (kid and kid in accepted_kids) or (bid and bid in accepted_blocks)
-                (kept if ok else dropped).append(s)
+                ok_src = source_in_allowlist(
+                    s,
+                    accepted_knowledge_ids=accepted_kids,
+                    accepted_block_ids=accepted_blocks,
+                    adjacent_allowlist=adjacent_allowlist,
+                )
+                if ok_src:
+                    # Annotate source provenance for scoring / audit.
+                    if (kid, bid) in adj_pairs or s.get("is_adjacent_extension"):
+                        s = dict(s)
+                        s["is_adjacent_extension"] = True
+                        citation_stats["adjacent_extension"] += 1
+                    else:
+                        citation_stats["preaccepted"] += 1
+                    kept.append(s)
+                else:
+                    citation_stats["rejected"] += 1
+                    dropped.append(s)
+            result["citation_integrity"] = citation_stats
             if dropped and kept:
                 result["sources"] = kept
-            # If ALL sources are un-traceable, the pipeline produced citations
-            # we cannot verify — refuse rather than risk a hallucinated answer.
+                result.setdefault("warnings", []).append(
+                    f"citation integrity: dropped {len(dropped)} untraceable sources"
+                )
+            # If ALL sources are un-traceable, refuse rather than risk a
+            # hallucinated answer built on allowlist-bypassing evidence.
             if dropped and not kept and result.get("answer_mode") != "no_answer":
                 result["answer"] = ""
                 result["sources"] = []
@@ -912,6 +957,23 @@ def _do_ask(question: str) -> dict:
                 route["mode"] = "no_answer"
                 route["explanation"] = result["reason"]
                 result["route"] = route
+            elif kept:
+                result["sources"] = kept
+
+        # Surface a compact snapshot summary for evaluators (no full text dump).
+        if snapshot is not None:
+            result["evidence_snapshot"] = {
+                "accepted_knowledge_ids": list(snapshot.get("accepted_knowledge_ids") or []),
+                "accepted_block_ids": list(snapshot.get("accepted_block_ids") or []),
+                "generation_knowledge_ids": list(
+                    snapshot.get("generation_knowledge_ids") or []
+                ),
+                "top_score": snapshot.get("top_score"),
+                "intent": snapshot.get("intent"),
+                "adjacent_count": sum(
+                    1 for e in adjacent_allowlist if e.get("is_adjacent_extension")
+                ),
+            }
     except Exception as exc:
         # Py3.10: concurrent.futures.TimeoutError is NOT an alias of builtins.TimeoutError
         # (alias since 3.11). Treat both as hard timeout envelopes.

@@ -9,6 +9,7 @@ prevent the II类/III类 substitution bug.
 from __future__ import annotations
 
 import logging
+import re
 from typing import Any, Callable
 
 from src.answering.citations import (
@@ -175,9 +176,10 @@ def assemble_answer_payload(
     if freshness_q and answer_mode == ANSWER_MODE_HYBRID and dropped_stale:
         warnings.append("freshness_sensitive_stale_excluded")
 
-    # SPEC Phase 5 (KB-019): strip numeric assertions that are not present in
-    # the accepted evidence. Prevents the II类/III类 substitution where a
-    # truncated context made the LLM cite "10万元" (II类) for a III类 question.
+    # SPEC Phase 5 / v2 Phase 3 (KB-019): strip numeric assertions that are
+    # not subject-anchored in the accepted evidence. Prevents the II类/III类
+    # substitution where a truncated context made the LLM cite "10万元" (II类)
+    # for a III类 question, including inferred phrasing like "超过10万元".
     # Only strips values with explicit amount/percent units — never touches
     # category labels, dates, or prose. If stripping would empty the answer,
     # downgrade to no_answer rather than show an unverifiable number.
@@ -186,7 +188,7 @@ def assemble_answer_payload(
             str(r.get("text") or "") for r in (claim_rows + raw_rows)
         )
         cleaned, stripped_any = strip_unanchored_numeric_assertions(
-            answer, evidence=evidence_blob
+            answer, evidence=evidence_blob, question=question,
         )
         if stripped_any:
             warnings.append("numeric_fact_guard_stripped_unanchored_value")
@@ -197,6 +199,37 @@ def assemble_answer_payload(
                 warnings.append("numeric_fact_guard_emptied_answer")
         else:
             answer = cleaned
+
+        # If a subject+numeric question remains without the subject-anchored
+        # value in the answer, refuse rather than return a qualitative hedge
+        # (e.g. "超过10万元" with no III类 20万元). Only for questions that
+        # clearly ask for an amount/limit (限额/金额/处罚/占比…).
+        from src.answering.fact_guard import (
+            extract_query_subjects,
+            select_numeric_fact_for_subject,
+        )
+        subjects = extract_query_subjects(question)
+        numeric_intent = bool(
+            re.search(r"限额|金额|处罚|占比|比例|标准|多少|元|%|％", question or "")
+        )
+        if (
+            subjects
+            and numeric_intent
+            and answer_mode in (ANSWER_MODE_HYBRID, ANSWER_MODE_RAW)
+        ):
+            needed = select_numeric_fact_for_subject(
+                subject=subjects[0], evidence=evidence_blob,
+            )
+            if needed:
+                ans_norm = re.sub(r"\s+", "", answer or "")
+                need_norm = re.sub(r"\s+", "", needed)
+                if (
+                    need_norm not in ans_norm
+                    and need_norm.replace("元", "") not in ans_norm
+                ):
+                    answer_mode = ANSWER_MODE_NO_ANSWER
+                    answer = format_no_answer(question, freshness=freshness_q)
+                    warnings.append("numeric_fact_guard_missing_subject_value")
 
     sources = build_sources(results, claim_rows, raw_rows)
 

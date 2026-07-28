@@ -1,0 +1,140 @@
+{
+  "started_at": "2026-07-27T17:38:10",
+  "finished_at": "2026-07-27T18:01:32",
+  "elapsed_sec": 1401.9,
+  "before": {
+    "total_blocks": 128348,
+    "covered_blocks": 6976,
+    "missing_blocks": 121372,
+    "coverage": 0.05435222987502727
+  },
+  "after": {
+    "total_blocks": 128348,
+    "covered_blocks": 127964,
+    "missing_blocks": 384,
+    "coverage": 0.9970081341353196
+  },
+  "processed": 120988,
+  "errors": [
+    {
+      "block_ids": [
+        "bf0fcefa-a966-4308-acc1-98b13cefb193",
+        "36ba7853-c482-42a7-bb87-cb90dfa46e9a",
+        "43dab1f6-9ffe-40ec-a57e-24f5d2c1e3de"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APIConnectionError: Connection error.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "c7f82eb8-db9d-4724-b633-5d526bb88c89",
+        "88f7475f-2772-4459-83f1-23a23cfb61d3",
+        "56d59aaf-41c9-45f1-99ae-b9722f85423d"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APIConnectionError: Connection error.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "98648f8b-bc8b-4f17-936a-e1197820377b",
+        "cfa6b128-11eb-4ff8-a9bf-731155e3c30e",
+        "723562fa-969c-446b-b2af-059f931a062a"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APIConnectionError: Connection error.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "59036569-2f45-4cf8-9bb4-e6b2484fb924",
+        "9be175c8-9a32-4caa-a04f-fa5378e8c456",
+        "16066793-93c2-4148-ad5a-0620e51a559c"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APIConnectionError: Connection error.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "cd21c9f2-8d1a-4e75-90f2-9a6642a2978c",
+        "77b9eee7-6fcf-465c-a4a9-57b8f66cb80d",
+        "fe2c2405-2d78-4850-a4b3-e135dd06859e"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APIConnectionError: Connection error.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "6a3874be-02b9-4257-979b-ea7cacb9ebdf",
+        "b09e7688-d7c3-45be-9113-b97694eacc00",
+        "b416b9a9-7f33-4428-8f5d-c2159403805f"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APIConnectionError: Connection error.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "ba1fd6b4-17a5-4408-97ee-45585ba433d8",
+        "e05e7752-466d-4f70-a10c-1d279c0f8398",
+        "0134950d-0efe-44f2-8ed5-a391e573e033"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APITimeoutError: Request timed out.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "cf9c3996-fae8-4420-b7c8-36ea8260a96f",
+        "f2801b61-592d-4717-8d68-dddb3fc5e72f",
+        "2ca5dd4e-c211-4342-a399-456f66b8bb51"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APITimeoutError: Request timed out.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "83f5f126-50a2-4b23-bd6f-25be3ec8b8a9",
+        "2d3c3441-315d-453d-9745-04f13aecba2f",
+        "1192c12e-324a-4e4f-b69c-85099f5066b1"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APITimeoutError: Request timed out.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "d7e47f69-ba1d-4fc8-89ee-5ab140502472",
+        "307c793c-ad3d-4d0e-8b1e-d3ea1c51333c",
+        "bd78fcec-b70b-48e1-8343-a2b7a4eda277"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APITimeoutError: Request timed out.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "e14f98ca-9f25-49f0-9a07-eb58cc2f9015",
+        "d146eb7f-5d95-4ddc-90ca-db55be1249f9",
+        "fb72993f-ce0a-4949-b520-29eff9bd2b12"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APITimeoutError: Request timed out.",
+      "n": 32
+    },
+    {
+      "block_ids": [
+        "2602b41f-ab7e-4401-b0ad-4cab348abd45",
+        "f8294df0-e384-4bd5-8733-c860e7133c99",
+        "cdcfee2d-38bb-4b55-8cc7-b655c7e2cc92"
+      ],
+      "error": "Unexpected error during embedding (model=BAAI/bge-m3, batch_size=32): APITimeoutError: Request timed out.",
+      "n": 32
+    }
+  ],
+  "error_count": 12,
+  "batch_size": 32,
+  "workers": 6,
+  "method": "parallel_official_blockstore",
+  "final_coverage": {
+    "total_blocks": 128348,
+    "covered_blocks": 128348,
+    "missing_blocks": 0,
+    "coverage": 1.0
+  },
+  "coverage_confirmed_at": "2026-07-27T18:02:57",
+  "embedding_model": "BAAI/bge-m3"
+}
