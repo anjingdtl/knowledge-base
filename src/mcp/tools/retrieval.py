@@ -1954,8 +1954,30 @@ def _runtime_diagnostics() -> dict:
     emb_model = str(Config.get("embedding.model", "") or "")
     emb_dim = int(Config.get("embedding.dimension", 1024) or 1024)
 
+    # SPEC v3: independent passage index health (not block coverage).
+    passage_health: dict = {
+        "retrieval_index_unit": "passage",
+        "passages": 0,
+        "embedded": 0,
+        "fts": 0,
+        "vector_coverage": 0.0,
+        "fts_coverage": 0.0,
+        "avg_char_count": 0.0,
+        "p50_char_count": 0.0,
+        "p95_char_count": 0.0,
+        "short_passage_count": 0,
+        "length_gate_ok": False,
+    }
+    try:
+        from src.services.passage_store import PassageStore
+        passage_health = PassageStore().health_stats()
+    except Exception as exc:
+        passage_health["error"] = f"{type(exc).__name__}: {str(exc)[:120]}"
+
     return {
         "api_keys": key_state,
+        "retrieval_index_unit": "passage",
+        "passage_index": passage_health,
         "vector_index": {
             "blocks": block_count,
             "vectors": vector_count,
@@ -1963,6 +1985,7 @@ def _runtime_diagnostics() -> dict:
             "sqlite_vec_ok": not bool(vector_error),
             "error": vector_error,
             "recommendation": recommendation,
+            "note": "block-level coverage is structural; use passage_index for retrieval health",
         },
         "vector": {
             "enabled": True,

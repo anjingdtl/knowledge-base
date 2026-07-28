@@ -239,6 +239,52 @@ def build_canonical_snapshot(
         for r in generation_items
         if r.get("knowledge_id")
     }
+    # SPEC v3: passage IDs + family/version audit for generation isolation.
+    accepted_passages: list[str] = []
+    seen_p: set[str] = set()
+    for r in accepted:
+        pid = str(r.get("passage_id") or "").strip()
+        if pid and pid not in seen_p:
+            seen_p.add(pid)
+            accepted_passages.append(pid)
+    gen_passages = [
+        str(r.get("passage_id") or "").strip()
+        for r in generation_items
+        if r.get("passage_id")
+    ]
+    version_exclusions: list[dict] = []
+    for r in generation_items:
+        vr = r.get("version_rank") if isinstance(r.get("version_rank"), dict) else {}
+        for ex in vr.get("excluded_family_versions") or []:
+            if ex not in version_exclusions:
+                version_exclusions.append(ex)
+
+    # Final assertion for local_version: generation must not include excluded years.
+    if intent == "local_version" and generation_items:
+        from src.services.version_rank import family_key_of, extract_version_year
+        family_newest: dict[str, int] = {}
+        for r in accepted:
+            fk = family_key_of(r)
+            y = extract_version_year(r)
+            if fk and y is not None:
+                family_newest[fk] = max(family_newest.get(fk, 0), y)
+        filtered_gen = []
+        for r in generation_items:
+            fk = family_key_of(r)
+            y = extract_version_year(r)
+            newest = family_newest.get(fk)
+            if fk and y is not None and newest is not None and y < newest:
+                version_exclusions.append({
+                    "knowledge_id": r.get("knowledge_id"),
+                    "passage_id": r.get("passage_id"),
+                    "family_key": fk,
+                    "version_year": y,
+                    "newest_year": newest,
+                    "reason": "generation_preassert_excluded",
+                })
+                continue
+            filtered_gen.append(r)
+        generation_items = filtered_gen
 
     return {
         "query": q,
@@ -253,9 +299,12 @@ def build_canonical_snapshot(
         "generation_items": generation_items[:top_k],
         "accepted_knowledge_ids": accepted_kids,
         "accepted_block_ids": accepted_blocks,
+        "accepted_passage_ids": accepted_passages,
+        "generation_passage_ids": [p for p in gen_passages if p],
         "generation_knowledge_ids": sorted(gen_kids),
         "adjacent_allowlist": allowlist,
         "gate_evidence": list(decision.get("evidence") or []),
+        "version_exclusions": version_exclusions,
         "stages": {
             "gate": {
                 "accept": bool(decision.get("accept")),
@@ -265,6 +314,7 @@ def build_canonical_snapshot(
             },
             "freshness_applied_after_relevance": True,
             "local_version_filtered": intent == "local_version",
+            "retrieval_unit": "passage",
         },
     }
 

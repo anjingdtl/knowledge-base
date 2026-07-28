@@ -257,11 +257,40 @@ def reindex_knowledge_item(item_id: str, item: KnowledgeItem):
     BlockStore().delete_by_page(item_id)
     if Config.get("rag.legacy_chunk_vector", False):
         VectorStore().delete_by_knowledge(item_id)
+    try:
+        from src.services.passage_store import PassageStore
+        PassageStore().delete_by_knowledge(item_id)
+    except Exception as e:
+        logger.debug("passage delete before reindex: %s", e)
     Database.delete_blocks_by_page(item_id)
     Database.delete_chunks_fts(item_id)
     Database.delete_chunks(item_id)
     # skip_dedup=True：避免 content_hash 命中自身后跳过重建
     index_knowledge_item(item, skip_dedup=True)
+    # SPEC v3: rebuild independent retrieval passages after blocks/chunks.
+    try:
+        from src.services.passage_store import PassageStore
+        conn = Database.get_conn()
+        blocks = [
+            {
+                "id": r[0] if not hasattr(r, "keys") else r["id"],
+                "content": r[1] if not hasattr(r, "keys") else r["content"],
+                "order_idx": r[2] if not hasattr(r, "keys") else r["order_idx"],
+            }
+            for r in conn.execute(
+                "SELECT id, content, order_idx FROM blocks WHERE page_id = ? ORDER BY order_idx",
+                (item_id,),
+            ).fetchall()
+        ]
+        PassageStore().rebuild_for_knowledge(
+            knowledge_id=item_id,
+            title=item.title or "",
+            content=item.content or "",
+            blocks=blocks,
+            embed=True,
+        )
+    except Exception as e:
+        logger.warning("Passage rebuild after reindex failed for %s: %s", item_id, e)
 
 
 def _cleanup_orphan_vectors():
@@ -384,19 +413,46 @@ def repair_missing_block_vectors(
     }
 
 
+def rebuild_passage_index(
+    progress_callback: Callable[[int, int, str], None] | None = None,
+    *,
+    embed: bool = True,
+    knowledge_ids: list[str] | None = None,
+    embed_batch_size: int = 8,
+    embed_timeout: float = 120.0,
+) -> dict:
+    """SPEC v3: rebuild independent retrieval_passages (+ FTS/vectors).
+
+    Does not rewrite graph blocks. Safe to run after alembic upgrade to
+    k001_retrieval_passages on an existing corpus.
+    """
+    from src.services.passage_store import PassageStore
+
+    store = PassageStore()
+    store.ensure_schema()
+    return store.rebuild_all(
+        progress_callback=progress_callback,
+        embed=embed,
+        knowledge_ids=knowledge_ids,
+        embed_batch_size=embed_batch_size,
+        embed_timeout=embed_timeout,
+    )
+
+
 def reindex_all(
     progress_callback: Callable[[int, int, str], None] | None = None,
     dry_run: bool = False,
     restart: bool = True,
     batch_size: int = 64,
 ) -> dict:
-    """重建所有知识条目的索引（向量 + FTS）
+    """重建所有知识条目的索引（向量 + FTS + passages）
 
     增强:
     - 断点续传: restart=True 时从上次中断位置继续（基于 async_jobs 记录）
     - WAL模式: reindex期间切WAL不阻塞读，完成后切回DELETE
     - 孤儿清理: reindex前清理vec_blocks中的孤儿向量
     - 批量向量写入: 使用 add_block_embeddings_batch 减少 commit 次数
+    - SPEC v3: 每条 knowledge 重建后同步 retrieval_passages
     """
     items = Database.list_knowledge(limit=100000)
     total = len(items)
@@ -521,6 +577,20 @@ def reindex_all(
         if _completed_cleanly:
             _clear_reindex_checkpoint()
 
+    # SPEC v3: ensure passage index is complete even if per-item rebuild was skipped.
+    passage_result: dict = {}
+    try:
+        passage_result = rebuild_passage_index(
+            progress_callback=(
+                (lambda cur, tot, kid: progress_callback(cur, tot, f"passages {cur}/{tot}"))
+                if progress_callback else None
+            ),
+            embed=True,
+        )
+    except Exception as e:
+        logger.warning("Passage index rebuild after reindex_all failed: %s", e)
+        passage_result = {"error": str(e)}
+
     return {
         "total": total,
         "success": success,
@@ -528,6 +598,7 @@ def reindex_all(
         "skipped": skipped,
         "orphans_removed": orphans_removed,
         "errors": errors[:10],
+        "passage_index": passage_result,
     }
 
 

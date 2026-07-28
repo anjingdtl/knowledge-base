@@ -31,7 +31,7 @@ def extract_version_year(item: dict[str, Any]) -> int | None:
     """Return the most reliable year identifying this document's version.
 
     Priority:
-      1. ``effective_year`` metadata if the importer recorded one;
+      1. ``effective_year`` / ``version_year`` metadata (incl. passage fields);
       2. the year inside a 〔YYYY〕N号 document number in title/text;
       3. the most recent 4-digit year in title (titles usually embed the
          edition year, e.g. "差旅费管理办法-2025年").
@@ -40,9 +40,18 @@ def extract_version_year(item: dict[str, Any]) -> int | None:
     """
     if not isinstance(item, dict):
         return None
-    # 1. explicit metadata
+    # 1. explicit metadata (passage layer projects these)
     for key in ("effective_year", "version_year", "doc_year"):
         v = item.get(key)
+        if isinstance(v, int) and 1900 <= v <= 2100:
+            return v
+        if isinstance(v, str) and v.isdigit():
+            y = int(v)
+            if 1900 <= y <= 2100:
+                return y
+    meta = item.get("metadata") if isinstance(item.get("metadata"), dict) else {}
+    for key in ("effective_year", "version_year", "doc_year"):
+        v = meta.get(key)
         if isinstance(v, int) and 1900 <= v <= 2100:
             return v
     blob = f"{item.get('title') or ''} {item.get('text') or ''}"
@@ -131,15 +140,16 @@ def rank_with_freshness(
     # editions even when lexical relevance slightly favors the old text
     # (KB-037: 2023 "一级竞赛" vs 2026 revision). Adjustment is family-local
     # — it must not reorder unrelated documents globally.
+    # SPEC v3: prefer document_family_id over title-only grouping.
     family_newest: dict[str, int] = {}
     for row in out:
-        key = _normalize_title_for_grouping(row.get("title") or "")
+        key = family_key_of(row)
         year = extract_version_year(row)
         if key and year is not None:
             family_newest[key] = max(family_newest.get(key, 0), year)
 
     for row in out:
-        key = _normalize_title_for_grouping(row.get("title") or "")
+        key = family_key_of(row)
         year = extract_version_year(row)
         newest_in_family = family_newest.get(key)
         rs = float(row.get("ranking_score") or 0.0)
@@ -153,6 +163,7 @@ def rank_with_freshness(
             row["ranking_score"] = rs
             row["score"] = rs
             vr = dict(row.get("version_rank") or {})
+            vr["family_key"] = key
             vr["family_newest_year"] = newest_in_family
             vr["is_family_newest"] = year == newest_in_family
             row["version_rank"] = vr
@@ -167,26 +178,43 @@ def rank_with_freshness(
     return out
 
 
+def family_key_of(item: dict[str, Any]) -> str:
+    """Stable family key: document_family_id when present, else title normalize."""
+    if not isinstance(item, dict):
+        return ""
+    fid = str(item.get("document_family_id") or "").strip()
+    if fid:
+        return fid
+    # Allow nested metadata / version_rank traces.
+    meta = item.get("metadata") if isinstance(item.get("metadata"), dict) else {}
+    fid = str(meta.get("document_family_id") or "").strip()
+    if fid:
+        return fid
+    return _normalize_title_for_grouping(item.get("title") or "")
+
+
 def filter_to_latest_versions(
     items: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    """Keep only the newest year within each regulation title family.
+    """Keep only the newest year within each regulation family.
 
     Used when the user asks for the latest/current version so generation
     context does not mix superseded amounts or grading rules (KB-037).
-    Unrelated documents (different title keys) are retained.
+    Unrelated documents (different family keys) are retained.
     Items without a parseable year are retained as-is.
+
+    SPEC v3: group by document_family_id first; title normalize is fallback.
     """
     if not items:
         return []
-    # Group by normalized title.
     groups: dict[str, list[dict[str, Any]]] = {}
     ungrouped: list[dict[str, Any]] = []
     order: list[str] = []
+    exclusion_trace: list[dict[str, Any]] = []
     for it in items:
         if not isinstance(it, dict):
             continue
-        key = _normalize_title_for_grouping(it.get("title") or "")
+        key = family_key_of(it)
         year = extract_version_year(it)
         if not key or year is None:
             ungrouped.append(it)
@@ -202,7 +230,8 @@ def filter_to_latest_versions(
         years = [extract_version_year(g) for g in group]
         newest = max(y for y in years if y is not None)
         for g in group:
-            if extract_version_year(g) == newest:
+            y = extract_version_year(g)
+            if y == newest:
                 row = dict(g)
                 row.setdefault("version_rank", {})
                 if isinstance(row["version_rank"], dict):
@@ -210,10 +239,24 @@ def filter_to_latest_versions(
                         **row["version_rank"],
                         "kept_as_latest": True,
                         "newest_year": newest,
+                        "family_key": key,
                     }
                 kept.append(row)
-    # Preserve relative order: latest-filtered groups first (original order),
-    # then ungrouped.
+            else:
+                exclusion_trace.append({
+                    "knowledge_id": g.get("knowledge_id"),
+                    "passage_id": g.get("passage_id"),
+                    "family_key": key,
+                    "version_year": y,
+                    "newest_year": newest,
+                    "reason": "superseded_version_excluded",
+                })
+    # Attach exclusion audit on kept items for ask/trace consumers.
+    if exclusion_trace and kept:
+        for row in kept:
+            vr = dict(row.get("version_rank") or {})
+            vr.setdefault("excluded_family_versions", exclusion_trace)
+            row["version_rank"] = vr
     return kept + ungrouped
 
 

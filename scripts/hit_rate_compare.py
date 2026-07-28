@@ -1,10 +1,11 @@
-"""Compare hit-rate metrics across baseline / round-1 / round-2 artifacts.
+"""Compare hit-rate metrics across baseline / round-1 / round-2 / round-3 artifacts.
 
 Usage:
     python scripts/hit_rate_compare.py \
         --baseline artifacts/hit_rate_test \
         --round1 artifacts/hit_rate_test_after_fix \
-        --round2 artifacts/hit_rate_test_v2
+        --round2 artifacts/hit_rate_test_v2 \
+        --round3 artifacts/hit_rate_test_v3
 """
 from __future__ import annotations
 
@@ -52,6 +53,7 @@ def main() -> None:
     ap.add_argument("--baseline", default="artifacts/hit_rate_test")
     ap.add_argument("--round1", default="artifacts/hit_rate_test_after_fix")
     ap.add_argument("--round2", default="artifacts/hit_rate_test_v2")
+    ap.add_argument("--round3", default="artifacts/hit_rate_test_v3")
     ap.add_argument("--out", default=None, help="optional path to write text report")
     args = ap.parse_args()
 
@@ -60,6 +62,7 @@ def main() -> None:
         ("Baseline", args.baseline),
         ("Round1", args.round1),
         ("Round2", args.round2),
+        ("Round3", args.round3),
     ]:
         p = Path(path)
         if (p / "final_scored.json").exists():
@@ -68,89 +71,105 @@ def main() -> None:
             rounds.append((label, path, None))
 
     lines: list[str] = []
-    lines.append("=" * 88)
-    lines.append("METRIC COMPARISON (baseline / round-1 after-fix / round-2 v2)")
-    lines.append("=" * 88)
+    lines.append("=" * 100)
+    lines.append("METRIC COMPARISON (baseline / round-1 / round-2 v2 / round-3 v3)")
+    lines.append("=" * 100)
     header = f"{'Metric':<26}"
     for label, _, _ in rounds:
         header += f"{label:>12}"
-    header += f"{'MinGate':>10}{'R2Pass':>8}"
+    header += f"{'MinGate':>10}{'R3Pass':>8}"
     lines.append(header)
 
-    r2_metrics = rounds[-1][2]["metrics"] if rounds[-1][2] else {}
-    all_pass = True
+    last = next((r for r in reversed(rounds) if r[2] is not None), None)
+    last_metrics = last[2]["metrics"] if last and last[2] else {}
+
     for key, higher in METRIC_KEYS:
         row = f"{key:<26}"
         for _, _, data in rounds:
             if data is None:
                 row += f"{'n/a':>12}"
             else:
-                row += f"{_pct(data['metrics'].get(key)):>12}"
+                m = data.get("metrics") or {}
+                row += f"{_pct(m.get(key)):>12}"
         thr = GOALS.get(key)
         row += f"{_pct(thr):>10}"
-        val = r2_metrics.get(key)
+        val = last_metrics.get(key)
         if val is None or thr is None:
-            mark = " n/a"
+            ok = "   n/a"
         else:
-            ok = (val >= thr) if higher else (val <= thr)
-            mark = "  ✓" if ok else "  ✗"
-            if rounds[-1][2] is not None and not ok:
-                all_pass = False
-        row += f"{mark:>8}"
+            ok = "       ✓" if ((val >= thr) if higher else (val <= thr)) else "       ✗"
+        row += ok
         lines.append(row)
 
     lines.append("")
     lines.append("RELEASE VERDICTS")
     for label, path, data in rounds:
         if data is None:
-            lines.append(f"  {label} ({path}): missing final_scored.json")
+            lines.append(f"  {label}: (missing {path})")
             continue
-        verdict = data.get("release_verdict") or "(legacy, no verdict field)"
+        verdict = data.get("verdict") or data.get("release_verdict") or "(no verdict field)"
         lines.append(f"  {label}: {verdict}")
 
     lines.append("")
     lines.append("DEFECT COUNTS")
-    for label, _, data in rounds:
+    for label, path, data in rounds:
         if data is None:
             continue
-        d = data.get("defects", {})
+        defects = data.get("defects") or {}
+        p0 = defects.get("P0") or []
+        p1 = defects.get("P1") or []
+        p2 = defects.get("P2") or []
+        p3 = defects.get("P3") or []
         lines.append(
-            f"  {label}: P0={len(d.get('P0', []))} P1={len(d.get('P1', []))} "
-            f"P2={len(d.get('P2', []))} P3={len(d.get('P3', []))}"
+            f"  {label}: P0={len(p0)} P1={len(p1)} P2={len(p2)} P3={len(p3)}"
         )
-        for sev in ("P0", "P1", "P2"):
-            items = d.get(sev) or []
-            if items:
-                lines.append(f"    {sev}: {', '.join(items)}")
+        if p1:
+            lines.append(f"    P1: {', '.join(p1)}")
+        if p2:
+            lines.append(f"    P2: {', '.join(p2)}")
 
-    # Per-case hard-acceptance cases from SPEC v2 §9.1
-    hard = ["KB-007", "KB-009", "KB-017", "KB-019", "KB-021", "KB-023", "KB-037"]
+    # Passage health if present on round3
+    if last and last[2]:
+        ph = (last[2].get("passage_health")
+              or (last[2].get("diagnostics") or {}).get("passage_index"))
+        if ph:
+            lines.append("")
+            lines.append("PASSAGE INDEX HEALTH (round3)")
+            for k in (
+                "retrieval_index_unit", "passages", "embedded", "fts",
+                "vector_coverage", "fts_coverage", "avg_char_count",
+                "p50_char_count", "p95_char_count", "short_passage_count",
+                "length_gate_ok",
+            ):
+                if k in ph:
+                    lines.append(f"  {k}: {ph[k]}")
+
     lines.append("")
-    lines.append("HARD ACCEPTANCE CASES (round2 detail if present)")
-    if rounds[-1][2]:
-        detail = {x["case_id"]: x for x in rounds[-1][2].get("detail", [])}
-        for cid in hard:
-            row = detail.get(cid, {})
-            lines.append(
-                f"  {cid}: top1={row.get('top1_hit')} recall5={row.get('recall5')} "
-                f"ask_fact={row.get('ask_fact_correct', row.get('facts_correct'))} "
-                f"ask_cite={row.get('ask_citation_valid', row.get('citation_valid'))} "
-                f"e2e={row.get('e2e_pass')} sev={row.get('defect_severity')}"
-            )
+    if last and last[2]:
+        gates = last[2].get("gates") or last[2].get("gate_results") or {}
+        all_pass = last[2].get("all_gates_pass")
+        if all_pass is None:
+            # Derive from metrics
+            all_pass = True
+            for key, higher in METRIC_KEYS:
+                if key not in GOALS:
+                    continue
+                val = last_metrics.get(key)
+                thr = GOALS[key]
+                if val is None:
+                    continue
+                ok = (val >= thr) if higher else (val <= thr)
+                if not ok:
+                    all_pass = False
+        verdict = "通过放行" if all_pass else "不通过放行"
+        lines.append(f"ROUND-3 OVERALL GATE: {'PASS' if all_pass else 'FAIL'} / verdict={verdict}")
+    else:
+        lines.append("ROUND-3 OVERALL GATE: n/a")
 
-    lines.append("")
-    lines.append(
-        f"ROUND-2 OVERALL GATE: {'PASS' if all_pass and rounds[-1][2] else 'FAIL'} "
-        f"/ verdict={rounds[-1][2].get('release_verdict') if rounds[-1][2] else 'n/a'}"
-    )
-
-    text = "\n".join(lines)
+    text = "\n".join(lines) + "\n"
     print(text)
     if args.out:
-        Path(args.out).write_text(text + "\n", encoding="utf-8")
-    elif rounds[-1][2] is not None:
-        out_path = Path(args.round2) / "metrics_comparison.txt"
-        out_path.write_text(text + "\n", encoding="utf-8")
+        Path(args.out).write_text(text, encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -61,7 +61,12 @@ def _extract_top_score(warnings):
 
 
 def classify_defect(case, d, sc):
-    """Return (severity, category, reason) for failed/partial cases."""
+    """Return (severity, category, reason) for failed/partial cases.
+
+    SPEC v3 §F.2: every answerable case with recall5=false must be at least
+    P1 retrieval_recall — including when ask.answer happens to cover required
+    facts (KB-007, KB-023). Secondary issues may be noted in reason text.
+    """
     a = ask_info(d)
     expected = case["expected_knowledge_ids"]
     n_cand = sc.get("cand_count", 0)
@@ -75,6 +80,15 @@ def classify_defect(case, d, sc):
         return (
             "P1", "retrieval_recall",
             "search 返回 0 候选；相关文档未被召回。",
+        )
+    # SPEC v3: recall miss is always P1 retrieval, even if answer text luckily correct.
+    if expected and not sc.get("recall5"):
+        extra = ""
+        if sc.get("ask_fact_correct"):
+            extra = "（答案文本碰巧覆盖 required_facts，仍计检索召回失败）"
+        return (
+            "P1", "retrieval_recall",
+            f"search Top-5 未命中 expected 文档{extra}。",
         )
     if sc.get("recall5") and a["mode"] == "no_answer" and any(
         "evidence gate" in str(w) for w in a["warnings"]
@@ -178,6 +192,18 @@ def score_answerable(case, d):
     if not hallucination:
         score += 1
 
+    # Diagnostic fields (SPEC v3 §F.3) — do not replace metrics.
+    passage_trace = []
+    for c in cands[:5]:
+        if not isinstance(c, dict):
+            continue
+        passage_trace.append({
+            "knowledge_id": c.get("knowledge_id"),
+            "passage_id": c.get("passage_id"),
+            "document_family_id": c.get("document_family_id"),
+            "version_year": c.get("version_year"),
+            "title": (c.get("title") or "")[:80],
+        })
     sc = {
         "top1_hit": top1_hit,
         "recall5": recall5,
@@ -197,6 +223,12 @@ def score_answerable(case, d):
         "citation_valid_den": citation_valid_den,
         "ask_source_count": len(srcs),
         "ask_has_answer": bool(ans.strip()),
+        # v3 diagnostics
+        "expected_doc_recalled": recall5,
+        "answer_fact_correct": ask_fact_correct,
+        "source_trace_valid": ask_citation_valid,
+        "passage_trace": passage_trace,
+        "normalization_rules": ["whitespace_collapse"],
     }
     sev, cat, reason = classify_defect(case, d, sc)
     sc["defect_severity"] = sev

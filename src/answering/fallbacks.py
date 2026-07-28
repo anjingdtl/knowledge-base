@@ -70,11 +70,20 @@ def build_generation_context(
             f"【已验证 Claim {i} id={c.get('claim_id')}】\n"
             f"{c.get('text')}\n证据: {'; '.join(ev_bits) or '（无）'}"
         )
+    # SPEC v3: evidence packet from passages — full semantic text, not micro-block truncations.
     for i, r in enumerate(raw_rows[:8], 1):
-        parts.append(
-            f"【原始证据 {i} kid={r.get('knowledge_id')} bid={r.get('block_id')}】\n"
-            f"{(r.get('text') or '')[:800]}"
+        unit = r.get("retrieval_unit") or r.get("candidate_type") or ""
+        pid = r.get("passage_id") or ""
+        ver = r.get("version_year") or r.get("source_version") or ""
+        family = r.get("document_family_id") or ""
+        header = (
+            f"【证据包 {i} kid={r.get('knowledge_id')} "
+            f"passage={pid or '-'} bid={r.get('block_id') or '-'} "
+            f"unit={unit or 'raw'} version={ver or '-'} family={family or '-'}】"
         )
+        # Passages are already 400–1000 chars; allow full body (cap 2000 for safety).
+        body = (r.get("text") or "")[:2000]
+        parts.append(f"{header}\n{body}")
     return "\n\n".join(parts) if parts else "（无检索上下文）"
 
 

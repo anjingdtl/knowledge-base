@@ -1,4 +1,8 @@
-"""混合检索模块 — Block-First 架构（embedding/keywords/blend）+ 加权 RRF 融合"""
+"""混合检索模块 — Passage-first 语义检索（SPEC v3）+ 加权 RRF 融合。
+
+图谱 blocks 仅作结构/溯源；当 retrieval_passages 可用时，向量/FTS/融合
+统一以 passage 为候选单元。passages 为空时回退 block 路径保持兼容。
+"""
 import hashlib
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -12,11 +16,13 @@ from src.utils.config import Config
 
 
 class HybridSearcher:
-    def __init__(self, db=None, block_store=None, config=None):
+    def __init__(self, db=None, block_store=None, config=None, passage_store=None):
         self._db = db or Database
         self._block_store = block_store or BlockStore()
         self._config = config or Config
+        self._passage_store = passage_store  # lazy optional
         self._lexical = None  # W3: lazy LexicalZh
+        self._passage_mode: bool | None = None
 
     def _get_config(self, key: str, default=None):
         return self._config.get(key, default)
@@ -27,8 +33,59 @@ class HybridSearcher:
             self._lexical = LexicalZh(config=self._config)
         return self._lexical
 
+    def _get_passage_store(self):
+        if self._passage_store is not None:
+            return self._passage_store
+        try:
+            from src.services.passage_store import PassageStore
+            # Prefer injected db instance; singleton path uses Database.
+            if self._db is not None and self._db is not Database:
+                self._passage_store = PassageStore(db=self._db)
+            else:
+                self._passage_store = PassageStore()
+            return self._passage_store
+        except Exception as e:
+            logging.debug("PassageStore unavailable: %s", e)
+            return None
+
+    def _use_passages(self) -> bool:
+        """Prefer passage index when it has content (SPEC v3)."""
+        force = self._get_config("rag.retrieval_unit", None)
+        if force == "block":
+            return False
+        if force == "passage":
+            return True
+        if self._passage_mode is not None:
+            return self._passage_mode
+        store = self._get_passage_store()
+        if store is None:
+            self._passage_mode = False
+            return False
+        try:
+            store.ensure_schema()
+            n = store.count()
+            self._passage_mode = n > 0
+        except Exception:
+            self._passage_mode = False
+        return bool(self._passage_mode)
+
     def search(self, queries: list[str], top_k: int = 5) -> list[dict]:
         mode = self._get_config("rag.search_mode", "blend")
+        use_passages = self._use_passages()
+        if use_passages:
+            if mode == "embedding":
+                results, _vec_warnings = self._passage_vector_search(queries, top_k)
+                if _vec_warnings:
+                    for r in results:
+                        r.setdefault("warnings", []).extend(_vec_warnings)
+            elif mode == "keywords":
+                results = self._passage_keyword_search(queries, top_k)
+            else:
+                results = self._passage_blend_search(queries, top_k)
+            for r in results:
+                r.setdefault("metadata", {})["retrieval_unit"] = "passage"
+            return results
+
         if mode == "embedding":
             results, _vec_warnings = self._vector_search(queries, top_k)
             if _vec_warnings:
@@ -52,6 +109,224 @@ class HybridSearcher:
                 logging.warning("Parent-child enrichment failed: %s", e)
 
         return results
+
+    # ------------------------------------------------------------------
+    # Passage-level channels (SPEC v3)
+    # ------------------------------------------------------------------
+    def _passage_vector_search(self, queries: list[str], top_k: int) -> tuple[list[dict], list[str]]:
+        store = self._get_passage_store()
+        results: list[dict] = []
+        seen: set[str] = set()
+        warnings: list[str] = []
+        if store is None:
+            return [], ["passage store unavailable"]
+        for query in queries:
+            try:
+                hits = store.vector_search(query, top_k=top_k * 2)
+                for r in hits:
+                    cid = r.get("id") or r.get("passage_id")
+                    if not cid or cid in seen:
+                        continue
+                    seen.add(cid)
+                    results.append(r)
+            except Exception as e:
+                msg = f"passage vector channel degraded: {type(e).__name__}: {e}"
+                warnings.append(msg[:300])
+                logging.warning("Passage vector search failed: %s", e)
+        results.sort(
+            key=lambda x: (1 - float(x.get("distance") or 0) / 2, -len(x.get("text") or "")),
+            reverse=True,
+        )
+        return results[: top_k * 2], warnings
+
+    def _passage_keyword_search(self, queries: list[str], top_k: int) -> list[dict]:
+        store = self._get_passage_store()
+        results: list[dict] = []
+        seen: set[str] = set()
+        if store is None:
+            return []
+        for query in queries:
+            try:
+                expanded = self._get_lexical().expand_query(query)
+                hits = store.fts_search(expanded, top_k=top_k * 2)
+                for r in hits:
+                    cid = r.get("id") or r.get("passage_id")
+                    if not cid or cid in seen:
+                        continue
+                    seen.add(cid)
+                    results.append(r)
+            except Exception as e:
+                logging.warning("Passage keyword search failed: %s", e)
+        return results[: top_k * 2]
+
+    def _passage_blend_search(self, queries: list[str], top_k: int) -> list[dict]:
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            vec_future = pool.submit(self._passage_vector_search, queries, top_k * 3)
+            fts_future = pool.submit(self._passage_keyword_search, queries, top_k * 3)
+            try:
+                vec_results, vec_warnings = vec_future.result()
+            except Exception as e:
+                vec_results, vec_warnings = [], [f"passage vector channel failed: {e}"]
+            try:
+                fts_results = fts_future.result()
+            except Exception as e:
+                fts_results = []
+                logging.warning("Passage keyword channel failed in blend: %s", e)
+
+        k = self._get_config("rag.rrf_k", 40)
+        w_semantic = float(self._get_config("rag.rrf_weight_semantic", 0.4))
+        lang = detect_query_language(queries[0] if queries else "")
+        if lang == "zh":
+            w_keyword = float(self._get_config("rag.rrf_weight_keyword_zh", 0.7))
+        else:
+            w_keyword = float(self._get_config("rag.rrf_weight_keyword_en", 0.5))
+        total_w = w_semantic + w_keyword
+        if total_w > 0:
+            w_semantic /= total_w
+            w_keyword /= total_w
+
+        proper_nouns: list[str] = []
+        for q in queries:
+            proper_nouns.extend(detect_proper_nouns(q))
+        proper_noun_boost = float(self._get_config("rag.proper_noun_boost", 1.5)) if proper_nouns else 1.0
+
+        rrf_scores: dict[str, float] = {}
+        rrf_breakdown: dict[str, dict] = {}
+        result_map: dict[str, dict] = {}
+        vec_ids: set[str] = set()
+        fts_ids: set[str] = set()
+
+        for rank, item in enumerate(vec_results):
+            item_id = self._candidate_id(item)
+            semantic_rrf = w_semantic / (k + rank + 1)
+            rrf_scores[item_id] = rrf_scores.get(item_id, 0) + semantic_rrf
+            rrf_breakdown.setdefault(item_id, {"semantic_rrf": 0, "keyword_rrf": 0})
+            rrf_breakdown[item_id]["semantic_rrf"] += semantic_rrf
+            vec_ids.add(item_id)
+            if item_id not in result_map:
+                result_map[item_id] = {
+                    "id": item.get("id", item_id),
+                    "text": item.get("text", ""),
+                    "metadata": self._metadata_with_block_id(item, item.get("id", item_id)),
+                    "distance": item.get("distance", 0),
+                    "vector_score": item.get(
+                        "vector_score",
+                        normalize_vector_score(item.get("distance", 0)),
+                    ),
+                    "passage_id": item.get("passage_id") or item.get("id"),
+                    "knowledge_id": item.get("knowledge_id")
+                    or (item.get("metadata") or {}).get("knowledge_id"),
+                    "document_family_id": item.get("document_family_id")
+                    or (item.get("metadata") or {}).get("document_family_id"),
+                    "version_year": item.get("version_year")
+                    or (item.get("metadata") or {}).get("version_year"),
+                }
+
+        for rank, item in enumerate(fts_results):
+            item_id = self._candidate_id(item)
+            keyword_rrf = w_keyword * proper_noun_boost / (k + rank + 1)
+            rrf_scores[item_id] = rrf_scores.get(item_id, 0) + keyword_rrf
+            rrf_breakdown.setdefault(item_id, {"semantic_rrf": 0, "keyword_rrf": 0})
+            rrf_breakdown[item_id]["keyword_rrf"] += keyword_rrf
+            fts_ids.add(item_id)
+            if item_id not in result_map:
+                result_map[item_id] = {
+                    "id": item.get("id", item_id),
+                    "text": item.get("text", ""),
+                    "metadata": self._metadata_with_block_id(item, item.get("id", item_id)),
+                    "distance": item.get("distance", 0),
+                    "fts_rank": item.get("fts_rank", 0),
+                    "keyword_score": item.get(
+                        "keyword_score",
+                        normalize_fts_score(item.get("fts_rank", 0)),
+                    ),
+                    "passage_id": item.get("passage_id") or item.get("id"),
+                    "knowledge_id": item.get("knowledge_id")
+                    or (item.get("metadata") or {}).get("knowledge_id"),
+                    "document_family_id": item.get("document_family_id")
+                    or (item.get("metadata") or {}).get("document_family_id"),
+                    "version_year": item.get("version_year")
+                    or (item.get("metadata") or {}).get("version_year"),
+                }
+            else:
+                result_map[item_id].setdefault("fts_rank", item.get("fts_rank", 0))
+                result_map[item_id].setdefault(
+                    "keyword_score",
+                    item.get("keyword_score", normalize_fts_score(item.get("fts_rank", 0))),
+                )
+
+        sorted_ids = sorted(rrf_scores, key=lambda x: rrf_scores[x], reverse=True)
+        results = []
+        for item_id in sorted_ids[: top_k * 3]:
+            item = result_map[item_id]
+            item["rrf_score"] = rrf_scores[item_id]
+            item["final_score"] = rrf_scores[item_id]
+            channels = []
+            if item_id in vec_ids:
+                channels.append("semantic")
+            if item_id in fts_ids:
+                channels.append("keyword")
+            if proper_nouns and item_id in fts_ids:
+                channels.append("proper_noun_boost")
+            item["match_channels"] = channels
+            item.setdefault("vector_score", None)
+            item.setdefault("keyword_score", None)
+            bd = rrf_breakdown.get(item_id, {})
+            item["score_breakdown"] = {
+                "semantic_rrf": round(bd.get("semantic_rrf", 0), 6),
+                "keyword_rrf": round(bd.get("keyword_rrf", 0), 6),
+                "proper_noun_boost": proper_noun_boost if proper_nouns else 1.0,
+                "proper_nouns": proper_nouns,
+                "retrieval_unit": "passage",
+            }
+            results.append(item)
+
+        # Diversity: keep best per (doc, section) then fill remaining slots.
+        diversified = self._diversify_passages(results, top_k * 2)
+        final = self._preserve_keyword_hits(diversified, top_k)
+        if vec_warnings:
+            for item in final:
+                item.setdefault("warnings", []).extend(vec_warnings)
+        return final
+
+    def _diversify_passages(self, items: list[dict], limit: int) -> list[dict]:
+        """Same-doc multi-passage diversity: keep best passage per section, then fill."""
+        if not items:
+            return []
+        selected: list[dict] = []
+        seen_section: set[tuple[str, str]] = set()
+        seen_id: set[str] = set()
+        # First pass: best per (knowledge_id, section_path)
+        for item in items:
+            meta = item.get("metadata") or {}
+            kid = str(
+                item.get("knowledge_id")
+                or meta.get("knowledge_id")
+                or meta.get("page_id")
+                or ""
+            )
+            section = str(meta.get("section_path") or "")
+            pid = str(item.get("id") or item.get("passage_id") or "")
+            key = (kid, section)
+            if key in seen_section:
+                continue
+            seen_section.add(key)
+            if pid:
+                seen_id.add(pid)
+            selected.append(item)
+            if len(selected) >= limit:
+                return selected
+        # Second pass: additional passages from same docs for exceptions/numbers.
+        for item in items:
+            pid = str(item.get("id") or item.get("passage_id") or "")
+            if pid and pid in seen_id:
+                continue
+            if pid:
+                seen_id.add(pid)
+            selected.append(item)
+            if len(selected) >= limit:
+                break
+        return selected
 
     def _vector_search(self, queries: list[str], top_k: int) -> tuple[list[dict], list[str]]:
         """返回 (候选列表, 降级告警列表)。

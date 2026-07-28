@@ -200,36 +200,69 @@ def assemble_answer_payload(
         else:
             answer = cleaned
 
-        # If a subject+numeric question remains without the subject-anchored
-        # value in the answer, refuse rather than return a qualitative hedge
-        # (e.g. "超过10万元" with no III类 20万元). Only for questions that
-        # clearly ask for an amount/limit (限额/金额/处罚/占比…).
+        # SPEC v3 numeric guard: do NOT refuse when the answer's numeric
+        # assertions are already verifiable in passage evidence, even if a
+        # single "subject" heuristic fails to parse (KB-010 multi-condition).
         from src.answering.fact_guard import (
+            extract_query_conditions,
             extract_query_subjects,
             select_numeric_fact_for_subject,
+            answer_numerics_supported_by_evidence,
         )
         subjects = extract_query_subjects(question)
+        conditions = extract_query_conditions(question)
         numeric_intent = bool(
             re.search(r"限额|金额|处罚|占比|比例|标准|多少|元|%|％", question or "")
         )
         if (
-            subjects
-            and numeric_intent
+            numeric_intent
             and answer_mode in (ANSWER_MODE_HYBRID, ANSWER_MODE_RAW)
         ):
-            needed = select_numeric_fact_for_subject(
-                subject=subjects[0], evidence=evidence_blob,
-            )
-            if needed:
-                ans_norm = re.sub(r"\s+", "", answer or "")
-                need_norm = re.sub(r"\s+", "", needed)
-                if (
-                    need_norm not in ans_norm
-                    and need_norm.replace("元", "") not in ans_norm
-                ):
+            # Prefer multi-condition anchoring (涉诈/涉骚扰) over single subject.
+            anchors = conditions or subjects
+            if anchors:
+                all_ok = True
+                audit: list[str] = []
+                for anchor in anchors:
+                    needed = select_numeric_fact_for_subject(
+                        subject=anchor, evidence=evidence_blob,
+                    )
+                    if not needed:
+                        # No numeric clause for this condition — skip, do not refuse.
+                        audit.append(f"no_value_for:{anchor}")
+                        continue
+                    ans_norm = re.sub(r"\s+", "", answer or "")
+                    need_norm = re.sub(r"\s+", "", needed)
+                    if (
+                        need_norm not in ans_norm
+                        and need_norm.replace("元", "") not in ans_norm
+                    ):
+                        # Only refuse if answer asserts a conflicting number
+                        # that cannot be verified for this condition.
+                        if answer_numerics_supported_by_evidence(
+                            answer=answer, evidence=evidence_blob, condition=anchor,
+                        ):
+                            audit.append(f"verified_alt:{anchor}")
+                            continue
+                        all_ok = False
+                        audit.append(f"missing:{anchor}->{need_norm}")
+                        break
+                    audit.append(f"ok:{anchor}->{need_norm}")
+                if not all_ok and subjects:
+                    # Legacy single-subject hard fail only when primary subject
+                    # value is missing AND answer has unsupported numbers.
                     answer_mode = ANSWER_MODE_NO_ANSWER
                     answer = format_no_answer(question, freshness=freshness_q)
                     warnings.append("numeric_fact_guard_missing_subject_value")
+                    warnings.append("numeric_fact_guard_audit:" + ",".join(audit[:8]))
+                elif audit:
+                    warnings.append("numeric_fact_guard_audit:" + ",".join(audit[:8]))
+            elif answer and not answer_numerics_supported_by_evidence(
+                answer=answer, evidence=evidence_blob, condition=None,
+            ):
+                # No subject/condition parsed: still strip is enough; do not
+                # empty-answer refuse when evidence already supports numbers.
+                pass
 
     sources = build_sources(results, claim_rows, raw_rows)
 

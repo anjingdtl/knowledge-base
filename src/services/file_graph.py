@@ -401,6 +401,25 @@ class FileGraphService:
                 except Exception:
                     pass
 
+        # SPEC v3: independent retrieval passages (semantic unit).
+        # Blocks remain graph/structure; passages are built for hybrid search.
+        try:
+            from src.services.passage_store import PassageStore
+            store = PassageStore(db=self._db) if self._db is not None else PassageStore()
+            store.rebuild_for_knowledge(
+                knowledge_id=page.id,
+                title=getattr(item, "title", None) or getattr(page, "title", "") or "",
+                content=self._content_from_page(page) if hasattr(self, "_content_from_page") else (getattr(item, "content", "") or ""),
+                blocks=block_rows,
+                embedding_service=self._embedding,
+                embed=bool(self._embedding),
+            )
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).warning(
+                "Passage rebuild failed for %s: %s", page.id, e
+            )
+
     def _delete_cache(self, page_id: str, *, hard: bool = False) -> None:
         """软删只置 deleted_at（保留 blocks/vectors 供过滤与恢复）；硬删清向量+关联。"""
         if not hard:
@@ -413,6 +432,11 @@ class FileGraphService:
         try:
             from src.services.vectorstore import VectorStore
             VectorStore().delete_by_knowledge(page_id)
+        except Exception:
+            pass
+        try:
+            from src.services.passage_store import PassageStore
+            PassageStore(db=self._db).delete_by_knowledge(page_id)
         except Exception:
             pass
         if hasattr(self._db, "purge_knowledge"):

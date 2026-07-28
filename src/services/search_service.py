@@ -312,21 +312,34 @@ class SearchService:
     def _package_raw_candidates(
         self, query: str, candidates: list[dict], *, top_k: int,
     ) -> list[dict]:
-        """Package hybrid hits into legacy search result items."""
+        """Package hybrid hits into legacy search result items.
+
+        SPEC v3: candidates may be passages (retrieval_unit=passage). Preserve
+        passage_id / document_family / block ranges while keeping knowledge_id
+        and block_id for MCP compatibility.
+        """
         output: list[dict] = []
-        seen_blocks: set = set()
+        seen_units: set = set()
         knowledge_doc_counts: dict[str, int] = {}
-        max_per_doc = 3
+        # Allow more passages per doc so conditions + exceptions coexist in pool.
+        max_per_doc = int(self._cfg("rag.max_passages_per_doc", 5) or 5)
         citation_builder = CitationBuilder(self._db) if self._db is not None else None
         for r in candidates:
-            bid = r.get("id", "")
-            if bid and bid in seen_blocks:
+            meta = r.get("metadata") or {}
+            unit = meta.get("retrieval_unit") or r.get("retrieval_unit") or ""
+            is_passage = unit == "passage" or bool(r.get("passage_id") or meta.get("passage_id"))
+            unit_id = r.get("id", "") or r.get("passage_id") or ""
+            if unit_id and unit_id in seen_units:
                 continue
-            if bid:
-                seen_blocks.add(bid)
+            if unit_id:
+                seen_units.add(unit_id)
 
-            kid = (r.get("metadata") or {}).get("page_id",
-                  (r.get("metadata") or {}).get("knowledge_id", ""))
+            kid = (
+                r.get("knowledge_id")
+                or meta.get("page_id")
+                or meta.get("knowledge_id")
+                or ""
+            )
 
             if kid:
                 doc_count = knowledge_doc_counts.get(kid, 0)
@@ -348,8 +361,8 @@ class SearchService:
             title = "未知"
             if item and item.get("title"):
                 title = item["title"]
-            elif (r.get("metadata") or {}).get("title"):
-                title = r["metadata"]["title"]
+            elif meta.get("title") or r.get("title"):
+                title = meta.get("title") or r.get("title") or "未知"
             elif kid and self._db is not None:
                 try:
                     row = self._db.get_conn().execute(
@@ -374,16 +387,41 @@ class SearchService:
                     if "title_boost" not in r["match_channels"]:
                         r["match_channels"].append("title_boost")
 
+            primary_block = (
+                meta.get("block_id")
+                or r.get("block_id")
+                or (unit_id if not is_passage else "")
+            )
+            if is_passage and not primary_block:
+                bids = meta.get("block_ids") or []
+                primary_block = bids[0] if bids else ""
+
             entry = {
                 "source": "knowledge",
-                "block_id": bid,
+                "block_id": primary_block or unit_id,
                 "knowledge_id": kid,
                 "title": title,
                 "text": r.get("text", ""),
                 "score": score,
                 "match_channels": r.get("match_channels", []),
                 "warnings": r.get("warnings", []),
+                "candidate_type": "passage" if is_passage else "raw_block",
+                "retrieval_unit": "passage" if is_passage else "block",
             }
+            if is_passage:
+                entry["passage_id"] = r.get("passage_id") or meta.get("passage_id") or unit_id
+                entry["document_family_id"] = (
+                    r.get("document_family_id")
+                    or meta.get("document_family_id")
+                    or ""
+                )
+                entry["version_year"] = r.get("version_year") or meta.get("version_year")
+                entry["source_version"] = r.get("source_version") or meta.get("source_version") or ""
+                entry["section_path"] = meta.get("section_path") or ""
+                entry["block_ids"] = meta.get("block_ids") or []
+                entry["block_ranges"] = meta.get("block_ranges") or []
+                if entry["version_year"] is not None:
+                    entry["effective_year"] = entry["version_year"]
             if citation_builder is not None:
                 entry["citation"] = citation_builder.build(r, item).to_dict()
             output.append(entry)

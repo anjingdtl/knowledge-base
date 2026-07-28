@@ -54,6 +54,85 @@ def extract_query_subjects(query: str) -> list[str]:
     return found
 
 
+# Multi-condition anchors (SPEC v3 / KB-010): each condition binds its own value.
+_CONDITION_PATTERNS: list[tuple[re.Pattern[str], str]] = [
+    (re.compile(r"涉诈|诈骗|防诈"), "涉诈"),
+    (re.compile(r"涉骚扰|骚扰"), "涉骚扰"),
+    (re.compile(r"III\s*类|Ⅲ\s*类|三类"), "III类"),
+    (re.compile(r"II\s*类|Ⅱ\s*类|二类"), "II类"),
+    (re.compile(r"区外"), "区外"),
+    (re.compile(r"区内"), "区内"),
+    (re.compile(r"团体"), "团体"),
+    (re.compile(r"个人"), "个人"),
+]
+
+
+def extract_query_conditions(query: str) -> list[str]:
+    """Return ordered condition labels for multi-slot numeric questions.
+
+    Unlike subjects, multiple conditions are expected to each have their own
+    numeric fact (e.g. 涉诈→A元, 涉骚扰→B元). Empty list when none match.
+    """
+    q = query or ""
+    found: list[str] = []
+    seen: set[str] = set()
+    for pat, label in _CONDITION_PATTERNS:
+        if pat.search(q) and label not in seen:
+            seen.add(label)
+            found.append(label)
+    return found
+
+
+def answer_numerics_supported_by_evidence(
+    *,
+    answer: str,
+    evidence: str,
+    condition: str | None = None,
+) -> bool:
+    """True when every numeric value in ``answer`` appears in evidence.
+
+    When ``condition`` is set, each answer value must co-occur with that
+    condition in some evidence clause OR appear as the selected value for it.
+    When condition is None, values need only appear somewhere in evidence
+    (modulo whitespace / 元 variants). Used to avoid false no_answer when
+    subject heuristics fail but the answer is fully grounded (KB-010).
+    """
+    if not answer:
+        return True
+    if not evidence:
+        return False
+    vals = [m.group(0) for m in _VALUE_RE.finditer(answer)]
+    if not vals:
+        return True
+    for v in vals:
+        if condition:
+            if answer_value_is_anchored(
+                subject=condition, evidence=evidence, claimed_value=v,
+            ):
+                continue
+            # Also accept if value is selected for the condition.
+            selected = select_numeric_fact_for_subject(
+                subject=condition, evidence=evidence,
+            )
+            if selected and _values_equal(selected, v):
+                continue
+            # Multi-condition answers may list several values; accept if value
+            # exists in evidence at all when condition-specific check fails
+            # only because clause split is imperfect.
+            if _normalize_value(v) in _normalize_value(evidence) or (
+                _normalize_value(v).replace("元", "")
+                in _normalize_value(evidence).replace("元", "")
+            ):
+                continue
+            return False
+        nv = _normalize_value(v)
+        ev = _normalize_value(evidence)
+        if nv in ev or nv.replace("元", "") in ev.replace("元", ""):
+            continue
+        return False
+    return True
+
+
 def select_numeric_fact_for_subject(
     *,
     subject: str,
