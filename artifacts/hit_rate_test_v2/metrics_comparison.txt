@@ -1,0 +1,38 @@
+========================================================================================
+METRIC COMPARISON (baseline / round-1 after-fix / round-2 v2)
+========================================================================================
+Metric                        Baseline      Round1      Round2   MinGate  R2Pass
+Top-1 Accuracy                  59.38%      84.38%      84.38%    75.00%       ✓
+Recall@5                        65.62%      87.50%      87.50%    88.00%       ✗
+Ask Fact Correctness               n/a         n/a      34.38%    90.00%       ✗
+Answer Groundedness             40.62%      84.38%      34.38%    90.00%       ✗
+Ask Citation Validity              n/a         n/a      93.75%    95.00%       ✗
+Citation Validity               70.48%      63.89%      68.94%    95.00%       ✗
+E2E Pass Rate                      n/a         n/a      31.25%    90.00%       ✗
+Hallucination Rate               3.12%       6.25%       6.25%     5.00%       ✗
+False Positive Rate              0.00%       0.00%       0.00%     5.00%       ✓
+
+RELEASE VERDICTS
+  Baseline: (legacy, no verdict field)
+  Round1: (legacy, no verdict field)
+  Round2: 不通过放行
+
+DEFECT COUNTS
+  Baseline: P0=0 P1=18 P2=0 P3=0
+    P1: KB-007, KB-009, KB-010, KB-011, KB-012, KB-014, KB-015, KB-016, KB-017, KB-018, KB-019, KB-020, KB-021, KB-023, KB-027, KB-028, KB-035, KB-037
+  Round1: P0=0 P1=3 P2=1 P3=0
+    P1: KB-017, KB-019, KB-021
+    P2: KB-037
+  Round2: P0=0 P1=20 P2=0 P3=0
+    P1: KB-001, KB-002, KB-006, KB-009, KB-010, KB-011, KB-012, KB-013, KB-014, KB-015, KB-016, KB-017, KB-018, KB-021, KB-022, KB-024, KB-028, KB-035, KB-036, KB-037
+
+HARD ACCEPTANCE CASES (round2 detail if present)
+  KB-007: top1=False recall5=False ask_fact=True ask_cite=True e2e=False sev=None
+  KB-009: top1=True recall5=True ask_fact=False ask_cite=True e2e=False sev=P1
+  KB-017: top1=False recall5=False ask_fact=False ask_cite=False e2e=False sev=P1
+  KB-019: top1=True recall5=True ask_fact=True ask_cite=True e2e=True sev=None
+  KB-021: top1=False recall5=False ask_fact=False ask_cite=False e2e=False sev=P1
+  KB-023: top1=False recall5=False ask_fact=False ask_cite=True e2e=False sev=None
+  KB-037: top1=True recall5=True ask_fact=False ask_cite=True e2e=False sev=P1
+
+ROUND-2 OVERALL GATE: FAIL / verdict=不通过放行

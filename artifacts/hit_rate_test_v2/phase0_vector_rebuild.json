@@ -135,6 +135,13 @@
     "missing_blocks": 0,
     "coverage": 1.0
   },
-  "coverage_confirmed_at": "2026-07-27T18:02:57",
-  "embedding_model": "BAAI/bge-m3"
+  "coverage_confirmed_at": "2026-07-28T09:25:28",
+  "embedding_model": "BAAI/bge-m3",
+  "final_after_retry": {
+    "total_blocks": 128348,
+    "covered_blocks": 128348,
+    "missing_blocks": 0,
+    "coverage": 1.0
+  },
+  "embedding_base_url": "https://api.siliconflow.cn/v1/embeddings"
 }

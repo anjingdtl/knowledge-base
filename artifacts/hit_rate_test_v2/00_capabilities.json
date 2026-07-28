@@ -4,12 +4,12 @@
       "ok": true,
       "data": {
         "status": "alive",
-        "timestamp": 1785146688.9679563,
+        "timestamp": 1785198943.4027765,
         "version": "1.11.1",
         "uptime_hint": "ok"
       }
     },
-    "latency_ms": 27.31,
+    "latency_ms": 40.83,
     "status": 200,
     "raw_result": {
       "jsonrpc": "2.0",
@@ -18,14 +18,14 @@
         "content": [
           {
             "type": "text",
-            "text": "{\"ok\":true,\"data\":{\"status\":\"alive\",\"timestamp\":1785146688.9679563,\"version\":\"1.11.1\",\"uptime_hint\":\"ok\"}}"
+            "text": "{\"ok\":true,\"data\":{\"status\":\"alive\",\"timestamp\":1785198943.4027765,\"version\":\"1.11.1\",\"uptime_hint\":\"ok\"}}"
           }
         ],
         "structuredContent": {
           "ok": true,
           "data": {
             "status": "alive",
-            "timestamp": 1785146688.9679563,
+            "timestamp": 1785198943.4027765,
             "version": "1.11.1",
             "uptime_hint": "ok"
           }
@@ -871,7 +871,7 @@
         ]
       }
     },
-    "latency_ms": 223.79,
+    "latency_ms": 369.15,
     "status": 200,
     "raw_result": {
       "jsonrpc": "2.0",

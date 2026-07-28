@@ -1,0 +1,90 @@
+{
+  "case": {
+    "case_id": "KB-017",
+    "category": "多条件组合",
+    "query": "涉诈电话 代理商一个自然月内每个号码处罚金额",
+    "expected_knowledge_ids": [
+      "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+    ],
+    "expected_title_keywords": [
+      "涉诈",
+      "2026"
+    ],
+    "required_facts": [
+      "2000元",
+      "一个自然月"
+    ],
+    "forbidden_facts": [
+      "30元"
+    ],
+    "expected_no_answer": false,
+    "notes": "组合'涉诈+代理商+单号处罚'；正确2000元，禁忌30元(涉骚扰值)"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [],
+      "meta": {
+        "total_estimate": 0,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": true,
+        "reason": "insufficient_relevant_evidence",
+        "top_score": 0.2004,
+        "threshold": 0.35,
+        "source_path": "canonical_snapshot"
+      }
+    },
+    "latency_ms": 25136.7
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "sources": [],
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.2004 < 0.35)"
+        ],
+        "wiki_context": "",
+        "trace_id": "",
+        "answer_mode": "no_answer",
+        "reason": "insufficient_relevant_evidence",
+        "conflict_disclosed": false,
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [],
+          "accepted_block_ids": [],
+          "top_score": 0.2004,
+          "intent": "ordinary"
+        }
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 22609.06
+  },
+  "top_candidate_id": null,
+  "candidates": []
+}
