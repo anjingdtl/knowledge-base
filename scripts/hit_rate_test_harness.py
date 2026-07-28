@@ -123,7 +123,7 @@ class MCPClient:
         }
 
 
-def run(golden_path: Path, out_dir: Path):
+def run(golden_path: Path, out_dir: Path, *, resume: bool = False):
     out_dir.mkdir(parents=True, exist_ok=True)
     golden = json.loads(golden_path.read_text(encoding="utf-8"))
     cases = golden["cases"] if isinstance(golden, dict) and "cases" in golden else golden
@@ -133,7 +133,7 @@ def run(golden_path: Path, out_dir: Path):
         raise RuntimeError("MCP initialize failed")
     print(f"OK session={client.session_id}")
 
-    # 1) ping + kb_capabilities
+    # 1) ping + kb_capabilities (refresh each run; safe to overwrite)
     ping = client.call("ping", {})
     caps = client.call("kb_capabilities", {})
     (out_dir / "00_capabilities.json").write_text(
@@ -143,10 +143,26 @@ def run(golden_path: Path, out_dir: Path):
     print(f"[step] ping ok={ping['envelope'].get('ok')} caps ok={caps['envelope'].get('ok')}")
 
     results = []
+    skipped = 0
     for i, case in enumerate(cases, 1):
         cid = case["case_id"]
         query = case["query"]
-        print(f"\n[{i}/{len(cases)}] {cid} category={case.get('category')} q={query[:50]}")
+        case_path = out_dir / f"{cid}.json"
+        if resume and case_path.exists():
+            try:
+                prev = json.loads(case_path.read_text(encoding="utf-8"))
+                results.append(prev)
+                skipped += 1
+                print(
+                    f"\n[{i}/{len(cases)}] {cid} SKIP resume "
+                    f"top={prev.get('top_candidate_id')}",
+                    flush=True,
+                )
+                continue
+            except Exception as exc:  # noqa: BLE001
+                print(f"\n[{i}/{len(cases)}] {cid} resume-load failed ({exc}); re-run", flush=True)
+
+        print(f"\n[{i}/{len(cases)}] {cid} category={case.get('category')} q={query[:50]}", flush=True)
 
         # search top_k=5
         search = client.call("search", {"query": query, "top_k": 5}, timeout=180)
@@ -202,14 +218,19 @@ def run(golden_path: Path, out_dir: Path):
             ],
         }
         results.append(result)
-        (out_dir / f"{cid}.json").write_text(
+        case_path.write_text(
             json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
         )
-        print(f"   top={top_candidate_id} search_t={search['latency_ms']:.0f}ms ask_t={ask['latency_ms']:.0f}ms")
+        print(
+            f"   top={top_candidate_id} search_t={search['latency_ms']:.0f}ms "
+            f"ask_t={ask['latency_ms']:.0f}ms",
+            flush=True,
+        )
 
     summary = {
         "session_id": client.session_id,
         "total": len(results),
+        "skipped_resume": skipped,
         "cases": [
             {
                 "case_id": r["case"]["case_id"],
@@ -225,12 +246,17 @@ def run(golden_path: Path, out_dir: Path):
     (out_dir / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    print(f"\n[done] {len(results)} cases -> {out_dir}")
+    print(f"\n[done] {len(results)} cases (skipped_resume={skipped}) -> {out_dir}", flush=True)
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--golden", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument(
+        "--resume",
+        action="store_true",
+        help="Skip cases that already have <CaseID>.json in --out",
+    )
     args = ap.parse_args()
-    run(Path(args.golden), Path(args.out))
+    run(Path(args.golden), Path(args.out), resume=bool(args.resume))
