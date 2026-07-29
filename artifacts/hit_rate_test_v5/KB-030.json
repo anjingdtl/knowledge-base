@@ -1,0 +1,232 @@
+{
+  "case": {
+    "case_id": "KB-030",
+    "category": "无答案或越界问题",
+    "query": "中国电信广西公司2026年营收预测是多少亿元",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体营收预测数字"
+    ],
+    "expected_no_answer": true,
+    "notes": "知识库无未来营收预测；应拒答或说明证据不足"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "534ceabe-939d-4f7a-a365-88c4d9c5527f",
+          "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+          "passage_id": "fa0a7ed5b47854058cdeb925ee56cae1",
+          "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+          "text": "【文档】中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593\n【章节】第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属\n合规使用，并实现应收款项、预存款项与实收资金数据的全面关\n联。\n第五条 各单位根据本办法规范营收资金管理业务流程、考\n核规则，建立定期检查的营收资金监察体系，完善稽核流程，明\n确岗位责任，将稽核责任落实到各层级稽核岗位绩效考核中并严\n— 4 —格实施，确保营收资金稽核工作的有序开展。\n第六条 营收资金管理应遵循 “收支两条线”的原则，已收取\n的营收资金应及时入账，严禁收款不入账、资金体外循环、收入\n资金坐支、设立“小金库”、通过个人及非公司收款渠道收取客户\n资金等违规行为。\n第七条 区公司建立全区营收资金管理平台系统，实现营收\n资金全流程线上闭环管理，实现营收资金全流程可视可控和数据\n源头可追溯。\n第八条 本办法中涉及相关名词解释\n（一）本办法所述“司库平台”，是指集团集约建设的司库管\n理平台，不包括省内自行与银行搭建的银企直联系统。\n（二）本办法所述营收资金管理平台，是指供广西公司所属\n营业单元实体渠道受理的营收资金稽核、实体渠道资金稽核、银\n行到账资金稽核工作并出具相关营收资金报表，以及政企渠道开\n展政企资金认领、充值、销账等额业务处理的信息化管理平台。",
+          "document_family_id": "topic:营收资金管理办法",
+          "version_year": 2026,
+          "section_path": "第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属",
+          "block_ids": [
+            "534ceabe-939d-4f7a-a365-88c4d9c5527f",
+            "d5177357-60c2-449e-8cd0-271e404b94da",
+            "665ea7eb-2402-4dc7-af94-fb8b71e56840",
+            "1b7be302-227d-4b0e-9b6f-a5b5f711488e",
+            "b2ad651c-45f9-4650-a535-1610978424f1",
+            "358b1321-d719-43fe-ac8e-7b07cddd5fc8",
+            "40a78ab7-0cad-491c-b2e3-82584dee00d4",
+            "d996006f-501d-4ed2-ad49-21799300e26f",
+            "cdf4866a-390e-47d5-8aea-a51886c19e5e",
+            "6a3bf419-8dbe-4211-a524-2e2089d19152",
+            "2277aa12-7377-405e-9406-0a43b22da791",
+            "0a763a77-3d66-4f52-be6e-e50ba77aced7",
+            "bda8c49a-c424-43e2-9d6e-fcfcf715b714",
+            "060ef016-1ebc-41b8-b415-06e824cf8e36",
+            "66e371c0-cefa-4b31-9dcd-c4ea47469841",
+            "046b2d55-4810-4cb6-934b-23878d492629",
+            "418f8986-bc32-49b9-8bae-48677b4d0c4e",
+            "ba90219f-c143-462b-bc68-d61bfccad6bf"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -15.04069005677404,
+          "fts_score": 1.0,
+          "score": 0.9000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": true
+          },
+          "relevance": {
+            "semantic_score": 0.5079,
+            "fts_score": 1.0,
+            "title_score": 0.5556,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4762,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": true
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:营收资金管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+        ],
+        "evidence_snapshot_id": "OBgynOGfu4BjBExuMo6QcN2ocJcLDhak",
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 21315.7
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.55,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "direct_slot_not_satisfied",
+        "answer_validation_decision": "direct_slot_not_satisfied",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {},
+        "claim_audit": [],
+        "fact_candidate_audit": {},
+        "answer_plan": {},
+        "query_plan": {},
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "direct_slot_not_satisfied",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+          ],
+          "accepted_block_ids": [
+            "534ceabe-939d-4f7a-a365-88c4d9c5527f"
+          ],
+          "accepted_passage_ids": [
+            "fa0a7ed5b47854058cdeb925ee56cae1",
+            "4863dd53e9138452cc595e98db4d9728",
+            "2a47f485eacadb9a5c5dc147e949cf0a"
+          ],
+          "generation_knowledge_ids": [
+            "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+          ],
+          "top_score": 0.55,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {}
+        },
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 29.58
+  },
+  "top_candidate_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+  "candidates": [
+    {
+      "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+      "passage_id": "fa0a7ed5b47854058cdeb925ee56cae1",
+      "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593\n【章节】第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属\n合规使用，并实现应收款项、预存款项与实收资金数据的全面关\n联。\n第五条 各单位根据本办法规范营收资金管理业务流程、考\n核规则，建立定期检查的营收资金监察体系，完善稽核流程，明\n确岗位责任，将稽核责任落实到各层级稽核岗位绩效考核中并严\n— 4 —格实施，确保营收资金稽核工作的有序开展。\n第六条 营收资金管理应遵循 “收支两条线”的原则，已收取\n的营收资金应及时入账，严禁收款不入账、资金体外循环、收入\n资金坐支、设立“小金库”、通过个人及非公司收款渠道收取客户\n资金等违规行为。\n第七条 区公司建立全区营收资金管理平台系统，实现营收\n资金全流程线上闭环管理，实现营收资金全流程可视可控和数据\n源头可追溯。\n第八条 本办法中涉及相关名词解释\n（一）本办法所述“司库平台”，是指集团集约建设的司库管\n理平台，不包括省内自行与银行搭建的银企直联系统。\n（二）本办法所述营收资金管理平台，是指供广西公司所属\n营业单元实体渠道受理的营收资金稽核、实体渠道资金稽核、银\n行到账资金稽核工作并出具相关营收资金报表，以及政企渠道开\n展政企资金认领、充值、销账等额业务处理的信息化管理平台。"
+    }
+  ],
+  "search_ms": 21315.7,
+  "ask_ms": 29.58,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "OBgynOGfu4BjBExuMo6QcN2ocJcLDhak",
+  "retrieval_count": 0,
+  "answer_validation_decision": "direct_slot_not_satisfied",
+  "retrieval_decision": "accepted"
+}

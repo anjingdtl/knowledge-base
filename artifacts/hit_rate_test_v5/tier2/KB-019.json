@@ -1,0 +1,687 @@
+{
+  "case": {
+    "case_id": "KB-019",
+    "category": "多条件组合",
+    "query": "翼支付III类支付账户 年付款限额",
+    "expected_knowledge_ids": [
+      "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+    ],
+    "expected_title_keywords": [
+      "翼支付",
+      "2026"
+    ],
+    "required_facts": [
+      "III类",
+      "20万元"
+    ],
+    "forbidden_facts": [
+      "10万元"
+    ],
+    "expected_no_answer": false,
+    "notes": "组合'翼支付+III类账户+年限额'；正确20万元"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+          "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+          "text": "【文档】中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4\n【章节】第十八条翼支付按照账户等级、交易场景、商户类型、支 > 第五章充值、转账及提现业务管理 > 第十九条充值业务管理\n翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。\n第十八条翼支付按照账户等级、交易场景、商户类型、支\n付资金源四个维度对用户交易进行限额，任何一笔交易同时受到\n四个维度的交叉限额控制，当前星级可享额度可登录翼支付客户\n端“我的”频道的“设置”页面查看。翼支付用户必须完成实名认\n证，方可使用翼支付各项支付功能。除注册过程中上传实名信息\n进行认证外，用户还可通过翼支付门户网站或客户端完成在线实\n名认证，同一个身份证名下最多可申请10个实名会员账户、最\n多可升级开通5个支付账户，所有等级认证均以翼支付客户端认\n—11—证要求为准。\n第五章充值、转账及提现业务管理\n第十九条充值业务管理\n翼支付账户充值业务分为个人账户充值与单位账户（对公）\n充值。",
+          "document_family_id": "topic:翼支付业务管理办法",
+          "version_year": 2026,
+          "section_path": "第十八条翼支付按照账户等级、交易场景、商户类型、支 > 第五章充值、转账及提现业务管理 > 第十九条充值业务管理",
+          "block_ids": [
+            "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+            "620e77a4-8513-4d74-bcaf-0079a637cf60",
+            "2bca454d-0227-467d-be2d-37305fc587c4",
+            "49349b40-089b-4650-bde6-b4c95117eaaa",
+            "109d0655-0d18-4552-b0f2-0d7af4ae01bc",
+            "b4506a73-fe3d-4453-ac21-be82dd2db45b",
+            "a57673a7-6c11-452d-b007-1a6c866458ac",
+            "0d03a541-4138-42d9-96ed-2d8454c1febf",
+            "06bd7321-9728-495a-852a-2f27fa1f1e65",
+            "3beed2ff-f60c-4d41-b704-14a3cfe6517c",
+            "13d58800-59bd-4b2b-be6f-94b57c81d8fb",
+            "881b4178-67f9-41a0-b227-bef8cb99c399",
+            "c69ba7f8-5eb3-4775-9906-7ff04fe69ed6",
+            "d9277126-3adc-481a-b435-26a288a236cd",
+            "276d29f1-8a97-41b5-a6a6-cecd22a330d0",
+            "9f6086b6-d21f-4da7-abed-e5c15dea4990"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -54.83920074160035,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 1.0,
+            "fts_score": 1.0,
+            "title_score": 0.35,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 1.0,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7525,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7525,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:翼支付业务管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "7053d7da-7020-4bf6-a7d6-5187b2d16762",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "f6393a870628e366e18578de86d184a9",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】五、流程概述 > （一）业务开通 > 1.默认开通\n报；\n（五）新商户接入或原有商户信息的变更未经适当授权\n和审批；\n（六） 系统中设定的结算规则与签订的合作协议不符， 导\n致合同争议或公司损失等；\n（七）多计或少计与商户结算相关的收入、成本、应收、\n应付账款和其他应收、其他应付款，造成财务报告及相关信维护账号(集团互联)\n— 570 — 息不真实、不完整；\n（八）与商户结算款项的处理未经适当授权 和审批；\n（九） 相关结算报表生成程序逻辑不准确， 导致生成数据\n有误；\n（十）客户备付金的相关业务（如银行账户的开立、变更\n和撤销，资金的收付等）未经适当授权和审批；\n（十一）发生违反支付机构客户备付金存管办法及其它\n金融法规的行为，造成损失。\n四、相关会计科目\n预收账款、营业收入、营业成本、应收账款、应付账款、\n其他应收款、其他应付款、应交税费、其他等。\n五、流程概述\n（一）业务开通\n翼支付业务开通分为默认开通及主动申请两种方式：\n1.默认开通\n新入网的天翼用户在系统内默认开通翼支付账户，用\n户无需另行申请。",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "section_path": "五、流程概述 > （一）业务开通 > 1.默认开通",
+          "block_ids": [
+            "7053d7da-7020-4bf6-a7d6-5187b2d16762",
+            "f45b1abc-5491-459f-8409-6db540ea57f6",
+            "d1b96b72-14e3-41c3-939e-fe3d00bf00e8",
+            "2ba900c2-e9ca-48b9-9a1d-fd99e62db48f",
+            "c0ab7d5e-5162-43f3-8637-f27b840ffe8a",
+            "3672240e-9d81-44c7-9454-6a19ada83491",
+            "282c6f71-7463-430b-ba2e-ca42a16acec3",
+            "82f9c293-c8ac-41ab-a36e-6b79fd9b9514",
+            "61a4e1cc-a6db-4a21-8270-231f3d57fbe6",
+            "c156ba84-ff33-4662-ac57-9968cb01db38",
+            "fce3704b-3eac-4dc9-9c44-4ef9d9d204d4",
+            "e45570e1-a042-4ec4-a09a-a578bb34c6f5",
+            "d27f80be-ff62-4afb-9318-50b3230fbca5",
+            "9ea80ead-dbd8-4e3c-a7b4-02edacf7bf3b",
+            "14e47aa1-0178-4ceb-8776-724ac5939a36",
+            "ddce7a80-f68b-41cc-95ce-530c0d81ce06",
+            "e900388f-f2c4-491c-a13d-cad26cedd3e3",
+            "b92489b5-33ed-437c-bb90-d1eaa476d4c7",
+            "e4c3e347-d124-47f3-b11e-432fab7b6b35",
+            "45c8466d-ff0a-4c04-8e11-8bd064a41ac9"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -28.536435077882963,
+          "fts_score": 0.7405053171163917,
+          "score": 0.5911,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4,
+            "fts_score": 0.7405,
+            "title_score": 0.2,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3911,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3911,
+          "ranking_score": 0.5911,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7525,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+        ],
+        "evidence_snapshot_id": "h4_FXE5biyzXRSvlHrwMWxG7-PU0_-x0",
+        "adjacent_unit": "passage",
+        "adjacent_count": 4,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 59533.51
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- III类20万元",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+            "block_id": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+            "block_ids": [
+              "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "620e77a4-8513-4d74-bcaf-0079a637cf60",
+              "2bca454d-0227-467d-be2d-37305fc587c4",
+              "49349b40-089b-4650-bde6-b4c95117eaaa",
+              "109d0655-0d18-4552-b0f2-0d7af4ae01bc",
+              "b4506a73-fe3d-4453-ac21-be82dd2db45b",
+              "a57673a7-6c11-452d-b007-1a6c866458ac",
+              "0d03a541-4138-42d9-96ed-2d8454c1febf",
+              "06bd7321-9728-495a-852a-2f27fa1f1e65",
+              "3beed2ff-f60c-4d41-b704-14a3cfe6517c",
+              "13d58800-59bd-4b2b-be6f-94b57c81d8fb",
+              "881b4178-67f9-41a0-b227-bef8cb99c399",
+              "c69ba7f8-5eb3-4775-9906-7ff04fe69ed6",
+              "d9277126-3adc-481a-b435-26a288a236cd",
+              "276d29f1-8a97-41b5-a6a6-cecd22a330d0",
+              "9f6086b6-d21f-4da7-abed-e5c15dea4990"
+            ],
+            "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+            "text": "翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。\n第十八条翼支付按照账户等级、交易场景、商户类型、支\n付资金源四个维度对用户交易进行限额，任何一笔交易同时受到\n四个维度的交叉限额控制，当前星级可享额度可登录翼支付客户\n端“我的”频道的“设置”页面查看。翼支付用户必须完成实名认\n证，方可使用翼支付各项支付功能。除注册过程中上传实名信息\n进行认证外，用户还可通过翼支付门户网站或客户端完成在线实\n名认证，同一个身份证名下最多可申请10个实名会员账户、最\n多可升级开通5个支付账户，所有等级认证均以翼支付客户端认\n—11—证要求为准。\n第五章充值、转账及提现业务管理\n第十九条充值业务管理\n翼支付账户充值业务分为个人账户充值与单位账户（对公）\n充值。",
+            "score": 1.0,
+            "document_family_id": "topic:翼支付业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "III类20万元",
+            "evidence_passage_ids": [
+              "3c7a08568ce26db0437fda38059ae1da"
+            ],
+            "fact_type": "numeric",
+            "condition": "III类",
+            "candidate_id": "3c7a08568ce26db0437fda38059ae1da:r3:num:III类:20万元"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+            "block_id": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+            "block_ids": [
+              "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "620e77a4-8513-4d74-bcaf-0079a637cf60",
+              "2bca454d-0227-467d-be2d-37305fc587c4",
+              "49349b40-089b-4650-bde6-b4c95117eaaa",
+              "109d0655-0d18-4552-b0f2-0d7af4ae01bc",
+              "b4506a73-fe3d-4453-ac21-be82dd2db45b",
+              "a57673a7-6c11-452d-b007-1a6c866458ac",
+              "0d03a541-4138-42d9-96ed-2d8454c1febf",
+              "06bd7321-9728-495a-852a-2f27fa1f1e65",
+              "3beed2ff-f60c-4d41-b704-14a3cfe6517c",
+              "13d58800-59bd-4b2b-be6f-94b57c81d8fb",
+              "881b4178-67f9-41a0-b227-bef8cb99c399",
+              "c69ba7f8-5eb3-4775-9906-7ff04fe69ed6",
+              "d9277126-3adc-481a-b435-26a288a236cd",
+              "276d29f1-8a97-41b5-a6a6-cecd22a330d0",
+              "9f6086b6-d21f-4da7-abed-e5c15dea4990"
+            ],
+            "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+            "path": "",
+            "text": "翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。\n第十八条翼支付按照账户等级、交易场景、商户类型、支\n付资金源四个维度对用户交易进行限额，任何一笔交易同时受到\n四个维度的交叉限额控制，当前星级可享额度可登录翼支付客户\n端“我的”频道的“设置”页面查看。翼支付用户必须完成实名认\n证，方可使用翼支付各项支付功能。除注册过程中上传实名信息\n进行认证外，用户还可通过翼支付门户网站或客户端完成在线实\n名认证，同一个身份证名下最多可申请10个实名会员账户、最\n多可升级开通5个支付账户，所有等级认证均以翼支付客户端认\n—11—证要求为准。\n第五章充值、转账及提现业务管理\n第十九条充值业务管理\n翼支付账户充值业务分为个人账户充值与单位账户（对公）\n充值。",
+            "body_text": "翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。\n第十八条翼支付按照账户等级、交易场景、商户类型、支\n付资金源四个维度对用户交易进行限额，任何一笔交易同时受到\n四个维度的交叉限额控制，当前星级可享额度可登录翼支付客户\n端“我的”频道的“设置”页面查看。翼支付用户必须完成实名认\n证，方可使用翼支付各项支付功能。除注册过程中上传实名信息\n进行认证外，用户还可通过翼支付门户网站或客户端完成在线实\n名认证，同一个身份证名下最多可申请10个实名会员账户、最\n多可升级开通5个支付账户，所有等级认证均以翼支付客户端认\n—11—证要求为准。\n第五章充值、转账及提现业务管理\n第十九条充值业务管理\n翼支付账户充值业务分为个人账户充值与单位账户（对公）\n充值。",
+            "score": 1.0,
+            "document_family_id": "topic:翼支付业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.7525,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 4,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_id_count": 6,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [
+              "III类"
+            ],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "翼支付III类支付账户 年付款限额"
+          },
+          "fact_plan": {
+            "raw": "翼支付III类支付账户 年付款限额",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [
+              "III类"
+            ],
+            "required_slots": [
+              "value",
+              "unit",
+              "condition",
+              "III类"
+            ],
+            "entities": [
+              "翼支付",
+              "类支付账户",
+              "年付款限额"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "III类",
+              "value": "20",
+              "unit": "万元",
+              "evidence_passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "record_id": "3c7a08568ce26db0437fda38059ae1da:r3",
+              "exact_text": "III类20万元",
+              "table_row_ref": "3c7a08568ce26db0437fda38059ae1da:t0"
+            }
+          ],
+          "dropped": [
+            {
+              "id": "3c7a08568ce26db0437fda38059ae1da:r2:num:II类:10万元",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "III类"
+              ]
+            },
+            {
+              "id": "b70adbe973c7e295104418fba7e0fac0:r2:num:II类:10万元",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "III类"
+              ]
+            },
+            {
+              "id": "b70adbe973c7e295104418fba7e0fac0:r2:num:个人:10万元",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "III类"
+              ]
+            },
+            {
+              "id": "4f372e3e89ecc16bc92251ed44332073:r0:num:个人:10个",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4f372e3e89ecc16bc92251ed44332073:r0:num:个人:5个",
+              "reason": "unit_not_money"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 38,
+          "candidate_count": 8
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "III类20万元",
+              "evidence_passage_ids": [
+                "3c7a08568ce26db0437fda38059ae1da"
+              ],
+              "fact_type": "numeric",
+              "condition": "III类",
+              "candidate_id": "3c7a08568ce26db0437fda38059ae1da:r3:num:III类:20万元"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "翼支付III类支付账户 年付款限额",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [
+              "III类"
+            ],
+            "required_slots": [
+              "value",
+              "unit",
+              "condition",
+              "III类"
+            ],
+            "entities": [
+              "翼支付",
+              "类支付账户",
+              "年付款限额"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ]
+          },
+          "input_count": 8,
+          "dropped": [
+            {
+              "id": "3c7a08568ce26db0437fda38059ae1da:r2:num:II类:10万元",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "III类"
+              ]
+            },
+            {
+              "id": "b70adbe973c7e295104418fba7e0fac0:r2:num:II类:10万元",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "III类"
+              ]
+            },
+            {
+              "id": "b70adbe973c7e295104418fba7e0fac0:r2:num:个人:10万元",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "III类"
+              ]
+            },
+            {
+              "id": "4f372e3e89ecc16bc92251ed44332073:r0:num:个人:10个",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4f372e3e89ecc16bc92251ed44332073:r0:num:个人:5个",
+              "reason": "unit_not_money"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "3c7a08568ce26db0437fda38059ae1da:r3:num:III类:20万元",
+              "record_id": "3c7a08568ce26db0437fda38059ae1da:r3",
+              "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "20万元",
+              "qualifiers": [],
+              "condition": "III类",
+              "value": "20",
+              "unit": "万元",
+              "exact_text": "III类20万元",
+              "evidence_spans": [
+                [
+                  18,
+                  22
+                ]
+              ],
+              "table_row_ref": "3c7a08568ce26db0437fda38059ae1da:t0",
+              "document_family_id": "topic:翼支付业务管理办法",
+              "version_year": 2026,
+              "score": 7.8,
+              "unstructured_rejected": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "covered_slots": [
+            "III类",
+            "unit",
+            "value"
+          ],
+          "covered_conditions": [
+            "III类"
+          ]
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit",
+            "condition",
+            "III类"
+          ],
+          "candidate_ids": [
+            "3c7a08568ce26db0437fda38059ae1da:r3:num:III类:20万元"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "numeric"
+          ]
+        },
+        "query_plan": {
+          "raw": "翼支付III类支付账户 年付款限额",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [
+            "III类"
+          ],
+          "required_slots": [
+            "value",
+            "unit",
+            "condition",
+            "III类"
+          ],
+          "entities": [
+            "翼支付",
+            "类支付账户",
+            "年付款限额"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ]
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "type": "knowledge",
+              "label": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4"
+            },
+            {
+              "id": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "type": "block",
+              "label": "立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+            },
+            {
+              "id": "4ab47bdd-03e7-486a-8a00-133e14412879",
+              "type": "block",
+              "label": "[第10页]",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+            },
+            {
+              "id": "dfe59a14-9903-488e-9257-a523defaaef3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-371号-关于印发中国电信广西公司原子能力管理办法-试行-的通知--dfe59a14"
+            }
+          ],
+          "edges": [
+            {
+              "source": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "target": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "type": "contains"
+            },
+            {
+              "source": "4ab47bdd-03e7-486a-8a00-133e14412879",
+              "target": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "type": "parent"
+            },
+            {
+              "source": "dfe59a14-9903-488e-9257-a523defaaef3",
+              "target": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 4
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 0,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "accepted_block_ids": [
+            "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+            "7053d7da-7020-4bf6-a7d6-5187b2d16762"
+          ],
+          "accepted_passage_ids": [
+            "3c7a08568ce26db0437fda38059ae1da",
+            "f6393a870628e366e18578de86d184a9",
+            "b70adbe973c7e295104418fba7e0fac0",
+            "4f372e3e89ecc16bc92251ed44332073",
+            "bbd19720a8a8b0a48b9312782e5323f2",
+            "a95ef165d3c08ba7bac9a9c578140e98"
+          ],
+          "generation_knowledge_ids": [
+            "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "top_score": 0.7525,
+          "intent": "ordinary",
+          "adjacent_count": 4,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {}
+        },
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 31.21
+  },
+  "top_candidate_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+  "candidates": [
+    {
+      "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+      "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+      "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+      "score": 1.0,
+      "final_relevance_score": 0.7525,
+      "text": "【文档】中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4\n【章节】第十八条翼支付按照账户等级、交易场景、商户类型、支 > 第五章充值、转账及提现业务管理 > 第十九条充值业务管理\n翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。\n第十八条翼支付按照账户等级、交易场景、商户类型、支\n付资金源四个维度对用户交易进行限额，任何一笔交易同时受到\n四个维度的交叉限额控制，当前星级可享额度可登录翼支付客户\n端“我的”频道的“设置”页面查看。翼支付用户必须完成实名认\n证，方可使用翼支付各项支付功能。除注册过程中上传实名信息\n进行认证外，用户还可通过翼支付门户网站或客户端完成在线实\n名认证，同一个身份证名下最多可申请10个实名会员账户、最\n多可升级开通5个支付账户，所有等级认证均以翼支付客户端认\n—11—证要求为准。\n第五章充值、转账及提现业务管理\n第十九条充值业务管理\n翼支付账户充值业务分为个人账户充值与单位账户（对公）\n充值。"
+    },
+    {
+      "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+      "passage_id": "f6393a870628e366e18578de86d184a9",
+      "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+      "score": 0.5911,
+      "final_relevance_score": 0.3911,
+      "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】五、流程概述 > （一）业务开通 > 1.默认开通\n报；\n（五）新商户接入或原有商户信息的变更未经适当授权\n和审批；\n（六） 系统中设定的结算规则与签订的合作协议不符， 导\n致合同争议或公司损失等；\n（七）多计或少计与商户结算相关的收入、成本、应收、\n应付账款和其他应收、其他应付款，造成财务报告及相关信维护账号(集团互联)\n— 570 — 息不真实、不完整；\n（八）与商户结算款项的处理未经适当授权 和审批；\n（九） 相关结算报表生成程序逻辑不准确， 导致生成数据\n有误；\n（十）客户备付金的相关业务（如银行账户的开立、变更\n和撤销，资金的收付等）未经适当授权和审批；\n（十一）发生违反支付机构客户备付金存管办法及其它\n金融法规的行为，造成损失。\n四、相关会计科目\n预收账款、营业收入、营业成本、应收账款、应付账款、\n其他应收款、其他应付款、应交税费、其他等。\n五、流程概述\n（一）业务开通\n翼支付业务开通分为默认开通及主动申请两种方式：\n1.默认开通\n新入网的天翼用户在系统内默认开通翼支付账户，用\n户无需另行申请。"
+    }
+  ],
+  "search_ms": 59533.51,
+  "ask_ms": 31.21,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "h4_FXE5biyzXRSvlHrwMWxG7-PU0_-x0",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

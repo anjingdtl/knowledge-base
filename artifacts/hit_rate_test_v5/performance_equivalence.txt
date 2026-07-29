@@ -1,0 +1,15 @@
+workers1_elapsed_s: 321.33
+workers2_elapsed_s: 201.82
+snapshot_reuse_w1: 8/8
+snapshot_reuse_w2: 8/8
+answer_mode_answer_text_match: 8/8
+reason_mismatch: KB-032 only (both no_answer empty)
+verdict: full golden used workers=1; workers=2 OK for wallclock but reason nondeterminism on 1 no-answer case
+full37_elapsed_s: 2505.02
+full37_snapshot_reuse: 30/37
+search_ms_sum: 2086715.67
+ask_ms_sum: 416963.63
+retrieval_count_sum: 6
+pytest_baseline: 23 failed / 2219 passed
+pytest_final: 22 failed / 2220 passed
+fixed_related: test_do_ask_timeout, test_do_ask_non_timeout_exception

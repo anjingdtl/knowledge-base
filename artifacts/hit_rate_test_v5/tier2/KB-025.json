@@ -1,0 +1,1114 @@
+{
+  "case": {
+    "case_id": "KB-025",
+    "category": "跨文档综合",
+    "query": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+    "expected_knowledge_ids": [
+      "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+    ],
+    "expected_title_keywords": [
+      "重要决策",
+      "法律合规审核"
+    ],
+    "required_facts": [
+      "法律合规部"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕505号第八条；归口=区公司法律合规部"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第十条 各单位法律部门也可根据实际需要，委托外聘律师 > 第十一条 各单位的业务、职能部门为法律合规审核需求发 > （一）对本办法规定应当提起法律合规审核的重要决策或视\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为：",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "section_path": "第十条 各单位法律部门也可根据实际需要，委托外聘律师 > 第十一条 各单位的业务、职能部门为法律合规审核需求发 > （一）对本办法规定应当提起法律合规审核的重要决策或视",
+          "block_ids": [
+            "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "1fa31dca-2475-4f11-be8e-620be8281a62",
+            "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d",
+            "4c5769ec-796e-4e04-9339-0341934a33c9",
+            "7b37aaee-37cf-4ca5-b855-0da62a4e6055",
+            "c25a9ddf-a2bf-4429-835d-cabda233629c",
+            "6461d2ea-dcce-42ab-bd4c-ed2459aa7bc2",
+            "8158890f-7929-440d-82e1-d290782076c6",
+            "17792fbe-1a07-4a8a-bbf7-f5cf59942b12",
+            "37bcefe3-0680-4620-8f50-f33bb4e5f4d5",
+            "98968cc6-e10e-402e-963c-0109502e31ad",
+            "8f59dd46-d3da-4696-8495-393a954703b6",
+            "35eb850a-fbec-4030-b1e7-fb1644be494b",
+            "e32fe28a-6d37-4deb-be76-6e1e5db1e484",
+            "aa033116-6229-41c1-86ae-28a8460b31c2",
+            "f49fe116-cb03-4002-b24a-12b1a08d5b8b"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -20.339392924091126,
+          "fts_score": 1.0,
+          "score": 0.9114,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.65,
+            "fts_score": 1.0,
+            "title_score": 0.6429,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.65,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.6214,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.6214,
+          "ranking_score": 0.9114,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "8b0a77a3-78f9-46ca-9c88-1fd47f1189ec",
+          "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+          "passage_id": "1f2466e049ab06e021d20ef7b8377b6c",
+          "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+          "text": "【文档】中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665\n【章节】（五）严格实行传播内容“先审后发”的审核机制，明确审 > 第三十五条 行为合规。品牌宣传行为应严格按照国家法律 > 第三十六条 整合传播。各单位应积极构建资源集约、结构\n久”等易误解表述。严禁诋毁、攻击竞争对手的商业信誉、商品\n声誉，不炒作友商负面信息，维护良好的行业口碑。\n（四）使用人工智能（AI）技术生成、合成的文本、图片、\n音频、视频、虚拟场景等信息，应当依规添加相应标识，确保能\n够清晰辨识其为人工智能（AI）生成内容。\n（五）严格实行传播内容“先审后发”的审核机制，明确审\n核流程与责任人，未经审核严禁发布。其中，品牌及业务广告宣\n传归口管理部门为市场部，服务宣传归口管理部门为服务督察部\n（客户服务部），企业形象宣传归口管理部门为办公室（安全保\n卫部），线上渠道宣传归口管理部门为全渠道运营中心。\n第三十五条 行为合规。品牌宣传行为应严格按照国家法律\n法规相关要求，加强对广告代言、发布发送、未成年人保护、价\n格宣传等环节的管理（具体合规要求详见附件3：品牌宣传行为\n合规要求）。\n第三十六条 整合传播。各单位应积极构建资源集约、结构\n合理、协同高效的品牌传播体系，充分利用重大活动、新闻事件、\n体育赛事、展会论坛等契机，结合社会热点提升传播效果。",
+          "document_family_id": "topic:关于印发中国电信广西公司品牌管理办法",
+          "version_year": 2026,
+          "section_path": "（五）严格实行传播内容“先审后发”的审核机制，明确审 > 第三十五条 行为合规。品牌宣传行为应严格按照国家法律 > 第三十六条 整合传播。各单位应积极构建资源集约、结构",
+          "block_ids": [
+            "8b0a77a3-78f9-46ca-9c88-1fd47f1189ec",
+            "b5488905-d4b3-47b2-8ea7-c7458855b336",
+            "eb2f2ada-d009-48cf-a087-e4c901962cf0",
+            "38c06a09-d0ec-4ed5-9ee6-a39608533a5e",
+            "9ca359c3-1253-4f6f-95a5-a3341009c737",
+            "3b9f2f5c-7f6c-4322-ae76-fd57ef85c49a",
+            "50ecd311-2602-431b-9ba5-7509172bb53e",
+            "b2797513-100a-4452-b712-ba52e4e053f2",
+            "34040a2f-f89a-44d9-b19e-f82c8c01f281",
+            "d067bd3e-571c-4ca5-ad40-17c369d87040",
+            "95a7387b-5295-43b6-880f-80eccc6d55a1",
+            "a3758591-bdb1-4e94-b2c7-d66dd88f62cd",
+            "c087f01b-99bc-4c37-9334-8a6c0c8f9dad",
+            "d194540b-ff6e-4073-be76-e09e749b3aef",
+            "09798a24-457e-402f-b66a-020e842d6aaa"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -16.659306944782116,
+          "fts_score": 1.0,
+          "score": 0.9000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5125,
+            "fts_score": 1.0,
+            "title_score": 0.4643,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5125,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司品牌管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "ad3fb076-ce4f-4a60-a5f8-9ec3612292e0",
+          "knowledge_id": "7a105c2a-9de9-414b-8ae4-7de195a21325",
+          "passage_id": "398938339dc4a1d7f115aadb937271df",
+          "title": "中电信桂-2017-214号-关于印发中国电信广西公司采购管理办法的通知--7a105c2a",
+          "text": "【文档】中电信桂-2017-214号-关于印发中国电信广西公司采购管理办法的通知--7a105c2a\n【章节】第十三条 公司各类工程、货物及服务的采购方式包括： > （一）招标：指以招标公告或投标邀请书的方式邀请３家及 > （二）比选：指以比选公告或比选邀请书的方式邀请３家及\n 根据采购归口管理部门或采购实施部\n门要求，参与采购检测管理、供 应商考察及供应商评价等相关工\n作。\n第十条 管控部门包括财务、法律等部门。财务部门主要负\n责审核采购文件与合同的支付条款、 按照合同约定条件实施款项\n支付等；法律部门主要负责审查采 购文件与合同的合法合规性。\n第十一条 监督部门包括审计、纪检监察机构和采购工作归\n口管理部门，主要负责对采购活动进行审计和监督检查。\n第十二条 采购决策机构是指各单位负责采购事项决策或\n确认的组织， 主要负责按照企业内控管理规定对重大采购事项进\n行集体审议决策或确认。\n第三章 采购方式\n第十三条 公司各类工程、货物及服务的采购方式包括：\n（一）招标：指以招标公告或投标邀请书的方式邀请３家及\n以上供应商参与投标竞争，按照综合 评估法、经评审的最低投标\n价法等法律法规允许的评标方法 评审确定成交供应商及价格等何世恒(全渠道运营中心)\n\u0001\u0001 — 9 — 中标结果。\n（二）比选：指以比选公告或比选邀请书的方式邀请３家及\n以上供应商参与比选竞争， 按照综合评估法评审确定成交供应商\n及价格等中选结果。",
+          "document_family_id": "topic:关于印发中国电信广西公司采购管理办法",
+          "version_year": 2017,
+          "section_path": "第十三条 公司各类工程、货物及服务的采购方式包括： > （一）招标：指以招标公告或投标邀请书的方式邀请３家及 > （二）比选：指以比选公告或比选邀请书的方式邀请３家及",
+          "block_ids": [
+            "ad3fb076-ce4f-4a60-a5f8-9ec3612292e0",
+            "03bdcf54-f315-48e8-b4a1-246ec8de0544",
+            "59e1b4d2-f5e6-482e-94c4-02cd7533d537",
+            "e3a81a9c-3536-4457-a66b-ceb41a63a254",
+            "3fdd16f6-aab5-44c7-83af-b0b4dd8284ae",
+            "336e69a5-df0c-4bec-b8ce-f64594d5fce6",
+            "b6069157-da82-43fc-837a-59b5ad583180",
+            "f97ea311-a8e7-4b52-9427-b9cddd817ddb",
+            "64582453-56d4-48bc-a4a9-575d8e7e701b",
+            "129e2cd6-d533-4824-8a22-3ea110751800",
+            "085bebb7-61ea-47c9-9a00-fec65f73826b",
+            "c5263cf3-c9f6-4da6-902b-1a428c4ebb57",
+            "fd85655a-b6ac-4412-92f8-5bbfaf6557c0",
+            "91a6cf90-c211-460c-b3a1-814bc0b4bdcd",
+            "33140948-435b-4a38-b0df-a2da9d32ef8c",
+            "1ce1fb09-cecc-4908-adda-363ee556f37f",
+            "63b387d7-a7cf-4960-896b-557ab96e1dc3"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -17.065590534348058,
+          "fts_score": 1.0,
+          "score": 0.7634000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5875,
+            "fts_score": 1.0,
+            "title_score": 0.4643,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5875,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5634,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5634,
+          "ranking_score": 0.7634000000000001,
+          "version_rank": {
+            "version_year": 2017,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司采购管理办法",
+            "family_newest_year": 2017,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "795a182e-87a5-4108-9485-8ea80c383700",
+          "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "passage_id": "097cce346f1026a2cf80d0df41875ee8",
+          "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+          "text": "【文档】中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150\n【章节】2.负责内容信息安全事件的处置工作，组织、指导内容信息 > 3.负责承接政府主管部门和集团公司下达的内容信息安全 > 5.负责对日常内容信息安全工作进行监督、指导、教育、培\n络和信息安全领导小组办公室统筹管理内容信息安全工作，按照\n“党政同责、一岗双责、齐抓共管、失职追责”的要求和“谁主\n管谁负责、谁运营谁负责、谁接入谁负责”的原则，实行分级管\n理和属地管理，将内容信息安全管理责任主体划分为归口管理部\n门、业务管理部门、业务运营部门和综合支撑部门。\n（一）区公司内容信息安全归口管理部门为区公司网络和信\n息安全管理部，负责组织落实、监督检查、考核处置公司内容信\n息安全工作。职责包括：\n1.负责制定有关内容信息安全的规章制度和工作要求，并指\n导、监督各单位贯彻落实；\n2.负责内容信息安全事件的处置工作，组织、指导内容信息\n安全应急演练；\n3.负责承接政府主管部门和集团公司下达的内容信息安全\n方面的专项治理工作； 何世恒(全渠道运营中心)\n— 4 —4.负责监督、检查、评估、考核各单位内容信息安全工作，\n并就相关情况定期或不定期向各单位进行通报；\n5.负责对日常内容信息安全工作进行监督、指导、教育、培\n训工作。",
+          "document_family_id": "topic:关于印发中国电信广西公司内容信息安全管理办法",
+          "version_year": 2022,
+          "section_path": "2.负责内容信息安全事件的处置工作，组织、指导内容信息 > 3.负责承接政府主管部门和集团公司下达的内容信息安全 > 5.负责对日常内容信息安全工作进行监督、指导、教育、培",
+          "block_ids": [
+            "795a182e-87a5-4108-9485-8ea80c383700",
+            "6c8b59e0-2637-4ebe-acc0-a8bb8ef0f9bd",
+            "adff5e63-ae31-4d38-a102-a827251737aa",
+            "62d354a5-5d54-48fe-80f0-05b58d1b6835",
+            "8098d462-02e7-4b7f-a3fa-efc1fd6aeb9b",
+            "69fa658f-e0c5-4803-b126-66f35f3d4a70",
+            "75e1f16b-4dd0-4f6a-a619-009fd56de5c8",
+            "24e66dcf-c421-4538-8a38-c1f0c2ba3468",
+            "e09c79dd-0c09-4d18-b26b-3a3c6bdad4e5",
+            "f5113a2f-2990-4466-886d-f81e5b675595",
+            "55e8f452-9e97-4d02-8404-03ec63c067cf",
+            "fe600b7c-7843-4931-9832-98dd2caa29c5",
+            "3afc45f9-74e6-46d2-9bc5-1fd1af17dccd",
+            "99fdbd20-4917-4207-aea3-bf428ba4a612",
+            "e37f9e29-e64a-46f2-960d-e0715e2a8962",
+            "c9fe7d5f-4272-4b85-a884-259d48368745"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -16.311848370495138,
+          "fts_score": 1.0,
+          "score": 0.75,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.475,
+            "fts_score": 1.0,
+            "title_score": 0.4643,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.475,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.75,
+          "version_rank": {
+            "version_year": 2022,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司内容信息安全管理办法",
+            "family_newest_year": 2022,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "964a2c1c-0eda-4071-b593-b03006afc668",
+          "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+          "passage_id": "4846517934b860c6e52a2f9c4cb61e39",
+          "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+          "text": "【文档】中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1\n【章节】第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 面向客户APP收集使用个人信息合规（以下简称 > 第六条 按照“谁主管谁负责、谁开发谁负责、谁运营谁负责、\n支撑中心、集团专业公司等）负责落实合规要求并承担相关责任。\n在区公司立项产品所涉及APP由区公司开发运营部门（区\n公司相关运营/支撑中心、专业公司）负责落实合规要求并承担\n相关责任。\n在各市分公司立项产品所涉及APP由各市分公司开发运营\n部门负责落实合规要求并承担相关责任。\n第六条 按照“谁主管谁负责、谁开发谁负责、谁运营谁负责、\n谁审批谁负责”的原则，APP合规工作由APP合规管理部门、APP\n业务管理部门、APP开发运营部门分工负责。\n区公司网络和信息安全管理部（安全管理部）为APP合规\n管理部门，负责制定合规管理制度、流程、评估标准、评估计划；\n推动APP合规管理系统及技术检测手段建设；对各单位APP合\n规工作情况进行指导、监督、检查、考核。\n区公司市场部为APP业务管理部门，负责审核新建APP 的\n必要性及业务功能的合理性，协助管理APP开发运营部门落实\n合规要求，督促风险整改及问题清零。 维护账号(集团互联)",
+          "document_family_id": "topic:合规管理办法",
+          "version_year": 2021,
+          "section_path": "第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 面向客户APP收集使用个人信息合规（以下简称 > 第六条 按照“谁主管谁负责、谁开发谁负责、谁运营谁负责、",
+          "block_ids": [
+            "964a2c1c-0eda-4071-b593-b03006afc668",
+            "aa64c661-c1c1-4cfc-a4d0-5cd7ec6bb47c",
+            "8b553c90-d40b-4fe8-ac50-b6acd1226c99",
+            "21f4ecd9-e760-463a-9173-a7deae699291",
+            "2690562e-5c0f-4d67-b023-6cfe2b10870a",
+            "b0e4e87e-892e-4a0c-af2e-5024397e252a",
+            "e0961d42-211c-4f96-ac60-cf86a28fb05a",
+            "689a1873-8c9a-4a59-9323-5403a8da7c22",
+            "e518f762-774e-4979-ae8d-bfdc996c91d5",
+            "887f13c4-69cc-4808-a402-dca5b8c0f07d",
+            "ad08b79b-6ccb-4d38-a55d-555db5d275f1",
+            "ffa6ef87-5e04-4835-8e67-9cc38c2577c5",
+            "2d7d0b36-0676-4bbc-98f4-dbf28382fd59"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -21.52395299119877,
+          "fts_score": 1.0,
+          "score": 0.75,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4918,
+            "fts_score": 1.0,
+            "title_score": 0.5357,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4625,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.75,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:合规管理办法",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 5,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.6214,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "423eb665-1382-4fc3-9805-8597e3c25276",
+          "7a105c2a-9de9-414b-8ae4-7de195a21325",
+          "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "77ea3d15-7437-4d18-acbc-a48ba245630a",
+          "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+          "2fc09b4e-cfb1-4919-ba41-ee598890c5a5",
+          "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+          "4e1f17e5-1b81-454d-bf82-db980ee49910",
+          "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+        ],
+        "evidence_snapshot_id": "aj2gSr-mOZe2t-IR7DnA5xZgzxhPV6UF",
+        "adjacent_unit": "passage",
+        "adjacent_count": 10,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 28136.05
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 及其所属企业（以下简称“各单位”）\n- 负责制定法律合规审核相关规章制度并组织实施；\n- 负责对规章制度的落实情况进行检查；",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+            "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "block_ids": [
+              "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "1fa31dca-2475-4f11-be8e-620be8281a62",
+              "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d",
+              "4c5769ec-796e-4e04-9339-0341934a33c9",
+              "7b37aaee-37cf-4ca5-b855-0da62a4e6055",
+              "c25a9ddf-a2bf-4429-835d-cabda233629c",
+              "6461d2ea-dcce-42ab-bd4c-ed2459aa7bc2",
+              "8158890f-7929-440d-82e1-d290782076c6",
+              "17792fbe-1a07-4a8a-bbf7-f5cf59942b12",
+              "37bcefe3-0680-4620-8f50-f33bb4e5f4d5",
+              "98968cc6-e10e-402e-963c-0109502e31ad",
+              "8f59dd46-d3da-4696-8495-393a954703b6",
+              "35eb850a-fbec-4030-b1e7-fb1644be494b",
+              "e32fe28a-6d37-4deb-be76-6e1e5db1e484",
+              "aa033116-6229-41c1-86ae-28a8460b31c2",
+              "f49fe116-cb03-4002-b24a-12b1a08d5b8b"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为：",
+            "score": 0.9114,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "及其所属企业（以下简称“各单位”）",
+            "evidence_passage_ids": [
+              "0ea0bb1be39826cfef6d6b3adc5ecce0"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r0:pol:responsibility:53890343"
+          },
+          {
+            "text": "负责制定法律合规审核相关规章制度并组织实施；",
+            "evidence_passage_ids": [
+              "0ea0bb1be39826cfef6d6b3adc5ecce0"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r1:pol:responsibility:85600264"
+          },
+          {
+            "text": "负责对规章制度的落实情况进行检查；",
+            "evidence_passage_ids": [
+              "0ea0bb1be39826cfef6d6b3adc5ecce0"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r2:pol:responsibility:77665054"
+          },
+          {
+            "text": "负责全区性经营管理问题的法律审核，提供法律意见；",
+            "evidence_passage_ids": [
+              "0ea0bb1be39826cfef6d6b3adc5ecce0"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r3:pol:responsibility:89643445"
+          },
+          {
+            "text": "负责统计全区法律审核总体情况，上报集团公司；",
+            "evidence_passage_ids": [
+              "0ea0bb1be39826cfef6d6b3adc5ecce0"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r4:pol:responsibility:8702576"
+          },
+          {
+            "text": "其它应当由归口部门承担的管理职责",
+            "evidence_passage_ids": [
+              "0ea0bb1be39826cfef6d6b3adc5ecce0"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r5:pol:responsibility:58051073"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+            "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "block_ids": [
+              "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "1fa31dca-2475-4f11-be8e-620be8281a62",
+              "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d",
+              "4c5769ec-796e-4e04-9339-0341934a33c9",
+              "7b37aaee-37cf-4ca5-b855-0da62a4e6055",
+              "c25a9ddf-a2bf-4429-835d-cabda233629c",
+              "6461d2ea-dcce-42ab-bd4c-ed2459aa7bc2",
+              "8158890f-7929-440d-82e1-d290782076c6",
+              "17792fbe-1a07-4a8a-bbf7-f5cf59942b12",
+              "37bcefe3-0680-4620-8f50-f33bb4e5f4d5",
+              "98968cc6-e10e-402e-963c-0109502e31ad",
+              "8f59dd46-d3da-4696-8495-393a954703b6",
+              "35eb850a-fbec-4030-b1e7-fb1644be494b",
+              "e32fe28a-6d37-4deb-be76-6e1e5db1e484",
+              "aa033116-6229-41c1-86ae-28a8460b31c2",
+              "f49fe116-cb03-4002-b24a-12b1a08d5b8b"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为：",
+            "body_text": "及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为：",
+            "score": 0.9114,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.6214,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 10,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_id_count": 15,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责"
+          },
+          "fact_plan": {
+            "raw": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+            "intents": [
+              "responsibility",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "subject",
+              "role",
+              "policy_fact"
+            ],
+            "entities": [
+              "中国电信广西公司各类管理",
+              "办法的归口管理部门",
+              "法律合规审核由谁负责"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": true,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "responsibility",
+              "policy",
+              "prohibition"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 91,
+          "candidate_count": 91
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "及其所属企业（以下简称“各单位”）",
+              "evidence_passage_ids": [
+                "0ea0bb1be39826cfef6d6b3adc5ecce0"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r0:pol:responsibility:53890343"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责制定法律合规审核相关规章制度并组织实施；",
+              "evidence_passage_ids": [
+                "0ea0bb1be39826cfef6d6b3adc5ecce0"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r1:pol:responsibility:85600264"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责对规章制度的落实情况进行检查；",
+              "evidence_passage_ids": [
+                "0ea0bb1be39826cfef6d6b3adc5ecce0"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r2:pol:responsibility:77665054"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责全区性经营管理问题的法律审核，提供法律意见；",
+              "evidence_passage_ids": [
+                "0ea0bb1be39826cfef6d6b3adc5ecce0"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r3:pol:responsibility:89643445"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责统计全区法律审核总体情况，上报集团公司；",
+              "evidence_passage_ids": [
+                "0ea0bb1be39826cfef6d6b3adc5ecce0"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r4:pol:responsibility:8702576"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "其它应当由归口部门承担的管理职责",
+              "evidence_passage_ids": [
+                "0ea0bb1be39826cfef6d6b3adc5ecce0"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r5:pol:responsibility:58051073"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+            "intents": [
+              "responsibility",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "subject",
+              "role",
+              "policy_fact"
+            ],
+            "entities": [
+              "中国电信广西公司各类管理",
+              "办法的归口管理部门",
+              "法律合规审核由谁负责"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": true,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "responsibility",
+              "policy",
+              "prohibition"
+            ]
+          },
+          "input_count": 91,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r0:pol:responsibility:53890343",
+              "record_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r0",
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "中国电信广西公司各类管理",
+              "predicate": "",
+              "object": "及其所属企业（以下简称“各单位”）",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "及其所属企业（以下简称“各单位”）",
+              "evidence_spans": [
+                [
+                  0,
+                  94
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r1:pol:responsibility:85600264",
+              "record_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r1",
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "法律合规审核由谁负责",
+              "predicate": "",
+              "object": "负责制定法律合规审核相关规章制度并组织实施；",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责制定法律合规审核相关规章制度并组织实施；",
+              "evidence_spans": [
+                [
+                  98,
+                  121
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r2:pol:responsibility:77665054",
+              "record_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r2",
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "法律合规审核由谁负责",
+              "predicate": "",
+              "object": "负责对规章制度的落实情况进行检查；",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责对规章制度的落实情况进行检查；",
+              "evidence_spans": [
+                [
+                  125,
+                  143
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r3:pol:responsibility:89643445",
+              "record_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r3",
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "中国电信广西公司各类管理",
+              "predicate": "",
+              "object": "负责全区性经营管理问题的法律审核，提供法律意见；",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责全区性经营管理问题的法律审核，提供法律意见；",
+              "evidence_spans": [
+                [
+                  147,
+                  226
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r4:pol:responsibility:8702576",
+              "record_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r4",
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "中国电信广西公司各类管理",
+              "predicate": "",
+              "object": "负责统计全区法律审核总体情况，上报集团公司；",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责统计全区法律审核总体情况，上报集团公司；",
+              "evidence_spans": [
+                [
+                  230,
+                  252
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r5:pol:responsibility:58051073",
+              "record_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r5",
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "中国电信广西公司各类管理",
+              "predicate": "",
+              "object": "其它应当由归口部门承担的管理职责",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "其它应当由归口部门承担的管理职责",
+              "evidence_spans": [
+                [
+                  256,
+                  438
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 3.5,
+              "unstructured_rejected": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "covered_slots": [
+            "policy_fact",
+            "role"
+          ],
+          "covered_conditions": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "subject",
+            "role",
+            "policy_fact"
+          ],
+          "candidate_ids": [
+            "0ea0bb1be39826cfef6d6b3adc5ecce0:r0:pol:responsibility:53890343",
+            "0ea0bb1be39826cfef6d6b3adc5ecce0:r1:pol:responsibility:85600264",
+            "0ea0bb1be39826cfef6d6b3adc5ecce0:r2:pol:responsibility:77665054",
+            "0ea0bb1be39826cfef6d6b3adc5ecce0:r3:pol:responsibility:89643445",
+            "0ea0bb1be39826cfef6d6b3adc5ecce0:r4:pol:responsibility:8702576",
+            "0ea0bb1be39826cfef6d6b3adc5ecce0:r5:pol:responsibility:58051073"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "responsibility",
+            "policy"
+          ]
+        },
+        "query_plan": {
+          "raw": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+          "intents": [
+            "responsibility",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "subject",
+            "role",
+            "policy_fact"
+          ],
+          "entities": [
+            "中国电信广西公司各类管理",
+            "办法的归口管理部门",
+            "法律合规审核由谁负责"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": true,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "responsibility",
+            "policy",
+            "prohibition"
+          ]
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "type": "knowledge",
+              "label": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+            },
+            {
+              "id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "type": "block",
+              "label": "第八条 区公司法律合规部是法律合规审核的归口管理部",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "d6b3d715-2654-4b43-8f5e-3771880e3beb",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9"
+            }
+          ],
+          "edges": [
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "type": "contains"
+            },
+            {
+              "source": "d6b3d715-2654-4b43-8f5e-3771880e3beb",
+              "target": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "type": "parent"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 4
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 0,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "423eb665-1382-4fc3-9805-8597e3c25276",
+            "7a105c2a-9de9-414b-8ae4-7de195a21325",
+            "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+            "77ea3d15-7437-4d18-acbc-a48ba245630a",
+            "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+            "2fc09b4e-cfb1-4919-ba41-ee598890c5a5",
+            "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+            "4e1f17e5-1b81-454d-bf82-db980ee49910",
+            "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+          ],
+          "accepted_block_ids": [
+            "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "8b0a77a3-78f9-46ca-9c88-1fd47f1189ec",
+            "ad3fb076-ce4f-4a60-a5f8-9ec3612292e0",
+            "795a182e-87a5-4108-9485-8ea80c383700",
+            "964a2c1c-0eda-4071-b593-b03006afc668",
+            "c27f3d4d-0e07-4daf-a2da-ef29a3cbf2ca",
+            "b4dd095b-46ce-484a-8aca-b38290053010",
+            "eec4c43e-9ed9-4c08-b2b3-7239dac38576",
+            "01df5747-e8a0-4180-8911-7b81d4339a61",
+            "e20b6393-88ae-4587-90fa-dc1383998fbd"
+          ],
+          "accepted_passage_ids": [
+            "0ea0bb1be39826cfef6d6b3adc5ecce0",
+            "1f2466e049ab06e021d20ef7b8377b6c",
+            "398938339dc4a1d7f115aadb937271df",
+            "097cce346f1026a2cf80d0df41875ee8",
+            "4846517934b860c6e52a2f9c4cb61e39",
+            "05a1d92810362ad39b8baf29644013f8",
+            "462ce80d9bf2e0cd708c6afe560c65fa",
+            "57b92a66c258fd6fbb737ef6fa63ad50",
+            "cb393094729df18ecac6f90f5912c7b7",
+            "653f9377efecc56ba6b63aace18e90b6",
+            "640e4ce94f67676be67f83c899e81c82",
+            "ab1960d6ce332c4b1af3ef3a7492c6f1",
+            "0a6cb532dcf71f17494997df20c8c15d",
+            "45363b075a1b82e72f7bdd07e5e131a1",
+            "37b2d1c07aa5757775362e9d90238104",
+            "f2875908c4211f0e270ae97e92c9a511",
+            "8f09f883255227f0fe2f94b80a22844c",
+            "c0288a293ec5610fef22ff5f95e73c3d",
+            "02f542eaf1a8da980d1b72fad2767bff",
+            "95611f1843bc962776d903764952262f"
+          ],
+          "generation_knowledge_ids": [
+            "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "2fc09b4e-cfb1-4919-ba41-ee598890c5a5",
+            "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+            "423eb665-1382-4fc3-9805-8597e3c25276",
+            "4e1f17e5-1b81-454d-bf82-db980ee49910",
+            "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+            "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+            "77ea3d15-7437-4d18-acbc-a48ba245630a",
+            "7a105c2a-9de9-414b-8ae4-7de195a21325",
+            "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+          ],
+          "top_score": 0.6214,
+          "intent": "ordinary",
+          "adjacent_count": 10,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {}
+        },
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 25.38
+  },
+  "top_candidate_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+  "candidates": [
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 0.9114,
+      "final_relevance_score": 0.6214,
+      "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第十条 各单位法律部门也可根据实际需要，委托外聘律师 > 第十一条 各单位的业务、职能部门为法律合规审核需求发 > （一）对本办法规定应当提起法律合规审核的重要决策或视\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为："
+    },
+    {
+      "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+      "passage_id": "1f2466e049ab06e021d20ef7b8377b6c",
+      "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665\n【章节】（五）严格实行传播内容“先审后发”的审核机制，明确审 > 第三十五条 行为合规。品牌宣传行为应严格按照国家法律 > 第三十六条 整合传播。各单位应积极构建资源集约、结构\n久”等易误解表述。严禁诋毁、攻击竞争对手的商业信誉、商品\n声誉，不炒作友商负面信息，维护良好的行业口碑。\n（四）使用人工智能（AI）技术生成、合成的文本、图片、\n音频、视频、虚拟场景等信息，应当依规添加相应标识，确保能\n够清晰辨识其为人工智能（AI）生成内容。\n（五）严格实行传播内容“先审后发”的审核机制，明确审\n核流程与责任人，未经审核严禁发布。其中，品牌及业务广告宣\n传归口管理部门为市场部，服务宣传归口管理部门为服务督察部\n（客户服务部），企业形象宣传归口管理部门为办公室（安全保\n卫部），线上渠道宣传归口管理部门为全渠道运营中心。\n第三十五条 行为合规。品牌宣传行为应严格按照国家法律\n法规相关要求，加强对广告代言、发布发送、未成年人保护、价\n格宣传等环节的管理（具体合规要求详见附件3：品牌宣传行为\n合规要求）。\n第三十六条 整合传播。各单位应积极构建资源集约、结构\n合理、协同高效的品牌传播体系，充分利用重大活动、新闻事件、\n体育赛事、展会论坛等契机，结合社会热点提升传播效果。"
+    },
+    {
+      "knowledge_id": "7a105c2a-9de9-414b-8ae4-7de195a21325",
+      "passage_id": "398938339dc4a1d7f115aadb937271df",
+      "title": "中电信桂-2017-214号-关于印发中国电信广西公司采购管理办法的通知--7a105c2a",
+      "score": 0.7634000000000001,
+      "final_relevance_score": 0.5634,
+      "text": "【文档】中电信桂-2017-214号-关于印发中国电信广西公司采购管理办法的通知--7a105c2a\n【章节】第十三条 公司各类工程、货物及服务的采购方式包括： > （一）招标：指以招标公告或投标邀请书的方式邀请３家及 > （二）比选：指以比选公告或比选邀请书的方式邀请３家及\n 根据采购归口管理部门或采购实施部\n门要求，参与采购检测管理、供 应商考察及供应商评价等相关工\n作。\n第十条 管控部门包括财务、法律等部门。财务部门主要负\n责审核采购文件与合同的支付条款、 按照合同约定条件实施款项\n支付等；法律部门主要负责审查采 购文件与合同的合法合规性。\n第十一条 监督部门包括审计、纪检监察机构和采购工作归\n口管理部门，主要负责对采购活动进行审计和监督检查。\n第十二条 采购决策机构是指各单位负责采购事项决策或\n确认的组织， 主要负责按照企业内控管理规定对重大采购事项进\n行集体审议决策或确认。\n第三章 采购方式\n第十三条 公司各类工程、货物及服务的采购方式包括：\n（一）招标：指以招标公告或投标邀请书的方式邀请３家及\n以上供应商参与投标竞争，按照综合 评估法、经评审的最低投标\n价法等法律法规允许的评标方法 评审确定成交供应商及价格等何世恒(全渠道运营中心)\n\u0001\u0001 — 9 — 中标结果。\n（二）比选：指以比选公告或比选邀请书的方式邀请３家及\n以上供应商参与比选竞争， 按照综合评估法评审确定成交供应商\n及价格等中选结果。"
+    },
+    {
+      "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+      "passage_id": "097cce346f1026a2cf80d0df41875ee8",
+      "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+      "score": 0.75,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150\n【章节】2.负责内容信息安全事件的处置工作，组织、指导内容信息 > 3.负责承接政府主管部门和集团公司下达的内容信息安全 > 5.负责对日常内容信息安全工作进行监督、指导、教育、培\n络和信息安全领导小组办公室统筹管理内容信息安全工作，按照\n“党政同责、一岗双责、齐抓共管、失职追责”的要求和“谁主\n管谁负责、谁运营谁负责、谁接入谁负责”的原则，实行分级管\n理和属地管理，将内容信息安全管理责任主体划分为归口管理部\n门、业务管理部门、业务运营部门和综合支撑部门。\n（一）区公司内容信息安全归口管理部门为区公司网络和信\n息安全管理部，负责组织落实、监督检查、考核处置公司内容信\n息安全工作。职责包括：\n1.负责制定有关内容信息安全的规章制度和工作要求，并指\n导、监督各单位贯彻落实；\n2.负责内容信息安全事件的处置工作，组织、指导内容信息\n安全应急演练；\n3.负责承接政府主管部门和集团公司下达的内容信息安全\n方面的专项治理工作； 何世恒(全渠道运营中心)\n— 4 —4.负责监督、检查、评估、考核各单位内容信息安全工作，\n并就相关情况定期或不定期向各单位进行通报；\n5.负责对日常内容信息安全工作进行监督、指导、教育、培\n训工作。"
+    },
+    {
+      "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+      "passage_id": "4846517934b860c6e52a2f9c4cb61e39",
+      "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+      "score": 0.75,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1\n【章节】第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 面向客户APP收集使用个人信息合规（以下简称 > 第六条 按照“谁主管谁负责、谁开发谁负责、谁运营谁负责、\n支撑中心、集团专业公司等）负责落实合规要求并承担相关责任。\n在区公司立项产品所涉及APP由区公司开发运营部门（区\n公司相关运营/支撑中心、专业公司）负责落实合规要求并承担\n相关责任。\n在各市分公司立项产品所涉及APP由各市分公司开发运营\n部门负责落实合规要求并承担相关责任。\n第六条 按照“谁主管谁负责、谁开发谁负责、谁运营谁负责、\n谁审批谁负责”的原则，APP合规工作由APP合规管理部门、APP\n业务管理部门、APP开发运营部门分工负责。\n区公司网络和信息安全管理部（安全管理部）为APP合规\n管理部门，负责制定合规管理制度、流程、评估标准、评估计划；\n推动APP合规管理系统及技术检测手段建设；对各单位APP合\n规工作情况进行指导、监督、检查、考核。\n区公司市场部为APP业务管理部门，负责审核新建APP 的\n必要性及业务功能的合理性，协助管理APP开发运营部门落实\n合规要求，督促风险整改及问题清零。 维护账号(集团互联)"
+    }
+  ],
+  "search_ms": 28136.05,
+  "ask_ms": 25.38,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "aj2gSr-mOZe2t-IR7DnA5xZgzxhPV6UF",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

@@ -1,0 +1,580 @@
+{
+  "case": {
+    "case_id": "KB-007",
+    "category": "精确关键词",
+    "query": "安全生产管理办法 专职安全员 南宁分公司不少于5人",
+    "expected_knowledge_ids": [
+      "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7"
+    ],
+    "expected_title_keywords": [
+      "安全生产",
+      "2023"
+    ],
+    "required_facts": [
+      "南宁分公司",
+      "不少于5人"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2023〕118号第十一条"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "6cf38846-c6e7-48a6-b37d-f431c37d3676",
+          "knowledge_id": "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+          "passage_id": "825a7cf091a250a751c4ed1844afeffb",
+          "title": "中电信桂-2023-118号-关于印发中国电信广西公司安全生产管理办法-2023年修订-的通知--acf5e2d6",
+          "text": "【文档】中电信桂-2023-118号-关于印发中国电信广西公司安全生产管理办法-2023年修订-的通知--acf5e2d6\n【章节】（二）从业人员超过100人以上的专业公司、县（区域）分 > （三）区公司本部各部门和市分公司、专业公司所辖各部门 > （四）各单位应落实消防安全楼长责任制，按规定设置通信\n全安全生产管理网络。\n（一）市分公司设置安全生产管理机构，配备专职安全生产\n管理人员（不含部门领导），标准如下：南宁分公司配备不少于\n5人；桂林、柳州、百色、河池分公司配备不少于3人；玉林、 龙晓峰(办公室（安全保卫部）)\n— 5 — 贵港、钦州、梧州分公司配备不少于2人；崇左、北海、来宾、\n贺州、防城港分公司配备1-2人。\n（二）从业人员超过100人以上的专业公司、县（区域）分\n公司应当配备专职的安全生产管理人员；从业人员在100人以下\n的专业公司、县（区域）分公司应当配备专职或者兼职的安全生\n产管理人员。配备兼职安全生产管理人员的，其兼职的工作量不\n应大于安全生产管理工作量。\n（三）区公司本部各部门和市分公司、专业公司所辖各部门\n以及县（区域）分公司所辖各部门、支局、班组应配备一名兼职\n安全员。\n（四）各单位应落实消防安全楼长责任制，按规定设置通信\n楼宇楼长、副楼长、楼层长、楼宇安全管理员；各市分公司应至\n少配备专职消防和治安人员1人，各专业公司、县（区域）分公\n司应配备专职或兼职的消防安全管理员。",
+          "document_family_id": "topic:安全生产管理办法",
+          "version_year": 2023,
+          "section_path": "（二）从业人员超过100人以上的专业公司、县（区域）分 > （三）区公司本部各部门和市分公司、专业公司所辖各部门 > （四）各单位应落实消防安全楼长责任制，按规定设置通信",
+          "block_ids": [
+            "6cf38846-c6e7-48a6-b37d-f431c37d3676",
+            "11b8899e-640b-429e-8465-bce1218e5ac7",
+            "b132da56-4eab-4fcc-87cb-7bd5e65ee32d",
+            "88aedc53-d4f5-47d2-9e28-d057d56c780c",
+            "62424bfb-61fc-4a61-8dc2-a981c98fe67d",
+            "62b8e66b-2be4-44d9-a40f-3f52057fd23b",
+            "f42af04e-0ef2-4180-a27b-4b960f7e2823",
+            "735aac69-3482-4146-9ea1-9fee06439dce",
+            "c5722de8-02f2-4ada-920a-88760b113e6c",
+            "c593fd0d-2de4-4b3c-b102-9bfb4814b4b9",
+            "996eee36-5942-4211-a065-01ea1ff9a046",
+            "9e9a3ea0-ec5a-4eff-a9b6-ccb23deee300",
+            "4ddfc0de-4e17-451e-93b1-779397385df0",
+            "02bc98f5-0020-4ffb-8364-abddbeede966",
+            "bc800718-5a1d-445e-aaae-72b1daa41b1d",
+            "3d5d2c01-a988-4564-bd7d-7e46ef8d2242",
+            "2376964e-692e-4c7a-b02a-62919cfa79d3"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -57.02528817997578,
+          "fts_score": 1.0,
+          "score": 0.9322999999999999,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": true
+          },
+          "relevance": {
+            "semantic_score": 0.8409,
+            "fts_score": 1.0,
+            "title_score": 0.5789,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.8409,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7323,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": true
+            }
+          },
+          "final_relevance_score": 0.7323,
+          "ranking_score": 0.9322999999999999,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:安全生产管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "candidate_type": "raw_block",
+          "block_id": "0ea6d18f31eba5f92203dd521c17d317",
+          "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+          "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+          "text": "【文档】中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665\n【章节】3、中式乐器, 昇 包含但不限于唢呐、琵琶、、 > 4、形式不限附相关演出视频 人/ > 2、演出形式包含流行、通俗、美声、说唱、\n2、巡游跨度不少于8小时，巡游时长不小于\n4小时，具体服务时长按照甲方要求\n3、男性身高不低于175cm，女性身高不低于\n165cm 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 驻唱专业歌手 男/女，工作跨度不小于8小时，驻唱时长不\n小于4小时；\n演出形式包含流行、通俗、美声、说唱、嘻\n哈、戏曲、电音等附相关演出视频。供甲方\n从中选择 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 乐队表演 1、乐队不限男女，共3-5人，人数根据活动\n大小调整，自带服装，每天工时间跨度4-6\n小时，演唱时长不小于3小时\n2、西方乐器，包含但不限于乐队由主唱、贝\n斯、键盘或吉他及鼓手等；\n3、中式乐器, 昇 包含但不限于唢呐、琵琶、、\n古筝、古琴、竹笛等\n4、形式不限附相关演出视频 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 外籍歌手 1、男/女，演唱不低于5首歌曲，服从演出\n顺序安排，每天工时间跨度4-6小时",
+          "score": 0.7342,
+          "match_channels": [
+            "keyword",
+            "proper_noun_boost",
+            "raw"
+          ],
+          "warnings": [],
+          "source_layer": "evidence",
+          "score_breakdown": {
+            "rerank_score": 0.5,
+            "rrf_score": 0.010847107438016527,
+            "vector_score": null,
+            "rank": 9
+          },
+          "citation": {
+            "document": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+            "path": "",
+            "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+            "block_id": "0b284b5a-19cd-42fa-9406-b02f407ececb",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.0,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": null,
+              "rrf": null,
+              "rerank": null
+            },
+            "match_channels": [],
+            "reason": "match",
+            "text": "【文档】中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665\n【章节】3、中式乐器, 昇 包含但不限于唢呐、琵琶、、 > 4、形式不限附相关演出视频 人/ > 2、演出形式包含流行、通俗、美声、说唱、\n2、巡游跨度不少于8小时，巡游时长不小于\n4小时，具体服务时长按照甲方要求\n3、男性身高不低于175cm，女性身高不低于\n165cm 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 驻唱专业歌手 男/女，工作跨度不小于8小时，驻唱时长不\n小于4小时；\n演出形式包含流行、通俗、美声、说唱、嘻\n哈、戏曲、电音等附相关演出视频。供甲方\n从中选择 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 乐队表演 1、乐队不限男女，共3-5人，人数根据活动\n大小调整，自带服装，每天工时间跨度4-6\n小时，演唱时长不小于3小时\n2、西方乐器，包含但不限于乐队由主唱、贝\n斯、键盘或吉他及鼓手等；\n3、中式乐器, 昇 包含但不限于唢呐、琵琶、、\n古筝、古琴、竹笛等\n4、形式不限附相关演出视频 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 外籍歌手 1、男/女，演唱不低于5首歌曲，服从演出\n顺序安排，每天工时间跨度4-6小时"
+          },
+          "_semantic_similarity": 0.0115,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "fts_score": 0.8414999999999999,
+          "relevance": {
+            "semantic_score": 0.2837,
+            "fts_score": 0.8415,
+            "title_score": 0.3684,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.2273,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3842,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3842,
+          "ranking_score": 0.7342,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "中电信桂关于印发中国电信广西公司品牌管理办法的通知423eb665",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "3523d082-618b-4883-ab41-cc13d2d38710",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "7a2bc28af54a389ed75bd0015472f03a",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】6.1.3 内控评价的评估者应具有足够的知识理解被评价目 > 6.2 持续监控 > 6.2.1 员工在进行日常工作时，能够获取内部控制是否\n修订）的通知》 （中电信桂〔 2018〕376号）安全生产检查以定\n期安全生产检查、经常性安全生产检查、季节性及节假日前后安\n全生产检查、专业（项）安全生产检查为主，每月至少开展一次\n安全生产检查工作。 区公司到基层的安全生产检查每年应不少于维护账号(集团互联)\n— 71 — 60个工作日，市分公司、专业公司开展的安全生产检查每年应\n不少于120个工作日， 县分公司开展的安全生产检 查每年应不少\n于180个工作日。 对排查出的安全生产事故隐患落实专项治理经\n费和责任人，按时完成整改。\n信息技术方面：\n每年公司对于信息技术部门制定了信息系统运行故障率、 项\n目完成率，服务情况等关键指标，并通过月报、巡检， 和使用\n部门评分等方法来完成。 考核结果将影响信息技术部门相关员工\n的绩效考核的评定。\n采购方面：\n《中国电信广西公司库存物资管理办法》 （ 中电信桂 〔 2008〕\n355号）明确规定 实物管理部门设置不同的人员分别担任料账员\n和仓库保管员，配备的人员须熟悉业务、持证上岗。",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "section_path": "6.1.3 内控评价的评估者应具有足够的知识理解被评价目 > 6.2 持续监控 > 6.2.1 员工在进行日常工作时，能够获取内部控制是否",
+          "block_ids": [
+            "3523d082-618b-4883-ab41-cc13d2d38710",
+            "c1b1e559-9883-468e-b01d-34fce7e11795",
+            "b341a794-76b1-40db-a5da-e0f493b9d89c",
+            "d8c68065-c098-4661-828a-73df2bc27624",
+            "25055854-d9f0-48a4-b186-be2b015b840c",
+            "6b7c4cf6-db16-4c50-ba12-d0c1ba5266b0",
+            "3aeba9bd-d984-414b-af22-49029c16b8de",
+            "22460c40-addb-4dac-ab07-31ea1339a1e7",
+            "5f5a362c-b805-4107-b938-4099ff8d5003",
+            "dcd92244-722c-4c4a-8ea2-9957f379ad53",
+            "5b50e1d3-f772-4cbe-87e2-365cfe444976",
+            "ec22aa85-0abe-46d5-b0fa-210f0c1bccfb",
+            "ebe2b2c4-03a2-4862-a697-115a23cfa3e7",
+            "cf927dba-bf4d-4397-a132-6eee3d9c5432",
+            "2f391acd-8fcb-44ea-98ec-66cbc8eb6d16",
+            "8e16ade4-e1a4-442a-8a37-2b1ccd315d15"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -24.582168369268764,
+          "fts_score": 1.0,
+          "score": 0.6611,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4091,
+            "fts_score": 1.0,
+            "title_score": 0.2105,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4091,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4611,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4611,
+          "ranking_score": 0.6611,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "4ecd5527-4898-4b18-8ea5-6af0b3089536",
+          "knowledge_id": "6246d57f-6fe0-4592-b172-c11822200aa9",
+          "passage_id": "677611545d16df3bde41fba2f6bbbcde",
+          "title": "中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f",
+          "text": "【文档】中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f\n【章节】第二十三条 各运营及生产使用单位负责组织实施本单位用 > 第二十四条 各运营及生产使用单位负责组织开展本专业领 > 第二十五条 各单位负责落实本单位用户个人信息安全影响\n技术培训和学习。接触用户个人信息岗位的人员，每人每年至少\n要参加一次用户个人信息保护培 训，年度学习时长累计不少于\n12个小时。接触用户个人信息的一线触点人员每人每季度至少\n要参加一次用户个人信息保护培 训，年度学习时长累计不少于\n24个小时。\n第二十四条 各运营及生产使用单位负责组织开展本专业领\n域/本单位的用户个人信息保护自查，至 少每年对用户个人信息何世恒(全渠道运营中心)\n\u0001\u0001 — 17 — 保护情况进行一次自查，及时整改消除发现的安全隐患，并将自\n查结果及整改情况进行通报，报备区公司客户服务部（客户服务中心）。\n第二十五条 各单位负责落实本单位用户个人信息安全影响\n评估和稽核制度。新建涉及到用户个人信息的业务合作、业务系统和流程，应进行风险评估通过后方可投入使用；并对上线后的\n业务合作、 业务系统和流程运营中用户个人信息保护措施有效性\n进行稽核，发现异常对应预警整改。在中国人民共和国境内运营中收集和产生的个人信息因业务需要，确需向境外提供的，应当\n按照国家相关办法进行安全评估， 并履行国家相关出境规定。",
+          "document_family_id": "topic:关于印发中国电信广西公司用户个人信息保护管理办法",
+          "version_year": 2019,
+          "section_path": "第二十三条 各运营及生产使用单位负责组织实施本单位用 > 第二十四条 各运营及生产使用单位负责组织开展本专业领 > 第二十五条 各单位负责落实本单位用户个人信息安全影响",
+          "block_ids": [
+            "4ecd5527-4898-4b18-8ea5-6af0b3089536",
+            "11aedea5-ed01-41d3-aca0-51798226980e",
+            "9be7cc79-112e-483e-934f-6ebb06d09a51",
+            "ab431120-2c95-46dd-bd43-ddc288d4594c",
+            "e2ab2eb1-2346-4310-86d7-983634fa2067",
+            "1ce1110c-a552-4aa5-a315-e7737be5edbb",
+            "2fb54c38-7012-4be6-bdf5-711e79cbd93b",
+            "87a6fe1f-08be-4f35-8193-22e47cc76278",
+            "55f13f35-7496-46ec-a800-dd1a91434407",
+            "f352f00e-1edb-4bfa-b9d8-a41aede0f1ab",
+            "739bad89-3447-4c57-b11c-b064d918f746",
+            "acb00d0d-fa1f-4064-8b49-e9f0c80bbd7a"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -20.957061864659448,
+          "fts_score": 1.0,
+          "score": 0.6262000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.311,
+            "fts_score": 1.0,
+            "title_score": 0.3684,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.2727,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4262,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4262,
+          "ranking_score": 0.6262000000000001,
+          "version_rank": {
+            "version_year": 2019,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司用户个人信息保护管理办法",
+            "family_newest_year": 2019,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "candidate_type": "raw_block",
+          "block_id": "8f38d29e2c894931959591e43ee86445",
+          "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+          "text": "【文档】中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150\n【章节】6.配合落实内容信息安全事件的处置工作； > 7.落实内容信息安全归口管理部门明确的其他内容信息安 > （四）全区内容信息安全综合支撑部门为数字生活中心（号\n心、政企信息服务事业群（数智分公司）、各市分公司和相关专\n业公司；业务运营部门作为内容信息安全第一责任单位，负责落\n实各项内容信息安全工作要求，承担内容信息安全主体责任。职\n责包括：\n1.根据本单位的实际运营状况，明确具体的内容信息安全责\n任人员与岗位；\n2.严格执行各项内容信息安全规章制度，根据业务特性制定\n开展巡检方案和日常审批工作，避免因违反规程等原因而产生违\n法和不良信息等问题；\n3.对内容信息安全工作进行自评估；\n4.接受内容信息安全归口管理部门和业务管理部门的检查\n与考核，并按要求提供各类资料；\n5.协助各业务主管部门，具体制定内容信息安全实施细则；\n6.配合落实内容信息安全事件的处置工作；\n7.落实内容信息安全归口管理部门明确的其他内容信息安\n全工作要求。\n（四）全区内容信息安全综合支撑部门为数字生活中心（号\n百中心），支撑部门需落实人员专职负责配合区公司内容信息安\n全归口管理部门执行各项内容信息安全监测和协调处置工作。 何世恒(全渠道运营中心)",
+          "score": 0.6091,
+          "match_channels": [
+            "keyword",
+            "proper_noun_boost",
+            "raw"
+          ],
+          "warnings": [],
+          "source_layer": "evidence",
+          "score_breakdown": {
+            "rerank_score": 0.5,
+            "rrf_score": 0.010263929618768326,
+            "vector_score": null,
+            "rank": 12
+          },
+          "citation": {
+            "document": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+            "path": "",
+            "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+            "block_id": "5324a9a6-1517-4154-84eb-ca152c8a42de",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.0,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": null,
+              "rrf": null,
+              "rerank": null
+            },
+            "match_channels": [],
+            "reason": "match",
+            "text": "【文档】中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150\n【章节】6.配合落实内容信息安全事件的处置工作； > 7.落实内容信息安全归口管理部门明确的其他内容信息安 > （四）全区内容信息安全综合支撑部门为数字生活中心（号\n心、政企信息服务事业群（数智分公司）、各市分公司和相关专\n业公司；业务运营部门作为内容信息安全第一责任单位，负责落\n实各项内容信息安全工作要求，承担内容信息安全主体责任。职\n责包括：\n1.根据本单位的实际运营状况，明确具体的内容信息安全责\n任人员与岗位；\n2.严格执行各项内容信息安全规章制度，根据业务特性制定\n开展巡检方案和日常审批工作，避免因违反规程等原因而产生违\n法和不良信息等问题；\n3.对内容信息安全工作进行自评估；\n4.接受内容信息安全归口管理部门和业务管理部门的检查\n与考核，并按要求提供各类资料；\n5.协助各业务主管部门，具体制定内容信息安全实施细则；\n6.配合落实内容信息安全事件的处置工作；\n7.落实内容信息安全归口管理部门明确的其他内容信息安\n全工作要求。\n（四）全区内容信息安全综合支撑部门为数字生活中心（号\n百中心），支撑部门需落实人员专职负责配合区公司内容信息安\n全归口管理部门执行各项内容信息安全监测和协调处置工作。 何世恒(全渠道运营中心)"
+          },
+          "_semantic_similarity": 0.010849056603773584,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "fts_score": 0.8408490566037736,
+          "relevance": {
+            "semantic_score": 0.3227,
+            "fts_score": 0.8408,
+            "title_score": 0.4318,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.25,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4091,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4091,
+          "ranking_score": 0.6091,
+          "version_rank": {
+            "version_year": 2022,
+            "deprecated": false,
+            "family_key": "中电信桂关于印发中国电信广西公司内容信息安全管理办法的通知9e844150",
+            "family_newest_year": 2022,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 5,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7323,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+          "423eb665-1382-4fc3-9805-8597e3c25276",
+          "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "6246d57f-6fe0-4592-b172-c11822200aa9",
+          "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+        ],
+        "evidence_snapshot_id": "hoFW1gxzurFGVoOAbx6RtAwV2JEamV4n",
+        "adjacent_unit": "passage",
+        "adjacent_count": 6,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 49186.31
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "passage_trace:missing_passage_id",
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.7323,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 6,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_id_count": 11,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "passage_trace_failed",
+        "answer_validation_decision": "passage_trace_failed",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {},
+        "claim_audit": [],
+        "fact_candidate_audit": {},
+        "answer_plan": {},
+        "query_plan": {},
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "passage_trace_failed",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+            "423eb665-1382-4fc3-9805-8597e3c25276",
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "6246d57f-6fe0-4592-b172-c11822200aa9",
+            "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+          ],
+          "accepted_block_ids": [
+            "6cf38846-c6e7-48a6-b37d-f431c37d3676",
+            "0ea6d18f31eba5f92203dd521c17d317",
+            "3523d082-618b-4883-ab41-cc13d2d38710",
+            "4ecd5527-4898-4b18-8ea5-6af0b3089536",
+            "8f38d29e2c894931959591e43ee86445"
+          ],
+          "accepted_passage_ids": [
+            "825a7cf091a250a751c4ed1844afeffb",
+            "7a2bc28af54a389ed75bd0015472f03a",
+            "677611545d16df3bde41fba2f6bbbcde",
+            "3c00894f8ab0e9204ab5e06270e0166d",
+            "7f7bcc283857a3d71125c5e4ff5b9761",
+            "c968f49c40aec9a699d325520560d95c",
+            "3cd7424bd5dafdf4e9a1635aaf1f2136",
+            "eb1eb6fb23f5b2e4494efec827302d5c",
+            "7c6027da4e5152e4714b981925b7ecb1"
+          ],
+          "generation_knowledge_ids": [
+            "423eb665-1382-4fc3-9805-8597e3c25276",
+            "6246d57f-6fe0-4592-b172-c11822200aa9",
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+            "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7"
+          ],
+          "top_score": 0.7323,
+          "intent": "ordinary",
+          "adjacent_count": 6,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {}
+        },
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 2,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 32.79
+  },
+  "top_candidate_id": "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+  "candidates": [
+    {
+      "knowledge_id": "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+      "passage_id": "825a7cf091a250a751c4ed1844afeffb",
+      "title": "中电信桂-2023-118号-关于印发中国电信广西公司安全生产管理办法-2023年修订-的通知--acf5e2d6",
+      "score": 0.9322999999999999,
+      "final_relevance_score": 0.7323,
+      "text": "【文档】中电信桂-2023-118号-关于印发中国电信广西公司安全生产管理办法-2023年修订-的通知--acf5e2d6\n【章节】（二）从业人员超过100人以上的专业公司、县（区域）分 > （三）区公司本部各部门和市分公司、专业公司所辖各部门 > （四）各单位应落实消防安全楼长责任制，按规定设置通信\n全安全生产管理网络。\n（一）市分公司设置安全生产管理机构，配备专职安全生产\n管理人员（不含部门领导），标准如下：南宁分公司配备不少于\n5人；桂林、柳州、百色、河池分公司配备不少于3人；玉林、 龙晓峰(办公室（安全保卫部）)\n— 5 — 贵港、钦州、梧州分公司配备不少于2人；崇左、北海、来宾、\n贺州、防城港分公司配备1-2人。\n（二）从业人员超过100人以上的专业公司、县（区域）分\n公司应当配备专职的安全生产管理人员；从业人员在100人以下\n的专业公司、县（区域）分公司应当配备专职或者兼职的安全生\n产管理人员。配备兼职安全生产管理人员的，其兼职的工作量不\n应大于安全生产管理工作量。\n（三）区公司本部各部门和市分公司、专业公司所辖各部门\n以及县（区域）分公司所辖各部门、支局、班组应配备一名兼职\n安全员。\n（四）各单位应落实消防安全楼长责任制，按规定设置通信\n楼宇楼长、副楼长、楼层长、楼宇安全管理员；各市分公司应至\n少配备专职消防和治安人员1人，各专业公司、县（区域）分公\n司应配备专职或兼职的消防安全管理员。"
+    },
+    {
+      "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+      "passage_id": null,
+      "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+      "score": 0.7342,
+      "final_relevance_score": 0.3842,
+      "text": "【文档】中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665\n【章节】3、中式乐器, 昇 包含但不限于唢呐、琵琶、、 > 4、形式不限附相关演出视频 人/ > 2、演出形式包含流行、通俗、美声、说唱、\n2、巡游跨度不少于8小时，巡游时长不小于\n4小时，具体服务时长按照甲方要求\n3、男性身高不低于175cm，女性身高不低于\n165cm 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 驻唱专业歌手 男/女，工作跨度不小于8小时，驻唱时长不\n小于4小时；\n演出形式包含流行、通俗、美声、说唱、嘻\n哈、戏曲、电音等附相关演出视频。供甲方\n从中选择 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 乐队表演 1、乐队不限男女，共3-5人，人数根据活动\n大小调整，自带服装，每天工时间跨度4-6\n小时，演唱时长不小于3小时\n2、西方乐器，包含但不限于乐队由主唱、贝\n斯、键盘或吉他及鼓手等；\n3、中式乐器, 昇 包含但不限于唢呐、琵琶、、\n古筝、古琴、竹笛等\n4、形式不限附相关演出视频 人/\n天 1 0.00 0.00\n会展活动 会展活动-第三方人\n员支撑服务 外籍歌手 1、男/女，演唱不低于5首歌曲，服从演出\n顺序安排，每天工时间跨度4-6小时"
+    },
+    {
+      "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+      "passage_id": "7a2bc28af54a389ed75bd0015472f03a",
+      "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+      "score": 0.6611,
+      "final_relevance_score": 0.4611,
+      "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】6.1.3 内控评价的评估者应具有足够的知识理解被评价目 > 6.2 持续监控 > 6.2.1 员工在进行日常工作时，能够获取内部控制是否\n修订）的通知》 （中电信桂〔 2018〕376号）安全生产检查以定\n期安全生产检查、经常性安全生产检查、季节性及节假日前后安\n全生产检查、专业（项）安全生产检查为主，每月至少开展一次\n安全生产检查工作。 区公司到基层的安全生产检查每年应不少于维护账号(集团互联)\n— 71 — 60个工作日，市分公司、专业公司开展的安全生产检查每年应\n不少于120个工作日， 县分公司开展的安全生产检 查每年应不少\n于180个工作日。 对排查出的安全生产事故隐患落实专项治理经\n费和责任人，按时完成整改。\n信息技术方面：\n每年公司对于信息技术部门制定了信息系统运行故障率、 项\n目完成率，服务情况等关键指标，并通过月报、巡检， 和使用\n部门评分等方法来完成。 考核结果将影响信息技术部门相关员工\n的绩效考核的评定。\n采购方面：\n《中国电信广西公司库存物资管理办法》 （ 中电信桂 〔 2008〕\n355号）明确规定 实物管理部门设置不同的人员分别担任料账员\n和仓库保管员，配备的人员须熟悉业务、持证上岗。"
+    },
+    {
+      "knowledge_id": "6246d57f-6fe0-4592-b172-c11822200aa9",
+      "passage_id": "677611545d16df3bde41fba2f6bbbcde",
+      "title": "中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f",
+      "score": 0.6262000000000001,
+      "final_relevance_score": 0.4262,
+      "text": "【文档】中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f\n【章节】第二十三条 各运营及生产使用单位负责组织实施本单位用 > 第二十四条 各运营及生产使用单位负责组织开展本专业领 > 第二十五条 各单位负责落实本单位用户个人信息安全影响\n技术培训和学习。接触用户个人信息岗位的人员，每人每年至少\n要参加一次用户个人信息保护培 训，年度学习时长累计不少于\n12个小时。接触用户个人信息的一线触点人员每人每季度至少\n要参加一次用户个人信息保护培 训，年度学习时长累计不少于\n24个小时。\n第二十四条 各运营及生产使用单位负责组织开展本专业领\n域/本单位的用户个人信息保护自查，至 少每年对用户个人信息何世恒(全渠道运营中心)\n\u0001\u0001 — 17 — 保护情况进行一次自查，及时整改消除发现的安全隐患，并将自\n查结果及整改情况进行通报，报备区公司客户服务部（客户服务中心）。\n第二十五条 各单位负责落实本单位用户个人信息安全影响\n评估和稽核制度。新建涉及到用户个人信息的业务合作、业务系统和流程，应进行风险评估通过后方可投入使用；并对上线后的\n业务合作、 业务系统和流程运营中用户个人信息保护措施有效性\n进行稽核，发现异常对应预警整改。在中国人民共和国境内运营中收集和产生的个人信息因业务需要，确需向境外提供的，应当\n按照国家相关办法进行安全评估， 并履行国家相关出境规定。"
+    },
+    {
+      "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+      "passage_id": null,
+      "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+      "score": 0.6091,
+      "final_relevance_score": 0.4091,
+      "text": "【文档】中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150\n【章节】6.配合落实内容信息安全事件的处置工作； > 7.落实内容信息安全归口管理部门明确的其他内容信息安 > （四）全区内容信息安全综合支撑部门为数字生活中心（号\n心、政企信息服务事业群（数智分公司）、各市分公司和相关专\n业公司；业务运营部门作为内容信息安全第一责任单位，负责落\n实各项内容信息安全工作要求，承担内容信息安全主体责任。职\n责包括：\n1.根据本单位的实际运营状况，明确具体的内容信息安全责\n任人员与岗位；\n2.严格执行各项内容信息安全规章制度，根据业务特性制定\n开展巡检方案和日常审批工作，避免因违反规程等原因而产生违\n法和不良信息等问题；\n3.对内容信息安全工作进行自评估；\n4.接受内容信息安全归口管理部门和业务管理部门的检查\n与考核，并按要求提供各类资料；\n5.协助各业务主管部门，具体制定内容信息安全实施细则；\n6.配合落实内容信息安全事件的处置工作；\n7.落实内容信息安全归口管理部门明确的其他内容信息安\n全工作要求。\n（四）全区内容信息安全综合支撑部门为数字生活中心（号\n百中心），支撑部门需落实人员专职负责配合区公司内容信息安\n全归口管理部门执行各项内容信息安全监测和协调处置工作。 何世恒(全渠道运营中心)"
+    }
+  ],
+  "search_ms": 49186.31,
+  "ask_ms": 32.79,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "hoFW1gxzurFGVoOAbx6RtAwV2JEamV4n",
+  "retrieval_count": 0,
+  "answer_validation_decision": "passage_trace_failed",
+  "retrieval_decision": "accepted"
+}

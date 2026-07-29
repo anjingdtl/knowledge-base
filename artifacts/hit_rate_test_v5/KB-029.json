@@ -1,0 +1,839 @@
+{
+  "case": {
+    "case_id": "KB-029",
+    "category": "易混淆知识",
+    "query": "权益业务合作方单产品类权益结算价不应高于",
+    "expected_knowledge_ids": [
+      "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+    ],
+    "expected_title_keywords": [
+      "权益业务",
+      "2026"
+    ],
+    "required_facts": [
+      "市场售价",
+      "集团供价"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕34号第十七条；易与线上合作入驻门槛混淆"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+          "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】（2）主动提报模式可由需求部门或分公司结合自身业务或 > 2.合作资质初审 > （1）准入条件\n信相关管理办法规定及其它应具备的资质证明。市分公司上报的\n属地权益合作方，注册资本等条件可以适当下调，但要确保合作\n方的权益履约能力，对于零散的中小权益合作方非必要不合作，\n如需合作可通过专业公司整合一起合作确保履约能力。\n③具备权益合作相关项目的运营实力和经验，并配备管理团\n队、支撑团队及客服团队，以满足合作运营需求，需提供相关人\n员名单及社保缴纳证明。市分公司上报的属地权益合作方应当在\n本地配备线上或线下专职团队支撑履约及售后运营问题，确保履\n约服务闭环管理。\n④应承诺提供完备的客户服务支撑以及满足电信需要的信\n息安全对接及保障机制。\n⑤应提供权益产品的广西或本地区域市场覆盖面分析、产品\n服务内容、合作优势、渠道资源及结算报价等介绍材料。结算报\n价中，单产品类权益结算价不应高于市场售价及集团供价；N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。",
+          "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+          "version_year": 2026,
+          "section_path": "（2）主动提报模式可由需求部门或分公司结合自身业务或 > 2.合作资质初审 > （1）准入条件",
+          "block_ids": [
+            "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+            "c3e5a0e1-dd1b-4a38-89d4-23a4495ce23a",
+            "54cf3948-e1f9-4930-a1cf-9e5daa2dfe92",
+            "aaecfaac-8672-4715-94da-38f55b85b802",
+            "cbac4bf5-26f9-4f37-abf0-7f66516e8749",
+            "36e1a968-4a53-445a-8895-09665b21e7f0",
+            "7e1430de-ab4b-4715-bd7f-0f8a1dc8e204",
+            "2046dd0b-8415-4a6a-a4bc-17256da42e2d",
+            "64158b0f-634e-40cd-973d-12faf7688918",
+            "7a09efb6-a318-41b6-a580-0c5ad5a8e684",
+            "0114aa46-eda8-4c08-a6c2-1a33aa949660",
+            "bdef4085-c9b1-4800-9f39-568bd58739c7",
+            "f2a9ba26-f2c4-4508-b0b8-263c7b73d089",
+            "ade0b1d5-9150-45b0-8aa8-386e218b7b77",
+            "6a632019-9e38-465a-990f-243261a63f40",
+            "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+            "a651b152-b3bf-4027-8b70-86d74207dd67",
+            "66a2ee63-d0d6-4896-a83b-0be4f4e52c91"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -58.427580064911766,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.7736,
+            "fts_score": 1.0,
+            "title_score": 0.2778,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.7736,
+            "query_term_coverage": 0.7736,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7058,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7058,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7058,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+        ],
+        "evidence_snapshot_id": "UALYpNdzgZodztAVcGb-0eMsAtgOgLAa",
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 48402.07
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 结算报价中，单产品类权益结算价不应高于市场售价及集团供价；\n- N选组合型权益产品的市场价值不应低于结算定价的2倍\n- 特殊供价产品应提供相关介绍和说明",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+            "block_id": "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+            "block_ids": [
+              "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+              "c3e5a0e1-dd1b-4a38-89d4-23a4495ce23a",
+              "54cf3948-e1f9-4930-a1cf-9e5daa2dfe92",
+              "aaecfaac-8672-4715-94da-38f55b85b802",
+              "cbac4bf5-26f9-4f37-abf0-7f66516e8749",
+              "36e1a968-4a53-445a-8895-09665b21e7f0",
+              "7e1430de-ab4b-4715-bd7f-0f8a1dc8e204",
+              "2046dd0b-8415-4a6a-a4bc-17256da42e2d",
+              "64158b0f-634e-40cd-973d-12faf7688918",
+              "7a09efb6-a318-41b6-a580-0c5ad5a8e684",
+              "0114aa46-eda8-4c08-a6c2-1a33aa949660",
+              "bdef4085-c9b1-4800-9f39-568bd58739c7",
+              "f2a9ba26-f2c4-4508-b0b8-263c7b73d089",
+              "ade0b1d5-9150-45b0-8aa8-386e218b7b77",
+              "6a632019-9e38-465a-990f-243261a63f40",
+              "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+              "a651b152-b3bf-4027-8b70-86d74207dd67",
+              "66a2ee63-d0d6-4896-a83b-0be4f4e52c91"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "text": "信相关管理办法规定及其它应具备的资质证明。市分公司上报的\n属地权益合作方，注册资本等条件可以适当下调，但要确保合作\n方的权益履约能力，对于零散的中小权益合作方非必要不合作，\n如需合作可通过专业公司整合一起合作确保履约能力。\n③具备权益合作相关项目的运营实力和经验，并配备管理团\n队、支撑团队及客服团队，以满足合作运营需求，需提供相关人\n员名单及社保缴纳证明。市分公司上报的属地权益合作方应当在\n本地配备线上或线下专职团队支撑履约及售后运营问题，确保履\n约服务闭环管理。\n④应承诺提供完备的客户服务支撑以及满足电信需要的信\n息安全对接及保障机制。\n⑤应提供权益产品的广西或本地区域市场覆盖面分析、产品\n服务内容、合作优势、渠道资源及结算报价等介绍材料。结算报\n价中，单产品类权益结算价不应高于市场售价及集团供价；N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。",
+            "score": 1.0,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "bc8a98c68db50eadb443380f6b772f23",
+            "block_id": "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+            "block_ids": [
+              "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+              "a651b152-b3bf-4027-8b70-86d74207dd67",
+              "66a2ee63-d0d6-4896-a83b-0be4f4e52c91",
+              "46c9ed56-3fea-447d-9261-9e4af8a5e6a8",
+              "d745688d-e5c1-474c-b1da-e8558a4e6aeb",
+              "2f6339d5-58b8-4954-99d3-3a0721a1887b",
+              "72cfd5bb-d6bf-4052-b4f6-d0c05ec7ffae",
+              "8ac986bf-d9d0-4907-8bc9-6c9a960c9d3f",
+              "185e0721-57d0-48bc-ba9f-12099f6d2844",
+              "bb1db203-4a25-4e14-bdd2-d64ee0f2e4f0",
+              "88574720-a6be-4be9-81ac-a360ec522f1a",
+              "f7edeba8-2a82-4386-a2fa-89a4f651f831",
+              "9ce443ed-fb63-47c0-a5d9-fdc0013cccf3",
+              "9e3a78f9-7beb-4969-8265-267340b7ec4c",
+              "d2ab9bec-c386-4481-966d-294ab99a907a"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "text": "N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。\n⑥提供权益产品中各品牌授予至合作方的清晰且完整的授\n— 14 —权链路，且授权有效期限不应少于半年。\n（2）由数字生活中心（号百中心）、全渠道运营中心分别完\n成材料初审。其中，数字生活中心（号百中心）负责对合作方资\n质、产品介绍、授权资质、服务流程进行审核并进行对标比价；\n全渠道运营中心对产品市场分析、渠道资源、推广需求进行评估\n和确认，对于不满足准入条件或没有推广需求的产品，则直接退\n回材料至需求提报部门或合作方。\n3.合作引入评审\n权益合作引入对标区公司级对外合作管理办法，日常合作方\n引入、续签的常规评审执行“一评一审一决定”的原则，由区公\n司各部门组会审议后方可引入。",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "结算报价中，单产品类权益结算价不应高于市场售价及集团供价；",
+            "evidence_passage_ids": [
+              "fd311432f6bbc2c527a84855c4ef2708"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r6:pol:policy:50610696"
+          },
+          {
+            "text": "N选组合型权益产品的市场价值不应低于结算定价的2倍",
+            "evidence_passage_ids": [
+              "fd311432f6bbc2c527a84855c4ef2708"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r7:pol:policy:51567569"
+          },
+          {
+            "text": "特殊供价产品应提供相关介绍和说明",
+            "evidence_passage_ids": [
+              "fd311432f6bbc2c527a84855c4ef2708"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r10:pol:policy:43635432"
+          },
+          {
+            "text": "N选组合型权益产品的市场价值不应低于结算定价的2倍",
+            "evidence_passage_ids": [
+              "bc8a98c68db50eadb443380f6b772f23"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "bc8a98c68db50eadb443380f6b772f23:r0:pol:policy:51567569"
+          },
+          {
+            "text": "市分公司上报的属地权益合作方，注册资本等条件可以适当下调，但要确保合作方的权益履约能力，对于零散的中小权益合作方非必要不合作，如需合作可通过专业公司整合一起合作确保履约能力",
+            "evidence_passage_ids": [
+              "fd311432f6bbc2c527a84855c4ef2708"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r1:pol:policy:7913286"
+          },
+          {
+            "text": "③具备权益合作相关项目的运营实力和经验，并配备管理团队、支撑团队及客服团队，以满足合作运营需求，需提供相关人员名单及社保缴纳证明",
+            "evidence_passage_ids": [
+              "fd311432f6bbc2c527a84855c4ef2708"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r2:pol:policy:72710806"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+            "block_id": "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+            "block_ids": [
+              "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+              "c3e5a0e1-dd1b-4a38-89d4-23a4495ce23a",
+              "54cf3948-e1f9-4930-a1cf-9e5daa2dfe92",
+              "aaecfaac-8672-4715-94da-38f55b85b802",
+              "cbac4bf5-26f9-4f37-abf0-7f66516e8749",
+              "36e1a968-4a53-445a-8895-09665b21e7f0",
+              "7e1430de-ab4b-4715-bd7f-0f8a1dc8e204",
+              "2046dd0b-8415-4a6a-a4bc-17256da42e2d",
+              "64158b0f-634e-40cd-973d-12faf7688918",
+              "7a09efb6-a318-41b6-a580-0c5ad5a8e684",
+              "0114aa46-eda8-4c08-a6c2-1a33aa949660",
+              "bdef4085-c9b1-4800-9f39-568bd58739c7",
+              "f2a9ba26-f2c4-4508-b0b8-263c7b73d089",
+              "ade0b1d5-9150-45b0-8aa8-386e218b7b77",
+              "6a632019-9e38-465a-990f-243261a63f40",
+              "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+              "a651b152-b3bf-4027-8b70-86d74207dd67",
+              "66a2ee63-d0d6-4896-a83b-0be4f4e52c91"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "path": "",
+            "text": "信相关管理办法规定及其它应具备的资质证明。市分公司上报的\n属地权益合作方，注册资本等条件可以适当下调，但要确保合作\n方的权益履约能力，对于零散的中小权益合作方非必要不合作，\n如需合作可通过专业公司整合一起合作确保履约能力。\n③具备权益合作相关项目的运营实力和经验，并配备管理团\n队、支撑团队及客服团队，以满足合作运营需求，需提供相关人\n员名单及社保缴纳证明。市分公司上报的属地权益合作方应当在\n本地配备线上或线下专职团队支撑履约及售后运营问题，确保履\n约服务闭环管理。\n④应承诺提供完备的客户服务支撑以及满足电信需要的信\n息安全对接及保障机制。\n⑤应提供权益产品的广西或本地区域市场覆盖面分析、产品\n服务内容、合作优势、渠道资源及结算报价等介绍材料。结算报\n价中，单产品类权益结算价不应高于市场售价及集团供价；N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。",
+            "body_text": "信相关管理办法规定及其它应具备的资质证明。市分公司上报的\n属地权益合作方，注册资本等条件可以适当下调，但要确保合作\n方的权益履约能力，对于零散的中小权益合作方非必要不合作，\n如需合作可通过专业公司整合一起合作确保履约能力。\n③具备权益合作相关项目的运营实力和经验，并配备管理团\n队、支撑团队及客服团队，以满足合作运营需求，需提供相关人\n员名单及社保缴纳证明。市分公司上报的属地权益合作方应当在\n本地配备线上或线下专职团队支撑履约及售后运营问题，确保履\n约服务闭环管理。\n④应承诺提供完备的客户服务支撑以及满足电信需要的信\n息安全对接及保障机制。\n⑤应提供权益产品的广西或本地区域市场覆盖面分析、产品\n服务内容、合作优势、渠道资源及结算报价等介绍材料。结算报\n价中，单产品类权益结算价不应高于市场售价及集团供价；N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。",
+            "score": 1.0,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "bc8a98c68db50eadb443380f6b772f23",
+            "block_id": "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+            "block_ids": [
+              "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+              "a651b152-b3bf-4027-8b70-86d74207dd67",
+              "66a2ee63-d0d6-4896-a83b-0be4f4e52c91",
+              "46c9ed56-3fea-447d-9261-9e4af8a5e6a8",
+              "d745688d-e5c1-474c-b1da-e8558a4e6aeb",
+              "2f6339d5-58b8-4954-99d3-3a0721a1887b",
+              "72cfd5bb-d6bf-4052-b4f6-d0c05ec7ffae",
+              "8ac986bf-d9d0-4907-8bc9-6c9a960c9d3f",
+              "185e0721-57d0-48bc-ba9f-12099f6d2844",
+              "bb1db203-4a25-4e14-bdd2-d64ee0f2e4f0",
+              "88574720-a6be-4be9-81ac-a360ec522f1a",
+              "f7edeba8-2a82-4386-a2fa-89a4f651f831",
+              "9ce443ed-fb63-47c0-a5d9-fdc0013cccf3",
+              "9e3a78f9-7beb-4969-8265-267340b7ec4c",
+              "d2ab9bec-c386-4481-966d-294ab99a907a"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "path": "",
+            "text": "N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。\n⑥提供权益产品中各品牌授予至合作方的清晰且完整的授\n— 14 —权链路，且授权有效期限不应少于半年。\n（2）由数字生活中心（号百中心）、全渠道运营中心分别完\n成材料初审。其中，数字生活中心（号百中心）负责对合作方资\n质、产品介绍、授权资质、服务流程进行审核并进行对标比价；\n全渠道运营中心对产品市场分析、渠道资源、推广需求进行评估\n和确认，对于不满足准入条件或没有推广需求的产品，则直接退\n回材料至需求提报部门或合作方。\n3.合作引入评审\n权益合作引入对标区公司级对外合作管理办法，日常合作方\n引入、续签的常规评审执行“一评一审一决定”的原则，由区公\n司各部门组会审议后方可引入。",
+            "body_text": "N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。\n⑥提供权益产品中各品牌授予至合作方的清晰且完整的授\n— 14 —权链路，且授权有效期限不应少于半年。\n（2）由数字生活中心（号百中心）、全渠道运营中心分别完\n成材料初审。其中，数字生活中心（号百中心）负责对合作方资\n质、产品介绍、授权资质、服务流程进行审核并进行对标比价；\n全渠道运营中心对产品市场分析、渠道资源、推广需求进行评估\n和确认，对于不满足准入条件或没有推广需求的产品，则直接退\n回材料至需求提报部门或合作方。\n3.合作引入评审\n权益合作引入对标区公司级对外合作管理办法，日常合作方\n引入、续签的常规评审执行“一评一审一决定”的原则，由区公\n司各部门组会审议后方可引入。",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.7058,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "权益业务合作方单产品类权益结算价不应高于"
+          },
+          "fact_plan": {
+            "raw": "权益业务合作方单产品类权益结算价不应高于",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact"
+            ],
+            "entities": [
+              "权益业务合作方单产品类权",
+              "益结算价不应高于"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ]
+          },
+          "kept": [],
+          "dropped": [
+            {
+              "id": "bc8a98c68db50eadb443380f6b772f23:r1:pol:responsibility:92916142",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 17,
+          "candidate_count": 14
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "结算报价中，单产品类权益结算价不应高于市场售价及集团供价；",
+              "evidence_passage_ids": [
+                "fd311432f6bbc2c527a84855c4ef2708"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r6:pol:policy:50610696"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "N选组合型权益产品的市场价值不应低于结算定价的2倍",
+              "evidence_passage_ids": [
+                "fd311432f6bbc2c527a84855c4ef2708"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r7:pol:policy:51567569"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "特殊供价产品应提供相关介绍和说明",
+              "evidence_passage_ids": [
+                "fd311432f6bbc2c527a84855c4ef2708"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r10:pol:policy:43635432"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "N选组合型权益产品的市场价值不应低于结算定价的2倍",
+              "evidence_passage_ids": [
+                "bc8a98c68db50eadb443380f6b772f23"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "bc8a98c68db50eadb443380f6b772f23:r0:pol:policy:51567569"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "市分公司上报的属地权益合作方，注册资本等条件可以适当下调，但要确保合作方的权益履约能力，对于零散的中小权益合作方非必要不合作，如需合作可通过专业公司整合一起合作确保履约能力",
+              "evidence_passage_ids": [
+                "fd311432f6bbc2c527a84855c4ef2708"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r1:pol:policy:7913286"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "③具备权益合作相关项目的运营实力和经验，并配备管理团队、支撑团队及客服团队，以满足合作运营需求，需提供相关人员名单及社保缴纳证明",
+              "evidence_passage_ids": [
+                "fd311432f6bbc2c527a84855c4ef2708"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r2:pol:policy:72710806"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "权益业务合作方单产品类权益结算价不应高于",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact"
+            ],
+            "entities": [
+              "权益业务合作方单产品类权",
+              "益结算价不应高于"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ]
+          },
+          "input_count": 14,
+          "dropped": [
+            {
+              "id": "bc8a98c68db50eadb443380f6b772f23:r1:pol:responsibility:92916142",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r6:pol:policy:50610696",
+              "record_id": "fd311432f6bbc2c527a84855c4ef2708:r6",
+              "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "益结算价不应高于",
+              "predicate": "",
+              "object": "结算报价中，单产品类权益结算价不应高于市场售价及集团供价；",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "结算报价中，单产品类权益结算价不应高于市场售价及集团供价；",
+              "evidence_spans": [
+                [
+                  316,
+                  345
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 3.9,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r7:pol:policy:51567569",
+              "record_id": "fd311432f6bbc2c527a84855c4ef2708:r7",
+              "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "权益业务合作方单产品类权",
+              "predicate": "",
+              "object": "N选组合型权益产品的市场价值不应低于结算定价的2倍",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "N选组合型权益产品的市场价值不应低于结算定价的2倍",
+              "evidence_spans": [
+                [
+                  345,
+                  371
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r10:pol:policy:43635432",
+              "record_id": "fd311432f6bbc2c527a84855c4ef2708:r10",
+              "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "权益业务合作方单产品类权",
+              "predicate": "",
+              "object": "特殊供价产品应提供相关介绍和说明",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "特殊供价产品应提供相关介绍和说明",
+              "evidence_spans": [
+                [
+                  449,
+                  466
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "bc8a98c68db50eadb443380f6b772f23:r0:pol:policy:51567569",
+              "record_id": "bc8a98c68db50eadb443380f6b772f23:r0",
+              "passage_id": "bc8a98c68db50eadb443380f6b772f23",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "权益业务合作方单产品类权",
+              "predicate": "",
+              "object": "N选组合型权益产品的市场价值不应低于结算定价的2倍",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "N选组合型权益产品的市场价值不应低于结算定价的2倍",
+              "evidence_spans": [
+                [
+                  0,
+                  172
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r1:pol:policy:7913286",
+              "record_id": "fd311432f6bbc2c527a84855c4ef2708:r1",
+              "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "权益业务合作方单产品类权",
+              "predicate": "",
+              "object": "市分公司上报的属地权益合作方，注册资本等条件可以适当下调，但要确保合作方的权益履约能力，对于零散的中小权益合作方非必要不合作，如需合作可通过专业公司整合一起合作确保履约能力",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "市分公司上报的属地权益合作方，注册资本等条件可以适当下调，但要确保合作方的权益履约能力，对于零散的中小权益合作方非必要不合作，如需合作可通过专业公司整合一起合作确保履约能力",
+              "evidence_spans": [
+                [
+                  21,
+                  108
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 3.0,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "fd311432f6bbc2c527a84855c4ef2708:r2:pol:policy:72710806",
+              "record_id": "fd311432f6bbc2c527a84855c4ef2708:r2",
+              "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "权益业务合作方单产品类权",
+              "predicate": "",
+              "object": "③具备权益合作相关项目的运营实力和经验，并配备管理团队、支撑团队及客服团队，以满足合作运营需求，需提供相关人员名单及社保缴纳证明",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "③具备权益合作相关项目的运营实力和经验，并配备管理团队、支撑团队及客服团队，以满足合作运营需求，需提供相关人员名单及社保缴纳证明",
+              "evidence_spans": [
+                [
+                  109,
+                  174
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 3.0,
+              "unstructured_rejected": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "covered_conditions": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact"
+          ],
+          "candidate_ids": [
+            "fd311432f6bbc2c527a84855c4ef2708:r6:pol:policy:50610696",
+            "fd311432f6bbc2c527a84855c4ef2708:r7:pol:policy:51567569",
+            "fd311432f6bbc2c527a84855c4ef2708:r10:pol:policy:43635432",
+            "bc8a98c68db50eadb443380f6b772f23:r0:pol:policy:51567569",
+            "fd311432f6bbc2c527a84855c4ef2708:r1:pol:policy:7913286",
+            "fd311432f6bbc2c527a84855c4ef2708:r2:pol:policy:72710806"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "policy"
+          ]
+        },
+        "query_plan": {
+          "raw": "权益业务合作方单产品类权益结算价不应高于",
+          "intents": [
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "policy_fact"
+          ],
+          "entities": [
+            "权益业务合作方单产品类权",
+            "益结算价不应高于"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "policy",
+            "prohibition"
+          ]
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "type": "knowledge",
+              "label": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+            },
+            {
+              "id": "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+              "type": "block",
+              "label": "属地权益合作方，注册资本等条件可以适当下调，但要确保合作",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            },
+            {
+              "id": "189fe713-723b-4772-bc6a-6d4b33789909",
+              "type": "block",
+              "label": "[第13页]",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            },
+            {
+              "id": "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+              "type": "block",
+              "label": "价可通过集团相关结算文件或向集团专业公司邮件询价的方式",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            },
+            {
+              "id": "8e81cfc4-6f5f-4e2d-ae49-d1bd701a3880",
+              "type": "knowledge",
+              "label": "市场-2023-7号-关于印发中国电信广西公司电话外呼实施细则的通知--8e81cfc4"
+            }
+          ],
+          "edges": [
+            {
+              "source": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "target": "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+              "type": "contains"
+            },
+            {
+              "source": "189fe713-723b-4772-bc6a-6d4b33789909",
+              "target": "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+              "type": "parent"
+            },
+            {
+              "source": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "target": "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+              "type": "contains"
+            },
+            {
+              "source": "189fe713-723b-4772-bc6a-6d4b33789909",
+              "target": "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+              "type": "parent"
+            },
+            {
+              "source": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "target": "8e81cfc4-6f5f-4e2d-ae49-d1bd701a3880",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 5
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+          ],
+          "accepted_block_ids": [
+            "98ec4ac3-1df1-463d-bfba-16f90ac7db2a"
+          ],
+          "accepted_passage_ids": [
+            "fd311432f6bbc2c527a84855c4ef2708",
+            "df081aa8a99ed500f75add479c0d6bee",
+            "bc8a98c68db50eadb443380f6b772f23"
+          ],
+          "generation_knowledge_ids": [
+            "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+          ],
+          "top_score": 0.7058,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {}
+        },
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 2,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 31.94
+  },
+  "top_candidate_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+  "candidates": [
+    {
+      "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+      "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+      "score": 1.0,
+      "final_relevance_score": 0.7058,
+      "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】（2）主动提报模式可由需求部门或分公司结合自身业务或 > 2.合作资质初审 > （1）准入条件\n信相关管理办法规定及其它应具备的资质证明。市分公司上报的\n属地权益合作方，注册资本等条件可以适当下调，但要确保合作\n方的权益履约能力，对于零散的中小权益合作方非必要不合作，\n如需合作可通过专业公司整合一起合作确保履约能力。\n③具备权益合作相关项目的运营实力和经验，并配备管理团\n队、支撑团队及客服团队，以满足合作运营需求，需提供相关人\n员名单及社保缴纳证明。市分公司上报的属地权益合作方应当在\n本地配备线上或线下专职团队支撑履约及售后运营问题，确保履\n约服务闭环管理。\n④应承诺提供完备的客户服务支撑以及满足电信需要的信\n息安全对接及保障机制。\n⑤应提供权益产品的广西或本地区域市场覆盖面分析、产品\n服务内容、合作优势、渠道资源及结算报价等介绍材料。结算报\n价中，单产品类权益结算价不应高于市场售价及集团供价；N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。"
+    }
+  ],
+  "search_ms": 48402.07,
+  "ask_ms": 31.94,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "UALYpNdzgZodztAVcGb-0eMsAtgOgLAa",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

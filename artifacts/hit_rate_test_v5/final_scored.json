@@ -1,0 +1,2602 @@
+{
+  "metrics": {
+    "answerable_total": 32,
+    "no_answer_total": 5,
+    "top1_correct": 29,
+    "recall5_correct": 31,
+    "ask_fact_correct_count": 13,
+    "ask_citation_valid_count": 25,
+    "e2e_pass_count": 13,
+    "grounded_count": 13,
+    "Top-1 Accuracy": 0.9062,
+    "Recall@5": 0.9688,
+    "Ask Fact Correctness": 0.4062,
+    "Ask Citation Validity": 0.7812,
+    "E2E Pass Rate": 0.4062,
+    "Answer Groundedness": 0.4062,
+    "Citation Validity": 0.7273,
+    "citation_total": 55,
+    "citation_valid": 40,
+    "citation_buckets": {
+      "preaccepted": 28,
+      "adjacent_extension": 27,
+      "expected_id": 0,
+      "rejected": 0
+    },
+    "Hallucination Rate": 0.0,
+    "False Positive Rate": 0.0
+  },
+  "gates": {
+    "Top-1 Accuracy": {
+      "value": 0.9062,
+      "threshold": 0.75,
+      "pass": true
+    },
+    "Recall@5": {
+      "value": 0.9688,
+      "threshold": 0.88,
+      "pass": true
+    },
+    "Ask Fact Correctness": {
+      "value": 0.4062,
+      "threshold": 0.9,
+      "pass": false
+    },
+    "Ask Citation Validity": {
+      "value": 0.7812,
+      "threshold": 0.95,
+      "pass": false
+    },
+    "E2E Pass Rate": {
+      "value": 0.4062,
+      "threshold": 0.9,
+      "pass": false
+    },
+    "Hallucination Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    },
+    "False Positive Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    }
+  },
+  "release_verdict": "不通过放行",
+  "defects": {
+    "P0": [],
+    "P1": [
+      "KB-001",
+      "KB-002",
+      "KB-004",
+      "KB-006",
+      "KB-007",
+      "KB-009",
+      "KB-010",
+      "KB-011",
+      "KB-012",
+      "KB-013",
+      "KB-014",
+      "KB-015",
+      "KB-020",
+      "KB-022",
+      "KB-023",
+      "KB-025",
+      "KB-027",
+      "KB-028",
+      "KB-036"
+    ],
+    "P2": [
+      "KB-026"
+    ],
+    "P3": []
+  },
+  "detail": [
+    {
+      "case_id": "KB-001",
+      "category": "精确关键词",
+      "query": "营收资金管理办法 收支两条线",
+      "expected_ids": [
+        "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+      ],
+      "required_facts": [
+        "收支两条线",
+        "小金库"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+      "cand_count": 2,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 2,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 3,
+      "ask_source_count": 3,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+          "passage_id": "fa0a7ed5b47854058cdeb925ee56cae1",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593"
+        },
+        {
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "ec97da5db2eb7457e94e34b94b15474f",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 0.3333333333333333,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-002",
+      "category": "精确关键词",
+      "query": "翼支付业务管理办法 个人支付账户余额年付款限额",
+      "expected_ids": [
+        "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+      ],
+      "required_facts": [
+        "10万元",
+        "20万元"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": false,
+      "ask_citation_valid": false,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 6,
+      "top1_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 0,
+      "ask_source_count": 0,
+      "ask_has_answer": false,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": false,
+      "passage_trace": [
+        {
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "passage_id": "b70adbe973c7e295104418fba7e0fac0",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": false,
+      "expected_document_support_rate": null,
+      "passage_trace_completeness_sources": null,
+      "passage_trace_completeness_raw": null,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "no_answer",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-003",
+      "category": "精确关键词",
+      "query": "合同专用章管理办法 一个主体只允许制作一个",
+      "expected_ids": [
+        "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+        "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+      ],
+      "required_facts": [
+        "一个主体只允许制作一个合同实体章"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+      "cand_count": 2,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 2,
+        "adjacent_extension": 2,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 4,
+      "citation_valid_den": 4,
+      "ask_source_count": 4,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+          "passage_id": "8d4addbe5bba5f8f6382d91632763926",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3"
+        },
+        {
+          "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+          "passage_id": "39cdbd30bb110479500edaff4cabeab0",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-004",
+      "category": "精确关键词",
+      "query": "保密工作管理办法 不得使用外部互联网邮箱",
+      "expected_ids": [
+        "e8f52cfa-2e86-4048-9358-0649094a41b9"
+      ],
+      "required_facts": [
+        "企业商业秘密",
+        "微信"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+      "cand_count": 2,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 2,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 2,
+      "citation_valid_den": 3,
+      "ask_source_count": 3,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "passage_id": "9941c3c7b0fb92b60e9d24823edc9979",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa"
+        },
+        {
+          "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+          "passage_id": "4372bb32b60bade271e3c682e25af9c8",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 0.6666666666666666,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-005",
+      "category": "精确关键词",
+      "query": "合规管理办法 首席合规官 总法律顾问",
+      "expected_ids": [
+        "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+      ],
+      "required_facts": [
+        "首席合规官",
+        "总法律顾问"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+      "cand_count": 3,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 2,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 3,
+      "ask_source_count": 3,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+          "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9"
+        },
+        {
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "4deed0be86707f3bb13e637bed762135",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+        },
+        {
+          "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+          "passage_id": "c042ed35dfd7407bdf482d4ce12180b1",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 0.3333333333333333,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-006",
+      "category": "精确关键词",
+      "query": "商业秘密保护管理办法 核心商密 普通商密 保密期限",
+      "expected_ids": [
+        "102bee52-4b83-438d-9296-c852579473b6"
+      ],
+      "required_facts": [
+        "核心商密",
+        "10年",
+        "5年"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "102bee52-4b83-438d-9296-c852579473b6",
+      "cand_count": 2,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 2,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+          "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52"
+        },
+        {
+          "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "passage_id": "9647980114a596bfaea692d4535f9a8b",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 0.5,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-007",
+      "category": "精确关键词",
+      "query": "安全生产管理办法 专职安全员 南宁分公司不少于5人",
+      "expected_ids": [
+        "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7"
+      ],
+      "required_facts": [
+        "南宁分公司",
+        "不少于5人"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": false,
+      "ask_citation_valid": false,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 6,
+      "top1_id": "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+      "cand_count": 5,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 0,
+      "ask_source_count": 0,
+      "ask_has_answer": false,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": false,
+      "passage_trace": [
+        {
+          "knowledge_id": "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+          "passage_id": "825a7cf091a250a751c4ed1844afeffb",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-118号-关于印发中国电信广西公司安全生产管理办法-2023年修订-的通知--acf5e2d6"
+        },
+        {
+          "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665"
+        },
+        {
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "7a2bc28af54a389ed75bd0015472f03a",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0"
+        },
+        {
+          "knowledge_id": "6246d57f-6fe0-4592-b172-c11822200aa9",
+          "passage_id": "677611545d16df3bde41fba2f6bbbcde",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f"
+        },
+        {
+          "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": false,
+      "expected_document_support_rate": null,
+      "passage_trace_completeness_sources": null,
+      "passage_trace_completeness_raw": null,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "no_answer",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-008",
+      "category": "精确关键词",
+      "query": "授权管理办法 特定事项授权 一事一授权 MSS法律辅助系统",
+      "expected_ids": [
+        "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+      ],
+      "required_facts": [
+        "一事一授权",
+        "MSS法律辅助系统"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 2,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+          "passage_id": "86a2b84b13e93069f4f6f49b4643f050",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-009",
+      "category": "同义词与口语表达",
+      "query": "员工出差的住宿费和伙食补助每天能报多少",
+      "expected_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "required_facts": [
+        "100元",
+        "伙食补助"
+      ],
+      "forbidden_facts": [
+        "区内出差每人每天80元"
+      ],
+      "type": "answerable",
+      "top1_hit": false,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": false,
+      "ask_citation_valid": false,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 3,
+      "top1_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+      "cand_count": 5,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 0,
+      "ask_source_count": 0,
+      "ask_has_answer": false,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": false,
+      "passage_trace": [
+        {
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf"
+        },
+        {
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691"
+        },
+        {
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d"
+        },
+        {
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf"
+        },
+        {
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": false,
+      "expected_document_support_rate": null,
+      "passage_trace_completeness_sources": null,
+      "passage_trace_completeness_raw": null,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "no_answer",
+      "defect_severity": "P1",
+      "defect_category": "answer_pipeline",
+      "defect_reason": "search 已命中正确文档，但 ask 的 evidence gate（top_score=0.3）拦截生成。"
+    },
+    {
+      "case_id": "KB-010",
+      "category": "同义词与口语表达",
+      "query": "防诈骗和骚扰电话 代理商被罚多少钱",
+      "expected_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "required_facts": [
+        "2000元",
+        "涉诈"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": false,
+      "recall5": false,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 3,
+      "top1_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 1,
+      "ask_source_count": 1,
+      "ask_has_answer": true,
+      "expected_doc_recalled": false,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+          "passage_id": "21c6c0e9ea80bb2df0ce5e0907f62931",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 0.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "retrieval_recall",
+      "defect_reason": "search Top-5 未命中 expected 文档。"
+    },
+    {
+      "case_id": "KB-011",
+      "category": "同义词与口语表达",
+      "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+      "expected_ids": [
+        "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+      ],
+      "required_facts": [
+        "注册资本",
+        "100万",
+        "等级保护"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": false,
+      "ask_citation_valid": false,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 6,
+      "top1_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 0,
+      "ask_source_count": 0,
+      "ask_has_answer": false,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": false,
+      "passage_trace": [
+        {
+          "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": false,
+      "expected_document_support_rate": null,
+      "passage_trace_completeness_sources": null,
+      "passage_trace_completeness_raw": null,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "no_answer",
+      "defect_severity": "P1",
+      "defect_category": "answer_pipeline",
+      "defect_reason": "search 已命中正确文档，但 ask 的 evidence gate（top_score=0.3389）拦截生成。"
+    },
+    {
+      "case_id": "KB-012",
+      "category": "同义词与口语表达",
+      "query": "公司大额对外投资并购决策要不要先过法律审核",
+      "expected_ids": [
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+      ],
+      "required_facts": [
+        "法律合规审核",
+        "重大对外投融资"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "cand_count": 3,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 2,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "820fa23d66d52741921972289983318c",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+        },
+        {
+          "knowledge_id": "917d55a9-10b9-41da-8199-1cab744a757a",
+          "passage_id": "075edb407add95be60b42f1ec5ddc48e",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--917d55a9"
+        },
+        {
+          "knowledge_id": "befd93bd-9674-4b43-9fb7-bf96cb695268",
+          "passage_id": "accb21c51eefe8b779b76f443fbb2b90",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--befd93bd"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-013",
+      "category": "同义词与口语表达",
+      "query": "公司搞比赛给员工发奖金 上限是多少",
+      "expected_ids": [
+        "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+      ],
+      "required_facts": [
+        "2000元",
+        "15000元"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": false,
+      "ask_citation_valid": false,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 6,
+      "top1_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 0,
+      "ask_source_count": 0,
+      "ask_has_answer": false,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": false,
+      "passage_trace": [
+        {
+          "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+          "passage_id": "960e8fc10c452b0bf211ce55d43a78fd",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": false,
+      "expected_document_support_rate": null,
+      "passage_trace_completeness_sources": null,
+      "passage_trace_completeness_raw": null,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "no_answer",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-014",
+      "category": "同义词与口语表达",
+      "query": "异业合作给客户送权益优惠券的合作方准入条件",
+      "expected_ids": [
+        "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+      ],
+      "required_facts": [
+        "注册资本",
+        "100万"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": false,
+      "ask_citation_valid": false,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 6,
+      "top1_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 0,
+      "ask_source_count": 0,
+      "ask_has_answer": false,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": false,
+      "passage_trace": [
+        {
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": false,
+      "expected_document_support_rate": null,
+      "passage_trace_completeness_sources": null,
+      "passage_trace_completeness_raw": null,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "no_answer",
+      "defect_severity": "P1",
+      "defect_category": "answer_pipeline",
+      "defect_reason": "search 已命中正确文档，但 ask 的 evidence gate（top_score=0.3）拦截生成。"
+    },
+    {
+      "case_id": "KB-015",
+      "category": "同义词与口语表达",
+      "query": "客户提出对产品的需求 公司怎么响应处理",
+      "expected_ids": [
+        "b40b8949-e458-408a-aa75-292b0540516b"
+      ],
+      "required_facts": [
+        "问需",
+        "五级闭环"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": false,
+      "ask_citation_valid": false,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 6,
+      "top1_id": "b40b8949-e458-408a-aa75-292b0540516b",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 0,
+      "ask_source_count": 0,
+      "ask_has_answer": false,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": false,
+      "passage_trace": [
+        {
+          "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+          "passage_id": null,
+          "document_family_id": null,
+          "version_year": null,
+          "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": false,
+      "expected_document_support_rate": null,
+      "passage_trace_completeness_sources": null,
+      "passage_trace_completeness_raw": null,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "no_answer",
+      "defect_severity": "P1",
+      "defect_category": "answer_pipeline",
+      "defect_reason": "search 已命中正确文档，但 ask 的 evidence gate（top_score=0.3）拦截生成。"
+    },
+    {
+      "case_id": "KB-016",
+      "category": "多条件组合",
+      "query": "2025年差旅费管理办法 区外往返市内交通费报销标准",
+      "expected_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "required_facts": [
+        "区外",
+        "150元"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "cand_count": 4,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 2,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "passage_id": "392c97de4f338615d10f30b4f939e65f",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2"
+        },
+        {
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "passage_id": "518351c11ed4a9be8db9ca6d5a68200e",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d"
+        },
+        {
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "passage_id": "a02bd54472783824719815716c5ecc0d",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691"
+        },
+        {
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "passage_id": "95e48f77b5fe3461e51dd6c9c485bc5f",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 0.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-017",
+      "category": "多条件组合",
+      "query": "涉诈电话 代理商一个自然月内每个号码处罚金额",
+      "expected_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "required_facts": [
+        "2000元",
+        "一个自然月"
+      ],
+      "forbidden_facts": [
+        "30元"
+      ],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "cand_count": 1,
+      "wrong_version_in_evidence": true,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 1,
+      "ask_source_count": 1,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "passage_id": "f9159242a68d8d9a1268abce68d7a9a3",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-018",
+      "category": "多条件组合",
+      "query": "涉骚扰电话 代理商一个自然月内每个号码处罚金额",
+      "expected_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "required_facts": [
+        "30元",
+        "涉骚扰"
+      ],
+      "forbidden_facts": [
+        "2000元"
+      ],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "cand_count": 1,
+      "wrong_version_in_evidence": true,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 1,
+      "ask_source_count": 1,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "passage_id": "83fb103cba98000e98863f715dc075c6",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-019",
+      "category": "多条件组合",
+      "query": "翼支付III类支付账户 年付款限额",
+      "expected_ids": [
+        "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+      ],
+      "required_facts": [
+        "III类",
+        "20万元"
+      ],
+      "forbidden_facts": [
+        "10万元"
+      ],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+      "cand_count": 2,
+      "wrong_version_in_evidence": true,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 1,
+      "ask_source_count": 1,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4"
+        },
+        {
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "f6393a870628e366e18578de86d184a9",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-020",
+      "category": "多条件组合",
+      "query": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+      "expected_ids": [
+        "24a0fd9e-a285-4230-b58c-09715016758f"
+      ],
+      "required_facts": [
+        "99%",
+        "实名登记率"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+      "cand_count": 4,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 1,
+      "ask_source_count": 1,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+          "passage_id": "9f3789df9d23de54607daa2437d31362",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9"
+        },
+        {
+          "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "passage_id": "0c22e16442eb1f9e49b4117e19bd418e",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150"
+        },
+        {
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "982e81802593475c0c05aec107e05899",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0"
+        },
+        {
+          "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+          "passage_id": "33ad4018b26554bad2fad39658ad9494",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-021",
+      "category": "多条件组合",
+      "query": "产品问需工单 审核初审和产品评估的工作日时限",
+      "expected_ids": [
+        "b40b8949-e458-408a-aa75-292b0540516b"
+      ],
+      "required_facts": [
+        "1个工作日",
+        "5个工作日"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "b40b8949-e458-408a-aa75-292b0540516b",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 1,
+      "ask_source_count": 1,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+          "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-022",
+      "category": "跨文档综合",
+      "query": "中国电信广西公司涉诈和涉骚扰电话处置 分别由哪个部门牵头",
+      "expected_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "required_facts": [
+        "网络和信息安全管理部",
+        "市场部"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 2,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-023",
+      "category": "跨文档综合",
+      "query": "合同实体章和合同电子章的法律效力关系",
+      "expected_ids": [
+        "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+        "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+      ],
+      "required_facts": [
+        "同等法律效力"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+      "cand_count": 2,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 0,
+        "adjacent_extension": 4,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 4,
+      "citation_valid_den": 4,
+      "ask_source_count": 4,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+          "passage_id": "381518ae9620f75eadbfa8fc018ce5b6",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3"
+        },
+        {
+          "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+          "passage_id": "eb74ad5c633732a51f7cdda5699442ca",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-024",
+      "category": "跨文档综合",
+      "query": "广西公司差旅费伙食补助标准历年变化",
+      "expected_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+        "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+        "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+      ],
+      "required_facts": [
+        "100元"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "cand_count": 4,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 2,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 2,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "passage_id": "b4591de644e7c92923edcef6802c5834",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2"
+        },
+        {
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "passage_id": "822c8cc924f500b7ad69ff20db680118",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d"
+        },
+        {
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "passage_id": "a02bd54472783824719815716c5ecc0d",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691"
+        },
+        {
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "passage_id": "95e48f77b5fe3461e51dd6c9c485bc5f",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-025",
+      "category": "跨文档综合",
+      "query": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+      "expected_ids": [
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+      ],
+      "required_facts": [
+        "法律合规部"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "cand_count": 5,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 1,
+      "ask_source_count": 1,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+        },
+        {
+          "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+          "passage_id": "1f2466e049ab06e021d20ef7b8377b6c",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665"
+        },
+        {
+          "knowledge_id": "7a105c2a-9de9-414b-8ae4-7de195a21325",
+          "passage_id": "398938339dc4a1d7f115aadb937271df",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2017-214号-关于印发中国电信广西公司采购管理办法的通知--7a105c2a"
+        },
+        {
+          "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "passage_id": "097cce346f1026a2cf80d0df41875ee8",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150"
+        },
+        {
+          "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+          "passage_id": "4846517934b860c6e52a2f9c4cb61e39",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-026",
+      "category": "易混淆知识",
+      "query": "号百分公司差旅费管理办法 适用范围",
+      "expected_ids": [
+        "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+      ],
+      "required_facts": [
+        "号百分公司"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": false,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 7,
+      "top1_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "cand_count": 4,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 4,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 5,
+      "ask_source_count": 5,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "passage_id": "2685a87be138d2954d21beea8438c12b",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2"
+        },
+        {
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "passage_id": "5ed687afeda843ae890d0bceb6b63e4f",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf"
+        },
+        {
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "passage_id": "e0ae6e5c1427a5ca331f27d0403b1d05",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d"
+        },
+        {
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "passage_id": "78d25e8885bc84b0bc1c8d6694a49021",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 0.2,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P2",
+      "defect_category": "ranking",
+      "defect_reason": "正确文档进入 Top5 但非 Top1。"
+    },
+    {
+      "case_id": "KB-027",
+      "category": "易混淆知识",
+      "query": "技能竞赛 实际操作成绩占比不得少于",
+      "expected_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad",
+        "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+      ],
+      "required_facts": [
+        "70%"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "cand_count": 2,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 3,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 4,
+      "citation_valid_den": 4,
+      "ask_source_count": 4,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "246daea17bcb0c50a044240442923165",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+        },
+        {
+          "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+          "passage_id": "bc6ba87042031587af9f12b1a17b7813",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-028",
+      "category": "易混淆知识",
+      "query": "技能竞赛团体奖金限额 2026年修订",
+      "expected_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      ],
+      "required_facts": [
+        "15000元",
+        "1200元"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 1,
+      "citation_valid_den": 1,
+      "ask_source_count": 1,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "e70a54754d3d6c49c8f5a0936f8439af",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-029",
+      "category": "易混淆知识",
+      "query": "权益业务合作方单产品类权益结算价不应高于",
+      "expected_ids": [
+        "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+      ],
+      "required_facts": [
+        "市场售价",
+        "集团供价"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 2,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-030",
+      "category": "无答案或越界问题",
+      "query": "中国电信广西公司2026年营收预测是多少亿元",
+      "type": "no_answer",
+      "false_positive": false,
+      "expressed_insufficient": true,
+      "no_fabrication": true,
+      "score": 10,
+      "top1_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+      "cand_count": 1,
+      "ask_has_answer": false,
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-031",
+      "category": "无答案或越界问题",
+      "query": "广西电信员工的工资薪级表和岗位津贴具体数额",
+      "type": "no_answer",
+      "false_positive": false,
+      "expressed_insufficient": true,
+      "no_fabrication": true,
+      "score": 10,
+      "top1_id": null,
+      "cand_count": 0,
+      "ask_has_answer": false,
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-032",
+      "category": "无答案或越界问题",
+      "query": "中国电信集团总部北京的办公楼地址",
+      "type": "no_answer",
+      "false_positive": false,
+      "expressed_insufficient": true,
+      "no_fabrication": true,
+      "score": 10,
+      "top1_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+      "cand_count": 3,
+      "ask_has_answer": false,
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-033",
+      "category": "无答案或越界问题",
+      "query": "火星探测任务最新进展",
+      "type": "no_answer",
+      "false_positive": false,
+      "expressed_insufficient": true,
+      "no_fabrication": true,
+      "score": 10,
+      "top1_id": null,
+      "cand_count": 0,
+      "ask_has_answer": false,
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-034",
+      "category": "无答案或越界问题",
+      "query": "推荐一款好吃的火锅底料品牌",
+      "type": "no_answer",
+      "false_positive": false,
+      "expressed_insufficient": true,
+      "no_fabrication": true,
+      "score": 10,
+      "top1_id": null,
+      "cand_count": 0,
+      "ask_has_answer": false,
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-035",
+      "category": "新旧规则冲突",
+      "query": "中国电信广西公司差旅费管理办法最新版本是哪一年的",
+      "expected_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "required_facts": [
+        "2025",
+        "256号"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "cand_count": 5,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 2,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "passage_id": "2685a87be138d2954d21beea8438c12b",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2"
+        },
+        {
+          "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+          "passage_id": "941ecef125a3af9e397e0004bf2384c6",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1"
+        },
+        {
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "passage_id": "5ed687afeda843ae890d0bceb6b63e4f",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf"
+        },
+        {
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "passage_id": "e0ae6e5c1427a5ca331f27d0403b1d05",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d"
+        },
+        {
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "passage_id": "78d25e8885bc84b0bc1c8d6694a49021",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-036",
+      "category": "新旧规则冲突",
+      "query": "差旅费管理办法 取消交通意外险在差旅费中报账",
+      "expected_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "required_facts": [
+        "交通意外保险",
+        "不再重复报销"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "cand_count": 4,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 1,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 0,
+      "citation_valid_den": 2,
+      "ask_source_count": 2,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "passage_id": "392c97de4f338615d10f30b4f939e65f",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2"
+        },
+        {
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "passage_id": "7d948bad3637022ab5aada4f8d85d85b",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d"
+        },
+        {
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "passage_id": "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf"
+        },
+        {
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "passage_id": "f1ccb310c35aa420a8d4f3787fc238a1",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 0.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    },
+    {
+      "case_id": "KB-037",
+      "category": "新旧规则冲突",
+      "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+      "expected_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      ],
+      "required_facts": [
+        "2026",
+        "158号"
+      ],
+      "forbidden_facts": [
+        "一级竞赛",
+        "二级竞赛"
+      ],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "cand_count": 2,
+      "wrong_version_in_evidence": true,
+      "citation_buckets": {
+        "preaccepted": 1,
+        "adjacent_extension": 2,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 3,
+      "citation_valid_den": 3,
+      "ask_source_count": 3,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+        },
+        {
+          "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+          "passage_id": "c21ec60c41b528d524b03eee394a13e8",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    }
+  ]
+}

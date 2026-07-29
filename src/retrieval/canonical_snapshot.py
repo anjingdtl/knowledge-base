@@ -23,20 +23,44 @@ def build_adjacent_allowlist(
     *,
     list_blocks_fn: Callable[[str], list[dict[str, Any]]] | None = None,
     window: int = 1,
-) -> list[dict[str, Any]]:
-    """Build allowlist entries for accepted hits + same-doc adjacent blocks.
+    retrieval_unit: str = "block",
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Build allowlist entries for accepted hits + optional adjacent units.
+
+    SPEC v5 §3: when ``retrieval_unit == "passage"``, do **not** load/expand
+    whole-page blocks. Adjacent expansion for passages is handled separately
+    via passage_index ±1 (see ``build_passage_adjacent_entries``).
 
     Each entry:
       knowledge_id, block_id, is_adjacent_extension, parent_hit_block_id,
       order_idx, relevance_score (from parent hit when adjacent)
+
+    Returns (allowlist, audit) where audit has adjacent_unit / count / reason.
     """
     from src.answering.context_builder import expand_adjacent_evidence
 
-    if list_blocks_fn is None:
-        return _allowlist_from_hits_only(accepted_items)
+    audit: dict[str, Any] = {
+        "adjacent_unit": "none",
+        "adjacent_count": 0,
+        "adjacent_fallback_reason": "",
+        "focus_not_found": 0,
+    }
 
+    if retrieval_unit == "passage" or _items_are_passages(accepted_items):
+        # Passage path: hits only — no list_blocks_fn.
+        audit["adjacent_unit"] = "passage"
+        audit["adjacent_fallback_reason"] = "passage_path_skips_block_expansion"
+        return _allowlist_from_hits_only(accepted_items), audit
+
+    if list_blocks_fn is None:
+        audit["adjacent_unit"] = "block"
+        audit["adjacent_fallback_reason"] = "no_list_blocks_fn"
+        return _allowlist_from_hits_only(accepted_items), audit
+
+    audit["adjacent_unit"] = "block"
     out: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
+    adj_n = 0
 
     for hit in accepted_items:
         if not isinstance(hit, dict):
@@ -63,7 +87,6 @@ def build_adjacent_allowlist(
             page_blocks = []
         if not page_blocks or not bid:
             continue
-        # Normalize page blocks to expand_adjacent_evidence shape.
         normalized = []
         for b in page_blocks:
             if not isinstance(b, dict):
@@ -74,26 +97,103 @@ def build_adjacent_allowlist(
             if "text" not in nb:
                 nb["text"] = nb.get("content") or ""
             normalized.append(nb)
-        expanded = expand_adjacent_evidence(
-            normalized, focus_block_id=bid, window=window,
+        expanded, exp_audit = expand_adjacent_evidence(
+            normalized, focus_block_id=bid, window=window, return_audit=True,
         )
+        if exp_audit.get("reason") == "focus_not_found":
+            audit["focus_not_found"] = int(audit.get("focus_not_found") or 0) + 1
+            # Fail-closed: do not add any blocks for this hit.
+            continue
         for b in expanded:
             ebid = str(b.get("block_id") or b.get("id") or "").strip()
             if not ebid or (kid, ebid) in seen:
                 continue
             seen.add((kid, ebid))
+            is_adj = ebid != bid
+            if is_adj:
+                adj_n += 1
             out.append({
                 "knowledge_id": kid,
                 "block_id": ebid,
-                "is_adjacent_extension": ebid != bid,
+                "is_adjacent_extension": is_adj,
                 "parent_hit_block_id": bid,
                 "order_idx": b.get("order_idx"),
                 "relevance_score": score,
-                "channel": "adjacent_extension",
+                "channel": "adjacent_extension" if is_adj else (
+                    hit.get("match_channel") or hit.get("source") or ""
+                ),
                 "text": (b.get("text") or b.get("content") or "")[:500],
                 "title": hit.get("title") or "",
             })
-    return out
+    audit["adjacent_count"] = adj_n
+    return out, audit
+
+
+def _items_are_passages(items: list[dict[str, Any]]) -> bool:
+    if not items:
+        return False
+    n = 0
+    for it in items:
+        if not isinstance(it, dict):
+            continue
+        if (
+            it.get("passage_id")
+            or it.get("retrieval_unit") == "passage"
+            or it.get("candidate_type") == "passage"
+        ):
+            n += 1
+    return n >= max(1, (len(items) + 1) // 2)
+
+
+def build_passage_adjacent_entries(
+    accepted_items: list[dict[str, Any]],
+    *,
+    list_neighbor_passages_fn: Callable[[str, str, int], list[dict[str, Any]]] | None = None,
+    window: int = 1,
+) -> tuple[list[dict[str, Any]], int]:
+    """Optional ±1 passage_index neighbors; tagged passage_adjacent_extension.
+
+    ``list_neighbor_passages_fn(knowledge_id, passage_id, window)`` returns
+    neighbor passage dicts (not including the focus, or including — both OK).
+    """
+    if list_neighbor_passages_fn is None:
+        return [], 0
+    out: list[dict[str, Any]] = []
+    seen_pid: set[str] = set()
+    for hit in accepted_items:
+        if not isinstance(hit, dict):
+            continue
+        kid = str(hit.get("knowledge_id") or "").strip()
+        pid = str(hit.get("passage_id") or "").strip()
+        if not kid or not pid:
+            continue
+        seen_pid.add(pid)
+        try:
+            neighbors = list_neighbor_passages_fn(kid, pid, window) or []
+        except Exception:  # noqa: BLE001
+            neighbors = []
+        for n in neighbors:
+            if not isinstance(n, dict):
+                continue
+            npid = str(n.get("passage_id") or n.get("id") or "").strip()
+            if not npid or npid in seen_pid or npid == pid:
+                continue
+            seen_pid.add(npid)
+            row = dict(n)
+            row["knowledge_id"] = kid
+            row["passage_id"] = npid
+            row["is_adjacent_extension"] = True
+            row["passage_adjacent_extension"] = True
+            row["parent_hit_passage_id"] = pid
+            row["retrieval_unit"] = "passage"
+            row["candidate_type"] = "passage"
+            row["channel"] = "passage_adjacent_extension"
+            out.append(row)
+    # Cap: accepted_passage_count * 2
+    max_adj = max(0, len([i for i in accepted_items if isinstance(i, dict) and i.get("passage_id")]) * 2)
+    if len(out) > max_adj:
+        out = out[:max_adj]
+    return out, len(out)
 
 
 def _allowlist_from_hits_only(accepted_items: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -192,6 +292,7 @@ def build_canonical_snapshot(
     top_k: int = 5,
     expanded_queries: list[str] | None = None,
     list_blocks_fn: Callable[[str], list[dict[str, Any]]] | None = None,
+    list_neighbor_passages_fn: Callable[[str, str, int], list[dict[str, Any]]] | None = None,
     adjacent_window: int = 1,
 ) -> dict[str, Any]:
     """Gate + freshness + allowlist over a candidate list.
@@ -245,11 +346,56 @@ def build_canonical_snapshot(
             seen_p.add(pid)
             accepted_passages.append(pid)
 
-    allowlist = build_adjacent_allowlist(
+    is_passage = _items_are_passages(accepted[:top_k]) or bool(accepted_passages)
+    # SPEC v5: passage path must not call list_blocks_fn / expand whole pages.
+    allowlist, adj_audit = build_adjacent_allowlist(
         accepted[:top_k],
-        list_blocks_fn=list_blocks_fn,
+        list_blocks_fn=None if is_passage else list_blocks_fn,
         window=adjacent_window,
+        retrieval_unit="passage" if is_passage else "block",
     )
+
+    # Optional same-doc ±1 passage neighbors for generation context only.
+    passage_adj: list[dict[str, Any]] = []
+    passage_adj_n = 0
+    if is_passage and list_neighbor_passages_fn is not None:
+        passage_adj, passage_adj_n = build_passage_adjacent_entries(
+            accepted[:top_k],
+            list_neighbor_passages_fn=list_neighbor_passages_fn,
+            window=1,
+        )
+        for n in passage_adj:
+            npid = str(n.get("passage_id") or "").strip()
+            if npid and npid not in seen_p:
+                seen_p.add(npid)
+                accepted_passages.append(npid)
+            allowlist.append({
+                "knowledge_id": n.get("knowledge_id") or "",
+                "block_id": n.get("block_id") or "",
+                "passage_id": npid,
+                "is_adjacent_extension": True,
+                "passage_adjacent_extension": True,
+                "parent_hit_passage_id": n.get("parent_hit_passage_id") or "",
+                "relevance_score": n.get("score"),
+                "channel": "passage_adjacent_extension",
+            })
+        # Merge into generation_items (not unlimited).
+        gen_ids = {
+            str(r.get("passage_id") or "").strip()
+            for r in generation_items
+            if isinstance(r, dict)
+        }
+        for n in passage_adj:
+            npid = str(n.get("passage_id") or "").strip()
+            if npid and npid not in gen_ids:
+                generation_items.append(n)
+                gen_ids.add(npid)
+        adj_audit["adjacent_unit"] = "passage"
+        adj_audit["adjacent_count"] = passage_adj_n
+        adj_audit["adjacent_fallback_reason"] = (
+            "passage_index_neighbors" if passage_adj_n else "no_neighbors"
+        )
+
     # Ensure generation_items blocks are also allowlisted.
     gen_kids = {
         str(r.get("knowledge_id") or "").strip()
@@ -296,6 +442,18 @@ def build_canonical_snapshot(
             filtered_gen.append(r)
         generation_items = filtered_gen
 
+    # Recompute gen_kids/passages after filter.
+    gen_kids = {
+        str(r.get("knowledge_id") or "").strip()
+        for r in generation_items
+        if r.get("knowledge_id")
+    }
+    gen_passages = [
+        str(r.get("passage_id") or "").strip()
+        for r in generation_items
+        if r.get("passage_id")
+    ]
+
     return {
         "query": q,
         "expanded_queries": list(expanded_queries or [q]),
@@ -306,13 +464,16 @@ def build_canonical_snapshot(
         "threshold": threshold,
         "intent": intent,
         "accepted_items": accepted[:top_k],
-        "generation_items": generation_items[:top_k],
+        "generation_items": generation_items[: max(top_k, top_k + passage_adj_n)],
         "accepted_knowledge_ids": accepted_kids,
         "accepted_block_ids": accepted_blocks,
         "accepted_passage_ids": accepted_passages,
         "generation_passage_ids": [p for p in gen_passages if p],
         "generation_knowledge_ids": sorted(gen_kids),
         "adjacent_allowlist": allowlist,
+        "adjacent_unit": adj_audit.get("adjacent_unit") or "none",
+        "adjacent_count": int(adj_audit.get("adjacent_count") or 0),
+        "adjacent_fallback_reason": adj_audit.get("adjacent_fallback_reason") or "",
         "gate_evidence": list(decision.get("evidence") or []),
         "version_exclusions": version_exclusions,
         "stages": {
@@ -325,8 +486,12 @@ def build_canonical_snapshot(
             },
             "freshness_applied_after_relevance": True,
             "local_version_filtered": intent == "local_version",
-            "retrieval_unit": "passage",
+            "retrieval_unit": "passage" if is_passage else "block",
             "direct_slot_audit": decision.get("direct_slot_audit") or {},
+            "adjacent_unit": adj_audit.get("adjacent_unit"),
+            "adjacent_count": adj_audit.get("adjacent_count"),
+            "adjacent_fallback_reason": adj_audit.get("adjacent_fallback_reason"),
+            "focus_not_found": adj_audit.get("focus_not_found"),
         },
         "direct_slot_evidence": bool(decision.get("direct_slot_evidence")),
         "direct_slot_audit": decision.get("direct_slot_audit") or {},
@@ -424,6 +589,7 @@ def expand_results_with_adjacent(
         expanded = expand_adjacent_evidence(
             normalized, focus_block_id=bid, window=window,
         )
+        # focus_not_found → empty list (fail-closed); skip expansion.
         for b in expanded:
             ebid = str(b.get("block_id") or b.get("id") or "").strip()
             if not ebid:

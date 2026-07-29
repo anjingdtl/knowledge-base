@@ -1,0 +1,1024 @@
+{
+  "case": {
+    "case_id": "KB-037",
+    "category": "新旧规则冲突",
+    "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+    "expected_knowledge_ids": [
+      "2b63b216-9850-4e82-803e-4006cb9f62ad"
+    ],
+    "expected_title_keywords": [
+      "技能竞赛",
+      "2026"
+    ],
+    "required_facts": [
+      "2026",
+      "158号"
+    ],
+    "forbidden_facts": [
+      "一级竞赛",
+      "二级竞赛"
+    ],
+    "expected_no_answer": false,
+    "notes": "〔2026〕158号取消分级；不应返回2023版〔2023〕278号"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "474cba97-5770-42a2-afe4-9c88f215c93e",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十二条 全区电信职业技能竞赛是广西公司、区电信工 > 第十三条 技能竞赛应制订组织实施方案，主要包括：竞 > 第十四条 技能竞赛应依据国家、行业职业技能标准和企\n案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。\n第十二条 全区电信职业技能竞赛是广西公司、区电信工\n会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n赛管理办法》规定，向集团公司提交备案申请。\n第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n成情况、竞赛经费预算、奖励办法等。\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2026,
+          "section_path": "第十二条 全区电信职业技能竞赛是广西公司、区电信工 > 第十三条 技能竞赛应制订组织实施方案，主要包括：竞 > 第十四条 技能竞赛应依据国家、行业职业技能标准和企",
+          "block_ids": [
+            "474cba97-5770-42a2-afe4-9c88f215c93e",
+            "e9d256b3-1547-48b6-a05c-307199d0cad3",
+            "73c5533c-21cb-4199-aa68-25a93782d477",
+            "1d7347b7-4ffd-46d0-b02f-8c79e20d8f1b",
+            "701b82c8-d1b1-43a5-be5d-62f52df2e92e",
+            "85f4a708-3a3b-4916-a4b3-6b2ecbf7acb9",
+            "351fdddf-0cc6-4d22-aace-dd156dad28b9",
+            "e6d84f2c-07d1-4cb3-be8a-c26742078911",
+            "e7f44913-90de-4632-8884-c06bd6f98ba2",
+            "cd2a0eea-77be-411c-98aa-22eee1fa1869",
+            "e3c36b53-deab-4e28-b5f7-7eb6b16d186c",
+            "05148834-e4ed-4a80-9fec-a2f407140f6d",
+            "6467d52d-2637-4951-acab-35a908fd2afb",
+            "35c21d92-1693-45df-8e20-519786a085b0",
+            "b6f8772b-79ce-42e2-8398-d15503da9f33",
+            "18c783f8-858a-4701-8094-493458a3b191"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -32.78305188591154,
+          "fts_score": 1.0,
+          "score": 0.9000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4287,
+            "fts_score": 1.0,
+            "title_score": 0.5263,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.3636,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "65d51882-5469-490a-9905-ac7c7793d29c",
+          "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+          "passage_id": "c21ec60c41b528d524b03eee394a13e8",
+          "title": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4",
+          "text": "【文档】中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4\n【章节】第二章 组织管理 > 第五条 广西公司技能竞赛实行分级管理，分为一级竞赛 > 第六条 广西公司一级竞赛启动时应成立由人力资源部、\n面广的关键岗位、工种和新技术、新业务开展竞赛。\n（二）普遍提高与择优选拔相结合的原则。竞赛要体现广\n泛性和先进性，通过组织广泛的学习培训、岗位练兵，调动员\n工学习知识和提升技能的积极性和主动性，在推动员工业务素何世恒(全渠道运营中心)\n— 3 — 质和岗位技能水平整体提高的基础上，发现和培养优秀技能人\n才。\n（三）正向激励和注重实效的原则。竞赛要与岗位资格认\n证、教育培训、职位晋升等员工职业发展相结合，激励员工成\n长成才。适度把握竞赛的频次和范围，保证竞赛公平、公正，\n精心组织、节约办赛、注重实效。\n第四条 本办法适用各市分公司、各专业公司、区公司各\n部门。\n第二章 组织管理\n第五条 广西公司技能竞赛实行分级管理，分为一级竞赛\n和二级竞赛。一级竞赛是围绕企业发展重点领域开展的竞赛，\n由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n合举办。二级竞赛是由广西公司业务部门发起，以广西公司名\n义组织的专项竞赛。\n第六条 广西公司一级竞赛启动时应成立由人力资源部、\n区电信工会和竞赛专业主管部门组成的技能竞赛委员会，负责\n该项竞赛的组织领导。技能竞赛委员会下设办公室。",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2023,
+          "section_path": "第二章 组织管理 > 第五条 广西公司技能竞赛实行分级管理，分为一级竞赛 > 第六条 广西公司一级竞赛启动时应成立由人力资源部、",
+          "block_ids": [
+            "65d51882-5469-490a-9905-ac7c7793d29c",
+            "a517c5bb-125e-419a-a4fd-38b255fb286b",
+            "fe4082c7-b12d-4ee5-8ed4-f42b3d27fb8f",
+            "56fd1899-905e-4aac-b60b-bd653d697004",
+            "287959c3-eab2-4141-bca6-54e8ea16d39d",
+            "f73e9b97-8cf7-4daf-b61a-72db6bcd8839",
+            "d1ba9aa5-dff3-4383-8c3c-3ab1b93ba67f",
+            "122530bc-9699-46fd-9324-dbcd0ff5ea42",
+            "b9b83680-9cee-42ae-bfb4-c1b1bf6e21ea",
+            "231dbfbb-f8a0-40aa-8c84-73332d3c253b",
+            "873ed1ea-2b6d-416e-a28c-376593d46028",
+            "62bc46cd-bc44-4e1d-8a3f-29043748467b",
+            "5f6ae05b-e383-439e-9096-c5af7b53c1d4",
+            "bd45a1a7-4945-41f9-90b0-dfefd838b24d",
+            "bca828e2-7268-48cc-8399-31747a74a8d2",
+            "b0c3cb88-0e69-4fa5-a970-1ceeffd071a5",
+            "227b54ad-60ab-443e-b89d-118ff61325f1",
+            "1ffdd27a-2d3e-4e77-9dee-1802db00e12b",
+            "a12d9f60-74e6-4524-aa38-c364325bd33d",
+            "305f28fb-a9e1-4ef1-aa3c-e4690bf292a0"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -42.87847937457586,
+          "fts_score": 1.0,
+          "score": 0.33000000000000007,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4545,
+            "fts_score": 1.0,
+            "title_score": 0.4211,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4545,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.33000000000000007,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "canonical_snapshot",
+        "intent": "local_version",
+        "accepted_knowledge_ids": [
+          "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+        ],
+        "evidence_snapshot_id": "13d_WwxjXu4YgsvWHF_r_CchxaAV5Owo",
+        "adjacent_unit": "passage",
+        "adjacent_count": 4,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 49944.2
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 最新修订版为2026 2026-158号\n- 除全区电信职业技能竞赛外，每个部门每年原则上最多申报一项技能竞赛\n- 落实技能竞赛委员会交办的其他事项",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+            "block_id": "474cba97-5770-42a2-afe4-9c88f215c93e",
+            "block_ids": [
+              "474cba97-5770-42a2-afe4-9c88f215c93e",
+              "e9d256b3-1547-48b6-a05c-307199d0cad3",
+              "73c5533c-21cb-4199-aa68-25a93782d477",
+              "1d7347b7-4ffd-46d0-b02f-8c79e20d8f1b",
+              "701b82c8-d1b1-43a5-be5d-62f52df2e92e",
+              "85f4a708-3a3b-4916-a4b3-6b2ecbf7acb9",
+              "351fdddf-0cc6-4d22-aace-dd156dad28b9",
+              "e6d84f2c-07d1-4cb3-be8a-c26742078911",
+              "e7f44913-90de-4632-8884-c06bd6f98ba2",
+              "cd2a0eea-77be-411c-98aa-22eee1fa1869",
+              "e3c36b53-deab-4e28-b5f7-7eb6b16d186c",
+              "05148834-e4ed-4a80-9fec-a2f407140f6d",
+              "6467d52d-2637-4951-acab-35a908fd2afb",
+              "35c21d92-1693-45df-8e20-519786a085b0",
+              "b6f8772b-79ce-42e2-8398-d15503da9f33",
+              "18c783f8-858a-4701-8094-493458a3b191"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "text": "案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。\n第十二条 全区电信职业技能竞赛是广西公司、区电信工\n会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n赛管理办法》规定，向集团公司提交备案申请。\n第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n成情况、竞赛经费预算、奖励办法等。\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "bf27507f3dc0eb11e670f7ff673a6f01",
+            "block_id": "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+            "block_ids": [
+              "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+              "a818837d-9283-4011-a52c-bbccbb9e92c8",
+              "7b01e61b-3688-4c1d-95f3-1026cd48585b",
+              "fd41381c-b865-4a34-b9f2-841eb845fcf1",
+              "9aafba8f-70bf-4102-8298-214523c1347a",
+              "2c2828db-c7d7-41a4-a657-0d24bdf06cf1",
+              "81bbfba3-a787-4108-80d1-114cb9be8860",
+              "f76b6945-f567-481c-bc84-53cfde16f477",
+              "0d13e568-72f3-486e-966f-9f4e84c051cc",
+              "8e262f0c-e34e-442a-8f9f-dccb5e136ffe",
+              "6aed70f1-047c-443a-9dbe-bc172bf98074",
+              "98675afd-9c74-4334-ab57-722b539f8a84",
+              "ac4a693d-181e-4129-84c0-86918b82ec07",
+              "bec909a6-969b-4d7c-bb10-58326a9c0b9f",
+              "75641cfc-9d3f-4064-8df1-cf81bb0268bc",
+              "266736ef-802e-4f15-bd4d-85d2fe1ebc82",
+              "13f0cff1-227b-4a2f-b808-d1d55ad0ef7a",
+              "edc40ab8-708c-4e55-afc5-a49af18596c8",
+              "474cba97-5770-42a2-afe4-9c88f215c93e",
+              "e9d256b3-1547-48b6-a05c-307199d0cad3",
+              "73c5533c-21cb-4199-aa68-25a93782d477"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "text": "（五）落实技能竞赛委员会交办的其他事项。\n第九条 各部门应按各自职能积极发挥在技能竞赛中的作\n用，形成齐抓共管、高效协同、各司其职的工作格局。\n（一）人力资源部门应结合人才队伍建设、岗位培训和岗\n位资格认证要求，组织研究制定技能竞赛相关政策、制度和办\n法。\n（二）财务部门应依据国家及企业有关规定，为技能竞赛\n提供经费保障，确保经费使用和管理规范。\n（三）专业部门应紧密结合企业发展需要和员工岗位技能\n要求，提出技能竞赛计划，制订实施方案，负责竞赛的具体组\n织实施。\n（四）工会应发挥支撑和服务作用，提出技能竞赛规划、\n计划草案，做好竞赛日常协调、组织管理和员工动员，配合专\n业部门完善竞赛实施方案，协助组织实施。\n第十条 广西公司承办自治区级技能竞赛，应报公司总经\n理办公会审批，参加自治区级技能竞赛应报公司分管领导审批。\n各市级企业承办或参加自治区级技能竞赛应报区电信工会备\n案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。",
+            "score": 0.0,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "246daea17bcb0c50a044240442923165",
+            "block_id": "35c21d92-1693-45df-8e20-519786a085b0",
+            "block_ids": [
+              "35c21d92-1693-45df-8e20-519786a085b0",
+              "b6f8772b-79ce-42e2-8398-d15503da9f33",
+              "18c783f8-858a-4701-8094-493458a3b191",
+              "21fc17c7-ddb8-43cb-b813-7e70fdb10911",
+              "98c01fe5-da4c-47c3-ae4e-8f67affda76e",
+              "21f51d46-f0ab-4b79-bbb3-e9d98e6d12c1",
+              "b8763623-c307-4717-a381-4793f158a783",
+              "4cb38a7f-1629-4037-928d-002048d827da",
+              "64599769-f735-4ca7-9bc0-2295c0d4a67c",
+              "285d8090-6676-4c3b-bc82-bec752f306b3",
+              "c10d6117-c1ce-4624-9f61-c337e1252b1f",
+              "df39af57-0fb8-4b13-9aa1-de5923c2539e",
+              "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+              "dbff8995-450b-48ad-a234-c1efef126419",
+              "1c38b679-1ef2-4c5e-85d2-ca8f29431e5f"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "text": "\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。",
+            "score": 0.0,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "最新修订版为2026 2026-158号",
+            "evidence_passage_ids": [
+              "33115481de8de9d955a0ba3ecde2cf77"
+            ],
+            "fact_type": "version",
+            "condition": "",
+            "candidate_id": "33115481de8de9d955a0ba3ecde2cf77:r0:ver:2026:2026-158号"
+          },
+          {
+            "text": "除全区电信职业技能竞赛外，每个部门每年原则上最多申报一项技能竞赛",
+            "evidence_passage_ids": [
+              "33115481de8de9d955a0ba3ecde2cf77"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "33115481de8de9d955a0ba3ecde2cf77:r2:pol:policy:86202139"
+          },
+          {
+            "text": "落实技能竞赛委员会交办的其他事项",
+            "evidence_passage_ids": [
+              "bf27507f3dc0eb11e670f7ff673a6f01"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "bf27507f3dc0eb11e670f7ff673a6f01:r0:pol:policy:41934918"
+          },
+          {
+            "text": "财务部门应依据国家及企业有关规定，为技能竞赛提供经费保障，确保经费使用和管理规范",
+            "evidence_passage_ids": [
+              "bf27507f3dc0eb11e670f7ff673a6f01"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "bf27507f3dc0eb11e670f7ff673a6f01:r2:pol:policy:23758142"
+          },
+          {
+            "text": "第四章表彰奖励第十七条技能竞赛应坚持精神鼓励为主，物质奖励为辅",
+            "evidence_passage_ids": [
+              "246daea17bcb0c50a044240442923165"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "246daea17bcb0c50a044240442923165:r4:pol:policy:6523071"
+          },
+          {
+            "text": "要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才",
+            "evidence_passage_ids": [
+              "246daea17bcb0c50a044240442923165"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "246daea17bcb0c50a044240442923165:r5:pol:policy:74371241"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+            "block_id": "474cba97-5770-42a2-afe4-9c88f215c93e",
+            "block_ids": [
+              "474cba97-5770-42a2-afe4-9c88f215c93e",
+              "e9d256b3-1547-48b6-a05c-307199d0cad3",
+              "73c5533c-21cb-4199-aa68-25a93782d477",
+              "1d7347b7-4ffd-46d0-b02f-8c79e20d8f1b",
+              "701b82c8-d1b1-43a5-be5d-62f52df2e92e",
+              "85f4a708-3a3b-4916-a4b3-6b2ecbf7acb9",
+              "351fdddf-0cc6-4d22-aace-dd156dad28b9",
+              "e6d84f2c-07d1-4cb3-be8a-c26742078911",
+              "e7f44913-90de-4632-8884-c06bd6f98ba2",
+              "cd2a0eea-77be-411c-98aa-22eee1fa1869",
+              "e3c36b53-deab-4e28-b5f7-7eb6b16d186c",
+              "05148834-e4ed-4a80-9fec-a2f407140f6d",
+              "6467d52d-2637-4951-acab-35a908fd2afb",
+              "35c21d92-1693-45df-8e20-519786a085b0",
+              "b6f8772b-79ce-42e2-8398-d15503da9f33",
+              "18c783f8-858a-4701-8094-493458a3b191"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "text": "案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。\n第十二条 全区电信职业技能竞赛是广西公司、区电信工\n会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n赛管理办法》规定，向集团公司提交备案申请。\n第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n成情况、竞赛经费预算、奖励办法等。\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。",
+            "body_text": "案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。\n第十二条 全区电信职业技能竞赛是广西公司、区电信工\n会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n赛管理办法》规定，向集团公司提交备案申请。\n第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n成情况、竞赛经费预算、奖励办法等。\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "bf27507f3dc0eb11e670f7ff673a6f01",
+            "block_id": "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+            "block_ids": [
+              "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+              "a818837d-9283-4011-a52c-bbccbb9e92c8",
+              "7b01e61b-3688-4c1d-95f3-1026cd48585b",
+              "fd41381c-b865-4a34-b9f2-841eb845fcf1",
+              "9aafba8f-70bf-4102-8298-214523c1347a",
+              "2c2828db-c7d7-41a4-a657-0d24bdf06cf1",
+              "81bbfba3-a787-4108-80d1-114cb9be8860",
+              "f76b6945-f567-481c-bc84-53cfde16f477",
+              "0d13e568-72f3-486e-966f-9f4e84c051cc",
+              "8e262f0c-e34e-442a-8f9f-dccb5e136ffe",
+              "6aed70f1-047c-443a-9dbe-bc172bf98074",
+              "98675afd-9c74-4334-ab57-722b539f8a84",
+              "ac4a693d-181e-4129-84c0-86918b82ec07",
+              "bec909a6-969b-4d7c-bb10-58326a9c0b9f",
+              "75641cfc-9d3f-4064-8df1-cf81bb0268bc",
+              "266736ef-802e-4f15-bd4d-85d2fe1ebc82",
+              "13f0cff1-227b-4a2f-b808-d1d55ad0ef7a",
+              "edc40ab8-708c-4e55-afc5-a49af18596c8",
+              "474cba97-5770-42a2-afe4-9c88f215c93e",
+              "e9d256b3-1547-48b6-a05c-307199d0cad3",
+              "73c5533c-21cb-4199-aa68-25a93782d477"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "text": "（五）落实技能竞赛委员会交办的其他事项。\n第九条 各部门应按各自职能积极发挥在技能竞赛中的作\n用，形成齐抓共管、高效协同、各司其职的工作格局。\n（一）人力资源部门应结合人才队伍建设、岗位培训和岗\n位资格认证要求，组织研究制定技能竞赛相关政策、制度和办\n法。\n（二）财务部门应依据国家及企业有关规定，为技能竞赛\n提供经费保障，确保经费使用和管理规范。\n（三）专业部门应紧密结合企业发展需要和员工岗位技能\n要求，提出技能竞赛计划，制订实施方案，负责竞赛的具体组\n织实施。\n（四）工会应发挥支撑和服务作用，提出技能竞赛规划、\n计划草案，做好竞赛日常协调、组织管理和员工动员，配合专\n业部门完善竞赛实施方案，协助组织实施。\n第十条 广西公司承办自治区级技能竞赛，应报公司总经\n理办公会审批，参加自治区级技能竞赛应报公司分管领导审批。\n各市级企业承办或参加自治区级技能竞赛应报区电信工会备\n案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。",
+            "body_text": "（五）落实技能竞赛委员会交办的其他事项。\n第九条 各部门应按各自职能积极发挥在技能竞赛中的作\n用，形成齐抓共管、高效协同、各司其职的工作格局。\n（一）人力资源部门应结合人才队伍建设、岗位培训和岗\n位资格认证要求，组织研究制定技能竞赛相关政策、制度和办\n法。\n（二）财务部门应依据国家及企业有关规定，为技能竞赛\n提供经费保障，确保经费使用和管理规范。\n（三）专业部门应紧密结合企业发展需要和员工岗位技能\n要求，提出技能竞赛计划，制订实施方案，负责竞赛的具体组\n织实施。\n（四）工会应发挥支撑和服务作用，提出技能竞赛规划、\n计划草案，做好竞赛日常协调、组织管理和员工动员，配合专\n业部门完善竞赛实施方案，协助组织实施。\n第十条 广西公司承办自治区级技能竞赛，应报公司总经\n理办公会审批，参加自治区级技能竞赛应报公司分管领导审批。\n各市级企业承办或参加自治区级技能竞赛应报区电信工会备\n案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。",
+            "score": 0.0,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "246daea17bcb0c50a044240442923165",
+            "block_id": "35c21d92-1693-45df-8e20-519786a085b0",
+            "block_ids": [
+              "35c21d92-1693-45df-8e20-519786a085b0",
+              "b6f8772b-79ce-42e2-8398-d15503da9f33",
+              "18c783f8-858a-4701-8094-493458a3b191",
+              "21fc17c7-ddb8-43cb-b813-7e70fdb10911",
+              "98c01fe5-da4c-47c3-ae4e-8f67affda76e",
+              "21f51d46-f0ab-4b79-bbb3-e9d98e6d12c1",
+              "b8763623-c307-4717-a381-4793f158a783",
+              "4cb38a7f-1629-4037-928d-002048d827da",
+              "64599769-f735-4ca7-9bc0-2295c0d4a67c",
+              "285d8090-6676-4c3b-bc82-bec752f306b3",
+              "c10d6117-c1ce-4624-9f61-c337e1252b1f",
+              "df39af57-0fb8-4b13-9aa1-de5923c2539e",
+              "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+              "dbff8995-450b-48ad-a234-c1efef126419",
+              "1c38b679-1ef2-4c5e-85d2-ca8f29431e5f"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "text": "\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。",
+            "body_text": "\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。",
+            "score": 0.0,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": true,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.55,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": true,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 4,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "version"
+            ],
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级"
+          },
+          "fact_plan": {
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+            "intents": [
+              "version",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "version",
+              "doc_no",
+              "policy_fact"
+            ],
+            "entities": [
+              "技能竞赛管理办法最新修订",
+              "取消一级二级竞赛分级"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": true,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "version",
+              "policy",
+              "prohibition"
+            ]
+          },
+          "kept": [],
+          "dropped": [
+            {
+              "id": "bf27507f3dc0eb11e670f7ff673a6f01:r3:pol:responsibility:16539538",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 19,
+          "candidate_count": 21
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "最新修订版为2026 2026-158号",
+              "evidence_passage_ids": [
+                "33115481de8de9d955a0ba3ecde2cf77"
+              ],
+              "fact_type": "version",
+              "condition": "",
+              "candidate_id": "33115481de8de9d955a0ba3ecde2cf77:r0:ver:2026:2026-158号"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "除全区电信职业技能竞赛外，每个部门每年原则上最多申报一项技能竞赛",
+              "evidence_passage_ids": [
+                "33115481de8de9d955a0ba3ecde2cf77"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "33115481de8de9d955a0ba3ecde2cf77:r2:pol:policy:86202139"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "落实技能竞赛委员会交办的其他事项",
+              "evidence_passage_ids": [
+                "bf27507f3dc0eb11e670f7ff673a6f01"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "bf27507f3dc0eb11e670f7ff673a6f01:r0:pol:policy:41934918"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "财务部门应依据国家及企业有关规定，为技能竞赛提供经费保障，确保经费使用和管理规范",
+              "evidence_passage_ids": [
+                "bf27507f3dc0eb11e670f7ff673a6f01"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "bf27507f3dc0eb11e670f7ff673a6f01:r2:pol:policy:23758142"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第四章表彰奖励第十七条技能竞赛应坚持精神鼓励为主，物质奖励为辅",
+              "evidence_passage_ids": [
+                "246daea17bcb0c50a044240442923165"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "246daea17bcb0c50a044240442923165:r4:pol:policy:6523071"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才",
+              "evidence_passage_ids": [
+                "246daea17bcb0c50a044240442923165"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "246daea17bcb0c50a044240442923165:r5:pol:policy:74371241"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+            "intents": [
+              "version",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "version",
+              "doc_no",
+              "policy_fact"
+            ],
+            "entities": [
+              "技能竞赛管理办法最新修订",
+              "取消一级二级竞赛分级"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": true,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "version",
+              "policy",
+              "prohibition"
+            ]
+          },
+          "input_count": 21,
+          "dropped": [
+            {
+              "id": "bf27507f3dc0eb11e670f7ff673a6f01:r3:pol:responsibility:16539538",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "33115481de8de9d955a0ba3ecde2cf77:r0:ver:2026:2026-158号",
+              "record_id": "33115481de8de9d955a0ba3ecde2cf77:r0",
+              "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "version",
+              "subject": "",
+              "predicate": "",
+              "object": "2026-158号",
+              "qualifiers": [],
+              "condition": "",
+              "value": "2026",
+              "unit": "年",
+              "exact_text": "最新修订版为2026 2026-158号",
+              "evidence_spans": [],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 4.0,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "33115481de8de9d955a0ba3ecde2cf77:r2:pol:policy:86202139",
+              "record_id": "33115481de8de9d955a0ba3ecde2cf77:r2",
+              "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能竞赛管理办法最新修订",
+              "predicate": "",
+              "object": "除全区电信职业技能竞赛外，每个部门每年原则上最多申报一项技能竞赛",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "除全区电信职业技能竞赛外，每个部门每年原则上最多申报一项技能竞赛",
+              "evidence_spans": [
+                [
+                  94,
+                  127
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "bf27507f3dc0eb11e670f7ff673a6f01:r0:pol:policy:41934918",
+              "record_id": "bf27507f3dc0eb11e670f7ff673a6f01:r0",
+              "passage_id": "bf27507f3dc0eb11e670f7ff673a6f01",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能竞赛管理办法最新修订",
+              "predicate": "",
+              "object": "落实技能竞赛委员会交办的其他事项",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "落实技能竞赛委员会交办的其他事项",
+              "evidence_spans": [
+                [
+                  3,
+                  70
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "bf27507f3dc0eb11e670f7ff673a6f01:r2:pol:policy:23758142",
+              "record_id": "bf27507f3dc0eb11e670f7ff673a6f01:r2",
+              "passage_id": "bf27507f3dc0eb11e670f7ff673a6f01",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能竞赛管理办法最新修订",
+              "predicate": "",
+              "object": "财务部门应依据国家及企业有关规定，为技能竞赛提供经费保障，确保经费使用和管理规范",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "财务部门应依据国家及企业有关规定，为技能竞赛提供经费保障，确保经费使用和管理规范",
+              "evidence_spans": [
+                [
+                  129,
+                  170
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "246daea17bcb0c50a044240442923165:r4:pol:policy:6523071",
+              "record_id": "246daea17bcb0c50a044240442923165:r4",
+              "passage_id": "246daea17bcb0c50a044240442923165",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能竞赛管理办法最新修订",
+              "predicate": "",
+              "object": "第四章表彰奖励第十七条技能竞赛应坚持精神鼓励为主，物质奖励为辅",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第四章表彰奖励第十七条技能竞赛应坚持精神鼓励为主，物质奖励为辅",
+              "evidence_spans": [
+                [
+                  289,
+                  323
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "246daea17bcb0c50a044240442923165:r5:pol:policy:74371241",
+              "record_id": "246daea17bcb0c50a044240442923165:r5",
+              "passage_id": "246daea17bcb0c50a044240442923165",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能竞赛管理办法最新修订",
+              "predicate": "",
+              "object": "要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才",
+              "evidence_spans": [
+                [
+                  324,
+                  352
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 3.5,
+              "unstructured_rejected": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "covered_slots": [
+            "policy_fact",
+            "version"
+          ],
+          "covered_conditions": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "version",
+            "doc_no",
+            "policy_fact"
+          ],
+          "candidate_ids": [
+            "33115481de8de9d955a0ba3ecde2cf77:r0:ver:2026:2026-158号",
+            "33115481de8de9d955a0ba3ecde2cf77:r2:pol:policy:86202139",
+            "bf27507f3dc0eb11e670f7ff673a6f01:r0:pol:policy:41934918",
+            "bf27507f3dc0eb11e670f7ff673a6f01:r2:pol:policy:23758142",
+            "246daea17bcb0c50a044240442923165:r4:pol:policy:6523071",
+            "246daea17bcb0c50a044240442923165:r5:pol:policy:74371241"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "version",
+            "policy"
+          ]
+        },
+        "query_plan": {
+          "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+          "intents": [
+            "version",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "version",
+            "doc_no",
+            "policy_fact"
+          ],
+          "entities": [
+            "技能竞赛管理办法最新修订",
+            "取消一级二级竞赛分级"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": true,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "version",
+            "policy",
+            "prohibition"
+          ]
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "type": "knowledge",
+              "label": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+            },
+            {
+              "id": "474cba97-5770-42a2-afe4-9c88f215c93e",
+              "type": "block",
+              "label": "内，经广西公司竞赛委员会和分管领导同意后按计划实施。除",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "df76c8e4-9135-41df-8b62-2a6de1374bc9",
+              "type": "block",
+              "label": "[第6页]",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+              "type": "block",
+              "label": "（一）人力资源部门应结合人才队伍建设、岗位培训和岗",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "de42df0c-d38f-4cae-b596-d1faa51ec323",
+              "type": "block",
+              "label": "[第5页]",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "35c21d92-1693-45df-8e20-519786a085b0",
+              "type": "block",
+              "label": "等级一级。基于新技术、新业务和创新领域等暂无岗位资格认",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            }
+          ],
+          "edges": [
+            {
+              "source": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "target": "474cba97-5770-42a2-afe4-9c88f215c93e",
+              "type": "contains"
+            },
+            {
+              "source": "df76c8e4-9135-41df-8b62-2a6de1374bc9",
+              "target": "474cba97-5770-42a2-afe4-9c88f215c93e",
+              "type": "parent"
+            },
+            {
+              "source": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "target": "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+              "type": "contains"
+            },
+            {
+              "source": "de42df0c-d38f-4cae-b596-d1faa51ec323",
+              "target": "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+              "type": "parent"
+            },
+            {
+              "source": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "target": "35c21d92-1693-45df-8e20-519786a085b0",
+              "type": "contains"
+            },
+            {
+              "source": "df76c8e4-9135-41df-8b62-2a6de1374bc9",
+              "target": "35c21d92-1693-45df-8e20-519786a085b0",
+              "type": "parent"
+            }
+          ],
+          "truncated": false,
+          "node_count": 6
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "local_version"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 2,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+          ],
+          "accepted_block_ids": [
+            "474cba97-5770-42a2-afe4-9c88f215c93e",
+            "65d51882-5469-490a-9905-ac7c7793d29c"
+          ],
+          "accepted_passage_ids": [
+            "33115481de8de9d955a0ba3ecde2cf77",
+            "c21ec60c41b528d524b03eee394a13e8",
+            "bf27507f3dc0eb11e670f7ff673a6f01",
+            "246daea17bcb0c50a044240442923165",
+            "1bab0460e48b86a074703cfe2695106a",
+            "ff36ccda4b04ec796c503bf2e151bda8"
+          ],
+          "generation_knowledge_ids": [
+            "2b63b216-9850-4e82-803e-4006cb9f62ad"
+          ],
+          "top_score": 0.55,
+          "intent": "local_version",
+          "adjacent_count": 4,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {}
+        },
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 3,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 9.49
+  },
+  "top_candidate_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+  "candidates": [
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十二条 全区电信职业技能竞赛是广西公司、区电信工 > 第十三条 技能竞赛应制订组织实施方案，主要包括：竞 > 第十四条 技能竞赛应依据国家、行业职业技能标准和企\n案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。\n第十二条 全区电信职业技能竞赛是广西公司、区电信工\n会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n赛管理办法》规定，向集团公司提交备案申请。\n第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n成情况、竞赛经费预算、奖励办法等。\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。"
+    },
+    {
+      "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+      "passage_id": "c21ec60c41b528d524b03eee394a13e8",
+      "title": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4",
+      "score": 0.33000000000000007,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4\n【章节】第二章 组织管理 > 第五条 广西公司技能竞赛实行分级管理，分为一级竞赛 > 第六条 广西公司一级竞赛启动时应成立由人力资源部、\n面广的关键岗位、工种和新技术、新业务开展竞赛。\n（二）普遍提高与择优选拔相结合的原则。竞赛要体现广\n泛性和先进性，通过组织广泛的学习培训、岗位练兵，调动员\n工学习知识和提升技能的积极性和主动性，在推动员工业务素何世恒(全渠道运营中心)\n— 3 — 质和岗位技能水平整体提高的基础上，发现和培养优秀技能人\n才。\n（三）正向激励和注重实效的原则。竞赛要与岗位资格认\n证、教育培训、职位晋升等员工职业发展相结合，激励员工成\n长成才。适度把握竞赛的频次和范围，保证竞赛公平、公正，\n精心组织、节约办赛、注重实效。\n第四条 本办法适用各市分公司、各专业公司、区公司各\n部门。\n第二章 组织管理\n第五条 广西公司技能竞赛实行分级管理，分为一级竞赛\n和二级竞赛。一级竞赛是围绕企业发展重点领域开展的竞赛，\n由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n合举办。二级竞赛是由广西公司业务部门发起，以广西公司名\n义组织的专项竞赛。\n第六条 广西公司一级竞赛启动时应成立由人力资源部、\n区电信工会和竞赛专业主管部门组成的技能竞赛委员会，负责\n该项竞赛的组织领导。技能竞赛委员会下设办公室。"
+    }
+  ],
+  "search_ms": 49944.2,
+  "ask_ms": 9.49,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "13d_WwxjXu4YgsvWHF_r_CchxaAV5Owo",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

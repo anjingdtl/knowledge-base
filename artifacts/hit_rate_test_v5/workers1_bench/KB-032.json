@@ -1,0 +1,488 @@
+{
+  "case": {
+    "case_id": "KB-032",
+    "category": "无答案或越界问题",
+    "query": "中国电信集团总部北京的办公楼地址",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体办公地址"
+    ],
+    "expected_no_answer": true,
+    "notes": "知识库为广西公司制度文档，无集团总部地址；应拒答"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "c087f01b-99bc-4c37-9334-8a6c0c8f9dad",
+          "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+          "passage_id": "45363b075a1b82e72f7bdd07e5e131a1",
+          "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+          "text": "【文档】中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665\n【章节】第三十七条 外部媒介。各单位应系统规划外部媒介合作， > 第三十八条 内部媒介。各单位应加强内部媒介矩阵建设， > 第三十九条 宣传联动。建立区公司、市公司、专业公司协\n格宣传等环节的管理（具体合规要求详见附件3：品牌宣传行为\n合规要求）。\n第三十六条 整合传播。各单位应积极构建资源集约、结构\n合理、协同高效的品牌传播体系，充分利用重大活动、新闻事件、\n体育赛事、展会论坛等契机，结合社会热点提升传播效果。\n第三十七条 外部媒介。各单位应系统规划外部媒介合作，\n坚持主流媒体权威发声与商业平台广泛触达相结合、大众传播与\n垂直领域深度渗透相结合、硬广投放与内容共创相结合，拓展多\n元化传播渠道，提升传播的广度、深度与效能。\n第三十八条 内部媒介。各单位应加强内部媒介矩阵建设，\n将营业厅、自有办公楼宇、电渠平台、自媒体账号等纳入品牌传\n播统一管理范围，严格执行品牌视觉规范和品牌露出标准，确保\n品牌形象展示的规范性、一致性，并定期开展自查与优化。\n第三十九条 宣传联动。建立区公司、市公司、专业公司协\n同的重大宣传主题活动策划与实施机制。加强新闻宣传、品牌传\n播与资本市场信息披露的统筹管理，确保在重大主题、关键时点\n上的策略共商、资源共用与口径统一。",
+          "document_family_id": "topic:关于印发中国电信广西公司品牌管理办法",
+          "version_year": 2026,
+          "section_path": "第三十七条 外部媒介。各单位应系统规划外部媒介合作， > 第三十八条 内部媒介。各单位应加强内部媒介矩阵建设， > 第三十九条 宣传联动。建立区公司、市公司、专业公司协",
+          "block_ids": [
+            "c087f01b-99bc-4c37-9334-8a6c0c8f9dad",
+            "d194540b-ff6e-4073-be76-e09e749b3aef",
+            "09798a24-457e-402f-b66a-020e842d6aaa",
+            "b4019908-37c4-464e-9980-df03b8324174",
+            "7d49e3df-2915-4d62-8005-d036ab740a5b",
+            "7e71baae-2d28-4a64-9a7a-51ece1598394",
+            "82716b05-4806-4062-b4e1-1f8c2b226938",
+            "944d48de-5547-45b7-8ebe-cc7e266083d1",
+            "9fe26dab-4883-47b7-b004-c8a2cc75c3fe",
+            "8c067ea7-ac17-4c28-b092-9924fa1e823d",
+            "ad1dbadd-c179-4d4f-8804-c6571e6d1e1e",
+            "fdfc94d9-5bdd-4797-b815-ddc41d5b0084",
+            "994f3d4f-e60b-4b91-9d98-b89a2930418a",
+            "cb7886bb-a6f4-4b9c-bf34-00c6c448b384",
+            "f01b01f4-03b0-40d0-9e17-1b5fc755356b"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -9.22314068831129,
+          "fts_score": 0.9597936423531176,
+          "score": 0.7493000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.2857,
+            "fts_score": 0.9598,
+            "title_score": 0.3929,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.2143,
+            "query_term_coverage": 0.2143,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3993,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3993,
+          "ranking_score": 0.7493000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司品牌管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "candidate_type": "raw_block",
+          "block_id": "8a1b87143cf163e8f7913a05f1aff3db",
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+          "text": "【文档】中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2\n【章节】附件：1.中国电信广西公司出差人员乘坐交通工具标准 > 2.中国电信广西公司出差人员住宿标准 > 3.中国电信广西公司旺季住宿标准\n城市 旺季期间 住宿标准\n区公司领导及相当职级人员 其他人员\n大连 7月-9月 600 450\n哈尔滨 7月-9月 600 450\n青岛 7月-9月 600 450\n海口 11月-2月 650 450\n拉萨 6月-9月 750 530\n西宁 6月-9月 750 530\n抄送：中国电信股份有限公司并呈中国电信集团有限公司。\n中国电信广西公司办公室 2025年6月30日印发",
+          "score": 0.6669,
+          "match_channels": [
+            "keyword",
+            "proper_noun_boost",
+            "raw"
+          ],
+          "warnings": [],
+          "source_layer": "evidence",
+          "score_breakdown": {
+            "rerank_score": 0.05,
+            "rrf_score": 0.011784511784511783,
+            "vector_score": null,
+            "rank": 3
+          },
+          "citation": {
+            "document": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+            "path": "",
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "block_id": "1e966ead-6bb6-40a9-8a9b-cbbd0da0a57f",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.0,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": null,
+              "rrf": null,
+              "rerank": null
+            },
+            "match_channels": [],
+            "reason": "match",
+            "text": "【文档】中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2\n【章节】附件：1.中国电信广西公司出差人员乘坐交通工具标准 > 2.中国电信广西公司出差人员住宿标准 > 3.中国电信广西公司旺季住宿标准\n城市 旺季期间 住宿标准\n区公司领导及相当职级人员 其他人员\n大连 7月-9月 600 450\n哈尔滨 7月-9月 600 450\n青岛 7月-9月 600 450\n海口 11月-2月 650 450\n拉萨 6月-9月 750 530\n西宁 6月-9月 750 530\n抄送：中国电信股份有限公司并呈中国电信集团有限公司。\n中国电信广西公司办公室 2025年6月30日印发"
+          },
+          "_semantic_similarity": 0.013068181818181817,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "fts_score": 0.4930681818181818,
+          "relevance": {
+            "semantic_score": 0.3429,
+            "fts_score": 0.4931,
+            "title_score": 0.3929,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.3095,
+            "query_term_coverage": 0.3095,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3769,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3769,
+          "ranking_score": 0.6669,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "中电信桂关于印发中国电信广西公司差旅费管理办法的通知960ce8f2",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "0882baf3-8ee7-46cc-8425-9902cf286b23",
+          "knowledge_id": "419ac209-b811-4def-9eea-15845ab6e8ae",
+          "passage_id": "3226759fa45387cbcb00c25ea43d2287",
+          "title": "中电信桂-2020-58号-关于印发中国电信广西公司建筑灯光媒体管理办法的通知--419ac209",
+          "text": "【文档】中电信桂-2020-58号-关于印发中国电信广西公司建筑灯光媒体管理办法的通知--419ac209\n【章节】第二章 管理职责 > 第七条 各单位主要职责： > （一）区公司办公室是建筑灯光媒 体内容的审核管理部门，\n容与环境卫生管理条例》等相关规定，并结合公司实际，制定本管理办法。\n第二条 本办法的建筑灯光媒体是指公司通过新建、 改建或\n者租赁的方式，在办公楼、生产楼等大楼建筑外立面安装灯光设备，使大楼外立面呈现数字影像、图形、文字内容的媒体灯光亮\n化效果。\n公司营业厅、楼宇室内外的 LED 显示屏，以及由当地政府部\n门统一承建、维护、运营的楼宇亮 化项目，不属于本办法管理。\n第三条 建筑灯光媒体管理主要内容包括建设管理、 维护管\n理、使用管理以及监督管理等。\n第四条 建筑灯光媒体发布内容主要包括宣传公司对外正\n面形象、推广公司产品和服务的视频 内容，以及公益广告视频等\n内容。\n第五条 建筑灯光媒体应当遵循“统一规划、统一标准、逐\n级审批、属地维护”的原则。 何世恒(全渠道运营中心)\n\u0001\u0001 — 3 — 第六条 本管理办法适用于各市分公司、各专业公司、区公\n司各部门。\n第二章 管理职责\n第七条 各单位主要职责：\n（一）区公司办公室是建筑灯光媒 体内容的审核管理部门，\n统一负责建筑灯光媒体发布内容的审核， 具体负责企业形象、公\n益广告类型发布内容的策划、制作。",
+          "document_family_id": "topic:关于印发中国电信广西公司建筑灯光媒体管理办法",
+          "version_year": 2020,
+          "section_path": "第二章 管理职责 > 第七条 各单位主要职责： > （一）区公司办公室是建筑灯光媒 体内容的审核管理部门，",
+          "block_ids": [
+            "0882baf3-8ee7-46cc-8425-9902cf286b23",
+            "f4efad01-173a-40e6-b9b0-15f38a216734",
+            "8ff3eda2-606c-41b3-8a7d-be672e328d98",
+            "15f258a0-27cd-4605-a6e1-e1ebae7aaa87",
+            "130f5569-df04-40f2-80f2-339318f35559",
+            "54701e3b-2dea-4841-a148-04c719d60aa6",
+            "05d1c00c-5ca6-4420-ba45-26b6af606c9f",
+            "bd4df60b-6a07-4bd5-8f9b-75c589ce606d",
+            "9cf43de4-aa71-4c35-8a43-02844593da19",
+            "106562be-a28c-40ae-ad3e-27f9676f12b5",
+            "1525eb81-0bec-4fca-a7cd-c1198aee8d8e",
+            "8d825ab7-6dba-4a8d-8d9e-e87501798838",
+            "afbb5f57-b1ea-443a-be80-ff87e18ae526",
+            "b5e19474-edcd-44b7-9ca1-3f6075bb77cc",
+            "e7560055-d9f8-4391-aea7-bf578441fcc1",
+            "33d3f707-6709-4ecf-a0d8-6a564c5f6127",
+            "71ce5754-2ef9-4b25-ad04-f9ebb35c0387",
+            "eb5a33f3-d72a-4da7-93b8-b702e4ee67d6",
+            "3e070ade-97f3-4915-ac49-f03c9ca6ef3c"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -10.585393928411515,
+          "fts_score": 0.9942186719974196,
+          "score": 0.6045,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.2857,
+            "fts_score": 0.9942,
+            "title_score": 0.3929,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.2143,
+            "query_term_coverage": 0.2143,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4045,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4045,
+          "ranking_score": 0.6045,
+          "version_rank": {
+            "version_year": 2020,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司建筑灯光媒体管理办法",
+            "family_newest_year": 2020,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "7859f969-2fc4-4b78-825a-0a30c995dd95",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "6e2e68ee36fb0b5cc487ce3dc5426065",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】3.3 办理款项结算和财务处理 > 3.4省际出网长途结算 > 3.5增值税专用发票开具\n内部呼叫外省其他运营商手机用户的长途落地话务进行的\n省际结算，具体呼叫类型包括全国 C网用户呼叫外省其他运\n营商手机用户， 以及南方 20省及北京公司固话用户 （含各类\n平台）呼叫南方 20省及北京范围内外省其他运营商手机用\n户。\n每月由集团公司统一出帐，账单收支金额直接分解至各\n本地网，各省公司直接根据下发的账单进行相应财务处理。\n落地省公司收到集团公司下发的省际长途结算账单，应冲减\n原确认的相关结算支出。发端省公司收到集团公司下发的省\n际长途结算账单，应将支付给落地省公司的支出确认为相应\n的结算支出。结算金额与当月其它应进行省际结算的业务数\n据合并后统一开具增值税发票。\n3.5增值税专用发票开具\n实行“营改增”后，按照发票抵扣链模式，每月总部财务维护账号(集团互联)\n— 367 — 部依据总部企信部提供的《营改增》报表，开具发票给各省\n分公司，同时各省分公司开具发票到股份总部，双方分别进\n行增值税进项税抵扣及销项税的相关处理。",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "section_path": "3.3 办理款项结算和财务处理 > 3.4省际出网长途结算 > 3.5增值税专用发票开具",
+          "block_ids": [
+            "7859f969-2fc4-4b78-825a-0a30c995dd95",
+            "224ec175-70f0-4433-a400-f62060aa9dbb",
+            "ff156381-05f7-4f7a-9f91-dc5446dbe014",
+            "020be42e-6791-4109-a8b6-dcf03ce7b81f",
+            "1684e75b-f1ee-47a8-a8cf-51edec0c93a4",
+            "aef136a0-b62e-4969-9bc2-72bea08379cf",
+            "a5bd91ea-01f2-498a-a6bc-c9b87e9f964c",
+            "c4be586a-be49-4687-b281-d76fc6c5a14d",
+            "44e81c67-e904-4041-ba8a-cc23d4afec1e",
+            "7f776dfe-360c-462a-abd0-fdc34ab865cf",
+            "fda23060-f11f-451b-a500-0070381f27b3",
+            "6d532ef9-2083-4f72-bf86-ee6fcda8d839",
+            "013cd2bb-49bc-4a66-9df7-a3e2e45c0768",
+            "d68d9491-79fa-4a3e-b5a7-506a7ef5411d",
+            "a8bfc1ef-5e57-4e4a-94ce-3224eccc6ee4"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -13.349246946648679,
+          "fts_score": 1.0,
+          "score": 0.6009,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.2786,
+            "fts_score": 1.0,
+            "title_score": 0.375,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.2143,
+            "query_term_coverage": 0.2143,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4009,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4009,
+          "ranking_score": 0.6009,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 4,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.4045,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "423eb665-1382-4fc3-9805-8597e3c25276",
+          "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "419ac209-b811-4def-9eea-15845ab6e8ae",
+          "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+        ],
+        "evidence_snapshot_id": "4nvqEYD0VrylDs3sFDeoHnxgijjDjIQr",
+        "adjacent_unit": "passage",
+        "adjacent_count": 6,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 18961.85
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "passage_trace:missing_passage_id",
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.4045,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 6,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_id_count": 10,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "passage_trace_failed",
+        "answer_validation_decision": "passage_trace_failed",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {},
+        "claim_audit": [],
+        "fact_candidate_audit": {},
+        "answer_plan": {},
+        "query_plan": {},
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "passage_trace_failed",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "423eb665-1382-4fc3-9805-8597e3c25276",
+            "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "419ac209-b811-4def-9eea-15845ab6e8ae",
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "accepted_block_ids": [
+            "c087f01b-99bc-4c37-9334-8a6c0c8f9dad",
+            "8a1b87143cf163e8f7913a05f1aff3db",
+            "0882baf3-8ee7-46cc-8425-9902cf286b23",
+            "7859f969-2fc4-4b78-825a-0a30c995dd95"
+          ],
+          "accepted_passage_ids": [
+            "45363b075a1b82e72f7bdd07e5e131a1",
+            "3226759fa45387cbcb00c25ea43d2287",
+            "6e2e68ee36fb0b5cc487ce3dc5426065",
+            "1f2466e049ab06e021d20ef7b8377b6c",
+            "5f0aabf998c386e906ed2a3aaaceed7f",
+            "f99bf1f603de1eaeb0f4f70aafb9957c",
+            "b2f77aff2603942e724834112632f6b9",
+            "47f1ebbaedc2ca5975a20be209196c75",
+            "8d07b490b3ca1537e6a989a2aa8e2b3d"
+          ],
+          "generation_knowledge_ids": [
+            "419ac209-b811-4def-9eea-15845ab6e8ae",
+            "423eb665-1382-4fc3-9805-8597e3c25276",
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+          ],
+          "top_score": 0.4045,
+          "intent": "ordinary",
+          "adjacent_count": 6,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {}
+        },
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 2,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 26.05
+  },
+  "top_candidate_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+  "candidates": [
+    {
+      "knowledge_id": "423eb665-1382-4fc3-9805-8597e3c25276",
+      "passage_id": "45363b075a1b82e72f7bdd07e5e131a1",
+      "title": "中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665",
+      "score": 0.7493000000000001,
+      "final_relevance_score": 0.3993,
+      "text": "【文档】中电信桂-2026-167号-关于印发中国电信广西公司品牌管理办法的通知--423eb665\n【章节】第三十七条 外部媒介。各单位应系统规划外部媒介合作， > 第三十八条 内部媒介。各单位应加强内部媒介矩阵建设， > 第三十九条 宣传联动。建立区公司、市公司、专业公司协\n格宣传等环节的管理（具体合规要求详见附件3：品牌宣传行为\n合规要求）。\n第三十六条 整合传播。各单位应积极构建资源集约、结构\n合理、协同高效的品牌传播体系，充分利用重大活动、新闻事件、\n体育赛事、展会论坛等契机，结合社会热点提升传播效果。\n第三十七条 外部媒介。各单位应系统规划外部媒介合作，\n坚持主流媒体权威发声与商业平台广泛触达相结合、大众传播与\n垂直领域深度渗透相结合、硬广投放与内容共创相结合，拓展多\n元化传播渠道，提升传播的广度、深度与效能。\n第三十八条 内部媒介。各单位应加强内部媒介矩阵建设，\n将营业厅、自有办公楼宇、电渠平台、自媒体账号等纳入品牌传\n播统一管理范围，严格执行品牌视觉规范和品牌露出标准，确保\n品牌形象展示的规范性、一致性，并定期开展自查与优化。\n第三十九条 宣传联动。建立区公司、市公司、专业公司协\n同的重大宣传主题活动策划与实施机制。加强新闻宣传、品牌传\n播与资本市场信息披露的统筹管理，确保在重大主题、关键时点\n上的策略共商、资源共用与口径统一。"
+    },
+    {
+      "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "passage_id": null,
+      "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+      "score": 0.6669,
+      "final_relevance_score": 0.3769,
+      "text": "【文档】中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2\n【章节】附件：1.中国电信广西公司出差人员乘坐交通工具标准 > 2.中国电信广西公司出差人员住宿标准 > 3.中国电信广西公司旺季住宿标准\n城市 旺季期间 住宿标准\n区公司领导及相当职级人员 其他人员\n大连 7月-9月 600 450\n哈尔滨 7月-9月 600 450\n青岛 7月-9月 600 450\n海口 11月-2月 650 450\n拉萨 6月-9月 750 530\n西宁 6月-9月 750 530\n抄送：中国电信股份有限公司并呈中国电信集团有限公司。\n中国电信广西公司办公室 2025年6月30日印发"
+    },
+    {
+      "knowledge_id": "419ac209-b811-4def-9eea-15845ab6e8ae",
+      "passage_id": "3226759fa45387cbcb00c25ea43d2287",
+      "title": "中电信桂-2020-58号-关于印发中国电信广西公司建筑灯光媒体管理办法的通知--419ac209",
+      "score": 0.6045,
+      "final_relevance_score": 0.4045,
+      "text": "【文档】中电信桂-2020-58号-关于印发中国电信广西公司建筑灯光媒体管理办法的通知--419ac209\n【章节】第二章 管理职责 > 第七条 各单位主要职责： > （一）区公司办公室是建筑灯光媒 体内容的审核管理部门，\n容与环境卫生管理条例》等相关规定，并结合公司实际，制定本管理办法。\n第二条 本办法的建筑灯光媒体是指公司通过新建、 改建或\n者租赁的方式，在办公楼、生产楼等大楼建筑外立面安装灯光设备，使大楼外立面呈现数字影像、图形、文字内容的媒体灯光亮\n化效果。\n公司营业厅、楼宇室内外的 LED 显示屏，以及由当地政府部\n门统一承建、维护、运营的楼宇亮 化项目，不属于本办法管理。\n第三条 建筑灯光媒体管理主要内容包括建设管理、 维护管\n理、使用管理以及监督管理等。\n第四条 建筑灯光媒体发布内容主要包括宣传公司对外正\n面形象、推广公司产品和服务的视频 内容，以及公益广告视频等\n内容。\n第五条 建筑灯光媒体应当遵循“统一规划、统一标准、逐\n级审批、属地维护”的原则。 何世恒(全渠道运营中心)\n\u0001\u0001 — 3 — 第六条 本管理办法适用于各市分公司、各专业公司、区公\n司各部门。\n第二章 管理职责\n第七条 各单位主要职责：\n（一）区公司办公室是建筑灯光媒 体内容的审核管理部门，\n统一负责建筑灯光媒体发布内容的审核， 具体负责企业形象、公\n益广告类型发布内容的策划、制作。"
+    },
+    {
+      "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+      "passage_id": "6e2e68ee36fb0b5cc487ce3dc5426065",
+      "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+      "score": 0.6009,
+      "final_relevance_score": 0.4009,
+      "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】3.3 办理款项结算和财务处理 > 3.4省际出网长途结算 > 3.5增值税专用发票开具\n内部呼叫外省其他运营商手机用户的长途落地话务进行的\n省际结算，具体呼叫类型包括全国 C网用户呼叫外省其他运\n营商手机用户， 以及南方 20省及北京公司固话用户 （含各类\n平台）呼叫南方 20省及北京范围内外省其他运营商手机用\n户。\n每月由集团公司统一出帐，账单收支金额直接分解至各\n本地网，各省公司直接根据下发的账单进行相应财务处理。\n落地省公司收到集团公司下发的省际长途结算账单，应冲减\n原确认的相关结算支出。发端省公司收到集团公司下发的省\n际长途结算账单，应将支付给落地省公司的支出确认为相应\n的结算支出。结算金额与当月其它应进行省际结算的业务数\n据合并后统一开具增值税发票。\n3.5增值税专用发票开具\n实行“营改增”后，按照发票抵扣链模式，每月总部财务维护账号(集团互联)\n— 367 — 部依据总部企信部提供的《营改增》报表，开具发票给各省\n分公司，同时各省分公司开具发票到股份总部，双方分别进\n行增值税进项税抵扣及销项税的相关处理。"
+    }
+  ],
+  "search_ms": 18961.85,
+  "ask_ms": 26.05,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "4nvqEYD0VrylDs3sFDeoHnxgijjDjIQr",
+  "retrieval_count": 0,
+  "answer_validation_decision": "passage_trace_failed",
+  "retrieval_decision": "accepted"
+}

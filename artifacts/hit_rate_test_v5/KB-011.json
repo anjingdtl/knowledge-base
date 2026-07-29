@@ -1,0 +1,169 @@
+{
+  "case": {
+    "case_id": "KB-011",
+    "category": "同义词与口语表达",
+    "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+    "expected_knowledge_ids": [
+      "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+    ],
+    "expected_title_keywords": [
+      "线上合作",
+      "2025"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万",
+      "等级保护"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕155号第九条；口语'线上店铺入驻'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts",
+            "title_boost"
+          ],
+          "block_id": "bffb1eea-f0e4-4168-a4a1-39c2d5ac802f",
+          "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+          "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+          "text": "（三）线上合作商考核流程",
+          "block_type": "text",
+          "properties": {
+            "block_type": "heading",
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "chunk_index": 654,
+            "depth": 1
+          },
+          "fts_rank": -16.244795138407458,
+          "fts_score": 0.8889720686611234,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 0.8889720686611234,
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 0.889,
+            "title_score": 0.3026,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0526,
+            "query_term_coverage": 0.0526,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3847,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3847,
+          "alias_fts_match": true
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3847,
+        "source_path": "fulltext_fallback"
+      }
+    },
+    "latency_ms": 134344.08
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "sources": [],
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.3389 < 0.35); direct_slot={'matched_slots': [], 'passage_id': None, 'knowledge_id': None, 'spans': [], 'reason': 'query_slots_lt_2', 'query_slots': [], 'score': 0.0}"
+        ],
+        "wiki_context": "",
+        "trace_id": "",
+        "answer_mode": "no_answer",
+        "reason": "insufficient_relevant_evidence",
+        "retrieval_decision": "insufficient_relevant_evidence",
+        "answer_validation_decision": "",
+        "snapshot_reused": false,
+        "snapshot_reuse_reason": "",
+        "retrieval_count": 1,
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "conflict_disclosed": false,
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [],
+          "accepted_block_ids": [],
+          "accepted_passage_ids": [],
+          "top_score": 0.3389,
+          "intent": "ordinary",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {
+            "matched_slots": [],
+            "passage_id": null,
+            "knowledge_id": null,
+            "spans": [],
+            "reason": "query_slots_lt_2",
+            "query_slots": [],
+            "score": 0.0
+          },
+          "adjacent_unit": "block",
+          "adjacent_count": 0,
+          "adjacent_fallback_reason": "no_list_blocks_fn"
+        }
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 131014.45
+  },
+  "top_candidate_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+  "candidates": [
+    {
+      "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+      "passage_id": null,
+      "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+      "score": 0.8889720686611234,
+      "final_relevance_score": 0.3847,
+      "text": "（三）线上合作商考核流程"
+    }
+  ],
+  "search_ms": 134344.08,
+  "ask_ms": 131014.45,
+  "read_ms": 0.0,
+  "snapshot_reused": false,
+  "snapshot_id": null,
+  "retrieval_count": 1,
+  "answer_validation_decision": "",
+  "retrieval_decision": "insufficient_relevant_evidence"
+}

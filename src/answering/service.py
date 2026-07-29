@@ -311,9 +311,15 @@ class AnswerService:
                     "sources": trace.get("sources"),
                 },
                 "reason": structured.get("reason") or "",
+                "answer_validation_decision": structured.get("answer_validation_decision")
+                or structured.get("reason")
+                or "",
                 "user_notice": structured.get("user_notice") or "",
                 "numeric_fact_audit": structured.get("numeric_fact_audit") or {},
                 "claim_audit": structured.get("claim_audit") or [],
+                "fact_candidate_audit": structured.get("fact_candidate_audit") or {},
+                "answer_plan": structured.get("answer_plan") or {},
+                "query_plan": structured.get("query_plan") or {},
             }
             if structured.get("answer_mode") == "no_answer":
                 payload["sources"] = []

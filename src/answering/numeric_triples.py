@@ -78,13 +78,23 @@ def extract_numeric_triples(
     *,
     passage_id: str = "",
 ) -> list[NumericTriple]:
-    """Extract condition-value-unit triples from a passage body."""
-    body = text or ""
+    """Extract condition-value-unit triples from a passage **body**.
+
+    SPEC v5: never use the whole passage as a fallback clause (that caused
+    every condition to bind to every number). Bind only within the same
+    clause / local window. Strip leading 【文档】/【章节】 metadata first.
+    """
+    from src.answering.passage_evidence import split_metadata_and_body
+
+    raw = text or ""
+    body, _start, _meta = split_metadata_and_body(raw)
+    if not body.strip():
+        body = raw
     triples: list[NumericTriple] = []
     clauses = [c for c in _CLAUSE_SPLIT.split(body) if c and c.strip()]
-    # Also keep full body as a fallback clause for short dense tables.
-    if body and body not in clauses:
-        clauses.append(body)
+    # SPEC v5: DO NOT append full body as fallback (cross-row binding).
+    if not clauses and body.strip():
+        clauses = [body]
 
     for clause in clauses:
         local_conditions: list[str] = []
@@ -94,17 +104,21 @@ def extract_numeric_triples(
         for m in _VALUE_RE.finditer(clause):
             value = m.group("value")
             unit = m.group("unit")
-            # Prefer conditions found in the same clause; if none, scan
-            # a window around the value in the full text.
+            # Prefer conditions found in the same clause; else a tight window.
             conds = list(local_conditions)
             if not conds:
-                start = max(0, m.start() - 40)
+                start = max(0, m.start() - 36)
                 window = clause[start:m.end() + 10]
                 for pat, label, _ in _CONDITION_PATTERNS:
                     if pat.search(window) and label not in conds:
                         conds.append(label)
             if not conds:
-                conds = [""]
+                # Single-value short clause may have empty condition; multi-value
+                # without local condition is skipped (no cross-row guess).
+                if len(list(_VALUE_RE.finditer(clause))) == 1 and len(clause) <= 80:
+                    conds = [""]
+                else:
+                    continue
             abs_start = body.find(clause)
             if abs_start < 0:
                 abs_start = 0
@@ -213,6 +227,7 @@ def triples_from_evidence_rows(rows: list[dict[str, Any]]) -> list[NumericTriple
         if not isinstance(r, dict):
             continue
         pid = str(r.get("passage_id") or "")
-        text = str(r.get("text") or "")
+        # Prefer body_text so metadata headers never participate.
+        text = str(r.get("body_text") or r.get("text") or "")
         all_t.extend(extract_numeric_triples(text, passage_id=pid))
     return all_t

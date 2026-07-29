@@ -1,8 +1,35 @@
-"""PassageEvidence DTO — end-to-end non-lossy evidence contract (SPEC v4 §A)."""
+"""PassageEvidence DTO — end-to-end non-lossy evidence contract (SPEC v4 §A / v5 §2.1)."""
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass, field
 from typing import Any
+
+# Passage builder prefixes metadata as 【文档】/【章节】 lines before body.
+_META_LINE_RE = re.compile(
+    r"^(?:【文档】|【章节】|【页码】|【文号】|【标签】).*$",
+    re.MULTILINE,
+)
+_META_PREFIX_BLOCK = re.compile(
+    r"^(?:(?:【文档】|【章节】|【页码】|【文号】|【标签】)[^\n]*\n?)+",
+)
+
+
+def split_metadata_and_body(text: str) -> tuple[str, int, str]:
+    """Split composed passage text into (body_text, body_char_start, meta_prefix).
+
+    Auditable rule: strip only leading lines that match known metadata tags
+    produced by ``passage_builder._compose_passage_text``. Never silently
+    delete mid-body content.
+    """
+    raw = text or ""
+    m = _META_PREFIX_BLOCK.match(raw)
+    if not m:
+        return raw, 0, ""
+    meta = m.group(0)
+    body_start = m.end()
+    body = raw[body_start:]
+    return body, body_start, meta
 
 
 @dataclass
@@ -25,8 +52,25 @@ class PassageEvidence:
     retrieval_unit: str = "passage"
     candidate_type: str = "passage"
     retrieval_fallback: str = ""
+    # SPEC v5: fact extraction must use body_text only (no title/doc-no headers).
+    body_text: str = ""
+    body_char_start: int = 0
+    body_char_end: int | None = None
+    metadata_prefix: str = ""
+
+    def ensure_body(self) -> "PassageEvidence":
+        """Populate body_text from composed ``text`` when not already set."""
+        if self.body_text:
+            return self
+        body, start, meta = split_metadata_and_body(self.text or "")
+        self.body_text = body
+        self.body_char_start = start
+        self.body_char_end = start + len(body)
+        self.metadata_prefix = meta
+        return self
 
     def to_row(self) -> dict[str, Any]:
+        self.ensure_body()
         primary_block = self.block_ids[0] if self.block_ids else ""
         return {
             "source": "knowledge",
@@ -37,6 +81,10 @@ class PassageEvidence:
             "block_ranges": list(self.block_ranges),
             "title": self.title,
             "text": self.text,
+            "body_text": self.body_text,
+            "body_char_start": self.body_char_start,
+            "body_char_end": self.body_char_end,
+            "metadata_prefix": self.metadata_prefix,
             "document_family_id": self.document_family_id,
             "version_year": self.version_year,
             "source_version": self.source_version,
@@ -137,7 +185,7 @@ def normalize_to_passage_evidence(row: dict[str, Any] | PassageEvidence) -> Pass
             retrieval_fallback="block",
         )
 
-    return PassageEvidence(
+    pe = PassageEvidence(
         passage_id=passage_id,
         knowledge_id=knowledge_id,
         text=str(row.get("text") or row.get("content") or ""),
@@ -158,7 +206,12 @@ def normalize_to_passage_evidence(row: dict[str, Any] | PassageEvidence) -> Pass
         retrieval_unit="passage",
         candidate_type="passage",
         retrieval_fallback="",
+        body_text=str(row.get("body_text") or ""),
+        body_char_start=int(row.get("body_char_start") or 0),
+        body_char_end=row.get("body_char_end"),
+        metadata_prefix=str(row.get("metadata_prefix") or ""),
     )
+    return pe.ensure_body()
 
 
 def normalize_evidence_list(rows: list[dict[str, Any]] | None) -> list[PassageEvidence]:

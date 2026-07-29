@@ -267,7 +267,7 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
     from src.application.retrieval_commands import RetrievalCommands
     from src.services.numeric_unit_match import apply_numeric_unit_ranking
     from src.services.query_rewrite import expand_query, merge_candidates_by_query
-    from src.services.result_dedupe import boost_title_term_overlap, dedupe_by_knowledge_id
+    from src.services.result_dedupe import boost_title_term_overlap, dedupe_retrieval_hits
 
     def _semantic(q: str) -> list:
         try:
@@ -344,7 +344,9 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
     results = _enrich_with_passages(results)
 
     apply_numeric_unit_ranking(query, results)
-    results = dedupe_by_knowledge_id(results)
+    # SPEC v5: keep multi-passage diversity within a document (do not collapse
+    # all passages of one knowledge_id to a single hit).
+    results = dedupe_retrieval_hits(results, max_passages_per_knowledge=3)
     results = boost_title_term_overlap(query, results)
     # NOTE: rank_with_freshness is intentionally NOT applied here. SPEC v2
     # requires freshness to run AFTER final relevance ranking so a later
@@ -368,6 +370,105 @@ def _list_blocks_for_snapshot(page_id: str) -> list[dict]:
         return []
 
 
+def _neighbor_passages_for_snapshot(
+    knowledge_id: str,
+    passage_id: str,
+    window: int = 1,
+) -> list[dict]:
+    """Load same-doc passage_index ±window neighbors (SPEC v5 §3)."""
+    try:
+        from src.services.passage_store import PassageStore
+        store = PassageStore()
+        all_p = store.get_by_knowledge(knowledge_id) or []
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("neighbor passages failed for %s: %s", knowledge_id, exc)
+        return []
+    if not all_p:
+        return []
+    # Locate focus by id
+    idx = None
+    for i, p in enumerate(all_p):
+        pid = str(p.get("id") or p.get("passage_id") or "").strip()
+        if pid == passage_id:
+            idx = i
+            break
+    if idx is None:
+        return []
+    lo = max(0, idx - int(window))
+    hi = min(len(all_p), idx + int(window) + 1)
+    out: list[dict] = []
+    for j in range(lo, hi):
+        if j == idx:
+            continue
+        p = all_p[j]
+        pid = str(p.get("id") or p.get("passage_id") or "").strip()
+        meta = p.get("metadata") if isinstance(p.get("metadata"), dict) else {}
+        bids = p.get("block_ids") or meta.get("block_ids") or []
+        if isinstance(bids, str):
+            try:
+                import json as _json
+                bids = _json.loads(bids)
+            except Exception:
+                bids = []
+        out.append({
+            "source": "knowledge",
+            "knowledge_id": knowledge_id,
+            "passage_id": pid,
+            "title": p.get("title") or p.get("title_prefix") or meta.get("title") or "",
+            "text": p.get("text") or "",
+            "block_id": (bids[0] if bids else ""),
+            "block_ids": list(bids) if isinstance(bids, list) else [],
+            "document_family_id": p.get("document_family_id") or "",
+            "version_year": p.get("version_year"),
+            "section_path": p.get("section_path") or meta.get("section_path") or "",
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "score": 0.0,
+            "passage_index": p.get("passage_index"),
+        })
+    return out
+
+
+def _snapshot_config_bits() -> dict:
+    return {
+        "no_answer_threshold": Config.get("rag.ask.no_answer_threshold", 0.35),
+        "no_match_threshold": Config.get("rag.search.no_match_threshold", 0.35),
+        "max_sources": Config.get("rag.ask.max_sources", 5),
+        "retrieval_unit": "passage",
+    }
+
+
+def _index_revision() -> str:
+    try:
+        from src.services.passage_store import PassageStore
+        store = PassageStore()
+        conn = store._get_conn()
+        row = conn.execute(
+            "SELECT COUNT(*), COALESCE(MAX(updated_at), '') FROM retrieval_passages "
+            "WHERE deleted_at IS NULL OR deleted_at = ''"
+        ).fetchone()
+        return f"passages:{row[0]}:{row[1]}"
+    except Exception:
+        return "passages:unknown"
+
+
+def _db_revision() -> str:
+    try:
+        container = _get_container()
+        db = getattr(container, "db", None)
+        if db is None:
+            return "db:unknown"
+        conn = db.get_conn() if hasattr(db, "get_conn") else None
+        if conn is None:
+            return "db:unknown"
+        row = conn.execute(
+            "SELECT COUNT(*) FROM knowledge_items WHERE deleted_at IS NULL OR deleted_at = ''"
+        ).fetchone()
+        return f"knowledge:{row[0]}"
+    except Exception:
+        return "db:unknown"
+
+
 def _build_shared_snapshot(
     query: str,
     *,
@@ -381,14 +482,47 @@ def _build_shared_snapshot(
 
     fk = int(fetch_k if fetch_k is not None else max(top_k * 3, 15))
     candidates = _retrieve_candidates(query, fetch_k=fk)
+    # SPEC v5: passage path — no list_blocks_fn; optional passage neighbors.
     return build_canonical_snapshot(
         query,
         candidates,
         threshold=threshold,
         top_k=top_k,
         expanded_queries=expand_query(query),
-        list_blocks_fn=_list_blocks_for_snapshot,
+        list_blocks_fn=None,
+        list_neighbor_passages_fn=_neighbor_passages_for_snapshot,
         adjacent_window=1,
+    )
+
+
+def _register_snapshot(snapshot: dict, *, query: str, top_k: int) -> str:
+    from src.retrieval.snapshot_registry import compute_config_hash, put_snapshot
+
+    return put_snapshot(
+        snapshot,
+        query=query,
+        top_k=top_k,
+        config_hash=compute_config_hash(_snapshot_config_bits()),
+        index_revision=_index_revision(),
+        db_revision=_db_revision(),
+    )
+
+
+def _load_snapshot(
+    snapshot_id: str,
+    *,
+    query: str,
+    top_k: int,
+) -> tuple[dict | None, str, bool]:
+    from src.retrieval.snapshot_registry import compute_config_hash, get_snapshot
+
+    return get_snapshot(
+        snapshot_id,
+        query=query,
+        top_k=top_k,
+        config_hash=compute_config_hash(_snapshot_config_bits()),
+        index_revision=_index_revision(),
+        db_revision=_db_revision(),
     )
 
 
@@ -440,6 +574,7 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
     )
     if snapshot.get("accept") and snapshot.get("accepted_items"):
         data = list(snapshot["accepted_items"])[:k]
+        snap_id = _register_snapshot(snapshot, query=query, top_k=k)
         return ok(
             data,
             total_estimate=len(data),
@@ -450,6 +585,10 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             source_path="canonical_snapshot",
             intent=snapshot.get("intent"),
             accepted_knowledge_ids=list(snapshot.get("accepted_knowledge_ids") or []),
+            evidence_snapshot_id=snap_id,
+            adjacent_unit=snapshot.get("adjacent_unit"),
+            adjacent_count=snapshot.get("adjacent_count"),
+            adjacent_fallback_reason=snapshot.get("adjacent_fallback_reason"),
         )
 
     # Low-confidence colloquial surface: when the gate rejects but alias FTS
@@ -706,11 +845,13 @@ def ask(
     max_sources: int = 5,
     max_graph_nodes: int = 50,
     query: str | None = None,
+    evidence_snapshot_id: str | None = None,
 ) -> dict:
     """基于知识库的智能问答，返回 7 字段结构化 RAG payload。
 
     Args:
         question: 用户的问题
+        evidence_snapshot_id: 可选；由 search 返回的短时 snapshot ID，校验指纹后复用，跳过二次检索
 
     Returns:
         envelope.data 包含：
@@ -736,7 +877,11 @@ def ask(
     do_ask = getattr(server_mod, "_do_ask", None) if server_mod else None
     if do_ask is None:
         do_ask = _do_ask
-    result = do_ask(question)
+    # Pass snapshot id when the underlying _do_ask supports it.
+    try:
+        result = do_ask(question, evidence_snapshot_id=evidence_snapshot_id)
+    except TypeError:
+        result = do_ask(question)
     if max_sources and max_sources > 0:
         result["sources"] = list(result.get("sources", []))[:max_sources]
     if include_graph:
@@ -807,7 +952,7 @@ def ask_verified(
     )
 
 
-def _do_ask(question: str) -> dict:
+def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
     # BUG-2 fix (50轮测试报告): ask 工具增加总超时控制。
     # Phase 4: verified hybrid 时优先 SearchService + AnswerService
     # （冲突披露 / claim+evidence 引用 / answer_mode）；否则走 rag_pipeline。
@@ -815,6 +960,7 @@ def _do_ask(question: str) -> dict:
     # Hit-rate SPEC Phase 1: unified evidence judgment via
     # ``evaluate_evidence_unified`` — search and ask now score the same evidence
     # identically (fixes KB-017 ask=0.0957 vs search=1.0 divergence).
+    # SPEC v5: optional evidence_snapshot_id reuses search snapshot (no re-retrieval).
     from src.mcp.tools.support import DeadlineTimeout, run_with_deadline
     from src.services.relevance_gate import (
         classify_query_intent,
@@ -846,6 +992,10 @@ def _do_ask(question: str) -> dict:
             "trace_id": "",
             "answer_mode": "no_answer",
             "reason": "requires_current_external_data",
+            "retrieval_decision": "requires_current_external_data",
+            "answer_validation_decision": "",
+            "snapshot_reused": False,
+            "retrieval_count": 0,
             "conflict_disclosed": False,
             "claims_used": [],
             "raw_evidence_used": [],
@@ -855,43 +1005,68 @@ def _do_ask(question: str) -> dict:
 
     container = _get_container()
 
-    # --- SPEC v2 Phase 1: shared canonical snapshot ------------------------
-    # Build the SAME snapshot search uses. If the gate rejects, short-circuit
-    # to no_answer WITHOUT calling the LLM. When accepted, the snapshot is
-    # passed into AnswerService so it cannot re-retrieve unconstrained
-    # evidence for the same question (KB-007/023).
+    # --- SPEC v2 Phase 1 + v5 snapshot reuse --------------------------------
     snapshot: dict | None = None
     accepted_kids: set[str] = set()
     accepted_blocks: set[str] = set()
     adjacent_allowlist: list[dict] = []
-    probe_available = getattr(container, "search_service", None) is not None
-    if probe_available:
+    snapshot_reused = False
+    snapshot_reuse_reason = ""
+    retrieval_count = 0
+    probe_k = int(Config.get("rag.ask.max_sources", 5) or 5)
+    # Only real AppContainer has a trustworthy search_service for shared snapshot.
+    # MagicMock / test doubles must fall through to legacy timeout/error envelopes.
+    probe_available = (
+        isinstance(container, AppContainer)
+        and getattr(container, "search_service", None) is not None
+    )
+
+    if evidence_snapshot_id and probe_available:
+        loaded, miss_reason, reused = _load_snapshot(
+            evidence_snapshot_id, query=question, top_k=probe_k,
+        )
+        if reused and loaded is not None:
+            snapshot = loaded
+            snapshot_reused = True
+            snapshot_reuse_reason = ""
+            retrieval_count = 0
+        else:
+            snapshot_reuse_reason = miss_reason or "snapshot_load_failed"
+            snapshot_reused = False
+
+    if snapshot is None and probe_available:
         try:
-            probe_k = int(Config.get("rag.ask.max_sources", 5) or 5)
             snapshot = _build_shared_snapshot(
                 question,
                 top_k=probe_k,
                 threshold=weak_threshold,
                 fetch_k=max(probe_k * 3, 15),
             )
-            accepted_kids = {
-                k for k in (snapshot.get("accepted_knowledge_ids") or []) if k
-            }
-            accepted_blocks = {
-                b for b in (snapshot.get("accepted_block_ids") or []) if b
-            }
-            adjacent_allowlist = list(snapshot.get("adjacent_allowlist") or [])
-            # Also allow adjacent block ids explicitly.
-            for entry in adjacent_allowlist:
-                bid = (entry.get("block_id") or "").strip()
-                kid = (entry.get("knowledge_id") or "").strip()
-                if bid:
-                    accepted_blocks.add(bid)
-                if kid:
-                    accepted_kids.add(kid)
+            retrieval_count = 1
+            # Register for potential subsequent reuse.
+            try:
+                _register_snapshot(snapshot, query=question, top_k=probe_k)
+            except Exception:  # noqa: BLE001
+                pass
         except Exception as exc:  # noqa: BLE001 - probe is best-effort
             logger.debug("ask shared snapshot probe failed: %s", exc)
             snapshot = None
+
+    if snapshot is not None:
+        accepted_kids = {
+            k for k in (snapshot.get("accepted_knowledge_ids") or []) if k
+        }
+        accepted_blocks = {
+            b for b in (snapshot.get("accepted_block_ids") or []) if b
+        }
+        adjacent_allowlist = list(snapshot.get("adjacent_allowlist") or [])
+        for entry in adjacent_allowlist:
+            bid = (entry.get("block_id") or "").strip()
+            kid = (entry.get("knowledge_id") or "").strip()
+            if bid:
+                accepted_blocks.add(bid)
+            if kid:
+                accepted_kids.add(kid)
 
     if snapshot is not None and not snapshot.get("accept"):
         warn = (
@@ -900,13 +1075,14 @@ def _do_ask(question: str) -> dict:
         )
         if snapshot.get("direct_slot_audit"):
             warn += f"; direct_slot={snapshot.get('direct_slot_audit')}"
+        gate_reason = snapshot.get("reason") or "retrieval_gate_rejected"
         return {
             "answer": "",
             "sources": [],
             "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
             "route": {
                 "mode": "no_answer",
-                "explanation": snapshot.get("reason") or "insufficient_relevant_evidence",
+                "explanation": gate_reason,
             },
             "query_plan": {},
             "block_contexts": {},
@@ -914,7 +1090,12 @@ def _do_ask(question: str) -> dict:
             "wiki_context": "",
             "trace_id": "",
             "answer_mode": "no_answer",
-            "reason": snapshot.get("reason") or "insufficient_relevant_evidence",
+            "reason": gate_reason,
+            "retrieval_decision": gate_reason,
+            "answer_validation_decision": "",
+            "snapshot_reused": snapshot_reused,
+            "snapshot_reuse_reason": snapshot_reuse_reason,
+            "retrieval_count": retrieval_count,
             "user_notice": "知识库中未找到可直接支持该问题的证据。",
             "conflict_disclosed": False,
             "claims_used": [],
@@ -929,6 +1110,9 @@ def _do_ask(question: str) -> dict:
                 "intent": snapshot.get("intent"),
                 "direct_slot_evidence": bool(snapshot.get("direct_slot_evidence")),
                 "direct_slot_audit": snapshot.get("direct_slot_audit") or {},
+                "adjacent_unit": snapshot.get("adjacent_unit"),
+                "adjacent_count": snapshot.get("adjacent_count"),
+                "adjacent_fallback_reason": snapshot.get("adjacent_fallback_reason"),
             },
         }
 
@@ -1013,11 +1197,33 @@ def _do_ask(question: str) -> dict:
         if not sources and result.get("answer_mode") not in ("timeout", "error"):
             # Pipeline returned no sources — fall back to no_answer rather than
             # show an unsourced answer (anti-hallucination).
+            # SPEC v5 §2.5: do NOT overwrite a specific answer_validation reason
+            # with a generic retrieval gate label.
+            prior_reason = str(result.get("reason") or "").strip()
+            prior_av = str(result.get("answer_validation_decision") or "").strip()
+            from src.answering.claim_protocol import ANSWER_VALIDATION_REASONS
+            keep_prior = (
+                prior_av in ANSWER_VALIDATION_REASONS
+                or prior_reason in ANSWER_VALIDATION_REASONS
+                or (
+                    prior_reason
+                    and prior_reason
+                    not in ("", "insufficient_relevant_evidence", "structured_claim_answer")
+                )
+            )
             result["answer"] = ""
             result["answer_mode"] = "no_answer"
-            result["reason"] = "insufficient_relevant_evidence"
+            if not keep_prior:
+                result["reason"] = "no_fact_candidate"
+                result["answer_validation_decision"] = "no_fact_candidate"
+            else:
+                result["reason"] = prior_reason
+                result.setdefault(
+                    "answer_validation_decision",
+                    prior_av or prior_reason,
+                )
             result.setdefault("warnings", []).append(
-                "evidence gate blocked generation (no traceable sources)"
+                "answer validation: no traceable sources for final answer"
             )
             route = dict(result.get("route") or {})
             route["mode"] = "no_answer"
@@ -1082,7 +1288,8 @@ def _do_ask(question: str) -> dict:
                 result["answer"] = ""
                 result["sources"] = []
                 result["answer_mode"] = "no_answer"
-                result["reason"] = "unverifiable_citations"
+                result["reason"] = "citation_allowlist_failed"
+                result["answer_validation_decision"] = "citation_allowlist_failed"
                 result.setdefault("warnings", []).append(
                     "citation integrity: final sources not traceable to accepted evidence"
                 )
@@ -1104,9 +1311,15 @@ def _do_ask(question: str) -> dict:
                 ),
                 "top_score": snapshot.get("top_score"),
                 "intent": snapshot.get("intent"),
-                "adjacent_count": sum(
-                    1 for e in adjacent_allowlist if e.get("is_adjacent_extension")
+                "adjacent_count": int(
+                    snapshot.get("adjacent_count")
+                    if snapshot.get("adjacent_count") is not None
+                    else sum(
+                        1 for e in adjacent_allowlist if e.get("is_adjacent_extension")
+                    )
                 ),
+                "adjacent_unit": snapshot.get("adjacent_unit"),
+                "adjacent_fallback_reason": snapshot.get("adjacent_fallback_reason"),
                 "direct_slot_evidence": bool(snapshot.get("direct_slot_evidence")),
                 "direct_slot_audit": snapshot.get("direct_slot_audit") or {},
             }
@@ -1119,6 +1332,28 @@ def _do_ask(question: str) -> dict:
                     "user_notice",
                     "知识库中未找到可直接支持该问题的证据。",
                 )
+
+        # Always surface retrieval vs answer-validation decisions + snapshot reuse.
+        result["snapshot_reused"] = bool(snapshot_reused)
+        if snapshot_reuse_reason:
+            result["snapshot_reuse_reason"] = snapshot_reuse_reason
+        result["retrieval_count"] = int(retrieval_count)
+        if snapshot is not None and snapshot.get("accept"):
+            result.setdefault("retrieval_decision", "accepted")
+        elif snapshot is not None:
+            result.setdefault(
+                "retrieval_decision",
+                snapshot.get("reason") or "retrieval_gate_rejected",
+            )
+        result.setdefault(
+            "answer_validation_decision",
+            result.get("answer_validation_decision")
+            or (
+                result.get("reason")
+                if result.get("answer_mode") == "no_answer"
+                else "structured_claim_answer"
+            ),
+        )
     except Exception as exc:
         # Py3.10: concurrent.futures.TimeoutError is NOT an alias of builtins.TimeoutError
         # (alias since 3.11). Treat both as hard timeout envelopes.

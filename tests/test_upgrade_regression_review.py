@@ -288,16 +288,19 @@ def test_do_ask_catches_non_timeout_exception(monkeypatch):
     """S3.2:_do_ask 必须兜住非超时异常(S1.4 后 query() 会传播),返回结构化部分结果,
     不冒泡成未处理 MCP 错误。"""
     from src import mcp_server
+    from unittest.mock import MagicMock
 
     # This regression targets the legacy RAG error envelope specifically;
     # verified mode has its own tested no-answer/fallback path.
     monkeypatch.setattr(mcp_server, "_should_use_verified_ask", lambda: False)
 
-    container = mcp_server._get_container()
-
-    def _boom(question, timeout=None, **kwargs):
-        raise RuntimeError("simulated pipeline failure")
-    monkeypatch.setattr(container.rag_pipeline, "query", _boom)
+    # Use a non-AppContainer double so the shared-snapshot probe is skipped
+    # and the legacy rag_pipeline.query error path is exercised.
+    mock_container = MagicMock()
+    mock_container.rag_pipeline.query.side_effect = RuntimeError(
+        "simulated pipeline failure"
+    )
+    monkeypatch.setattr(mcp_server, "_get_container", lambda: mock_container)
 
     result = mcp_server._do_ask("any question")
     assert result["route"]["mode"] == "error"

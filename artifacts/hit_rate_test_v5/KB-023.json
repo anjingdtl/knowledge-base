@@ -1,0 +1,1284 @@
+{
+  "case": {
+    "case_id": "KB-023",
+    "category": "跨文档综合",
+    "query": "合同实体章和合同电子章的法律效力关系",
+    "expected_knowledge_ids": [
+      "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+      "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+    ],
+    "expected_title_keywords": [
+      "合同专用章",
+      "2023"
+    ],
+    "required_facts": [
+      "同等法律效力"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2023〕44号第五条；实体章与电子章效力等同"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "9df3fcc6-ac3e-4dbc-b183-51fea09af362",
+          "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+          "passage_id": "381518ae9620f75eadbfa8fc018ce5b6",
+          "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3",
+          "text": "【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3\n【章节】（四）负责对全区合同专用章使用情况进行监督检查。 > 第九条 各市分公司、各专业公司法律部门为本单位合同专 > （一）负责本单位及所辖县分公司合同专用章的日常管理；\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、李霞(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。\n第五条 加盖合同电子章的电子合同与加盖合同实体印章的\n纸质合同具有同等法律效力。\n第六条 合同专用章使用管理应遵循“合法合规、认真审批、\n规范使用、防范风险”的原则。\n第七条 本办法适用于各市分公司、各专业公司和区公司各\n部门（以下简称“各单位”）。\n第二章 管理职责\n第八条 区公司企业发展部（法律部）为全区合同专用章归\n口管理部门，主要职责包括：\n（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：",
+          "document_family_id": "topic:合同专用章管理办法",
+          "version_year": 2023,
+          "section_path": "（四）负责对全区合同专用章使用情况进行监督检查。 > 第九条 各市分公司、各专业公司法律部门为本单位合同专 > （一）负责本单位及所辖县分公司合同专用章的日常管理；",
+          "block_ids": [
+            "9df3fcc6-ac3e-4dbc-b183-51fea09af362",
+            "b889f600-6a79-46b9-8a80-196283341b40",
+            "ca996b3d-359c-4bd6-843f-59a913571a22",
+            "a892a339-c00c-49f1-879c-1a2e26f27eaf",
+            "cc1899da-369c-4c24-a287-ff34b88ea086",
+            "72e4a845-3129-43a8-8339-97eaee12f219",
+            "17736c77-6a3d-4871-b71e-355536a62c51",
+            "96aac06f-a97d-43ca-abf5-3ad5dfc9cb38",
+            "8b33847a-a840-4f17-a2de-95522584b4c3",
+            "58c3542c-6da0-4cd1-a856-98c740b9afd8",
+            "687236cc-bb4a-470a-bb6a-ab54381c9960",
+            "43b1edeb-07fb-4699-b4a2-e87c026083f6",
+            "f58e1419-64fc-4954-bf12-7b1231894c90",
+            "309807a7-98c6-42e6-931f-4ac5368438b0",
+            "65e0f4c1-eeef-40c3-9c40-7fa6cb48a2a5",
+            "a870c028-0631-49f5-9224-c98aac50f267",
+            "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+            "e29e669b-2bb3-419e-975a-7ead3b2838a0",
+            "49d8da79-06d5-4f5d-9d76-d37bffcb4e3e"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -45.05787620913369,
+          "fts_score": 0.938372943372976,
+          "score": 0.8877999999999999,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5106,
+            "fts_score": 0.9384,
+            "title_score": 0.2713,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.5106,
+            "query_term_coverage": 0.5106,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5378,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5378,
+          "ranking_score": 0.8877999999999999,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:合同专用章管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "d31cf823-ff86-4e96-81cc-b4aed3a31167",
+          "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+          "passage_id": "eb74ad5c633732a51f7cdda5699442ca",
+          "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8",
+          "text": "【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8\n【章节】（四）负责对全区合同专用章使用情况进行监督检查。 > 第九条 各市分公司、各专业公司法律部门为本单位合同专 > （一）负责本单位及所辖县分公司合同专用章的日常管理；\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、 吴先萍(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。\n第五条 加盖合同电子章的电子合同与加盖合同实体印章的\n纸质合同具有同等法律效力。\n第六条 合同专用章使用管理应遵循“合法合规、认真审批、\n规范使用、防范风险”的原则。\n第七条 本办法适用于各市分公司、各专业公司和区公司各\n部门（以下简称“各单位”）。\n第二章 管理职责\n第八条 区公司企业发展部（法律部）为全区合同专用章归\n口管理部门，主要职责包括：\n（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：",
+          "document_family_id": "topic:合同专用章管理办法",
+          "version_year": 2023,
+          "section_path": "（四）负责对全区合同专用章使用情况进行监督检查。 > 第九条 各市分公司、各专业公司法律部门为本单位合同专 > （一）负责本单位及所辖县分公司合同专用章的日常管理；",
+          "block_ids": [
+            "d31cf823-ff86-4e96-81cc-b4aed3a31167",
+            "a8483adb-93ed-4068-9621-14d0eb50c94c",
+            "67d8849a-c7b7-417a-b81f-aa302db26a0a",
+            "383ab962-99e1-4f9a-91be-169ffe4b2841",
+            "2e2751f9-8cfd-40d4-9d66-9f0df6bfda0a",
+            "0c785002-5dbc-4eee-9d36-a5287e6200f3",
+            "fa831df0-c079-43f9-a9e5-34e3aa000c07",
+            "2f85d28f-328e-49ec-bd14-9fa4ccb9b268",
+            "b2708d3f-9a2e-4f32-addd-29cfe02bf585",
+            "cbd1556e-59cd-4297-9cd8-0b4bd1c8c2b9",
+            "879e4d18-61b8-4420-93fd-862add99e280",
+            "688f5806-267d-4f35-a1d4-fa9dd45dd6e3",
+            "c414f910-2937-4c74-a8f4-c8d114f48855",
+            "bba45676-4104-4c18-9614-98a59ba2c2b2",
+            "a2984bd6-461e-4c8e-9b87-d3d637f3e7ab",
+            "bc2de04d-cd49-48c9-823b-e92ee566e8ca",
+            "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+            "0385ffc4-8538-4f6e-9143-d3b57aa2dcd2",
+            "0499251c-c7e2-4d8f-b4a1-4175f84db9b1"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -45.02627400511915,
+          "fts_score": 0.938268632924888,
+          "score": 0.8877999999999999,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5106,
+            "fts_score": 0.9383,
+            "title_score": 0.2713,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.5106,
+            "query_term_coverage": 0.5106,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5378,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5378,
+          "ranking_score": 0.8877999999999999,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:合同专用章管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.5378,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+          "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+        ],
+        "evidence_snapshot_id": "XO9IVpimf02NSlE7mpebtLSzLqfX0tGM",
+        "adjacent_unit": "passage",
+        "adjacent_count": 4,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 66165.51
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章\n- 电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致\n- 用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+            "passage_id": "8d4addbe5bba5f8f6382d91632763926",
+            "block_id": "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+            "block_ids": [
+              "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+              "e29e669b-2bb3-419e-975a-7ead3b2838a0",
+              "49d8da79-06d5-4f5d-9d76-d37bffcb4e3e",
+              "cfeb0273-29e5-42c1-9462-d10bb47bad4b",
+              "988de74b-6e4a-470a-8e01-0f30829b70f5",
+              "91649bb0-e31a-401b-bc37-c4737c3ff57c",
+              "5edaeea9-377f-4e49-83cd-ed5f5e794fb6",
+              "f4f89831-5cfd-482f-ac57-5030d64fc4f8",
+              "a9b6744d-75cf-4722-8348-ef4bc9dcf3af",
+              "5667b40d-ac7d-4b72-8ba8-bd0c9b4c4e6c",
+              "d2cc355b-bd3b-4ad2-bd47-be7449e17a0a",
+              "ef1f591b-dbc4-4433-b61d-3790ea19a5c2",
+              "62f59bd0-68f9-4230-a38d-4608019c1aa8",
+              "03131fc4-48ff-4075-b04f-1afd460d3b7c",
+              "4d506d9d-834e-4db5-8631-4beee116820c",
+              "27c99465-d474-4155-8f81-b654cb06d5f1",
+              "aa665dfb-f66a-4c6b-a877-d933bbbfeeea"
+            ],
+            "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3",
+            "text": "（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 李霞(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+            "score": 0.0,
+            "document_family_id": "topic:合同专用章管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+            "passage_id": "39cdbd30bb110479500edaff4cabeab0",
+            "block_id": "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+            "block_ids": [
+              "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+              "0385ffc4-8538-4f6e-9143-d3b57aa2dcd2",
+              "0499251c-c7e2-4d8f-b4a1-4175f84db9b1",
+              "9cb18ab3-94ba-4b3c-b68e-afed8d609f1b",
+              "d7de2bb4-8b02-435e-b741-ec84fe305b21",
+              "b391fba7-df12-4287-89d7-2a30ade64dc1",
+              "0df78807-26ae-443e-a937-cba2bdef1f8a",
+              "05ce105b-2d23-4594-a619-9cbfe2fca948",
+              "0bd735db-42e4-44ea-8489-a2bdbbbd8f0b",
+              "c4b88d38-3437-421d-b72e-4b6b715b4f21",
+              "b2fa3039-46c3-4f74-b28d-1b2f8fab3864",
+              "e710bd8a-c431-4f4d-b866-343c712f1cb8",
+              "0c4466d5-8de6-41ce-bcbb-f48296c0c659",
+              "b379c497-6ae7-4f09-ae09-bd9f93879f91",
+              "959f287f-70c4-44bc-83c3-eafbcf2cf351",
+              "63b52c40-6dd0-4a4a-9f46-daf3087f8eb9",
+              "b8d8fac4-dba5-4828-b965-00e5d1fd89f9"
+            ],
+            "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8",
+            "text": "（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 吴先萍(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+            "score": 0.0,
+            "document_family_id": "topic:合同专用章管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+            "passage_id": "617e29d6d9dd76bdced15805173b51f0",
+            "block_id": "78b21ea4-b3f3-4942-b7f7-93448e38fa2b",
+            "block_ids": [
+              "78b21ea4-b3f3-4942-b7f7-93448e38fa2b",
+              "1f058d6b-aa86-4a42-a0ab-7c2e22765b67",
+              "19896353-6b98-4d1d-b37d-c4dffd922db0",
+              "887eded2-cec6-4ae9-81d8-433d8bfa0e1b",
+              "7a668868-ae1d-4ee8-9e0a-be3d75c6f845",
+              "0a205a29-0f8f-417f-a34d-ebe951e445e8",
+              "6ea4c13d-3366-4372-8907-892865863da6",
+              "b5e5aa5d-2740-43d9-8aee-862495667ad1",
+              "cccb0c69-c9e6-4da6-b0ee-b35525a88955",
+              "3153d215-1c80-4819-a084-8d8bde8a5283",
+              "c9024df3-825b-4005-926a-87797143718f",
+              "9df3fcc6-ac3e-4dbc-b183-51fea09af362",
+              "b889f600-6a79-46b9-8a80-196283341b40",
+              "ca996b3d-359c-4bd6-843f-59a913571a22"
+            ],
+            "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3",
+            "text": "\n第二条 本办法所称合同是指各单位与其他民事主体（包括\n自然人、法人和其他组织）之间设立、变更、终止民事法律关系\n的法律文件（包括但不限于合同、协议、订单、备忘录、意向书、\n认购书、订购书、预定书等构成合同或者预约合同的法律文件），\n不包括劳动合同及电信业务格式合同。\n第三条 本办法所称合同专用章，包括合同专用章实体印章\n（以下简称“合同实体章”）及合同专用章电子印章（以下简称\n“合同电子章”）。合同电子章是指以电子形式用于识别单位身份\n并表明其认可合同内容的数据，合同电子章由依法设立的电子认\n证机构提供认证服务，其图形化特征与合同实体章的印模完全一\n致。\n第四条 合同电子章在集团电子印章系统环境内运行使用，\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、李霞(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。",
+            "score": 0.0,
+            "document_family_id": "topic:合同专用章管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+            "passage_id": "dd8f4bb1d534fbd0654500f7338f304f",
+            "block_id": "2ff12068-993a-458b-be3e-58b6f4a2d0ba",
+            "block_ids": [
+              "2ff12068-993a-458b-be3e-58b6f4a2d0ba",
+              "3cd11cbd-b54a-4d53-ba36-b896f071a495",
+              "081a4092-df85-4b70-ba19-0cc076b34bc1",
+              "cd5592d6-010b-40ba-9373-820dd6847e87",
+              "0043e3f0-9b61-4244-8336-c312720b0b94",
+              "6091f1ca-44ee-471d-9192-836ca206d14d",
+              "73d18a4f-7558-45e7-9af8-ff960186b8e1",
+              "ba601c5a-bc25-425d-8c0d-2c6f6730071e",
+              "8a3fbeda-bc0b-4b13-8933-5b56689f202c",
+              "3de92147-228b-4e62-82af-5a75a68f6e3e",
+              "1d3e5a9d-5d6d-4c92-9612-c721b2674172",
+              "d31cf823-ff86-4e96-81cc-b4aed3a31167",
+              "a8483adb-93ed-4068-9621-14d0eb50c94c",
+              "67d8849a-c7b7-417a-b81f-aa302db26a0a"
+            ],
+            "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8",
+            "text": "\n第二条 本办法所称合同是指各单位与其他民事主体（包括\n自然人、法人和其他组织）之间设立、变更、终止民事法律关系\n的法律文件（包括但不限于合同、协议、订单、备忘录、意向书、\n认购书、订购书、预定书等构成合同或者预约合同的法律文件），\n不包括劳动合同及电信业务格式合同。\n第三条 本办法所称合同专用章，包括合同专用章实体印章\n（以下简称“合同实体章”）及合同专用章电子印章（以下简称\n“合同电子章”）。合同电子章是指以电子形式用于识别单位身份\n并表明其认可合同内容的数据，合同电子章由依法设立的电子认\n证机构提供认证服务，其图形化特征与合同实体章的印模完全一\n致。\n第四条 合同电子章在集团电子印章系统环境内运行使用，\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、 吴先萍(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。",
+            "score": 0.0,
+            "document_family_id": "topic:合同专用章管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章",
+            "evidence_passage_ids": [
+              "8d4addbe5bba5f8f6382d91632763926"
+            ],
+            "fact_type": "relationship",
+            "condition": "",
+            "candidate_id": "8d4addbe5bba5f8f6382d91632763926:r6:pol:relationship:15622166"
+          },
+          {
+            "text": "合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章",
+            "evidence_passage_ids": [
+              "39cdbd30bb110479500edaff4cabeab0"
+            ],
+            "fact_type": "relationship",
+            "condition": "",
+            "candidate_id": "39cdbd30bb110479500edaff4cabeab0:r6:pol:relationship:15622166"
+          },
+          {
+            "text": "电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致",
+            "evidence_passage_ids": [
+              "617e29d6d9dd76bdced15805173b51f0"
+            ],
+            "fact_type": "relationship",
+            "condition": "",
+            "candidate_id": "617e29d6d9dd76bdced15805173b51f0:r2:pol:relationship:36127544"
+          },
+          {
+            "text": "电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致",
+            "evidence_passage_ids": [
+              "dd8f4bb1d534fbd0654500f7338f304f"
+            ],
+            "fact_type": "relationship",
+            "condition": "",
+            "candidate_id": "dd8f4bb1d534fbd0654500f7338f304f:r2:pol:relationship:36127544"
+          },
+          {
+            "text": "用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+            "evidence_passage_ids": [
+              "617e29d6d9dd76bdced15805173b51f0"
+            ],
+            "fact_type": "relationship",
+            "condition": "",
+            "candidate_id": "617e29d6d9dd76bdced15805173b51f0:r1:pol:relationship:64914595"
+          },
+          {
+            "text": "用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+            "evidence_passage_ids": [
+              "dd8f4bb1d534fbd0654500f7338f304f"
+            ],
+            "fact_type": "relationship",
+            "condition": "",
+            "candidate_id": "dd8f4bb1d534fbd0654500f7338f304f:r1:pol:relationship:64914595"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+            "passage_id": "8d4addbe5bba5f8f6382d91632763926",
+            "block_id": "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+            "block_ids": [
+              "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+              "e29e669b-2bb3-419e-975a-7ead3b2838a0",
+              "49d8da79-06d5-4f5d-9d76-d37bffcb4e3e",
+              "cfeb0273-29e5-42c1-9462-d10bb47bad4b",
+              "988de74b-6e4a-470a-8e01-0f30829b70f5",
+              "91649bb0-e31a-401b-bc37-c4737c3ff57c",
+              "5edaeea9-377f-4e49-83cd-ed5f5e794fb6",
+              "f4f89831-5cfd-482f-ac57-5030d64fc4f8",
+              "a9b6744d-75cf-4722-8348-ef4bc9dcf3af",
+              "5667b40d-ac7d-4b72-8ba8-bd0c9b4c4e6c",
+              "d2cc355b-bd3b-4ad2-bd47-be7449e17a0a",
+              "ef1f591b-dbc4-4433-b61d-3790ea19a5c2",
+              "62f59bd0-68f9-4230-a38d-4608019c1aa8",
+              "03131fc4-48ff-4075-b04f-1afd460d3b7c",
+              "4d506d9d-834e-4db5-8631-4beee116820c",
+              "27c99465-d474-4155-8f81-b654cb06d5f1",
+              "aa665dfb-f66a-4c6b-a877-d933bbbfeeea"
+            ],
+            "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3",
+            "path": "",
+            "text": "（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 李霞(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+            "body_text": "（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 李霞(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+            "score": 0.0,
+            "document_family_id": "topic:合同专用章管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+            "passage_id": "39cdbd30bb110479500edaff4cabeab0",
+            "block_id": "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+            "block_ids": [
+              "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+              "0385ffc4-8538-4f6e-9143-d3b57aa2dcd2",
+              "0499251c-c7e2-4d8f-b4a1-4175f84db9b1",
+              "9cb18ab3-94ba-4b3c-b68e-afed8d609f1b",
+              "d7de2bb4-8b02-435e-b741-ec84fe305b21",
+              "b391fba7-df12-4287-89d7-2a30ade64dc1",
+              "0df78807-26ae-443e-a937-cba2bdef1f8a",
+              "05ce105b-2d23-4594-a619-9cbfe2fca948",
+              "0bd735db-42e4-44ea-8489-a2bdbbbd8f0b",
+              "c4b88d38-3437-421d-b72e-4b6b715b4f21",
+              "b2fa3039-46c3-4f74-b28d-1b2f8fab3864",
+              "e710bd8a-c431-4f4d-b866-343c712f1cb8",
+              "0c4466d5-8de6-41ce-bcbb-f48296c0c659",
+              "b379c497-6ae7-4f09-ae09-bd9f93879f91",
+              "959f287f-70c4-44bc-83c3-eafbcf2cf351",
+              "63b52c40-6dd0-4a4a-9f46-daf3087f8eb9",
+              "b8d8fac4-dba5-4828-b965-00e5d1fd89f9"
+            ],
+            "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8",
+            "path": "",
+            "text": "（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 吴先萍(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+            "body_text": "（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 吴先萍(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+            "score": 0.0,
+            "document_family_id": "topic:合同专用章管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+            "passage_id": "617e29d6d9dd76bdced15805173b51f0",
+            "block_id": "78b21ea4-b3f3-4942-b7f7-93448e38fa2b",
+            "block_ids": [
+              "78b21ea4-b3f3-4942-b7f7-93448e38fa2b",
+              "1f058d6b-aa86-4a42-a0ab-7c2e22765b67",
+              "19896353-6b98-4d1d-b37d-c4dffd922db0",
+              "887eded2-cec6-4ae9-81d8-433d8bfa0e1b",
+              "7a668868-ae1d-4ee8-9e0a-be3d75c6f845",
+              "0a205a29-0f8f-417f-a34d-ebe951e445e8",
+              "6ea4c13d-3366-4372-8907-892865863da6",
+              "b5e5aa5d-2740-43d9-8aee-862495667ad1",
+              "cccb0c69-c9e6-4da6-b0ee-b35525a88955",
+              "3153d215-1c80-4819-a084-8d8bde8a5283",
+              "c9024df3-825b-4005-926a-87797143718f",
+              "9df3fcc6-ac3e-4dbc-b183-51fea09af362",
+              "b889f600-6a79-46b9-8a80-196283341b40",
+              "ca996b3d-359c-4bd6-843f-59a913571a22"
+            ],
+            "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3",
+            "path": "",
+            "text": "\n第二条 本办法所称合同是指各单位与其他民事主体（包括\n自然人、法人和其他组织）之间设立、变更、终止民事法律关系\n的法律文件（包括但不限于合同、协议、订单、备忘录、意向书、\n认购书、订购书、预定书等构成合同或者预约合同的法律文件），\n不包括劳动合同及电信业务格式合同。\n第三条 本办法所称合同专用章，包括合同专用章实体印章\n（以下简称“合同实体章”）及合同专用章电子印章（以下简称\n“合同电子章”）。合同电子章是指以电子形式用于识别单位身份\n并表明其认可合同内容的数据，合同电子章由依法设立的电子认\n证机构提供认证服务，其图形化特征与合同实体章的印模完全一\n致。\n第四条 合同电子章在集团电子印章系统环境内运行使用，\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、李霞(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。",
+            "body_text": "\n第二条 本办法所称合同是指各单位与其他民事主体（包括\n自然人、法人和其他组织）之间设立、变更、终止民事法律关系\n的法律文件（包括但不限于合同、协议、订单、备忘录、意向书、\n认购书、订购书、预定书等构成合同或者预约合同的法律文件），\n不包括劳动合同及电信业务格式合同。\n第三条 本办法所称合同专用章，包括合同专用章实体印章\n（以下简称“合同实体章”）及合同专用章电子印章（以下简称\n“合同电子章”）。合同电子章是指以电子形式用于识别单位身份\n并表明其认可合同内容的数据，合同电子章由依法设立的电子认\n证机构提供认证服务，其图形化特征与合同实体章的印模完全一\n致。\n第四条 合同电子章在集团电子印章系统环境内运行使用，\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、李霞(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。",
+            "score": 0.0,
+            "document_family_id": "topic:合同专用章管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+            "passage_id": "dd8f4bb1d534fbd0654500f7338f304f",
+            "block_id": "2ff12068-993a-458b-be3e-58b6f4a2d0ba",
+            "block_ids": [
+              "2ff12068-993a-458b-be3e-58b6f4a2d0ba",
+              "3cd11cbd-b54a-4d53-ba36-b896f071a495",
+              "081a4092-df85-4b70-ba19-0cc076b34bc1",
+              "cd5592d6-010b-40ba-9373-820dd6847e87",
+              "0043e3f0-9b61-4244-8336-c312720b0b94",
+              "6091f1ca-44ee-471d-9192-836ca206d14d",
+              "73d18a4f-7558-45e7-9af8-ff960186b8e1",
+              "ba601c5a-bc25-425d-8c0d-2c6f6730071e",
+              "8a3fbeda-bc0b-4b13-8933-5b56689f202c",
+              "3de92147-228b-4e62-82af-5a75a68f6e3e",
+              "1d3e5a9d-5d6d-4c92-9612-c721b2674172",
+              "d31cf823-ff86-4e96-81cc-b4aed3a31167",
+              "a8483adb-93ed-4068-9621-14d0eb50c94c",
+              "67d8849a-c7b7-417a-b81f-aa302db26a0a"
+            ],
+            "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8",
+            "path": "",
+            "text": "\n第二条 本办法所称合同是指各单位与其他民事主体（包括\n自然人、法人和其他组织）之间设立、变更、终止民事法律关系\n的法律文件（包括但不限于合同、协议、订单、备忘录、意向书、\n认购书、订购书、预定书等构成合同或者预约合同的法律文件），\n不包括劳动合同及电信业务格式合同。\n第三条 本办法所称合同专用章，包括合同专用章实体印章\n（以下简称“合同实体章”）及合同专用章电子印章（以下简称\n“合同电子章”）。合同电子章是指以电子形式用于识别单位身份\n并表明其认可合同内容的数据，合同电子章由依法设立的电子认\n证机构提供认证服务，其图形化特征与合同实体章的印模完全一\n致。\n第四条 合同电子章在集团电子印章系统环境内运行使用，\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、 吴先萍(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。",
+            "body_text": "\n第二条 本办法所称合同是指各单位与其他民事主体（包括\n自然人、法人和其他组织）之间设立、变更、终止民事法律关系\n的法律文件（包括但不限于合同、协议、订单、备忘录、意向书、\n认购书、订购书、预定书等构成合同或者预约合同的法律文件），\n不包括劳动合同及电信业务格式合同。\n第三条 本办法所称合同专用章，包括合同专用章实体印章\n（以下简称“合同实体章”）及合同专用章电子印章（以下简称\n“合同电子章”）。合同电子章是指以电子形式用于识别单位身份\n并表明其认可合同内容的数据，合同电子章由依法设立的电子认\n证机构提供认证服务，其图形化特征与合同实体章的印模完全一\n致。\n第四条 合同电子章在集团电子印章系统环境内运行使用，\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、 吴先萍(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。",
+            "score": 0.0,
+            "document_family_id": "topic:合同专用章管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.5378,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 4,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_id_count": 6,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "合同实体章和合同电子章的法律效力关系"
+          },
+          "fact_plan": {
+            "raw": "合同实体章和合同电子章的法律效力关系",
+            "intents": [
+              "relationship",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "relationship",
+              "policy_fact"
+            ],
+            "entities": [
+              "合同实体章和合同电子章的",
+              "法律效力关系"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": true,
+            "allow_fact_kinds": [
+              "relationship",
+              "policy",
+              "prohibition"
+            ]
+          },
+          "kept": [],
+          "dropped": [
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r0:pol:responsibility:30637",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r1:pol:responsibility:17986651",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r2:pol:responsibility:96307450",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r3:pol:responsibility:77737781",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r4:pol:responsibility:82622780",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r0:pol:responsibility:12947948",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r1:pol:responsibility:17986651",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r2:pol:responsibility:96307450",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r3:pol:responsibility:77737781",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r4:pol:responsibility:82622780",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r0:pol:responsibility:17986651",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r1:pol:responsibility:96307450",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r2:pol:responsibility:77737781",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r3:pol:responsibility:82622780",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r4:pol:responsibility:18639415",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r5:pol:responsibility:59939137",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r0:pol:responsibility:17986651",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r1:pol:responsibility:96307450",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r2:pol:responsibility:77737781",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r3:pol:responsibility:82622780",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r4:pol:responsibility:18639415",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r5:pol:responsibility:71481297",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 32,
+          "candidate_count": 32
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章",
+              "evidence_passage_ids": [
+                "8d4addbe5bba5f8f6382d91632763926"
+              ],
+              "fact_type": "relationship",
+              "condition": "",
+              "candidate_id": "8d4addbe5bba5f8f6382d91632763926:r6:pol:relationship:15622166"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章",
+              "evidence_passage_ids": [
+                "39cdbd30bb110479500edaff4cabeab0"
+              ],
+              "fact_type": "relationship",
+              "condition": "",
+              "candidate_id": "39cdbd30bb110479500edaff4cabeab0:r6:pol:relationship:15622166"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致",
+              "evidence_passage_ids": [
+                "617e29d6d9dd76bdced15805173b51f0"
+              ],
+              "fact_type": "relationship",
+              "condition": "",
+              "candidate_id": "617e29d6d9dd76bdced15805173b51f0:r2:pol:relationship:36127544"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致",
+              "evidence_passage_ids": [
+                "dd8f4bb1d534fbd0654500f7338f304f"
+              ],
+              "fact_type": "relationship",
+              "condition": "",
+              "candidate_id": "dd8f4bb1d534fbd0654500f7338f304f:r2:pol:relationship:36127544"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+              "evidence_passage_ids": [
+                "617e29d6d9dd76bdced15805173b51f0"
+              ],
+              "fact_type": "relationship",
+              "condition": "",
+              "candidate_id": "617e29d6d9dd76bdced15805173b51f0:r1:pol:relationship:64914595"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+              "evidence_passage_ids": [
+                "dd8f4bb1d534fbd0654500f7338f304f"
+              ],
+              "fact_type": "relationship",
+              "condition": "",
+              "candidate_id": "dd8f4bb1d534fbd0654500f7338f304f:r1:pol:relationship:64914595"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "合同实体章和合同电子章的法律效力关系",
+            "intents": [
+              "relationship",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "relationship",
+              "policy_fact"
+            ],
+            "entities": [
+              "合同实体章和合同电子章的",
+              "法律效力关系"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": true,
+            "allow_fact_kinds": [
+              "relationship",
+              "policy",
+              "prohibition"
+            ]
+          },
+          "input_count": 32,
+          "dropped": [
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r0:pol:responsibility:30637",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r1:pol:responsibility:17986651",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r2:pol:responsibility:96307450",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r3:pol:responsibility:77737781",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "381518ae9620f75eadbfa8fc018ce5b6:r4:pol:responsibility:82622780",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r0:pol:responsibility:12947948",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r1:pol:responsibility:17986651",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r2:pol:responsibility:96307450",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r3:pol:responsibility:77737781",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "eb74ad5c633732a51f7cdda5699442ca:r4:pol:responsibility:82622780",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r0:pol:responsibility:17986651",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r1:pol:responsibility:96307450",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r2:pol:responsibility:77737781",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r3:pol:responsibility:82622780",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r4:pol:responsibility:18639415",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "8d4addbe5bba5f8f6382d91632763926:r5:pol:responsibility:59939137",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r0:pol:responsibility:17986651",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r1:pol:responsibility:96307450",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r2:pol:responsibility:77737781",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r3:pol:responsibility:82622780",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r4:pol:responsibility:18639415",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "39cdbd30bb110479500edaff4cabeab0:r5:pol:responsibility:71481297",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "8d4addbe5bba5f8f6382d91632763926:r6:pol:relationship:15622166",
+              "record_id": "8d4addbe5bba5f8f6382d91632763926:r6",
+              "passage_id": "8d4addbe5bba5f8f6382d91632763926",
+              "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "fact_kind": "relationship",
+              "subject": "一个主体只允许制作一个",
+              "predicate": "",
+              "object": "合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章",
+              "evidence_spans": [
+                [
+                  393,
+                  432
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合同专用章管理办法",
+              "version_year": 2023,
+              "score": 4.7,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "39cdbd30bb110479500edaff4cabeab0:r6:pol:relationship:15622166",
+              "record_id": "39cdbd30bb110479500edaff4cabeab0:r6",
+              "passage_id": "39cdbd30bb110479500edaff4cabeab0",
+              "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+              "fact_kind": "relationship",
+              "subject": "一个主体只允许制作一个",
+              "predicate": "",
+              "object": "合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "合同专用章按照使用单位主体制作，一个主体只允许制作一个合同实体章及合同电子章",
+              "evidence_spans": [
+                [
+                  394,
+                  433
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合同专用章管理办法",
+              "version_year": 2023,
+              "score": 4.7,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "617e29d6d9dd76bdced15805173b51f0:r2:pol:relationship:36127544",
+              "record_id": "617e29d6d9dd76bdced15805173b51f0:r2",
+              "passage_id": "617e29d6d9dd76bdced15805173b51f0",
+              "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "fact_kind": "relationship",
+              "subject": "合同实体章",
+              "predicate": "",
+              "object": "电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致",
+              "evidence_spans": [
+                [
+                  194,
+                  272
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合同专用章管理办法",
+              "version_year": 2023,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "dd8f4bb1d534fbd0654500f7338f304f:r2:pol:relationship:36127544",
+              "record_id": "dd8f4bb1d534fbd0654500f7338f304f:r2",
+              "passage_id": "dd8f4bb1d534fbd0654500f7338f304f",
+              "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+              "fact_kind": "relationship",
+              "subject": "合同实体章",
+              "predicate": "",
+              "object": "电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "电子认证机构提供认证服务，其图形化特征与合同实体章的印模完全一致",
+              "evidence_spans": [
+                [
+                  194,
+                  272
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合同专用章管理办法",
+              "version_year": 2023,
+              "score": 3.5,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "617e29d6d9dd76bdced15805173b51f0:r1:pol:relationship:64914595",
+              "record_id": "617e29d6d9dd76bdced15805173b51f0:r1",
+              "passage_id": "617e29d6d9dd76bdced15805173b51f0",
+              "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "fact_kind": "relationship",
+              "subject": "合同实体章",
+              "predicate": "",
+              "object": "用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+              "evidence_spans": [
+                [
+                  130,
+                  194
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合同专用章管理办法",
+              "version_year": 2023,
+              "score": 3.0,
+              "unstructured_rejected": false
+            },
+            {
+              "candidate_id": "dd8f4bb1d534fbd0654500f7338f304f:r1:pol:relationship:64914595",
+              "record_id": "dd8f4bb1d534fbd0654500f7338f304f:r1",
+              "passage_id": "dd8f4bb1d534fbd0654500f7338f304f",
+              "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+              "fact_kind": "relationship",
+              "subject": "合同实体章",
+              "predicate": "",
+              "object": "用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "用章，包括合同专用章实体印章（以下简称“合同实体章”）及合同专用章电子印章（以下简称“合同电子章”）",
+              "evidence_spans": [
+                [
+                  130,
+                  194
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合同专用章管理办法",
+              "version_year": 2023,
+              "score": 3.0,
+              "unstructured_rejected": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "covered_conditions": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "relationship",
+            "policy_fact"
+          ],
+          "candidate_ids": [
+            "8d4addbe5bba5f8f6382d91632763926:r6:pol:relationship:15622166",
+            "39cdbd30bb110479500edaff4cabeab0:r6:pol:relationship:15622166",
+            "617e29d6d9dd76bdced15805173b51f0:r2:pol:relationship:36127544",
+            "dd8f4bb1d534fbd0654500f7338f304f:r2:pol:relationship:36127544",
+            "617e29d6d9dd76bdced15805173b51f0:r1:pol:relationship:64914595",
+            "dd8f4bb1d534fbd0654500f7338f304f:r1:pol:relationship:64914595"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "relationship",
+            "policy"
+          ]
+        },
+        "query_plan": {
+          "raw": "合同实体章和合同电子章的法律效力关系",
+          "intents": [
+            "relationship",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "relationship",
+            "policy_fact"
+          ],
+          "entities": [
+            "合同实体章和合同电子章的",
+            "法律效力关系"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": true,
+          "allow_fact_kinds": [
+            "relationship",
+            "policy",
+            "prohibition"
+          ]
+        },
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "type": "knowledge",
+              "label": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3"
+            },
+            {
+              "id": "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+              "type": "block",
+              "label": "（四）负责对全区合同专用章使用情况进行监督检查。",
+              "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+            },
+            {
+              "id": "00c78161-e79a-4e33-8558-4ebdf9a07726",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+            },
+            {
+              "id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+              "type": "knowledge",
+              "label": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8"
+            },
+            {
+              "id": "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+              "type": "block",
+              "label": "（四）负责对全区合同专用章使用情况进行监督检查。",
+              "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+            },
+            {
+              "id": "0232d72e-c264-4612-91fa-b6bfb1d0d2c0",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+            },
+            {
+              "id": "78b21ea4-b3f3-4942-b7f7-93448e38fa2b",
+              "type": "block",
+              "label": "的法律文件（包括但不限于合同、协议、订单、备忘录、意向书、",
+              "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+            },
+            {
+              "id": "8e4472a1-e41e-4301-be8b-a97c4c56a743",
+              "type": "block",
+              "label": "[第2页]",
+              "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+            },
+            {
+              "id": "2ff12068-993a-458b-be3e-58b6f4a2d0ba",
+              "type": "block",
+              "label": "的法律文件（包括但不限于合同、协议、订单、备忘录、意向书、",
+              "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+            },
+            {
+              "id": "0230a5e7-91cc-42a3-a33e-c020cd028943",
+              "type": "block",
+              "label": "[第2页]",
+              "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+            }
+          ],
+          "edges": [
+            {
+              "source": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "target": "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+              "type": "contains"
+            },
+            {
+              "source": "00c78161-e79a-4e33-8558-4ebdf9a07726",
+              "target": "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+              "type": "parent"
+            },
+            {
+              "source": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+              "target": "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+              "type": "contains"
+            },
+            {
+              "source": "0232d72e-c264-4612-91fa-b6bfb1d0d2c0",
+              "target": "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+              "type": "parent"
+            },
+            {
+              "source": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "target": "78b21ea4-b3f3-4942-b7f7-93448e38fa2b",
+              "type": "contains"
+            },
+            {
+              "source": "8e4472a1-e41e-4301-be8b-a97c4c56a743",
+              "target": "78b21ea4-b3f3-4942-b7f7-93448e38fa2b",
+              "type": "parent"
+            },
+            {
+              "source": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+              "target": "2ff12068-993a-458b-be3e-58b6f4a2d0ba",
+              "type": "contains"
+            },
+            {
+              "source": "0230a5e7-91cc-42a3-a33e-c020cd028943",
+              "target": "2ff12068-993a-458b-be3e-58b6f4a2d0ba",
+              "type": "parent"
+            },
+            {
+              "source": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+              "target": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 10
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 0,
+          "adjacent_extension": 4,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+            "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+          ],
+          "accepted_block_ids": [
+            "9df3fcc6-ac3e-4dbc-b183-51fea09af362",
+            "d31cf823-ff86-4e96-81cc-b4aed3a31167"
+          ],
+          "accepted_passage_ids": [
+            "381518ae9620f75eadbfa8fc018ce5b6",
+            "eb74ad5c633732a51f7cdda5699442ca",
+            "617e29d6d9dd76bdced15805173b51f0",
+            "8d4addbe5bba5f8f6382d91632763926",
+            "dd8f4bb1d534fbd0654500f7338f304f",
+            "39cdbd30bb110479500edaff4cabeab0"
+          ],
+          "generation_knowledge_ids": [
+            "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+            "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+          ],
+          "top_score": 0.5378,
+          "intent": "ordinary",
+          "adjacent_count": 4,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {}
+        },
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 4,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 37.3
+  },
+  "top_candidate_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+  "candidates": [
+    {
+      "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+      "passage_id": "381518ae9620f75eadbfa8fc018ce5b6",
+      "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3",
+      "score": 0.8877999999999999,
+      "final_relevance_score": 0.5378,
+      "text": "【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3\n【章节】（四）负责对全区合同专用章使用情况进行监督检查。 > 第九条 各市分公司、各专业公司法律部门为本单位合同专 > （一）负责本单位及所辖县分公司合同专用章的日常管理；\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、李霞(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。\n第五条 加盖合同电子章的电子合同与加盖合同实体印章的\n纸质合同具有同等法律效力。\n第六条 合同专用章使用管理应遵循“合法合规、认真审批、\n规范使用、防范风险”的原则。\n第七条 本办法适用于各市分公司、各专业公司和区公司各\n部门（以下简称“各单位”）。\n第二章 管理职责\n第八条 区公司企业发展部（法律部）为全区合同专用章归\n口管理部门，主要职责包括：\n（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括："
+    },
+    {
+      "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+      "passage_id": "eb74ad5c633732a51f7cdda5699442ca",
+      "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8",
+      "score": 0.8877999999999999,
+      "final_relevance_score": 0.5378,
+      "text": "【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8\n【章节】（四）负责对全区合同专用章使用情况进行监督检查。 > 第九条 各市分公司、各专业公司法律部门为本单位合同专 > （一）负责本单位及所辖县分公司合同专用章的日常管理；\n电子印章系统是实现合同专用章电子印章功能的信息化平台，由\n集团总部集中建设、集中运营、集中管理，提供合同电子章申请、 吴先萍(企业发展部（法律部）)\n— 3 — 制作、备案、查询、变更、注销、签章、验章和使用管理等功能，\n并与中国电信集中MSS系统相关业务流程实现数据互通共享。\n第五条 加盖合同电子章的电子合同与加盖合同实体印章的\n纸质合同具有同等法律效力。\n第六条 合同专用章使用管理应遵循“合法合规、认真审批、\n规范使用、防范风险”的原则。\n第七条 本办法适用于各市分公司、各专业公司和区公司各\n部门（以下简称“各单位”）。\n第二章 管理职责\n第八条 区公司企业发展部（法律部）为全区合同专用章归\n口管理部门，主要职责包括：\n（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括："
+    }
+  ],
+  "search_ms": 66165.51,
+  "ask_ms": 37.3,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "XO9IVpimf02NSlE7mpebtLSzLqfX0tGM",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

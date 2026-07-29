@@ -1,0 +1,172 @@
+{
+  "case": {
+    "case_id": "KB-014",
+    "category": "同义词与口语表达",
+    "query": "异业合作给客户送权益优惠券的合作方准入条件",
+    "expected_knowledge_ids": [
+      "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+    ],
+    "expected_title_keywords": [
+      "权益业务",
+      "2026"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕34号第十七条；口语'送权益优惠券/异业合作'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "block_fts",
+          "match_channels": [
+            "block_fts",
+            "title_boost"
+          ],
+          "block_id": "98824f19-2984-4b88-b249-bc09b16c4bae",
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+          "text": "权益业务销售服务。",
+          "block_type": "text",
+          "properties": {
+            "block_type": "text",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "chunk_index": 97,
+            "depth": 1
+          },
+          "fts_rank": -11.77595798719033,
+          "fts_score": 0.8107779531039468,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "score": 0.8107779531039468,
+          "relevance": {
+            "semantic_score": 1.0,
+            "fts_score": 0.8108,
+            "title_score": 1.0,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 1.0,
+            "query_term_coverage": 1.0,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.9216,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.9216,
+          "alias_fts_match": true,
+          "low_confidence": true,
+          "confidence_reason": "colloquial_alias_fts_match"
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "low_confidence": true,
+        "top_score": 0.3469,
+        "threshold": 0.35,
+        "source_path": "fulltext_fallback_low_confidence"
+      }
+    },
+    "latency_ms": 98627.4
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "sources": [],
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "insufficient_relevant_evidence"
+        },
+        "query_plan": {},
+        "block_contexts": {},
+        "warnings": [
+          "evidence gate blocked generation (top_score=0.3 < 0.35); direct_slot={'matched_slots': [], 'passage_id': None, 'knowledge_id': None, 'spans': [], 'reason': 'query_slots_lt_2', 'query_slots': [], 'score': 0.0}"
+        ],
+        "wiki_context": "",
+        "trace_id": "",
+        "answer_mode": "no_answer",
+        "reason": "insufficient_relevant_evidence",
+        "retrieval_decision": "insufficient_relevant_evidence",
+        "answer_validation_decision": "",
+        "snapshot_reused": false,
+        "snapshot_reuse_reason": "",
+        "retrieval_count": 1,
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "conflict_disclosed": false,
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [],
+          "accepted_block_ids": [],
+          "accepted_passage_ids": [],
+          "top_score": 0.3,
+          "intent": "ordinary",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {
+            "matched_slots": [],
+            "passage_id": null,
+            "knowledge_id": null,
+            "spans": [],
+            "reason": "query_slots_lt_2",
+            "query_slots": [],
+            "score": 0.0
+          },
+          "adjacent_unit": "block",
+          "adjacent_count": 0,
+          "adjacent_fallback_reason": "no_list_blocks_fn"
+        }
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 104609.1
+  },
+  "top_candidate_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+  "candidates": [
+    {
+      "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "passage_id": null,
+      "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+      "score": 0.8107779531039468,
+      "final_relevance_score": 0.9216,
+      "text": "权益业务销售服务。"
+    }
+  ],
+  "search_ms": 98627.4,
+  "ask_ms": 104609.1,
+  "read_ms": 0.0,
+  "snapshot_reused": false,
+  "snapshot_id": null,
+  "retrieval_count": 1,
+  "answer_validation_decision": "",
+  "retrieval_decision": "insufficient_relevant_evidence"
+}
