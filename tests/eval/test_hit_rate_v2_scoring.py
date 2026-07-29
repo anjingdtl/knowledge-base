@@ -139,3 +139,142 @@ def test_forbidden_assertion_rate_gate_uses_proxy_not_hallucination():
     gate = evaluate_gate(metrics)
     assert "Forbidden Assertion Rate" in gate["gates"]
     assert gate["gates"]["Hallucination Rate"]["status"] == "not_fully_measurable"
+
+
+def test_numeric_unit_requires_value_and_unit_and_condition():
+    """99% alone without condition must not pass a condition-bound numeric fact."""
+    from evals.hit_rate_v2.scoring import _fact_group_covered
+
+    group = {
+        "fact_id": "rate",
+        "value": "99",
+        "unit": "%",
+        "condition": "实名",
+        "match_policy": "numeric_unit",
+        "required": True,
+    }
+    assert _fact_group_covered("准确率达到99%", group) is False  # missing 实名
+    assert _fact_group_covered("实名用户准确率达到99%", group) is True
+
+
+def test_condition_scope_version_slots_participate():
+    from evals.hit_rate_v2.scoring import _fact_group_covered
+
+    group = {
+        "fact_id": "policy",
+        "object_text": "适用财务部门",
+        "scope": "广西电信",
+        "version": "2024版",
+        "match_policy": "normalized",
+        "required": True,
+    }
+    assert _fact_group_covered("适用财务部门", group) is False
+    assert _fact_group_covered("广西电信2024版制度适用财务部门", group) is True
+
+
+def test_semantic_review_does_not_auto_pass_on_substring():
+    from evals.hit_rate_v2.scoring import _fact_group_covered
+
+    group = {
+        "fact_id": "sem",
+        "object_text": "复杂政策含义",
+        "match_policy": "semantic_review",
+        "required": True,
+    }
+    assert _fact_group_covered("复杂政策含义已阐明", group) is False
+    group["semantic_review_passed"] = True
+    assert _fact_group_covered("复杂政策含义已阐明", group) is True
+
+
+def test_citation_requires_golden_expected_passage_when_present():
+    case = _answerable_case(
+        expected_sources=[
+            {
+                "knowledge_id": "doc-good",
+                "passage_id": "p-doc-good",
+                "source_role": "primary",
+            }
+        ],
+        required_fact_groups=[
+            {
+                "fact_id": "f1",
+                "object_text": "处罚2000元",
+                "match_policy": "normalized",
+                "required": True,
+                "evidence_passage_id": "p-doc-good",
+            }
+        ],
+    )
+    # Citation uses a different accepted passage → fail golden binding
+    sc = score_answerable_case(
+        case,
+        _result(
+            cand_ids=["doc-good"],
+            answer="对代理商处罚2000元。",
+            sources=[{"knowledge_id": "doc-good", "passage_id": "p-other"}],
+            accepted=["p-other"],
+            raw_pids=["p-other"],
+        ),
+    )
+    assert sc.ask_citation_valid is False
+
+
+def test_unsupported_assertion_rate_is_na_without_claims():
+    sc = score_answerable_case(
+        _answerable_case(),
+        _result(cand_ids=["doc-good"], answer="对代理商处罚2000元。"),
+    )
+    assert sc.extra.get("unsupported_assertion_rate") is None
+
+
+def test_clarification_required_scoring():
+    from evals.hit_rate_v2.scoring import score_case
+
+    case = {
+        "case_id": "KB-CL",
+        "answerability": "clarification_required",
+        "ambiguity": {
+            "status": "needs_clarification",
+            "clarifying_question": "请问指的是哪个分公司",
+        },
+    }
+    # Definitive answer without clarifying → fail
+    sc_fail = score_case(
+        case,
+        {
+            "ask": {
+                "envelope": {
+                    "ok": True,
+                    "data": {
+                        "answer": "南宁分公司。",
+                        "answer_mode": "raw_only",
+                        "sources": [],
+                        "raw_evidence_used": [],
+                        "warnings": [],
+                    },
+                }
+            }
+        },
+    )
+    assert sc_fail.e2e_pass is False
+    assert "definitive_answer_without_clarification" in sc_fail.reason_codes
+
+    # Raises the clarification dimension → pass
+    sc_ok = score_case(
+        case,
+        {
+            "ask": {
+                "envelope": {
+                    "ok": True,
+                    "data": {
+                        "answer": "请问指的是哪个分公司？需要澄清后才能回答。",
+                        "answer_mode": "clarification",
+                        "sources": [],
+                        "raw_evidence_used": [],
+                        "warnings": [],
+                    },
+                }
+            }
+        },
+    )
+    assert sc_ok.e2e_pass is True

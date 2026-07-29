@@ -42,8 +42,16 @@ def apply_review(
     notes: str = "",
     disagreement: bool = False,
     adjudicator: str = "",
+    evidence_checked: list | None = None,
+    disagreement_summary: str = "",
+    clear_disagreement: bool = False,
 ) -> dict[str, Any]:
-    """Apply a single human review event. Does not fabricate timestamps/names."""
+    """Apply a single human review event. Does not fabricate timestamps/names.
+
+    Historical disagreement is preserved unless the adjudicator role explicitly
+    records a resolution with ``disagreement_summary`` / notes. A bare
+    ``clear_disagreement`` without adjudication record is refused.
+    """
     if not str(reviewer or "").strip():
         raise ValueError("reviewer is required; refuse to invent reviewer identity")
     if role not in {"primary", "secondary", "adjudicator"}:
@@ -51,6 +59,12 @@ def apply_review(
 
     out = dict(row)
     review = dict(out.get("review") or {})
+    prior_disagreement = bool(review.get("disagreement"))
+    prior_summary = str(
+        review.get("disagreement_summary")
+        or review.get("original_disagreement")
+        or ""
+    ).strip()
     now = utc_now()
 
     if role == "primary":
@@ -62,13 +76,60 @@ def apply_review(
     else:
         if not adjudicator and not reviewer:
             raise ValueError("adjudicator required")
-        review["adjudicator"] = adjudicator or reviewer
+        adj = (adjudicator or reviewer).strip()
+        primary = str(review.get("primary_reviewer") or "").strip()
+        secondary = str(review.get("secondary_reviewer") or "").strip()
+        if adj and adj in {primary, secondary}:
+            raise ValueError(
+                "adjudicator must differ from primary and secondary reviewers"
+            )
+        review["adjudicator"] = adj
         review["adjudicated_at"] = now
+        # Preserve original disagreement record when resolving.
+        if prior_disagreement and not prior_summary:
+            if not (disagreement_summary or notes):
+                raise ValueError(
+                    "adjudication must record original disagreement "
+                    "(disagreement_summary or notes); refuse silent clear"
+                )
+            review["disagreement_summary"] = disagreement_summary or notes
+            review["original_disagreement"] = True
+        elif disagreement_summary:
+            review["disagreement_summary"] = disagreement_summary
+
+    if clear_disagreement and role != "adjudicator":
+        raise ValueError(
+            "only adjudicator may clear disagreement; refuse silent history wipe"
+        )
+    if clear_disagreement and role == "adjudicator":
+        if not (
+            str(review.get("disagreement_summary") or "").strip()
+            or str(notes or "").strip()
+            or prior_summary
+        ):
+            raise ValueError(
+                "refuse to clear disagreement without adjudication record"
+            )
+        review["disagreement"] = False
+    else:
+        # Never silently drop historical disagreement on non-adjudicator writes.
+        review["disagreement"] = bool(disagreement) or prior_disagreement
 
     review["status"] = status
-    review["disagreement"] = bool(disagreement)
     if notes:
-        review["decision_notes"] = notes
+        # Append rather than overwrite when prior notes exist (preserve history).
+        prior_notes = str(review.get("decision_notes") or "").strip()
+        if prior_notes and notes not in prior_notes:
+            review["decision_notes"] = prior_notes + "\n" + notes
+        else:
+            review["decision_notes"] = notes or prior_notes
+    if evidence_checked is not None:
+        # Merge rather than replace wholesale when both are lists of dicts.
+        existing = list(review.get("evidence_checked") or [])
+        if not existing:
+            review["evidence_checked"] = list(evidence_checked)
+        else:
+            review["evidence_checked"] = existing + list(evidence_checked)
     out["review"] = review
 
     primary = str(review.get("primary_reviewer") or "").strip()
@@ -78,7 +139,7 @@ def apply_review(
         and secondary
         and primary != secondary
         and status == "approved"
-        and not disagreement
+        and not review.get("disagreement")
     ):
         out["annotation_source"] = "human_reviewed"
     return out
@@ -103,12 +164,38 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--notes", default="")
     ap.add_argument("--disagreement", action="store_true")
     ap.add_argument("--adjudicator", default="")
+    ap.add_argument(
+        "--disagreement-summary",
+        default="",
+        help="Original disagreement record (required when adjudicating/clearing)",
+    )
+    ap.add_argument(
+        "--clear-disagreement",
+        action="store_true",
+        help="Adjudicator-only: clear disagreement flag after recording resolution",
+    )
+    ap.add_argument(
+        "--evidence-checked-json",
+        default="",
+        help="JSON array of evidence_checked entries (sources/facts decisions)",
+    )
     args = ap.parse_args(argv)
 
     # Safety: never write into frozen from this tool
     if "frozen" in args.output.resolve().parts:
         print("ERROR: review tool must not write frozen/", file=sys.stderr)
         return 2
+
+    evidence_checked = None
+    if args.evidence_checked_json:
+        try:
+            evidence_checked = json.loads(args.evidence_checked_json)
+        except json.JSONDecodeError as exc:
+            print(f"ERROR: --evidence-checked-json invalid: {exc}", file=sys.stderr)
+            return 2
+        if not isinstance(evidence_checked, list):
+            print("ERROR: --evidence-checked-json must be a JSON array", file=sys.stderr)
+            return 2
 
     rows = load_jsonl(args.input)
     if args.output.exists():
@@ -128,15 +215,22 @@ def main(argv: list[str] | None = None) -> int:
         schema_errs = validate_case_schema(row)
         if schema_errs and args.status == "approved":
             print(f"schema errors (still recording review): {schema_errs}")
-        updated = apply_review(
-            row,
-            reviewer=args.reviewer,
-            role=args.role,
-            status=args.status,
-            notes=args.notes,
-            disagreement=bool(args.disagreement),
-            adjudicator=args.adjudicator,
-        )
+        try:
+            updated = apply_review(
+                row,
+                reviewer=args.reviewer,
+                role=args.role,
+                status=args.status,
+                notes=args.notes,
+                disagreement=bool(args.disagreement),
+                adjudicator=args.adjudicator,
+                evidence_checked=evidence_checked,
+                disagreement_summary=args.disagreement_summary,
+                clear_disagreement=bool(args.clear_disagreement),
+            )
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
         out_rows.append(updated)
         print(json.dumps(updated.get("review"), ensure_ascii=False, indent=2))
 

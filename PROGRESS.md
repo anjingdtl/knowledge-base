@@ -1,18 +1,34 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-29  
+> 最后更新：2026-07-29
 > 源码版本：`src/version.py` 中的 **`1.11.1`**
 >
-> 当前分支：`master`（HEAD 基线 `19195d4`；版本元数据已统一为 1.11.1）
+> 当前分支：`master`（HEAD 基线 `5bb41f7`；Phase 0–1 已落盘提交，勘误见 `docs/evaluation/mcp-hit-rate-phase0-phase1-report.md` §13；版本元数据已统一为 1.11.1）
 >
 > 发布说明：源码权威版本 1.11.1；**未**因 Phase 0–1 发布新版本
 >
 > 迁移：无 Schema 变更；hit-rate 评测进入 V2 评分合同与 Golden V2 治理
 >
-> 当前方向：**MCP 命中率 Phase 0–1 质量地基重建（工程完成）** — 唯一 scorer V2、no-answer 漏判修复、Golden V2 candidates、formal 冻结门禁。  
-> **正式数据集冻结被人工审核阻塞**；**仍 NO-GO 发布**；工程上可进入 Phase 2 检索/回答重构。  
-> 报告：`docs/evaluation/mcp-hit-rate-phase0-phase1-report.md`  
-> 方案：`docs/superpowers/plans/2026-07-29-hit-rate-phase0-phase1-quality-foundation.md`
+> 当前方向：**MCP 命中率 Phase 2–3（Task 2.0 工程收口完成；Phase 2 边界部分落地；Phase 3 未完成）**
+> **正式数据集冻结被人工审核阻塞**；**仍 NO-GO 发布**；frozen=0 → 一切结果 development/non-formal。
+> Phase 2–3 报告：`docs/evaluation/mcp-hit-rate-phase2-phase3-report.md`
+> 方案：`docs/superpowers/plans/2026-07-29-hit-rate-phase2-phase3-core-rebuild.md`
+> Phase 0–1 报告：`docs/evaluation/mcp-hit-rate-phase0-phase1-report.md`
+
+---
+
+## MCP 命中率 Phase 2–3：Task 2.0 收口 + 架构薄层（2026-07-29，工程进行中）
+
+执行报告：`docs/evaluation/mcp-hit-rate-phase2-phase3-report.md`
+
+完成项（工程，工作区未提交）：
+
+- ✅ Task 2.0 全量：pytest 分片 0 failed；CandidatePoolPolicy；契约 ADR + snapshot；formal 真冻结；review/adjudication；Scorer V2 语义；artifact 仅脱敏
+- ✅ Phase 2.1 ADR 双文件；SearchUseCase/AskUseCase/Ports；架构边界测试增强；PassageStore.revision_token 去私有 conn
+- 🟡 MCP retrieval.py 仍厚；Phase 3 质量算法未重建
+- ❌ reviewed=0 / frozen=0 — **禁止伪造 reviewer**；**NO-GO**
+
+`data/kb.db` SHA256 前后一致：`4ba22449794c984f6c1fda3d459574556c71b017efcc8e041bd4da731e737479`
 
 ---
 

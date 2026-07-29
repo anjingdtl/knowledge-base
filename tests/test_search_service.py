@@ -1,12 +1,13 @@
 """SearchService 单元测试 — 验证完整搜索管线"""
 from unittest.mock import Mock, patch
 
+from src.retrieval.candidate_pool import CandidatePoolPolicy
 from src.services.search_service import SearchService
 
 
 class TestSearchService:
     def test_search_calls_rewrite_hybrid_rerank(self):
-        """验证管线各阶段被调用"""
+        """验证管线各阶段被调用；内部 pool 由 CandidatePoolPolicy 决定。"""
         config = Mock()
         config.get.side_effect = lambda key, default=None: {
             "rag.enable_query_rewriting": True,
@@ -22,6 +23,7 @@ class TestSearchService:
         llm = Mock()
 
         service = SearchService(config, db, block_store, embedding, llm)
+        policy = CandidatePoolPolicy.from_request(5)
 
         with patch.object(service, '_rewrite_query', return_value=["query", "rewrite1"]) as mock_rewrite, \
              patch.object(service, '_hybrid_search', return_value=[{"id": "b1", "text": "text", "metadata": {"page_id": "k1"}, "rrf_score": 0.9}]) as mock_hybrid, \
@@ -30,8 +32,16 @@ class TestSearchService:
             results = service.search("test query", top_k=5)
 
             mock_rewrite.assert_called_once_with("test query")
-            mock_hybrid.assert_called_once_with(["query", "rewrite1"], 5)
+            # Hybrid is called with rewritten queries first; deterministic
+            # variants may append extra surfaces. Pool size is policy.fetch_k.
+            hybrid_args, _ = mock_hybrid.call_args
+            assert hybrid_args[0][:2] == ["query", "rewrite1"]
+            assert hybrid_args[1] == policy.fetch_k
             mock_rerank.assert_called_once()
+            rerank_args, _ = mock_rerank.call_args
+            # timed_rerank → rerank(query, candidates, top_k=policy.rerank_top_k)
+            assert rerank_args[2] == policy.rerank_top_k
+            assert len(results) <= policy.public_top_k
             assert len(results) == 1
             assert results[0]["source"] == "knowledge"
             assert results[0]["knowledge_id"] == "k1"
@@ -64,7 +74,7 @@ class TestSearchService:
             assert results[1]["source"] == "knowledge"
 
     def test_search_fallback_to_block_store(self):
-        """HybridSearcher 失败时回退 BlockStore"""
+        """HybridSearcher 失败时回退 BlockStore，且与主路径同 CandidatePoolPolicy。"""
         config = Mock()
         config.get.return_value = False
 
@@ -81,6 +91,7 @@ class TestSearchService:
         llm = Mock()
 
         service = SearchService(config, db, block_store, embedding, llm)
+        policy = CandidatePoolPolicy.from_request(5)
 
         with patch.object(service, '_rewrite_query', return_value=["query"]), \
              patch.object(service, '_hybrid_search', side_effect=Exception("Hybrid failed")), \
@@ -88,7 +99,9 @@ class TestSearchService:
 
             results = service.search("test", top_k=5)
 
-            block_store.search.assert_called_once_with("test", top_k=5)
+            # Fallback and main path share the same fetch_k policy.
+            block_store.search.assert_called_once_with("test", top_k=policy.fetch_k)
+            assert len(results) <= policy.public_top_k
             assert len(results) == 1
             assert results[0]["text"] == "fallback text"
 

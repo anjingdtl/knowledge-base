@@ -533,6 +533,7 @@ def test_status_probe_does_not_spawn_console_process(monkeypatch, tmp_path):
 
 
 def test_launcher_status_does_not_query_windows_service(monkeypatch):
+    """is_running trusts managed process + TCP only; never sc.exe / stale PID."""
     monkeypatch.setattr(mcp_launcher, "_process", None)
     monkeypatch.setattr(mcp_launcher, "_read_pid", lambda: 12345)
     monkeypatch.setattr(mcp_launcher, "_remove_pid", lambda: None)
@@ -546,8 +547,30 @@ def test_launcher_status_does_not_query_windows_service(monkeypatch):
         "is_mcp_available",
         lambda: False,
     )
+    # Isolate from any real MCP HTTP listener on this machine (e.g. port 9000).
+    # is_running imports is_mcp_port_available from mcp_heartbeat at call time.
+    monkeypatch.setattr(
+        mcp_heartbeat,
+        "is_mcp_port_available",
+        lambda: False,
+    )
 
     assert mcp_launcher.is_running() is False
+
+
+def test_launcher_running_when_port_available(monkeypatch):
+    """TCP port reachable ⇒ running=True without querying Windows service."""
+    monkeypatch.setattr(mcp_launcher, "_process", None)
+    monkeypatch.setattr(mcp_launcher, "_read_pid", lambda: None)
+    monkeypatch.setattr(
+        mcp_launcher,
+        "is_service_installed",
+        lambda: pytest.fail("port-available path must not query sc.exe"),
+    )
+    monkeypatch.setattr(mcp_heartbeat, "is_mcp_available", lambda: False)
+    monkeypatch.setattr(mcp_heartbeat, "is_mcp_port_available", lambda: True)
+
+    assert mcp_launcher.is_running() is True
 
 
 def test_service_registration_requires_pywin32_python_class(monkeypatch):

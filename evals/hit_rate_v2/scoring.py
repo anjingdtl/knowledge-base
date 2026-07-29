@@ -279,11 +279,48 @@ def _forbidden_assertion_hit(answer: str, forbidden: Iterable[str]) -> bool:
     return False
 
 
+def _expected_passage_ids(case: dict[str, Any]) -> set[str]:
+    """Golden expected / supporting / acceptable passage ids."""
+    out: set[str] = set()
+    for src in case.get("expected_sources") or []:
+        if not isinstance(src, dict):
+            continue
+        role = str(src.get("source_role") or "primary")
+        if role in {"primary", "supporting", "acceptable"}:
+            pid = str(src.get("passage_id") or "").strip()
+            if pid:
+                out.add(pid)
+    for g in case.get("required_fact_groups") or []:
+        if not isinstance(g, dict):
+            continue
+        for key in ("evidence_passage_id", "passage_id"):
+            pid = str(g.get(key) or "").strip()
+            if pid:
+                out.add(pid)
+    # Legacy flat fields
+    for key in ("expected_passage_ids", "supporting_passage_ids"):
+        for pid in case.get(key) or []:
+            if str(pid).strip():
+                out.add(str(pid).strip())
+    return out
+
+
 def _citation_bucket(
     source: dict[str, Any],
     snap: dict[str, Any],
     raw_evidence: list[Any],
+    *,
+    expected_pids: set[str] | None = None,
+    require_golden_passage: bool = False,
 ) -> str:
+    """Classify a citation.
+
+    Pass requires (Task 2.0.5):
+    1. passage in Snapshot allowlist (accepted or adjacent extension);
+    2. passage in raw_evidence_used;
+    3. when require_golden_passage and Golden has expected passages — match them;
+    4. fact-group support is checked separately via _fact_group_supported_by_citation.
+    """
     pid = str(source.get("passage_id") or "").strip()
     raw_pids = {
         str(item.get("passage_id") or "")
@@ -301,6 +338,9 @@ def _citation_bucket(
             adjacent.add(str(item.get("passage_id")))
     if not pid or pid not in raw_pids:
         return "rejected"
+    if require_golden_passage and expected_pids is not None and expected_pids:
+        if pid not in expected_pids:
+            return "rejected"
     if pid in accepted:
         return "preaccepted"
     if source.get("is_adjacent_extension") and pid in adjacent:
@@ -372,9 +412,18 @@ def score_answerable_case(
     srcs = [s for s in (ask.get("sources") or []) if isinstance(s, dict)]
     snap = ask.get("snap") or {}
     raw_ev = ask.get("raw_ev") or []
+    expected_pids = _expected_passage_ids(case)
+    # When Golden declares expected passages, citations must bind to them.
+    require_golden = bool(expected_pids)
     buckets = {"preaccepted": 0, "adjacent_extension": 0, "expected_id": 0, "rejected": 0}
     for s in srcs:
-        b = _citation_bucket(s, snap, raw_ev)
+        b = _citation_bucket(
+            s,
+            snap,
+            raw_ev,
+            expected_pids=expected_pids,
+            require_golden_passage=require_golden,
+        )
         buckets[b] = buckets.get(b, 0) + 1
     if srcs:
         valid_n = buckets["preaccepted"] + buckets["adjacent_extension"] + buckets["expected_id"]
@@ -385,6 +434,33 @@ def score_answerable_case(
         ask_citation_valid = False
         citation_valid_num = 0
         citation_valid_den = 0
+
+    # Fact-group citation support (point 4): each required group with an
+    # evidence_passage_id must be cited via that passage.
+    if fact_groups and ask_citation_valid:
+        for g in fact_groups:
+            if not g.get("required", True):
+                continue
+            if not _fact_group_supported_by_citation(g, srcs, raw_ev):
+                ask_citation_valid = False
+                break
+
+    # Unsupported assertions: N/A unless structured claims are present.
+    claims = [c for c in (ask.get("claims") or []) if isinstance(c, dict)]
+    unsupported_assertion_rate: float | None
+    if not claims:
+        unsupported_assertion_rate = None  # not measurable yet
+    else:
+        unsupported = 0
+        for claim in claims:
+            c_pids = {
+                str(p).strip()
+                for p in (claim.get("evidence_passage_ids") or claim.get("passage_ids") or [])
+                if str(p).strip()
+            }
+            if not c_pids:
+                unsupported += 1
+        unsupported_assertion_rate = round(unsupported / len(claims), 4)
 
     hallucination = ans_has_forbidden  # proxy only
     e2e_pass = (
@@ -449,6 +525,7 @@ def score_answerable_case(
             "answer_fact_correct": ask_fact_correct,
             "source_trace_valid": ask_citation_valid,
             "expected_doc_recalled": recall5,
+            "unsupported_assertion_rate": unsupported_assertion_rate,
         },
     )
     sev, cat, reason = classify_defect(case, case_result, cs)
@@ -458,13 +535,44 @@ def score_answerable_case(
     return cs
 
 
+def _slot_present(answer: str, slot: Any) -> bool:
+    """Whether a non-empty slot value appears in the answer (normalized)."""
+    text = str(slot or "").strip()
+    if not text:
+        return True
+    return contains_fact(answer, text)
+
+
+def _extract_numbers(text: str) -> list[str]:
+    return re.findall(r"\d+(?:\.\d+)?", normalize_text(text))
+
+
 def _fact_group_covered(answer: str, group: dict[str, Any]) -> bool:
-    variants = []
+    """Fact-group coverage with match_policy semantics (Task 2.0.5).
+
+    - exact: normalized exact phrase of object_text / value
+    - normalized: object_text or any acceptable_variants
+    - numeric_unit: value + unit + condition/scope/version when provided
+    - semantic_review: never auto-pass via substring; requires explicit
+      human/judge flag on the case result (or fails closed)
+
+    Subject / predicate / object / condition / scope / version all participate
+    when present on the group.
+    """
+    policy = str(group.get("match_policy") or "normalized")
+    ans = answer or ""
+
+    # Structural slots always participate when present.
+    for slot_key in ("subject", "predicate", "condition", "scope", "version"):
+        if not _slot_present(ans, group.get(slot_key)):
+            return False
+
     obj = group.get("object_text")
-    if obj is not None and str(obj).strip():
-        variants.append(str(obj))
     val = group.get("value")
     unit = group.get("unit")
+    variants: list[str] = []
+    if obj is not None and str(obj).strip():
+        variants.append(str(obj))
     if val is not None and str(val).strip():
         if unit:
             variants.append(f"{val}{unit}")
@@ -473,12 +581,76 @@ def _fact_group_covered(answer: str, group: dict[str, Any]) -> bool:
     for v in group.get("acceptable_variants") or []:
         if str(v).strip():
             variants.append(str(v))
+
+    if policy == "semantic_review":
+        # Auto substring pass is forbidden. Only an external judge mark may pass.
+        if group.get("semantic_review_passed") is True:
+            return True
+        if group.get("human_verified") is True:
+            return True
+        return False
+
+    if policy == "exact":
+        if not variants:
+            return True
+        # Exact: primary object_text / value(+unit) only — not free variants.
+        primary = []
+        if obj is not None and str(obj).strip():
+            primary.append(str(obj))
+        if val is not None and str(val).strip():
+            if unit:
+                primary.append(f"{val}{unit}")
+            primary.append(str(val))
+        needles = primary or variants
+        return any(contains_fact(ans, v) for v in needles)
+
+    if policy == "numeric_unit":
+        # Value (as number) and unit must both bind; condition already checked.
+        if val is None or not str(val).strip():
+            # Fall back to object_text if no structured value
+            if not variants:
+                return True
+            return any(contains_fact(ans, v) for v in variants)
+        val_s = str(val).strip()
+        nums_ans = _extract_numbers(ans)
+        nums_val = _extract_numbers(val_s)
+        if nums_val and not any(n in nums_ans for n in nums_val):
+            return False
+        if unit and str(unit).strip():
+            if not contains_fact(ans, unit):
+                return False
+        # Prefer full value+unit phrase when possible; number+unit already checked.
+        return True
+
+    # normalized (default): object or any acceptable variant
     if not variants:
         return True
-    policy = str(group.get("match_policy") or "normalized")
-    if policy in {"exact", "normalized", "numeric_unit", "semantic_review"}:
-        return any(contains_fact(answer, v) for v in variants)
-    return any(contains_fact(answer, v) for v in variants)
+    return any(contains_fact(ans, v) for v in variants)
+
+
+def _fact_group_supported_by_citation(
+    group: dict[str, Any],
+    sources: list[dict[str, Any]],
+    raw_evidence: list[Any],
+) -> bool:
+    """Citation must support the fact group, not merely share a knowledge_id."""
+    evidence_pid = str(
+        group.get("evidence_passage_id") or group.get("passage_id") or ""
+    ).strip()
+    if not evidence_pid:
+        # No binding required when Golden itself lacks evidence passage.
+        return True
+    src_pids = {
+        str(s.get("passage_id") or "").strip()
+        for s in sources
+        if isinstance(s, dict)
+    }
+    raw_pids = {
+        str(r.get("passage_id") or "").strip()
+        for r in raw_evidence
+        if isinstance(r, dict)
+    }
+    return evidence_pid in src_pids and evidence_pid in raw_pids
 
 
 def score_no_answer_case(
@@ -655,9 +827,98 @@ def classify_defect(
     return (None, None, None)
 
 
+def score_clarification_case(
+    case: dict[str, Any],
+    case_result: dict[str, Any],
+) -> CaseScore:
+    """Score answerability=clarification_required independently (Task 2.0.5).
+
+    Pass: answer raises Golden-defined clarification dimension(s).
+    Fail: definitive answer without clarifying, or pure refusal with no clarify.
+    """
+    case_id = str(case.get("case_id") or case.get("id") or "")
+    ask = extract_ask_payload(case_result)
+    ans = ask["answer"]
+    mode = str(ask.get("mode") or "").strip() or None
+    mode_l = (mode or "").lower()
+
+    # Golden-defined clarification dimensions / question keywords.
+    amb = case.get("ambiguity") if isinstance(case.get("ambiguity"), dict) else {}
+    dimensions: list[str] = []
+    for key in ("clarification_dimensions", "clarify_dimensions"):
+        for d in case.get(key) or []:
+            if str(d).strip():
+                dimensions.append(str(d).strip())
+    cq = str(
+        (amb or {}).get("clarifying_question")
+        or case.get("clarifying_question")
+        or ""
+    ).strip()
+    if cq:
+        dimensions.append(cq)
+    for d in (amb or {}).get("dimensions") or []:
+        if str(d).strip():
+            dimensions.append(str(d).strip())
+
+    reason_codes: list[str] = []
+    # Definitive answer mode without clarify → fail
+    if mode_l in ANSWER_MODES:
+        reason_codes.append("definitive_answer_without_clarification")
+    # Pure refusal with no clarify dimension raised
+    refusal_only = _is_refusal_only(ans)
+    raised = False
+    if dimensions:
+        raised = any(contains_fact(ans, d) for d in dimensions)
+    else:
+        # Soft heuristic: question mark / 请确认 / 需要澄清
+        raised = bool(
+            re.search(r"[？?]|请确认|需要澄清|哪[个一]|是否指", ans or "")
+        ) or mode_l in {"clarification", "clarify", "clarification_required"}
+
+    if mode_l in {"clarification", "clarify", "clarification_required"}:
+        raised = True
+
+    if not raised:
+        if refusal_only or not (ans or "").strip():
+            reason_codes.append("refusal_without_clarification")
+        else:
+            reason_codes.append("missing_clarification_dimension")
+
+    # Substantive assertion that picks one interpretation → fail
+    if _has_substantive_assertion(ans) and mode_l in ANSWER_MODES:
+        if "definitive_answer_without_clarification" not in reason_codes:
+            reason_codes.append("definitive_answer_without_clarification")
+
+    passed = not reason_codes
+    cs = CaseScore(
+        case_id=case_id,
+        case_type="clarification_required",
+        metric_contract_version=METRIC_CONTRACT_VERSION,
+        false_positive=not passed and "definitive_answer_without_clarification" in reason_codes,
+        expressed_insufficient=raised,
+        no_fabrication=passed,
+        reason_codes=sorted(set(reason_codes)),
+        score=10 if passed else 0,
+        ask_has_answer=bool((ans or "").strip()),
+        answer_mode=mode,
+        e2e_pass=passed,
+        defect_severity="P1" if not passed else None,
+        defect_category="clarification" if not passed else None,
+        defect_reason=(
+            "clarification_required 未正确澄清: " + ",".join(sorted(set(reason_codes)))
+            if not passed
+            else None
+        ),
+        extra={"clarification_raised": raised},
+    )
+    return cs
+
+
 def score_case(case: dict[str, Any], case_result: dict[str, Any]) -> CaseScore:
     if case.get("expected_no_answer") or case.get("answerability") == "no_answer":
         return score_no_answer_case(case, case_result)
+    if case.get("answerability") == "clarification_required":
+        return score_clarification_case(case, case_result)
     return score_answerable_case(case, case_result)
 
 

@@ -16,10 +16,14 @@ _FLOAT_KEYS = frozenset({
     "keyword_score", "distance", "wiki_weight", "raw_weight", "confidence",
 })
 
-# Keys stripped from traces / payloads (non-deterministic)
+# Keys stripped from traces / payloads (non-deterministic).
+# ADR §3.5: drop all timing keys (ms / elapsed_ms) and request identity.
 _DROP_KEYS = frozenset({
-    "elapsed_ms", "created_at", "updated_at", "timestamp", "request_id",
+    "ms", "elapsed_ms", "created_at", "updated_at", "timestamp", "request_id",
 })
+
+# Process-level rerank circuit timestamps (non-deterministic across runs).
+_CIRCUIT_DROP_KEYS = frozenset({"open_until", "last_probe_at"})
 
 
 def round_floats(obj: Any, ndigits: int = 4) -> Any:
@@ -40,6 +44,19 @@ def round_floats(obj: Any, ndigits: int = 4) -> Any:
     return obj
 
 
+def _normalize_rerank_circuit(stages: dict[str, Any]) -> None:
+    """Strip non-deterministic circuit timestamps; keep counts/booleans."""
+    rerank = stages.get("rerank")
+    if not isinstance(rerank, dict):
+        return
+    circuit = rerank.get("circuit")
+    if not isinstance(circuit, dict):
+        return
+    rerank["circuit"] = {
+        k: v for k, v in circuit.items() if k not in _CIRCUIT_DROP_KEYS
+    }
+
+
 def normalize_search_contract(execution_like: dict[str, Any]) -> dict[str, Any]:
     """Normalize SearchExecution-shaped dict for snapshot compare."""
     data = copy.deepcopy(execution_like)
@@ -56,6 +73,9 @@ def normalize_search_contract(execution_like: dict[str, Any]) -> dict[str, Any]:
     if "warnings" in data:
         data["warnings"] = list(data["warnings"])
     if "trace" in data and isinstance(data["trace"], dict):
+        stages = data["trace"].get("stages")
+        if isinstance(stages, dict):
+            _normalize_rerank_circuit(stages)
         data["trace"] = _stable_dict(round_floats(data["trace"]))
     return data
 

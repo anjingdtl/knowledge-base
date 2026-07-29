@@ -52,3 +52,8 @@ artifacts/production-pilot-final-validation/kb.db.vector-repair-backup-*
 
 # Optional local redaction workspace
 artifacts/eval-runs-raw/
+
+# Raw scored detail must not live under committable eval-summaries
+artifacts/eval-summaries/**/final_scored_v2.json
+artifacts/eval-summaries/**/final_scored.json
+artifacts/eval-summaries/**/case_results.json

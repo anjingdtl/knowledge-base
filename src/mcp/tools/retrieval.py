@@ -517,13 +517,7 @@ def _snapshot_config_bits() -> dict:
 def _index_revision() -> str:
     try:
         from src.services.passage_store import PassageStore
-        store = PassageStore()
-        conn = store._get_conn()
-        row = conn.execute(
-            "SELECT COUNT(*), COALESCE(MAX(updated_at), '') FROM retrieval_passages "
-            "WHERE deleted_at IS NULL OR deleted_at = ''"
-        ).fetchone()
-        return f"passages:{row[0]}:{row[1]}"
+        return PassageStore().revision_token()
     except Exception:
         return "passages:unknown"
 
@@ -553,10 +547,15 @@ def _build_shared_snapshot(
     fetch_k: int | None = None,
 ) -> dict:
     """Build the single canonical retrieval snapshot for search and ask."""
+    from src.retrieval.candidate_pool import CandidatePoolPolicy
     from src.retrieval.canonical_snapshot import build_canonical_snapshot
     from src.services.query_rewrite import expand_query
 
-    fk = int(fetch_k if fetch_k is not None else max(top_k * 3, 15))
+    # ADR §5: same CandidatePoolPolicy as RawRetriever (4x/20 floor).
+    if fetch_k is not None:
+        fk = int(fetch_k)
+    else:
+        fk = CandidatePoolPolicy.from_request(top_k).fetch_k
     candidates = _retrieve_candidates(query, fetch_k=fk)
     # SPEC v5: passage path — no list_blocks_fn; optional passage neighbors.
     return build_canonical_snapshot(
@@ -624,10 +623,13 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
         is_current_information_query,
     )
 
+    from src.retrieval.candidate_pool import CandidatePoolPolicy
+
     k = int(limit if limit is not None else top_k)
     k = max(1, k)
-    # Over-fetch so document-level dedupe still leaves enough unique knowledge_ids.
-    fetch_k = max(k * 3, 15)
+    # ADR §5: public top_k vs internal fetch_k from one policy (main + fallback).
+    pool_policy = CandidatePoolPolicy.from_request(k)
+    fetch_k = pool_policy.fetch_k
     threshold = float(Config.get("rag.search.no_match_threshold", 0.35) or 0.35)
 
     # Only true live-external queries short-circuit (SPEC Phase 2).
@@ -1115,11 +1117,13 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
 
     if snapshot is None and probe_available:
         try:
+            from src.retrieval.candidate_pool import CandidatePoolPolicy
+
             snapshot = _build_shared_snapshot(
                 question,
                 top_k=probe_k,
                 threshold=weak_threshold,
-                fetch_k=max(probe_k * 3, 15),
+                fetch_k=CandidatePoolPolicy.from_request(probe_k).fetch_k,
             )
             retrieval_count = 1
             # Register for potential subsequent reuse.

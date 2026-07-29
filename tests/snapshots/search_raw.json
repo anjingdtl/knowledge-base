@@ -5,6 +5,7 @@
   "results": [
     {
       "block_id": "b1",
+      "candidate_type": "raw_block",
       "citation": {
         "block_id": "b1",
         "document": "Doc",
@@ -32,6 +33,7 @@
       },
       "knowledge_id": "k1",
       "match_channels": [],
+      "retrieval_unit": "block",
       "score": 0.9,
       "source": "knowledge",
       "text": "raw FTTR content",
@@ -44,14 +46,44 @@
     "query": "FTTR 规格",
     "result_count": 1,
     "stages": {
+      "candidate_pool_policy": {
+        "fetch_k": 20,
+        "final_top_k": 5,
+        "max_per_document": 3,
+        "public_top_k": 5,
+        "rerank_top_k": 5
+      },
       "legacy_wiki_fts": {
         "count": 0
       },
+      "pre_rerank_candidate_ids": [
+        "k1"
+      ],
       "query_rewrite": {
         "count": 1
       },
+      "query_variants": [
+        {
+          "query": "FTTR 规格",
+          "source": "original"
+        }
+      ],
       "raw_retrieval": {
-        "count": 1
+        "count": 1,
+        "requested_pool_k": 20
+      },
+      "rerank": {
+        "circuit": {
+          "consecutive_timeouts": 0,
+          "fallback_count": 0,
+          "last_reason": "recovered",
+          "timeout_count": 0
+        },
+        "fallback": false,
+        "output_candidate_ids": [
+          "k1"
+        ],
+        "query_fingerprint": "86102cddc4ac"
       }
     }
   },

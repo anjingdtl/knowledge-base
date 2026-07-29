@@ -90,15 +90,20 @@ class TestPublicAskContract:
         assert_matches_snapshot("ask_hybrid_verified.json", snap)
 
     def test_ask_raw_only(self):
+        # ADR §4.3: raw evidence semantically relevant + groundable fact →
+        # raw_only. Fixtures must be judgeable, not empty placeholders.
         ex = SearchExecution(
-            results=(_raw_row(text="仅原始块内容"),),
+            results=(_raw_row(text="营收资金管理办法适用于财务部门。"),),
             trace={"mode": "legacy_raw", "stages": {}},
         )
         svc = VerifiedAnswerService(_FixedSearch(ex), llm=None, config={})
-        payload = svc.ask("文档说了什么", top_k=5, use_llm=False)
+        payload = svc.ask("营收资金管理办法适用于哪个部门？", top_k=5, use_llm=False)
         assert payload["answer_mode"] == ANSWER_MODE_RAW
         assert payload["raw_evidence_used"]
-        assert not payload["claims_used"]
+        # ADR §4.1: claims_used may carry deterministic claims extracted from
+        # raw evidence; each must stay bound to the raw passage (no wiki claim).
+        for claim in payload["claims_used"]:
+            assert "block:k1:b1" in (claim.get("evidence_passage_ids") or [])
         assert_matches_snapshot("ask_raw_only.json", normalize_ask_contract(payload))
 
     def test_ask_conflict(self):
@@ -128,9 +133,15 @@ class TestPublicAskContract:
         assert_matches_snapshot("ask_no_answer.json", normalize_ask_contract(payload))
 
     def test_ask_timeout_generate_failed(self):
-        """Simulate LLM generation failure → deterministic template + warning."""
+        """LLM claim extraction timeout → deterministic fallback + warning.
+
+        ADR §4.4: the answer main path is deterministic; an LLM failure must
+        not force a refusal. It degrades to deterministic extraction, records
+        a structured fallback and keeps the compatible ``generate_failed``
+        warning observable.
+        """
         ex = SearchExecution(
-            results=(_raw_row(text="有证据"),),
+            results=(_raw_row(text="营收资金管理办法适用于财务部门。"),),
             trace={"mode": "legacy_raw", "stages": {}},
         )
 
@@ -141,12 +152,22 @@ class TestPublicAskContract:
             def chat_with_usage(self, messages):
                 raise TimeoutError("llm timeout")
 
+            def generate(self, prompt):
+                raise TimeoutError("llm timeout")
+
         svc = VerifiedAnswerService(_FixedSearch(ex), llm=BoomLLM(), config={})
-        payload = svc.ask("有证据吗", top_k=5, use_llm=True)
+        payload = svc.ask("营收资金管理办法适用于哪个部门？", top_k=5, use_llm=True)
         assert payload["answer_mode"] == ANSWER_MODE_RAW
         assert payload["answer"]
         warnings = payload.get("warnings") or []
         assert any("generate_failed" in str(w) for w in warnings)
+        fallbacks = payload.get("fallbacks") or []
+        assert any(
+            isinstance(f, dict)
+            and f.get("stage") == "claim_extraction"
+            and f.get("type") == "llm_unavailable_deterministic_fallback"
+            for f in fallbacks
+        )
         assert_matches_snapshot("ask_timeout.json", normalize_ask_contract(payload))
 
     def test_ask_consumes_execute_not_last_state(self):

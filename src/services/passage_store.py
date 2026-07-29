@@ -444,6 +444,22 @@ class PassageStore:
         except Exception:
             return 0
 
+    def revision_token(self) -> str:
+        """Stable index revision string for snapshot registry (public API).
+
+        MCP/adapters must use this instead of opening private connections.
+        """
+        try:
+            self.ensure_schema()
+            conn = self._get_conn()
+            row = conn.execute(
+                "SELECT COUNT(*), COALESCE(MAX(updated_at), '') FROM retrieval_passages "
+                "WHERE deleted_at IS NULL OR deleted_at = ''"
+            ).fetchone()
+            return f"passages:{row[0]}:{row[1]}"
+        except Exception:
+            return "passages:unknown"
+
     def health_stats(self) -> dict[str, Any]:
         """Passage index health for kb_capabilities / diagnostics (SPEC §E)."""
         self.ensure_schema()

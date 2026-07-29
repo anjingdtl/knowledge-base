@@ -80,14 +80,18 @@ def _gate(content: str = "FTTR 可达 1Gbps", **kwargs) -> WikiServingGate:
 
 class TestWikiServingContract:
     def test_wiki_001_raw_evidence_is_final_base(self):
-        """WIKI-001: without claims, ask can still answer from raw evidence."""
+        """WIKI-001: without claims, ask can still answer from raw evidence.
+
+        ADR §4.3: the raw evidence must be semantically relevant and carry a
+        groundable fact; empty placeholders are refused by design.
+        """
         ex = SearchExecution(
             results=({
                 "source": "knowledge",
                 "knowledge_id": "k1",
                 "block_id": "b1",
                 "title": "Doc",
-                "text": "raw only base",
+                "text": "营收资金管理办法适用于财务部门。",
                 "score": 0.9,
             },),
             trace={"mode": "legacy_raw", "stages": {}},
@@ -97,7 +101,9 @@ class TestWikiServingContract:
             def execute(self, q, top_k=5, query_spec=None):
                 return ex
 
-        payload = VerifiedAnswerService(S(), llm=None).ask("q", use_llm=False)
+        payload = VerifiedAnswerService(S(), llm=None).ask(
+            "营收资金管理办法适用于哪个部门？", use_llm=False,
+        )
         assert payload["answer_mode"] == ANSWER_MODE_RAW
         assert payload["raw_evidence_used"]
 

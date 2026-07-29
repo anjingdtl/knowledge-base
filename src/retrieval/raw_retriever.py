@@ -15,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
 from typing import Any, Callable, cast
 
+from src.retrieval.candidate_pool import CandidatePoolPolicy
 from src.retrieval.models import RawRetrievalResult
 from src.services.citation_builder import CitationBuilder
 from src.services.hybrid_search import HybridSearcher
@@ -354,10 +355,11 @@ class RawRetriever:
                 queries.append(vq)
         queries = queries[:6]
 
-        # Keep a wider pre-rerank pool so a single sparse FTS/vector branch
-        # cannot collapse recall before fusion/rerank has a chance to compare
-        # evidence.  Packaging still returns the caller's requested top_k.
-        raw_pool_k = max(int(top_k) * 4, 20)
+        # Explicit public top_k vs internal fetch_k (ADR §5 CandidatePoolPolicy).
+        # Main path and BlockStore fallback share the same policy object.
+        policy = CandidatePoolPolicy.from_request(top_k, config=self._config)
+        trace["stages"]["candidate_pool_policy"] = policy.to_trace()
+        raw_pool_k = policy.fetch_k
         t_ret0 = time.monotonic()
         candidates = self.raw_retrieve(queries, query, raw_pool_k)
         trace["stages"]["raw_retrieval"] = {
@@ -395,10 +397,14 @@ class RawRetriever:
                     cb_reason,
                     qfp,
                 )
-                candidates = deterministic_fallback_rank(query, candidates, top_k=raw_pool_k)
+                candidates = deterministic_fallback_rank(
+                    query, candidates, top_k=raw_pool_k,
+                )
             else:
                 try:
-                    candidates = self.timed_rerank(query, candidates, top_k)
+                    candidates = self.timed_rerank(
+                        query, candidates, policy.rerank_top_k,
+                    )
                     _rerank_circuit_note_success()
                 except FuturesTimeout:
                     _rerank_circuit_note_timeout(qfp)
@@ -423,7 +429,8 @@ class RawRetriever:
                 "circuit": get_rerank_circuit_state(),
                 "query_fingerprint": qfp,
                 "output_candidate_ids": [
-                    self._candidate_identity(row) for row in candidates[:top_k]
+                    self._candidate_identity(row)
+                    for row in candidates[: policy.rerank_top_k]
                 ],
             }
 
@@ -433,7 +440,11 @@ class RawRetriever:
         output: list[dict] = []
         if include_legacy_wiki_fts:
             output.extend(wiki_results)
-        output.extend(self.package_raw_candidates(query, candidates, top_k=top_k))
+        output.extend(
+            self.package_raw_candidates(
+                query, candidates, top_k=policy.final_top_k,
+            )
+        )
 
         elapsed = time.monotonic() - t0
         logger.info(

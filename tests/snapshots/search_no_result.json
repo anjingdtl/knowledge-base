@@ -8,14 +8,29 @@
     "query": "zzzz-no-hit",
     "result_count": 0,
     "stages": {
+      "candidate_pool_policy": {
+        "fetch_k": 20,
+        "final_top_k": 5,
+        "max_per_document": 3,
+        "public_top_k": 5,
+        "rerank_top_k": 5
+      },
       "legacy_wiki_fts": {
         "count": 0
       },
+      "pre_rerank_candidate_ids": [],
       "query_rewrite": {
         "count": 1
       },
+      "query_variants": [
+        {
+          "query": "zzzz-no-hit",
+          "source": "original"
+        }
+      ],
       "raw_retrieval": {
-        "count": 0
+        "count": 0,
+        "requested_pool_k": 20
       }
     }
   },

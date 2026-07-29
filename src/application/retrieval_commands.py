@@ -20,7 +20,13 @@ class RetrievalCommands:
         }
 
     def semantic_search(self, query: str, *, top_k: int = 5) -> list[dict[str, Any]]:
-        return list(self._c.search_service.search(query, top_k=top_k) or [])
+        # Phase 2: prefer SearchUseCase boundary when search_service is present.
+        from src.application.search_use_case import SearchUseCase
+
+        svc = getattr(self._c, "search_service", None)
+        if svc is None:
+            return []
+        return list(SearchUseCase(svc).search(query, top_k=top_k) or [])
 
     def fulltext_search(
         self,

@@ -247,3 +247,21 @@ Phase 0 **不**修复外部 provider。
 - **未** `git push`  
 - **未** 创建 PR  
 - **未** 重写 Git 历史 / 批量删除既有 artifacts  
+
+---
+
+## 13. 执行后 Git 状态勘误（2026-07-29，Phase 2–3 Task 2.0.1 补充）
+
+> 本勘误由 Phase 2–3 收口（`docs/superpowers/plans/2026-07-29-hit-rate-phase2-phase3-core-rebuild.md` Task 2.0.1）补充。不修改正文历史指标与原始执行时间。
+
+| 项目 | 值 |
+|---|---|
+| Phase 0–1 工作落盘提交 | `5bb41f7f670e6caad6c6669c7f4dc42d8125fe97`（`master`，"Rebuild hit-rate Phase 0-1 quality foundation and scoring authority."） |
+| Phase 2–3 执行起点 HEAD | `5bb41f7f670e6caad6c6669c7f4dc42d8125fe97`（`master`） |
+| Phase 2–3 执行起点工作区 | 仅未跟踪方案文件 `docs/superpowers/plans/2026-07-29-hit-rate-phase2-phase3-core-rebuild.md` |
+
+勘误说明：
+
+1. 正文 §1 记录的执行前基线 HEAD `19195d473727b657b9b563bce0029f94363ef459` 是 Phase 0–1 **开始执行时**的 HEAD，保持不变。
+2. §12「未 commit / 未 push / 未创建 PR」只表示**本报告生成时**的仓库状态。Phase 0–1 的工程改动其后已作为 `5bb41f7` 提交到 `master`；当前仓库状态以本勘误为准。
+3. 截至 Phase 2–3 执行起点：未 push、未创建 PR、未重写 Git 历史。

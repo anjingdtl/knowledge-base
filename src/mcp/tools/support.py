@@ -64,9 +64,19 @@ def get_container() -> AppContainer:
 
 
 def heartbeat(fn: Callable[P, R]) -> Callable[P, R]:
+    """Best-effort heartbeat wrapper.
+
+    Heartbeat is observability-only: a beat failure (unreadable config,
+    read-only data dir, clock/path errors) must never break the wrapped
+    read/write tool. Business tools keep their own contract regardless.
+    """
+
     @functools.wraps(fn)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-        beat()
+        try:
+            beat()
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("heartbeat beat skipped (best-effort): %s", exc)
         return fn(*args, **kwargs)
 
     return wrapper

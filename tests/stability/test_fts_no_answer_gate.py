@@ -1,4 +1,10 @@
-"""Phase 4 — FTS fallback must honor no-answer relevance gate."""
+"""Phase 4 — FTS fallback must honor no-answer relevance gate.
+
+ADR §3.3 freezes three search no-match tiers:
+1. accepted (canonical snapshot gate passes)
+2. low-confidence (gate rejects but alias/surface FTS has hits — marked)
+3. no match (empty data, no_match=true)
+"""
 from __future__ import annotations
 
 from types import SimpleNamespace
@@ -23,7 +29,8 @@ def test_keyword_only_revenue_doc_is_insufficient():
     assert decision["no_match"] is True
 
 
-def test_search_fulltext_fallback_no_match(monkeypatch):
+def test_search_fulltext_fallback_low_confidence(monkeypatch):
+    """Tier 2: gate rejects but surface FTS has hits → low_confidence results."""
     from src.mcp.tools import retrieval
     from src.utils.config import Config
 
@@ -33,17 +40,17 @@ def test_search_fulltext_fallback_no_match(monkeypatch):
         lambda key, default=None: 0.35 if "threshold" in key else default,
     )
 
+    weak_hit = {
+        "title": "营收资金管理办法",
+        "text": "营收资金管理办法适用于财务部门。",
+        "fts_score": 0.9,
+        "knowledge_id": "FINAL_CLOSURE_TEST_x",
+    }
+
     def weak_ft(query, limit=10, offset=0):
         return {
             "ok": True,
-            "data": [
-                {
-                    "title": "营收资金管理办法",
-                    "text": "营收资金管理办法适用于财务部门。",
-                    "fts_score": 0.9,
-                    "knowledge_id": "FINAL_CLOSURE_TEST_x",
-                }
-            ],
+            "data": [dict(weak_hit)],
             "meta": {"top_score": 0.9},
         }
 
@@ -54,19 +61,47 @@ def test_search_fulltext_fallback_no_match(monkeypatch):
         lambda: SimpleNamespace(search_service=None, hybrid_search=None, db=None),
     )
 
-    # Force semantic path empty/weak
-    class Boom:
-        def semantic_search(self, *a, **k):
-            return []
+    res = retrieval.search(query="广西电信2025年营收多少亿", limit=5)
+    assert res["ok"] is True
+    # Gate rejection is preserved: results are explicitly degraded, not accepted.
+    assert res["meta"].get("no_match") is False
+    assert res["meta"].get("low_confidence") is True
+    assert res["meta"].get("source_path") == "fulltext_fallback_low_confidence"
+    assert res["data"]
+    for item in res["data"]:
+        assert item.get("low_confidence") is True
+        assert item.get("confidence_reason")
 
-    import src.application.retrieval_commands as rc
 
-    monkeypatch.setattr(rc, "RetrievalCommands", lambda container: Boom())
+def test_search_fulltext_fallback_true_no_match(monkeypatch):
+    """Tier 3: no surface hits at all → empty data + no_match."""
+    from src.mcp.tools import retrieval
+    from src.utils.config import Config
+
+    monkeypatch.setattr(
+        Config,
+        "get",
+        lambda key, default=None: 0.35 if "threshold" in key else default,
+    )
+
+    def empty_ft(query, limit=10, offset=0):
+        return {"ok": True, "data": [], "meta": {"top_score": 0.0}}
+
+    monkeypatch.setattr(retrieval, "search_fulltext", empty_ft)
+    monkeypatch.setattr(
+        retrieval,
+        "_get_container",
+        lambda: SimpleNamespace(search_service=None, hybrid_search=None, db=None),
+    )
 
     res = retrieval.search(query="广西电信2025年营收多少亿", limit=5)
     assert res["ok"] is True
     assert res["data"] == []
     assert res["meta"].get("no_match") is True
+    assert res["meta"].get("source_path") in {
+        "canonical_snapshot",
+        "current_info_gate",
+    }
 
 
 @pytest.mark.parametrize(

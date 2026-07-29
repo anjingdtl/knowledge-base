@@ -356,19 +356,55 @@ def validate_formal_run_inputs(
     *,
     formal: bool,
     allow_candidates_dev: bool = False,
-) -> None:
-    """Fail closed for formal mode when golden is not frozen V2."""
-    if not formal:
-        return
-    from evals.hit_rate_v2.validation import validate_formal_golden_path
+    expected_corpus_sha: str | None = None,
+    db_path: Path | None = None,
+    schema_hash: str = "",
+) -> dict[str, str]:
+    """Fail closed for formal mode: path + per-row freeze + corpus/review integrity.
 
-    errors = validate_formal_golden_path(Path(golden_path))
-    if errors:
-        raise SystemExit(
-            "formal harness rejected golden path: " + ", ".join(errors)
-        )
+    Returns meta dict with review_manifest_hash, corpus_snapshot, dataset_hash, split.
+    Non-formal mode returns empty meta.
+    """
+    if not formal:
+        return {
+            "review_manifest_hash": "",
+            "corpus_snapshot": "",
+            "dataset_hash": "",
+            "split": "",
+        }
+    from evals.hit_rate_v2.validation import (
+        corpus_snapshot_token,
+        sha256_file,
+        validate_formal_frozen_dataset,
+    )
+
     if allow_candidates_dev:
         raise SystemExit("internal error: formal cannot allow candidates")
+
+    root = Path(__file__).resolve().parents[1]
+    schema_path = root / "schema" / "hit-rate-golden-v2.schema.json"
+    sch = schema_hash or (sha256_file(schema_path) if schema_path.exists() else "")
+    db = db_path or (root / "data" / "kb.db")
+    corpus = expected_corpus_sha
+    if not corpus and Path(db).exists():
+        corpus = corpus_snapshot_token(Path(db))
+
+    errors, meta = validate_formal_frozen_dataset(
+        Path(golden_path),
+        expected_corpus_sha=corpus,
+        db_path=Path(db) if Path(db).exists() else None,
+        schema_hash=sch,
+    )
+    if errors:
+        raise SystemExit(
+            "formal harness rejected golden: " + ", ".join(errors[:40])
+            + (f" (+{len(errors) - 40} more)" if len(errors) > 40 else "")
+        )
+    if not meta.get("review_manifest_hash") or not meta.get("corpus_snapshot"):
+        raise SystemExit(
+            "formal harness rejected golden: review_manifest_hash/corpus_snapshot empty"
+        )
+    return meta
 
 
 def _extract_snapshot_id(search_envelope: dict) -> str | None:
@@ -540,8 +576,17 @@ def run(
         sha256_file,
     )
 
-    # Formal mode: fail closed unless golden is under frozen/
-    validate_formal_run_inputs(Path(golden_path), formal=bool(formal))
+    schema_path = ROOT / "schema" / "hit-rate-golden-v2.schema.json"
+    schema_hash = sha256_file(schema_path) if schema_path.exists() else ""
+
+    # Formal mode: fail closed on path + per-row freeze + corpus/review integrity.
+    # Directory name "frozen" alone is never sufficient.
+    formal_meta = validate_formal_run_inputs(
+        Path(golden_path),
+        formal=bool(formal),
+        schema_hash=schema_hash,
+        db_path=ROOT / "data" / "kb.db",
+    )
 
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -569,11 +614,15 @@ def run(
             f"{status.fallback_reason or 'provider_unavailable'}"
         )
 
-    schema_path = ROOT / "schema" / "hit-rate-golden-v2.schema.json"
-    schema_hash = sha256_file(schema_path) if schema_path.exists() else ""
-    ds_hash = _dataset_hash(list(cases)) if cases else ""
-    splits = sorted({str(c.get("split") or "") for c in cases if isinstance(c, dict)})
-    split_label = ",".join(s for s in splits if s) or None
+    ds_hash = formal_meta.get("dataset_hash") or (
+        _dataset_hash(list(cases)) if cases else ""
+    )
+    split_label = formal_meta.get("split") or None
+    if not split_label:
+        splits = sorted(
+            {str(c.get("split") or "") for c in cases if isinstance(c, dict)}
+        )
+        split_label = ",".join(s for s in splits if s) or None
 
     manifest = _build_manifest(
         golden_path=golden_path,
@@ -588,8 +637,8 @@ def run(
         split=split_label,
         schema_hash=schema_hash,
         dataset_hash=ds_hash,
-        review_manifest_hash="",
-        corpus_snapshot="",
+        review_manifest_hash=formal_meta.get("review_manifest_hash") or "",
+        corpus_snapshot=formal_meta.get("corpus_snapshot") or "",
         rerank_status=status.to_dict(),
     )
     manifest["scorer_contract_hash"] = scorer_contract_hash(ROOT)

@@ -1,7 +1,17 @@
 {
-  "answer": "基于原始文档检索（未使用可验证 Claim 结论），关于「文档说了什么」：\n\n- [Doc] 仅原始块内容",
+  "answer": "- 营收资金管理办法适用于财务部门",
   "answer_mode": "raw_only",
-  "claims_used": [],
+  "claims_used": [
+    {
+      "candidate_id": "b33b1869d29b2b9336f75cb5",
+      "condition": "",
+      "evidence_passage_ids": [
+        "block:k1:b1"
+      ],
+      "fact_type": "responsibility",
+      "text": "营收资金管理办法适用于财务部门"
+    }
+  ],
   "conflict_disclosed": false,
   "conflicts": [],
   "fallbacks": [],
@@ -9,22 +19,19 @@
   "raw_evidence_used": [
     {
       "block_id": "b1",
-      "block_ids": [],
-      "candidate_type": "raw_block",
-      "citation": {
-        "block_id": "b1",
-        "knowledge_id": "k1",
-        "path": "/docs/a.md"
-      },
+      "block_ids": [
+        "b1"
+      ],
+      "body_text": "营收资金管理办法适用于财务部门。",
+      "candidate_type": "passage",
+      "citation": null,
       "document_family_id": "",
       "knowledge_id": "k1",
-      "passage_id": "",
-      "path": "/docs/a.md",
-      "retrieval_fallback": "",
-      "retrieval_unit": "block",
+      "passage_id": "block:k1:b1",
+      "path": "",
+      "retrieval_unit": "passage",
       "score": 0.8,
-      "section_path": "",
-      "text": "仅原始块内容",
+      "text": "营收资金管理办法适用于财务部门。",
       "title": "Doc",
       "version_year": null
     }
@@ -44,24 +51,19 @@
   "sources": [
     {
       "block_id": "b1",
-      "block_ids": [],
-      "candidate_type": "raw_block",
-      "citation": {
-        "block_id": "b1",
-        "knowledge_id": "k1",
-        "path": "/docs/a.md"
-      },
+      "block_ids": [
+        "b1"
+      ],
+      "candidate_type": "passage",
+      "citation": null,
       "document_family_id": "",
-      "is_adjacent_extension": false,
       "knowledge_id": "k1",
-      "passage_id": "",
-      "retrieval_fallback": "",
-      "retrieval_unit": "block",
+      "passage_id": "block:k1:b1",
+      "retrieval_unit": "passage",
       "score": 0.8,
-      "section_path": "",
       "source": "knowledge",
       "source_layer": "evidence",
-      "text": "仅原始块内容",
+      "text": "营收资金管理办法适用于财务部门。",
       "title": "Doc",
       "version_year": null
     }

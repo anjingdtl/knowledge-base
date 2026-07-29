@@ -296,21 +296,6 @@ class SearchService:
             state.claim_error = result.fallback_reason
         return list(result.claim_pairs)
 
-    def _raw_retrieve(self, queries: list[str], query: str, top_k: int) -> list[dict]:
-        """Existing raw retrieval path (hybrid → block_store → knowledge FTS)."""
-        try:
-            candidates = self._timed_hybrid_search(queries, top_k)
-        except Exception as e:
-            logger.warning("Hybrid search failed, falling back to BlockStore: %s", e)
-            try:
-                candidates = self._block_store.search(query, top_k=top_k) if self._block_store else []
-            except Exception:
-                candidates = []
-
-        if not candidates:
-            candidates = self._knowledge_fts_search(query, top_k)
-        return candidates
-
     def _package_raw_candidates(
         self, query: str, candidates: list[dict], *, top_k: int,
     ) -> list[dict]:

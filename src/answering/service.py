@@ -294,11 +294,12 @@ class AnswerService:
 
         use_structured = bool(norm_rows) and not has_claims
         structured: dict[str, Any] = {}
+        claim_json_failure = ""
         if use_structured:
             llm_json = None
             # Only claim-JSON from LLM; never free-form prose (SPEC v6 process-prose ban).
             if use_llm and llm_answer is None and self._llm is not None:
-                llm_json = self._try_claim_json(question, norm_rows)
+                llm_json, claim_json_failure = self._try_claim_json(question, norm_rows)
             elif isinstance(llm_answer, str) and llm_answer.strip().startswith("{"):
                 llm_json = llm_answer
             structured = structured_answer_from_evidence(
@@ -357,6 +358,18 @@ class AnswerService:
                 "render_validation": structured.get("render_validation") or {},
                 "primary_group_id": structured.get("primary_group_id"),
             }
+            if claim_json_failure:
+                # ADR adr-search-ask-contract-v2 §4.4: LLM claim extraction is
+                # optional; its failure falls back to the deterministic path and
+                # must be observable, never silent.
+                payload["fallbacks"] = list(payload.get("fallbacks") or []) + [{
+                    "stage": "claim_extraction",
+                    "type": "llm_unavailable_deterministic_fallback",
+                    "reason": claim_json_failure,
+                }]
+                payload["warnings"] = list(payload.get("warnings") or []) + [
+                    f"generate_failed:{claim_json_failure}"
+                ]
             if structured.get("answer_mode") == "no_answer":
                 payload["sources"] = []
                 payload["raw_evidence_used"] = []
@@ -430,8 +443,16 @@ class AnswerService:
             }
         return payload
 
-    def _try_claim_json(self, question: str, evidence_rows: list[dict[str, Any]]) -> str | None:
-        """Ask LLM for claim JSON only; never use free-form prose as answer."""
+    def _try_claim_json(
+        self, question: str, evidence_rows: list[dict[str, Any]],
+    ) -> tuple[str | None, str]:
+        """Ask LLM for claim JSON only; never use free-form prose as answer.
+
+        Returns ``(claim_json, failure_reason)``. ``failure_reason`` is ``""``
+        on success and a stable reason code otherwise (ADR
+        ``adr-search-ask-contract-v2`` §4.4): ``llm_protocol_unsupported``,
+        ``claim_json_not_found`` or the exception class name (``TimeoutError``).
+        """
         try:
             from src.answering.fallbacks import build_generation_context
             ctx = build_generation_context([], evidence_rows, conflicts=[])
@@ -448,14 +469,16 @@ class AnswerService:
             elif callable(self._llm):
                 out = self._llm(prompt)
             else:
-                return None
+                return None, "llm_protocol_unsupported"
             text = (out if isinstance(out, str) else str(out or "")).strip()
             if text.startswith("{"):
-                return text
+                return text, ""
             # Try extract first JSON object
             import re
             m = re.search(r"\{[\s\S]*\}", text)
-            return m.group(0) if m else None
+            if m:
+                return m.group(0), ""
+            return None, "claim_json_not_found"
         except Exception as exc:  # noqa: BLE001
             logger.debug("claim JSON generation failed: %s", exc)
-            return None
+            return None, type(exc).__name__ or "claim_json_failed"
