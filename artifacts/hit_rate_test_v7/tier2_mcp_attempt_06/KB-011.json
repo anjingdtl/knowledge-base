@@ -1,0 +1,1715 @@
+{
+  "case": {
+    "case_id": "KB-011",
+    "category": "同义词与口语表达",
+    "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+    "expected_knowledge_ids": [
+      "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+    ],
+    "expected_title_keywords": [
+      "线上合作",
+      "2025"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万",
+      "等级保护"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕155号第九条；口语'线上店铺入驻'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "cb48eae7-4c26-4347-8646-a981a1901ffd",
+          "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+          "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+          "text": "【文档】中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd\n【章节】第三条 遵循原则 > 第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 线上合作类别划分\n合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。\n对于后期因公司发展需要而产生的新的合作形态不在本办\n法适用范围内。新的合作模式引入必须经过试运营期。后续将通\n过修订线上合作管理办法增补新的合作模式。\n第三条 遵循原则\n本管理办法遵循“公开”“透明”“公正”原则。\n第四条 本办法适用于各市分公司、各专业公司、区公司相\n关部门（以下统称“各单位”）。\n— 3 — 第二章 线上合作分类\n根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下：",
+          "score": 0.7,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+          "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+          "version_year": 2025,
+          "source_version": "2025",
+          "section_path": "第三条 遵循原则 > 第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 线上合作类别划分",
+          "block_ids": [
+            "cb48eae7-4c26-4347-8646-a981a1901ffd",
+            "3cd27e26-ec65-40a9-842a-514906e9cc3d",
+            "a81445ba-7ede-4361-8798-68322851e704",
+            "f40a3726-ccde-46c5-a5df-b1139af9c299",
+            "d477e8cc-afd8-45f0-b360-bc7de4fb2ca0",
+            "0b81c429-e71d-4392-9b73-f863d0294530",
+            "0bc8c248-4b31-479f-b1c5-80ce7aa1e8fd",
+            "a5010efd-89a4-4c0b-876f-4845192c4e1b",
+            "6f5285f3-4c4b-4fac-8ee0-9c713d999344",
+            "5834d15b-b824-4a42-8a43-6ab3f0083548",
+            "bf5dec95-591f-422a-b600-b6e92db3a646",
+            "35981fae-63f5-4aec-a9c0-a28b99a8c072",
+            "420a8bea-6bc6-40e6-8bf9-a84e61e695e1",
+            "397b173d-800d-4e45-be43-e214fa865060",
+            "53d248a5-a34f-4480-83ae-1c9592240c53",
+            "3b20158a-c629-467d-96f4-a30d0100d4d0"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "cb48eae7-4c26-4347-8646-a981a1901ffd",
+              "order_idx": 21,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "3cd27e26-ec65-40a9-842a-514906e9cc3d",
+              "order_idx": 22,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "a81445ba-7ede-4361-8798-68322851e704",
+              "order_idx": 23,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "f40a3726-ccde-46c5-a5df-b1139af9c299",
+              "order_idx": 24,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "d477e8cc-afd8-45f0-b360-bc7de4fb2ca0",
+              "order_idx": 25,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "0b81c429-e71d-4392-9b73-f863d0294530",
+              "order_idx": 26,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "0bc8c248-4b31-479f-b1c5-80ce7aa1e8fd",
+              "order_idx": 27,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "a5010efd-89a4-4c0b-876f-4845192c4e1b",
+              "order_idx": 28,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "6f5285f3-4c4b-4fac-8ee0-9c713d999344",
+              "order_idx": 29,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "5834d15b-b824-4a42-8a43-6ab3f0083548",
+              "order_idx": 30,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "bf5dec95-591f-422a-b600-b6e92db3a646",
+              "order_idx": 32,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "35981fae-63f5-4aec-a9c0-a28b99a8c072",
+              "order_idx": 33,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "420a8bea-6bc6-40e6-8bf9-a84e61e695e1",
+              "order_idx": 34,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "397b173d-800d-4e45-be43-e214fa865060",
+              "order_idx": 35,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "53d248a5-a34f-4480-83ae-1c9592240c53",
+              "order_idx": 36,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "3b20158a-c629-467d-96f4-a30d0100d4d0",
+              "order_idx": 37,
+              "char_start": 0,
+              "char_end": 22
+            }
+          ],
+          "effective_year": 2025,
+          "citation": {
+            "document": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "path": "",
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "block_id": "cb48eae7-4c26-4347-8646-a981a1901ffd",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.18993529677391052,
+            "score_breakdown": {
+              "vector": 0.8102425038814545,
+              "keyword": 0.6467160870083046,
+              "rrf": 0.023415977961432504,
+              "rerank": 0.18993529677391052
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd\n【章节】第三条 遵循原则 > 第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 线上合作类别划分\n合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。\n对于后期因公司发展需要而产生的新的合作形态不在本办\n法适用范围内。新的合作模式引入必须经过试运营期。后续将通\n过修订线上合作管理办法增补新的合作模式。\n第三条 遵循原则\n本管理办法遵循“公开”“透明”“公正”原则。\n第四条 本办法适用于各市分公司、各专业公司、区公司相\n关部门（以下统称“各单位”）。\n— 3 — 第二章 线上合作分类\n根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下："
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司线上合作管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.1695,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+        ],
+        "evidence_snapshot_id": "w8KxHqPLHFaJx4zCtMCl6IeF5UafOJSS",
+        "snapshot_fingerprint": "08212d1d0851d251710bb1ab",
+        "accepted_passage_ids": [
+          "e1de7f1abf50c32d59fd9a2a48adc161",
+          "7bdeefb50c8164633bfbe81e293983f0",
+          "9dec203b10ade2cbb948dff5eb249424"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 2845.95
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 第五条线上合作类别划分（一）资源置换类合作资源置换类合作指使用自身的流量型资源、其他资源与外部合作商的多样性资源进行多元化、全方位的置换合作类型\n- 第二条线上合作是指各单位在业务发展运营过程中因业务发展需要与线上合作商所建立的业务合作关系\n- 合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "passage_id": "9dec203b10ade2cbb948dff5eb249424",
+            "block_id": "397b173d-800d-4e45-be43-e214fa865060",
+            "block_ids": [
+              "397b173d-800d-4e45-be43-e214fa865060",
+              "53d248a5-a34f-4480-83ae-1c9592240c53",
+              "3b20158a-c629-467d-96f4-a30d0100d4d0",
+              "6a93a60f-8878-43df-bca4-9ba657353f0f",
+              "c12d6fa1-1b52-4a5b-9438-4b72cdf34740",
+              "d494a41c-cefa-4759-ad3f-42fb286313fe",
+              "c854aab5-4c71-4549-8a2d-b45cb30e3e65",
+              "0de0422e-c7ea-4f7c-9a52-2e7aa85f48d3",
+              "509a3f69-6192-42cb-9f0d-70a0f41525a1",
+              "e71f0a30-d171-4a50-838e-2008e3b6c4b4",
+              "7304f7dc-8d70-42b4-97d8-a598d003fa9b",
+              "4cfd4b4e-2883-49aa-8a19-c349c58b9530",
+              "84628718-a59e-4469-92ff-fe5324afd695",
+              "9a1dac7a-f89f-48a5-bc81-f2db2af0f335",
+              "5a8cfc5e-0da2-40df-a70f-dd395dff6671",
+              "81ceefff-6bb8-4a6f-9811-58eab1e568f4",
+              "fc0f4a3d-7ed1-4181-9104-09f96e8c4669",
+              "9c0482a1-17e5-4375-b2ef-3da7b8ffa32c"
+            ],
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "text": "根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下：\n第五条 线上合作类别划分\n（一）资源置换类合作\n资源置换类合作指使用自身的流量型资源、其他资源与外部\n合作商的多样性资源进行多元化、全方位的置换合作类型。资源\n置换应达到双方共赢的目的，双方置换的资源价值要对等，中国\n电信获得的资源价值不得比付出的资源价值低，且合作方提供的\n运营数据第三方报告不得以合作方单方面数据为准。同时置换合\n作业务需遵循权责发生制以及收支匹配原则，不得出现只收不\n支，或只支不收单边列账的情况。\n1.流量型资源置换合作。流量型资源指网站流量、活跃度、\n粉丝量等流量型资源。包括不限于以下：\n（1）电信自有流量资源。如营业厅客户端：包含开机屏、\n首页焦点图、各频道焦点图、首页及各频道icon固定位等，欢\ngo 网站及WAP网站：悬浮图、首页焦点图、各频道焦点图、首\n页及各频道附加的固定位等。",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "passage_id": "7bdeefb50c8164633bfbe81e293983f0",
+            "block_id": "8f5e266f-7d24-42ef-a305-ac405e6dc463",
+            "block_ids": [
+              "8f5e266f-7d24-42ef-a305-ac405e6dc463",
+              "5dd6f4fd-4e8d-45c0-ae5e-2da37da0a8e7",
+              "3c82d614-5749-48aa-9c1c-bf9d5b1b1b01",
+              "b81977de-431f-4bf1-a555-17ce3cf65241",
+              "1b78b390-97c7-4c25-81ed-7464ac319b14",
+              "abb46cf0-666d-4a0f-9394-e02e9d365820",
+              "7f7b35c2-6fdf-4a76-9892-d7c2d0493e9b",
+              "da929053-4403-4e24-86aa-89d85c4bd57b",
+              "13b1b99a-8125-473e-85bb-4b38e8742ec9",
+              "3a5c2779-4980-4e62-986b-c29a4d9fe085",
+              "d45fafae-bf00-480a-b28e-faf416c27edb",
+              "b6ce9764-2a1f-461d-a393-452603cfe011",
+              "c22e162f-66d8-4c4d-97d6-d963f5609fea",
+              "b4bb32f8-9d1f-4266-a366-1129e4672b85",
+              "c75e08cb-f150-4b0e-ad3b-cbe2fd3e9c31",
+              "f896ad3a-0aad-4f24-b227-80d926c61a58",
+              "a3fa5e60-91c7-41ec-918c-dd1c0813aafe",
+              "d3c85aeb-c931-4824-861a-223980873175",
+              "cb48eae7-4c26-4347-8646-a981a1901ffd",
+              "3cd27e26-ec65-40a9-842a-514906e9cc3d",
+              "a81445ba-7ede-4361-8798-68322851e704"
+            ],
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "text": "中电信桂〔2025〕155号\n关于印发中国电信广西公司线上合作管理办法\n（2025年修订）的通知\n各市分公司，各专业公司，区公司各部门：\n现将《中国电信广西公司线上合作管理办法（2025年修订）》\n印发给你们，请遵照执行。\n中国电信广西公司\n2025年4月23日 何世恒(全渠道运营中心)\n— 2 —中国电信广西公司线上合作管理办法\n（2025年修订）\n第一章 总 则\n第一条 为进一步规范线上合作业务管理，有效防范廉洁风\n险、资金安全风险、意识形态风险、品牌形象风险，保证其有序、\n健康发展，特制定本管理办法。\n第二条 线上合作是指各单位在业务发展运营过程中因业\n务发展需要与线上合作商所建立的业务合作关系。合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+            "block_id": "cb48eae7-4c26-4347-8646-a981a1901ffd",
+            "block_ids": [
+              "cb48eae7-4c26-4347-8646-a981a1901ffd",
+              "3cd27e26-ec65-40a9-842a-514906e9cc3d",
+              "a81445ba-7ede-4361-8798-68322851e704",
+              "f40a3726-ccde-46c5-a5df-b1139af9c299",
+              "d477e8cc-afd8-45f0-b360-bc7de4fb2ca0",
+              "0b81c429-e71d-4392-9b73-f863d0294530",
+              "0bc8c248-4b31-479f-b1c5-80ce7aa1e8fd",
+              "a5010efd-89a4-4c0b-876f-4845192c4e1b",
+              "6f5285f3-4c4b-4fac-8ee0-9c713d999344",
+              "5834d15b-b824-4a42-8a43-6ab3f0083548",
+              "bf5dec95-591f-422a-b600-b6e92db3a646",
+              "35981fae-63f5-4aec-a9c0-a28b99a8c072",
+              "420a8bea-6bc6-40e6-8bf9-a84e61e695e1",
+              "397b173d-800d-4e45-be43-e214fa865060",
+              "53d248a5-a34f-4480-83ae-1c9592240c53",
+              "3b20158a-c629-467d-96f4-a30d0100d4d0"
+            ],
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "text": "合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。\n对于后期因公司发展需要而产生的新的合作形态不在本办\n法适用范围内。新的合作模式引入必须经过试运营期。后续将通\n过修订线上合作管理办法增补新的合作模式。\n第三条 遵循原则\n本管理办法遵循“公开”“透明”“公正”原则。\n第四条 本办法适用于各市分公司、各专业公司、区公司相\n关部门（以下统称“各单位”）。\n— 3 — 第二章 线上合作分类\n根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下：",
+            "score": 0.7,
+            "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "第五条线上合作类别划分（一）资源置换类合作资源置换类合作指使用自身的流量型资源、其他资源与外部合作商的多样性资源进行多元化、全方位的置换合作类型",
+            "evidence_passage_ids": [
+              "9dec203b10ade2cbb948dff5eb249424"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "bc46cb948cc2bdfe5c365992"
+          },
+          {
+            "text": "第二条线上合作是指各单位在业务发展运营过程中因业务发展需要与线上合作商所建立的业务合作关系",
+            "evidence_passage_ids": [
+              "7bdeefb50c8164633bfbe81e293983f0"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "21338a352e34e7b80c1ebb8f"
+          },
+          {
+            "text": "合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+            "evidence_passage_ids": [
+              "e1de7f1abf50c32d59fd9a2a48adc161"
+            ],
+            "fact_type": "scope",
+            "condition": "",
+            "candidate_id": "964d73bd6e0e7200544113e8"
+          },
+          {
+            "text": "合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+            "evidence_passage_ids": [
+              "7bdeefb50c8164633bfbe81e293983f0"
+            ],
+            "fact_type": "scope",
+            "condition": "",
+            "candidate_id": "45440ae34c897c8c1a9faf2f"
+          },
+          {
+            "text": "新的合作模式引入必须经过试运营期",
+            "evidence_passage_ids": [
+              "e1de7f1abf50c32d59fd9a2a48adc161"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "1f589dee301cbd318c1b86c7"
+          },
+          {
+            "text": "后续将通过修订线上合作管理办法增补新的合作模式",
+            "evidence_passage_ids": [
+              "e1de7f1abf50c32d59fd9a2a48adc161"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "16e6efb24522d0de8a912c25"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "passage_id": "9dec203b10ade2cbb948dff5eb249424",
+            "block_id": "397b173d-800d-4e45-be43-e214fa865060",
+            "block_ids": [
+              "397b173d-800d-4e45-be43-e214fa865060",
+              "53d248a5-a34f-4480-83ae-1c9592240c53",
+              "3b20158a-c629-467d-96f4-a30d0100d4d0",
+              "6a93a60f-8878-43df-bca4-9ba657353f0f",
+              "c12d6fa1-1b52-4a5b-9438-4b72cdf34740",
+              "d494a41c-cefa-4759-ad3f-42fb286313fe",
+              "c854aab5-4c71-4549-8a2d-b45cb30e3e65",
+              "0de0422e-c7ea-4f7c-9a52-2e7aa85f48d3",
+              "509a3f69-6192-42cb-9f0d-70a0f41525a1",
+              "e71f0a30-d171-4a50-838e-2008e3b6c4b4",
+              "7304f7dc-8d70-42b4-97d8-a598d003fa9b",
+              "4cfd4b4e-2883-49aa-8a19-c349c58b9530",
+              "84628718-a59e-4469-92ff-fe5324afd695",
+              "9a1dac7a-f89f-48a5-bc81-f2db2af0f335",
+              "5a8cfc5e-0da2-40df-a70f-dd395dff6671",
+              "81ceefff-6bb8-4a6f-9811-58eab1e568f4",
+              "fc0f4a3d-7ed1-4181-9104-09f96e8c4669",
+              "9c0482a1-17e5-4375-b2ef-3da7b8ffa32c"
+            ],
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "path": "",
+            "text": "根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下：\n第五条 线上合作类别划分\n（一）资源置换类合作\n资源置换类合作指使用自身的流量型资源、其他资源与外部\n合作商的多样性资源进行多元化、全方位的置换合作类型。资源\n置换应达到双方共赢的目的，双方置换的资源价值要对等，中国\n电信获得的资源价值不得比付出的资源价值低，且合作方提供的\n运营数据第三方报告不得以合作方单方面数据为准。同时置换合\n作业务需遵循权责发生制以及收支匹配原则，不得出现只收不\n支，或只支不收单边列账的情况。\n1.流量型资源置换合作。流量型资源指网站流量、活跃度、\n粉丝量等流量型资源。包括不限于以下：\n（1）电信自有流量资源。如营业厅客户端：包含开机屏、\n首页焦点图、各频道焦点图、首页及各频道icon固定位等，欢\ngo 网站及WAP网站：悬浮图、首页焦点图、各频道焦点图、首\n页及各频道附加的固定位等。",
+            "body_text": "根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下：\n第五条 线上合作类别划分\n（一）资源置换类合作\n资源置换类合作指使用自身的流量型资源、其他资源与外部\n合作商的多样性资源进行多元化、全方位的置换合作类型。资源\n置换应达到双方共赢的目的，双方置换的资源价值要对等，中国\n电信获得的资源价值不得比付出的资源价值低，且合作方提供的\n运营数据第三方报告不得以合作方单方面数据为准。同时置换合\n作业务需遵循权责发生制以及收支匹配原则，不得出现只收不\n支，或只支不收单边列账的情况。\n1.流量型资源置换合作。流量型资源指网站流量、活跃度、\n粉丝量等流量型资源。包括不限于以下：\n（1）电信自有流量资源。如营业厅客户端：包含开机屏、\n首页焦点图、各频道焦点图、首页及各频道icon固定位等，欢\ngo 网站及WAP网站：悬浮图、首页焦点图、各频道焦点图、首\n页及各频道附加的固定位等。",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "passage_id": "7bdeefb50c8164633bfbe81e293983f0",
+            "block_id": "8f5e266f-7d24-42ef-a305-ac405e6dc463",
+            "block_ids": [
+              "8f5e266f-7d24-42ef-a305-ac405e6dc463",
+              "5dd6f4fd-4e8d-45c0-ae5e-2da37da0a8e7",
+              "3c82d614-5749-48aa-9c1c-bf9d5b1b1b01",
+              "b81977de-431f-4bf1-a555-17ce3cf65241",
+              "1b78b390-97c7-4c25-81ed-7464ac319b14",
+              "abb46cf0-666d-4a0f-9394-e02e9d365820",
+              "7f7b35c2-6fdf-4a76-9892-d7c2d0493e9b",
+              "da929053-4403-4e24-86aa-89d85c4bd57b",
+              "13b1b99a-8125-473e-85bb-4b38e8742ec9",
+              "3a5c2779-4980-4e62-986b-c29a4d9fe085",
+              "d45fafae-bf00-480a-b28e-faf416c27edb",
+              "b6ce9764-2a1f-461d-a393-452603cfe011",
+              "c22e162f-66d8-4c4d-97d6-d963f5609fea",
+              "b4bb32f8-9d1f-4266-a366-1129e4672b85",
+              "c75e08cb-f150-4b0e-ad3b-cbe2fd3e9c31",
+              "f896ad3a-0aad-4f24-b227-80d926c61a58",
+              "a3fa5e60-91c7-41ec-918c-dd1c0813aafe",
+              "d3c85aeb-c931-4824-861a-223980873175",
+              "cb48eae7-4c26-4347-8646-a981a1901ffd",
+              "3cd27e26-ec65-40a9-842a-514906e9cc3d",
+              "a81445ba-7ede-4361-8798-68322851e704"
+            ],
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "path": "",
+            "text": "中电信桂〔2025〕155号\n关于印发中国电信广西公司线上合作管理办法\n（2025年修订）的通知\n各市分公司，各专业公司，区公司各部门：\n现将《中国电信广西公司线上合作管理办法（2025年修订）》\n印发给你们，请遵照执行。\n中国电信广西公司\n2025年4月23日 何世恒(全渠道运营中心)\n— 2 —中国电信广西公司线上合作管理办法\n（2025年修订）\n第一章 总 则\n第一条 为进一步规范线上合作业务管理，有效防范廉洁风\n险、资金安全风险、意识形态风险、品牌形象风险，保证其有序、\n健康发展，特制定本管理办法。\n第二条 线上合作是指各单位在业务发展运营过程中因业\n务发展需要与线上合作商所建立的业务合作关系。合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。",
+            "body_text": "中电信桂〔2025〕155号\n关于印发中国电信广西公司线上合作管理办法\n（2025年修订）的通知\n各市分公司，各专业公司，区公司各部门：\n现将《中国电信广西公司线上合作管理办法（2025年修订）》\n印发给你们，请遵照执行。\n中国电信广西公司\n2025年4月23日 何世恒(全渠道运营中心)\n— 2 —中国电信广西公司线上合作管理办法\n（2025年修订）\n第一章 总 则\n第一条 为进一步规范线上合作业务管理，有效防范廉洁风\n险、资金安全风险、意识形态风险、品牌形象风险，保证其有序、\n健康发展，特制定本管理办法。\n第二条 线上合作是指各单位在业务发展运营过程中因业\n务发展需要与线上合作商所建立的业务合作关系。合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+            "block_id": "cb48eae7-4c26-4347-8646-a981a1901ffd",
+            "block_ids": [
+              "cb48eae7-4c26-4347-8646-a981a1901ffd",
+              "3cd27e26-ec65-40a9-842a-514906e9cc3d",
+              "a81445ba-7ede-4361-8798-68322851e704",
+              "f40a3726-ccde-46c5-a5df-b1139af9c299",
+              "d477e8cc-afd8-45f0-b360-bc7de4fb2ca0",
+              "0b81c429-e71d-4392-9b73-f863d0294530",
+              "0bc8c248-4b31-479f-b1c5-80ce7aa1e8fd",
+              "a5010efd-89a4-4c0b-876f-4845192c4e1b",
+              "6f5285f3-4c4b-4fac-8ee0-9c713d999344",
+              "5834d15b-b824-4a42-8a43-6ab3f0083548",
+              "bf5dec95-591f-422a-b600-b6e92db3a646",
+              "35981fae-63f5-4aec-a9c0-a28b99a8c072",
+              "420a8bea-6bc6-40e6-8bf9-a84e61e695e1",
+              "397b173d-800d-4e45-be43-e214fa865060",
+              "53d248a5-a34f-4480-83ae-1c9592240c53",
+              "3b20158a-c629-467d-96f4-a30d0100d4d0"
+            ],
+            "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+            "path": "",
+            "text": "合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。\n对于后期因公司发展需要而产生的新的合作形态不在本办\n法适用范围内。新的合作模式引入必须经过试运营期。后续将通\n过修订线上合作管理办法增补新的合作模式。\n第三条 遵循原则\n本管理办法遵循“公开”“透明”“公正”原则。\n第四条 本办法适用于各市分公司、各专业公司、区公司相\n关部门（以下统称“各单位”）。\n— 3 — 第二章 线上合作分类\n根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下：",
+            "body_text": "合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。\n对于后期因公司发展需要而产生的新的合作形态不在本办\n法适用范围内。新的合作模式引入必须经过试运营期。后续将通\n过修订线上合作管理办法增补新的合作模式。\n第三条 遵循原则\n本管理办法遵循“公开”“透明”“公正”原则。\n第四条 本办法适用于各市分公司、各专业公司、区公司相\n关部门（以下统称“各单位”）。\n— 3 — 第二章 线上合作分类\n根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下：",
+            "score": 0.7,
+            "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.1695,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "合作",
+                "店铺",
+                "合作商"
+              ],
+              "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "spans": [
+                {
+                  "slot": "合作",
+                  "surface": "合作",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    29,
+                    31
+                  ],
+                  "excerpt": "-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd\n【文档】中电信桂-2025"
+                },
+                {
+                  "slot": "店铺",
+                  "surface": "店铺",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    265,
+                    267
+                  ],
+                  "excerpt": "相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。\n"
+                },
+                {
+                  "slot": "合作商",
+                  "surface": "合作商",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    177,
+                    180
+                  ],
+                  "excerpt": "区公司相 > 第五条 线上合作类别划分\n合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "外部",
+                "商家",
+                "合作",
+                "卖东西",
+                "店铺",
+                "入驻",
+                "门槛",
+                "合作商",
+                "门店",
+                "公司和外部商家合作卖东西的线",
+                "外部商家合作卖东西",
+                "线上店铺入驻门槛"
+              ],
+              "score": 0.25,
+              "typed_plan": {
+                "anchors": [
+                  "外部",
+                  "商家",
+                  "合作",
+                  "卖东西",
+                  "店铺",
+                  "入驻",
+                  "门槛",
+                  "合作商"
+                ],
+                "predicate": "门槛",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "08212d1d0851d251710bb1ab",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛"
+          },
+          "fact_plan": {
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:门槛"
+            ],
+            "entities": [
+              "外部",
+              "商家",
+              "合作",
+              "卖东西",
+              "店铺",
+              "入驻",
+              "门槛",
+              "合作商",
+              "门店",
+              "公司和外部商家合作卖东西的线",
+              "外部商家合作卖东西",
+              "线上店铺入驻门槛"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "外部",
+            "object": "商家",
+            "scope": [],
+            "selector": [],
+            "predicate": "门槛",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "外部",
+              "商家",
+              "合作",
+              "卖东西",
+              "店铺",
+              "入驻",
+              "门槛",
+              "合作商",
+              "门店",
+              "公司和外部商家合作卖东西的线",
+              "外部商家合作卖东西",
+              "线上店铺入驻门槛"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 19,
+          "candidate_count": 16
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "第五条线上合作类别划分（一）资源置换类合作资源置换类合作指使用自身的流量型资源、其他资源与外部合作商的多样性资源进行多元化、全方位的置换合作类型",
+              "evidence_passage_ids": [
+                "9dec203b10ade2cbb948dff5eb249424"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "bc46cb948cc2bdfe5c365992"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第二条线上合作是指各单位在业务发展运营过程中因业务发展需要与线上合作商所建立的业务合作关系",
+              "evidence_passage_ids": [
+                "7bdeefb50c8164633bfbe81e293983f0"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "21338a352e34e7b80c1ebb8f"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+              "evidence_passage_ids": [
+                "e1de7f1abf50c32d59fd9a2a48adc161"
+              ],
+              "fact_type": "scope",
+              "condition": "",
+              "candidate_id": "964d73bd6e0e7200544113e8"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+              "evidence_passage_ids": [
+                "7bdeefb50c8164633bfbe81e293983f0"
+              ],
+              "fact_type": "scope",
+              "condition": "",
+              "candidate_id": "45440ae34c897c8c1a9faf2f"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "新的合作模式引入必须经过试运营期",
+              "evidence_passage_ids": [
+                "e1de7f1abf50c32d59fd9a2a48adc161"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "1f589dee301cbd318c1b86c7"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "后续将通过修订线上合作管理办法增补新的合作模式",
+              "evidence_passage_ids": [
+                "e1de7f1abf50c32d59fd9a2a48adc161"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "16e6efb24522d0de8a912c25"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:门槛"
+            ],
+            "entities": [
+              "外部",
+              "商家",
+              "合作",
+              "卖东西",
+              "店铺",
+              "入驻",
+              "门槛",
+              "合作商",
+              "门店",
+              "公司和外部商家合作卖东西的线",
+              "外部商家合作卖东西",
+              "线上店铺入驻门槛"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "外部",
+            "object": "商家",
+            "scope": [],
+            "selector": [],
+            "predicate": "门槛",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "外部",
+              "商家",
+              "合作",
+              "卖东西",
+              "店铺",
+              "入驻",
+              "门槛",
+              "合作商",
+              "门店",
+              "公司和外部商家合作卖东西的线",
+              "外部商家合作卖东西",
+              "线上店铺入驻门槛"
+            ]
+          },
+          "input_count": 16,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "bc46cb948cc2bdfe5c365992",
+              "record_id": "9dec203b10ade2cbb948dff5eb249424:r0",
+              "passage_id": "9dec203b10ade2cbb948dff5eb249424",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "fact_kind": "policy",
+              "subject": "外部",
+              "predicate": "门槛",
+              "object": "第五条线上合作类别划分（一）资源置换类合作资源置换类合作指使用自身的流量型资源、其他资源与外部合作商的多样性资源进行多元化、全方位的置换合作类型",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第五条线上合作类别划分（一）资源置换类合作资源置换类合作指使用自身的流量型资源、其他资源与外部合作商的多样性资源进行多元化、全方位的置换合作类型",
+              "evidence_spans": [
+                [
+                  134,
+                  207
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+              "version_year": 2025,
+              "score": 22.449999999999992,
+              "unstructured_rejected": false,
+              "group_id": "5b75b29b6be887ff",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:门槛": "miss",
+                "anchor:外部": "hit",
+                "anchor:商家": "miss",
+                "anchor:合作": "hit",
+                "anchor:卖东西": "miss",
+                "anchor:店铺": "miss",
+                "anchor:入驻": "miss",
+                "anchor:门槛": "miss",
+                "anchor:合作商": "hit"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "21338a352e34e7b80c1ebb8f",
+              "record_id": "7bdeefb50c8164633bfbe81e293983f0:r3",
+              "passage_id": "7bdeefb50c8164633bfbe81e293983f0",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "fact_kind": "policy",
+              "subject": "合作",
+              "predicate": "门槛",
+              "object": "第二条线上合作是指各单位在业务发展运营过程中因业务发展需要与线上合作商所建立的业务合作关系",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第二条线上合作是指各单位在业务发展运营过程中因业务发展需要与线上合作商所建立的业务合作关系",
+              "evidence_spans": [
+                [
+                  0,
+                  46
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+              "version_year": 2025,
+              "score": 16.15,
+              "unstructured_rejected": false,
+              "group_id": "5b75b29b6be887ff",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:门槛": "miss",
+                "anchor:外部": "miss",
+                "anchor:商家": "miss",
+                "anchor:合作": "hit",
+                "anchor:卖东西": "miss",
+                "anchor:店铺": "miss",
+                "anchor:入驻": "miss",
+                "anchor:门槛": "miss",
+                "anchor:合作商": "hit"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "964d73bd6e0e7200544113e8",
+              "record_id": "e1de7f1abf50c32d59fd9a2a48adc161:r0",
+              "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "fact_kind": "scope",
+              "subject": "合作",
+              "predicate": "门槛",
+              "object": "合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+              "evidence_spans": [
+                [
+                  0,
+                  45
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+              "version_year": 2025,
+              "score": 14.149999999999999,
+              "unstructured_rejected": false,
+              "group_id": "5b75b29b6be887ff",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:门槛": "miss",
+                "anchor:外部": "miss",
+                "anchor:商家": "miss",
+                "anchor:合作": "hit",
+                "anchor:卖东西": "miss",
+                "anchor:店铺": "miss",
+                "anchor:入驻": "miss",
+                "anchor:门槛": "miss",
+                "anchor:合作商": "hit"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "45440ae34c897c8c1a9faf2f",
+              "record_id": "7bdeefb50c8164633bfbe81e293983f0:r4",
+              "passage_id": "7bdeefb50c8164633bfbe81e293983f0",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "fact_kind": "scope",
+              "subject": "合作",
+              "predicate": "门槛",
+              "object": "合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+              "evidence_spans": [
+                [
+                  0,
+                  45
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+              "version_year": 2025,
+              "score": 14.149999999999999,
+              "unstructured_rejected": false,
+              "group_id": "5b75b29b6be887ff",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:门槛": "miss",
+                "anchor:外部": "miss",
+                "anchor:商家": "miss",
+                "anchor:合作": "hit",
+                "anchor:卖东西": "miss",
+                "anchor:店铺": "miss",
+                "anchor:入驻": "miss",
+                "anchor:门槛": "miss",
+                "anchor:合作商": "hit"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "1f589dee301cbd318c1b86c7",
+              "record_id": "e1de7f1abf50c32d59fd9a2a48adc161:r3",
+              "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "fact_kind": "policy",
+              "subject": "合作",
+              "predicate": "门槛",
+              "object": "新的合作模式引入必须经过试运营期",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "新的合作模式引入必须经过试运营期",
+              "evidence_spans": [
+                [
+                  0,
+                  16
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+              "version_year": 2025,
+              "score": 10.1,
+              "unstructured_rejected": false,
+              "group_id": "5b75b29b6be887ff",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:门槛": "miss",
+                "anchor:外部": "miss",
+                "anchor:商家": "miss",
+                "anchor:合作": "hit",
+                "anchor:卖东西": "miss",
+                "anchor:店铺": "miss",
+                "anchor:入驻": "miss",
+                "anchor:门槛": "miss",
+                "anchor:合作商": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "16e6efb24522d0de8a912c25",
+              "record_id": "e1de7f1abf50c32d59fd9a2a48adc161:r4",
+              "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "fact_kind": "policy",
+              "subject": "合作",
+              "predicate": "门槛",
+              "object": "后续将通过修订线上合作管理办法增补新的合作模式",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "后续将通过修订线上合作管理办法增补新的合作模式",
+              "evidence_spans": [
+                [
+                  0,
+                  23
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司线上合作管理办法",
+              "version_year": 2025,
+              "score": 10.1,
+              "unstructured_rejected": false,
+              "group_id": "5b75b29b6be887ff",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:门槛": "miss",
+                "anchor:外部": "miss",
+                "anchor:商家": "miss",
+                "anchor:合作": "hit",
+                "anchor:卖东西": "miss",
+                "anchor:店铺": "miss",
+                "anchor:入驻": "miss",
+                "anchor:门槛": "miss",
+                "anchor:合作商": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {
+              "bc46cb948cc2bdfe5c365992": "hit",
+              "21338a352e34e7b80c1ebb8f": "hit",
+              "964d73bd6e0e7200544113e8": "hit",
+              "45440ae34c897c8c1a9faf2f": "hit",
+              "1f589dee301cbd318c1b86c7": "hit",
+              "16e6efb24522d0de8a912c25": "hit",
+              "c8b47da20dae2aef20ad62f0": "hit",
+              "9e51bd0be689118273dc3a60": "hit",
+              "29caf35abca90d37b1f09b2b": "hit",
+              "bc82df81133a1b03faefcd5c": "hit",
+              "d0a891d97f7a87c3c74ff83c": "hit",
+              "f7783c227029d0f1048c1366": "hit",
+              "e83b395855a485a1dd436498": "hit",
+              "70962f6d490991fae5ac4cdf": "hit",
+              "f75ee860dbc1b1bbd7489608": "hit",
+              "f7bbb4a4c2b58149a44e2675": "hit"
+            },
+            "predicate:门槛": {
+              "bc46cb948cc2bdfe5c365992": "miss",
+              "21338a352e34e7b80c1ebb8f": "miss",
+              "964d73bd6e0e7200544113e8": "miss",
+              "45440ae34c897c8c1a9faf2f": "miss",
+              "1f589dee301cbd318c1b86c7": "miss",
+              "16e6efb24522d0de8a912c25": "miss",
+              "c8b47da20dae2aef20ad62f0": "miss",
+              "9e51bd0be689118273dc3a60": "miss",
+              "29caf35abca90d37b1f09b2b": "miss",
+              "bc82df81133a1b03faefcd5c": "miss",
+              "d0a891d97f7a87c3c74ff83c": "miss",
+              "f7783c227029d0f1048c1366": "miss",
+              "e83b395855a485a1dd436498": "miss",
+              "70962f6d490991fae5ac4cdf": "miss",
+              "f75ee860dbc1b1bbd7489608": "miss",
+              "f7bbb4a4c2b58149a44e2675": "miss"
+            }
+          },
+          "primary_group_id": "5b75b29b6be887ff",
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "missing_after_select": [
+            "predicate:门槛"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "5b75b29b6be887ff",
+                "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+                "knowledge_ids": [
+                  "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司线上合作管理办法",
+                "document_revision": "2025",
+                "effective_date": "",
+                "version_year": 2025,
+                "passage_ids": [
+                  "e1de7f1abf50c32d59fd9a2a48adc161",
+                  "7bdeefb50c8164633bfbe81e293983f0",
+                  "9dec203b10ade2cbb948dff5eb249424"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.7,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+                "section": "第三条 遵循原则 > 第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 线上合作类别划分",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.4,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r0",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r1",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r2",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r3",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r4",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r5",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r6",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r7",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r8",
+                  "e1de7f1abf50c32d59fd9a2a48adc161:r9",
+                  "7bdeefb50c8164633bfbe81e293983f0:r0",
+                  "7bdeefb50c8164633bfbe81e293983f0:r1",
+                  "7bdeefb50c8164633bfbe81e293983f0:r2",
+                  "7bdeefb50c8164633bfbe81e293983f0:r3",
+                  "7bdeefb50c8164633bfbe81e293983f0:r4",
+                  "7bdeefb50c8164633bfbe81e293983f0:r5",
+                  "9dec203b10ade2cbb948dff5eb249424:r0",
+                  "9dec203b10ade2cbb948dff5eb249424:r1",
+                  "9dec203b10ade2cbb948dff5eb249424:r2"
+                ]
+              }
+            ],
+            "primary_group_id": "5b75b29b6be887ff",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "公司和外部商家合作卖东西",
+                "的线上店铺入驻门槛"
+              ],
+              "selection": [
+                {
+                  "group_id": "5b75b29b6be887ff",
+                  "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+                  "knowledge_ids": [
+                    "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+                  ],
+                  "score": 7.4,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact",
+            "predicate:门槛"
+          ],
+          "candidate_ids": [
+            "bc46cb948cc2bdfe5c365992",
+            "21338a352e34e7b80c1ebb8f",
+            "964d73bd6e0e7200544113e8",
+            "45440ae34c897c8c1a9faf2f",
+            "1f589dee301cbd318c1b86c7",
+            "16e6efb24522d0de8a912c25"
+          ],
+          "missing_slots": [
+            "predicate:门槛"
+          ],
+          "complete": false,
+          "intents": [
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "coverage_matrix": {
+            "policy_fact": {
+              "bc46cb948cc2bdfe5c365992": "hit",
+              "21338a352e34e7b80c1ebb8f": "hit",
+              "964d73bd6e0e7200544113e8": "hit",
+              "45440ae34c897c8c1a9faf2f": "hit",
+              "1f589dee301cbd318c1b86c7": "hit",
+              "16e6efb24522d0de8a912c25": "hit",
+              "c8b47da20dae2aef20ad62f0": "hit",
+              "9e51bd0be689118273dc3a60": "hit",
+              "29caf35abca90d37b1f09b2b": "hit",
+              "bc82df81133a1b03faefcd5c": "hit",
+              "d0a891d97f7a87c3c74ff83c": "hit",
+              "f7783c227029d0f1048c1366": "hit",
+              "e83b395855a485a1dd436498": "hit",
+              "70962f6d490991fae5ac4cdf": "hit",
+              "f75ee860dbc1b1bbd7489608": "hit",
+              "f7bbb4a4c2b58149a44e2675": "hit"
+            },
+            "predicate:门槛": {
+              "bc46cb948cc2bdfe5c365992": "miss",
+              "21338a352e34e7b80c1ebb8f": "miss",
+              "964d73bd6e0e7200544113e8": "miss",
+              "45440ae34c897c8c1a9faf2f": "miss",
+              "1f589dee301cbd318c1b86c7": "miss",
+              "16e6efb24522d0de8a912c25": "miss",
+              "c8b47da20dae2aef20ad62f0": "miss",
+              "9e51bd0be689118273dc3a60": "miss",
+              "29caf35abca90d37b1f09b2b": "miss",
+              "bc82df81133a1b03faefcd5c": "miss",
+              "d0a891d97f7a87c3c74ff83c": "miss",
+              "f7783c227029d0f1048c1366": "miss",
+              "e83b395855a485a1dd436498": "miss",
+              "70962f6d490991fae5ac4cdf": "miss",
+              "f75ee860dbc1b1bbd7489608": "miss",
+              "f7bbb4a4c2b58149a44e2675": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+          "intents": [
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "policy_fact",
+            "predicate:门槛"
+          ],
+          "entities": [
+            "外部",
+            "商家",
+            "合作",
+            "卖东西",
+            "店铺",
+            "入驻",
+            "门槛",
+            "合作商",
+            "门店",
+            "公司和外部商家合作卖东西的线",
+            "外部商家合作卖东西",
+            "线上店铺入驻门槛"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "policy",
+            "prohibition",
+            "scope",
+            "responsibility",
+            "relationship"
+          ],
+          "subject": "外部",
+          "object": "商家",
+          "scope": [],
+          "selector": [],
+          "predicate": "门槛",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "policy",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "外部",
+            "商家",
+            "合作",
+            "卖东西",
+            "店铺",
+            "入驻",
+            "门槛",
+            "合作商",
+            "门店",
+            "公司和外部商家合作卖东西的线",
+            "外部商家合作卖东西",
+            "线上店铺入驻门槛"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "5b75b29b6be887ff",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "knowledge_ids": [
+                "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司线上合作管理办法",
+              "document_revision": "2025",
+              "effective_date": "",
+              "version_year": 2025,
+              "passage_ids": [
+                "e1de7f1abf50c32d59fd9a2a48adc161",
+                "7bdeefb50c8164633bfbe81e293983f0",
+                "9dec203b10ade2cbb948dff5eb249424"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.7,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+              "section": "第三条 遵循原则 > 第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 线上合作类别划分",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.4,
+              "rejection_reasons": [],
+              "record_ids": [
+                "e1de7f1abf50c32d59fd9a2a48adc161:r0",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r1",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r2",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r3",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r4",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r5",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r6",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r7",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r8",
+                "e1de7f1abf50c32d59fd9a2a48adc161:r9",
+                "7bdeefb50c8164633bfbe81e293983f0:r0",
+                "7bdeefb50c8164633bfbe81e293983f0:r1",
+                "7bdeefb50c8164633bfbe81e293983f0:r2",
+                "7bdeefb50c8164633bfbe81e293983f0:r3",
+                "7bdeefb50c8164633bfbe81e293983f0:r4",
+                "7bdeefb50c8164633bfbe81e293983f0:r5",
+                "9dec203b10ade2cbb948dff5eb249424:r0",
+                "9dec203b10ade2cbb948dff5eb249424:r1",
+                "9dec203b10ade2cbb948dff5eb249424:r2"
+              ]
+            }
+          ],
+          "primary_group_id": "5b75b29b6be887ff",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛"
+            ],
+            "selection": [
+              {
+                "group_id": "5b75b29b6be887ff",
+                "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+                "knowledge_ids": [
+                  "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+                ],
+                "score": 7.4,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": false,
+          "missing_slots": [
+            "predicate:门槛"
+          ],
+          "checks": {
+            "policy_anchors": [
+              "外部",
+              "合作"
+            ],
+            "predicate:门槛": false
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "bc46cb948cc2bdfe5c365992"
+              ],
+              "passage_id": "9dec203b10ade2cbb948dff5eb249424",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "text": "- 第五条线上合作类别划分（一）资源置换类合作资源置换类合作指使用自身的流量型资源、其他资源与外部合作商的多样性资源进行多元化、全方位的置换合作类型",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "21338a352e34e7b80c1ebb8f"
+              ],
+              "passage_id": "7bdeefb50c8164633bfbe81e293983f0",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "text": "- 第二条线上合作是指各单位在业务发展运营过程中因业务发展需要与线上合作商所建立的业务合作关系",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "964d73bd6e0e7200544113e8"
+              ],
+              "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "text": "- 合作商须具备相应资质和能力，在授权范围内从事各项电信基础电信业务的线上销售和服务的经营机构",
+              "fact_kind": "scope"
+            }
+          ],
+          "answer_len": 170
+        },
+        "primary_group_id": "5b75b29b6be887ff",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "type": "knowledge",
+              "label": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd"
+            },
+            {
+              "id": "397b173d-800d-4e45-be43-e214fa865060",
+              "type": "block",
+              "label": "业务代理类合作、APP类合作、终端类合作、软件类产品代销服",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+            },
+            {
+              "id": "c1683fc3-2fba-4b69-b910-1c70f3be4d01",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+            },
+            {
+              "id": "8f5e266f-7d24-42ef-a305-ac405e6dc463",
+              "type": "block",
+              "label": "中电信桂〔2025〕155号",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+            },
+            {
+              "id": "f7e80c75-589f-4fd1-8f8d-da473597461e",
+              "type": "block",
+              "label": "[第1页]",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+            },
+            {
+              "id": "cb48eae7-4c26-4347-8646-a981a1901ffd",
+              "type": "block",
+              "label": "线上销售是指以线上形式销售与本公司经营相关的业务/产",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+            },
+            {
+              "id": "56a8d600-430d-4c11-87ba-782fadd6037e",
+              "type": "block",
+              "label": "[第2页]",
+              "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+            }
+          ],
+          "edges": [
+            {
+              "source": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "target": "397b173d-800d-4e45-be43-e214fa865060",
+              "type": "contains"
+            },
+            {
+              "source": "c1683fc3-2fba-4b69-b910-1c70f3be4d01",
+              "target": "397b173d-800d-4e45-be43-e214fa865060",
+              "type": "parent"
+            },
+            {
+              "source": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "target": "8f5e266f-7d24-42ef-a305-ac405e6dc463",
+              "type": "contains"
+            },
+            {
+              "source": "f7e80c75-589f-4fd1-8f8d-da473597461e",
+              "target": "8f5e266f-7d24-42ef-a305-ac405e6dc463",
+              "type": "parent"
+            },
+            {
+              "source": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+              "target": "cb48eae7-4c26-4347-8646-a981a1901ffd",
+              "type": "contains"
+            },
+            {
+              "source": "56a8d600-430d-4c11-87ba-782fadd6037e",
+              "target": "cb48eae7-4c26-4347-8646-a981a1901ffd",
+              "type": "parent"
+            }
+          ],
+          "truncated": false,
+          "node_count": 7
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 2,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+          ],
+          "accepted_block_ids": [
+            "cb48eae7-4c26-4347-8646-a981a1901ffd"
+          ],
+          "accepted_passage_ids": [
+            "e1de7f1abf50c32d59fd9a2a48adc161",
+            "7bdeefb50c8164633bfbe81e293983f0",
+            "9dec203b10ade2cbb948dff5eb249424"
+          ],
+          "adjacent_passage_ids": [
+            "7bdeefb50c8164633bfbe81e293983f0",
+            "9dec203b10ade2cbb948dff5eb249424"
+          ],
+          "generation_knowledge_ids": [
+            "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+          ],
+          "top_score": 0.1695,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "合作",
+              "店铺",
+              "合作商"
+            ],
+            "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+            "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+            "spans": [
+              {
+                "slot": "合作",
+                "surface": "合作",
+                "synonym_source": "query_surface",
+                "span": [
+                  29,
+                  31
+                ],
+                "excerpt": "-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd\n【文档】中电信桂-2025"
+              },
+              {
+                "slot": "店铺",
+                "surface": "店铺",
+                "synonym_source": "query_surface",
+                "span": [
+                  265,
+                  267
+                ],
+                "excerpt": "相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。\n"
+              },
+              {
+                "slot": "合作商",
+                "surface": "合作商",
+                "synonym_source": "query_surface",
+                "span": [
+                  177,
+                  180
+                ],
+                "excerpt": "区公司相 > 第五条 线上合作类别划分\n合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "外部",
+              "商家",
+              "合作",
+              "卖东西",
+              "店铺",
+              "入驻",
+              "门槛",
+              "合作商",
+              "门店",
+              "公司和外部商家合作卖东西的线",
+              "外部商家合作卖东西",
+              "线上店铺入驻门槛"
+            ],
+            "score": 0.25,
+            "typed_plan": {
+              "anchors": [
+                "外部",
+                "商家",
+                "合作",
+                "卖东西",
+                "店铺",
+                "入驻",
+                "门槛",
+                "合作商"
+              ],
+              "predicate": "门槛",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "08212d1d0851d251710bb1ab"
+        },
+        "snapshot_fingerprint": "08212d1d0851d251710bb1ab",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 3,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 30.45
+  },
+  "top_candidate_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+  "candidates": [
+    {
+      "knowledge_id": "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+      "passage_id": "e1de7f1abf50c32d59fd9a2a48adc161",
+      "title": "中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd",
+      "score": 0.7,
+      "final_relevance_score": 0.35,
+      "text": "【文档】中电信桂-2025-155号-关于印发中国电信广西公司线上合作管理办法-2025年修订-的通知--35c01dbd\n【章节】第三条 遵循原则 > 第四条 本办法适用于各市分公司、各专业公司、区公司相 > 第五条 线上合作类别划分\n合作商须具备\n相应资质和能力，在授权范围内从事各项电信基础电信业务的线\n上销售和服务的经营机构。\n线上销售是指以线上形式销售与本公司经营相关的业务/产\n品/服务等，包括电商平台店铺（如天猫京东、苏宁等）、网站、\n微信公众号、APP 客户端等非实体店面的销售。\n对于后期因公司发展需要而产生的新的合作形态不在本办\n法适用范围内。新的合作模式引入必须经过试运营期。后续将通\n过修订线上合作管理办法增补新的合作模式。\n第三条 遵循原则\n本管理办法遵循“公开”“透明”“公正”原则。\n第四条 本办法适用于各市分公司、各专业公司、区公司相\n关部门（以下统称“各单位”）。\n— 3 — 第二章 线上合作分类\n根据各单位对外合作的业务性质、销售渠道及商业模式对合\n作业务进行分类。合作方式包括但不限于资源置换类合作、电信\n业务代理类合作、APP类合作、终端类合作、软件类产品代销服\n务合作、线上外呼类合作、权益类合作等，不包括招标方式的运\n营支撑合作。本办法所涉及的合作业务类别如下："
+    }
+  ],
+  "search_ms": 2845.95,
+  "ask_ms": 30.45,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "w8KxHqPLHFaJx4zCtMCl6IeF5UafOJSS",
+  "search_snapshot_fingerprint": "08212d1d0851d251710bb1ab",
+  "ask_snapshot_fingerprint": "08212d1d0851d251710bb1ab",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "53c0be6f9e69f3b9efcf0538"
+}

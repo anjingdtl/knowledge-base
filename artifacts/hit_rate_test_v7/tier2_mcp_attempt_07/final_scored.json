@@ -1,0 +1,144 @@
+{
+  "metrics": {
+    "answerable_total": 1,
+    "no_answer_total": 0,
+    "top1_correct": 1,
+    "recall5_correct": 1,
+    "ask_fact_correct_count": 0,
+    "ask_citation_valid_count": 1,
+    "e2e_pass_count": 0,
+    "grounded_count": 0,
+    "Top-1 Accuracy": 1.0,
+    "Recall@5": 1.0,
+    "Ask Fact Correctness": 0.0,
+    "Ask Citation Validity": 1.0,
+    "E2E Pass Rate": 0.0,
+    "Answer Groundedness": 0.0,
+    "Citation Validity": 1.0,
+    "citation_total": 3,
+    "citation_valid": 3,
+    "citation_buckets": {
+      "preaccepted": 3,
+      "adjacent_extension": 0,
+      "expected_id": 0,
+      "rejected": 0
+    },
+    "Hallucination Rate": 0.0,
+    "False Positive Rate": 0.0
+  },
+  "gates": {
+    "Top-1 Accuracy": {
+      "value": 1.0,
+      "threshold": 0.75,
+      "pass": true
+    },
+    "Recall@5": {
+      "value": 1.0,
+      "threshold": 0.88,
+      "pass": true
+    },
+    "Ask Fact Correctness": {
+      "value": 0.0,
+      "threshold": 0.9,
+      "pass": false
+    },
+    "Ask Citation Validity": {
+      "value": 1.0,
+      "threshold": 0.95,
+      "pass": true
+    },
+    "E2E Pass Rate": {
+      "value": 0.0,
+      "threshold": 0.9,
+      "pass": false
+    },
+    "Hallucination Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    },
+    "False Positive Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    }
+  },
+  "release_verdict": "不通过放行",
+  "defects": {
+    "P0": [],
+    "P1": [
+      "KB-012"
+    ],
+    "P2": [],
+    "P3": []
+  },
+  "detail": [
+    {
+      "case_id": "KB-012",
+      "category": "同义词与口语表达",
+      "query": "公司大额对外投资并购决策要不要先过法律审核",
+      "expected_ids": [
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+      ],
+      "required_facts": [
+        "法律合规审核",
+        "重大对外投融资"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 3,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 3,
+      "citation_valid_den": 3,
+      "ask_source_count": 3,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "820fa23d66d52741921972289983318c",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "passage_trace_completeness_claims": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    }
+  ]
+}

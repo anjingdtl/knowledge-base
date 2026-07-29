@@ -1,0 +1,35 @@
+{
+  "total": 1,
+  "skipped_resume": 0,
+  "reuse_snapshot": true,
+  "read_mode": "unique",
+  "workers": 1,
+  "elapsed_s": 4.53,
+  "search_ms_sum": 4437.55,
+  "ask_ms_sum": 46.56,
+  "read_ms_sum": 0.0,
+  "snapshot_reuse_hits": 1,
+  "retrieval_count_sum": 0,
+  "unique_reads": 1,
+  "cases": [
+    {
+      "case_id": "KB-012",
+      "category": "同义词与口语表达",
+      "query": "公司大额对外投资并购决策要不要先过法律审核",
+      "top_candidate_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "search_ok": true,
+      "ask_ok": true,
+      "search_ms": 4437.55,
+      "ask_ms": 46.56,
+      "read_ms": 0.0,
+      "snapshot_reused": true,
+      "snapshot_reuse_reason": "",
+      "snapshot_integrity_error": false,
+      "search_snapshot_fingerprint": "b35279428a6f994b7517ae6b",
+      "ask_snapshot_fingerprint": "b35279428a6f994b7517ae6b",
+      "retrieval_count": 0,
+      "answer_validation_decision": "structured_claim_answer",
+      "retrieval_decision": "accepted"
+    }
+  ]
+}

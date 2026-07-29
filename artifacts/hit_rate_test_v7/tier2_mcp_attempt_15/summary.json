@@ -1,0 +1,35 @@
+{
+  "total": 1,
+  "skipped_resume": 0,
+  "reuse_snapshot": true,
+  "read_mode": "unique",
+  "workers": 1,
+  "elapsed_s": 3.44,
+  "search_ms_sum": 3347.51,
+  "ask_ms_sum": 48.94,
+  "read_ms_sum": 0.0,
+  "snapshot_reuse_hits": 1,
+  "retrieval_count_sum": 0,
+  "unique_reads": 1,
+  "cases": [
+    {
+      "case_id": "KB-014",
+      "category": "同义词与口语表达",
+      "query": "异业合作给客户送权益优惠券的合作方准入条件",
+      "top_candidate_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "search_ok": true,
+      "ask_ok": true,
+      "search_ms": 3347.51,
+      "ask_ms": 48.94,
+      "read_ms": 0.0,
+      "snapshot_reused": true,
+      "snapshot_reuse_reason": "",
+      "snapshot_integrity_error": false,
+      "search_snapshot_fingerprint": "b33c51416c27669d87d916b7",
+      "ask_snapshot_fingerprint": "b33c51416c27669d87d916b7",
+      "retrieval_count": 0,
+      "answer_validation_decision": "structured_claim_answer",
+      "retrieval_decision": "accepted"
+    }
+  ]
+}

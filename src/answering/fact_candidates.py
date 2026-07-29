@@ -14,7 +14,7 @@ from src.answering.logical_evidence import LogicalEvidenceRecord, records_from_e
 from src.answering.query_planner import QueryPlan, extract_conditions, plan_query
 
 _VALUE_RE = re.compile(
-    r"(?P<value>\d+(?:\.\d+)?)\s*(?P<unit>万元|亿|元|%|％|天|个工作日|工作日|个月|月|年|次|户|人|个|倍)",
+    r"(?P<value>\d+(?:\.\d+)?)\s*(?P<unit>万元|万|亿|元|%|％|天|个工作日|工作日|个月|月|年|次|户|人|个|倍)",
     re.IGNORECASE,
 )
 _DEADLINE_RE = re.compile(
@@ -183,26 +183,29 @@ def annotate_slot_match(candidate: FactCandidate, plan: QueryPlan) -> FactCandid
                     match["condition"] = "miss"
             else:
                 match["condition"] = "unknown"
+        elif slot.startswith("condition:"):
+            condition = slot.split(":", 1)[1]
+            if candidate.condition == condition or condition in body:
+                match[slot] = "hit"
+            else:
+                match[slot] = "miss"
         elif slot.startswith("dim:"):
             dim = slot[4:]
             if candidate.value_dimension == dim or candidate.condition == dim:
                 match[slot] = "hit"
             elif dim in body or (candidate.condition and dim in candidate.condition):
                 match[slot] = "hit"
-            elif dim in ("II类", "III类", "I类") and candidate.condition == dim:
-                match[slot] = "hit"
-            elif dim in ("总额", "人均", "比例", "年付款", "周期", "value"):
+            elif dim in ("total", "per_unit", "ratio", "annual", "period", "value"):
                 # Dimension coverage via unit/condition heuristics
-                if dim == "比例" and candidate.unit in ("%", "％"):
+                if dim == "ratio" and candidate.unit in ("%", "％"):
                     match[slot] = "hit"
-                elif dim == "年付款" and candidate.unit in ("万元", "元"):
-                    match[slot] = "hit" if not plan.conditions or candidate.condition else "unknown"
-                elif dim == "总额" and candidate.condition in ("团体", "") and candidate.unit in ("元", "万元"):
+                elif dim == "annual" and candidate.unit in ("万元", "元"):
                     match[slot] = "hit"
-                elif dim == "人均" and (
-                    "人" in (candidate.condition or "")
+                elif dim == "total" and candidate.unit in ("元", "万元"):
+                    match[slot] = "hit"
+                elif dim == "per_unit" and (
+                    re.search(r"每(?:人|个|名)|人均", body)
                     or "人" in body
-                    or candidate.value_dimension == "人均"
                 ):
                     match[slot] = "hit"
                 elif dim == "value" and candidate.value:
@@ -333,31 +336,27 @@ def select_fact_candidates(
             audit["dropped"].append({"id": c.candidate_id, "reason": "numeric_without_numeric_intent"})
             continue
         if plan.wants_numeric and c.fact_kind == "numeric":
-            money_q = bool(re.search(r"处罚|金额|限额|元|奖金|补助|占比|比例", plan.raw or ""))
-            if money_q and c.unit not in ("元", "万元", "亿", "%", "％"):
+            # Distinguish a monetary answer request from a duration/count
+            # request before slot coverage can stop on an unrelated number.
+            # These are general question forms; the unit constraint remains
+            # evidence-derived rather than corpus-specific.
+            money_q = bool(re.search(
+                r"处罚|罚款|金额|限额|额度|元|钱|费用|价格|报销|奖金|奖励|补助|占比|比例",
+                plan.raw or "",
+            )) or plan.predicate in {"准入", "门槛", "资格"}
+            if money_q and c.unit not in ("元", "万元", "万", "亿", "%", "％"):
                 audit["dropped"].append({"id": c.candidate_id, "reason": "unit_not_money"})
                 continue
-            # Exclusive conditions only — scope words must NOT filter here.
+            # User-stated conditions only — scope words are never conditions.
             if plan.conditions:
                 if c.condition and c.condition not in plan.conditions:
-                    # Allow class limits when plan asks account limits without exclusive
-                    # condition match on same class — still drop unrelated exclusive labels.
-                    exclusive = {"涉诈", "涉骚扰", "区外", "区内", "I类", "II类", "III类"}
-                    if c.condition in exclusive and c.condition not in plan.conditions:
-                        # Keep II/III class when query wants 年付款 without naming class
-                        if not (
-                            re.search(r"年付款|支付账户|账户余额", plan.raw or "")
-                            and c.condition in ("I类", "II类", "III类")
-                        ):
-                            audit["dropped"].append({
-                                "id": c.candidate_id,
-                                "reason": "condition_mismatch",
-                                "wanted": plan.conditions,
-                            })
-                            continue
-                if not c.condition and plan.conditions and not re.search(
-                    r"年付款|支付账户|账户余额|奖金|限额", plan.raw or ""
-                ):
+                    audit["dropped"].append({
+                        "id": c.candidate_id,
+                        "reason": "condition_mismatch",
+                        "wanted": plan.conditions,
+                    })
+                    continue
+                if not c.condition and plan.conditions:
                     audit["dropped"].append({
                         "id": c.candidate_id,
                         "reason": "missing_condition_for_conditioned_query",
@@ -373,13 +372,17 @@ def select_fact_candidates(
 
     selected: list[FactCandidate] = []
     covered: set[str] = set()
+    covered_anchors: set[str] = set()
 
     def _mark_covered(c: FactCandidate) -> None:
         for slot, status in (c.slot_match or {}).items():
             if status == "hit" and not slot.startswith("anchor:"):
                 covered.add(slot)
+            elif status == "hit" and slot.startswith("anchor:"):
+                covered_anchors.add(slot[7:])
         if c.condition:
             covered.add(c.condition)
+            covered.add(f"condition:{c.condition}")
         if c.fact_kind == "numeric" and c.value:
             covered.add("value")
             covered.add("unit")
@@ -395,7 +398,16 @@ def select_fact_candidates(
             covered.add("policy_fact")
 
     def _needed() -> list[str]:
-        return [s for s in (plan.required_slots or []) if s not in covered]
+        required = [s for s in (plan.required_slots or []) if s not in covered]
+        if required:
+            return required
+        # A typed slot alone can be satisfied by a definition while omitting
+        # the user's actual entity/constraint.  Spend remaining bullet budget
+        # on independently grounded query anchors, never on an invented fact.
+        return [
+            f"anchor:{anchor}" for anchor in (plan.anchors or [])[:8]
+            if len(anchor) >= 2 and anchor not in covered_anchors
+        ]
 
     # Prefer numerics first when numeric intent is present; version when version intent.
     if plan.wants_numeric:
@@ -420,10 +432,14 @@ def select_fact_candidates(
             for s in need:
                 if (c.slot_match or {}).get(s) == "hit":
                     hits += 1
-                elif s == c.condition:
+                elif s == c.condition or s == f"condition:{c.condition}":
                     hits += 1
                 elif s.startswith("dim:") and (
                     c.value_dimension == s[4:] or c.condition == s[4:]
+                ):
+                    hits += 1
+                elif s.startswith("anchor:") and (
+                    (c.slot_match or {}).get(s) == "hit"
                 ):
                     hits += 1
             # Prefer exact exclusive condition match and numeric kinds
@@ -485,10 +501,8 @@ def select_fact_candidates(
                     and (
                         c.value_dimension == dim
                         or c.condition == dim
-                        or (dim == "比例" and c.unit in ("%", "％"))
-                        or (dim == "人均" and ("人" in (c.condition or "") or c.value_dimension == "人均"))
-                        or (dim == "总额" and c.condition in ("团体",))
-                        or (dim in ("II类", "III类", "I类") and c.condition == dim)
+                        or (dim == "ratio" and c.unit in ("%", "％"))
+                        or (dim == "per_unit" and re.search(r"每(?:人|个|名)|人均", c.exact_text or ""))
                     )
                 ),
                 None,
@@ -525,15 +539,10 @@ def select_fact_candidates(
             )
         ] or selected
 
-    # Deadlines by label
+    # Deadlines by query-stated labels.  If no label is explicit, retain the
+    # strongest deadline candidate rather than inventing a workflow taxonomy.
     if plan.wants_deadline:
-        labels = []
-        if "初审" in (plan.raw or "") or "初审" in plan.conditions:
-            labels.append("初审")
-        if re.search(r"产品评估|评估", plan.raw or ""):
-            labels.append("产品评估")
-        if not labels:
-            labels = ["初审", "产品评估"]
+        labels = list(plan.conditions or [])
         for label in labels:
             if any(c.fact_kind == "deadline" and (
                 c.condition == label or label in (c.exact_text or "")
@@ -662,25 +671,10 @@ def build_answer_plan(
                 and (
                     c.condition == dim
                     or c.value_dimension == dim
-                    or (dim == "比例" and c.unit in ("%", "％"))
-                    or (dim in ("II类", "III类") and c.condition == dim)
+                    or (dim == "ratio" and c.unit in ("%", "％"))
                 )
                 for c in selected
             ):
-                continue
-            # II/III dims: require at least one class limit present if both requested
-            if dim in ("II类", "III类", "I类"):
-                missing.append(slot)
-                continue
-            if dim in ("总额", "人均") and plan.wants_numeric:
-                # Only require if query explicitly asked both dimensions
-                if dim in (plan.value_dimensions or []) and len(plan.value_dimensions) > 1:
-                    if not any(
-                        (dim == "总额" and c.condition == "团体")
-                        or (dim == "人均" and ("人" in (c.condition or "") or c.value_dimension == "人均"))
-                        for c in selected if c.fact_kind == "numeric"
-                    ):
-                        missing.append(slot)
                 continue
             missing.append(slot)
             continue
@@ -712,7 +706,7 @@ def build_answer_plan(
             for c in selected
         ):
             continue
-        if slot in ("deadline", "初审", "产品评估") and any(c.fact_kind == "deadline" for c in selected):
+        if slot == "deadline" and any(c.fact_kind == "deadline" for c in selected):
             continue
         if slot in ("version", "doc_no") and any(c.fact_kind == "version" for c in selected):
             continue
@@ -817,29 +811,15 @@ def validate_render_coverage(
         for dim in plan.value_dimensions:
             if dim in ("value", "年付款", "周期"):
                 continue
-            if dim in ("II类", "III类", "I类"):
-                ok = dim in text or any(
-                    c.condition == dim and c.value and c.value in text for c in selected
-                )
-                # Also accept bare value if condition implied
-                if not ok and any(c.condition == dim and c.value and c.value in norm for c in selected):
-                    ok = True
+            if dim in ("period", "annual", "total"):
+                continue
+            if dim == "ratio":
+                ok = bool(re.search(r"\d+(?:\.\d+)?\s*(?:%|％)", text))
                 checks[f"dim:{dim}"] = ok
                 if not ok:
                     missing.append(f"dim:{dim}")
-            elif dim in ("总额", "人均") and len([d for d in plan.value_dimensions if d in ("总额", "人均")]) >= 2:
-                if dim == "总额":
-                    ok = any(
-                        c.condition == "团体" and c.value and c.value in text
-                        for c in selected if c.fact_kind == "numeric"
-                    ) or bool(re.search(r"15000|团体", text))
-                else:
-                    ok = any(
-                        c.value and c.value in text and (
-                            c.value_dimension == "人均" or "人" in (c.condition or "")
-                        )
-                        for c in selected if c.fact_kind == "numeric"
-                    ) or bool(re.search(r"1200|人均|每人", text))
+            elif dim == "per_unit":
+                ok = bool(re.search(r"每(?:人|个|名)|人均", text))
                 checks[f"dim:{dim}"] = ok
                 if not ok:
                     missing.append(f"dim:{dim}")
@@ -961,16 +941,16 @@ def _numeric_from_record(rec: LogicalEvidenceRecord, plan: QueryPlan) -> list[Fa
                 if len(frag) > 60:
                     frag = f"{cond}{value}{unit}" if cond else f"{value}{unit}"
             dim = ""
-            if cond in ("I类", "II类", "III类"):
-                dim = cond
-            elif cond == "团体":
-                dim = "总额"
-            elif cond == "人均":
-                dim = "人均"
+            if re.fullmatch(r"(?:[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩIVX]+|[一二三四五六七八九十]+)类", cond or ""):
+                dim = "class"
+            elif re.search(r"每(?:人|个|名)|人均", frag):
+                dim = "per_unit"
+            elif re.search(r"总额|总计|合计", frag):
+                dim = "total"
             elif unit in ("%", "％"):
-                dim = "比例"
-            elif re.search(r"年付款", body):
-                dim = "年付款"
+                dim = "ratio"
+            elif re.search(r"年付款|年限额", body):
+                dim = "annual"
             cid = stable_candidate_id(
                 passage_id=rec.passage_id,
                 body_span=(m.start(), m.end()),
@@ -1121,7 +1101,7 @@ def _version_from_record(rec: LogicalEvidenceRecord, plan: QueryPlan) -> list[Fa
 
 
 def _policy_from_record(rec: LogicalEvidenceRecord, plan: QueryPlan) -> list[FactCandidate]:
-    """Query-derived anchors + predicate/polarity + proximity scoring (no high_value list)."""
+    """Query-derived anchors, predicate/polarity and proximity scoring."""
     body = rec.body_text or ""
     if not body.strip():
         return []
@@ -1285,7 +1265,7 @@ def _score_candidate(c: FactCandidate, plan: QueryPlan) -> float:
         score += 0.5
     if c.table_row_ref:
         score += 0.3
-    # Query-derived anchor overlap only (no fixed high_value list)
+    # Query-derived anchor overlap only.
     for a in plan.anchors or []:
         if a and a in (c.exact_text or ""):
             score += 1.2

@@ -11,7 +11,7 @@ _SENTENCE_SPLIT = re.compile(r"(?<=[。；;！？\n])")
 _LIST_ITEM = re.compile(r"(?:^|\n)\s*(?:[-•·]|\d+[\.、]|[（(][一二三四五六七八九十0-9]+[）)])\s*")
 _TABLE_ROWISH = re.compile(
     r"(?:处罚|限额|标准|时限|奖金).{0,40}\d|"
-    r"\d+(?:\.\d+)?\s*(?:万元|元|%|％|个工作日|工作日)"
+    r"\d+(?:\.\d+)?\s*(?:万元|万|元|%|％|个工作日|工作日)"
 )
 # Heuristic: many short lines with multiple numbers look like flattened OCR tables.
 _DIGIT_RE = re.compile(r"\d+(?:\.\d+)?")
@@ -55,7 +55,7 @@ def _is_ambiguous_table_blob(text: str) -> bool:
     body = text or ""
     if len(body) < 80:
         return False
-    money = list(re.finditer(r"\d+(?:\.\d+)?\s*(?:万元|元)", body))
+    money = list(re.finditer(r"\d+(?:\.\d+)?\s*(?:万元|万|元)", body))
     if len(money) < 3:
         return False
     local_cond = 0

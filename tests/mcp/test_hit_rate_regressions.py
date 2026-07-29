@@ -384,52 +384,33 @@ class TestClauseEvidenceIntegrity:
 # ===========================================================================
 
 class TestQueryRewrite:
-    """Colloquial telecom-policy queries must expand to canonical terms so the
-    retriever can surface the formal-policy documents (KB-010/011/012/015/018/
-    020/021/028)."""
+    """Surface variants must preserve user wording without policy mappings."""
 
     def test_original_query_always_first(self):
         from src.services.query_rewrite import expand_query
         variants = expand_query("防诈骗和骚扰电话 代理商被罚多少钱")
         assert variants[0] == "防诈骗和骚扰电话 代理商被罚多少钱"
 
-    @pytest.mark.parametrize(
-        "q,canonical",
-        [
-            ("防诈骗和骚扰电话 代理商被罚多少钱", "涉诈"),
-            ("公司和外部商家合作卖东西的线上店铺入驻门槛", "线上合作"),
-            ("公司大额对外投资并购决策要不要先过法律审核", "重要决策"),
-            ("公司搞比赛给员工发奖金 上限是多少", "劳动竞赛"),
-            ("异业合作给客户送权益优惠券的合作方准入条件", "权益业务"),
-            ("客户提出对产品的需求 公司怎么响应处理", "产品问需"),
-        ],
-    )
-    def test_colloquial_expands_to_canonical_term(self, q, canonical):
+    def test_variant_never_invents_policy_title_or_answer_term(self):
         from src.services.query_rewrite import expand_query
+        q = "公司搞比赛给员工发奖金 上限是多少"
         variants = expand_query(q)
-        # At least one variant must contain the canonical policy term.
         joined = " ".join(variants)
-        assert canonical in joined, (q, canonical, variants)
+        assert "劳动竞赛" not in joined
+        assert "技能竞赛" not in joined
 
     def test_unknown_query_unchanged(self):
-        """Precision guard: queries without known synonyms return only the
-        original (no spurious expansion that could harm no-answer cases)."""
+        """A surface variant only contains user-derived terms."""
         from src.services.query_rewrite import expand_query
         variants = expand_query("营收资金管理办法 收支两条线")
-        assert variants == ["营收资金管理办法 收支两条线"]
+        assert variants[0] == "营收资金管理办法 收支两条线"
+        assert all("".join(variant.split()) for variant in variants)
 
-    def test_canonical_terms_for_per_term_fts(self):
-        """SPEC Phase 3.3: canonical terms must be extracted for per-term FTS
-        (FTS5 multi-word queries are implicit-AND and fail on missing terms)."""
+    def test_terms_are_query_derived(self):
         from src.services.query_rewrite import canonical_terms
-        # KB-010: 防诈骗→涉诈, 被罚→处罚
         terms = canonical_terms("防诈骗和骚扰电话 代理商被罚多少钱")
-        assert "涉诈" in terms and "处罚" in terms
-        # KB-009: 出差住宿→差旅费
-        terms = canonical_terms("员工出差的住宿费和伙食补助每天能报多少")
-        assert "差旅费" in terms
-        # No synonyms → empty (precision guard for no-answer queries)
-        assert canonical_terms("营收资金管理办法 收支两条线") == []
+        assert terms
+        assert "涉诈" not in terms and "处罚" not in terms
 
     def test_merge_keeps_highest_score_per_kid(self):
         from src.services.query_rewrite import merge_candidates_by_query

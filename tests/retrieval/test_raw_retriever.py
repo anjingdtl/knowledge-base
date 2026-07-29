@@ -44,6 +44,8 @@ def test_raw_retriever_returns_tuple_candidates():
     assert "stages" in result.trace
 
 
+
+
 def test_raw_retriever_can_strip_legacy_wiki_fts():
     config = Mock()
     config.get.return_value = False

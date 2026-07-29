@@ -1,0 +1,35 @@
+{
+  "total": 1,
+  "skipped_resume": 0,
+  "reuse_snapshot": true,
+  "read_mode": "unique",
+  "workers": 1,
+  "elapsed_s": 3.54,
+  "search_ms_sum": 3424.08,
+  "ask_ms_sum": 57.73,
+  "read_ms_sum": 0.0,
+  "snapshot_reuse_hits": 1,
+  "retrieval_count_sum": 0,
+  "unique_reads": 1,
+  "cases": [
+    {
+      "case_id": "KB-037",
+      "category": "新旧规则冲突",
+      "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+      "top_candidate_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "search_ok": true,
+      "ask_ok": true,
+      "search_ms": 3424.08,
+      "ask_ms": 57.73,
+      "read_ms": 0.0,
+      "snapshot_reused": true,
+      "snapshot_reuse_reason": "",
+      "snapshot_integrity_error": false,
+      "search_snapshot_fingerprint": "282c232c25580776e193b562",
+      "ask_snapshot_fingerprint": "282c232c25580776e193b562",
+      "retrieval_count": 0,
+      "answer_validation_decision": "structured_claim_answer",
+      "retrieval_decision": "accepted"
+    }
+  ]
+}

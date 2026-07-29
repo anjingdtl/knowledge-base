@@ -12,6 +12,7 @@ SPEC v2 Phase 5: 分离检索成功与最终回答正确性——禁止将 searc
 """
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
@@ -60,26 +61,23 @@ def contains(haystack, needle):
     return norm(needle) in norm(haystack)
 
 
-def _citation_bucket(source, expected_ids, snap):
-    """Classify a source as preaccepted / adjacent / rejected / expected."""
+def _citation_bucket(source, snap, raw_evidence):
+    """Classify a source by passage-level canonical lineage only."""
     if not isinstance(source, dict):
         return "rejected"
-    kid = str(source.get("knowledge_id") or "").strip()
-    bid = str(source.get("block_id") or "").strip()
-    accepted_kids = set(snap.get("accepted_knowledge_ids") or [])
-    accepted_blocks = set(snap.get("accepted_block_ids") or [])
-    gen_kids = set(snap.get("generation_knowledge_ids") or [])
-    if source.get("is_adjacent_extension"):
+    pid = str(source.get("passage_id") or "").strip()
+    raw_pids = {
+        str(item.get("passage_id") or "")
+        for item in raw_evidence if isinstance(item, dict)
+    }
+    accepted = {str(pid) for pid in (snap.get("accepted_passage_ids") or []) if str(pid).strip()}
+    adjacent = {str(pid) for pid in (snap.get("adjacent_passage_ids") or []) if str(pid).strip()}
+    if not pid or pid not in raw_pids:
+        return "rejected"
+    if pid in accepted:
+        return "preaccepted"
+    if source.get("is_adjacent_extension") and pid in adjacent:
         return "adjacent_extension"
-    if kid and kid in accepted_kids:
-        return "preaccepted"
-    if bid and bid in accepted_blocks:
-        return "preaccepted"
-    if kid and kid in gen_kids:
-        return "preaccepted"
-    if kid and kid in expected_ids:
-        # Traceable to golden expected set even if snapshot missing (older artifacts).
-        return "expected_id"
     return "rejected"
 
 
@@ -115,7 +113,7 @@ def score_answerable(case, d):
     # Prefer final sources only (not raw_evidence) for citation validity (SPEC v2).
     if ask_sources:
         for s in ask_sources:
-            bucket = _citation_bucket(s, expected_ids, snap)
+            bucket = _citation_bucket(s, snap, raw_ev)
             citation_buckets[bucket] = citation_buckets.get(bucket, 0) + 1
         # Valid = preaccepted / adjacent / expected_id; rejected is invalid.
         valid_n = (
@@ -223,10 +221,21 @@ def score_no_answer(case, d):
     }
 
 
-def main():
+def main(argv: list[str] | None = None):
+    global OUT, GOLDEN
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", default=os.environ.get("HIT_RATE_ARTIFACTS_DIR", "artifacts/hit_rate_test"))
+    parser.add_argument("--golden", default="evals/golden_set_hit_rate.json")
+    parser.add_argument("--cases", help="Optional comma-separated case IDs")
+    args = parser.parse_args(argv)
+    OUT = Path(args.out)
+    GOLDEN = json.loads(Path(args.golden).read_text(encoding="utf-8"))["cases"]
+    selected = set(args.cases.split(",")) if args.cases else None
     rows = []
     for case in GOLDEN:
         cid = case["case_id"]
+        if selected and cid not in selected:
+            continue
         path = OUT / f"{cid}.json"
         if not path.exists():
             print(f"MISSING {cid}")

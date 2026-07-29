@@ -1,0 +1,3053 @@
+{
+  "case": {
+    "case_id": "KB-020",
+    "category": "多条件组合",
+    "query": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+    "expected_knowledge_ids": [
+      "24a0fd9e-a285-4230-b58c-09715016758f"
+    ],
+    "expected_title_keywords": [
+      "网络和信息安全",
+      "2026",
+      "考核"
+    ],
+    "required_facts": [
+      "99%",
+      "实名登记率"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕161号；组合'网信安考核+实名制+阈值'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "9489004b-7ac4-44c3-a1ac-73b72954b905",
+          "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+          "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+          "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】2.未严格落实身份信息核验要求，存在证件冒 > 2.身份信息核验方面，存在 > （三）宽带实\n监管，每发现一次（含通报）扣 3分。 注1:Al换脸识别技术能力\n要求另行下发。\n注2：指部网安局印发的实\n名制工作通报 （含定期通报、\n专项通报等）。同一问题首\n次通报不扣分，下同。 网络和信息\n安全管理\n部、 市场部、\n数字化运营\n支撑中心 文艳\n— 26 — （二）电话实\n名制 1.电话实名制基础管理：未按要求落实电话实名\n制安全管理要求；电话用户实名登记率、人证一\n致率未达 99%；每发现一次（含通报）扣 3分。\n2.未严格落实身份信息核验要求，存在证件冒\n用、照片复用、换脸冒名入网等问题的，每发现\n一次，视情扣 5分或10分。 注：1.如单位用户、未成年\n用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "66d10f39a10245128b424ccadad81874",
+          "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "2.未严格落实身份信息核验要求，存在证件冒 > 2.身份信息核验方面，存在 > （三）宽带实",
+          "block_ids": [
+            "9489004b-7ac4-44c3-a1ac-73b72954b905",
+            "6bf41b95-05e9-4878-b7de-39c17c44f7e6",
+            "74c524c3-1975-4f0a-bc66-252f7ca696fe",
+            "d7b58cb2-1d7b-491a-8da5-f8c5a714a0bd",
+            "84974041-ec82-4fad-9395-87860f24fec9",
+            "f2a8bf4f-376b-4198-814c-a7db62121838",
+            "b1a231a4-c030-43e9-b62f-c0c7cae16073",
+            "189f6b71-5dd9-4bd0-b163-57827b073d13",
+            "a2cc9215-1a1a-4b4e-84d1-6b9696d3ebe4",
+            "c13213f2-a440-4a94-822a-bf3736706e4f",
+            "fb24718e-9825-442d-a0d9-59ec0da5ee74",
+            "c49b5eff-59e2-49ba-a90e-e5891bb65bb1",
+            "f56de768-b74c-4cef-851d-8bb41447de4c",
+            "e28ee752-20b2-4030-bb42-dbd67c431a70",
+            "40fefe7b-1886-4020-a8c6-1272afb69f4b",
+            "dc8667ec-518f-4ece-93b6-ddfc25b82139",
+            "c254000f-5900-4398-a233-e0d30274837f",
+            "6c81ede8-0aef-4448-b946-bfbb21ec860c",
+            "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+            "eafe1820-c78d-40e5-a8a1-36a5cae2adfa",
+            "4e83c48c-f5c7-42cb-86c5-e72352c60790"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "9489004b-7ac4-44c3-a1ac-73b72954b905",
+              "order_idx": 1536,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "6bf41b95-05e9-4878-b7de-39c17c44f7e6",
+              "order_idx": 1537,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "74c524c3-1975-4f0a-bc66-252f7ca696fe",
+              "order_idx": 1538,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "d7b58cb2-1d7b-491a-8da5-f8c5a714a0bd",
+              "order_idx": 1540,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "84974041-ec82-4fad-9395-87860f24fec9",
+              "order_idx": 1541,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "f2a8bf4f-376b-4198-814c-a7db62121838",
+              "order_idx": 1542,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "b1a231a4-c030-43e9-b62f-c0c7cae16073",
+              "order_idx": 1543,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "189f6b71-5dd9-4bd0-b163-57827b073d13",
+              "order_idx": 1544,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "a2cc9215-1a1a-4b4e-84d1-6b9696d3ebe4",
+              "order_idx": 1545,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "c13213f2-a440-4a94-822a-bf3736706e4f",
+              "order_idx": 1546,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "fb24718e-9825-442d-a0d9-59ec0da5ee74",
+              "order_idx": 1547,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "c49b5eff-59e2-49ba-a90e-e5891bb65bb1",
+              "order_idx": 1548,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "f56de768-b74c-4cef-851d-8bb41447de4c",
+              "order_idx": 1549,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "e28ee752-20b2-4030-bb42-dbd67c431a70",
+              "order_idx": 1550,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "40fefe7b-1886-4020-a8c6-1272afb69f4b",
+              "order_idx": 1551,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "dc8667ec-518f-4ece-93b6-ddfc25b82139",
+              "order_idx": 1552,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "c254000f-5900-4398-a233-e0d30274837f",
+              "order_idx": 1553,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "6c81ede8-0aef-4448-b946-bfbb21ec860c",
+              "order_idx": 1554,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+              "order_idx": 1555,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "eafe1820-c78d-40e5-a8a1-36a5cae2adfa",
+              "order_idx": 1556,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "4e83c48c-f5c7-42cb-86c5-e72352c60790",
+              "order_idx": 1557,
+              "char_start": 0,
+              "char_end": 13
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "9489004b-7ac4-44c3-a1ac-73b72954b905",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9871150255203247,
+            "score_breakdown": {
+              "vector": 0.8555811643600464,
+              "keyword": 0.8356279849439671,
+              "rrf": 0.03159645232815964,
+              "rerank": 0.9871150255203247
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】2.未严格落实身份信息核验要求，存在证件冒 > 2.身份信息核验方面，存在 > （三）宽带实\n监管，每发现一次（含通报）扣 3分。 注1:Al换脸识别技术能力\n要求另行下发。\n注2：指部网安局印发的实\n名制工作通报 （含定期通报、\n专项通报等）。同一问题首\n次通报不扣分，下同。 网络和信息\n安全管理\n部、 市场部、\n数字化运营\n支撑中心 文艳\n— 26 — （二）电话实\n名制 1.电话实名制基础管理：未按要求落实电话实名\n制安全管理要求；电话用户实名登记率、人证一\n致率未达 99%；每发现一次（含通报）扣 3分。\n2.未严格落实身份信息核验要求，存在证件冒\n用、照片复用、换脸冒名入网等问题的，每发现\n一次，视情扣 5分或10分。 注：1.如单位用户、未成年\n用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳"
+          },
+          "relevance": {
+            "semantic_score": 0.5484,
+            "fts_score": 0.0,
+            "title_score": 0.4597,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5484,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:网络和信息安全考核要点与评分标准afd",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+          "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+          "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+          "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】（四）中间 > （1）中间号：未按要求落实中间号管理要求（注 > 1）、中间号合作单位实名登记率、实名登记准\n用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳\n（三）宽带实\n名制 宽带实名制基础管理：未按要求落实宽带等安全\n管理要求，新增宽带用户实名登记率未达 95%，\n每发现一次（含通报）扣 3分。 注：如入网流程不合规、装\n机地址录入不规范、存量用\n户补登记工作推进缓慢等。 市场部、政\n企信息服务\n事业群（数\n智分公司）\n（四）中间\n号、物联网、\n车联网、短信\n端口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "bb568a81ab014a2ffb14e957710997a7",
+          "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "（四）中间 > （1）中间号：未按要求落实中间号管理要求（注 > 1）、中间号合作单位实名登记率、实名登记准",
+          "block_ids": [
+            "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+            "eafe1820-c78d-40e5-a8a1-36a5cae2adfa",
+            "4e83c48c-f5c7-42cb-86c5-e72352c60790",
+            "a9147d90-9612-4d45-bcf3-59bf8e61e35a",
+            "bcf75147-b404-4cbf-a9ee-1d1c4cc4da11",
+            "0697eacf-c7aa-4178-863f-60f55efda207",
+            "29e6a2f2-7a06-4fac-8949-84e33fffed5d",
+            "96281837-8c60-4540-b38f-929f7b1a6cb0",
+            "16e11836-4409-48d7-a177-03394b17fdbe",
+            "037a3794-89ac-4569-b93d-d210edef029f",
+            "12f33210-ba93-42eb-92db-a1a3923382ee",
+            "9953760d-17a1-4af9-bed7-d84bc1101670",
+            "bab8c47d-45a2-45a7-99d0-f6659d85da46",
+            "c61934a5-18f3-4b6d-809c-aa05cac80c3c",
+            "1da1857f-d244-4a6e-8517-c17a51390d70",
+            "782daeb6-397c-41d3-8506-64282cff3b38",
+            "42a1f94b-3fdf-40f6-810e-06688387f7cf",
+            "721827b2-c850-4681-bfab-aa3bed7ba667",
+            "79a67ca1-ea50-4277-80ed-4392cc8c8550",
+            "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+            "a24cd536-21bc-4e7c-afed-fd2505114630",
+            "7861af8b-0696-4fc5-9c7d-b5e7e1a8bc51"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+              "order_idx": 1555,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "eafe1820-c78d-40e5-a8a1-36a5cae2adfa",
+              "order_idx": 1556,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "4e83c48c-f5c7-42cb-86c5-e72352c60790",
+              "order_idx": 1557,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "a9147d90-9612-4d45-bcf3-59bf8e61e35a",
+              "order_idx": 1558,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "bcf75147-b404-4cbf-a9ee-1d1c4cc4da11",
+              "order_idx": 1559,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "0697eacf-c7aa-4178-863f-60f55efda207",
+              "order_idx": 1560,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "29e6a2f2-7a06-4fac-8949-84e33fffed5d",
+              "order_idx": 1561,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "96281837-8c60-4540-b38f-929f7b1a6cb0",
+              "order_idx": 1562,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "16e11836-4409-48d7-a177-03394b17fdbe",
+              "order_idx": 1563,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "037a3794-89ac-4569-b93d-d210edef029f",
+              "order_idx": 1564,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "12f33210-ba93-42eb-92db-a1a3923382ee",
+              "order_idx": 1565,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "9953760d-17a1-4af9-bed7-d84bc1101670",
+              "order_idx": 1566,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "bab8c47d-45a2-45a7-99d0-f6659d85da46",
+              "order_idx": 1567,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "c61934a5-18f3-4b6d-809c-aa05cac80c3c",
+              "order_idx": 1568,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "1da1857f-d244-4a6e-8517-c17a51390d70",
+              "order_idx": 1569,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "782daeb6-397c-41d3-8506-64282cff3b38",
+              "order_idx": 1570,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "42a1f94b-3fdf-40f6-810e-06688387f7cf",
+              "order_idx": 1571,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "721827b2-c850-4681-bfab-aa3bed7ba667",
+              "order_idx": 1572,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "79a67ca1-ea50-4277-80ed-4392cc8c8550",
+              "order_idx": 1573,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+              "order_idx": 1574,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "a24cd536-21bc-4e7c-afed-fd2505114630",
+              "order_idx": 1575,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "7861af8b-0696-4fc5-9c7d-b5e7e1a8bc51",
+              "order_idx": 1576,
+              "char_start": 0,
+              "char_end": 11
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9801287055015564,
+            "score_breakdown": {
+              "vector": 0.8510265499353409,
+              "keyword": 0.8353479717963936,
+              "rrf": 0.030655391120507393,
+              "rerank": 0.9801287055015564
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】（四）中间 > （1）中间号：未按要求落实中间号管理要求（注 > 1）、中间号合作单位实名登记率、实名登记准\n用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳\n（三）宽带实\n名制 宽带实名制基础管理：未按要求落实宽带等安全\n管理要求，新增宽带用户实名登记率未达 95%，\n每发现一次（含通报）扣 3分。 注：如入网流程不合规、装\n机地址录入不规范、存量用\n户补登记工作推进缓慢等。 市场部、政\n企信息服务\n事业群（数\n智分公司）\n（四）中间\n号、物联网、\n车联网、短信\n端口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。"
+          },
+          "relevance": {
+            "semantic_score": 0.5,
+            "fts_score": 0.0,
+            "title_score": 0.4597,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:网络和信息安全考核要点与评分标准afd",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "c25863cf-8a25-4bc9-b1f1-a1c0fc51c821",
+          "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+          "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+          "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带\n能力的日常监管，每发现一次（含通报）\n扣3分。 注1:Al换脸识别技术能力要求另行\n下发。\n注2：指部网安局印发的实名制工作\n通报（含定期通报、专项通报等）。\n同一问题首次通报不扣分，下同。 网络和信息\n安全管理部、\n市场部、数字\n化运营支撑\n中心 文艳\n— 13 — （二） 电话\n实名制 1.电话实名制基础管理： 未按要求落实电\n话实名制安全管理要求； 电话用户实名登\n记率、人证一致率未达 99%；每发现一次\n（含通报）扣 3分。\n2.未严格落实身份信息核验要求， 存在证\n件冒用、照片复用、换脸冒名入网等问题\n的，每发现一次，视情扣 5分或10分。 注：1.如单位用户、 未成年用户、 eSIM\n用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "9f3789df9d23de54607daa2437d31362",
+          "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带",
+          "block_ids": [
+            "c25863cf-8a25-4bc9-b1f1-a1c0fc51c821",
+            "fa079d32-2111-4c07-9a60-f42523449690",
+            "becdedd3-7b0d-45c1-9b9b-22bbcbf9c239",
+            "bf4adf2d-6034-4bc9-973e-483f46db3f91",
+            "af71bcdb-d110-4752-9fe3-b5dd754ef77b",
+            "d74d0938-7b26-4e03-9187-94df34e9ac0a",
+            "04db36ed-a68a-4da1-a479-6d53423d5399",
+            "c2b8cef6-0d9f-49cd-9c15-cfd8d451ebaa",
+            "44a135c9-142e-4458-9b5a-aaa9374ad5ee",
+            "eb2f7fa6-6aa3-4ff4-b984-c008891f0d25",
+            "86e577ef-b3f1-4a0a-9af0-246cecf7050c",
+            "31799670-1957-46a6-8b02-77cc068d85dd",
+            "0942a95c-f56d-4f05-9c18-ea60bbe67d88",
+            "f4648f46-f358-4f05-9820-880cc382a9d7",
+            "49ec368c-0054-42c3-ba37-a0523a10b6e6",
+            "20c9c645-c6f0-4503-a9ca-e0fc74261eba",
+            "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+            "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "c25863cf-8a25-4bc9-b1f1-a1c0fc51c821",
+              "order_idx": 764,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "fa079d32-2111-4c07-9a60-f42523449690",
+              "order_idx": 765,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "becdedd3-7b0d-45c1-9b9b-22bbcbf9c239",
+              "order_idx": 766,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "bf4adf2d-6034-4bc9-973e-483f46db3f91",
+              "order_idx": 768,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "af71bcdb-d110-4752-9fe3-b5dd754ef77b",
+              "order_idx": 769,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "d74d0938-7b26-4e03-9187-94df34e9ac0a",
+              "order_idx": 770,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "04db36ed-a68a-4da1-a479-6d53423d5399",
+              "order_idx": 771,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "c2b8cef6-0d9f-49cd-9c15-cfd8d451ebaa",
+              "order_idx": 772,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "44a135c9-142e-4458-9b5a-aaa9374ad5ee",
+              "order_idx": 773,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "eb2f7fa6-6aa3-4ff4-b984-c008891f0d25",
+              "order_idx": 774,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "86e577ef-b3f1-4a0a-9af0-246cecf7050c",
+              "order_idx": 775,
+              "char_start": 0,
+              "char_end": 42
+            },
+            {
+              "block_id": "31799670-1957-46a6-8b02-77cc068d85dd",
+              "order_idx": 776,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "0942a95c-f56d-4f05-9c18-ea60bbe67d88",
+              "order_idx": 777,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "f4648f46-f358-4f05-9820-880cc382a9d7",
+              "order_idx": 778,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "49ec368c-0054-42c3-ba37-a0523a10b6e6",
+              "order_idx": 779,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "20c9c645-c6f0-4503-a9ca-e0fc74261eba",
+              "order_idx": 780,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "order_idx": 781,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+              "order_idx": 782,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4",
+              "order_idx": 783,
+              "char_start": 0,
+              "char_end": 20
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "c25863cf-8a25-4bc9-b1f1-a1c0fc51c821",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9800675511360168,
+            "score_breakdown": {
+              "vector": 0.8545248359441757,
+              "keyword": 0.8367811181326708,
+              "rrf": 0.03193960511033681,
+              "rerank": 0.9800675511360168
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带\n能力的日常监管，每发现一次（含通报）\n扣3分。 注1:Al换脸识别技术能力要求另行\n下发。\n注2：指部网安局印发的实名制工作\n通报（含定期通报、专项通报等）。\n同一问题首次通报不扣分，下同。 网络和信息\n安全管理部、\n市场部、数字\n化运营支撑\n中心 文艳\n— 13 — （二） 电话\n实名制 1.电话实名制基础管理： 未按要求落实电\n话实名制安全管理要求； 电话用户实名登\n记率、人证一致率未达 99%；每发现一次\n（含通报）扣 3分。\n2.未严格落实身份信息核验要求， 存在证\n件冒用、照片复用、换脸冒名入网等问题\n的，每发现一次，视情扣 5分或10分。 注：1.如单位用户、 未成年用户、 eSIM\n用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳"
+          },
+          "relevance": {
+            "semantic_score": 0.4677,
+            "fts_score": 0.0,
+            "title_score": 0.4597,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4677,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:网络和信息安全考核要点与评分标准afd",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+          "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+          "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+          "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】（三） 宽带 > （四） 中间 > （1）中间号：未按要求落实中间号管理\n用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+          "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "（三） 宽带 > （四） 中间 > （1）中间号：未按要求落实中间号管理",
+          "block_ids": [
+            "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+            "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4",
+            "9095ccae-e551-4631-a10b-f51e6158e28e",
+            "31887cf2-693b-4ee3-8499-c4f25432b5a2",
+            "4cdc5178-e3f0-48f7-a8a3-2087d78aa428",
+            "cee673e6-9c13-4839-9e3d-2dd9d2d10937",
+            "2e2be46f-635f-4fb9-8c6e-2ad9578eac51",
+            "3778be19-ad3b-4878-bc5e-8b5a02e8c8fb",
+            "4d3ea696-7045-4fc1-b1a1-5164cbe0da2b",
+            "ee4ca5bc-9640-4e84-b65b-13cd0f4c6022",
+            "52b30cdb-95a8-4cb1-8df3-fb77a46588f3",
+            "8797c9e2-ef17-4410-9d68-cf0d3c32ecd3",
+            "181522f1-e906-4dff-abd0-b6fccc675b49",
+            "d83a83f1-7ea1-47db-bedc-c994e3d95138",
+            "51483a06-fde0-42db-80f9-6287b13cf50b",
+            "8f4fcbc4-ef0f-44f2-9a73-785ba8eb584e",
+            "8498e622-f3e3-4072-a920-daf87042d36a",
+            "31dee27b-5fbf-4273-a320-4fdab8b1c125",
+            "455ca343-27fb-46a2-826e-080679185d03",
+            "754b7603-5d6d-4195-b7e6-e6268eeabc6e",
+            "eb6140e9-2813-47cb-a6cd-a5451580d958",
+            "01a70959-5483-4b0f-9bce-f9ead9da5676",
+            "8442bfb3-e09d-4437-94a8-027e1e7f7001",
+            "147bc3cb-425c-45b6-aa0a-f8aac27a74f5"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "order_idx": 781,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+              "order_idx": 782,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4",
+              "order_idx": 783,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "9095ccae-e551-4631-a10b-f51e6158e28e",
+              "order_idx": 784,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "31887cf2-693b-4ee3-8499-c4f25432b5a2",
+              "order_idx": 785,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "4cdc5178-e3f0-48f7-a8a3-2087d78aa428",
+              "order_idx": 786,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "cee673e6-9c13-4839-9e3d-2dd9d2d10937",
+              "order_idx": 787,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "2e2be46f-635f-4fb9-8c6e-2ad9578eac51",
+              "order_idx": 788,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "3778be19-ad3b-4878-bc5e-8b5a02e8c8fb",
+              "order_idx": 789,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "4d3ea696-7045-4fc1-b1a1-5164cbe0da2b",
+              "order_idx": 790,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "ee4ca5bc-9640-4e84-b65b-13cd0f4c6022",
+              "order_idx": 791,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "52b30cdb-95a8-4cb1-8df3-fb77a46588f3",
+              "order_idx": 792,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "8797c9e2-ef17-4410-9d68-cf0d3c32ecd3",
+              "order_idx": 793,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "181522f1-e906-4dff-abd0-b6fccc675b49",
+              "order_idx": 794,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "d83a83f1-7ea1-47db-bedc-c994e3d95138",
+              "order_idx": 795,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "51483a06-fde0-42db-80f9-6287b13cf50b",
+              "order_idx": 796,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "8f4fcbc4-ef0f-44f2-9a73-785ba8eb584e",
+              "order_idx": 797,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "8498e622-f3e3-4072-a920-daf87042d36a",
+              "order_idx": 798,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "31dee27b-5fbf-4273-a320-4fdab8b1c125",
+              "order_idx": 799,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "455ca343-27fb-46a2-826e-080679185d03",
+              "order_idx": 800,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "754b7603-5d6d-4195-b7e6-e6268eeabc6e",
+              "order_idx": 801,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "eb6140e9-2813-47cb-a6cd-a5451580d958",
+              "order_idx": 802,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "order_idx": 803,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "8442bfb3-e09d-4437-94a8-027e1e7f7001",
+              "order_idx": 804,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "147bc3cb-425c-45b6-aa0a-f8aac27a74f5",
+              "order_idx": 805,
+              "char_start": 0,
+              "char_end": 11
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9783259630203247,
+            "score_breakdown": {
+              "vector": 0.8450602293014526,
+              "keyword": 0.8336799608654956,
+              "rrf": 0.02995867768595041,
+              "rerank": 0.9783259630203247
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】（三） 宽带 > （四） 中间 > （1）中间号：未按要求落实中间号管理\n用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。"
+          },
+          "relevance": {
+            "semantic_score": 0.4258,
+            "fts_score": 0.0,
+            "title_score": 0.4597,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4032,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:网络和信息安全考核要点与评分标准afd",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+          "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+          "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+          "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】4.如实名登记不合规，入网信息留存 > 2.各类检查通报： > （1）不定期抽查未按规定办理中间号、\n99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。\n2.如未按要求落实开通非定向大流量\n物联网卡登记到实际使用人、超“一\n证十卡”开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，定向流量\n白名单、高风险场景销售合同等审批\n管理不严、 违规销售物联网卡裸卡等。\n3.如入网流程不规范，必填信息填写\n不合规，超“一证十卡”限制不严、\n入网信息留存不规范等。\n4.如实名登记不合规，入网信息留存\n不规范，短信端口模板（含签名）及\n引流信息审核把关不严、自有端口管\n理缺位，合作单位管理不到位等。 政企信息服\n务事业群（数\n智分公司） 云中台（政企\n业务交付运\n营中心） 文艳\n— 14 — 现一次（含通报）扣 3分。\n2.各类检查通报：",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "be3b29aca67a2017490e584e6739589d",
+          "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "4.如实名登记不合规，入网信息留存 > 2.各类检查通报： > （1）不定期抽查未按规定办理中间号、",
+          "block_ids": [
+            "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+            "38e2db7c-6079-4f39-85bd-efe922572fca",
+            "45874a4f-cacd-45ab-bb66-8418dae8b79d",
+            "6e610762-cb44-4006-9ecf-3e94cb9ac3f2",
+            "1f96091a-bf0c-4c7a-8a73-7fbea972bb53",
+            "3f2fe6d7-0dc9-4e20-b1f6-e7a93e2e1607",
+            "d43ecbda-07ba-408f-88b2-3c70724743fd",
+            "8a92d9e7-78f7-4a6a-bd99-eb0225727a3e",
+            "84610cf0-8e0e-43fc-be24-53320a3352db",
+            "0314669a-c3b3-4983-9dae-8dd5983104a6",
+            "ab2d4a7c-8860-4e35-bac8-440800d9c93f",
+            "cf7745f5-d5ca-4cca-add0-7ed2a3447e78",
+            "51ff8f6d-157f-4e81-acc1-8430171c2753",
+            "1f162e8e-ff6c-47c8-81fb-9eac06575225",
+            "a700c281-354c-4bdc-84a5-3c2dd92e2b91",
+            "98a089d4-1cc8-49c6-b513-ee5827c357f9",
+            "8010ccf2-8717-4a2a-8db3-c2cb2bea3b12",
+            "b3c02abb-1201-4b0d-8371-023ddac5fba4",
+            "3c2e2d83-ab7d-4bf2-8d81-103915e2764c",
+            "dd83643b-1e65-4df9-910c-f90c5e0d7abd",
+            "c1eca579-7505-4df3-b21c-711c2bcc63ed",
+            "be958784-b012-4ea4-863a-0fb0cad258c2"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+              "order_idx": 819,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "38e2db7c-6079-4f39-85bd-efe922572fca",
+              "order_idx": 820,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "45874a4f-cacd-45ab-bb66-8418dae8b79d",
+              "order_idx": 821,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "6e610762-cb44-4006-9ecf-3e94cb9ac3f2",
+              "order_idx": 822,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "1f96091a-bf0c-4c7a-8a73-7fbea972bb53",
+              "order_idx": 823,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "3f2fe6d7-0dc9-4e20-b1f6-e7a93e2e1607",
+              "order_idx": 824,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "d43ecbda-07ba-408f-88b2-3c70724743fd",
+              "order_idx": 825,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "8a92d9e7-78f7-4a6a-bd99-eb0225727a3e",
+              "order_idx": 826,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "84610cf0-8e0e-43fc-be24-53320a3352db",
+              "order_idx": 827,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "0314669a-c3b3-4983-9dae-8dd5983104a6",
+              "order_idx": 828,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "ab2d4a7c-8860-4e35-bac8-440800d9c93f",
+              "order_idx": 829,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "cf7745f5-d5ca-4cca-add0-7ed2a3447e78",
+              "order_idx": 830,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "51ff8f6d-157f-4e81-acc1-8430171c2753",
+              "order_idx": 831,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "1f162e8e-ff6c-47c8-81fb-9eac06575225",
+              "order_idx": 832,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "a700c281-354c-4bdc-84a5-3c2dd92e2b91",
+              "order_idx": 833,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "98a089d4-1cc8-49c6-b513-ee5827c357f9",
+              "order_idx": 834,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "8010ccf2-8717-4a2a-8db3-c2cb2bea3b12",
+              "order_idx": 835,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "b3c02abb-1201-4b0d-8371-023ddac5fba4",
+              "order_idx": 836,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "3c2e2d83-ab7d-4bf2-8d81-103915e2764c",
+              "order_idx": 837,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "dd83643b-1e65-4df9-910c-f90c5e0d7abd",
+              "order_idx": 838,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "c1eca579-7505-4df3-b21c-711c2bcc63ed",
+              "order_idx": 840,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "be958784-b012-4ea4-863a-0fb0cad258c2",
+              "order_idx": 841,
+              "char_start": 0,
+              "char_end": 9
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "block_id": "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9750339388847351,
+            "score_breakdown": {
+              "vector": 0.8434347212314606,
+              "keyword": 0.7863574933836649,
+              "rrf": 0.02558190601668862,
+              "rerank": 0.9750339388847351
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】4.如实名登记不合规，入网信息留存 > 2.各类检查通报： > （1）不定期抽查未按规定办理中间号、\n99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。\n2.如未按要求落实开通非定向大流量\n物联网卡登记到实际使用人、超“一\n证十卡”开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，定向流量\n白名单、高风险场景销售合同等审批\n管理不严、 违规销售物联网卡裸卡等。\n3.如入网流程不规范，必填信息填写\n不合规，超“一证十卡”限制不严、\n入网信息留存不规范等。\n4.如实名登记不合规，入网信息留存\n不规范，短信端口模板（含签名）及\n引流信息审核把关不严、自有端口管\n理缺位，合作单位管理不到位等。 政企信息服\n务事业群（数\n智分公司） 云中台（政企\n业务交付运\n营中心） 文艳\n— 14 — 现一次（含通报）扣 3分。\n2.各类检查通报："
+          },
+          "relevance": {
+            "semantic_score": 0.4548,
+            "fts_score": 0.0,
+            "title_score": 0.4597,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4516,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:网络和信息安全考核要点与评分标准afd",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 5,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "24a0fd9e-a285-4230-b58c-09715016758f"
+        ],
+        "evidence_snapshot_id": "sPwCAhgZXva4wFVuPu-pqLBlPwZMYVjQ",
+        "snapshot_fingerprint": "a1f9225c15ead5d239525005",
+        "accepted_passage_ids": [
+          "66d10f39a10245128b424ccadad81874",
+          "bb568a81ab014a2ffb14e957710997a7",
+          "9f3789df9d23de54607daa2437d31362",
+          "a3269c83c2e8cca12e8cff399bdd07f7",
+          "be3b29aca67a2017490e584e6739589d",
+          "47231fa6485f493e7d7347596da73abe",
+          "875ae80b74f7d2817e2f869ae8f50161",
+          "875abd083dde6ed96017e06805327816",
+          "574a97edac4d399f25ebe8b254bfcf78",
+          "49d5234f1f451f59f74263c2b54b6cfd"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 7,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 2755.97
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码\n- 名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码\n- 99%，每发现一次，扣5分。",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "bb568a81ab014a2ffb14e957710997a7",
+            "block_id": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+            "block_ids": [
+              "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+              "eafe1820-c78d-40e5-a8a1-36a5cae2adfa",
+              "4e83c48c-f5c7-42cb-86c5-e72352c60790",
+              "a9147d90-9612-4d45-bcf3-59bf8e61e35a",
+              "bcf75147-b404-4cbf-a9ee-1d1c4cc4da11",
+              "0697eacf-c7aa-4178-863f-60f55efda207",
+              "29e6a2f2-7a06-4fac-8949-84e33fffed5d",
+              "96281837-8c60-4540-b38f-929f7b1a6cb0",
+              "16e11836-4409-48d7-a177-03394b17fdbe",
+              "037a3794-89ac-4569-b93d-d210edef029f",
+              "12f33210-ba93-42eb-92db-a1a3923382ee",
+              "9953760d-17a1-4af9-bed7-d84bc1101670",
+              "bab8c47d-45a2-45a7-99d0-f6659d85da46",
+              "c61934a5-18f3-4b6d-809c-aa05cac80c3c",
+              "1da1857f-d244-4a6e-8517-c17a51390d70",
+              "782daeb6-397c-41d3-8506-64282cff3b38",
+              "42a1f94b-3fdf-40f6-810e-06688387f7cf",
+              "721827b2-c850-4681-bfab-aa3bed7ba667",
+              "79a67ca1-ea50-4277-80ed-4392cc8c8550",
+              "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+              "a24cd536-21bc-4e7c-afed-fd2505114630",
+              "7861af8b-0696-4fc5-9c7d-b5e7e1a8bc51"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳\n（三）宽带实\n名制 宽带实名制基础管理：未按要求落实宽带等安全\n管理要求，新增宽带用户实名登记率未达 95%，\n每发现一次（含通报）扣 3分。 注：如入网流程不合规、装\n机地址录入不规范、存量用\n户补登记工作推进缓慢等。 市场部、政\n企信息服务\n事业群（数\n智分公司）\n（四）中间\n号、物联网、\n车联网、短信\n端口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+            "block_id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "block_ids": [
+              "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+              "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4",
+              "9095ccae-e551-4631-a10b-f51e6158e28e",
+              "31887cf2-693b-4ee3-8499-c4f25432b5a2",
+              "4cdc5178-e3f0-48f7-a8a3-2087d78aa428",
+              "cee673e6-9c13-4839-9e3d-2dd9d2d10937",
+              "2e2be46f-635f-4fb9-8c6e-2ad9578eac51",
+              "3778be19-ad3b-4878-bc5e-8b5a02e8c8fb",
+              "4d3ea696-7045-4fc1-b1a1-5164cbe0da2b",
+              "ee4ca5bc-9640-4e84-b65b-13cd0f4c6022",
+              "52b30cdb-95a8-4cb1-8df3-fb77a46588f3",
+              "8797c9e2-ef17-4410-9d68-cf0d3c32ecd3",
+              "181522f1-e906-4dff-abd0-b6fccc675b49",
+              "d83a83f1-7ea1-47db-bedc-c994e3d95138",
+              "51483a06-fde0-42db-80f9-6287b13cf50b",
+              "8f4fcbc4-ef0f-44f2-9a73-785ba8eb584e",
+              "8498e622-f3e3-4072-a920-daf87042d36a",
+              "31dee27b-5fbf-4273-a320-4fdab8b1c125",
+              "455ca343-27fb-46a2-826e-080679185d03",
+              "754b7603-5d6d-4195-b7e6-e6268eeabc6e",
+              "eb6140e9-2813-47cb-a6cd-a5451580d958",
+              "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "8442bfb3-e09d-4437-94a8-027e1e7f7001",
+              "147bc3cb-425c-45b6-aa0a-f8aac27a74f5"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "875ae80b74f7d2817e2f869ae8f50161",
+            "block_id": "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+            "block_ids": [
+              "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+              "a24cd536-21bc-4e7c-afed-fd2505114630",
+              "7861af8b-0696-4fc5-9c7d-b5e7e1a8bc51",
+              "c724db6e-dede-4352-bc25-9f6d757aeee1",
+              "b4abe167-72d7-4f50-91bd-4a60eaa70f7c",
+              "c5aacb67-d40b-4a9d-9941-e6dbf8b1b6c5",
+              "c38e22e1-1ef4-405f-81c3-8141f33e4be3",
+              "b9fa1248-d5b3-47c5-9823-3228d44a5556",
+              "4d50831b-b383-4905-a675-0a20695cee60",
+              "39779a83-d6f0-4a17-bcc1-0fc53480701a",
+              "69ff5a3a-ec72-4e95-b228-07217c601709",
+              "96b2c833-6711-496d-9cdd-3728b54cf19c",
+              "6f67bd74-f387-44ab-a997-b4a14a4af0a8",
+              "c574f911-a7ac-444c-921d-c617a45e58b3",
+              "d76205fe-9bcb-4161-ac5a-a933808bbf4d",
+              "52069da9-eb0a-4be9-8e7d-c6f55bb4bee9",
+              "24eeff18-915e-4244-a8da-0d6b41ad5733",
+              "fe3e4b83-1dd1-46be-b8ae-1d179ab04554",
+              "042c9f3e-3065-42e9-abaf-bc9e1efa6f21",
+              "82bbd260-5644-4d47-8e05-650f19480a24",
+              "114fef7b-8f40-4789-8872-9edf543a72a2",
+              "5089b926-8a2a-422a-88e8-30258ff56d67",
+              "19fcb3c8-4fa0-4dfb-b0f9-1eba1eea289d",
+              "172b54fd-ef43-465d-9afa-fc42a73a8fc3",
+              "6cd35f10-5ba7-499a-ad01-a835880e45df",
+              "0a13f8f5-3b9a-4963-b831-9b0aa2d78ded"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。\n（2）物联网卡：未按要求落实物联网卡管理要\n求 （注2） 、 物联网卡销售登记合规率、 新增 （ 2026\n年 1 月 1 日之后）物联网卡搭载销售实名准确\n率未达 99%，高风险物联网卡监测处置及时率未\n达 99%，每发现一次，扣 5分。\n（3）车联网卡：未按要求落实车联网卡管理要\n求（注3）、新增（ 2026 年 1 月 1 日之后）车\n联网卡实名登记率未达 99%，每发现一次，扣 5\n分。\n（4）短信端口：未按要求落实短信端口（注 4）、注：1.如中间号安全管理机\n制不健全，售前风险评估不\n全面，入网流程不合规，用\n户风险提醒未落实，存量业\n务整改不力等。\n2.如未按要求落实开通非定\n向大流量物联网卡登记到实\n际使用人、超“一证十卡”\n开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，\n定向流量白名单、高风险场\n景销售合同等审批管理不\n严、违规销售物联网卡裸卡\n等。",
+            "score": 0.0,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "574a97edac4d399f25ebe8b254bfcf78",
+            "block_id": "01a70959-5483-4b0f-9bce-f9ead9da5676",
+            "block_ids": [
+              "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "8442bfb3-e09d-4437-94a8-027e1e7f7001",
+              "147bc3cb-425c-45b6-aa0a-f8aac27a74f5",
+              "ca7bf9ad-5752-4c6d-b9d6-fc8cbf7b642f",
+              "02e2b321-a096-4b6c-9fd0-3da06dfd975a",
+              "ddd030ac-4509-4c8b-ade5-dfd76a92be4a",
+              "c16ea3a8-9abb-4480-bf0b-f75dee3dfd85",
+              "1e99e886-dab0-428c-b380-a026f6209a19",
+              "bd6f5a3c-7f8a-4429-96c2-1665ca3e6c84",
+              "8cccac0d-df28-4ef7-bd1c-be5d424b2f3c",
+              "f2837d85-3c01-48d5-80a7-1ff5a0af65b7",
+              "3d34ef13-c536-4b0a-ae80-4fd7a5c84ce0",
+              "2b206812-d97e-4660-8595-d4a1db7159d8",
+              "0faf494f-f071-4bbd-86fc-a61d64894ed8",
+              "2d9d3b54-1a57-4f5f-92ae-e68f83445cc2",
+              "fc2d75a4-88e8-4857-93a1-7936abc48d51",
+              "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+              "38e2db7c-6079-4f39-85bd-efe922572fca",
+              "45874a4f-cacd-45ab-bb66-8418dae8b79d"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。\n（2）物联网卡：未按要求落实物联网卡\n管理要求（注 2）、物联网卡销售登记合\n规率、新增（ 2026 年 1 月 1 日之后）\n物联网卡搭载销售实名准确率未达 99%，\n高风险物联网卡监测处置及时率未达\n99%，每发现一次，扣 5分。\n（3）车联网卡：未按要求落实车联网卡\n管理要求（注 3）、新增（ 2026 年 1 月\n1 日之后）车联网卡实名登记率未达\n99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。",
+            "score": 0.0,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "be3b29aca67a2017490e584e6739589d",
+            "block_id": "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+            "block_ids": [
+              "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+              "38e2db7c-6079-4f39-85bd-efe922572fca",
+              "45874a4f-cacd-45ab-bb66-8418dae8b79d",
+              "6e610762-cb44-4006-9ecf-3e94cb9ac3f2",
+              "1f96091a-bf0c-4c7a-8a73-7fbea972bb53",
+              "3f2fe6d7-0dc9-4e20-b1f6-e7a93e2e1607",
+              "d43ecbda-07ba-408f-88b2-3c70724743fd",
+              "8a92d9e7-78f7-4a6a-bd99-eb0225727a3e",
+              "84610cf0-8e0e-43fc-be24-53320a3352db",
+              "0314669a-c3b3-4983-9dae-8dd5983104a6",
+              "ab2d4a7c-8860-4e35-bac8-440800d9c93f",
+              "cf7745f5-d5ca-4cca-add0-7ed2a3447e78",
+              "51ff8f6d-157f-4e81-acc1-8430171c2753",
+              "1f162e8e-ff6c-47c8-81fb-9eac06575225",
+              "a700c281-354c-4bdc-84a5-3c2dd92e2b91",
+              "98a089d4-1cc8-49c6-b513-ee5827c357f9",
+              "8010ccf2-8717-4a2a-8db3-c2cb2bea3b12",
+              "b3c02abb-1201-4b0d-8371-023ddac5fba4",
+              "3c2e2d83-ab7d-4bf2-8d81-103915e2764c",
+              "dd83643b-1e65-4df9-910c-f90c5e0d7abd",
+              "c1eca579-7505-4df3-b21c-711c2bcc63ed",
+              "be958784-b012-4ea4-863a-0fb0cad258c2"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。\n2.如未按要求落实开通非定向大流量\n物联网卡登记到实际使用人、超“一\n证十卡”开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，定向流量\n白名单、高风险场景销售合同等审批\n管理不严、 违规销售物联网卡裸卡等。\n3.如入网流程不规范，必填信息填写\n不合规，超“一证十卡”限制不严、\n入网信息留存不规范等。\n4.如实名登记不合规，入网信息留存\n不规范，短信端口模板（含签名）及\n引流信息审核把关不严、自有端口管\n理缺位，合作单位管理不到位等。 政企信息服\n务事业群（数\n智分公司） 云中台（政企\n业务交付运\n营中心） 文艳\n— 14 — 现一次（含通报）扣 3分。\n2.各类检查通报：",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+            "evidence_passage_ids": [
+              "bb568a81ab014a2ffb14e957710997a7"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "4bea1c73d1d53ba3eecf9715"
+          },
+          {
+            "text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+            "evidence_passage_ids": [
+              "a3269c83c2e8cca12e8cff399bdd07f7"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "7db8e1fbce7649ce23f37f3f"
+          },
+          {
+            "text": "登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+            "evidence_passage_ids": [
+              "875ae80b74f7d2817e2f869ae8f50161"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "f4d45fb11e5ce61914e9f848"
+          },
+          {
+            "text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+            "evidence_passage_ids": [
+              "574a97edac4d399f25ebe8b254bfcf78"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "ae2bd1dd0251241b064b1708"
+          },
+          {
+            "text": "99%，每发现一次，扣5分。",
+            "evidence_passage_ids": [
+              "be3b29aca67a2017490e584e6739589d"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "b852f980bae7b9aade750874"
+          },
+          {
+            "text": "评估99%",
+            "evidence_passage_ids": [
+              "be3b29aca67a2017490e584e6739589d"
+            ],
+            "fact_type": "numeric",
+            "condition": "评估",
+            "candidate_id": "ad557c3950a7730fca46d54b"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "bb568a81ab014a2ffb14e957710997a7",
+            "block_id": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+            "block_ids": [
+              "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+              "eafe1820-c78d-40e5-a8a1-36a5cae2adfa",
+              "4e83c48c-f5c7-42cb-86c5-e72352c60790",
+              "a9147d90-9612-4d45-bcf3-59bf8e61e35a",
+              "bcf75147-b404-4cbf-a9ee-1d1c4cc4da11",
+              "0697eacf-c7aa-4178-863f-60f55efda207",
+              "29e6a2f2-7a06-4fac-8949-84e33fffed5d",
+              "96281837-8c60-4540-b38f-929f7b1a6cb0",
+              "16e11836-4409-48d7-a177-03394b17fdbe",
+              "037a3794-89ac-4569-b93d-d210edef029f",
+              "12f33210-ba93-42eb-92db-a1a3923382ee",
+              "9953760d-17a1-4af9-bed7-d84bc1101670",
+              "bab8c47d-45a2-45a7-99d0-f6659d85da46",
+              "c61934a5-18f3-4b6d-809c-aa05cac80c3c",
+              "1da1857f-d244-4a6e-8517-c17a51390d70",
+              "782daeb6-397c-41d3-8506-64282cff3b38",
+              "42a1f94b-3fdf-40f6-810e-06688387f7cf",
+              "721827b2-c850-4681-bfab-aa3bed7ba667",
+              "79a67ca1-ea50-4277-80ed-4392cc8c8550",
+              "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+              "a24cd536-21bc-4e7c-afed-fd2505114630",
+              "7861af8b-0696-4fc5-9c7d-b5e7e1a8bc51"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳\n（三）宽带实\n名制 宽带实名制基础管理：未按要求落实宽带等安全\n管理要求，新增宽带用户实名登记率未达 95%，\n每发现一次（含通报）扣 3分。 注：如入网流程不合规、装\n机地址录入不规范、存量用\n户补登记工作推进缓慢等。 市场部、政\n企信息服务\n事业群（数\n智分公司）\n（四）中间\n号、物联网、\n车联网、短信\n端口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "body_text": "用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳\n（三）宽带实\n名制 宽带实名制基础管理：未按要求落实宽带等安全\n管理要求，新增宽带用户实名登记率未达 95%，\n每发现一次（含通报）扣 3分。 注：如入网流程不合规、装\n机地址录入不规范、存量用\n户补登记工作推进缓慢等。 市场部、政\n企信息服务\n事业群（数\n智分公司）\n（四）中间\n号、物联网、\n车联网、短信\n端口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+            "block_id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "block_ids": [
+              "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+              "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4",
+              "9095ccae-e551-4631-a10b-f51e6158e28e",
+              "31887cf2-693b-4ee3-8499-c4f25432b5a2",
+              "4cdc5178-e3f0-48f7-a8a3-2087d78aa428",
+              "cee673e6-9c13-4839-9e3d-2dd9d2d10937",
+              "2e2be46f-635f-4fb9-8c6e-2ad9578eac51",
+              "3778be19-ad3b-4878-bc5e-8b5a02e8c8fb",
+              "4d3ea696-7045-4fc1-b1a1-5164cbe0da2b",
+              "ee4ca5bc-9640-4e84-b65b-13cd0f4c6022",
+              "52b30cdb-95a8-4cb1-8df3-fb77a46588f3",
+              "8797c9e2-ef17-4410-9d68-cf0d3c32ecd3",
+              "181522f1-e906-4dff-abd0-b6fccc675b49",
+              "d83a83f1-7ea1-47db-bedc-c994e3d95138",
+              "51483a06-fde0-42db-80f9-6287b13cf50b",
+              "8f4fcbc4-ef0f-44f2-9a73-785ba8eb584e",
+              "8498e622-f3e3-4072-a920-daf87042d36a",
+              "31dee27b-5fbf-4273-a320-4fdab8b1c125",
+              "455ca343-27fb-46a2-826e-080679185d03",
+              "754b7603-5d6d-4195-b7e6-e6268eeabc6e",
+              "eb6140e9-2813-47cb-a6cd-a5451580d958",
+              "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "8442bfb3-e09d-4437-94a8-027e1e7f7001",
+              "147bc3cb-425c-45b6-aa0a-f8aac27a74f5"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "body_text": "用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "875ae80b74f7d2817e2f869ae8f50161",
+            "block_id": "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+            "block_ids": [
+              "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+              "a24cd536-21bc-4e7c-afed-fd2505114630",
+              "7861af8b-0696-4fc5-9c7d-b5e7e1a8bc51",
+              "c724db6e-dede-4352-bc25-9f6d757aeee1",
+              "b4abe167-72d7-4f50-91bd-4a60eaa70f7c",
+              "c5aacb67-d40b-4a9d-9941-e6dbf8b1b6c5",
+              "c38e22e1-1ef4-405f-81c3-8141f33e4be3",
+              "b9fa1248-d5b3-47c5-9823-3228d44a5556",
+              "4d50831b-b383-4905-a675-0a20695cee60",
+              "39779a83-d6f0-4a17-bcc1-0fc53480701a",
+              "69ff5a3a-ec72-4e95-b228-07217c601709",
+              "96b2c833-6711-496d-9cdd-3728b54cf19c",
+              "6f67bd74-f387-44ab-a997-b4a14a4af0a8",
+              "c574f911-a7ac-444c-921d-c617a45e58b3",
+              "d76205fe-9bcb-4161-ac5a-a933808bbf4d",
+              "52069da9-eb0a-4be9-8e7d-c6f55bb4bee9",
+              "24eeff18-915e-4244-a8da-0d6b41ad5733",
+              "fe3e4b83-1dd1-46be-b8ae-1d179ab04554",
+              "042c9f3e-3065-42e9-abaf-bc9e1efa6f21",
+              "82bbd260-5644-4d47-8e05-650f19480a24",
+              "114fef7b-8f40-4789-8872-9edf543a72a2",
+              "5089b926-8a2a-422a-88e8-30258ff56d67",
+              "19fcb3c8-4fa0-4dfb-b0f9-1eba1eea289d",
+              "172b54fd-ef43-465d-9afa-fc42a73a8fc3",
+              "6cd35f10-5ba7-499a-ad01-a835880e45df",
+              "0a13f8f5-3b9a-4963-b831-9b0aa2d78ded"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。\n（2）物联网卡：未按要求落实物联网卡管理要\n求 （注2） 、 物联网卡销售登记合规率、 新增 （ 2026\n年 1 月 1 日之后）物联网卡搭载销售实名准确\n率未达 99%，高风险物联网卡监测处置及时率未\n达 99%，每发现一次，扣 5分。\n（3）车联网卡：未按要求落实车联网卡管理要\n求（注3）、新增（ 2026 年 1 月 1 日之后）车\n联网卡实名登记率未达 99%，每发现一次，扣 5\n分。\n（4）短信端口：未按要求落实短信端口（注 4）、注：1.如中间号安全管理机\n制不健全，售前风险评估不\n全面，入网流程不合规，用\n户风险提醒未落实，存量业\n务整改不力等。\n2.如未按要求落实开通非定\n向大流量物联网卡登记到实\n际使用人、超“一证十卡”\n开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，\n定向流量白名单、高风险场\n景销售合同等审批管理不\n严、违规销售物联网卡裸卡\n等。",
+            "body_text": "（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。\n（2）物联网卡：未按要求落实物联网卡管理要\n求 （注2） 、 物联网卡销售登记合规率、 新增 （ 2026\n年 1 月 1 日之后）物联网卡搭载销售实名准确\n率未达 99%，高风险物联网卡监测处置及时率未\n达 99%，每发现一次，扣 5分。\n（3）车联网卡：未按要求落实车联网卡管理要\n求（注3）、新增（ 2026 年 1 月 1 日之后）车\n联网卡实名登记率未达 99%，每发现一次，扣 5\n分。\n（4）短信端口：未按要求落实短信端口（注 4）、注：1.如中间号安全管理机\n制不健全，售前风险评估不\n全面，入网流程不合规，用\n户风险提醒未落实，存量业\n务整改不力等。\n2.如未按要求落实开通非定\n向大流量物联网卡登记到实\n际使用人、超“一证十卡”\n开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，\n定向流量白名单、高风险场\n景销售合同等审批管理不\n严、违规销售物联网卡裸卡\n等。",
+            "score": 0.0,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "574a97edac4d399f25ebe8b254bfcf78",
+            "block_id": "01a70959-5483-4b0f-9bce-f9ead9da5676",
+            "block_ids": [
+              "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "8442bfb3-e09d-4437-94a8-027e1e7f7001",
+              "147bc3cb-425c-45b6-aa0a-f8aac27a74f5",
+              "ca7bf9ad-5752-4c6d-b9d6-fc8cbf7b642f",
+              "02e2b321-a096-4b6c-9fd0-3da06dfd975a",
+              "ddd030ac-4509-4c8b-ade5-dfd76a92be4a",
+              "c16ea3a8-9abb-4480-bf0b-f75dee3dfd85",
+              "1e99e886-dab0-428c-b380-a026f6209a19",
+              "bd6f5a3c-7f8a-4429-96c2-1665ca3e6c84",
+              "8cccac0d-df28-4ef7-bd1c-be5d424b2f3c",
+              "f2837d85-3c01-48d5-80a7-1ff5a0af65b7",
+              "3d34ef13-c536-4b0a-ae80-4fd7a5c84ce0",
+              "2b206812-d97e-4660-8595-d4a1db7159d8",
+              "0faf494f-f071-4bbd-86fc-a61d64894ed8",
+              "2d9d3b54-1a57-4f5f-92ae-e68f83445cc2",
+              "fc2d75a4-88e8-4857-93a1-7936abc48d51",
+              "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+              "38e2db7c-6079-4f39-85bd-efe922572fca",
+              "45874a4f-cacd-45ab-bb66-8418dae8b79d"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。\n（2）物联网卡：未按要求落实物联网卡\n管理要求（注 2）、物联网卡销售登记合\n规率、新增（ 2026 年 1 月 1 日之后）\n物联网卡搭载销售实名准确率未达 99%，\n高风险物联网卡监测处置及时率未达\n99%，每发现一次，扣 5分。\n（3）车联网卡：未按要求落实车联网卡\n管理要求（注 3）、新增（ 2026 年 1 月\n1 日之后）车联网卡实名登记率未达\n99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。",
+            "body_text": "（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。\n（2）物联网卡：未按要求落实物联网卡\n管理要求（注 2）、物联网卡销售登记合\n规率、新增（ 2026 年 1 月 1 日之后）\n物联网卡搭载销售实名准确率未达 99%，\n高风险物联网卡监测处置及时率未达\n99%，每发现一次，扣 5分。\n（3）车联网卡：未按要求落实车联网卡\n管理要求（注 3）、新增（ 2026 年 1 月\n1 日之后）车联网卡实名登记率未达\n99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。",
+            "score": 0.0,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "be3b29aca67a2017490e584e6739589d",
+            "block_id": "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+            "block_ids": [
+              "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+              "38e2db7c-6079-4f39-85bd-efe922572fca",
+              "45874a4f-cacd-45ab-bb66-8418dae8b79d",
+              "6e610762-cb44-4006-9ecf-3e94cb9ac3f2",
+              "1f96091a-bf0c-4c7a-8a73-7fbea972bb53",
+              "3f2fe6d7-0dc9-4e20-b1f6-e7a93e2e1607",
+              "d43ecbda-07ba-408f-88b2-3c70724743fd",
+              "8a92d9e7-78f7-4a6a-bd99-eb0225727a3e",
+              "84610cf0-8e0e-43fc-be24-53320a3352db",
+              "0314669a-c3b3-4983-9dae-8dd5983104a6",
+              "ab2d4a7c-8860-4e35-bac8-440800d9c93f",
+              "cf7745f5-d5ca-4cca-add0-7ed2a3447e78",
+              "51ff8f6d-157f-4e81-acc1-8430171c2753",
+              "1f162e8e-ff6c-47c8-81fb-9eac06575225",
+              "a700c281-354c-4bdc-84a5-3c2dd92e2b91",
+              "98a089d4-1cc8-49c6-b513-ee5827c357f9",
+              "8010ccf2-8717-4a2a-8db3-c2cb2bea3b12",
+              "b3c02abb-1201-4b0d-8371-023ddac5fba4",
+              "3c2e2d83-ab7d-4bf2-8d81-103915e2764c",
+              "dd83643b-1e65-4df9-910c-f90c5e0d7abd",
+              "c1eca579-7505-4df3-b21c-711c2bcc63ed",
+              "be958784-b012-4ea4-863a-0fb0cad258c2"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。\n2.如未按要求落实开通非定向大流量\n物联网卡登记到实际使用人、超“一\n证十卡”开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，定向流量\n白名单、高风险场景销售合同等审批\n管理不严、 违规销售物联网卡裸卡等。\n3.如入网流程不规范，必填信息填写\n不合规，超“一证十卡”限制不严、\n入网信息留存不规范等。\n4.如实名登记不合规，入网信息留存\n不规范，短信端口模板（含签名）及\n引流信息审核把关不严、自有端口管\n理缺位，合作单位管理不到位等。 政企信息服\n务事业群（数\n智分公司） 云中台（政企\n业务交付运\n营中心） 文艳\n— 14 — 现一次（含通报）扣 3分。\n2.各类检查通报：",
+            "body_text": "99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。\n2.如未按要求落实开通非定向大流量\n物联网卡登记到实际使用人、超“一\n证十卡”开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，定向流量\n白名单、高风险场景销售合同等审批\n管理不严、 违规销售物联网卡裸卡等。\n3.如入网流程不规范，必填信息填写\n不合规，超“一证十卡”限制不严、\n入网信息留存不规范等。\n4.如实名登记不合规，入网信息留存\n不规范，短信端口模板（含签名）及\n引流信息审核把关不严、自有端口管\n理缺位，合作单位管理不到位等。 政企信息服\n务事业群（数\n智分公司） 云中台（政企\n业务交付运\n营中心） 文艳\n— 14 — 现一次（含通报）扣 3分。\n2.各类检查通报：",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.55,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 7,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "a1f9225c15ead5d239525005",
+            "snapshot_id_count": 10,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值"
+          },
+          "fact_plan": {
+            "raw": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:扣分"
+            ],
+            "entities": [
+              "网络",
+              "信息安全",
+              "考核",
+              "电话",
+              "实名制",
+              "实名",
+              "登记",
+              "未达标",
+              "扣分",
+              "阈值",
+              "网络信息安全考核",
+              "网络信息安全"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "网络",
+            "object": "信息安全",
+            "scope": [],
+            "selector": [],
+            "predicate": "扣分",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "网络",
+              "信息安全",
+              "考核",
+              "电话",
+              "实名制",
+              "实名",
+              "登记",
+              "未达标",
+              "扣分",
+              "阈值",
+              "网络信息安全考核",
+              "网络信息安全"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "evidence_passage_id": "bb568a81ab014a2ffb14e957710997a7",
+              "record_id": "bb568a81ab014a2ffb14e957710997a7:r2",
+              "exact_text": "登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "table_row_ref": "",
+              "value_dimension": "ratio",
+              "group_id": "8c6eb92e3265b10f"
+            },
+            {
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "evidence_passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+              "record_id": "a3269c83c2e8cca12e8cff399bdd07f7:r2",
+              "exact_text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "table_row_ref": "",
+              "value_dimension": "ratio",
+              "group_id": "8c6eb92e3265b10f"
+            },
+            {
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "evidence_passage_id": "875ae80b74f7d2817e2f869ae8f50161",
+              "record_id": "875ae80b74f7d2817e2f869ae8f50161:r0",
+              "exact_text": "登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "table_row_ref": "",
+              "value_dimension": "ratio",
+              "group_id": "8c6eb92e3265b10f"
+            },
+            {
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "evidence_passage_id": "574a97edac4d399f25ebe8b254bfcf78",
+              "record_id": "574a97edac4d399f25ebe8b254bfcf78:r0",
+              "exact_text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "table_row_ref": "",
+              "value_dimension": "ratio",
+              "group_id": "8c6eb92e3265b10f"
+            },
+            {
+              "condition": "",
+              "value": "99",
+              "unit": "%",
+              "evidence_passage_id": "be3b29aca67a2017490e584e6739589d",
+              "record_id": "be3b29aca67a2017490e584e6739589d:r0",
+              "exact_text": "99%，每发现一次，扣5分。",
+              "table_row_ref": "",
+              "value_dimension": "ratio",
+              "group_id": "8c6eb92e3265b10f"
+            },
+            {
+              "condition": "评估",
+              "value": "99",
+              "unit": "%",
+              "evidence_passage_id": "be3b29aca67a2017490e584e6739589d",
+              "record_id": "be3b29aca67a2017490e584e6739589d:r1",
+              "exact_text": "评估99%",
+              "table_row_ref": "",
+              "value_dimension": "ratio",
+              "group_id": "8c6eb92e3265b10f"
+            }
+          ],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 39,
+          "candidate_count": 9
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_passage_ids": [
+                "bb568a81ab014a2ffb14e957710997a7"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "4bea1c73d1d53ba3eecf9715"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_passage_ids": [
+                "a3269c83c2e8cca12e8cff399bdd07f7"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "7db8e1fbce7649ce23f37f3f"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_passage_ids": [
+                "875ae80b74f7d2817e2f869ae8f50161"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "f4d45fb11e5ce61914e9f848"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_passage_ids": [
+                "574a97edac4d399f25ebe8b254bfcf78"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "ae2bd1dd0251241b064b1708"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "99%，每发现一次，扣5分。",
+              "evidence_passage_ids": [
+                "be3b29aca67a2017490e584e6739589d"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "b852f980bae7b9aade750874"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "评估99%",
+              "evidence_passage_ids": [
+                "be3b29aca67a2017490e584e6739589d"
+              ],
+              "fact_type": "numeric",
+              "condition": "评估",
+              "candidate_id": "ad557c3950a7730fca46d54b"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:扣分"
+            ],
+            "entities": [
+              "网络",
+              "信息安全",
+              "考核",
+              "电话",
+              "实名制",
+              "实名",
+              "登记",
+              "未达标",
+              "扣分",
+              "阈值",
+              "网络信息安全考核",
+              "网络信息安全"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "网络",
+            "object": "信息安全",
+            "scope": [],
+            "selector": [],
+            "predicate": "扣分",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "网络",
+              "信息安全",
+              "考核",
+              "电话",
+              "实名制",
+              "实名",
+              "登记",
+              "未达标",
+              "扣分",
+              "阈值",
+              "网络信息安全考核",
+              "网络信息安全"
+            ]
+          },
+          "input_count": 9,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "4bea1c73d1d53ba3eecf9715",
+              "record_id": "bb568a81ab014a2ffb14e957710997a7:r2",
+              "passage_id": "bb568a81ab014a2ffb14e957710997a7",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "98%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "exact_text": "登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_spans": [
+                [
+                  51,
+                  54
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+              "version_year": 2026,
+              "score": 8.300000000000002,
+              "unstructured_rejected": false,
+              "group_id": "8c6eb92e3265b10f",
+              "polarity": "",
+              "value_dimension": "ratio",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:扣分": "miss",
+                "anchor:网络": "miss",
+                "anchor:信息安全": "miss",
+                "anchor:考核": "miss",
+                "anchor:电话": "miss",
+                "anchor:实名制": "miss",
+                "anchor:实名": "hit",
+                "anchor:登记": "hit",
+                "anchor:未达标": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  51,
+                  54
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "7db8e1fbce7649ce23f37f3f",
+              "record_id": "a3269c83c2e8cca12e8cff399bdd07f7:r2",
+              "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "98%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "exact_text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_spans": [
+                [
+                  51,
+                  54
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+              "version_year": 2026,
+              "score": 8.300000000000002,
+              "unstructured_rejected": false,
+              "group_id": "8c6eb92e3265b10f",
+              "polarity": "",
+              "value_dimension": "ratio",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:扣分": "miss",
+                "anchor:网络": "miss",
+                "anchor:信息安全": "miss",
+                "anchor:考核": "miss",
+                "anchor:电话": "miss",
+                "anchor:实名制": "miss",
+                "anchor:实名": "hit",
+                "anchor:登记": "hit",
+                "anchor:未达标": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  51,
+                  54
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "f4d45fb11e5ce61914e9f848",
+              "record_id": "875ae80b74f7d2817e2f869ae8f50161:r0",
+              "passage_id": "875ae80b74f7d2817e2f869ae8f50161",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "98%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "exact_text": "登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_spans": [
+                [
+                  51,
+                  54
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+              "version_year": 2026,
+              "score": 8.300000000000002,
+              "unstructured_rejected": false,
+              "group_id": "8c6eb92e3265b10f",
+              "polarity": "",
+              "value_dimension": "ratio",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:扣分": "miss",
+                "anchor:网络": "miss",
+                "anchor:信息安全": "miss",
+                "anchor:考核": "miss",
+                "anchor:电话": "miss",
+                "anchor:实名制": "miss",
+                "anchor:实名": "hit",
+                "anchor:登记": "hit",
+                "anchor:未达标": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  51,
+                  54
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "ae2bd1dd0251241b064b1708",
+              "record_id": "574a97edac4d399f25ebe8b254bfcf78:r0",
+              "passage_id": "574a97edac4d399f25ebe8b254bfcf78",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "98%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "exact_text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_spans": [
+                [
+                  51,
+                  54
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+              "version_year": 2026,
+              "score": 8.300000000000002,
+              "unstructured_rejected": false,
+              "group_id": "8c6eb92e3265b10f",
+              "polarity": "",
+              "value_dimension": "ratio",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:扣分": "miss",
+                "anchor:网络": "miss",
+                "anchor:信息安全": "miss",
+                "anchor:考核": "miss",
+                "anchor:电话": "miss",
+                "anchor:实名制": "miss",
+                "anchor:实名": "hit",
+                "anchor:登记": "hit",
+                "anchor:未达标": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  51,
+                  54
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "b852f980bae7b9aade750874",
+              "record_id": "be3b29aca67a2017490e584e6739589d:r0",
+              "passage_id": "be3b29aca67a2017490e584e6739589d",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "99%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "99",
+              "unit": "%",
+              "exact_text": "99%，每发现一次，扣5分。",
+              "evidence_spans": [
+                [
+                  0,
+                  3
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+              "version_year": 2026,
+              "score": 5.1,
+              "unstructured_rejected": false,
+              "group_id": "8c6eb92e3265b10f",
+              "polarity": "",
+              "value_dimension": "ratio",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:扣分": "miss",
+                "anchor:网络": "miss",
+                "anchor:信息安全": "miss",
+                "anchor:考核": "miss",
+                "anchor:电话": "miss",
+                "anchor:实名制": "miss",
+                "anchor:实名": "miss",
+                "anchor:登记": "miss",
+                "anchor:未达标": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  0,
+                  3
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "ad557c3950a7730fca46d54b",
+              "record_id": "be3b29aca67a2017490e584e6739589d:r1",
+              "passage_id": "be3b29aca67a2017490e584e6739589d",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "99%",
+              "qualifiers": [],
+              "condition": "评估",
+              "value": "99",
+              "unit": "%",
+              "exact_text": "评估99%",
+              "evidence_spans": [
+                [
+                  33,
+                  36
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+              "version_year": 2026,
+              "score": 5.1,
+              "unstructured_rejected": false,
+              "group_id": "8c6eb92e3265b10f",
+              "polarity": "",
+              "value_dimension": "ratio",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:扣分": "miss",
+                "anchor:网络": "miss",
+                "anchor:信息安全": "miss",
+                "anchor:考核": "miss",
+                "anchor:电话": "miss",
+                "anchor:实名制": "miss",
+                "anchor:实名": "miss",
+                "anchor:登记": "miss",
+                "anchor:未达标": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  33,
+                  36
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "4bea1c73d1d53ba3eecf9715": "hit",
+              "7db8e1fbce7649ce23f37f3f": "hit",
+              "f4d45fb11e5ce61914e9f848": "hit",
+              "ae2bd1dd0251241b064b1708": "hit",
+              "b852f980bae7b9aade750874": "hit",
+              "ad557c3950a7730fca46d54b": "hit",
+              "2600317ffb8d99a629c88f70": "hit",
+              "3fca0c5b3bcb7f1b31cc06ca": "hit",
+              "9f88e79a8d2b9fa433601063": "hit"
+            },
+            "unit": {
+              "4bea1c73d1d53ba3eecf9715": "hit",
+              "7db8e1fbce7649ce23f37f3f": "hit",
+              "f4d45fb11e5ce61914e9f848": "hit",
+              "ae2bd1dd0251241b064b1708": "hit",
+              "b852f980bae7b9aade750874": "hit",
+              "ad557c3950a7730fca46d54b": "hit",
+              "2600317ffb8d99a629c88f70": "hit",
+              "3fca0c5b3bcb7f1b31cc06ca": "hit",
+              "9f88e79a8d2b9fa433601063": "hit"
+            },
+            "predicate:扣分": {
+              "4bea1c73d1d53ba3eecf9715": "miss",
+              "7db8e1fbce7649ce23f37f3f": "miss",
+              "f4d45fb11e5ce61914e9f848": "miss",
+              "ae2bd1dd0251241b064b1708": "miss",
+              "b852f980bae7b9aade750874": "miss",
+              "ad557c3950a7730fca46d54b": "miss",
+              "2600317ffb8d99a629c88f70": "miss",
+              "3fca0c5b3bcb7f1b31cc06ca": "miss",
+              "9f88e79a8d2b9fa433601063": "miss"
+            }
+          },
+          "primary_group_id": "8c6eb92e3265b10f",
+          "covered_slots": [
+            "condition:评估",
+            "dim:ratio",
+            "unit",
+            "value",
+            "评估"
+          ],
+          "missing_after_select": [
+            "predicate:扣分"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "8c6eb92e3265b10f",
+                "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+                "knowledge_ids": [
+                  "24a0fd9e-a285-4230-b58c-09715016758f"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:网络和信息安全考核要点与评分标准afd",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "66d10f39a10245128b424ccadad81874",
+                  "bb568a81ab014a2ffb14e957710997a7",
+                  "9f3789df9d23de54607daa2437d31362",
+                  "a3269c83c2e8cca12e8cff399bdd07f7",
+                  "be3b29aca67a2017490e584e6739589d",
+                  "47231fa6485f493e7d7347596da73abe",
+                  "875ae80b74f7d2817e2f869ae8f50161",
+                  "875abd083dde6ed96017e06805327816",
+                  "574a97edac4d399f25ebe8b254bfcf78",
+                  "49d5234f1f451f59f74263c2b54b6cfd"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9
+                ],
+                "retrieval_scores": [
+                  0.9000000000000001,
+                  0.9000000000000001,
+                  0.9000000000000001,
+                  0.9000000000000001,
+                  0.9000000000000001,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+                "section": "2.未严格落实身份信息核验要求，存在证件冒 > 2.身份信息核验方面，存在 > （三）宽带实",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.8,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "66d10f39a10245128b424ccadad81874:r0",
+                  "66d10f39a10245128b424ccadad81874:r1",
+                  "66d10f39a10245128b424ccadad81874:r2",
+                  "bb568a81ab014a2ffb14e957710997a7:r0",
+                  "bb568a81ab014a2ffb14e957710997a7:r1",
+                  "bb568a81ab014a2ffb14e957710997a7:r2",
+                  "9f3789df9d23de54607daa2437d31362:r0",
+                  "9f3789df9d23de54607daa2437d31362:r1",
+                  "9f3789df9d23de54607daa2437d31362:r2",
+                  "a3269c83c2e8cca12e8cff399bdd07f7:r0",
+                  "a3269c83c2e8cca12e8cff399bdd07f7:r1",
+                  "a3269c83c2e8cca12e8cff399bdd07f7:r2",
+                  "be3b29aca67a2017490e584e6739589d:r0",
+                  "be3b29aca67a2017490e584e6739589d:r1",
+                  "be3b29aca67a2017490e584e6739589d:r2",
+                  "be3b29aca67a2017490e584e6739589d:r3",
+                  "be3b29aca67a2017490e584e6739589d:r4",
+                  "be3b29aca67a2017490e584e6739589d:r5",
+                  "47231fa6485f493e7d7347596da73abe:r0",
+                  "47231fa6485f493e7d7347596da73abe:r1",
+                  "47231fa6485f493e7d7347596da73abe:r2",
+                  "875ae80b74f7d2817e2f869ae8f50161:r0",
+                  "875ae80b74f7d2817e2f869ae8f50161:r1",
+                  "875ae80b74f7d2817e2f869ae8f50161:r2",
+                  "875ae80b74f7d2817e2f869ae8f50161:r3",
+                  "875ae80b74f7d2817e2f869ae8f50161:r4",
+                  "875abd083dde6ed96017e06805327816:r0",
+                  "875abd083dde6ed96017e06805327816:r1",
+                  "875abd083dde6ed96017e06805327816:r2",
+                  "574a97edac4d399f25ebe8b254bfcf78:r0",
+                  "574a97edac4d399f25ebe8b254bfcf78:r1",
+                  "574a97edac4d399f25ebe8b254bfcf78:r2",
+                  "574a97edac4d399f25ebe8b254bfcf78:r3",
+                  "49d5234f1f451f59f74263c2b54b6cfd:r0",
+                  "49d5234f1f451f59f74263c2b54b6cfd:r1",
+                  "49d5234f1f451f59f74263c2b54b6cfd:r2",
+                  "49d5234f1f451f59f74263c2b54b6cfd:r3",
+                  "49d5234f1f451f59f74263c2b54b6cfd:r4",
+                  "49d5234f1f451f59f74263c2b54b6cfd:r5"
+                ]
+              }
+            ],
+            "primary_group_id": "8c6eb92e3265b10f",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "标扣分阈值",
+                "电话实名制实名登记率未达",
+                "网络信息安全考核"
+              ],
+              "selection": [
+                {
+                  "group_id": "8c6eb92e3265b10f",
+                  "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+                  "knowledge_ids": [
+                    "24a0fd9e-a285-4230-b58c-09715016758f"
+                  ],
+                  "score": 7.8,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit",
+            "predicate:扣分"
+          ],
+          "candidate_ids": [
+            "4bea1c73d1d53ba3eecf9715",
+            "7db8e1fbce7649ce23f37f3f",
+            "f4d45fb11e5ce61914e9f848",
+            "ae2bd1dd0251241b064b1708",
+            "b852f980bae7b9aade750874",
+            "ad557c3950a7730fca46d54b"
+          ],
+          "missing_slots": [
+            "predicate:扣分"
+          ],
+          "complete": false,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "dim:ratio",
+            "unit",
+            "value",
+            "评估"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "4bea1c73d1d53ba3eecf9715": "hit",
+              "7db8e1fbce7649ce23f37f3f": "hit",
+              "f4d45fb11e5ce61914e9f848": "hit",
+              "ae2bd1dd0251241b064b1708": "hit",
+              "b852f980bae7b9aade750874": "hit",
+              "ad557c3950a7730fca46d54b": "hit",
+              "2600317ffb8d99a629c88f70": "hit",
+              "3fca0c5b3bcb7f1b31cc06ca": "hit",
+              "9f88e79a8d2b9fa433601063": "hit"
+            },
+            "unit": {
+              "4bea1c73d1d53ba3eecf9715": "hit",
+              "7db8e1fbce7649ce23f37f3f": "hit",
+              "f4d45fb11e5ce61914e9f848": "hit",
+              "ae2bd1dd0251241b064b1708": "hit",
+              "b852f980bae7b9aade750874": "hit",
+              "ad557c3950a7730fca46d54b": "hit",
+              "2600317ffb8d99a629c88f70": "hit",
+              "3fca0c5b3bcb7f1b31cc06ca": "hit",
+              "9f88e79a8d2b9fa433601063": "hit"
+            },
+            "predicate:扣分": {
+              "4bea1c73d1d53ba3eecf9715": "miss",
+              "7db8e1fbce7649ce23f37f3f": "miss",
+              "f4d45fb11e5ce61914e9f848": "miss",
+              "ae2bd1dd0251241b064b1708": "miss",
+              "b852f980bae7b9aade750874": "miss",
+              "ad557c3950a7730fca46d54b": "miss",
+              "2600317ffb8d99a629c88f70": "miss",
+              "3fca0c5b3bcb7f1b31cc06ca": "miss",
+              "9f88e79a8d2b9fa433601063": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "value",
+            "unit",
+            "predicate:扣分"
+          ],
+          "entities": [
+            "网络",
+            "信息安全",
+            "考核",
+            "电话",
+            "实名制",
+            "实名",
+            "登记",
+            "未达标",
+            "扣分",
+            "阈值",
+            "网络信息安全考核",
+            "网络信息安全"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "网络",
+          "object": "信息安全",
+          "scope": [],
+          "selector": [],
+          "predicate": "扣分",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "numeric",
+          "value_dimensions": [
+            "value"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "网络",
+            "信息安全",
+            "考核",
+            "电话",
+            "实名制",
+            "实名",
+            "登记",
+            "未达标",
+            "扣分",
+            "阈值",
+            "网络信息安全考核",
+            "网络信息安全"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "8c6eb92e3265b10f",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "knowledge_ids": [
+                "24a0fd9e-a285-4230-b58c-09715016758f"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:网络和信息安全考核要点与评分标准afd",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "66d10f39a10245128b424ccadad81874",
+                "bb568a81ab014a2ffb14e957710997a7",
+                "9f3789df9d23de54607daa2437d31362",
+                "a3269c83c2e8cca12e8cff399bdd07f7",
+                "be3b29aca67a2017490e584e6739589d",
+                "47231fa6485f493e7d7347596da73abe",
+                "875ae80b74f7d2817e2f869ae8f50161",
+                "875abd083dde6ed96017e06805327816",
+                "574a97edac4d399f25ebe8b254bfcf78",
+                "49d5234f1f451f59f74263c2b54b6cfd"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "retrieval_scores": [
+                0.9000000000000001,
+                0.9000000000000001,
+                0.9000000000000001,
+                0.9000000000000001,
+                0.9000000000000001,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+              "section": "2.未严格落实身份信息核验要求，存在证件冒 > 2.身份信息核验方面，存在 > （三）宽带实",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.8,
+              "rejection_reasons": [],
+              "record_ids": [
+                "66d10f39a10245128b424ccadad81874:r0",
+                "66d10f39a10245128b424ccadad81874:r1",
+                "66d10f39a10245128b424ccadad81874:r2",
+                "bb568a81ab014a2ffb14e957710997a7:r0",
+                "bb568a81ab014a2ffb14e957710997a7:r1",
+                "bb568a81ab014a2ffb14e957710997a7:r2",
+                "9f3789df9d23de54607daa2437d31362:r0",
+                "9f3789df9d23de54607daa2437d31362:r1",
+                "9f3789df9d23de54607daa2437d31362:r2",
+                "a3269c83c2e8cca12e8cff399bdd07f7:r0",
+                "a3269c83c2e8cca12e8cff399bdd07f7:r1",
+                "a3269c83c2e8cca12e8cff399bdd07f7:r2",
+                "be3b29aca67a2017490e584e6739589d:r0",
+                "be3b29aca67a2017490e584e6739589d:r1",
+                "be3b29aca67a2017490e584e6739589d:r2",
+                "be3b29aca67a2017490e584e6739589d:r3",
+                "be3b29aca67a2017490e584e6739589d:r4",
+                "be3b29aca67a2017490e584e6739589d:r5",
+                "47231fa6485f493e7d7347596da73abe:r0",
+                "47231fa6485f493e7d7347596da73abe:r1",
+                "47231fa6485f493e7d7347596da73abe:r2",
+                "875ae80b74f7d2817e2f869ae8f50161:r0",
+                "875ae80b74f7d2817e2f869ae8f50161:r1",
+                "875ae80b74f7d2817e2f869ae8f50161:r2",
+                "875ae80b74f7d2817e2f869ae8f50161:r3",
+                "875ae80b74f7d2817e2f869ae8f50161:r4",
+                "875abd083dde6ed96017e06805327816:r0",
+                "875abd083dde6ed96017e06805327816:r1",
+                "875abd083dde6ed96017e06805327816:r2",
+                "574a97edac4d399f25ebe8b254bfcf78:r0",
+                "574a97edac4d399f25ebe8b254bfcf78:r1",
+                "574a97edac4d399f25ebe8b254bfcf78:r2",
+                "574a97edac4d399f25ebe8b254bfcf78:r3",
+                "49d5234f1f451f59f74263c2b54b6cfd:r0",
+                "49d5234f1f451f59f74263c2b54b6cfd:r1",
+                "49d5234f1f451f59f74263c2b54b6cfd:r2",
+                "49d5234f1f451f59f74263c2b54b6cfd:r3",
+                "49d5234f1f451f59f74263c2b54b6cfd:r4",
+                "49d5234f1f451f59f74263c2b54b6cfd:r5"
+              ]
+            }
+          ],
+          "primary_group_id": "8c6eb92e3265b10f",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "标扣分阈值",
+              "电话实名制实名登记率未达",
+              "网络信息安全考核"
+            ],
+            "selection": [
+              {
+                "group_id": "8c6eb92e3265b10f",
+                "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+                "knowledge_ids": [
+                  "24a0fd9e-a285-4230-b58c-09715016758f"
+                ],
+                "score": 7.8,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {},
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "4bea1c73d1d53ba3eecf9715"
+              ],
+              "passage_id": "bb568a81ab014a2ffb14e957710997a7",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "text": "- 登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "7db8e1fbce7649ce23f37f3f"
+              ],
+              "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "text": "- 名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "b852f980bae7b9aade750874"
+              ],
+              "passage_id": "be3b29aca67a2017490e584e6739589d",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "text": "- 99%，每发现一次，扣5分。",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 91
+        },
+        "primary_group_id": "8c6eb92e3265b10f",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "type": "knowledge",
+              "label": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9"
+            },
+            {
+              "id": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+              "type": "block",
+              "label": "2.身份信息核验方面，存在",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "5c616bef-ea39-48f9-9ed9-50f18c46d948",
+              "type": "block",
+              "label": "[第30页]",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "type": "block",
+              "label": "严等。",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "47f5804c-1c31-40ad-bac3-b99a5335a255",
+              "type": "block",
+              "label": "[第17页]",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+              "type": "block",
+              "label": "业务码号资源的实际业务使用单位以及 700中间",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "type": "block",
+              "label": "实际业务使用单位以及 700中间号的应",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+              "type": "block",
+              "label": "售前风险评估不全面，入网流程不合",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "type": "knowledge",
+              "label": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150"
+            },
+            {
+              "id": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "type": "knowledge",
+              "label": "中电信桂-2019-370号-关于印发中国电信广西公司数据安全管理办法-试行-的通知--5fd963e8"
+            },
+            {
+              "id": "6246d57f-6fe0-4592-b172-c11822200aa9",
+              "type": "knowledge",
+              "label": "中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f"
+            },
+            {
+              "id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "type": "knowledge",
+              "label": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5"
+            }
+          ],
+          "edges": [
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+              "type": "contains"
+            },
+            {
+              "source": "5c616bef-ea39-48f9-9ed9-50f18c46d948",
+              "target": "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+              "type": "parent"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "type": "contains"
+            },
+            {
+              "source": "47f5804c-1c31-40ad-bac3-b99a5335a255",
+              "target": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "type": "parent"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+              "type": "contains"
+            },
+            {
+              "source": "5c616bef-ea39-48f9-9ed9-50f18c46d948",
+              "target": "7e63374c-f5a3-450e-ad6a-0c834a540e48",
+              "type": "parent"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "type": "contains"
+            },
+            {
+              "source": "47f5804c-1c31-40ad-bac3-b99a5335a255",
+              "target": "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "type": "parent"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+              "type": "contains"
+            },
+            {
+              "source": "47f5804c-1c31-40ad-bac3-b99a5335a255",
+              "target": "11a8bc5b-fafb-406b-8232-d74837e32b0f",
+              "type": "parent"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "6246d57f-6fe0-4592-b172-c11822200aa9",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 12
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 4,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "24a0fd9e-a285-4230-b58c-09715016758f"
+          ],
+          "accepted_block_ids": [
+            "9489004b-7ac4-44c3-a1ac-73b72954b905",
+            "56df87ce-0562-48d9-9c6c-909a32bbf49d",
+            "c25863cf-8a25-4bc9-b1f1-a1c0fc51c821",
+            "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "11a8bc5b-fafb-406b-8232-d74837e32b0f"
+          ],
+          "accepted_passage_ids": [
+            "66d10f39a10245128b424ccadad81874",
+            "bb568a81ab014a2ffb14e957710997a7",
+            "9f3789df9d23de54607daa2437d31362",
+            "a3269c83c2e8cca12e8cff399bdd07f7",
+            "be3b29aca67a2017490e584e6739589d",
+            "47231fa6485f493e7d7347596da73abe",
+            "875ae80b74f7d2817e2f869ae8f50161",
+            "875abd083dde6ed96017e06805327816",
+            "574a97edac4d399f25ebe8b254bfcf78",
+            "49d5234f1f451f59f74263c2b54b6cfd"
+          ],
+          "adjacent_passage_ids": [
+            "47231fa6485f493e7d7347596da73abe",
+            "bb568a81ab014a2ffb14e957710997a7",
+            "875ae80b74f7d2817e2f869ae8f50161",
+            "875abd083dde6ed96017e06805327816",
+            "a3269c83c2e8cca12e8cff399bdd07f7",
+            "574a97edac4d399f25ebe8b254bfcf78",
+            "49d5234f1f451f59f74263c2b54b6cfd"
+          ],
+          "generation_knowledge_ids": [
+            "24a0fd9e-a285-4230-b58c-09715016758f"
+          ],
+          "top_score": 0.55,
+          "intent": "ordinary",
+          "adjacent_count": 7,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "a1f9225c15ead5d239525005"
+        },
+        "snapshot_fingerprint": "a1f9225c15ead5d239525005",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 5,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 34.03
+  },
+  "top_candidate_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+  "candidates": [
+    {
+      "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+      "passage_id": "66d10f39a10245128b424ccadad81874",
+      "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】2.未严格落实身份信息核验要求，存在证件冒 > 2.身份信息核验方面，存在 > （三）宽带实\n监管，每发现一次（含通报）扣 3分。 注1:Al换脸识别技术能力\n要求另行下发。\n注2：指部网安局印发的实\n名制工作通报 （含定期通报、\n专项通报等）。同一问题首\n次通报不扣分，下同。 网络和信息\n安全管理\n部、 市场部、\n数字化运营\n支撑中心 文艳\n— 26 — （二）电话实\n名制 1.电话实名制基础管理：未按要求落实电话实名\n制安全管理要求；电话用户实名登记率、人证一\n致率未达 99%；每发现一次（含通报）扣 3分。\n2.未严格落实身份信息核验要求，存在证件冒\n用、照片复用、换脸冒名入网等问题的，每发现\n一次，视情扣 5分或10分。 注：1.如单位用户、未成年\n用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳"
+    },
+    {
+      "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+      "passage_id": "bb568a81ab014a2ffb14e957710997a7",
+      "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】（四）中间 > （1）中间号：未按要求落实中间号管理要求（注 > 1）、中间号合作单位实名登记率、实名登记准\n用户、eSIM用户等入网流程\n不合规，违规网络售卡寄送\n激活、渠道混用违规开卡等\n网络渠道入网管理要求未落\n实，入网信息留存不规范，\n电话用户行业“一证多卡”\n限制未落实，代理渠道管理\n不严等。\n2.身份信息核验方面，存在\n证件冒用、照片复用、换脸\n冒名入网等。 市场部 文艳\n（三）宽带实\n名制 宽带实名制基础管理：未按要求落实宽带等安全\n管理要求，新增宽带用户实名登记率未达 95%，\n每发现一次（含通报）扣 3分。 注：如入网流程不合规、装\n机地址录入不规范、存量用\n户补登记工作推进缓慢等。 市场部、政\n企信息服务\n事业群（数\n智分公司）\n（四）中间\n号、物联网、\n车联网、短信\n端口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理要求（注\n1）、中间号合作单位实名登记率、实名登记准\n确率、人证一致率未达 98%（合作单位包括存量\n业务码号资源的实际业务使用单位以及 700中间\n号的应用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。"
+    },
+    {
+      "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+      "passage_id": "9f3789df9d23de54607daa2437d31362",
+      "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带\n能力的日常监管，每发现一次（含通报）\n扣3分。 注1:Al换脸识别技术能力要求另行\n下发。\n注2：指部网安局印发的实名制工作\n通报（含定期通报、专项通报等）。\n同一问题首次通报不扣分，下同。 网络和信息\n安全管理部、\n市场部、数字\n化运营支撑\n中心 文艳\n— 13 — （二） 电话\n实名制 1.电话实名制基础管理： 未按要求落实电\n话实名制安全管理要求； 电话用户实名登\n记率、人证一致率未达 99%；每发现一次\n（含通报）扣 3分。\n2.未严格落实身份信息核验要求， 存在证\n件冒用、照片复用、换脸冒名入网等问题\n的，每发现一次，视情扣 5分或10分。 注：1.如单位用户、 未成年用户、 eSIM\n用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳"
+    },
+    {
+      "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+      "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+      "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】（三） 宽带 > （四） 中间 > （1）中间号：未按要求落实中间号管理\n用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。"
+    },
+    {
+      "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+      "passage_id": "be3b29aca67a2017490e584e6739589d",
+      "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】4.如实名登记不合规，入网信息留存 > 2.各类检查通报： > （1）不定期抽查未按规定办理中间号、\n99%，每发现一次，扣 5分。\n（4）短信端口：未按要求落实短信端口\n（注4）、活跃短信端口实名登记率未达\n99%、短信签名一致率未达 98%，，每发注：1.如中间号安全管理机制不健全，\n售前风险评估不全面，入网流程不合\n规，用户风险提醒未落实，存量业务\n整改不力等。\n2.如未按要求落实开通非定向大流量\n物联网卡登记到实际使用人、超“一\n证十卡”开卡、机卡绑定、黑名单限\n制等功能管控措施不到位，定向流量\n白名单、高风险场景销售合同等审批\n管理不严、 违规销售物联网卡裸卡等。\n3.如入网流程不规范，必填信息填写\n不合规，超“一证十卡”限制不严、\n入网信息留存不规范等。\n4.如实名登记不合规，入网信息留存\n不规范，短信端口模板（含签名）及\n引流信息审核把关不严、自有端口管\n理缺位，合作单位管理不到位等。 政企信息服\n务事业群（数\n智分公司） 云中台（政企\n业务交付运\n营中心） 文艳\n— 14 — 现一次（含通报）扣 3分。\n2.各类检查通报："
+    }
+  ],
+  "search_ms": 2755.97,
+  "ask_ms": 34.03,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "sPwCAhgZXva4wFVuPu-pqLBlPwZMYVjQ",
+  "search_snapshot_fingerprint": "a1f9225c15ead5d239525005",
+  "ask_snapshot_fingerprint": "a1f9225c15ead5d239525005",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "7c7c48ea58647d0ad4580408"
+}

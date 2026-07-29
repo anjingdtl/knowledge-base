@@ -294,6 +294,7 @@ def build_canonical_snapshot(
     expanded_queries: list[str] | None = None,
     list_blocks_fn: Callable[[str], list[dict[str, Any]]] | None = None,
     list_neighbor_passages_fn: Callable[[str, str, int], list[dict[str, Any]]] | None = None,
+    select_document_passages_fn: Callable[[str, str, set[str], int], list[dict[str, Any]]] | None = None,
     adjacent_window: int = 1,
 ) -> dict[str, Any]:
     """Gate + freshness + allowlist over a candidate list.
@@ -356,46 +357,79 @@ def build_canonical_snapshot(
         retrieval_unit="passage" if is_passage else "block",
     )
 
-    # SPEC v6: when query asks for numeric limits/penalties but accepted bodies
-    # lack money cues, promote same-knowledge passages from the raw pool that
-    # carry value patterns (general, not Golden-bound).
+    # For numeric questions, a top passage can contain an incidental number
+    # while the actual limit sits in another raw-hit passage of the same
+    # document.  Promote a bounded set of those same-document numeric passages
+    # from the existing raw pool; this never expands to arbitrary page text.
     if re.search(r"限额|金额|处罚|奖金|占比|多少|上限|元", q):
         money_re = re.compile(r"\d+(?:\.\d+)?\s*(?:万元|元|%|％)")
-        need_money = not any(
-            money_re.search(str(r.get("text") or r.get("body_text") or ""))
+        primary_kids = {
+            str(r.get("knowledge_id") or "").strip()
             for r in accepted[:top_k]
-            if isinstance(r, dict)
-        )
-        if need_money:
-            primary_kids = {
-                str(r.get("knowledge_id") or "").strip()
-                for r in accepted[:top_k]
-                if isinstance(r, dict) and r.get("knowledge_id")
-            }
-            promoted = 0
-            for r in pool:
-                if not isinstance(r, dict):
-                    continue
-                kid = str(r.get("knowledge_id") or "").strip()
-                if kid not in primary_kids:
-                    continue
-                text = str(r.get("text") or r.get("body_text") or "")
-                if not money_re.search(text):
-                    continue
-                pid = str(r.get("passage_id") or "").strip()
-                if pid and pid in seen_p:
-                    continue
-                # Promote into accepted/generation for fact extraction.
-                row = dict(r)
-                row["promoted_numeric_passage"] = True
-                accepted.append(row)
-                generation_items.append(row)
-                if pid:
-                    seen_p.add(pid)
-                    accepted_passages.append(pid)
-                promoted += 1
-                if promoted >= 4:
-                    break
+            if isinstance(r, dict) and r.get("knowledge_id")
+        }
+        promoted = 0
+        for r in pool:
+            if not isinstance(r, dict):
+                continue
+            kid = str(r.get("knowledge_id") or "").strip()
+            if kid not in primary_kids:
+                continue
+            text = str(r.get("text") or r.get("body_text") or "")
+            if not money_re.search(text):
+                continue
+            pid = str(r.get("passage_id") or "").strip()
+            if pid and pid in seen_p:
+                continue
+            row = dict(r)
+            row["promoted_numeric_passage"] = True
+            accepted.append(row)
+            generation_items.append(row)
+            if pid:
+                seen_p.add(pid)
+                accepted_passages.append(pid)
+            promoted += 1
+            if promoted >= 4:
+                break
+
+    # The retrieval hit can be a document's definition or heading while the
+    # answerable condition/value/responsibility is a different indexed passage
+    # in that same already-accepted document.  Select a small number of such
+    # passages with a query-derived scorer.  This is intentionally not a page
+    # expansion: the callback receives the accepted knowledge id only, returns
+    # indexed passages only, and its output is explicitly allowlisted.
+    targeted_passages: list[dict[str, Any]] = []
+    if select_document_passages_fn is not None and accepted:
+        primary_kid = str(accepted[0].get("knowledge_id") or "").strip()
+        existing_pids = set(seen_p)
+        if primary_kid:
+            try:
+                targeted_passages = select_document_passages_fn(
+                    primary_kid, q, existing_pids, 3,
+                ) or []
+            except Exception:
+                targeted_passages = []
+        for row in targeted_passages:
+            if not isinstance(row, dict):
+                continue
+            pid = str(row.get("passage_id") or "").strip()
+            if not pid or pid in seen_p:
+                continue
+            row = dict(row)
+            row["targeted_document_evidence"] = True
+            accepted.append(row)
+            generation_items.append(row)
+            seen_p.add(pid)
+            accepted_passages.append(pid)
+            allowlist.append({
+                "knowledge_id": row.get("knowledge_id") or primary_kid,
+                "block_id": row.get("block_id") or "",
+                "passage_id": pid,
+                "is_adjacent_extension": False,
+                "targeted_document_evidence": True,
+                "relevance_score": row.get("score"),
+                "channel": "accepted_document_passage",
+            })
 
     # Optional same-doc ±1 passage neighbors for generation context only.
     passage_adj: list[dict[str, Any]] = []
@@ -521,7 +555,7 @@ def build_canonical_snapshot(
         "threshold": threshold,
         "intent": intent,
         "accepted_items": accepted[:top_k],
-        "generation_items": generation_items[: max(top_k, top_k + passage_adj_n)],
+        "generation_items": generation_items[: max(top_k, top_k + passage_adj_n + len(targeted_passages))],
         "accepted_knowledge_ids": accepted_kids,
         "accepted_block_ids": accepted_blocks,
         "accepted_passage_ids": accepted_passages,

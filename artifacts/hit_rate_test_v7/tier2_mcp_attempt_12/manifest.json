@@ -1,0 +1,33 @@
+{
+  "git_revision": "194f88dcecc5af3daf8103673ad148210a6fa654",
+  "dirty_patch_sha256": "ec9971b891849608e3a1ff4ba4685a3f8c92ba48ab36412ddcb0b568f91a14ba",
+  "production_source_sha256": "d99a8b08ecc0768357d3c50c856f623f5c916d54a7a98471f720c6cf34a6edc0",
+  "golden_path": "evals\\golden_set_hit_rate.json",
+  "golden_sha256": "649be48fee5658368ceb679407029248cdcbc215d7060e8590e71fbb94adb03b",
+  "scorer_sha256": "fc5517e238006a0ed1c0e6a1b76a994052ae2d425b19fb729020fe251acce87b",
+  "config_hash": "5763d259895a21366ecdf2a968396db703790d53c1fa56ed085ee86ca58a7e4d",
+  "index_revision": "b51ffb57bf9911ba71d31dc684ce503e3e0b53139b37a807fcd39a85b7ecee3b",
+  "db_revision": "6d6c12cb033822aad47e8c1f237390ac549451d87292386568f8fea09448632c",
+  "process_start_id": "21080-43c78b92",
+  "python_version": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "dependency_lock_sha256": "d134549bfa73038bab83a00198be21e2100125f522391f8357feab43ee2d4727",
+  "retrieval_mode": "unified",
+  "rerank_mode": "circuit_breaker",
+  "timeout_settings": {
+    "search_request_s": 180,
+    "ask_request_s": 180,
+    "rerank_mode": "circuit_breaker"
+  },
+  "reuse_snapshot": true,
+  "read_mode": "unique",
+  "workers": 1,
+  "case_filter": [
+    "KB-010"
+  ],
+  "started_at": "2026-07-29T12:51:54+0800",
+  "host": "127.0.0.1",
+  "port": 9000,
+  "run_fingerprint": "78813ba64623344f8b470c86",
+  "ended_at": "2026-07-29T12:51:58+0800",
+  "elapsed_s": 3.38
+}

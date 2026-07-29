@@ -7,7 +7,7 @@ WP2: answer.orchestrator pseudo dual-path removed — only unified assemble path
 
 SPEC v2 Phase 1/3: accepts a pre-gated evidence snapshot so search and ask
 share the same candidates; expands adjacent blocks into generation context
-before the LLM sees the evidence (KB-019).
+before the LLM sees the evidence.
 """
 from __future__ import annotations
 
@@ -219,7 +219,7 @@ class AnswerService:
         else:
             results, trace, disclose_rows = self._run_search(question, top_k=top_k)
 
-        # Adjacent block expansion for clause integrity (KB-019).
+        # Adjacent block expansion for clause integrity.
         # SPEC v4: skip micro-block expansion when candidates are already
         # semantic passages (they already contain full clause context).
         has_passage = any(

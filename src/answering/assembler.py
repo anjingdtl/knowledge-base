@@ -2,7 +2,7 @@
 
 Canonical home for ask payload assembly (maintainability closure WP2).
 
-SPEC Phase 5 (KB-019): numeric answers must be anchored to the evidence — a
+Numeric answers must be anchored to the evidence — a
 generated value that does not appear in the accepted evidence is stripped to
 prevent the II类/III类 substitution bug.
 """
@@ -176,7 +176,7 @@ def assemble_answer_payload(
     if freshness_q and answer_mode == ANSWER_MODE_HYBRID and dropped_stale:
         warnings.append("freshness_sensitive_stale_excluded")
 
-    # SPEC Phase 5 / v2 Phase 3 (KB-019): strip numeric assertions that are
+    # Strip numeric assertions that are
     # not subject-anchored in the accepted evidence. Prevents the II类/III类
     # substitution where a truncated context made the LLM cite "10万元" (II类)
     # for a III类 question, including inferred phrasing like "超过10万元".
@@ -202,7 +202,7 @@ def assemble_answer_payload(
 
         # SPEC v3 numeric guard: do NOT refuse when the answer's numeric
         # assertions are already verifiable in passage evidence, even if a
-        # single "subject" heuristic fails to parse (KB-010 multi-condition).
+        # single "subject" heuristic fails to parse a multi-condition request.
         from src.answering.fact_guard import (
             extract_query_conditions,
             extract_query_subjects,

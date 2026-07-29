@@ -1,0 +1,17 @@
+{
+  "hits": 15,
+  "misses": [
+    {
+      "case_id": "KB-011",
+      "reason": "snapshot_id_missing",
+      "snapshot_id_present": false,
+      "search_snapshot_fingerprint": null,
+      "ask_snapshot_fingerprint": "22fb7ded0d6f8fbf3646c091",
+      "retrieval_count": 1,
+      "ask_ms": 2893.13,
+      "extra_retrieval": true
+    }
+  ],
+  "integrity_errors": [],
+  "retrieval_count_sum": 1
+}

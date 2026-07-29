@@ -10,9 +10,47 @@ from src.answering.logical_evidence import LogicalEvidenceRecord
 from src.answering.passage_evidence import PassageEvidence, normalize_evidence_list
 
 
+def _ordered_unique(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    return [v for v in values if v and not (v in seen or seen.add(v))]
+
+
 def _stable_group_id(knowledge_id: str, family: str, revision: str) -> str:
     raw = f"{knowledge_id}|{family}|{revision}"
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def _document_identity(pe: PassageEvidence) -> tuple[str, str, str, int | None]:
+    """Derive scope/family/revision from available metadata and title.
+
+    This is an in-memory fallback for legacy passages whose indexed family and
+    version metadata is absent.  It intentionally uses title structure only;
+    no evaluation knowledge IDs or document-name table is involved.
+    """
+    title = (pe.title or "").strip()
+    provided = (pe.document_family_id or "").strip().removeprefix("topic:")
+    year = pe.version_year
+    if year is None:
+        m = re.search(r"((?:19|20)\d{2})", title)
+        year = int(m.group(1)) if m else None
+    scope = ""
+    scope_match = re.search(r"中国电信[^，。；;（）()]{0,24}?(?:分公司|公司)", title)
+    if scope_match:
+        scope = scope_match.group(0)
+    else:
+        # Preserve a regional/company qualifier when it is present in the
+        # common dispatch-number title form.
+        region = re.search(r"(?:广西|南宁|柳州|桂林|贺州|号百)[\u4e00-\u9fff]{0,8}(?:分公司|公司)", title)
+        if region:
+            scope = region.group(0)
+    normalized = provided or title
+    normalized = re.sub(r"--[0-9a-fA-F-]{6,}$", "", normalized)
+    normalized = re.sub(r"(?:中电信[^-—]{0,12})?[-—]?(?:19|20)\d{2}[-—]\d+号", "", normalized)
+    normalized = re.sub(r"(?:关于)?印发|通知|修订版?|试行|\(?\d{4}年?\)?", "", normalized)
+    normalized = re.sub(r"[\-—_（）()【】\[\]]+", "", normalized).strip()
+    normalized = normalized[:80] or "unknown_document"
+    family = f"{scope}:{normalized}" if scope else normalized
+    return scope, family, str(year) if year is not None else "", year
 
 
 def _query_wants_freshness(query: str) -> bool:
@@ -38,6 +76,8 @@ def _tokenize(text: str) -> set[str]:
 class EvidenceGroup:
     group_id: str
     knowledge_id: str
+    knowledge_ids: list[str] = field(default_factory=list)
+    organization_scope: str = ""
     document_family_id: str = ""
     document_revision: str = ""
     effective_date: str = ""
@@ -94,25 +134,27 @@ def resolve_evidence_groups(
     wants_fresh = _query_wants_freshness(q)
     multi = bool(subqueries and len(subqueries) > 1)
 
-    # Bucket by knowledge_id (each kid is a group; family metadata optional).
-    buckets: dict[str, list[tuple[int, PassageEvidence]]] = {}
+    # Bucket by parsed document family + revision.  Different imported copies
+    # of the same edition form one evidence group while preserving every kid.
+    buckets: dict[tuple[str, str], list[tuple[int, PassageEvidence]]] = {}
     for rank, pe in enumerate(evidence):
-        kid = (pe.knowledge_id or "").strip() or f"unknown:{pe.passage_id or rank}"
-        buckets.setdefault(kid, []).append((rank, pe))
+        _scope, family, revision, _year = _document_identity(pe)
+        fallback = (pe.knowledge_id or "").strip() or f"unknown:{pe.passage_id or rank}"
+        buckets.setdefault((family or fallback, revision), []).append((rank, pe))
 
     groups: list[EvidenceGroup] = []
-    for kid, items in buckets.items():
+    for (bucket_family, bucket_revision), items in buckets.items():
         items_sorted = sorted(items, key=lambda x: x[0])
         first = items_sorted[0][1]
-        family = (first.document_family_id or "").strip()
-        year = first.version_year
-        if year is None:
-            m = re.search(r"((?:19|20)\d{2})", first.title or "")
-            if m:
-                year = int(m.group(1))
-        revision = str(year) if year is not None else ""
-        family_unknown = not bool(family)
-        gid = _stable_group_id(kid, family, revision)
+        scope, family, revision, year = _document_identity(first)
+        family = bucket_family or family
+        revision = bucket_revision or revision
+        kids = _ordered_unique([
+            (pe.knowledge_id or "").strip() for _, pe in items_sorted if (pe.knowledge_id or "").strip()
+        ])
+        kid = kids[0] if kids else f"unknown:{first.passage_id or len(groups)}"
+        family_unknown = family in ("", "unknown_document")
+        gid = _stable_group_id("|".join(kids) or kid, family, revision)
 
         passage_ids = []
         ranks = []
@@ -175,13 +217,15 @@ def resolve_evidence_groups(
         rec_ids = []
         if records:
             for rec in records:
-                if rec.knowledge_id == kid or rec.passage_id in passage_ids:
+                if rec.knowledge_id in kids or rec.passage_id in passage_ids:
                     rec_ids.append(rec.record_id)
 
         groups.append(
             EvidenceGroup(
                 group_id=gid,
                 knowledge_id=kid,
+                knowledge_ids=kids,
+                organization_scope=scope,
                 document_family_id=family,
                 document_revision=revision,
                 version_year=year if isinstance(year, int) else None,
@@ -235,6 +279,7 @@ def resolve_evidence_groups(
         audit["selection"].append({
             "group_id": g.group_id,
             "knowledge_id": g.knowledge_id,
+            "knowledge_ids": list(g.knowledge_ids),
             "score": g.group_score,
             "role": (
                 "primary" if g.group_id == primary
@@ -270,6 +315,7 @@ def filter_records_to_groups(
         ):
             if g.knowledge_id:
                 allowed_kids.add(g.knowledge_id)
+            allowed_kids.update(g.knowledge_ids)
             allowed_pids.update(g.passage_ids)
     if not allowed_kids and not allowed_pids:
         return list(records)
@@ -298,6 +344,7 @@ def filter_candidates_to_groups(
         ):
             if g.knowledge_id:
                 allowed_kids.add(g.knowledge_id)
+            allowed_kids.update(g.knowledge_ids)
             allowed_pids.update(g.passage_ids)
     out = []
     for c in candidates:

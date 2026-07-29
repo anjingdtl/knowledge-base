@@ -1,0 +1,35 @@
+{
+  "total": 1,
+  "skipped_resume": 0,
+  "reuse_snapshot": true,
+  "read_mode": "unique",
+  "workers": 1,
+  "elapsed_s": 3.38,
+  "search_ms_sum": 3267.6,
+  "ask_ms_sum": 48.72,
+  "read_ms_sum": 0.0,
+  "snapshot_reuse_hits": 1,
+  "retrieval_count_sum": 0,
+  "unique_reads": 1,
+  "cases": [
+    {
+      "case_id": "KB-010",
+      "category": "同义词与口语表达",
+      "query": "防诈骗和骚扰电话 代理商被罚多少钱",
+      "top_candidate_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "search_ok": true,
+      "ask_ok": true,
+      "search_ms": 3267.6,
+      "ask_ms": 48.72,
+      "read_ms": 0.0,
+      "snapshot_reused": true,
+      "snapshot_reuse_reason": "",
+      "snapshot_integrity_error": false,
+      "search_snapshot_fingerprint": "fda121798f2ce07f18d98cf6",
+      "ask_snapshot_fingerprint": "fda121798f2ce07f18d98cf6",
+      "retrieval_count": 0,
+      "answer_validation_decision": "structured_claim_answer",
+      "retrieval_decision": "accepted"
+    }
+  ]
+}

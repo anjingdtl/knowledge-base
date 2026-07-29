@@ -1,0 +1,1288 @@
+{
+  "case": {
+    "case_id": "KB-037",
+    "category": "新旧规则冲突",
+    "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+    "expected_knowledge_ids": [
+      "2b63b216-9850-4e82-803e-4006cb9f62ad"
+    ],
+    "expected_title_keywords": [
+      "技能竞赛",
+      "2026"
+    ],
+    "required_facts": [
+      "2026",
+      "158号"
+    ],
+    "forbidden_facts": [
+      "一级竞赛",
+      "二级竞赛"
+    ],
+    "expected_no_answer": false,
+    "notes": "〔2026〕158号取消分级；不应返回2023版〔2023〕278号"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "474cba97-5770-42a2-afe4-9c88f215c93e",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十二条 全区电信职业技能竞赛是广西公司、区电信工 > 第十三条 技能竞赛应制订组织实施方案，主要包括：竞 > 第十四条 技能竞赛应依据国家、行业职业技能标准和企\n案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。\n第十二条 全区电信职业技能竞赛是广西公司、区电信工\n会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n赛管理办法》规定，向集团公司提交备案申请。\n第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n成情况、竞赛经费预算、奖励办法等。\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2026,
+          "section_path": "第十二条 全区电信职业技能竞赛是广西公司、区电信工 > 第十三条 技能竞赛应制订组织实施方案，主要包括：竞 > 第十四条 技能竞赛应依据国家、行业职业技能标准和企",
+          "block_ids": [
+            "474cba97-5770-42a2-afe4-9c88f215c93e",
+            "e9d256b3-1547-48b6-a05c-307199d0cad3",
+            "73c5533c-21cb-4199-aa68-25a93782d477",
+            "1d7347b7-4ffd-46d0-b02f-8c79e20d8f1b",
+            "701b82c8-d1b1-43a5-be5d-62f52df2e92e",
+            "85f4a708-3a3b-4916-a4b3-6b2ecbf7acb9",
+            "351fdddf-0cc6-4d22-aace-dd156dad28b9",
+            "e6d84f2c-07d1-4cb3-be8a-c26742078911",
+            "e7f44913-90de-4632-8884-c06bd6f98ba2",
+            "cd2a0eea-77be-411c-98aa-22eee1fa1869",
+            "e3c36b53-deab-4e28-b5f7-7eb6b16d186c",
+            "05148834-e4ed-4a80-9fec-a2f407140f6d",
+            "6467d52d-2637-4951-acab-35a908fd2afb",
+            "35c21d92-1693-45df-8e20-519786a085b0",
+            "b6f8772b-79ce-42e2-8398-d15503da9f33",
+            "18c783f8-858a-4701-8094-493458a3b191"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -32.78305188591154,
+          "fts_score": 1.0,
+          "score": 0.9000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4287,
+            "fts_score": 1.0,
+            "title_score": 0.5263,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.3636,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "65d51882-5469-490a-9905-ac7c7793d29c",
+          "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+          "passage_id": "c21ec60c41b528d524b03eee394a13e8",
+          "title": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4",
+          "text": "【文档】中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4\n【章节】第二章 组织管理 > 第五条 广西公司技能竞赛实行分级管理，分为一级竞赛 > 第六条 广西公司一级竞赛启动时应成立由人力资源部、\n面广的关键岗位、工种和新技术、新业务开展竞赛。\n（二）普遍提高与择优选拔相结合的原则。竞赛要体现广\n泛性和先进性，通过组织广泛的学习培训、岗位练兵，调动员\n工学习知识和提升技能的积极性和主动性，在推动员工业务素何世恒(全渠道运营中心)\n— 3 — 质和岗位技能水平整体提高的基础上，发现和培养优秀技能人\n才。\n（三）正向激励和注重实效的原则。竞赛要与岗位资格认\n证、教育培训、职位晋升等员工职业发展相结合，激励员工成\n长成才。适度把握竞赛的频次和范围，保证竞赛公平、公正，\n精心组织、节约办赛、注重实效。\n第四条 本办法适用各市分公司、各专业公司、区公司各\n部门。\n第二章 组织管理\n第五条 广西公司技能竞赛实行分级管理，分为一级竞赛\n和二级竞赛。一级竞赛是围绕企业发展重点领域开展的竞赛，\n由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n合举办。二级竞赛是由广西公司业务部门发起，以广西公司名\n义组织的专项竞赛。\n第六条 广西公司一级竞赛启动时应成立由人力资源部、\n区电信工会和竞赛专业主管部门组成的技能竞赛委员会，负责\n该项竞赛的组织领导。技能竞赛委员会下设办公室。",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2023,
+          "section_path": "第二章 组织管理 > 第五条 广西公司技能竞赛实行分级管理，分为一级竞赛 > 第六条 广西公司一级竞赛启动时应成立由人力资源部、",
+          "block_ids": [
+            "65d51882-5469-490a-9905-ac7c7793d29c",
+            "a517c5bb-125e-419a-a4fd-38b255fb286b",
+            "fe4082c7-b12d-4ee5-8ed4-f42b3d27fb8f",
+            "56fd1899-905e-4aac-b60b-bd653d697004",
+            "287959c3-eab2-4141-bca6-54e8ea16d39d",
+            "f73e9b97-8cf7-4daf-b61a-72db6bcd8839",
+            "d1ba9aa5-dff3-4383-8c3c-3ab1b93ba67f",
+            "122530bc-9699-46fd-9324-dbcd0ff5ea42",
+            "b9b83680-9cee-42ae-bfb4-c1b1bf6e21ea",
+            "231dbfbb-f8a0-40aa-8c84-73332d3c253b",
+            "873ed1ea-2b6d-416e-a28c-376593d46028",
+            "62bc46cd-bc44-4e1d-8a3f-29043748467b",
+            "5f6ae05b-e383-439e-9096-c5af7b53c1d4",
+            "bd45a1a7-4945-41f9-90b0-dfefd838b24d",
+            "bca828e2-7268-48cc-8399-31747a74a8d2",
+            "b0c3cb88-0e69-4fa5-a970-1ceeffd071a5",
+            "227b54ad-60ab-443e-b89d-118ff61325f1",
+            "1ffdd27a-2d3e-4e77-9dee-1802db00e12b",
+            "a12d9f60-74e6-4524-aa38-c364325bd33d",
+            "305f28fb-a9e1-4ef1-aa3c-e4690bf292a0"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -42.87847937457586,
+          "fts_score": 1.0,
+          "score": 0.33000000000000007,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4545,
+            "fts_score": 1.0,
+            "title_score": 0.4211,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4545,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.33000000000000007,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "canonical_snapshot",
+        "intent": "local_version",
+        "accepted_knowledge_ids": [
+          "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+        ],
+        "evidence_snapshot_id": "SpXTN2PRv1U8R1Rs4_nyvFd23nISfNM2",
+        "snapshot_fingerprint": "b9c45d38579e14819cd60458",
+        "accepted_passage_ids": [
+          "33115481de8de9d955a0ba3ecde2cf77",
+          "c21ec60c41b528d524b03eee394a13e8",
+          "bf27507f3dc0eb11e670f7ff673a6f01",
+          "246daea17bcb0c50a044240442923165",
+          "1bab0460e48b86a074703cfe2695106a",
+          "ff36ccda4b04ec796c503bf2e151bda8"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 4,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 3196.0
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "render_missing:['version', 'predicate:取消']",
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": true,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.55,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": true,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 4,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "b9c45d38579e14819cd60458",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "render_validation_failed",
+        "answer_validation_decision": "render_validation_failed",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "version"
+            ],
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级"
+          },
+          "fact_plan": {
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+            "intents": [
+              "version",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "version",
+              "policy_fact",
+              "polarity_negative",
+              "predicate:取消"
+            ],
+            "entities": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法",
+              "修订版",
+              "取消",
+              "一级",
+              "二级",
+              "分级",
+              "技能竞赛管理办法最新修订版",
+              "技能竞赛管理办法最新修订",
+              "技能竞赛管理"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": true,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "version",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "技能",
+            "object": "竞赛",
+            "scope": [],
+            "selector": [],
+            "predicate": "取消",
+            "polarity": "negative",
+            "condition_slots": [],
+            "requested_attribute": "version",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "latest",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法",
+              "修订版",
+              "取消",
+              "一级",
+              "二级",
+              "分级",
+              "技能竞赛管理办法最新修订版",
+              "技能竞赛管理办法最新修订",
+              "技能竞赛管理"
+            ]
+          },
+          "kept": [],
+          "dropped": [
+            {
+              "id": "8b60f1875b37889376423c9c",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 19,
+          "candidate_count": 21
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+              "evidence_passage_ids": [
+                "246daea17bcb0c50a044240442923165"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "233cf853dc8ba41f443ad016"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第十二条全区电信职业技能竞赛是广西公司、区电信工会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强并具较高水平的重点赛事，每年应根据《中国电信集团技能竞赛管理办法》规定，向集团公司提交备案申请",
+              "evidence_passage_ids": [
+                "33115481de8de9d955a0ba3ecde2cf77"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "74eb048e42d3e885f12500d8"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "财务部门应依据国家及企业有关规定，为技能竞赛提供经费保障，确保经费使用和管理规范",
+              "evidence_passage_ids": [
+                "bf27507f3dc0eb11e670f7ff673a6f01"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "45dddac6275acf2fdf480647"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第十三条技能竞赛应制订组织实施方案，主要包括：竞赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组成情况、竞赛经费预算、奖励办法等",
+              "evidence_passage_ids": [
+                "33115481de8de9d955a0ba3ecde2cf77"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "3e9c024d8a7e1273a7594027"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第十四条技能竞赛应依据国家、行业职业技能标准和企业岗位资格认证标准命题，并至少高于岗位资格认证标准最低等级一级",
+              "evidence_passage_ids": [
+                "33115481de8de9d955a0ba3ecde2cf77"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "3fd354c76241f0de86e1e41b"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "人力资源部门应结合人才队伍建设、岗位培训和岗位资格认证要求，组织研究制定技能竞赛相关政策、制度和办法",
+              "evidence_passage_ids": [
+                "bf27507f3dc0eb11e670f7ff673a6f01"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "aee578136f383fdc0621ffda"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+            "intents": [
+              "version",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "version",
+              "policy_fact",
+              "polarity_negative",
+              "predicate:取消"
+            ],
+            "entities": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法",
+              "修订版",
+              "取消",
+              "一级",
+              "二级",
+              "分级",
+              "技能竞赛管理办法最新修订版",
+              "技能竞赛管理办法最新修订",
+              "技能竞赛管理"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": true,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "version",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "技能",
+            "object": "竞赛",
+            "scope": [],
+            "selector": [],
+            "predicate": "取消",
+            "polarity": "negative",
+            "condition_slots": [],
+            "requested_attribute": "version",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "latest",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法",
+              "修订版",
+              "取消",
+              "一级",
+              "二级",
+              "分级",
+              "技能竞赛管理办法最新修订版",
+              "技能竞赛管理办法最新修订",
+              "技能竞赛管理"
+            ]
+          },
+          "input_count": 21,
+          "dropped": [
+            {
+              "id": "8b60f1875b37889376423c9c",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "233cf853dc8ba41f443ad016",
+              "record_id": "246daea17bcb0c50a044240442923165:r2",
+              "passage_id": "246daea17bcb0c50a044240442923165",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "prohibition",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+              "evidence_spans": [
+                [
+                  0,
+                  107
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 19.499999999999996,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "negative",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "hit",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "miss",
+                "anchor:办法": "miss",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "74eb048e42d3e885f12500d8",
+              "record_id": "33115481de8de9d955a0ba3ecde2cf77:r3",
+              "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "第十二条全区电信职业技能竞赛是广西公司、区电信工会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强并具较高水平的重点赛事，每年应根据《中国电信集团技能竞赛管理办法》规定，向集团公司提交备案申请",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十二条全区电信职业技能竞赛是广西公司、区电信工会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强并具较高水平的重点赛事，每年应根据《中国电信集团技能竞赛管理办法》规定，向集团公司提交备案申请",
+              "evidence_spans": [
+                [
+                  0,
+                  99
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 36.09999999999999,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "hit",
+                "anchor:办法": "hit",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "45dddac6275acf2fdf480647",
+              "record_id": "bf27507f3dc0eb11e670f7ff673a6f01:r2",
+              "passage_id": "bf27507f3dc0eb11e670f7ff673a6f01",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "财务部门应依据国家及企业有关规定，为技能竞赛提供经费保障，确保经费使用和管理规范",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "财务部门应依据国家及企业有关规定，为技能竞赛提供经费保障，确保经费使用和管理规范",
+              "evidence_spans": [
+                [
+                  0,
+                  40
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 22.999999999999993,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "hit",
+                "anchor:办法": "miss",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "3e9c024d8a7e1273a7594027",
+              "record_id": "33115481de8de9d955a0ba3ecde2cf77:r4",
+              "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "第十三条技能竞赛应制订组织实施方案，主要包括：竞赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组成情况、竞赛经费预算、奖励办法等",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十三条技能竞赛应制订组织实施方案，主要包括：竞赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组成情况、竞赛经费预算、奖励办法等",
+              "evidence_spans": [
+                [
+                  0,
+                  95
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 22.499999999999993,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "miss",
+                "anchor:办法": "hit",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "3fd354c76241f0de86e1e41b",
+              "record_id": "33115481de8de9d955a0ba3ecde2cf77:r5",
+              "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "第十四条技能竞赛应依据国家、行业职业技能标准和企业岗位资格认证标准命题，并至少高于岗位资格认证标准最低等级一级",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十四条技能竞赛应依据国家、行业职业技能标准和企业岗位资格认证标准命题，并至少高于岗位资格认证标准最低等级一级",
+              "evidence_spans": [
+                [
+                  0,
+                  56
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 22.499999999999993,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "miss",
+                "anchor:办法": "miss",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "hit",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "aee578136f383fdc0621ffda",
+              "record_id": "bf27507f3dc0eb11e670f7ff673a6f01:r1",
+              "passage_id": "bf27507f3dc0eb11e670f7ff673a6f01",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "人力资源部门应结合人才队伍建设、岗位培训和岗位资格认证要求，组织研究制定技能竞赛相关政策、制度和办法",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "人力资源部门应结合人才队伍建设、岗位培训和岗位资格认证要求，组织研究制定技能竞赛相关政策、制度和办法",
+              "evidence_spans": [
+                [
+                  0,
+                  50
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 22.499999999999993,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "miss",
+                "anchor:办法": "hit",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "version": {
+              "74eb048e42d3e885f12500d8": "hit",
+              "45dddac6275acf2fdf480647": "hit",
+              "3e9c024d8a7e1273a7594027": "hit",
+              "3fd354c76241f0de86e1e41b": "hit",
+              "aee578136f383fdc0621ffda": "hit",
+              "56c72c21789d2db29cad9c6a": "hit",
+              "763675a7f0d16957dd04162a": "hit",
+              "233cf853dc8ba41f443ad016": "hit",
+              "e4fbb1039b38d429a5cc430e": "hit",
+              "e9291cf1472380d7f2157166": "hit",
+              "70c561f1c9dddb6356218544": "hit",
+              "acbb2b356539854a97d8ead0": "hit",
+              "8095a3f42841a9f661d12309": "hit",
+              "acf2893841c1d59ee1dbfa4d": "hit",
+              "8397c04e909e4c9a5dcf5cc5": "hit",
+              "cddb9c61d9d3976ab6257e9d": "hit",
+              "4953421ca0f4997fe7fa0881": "hit",
+              "a0622e6e0364d0a602e6716c": "hit",
+              "48e1a823474571676fb0cae3": "hit",
+              "7d214897643529a80325e299": "hit"
+            },
+            "policy_fact": {
+              "74eb048e42d3e885f12500d8": "hit",
+              "45dddac6275acf2fdf480647": "hit",
+              "3e9c024d8a7e1273a7594027": "hit",
+              "3fd354c76241f0de86e1e41b": "hit",
+              "aee578136f383fdc0621ffda": "hit",
+              "56c72c21789d2db29cad9c6a": "hit",
+              "763675a7f0d16957dd04162a": "hit",
+              "233cf853dc8ba41f443ad016": "hit",
+              "e4fbb1039b38d429a5cc430e": "hit",
+              "e9291cf1472380d7f2157166": "hit",
+              "70c561f1c9dddb6356218544": "hit",
+              "acbb2b356539854a97d8ead0": "hit",
+              "8095a3f42841a9f661d12309": "hit",
+              "acf2893841c1d59ee1dbfa4d": "hit",
+              "8397c04e909e4c9a5dcf5cc5": "hit",
+              "cddb9c61d9d3976ab6257e9d": "hit",
+              "4953421ca0f4997fe7fa0881": "hit",
+              "a0622e6e0364d0a602e6716c": "hit",
+              "48e1a823474571676fb0cae3": "hit",
+              "7d214897643529a80325e299": "hit"
+            },
+            "polarity_negative": {
+              "74eb048e42d3e885f12500d8": "miss",
+              "45dddac6275acf2fdf480647": "miss",
+              "3e9c024d8a7e1273a7594027": "miss",
+              "3fd354c76241f0de86e1e41b": "miss",
+              "aee578136f383fdc0621ffda": "miss",
+              "56c72c21789d2db29cad9c6a": "miss",
+              "763675a7f0d16957dd04162a": "miss",
+              "233cf853dc8ba41f443ad016": "hit",
+              "e4fbb1039b38d429a5cc430e": "miss",
+              "e9291cf1472380d7f2157166": "miss",
+              "70c561f1c9dddb6356218544": "miss",
+              "acbb2b356539854a97d8ead0": "miss",
+              "8095a3f42841a9f661d12309": "miss",
+              "acf2893841c1d59ee1dbfa4d": "miss",
+              "8397c04e909e4c9a5dcf5cc5": "miss",
+              "cddb9c61d9d3976ab6257e9d": "miss",
+              "4953421ca0f4997fe7fa0881": "miss",
+              "a0622e6e0364d0a602e6716c": "miss",
+              "48e1a823474571676fb0cae3": "miss",
+              "7d214897643529a80325e299": "miss"
+            },
+            "predicate:取消": {
+              "74eb048e42d3e885f12500d8": "miss",
+              "45dddac6275acf2fdf480647": "miss",
+              "3e9c024d8a7e1273a7594027": "miss",
+              "3fd354c76241f0de86e1e41b": "miss",
+              "aee578136f383fdc0621ffda": "miss",
+              "56c72c21789d2db29cad9c6a": "miss",
+              "763675a7f0d16957dd04162a": "miss",
+              "233cf853dc8ba41f443ad016": "miss",
+              "e4fbb1039b38d429a5cc430e": "miss",
+              "e9291cf1472380d7f2157166": "miss",
+              "70c561f1c9dddb6356218544": "miss",
+              "acbb2b356539854a97d8ead0": "miss",
+              "8095a3f42841a9f661d12309": "miss",
+              "acf2893841c1d59ee1dbfa4d": "miss",
+              "8397c04e909e4c9a5dcf5cc5": "miss",
+              "cddb9c61d9d3976ab6257e9d": "miss",
+              "4953421ca0f4997fe7fa0881": "miss",
+              "a0622e6e0364d0a602e6716c": "miss",
+              "48e1a823474571676fb0cae3": "miss",
+              "7d214897643529a80325e299": "miss"
+            }
+          },
+          "primary_group_id": "e0d4dc98beefe973",
+          "covered_slots": [
+            "polarity_negative",
+            "policy_fact",
+            "version"
+          ],
+          "missing_after_select": [
+            "predicate:取消"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "e0d4dc98beefe973",
+                "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+                "knowledge_ids": [
+                  "2b63b216-9850-4e82-803e-4006cb9f62ad"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:技能竞赛管理办法",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "33115481de8de9d955a0ba3ecde2cf77",
+                  "bf27507f3dc0eb11e670f7ff673a6f01",
+                  "246daea17bcb0c50a044240442923165"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.9000000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+                "section": "第十二条 全区电信职业技能竞赛是广西公司、区电信工 > 第十三条 技能竞赛应制订组织实施方案，主要包括：竞 > 第十四条 技能竞赛应依据国家、行业职业技能标准和企",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.7333,
+                "group_score": 8.9,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "33115481de8de9d955a0ba3ecde2cf77:r0",
+                  "33115481de8de9d955a0ba3ecde2cf77:r1",
+                  "33115481de8de9d955a0ba3ecde2cf77:r2",
+                  "33115481de8de9d955a0ba3ecde2cf77:r3",
+                  "33115481de8de9d955a0ba3ecde2cf77:r4",
+                  "33115481de8de9d955a0ba3ecde2cf77:r5",
+                  "33115481de8de9d955a0ba3ecde2cf77:r6",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r0",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r1",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r2",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r3",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r4",
+                  "246daea17bcb0c50a044240442923165:r0",
+                  "246daea17bcb0c50a044240442923165:r1",
+                  "246daea17bcb0c50a044240442923165:r2",
+                  "246daea17bcb0c50a044240442923165:r3",
+                  "246daea17bcb0c50a044240442923165:r4",
+                  "246daea17bcb0c50a044240442923165:r5",
+                  "246daea17bcb0c50a044240442923165:r6"
+                ]
+              }
+            ],
+            "primary_group_id": "e0d4dc98beefe973",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": true,
+              "query_tokens": [
+                "取消一级二级竞赛分级",
+                "技能竞赛管理办法最新修订"
+              ],
+              "selection": [
+                {
+                  "group_id": "e0d4dc98beefe973",
+                  "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+                  "knowledge_ids": [
+                    "2b63b216-9850-4e82-803e-4006cb9f62ad"
+                  ],
+                  "score": 8.9,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "version",
+            "policy_fact",
+            "polarity_negative",
+            "predicate:取消"
+          ],
+          "candidate_ids": [
+            "233cf853dc8ba41f443ad016",
+            "74eb048e42d3e885f12500d8",
+            "45dddac6275acf2fdf480647",
+            "3e9c024d8a7e1273a7594027",
+            "3fd354c76241f0de86e1e41b",
+            "aee578136f383fdc0621ffda"
+          ],
+          "missing_slots": [
+            "predicate:取消"
+          ],
+          "complete": false,
+          "intents": [
+            "version",
+            "policy"
+          ],
+          "covered_slots": [
+            "polarity_negative",
+            "policy_fact",
+            "version"
+          ],
+          "coverage_matrix": {
+            "version": {
+              "74eb048e42d3e885f12500d8": "hit",
+              "45dddac6275acf2fdf480647": "hit",
+              "3e9c024d8a7e1273a7594027": "hit",
+              "3fd354c76241f0de86e1e41b": "hit",
+              "aee578136f383fdc0621ffda": "hit",
+              "56c72c21789d2db29cad9c6a": "hit",
+              "763675a7f0d16957dd04162a": "hit",
+              "233cf853dc8ba41f443ad016": "hit",
+              "e4fbb1039b38d429a5cc430e": "hit",
+              "e9291cf1472380d7f2157166": "hit",
+              "70c561f1c9dddb6356218544": "hit",
+              "acbb2b356539854a97d8ead0": "hit",
+              "8095a3f42841a9f661d12309": "hit",
+              "acf2893841c1d59ee1dbfa4d": "hit",
+              "8397c04e909e4c9a5dcf5cc5": "hit",
+              "cddb9c61d9d3976ab6257e9d": "hit",
+              "4953421ca0f4997fe7fa0881": "hit",
+              "a0622e6e0364d0a602e6716c": "hit",
+              "48e1a823474571676fb0cae3": "hit",
+              "7d214897643529a80325e299": "hit"
+            },
+            "policy_fact": {
+              "74eb048e42d3e885f12500d8": "hit",
+              "45dddac6275acf2fdf480647": "hit",
+              "3e9c024d8a7e1273a7594027": "hit",
+              "3fd354c76241f0de86e1e41b": "hit",
+              "aee578136f383fdc0621ffda": "hit",
+              "56c72c21789d2db29cad9c6a": "hit",
+              "763675a7f0d16957dd04162a": "hit",
+              "233cf853dc8ba41f443ad016": "hit",
+              "e4fbb1039b38d429a5cc430e": "hit",
+              "e9291cf1472380d7f2157166": "hit",
+              "70c561f1c9dddb6356218544": "hit",
+              "acbb2b356539854a97d8ead0": "hit",
+              "8095a3f42841a9f661d12309": "hit",
+              "acf2893841c1d59ee1dbfa4d": "hit",
+              "8397c04e909e4c9a5dcf5cc5": "hit",
+              "cddb9c61d9d3976ab6257e9d": "hit",
+              "4953421ca0f4997fe7fa0881": "hit",
+              "a0622e6e0364d0a602e6716c": "hit",
+              "48e1a823474571676fb0cae3": "hit",
+              "7d214897643529a80325e299": "hit"
+            },
+            "polarity_negative": {
+              "74eb048e42d3e885f12500d8": "miss",
+              "45dddac6275acf2fdf480647": "miss",
+              "3e9c024d8a7e1273a7594027": "miss",
+              "3fd354c76241f0de86e1e41b": "miss",
+              "aee578136f383fdc0621ffda": "miss",
+              "56c72c21789d2db29cad9c6a": "miss",
+              "763675a7f0d16957dd04162a": "miss",
+              "233cf853dc8ba41f443ad016": "hit",
+              "e4fbb1039b38d429a5cc430e": "miss",
+              "e9291cf1472380d7f2157166": "miss",
+              "70c561f1c9dddb6356218544": "miss",
+              "acbb2b356539854a97d8ead0": "miss",
+              "8095a3f42841a9f661d12309": "miss",
+              "acf2893841c1d59ee1dbfa4d": "miss",
+              "8397c04e909e4c9a5dcf5cc5": "miss",
+              "cddb9c61d9d3976ab6257e9d": "miss",
+              "4953421ca0f4997fe7fa0881": "miss",
+              "a0622e6e0364d0a602e6716c": "miss",
+              "48e1a823474571676fb0cae3": "miss",
+              "7d214897643529a80325e299": "miss"
+            },
+            "predicate:取消": {
+              "74eb048e42d3e885f12500d8": "miss",
+              "45dddac6275acf2fdf480647": "miss",
+              "3e9c024d8a7e1273a7594027": "miss",
+              "3fd354c76241f0de86e1e41b": "miss",
+              "aee578136f383fdc0621ffda": "miss",
+              "56c72c21789d2db29cad9c6a": "miss",
+              "763675a7f0d16957dd04162a": "miss",
+              "233cf853dc8ba41f443ad016": "miss",
+              "e4fbb1039b38d429a5cc430e": "miss",
+              "e9291cf1472380d7f2157166": "miss",
+              "70c561f1c9dddb6356218544": "miss",
+              "acbb2b356539854a97d8ead0": "miss",
+              "8095a3f42841a9f661d12309": "miss",
+              "acf2893841c1d59ee1dbfa4d": "miss",
+              "8397c04e909e4c9a5dcf5cc5": "miss",
+              "cddb9c61d9d3976ab6257e9d": "miss",
+              "4953421ca0f4997fe7fa0881": "miss",
+              "a0622e6e0364d0a602e6716c": "miss",
+              "48e1a823474571676fb0cae3": "miss",
+              "7d214897643529a80325e299": "miss"
+            }
+          }
+        },
+        "query_plan": {},
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "e0d4dc98beefe973",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "knowledge_ids": [
+                "2b63b216-9850-4e82-803e-4006cb9f62ad"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:技能竞赛管理办法",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "33115481de8de9d955a0ba3ecde2cf77",
+                "bf27507f3dc0eb11e670f7ff673a6f01",
+                "246daea17bcb0c50a044240442923165"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.9000000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+              "section": "第十二条 全区电信职业技能竞赛是广西公司、区电信工 > 第十三条 技能竞赛应制订组织实施方案，主要包括：竞 > 第十四条 技能竞赛应依据国家、行业职业技能标准和企",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.7333,
+              "group_score": 8.9,
+              "rejection_reasons": [],
+              "record_ids": [
+                "33115481de8de9d955a0ba3ecde2cf77:r0",
+                "33115481de8de9d955a0ba3ecde2cf77:r1",
+                "33115481de8de9d955a0ba3ecde2cf77:r2",
+                "33115481de8de9d955a0ba3ecde2cf77:r3",
+                "33115481de8de9d955a0ba3ecde2cf77:r4",
+                "33115481de8de9d955a0ba3ecde2cf77:r5",
+                "33115481de8de9d955a0ba3ecde2cf77:r6",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r0",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r1",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r2",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r3",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r4",
+                "246daea17bcb0c50a044240442923165:r0",
+                "246daea17bcb0c50a044240442923165:r1",
+                "246daea17bcb0c50a044240442923165:r2",
+                "246daea17bcb0c50a044240442923165:r3",
+                "246daea17bcb0c50a044240442923165:r4",
+                "246daea17bcb0c50a044240442923165:r5",
+                "246daea17bcb0c50a044240442923165:r6"
+              ]
+            }
+          ],
+          "primary_group_id": "e0d4dc98beefe973",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": true,
+            "query_tokens": [
+              "取消一级二级竞赛分级",
+              "技能竞赛管理办法最新修订"
+            ],
+            "selection": [
+              {
+                "group_id": "e0d4dc98beefe973",
+                "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+                "knowledge_ids": [
+                  "2b63b216-9850-4e82-803e-4006cb9f62ad"
+                ],
+                "score": 8.9,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": false,
+          "missing_slots": [
+            "version",
+            "predicate:取消"
+          ],
+          "checks": {
+            "version": false,
+            "policy_anchors": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法"
+            ],
+            "polarity_negative": true,
+            "predicate:取消": false
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "233cf853dc8ba41f443ad016"
+              ],
+              "passage_id": "246daea17bcb0c50a044240442923165",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "text": "- 第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+              "fact_kind": "prohibition"
+            },
+            {
+              "rendered_candidate_ids": [
+                "74eb048e42d3e885f12500d8"
+              ],
+              "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "text": "- 第十二条全区电信职业技能竞赛是广西公司、区电信工会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强并具较高水平的重点赛事，每年应根据《中国电信集团技能竞赛管理办法》规定，向集团公司提交备案申请",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "45dddac6275acf2fdf480647"
+              ],
+              "passage_id": "bf27507f3dc0eb11e670f7ff673a6f01",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "text": "- 财务部门应依据国家及企业有关规定，为技能竞赛提供经费保障，确保经费使用和管理规范",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 248
+        },
+        "primary_group_id": null,
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "render_validation_failed",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "local_version"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+          ],
+          "accepted_block_ids": [
+            "474cba97-5770-42a2-afe4-9c88f215c93e",
+            "65d51882-5469-490a-9905-ac7c7793d29c"
+          ],
+          "accepted_passage_ids": [
+            "33115481de8de9d955a0ba3ecde2cf77",
+            "c21ec60c41b528d524b03eee394a13e8",
+            "bf27507f3dc0eb11e670f7ff673a6f01",
+            "246daea17bcb0c50a044240442923165",
+            "1bab0460e48b86a074703cfe2695106a",
+            "ff36ccda4b04ec796c503bf2e151bda8"
+          ],
+          "adjacent_passage_ids": [
+            "bf27507f3dc0eb11e670f7ff673a6f01",
+            "246daea17bcb0c50a044240442923165",
+            "1bab0460e48b86a074703cfe2695106a",
+            "ff36ccda4b04ec796c503bf2e151bda8"
+          ],
+          "generation_knowledge_ids": [
+            "2b63b216-9850-4e82-803e-4006cb9f62ad"
+          ],
+          "top_score": 0.55,
+          "intent": "local_version",
+          "adjacent_count": 4,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "b9c45d38579e14819cd60458"
+        },
+        "snapshot_fingerprint": "b9c45d38579e14819cd60458",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 2,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 24.53
+  },
+  "top_candidate_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+  "candidates": [
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "passage_id": "33115481de8de9d955a0ba3ecde2cf77",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十二条 全区电信职业技能竞赛是广西公司、区电信工 > 第十三条 技能竞赛应制订组织实施方案，主要包括：竞 > 第十四条 技能竞赛应依据国家、行业职业技能标准和企\n案。\n— 6 —第三章 组织实施\n第十一条 技能竞赛由专业部门于每年2月底前提出年度\n竞赛计划和实施方案，经区电信工会初审和汇总，在年度预算\n内，经广西公司竞赛委员会和分管领导同意后按计划实施。除\n全区电信职业技能竞赛外，每个部门每年原则上最多申报一项\n技能竞赛。\n第十二条 全区电信职业技能竞赛是广西公司、区电信工\n会联合举办的紧密结合企业和发展需要、覆盖面广、实效性强\n并具较高水平的重点赛事，每年应根据《中国电信集团技能竞\n赛管理办法》规定，向集团公司提交备案申请。\n第十三条 技能竞赛应制订组织实施方案，主要包括：竞\n赛组织领导、竞赛时间和地点、竞赛内容和形式、竞赛规程、\n评分规则、竞赛场地、设备和技术检测手段、评委（裁判）组\n成情况、竞赛经费预算、奖励办法等。\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。"
+    },
+    {
+      "knowledge_id": "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+      "passage_id": "c21ec60c41b528d524b03eee394a13e8",
+      "title": "中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4",
+      "score": 0.33000000000000007,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2023-278号-关于印发中国电信广西公司技能竞赛管理办法的通知--1acb61b4\n【章节】第二章 组织管理 > 第五条 广西公司技能竞赛实行分级管理，分为一级竞赛 > 第六条 广西公司一级竞赛启动时应成立由人力资源部、\n面广的关键岗位、工种和新技术、新业务开展竞赛。\n（二）普遍提高与择优选拔相结合的原则。竞赛要体现广\n泛性和先进性，通过组织广泛的学习培训、岗位练兵，调动员\n工学习知识和提升技能的积极性和主动性，在推动员工业务素何世恒(全渠道运营中心)\n— 3 — 质和岗位技能水平整体提高的基础上，发现和培养优秀技能人\n才。\n（三）正向激励和注重实效的原则。竞赛要与岗位资格认\n证、教育培训、职位晋升等员工职业发展相结合，激励员工成\n长成才。适度把握竞赛的频次和范围，保证竞赛公平、公正，\n精心组织、节约办赛、注重实效。\n第四条 本办法适用各市分公司、各专业公司、区公司各\n部门。\n第二章 组织管理\n第五条 广西公司技能竞赛实行分级管理，分为一级竞赛\n和二级竞赛。一级竞赛是围绕企业发展重点领域开展的竞赛，\n由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n合举办。二级竞赛是由广西公司业务部门发起，以广西公司名\n义组织的专项竞赛。\n第六条 广西公司一级竞赛启动时应成立由人力资源部、\n区电信工会和竞赛专业主管部门组成的技能竞赛委员会，负责\n该项竞赛的组织领导。技能竞赛委员会下设办公室。"
+    }
+  ],
+  "search_ms": 3196.0,
+  "ask_ms": 24.53,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "SpXTN2PRv1U8R1Rs4_nyvFd23nISfNM2",
+  "search_snapshot_fingerprint": "b9c45d38579e14819cd60458",
+  "ask_snapshot_fingerprint": "b9c45d38579e14819cd60458",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "render_validation_failed",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "0e9c509146cc848ab4d89247"
+}

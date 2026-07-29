@@ -120,9 +120,24 @@ class HybridSearcher:
         warnings: list[str] = []
         if store is None:
             return [], ["passage store unavailable"]
-        for query in queries:
+        # A query rewrite may contain several surface-preserving variants.
+        # Embed them in one provider request: process-isolated providers have a
+        # material startup cost on Windows, and issuing one request per variant
+        # made otherwise small searches exceed their retrieval budget.
+        query_embeddings: list[list[float]] = []
+        try:
+            from src.services.embedding import EmbeddingService
+            query_embeddings = EmbeddingService(config=self._config).embed_batch_with_cache(queries)
+        except Exception as e:
+            msg = f"passage vector embedding degraded: {type(e).__name__}: {e}"
+            warnings.append(msg[:300])
+            logging.warning("Passage vector embedding failed: %s", e)
+            return [], warnings
+        for query, query_embedding in zip(queries, query_embeddings):
             try:
-                hits = store.vector_search(query, top_k=top_k * 2)
+                hits = store.vector_search(
+                    query, top_k=top_k * 2, query_embedding=query_embedding,
+                )
                 for r in hits:
                     cid = r.get("id") or r.get("passage_id")
                     if not cid or cid in seen:

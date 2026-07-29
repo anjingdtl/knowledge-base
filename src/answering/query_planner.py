@@ -1,6 +1,7 @@
-"""Typed QueryPlan for FactCandidate extraction (SPEC v5 §2.3 + v6 §3.1).
+"""Query-derived planning for evidence-grounded answers.
 
-Scope/selector are NOT exclusive conditions. Conditions express if/when triggers.
+This module deliberately contains only general language structures.  It must
+not encode a document name, a knowledge-base fact, or an evaluation question.
 """
 from __future__ import annotations
 
@@ -8,48 +9,123 @@ import re
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
-# Exclusive numeric-binding labels (trigger / class selectors that bind values).
-_CONDITION_PATTERNS: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"III\s*类|Ⅲ\s*类|三类"), "III类"),
-    (re.compile(r"(?<![IⅠ])II\s*类|Ⅱ\s*类|二类"), "II类"),
-    (re.compile(r"(?<![IⅠ二三])I\s*类|(?<![IⅠ二三])Ⅰ\s*类|一类"), "I类"),
-    (re.compile(r"涉诈|诈骗|防诈"), "涉诈"),
-    (re.compile(r"涉骚扰|骚扰"), "涉骚扰"),
-    (re.compile(r"区外"), "区外"),
-    (re.compile(r"区内"), "区内"),
-    (re.compile(r"初审|审核初审"), "初审"),
-    (re.compile(r"产品评估"), "产品评估"),
-]
 
-# Scope / object-range terms (may co-exist with multiple value dimensions).
-_SCOPE_PATTERNS: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"个人(?:支付)?账户|个人会员|个人"), "个人"),
-    (re.compile(r"组织|企业|单位"), "组织"),
-    (re.compile(r"团体"), "团体"),
-    (re.compile(r"代理商"), "代理商"),
-]
+_NEGATIVE_RE = re.compile(r"不得|禁止|严禁|不可|不能|取消|不再|废止|停止")
+_POSITIVE_RE = re.compile(r"应当|必须|应|须|负责|牵头|归口")
+_NUMERIC_RE = re.compile(r"限额|额度|金额|处罚|罚款|扣分|占比|比例|标准|多少|元|%|％|奖金|补助|不少于|不超过")
+_DEADLINE_RE = re.compile(r"时限|工作日|期限|几天|多少天|完成时间|办理时间")
+_VERSION_RE = re.compile(r"最新|修订版|版本|哪一年|哪年|现行|历年|变化|替代")
+_RESPONSIBILITY_RE = re.compile(r"负责|职责|归口|主管部门|谁负责|哪个部门|牵头|负责人")
+_SCOPE_RE = re.compile(r"适用范围|适用于|适用对象|覆盖|范围")
+_RELATIONSHIP_RE = re.compile(r"关系|对应|区别|对比|之间|是否一致|联动|效力")
+_POLICY_RE = re.compile(r"办法|规定|制度|禁止|不得|应当|必须|原则|管理|通知|细则|要求|取消|准入|门槛|流程|处理")
+_GENERIC_SURFACE_ALIASES = {
+    "比赛": ("竞赛",), "赛事": ("竞赛",), "奖金": ("奖励",),
+    "商家": ("合作商",), "店铺": ("门店",),
+}
 
-# Selectors for value dimensions / per-unit framing.
-_SELECTOR_PATTERNS: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"总额|总计|合计"), "总额"),
-    (re.compile(r"人均|每人|每个号码|每(?:个|名)人"), "人均"),
-    (re.compile(r"单项|单笔"), "单项"),
-    (re.compile(r"年付款|年\s*限"), "年付款"),
-    (re.compile(r"周期|自然月|每月|每年"), "周期"),
-    (re.compile(r"比例|占比"), "比例"),
-]
 
-_POLARITY_NEG = re.compile(r"不得|禁止|严禁|不可|不能|取消|不再")
-_POLARITY_POS = re.compile(r"应当|必须|应|须|负责|牵头")
+def _ordered_unique(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    return [v for v in values if v and not (v in seen or seen.add(v))]
+
+
+def _query_phrases(text: str, *, limit: int = 12) -> list[str]:
+    """Extract query surface phrases without a domain vocabulary.
+
+    Chinese does not provide whitespace token boundaries reliably.  We retain
+    user-supplied chunks and useful short substrings, while excluding only
+    generic interrogatives and function words.
+    """
+    stop = {
+        "什么", "多少", "如何", "怎么", "是否", "哪个", "哪些", "以及", "或者",
+        "一个", "公司", "关于", "印发", "通知", "中国", "电信", "广西", "集团",
+        "总部", "最新", "修订", "版本", "不得", "使用", "管理办法",
+    }
+    values: list[str] = []
+    # Prefer a general tokenizer when available.  A whole Chinese question is
+    # often one regex run, which makes exact-evidence checks compare an
+    # artificial sentence-sized "anchor" instead of its entity/predicate
+    # terms.  The fallback below keeps minimal installations functional.
+    try:
+        import jieba
+        token_values = [
+            token.strip() for token in jieba.lcut(text or "")
+            if len(token.strip()) >= 2 and token.strip() not in stop
+        ]
+        values.extend(token_values)
+        for token in token_values:
+            values.extend(_GENERIC_SURFACE_ALIASES.get(token, ()))
+    except Exception:
+        pass
+    chunks = re.findall(r"[\u4e00-\u9fff]{2,24}|[A-Za-z0-9][A-Za-z0-9._-]{1,}", text or "")
+    for chunk in chunks:
+        if chunk in stop:
+            continue
+        values.append(chunk[:14])
+        # Split on general Chinese grammatical connectors before n-grams.  This
+        # exposes e.g. a subject, a time phrase and a requested attribute
+        # without requiring a terminology dictionary.
+        pieces = [p for p in re.split(r"(?:的|和|与|在|内|每|一个|各|分别|以及|并)", chunk) if len(p) >= 2]
+        values.extend(p[:12] for p in pieces if p not in stop)
+        # Long chunks can still contain a compact entity/attribute pair.  Add
+        # only boundary n-grams to avoid flooding anchors with arbitrary slices.
+        if len(chunk) > 6:
+            for width in (6, 4, 3):
+                values.append(chunk[:width])
+                values.append(chunk[-width:])
+    return _ordered_unique(values)[:limit]
+
+
+def _extract_conditions(text: str) -> list[str]:
+    """Return user-stated binding labels, not a fixed condition taxonomy."""
+    q = text or ""
+    values: list[str] = []
+    # Class/category labels and incident-style labels are common Chinese
+    # condition forms and remain generic for unseen domains.
+    values.extend(re.findall(r"(?:[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩIVX]+|[一二三四五六七八九十]+)\s*类", q))
+    values.extend(re.findall(r"涉[\u4e00-\u9fff]", q))
+    values.extend(re.findall(r"(?:境内|境外|区内|区外|省内|省外)", q))
+    values.extend(re.findall(r"(?:初审|复审|终审|评估|审批|验收)", q))
+    return _ordered_unique([re.sub(r"\s+", "", v) for v in values])
+
+
+def _extract_scopes(text: str) -> list[str]:
+    values = re.findall(
+        r"(?:个人(?:[\u4e00-\u9fff]{0,4})|团体|组织|企业|单位|客户|用户|合作方|代理商|员工|部门)",
+        text or "",
+    )
+    return _ordered_unique(values)
+
+
+def _extract_selectors(text: str) -> list[str]:
+    values = re.findall(
+        r"(?:总额|总计|合计|人均|每人|每个号码|每(?:个|名)人|单项|单笔|年付款|年\s*限|周期|自然月|每月|每年|比例|占比)",
+        text or "",
+    )
+    return _ordered_unique([re.sub(r"\s+", "", v) for v in values])
+
+
+def _predicate_from_surface(query: str) -> str:
+    """Classify predicate by generic linguistic form, never by domain entity."""
+    q = query or ""
+    for surface in (
+        "不得", "禁止", "严禁", "取消", "不再", "废止", "处罚", "罚款", "扣分",
+        "限额", "额度", "上限", "标准", "占比", "比例", "负责", "牵头", "归口",
+        "关系", "效力", "适用", "范围", "准入", "门槛", "资格", "入驻", "审核", "审查", "审批", "报销",
+        "报账", "支付", "响应", "处理", "流程", "时限",
+    ):
+        if surface in q:
+            return surface
+    return ""
 
 
 @dataclass
 class QueryPlan:
-    """Intent + typed slots derived only from the user question."""
+    """Typed query structure used by gates and fact selection."""
 
     raw: str
     intents: list[str] = field(default_factory=list)
-    # Legacy field kept for numeric exclusive labels (II类/涉诈/…); NOT scope words.
     conditions: list[str] = field(default_factory=list)
     required_slots: list[str] = field(default_factory=list)
     entities: list[str] = field(default_factory=list)
@@ -61,13 +137,12 @@ class QueryPlan:
     wants_scope: bool = False
     wants_relationship: bool = False
     allow_fact_kinds: list[str] = field(default_factory=list)
-    # SPEC v6 typed slots
     subject: str = ""
     object: str = ""
     scope: list[str] = field(default_factory=list)
     selector: list[str] = field(default_factory=list)
     predicate: str = ""
-    polarity: str = ""  # negative | positive | neutral
+    polarity: str = "neutral"
     condition_slots: list[str] = field(default_factory=list)
     requested_attribute: str = ""
     value_dimensions: list[str] = field(default_factory=list)
@@ -82,256 +157,104 @@ class QueryPlan:
 
 
 def extract_conditions(text: str) -> list[str]:
-    """Extract exclusive binding labels only (not scope/object words)."""
-    found: list[str] = []
-    for pat, label in _CONDITION_PATTERNS:
-        if pat.search(text or "") and label not in found:
-            found.append(label)
-    return found
+    """Compatibility API used by numeric extraction."""
+    return _extract_conditions(text)
 
 
 def extract_scopes(text: str) -> list[str]:
-    found: list[str] = []
-    for pat, label in _SCOPE_PATTERNS:
-        if pat.search(text or "") and label not in found:
-            found.append(label)
-    return found
+    return _extract_scopes(text)
 
 
 def extract_selectors(text: str) -> list[str]:
-    found: list[str] = []
-    for pat, label in _SELECTOR_PATTERNS:
-        if pat.search(text or "") and label not in found:
-            found.append(label)
-    return found
+    return _extract_selectors(text)
 
 
 def plan_query(question: str) -> QueryPlan:
-    """Identify intents and typed slots. Never reads Golden or case ids."""
-    q = question or ""
-    conditions = extract_conditions(q)
-    scopes = extract_scopes(q)
-    selectors = extract_selectors(q)
+    """Build a general query plan from user text only."""
+    q = (question or "").strip()
+    conditions = _extract_conditions(q)
+    scopes = _extract_scopes(q)
+    selectors = _extract_selectors(q)
+    wants_numeric = bool(_NUMERIC_RE.search(q)) or bool(
+        re.search(r"准入|门槛|资格|条件", q)
+    )
+    wants_deadline = bool(_DEADLINE_RE.search(q))
+    wants_version = bool(_VERSION_RE.search(q))
+    wants_responsibility = bool(_RESPONSIBILITY_RE.search(q))
+    wants_scope = bool(_SCOPE_RE.search(q))
+    wants_relationship = bool(_RELATIONSHIP_RE.search(q))
+    predicate = _predicate_from_surface(q)
+    wants_policy = bool(_POLICY_RE.search(q)) or not any(
+        (wants_numeric, wants_deadline, wants_version, wants_responsibility, wants_scope, wants_relationship)
+    )
+
+    polarity = "negative" if _NEGATIVE_RE.search(q) else (
+        "positive" if _POSITIVE_RE.search(q) else "neutral"
+    )
     intents: list[str] = []
     slots: list[str] = []
-    rewrite_trace: list[dict[str, str]] = []
-
-    wants_numeric = bool(
-        re.search(r"限额|金额|处罚|罚|扣分|占比|比例|标准|多少|元|%|％|奖金|补助|不少于", q)
-    )
-    wants_deadline = bool(re.search(r"时限|工作日|期限|几天|多少天", q))
-    wants_version = bool(re.search(r"最新|修订版|版本|哪一年|哪年|现行", q))
-    wants_responsibility = bool(
-        re.search(r"负责|职责|归口|主管部门|谁负责|哪个部门|首席|顾问|牵头", q)
-    )
-    wants_scope = bool(re.search(r"适用范围|适用于|适用对象|覆盖|范围", q))
-    wants_relationship = bool(
-        re.search(r"关系|对应|区别|对比|之间|与.*的|是否一致|联动|法律效力", q)
-    )
-    wants_policy = bool(
-        re.search(
-            r"办法|规定|制度|禁止|不得|应当|必须|原则|两条线|主体|制作|"
-            r"合规|管理|通知|细则|要求|取消|分级|报账|准入|门槛|响应",
-            q,
-        )
-    ) or (not wants_numeric and not wants_deadline and not wants_version)
-
-    # Polarity
-    polarity = "neutral"
-    if _POLARITY_NEG.search(q):
-        polarity = "negative"
-    elif _POLARITY_POS.search(q):
-        polarity = "positive"
-
-    # Predicate from query surface (generic, not Golden-bound).
-    predicate = ""
-    for pat, name in (
-        (re.compile(r"不得使用|禁止使用|不得"), "不得使用"),
-        (re.compile(r"取消"), "取消"),
-        (re.compile(r"收支两条线"), "收支两条线"),
-        (re.compile(r"限额|年付款"), "限额"),
-        (re.compile(r"处罚|被罚|罚款"), "处罚"),
-        (re.compile(r"占比|不得少于"), "占比下限"),
-        (re.compile(r"负责|牵头|归口"), "职责"),
-        (re.compile(r"法律效力|效力关系"), "效力关系"),
-        (re.compile(r"准入|门槛|入驻"), "准入"),
-        (re.compile(r"问需|响应|闭环"), "问需响应"),
-        (re.compile(r"奖金|上限"), "奖金限额"),
-        (re.compile(r"保密期限"), "保密期限"),
-        (re.compile(r"报账|报销"), "报账"),
-    ):
-        if pat.search(q):
-            predicate = name
-            break
-
-    value_dimensions: list[str] = []
-    if wants_numeric:
-        if "总额" in selectors or re.search(r"团体|总额", q):
-            value_dimensions.append("总额")
-        if "人均" in selectors or re.search(r"人均|每人|个人奖", q):
-            value_dimensions.append("人均")
-        # 团体奖金限额 policies typically publish both team total and per-person caps.
-        if re.search(r"奖金限额|奖励.*限额", q) and "总额" in value_dimensions and "人均" not in value_dimensions:
-            value_dimensions.append("人均")
-            rewrite_trace.append({
-                "from": "团体奖金限额",
-                "to": "团体总额+人均限额",
-                "source": "domain_normalize_bonus_caps",
-            })
-        if "比例" in selectors or re.search(r"占比|比例|%", q):
-            value_dimensions.append("比例")
-        if re.search(r"年付款|年\s*限额", q):
-            value_dimensions.append("年付款")
-        # "每个号码" is a selector, not a separate required value dimension.
-        if re.search(r"自然月", q) and "周期" not in value_dimensions:
-            value_dimensions.append("周期")
-        # Multi-class account limits: treat each class as a dimension when both appear in
-        # corpus pattern (II/III); query may only say 个人支付账户.
-        if re.search(r"支付账户|账户余额|年付款", q) and not conditions:
-            value_dimensions.extend(["II类", "III类"])
-            rewrite_trace.append({
-                "from": "个人支付账户余额年付款限额",
-                "to": "II类/III类年付款限额",
-                "source": "domain_normalize_account_limits",
-            })
-        # Colloquial contest bonus → labor contest bonus dimensions
-        if re.search(r"搞比赛|发奖金|奖金.*上限|上限是多少", q):
-            if "总额" not in value_dimensions:
-                value_dimensions.append("总额")
-            if "人均" not in value_dimensions:
-                value_dimensions.append("人均")
-            rewrite_trace.append({
-                "from": "比赛奖金上限",
-                "to": "劳动竞赛奖金限额",
-                "source": "domain_normalize_contest_bonus",
-            })
-        if not value_dimensions:
-            value_dimensions.append("value")
+    allow: list[str] = []
+    dimensions: list[str] = []
 
     if wants_numeric:
         intents.append("numeric")
-        slots.append("value")
-        slots.append("unit")
-        # Only exclusive conditions become required condition slots.
-        if conditions:
-            slots.append("condition")
-        for dim in value_dimensions:
-            if dim not in slots:
-                slots.append(f"dim:{dim}")
+        slots.extend(["value", "unit"])
+        allow.append("numeric")
+        dimensions.append("value")
+        for selector in selectors:
+            if selector in {"总额", "总计", "合计"}:
+                dimensions.append("total")
+            elif selector in {"人均", "每人", "每个号码", "每个人", "每名人"}:
+                dimensions.append("per_unit")
+            elif selector in {"单项", "单笔"}:
+                dimensions.append("single_item")
+            elif selector in {"比例", "占比"}:
+                dimensions.append("ratio")
+            elif selector in {"年付款", "年限"}:
+                dimensions.append("annual")
+            elif selector in {"周期", "自然月", "每月", "每年"}:
+                dimensions.append("period")
+        for condition in conditions:
+            slots.append(f"condition:{condition}")
     if wants_deadline:
         intents.append("deadline")
         slots.append("deadline")
-        if "初审" in conditions or "初审" in q:
-            slots.append("初审")
-        if "产品评估" in conditions or "评估" in q:
-            slots.append("产品评估")
+        allow.append("deadline")
     if wants_version:
         intents.append("version")
         slots.append("version")
-        slots.append("doc_no")
+        allow.append("version")
     if wants_responsibility:
         intents.append("responsibility")
-        slots.append("subject")
-        slots.append("role")
+        slots.extend(["subject", "role"])
+        allow.append("responsibility")
     if wants_scope:
         intents.append("scope")
         slots.append("scope")
+        allow.append("scope")
     if wants_relationship:
         intents.append("relationship")
         slots.append("relationship")
-    if wants_policy or not intents:
+        allow.append("relationship")
+    if wants_policy:
         intents.append("policy")
         slots.append("policy_fact")
+        # A policy statement may be expressed as a scope, responsibility or
+        # relation rather than a declarative rule.  These are still grounded
+        # factual candidates and must remain available for coverage ranking.
+        allow.extend(["policy", "prohibition", "scope", "responsibility", "relationship"])
         if polarity == "negative":
             slots.append("polarity_negative")
-        if predicate:
-            slots.append(f"predicate:{predicate}")
+    if predicate:
+        slots.append(f"predicate:{predicate}")
 
-    # Multi exclusive condition numeric: each is its own coverage slot.
-    for c in conditions:
-        if c not in slots:
-            slots.append(c)
-
-    entities = [
-        t
-        for t in re.findall(r"[\u4e00-\u9fff]{2,12}", q)
-        if t
-        not in {
-            "什么", "多少", "如何", "怎么", "是否", "哪个", "哪些", "以及", "或者",
-            "一个", "公司", "取消", "最新", "修订", "版本", "中国", "电信", "广西",
-            "集团", "总部", "北京", "关于", "印发", "通知", "不得", "使用",
-        }
-    ][:12]
-
-    # Query-derived anchors for policy localization (no fixed high_value list).
-    anchors: list[str] = []
-    for t in entities:
-        if len(t) >= 2 and t not in anchors:
-            anchors.append(t)
-    if predicate and predicate not in anchors:
-        anchors.insert(0, predicate)
-    for extra in re.findall(
-        r"收支两条线|小金库|外部互联网邮箱|微信|交通意外|专职安全员|"
-        r"南宁分公司|实际操作|团体奖金|人均|年付款|入驻门槛|权益优惠",
-        q,
-    ):
-        if extra not in anchors:
-            anchors.append(extra)
-
-    allow: list[str] = []
-    if wants_numeric:
-        allow.append("numeric")
-    if wants_deadline:
-        allow.append("deadline")
-    if wants_version:
-        allow.append("version")
-    if wants_responsibility:
-        allow.append("responsibility")
-    if wants_scope:
-        allow.append("scope")
-    if wants_relationship:
-        allow.append("relationship")
-    if wants_policy or "policy" in intents:
-        allow.extend(["policy", "prohibition"])
-    seen: set[str] = set()
-    allow_u = []
-    for a in allow:
-        if a not in seen:
-            seen.add(a)
-            allow_u.append(a)
-
-    # Subqueries for multi-object / multi-sub-question patterns
+    phrases = _query_phrases(q)
+    anchors = _ordered_unique(phrases + conditions + scopes + selectors)[:12]
+    entities = [p for p in phrases if len(p) >= 2][:12]
     subqueries: list[dict[str, Any]] = []
-    if re.search(r"分别|以及|和.*的|与.*的关系", q) and (
-        wants_responsibility or wants_relationship or wants_numeric
-    ):
-        # Split on 和/与 when two parallel objects appear.
-        parts = re.split(r"[和与、]|分别", q)
-        parts = [p.strip() for p in parts if p and len(p.strip()) >= 2]
-        if len(parts) >= 2:
-            for p in parts[:4]:
-                subqueries.append({"text": p, "anchors": _tokenize_simple(p)})
-
-    subject = entities[0] if entities else ""
-    obj = ""
-    for e in entities[1:]:
-        if e not in (subject,):
-            obj = e
-            break
-
-    requested_attribute = ""
-    if wants_numeric:
-        requested_attribute = "numeric_limit"
-    elif wants_deadline:
-        requested_attribute = "deadline"
-    elif wants_version:
-        requested_attribute = "version"
-    elif wants_responsibility:
-        requested_attribute = "responsibility"
-    elif polarity == "negative":
-        requested_attribute = "prohibition"
-    else:
-        requested_attribute = "policy"
+    if re.search(r"分别|以及|各类|历年|对比|区别|关系", q):
+        parts = [p.strip() for p in re.split(r"[、；;]|以及|分别|对比", q) if len(p.strip()) >= 2]
+        subqueries = [{"text": p, "anchors": _query_phrases(p, limit=6)} for p in parts[:4]]
 
     unit = ""
     if re.search(r"万元", q):
@@ -342,44 +265,46 @@ def plan_query(question: str) -> QueryPlan:
         unit = "%"
     elif re.search(r"工作日", q):
         unit = "个工作日"
+    year_match = re.search(r"((?:19|20)\d{2})", q)
+    time_or_version = year_match.group(1) if year_match else ("latest" if wants_version else "")
 
-    time_or_version = ""
-    m_year = re.search(r"((?:19|20)\d{2})", q)
-    if m_year:
-        time_or_version = m_year.group(1)
-    elif wants_version:
-        time_or_version = "latest"
-
+    requested_attribute = (
+        "numeric" if wants_numeric else "deadline" if wants_deadline else
+        "version" if wants_version else "responsibility" if wants_responsibility else
+        "scope" if wants_scope else "relationship" if wants_relationship else
+        "prohibition" if polarity == "negative" else "policy"
+    )
     return QueryPlan(
         raw=q,
-        intents=intents,
-        conditions=conditions,  # exclusive only
-        required_slots=slots,
+        intents=_ordered_unique(intents),
+        conditions=conditions,
+        required_slots=_ordered_unique(slots),
         entities=entities,
         wants_numeric=wants_numeric,
         wants_deadline=wants_deadline,
         wants_version=wants_version,
-        wants_policy=wants_policy or "policy" in intents,
+        wants_policy=wants_policy,
         wants_responsibility=wants_responsibility,
         wants_scope=wants_scope,
         wants_relationship=wants_relationship,
-        allow_fact_kinds=allow_u,
-        subject=subject,
-        object=obj,
+        allow_fact_kinds=_ordered_unique(allow),
+        subject=entities[0] if entities else "",
+        object=entities[1] if len(entities) > 1 else "",
         scope=scopes,
         selector=selectors,
         predicate=predicate,
         polarity=polarity,
         condition_slots=list(conditions),
         requested_attribute=requested_attribute,
-        value_dimensions=value_dimensions,
+        value_dimensions=_ordered_unique(dimensions),
         unit=unit,
         time_or_version=time_or_version,
         subqueries=subqueries,
-        query_rewrite_trace=rewrite_trace,
+        query_rewrite_trace=[],
         anchors=anchors,
     )
 
 
 def _tokenize_simple(text: str) -> list[str]:
-    return re.findall(r"[\u4e00-\u9fff]{2,10}", text or "")[:8]
+    """Compatibility helper for older callers."""
+    return _query_phrases(text, limit=8)

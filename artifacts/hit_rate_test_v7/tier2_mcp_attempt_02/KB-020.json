@@ -1,0 +1,1601 @@
+{
+  "case": {
+    "case_id": "KB-020",
+    "category": "多条件组合",
+    "query": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+    "expected_knowledge_ids": [
+      "24a0fd9e-a285-4230-b58c-09715016758f"
+    ],
+    "expected_title_keywords": [
+      "网络和信息安全",
+      "2026",
+      "考核"
+    ],
+    "required_facts": [
+      "99%",
+      "实名登记率"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕161号；组合'网信安考核+实名制+阈值'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "c25863cf-8a25-4bc9-b1f1-a1c0fc51c821",
+          "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+          "passage_id": "9f3789df9d23de54607daa2437d31362",
+          "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+          "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带\n能力的日常监管，每发现一次（含通报）\n扣3分。 注1:Al换脸识别技术能力要求另行\n下发。\n注2：指部网安局印发的实名制工作\n通报（含定期通报、专项通报等）。\n同一问题首次通报不扣分，下同。 网络和信息\n安全管理部、\n市场部、数字\n化运营支撑\n中心 文艳\n— 13 — （二） 电话\n实名制 1.电话实名制基础管理： 未按要求落实电\n话实名制安全管理要求； 电话用户实名登\n记率、人证一致率未达 99%；每发现一次\n（含通报）扣 3分。\n2.未严格落实身份信息核验要求， 存在证\n件冒用、照片复用、换脸冒名入网等问题\n的，每发现一次，视情扣 5分或10分。 注：1.如单位用户、 未成年用户、 eSIM\n用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳",
+          "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+          "version_year": 2026,
+          "section_path": "2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带",
+          "block_ids": [
+            "c25863cf-8a25-4bc9-b1f1-a1c0fc51c821",
+            "fa079d32-2111-4c07-9a60-f42523449690",
+            "becdedd3-7b0d-45c1-9b9b-22bbcbf9c239",
+            "bf4adf2d-6034-4bc9-973e-483f46db3f91",
+            "af71bcdb-d110-4752-9fe3-b5dd754ef77b",
+            "d74d0938-7b26-4e03-9187-94df34e9ac0a",
+            "04db36ed-a68a-4da1-a479-6d53423d5399",
+            "c2b8cef6-0d9f-49cd-9c15-cfd8d451ebaa",
+            "44a135c9-142e-4458-9b5a-aaa9374ad5ee",
+            "eb2f7fa6-6aa3-4ff4-b984-c008891f0d25",
+            "86e577ef-b3f1-4a0a-9af0-246cecf7050c",
+            "31799670-1957-46a6-8b02-77cc068d85dd",
+            "0942a95c-f56d-4f05-9c18-ea60bbe67d88",
+            "f4648f46-f358-4f05-9820-880cc382a9d7",
+            "49ec368c-0054-42c3-ba37-a0523a10b6e6",
+            "20c9c645-c6f0-4503-a9ca-e0fc74261eba",
+            "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+            "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -51.267421303182275,
+          "fts_score": 1.0,
+          "score": 0.9000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4677,
+            "fts_score": 1.0,
+            "title_score": 0.4597,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4677,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:网络和信息安全考核要点与评分标准afd",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "d9b9621e-e8df-4945-87b9-96cbdb67d456",
+          "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "passage_id": "0c22e16442eb1f9e49b4117e19bd418e",
+          "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+          "text": "【文档】中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150\n【章节】第七章 考核管理 > 第二十一条 内容信息安全考核纳入公司网络与信息安全考 > 第二十二条 由于工作不到位导致内容信息安全事件发生或\n业务运营部门\n按照国家有关部门和区公司内容信息安全归口管理部门要求，对\n本单位内部工作人员进行内容信息安全教育，定期开展技能培训\n和考核，制定内容信息安全预案并定期组织演练，保障有关人员\n熟悉内容信息安全相关法规和企业制度要求，具备必要的管理技\n能。\n第七章 考核管理\n第二十一条 内容信息安全考核纳入公司网络与信息安全考\n核范畴，由归口管理部门负责根据业务管理部门和业务运营部门\n提交的考核工作完成情况，向公司网络和信息安全领导小组办公\n室提交相关考核结果。\n第二十二条 由于工作不到位导致内容信息安全事件发生或\n造成重大影响的有关单位及个人，公司将按照《关于印发中国电\n信广西公司网络与信息安全工作责任追究办法（修订）的通知》\n（中电信桂〔2017〕183号）和《关于印发中国电信广西公司重何世恒(全渠道运营中心)\n— 12 —大网络和信息安全事件问责办法（试行）的通知》（中电信桂\n〔2022〕245号）及相关规章制度追究责任；造成严重后果、触\n犯法律法规的，交由司法机关追究法律责任。",
+          "document_family_id": "topic:关于印发中国电信广西公司内容信息安全管理办法",
+          "version_year": 2022,
+          "section_path": "第七章 考核管理 > 第二十一条 内容信息安全考核纳入公司网络与信息安全考 > 第二十二条 由于工作不到位导致内容信息安全事件发生或",
+          "block_ids": [
+            "d9b9621e-e8df-4945-87b9-96cbdb67d456",
+            "acbb7b85-5e38-4c65-8905-a0fddac22406",
+            "ecf4f0c7-fad7-4c63-89d7-4c72dfe91b18",
+            "bab74a4f-7c5b-4e10-8685-b5146afb7eff",
+            "2f1b9de4-8eca-4aa7-b6e3-c51cba7c3b8b",
+            "804761f2-6ed4-4967-8ab8-b3539f90251b",
+            "2ed825f1-5d5a-499c-a289-f30dae2cde60",
+            "89637868-7c13-407c-b91f-2b9f2a9b8aeb",
+            "6bbb5ce4-09d9-4070-a11c-d1ee40a655b2",
+            "e4d5a519-ea56-47ed-80ef-deffdf7172c8",
+            "0d548e07-f894-4ba5-ae8e-00c8c52b66a4",
+            "99f1db56-081a-47d8-91d9-bbaadb101f16",
+            "efe3a503-6a7d-41be-ae4f-d0e18e348e28",
+            "70cacea4-64fc-4977-9929-d3bfed1765bb",
+            "8b5faa08-2bdb-4c07-ac67-5a7324800431"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -22.835951186393938,
+          "fts_score": 1.0,
+          "score": 0.6225,
+          "alias_fts_match": true,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 1.0,
+            "title_score": 0.2174,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.2097,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4225,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4225,
+          "ranking_score": 0.6225,
+          "version_rank": {
+            "version_year": 2022,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司内容信息安全管理办法",
+            "family_newest_year": 2022,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "8af20836-402e-4f48-a196-2e9c60774c28",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "982e81802593475c0c05aec107e05899",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】1.4落实考核 > 1.4.1各单位根 > 1.4.2各单位应\n络和信息安\n全职责分工\n文件 1.2.1检查是否明\n确内部各部门、各\n下属单位信息安全\n职责。\n1.2.2应定期制\n定信息安全规\n划，统一规划并\n完善事前防 范、\n事中阻断、事后A 手工 单位内部规\n划文件 1.2.2检查是否开\n展信息安全规划。 维护账号(集团互联)\n— 1046 — 溯源的专业信息\n安全防护体系。\n1.3规范议事机\n制\n1.3.1把信息安\n全工作纳入重点\n工作计划和重要\n议事日程，建立\n定期议事制度。 A 手工 定期议事会\n议通知和会\n议纪要（备\n忘） 1.3.1检查是否建\n立定期议事制度并\n按要求组织开展相\n关工作。\n1.4落实考核\n1.4.1各单位根\n据上级要求结合\n实际制定本单位\n网络信息安全考\n核办法。 A 手工 本单位网络\n信息安全考\n核办法 1.4.1检查是否根\n据上级要求 形成本\n单位网络信息安全\n考核办法。\n1.4.2各单位应\n制定考核工作责\n任分解表，对网\n络信息安全考核\n应逐项明确责任\n单位。 B 手工 本单位信息\n安全考核责\n任分解表 1.4.2检查是否通\n过责任表逐项明确\n分解考核责任。",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "section_path": "1.4落实考核 > 1.4.1各单位根 > 1.4.2各单位应",
+          "block_ids": [
+            "8af20836-402e-4f48-a196-2e9c60774c28",
+            "3e2cccaf-8466-4238-94df-16e51fc8d022",
+            "1d622efc-fd5b-46a5-bf21-bd9aaef826e2",
+            "cfbb2b5f-1ceb-4a73-801a-78a9cd643b0d",
+            "919e6a5a-de82-450b-aeb9-ea2c1e29880f",
+            "a1ae2f89-5751-445c-871c-93bf06e10cb8",
+            "83187209-12d6-4b36-8fa5-b584527f6126",
+            "9daafb62-324f-41e9-b8a4-af26286e610d",
+            "35ea6187-1c0c-4c72-b389-075e310fd2cc",
+            "42b3ef73-12d6-4040-a47b-c9da51efc129",
+            "a209996f-6c79-4ab4-9390-c3bf169f96e6",
+            "5dc059d0-6eec-4d42-98c3-fe9774d29fb8",
+            "ab4b8283-15ee-4c05-9765-3b985edf8823",
+            "56cc1ae4-d587-4c39-a4a8-0c0d5e32f14a",
+            "3538f56d-88d8-4d55-bfe8-e609b5e6f254",
+            "d5742618-3996-4080-b3e1-7c4024de9f6a",
+            "8f922a55-e600-4976-9dfa-23ec85d38138",
+            "721e41d6-4625-4413-9d1f-c4fa2ce01628",
+            "1acf2376-da18-4578-a67d-c6ff114e993c",
+            "e5fc22e6-6150-4fc4-b75f-8ec5c198dd13",
+            "108fa796-1aa9-47a2-a06f-756d618c2208",
+            "a818685f-253b-4c41-96fa-8e42566ad038",
+            "7c5ce2c5-0837-424c-bf3e-d4a37b587292",
+            "928c988e-53aa-4655-b20c-7821772391a6",
+            "81323b0a-4685-42f5-85d3-3a47c1b93a42",
+            "2b292a8b-75f2-49c3-a0a4-c313444d57e2",
+            "502c7838-9f72-4ea9-8216-47ef51b78bf5",
+            "94420275-4702-456b-82b8-1d96ecc15e76",
+            "90e43c31-3e10-45f8-97d9-7cc1ba77c17d",
+            "d57a49f2-b19f-4be3-9332-e750457cdf4f",
+            "f5be6f6c-d733-4826-80d9-6c725aa60031",
+            "01627f76-0f1d-4b4b-9e62-b883875825e4",
+            "595c7a87-aff9-46fd-9537-d2fa77ebebf2",
+            "c6e5103c-13a6-4a73-a2f5-8b43b6faeef4",
+            "fa76f734-934c-41ee-83bd-dfb909fc3369",
+            "ba886d4d-d51d-4246-8ab4-6dbf294153c5",
+            "da75e3e8-6cb6-4c0c-9216-624c1a83b8bf",
+            "b43cf347-9061-408f-8a21-f30bc47afb39",
+            "275fdc74-4fb7-4b21-9a5c-17828fada764"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -22.391442614711796,
+          "fts_score": 0.6912764856154285,
+          "score": 0.5899000000000001,
+          "alias_fts_match": true,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 0.6913,
+            "title_score": 0.1739,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.2903,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3899,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3899,
+          "ranking_score": 0.5899000000000001,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "2b49f4d2-ae55-4fae-84e8-53ab836bf826",
+          "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+          "passage_id": "33ad4018b26554bad2fad39658ad9494",
+          "title": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5",
+          "text": "【文档】中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5\n【章节】第十八条 内容信息安全监管的技术保障。区公司内容信息 > 第七章 考核管理 > 第二十条 内容信息安全考核纳入公司网络与信息安全考核\n归口管理部门牵头， 业务管理部门配合完善内容信息安全管理制\n度和管理措施，从制度上保障各 级单位的内容信息安全管理工\n作。业务运营部门应建立健全配套内容信息安全管理制度，包括但不限于内容信息安全管理办法、违 法和不良信息处理流程、内\n容信息安全审核制度、黑名单管理制度等。\n第十八条 内容信息安全监管的技术保障。区公司内容信息\n安全归口管理部门规划建立区级内 容信息安全技术保障体系， 加\n强对违法违规内容和行为的监控和处理。 何世恒(全渠道运营中心)\n\u0001\u0001 — 11 — 第十九条 内容信息安全的技能、意识培训。业务运营部门\n按照国家有关部门和区公司内容信 息安全归口管理部门要求， 对\n本单位内部工作人员进行内容信息安全教育， 定期开展技能培训\n和考核，制定内容信息安全预案并定 期组织演练，保障有关人员\n熟悉内容信息安全相关法规和企业制度要求， 具备必要的管理技\n能。\n第七章 考核管理\n第二十条 内容信息安全考核纳入公司网络与信息安全考核\n范畴，由业务归口管理部门负责根据业务管理部门和业务运营部\n门提交的考核工作完成情况， 向信息安全统筹管理部门提交相关\n考核结果。",
+          "document_family_id": "topic:关于印发中国电信广西公司内容信息安全管理办法",
+          "version_year": 2017,
+          "section_path": "第十八条 内容信息安全监管的技术保障。区公司内容信息 > 第七章 考核管理 > 第二十条 内容信息安全考核纳入公司网络与信息安全考核",
+          "block_ids": [
+            "2b49f4d2-ae55-4fae-84e8-53ab836bf826",
+            "c4888b1a-5788-4669-a641-efa85650ab42",
+            "eaff91f9-e792-4279-bcdf-ffe6a74ceb33",
+            "12040488-334d-4300-b88e-903903e2d155",
+            "e58ee840-4ced-4ae3-bd5f-504968e26074",
+            "7cdc329e-1375-4d76-bc08-a3575c1def8d",
+            "a6ba1448-a675-41cb-8709-21d95d33aa51",
+            "d1f25a7f-c826-4412-bb0c-4c5154d78aa3",
+            "917abd9e-d0a4-49e7-bcf5-7c61fef90c44",
+            "f99218fe-8456-461c-85d4-7faf3484998c",
+            "578cced5-37d0-413b-8000-96339470f723",
+            "1bf2737b-012b-4010-981f-25828a1a4109",
+            "2c7b951e-32d9-4a60-88f7-277c625bd60b",
+            "546c9f86-2587-43c4-8bf2-f85df08e27a5",
+            "8405af3b-de51-4041-99a1-1f8de6fe5c4f",
+            "202e8f1c-417d-444f-97c9-ad25f78957e7",
+            "9b9a2fc7-07a1-4e28-a759-909fe93717a7"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -22.31880633193033,
+          "fts_score": 1.0,
+          "score": 0.20249999999999999,
+          "alias_fts_match": true,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 1.0,
+            "title_score": 0.2174,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.2097,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4225,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4225,
+          "ranking_score": 0.20249999999999999,
+          "version_rank": {
+            "version_year": 2017,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司内容信息安全管理办法",
+            "family_newest_year": 2022,
+            "is_family_newest": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 4,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "24a0fd9e-a285-4230-b58c-09715016758f",
+          "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+        ],
+        "evidence_snapshot_id": "lkX-AkPAN91BPH_gnF2sG2ju8LaYL4kH",
+        "snapshot_fingerprint": "b026e356cbf9bcdb112238a7",
+        "accepted_passage_ids": [
+          "9f3789df9d23de54607daa2437d31362",
+          "0c22e16442eb1f9e49b4117e19bd418e",
+          "982e81802593475c0c05aec107e05899",
+          "33ad4018b26554bad2fad39658ad9494",
+          "875abd083dde6ed96017e06805327816",
+          "a3269c83c2e8cca12e8cff399bdd07f7",
+          "3f20afb6b96060aa3aa159905a6bd09c",
+          "51d96237127abc07d4d0289e693241c4",
+          "741deeee6b2588dd58df3f01203275a6",
+          "bf840b4f92d08019b7b61f503c40efb3",
+          "3ab5dad0564435ee3024542788e33af8",
+          "a96ba92d9cfd40749cf548b94b0ea990"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 8,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 6860.87
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+            "block_id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "block_ids": [
+              "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+              "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4",
+              "9095ccae-e551-4631-a10b-f51e6158e28e",
+              "31887cf2-693b-4ee3-8499-c4f25432b5a2",
+              "4cdc5178-e3f0-48f7-a8a3-2087d78aa428",
+              "cee673e6-9c13-4839-9e3d-2dd9d2d10937",
+              "2e2be46f-635f-4fb9-8c6e-2ad9578eac51",
+              "3778be19-ad3b-4878-bc5e-8b5a02e8c8fb",
+              "4d3ea696-7045-4fc1-b1a1-5164cbe0da2b",
+              "ee4ca5bc-9640-4e84-b65b-13cd0f4c6022",
+              "52b30cdb-95a8-4cb1-8df3-fb77a46588f3",
+              "8797c9e2-ef17-4410-9d68-cf0d3c32ecd3",
+              "181522f1-e906-4dff-abd0-b6fccc675b49",
+              "d83a83f1-7ea1-47db-bedc-c994e3d95138",
+              "51483a06-fde0-42db-80f9-6287b13cf50b",
+              "8f4fcbc4-ef0f-44f2-9a73-785ba8eb584e",
+              "8498e622-f3e3-4072-a920-daf87042d36a",
+              "31dee27b-5fbf-4273-a320-4fdab8b1c125",
+              "455ca343-27fb-46a2-826e-080679185d03",
+              "754b7603-5d6d-4195-b7e6-e6268eeabc6e",
+              "eb6140e9-2813-47cb-a6cd-a5451580d958",
+              "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "8442bfb3-e09d-4437-94a8-027e1e7f7001",
+              "147bc3cb-425c-45b6-aa0a-f8aac27a74f5"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "text": "用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "score": 0.0,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+            "evidence_passage_ids": [
+              "a3269c83c2e8cca12e8cff399bdd07f7"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "7db8e1fbce7649ce23f37f3f"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+            "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+            "block_id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+            "block_ids": [
+              "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "b2b24eea-9cf1-47cf-aaeb-bb9c06511e5b",
+              "b5d307dc-9d4a-4567-bf6c-fc15f337d4b4",
+              "9095ccae-e551-4631-a10b-f51e6158e28e",
+              "31887cf2-693b-4ee3-8499-c4f25432b5a2",
+              "4cdc5178-e3f0-48f7-a8a3-2087d78aa428",
+              "cee673e6-9c13-4839-9e3d-2dd9d2d10937",
+              "2e2be46f-635f-4fb9-8c6e-2ad9578eac51",
+              "3778be19-ad3b-4878-bc5e-8b5a02e8c8fb",
+              "4d3ea696-7045-4fc1-b1a1-5164cbe0da2b",
+              "ee4ca5bc-9640-4e84-b65b-13cd0f4c6022",
+              "52b30cdb-95a8-4cb1-8df3-fb77a46588f3",
+              "8797c9e2-ef17-4410-9d68-cf0d3c32ecd3",
+              "181522f1-e906-4dff-abd0-b6fccc675b49",
+              "d83a83f1-7ea1-47db-bedc-c994e3d95138",
+              "51483a06-fde0-42db-80f9-6287b13cf50b",
+              "8f4fcbc4-ef0f-44f2-9a73-785ba8eb584e",
+              "8498e622-f3e3-4072-a920-daf87042d36a",
+              "31dee27b-5fbf-4273-a320-4fdab8b1c125",
+              "455ca343-27fb-46a2-826e-080679185d03",
+              "754b7603-5d6d-4195-b7e6-e6268eeabc6e",
+              "eb6140e9-2813-47cb-a6cd-a5451580d958",
+              "01a70959-5483-4b0f-9bce-f9ead9da5676",
+              "8442bfb3-e09d-4437-94a8-027e1e7f7001",
+              "147bc3cb-425c-45b6-aa0a-f8aac27a74f5"
+            ],
+            "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+            "path": "",
+            "text": "用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "body_text": "用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳\n（三） 宽带\n实名制 宽带实名制基础管理： 未按要求落实宽带\n等安全管理要求， 新增宽带用户实名登记\n率未达95%，每发现一次（含通报）扣 3\n分。 注：如入网流程不合规、装机地址录\n入不规范、存量用户补登记工作推进\n缓慢等。 市场部、政企\n信息服务事\n业群（数智分\n公司）\n（四） 中间\n号、物联\n网、车联\n网、 短信端\n口 1.实名制基础管理：\n（1）中间号：未按要求落实中间号管理\n要求（注 1）、中间号合作单位实名登记\n率、实名登记准确率、人证一致率未达\n98%（合作单位包括存量业务码号资源的\n实际业务使用单位以及 700中间号的应\n用平台提供方和业务使用方），每发现一\n次（含通报 )扣3分。",
+            "score": 0.0,
+            "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.55,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 8,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "b026e356cbf9bcdb112238a7",
+            "snapshot_id_count": 12,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值"
+          },
+          "fact_plan": {
+            "raw": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:扣分"
+            ],
+            "entities": [
+              "网络",
+              "信息安全",
+              "考核",
+              "电话",
+              "实名制",
+              "实名",
+              "登记",
+              "未达标",
+              "扣分",
+              "阈值",
+              "网络信息安全考核",
+              "网络信息安全"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "网络",
+            "object": "信息安全",
+            "scope": [],
+            "selector": [],
+            "predicate": "扣分",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "网络",
+              "信息安全",
+              "考核",
+              "电话",
+              "实名制",
+              "实名",
+              "登记",
+              "未达标",
+              "扣分",
+              "阈值",
+              "网络信息安全考核",
+              "网络信息安全"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "evidence_passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+              "record_id": "a3269c83c2e8cca12e8cff399bdd07f7:r2",
+              "exact_text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "table_row_ref": "",
+              "value_dimension": "ratio",
+              "group_id": "8c6eb92e3265b10f"
+            }
+          ],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 9,
+          "candidate_count": 1
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_passage_ids": [
+                "a3269c83c2e8cca12e8cff399bdd07f7"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "7db8e1fbce7649ce23f37f3f"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:扣分"
+            ],
+            "entities": [
+              "网络",
+              "信息安全",
+              "考核",
+              "电话",
+              "实名制",
+              "实名",
+              "登记",
+              "未达标",
+              "扣分",
+              "阈值",
+              "网络信息安全考核",
+              "网络信息安全"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "网络",
+            "object": "信息安全",
+            "scope": [],
+            "selector": [],
+            "predicate": "扣分",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "网络",
+              "信息安全",
+              "考核",
+              "电话",
+              "实名制",
+              "实名",
+              "登记",
+              "未达标",
+              "扣分",
+              "阈值",
+              "网络信息安全考核",
+              "网络信息安全"
+            ]
+          },
+          "input_count": 1,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "7db8e1fbce7649ce23f37f3f",
+              "record_id": "a3269c83c2e8cca12e8cff399bdd07f7:r2",
+              "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "98%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "98",
+              "unit": "%",
+              "exact_text": "名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "evidence_spans": [
+                [
+                  51,
+                  54
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:网络和信息安全考核要点与评分标准afd",
+              "version_year": 2026,
+              "score": 8.300000000000002,
+              "unstructured_rejected": false,
+              "group_id": "8c6eb92e3265b10f",
+              "polarity": "",
+              "value_dimension": "ratio",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:扣分": "miss",
+                "anchor:网络": "miss",
+                "anchor:信息安全": "miss",
+                "anchor:考核": "miss",
+                "anchor:电话": "miss",
+                "anchor:实名制": "miss",
+                "anchor:实名": "hit",
+                "anchor:登记": "hit",
+                "anchor:未达标": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  51,
+                  54
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "7db8e1fbce7649ce23f37f3f": "hit"
+            },
+            "unit": {
+              "7db8e1fbce7649ce23f37f3f": "hit"
+            },
+            "predicate:扣分": {
+              "7db8e1fbce7649ce23f37f3f": "miss"
+            }
+          },
+          "primary_group_id": "8c6eb92e3265b10f",
+          "covered_slots": [
+            "dim:ratio",
+            "unit",
+            "value"
+          ],
+          "missing_after_select": [
+            "predicate:扣分"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "8c6eb92e3265b10f",
+                "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+                "knowledge_ids": [
+                  "24a0fd9e-a285-4230-b58c-09715016758f"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:网络和信息安全考核要点与评分标准afd",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "9f3789df9d23de54607daa2437d31362",
+                  "875abd083dde6ed96017e06805327816",
+                  "a3269c83c2e8cca12e8cff399bdd07f7"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  4,
+                  5
+                ],
+                "retrieval_scores": [
+                  0.9000000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+                "section": "2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.8,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "9f3789df9d23de54607daa2437d31362:r0",
+                  "9f3789df9d23de54607daa2437d31362:r1",
+                  "9f3789df9d23de54607daa2437d31362:r2",
+                  "875abd083dde6ed96017e06805327816:r0",
+                  "875abd083dde6ed96017e06805327816:r1",
+                  "875abd083dde6ed96017e06805327816:r2",
+                  "a3269c83c2e8cca12e8cff399bdd07f7:r0",
+                  "a3269c83c2e8cca12e8cff399bdd07f7:r1",
+                  "a3269c83c2e8cca12e8cff399bdd07f7:r2"
+                ]
+              },
+              {
+                "group_id": "fbc36afd660a3d94",
+                "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+                "knowledge_ids": [
+                  "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司内容信息安全管理办法",
+                "document_revision": "2022",
+                "effective_date": "",
+                "version_year": 2022,
+                "passage_ids": [
+                  "0c22e16442eb1f9e49b4117e19bd418e",
+                  "3f20afb6b96060aa3aa159905a6bd09c",
+                  "51d96237127abc07d4d0289e693241c4"
+                ],
+                "retrieval_ranks": [
+                  1,
+                  6,
+                  7
+                ],
+                "retrieval_scores": [
+                  0.6225,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+                "section": "第七章 考核管理 > 第二十一条 内容信息安全考核纳入公司网络与信息安全考 > 第二十二条 由于工作不到位导致内容信息安全事件发生或",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 6.045,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "0c22e16442eb1f9e49b4117e19bd418e:r0",
+                  "0c22e16442eb1f9e49b4117e19bd418e:r1",
+                  "0c22e16442eb1f9e49b4117e19bd418e:r2",
+                  "0c22e16442eb1f9e49b4117e19bd418e:r3",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r0",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r1",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r2",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r3",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r4",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r5",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r6",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r7",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r8",
+                  "3f20afb6b96060aa3aa159905a6bd09c:r9",
+                  "51d96237127abc07d4d0289e693241c4:r0",
+                  "51d96237127abc07d4d0289e693241c4:r1",
+                  "51d96237127abc07d4d0289e693241c4:r2",
+                  "51d96237127abc07d4d0289e693241c4:r3",
+                  "51d96237127abc07d4d0289e693241c4:r4"
+                ]
+              },
+              {
+                "group_id": "98ca950f3a973cd5",
+                "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                "knowledge_ids": [
+                  "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                ],
+                "organization_scope": "中国电信股份有限公司",
+                "document_family_id": "中国电信股份有限公司:于中国电信股份有限公司广西分公司内控实施细则",
+                "document_revision": "2021",
+                "effective_date": "",
+                "version_year": 2021,
+                "passage_ids": [
+                  "982e81802593475c0c05aec107e05899",
+                  "741deeee6b2588dd58df3f01203275a6",
+                  "bf840b4f92d08019b7b61f503c40efb3"
+                ],
+                "retrieval_ranks": [
+                  2,
+                  8,
+                  9
+                ],
+                "retrieval_scores": [
+                  0.5899000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+                "section": "1.4落实考核 > 1.4.1各单位根 > 1.4.2各单位应",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 4.7798,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "982e81802593475c0c05aec107e05899:r0",
+                  "982e81802593475c0c05aec107e05899:r1",
+                  "982e81802593475c0c05aec107e05899:r2",
+                  "982e81802593475c0c05aec107e05899:r3",
+                  "982e81802593475c0c05aec107e05899:r4",
+                  "741deeee6b2588dd58df3f01203275a6:r0",
+                  "741deeee6b2588dd58df3f01203275a6:r1",
+                  "741deeee6b2588dd58df3f01203275a6:r2",
+                  "bf840b4f92d08019b7b61f503c40efb3:r0",
+                  "bf840b4f92d08019b7b61f503c40efb3:r1",
+                  "bf840b4f92d08019b7b61f503c40efb3:r2"
+                ]
+              },
+              {
+                "group_id": "64436f93ec45f7c0",
+                "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+                "knowledge_ids": [
+                  "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司内容信息安全管理办法",
+                "document_revision": "2017",
+                "effective_date": "",
+                "version_year": 2017,
+                "passage_ids": [
+                  "33ad4018b26554bad2fad39658ad9494",
+                  "3ab5dad0564435ee3024542788e33af8",
+                  "a96ba92d9cfd40749cf548b94b0ea990"
+                ],
+                "retrieval_ranks": [
+                  3,
+                  10,
+                  11
+                ],
+                "retrieval_scores": [
+                  0.20249999999999999,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5",
+                "section": "第十八条 内容信息安全监管的技术保障。区公司内容信息 > 第七章 考核管理 > 第二十条 内容信息安全考核纳入公司网络与信息安全考核",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 2.805,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "33ad4018b26554bad2fad39658ad9494:r0",
+                  "33ad4018b26554bad2fad39658ad9494:r1",
+                  "33ad4018b26554bad2fad39658ad9494:r2",
+                  "33ad4018b26554bad2fad39658ad9494:r3",
+                  "33ad4018b26554bad2fad39658ad9494:r4",
+                  "33ad4018b26554bad2fad39658ad9494:r5",
+                  "33ad4018b26554bad2fad39658ad9494:r6",
+                  "3ab5dad0564435ee3024542788e33af8:r0",
+                  "3ab5dad0564435ee3024542788e33af8:r1",
+                  "a96ba92d9cfd40749cf548b94b0ea990:r0",
+                  "a96ba92d9cfd40749cf548b94b0ea990:r1",
+                  "a96ba92d9cfd40749cf548b94b0ea990:r2",
+                  "a96ba92d9cfd40749cf548b94b0ea990:r3",
+                  "a96ba92d9cfd40749cf548b94b0ea990:r4",
+                  "a96ba92d9cfd40749cf548b94b0ea990:r5",
+                  "a96ba92d9cfd40749cf548b94b0ea990:r6",
+                  "a96ba92d9cfd40749cf548b94b0ea990:r7"
+                ]
+              }
+            ],
+            "primary_group_id": "8c6eb92e3265b10f",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "标扣分阈值",
+                "电话实名制实名登记率未达",
+                "网络信息安全考核"
+              ],
+              "selection": [
+                {
+                  "group_id": "8c6eb92e3265b10f",
+                  "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+                  "knowledge_ids": [
+                    "24a0fd9e-a285-4230-b58c-09715016758f"
+                  ],
+                  "score": 7.8,
+                  "role": "primary",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "fbc36afd660a3d94",
+                  "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+                  "knowledge_ids": [
+                    "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+                  ],
+                  "score": 6.045,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "98ca950f3a973cd5",
+                  "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                  "knowledge_ids": [
+                    "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                  ],
+                  "score": 4.7798,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "64436f93ec45f7c0",
+                  "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+                  "knowledge_ids": [
+                    "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+                  ],
+                  "score": 2.805,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                }
+              ],
+              "top_gap": 1.755
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit",
+            "predicate:扣分"
+          ],
+          "candidate_ids": [
+            "7db8e1fbce7649ce23f37f3f"
+          ],
+          "missing_slots": [
+            "predicate:扣分"
+          ],
+          "complete": false,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "dim:ratio",
+            "unit",
+            "value"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "7db8e1fbce7649ce23f37f3f": "hit"
+            },
+            "unit": {
+              "7db8e1fbce7649ce23f37f3f": "hit"
+            },
+            "predicate:扣分": {
+              "7db8e1fbce7649ce23f37f3f": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "value",
+            "unit",
+            "predicate:扣分"
+          ],
+          "entities": [
+            "网络",
+            "信息安全",
+            "考核",
+            "电话",
+            "实名制",
+            "实名",
+            "登记",
+            "未达标",
+            "扣分",
+            "阈值",
+            "网络信息安全考核",
+            "网络信息安全"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "网络",
+          "object": "信息安全",
+          "scope": [],
+          "selector": [],
+          "predicate": "扣分",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "numeric",
+          "value_dimensions": [
+            "value"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "网络",
+            "信息安全",
+            "考核",
+            "电话",
+            "实名制",
+            "实名",
+            "登记",
+            "未达标",
+            "扣分",
+            "阈值",
+            "网络信息安全考核",
+            "网络信息安全"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "8c6eb92e3265b10f",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "knowledge_ids": [
+                "24a0fd9e-a285-4230-b58c-09715016758f"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:网络和信息安全考核要点与评分标准afd",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "9f3789df9d23de54607daa2437d31362",
+                "875abd083dde6ed96017e06805327816",
+                "a3269c83c2e8cca12e8cff399bdd07f7"
+              ],
+              "retrieval_ranks": [
+                0,
+                4,
+                5
+              ],
+              "retrieval_scores": [
+                0.9000000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+              "section": "2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.8,
+              "rejection_reasons": [],
+              "record_ids": [
+                "9f3789df9d23de54607daa2437d31362:r0",
+                "9f3789df9d23de54607daa2437d31362:r1",
+                "9f3789df9d23de54607daa2437d31362:r2",
+                "875abd083dde6ed96017e06805327816:r0",
+                "875abd083dde6ed96017e06805327816:r1",
+                "875abd083dde6ed96017e06805327816:r2",
+                "a3269c83c2e8cca12e8cff399bdd07f7:r0",
+                "a3269c83c2e8cca12e8cff399bdd07f7:r1",
+                "a3269c83c2e8cca12e8cff399bdd07f7:r2"
+              ]
+            },
+            {
+              "group_id": "fbc36afd660a3d94",
+              "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "knowledge_ids": [
+                "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司内容信息安全管理办法",
+              "document_revision": "2022",
+              "effective_date": "",
+              "version_year": 2022,
+              "passage_ids": [
+                "0c22e16442eb1f9e49b4117e19bd418e",
+                "3f20afb6b96060aa3aa159905a6bd09c",
+                "51d96237127abc07d4d0289e693241c4"
+              ],
+              "retrieval_ranks": [
+                1,
+                6,
+                7
+              ],
+              "retrieval_scores": [
+                0.6225,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+              "section": "第七章 考核管理 > 第二十一条 内容信息安全考核纳入公司网络与信息安全考 > 第二十二条 由于工作不到位导致内容信息安全事件发生或",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 6.045,
+              "rejection_reasons": [],
+              "record_ids": [
+                "0c22e16442eb1f9e49b4117e19bd418e:r0",
+                "0c22e16442eb1f9e49b4117e19bd418e:r1",
+                "0c22e16442eb1f9e49b4117e19bd418e:r2",
+                "0c22e16442eb1f9e49b4117e19bd418e:r3",
+                "3f20afb6b96060aa3aa159905a6bd09c:r0",
+                "3f20afb6b96060aa3aa159905a6bd09c:r1",
+                "3f20afb6b96060aa3aa159905a6bd09c:r2",
+                "3f20afb6b96060aa3aa159905a6bd09c:r3",
+                "3f20afb6b96060aa3aa159905a6bd09c:r4",
+                "3f20afb6b96060aa3aa159905a6bd09c:r5",
+                "3f20afb6b96060aa3aa159905a6bd09c:r6",
+                "3f20afb6b96060aa3aa159905a6bd09c:r7",
+                "3f20afb6b96060aa3aa159905a6bd09c:r8",
+                "3f20afb6b96060aa3aa159905a6bd09c:r9",
+                "51d96237127abc07d4d0289e693241c4:r0",
+                "51d96237127abc07d4d0289e693241c4:r1",
+                "51d96237127abc07d4d0289e693241c4:r2",
+                "51d96237127abc07d4d0289e693241c4:r3",
+                "51d96237127abc07d4d0289e693241c4:r4"
+              ]
+            },
+            {
+              "group_id": "98ca950f3a973cd5",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "knowledge_ids": [
+                "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+              ],
+              "organization_scope": "中国电信股份有限公司",
+              "document_family_id": "中国电信股份有限公司:于中国电信股份有限公司广西分公司内控实施细则",
+              "document_revision": "2021",
+              "effective_date": "",
+              "version_year": 2021,
+              "passage_ids": [
+                "982e81802593475c0c05aec107e05899",
+                "741deeee6b2588dd58df3f01203275a6",
+                "bf840b4f92d08019b7b61f503c40efb3"
+              ],
+              "retrieval_ranks": [
+                2,
+                8,
+                9
+              ],
+              "retrieval_scores": [
+                0.5899000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "section": "1.4落实考核 > 1.4.1各单位根 > 1.4.2各单位应",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 4.7798,
+              "rejection_reasons": [],
+              "record_ids": [
+                "982e81802593475c0c05aec107e05899:r0",
+                "982e81802593475c0c05aec107e05899:r1",
+                "982e81802593475c0c05aec107e05899:r2",
+                "982e81802593475c0c05aec107e05899:r3",
+                "982e81802593475c0c05aec107e05899:r4",
+                "741deeee6b2588dd58df3f01203275a6:r0",
+                "741deeee6b2588dd58df3f01203275a6:r1",
+                "741deeee6b2588dd58df3f01203275a6:r2",
+                "bf840b4f92d08019b7b61f503c40efb3:r0",
+                "bf840b4f92d08019b7b61f503c40efb3:r1",
+                "bf840b4f92d08019b7b61f503c40efb3:r2"
+              ]
+            },
+            {
+              "group_id": "64436f93ec45f7c0",
+              "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "knowledge_ids": [
+                "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司内容信息安全管理办法",
+              "document_revision": "2017",
+              "effective_date": "",
+              "version_year": 2017,
+              "passage_ids": [
+                "33ad4018b26554bad2fad39658ad9494",
+                "3ab5dad0564435ee3024542788e33af8",
+                "a96ba92d9cfd40749cf548b94b0ea990"
+              ],
+              "retrieval_ranks": [
+                3,
+                10,
+                11
+              ],
+              "retrieval_scores": [
+                0.20249999999999999,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5",
+              "section": "第十八条 内容信息安全监管的技术保障。区公司内容信息 > 第七章 考核管理 > 第二十条 内容信息安全考核纳入公司网络与信息安全考核",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 2.805,
+              "rejection_reasons": [],
+              "record_ids": [
+                "33ad4018b26554bad2fad39658ad9494:r0",
+                "33ad4018b26554bad2fad39658ad9494:r1",
+                "33ad4018b26554bad2fad39658ad9494:r2",
+                "33ad4018b26554bad2fad39658ad9494:r3",
+                "33ad4018b26554bad2fad39658ad9494:r4",
+                "33ad4018b26554bad2fad39658ad9494:r5",
+                "33ad4018b26554bad2fad39658ad9494:r6",
+                "3ab5dad0564435ee3024542788e33af8:r0",
+                "3ab5dad0564435ee3024542788e33af8:r1",
+                "a96ba92d9cfd40749cf548b94b0ea990:r0",
+                "a96ba92d9cfd40749cf548b94b0ea990:r1",
+                "a96ba92d9cfd40749cf548b94b0ea990:r2",
+                "a96ba92d9cfd40749cf548b94b0ea990:r3",
+                "a96ba92d9cfd40749cf548b94b0ea990:r4",
+                "a96ba92d9cfd40749cf548b94b0ea990:r5",
+                "a96ba92d9cfd40749cf548b94b0ea990:r6",
+                "a96ba92d9cfd40749cf548b94b0ea990:r7"
+              ]
+            }
+          ],
+          "primary_group_id": "8c6eb92e3265b10f",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "标扣分阈值",
+              "电话实名制实名登记率未达",
+              "网络信息安全考核"
+            ],
+            "selection": [
+              {
+                "group_id": "8c6eb92e3265b10f",
+                "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+                "knowledge_ids": [
+                  "24a0fd9e-a285-4230-b58c-09715016758f"
+                ],
+                "score": 7.8,
+                "role": "primary",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "fbc36afd660a3d94",
+                "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+                "knowledge_ids": [
+                  "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+                ],
+                "score": 6.045,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "98ca950f3a973cd5",
+                "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                "knowledge_ids": [
+                  "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                ],
+                "score": 4.7798,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "64436f93ec45f7c0",
+                "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+                "knowledge_ids": [
+                  "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+                ],
+                "score": 2.805,
+                "role": "rejected",
+                "rejection_reasons": []
+              }
+            ],
+            "top_gap": 1.755
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {},
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "7db8e1fbce7649ce23f37f3f"
+              ],
+              "passage_id": "a3269c83c2e8cca12e8cff399bdd07f7",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "text": "- 名登记率、实名登记准确率、人证一致率未达98%（合作单位包括存量业务码",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 37
+        },
+        "primary_group_id": "8c6eb92e3265b10f",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "type": "knowledge",
+              "label": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9"
+            },
+            {
+              "id": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "type": "block",
+              "label": "严等。",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "47f5804c-1c31-40ad-bac3-b99a5335a255",
+              "type": "block",
+              "label": "[第17页]",
+              "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f"
+            },
+            {
+              "id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "type": "knowledge",
+              "label": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150"
+            },
+            {
+              "id": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "type": "knowledge",
+              "label": "中电信桂-2019-370号-关于印发中国电信广西公司数据安全管理办法-试行-的通知--5fd963e8"
+            },
+            {
+              "id": "6246d57f-6fe0-4592-b172-c11822200aa9",
+              "type": "knowledge",
+              "label": "中电信桂-2019-58号-关于印发中国电信广西公司用户个人信息保护管理办法-修订-的通知--6246d57f"
+            },
+            {
+              "id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "type": "knowledge",
+              "label": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5"
+            }
+          ],
+          "edges": [
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "type": "contains"
+            },
+            {
+              "source": "47f5804c-1c31-40ad-bac3-b99a5335a255",
+              "target": "16ae95f9-4039-493d-a497-db0d7048a5d7",
+              "type": "parent"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "6246d57f-6fe0-4592-b172-c11822200aa9",
+              "type": "references"
+            },
+            {
+              "source": "24a0fd9e-a285-4230-b58c-09715016758f",
+              "target": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 7
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 0,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "24a0fd9e-a285-4230-b58c-09715016758f",
+            "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+          ],
+          "accepted_block_ids": [
+            "c25863cf-8a25-4bc9-b1f1-a1c0fc51c821",
+            "d9b9621e-e8df-4945-87b9-96cbdb67d456",
+            "8af20836-402e-4f48-a196-2e9c60774c28",
+            "2b49f4d2-ae55-4fae-84e8-53ab836bf826"
+          ],
+          "accepted_passage_ids": [
+            "9f3789df9d23de54607daa2437d31362",
+            "0c22e16442eb1f9e49b4117e19bd418e",
+            "982e81802593475c0c05aec107e05899",
+            "33ad4018b26554bad2fad39658ad9494",
+            "875abd083dde6ed96017e06805327816",
+            "a3269c83c2e8cca12e8cff399bdd07f7",
+            "3f20afb6b96060aa3aa159905a6bd09c",
+            "51d96237127abc07d4d0289e693241c4",
+            "741deeee6b2588dd58df3f01203275a6",
+            "bf840b4f92d08019b7b61f503c40efb3",
+            "3ab5dad0564435ee3024542788e33af8",
+            "a96ba92d9cfd40749cf548b94b0ea990"
+          ],
+          "adjacent_passage_ids": [
+            "875abd083dde6ed96017e06805327816",
+            "a3269c83c2e8cca12e8cff399bdd07f7",
+            "3f20afb6b96060aa3aa159905a6bd09c",
+            "51d96237127abc07d4d0289e693241c4",
+            "741deeee6b2588dd58df3f01203275a6",
+            "bf840b4f92d08019b7b61f503c40efb3",
+            "3ab5dad0564435ee3024542788e33af8",
+            "a96ba92d9cfd40749cf548b94b0ea990"
+          ],
+          "generation_knowledge_ids": [
+            "24a0fd9e-a285-4230-b58c-09715016758f",
+            "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+          ],
+          "top_score": 0.55,
+          "intent": "ordinary",
+          "adjacent_count": 8,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "b026e356cbf9bcdb112238a7"
+        },
+        "snapshot_fingerprint": "b026e356cbf9bcdb112238a7",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 29.52
+  },
+  "top_candidate_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+  "candidates": [
+    {
+      "knowledge_id": "24a0fd9e-a285-4230-b58c-09715016758f",
+      "passage_id": "9f3789df9d23de54607daa2437d31362",
+      "title": "中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-161号-中国电信广西公司关于印发2026年网络和信息安全考核要点与评分标准的通知--24a0fd9\n【章节】2.未严格落实身份信息核验要求， 存在证 > 2.身份信息核验方面， 存在证件冒用、 > （三） 宽带\n能力的日常监管，每发现一次（含通报）\n扣3分。 注1:Al换脸识别技术能力要求另行\n下发。\n注2：指部网安局印发的实名制工作\n通报（含定期通报、专项通报等）。\n同一问题首次通报不扣分，下同。 网络和信息\n安全管理部、\n市场部、数字\n化运营支撑\n中心 文艳\n— 13 — （二） 电话\n实名制 1.电话实名制基础管理： 未按要求落实电\n话实名制安全管理要求； 电话用户实名登\n记率、人证一致率未达 99%；每发现一次\n（含通报）扣 3分。\n2.未严格落实身份信息核验要求， 存在证\n件冒用、照片复用、换脸冒名入网等问题\n的，每发现一次，视情扣 5分或10分。 注：1.如单位用户、 未成年用户、 eSIM\n用户等入网流程不合规，违规网络售\n卡寄送激活、渠道混用违规开卡等网\n络渠道入网管理要求未落实，入网信\n息留存不规范，电话用户行业“一证\n多卡”限制未落实，代理渠道管理不\n严等。\n2.身份信息核验方面， 存在证件冒用、\n照片复用、换脸冒名入网等。 市场部 文艳"
+    },
+    {
+      "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+      "passage_id": "0c22e16442eb1f9e49b4117e19bd418e",
+      "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+      "score": 0.6225,
+      "final_relevance_score": 0.4225,
+      "text": "【文档】中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150\n【章节】第七章 考核管理 > 第二十一条 内容信息安全考核纳入公司网络与信息安全考 > 第二十二条 由于工作不到位导致内容信息安全事件发生或\n业务运营部门\n按照国家有关部门和区公司内容信息安全归口管理部门要求，对\n本单位内部工作人员进行内容信息安全教育，定期开展技能培训\n和考核，制定内容信息安全预案并定期组织演练，保障有关人员\n熟悉内容信息安全相关法规和企业制度要求，具备必要的管理技\n能。\n第七章 考核管理\n第二十一条 内容信息安全考核纳入公司网络与信息安全考\n核范畴，由归口管理部门负责根据业务管理部门和业务运营部门\n提交的考核工作完成情况，向公司网络和信息安全领导小组办公\n室提交相关考核结果。\n第二十二条 由于工作不到位导致内容信息安全事件发生或\n造成重大影响的有关单位及个人，公司将按照《关于印发中国电\n信广西公司网络与信息安全工作责任追究办法（修订）的通知》\n（中电信桂〔2017〕183号）和《关于印发中国电信广西公司重何世恒(全渠道运营中心)\n— 12 —大网络和信息安全事件问责办法（试行）的通知》（中电信桂\n〔2022〕245号）及相关规章制度追究责任；造成严重后果、触\n犯法律法规的，交由司法机关追究法律责任。"
+    },
+    {
+      "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+      "passage_id": "982e81802593475c0c05aec107e05899",
+      "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+      "score": 0.5899000000000001,
+      "final_relevance_score": 0.3899,
+      "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】1.4落实考核 > 1.4.1各单位根 > 1.4.2各单位应\n络和信息安\n全职责分工\n文件 1.2.1检查是否明\n确内部各部门、各\n下属单位信息安全\n职责。\n1.2.2应定期制\n定信息安全规\n划，统一规划并\n完善事前防 范、\n事中阻断、事后A 手工 单位内部规\n划文件 1.2.2检查是否开\n展信息安全规划。 维护账号(集团互联)\n— 1046 — 溯源的专业信息\n安全防护体系。\n1.3规范议事机\n制\n1.3.1把信息安\n全工作纳入重点\n工作计划和重要\n议事日程，建立\n定期议事制度。 A 手工 定期议事会\n议通知和会\n议纪要（备\n忘） 1.3.1检查是否建\n立定期议事制度并\n按要求组织开展相\n关工作。\n1.4落实考核\n1.4.1各单位根\n据上级要求结合\n实际制定本单位\n网络信息安全考\n核办法。 A 手工 本单位网络\n信息安全考\n核办法 1.4.1检查是否根\n据上级要求 形成本\n单位网络信息安全\n考核办法。\n1.4.2各单位应\n制定考核工作责\n任分解表，对网\n络信息安全考核\n应逐项明确责任\n单位。 B 手工 本单位信息\n安全考核责\n任分解表 1.4.2检查是否通\n过责任表逐项明确\n分解考核责任。"
+    },
+    {
+      "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+      "passage_id": "33ad4018b26554bad2fad39658ad9494",
+      "title": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5",
+      "score": 0.20249999999999999,
+      "final_relevance_score": 0.4225,
+      "text": "【文档】中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5\n【章节】第十八条 内容信息安全监管的技术保障。区公司内容信息 > 第七章 考核管理 > 第二十条 内容信息安全考核纳入公司网络与信息安全考核\n归口管理部门牵头， 业务管理部门配合完善内容信息安全管理制\n度和管理措施，从制度上保障各 级单位的内容信息安全管理工\n作。业务运营部门应建立健全配套内容信息安全管理制度，包括但不限于内容信息安全管理办法、违 法和不良信息处理流程、内\n容信息安全审核制度、黑名单管理制度等。\n第十八条 内容信息安全监管的技术保障。区公司内容信息\n安全归口管理部门规划建立区级内 容信息安全技术保障体系， 加\n强对违法违规内容和行为的监控和处理。 何世恒(全渠道运营中心)\n\u0001\u0001 — 11 — 第十九条 内容信息安全的技能、意识培训。业务运营部门\n按照国家有关部门和区公司内容信 息安全归口管理部门要求， 对\n本单位内部工作人员进行内容信息安全教育， 定期开展技能培训\n和考核，制定内容信息安全预案并定 期组织演练，保障有关人员\n熟悉内容信息安全相关法规和企业制度要求， 具备必要的管理技\n能。\n第七章 考核管理\n第二十条 内容信息安全考核纳入公司网络与信息安全考核\n范畴，由业务归口管理部门负责根据业务管理部门和业务运营部\n门提交的考核工作完成情况， 向信息安全统筹管理部门提交相关\n考核结果。"
+    }
+  ],
+  "search_ms": 6860.87,
+  "ask_ms": 29.52,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "lkX-AkPAN91BPH_gnF2sG2ju8LaYL4kH",
+  "search_snapshot_fingerprint": "b026e356cbf9bcdb112238a7",
+  "ask_snapshot_fingerprint": "b026e356cbf9bcdb112238a7",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "0e9c509146cc848ab4d89247"
+}

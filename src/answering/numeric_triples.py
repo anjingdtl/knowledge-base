@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Any
 
 _VALUE_RE = re.compile(
-    r"(?P<value>\d+(?:\.\d+)?)\s*(?P<unit>万元|亿|元|%|％|天|个工作日|工作日|个月|月|年|次|户|人|个|倍)",
+    r"(?P<value>\d+(?:\.\d+)?)\s*(?P<unit>万元|万|亿|元|%|％|天|个工作日|工作日|个月|月|年|次|户|人|个|倍)",
     re.IGNORECASE,
 )
 
@@ -167,7 +167,7 @@ def filter_triples_for_query(
         if t.unit == "年" and not year_intent:
             dropped.append({"triple": t.to_dict(), "reason": "year_unit_without_year_intent"})
             continue
-        if money_intent and t.unit not in ("元", "万元", "亿", "%", "％"):
+        if money_intent and t.unit not in ("元", "万元", "万", "亿", "%", "％"):
             dropped.append({"triple": t.to_dict(), "reason": "unit_not_money_for_money_intent"})
             continue
         if deadline_intent and t.unit not in ("个工作日", "工作日", "天", "日"):

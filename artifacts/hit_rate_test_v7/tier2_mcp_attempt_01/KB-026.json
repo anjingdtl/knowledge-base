@@ -1,0 +1,1961 @@
+{
+  "case": {
+    "case_id": "KB-026",
+    "category": "易混淆知识",
+    "query": "号百分公司差旅费管理办法 适用范围",
+    "expected_knowledge_ids": [
+      "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+    ],
+    "expected_title_keywords": [
+      "号百",
+      "差旅费"
+    ],
+    "required_facts": [
+      "号百分公司"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂号百〔2018〕53号；需与广西公司级差旅费办法区分"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "7f5a0c33-9746-4731-af15-a4589b32e7af",
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "passage_id": "2685a87be138d2954d21beea8438c12b",
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+          "text": "【文档】中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2\n【章节】第一条 为加强和规范公司国内差旅费管理，进一步落实中 > 第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到境内（不含\n管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，\n从严控制出差人数和天数，严格差旅费预算管理和报销审核，控\n制差旅费支出规模。\n— 3 — 三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（业财赋能中心）备案。\n实施过程中遇到的问题和建议，请及时上报区公司财务部\n（业财赋能中心）。\n区公司财务部联系人：郭柳萍，电话：18977141818\n中国电信广西公司\n2025年6月30日\n— 4 —中国电信广西公司差旅费管理办法\n(2025年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，进一步落实中\n央八项规定及其实施细则精神，推进厉行节约反对浪费，根据国\n家有关规定并结合公司实际情况，特制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业公司（以下统称“各单位”）。\n第三条 本办法所称差旅费是指工作人员临时到境内（不含\n港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿\n费、伙食补助费和市内交通费。常驻地实行属地管理，如公司组\n织架构划分与行政区划有差异的以政府行政区划为准。",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2025,
+          "section_path": "第一条 为加强和规范公司国内差旅费管理，进一步落实中 > 第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到境内（不含",
+          "block_ids": [
+            "7f5a0c33-9746-4731-af15-a4589b32e7af",
+            "379c390f-df53-4f70-acdf-f9e9287fbcbc",
+            "d3b581e0-5bea-4b1b-9a46-f542dd85c560",
+            "55d107fb-0d02-47ea-b4a3-2dd78d8141fe",
+            "5c04085e-804e-4ddb-b305-4a69847a608b",
+            "b9631ba4-10f0-4604-bafd-eab67115fff7",
+            "a9e5bbd1-c9db-4814-a135-75a488fb303a",
+            "052187a3-be8a-4c5f-b7a9-2213167c48a3",
+            "49ece79f-3b2d-4b85-9722-afacd9e1872d",
+            "0eaa94c0-14f1-418b-b4eb-6f81f6f9b5d5",
+            "244a23c9-56ad-4f17-8301-5b00db8545a2",
+            "ab44a0a5-8f12-4bf1-b8ca-cdd13cbee992",
+            "36133567-972c-48db-8d35-010a50c39bea",
+            "101df34f-dbd1-4d9e-8558-0f4579e2522e",
+            "627bf04d-5e60-460a-890a-a46db54c6d69",
+            "bc22c3eb-663d-45e5-a15c-ea309d76c497",
+            "55024979-6d86-45c7-b2e4-25cdcd17486d",
+            "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+            "c6f323eb-dfe7-403f-9f26-7bd604226644",
+            "c17cd2fd-d0bc-468d-b280-3b652a6a3ffc"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -29.219741469280677,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.7419,
+            "fts_score": 1.0,
+            "title_score": 0.6774,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.7419,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.6726,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.6726,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:差旅费管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "54db5f46-28aa-43f7-887c-357770f211aa",
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "passage_id": "5ed687afeda843ae890d0bceb6b63e4f",
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+          "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于号百分公司各部门（以下统称 “各部 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外\n张 雄，电话： 18076611106\n中国电信广西号百分公司\n2018 年12 月24 日 ÝgóZU\u0000(NTQÑè\u0000)\n— 3 — 中国电信 广西号百 分公司差 旅费管理办法\n(2018 年版 )\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，推进厉行节约\n反对浪费，根据《中国电信集团公司国内差旅费管理办法》 （中\n国电信〔 2015 〕71 号） 、 《关于调整差旅住宿费标准的通知》 （中\n国电信〔 2015 〕431 号）和 《关于印发中国电信广西公司差旅\n费管理办法（ 2018 年）的通知》 （中电信桂〔 2018 〕477 号）相\n关规定，结合中国电信股份有限公司广西号百信息服务分公司\n（以下简称号百分公司）实际，制定本办法。\n第二条 本办法适用于号百分公司各部门（以下统称 “各部\n门”） 。\n第三条 本办法所称差旅费是指工作人员临时到常驻地以外\n地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市\n内交通费。",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2018,
+          "section_path": "第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于号百分公司各部门（以下统称 “各部 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外",
+          "block_ids": [
+            "54db5f46-28aa-43f7-887c-357770f211aa",
+            "86c1b7b4-7d06-4ea9-ba03-87a0a6ed005a",
+            "90d134a2-5497-45c1-a315-bafc5d121e73",
+            "d597e90b-9da3-44c7-8ae2-4c0a5047cc99",
+            "46c9f719-20a3-4fdb-ab05-e9fe27899b52",
+            "caad19c9-564c-4762-a990-9ecb049518a3",
+            "6dc6ae15-a08e-43a6-a263-b81834352000",
+            "81ae0f35-d45f-4423-aaa4-b4b250caa97d",
+            "52568792-ba6c-40a9-a989-60fb4b9ab857",
+            "b2663928-24f0-459d-8369-68c81a17d754",
+            "6035e58f-daa1-477a-b3f8-999882e75415",
+            "3d8b789e-9384-41a9-a57c-ef11717c1f66",
+            "ef4d1054-4901-4464-8bca-148ee58edb57",
+            "230690e6-20af-4524-9292-c89af64b8c1a",
+            "4763aa93-8d39-4d2a-9c90-bc61fe2cd414"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -38.35535975533625,
+          "fts_score": 1.0,
+          "score": 0.609,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.9677,
+            "fts_score": 1.0,
+            "title_score": 0.9677,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.9677,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.829,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.829,
+          "ranking_score": 0.609,
+          "version_rank": {
+            "version_year": 2018,
+            "deprecated": false,
+            "family_key": "topic:差旅费管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": false
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "c25c7b15-bcbd-482a-af32-e5e6a700601a",
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "passage_id": "e0ae6e5c1427a5ca331f27d0403b1d05",
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+          "text": "【文档】中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d\n【章节】第一章 总 则 > 第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于区公司各部门、各市分公司以及各专\n\n二、各单位应当严格按照差旅费管理办法和厉行节约反对浪\n费的有关规定，加强出差审批管理，从严控制出差人数和天数，\n严格差旅费预算管理和报销审核，控制差旅费支出规模。\n三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（财务共享服务中心）备案。\n实施过程中遇到的问题和建议，请及时上报区公司财务部\n（财务共享服务中心）。\n区公司财务部联系人：谢萍，电话：18977140345\n中国电信广西公司\n2022年3月1日 何世恒(全渠道运营中心)\n— 4 —中国电信广西公司差旅费管理办法\n(2022年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，推进厉行节约\n反对浪费，根据《中国电信集团公司国内差旅费管理办法》（中\n国电信〔2015〕71号）和《关于调整部分城市差旅住宿费标准\n的通知》（中国电信〔2021〕347号）相关规定，结合公司实际，\n制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业分公司（以下统称“各单位”）。",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2022,
+          "section_path": "第一章 总 则 > 第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于区公司各部门、各市分公司以及各专",
+          "block_ids": [
+            "c25c7b15-bcbd-482a-af32-e5e6a700601a",
+            "9533d39a-f7ac-4151-93e6-0bd921c657e1",
+            "024ea861-6278-4eeb-a67c-76b9e71ac776",
+            "e5adc0e6-6ce6-47bf-8b7a-d468075c34c6",
+            "97279bda-f976-4919-9723-dc0ab713c88f",
+            "aac74ed1-44fa-4585-9cfd-bdc15dc9df3a",
+            "98e5601d-f34c-42c7-bce3-8477ba882fef",
+            "23bd71dd-e424-4426-96d9-00a557ffe7df",
+            "db5fe887-8d63-4ee7-9df0-10b85406a866",
+            "59276d58-4235-4460-bddf-ca472306a643",
+            "203e84d9-d758-46d2-a743-459ef16f5a82",
+            "abe29049-dbf8-45ce-b0e6-99ab694240bb",
+            "e34f8bc0-4c37-477e-81f0-89aaf76d8da2",
+            "876035b6-d1b8-4188-b201-1e7c6c1e4240",
+            "baefa897-2444-4e74-ad99-97085dc948e3",
+            "58462927-51d3-4979-ab82-8840456d7094",
+            "ce21bcd8-5d47-41a7-8681-04b148a58b4e",
+            "49c9332d-4e9e-44d0-b7f9-c8b9852e28dd"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -29.86866220177474,
+          "fts_score": 1.0,
+          "score": 0.4526,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.7419,
+            "fts_score": 1.0,
+            "title_score": 0.6774,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.7419,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.6726,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.6726,
+          "ranking_score": 0.4526,
+          "version_rank": {
+            "version_year": 2022,
+            "deprecated": false,
+            "family_key": "topic:差旅费管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": false
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "fdb29982-c4b7-4d23-afe4-afd1fc94183a",
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "passage_id": "78d25e8885bc84b0bc1c8d6694a49021",
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+          "text": "【文档】中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691\n【章节】第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外 > 第四条 出差实行审批制度，各单位要加强定任务、定人数、\n（财务共享服务中心） 。\n区公司财务部联系人：谢萍，电话： 0771-2628376\n中国电信广西公司 2018 年12 月 18 日 何世恒(全渠道运营中心)\n\u0001\u0001 — 3 — 中国电信广西公司差旅费管理办法\n(2018 年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，推进厉行节约\n反对浪费，根据《关于调整差旅住宿费标准的通知》 （中国电信\n〔2015〕431号）和《关于印发中国电信股份有限公司总部差旅\n费管理办法的通知》 （中电信厅财务〔 2015〕2号）相关规定，\n结合公司实际，制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业分公司（以下统称 “各单位 ”）。\n第三条 本办法所称差旅费是指工作人员临时到常驻地以外\n地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市\n内交通费。\n第四条 出差实行审批制度，各单位要加强定任务、定人数、\n定地点、定时间、定费用、定交通工具等关键环节管理，从严控\n制出差人数和天数； 严格差旅费预算管理， 控制差旅费支出规模；",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2018,
+          "section_path": "第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外 > 第四条 出差实行审批制度，各单位要加强定任务、定人数、",
+          "block_ids": [
+            "fdb29982-c4b7-4d23-afe4-afd1fc94183a",
+            "efdda0d9-9550-4061-b7ed-0009b6cbe023",
+            "46d6e91b-387a-40a5-a538-e43c6b6b70f3",
+            "b2929494-485b-4d95-b7a4-89ffe7cc1ce7",
+            "90e019dd-cf4f-490f-bc12-0adc7c8fd270",
+            "4e7e8668-edf5-4ec2-97b3-f57cfd6e7729",
+            "945506b8-cb31-4348-8fbe-76396efacddb",
+            "7be8a848-31fa-4ade-9e72-6a318b60a3cd",
+            "d8b72870-568b-4985-83ae-4f3610838668",
+            "e07ebc5f-a21f-4466-bd1a-5b353d637352",
+            "e3333ef0-2d4e-4f9e-ad15-d568579174f6",
+            "5d1d7dd0-a659-42ee-b4b7-6a87a3dfba51",
+            "e8ed1d5f-b65e-4b49-8804-32e1e6479e0b",
+            "2936045d-62fb-4a33-afa5-09b4b58d663d",
+            "f5637ed2-74d0-4675-b4ac-f428814f25e8",
+            "f4f87926-cfe9-436c-96c0-e26ac3bea59d",
+            "63bf6d7a-457c-4973-ab21-f2e8e9f2b641"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -29.335357116645554,
+          "fts_score": 1.0,
+          "score": 0.4526,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.7419,
+            "fts_score": 1.0,
+            "title_score": 0.6774,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.7419,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.6726,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.6726,
+          "ranking_score": 0.4526,
+          "version_rank": {
+            "version_year": 2018,
+            "deprecated": false,
+            "family_key": "topic:差旅费管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 4,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.829,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+        ],
+        "evidence_snapshot_id": "fMnTH2UPQBYQ9rL6ch7C1TfywVsLMaoy",
+        "snapshot_fingerprint": "4ed59980199729d608bbbbed",
+        "accepted_passage_ids": [
+          "2685a87be138d2954d21beea8438c12b",
+          "5ed687afeda843ae890d0bceb6b63e4f",
+          "e0ae6e5c1427a5ca331f27d0403b1d05",
+          "78d25e8885bc84b0bc1c8d6694a49021",
+          "61521a66233c3a7ee143526701cbb55a",
+          "e3776bf5b996c58b43c89e426576559b",
+          "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+          "17b318c47a5480540aa26bfe14f4edcb",
+          "5de32c12f83da357bd441a7786075d9d",
+          "a83c7a522b310f8427392335c59f7497",
+          "fa1556a04c4a2068f5e169ab7fc4c968",
+          "f1ccb310c35aa420a8d4f3787fc238a1"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 8,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 3570.08
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 区公司财务部联系人：郭柳萍，电话：18977141818中国电信广西公司2025年6月30日—4—中国电信广西公司差旅费管理办法(2025年)第一章总则第一条为加强和规范公司国内差旅费管理，进一步落实中央八项规定及其实施细则精神，推进厉行节\n- 第二条本办法适用于区公司各部门、各市分公司以及各专业公司（以下统称“各单位”）\n- 二、各单位应当落实公司“过紧日子”要求，严格按照差旅费管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "passage_id": "2685a87be138d2954d21beea8438c12b",
+            "block_id": "7f5a0c33-9746-4731-af15-a4589b32e7af",
+            "block_ids": [
+              "7f5a0c33-9746-4731-af15-a4589b32e7af",
+              "379c390f-df53-4f70-acdf-f9e9287fbcbc",
+              "d3b581e0-5bea-4b1b-9a46-f542dd85c560",
+              "55d107fb-0d02-47ea-b4a3-2dd78d8141fe",
+              "5c04085e-804e-4ddb-b305-4a69847a608b",
+              "b9631ba4-10f0-4604-bafd-eab67115fff7",
+              "a9e5bbd1-c9db-4814-a135-75a488fb303a",
+              "052187a3-be8a-4c5f-b7a9-2213167c48a3",
+              "49ece79f-3b2d-4b85-9722-afacd9e1872d",
+              "0eaa94c0-14f1-418b-b4eb-6f81f6f9b5d5",
+              "244a23c9-56ad-4f17-8301-5b00db8545a2",
+              "ab44a0a5-8f12-4bf1-b8ca-cdd13cbee992",
+              "36133567-972c-48db-8d35-010a50c39bea",
+              "101df34f-dbd1-4d9e-8558-0f4579e2522e",
+              "627bf04d-5e60-460a-890a-a46db54c6d69",
+              "bc22c3eb-663d-45e5-a15c-ea309d76c497",
+              "55024979-6d86-45c7-b2e4-25cdcd17486d",
+              "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+              "c6f323eb-dfe7-403f-9f26-7bd604226644",
+              "c17cd2fd-d0bc-468d-b280-3b652a6a3ffc"
+            ],
+            "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+            "text": "管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，\n从严控制出差人数和天数，严格差旅费预算管理和报销审核，控\n制差旅费支出规模。\n— 3 — 三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（业财赋能中心）备案。\n实施过程中遇到的问题和建议，请及时上报区公司财务部\n（业财赋能中心）。\n区公司财务部联系人：郭柳萍，电话：18977141818\n中国电信广西公司\n2025年6月30日\n— 4 —中国电信广西公司差旅费管理办法\n(2025年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，进一步落实中\n央八项规定及其实施细则精神，推进厉行节约反对浪费，根据国\n家有关规定并结合公司实际情况，特制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业公司（以下统称“各单位”）。\n第三条 本办法所称差旅费是指工作人员临时到境内（不含\n港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿\n费、伙食补助费和市内交通费。常驻地实行属地管理，如公司组\n织架构划分与行政区划有差异的以政府行政区划为准。",
+            "score": 1.0,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "passage_id": "61521a66233c3a7ee143526701cbb55a",
+            "block_id": "994cd537-0547-45b1-a5c6-b28dd7d5583b",
+            "block_ids": [
+              "994cd537-0547-45b1-a5c6-b28dd7d5583b",
+              "8d2d362b-1370-4c00-a33f-9cd4f7a6be60",
+              "7c8084b3-ab8c-437a-a5d8-72fb0ebdbcae",
+              "8cdb80c3-fa9b-43c4-bcd8-a0c592d55241",
+              "db90701c-a51c-4e22-8eb9-9ec5ec78fef7",
+              "da5d9cc4-a4c4-40d9-aca4-83732e821061",
+              "bef709d2-2182-4efe-a9f8-cc84f9716805",
+              "bf9326b1-9dd7-44a3-8d7e-d7821cd213c6",
+              "d7cbea43-90d4-4e7b-a7b8-546a03cdb24f",
+              "4c305bb8-fac0-42e3-ac05-c0aa620747f8",
+              "3f144d11-646e-4db6-a1b8-029a8f9abc43",
+              "3ac94b9b-8191-42e3-b12f-36629c62731f",
+              "575e7163-182a-4059-b390-5fc503323b10",
+              "7f5a0c33-9746-4731-af15-a4589b32e7af",
+              "379c390f-df53-4f70-acdf-f9e9287fbcbc",
+              "d3b581e0-5bea-4b1b-9a46-f542dd85c560"
+            ],
+            "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+            "text": "区外往返两天每人每天150元，区内往返两天每人每天50元。\n出差期间不再报销市内交通费（纪委办案除外）。\n（四）增加行程变更报账规定\n出差人员需按审批行程出行，因公改变行程的，需履行审批\n手续；因私改变行程的，改变行程（包括提前出发、延期返回、\n中途转道）的相关费用需自理。\n（五）取消异地调动随迁家属和搬迁家具的费用\n工作人员因组织安排异地调动工作的，随迁家属和搬迁家具\n发生的费用由调动人员自理。\n（六）明确责任\n出差人员对差旅内容及票据的真实、完整、合规性承担第一\n责任，所在部门领导对审批事项的真实性、合规性承担审批责任，\n财务人员对差旅费报销票据承担审核责任。\n二、各单位应当落实公司“过紧日子”要求，严格按照差旅费\n管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，\n从严控制出差人数和天数，严格差旅费预算管理和报销审核，控\n制差旅费支出规模。\n— 3 — 三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（业财赋能中心）备案。",
+            "score": 0.0,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "passage_id": "e3776bf5b996c58b43c89e426576559b",
+            "block_id": "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+            "block_ids": [
+              "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+              "c6f323eb-dfe7-403f-9f26-7bd604226644",
+              "c17cd2fd-d0bc-468d-b280-3b652a6a3ffc",
+              "f2d4e413-8231-4161-b0b6-654d1a5455cb",
+              "0846ed4a-9e8d-4e88-92d4-eb2929960bbe",
+              "58901d0d-63a8-4cf3-8578-9ae60d650a78",
+              "3f1e5ecc-731a-4be2-bbe7-40eff20dc2c8",
+              "bb705e6f-49d1-48a4-82ee-3e222f491957",
+              "24c8fa75-dfa5-4f74-b204-1f7402b3d834",
+              "113468cf-5784-42ee-b46b-ed6a49bd7a5c",
+              "069a254f-e106-4963-832b-ec17c9a2205c",
+              "20760cd7-67ef-4cbd-ba66-88c5fc66471e",
+              "c2c11906-8426-4006-8a09-5475ed15d258",
+              "9dc9237f-88b4-4d20-a661-193d6277f0d2",
+              "e847036c-79b8-49a8-8fbb-400e8299b9f9",
+              "bcaa8bc7-fd74-41c5-ad00-f2b6e428c4dc"
+            ],
+            "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+            "text": "业公司（以下统称“各单位”）。\n第三条 本办法所称差旅费是指工作人员临时到境内（不含\n港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿\n费、伙食补助费和市内交通费。常驻地实行属地管理，如公司组\n织架构划分与行政区划有差异的以政府行政区划为准。\n因公临时出国（境）差旅费，严格按照《中国电信集团外事\n工作管理办法（修订）》（中国电信〔2005〕542）、《因公出国（境）\n工作手册》标准执行。\n第四条 各单位应当建立健全公务出差审批制度。出差必须\n按规定报经单位有关领导批准，从严控制出差人数和天数；落实\n过紧日子要求，严格差旅费预算管理，控制差旅费支出规模；严\n禁无实质内容、无明确公务目的的差旅活动，严禁以任何名义和\n方式变相旅游，严禁异地部门间无实质内容的学习交流和考察调\n研。\n— 5 — 第五条 区公司进一步强化差旅数字化平台建设，夯实基础\n管理能力，实现差旅事项闭环管理，加强防控预警，规范差旅支\n出核算。各单位要定期开展差旅支出分析，加强节假日差旅审核\n力度。",
+            "score": 0.0,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "区公司财务部联系人：郭柳萍，电话：18977141818中国电信广西公司2025年6月30日—4—中国电信广西公司差旅费管理办法(2025年)第一章总则第一条为加强和规范公司国内差旅费管理，进一步落实中央八项规定及其实施细则精神，推进厉行节",
+            "evidence_passage_ids": [
+              "2685a87be138d2954d21beea8438c12b"
+            ],
+            "fact_type": "scope",
+            "condition": "",
+            "candidate_id": "1ce46e5bc0a1f81f895e6f60"
+          },
+          {
+            "text": "第二条本办法适用于区公司各部门、各市分公司以及各专业公司（以下统称“各单位”）",
+            "evidence_passage_ids": [
+              "2685a87be138d2954d21beea8438c12b"
+            ],
+            "fact_type": "scope",
+            "condition": "",
+            "candidate_id": "f6fb981a33a8cd8040aa2671"
+          },
+          {
+            "text": "二、各单位应当落实公司“过紧日子”要求，严格按照差旅费管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+            "evidence_passage_ids": [
+              "61521a66233c3a7ee143526701cbb55a"
+            ],
+            "fact_type": "scope",
+            "condition": "",
+            "candidate_id": "f9722e62dd3c7b45aa46de26"
+          },
+          {
+            "text": "管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+            "evidence_passage_ids": [
+              "2685a87be138d2954d21beea8438c12b"
+            ],
+            "fact_type": "scope",
+            "condition": "",
+            "candidate_id": "d260cb01d673e9227cf7b444"
+          },
+          {
+            "text": "因公临时出国（境）差旅费，严格按照《中国电信集团外事工作管理办法（修订）》（中国电信〔2005〕542）、《因公出国（境）工作手册》标准执行",
+            "evidence_passage_ids": [
+              "e3776bf5b996c58b43c89e426576559b"
+            ],
+            "fact_type": "scope",
+            "condition": "",
+            "candidate_id": "53687cf0d0d314d4a3462528"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "passage_id": "2685a87be138d2954d21beea8438c12b",
+            "block_id": "7f5a0c33-9746-4731-af15-a4589b32e7af",
+            "block_ids": [
+              "7f5a0c33-9746-4731-af15-a4589b32e7af",
+              "379c390f-df53-4f70-acdf-f9e9287fbcbc",
+              "d3b581e0-5bea-4b1b-9a46-f542dd85c560",
+              "55d107fb-0d02-47ea-b4a3-2dd78d8141fe",
+              "5c04085e-804e-4ddb-b305-4a69847a608b",
+              "b9631ba4-10f0-4604-bafd-eab67115fff7",
+              "a9e5bbd1-c9db-4814-a135-75a488fb303a",
+              "052187a3-be8a-4c5f-b7a9-2213167c48a3",
+              "49ece79f-3b2d-4b85-9722-afacd9e1872d",
+              "0eaa94c0-14f1-418b-b4eb-6f81f6f9b5d5",
+              "244a23c9-56ad-4f17-8301-5b00db8545a2",
+              "ab44a0a5-8f12-4bf1-b8ca-cdd13cbee992",
+              "36133567-972c-48db-8d35-010a50c39bea",
+              "101df34f-dbd1-4d9e-8558-0f4579e2522e",
+              "627bf04d-5e60-460a-890a-a46db54c6d69",
+              "bc22c3eb-663d-45e5-a15c-ea309d76c497",
+              "55024979-6d86-45c7-b2e4-25cdcd17486d",
+              "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+              "c6f323eb-dfe7-403f-9f26-7bd604226644",
+              "c17cd2fd-d0bc-468d-b280-3b652a6a3ffc"
+            ],
+            "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+            "path": "",
+            "text": "管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，\n从严控制出差人数和天数，严格差旅费预算管理和报销审核，控\n制差旅费支出规模。\n— 3 — 三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（业财赋能中心）备案。\n实施过程中遇到的问题和建议，请及时上报区公司财务部\n（业财赋能中心）。\n区公司财务部联系人：郭柳萍，电话：18977141818\n中国电信广西公司\n2025年6月30日\n— 4 —中国电信广西公司差旅费管理办法\n(2025年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，进一步落实中\n央八项规定及其实施细则精神，推进厉行节约反对浪费，根据国\n家有关规定并结合公司实际情况，特制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业公司（以下统称“各单位”）。\n第三条 本办法所称差旅费是指工作人员临时到境内（不含\n港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿\n费、伙食补助费和市内交通费。常驻地实行属地管理，如公司组\n织架构划分与行政区划有差异的以政府行政区划为准。",
+            "body_text": "管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，\n从严控制出差人数和天数，严格差旅费预算管理和报销审核，控\n制差旅费支出规模。\n— 3 — 三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（业财赋能中心）备案。\n实施过程中遇到的问题和建议，请及时上报区公司财务部\n（业财赋能中心）。\n区公司财务部联系人：郭柳萍，电话：18977141818\n中国电信广西公司\n2025年6月30日\n— 4 —中国电信广西公司差旅费管理办法\n(2025年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，进一步落实中\n央八项规定及其实施细则精神，推进厉行节约反对浪费，根据国\n家有关规定并结合公司实际情况，特制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业公司（以下统称“各单位”）。\n第三条 本办法所称差旅费是指工作人员临时到境内（不含\n港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿\n费、伙食补助费和市内交通费。常驻地实行属地管理，如公司组\n织架构划分与行政区划有差异的以政府行政区划为准。",
+            "score": 1.0,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "passage_id": "61521a66233c3a7ee143526701cbb55a",
+            "block_id": "994cd537-0547-45b1-a5c6-b28dd7d5583b",
+            "block_ids": [
+              "994cd537-0547-45b1-a5c6-b28dd7d5583b",
+              "8d2d362b-1370-4c00-a33f-9cd4f7a6be60",
+              "7c8084b3-ab8c-437a-a5d8-72fb0ebdbcae",
+              "8cdb80c3-fa9b-43c4-bcd8-a0c592d55241",
+              "db90701c-a51c-4e22-8eb9-9ec5ec78fef7",
+              "da5d9cc4-a4c4-40d9-aca4-83732e821061",
+              "bef709d2-2182-4efe-a9f8-cc84f9716805",
+              "bf9326b1-9dd7-44a3-8d7e-d7821cd213c6",
+              "d7cbea43-90d4-4e7b-a7b8-546a03cdb24f",
+              "4c305bb8-fac0-42e3-ac05-c0aa620747f8",
+              "3f144d11-646e-4db6-a1b8-029a8f9abc43",
+              "3ac94b9b-8191-42e3-b12f-36629c62731f",
+              "575e7163-182a-4059-b390-5fc503323b10",
+              "7f5a0c33-9746-4731-af15-a4589b32e7af",
+              "379c390f-df53-4f70-acdf-f9e9287fbcbc",
+              "d3b581e0-5bea-4b1b-9a46-f542dd85c560"
+            ],
+            "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+            "path": "",
+            "text": "区外往返两天每人每天150元，区内往返两天每人每天50元。\n出差期间不再报销市内交通费（纪委办案除外）。\n（四）增加行程变更报账规定\n出差人员需按审批行程出行，因公改变行程的，需履行审批\n手续；因私改变行程的，改变行程（包括提前出发、延期返回、\n中途转道）的相关费用需自理。\n（五）取消异地调动随迁家属和搬迁家具的费用\n工作人员因组织安排异地调动工作的，随迁家属和搬迁家具\n发生的费用由调动人员自理。\n（六）明确责任\n出差人员对差旅内容及票据的真实、完整、合规性承担第一\n责任，所在部门领导对审批事项的真实性、合规性承担审批责任，\n财务人员对差旅费报销票据承担审核责任。\n二、各单位应当落实公司“过紧日子”要求，严格按照差旅费\n管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，\n从严控制出差人数和天数，严格差旅费预算管理和报销审核，控\n制差旅费支出规模。\n— 3 — 三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（业财赋能中心）备案。",
+            "body_text": "区外往返两天每人每天150元，区内往返两天每人每天50元。\n出差期间不再报销市内交通费（纪委办案除外）。\n（四）增加行程变更报账规定\n出差人员需按审批行程出行，因公改变行程的，需履行审批\n手续；因私改变行程的，改变行程（包括提前出发、延期返回、\n中途转道）的相关费用需自理。\n（五）取消异地调动随迁家属和搬迁家具的费用\n工作人员因组织安排异地调动工作的，随迁家属和搬迁家具\n发生的费用由调动人员自理。\n（六）明确责任\n出差人员对差旅内容及票据的真实、完整、合规性承担第一\n责任，所在部门领导对审批事项的真实性、合规性承担审批责任，\n财务人员对差旅费报销票据承担审核责任。\n二、各单位应当落实公司“过紧日子”要求，严格按照差旅费\n管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，\n从严控制出差人数和天数，严格差旅费预算管理和报销审核，控\n制差旅费支出规模。\n— 3 — 三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（业财赋能中心）备案。",
+            "score": 0.0,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "passage_id": "e3776bf5b996c58b43c89e426576559b",
+            "block_id": "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+            "block_ids": [
+              "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+              "c6f323eb-dfe7-403f-9f26-7bd604226644",
+              "c17cd2fd-d0bc-468d-b280-3b652a6a3ffc",
+              "f2d4e413-8231-4161-b0b6-654d1a5455cb",
+              "0846ed4a-9e8d-4e88-92d4-eb2929960bbe",
+              "58901d0d-63a8-4cf3-8578-9ae60d650a78",
+              "3f1e5ecc-731a-4be2-bbe7-40eff20dc2c8",
+              "bb705e6f-49d1-48a4-82ee-3e222f491957",
+              "24c8fa75-dfa5-4f74-b204-1f7402b3d834",
+              "113468cf-5784-42ee-b46b-ed6a49bd7a5c",
+              "069a254f-e106-4963-832b-ec17c9a2205c",
+              "20760cd7-67ef-4cbd-ba66-88c5fc66471e",
+              "c2c11906-8426-4006-8a09-5475ed15d258",
+              "9dc9237f-88b4-4d20-a661-193d6277f0d2",
+              "e847036c-79b8-49a8-8fbb-400e8299b9f9",
+              "bcaa8bc7-fd74-41c5-ad00-f2b6e428c4dc"
+            ],
+            "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+            "path": "",
+            "text": "业公司（以下统称“各单位”）。\n第三条 本办法所称差旅费是指工作人员临时到境内（不含\n港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿\n费、伙食补助费和市内交通费。常驻地实行属地管理，如公司组\n织架构划分与行政区划有差异的以政府行政区划为准。\n因公临时出国（境）差旅费，严格按照《中国电信集团外事\n工作管理办法（修订）》（中国电信〔2005〕542）、《因公出国（境）\n工作手册》标准执行。\n第四条 各单位应当建立健全公务出差审批制度。出差必须\n按规定报经单位有关领导批准，从严控制出差人数和天数；落实\n过紧日子要求，严格差旅费预算管理，控制差旅费支出规模；严\n禁无实质内容、无明确公务目的的差旅活动，严禁以任何名义和\n方式变相旅游，严禁异地部门间无实质内容的学习交流和考察调\n研。\n— 5 — 第五条 区公司进一步强化差旅数字化平台建设，夯实基础\n管理能力，实现差旅事项闭环管理，加强防控预警，规范差旅支\n出核算。各单位要定期开展差旅支出分析，加强节假日差旅审核\n力度。",
+            "body_text": "业公司（以下统称“各单位”）。\n第三条 本办法所称差旅费是指工作人员临时到境内（不含\n港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿\n费、伙食补助费和市内交通费。常驻地实行属地管理，如公司组\n织架构划分与行政区划有差异的以政府行政区划为准。\n因公临时出国（境）差旅费，严格按照《中国电信集团外事\n工作管理办法（修订）》（中国电信〔2005〕542）、《因公出国（境）\n工作手册》标准执行。\n第四条 各单位应当建立健全公务出差审批制度。出差必须\n按规定报经单位有关领导批准，从严控制出差人数和天数；落实\n过紧日子要求，严格差旅费预算管理，控制差旅费支出规模；严\n禁无实质内容、无明确公务目的的差旅活动，严禁以任何名义和\n方式变相旅游，严禁异地部门间无实质内容的学习交流和考察调\n研。\n— 5 — 第五条 区公司进一步强化差旅数字化平台建设，夯实基础\n管理能力，实现差旅事项闭环管理，加强防控预警，规范差旅支\n出核算。各单位要定期开展差旅支出分析，加强节假日差旅审核\n力度。",
+            "score": 0.0,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.829,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 8,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "4ed59980199729d608bbbbed",
+            "snapshot_id_count": 12,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "号百分公司差旅费管理办法 适用范围"
+          },
+          "fact_plan": {
+            "raw": "号百分公司差旅费管理办法 适用范围",
+            "intents": [
+              "scope",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "scope",
+              "policy_fact",
+              "predicate:适用"
+            ],
+            "entities": [
+              "号百分公司差旅费管理办法",
+              "号百分公司差",
+              "旅费管理办法",
+              "号百分公",
+              "管理办法",
+              "号百分",
+              "理办法",
+              "适用范围"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": true,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "scope",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "号百分公司差旅费管理办法",
+            "object": "号百分公司差",
+            "scope": [],
+            "selector": [],
+            "predicate": "适用",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "scope",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "号百分公司差旅费管理办法",
+              "号百分公司差",
+              "旅费管理办法",
+              "号百分公",
+              "管理办法",
+              "号百分",
+              "理办法",
+              "适用范围"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 21,
+          "candidate_count": 5
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "区公司财务部联系人：郭柳萍，电话：18977141818中国电信广西公司2025年6月30日—4—中国电信广西公司差旅费管理办法(2025年)第一章总则第一条为加强和规范公司国内差旅费管理，进一步落实中央八项规定及其实施细则精神，推进厉行节",
+              "evidence_passage_ids": [
+                "2685a87be138d2954d21beea8438c12b"
+              ],
+              "fact_type": "scope",
+              "condition": "",
+              "candidate_id": "1ce46e5bc0a1f81f895e6f60"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第二条本办法适用于区公司各部门、各市分公司以及各专业公司（以下统称“各单位”）",
+              "evidence_passage_ids": [
+                "2685a87be138d2954d21beea8438c12b"
+              ],
+              "fact_type": "scope",
+              "condition": "",
+              "candidate_id": "f6fb981a33a8cd8040aa2671"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "二、各单位应当落实公司“过紧日子”要求，严格按照差旅费管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+              "evidence_passage_ids": [
+                "61521a66233c3a7ee143526701cbb55a"
+              ],
+              "fact_type": "scope",
+              "condition": "",
+              "candidate_id": "f9722e62dd3c7b45aa46de26"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+              "evidence_passage_ids": [
+                "2685a87be138d2954d21beea8438c12b"
+              ],
+              "fact_type": "scope",
+              "condition": "",
+              "candidate_id": "d260cb01d673e9227cf7b444"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "因公临时出国（境）差旅费，严格按照《中国电信集团外事工作管理办法（修订）》（中国电信〔2005〕542）、《因公出国（境）工作手册》标准执行",
+              "evidence_passage_ids": [
+                "e3776bf5b996c58b43c89e426576559b"
+              ],
+              "fact_type": "scope",
+              "condition": "",
+              "candidate_id": "53687cf0d0d314d4a3462528"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "号百分公司差旅费管理办法 适用范围",
+            "intents": [
+              "scope",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "scope",
+              "policy_fact",
+              "predicate:适用"
+            ],
+            "entities": [
+              "号百分公司差旅费管理办法",
+              "号百分公司差",
+              "旅费管理办法",
+              "号百分公",
+              "管理办法",
+              "号百分",
+              "理办法",
+              "适用范围"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": true,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "scope",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "号百分公司差旅费管理办法",
+            "object": "号百分公司差",
+            "scope": [],
+            "selector": [],
+            "predicate": "适用",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "scope",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "号百分公司差旅费管理办法",
+              "号百分公司差",
+              "旅费管理办法",
+              "号百分公",
+              "管理办法",
+              "号百分",
+              "理办法",
+              "适用范围"
+            ]
+          },
+          "input_count": 5,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "1ce46e5bc0a1f81f895e6f60",
+              "record_id": "2685a87be138d2954d21beea8438c12b:r3",
+              "passage_id": "2685a87be138d2954d21beea8438c12b",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "fact_kind": "scope",
+              "subject": "旅费管理办法",
+              "predicate": "适用",
+              "object": "区公司财务部联系人：郭柳萍，电话：18977141818中国电信广西公司2025年6月30日—4—中国电信广西公司差旅费管理办法(2025年)第一章总则第一条为加强和规范公司国内差旅费管理，进一步落实中央八项规定及其实施细则精神，推进厉行节",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "区公司财务部联系人：郭柳萍，电话：18977141818中国电信广西公司2025年6月30日—4—中国电信广西公司差旅费管理办法(2025年)第一章总则第一条为加强和规范公司国内差旅费管理，进一步落实中央八项规定及其实施细则精神，推进厉行节",
+              "evidence_spans": [
+                [
+                  0,
+                  156
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:差旅费管理办法",
+              "version_year": 2025,
+              "score": 22.249999999999993,
+              "unstructured_rejected": false,
+              "group_id": "a5691b64b4f00182",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "scope": "hit",
+                "policy_fact": "hit",
+                "predicate:适用": "miss",
+                "anchor:号百分公司差旅费管理办法": "miss",
+                "anchor:号百分公司差": "miss",
+                "anchor:旅费管理办法": "hit",
+                "anchor:号百分公": "miss",
+                "anchor:管理办法": "hit",
+                "anchor:号百分": "miss",
+                "anchor:理办法": "hit",
+                "anchor:适用范围": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "f6fb981a33a8cd8040aa2671",
+              "record_id": "2685a87be138d2954d21beea8438c12b:r4",
+              "passage_id": "2685a87be138d2954d21beea8438c12b",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "fact_kind": "scope",
+              "subject": "",
+              "predicate": "适用",
+              "object": "第二条本办法适用于区公司各部门、各市分公司以及各专业公司（以下统称“各单位”）",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第二条本办法适用于区公司各部门、各市分公司以及各专业公司（以下统称“各单位”）",
+              "evidence_spans": [
+                [
+                  0,
+                  40
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:差旅费管理办法",
+              "version_year": 2025,
+              "score": 6.1,
+              "unstructured_rejected": false,
+              "group_id": "a5691b64b4f00182",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "scope": "unknown",
+                "policy_fact": "hit",
+                "predicate:适用": "hit",
+                "anchor:号百分公司差旅费管理办法": "miss",
+                "anchor:号百分公司差": "miss",
+                "anchor:旅费管理办法": "miss",
+                "anchor:号百分公": "miss",
+                "anchor:管理办法": "miss",
+                "anchor:号百分": "miss",
+                "anchor:理办法": "miss",
+                "anchor:适用范围": "miss"
+              },
+              "slot_spans": {
+                "predicate:适用": [
+                  6,
+                  8
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "f9722e62dd3c7b45aa46de26",
+              "record_id": "61521a66233c3a7ee143526701cbb55a:r3",
+              "passage_id": "61521a66233c3a7ee143526701cbb55a",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "fact_kind": "scope",
+              "subject": "旅费管理办法",
+              "predicate": "适用",
+              "object": "二、各单位应当落实公司“过紧日子”要求，严格按照差旅费管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "二、各单位应当落实公司“过紧日子”要求，严格按照差旅费管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+              "evidence_spans": [
+                [
+                  79,
+                  170
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:差旅费管理办法",
+              "version_year": 2025,
+              "score": 22.249999999999993,
+              "unstructured_rejected": false,
+              "group_id": "a5691b64b4f00182",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "scope": "hit",
+                "policy_fact": "hit",
+                "predicate:适用": "miss",
+                "anchor:号百分公司差旅费管理办法": "miss",
+                "anchor:号百分公司差": "miss",
+                "anchor:旅费管理办法": "hit",
+                "anchor:号百分公": "miss",
+                "anchor:管理办法": "hit",
+                "anchor:号百分": "miss",
+                "anchor:理办法": "hit",
+                "anchor:适用范围": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "d260cb01d673e9227cf7b444",
+              "record_id": "2685a87be138d2954d21beea8438c12b:r0",
+              "passage_id": "2685a87be138d2954d21beea8438c12b",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "fact_kind": "scope",
+              "subject": "管理办法",
+              "predicate": "适用",
+              "object": "管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+              "evidence_spans": [
+                [
+                  0,
+                  64
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:差旅费管理办法",
+              "version_year": 2025,
+              "score": 14.95,
+              "unstructured_rejected": false,
+              "group_id": "a5691b64b4f00182",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "scope": "hit",
+                "policy_fact": "hit",
+                "predicate:适用": "miss",
+                "anchor:号百分公司差旅费管理办法": "miss",
+                "anchor:号百分公司差": "miss",
+                "anchor:旅费管理办法": "miss",
+                "anchor:号百分公": "miss",
+                "anchor:管理办法": "hit",
+                "anchor:号百分": "miss",
+                "anchor:理办法": "hit",
+                "anchor:适用范围": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "53687cf0d0d314d4a3462528",
+              "record_id": "e3776bf5b996c58b43c89e426576559b:r3",
+              "passage_id": "e3776bf5b996c58b43c89e426576559b",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "fact_kind": "scope",
+              "subject": "管理办法",
+              "predicate": "适用",
+              "object": "因公临时出国（境）差旅费，严格按照《中国电信集团外事工作管理办法（修订）》（中国电信〔2005〕542）、《因公出国（境）工作手册》标准执行",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "因公临时出国（境）差旅费，严格按照《中国电信集团外事工作管理办法（修订）》（中国电信〔2005〕542）、《因公出国（境）工作手册》标准执行",
+              "evidence_spans": [
+                [
+                  0,
+                  70
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:差旅费管理办法",
+              "version_year": 2025,
+              "score": 14.95,
+              "unstructured_rejected": false,
+              "group_id": "a5691b64b4f00182",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "scope": "hit",
+                "policy_fact": "hit",
+                "predicate:适用": "miss",
+                "anchor:号百分公司差旅费管理办法": "miss",
+                "anchor:号百分公司差": "miss",
+                "anchor:旅费管理办法": "miss",
+                "anchor:号百分公": "miss",
+                "anchor:管理办法": "hit",
+                "anchor:号百分": "miss",
+                "anchor:理办法": "hit",
+                "anchor:适用范围": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "scope": {
+              "1ce46e5bc0a1f81f895e6f60": "hit",
+              "f9722e62dd3c7b45aa46de26": "hit",
+              "d260cb01d673e9227cf7b444": "hit",
+              "53687cf0d0d314d4a3462528": "hit",
+              "f6fb981a33a8cd8040aa2671": "unknown"
+            },
+            "policy_fact": {
+              "1ce46e5bc0a1f81f895e6f60": "hit",
+              "f9722e62dd3c7b45aa46de26": "hit",
+              "d260cb01d673e9227cf7b444": "hit",
+              "53687cf0d0d314d4a3462528": "hit",
+              "f6fb981a33a8cd8040aa2671": "hit"
+            },
+            "predicate:适用": {
+              "1ce46e5bc0a1f81f895e6f60": "miss",
+              "f9722e62dd3c7b45aa46de26": "miss",
+              "d260cb01d673e9227cf7b444": "miss",
+              "53687cf0d0d314d4a3462528": "miss",
+              "f6fb981a33a8cd8040aa2671": "hit"
+            }
+          },
+          "primary_group_id": "a5691b64b4f00182",
+          "covered_slots": [
+            "policy_fact",
+            "predicate:适用",
+            "scope"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "a5691b64b4f00182",
+                "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+                "knowledge_ids": [
+                  "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:差旅费管理办法",
+                "document_revision": "2025",
+                "effective_date": "",
+                "version_year": 2025,
+                "passage_ids": [
+                  "2685a87be138d2954d21beea8438c12b",
+                  "61521a66233c3a7ee143526701cbb55a",
+                  "e3776bf5b996c58b43c89e426576559b"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  4,
+                  5
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+                "section": "第一条 为加强和规范公司国内差旅费管理，进一步落实中 > 第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到境内（不含",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 10.0,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "2685a87be138d2954d21beea8438c12b:r0",
+                  "2685a87be138d2954d21beea8438c12b:r1",
+                  "2685a87be138d2954d21beea8438c12b:r2",
+                  "2685a87be138d2954d21beea8438c12b:r3",
+                  "2685a87be138d2954d21beea8438c12b:r4",
+                  "2685a87be138d2954d21beea8438c12b:r5",
+                  "2685a87be138d2954d21beea8438c12b:r6",
+                  "61521a66233c3a7ee143526701cbb55a:r0",
+                  "61521a66233c3a7ee143526701cbb55a:r1",
+                  "61521a66233c3a7ee143526701cbb55a:r2",
+                  "61521a66233c3a7ee143526701cbb55a:r3",
+                  "e3776bf5b996c58b43c89e426576559b:r0",
+                  "e3776bf5b996c58b43c89e426576559b:r1",
+                  "e3776bf5b996c58b43c89e426576559b:r2",
+                  "e3776bf5b996c58b43c89e426576559b:r3",
+                  "e3776bf5b996c58b43c89e426576559b:r4",
+                  "e3776bf5b996c58b43c89e426576559b:r5",
+                  "e3776bf5b996c58b43c89e426576559b:r6",
+                  "e3776bf5b996c58b43c89e426576559b:r7",
+                  "e3776bf5b996c58b43c89e426576559b:r8",
+                  "e3776bf5b996c58b43c89e426576559b:r9"
+                ]
+              },
+              {
+                "group_id": "51c0f8c2eebeda8a",
+                "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+                "knowledge_ids": [
+                  "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+                ],
+                "organization_scope": "中国电信广西号百分公司",
+                "document_family_id": "中国电信广西号百分公司:差旅费管理办法",
+                "document_revision": "2018",
+                "effective_date": "",
+                "version_year": 2018,
+                "passage_ids": [
+                  "5ed687afeda843ae890d0bceb6b63e4f",
+                  "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+                  "17b318c47a5480540aa26bfe14f4edcb"
+                ],
+                "retrieval_ranks": [
+                  1,
+                  6,
+                  7
+                ],
+                "retrieval_scores": [
+                  0.609,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+                "section": "第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于号百分公司各部门（以下统称 “各部 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 8.018,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "5ed687afeda843ae890d0bceb6b63e4f:r0",
+                  "5ed687afeda843ae890d0bceb6b63e4f:r1",
+                  "5ed687afeda843ae890d0bceb6b63e4f:r2",
+                  "9a5b9d5b3d03ba3dea4800bc8b807b1b:r0",
+                  "9a5b9d5b3d03ba3dea4800bc8b807b1b:r1",
+                  "9a5b9d5b3d03ba3dea4800bc8b807b1b:r2",
+                  "17b318c47a5480540aa26bfe14f4edcb:r0",
+                  "17b318c47a5480540aa26bfe14f4edcb:r1"
+                ]
+              },
+              {
+                "group_id": "6dcc9e60c0b6c789",
+                "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+                "knowledge_ids": [
+                  "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:差旅费管理办法",
+                "document_revision": "2022",
+                "effective_date": "",
+                "version_year": 2022,
+                "passage_ids": [
+                  "e0ae6e5c1427a5ca331f27d0403b1d05",
+                  "5de32c12f83da357bd441a7786075d9d",
+                  "a83c7a522b310f8427392335c59f7497"
+                ],
+                "retrieval_ranks": [
+                  2,
+                  8,
+                  9
+                ],
+                "retrieval_scores": [
+                  0.4526,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+                "section": "第一章 总 则 > 第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于区公司各部门、各市分公司以及各专",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 6.5052,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "e0ae6e5c1427a5ca331f27d0403b1d05:r0",
+                  "e0ae6e5c1427a5ca331f27d0403b1d05:r1",
+                  "e0ae6e5c1427a5ca331f27d0403b1d05:r2",
+                  "e0ae6e5c1427a5ca331f27d0403b1d05:r3",
+                  "e0ae6e5c1427a5ca331f27d0403b1d05:r4",
+                  "5de32c12f83da357bd441a7786075d9d:r0",
+                  "5de32c12f83da357bd441a7786075d9d:r1",
+                  "5de32c12f83da357bd441a7786075d9d:r2",
+                  "5de32c12f83da357bd441a7786075d9d:r3",
+                  "a83c7a522b310f8427392335c59f7497:r0",
+                  "a83c7a522b310f8427392335c59f7497:r1",
+                  "a83c7a522b310f8427392335c59f7497:r2"
+                ]
+              },
+              {
+                "group_id": "93b897fa4a07cf31",
+                "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+                "knowledge_ids": [
+                  "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:差旅费管理办法",
+                "document_revision": "2018",
+                "effective_date": "",
+                "version_year": 2018,
+                "passage_ids": [
+                  "78d25e8885bc84b0bc1c8d6694a49021",
+                  "fa1556a04c4a2068f5e169ab7fc4c968",
+                  "f1ccb310c35aa420a8d4f3787fc238a1"
+                ],
+                "retrieval_ranks": [
+                  3,
+                  10,
+                  11
+                ],
+                "retrieval_scores": [
+                  0.4526,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+                "section": "第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外 > 第四条 出差实行审批制度，各单位要加强定任务、定人数、",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 5.3052,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "78d25e8885bc84b0bc1c8d6694a49021:r0",
+                  "78d25e8885bc84b0bc1c8d6694a49021:r1",
+                  "78d25e8885bc84b0bc1c8d6694a49021:r2",
+                  "78d25e8885bc84b0bc1c8d6694a49021:r3",
+                  "78d25e8885bc84b0bc1c8d6694a49021:r4",
+                  "78d25e8885bc84b0bc1c8d6694a49021:r5",
+                  "fa1556a04c4a2068f5e169ab7fc4c968:r0",
+                  "fa1556a04c4a2068f5e169ab7fc4c968:r1",
+                  "fa1556a04c4a2068f5e169ab7fc4c968:r2",
+                  "f1ccb310c35aa420a8d4f3787fc238a1:r0",
+                  "f1ccb310c35aa420a8d4f3787fc238a1:r1"
+                ]
+              }
+            ],
+            "primary_group_id": "a5691b64b4f00182",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "号百分公司差旅费管理办法",
+                "适用范围"
+              ],
+              "selection": [
+                {
+                  "group_id": "a5691b64b4f00182",
+                  "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+                  "knowledge_ids": [
+                    "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+                  ],
+                  "score": 10.0,
+                  "role": "primary",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "51c0f8c2eebeda8a",
+                  "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+                  "knowledge_ids": [
+                    "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+                  ],
+                  "score": 8.018,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "6dcc9e60c0b6c789",
+                  "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+                  "knowledge_ids": [
+                    "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+                  ],
+                  "score": 6.5052,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "93b897fa4a07cf31",
+                  "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+                  "knowledge_ids": [
+                    "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+                  ],
+                  "score": 5.3052,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                }
+              ],
+              "top_gap": 1.982
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "scope",
+            "policy_fact",
+            "predicate:适用"
+          ],
+          "candidate_ids": [
+            "1ce46e5bc0a1f81f895e6f60",
+            "f6fb981a33a8cd8040aa2671",
+            "f9722e62dd3c7b45aa46de26",
+            "d260cb01d673e9227cf7b444",
+            "53687cf0d0d314d4a3462528"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "scope",
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact",
+            "predicate:适用",
+            "scope"
+          ],
+          "coverage_matrix": {
+            "scope": {
+              "1ce46e5bc0a1f81f895e6f60": "hit",
+              "f9722e62dd3c7b45aa46de26": "hit",
+              "d260cb01d673e9227cf7b444": "hit",
+              "53687cf0d0d314d4a3462528": "hit",
+              "f6fb981a33a8cd8040aa2671": "unknown"
+            },
+            "policy_fact": {
+              "1ce46e5bc0a1f81f895e6f60": "hit",
+              "f9722e62dd3c7b45aa46de26": "hit",
+              "d260cb01d673e9227cf7b444": "hit",
+              "53687cf0d0d314d4a3462528": "hit",
+              "f6fb981a33a8cd8040aa2671": "hit"
+            },
+            "predicate:适用": {
+              "1ce46e5bc0a1f81f895e6f60": "miss",
+              "f9722e62dd3c7b45aa46de26": "miss",
+              "d260cb01d673e9227cf7b444": "miss",
+              "53687cf0d0d314d4a3462528": "miss",
+              "f6fb981a33a8cd8040aa2671": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "号百分公司差旅费管理办法 适用范围",
+          "intents": [
+            "scope",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "scope",
+            "policy_fact",
+            "predicate:适用"
+          ],
+          "entities": [
+            "号百分公司差旅费管理办法",
+            "号百分公司差",
+            "旅费管理办法",
+            "号百分公",
+            "管理办法",
+            "号百分",
+            "理办法",
+            "适用范围"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": true,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "scope",
+            "policy",
+            "prohibition"
+          ],
+          "subject": "号百分公司差旅费管理办法",
+          "object": "号百分公司差",
+          "scope": [],
+          "selector": [],
+          "predicate": "适用",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "scope",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "号百分公司差旅费管理办法",
+            "号百分公司差",
+            "旅费管理办法",
+            "号百分公",
+            "管理办法",
+            "号百分",
+            "理办法",
+            "适用范围"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "a5691b64b4f00182",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "knowledge_ids": [
+                "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:差旅费管理办法",
+              "document_revision": "2025",
+              "effective_date": "",
+              "version_year": 2025,
+              "passage_ids": [
+                "2685a87be138d2954d21beea8438c12b",
+                "61521a66233c3a7ee143526701cbb55a",
+                "e3776bf5b996c58b43c89e426576559b"
+              ],
+              "retrieval_ranks": [
+                0,
+                4,
+                5
+              ],
+              "retrieval_scores": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+              "section": "第一条 为加强和规范公司国内差旅费管理，进一步落实中 > 第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到境内（不含",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 10.0,
+              "rejection_reasons": [],
+              "record_ids": [
+                "2685a87be138d2954d21beea8438c12b:r0",
+                "2685a87be138d2954d21beea8438c12b:r1",
+                "2685a87be138d2954d21beea8438c12b:r2",
+                "2685a87be138d2954d21beea8438c12b:r3",
+                "2685a87be138d2954d21beea8438c12b:r4",
+                "2685a87be138d2954d21beea8438c12b:r5",
+                "2685a87be138d2954d21beea8438c12b:r6",
+                "61521a66233c3a7ee143526701cbb55a:r0",
+                "61521a66233c3a7ee143526701cbb55a:r1",
+                "61521a66233c3a7ee143526701cbb55a:r2",
+                "61521a66233c3a7ee143526701cbb55a:r3",
+                "e3776bf5b996c58b43c89e426576559b:r0",
+                "e3776bf5b996c58b43c89e426576559b:r1",
+                "e3776bf5b996c58b43c89e426576559b:r2",
+                "e3776bf5b996c58b43c89e426576559b:r3",
+                "e3776bf5b996c58b43c89e426576559b:r4",
+                "e3776bf5b996c58b43c89e426576559b:r5",
+                "e3776bf5b996c58b43c89e426576559b:r6",
+                "e3776bf5b996c58b43c89e426576559b:r7",
+                "e3776bf5b996c58b43c89e426576559b:r8",
+                "e3776bf5b996c58b43c89e426576559b:r9"
+              ]
+            },
+            {
+              "group_id": "51c0f8c2eebeda8a",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "knowledge_ids": [
+                "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+              ],
+              "organization_scope": "中国电信广西号百分公司",
+              "document_family_id": "中国电信广西号百分公司:差旅费管理办法",
+              "document_revision": "2018",
+              "effective_date": "",
+              "version_year": 2018,
+              "passage_ids": [
+                "5ed687afeda843ae890d0bceb6b63e4f",
+                "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+                "17b318c47a5480540aa26bfe14f4edcb"
+              ],
+              "retrieval_ranks": [
+                1,
+                6,
+                7
+              ],
+              "retrieval_scores": [
+                0.609,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+              "section": "第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于号百分公司各部门（以下统称 “各部 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 8.018,
+              "rejection_reasons": [],
+              "record_ids": [
+                "5ed687afeda843ae890d0bceb6b63e4f:r0",
+                "5ed687afeda843ae890d0bceb6b63e4f:r1",
+                "5ed687afeda843ae890d0bceb6b63e4f:r2",
+                "9a5b9d5b3d03ba3dea4800bc8b807b1b:r0",
+                "9a5b9d5b3d03ba3dea4800bc8b807b1b:r1",
+                "9a5b9d5b3d03ba3dea4800bc8b807b1b:r2",
+                "17b318c47a5480540aa26bfe14f4edcb:r0",
+                "17b318c47a5480540aa26bfe14f4edcb:r1"
+              ]
+            },
+            {
+              "group_id": "6dcc9e60c0b6c789",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "knowledge_ids": [
+                "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:差旅费管理办法",
+              "document_revision": "2022",
+              "effective_date": "",
+              "version_year": 2022,
+              "passage_ids": [
+                "e0ae6e5c1427a5ca331f27d0403b1d05",
+                "5de32c12f83da357bd441a7786075d9d",
+                "a83c7a522b310f8427392335c59f7497"
+              ],
+              "retrieval_ranks": [
+                2,
+                8,
+                9
+              ],
+              "retrieval_scores": [
+                0.4526,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+              "section": "第一章 总 则 > 第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于区公司各部门、各市分公司以及各专",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 6.5052,
+              "rejection_reasons": [],
+              "record_ids": [
+                "e0ae6e5c1427a5ca331f27d0403b1d05:r0",
+                "e0ae6e5c1427a5ca331f27d0403b1d05:r1",
+                "e0ae6e5c1427a5ca331f27d0403b1d05:r2",
+                "e0ae6e5c1427a5ca331f27d0403b1d05:r3",
+                "e0ae6e5c1427a5ca331f27d0403b1d05:r4",
+                "5de32c12f83da357bd441a7786075d9d:r0",
+                "5de32c12f83da357bd441a7786075d9d:r1",
+                "5de32c12f83da357bd441a7786075d9d:r2",
+                "5de32c12f83da357bd441a7786075d9d:r3",
+                "a83c7a522b310f8427392335c59f7497:r0",
+                "a83c7a522b310f8427392335c59f7497:r1",
+                "a83c7a522b310f8427392335c59f7497:r2"
+              ]
+            },
+            {
+              "group_id": "93b897fa4a07cf31",
+              "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+              "knowledge_ids": [
+                "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:差旅费管理办法",
+              "document_revision": "2018",
+              "effective_date": "",
+              "version_year": 2018,
+              "passage_ids": [
+                "78d25e8885bc84b0bc1c8d6694a49021",
+                "fa1556a04c4a2068f5e169ab7fc4c968",
+                "f1ccb310c35aa420a8d4f3787fc238a1"
+              ],
+              "retrieval_ranks": [
+                3,
+                10,
+                11
+              ],
+              "retrieval_scores": [
+                0.4526,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+              "section": "第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外 > 第四条 出差实行审批制度，各单位要加强定任务、定人数、",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 5.3052,
+              "rejection_reasons": [],
+              "record_ids": [
+                "78d25e8885bc84b0bc1c8d6694a49021:r0",
+                "78d25e8885bc84b0bc1c8d6694a49021:r1",
+                "78d25e8885bc84b0bc1c8d6694a49021:r2",
+                "78d25e8885bc84b0bc1c8d6694a49021:r3",
+                "78d25e8885bc84b0bc1c8d6694a49021:r4",
+                "78d25e8885bc84b0bc1c8d6694a49021:r5",
+                "fa1556a04c4a2068f5e169ab7fc4c968:r0",
+                "fa1556a04c4a2068f5e169ab7fc4c968:r1",
+                "fa1556a04c4a2068f5e169ab7fc4c968:r2",
+                "f1ccb310c35aa420a8d4f3787fc238a1:r0",
+                "f1ccb310c35aa420a8d4f3787fc238a1:r1"
+              ]
+            }
+          ],
+          "primary_group_id": "a5691b64b4f00182",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "号百分公司差旅费管理办法",
+              "适用范围"
+            ],
+            "selection": [
+              {
+                "group_id": "a5691b64b4f00182",
+                "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+                "knowledge_ids": [
+                  "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+                ],
+                "score": 10.0,
+                "role": "primary",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "51c0f8c2eebeda8a",
+                "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+                "knowledge_ids": [
+                  "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+                ],
+                "score": 8.018,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "6dcc9e60c0b6c789",
+                "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+                "knowledge_ids": [
+                  "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+                ],
+                "score": 6.5052,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "93b897fa4a07cf31",
+                "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+                "knowledge_ids": [
+                  "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+                ],
+                "score": 5.3052,
+                "role": "rejected",
+                "rejection_reasons": []
+              }
+            ],
+            "top_gap": 1.982
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "旅费管理办法",
+              "管理办法"
+            ],
+            "predicate:适用": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "1ce46e5bc0a1f81f895e6f60"
+              ],
+              "passage_id": "2685a87be138d2954d21beea8438c12b",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "text": "- 区公司财务部联系人：郭柳萍，电话：18977141818中国电信广西公司2025年6月30日—4—中国电信广西公司差旅费管理办法(2025年)第一章总则第一条为加强和规范公司国内差旅费管理，进一步落实中央八项规定及其实施细则精神，推进厉行节",
+              "fact_kind": "scope"
+            },
+            {
+              "rendered_candidate_ids": [
+                "f6fb981a33a8cd8040aa2671"
+              ],
+              "passage_id": "2685a87be138d2954d21beea8438c12b",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "text": "- 第二条本办法适用于区公司各部门、各市分公司以及各专业公司（以下统称“各单位”）",
+              "fact_kind": "scope"
+            },
+            {
+              "rendered_candidate_ids": [
+                "f9722e62dd3c7b45aa46de26"
+              ],
+              "passage_id": "61521a66233c3a7ee143526701cbb55a",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "text": "- 二、各单位应当落实公司“过紧日子”要求，严格按照差旅费管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，从严控制出差人数和天数，严格差旅费预算管理和报销审核，控制差旅费支出规模",
+              "fact_kind": "scope"
+            }
+          ],
+          "answer_len": 258
+        },
+        "primary_group_id": "a5691b64b4f00182",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "type": "knowledge",
+              "label": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2"
+            },
+            {
+              "id": "7f5a0c33-9746-4731-af15-a4589b32e7af",
+              "type": "block",
+              "label": "制差旅费支出规模。",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+            },
+            {
+              "id": "0440a995-ce99-43e1-aeb0-66164ab9b939",
+              "type": "block",
+              "label": "[第2页]",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+            },
+            {
+              "id": "994cd537-0547-45b1-a5c6-b28dd7d5583b",
+              "type": "block",
+              "label": "出差人员需按审批行程出行，因公改变行程的，需履行审批",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+            },
+            {
+              "id": "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+              "type": "block",
+              "label": "港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+            },
+            {
+              "id": "ebcd204f-8772-4175-a78a-5dbf7be99c38",
+              "type": "block",
+              "label": "[第4页]",
+              "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+            }
+          ],
+          "edges": [
+            {
+              "source": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "target": "7f5a0c33-9746-4731-af15-a4589b32e7af",
+              "type": "contains"
+            },
+            {
+              "source": "0440a995-ce99-43e1-aeb0-66164ab9b939",
+              "target": "7f5a0c33-9746-4731-af15-a4589b32e7af",
+              "type": "parent"
+            },
+            {
+              "source": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "target": "994cd537-0547-45b1-a5c6-b28dd7d5583b",
+              "type": "contains"
+            },
+            {
+              "source": "0440a995-ce99-43e1-aeb0-66164ab9b939",
+              "target": "994cd537-0547-45b1-a5c6-b28dd7d5583b",
+              "type": "parent"
+            },
+            {
+              "source": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+              "target": "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+              "type": "contains"
+            },
+            {
+              "source": "ebcd204f-8772-4175-a78a-5dbf7be99c38",
+              "target": "f16d6d66-2051-42c5-a4d9-98ca2d2589eb",
+              "type": "parent"
+            }
+          ],
+          "truncated": false,
+          "node_count": 6
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 2,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+          ],
+          "accepted_block_ids": [
+            "7f5a0c33-9746-4731-af15-a4589b32e7af",
+            "54db5f46-28aa-43f7-887c-357770f211aa",
+            "c25c7b15-bcbd-482a-af32-e5e6a700601a",
+            "fdb29982-c4b7-4d23-afe4-afd1fc94183a"
+          ],
+          "accepted_passage_ids": [
+            "2685a87be138d2954d21beea8438c12b",
+            "5ed687afeda843ae890d0bceb6b63e4f",
+            "e0ae6e5c1427a5ca331f27d0403b1d05",
+            "78d25e8885bc84b0bc1c8d6694a49021",
+            "61521a66233c3a7ee143526701cbb55a",
+            "e3776bf5b996c58b43c89e426576559b",
+            "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+            "17b318c47a5480540aa26bfe14f4edcb",
+            "5de32c12f83da357bd441a7786075d9d",
+            "a83c7a522b310f8427392335c59f7497",
+            "fa1556a04c4a2068f5e169ab7fc4c968",
+            "f1ccb310c35aa420a8d4f3787fc238a1"
+          ],
+          "adjacent_passage_ids": [
+            "61521a66233c3a7ee143526701cbb55a",
+            "e3776bf5b996c58b43c89e426576559b",
+            "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+            "17b318c47a5480540aa26bfe14f4edcb",
+            "5de32c12f83da357bd441a7786075d9d",
+            "a83c7a522b310f8427392335c59f7497",
+            "fa1556a04c4a2068f5e169ab7fc4c968",
+            "f1ccb310c35aa420a8d4f3787fc238a1"
+          ],
+          "generation_knowledge_ids": [
+            "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+            "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+          ],
+          "top_score": 0.829,
+          "intent": "ordinary",
+          "adjacent_count": 8,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "4ed59980199729d608bbbbed"
+        },
+        "snapshot_fingerprint": "4ed59980199729d608bbbbed",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 3,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 29.03
+  },
+  "top_candidate_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+  "candidates": [
+    {
+      "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+      "passage_id": "2685a87be138d2954d21beea8438c12b",
+      "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+      "score": 1.0,
+      "final_relevance_score": 0.6726,
+      "text": "【文档】中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2\n【章节】第一条 为加强和规范公司国内差旅费管理，进一步落实中 > 第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到境内（不含\n管理办法和厉行节约反对浪费的有关规定，加强出差审批管理，\n从严控制出差人数和天数，严格差旅费预算管理和报销审核，控\n制差旅费支出规模。\n— 3 — 三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（业财赋能中心）备案。\n实施过程中遇到的问题和建议，请及时上报区公司财务部\n（业财赋能中心）。\n区公司财务部联系人：郭柳萍，电话：18977141818\n中国电信广西公司\n2025年6月30日\n— 4 —中国电信广西公司差旅费管理办法\n(2025年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，进一步落实中\n央八项规定及其实施细则精神，推进厉行节约反对浪费，根据国\n家有关规定并结合公司实际情况，特制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业公司（以下统称“各单位”）。\n第三条 本办法所称差旅费是指工作人员临时到境内（不含\n港澳台）常驻地以外地区公务出差所发生的城市间交通费、住宿\n费、伙食补助费和市内交通费。常驻地实行属地管理，如公司组\n织架构划分与行政区划有差异的以政府行政区划为准。"
+    },
+    {
+      "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+      "passage_id": "5ed687afeda843ae890d0bceb6b63e4f",
+      "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+      "score": 0.609,
+      "final_relevance_score": 0.829,
+      "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于号百分公司各部门（以下统称 “各部 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外\n张 雄，电话： 18076611106\n中国电信广西号百分公司\n2018 年12 月24 日 ÝgóZU\u0000(NTQÑè\u0000)\n— 3 — 中国电信 广西号百 分公司差 旅费管理办法\n(2018 年版 )\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，推进厉行节约\n反对浪费，根据《中国电信集团公司国内差旅费管理办法》 （中\n国电信〔 2015 〕71 号） 、 《关于调整差旅住宿费标准的通知》 （中\n国电信〔 2015 〕431 号）和 《关于印发中国电信广西公司差旅\n费管理办法（ 2018 年）的通知》 （中电信桂〔 2018 〕477 号）相\n关规定，结合中国电信股份有限公司广西号百信息服务分公司\n（以下简称号百分公司）实际，制定本办法。\n第二条 本办法适用于号百分公司各部门（以下统称 “各部\n门”） 。\n第三条 本办法所称差旅费是指工作人员临时到常驻地以外\n地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市\n内交通费。"
+    },
+    {
+      "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+      "passage_id": "e0ae6e5c1427a5ca331f27d0403b1d05",
+      "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+      "score": 0.4526,
+      "final_relevance_score": 0.6726,
+      "text": "【文档】中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d\n【章节】第一章 总 则 > 第一条 为加强和规范公司国内差旅费管理，推进厉行节约 > 第二条 本办法适用于区公司各部门、各市分公司以及各专\n\n二、各单位应当严格按照差旅费管理办法和厉行节约反对浪\n费的有关规定，加强出差审批管理，从严控制出差人数和天数，\n严格差旅费预算管理和报销审核，控制差旅费支出规模。\n三、各单位应在不高于区公司标准的原则下制定本单位的差\n旅费标准，并报区公司财务部（财务共享服务中心）备案。\n实施过程中遇到的问题和建议，请及时上报区公司财务部\n（财务共享服务中心）。\n区公司财务部联系人：谢萍，电话：18977140345\n中国电信广西公司\n2022年3月1日 何世恒(全渠道运营中心)\n— 4 —中国电信广西公司差旅费管理办法\n(2022年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，推进厉行节约\n反对浪费，根据《中国电信集团公司国内差旅费管理办法》（中\n国电信〔2015〕71号）和《关于调整部分城市差旅住宿费标准\n的通知》（中国电信〔2021〕347号）相关规定，结合公司实际，\n制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业分公司（以下统称“各单位”）。"
+    },
+    {
+      "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+      "passage_id": "78d25e8885bc84b0bc1c8d6694a49021",
+      "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+      "score": 0.4526,
+      "final_relevance_score": 0.6726,
+      "text": "【文档】中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691\n【章节】第二条 本办法适用于区公司各部门、各市分公司以及各专 > 第三条 本办法所称差旅费是指工作人员临时到常驻地以外 > 第四条 出差实行审批制度，各单位要加强定任务、定人数、\n（财务共享服务中心） 。\n区公司财务部联系人：谢萍，电话： 0771-2628376\n中国电信广西公司 2018 年12 月 18 日 何世恒(全渠道运营中心)\n\u0001\u0001 — 3 — 中国电信广西公司差旅费管理办法\n(2018 年)\n第一章 总 则\n第一条 为加强和规范公司国内差旅费管理，推进厉行节约\n反对浪费，根据《关于调整差旅住宿费标准的通知》 （中国电信\n〔2015〕431号）和《关于印发中国电信股份有限公司总部差旅\n费管理办法的通知》 （中电信厅财务〔 2015〕2号）相关规定，\n结合公司实际，制定本办法。\n第二条 本办法适用于区公司各部门、各市分公司以及各专\n业分公司（以下统称 “各单位 ”）。\n第三条 本办法所称差旅费是指工作人员临时到常驻地以外\n地区公务出差所发生的城市间交通费、住宿费、伙食补助费和市\n内交通费。\n第四条 出差实行审批制度，各单位要加强定任务、定人数、\n定地点、定时间、定费用、定交通工具等关键环节管理，从严控\n制出差人数和天数； 严格差旅费预算管理， 控制差旅费支出规模；"
+    }
+  ],
+  "search_ms": 3570.08,
+  "ask_ms": 29.03,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "fMnTH2UPQBYQ9rL6ch7C1TfywVsLMaoy",
+  "search_snapshot_fingerprint": "4ed59980199729d608bbbbed",
+  "ask_snapshot_fingerprint": "4ed59980199729d608bbbbed",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "da1ad49053192fa081442077"
+}

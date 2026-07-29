@@ -207,33 +207,21 @@ def ground_claims(
         if not ok:
             continue
 
-        # Only exclusive typed conditions gate drafts (not scope/selector).
-        exclusive = {"涉诈", "涉骚扰", "II类", "III类", "I类", "区外", "区内"}
-        if conditions and d.condition and d.condition in exclusive and d.condition not in conditions:
-            # Allow class limits when query asked for account limits without naming class.
-            if not (
-                d.condition in ("I类", "II类", "III类")
-                and re.search(r"年付款|支付账户|账户余额", question or "")
-            ):
+        # Only query-stated conditions gate drafts (not scope/selector).  Do
+        # not keep a domain-specific list of condition labels here.
+        if conditions and d.condition and d.condition not in conditions:
+            audit.append({
+                "claim": d.to_dict(),
+                "reason": "condition_not_in_query",
+            })
+            continue
+        if conditions:
+            if not any(c in d.text for c in conditions):
                 audit.append({
                     "claim": d.to_dict(),
-                    "reason": "condition_not_in_query",
+                    "reason": "condition_not_grounded_in_claim",
                 })
                 continue
-        if conditions:
-            other = [c for c in exclusive if c in d.text and c not in conditions]
-            # Multi-class account answers may mention both II/III even if query only said 个人.
-            if other and not any(c in d.text for c in conditions):
-                if not (
-                    set(other) <= {"I类", "II类", "III类"}
-                    and re.search(r"年付款|支付账户|账户余额", question or "")
-                ):
-                    audit.append({
-                        "claim": d.to_dict(),
-                        "reason": "exclusive_condition_mismatch",
-                        "other": other,
-                    })
-                    continue
         kept.append(d)
         audit.append({"claim": d.to_dict(), "reason": "kept"})
     return kept, audit
@@ -604,6 +592,22 @@ def structured_answer_from_evidence(
     if not answer:
         answer = render_short_answer(kept)
 
+    # A version/current query asks for the identity of the applicable source,
+    # not just one of its clauses.  Prefix the already-accepted document title
+    # so the year/reference number remains grounded and auditable.
+    if plan.wants_version and answer:
+        primary_title = next(
+            (
+                str(e.title or "").strip()
+                for e in evidence
+                if (not group_kids or str(e.knowledge_id or "") in group_kids)
+                and str(e.title or "").strip()
+            ),
+            "",
+        )
+        if primary_title and primary_title not in answer:
+            answer = f"- 依据文件：{primary_title}\n{answer}"
+
     allowed_nums = {
         re.sub(r"\s+", "", f"{c.value}{c.unit}")
         for c in selected
@@ -641,8 +645,7 @@ def structured_answer_from_evidence(
             s for s in (render_validation.get("missing_slots") or [])
             if s in (plan.conditions or [])
             or s.startswith("dim:")
-            or s in ("polarity_negative", "policy_anchor", "version")
-            or s.startswith("predicate:")
+            or s in ("polarity_negative", "version")
             or s.startswith("value:")
         ]
         if hard_missing and plan.wants_policy and not plan.wants_numeric:

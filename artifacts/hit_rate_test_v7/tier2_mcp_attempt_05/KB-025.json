@@ -1,0 +1,3434 @@
+{
+  "case": {
+    "case_id": "KB-025",
+    "category": "跨文档综合",
+    "query": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+    "expected_knowledge_ids": [
+      "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+    ],
+    "expected_title_keywords": [
+      "重要决策",
+      "法律合规审核"
+    ],
+    "required_facts": [
+      "法律合规部"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕505号第八条；归口=区公司法律合规部"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第六章 附则 > 第二十六条 本办法由区公司法律合规部负责解释。 > 第二十七条 本部分自印发之日起施行，过去规定与本办法\n项的进展情况，根据情况变化及时调整法律意见。同时对法律合\n规审核情况进行经验总结，提供给相关部门和人员作为参考。\n第二十二条 对于需由外聘律师进行的法律合规审核，应通\n过本单位法律部门统筹安排，外聘律师出具的法律意见事先经法\n律部门审核后，反馈需求部门。\n第二十三条 法律部门应做好法律合规审核的工作记录和\n档案保管工作。\n第五章 责任追究\n第二十四条 法律部门在法律审核工作中出现重大失误，给\n公司造成损失的，按照有关规定追究部门和相关人员的责任。\n第二十五条 各单位未按照国家有关规定建立健全法律监\n督机制，经办部门对按本办法规定应当法律合规审核重大决策事\n项未及时送审，导致程序上违规决策的，法律部门应给予风险提\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "f38d4e88e9371ceabe2566a6973e3166",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "source_version": "2025",
+          "section_path": "第六章 附则 > 第二十六条 本办法由区公司法律合规部负责解释。 > 第二十七条 本部分自印发之日起施行，过去规定与本办法",
+          "block_ids": [
+            "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+            "52107990-f8d1-44c7-94e2-8b0681f02a66",
+            "42062598-04c0-4fd3-8e6d-b1414259073a",
+            "ad25547e-418a-40f2-85ad-eb3d24106eaf",
+            "3c8239cd-6792-4f61-a751-f0bfb2c18e60",
+            "7770b2e8-a290-4d25-84b5-c66ae4632ef3",
+            "7539c619-5771-4c99-a37f-a79a8acdf556",
+            "4ad542ee-8c76-4826-be07-7bc752468788",
+            "53c79866-2e6e-49e8-afc8-26b5524a5500",
+            "d48c547b-030c-453f-ad0b-5939903fffc7",
+            "69fd967d-381e-4bee-900f-f08b1c857dfc",
+            "31027df6-8509-46ee-b010-4aeb60142120",
+            "18a0b879-f0dd-40a1-9d5a-e43e25aac191",
+            "fe5c4213-b2a2-49fa-972a-f13862fec232",
+            "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+            "1a563d2b-0509-4b6c-83c0-8361de2b2600"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+              "order_idx": 137,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "52107990-f8d1-44c7-94e2-8b0681f02a66",
+              "order_idx": 138,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "42062598-04c0-4fd3-8e6d-b1414259073a",
+              "order_idx": 139,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "ad25547e-418a-40f2-85ad-eb3d24106eaf",
+              "order_idx": 140,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "3c8239cd-6792-4f61-a751-f0bfb2c18e60",
+              "order_idx": 141,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "7770b2e8-a290-4d25-84b5-c66ae4632ef3",
+              "order_idx": 142,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "7539c619-5771-4c99-a37f-a79a8acdf556",
+              "order_idx": 143,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "4ad542ee-8c76-4826-be07-7bc752468788",
+              "order_idx": 144,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "53c79866-2e6e-49e8-afc8-26b5524a5500",
+              "order_idx": 145,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "d48c547b-030c-453f-ad0b-5939903fffc7",
+              "order_idx": 146,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "69fd967d-381e-4bee-900f-f08b1c857dfc",
+              "order_idx": 147,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "31027df6-8509-46ee-b010-4aeb60142120",
+              "order_idx": 149,
+              "char_start": 0,
+              "char_end": 33
+            },
+            {
+              "block_id": "18a0b879-f0dd-40a1-9d5a-e43e25aac191",
+              "order_idx": 150,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "fe5c4213-b2a2-49fa-972a-f13862fec232",
+              "order_idx": 151,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+              "order_idx": 152,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "1a563d2b-0509-4b6c-83c0-8361de2b2600",
+              "order_idx": 153,
+              "char_start": 0,
+              "char_end": 23
+            }
+          ],
+          "effective_year": 2025,
+          "citation": {
+            "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9967346787452698,
+            "score_breakdown": {
+              "vector": 0.8958451300859451,
+              "keyword": 0.5912522988661908,
+              "rrf": 0.024104945759539732,
+              "rerank": 0.9967346787452698
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第六章 附则 > 第二十六条 本办法由区公司法律合规部负责解释。 > 第二十七条 本部分自印发之日起施行，过去规定与本办法\n项的进展情况，根据情况变化及时调整法律意见。同时对法律合\n规审核情况进行经验总结，提供给相关部门和人员作为参考。\n第二十二条 对于需由外聘律师进行的法律合规审核，应通\n过本单位法律部门统筹安排，外聘律师出具的法律意见事先经法\n律部门审核后，反馈需求部门。\n第二十三条 法律部门应做好法律合规审核的工作记录和\n档案保管工作。\n第五章 责任追究\n第二十四条 法律部门在法律审核工作中出现重大失误，给\n公司造成损失的，按照有关规定追究部门和相关人员的责任。\n第二十五条 各单位未按照国家有关规定建立健全法律监\n督机制，经办部门对按本办法规定应当法律合规审核重大决策事\n项未及时送审，导致程序上违规决策的，法律部门应给予风险提\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。"
+          },
+          "relevance": {
+            "semantic_score": 0.5646,
+            "fts_score": 0.0,
+            "title_score": 0.6429,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5125,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第八条 区公司法律合规部是法律合规审核的归口管理部 > （一）负责制定法律合规审核相关规章制度并组织实施 ； > （二）负责对规章制度的落实情况进行检查 ；\n\n（六）合并、分立、解散或变更公司形式的方案 ；\n（七）各级分支机构的设立 、合并或撤销 ；\n（八）代管子公司的合并 、分立或重组 ；\n（九）知识产权发展规划以及重大知识产权转让事项 ；\n（十）其他对公司经营管理有重大影响的决策事项 。\n第四条 重要决策作出之前 ，应当进行法律合规审核 。\n第五条 各单位法律部门应当认真履行工作职责 ，充分利用\n单位法律工作人员或外聘律师等法律资源 ，在认真分析具体情况\n的基础上 ，提出切实可行的法律意见 。\n各级单位应充分重视法律部门提出的法律意见 ，采取有效措\n施防范、控制、化解法律风险 ，最大限度地维护公司合法权益 。\n第六条 本办法适用于中国电信股份有限公司广西分公司\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "640e4ce94f67676be67f83c899e81c82",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "source_version": "2025",
+          "section_path": "第八条 区公司法律合规部是法律合规审核的归口管理部 > （一）负责制定法律合规审核相关规章制度并组织实施 ； > （二）负责对规章制度的落实情况进行检查 ；",
+          "block_ids": [
+            "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+            "1b986344-f8e3-4fed-8356-af7541b3deb9",
+            "bbe51b50-d4e2-4f2e-9e2e-ff8b1a2f8f4c",
+            "75aeefe2-5768-4065-a102-0a92e51fb31f",
+            "0bf08d73-c2fa-4220-8a30-c00a1d793d00",
+            "ea49bd27-3892-476d-90d4-c2d884eb7a5f",
+            "9b9ac3fb-64be-4b69-8af9-00ebc40f0142",
+            "6ddbda13-9dfb-4b4e-8c25-699c1135b6f1",
+            "097c10ce-7bdb-4698-a2c4-c6dd87f7b761",
+            "74c8fb5e-4d2f-4d9d-a4a4-718e0e1c5a30",
+            "644d6934-c758-4ac4-99a3-b858d844add3",
+            "72c49fc6-9ad9-4cc6-b689-a9af5d9aef7c",
+            "f21d8d58-8ab7-4cde-921c-119f1189f547",
+            "a9391b02-65ba-4800-afc3-898fbdfb139f",
+            "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "1fa31dca-2475-4f11-be8e-620be8281a62",
+            "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+              "order_idx": 38,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "1b986344-f8e3-4fed-8356-af7541b3deb9",
+              "order_idx": 39,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "bbe51b50-d4e2-4f2e-9e2e-ff8b1a2f8f4c",
+              "order_idx": 40,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "75aeefe2-5768-4065-a102-0a92e51fb31f",
+              "order_idx": 41,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "0bf08d73-c2fa-4220-8a30-c00a1d793d00",
+              "order_idx": 42,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "ea49bd27-3892-476d-90d4-c2d884eb7a5f",
+              "order_idx": 43,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "9b9ac3fb-64be-4b69-8af9-00ebc40f0142",
+              "order_idx": 44,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "6ddbda13-9dfb-4b4e-8c25-699c1135b6f1",
+              "order_idx": 45,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "097c10ce-7bdb-4698-a2c4-c6dd87f7b761",
+              "order_idx": 46,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "74c8fb5e-4d2f-4d9d-a4a4-718e0e1c5a30",
+              "order_idx": 47,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "644d6934-c758-4ac4-99a3-b858d844add3",
+              "order_idx": 48,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "72c49fc6-9ad9-4cc6-b689-a9af5d9aef7c",
+              "order_idx": 49,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "f21d8d58-8ab7-4cde-921c-119f1189f547",
+              "order_idx": 50,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "a9391b02-65ba-4800-afc3-898fbdfb139f",
+              "order_idx": 51,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "order_idx": 52,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "1fa31dca-2475-4f11-be8e-620be8281a62",
+              "order_idx": 53,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d",
+              "order_idx": 54,
+              "char_start": 0,
+              "char_end": 26
+            }
+          ],
+          "effective_year": 2025,
+          "citation": {
+            "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9964419007301331,
+            "score_breakdown": {
+              "vector": 0.9198005124926567,
+              "keyword": 0.6672977948503865,
+              "rrf": 0.031067911101943995,
+              "rerank": 0.9964419007301331
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第八条 区公司法律合规部是法律合规审核的归口管理部 > （一）负责制定法律合规审核相关规章制度并组织实施 ； > （二）负责对规章制度的落实情况进行检查 ；\n\n（六）合并、分立、解散或变更公司形式的方案 ；\n（七）各级分支机构的设立 、合并或撤销 ；\n（八）代管子公司的合并 、分立或重组 ；\n（九）知识产权发展规划以及重大知识产权转让事项 ；\n（十）其他对公司经营管理有重大影响的决策事项 。\n第四条 重要决策作出之前 ，应当进行法律合规审核 。\n第五条 各单位法律部门应当认真履行工作职责 ，充分利用\n单位法律工作人员或外聘律师等法律资源 ，在认真分析具体情况\n的基础上 ，提出切实可行的法律意见 。\n各级单位应充分重视法律部门提出的法律意见 ，采取有效措\n施防范、控制、化解法律风险 ，最大限度地维护公司合法权益 。\n第六条 本办法适用于中国电信股份有限公司广西分公司\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；"
+          },
+          "relevance": {
+            "semantic_score": 0.65,
+            "fts_score": 0.0,
+            "title_score": 0.6429,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.65,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第十条 各单位法律部门也可根据实际需要，委托外聘律师 > 第十一条 各单位的业务、职能部门为法律合规审核需求发 > （一）对本办法规定应当提起法律合规审核的重要决策或视\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为：",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "source_version": "2025",
+          "section_path": "第十条 各单位法律部门也可根据实际需要，委托外聘律师 > 第十一条 各单位的业务、职能部门为法律合规审核需求发 > （一）对本办法规定应当提起法律合规审核的重要决策或视",
+          "block_ids": [
+            "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "1fa31dca-2475-4f11-be8e-620be8281a62",
+            "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d",
+            "4c5769ec-796e-4e04-9339-0341934a33c9",
+            "7b37aaee-37cf-4ca5-b855-0da62a4e6055",
+            "c25a9ddf-a2bf-4429-835d-cabda233629c",
+            "6461d2ea-dcce-42ab-bd4c-ed2459aa7bc2",
+            "8158890f-7929-440d-82e1-d290782076c6",
+            "17792fbe-1a07-4a8a-bbf7-f5cf59942b12",
+            "37bcefe3-0680-4620-8f50-f33bb4e5f4d5",
+            "98968cc6-e10e-402e-963c-0109502e31ad",
+            "8f59dd46-d3da-4696-8495-393a954703b6",
+            "35eb850a-fbec-4030-b1e7-fb1644be494b",
+            "e32fe28a-6d37-4deb-be76-6e1e5db1e484",
+            "aa033116-6229-41c1-86ae-28a8460b31c2",
+            "f49fe116-cb03-4002-b24a-12b1a08d5b8b"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "order_idx": 52,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "1fa31dca-2475-4f11-be8e-620be8281a62",
+              "order_idx": 53,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d",
+              "order_idx": 54,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "4c5769ec-796e-4e04-9339-0341934a33c9",
+              "order_idx": 55,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "7b37aaee-37cf-4ca5-b855-0da62a4e6055",
+              "order_idx": 56,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "c25a9ddf-a2bf-4429-835d-cabda233629c",
+              "order_idx": 58,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "6461d2ea-dcce-42ab-bd4c-ed2459aa7bc2",
+              "order_idx": 59,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "8158890f-7929-440d-82e1-d290782076c6",
+              "order_idx": 60,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "17792fbe-1a07-4a8a-bbf7-f5cf59942b12",
+              "order_idx": 61,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "37bcefe3-0680-4620-8f50-f33bb4e5f4d5",
+              "order_idx": 62,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "98968cc6-e10e-402e-963c-0109502e31ad",
+              "order_idx": 63,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "8f59dd46-d3da-4696-8495-393a954703b6",
+              "order_idx": 64,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "35eb850a-fbec-4030-b1e7-fb1644be494b",
+              "order_idx": 65,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "e32fe28a-6d37-4deb-be76-6e1e5db1e484",
+              "order_idx": 66,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "aa033116-6229-41c1-86ae-28a8460b31c2",
+              "order_idx": 67,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "f49fe116-cb03-4002-b24a-12b1a08d5b8b",
+              "order_idx": 68,
+              "char_start": 0,
+              "char_end": 10
+            }
+          ],
+          "effective_year": 2025,
+          "citation": {
+            "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9959665536880493,
+            "score_breakdown": {
+              "vector": 0.9125740081071854,
+              "keyword": 0.6703955143393968,
+              "rrf": 0.031385281385281384,
+              "rerank": 0.9959665536880493
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第十条 各单位法律部门也可根据实际需要，委托外聘律师 > 第十一条 各单位的业务、职能部门为法律合规审核需求发 > （一）对本办法规定应当提起法律合规审核的重要决策或视\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为："
+          },
+          "relevance": {
+            "semantic_score": 0.65,
+            "fts_score": 0.0,
+            "title_score": 0.6429,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.65,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "fe5c4213-b2a2-49fa-972a-f13862fec232",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】2.XXXX > 3.XXXX > 一、XXXXXXXX\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。\n第二十七条 本部分自印发之日起施行，过去规定与本办法\n相悖的，以本办法为准。\n附件：1.重要决策法律合规审核单（模板）\n2.法律意见书（模板）\n— 9 — 附件1\n重要决策法律合规审核单（模板）\n编号 中电信X法审﹝202X﹞XX号\n申请单位\n审核事项\n所提交的文件\n法律部门意见\n初审法律人员： 电话： 时间：\n法律部门领导：\n备注：\n— 10 — 附件2\n关于XXXX的法律意见书\nXXXXXX（部/中心/分公司）\n贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\nXXXX出具法律意见。\n贵（部/中心/分公司）向我部提供的材料包括：\n1.XXXX\n2.XXXX\n3.XXXX\n我部根据上述材料及我国现行有效的相关法律、法规和规范\n性文件，经分析研究，提出以下法律意见：",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "4deed0be86707f3bb13e637bed762135",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "source_version": "2025",
+          "section_path": "2.XXXX > 3.XXXX > 一、XXXXXXXX",
+          "block_ids": [
+            "fe5c4213-b2a2-49fa-972a-f13862fec232",
+            "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+            "1a563d2b-0509-4b6c-83c0-8361de2b2600",
+            "30d9794e-8364-4cde-9d6a-49f8b56daa40",
+            "15ff7860-4398-4c78-bb8a-9fb8ea1a1255",
+            "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+            "85f15f23-351e-4029-b0f7-ae43032e3b2a",
+            "66319ae3-8f75-4b7c-a979-ad9bea4e8a0c",
+            "16669462-dae2-49e2-bca5-bf3f72c88b76",
+            "6e2feb11-56fe-4b03-a546-a671bbc0bd85",
+            "7121069b-c185-4f1b-9e80-c604d41a9717",
+            "5987b782-c1fb-42c2-8c04-893abf8ebebe",
+            "44b2fdaf-df26-4dfd-a363-d214c3184537",
+            "aeb1226c-8512-49ff-917c-7c8fae71b5c1",
+            "cc77b84b-9774-43af-8e24-36c41a11bb10",
+            "af23fc74-c046-4d4a-a69d-8b18b8fdedd7",
+            "c9f6309c-ebd5-4b8b-92a1-cfdf1787687d",
+            "660d8dd9-3161-43e4-b6f6-6d1459084ec3",
+            "2999f88f-6536-452f-a653-a6a399bc9de1",
+            "519dbf60-f2a4-4f36-8d50-5348b3f5e641",
+            "dd8c2569-23cb-44e7-81b0-8d0ec9d1f9f3",
+            "43721ab6-bef2-4a33-8657-64a7aa64e600",
+            "44014f26-07b9-4cff-ab9c-50c13253cfcc",
+            "9820b821-9a5e-4ff2-b54a-880883b5b997",
+            "c0e29307-991e-45cd-894c-f058007f71d1",
+            "6934aeeb-2fb3-4b0d-86b9-d72a98286975",
+            "af9c9d5a-8ce9-425c-a505-5bb8235fe0a5",
+            "91f7f9e1-a1a9-4b80-8152-67cbc95dc0e3"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "fe5c4213-b2a2-49fa-972a-f13862fec232",
+              "order_idx": 151,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+              "order_idx": 152,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "1a563d2b-0509-4b6c-83c0-8361de2b2600",
+              "order_idx": 153,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "30d9794e-8364-4cde-9d6a-49f8b56daa40",
+              "order_idx": 154,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "15ff7860-4398-4c78-bb8a-9fb8ea1a1255",
+              "order_idx": 155,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+              "order_idx": 156,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "85f15f23-351e-4029-b0f7-ae43032e3b2a",
+              "order_idx": 157,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "66319ae3-8f75-4b7c-a979-ad9bea4e8a0c",
+              "order_idx": 159,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "16669462-dae2-49e2-bca5-bf3f72c88b76",
+              "order_idx": 160,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "6e2feb11-56fe-4b03-a546-a671bbc0bd85",
+              "order_idx": 161,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "7121069b-c185-4f1b-9e80-c604d41a9717",
+              "order_idx": 162,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "5987b782-c1fb-42c2-8c04-893abf8ebebe",
+              "order_idx": 163,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "44b2fdaf-df26-4dfd-a363-d214c3184537",
+              "order_idx": 164,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "aeb1226c-8512-49ff-917c-7c8fae71b5c1",
+              "order_idx": 165,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "cc77b84b-9774-43af-8e24-36c41a11bb10",
+              "order_idx": 166,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "af23fc74-c046-4d4a-a69d-8b18b8fdedd7",
+              "order_idx": 167,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "c9f6309c-ebd5-4b8b-92a1-cfdf1787687d",
+              "order_idx": 168,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "660d8dd9-3161-43e4-b6f6-6d1459084ec3",
+              "order_idx": 170,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "2999f88f-6536-452f-a653-a6a399bc9de1",
+              "order_idx": 171,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "519dbf60-f2a4-4f36-8d50-5348b3f5e641",
+              "order_idx": 172,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "dd8c2569-23cb-44e7-81b0-8d0ec9d1f9f3",
+              "order_idx": 173,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "43721ab6-bef2-4a33-8657-64a7aa64e600",
+              "order_idx": 174,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "44014f26-07b9-4cff-ab9c-50c13253cfcc",
+              "order_idx": 175,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "9820b821-9a5e-4ff2-b54a-880883b5b997",
+              "order_idx": 176,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "c0e29307-991e-45cd-894c-f058007f71d1",
+              "order_idx": 177,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "6934aeeb-2fb3-4b0d-86b9-d72a98286975",
+              "order_idx": 178,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "af9c9d5a-8ce9-425c-a505-5bb8235fe0a5",
+              "order_idx": 179,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "91f7f9e1-a1a9-4b80-8152-67cbc95dc0e3",
+              "order_idx": 180,
+              "char_start": 0,
+              "char_end": 19
+            }
+          ],
+          "effective_year": 2025,
+          "citation": {
+            "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "fe5c4213-b2a2-49fa-972a-f13862fec232",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9870468378067017,
+            "score_breakdown": {
+              "vector": 0.8862693831324577,
+              "keyword": 0.5797906858629364,
+              "rrf": 0.02194257149500116,
+              "rerank": 0.9870468378067017
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】2.XXXX > 3.XXXX > 一、XXXXXXXX\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。\n第二十七条 本部分自印发之日起施行，过去规定与本办法\n相悖的，以本办法为准。\n附件：1.重要决策法律合规审核单（模板）\n2.法律意见书（模板）\n— 9 — 附件1\n重要决策法律合规审核单（模板）\n编号 中电信X法审﹝202X﹞XX号\n申请单位\n审核事项\n所提交的文件\n法律部门意见\n初审法律人员： 电话： 时间：\n法律部门领导：\n备注：\n— 10 — 附件2\n关于XXXX的法律意见书\nXXXXXX（部/中心/分公司）\n贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\nXXXX出具法律意见。\n贵（部/中心/分公司）向我部提供的材料包括：\n1.XXXX\n2.XXXX\n3.XXXX\n我部根据上述材料及我国现行有效的相关法律、法规和规范\n性文件，经分析研究，提出以下法律意见："
+          },
+          "relevance": {
+            "semantic_score": 0.5646,
+            "fts_score": 0.0,
+            "title_score": 0.6429,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5125,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第十四条 经办部门对重要决策应通过书面形式提出法律 > 第四章 法律合规审核原则及工作要求 > 第十五条 法律合规审核应遵循合法性、有效性、及时性、\n度，对法律合规审核提供必要的协助。\n— 5 — 第三章 法律审核流程\n第十三条 重要决策法律合规审核可以在以下环节进行：\n（一）经办部门制定方案或计划时，征求法律部门的意见；\n（二）方案或计划在提交党委会、总经理办公会议决策前，\n征求法律部门意见或提请法律部门会签。\n（三）方案或计划进行审议时，征求法律部门的意见；\n（四）方案或计划在执行过程中遇到重大法律问题，征求法\n律部门的意见。\n第十四条 经办部门对重要决策应通过书面形式提出法律\n合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业\n务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部\n门负责人同意，可通过发文会签、工作协同单等方式提出，后续\n进行系统补录。重大决策会议管理部门应做好上会事项管控，原\n则上按规定应经法律审核事项，未经法律前置审核不得安排上会\n审议。\n第四章 法律合规审核原则及工作要求\n第十五条 法律合规审核应遵循合法性、有效性、及时性、\n规范性的基本原则。",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "1c97fc1bd504ae73cbba1c15e76d8a27",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "source_version": "2025",
+          "section_path": "第十四条 经办部门对重要决策应通过书面形式提出法律 > 第四章 法律合规审核原则及工作要求 > 第十五条 法律合规审核应遵循合法性、有效性、及时性、",
+          "block_ids": [
+            "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+            "5ad89b1a-eb77-470b-bcf4-913e1ca02539",
+            "88f0472d-2a8f-4011-8657-d6239b8809f9",
+            "861b6790-fc37-4770-8075-89f367281603",
+            "8a2f4143-f7c5-48ae-ae3b-4dd0caa6d864",
+            "627c2c91-1f87-47ee-b44d-373354b83121",
+            "e2613a63-2a3a-49d3-a54f-e29ecd368952",
+            "3eeca30e-4560-45df-9925-e32b461407b9",
+            "0ca3826a-30f0-47da-8553-7c0ec40b8bd9",
+            "2d234929-a114-4b4a-b331-add92a74a103",
+            "d6778812-8fae-487b-9d13-d1ce6e47ce45",
+            "4ee1c823-0718-46a4-936b-c43bf5431717",
+            "0422a106-72e6-4393-9b8e-8e8ac269bf86",
+            "90ee8cd6-bd5a-47f2-8e96-8485788eba8a",
+            "490cfd97-b790-48e5-9618-e746f7ca2549",
+            "cb85b7f0-b532-4b33-97e6-44b90d0a3b67"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+              "order_idx": 82,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "5ad89b1a-eb77-470b-bcf4-913e1ca02539",
+              "order_idx": 83,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "88f0472d-2a8f-4011-8657-d6239b8809f9",
+              "order_idx": 84,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "861b6790-fc37-4770-8075-89f367281603",
+              "order_idx": 85,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "8a2f4143-f7c5-48ae-ae3b-4dd0caa6d864",
+              "order_idx": 86,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "627c2c91-1f87-47ee-b44d-373354b83121",
+              "order_idx": 87,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "e2613a63-2a3a-49d3-a54f-e29ecd368952",
+              "order_idx": 88,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "3eeca30e-4560-45df-9925-e32b461407b9",
+              "order_idx": 89,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "0ca3826a-30f0-47da-8553-7c0ec40b8bd9",
+              "order_idx": 90,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "2d234929-a114-4b4a-b331-add92a74a103",
+              "order_idx": 91,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "d6778812-8fae-487b-9d13-d1ce6e47ce45",
+              "order_idx": 92,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "4ee1c823-0718-46a4-936b-c43bf5431717",
+              "order_idx": 93,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "0422a106-72e6-4393-9b8e-8e8ac269bf86",
+              "order_idx": 94,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "90ee8cd6-bd5a-47f2-8e96-8485788eba8a",
+              "order_idx": 95,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "490cfd97-b790-48e5-9618-e746f7ca2549",
+              "order_idx": 96,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "cb85b7f0-b532-4b33-97e6-44b90d0a3b67",
+              "order_idx": 97,
+              "char_start": 0,
+              "char_end": 9
+            }
+          ],
+          "effective_year": 2025,
+          "citation": {
+            "document": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "block_id": "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9349237680435181,
+            "score_breakdown": {
+              "vector": 0.870024785399437,
+              "keyword": 0.5941959333528992,
+              "rrf": 0.022558321844673313,
+              "rerank": 0.9349237680435181
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第十四条 经办部门对重要决策应通过书面形式提出法律 > 第四章 法律合规审核原则及工作要求 > 第十五条 法律合规审核应遵循合法性、有效性、及时性、\n度，对法律合规审核提供必要的协助。\n— 5 — 第三章 法律审核流程\n第十三条 重要决策法律合规审核可以在以下环节进行：\n（一）经办部门制定方案或计划时，征求法律部门的意见；\n（二）方案或计划在提交党委会、总经理办公会议决策前，\n征求法律部门意见或提请法律部门会签。\n（三）方案或计划进行审议时，征求法律部门的意见；\n（四）方案或计划在执行过程中遇到重大法律问题，征求法\n律部门的意见。\n第十四条 经办部门对重要决策应通过书面形式提出法律\n合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业\n务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部\n门负责人同意，可通过发文会签、工作协同单等方式提出，后续\n进行系统补录。重大决策会议管理部门应做好上会事项管控，原\n则上按规定应经法律审核事项，未经法律前置审核不得安排上会\n审议。\n第四章 法律合规审核原则及工作要求\n第十五条 法律合规审核应遵循合法性、有效性、及时性、\n规范性的基本原则。"
+          },
+          "relevance": {
+            "semantic_score": 0.5946,
+            "fts_score": 0.0,
+            "title_score": 0.6429,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5625,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 5,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+          "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+          "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+          "4e1f17e5-1b81-454d-bf82-db980ee49910",
+          "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+        ],
+        "evidence_snapshot_id": "FmwLBBEJ2AWSdjvvXekOtpaKjdjcK3BW",
+        "snapshot_fingerprint": "0db2dee28234e63fd7da0c5e",
+        "accepted_passage_ids": [
+          "f38d4e88e9371ceabe2566a6973e3166",
+          "640e4ce94f67676be67f83c899e81c82",
+          "0ea0bb1be39826cfef6d6b3adc5ecce0",
+          "4deed0be86707f3bb13e637bed762135",
+          "1c97fc1bd504ae73cbba1c15e76d8a27",
+          "097cce346f1026a2cf80d0df41875ee8",
+          "05a1d92810362ad39b8baf29644013f8",
+          "f7d2f4636458475b608c485a6be76365",
+          "cb393094729df18ecac6f90f5912c7b7",
+          "653f9377efecc56ba6b63aace18e90b6",
+          "11bbd5056f79c8f85abc10ff9c8ee7ee",
+          "820fa23d66d52741921972289983318c",
+          "ab1960d6ce332c4b1af3ef3a7492c6f1",
+          "b0554250b5e311770232aa1e2fc6f2f3",
+          "4fb443aa443469952bfdc0e31fe1ca91"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 7,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 3483.0
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制\n- 第九条各单位法律部门负责本单位的重要决策法律合规审核管理工作，负责本单位经营管理问题的法律咨询和解答，以及本单位法律审核情况的归纳、总结、汇总和统计\n- 第十四条经办部门对重要决策应通过书面形式提出法律合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部门负责人同意，可通过发文会签、工作协同单等方式提出，后续进行系统补录",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "640e4ce94f67676be67f83c899e81c82",
+            "block_id": "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+            "block_ids": [
+              "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+              "1b986344-f8e3-4fed-8356-af7541b3deb9",
+              "bbe51b50-d4e2-4f2e-9e2e-ff8b1a2f8f4c",
+              "75aeefe2-5768-4065-a102-0a92e51fb31f",
+              "0bf08d73-c2fa-4220-8a30-c00a1d793d00",
+              "ea49bd27-3892-476d-90d4-c2d884eb7a5f",
+              "9b9ac3fb-64be-4b69-8af9-00ebc40f0142",
+              "6ddbda13-9dfb-4b4e-8c25-699c1135b6f1",
+              "097c10ce-7bdb-4698-a2c4-c6dd87f7b761",
+              "74c8fb5e-4d2f-4d9d-a4a4-718e0e1c5a30",
+              "644d6934-c758-4ac4-99a3-b858d844add3",
+              "72c49fc6-9ad9-4cc6-b689-a9af5d9aef7c",
+              "f21d8d58-8ab7-4cde-921c-119f1189f547",
+              "a9391b02-65ba-4800-afc3-898fbdfb139f",
+              "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "1fa31dca-2475-4f11-be8e-620be8281a62",
+              "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "\n（六）合并、分立、解散或变更公司形式的方案 ；\n（七）各级分支机构的设立 、合并或撤销 ；\n（八）代管子公司的合并 、分立或重组 ；\n（九）知识产权发展规划以及重大知识产权转让事项 ；\n（十）其他对公司经营管理有重大影响的决策事项 。\n第四条 重要决策作出之前 ，应当进行法律合规审核 。\n第五条 各单位法律部门应当认真履行工作职责 ，充分利用\n单位法律工作人员或外聘律师等法律资源 ，在认真分析具体情况\n的基础上 ，提出切实可行的法律意见 。\n各级单位应充分重视法律部门提出的法律意见 ，采取有效措\n施防范、控制、化解法律风险 ，最大限度地维护公司合法权益 。\n第六条 本办法适用于中国电信股份有限公司广西分公司\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+            "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "block_ids": [
+              "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "1fa31dca-2475-4f11-be8e-620be8281a62",
+              "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d",
+              "4c5769ec-796e-4e04-9339-0341934a33c9",
+              "7b37aaee-37cf-4ca5-b855-0da62a4e6055",
+              "c25a9ddf-a2bf-4429-835d-cabda233629c",
+              "6461d2ea-dcce-42ab-bd4c-ed2459aa7bc2",
+              "8158890f-7929-440d-82e1-d290782076c6",
+              "17792fbe-1a07-4a8a-bbf7-f5cf59942b12",
+              "37bcefe3-0680-4620-8f50-f33bb4e5f4d5",
+              "98968cc6-e10e-402e-963c-0109502e31ad",
+              "8f59dd46-d3da-4696-8495-393a954703b6",
+              "35eb850a-fbec-4030-b1e7-fb1644be494b",
+              "e32fe28a-6d37-4deb-be76-6e1e5db1e484",
+              "aa033116-6229-41c1-86ae-28a8460b31c2",
+              "f49fe116-cb03-4002-b24a-12b1a08d5b8b"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为：",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "1c97fc1bd504ae73cbba1c15e76d8a27",
+            "block_id": "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+            "block_ids": [
+              "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+              "5ad89b1a-eb77-470b-bcf4-913e1ca02539",
+              "88f0472d-2a8f-4011-8657-d6239b8809f9",
+              "861b6790-fc37-4770-8075-89f367281603",
+              "8a2f4143-f7c5-48ae-ae3b-4dd0caa6d864",
+              "627c2c91-1f87-47ee-b44d-373354b83121",
+              "e2613a63-2a3a-49d3-a54f-e29ecd368952",
+              "3eeca30e-4560-45df-9925-e32b461407b9",
+              "0ca3826a-30f0-47da-8553-7c0ec40b8bd9",
+              "2d234929-a114-4b4a-b331-add92a74a103",
+              "d6778812-8fae-487b-9d13-d1ce6e47ce45",
+              "4ee1c823-0718-46a4-936b-c43bf5431717",
+              "0422a106-72e6-4393-9b8e-8e8ac269bf86",
+              "90ee8cd6-bd5a-47f2-8e96-8485788eba8a",
+              "490cfd97-b790-48e5-9618-e746f7ca2549",
+              "cb85b7f0-b532-4b33-97e6-44b90d0a3b67"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "度，对法律合规审核提供必要的协助。\n— 5 — 第三章 法律审核流程\n第十三条 重要决策法律合规审核可以在以下环节进行：\n（一）经办部门制定方案或计划时，征求法律部门的意见；\n（二）方案或计划在提交党委会、总经理办公会议决策前，\n征求法律部门意见或提请法律部门会签。\n（三）方案或计划进行审议时，征求法律部门的意见；\n（四）方案或计划在执行过程中遇到重大法律问题，征求法\n律部门的意见。\n第十四条 经办部门对重要决策应通过书面形式提出法律\n合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业\n务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部\n门负责人同意，可通过发文会签、工作协同单等方式提出，后续\n进行系统补录。重大决策会议管理部门应做好上会事项管控，原\n则上按规定应经法律审核事项，未经法律前置审核不得安排上会\n审议。\n第四章 法律合规审核原则及工作要求\n第十五条 法律合规审核应遵循合法性、有效性、及时性、\n规范性的基本原则。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "f38d4e88e9371ceabe2566a6973e3166",
+            "block_id": "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+            "block_ids": [
+              "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+              "52107990-f8d1-44c7-94e2-8b0681f02a66",
+              "42062598-04c0-4fd3-8e6d-b1414259073a",
+              "ad25547e-418a-40f2-85ad-eb3d24106eaf",
+              "3c8239cd-6792-4f61-a751-f0bfb2c18e60",
+              "7770b2e8-a290-4d25-84b5-c66ae4632ef3",
+              "7539c619-5771-4c99-a37f-a79a8acdf556",
+              "4ad542ee-8c76-4826-be07-7bc752468788",
+              "53c79866-2e6e-49e8-afc8-26b5524a5500",
+              "d48c547b-030c-453f-ad0b-5939903fffc7",
+              "69fd967d-381e-4bee-900f-f08b1c857dfc",
+              "31027df6-8509-46ee-b010-4aeb60142120",
+              "18a0b879-f0dd-40a1-9d5a-e43e25aac191",
+              "fe5c4213-b2a2-49fa-972a-f13862fec232",
+              "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+              "1a563d2b-0509-4b6c-83c0-8361de2b2600"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "text": "项的进展情况，根据情况变化及时调整法律意见。同时对法律合\n规审核情况进行经验总结，提供给相关部门和人员作为参考。\n第二十二条 对于需由外聘律师进行的法律合规审核，应通\n过本单位法律部门统筹安排，外聘律师出具的法律意见事先经法\n律部门审核后，反馈需求部门。\n第二十三条 法律部门应做好法律合规审核的工作记录和\n档案保管工作。\n第五章 责任追究\n第二十四条 法律部门在法律审核工作中出现重大失误，给\n公司造成损失的，按照有关规定追究部门和相关人员的责任。\n第二十五条 各单位未按照国家有关规定建立健全法律监\n督机制，经办部门对按本办法规定应当法律合规审核重大决策事\n项未及时送审，导致程序上违规决策的，法律部门应给予风险提\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+            "evidence_passage_ids": [
+              "640e4ce94f67676be67f83c899e81c82"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "b9f09d811beae5bd6937d9d8"
+          },
+          {
+            "text": "第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+            "evidence_passage_ids": [
+              "0ea0bb1be39826cfef6d6b3adc5ecce0"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "800018a70c7bdd4e8a87dc6a"
+          },
+          {
+            "text": "第九条各单位法律部门负责本单位的重要决策法律合规审核管理工作，负责本单位经营管理问题的法律咨询和解答，以及本单位法律审核情况的归纳、总结、汇总和统计",
+            "evidence_passage_ids": [
+              "0ea0bb1be39826cfef6d6b3adc5ecce0"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "fb80b2d8ec4488a5e28f490d"
+          },
+          {
+            "text": "第十四条经办部门对重要决策应通过书面形式提出法律合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部门负责人同意，可通过发文会签、工作协同单等方式提出，后续进行系统补录",
+            "evidence_passage_ids": [
+              "1c97fc1bd504ae73cbba1c15e76d8a27"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "60a8b690be25020660d3dfa8"
+          },
+          {
+            "text": "第二十五条各单位未按照国家有关规定建立健全法律监督机制，经办部门对按本办法规定应当法律合规审核重大决策事项未及时送审，导致程序上违规决策的，法律部门应给予风险提—8—示并通报公司总法律顾问",
+            "evidence_passage_ids": [
+              "f38d4e88e9371ceabe2566a6973e3166"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "62652c7bfe779b90c3e33281"
+          },
+          {
+            "text": "第六章附则第二十六条本办法由区公司法律合规部负责解释",
+            "evidence_passage_ids": [
+              "f38d4e88e9371ceabe2566a6973e3166"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "9d0f45aeebfcad1ee314d941"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "640e4ce94f67676be67f83c899e81c82",
+            "block_id": "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+            "block_ids": [
+              "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+              "1b986344-f8e3-4fed-8356-af7541b3deb9",
+              "bbe51b50-d4e2-4f2e-9e2e-ff8b1a2f8f4c",
+              "75aeefe2-5768-4065-a102-0a92e51fb31f",
+              "0bf08d73-c2fa-4220-8a30-c00a1d793d00",
+              "ea49bd27-3892-476d-90d4-c2d884eb7a5f",
+              "9b9ac3fb-64be-4b69-8af9-00ebc40f0142",
+              "6ddbda13-9dfb-4b4e-8c25-699c1135b6f1",
+              "097c10ce-7bdb-4698-a2c4-c6dd87f7b761",
+              "74c8fb5e-4d2f-4d9d-a4a4-718e0e1c5a30",
+              "644d6934-c758-4ac4-99a3-b858d844add3",
+              "72c49fc6-9ad9-4cc6-b689-a9af5d9aef7c",
+              "f21d8d58-8ab7-4cde-921c-119f1189f547",
+              "a9391b02-65ba-4800-afc3-898fbdfb139f",
+              "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "1fa31dca-2475-4f11-be8e-620be8281a62",
+              "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "\n（六）合并、分立、解散或变更公司形式的方案 ；\n（七）各级分支机构的设立 、合并或撤销 ；\n（八）代管子公司的合并 、分立或重组 ；\n（九）知识产权发展规划以及重大知识产权转让事项 ；\n（十）其他对公司经营管理有重大影响的决策事项 。\n第四条 重要决策作出之前 ，应当进行法律合规审核 。\n第五条 各单位法律部门应当认真履行工作职责 ，充分利用\n单位法律工作人员或外聘律师等法律资源 ，在认真分析具体情况\n的基础上 ，提出切实可行的法律意见 。\n各级单位应充分重视法律部门提出的法律意见 ，采取有效措\n施防范、控制、化解法律风险 ，最大限度地维护公司合法权益 。\n第六条 本办法适用于中国电信股份有限公司广西分公司\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；",
+            "body_text": "\n（六）合并、分立、解散或变更公司形式的方案 ；\n（七）各级分支机构的设立 、合并或撤销 ；\n（八）代管子公司的合并 、分立或重组 ；\n（九）知识产权发展规划以及重大知识产权转让事项 ；\n（十）其他对公司经营管理有重大影响的决策事项 。\n第四条 重要决策作出之前 ，应当进行法律合规审核 。\n第五条 各单位法律部门应当认真履行工作职责 ，充分利用\n单位法律工作人员或外聘律师等法律资源 ，在认真分析具体情况\n的基础上 ，提出切实可行的法律意见 。\n各级单位应充分重视法律部门提出的法律意见 ，采取有效措\n施防范、控制、化解法律风险 ，最大限度地维护公司合法权益 。\n第六条 本办法适用于中国电信股份有限公司广西分公司\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+            "block_id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "block_ids": [
+              "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "1fa31dca-2475-4f11-be8e-620be8281a62",
+              "6d6fe72b-0f63-4b7f-99b6-dc0fbe32ef0d",
+              "4c5769ec-796e-4e04-9339-0341934a33c9",
+              "7b37aaee-37cf-4ca5-b855-0da62a4e6055",
+              "c25a9ddf-a2bf-4429-835d-cabda233629c",
+              "6461d2ea-dcce-42ab-bd4c-ed2459aa7bc2",
+              "8158890f-7929-440d-82e1-d290782076c6",
+              "17792fbe-1a07-4a8a-bbf7-f5cf59942b12",
+              "37bcefe3-0680-4620-8f50-f33bb4e5f4d5",
+              "98968cc6-e10e-402e-963c-0109502e31ad",
+              "8f59dd46-d3da-4696-8495-393a954703b6",
+              "35eb850a-fbec-4030-b1e7-fb1644be494b",
+              "e32fe28a-6d37-4deb-be76-6e1e5db1e484",
+              "aa033116-6229-41c1-86ae-28a8460b31c2",
+              "f49fe116-cb03-4002-b24a-12b1a08d5b8b"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为：",
+            "body_text": "及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为：",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "1c97fc1bd504ae73cbba1c15e76d8a27",
+            "block_id": "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+            "block_ids": [
+              "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+              "5ad89b1a-eb77-470b-bcf4-913e1ca02539",
+              "88f0472d-2a8f-4011-8657-d6239b8809f9",
+              "861b6790-fc37-4770-8075-89f367281603",
+              "8a2f4143-f7c5-48ae-ae3b-4dd0caa6d864",
+              "627c2c91-1f87-47ee-b44d-373354b83121",
+              "e2613a63-2a3a-49d3-a54f-e29ecd368952",
+              "3eeca30e-4560-45df-9925-e32b461407b9",
+              "0ca3826a-30f0-47da-8553-7c0ec40b8bd9",
+              "2d234929-a114-4b4a-b331-add92a74a103",
+              "d6778812-8fae-487b-9d13-d1ce6e47ce45",
+              "4ee1c823-0718-46a4-936b-c43bf5431717",
+              "0422a106-72e6-4393-9b8e-8e8ac269bf86",
+              "90ee8cd6-bd5a-47f2-8e96-8485788eba8a",
+              "490cfd97-b790-48e5-9618-e746f7ca2549",
+              "cb85b7f0-b532-4b33-97e6-44b90d0a3b67"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "度，对法律合规审核提供必要的协助。\n— 5 — 第三章 法律审核流程\n第十三条 重要决策法律合规审核可以在以下环节进行：\n（一）经办部门制定方案或计划时，征求法律部门的意见；\n（二）方案或计划在提交党委会、总经理办公会议决策前，\n征求法律部门意见或提请法律部门会签。\n（三）方案或计划进行审议时，征求法律部门的意见；\n（四）方案或计划在执行过程中遇到重大法律问题，征求法\n律部门的意见。\n第十四条 经办部门对重要决策应通过书面形式提出法律\n合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业\n务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部\n门负责人同意，可通过发文会签、工作协同单等方式提出，后续\n进行系统补录。重大决策会议管理部门应做好上会事项管控，原\n则上按规定应经法律审核事项，未经法律前置审核不得安排上会\n审议。\n第四章 法律合规审核原则及工作要求\n第十五条 法律合规审核应遵循合法性、有效性、及时性、\n规范性的基本原则。",
+            "body_text": "度，对法律合规审核提供必要的协助。\n— 5 — 第三章 法律审核流程\n第十三条 重要决策法律合规审核可以在以下环节进行：\n（一）经办部门制定方案或计划时，征求法律部门的意见；\n（二）方案或计划在提交党委会、总经理办公会议决策前，\n征求法律部门意见或提请法律部门会签。\n（三）方案或计划进行审议时，征求法律部门的意见；\n（四）方案或计划在执行过程中遇到重大法律问题，征求法\n律部门的意见。\n第十四条 经办部门对重要决策应通过书面形式提出法律\n合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业\n务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部\n门负责人同意，可通过发文会签、工作协同单等方式提出，后续\n进行系统补录。重大决策会议管理部门应做好上会事项管控，原\n则上按规定应经法律审核事项，未经法律前置审核不得安排上会\n审议。\n第四章 法律合规审核原则及工作要求\n第十五条 法律合规审核应遵循合法性、有效性、及时性、\n规范性的基本原则。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "passage_id": "f38d4e88e9371ceabe2566a6973e3166",
+            "block_id": "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+            "block_ids": [
+              "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+              "52107990-f8d1-44c7-94e2-8b0681f02a66",
+              "42062598-04c0-4fd3-8e6d-b1414259073a",
+              "ad25547e-418a-40f2-85ad-eb3d24106eaf",
+              "3c8239cd-6792-4f61-a751-f0bfb2c18e60",
+              "7770b2e8-a290-4d25-84b5-c66ae4632ef3",
+              "7539c619-5771-4c99-a37f-a79a8acdf556",
+              "4ad542ee-8c76-4826-be07-7bc752468788",
+              "53c79866-2e6e-49e8-afc8-26b5524a5500",
+              "d48c547b-030c-453f-ad0b-5939903fffc7",
+              "69fd967d-381e-4bee-900f-f08b1c857dfc",
+              "31027df6-8509-46ee-b010-4aeb60142120",
+              "18a0b879-f0dd-40a1-9d5a-e43e25aac191",
+              "fe5c4213-b2a2-49fa-972a-f13862fec232",
+              "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+              "1a563d2b-0509-4b6c-83c0-8361de2b2600"
+            ],
+            "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+            "path": "",
+            "text": "项的进展情况，根据情况变化及时调整法律意见。同时对法律合\n规审核情况进行经验总结，提供给相关部门和人员作为参考。\n第二十二条 对于需由外聘律师进行的法律合规审核，应通\n过本单位法律部门统筹安排，外聘律师出具的法律意见事先经法\n律部门审核后，反馈需求部门。\n第二十三条 法律部门应做好法律合规审核的工作记录和\n档案保管工作。\n第五章 责任追究\n第二十四条 法律部门在法律审核工作中出现重大失误，给\n公司造成损失的，按照有关规定追究部门和相关人员的责任。\n第二十五条 各单位未按照国家有关规定建立健全法律监\n督机制，经办部门对按本办法规定应当法律合规审核重大决策事\n项未及时送审，导致程序上违规决策的，法律部门应给予风险提\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。",
+            "body_text": "项的进展情况，根据情况变化及时调整法律意见。同时对法律合\n规审核情况进行经验总结，提供给相关部门和人员作为参考。\n第二十二条 对于需由外聘律师进行的法律合规审核，应通\n过本单位法律部门统筹安排，外聘律师出具的法律意见事先经法\n律部门审核后，反馈需求部门。\n第二十三条 法律部门应做好法律合规审核的工作记录和\n档案保管工作。\n第五章 责任追究\n第二十四条 法律部门在法律审核工作中出现重大失误，给\n公司造成损失的，按照有关规定追究部门和相关人员的责任。\n第二十五条 各单位未按照国家有关规定建立健全法律监\n督机制，经办部门对按本办法规定应当法律合规审核重大决策事\n项未及时送审，导致程序上违规决策的，法律部门应给予风险提\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.55,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 7,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "0db2dee28234e63fd7da0c5e",
+            "snapshot_id_count": 12,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责"
+          },
+          "fact_plan": {
+            "raw": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+            "intents": [
+              "responsibility",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "subject",
+              "role",
+              "policy_fact",
+              "predicate:负责"
+            ],
+            "entities": [
+              "中国电信",
+              "各类",
+              "管理",
+              "办法",
+              "归口",
+              "部门",
+              "法律",
+              "合规",
+              "审核",
+              "负责",
+              "中国电信广西公司各类管理办法",
+              "中国电信广西公司"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": true,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "responsibility",
+              "policy",
+              "prohibition",
+              "scope",
+              "relationship"
+            ],
+            "subject": "中国电信",
+            "object": "各类",
+            "scope": [
+              "部门"
+            ],
+            "selector": [],
+            "predicate": "负责",
+            "polarity": "positive",
+            "condition_slots": [],
+            "requested_attribute": "responsibility",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [
+              {
+                "text": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+                "anchors": [
+                  "中国电信",
+                  "各类",
+                  "管理",
+                  "办法",
+                  "归口",
+                  "部门"
+                ]
+              }
+            ],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "中国电信",
+              "各类",
+              "管理",
+              "办法",
+              "归口",
+              "部门",
+              "法律",
+              "合规",
+              "审核",
+              "负责",
+              "中国电信广西公司各类管理办法",
+              "中国电信广西公司"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 41,
+          "candidate_count": 30
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+              "evidence_passage_ids": [
+                "640e4ce94f67676be67f83c899e81c82"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "b9f09d811beae5bd6937d9d8"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+              "evidence_passage_ids": [
+                "0ea0bb1be39826cfef6d6b3adc5ecce0"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "800018a70c7bdd4e8a87dc6a"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第九条各单位法律部门负责本单位的重要决策法律合规审核管理工作，负责本单位经营管理问题的法律咨询和解答，以及本单位法律审核情况的归纳、总结、汇总和统计",
+              "evidence_passage_ids": [
+                "0ea0bb1be39826cfef6d6b3adc5ecce0"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "fb80b2d8ec4488a5e28f490d"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第十四条经办部门对重要决策应通过书面形式提出法律合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部门负责人同意，可通过发文会签、工作协同单等方式提出，后续进行系统补录",
+              "evidence_passage_ids": [
+                "1c97fc1bd504ae73cbba1c15e76d8a27"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "60a8b690be25020660d3dfa8"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第二十五条各单位未按照国家有关规定建立健全法律监督机制，经办部门对按本办法规定应当法律合规审核重大决策事项未及时送审，导致程序上违规决策的，法律部门应给予风险提—8—示并通报公司总法律顾问",
+              "evidence_passage_ids": [
+                "f38d4e88e9371ceabe2566a6973e3166"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "62652c7bfe779b90c3e33281"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第六章附则第二十六条本办法由区公司法律合规部负责解释",
+              "evidence_passage_ids": [
+                "f38d4e88e9371ceabe2566a6973e3166"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "9d0f45aeebfcad1ee314d941"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+            "intents": [
+              "responsibility",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "subject",
+              "role",
+              "policy_fact",
+              "predicate:负责"
+            ],
+            "entities": [
+              "中国电信",
+              "各类",
+              "管理",
+              "办法",
+              "归口",
+              "部门",
+              "法律",
+              "合规",
+              "审核",
+              "负责",
+              "中国电信广西公司各类管理办法",
+              "中国电信广西公司"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": true,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "responsibility",
+              "policy",
+              "prohibition",
+              "scope",
+              "relationship"
+            ],
+            "subject": "中国电信",
+            "object": "各类",
+            "scope": [
+              "部门"
+            ],
+            "selector": [],
+            "predicate": "负责",
+            "polarity": "positive",
+            "condition_slots": [],
+            "requested_attribute": "responsibility",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [
+              {
+                "text": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+                "anchors": [
+                  "中国电信",
+                  "各类",
+                  "管理",
+                  "办法",
+                  "归口",
+                  "部门"
+                ]
+              }
+            ],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "中国电信",
+              "各类",
+              "管理",
+              "办法",
+              "归口",
+              "部门",
+              "法律",
+              "合规",
+              "审核",
+              "负责",
+              "中国电信广西公司各类管理办法",
+              "中国电信广西公司"
+            ]
+          },
+          "input_count": 30,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "b9f09d811beae5bd6937d9d8",
+              "record_id": "640e4ce94f67676be67f83c899e81c82:r4",
+              "passage_id": "640e4ce94f67676be67f83c899e81c82",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "管理",
+              "predicate": "负责",
+              "object": "第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+              "evidence_spans": [
+                [
+                  229,
+                  266
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 49.49999999999999,
+              "unstructured_rejected": false,
+              "group_id": "cecc1bced7bd9523",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:负责": "hit",
+                "anchor:中国电信": "miss",
+                "anchor:各类": "miss",
+                "anchor:管理": "hit",
+                "anchor:办法": "miss",
+                "anchor:归口": "hit",
+                "anchor:部门": "miss",
+                "anchor:法律": "hit",
+                "anchor:合规": "hit"
+              },
+              "slot_spans": {
+                "predicate:负责": [
+                  27,
+                  29
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "800018a70c7bdd4e8a87dc6a",
+              "record_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r0",
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "管理",
+              "predicate": "负责",
+              "object": "第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+              "evidence_spans": [
+                [
+                  21,
+                  58
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 49.49999999999999,
+              "unstructured_rejected": false,
+              "group_id": "cecc1bced7bd9523",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:负责": "hit",
+                "anchor:中国电信": "miss",
+                "anchor:各类": "miss",
+                "anchor:管理": "hit",
+                "anchor:办法": "miss",
+                "anchor:归口": "hit",
+                "anchor:部门": "miss",
+                "anchor:法律": "hit",
+                "anchor:合规": "hit"
+              },
+              "slot_spans": {
+                "predicate:负责": [
+                  27,
+                  29
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "fb80b2d8ec4488a5e28f490d",
+              "record_id": "0ea0bb1be39826cfef6d6b3adc5ecce0:r5",
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "管理",
+              "predicate": "负责",
+              "object": "第九条各单位法律部门负责本单位的重要决策法律合规审核管理工作，负责本单位经营管理问题的法律咨询和解答，以及本单位法律审核情况的归纳、总结、汇总和统计",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第九条各单位法律部门负责本单位的重要决策法律合规审核管理工作，负责本单位经营管理问题的法律咨询和解答，以及本单位法律审核情况的归纳、总结、汇总和统计",
+              "evidence_spans": [
+                [
+                  18,
+                  93
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 48.99999999999999,
+              "unstructured_rejected": false,
+              "group_id": "cecc1bced7bd9523",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:负责": "hit",
+                "anchor:中国电信": "miss",
+                "anchor:各类": "miss",
+                "anchor:管理": "hit",
+                "anchor:办法": "miss",
+                "anchor:归口": "miss",
+                "anchor:部门": "hit",
+                "anchor:法律": "hit",
+                "anchor:合规": "hit"
+              },
+              "slot_spans": {
+                "predicate:负责": [
+                  10,
+                  12
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "60a8b690be25020660d3dfa8",
+              "record_id": "1c97fc1bd504ae73cbba1c15e76d8a27:r4",
+              "passage_id": "1c97fc1bd504ae73cbba1c15e76d8a27",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "管理",
+              "predicate": "负责",
+              "object": "第十四条经办部门对重要决策应通过书面形式提出法律合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部门负责人同意，可通过发文会签、工作协同单等方式提出，后续进行系统补录",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十四条经办部门对重要决策应通过书面形式提出法律合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部门负责人同意，可通过发文会签、工作协同单等方式提出，后续进行系统补录",
+              "evidence_spans": [
+                [
+                  31,
+                  149
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 48.99999999999999,
+              "unstructured_rejected": false,
+              "group_id": "cecc1bced7bd9523",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:负责": "hit",
+                "anchor:中国电信": "miss",
+                "anchor:各类": "miss",
+                "anchor:管理": "hit",
+                "anchor:办法": "miss",
+                "anchor:归口": "miss",
+                "anchor:部门": "hit",
+                "anchor:法律": "hit",
+                "anchor:合规": "hit"
+              },
+              "slot_spans": {
+                "predicate:负责": [
+                  84,
+                  86
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "62652c7bfe779b90c3e33281",
+              "record_id": "f38d4e88e9371ceabe2566a6973e3166:r5",
+              "passage_id": "f38d4e88e9371ceabe2566a6973e3166",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "办法",
+              "predicate": "负责",
+              "object": "第二十五条各单位未按照国家有关规定建立健全法律监督机制，经办部门对按本办法规定应当法律合规审核重大决策事项未及时送审，导致程序上违规决策的，法律部门应给予风险提—8—示并通报公司总法律顾问",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第二十五条各单位未按照国家有关规定建立健全法律监督机制，经办部门对按本办法规定应当法律合规审核重大决策事项未及时送审，导致程序上违规决策的，法律部门应给予风险提—8—示并通报公司总法律顾问",
+              "evidence_spans": [
+                [
+                  0,
+                  98
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 38.399999999999984,
+              "unstructured_rejected": false,
+              "group_id": "cecc1bced7bd9523",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:负责": "miss",
+                "anchor:中国电信": "miss",
+                "anchor:各类": "miss",
+                "anchor:管理": "miss",
+                "anchor:办法": "hit",
+                "anchor:归口": "miss",
+                "anchor:部门": "hit",
+                "anchor:法律": "hit",
+                "anchor:合规": "hit"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "9d0f45aeebfcad1ee314d941",
+              "record_id": "f38d4e88e9371ceabe2566a6973e3166:r7",
+              "passage_id": "f38d4e88e9371ceabe2566a6973e3166",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "responsibility",
+              "subject": "办法",
+              "predicate": "负责",
+              "object": "第六章附则第二十六条本办法由区公司法律合规部负责解释",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第六章附则第二十六条本办法由区公司法律合规部负责解释",
+              "evidence_spans": [
+                [
+                  0,
+                  28
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 36.89999999999998,
+              "unstructured_rejected": false,
+              "group_id": "cecc1bced7bd9523",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:负责": "hit",
+                "anchor:中国电信": "miss",
+                "anchor:各类": "miss",
+                "anchor:管理": "miss",
+                "anchor:办法": "hit",
+                "anchor:归口": "miss",
+                "anchor:部门": "miss",
+                "anchor:法律": "hit",
+                "anchor:合规": "hit"
+              },
+              "slot_spans": {
+                "predicate:负责": [
+                  22,
+                  24
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "subject": {
+              "b9f09d811beae5bd6937d9d8": "hit",
+              "800018a70c7bdd4e8a87dc6a": "hit",
+              "fb80b2d8ec4488a5e28f490d": "hit",
+              "60a8b690be25020660d3dfa8": "hit",
+              "62652c7bfe779b90c3e33281": "hit",
+              "9d0f45aeebfcad1ee314d941": "hit",
+              "21aaac10cc04a1974da1d7e3": "hit",
+              "48522f3e86fdc05a9377ce71": "hit",
+              "4b59c4c8d81aac056c7a8149": "unknown",
+              "682d80fd330f433e3a4b77ef": "unknown",
+              "fe1d3885a7144919cf970448": "hit",
+              "9c5963f87407dc6704e1ae4e": "hit",
+              "e67b6105a30b94c2a7ecf670": "unknown",
+              "ac9d80599920537a16484420": "hit",
+              "e55e8955be357c919b089242": "hit",
+              "c67b43e06befcf3f82e784e9": "hit",
+              "1deb9e7bc4f6dd0866bd82b3": "hit",
+              "3fad11f9b7e812516650b775": "hit",
+              "71024f84f8f84a635f623284": "unknown",
+              "dea739a2d9f6a98fe1fc3e3b": "unknown",
+              "d07718777c0b7d9def1dd77b": "unknown",
+              "502fcc15c4493437b2f891e1": "hit",
+              "c73007b89cf33946dad85a25": "hit",
+              "3eb92a607aaca56289f77de4": "hit",
+              "23125276e09da49c4b6b9875": "hit",
+              "80f093b64ae7c6d0a8e5055e": "hit",
+              "a1f490e80767706c82e28f2e": "unknown",
+              "851cc93a1cb208d8552b5661": "unknown",
+              "bb3710cfc1270d6d1d9fb6da": "unknown",
+              "0257174a1652d600d324f400": "unknown"
+            },
+            "role": {
+              "b9f09d811beae5bd6937d9d8": "hit",
+              "800018a70c7bdd4e8a87dc6a": "hit",
+              "fb80b2d8ec4488a5e28f490d": "hit",
+              "60a8b690be25020660d3dfa8": "hit",
+              "62652c7bfe779b90c3e33281": "hit",
+              "9d0f45aeebfcad1ee314d941": "hit",
+              "21aaac10cc04a1974da1d7e3": "hit",
+              "48522f3e86fdc05a9377ce71": "hit",
+              "4b59c4c8d81aac056c7a8149": "unknown",
+              "682d80fd330f433e3a4b77ef": "unknown",
+              "fe1d3885a7144919cf970448": "hit",
+              "9c5963f87407dc6704e1ae4e": "hit",
+              "e67b6105a30b94c2a7ecf670": "unknown",
+              "ac9d80599920537a16484420": "hit",
+              "e55e8955be357c919b089242": "hit",
+              "c67b43e06befcf3f82e784e9": "hit",
+              "1deb9e7bc4f6dd0866bd82b3": "hit",
+              "3fad11f9b7e812516650b775": "hit",
+              "71024f84f8f84a635f623284": "unknown",
+              "dea739a2d9f6a98fe1fc3e3b": "unknown",
+              "d07718777c0b7d9def1dd77b": "unknown",
+              "502fcc15c4493437b2f891e1": "hit",
+              "c73007b89cf33946dad85a25": "hit",
+              "3eb92a607aaca56289f77de4": "hit",
+              "23125276e09da49c4b6b9875": "hit",
+              "80f093b64ae7c6d0a8e5055e": "hit",
+              "a1f490e80767706c82e28f2e": "unknown",
+              "851cc93a1cb208d8552b5661": "unknown",
+              "bb3710cfc1270d6d1d9fb6da": "unknown",
+              "0257174a1652d600d324f400": "unknown"
+            },
+            "policy_fact": {
+              "b9f09d811beae5bd6937d9d8": "hit",
+              "800018a70c7bdd4e8a87dc6a": "hit",
+              "fb80b2d8ec4488a5e28f490d": "hit",
+              "60a8b690be25020660d3dfa8": "hit",
+              "62652c7bfe779b90c3e33281": "hit",
+              "9d0f45aeebfcad1ee314d941": "hit",
+              "21aaac10cc04a1974da1d7e3": "hit",
+              "48522f3e86fdc05a9377ce71": "hit",
+              "4b59c4c8d81aac056c7a8149": "hit",
+              "682d80fd330f433e3a4b77ef": "hit",
+              "fe1d3885a7144919cf970448": "hit",
+              "9c5963f87407dc6704e1ae4e": "hit",
+              "e67b6105a30b94c2a7ecf670": "hit",
+              "ac9d80599920537a16484420": "hit",
+              "e55e8955be357c919b089242": "hit",
+              "c67b43e06befcf3f82e784e9": "hit",
+              "1deb9e7bc4f6dd0866bd82b3": "hit",
+              "3fad11f9b7e812516650b775": "hit",
+              "71024f84f8f84a635f623284": "hit",
+              "dea739a2d9f6a98fe1fc3e3b": "hit",
+              "d07718777c0b7d9def1dd77b": "hit",
+              "502fcc15c4493437b2f891e1": "hit",
+              "c73007b89cf33946dad85a25": "hit",
+              "3eb92a607aaca56289f77de4": "hit",
+              "23125276e09da49c4b6b9875": "hit",
+              "80f093b64ae7c6d0a8e5055e": "hit",
+              "a1f490e80767706c82e28f2e": "hit",
+              "851cc93a1cb208d8552b5661": "hit",
+              "bb3710cfc1270d6d1d9fb6da": "hit",
+              "0257174a1652d600d324f400": "hit"
+            },
+            "predicate:负责": {
+              "b9f09d811beae5bd6937d9d8": "hit",
+              "800018a70c7bdd4e8a87dc6a": "hit",
+              "fb80b2d8ec4488a5e28f490d": "hit",
+              "60a8b690be25020660d3dfa8": "hit",
+              "62652c7bfe779b90c3e33281": "miss",
+              "9d0f45aeebfcad1ee314d941": "hit",
+              "21aaac10cc04a1974da1d7e3": "hit",
+              "48522f3e86fdc05a9377ce71": "hit",
+              "4b59c4c8d81aac056c7a8149": "hit",
+              "682d80fd330f433e3a4b77ef": "hit",
+              "fe1d3885a7144919cf970448": "miss",
+              "9c5963f87407dc6704e1ae4e": "miss",
+              "e67b6105a30b94c2a7ecf670": "hit",
+              "ac9d80599920537a16484420": "miss",
+              "e55e8955be357c919b089242": "miss",
+              "c67b43e06befcf3f82e784e9": "miss",
+              "1deb9e7bc4f6dd0866bd82b3": "miss",
+              "3fad11f9b7e812516650b775": "miss",
+              "71024f84f8f84a635f623284": "miss",
+              "dea739a2d9f6a98fe1fc3e3b": "hit",
+              "d07718777c0b7d9def1dd77b": "miss",
+              "502fcc15c4493437b2f891e1": "miss",
+              "c73007b89cf33946dad85a25": "miss",
+              "3eb92a607aaca56289f77de4": "miss",
+              "23125276e09da49c4b6b9875": "miss",
+              "80f093b64ae7c6d0a8e5055e": "miss",
+              "a1f490e80767706c82e28f2e": "miss",
+              "851cc93a1cb208d8552b5661": "miss",
+              "bb3710cfc1270d6d1d9fb6da": "miss",
+              "0257174a1652d600d324f400": "miss"
+            }
+          },
+          "primary_group_id": "cecc1bced7bd9523",
+          "covered_slots": [
+            "policy_fact",
+            "predicate:负责",
+            "role",
+            "subject"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "cecc1bced7bd9523",
+                "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                "knowledge_ids": [
+                  "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司重要决策法律合规审核管理办法",
+                "document_revision": "2025",
+                "effective_date": "",
+                "version_year": 2025,
+                "passage_ids": [
+                  "f38d4e88e9371ceabe2566a6973e3166",
+                  "640e4ce94f67676be67f83c899e81c82",
+                  "0ea0bb1be39826cfef6d6b3adc5ecce0",
+                  "4deed0be86707f3bb13e637bed762135",
+                  "1c97fc1bd504ae73cbba1c15e76d8a27",
+                  "11bbd5056f79c8f85abc10ff9c8ee7ee",
+                  "820fa23d66d52741921972289983318c"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  10,
+                  11
+                ],
+                "retrieval_scores": [
+                  0.9000000000000001,
+                  0.9000000000000001,
+                  0.9000000000000001,
+                  0.9000000000000001,
+                  0.9000000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+                "section": "第六章 附则 > 第二十六条 本办法由区公司法律合规部负责解释。 > 第二十七条 本部分自印发之日起施行，过去规定与本办法",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 9.8,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "f38d4e88e9371ceabe2566a6973e3166:r0",
+                  "f38d4e88e9371ceabe2566a6973e3166:r1",
+                  "f38d4e88e9371ceabe2566a6973e3166:r2",
+                  "f38d4e88e9371ceabe2566a6973e3166:r3",
+                  "f38d4e88e9371ceabe2566a6973e3166:r4",
+                  "f38d4e88e9371ceabe2566a6973e3166:r5",
+                  "f38d4e88e9371ceabe2566a6973e3166:r6",
+                  "f38d4e88e9371ceabe2566a6973e3166:r7",
+                  "640e4ce94f67676be67f83c899e81c82:r0",
+                  "640e4ce94f67676be67f83c899e81c82:r1",
+                  "640e4ce94f67676be67f83c899e81c82:r2",
+                  "640e4ce94f67676be67f83c899e81c82:r3",
+                  "640e4ce94f67676be67f83c899e81c82:r4",
+                  "640e4ce94f67676be67f83c899e81c82:r5",
+                  "0ea0bb1be39826cfef6d6b3adc5ecce0:r0",
+                  "0ea0bb1be39826cfef6d6b3adc5ecce0:r1",
+                  "0ea0bb1be39826cfef6d6b3adc5ecce0:r2",
+                  "0ea0bb1be39826cfef6d6b3adc5ecce0:r3",
+                  "0ea0bb1be39826cfef6d6b3adc5ecce0:r4",
+                  "0ea0bb1be39826cfef6d6b3adc5ecce0:r5",
+                  "4deed0be86707f3bb13e637bed762135:r0",
+                  "4deed0be86707f3bb13e637bed762135:r1",
+                  "1c97fc1bd504ae73cbba1c15e76d8a27:r0",
+                  "1c97fc1bd504ae73cbba1c15e76d8a27:r1",
+                  "1c97fc1bd504ae73cbba1c15e76d8a27:r2",
+                  "1c97fc1bd504ae73cbba1c15e76d8a27:r3",
+                  "1c97fc1bd504ae73cbba1c15e76d8a27:r4",
+                  "11bbd5056f79c8f85abc10ff9c8ee7ee:r0",
+                  "11bbd5056f79c8f85abc10ff9c8ee7ee:r1",
+                  "11bbd5056f79c8f85abc10ff9c8ee7ee:r2",
+                  "11bbd5056f79c8f85abc10ff9c8ee7ee:r3",
+                  "820fa23d66d52741921972289983318c:r0",
+                  "820fa23d66d52741921972289983318c:r1",
+                  "820fa23d66d52741921972289983318c:r2",
+                  "820fa23d66d52741921972289983318c:r3",
+                  "820fa23d66d52741921972289983318c:r4",
+                  "820fa23d66d52741921972289983318c:r5",
+                  "820fa23d66d52741921972289983318c:r6",
+                  "820fa23d66d52741921972289983318c:r7",
+                  "820fa23d66d52741921972289983318c:r8",
+                  "820fa23d66d52741921972289983318c:r9"
+                ]
+              },
+              {
+                "group_id": "7fed0ef8b9e24db7",
+                "knowledge_id": "4e1f17e5-1b81-454d-bf82-db980ee49910",
+                "knowledge_ids": [
+                  "4e1f17e5-1b81-454d-bf82-db980ee49910"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司固定资产管理办法",
+                "document_revision": "2017",
+                "effective_date": "",
+                "version_year": 2017,
+                "passage_ids": [
+                  "cb393094729df18ecac6f90f5912c7b7"
+                ],
+                "retrieval_ranks": [
+                  8
+                ],
+                "retrieval_scores": [
+                  0.75
+                ],
+                "title": "中电信桂-2017-266号-关于印发中国电信广西公司固定资产管理办法-2017年-的通知--4e1f17e5",
+                "section": "1.网络运行维护事业部负责有线传输设备，无线传输设备，何世恒(全渠道运营中心) > 2.市场部负责营业用电话设备，公共电话设备， IC卡电话 > 3.企业信息化事业部负责企业信息系统设备中用于 IT支撑",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 3.5,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "cb393094729df18ecac6f90f5912c7b7:r0",
+                  "cb393094729df18ecac6f90f5912c7b7:r1",
+                  "cb393094729df18ecac6f90f5912c7b7:r2",
+                  "cb393094729df18ecac6f90f5912c7b7:r3",
+                  "cb393094729df18ecac6f90f5912c7b7:r4",
+                  "cb393094729df18ecac6f90f5912c7b7:r5",
+                  "cb393094729df18ecac6f90f5912c7b7:r6",
+                  "cb393094729df18ecac6f90f5912c7b7:r7"
+                ]
+              },
+              {
+                "group_id": "fbc36afd660a3d94",
+                "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+                "knowledge_ids": [
+                  "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司内容信息安全管理办法",
+                "document_revision": "2022",
+                "effective_date": "",
+                "version_year": 2022,
+                "passage_ids": [
+                  "097cce346f1026a2cf80d0df41875ee8"
+                ],
+                "retrieval_ranks": [
+                  5
+                ],
+                "retrieval_scores": [
+                  0.75
+                ],
+                "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+                "section": "2.负责内容信息安全事件的处置工作，组织、指导内容信息 > 3.负责承接政府主管部门和集团公司下达的内容信息安全 > 5.负责对日常内容信息安全工作进行监督、指导、教育、培",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.6667,
+                "freshness_score": 0.0,
+                "group_score": 2.8333,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "097cce346f1026a2cf80d0df41875ee8:r0",
+                  "097cce346f1026a2cf80d0df41875ee8:r1",
+                  "097cce346f1026a2cf80d0df41875ee8:r2",
+                  "097cce346f1026a2cf80d0df41875ee8:r3",
+                  "097cce346f1026a2cf80d0df41875ee8:r4",
+                  "097cce346f1026a2cf80d0df41875ee8:r5"
+                ]
+              },
+              {
+                "group_id": "2b91359b443aa98a",
+                "knowledge_id": "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+                "knowledge_ids": [
+                  "5b7cff87-0015-4703-bcd7-8668c492ac8d"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司印章管理办法",
+                "document_revision": "2020",
+                "effective_date": "",
+                "version_year": 2020,
+                "passage_ids": [
+                  "05a1d92810362ad39b8baf29644013f8"
+                ],
+                "retrieval_ranks": [
+                  6
+                ],
+                "retrieval_scores": [
+                  0.75
+                ],
+                "title": "中电信桂-2020-381号-关于印发中国电信广西公司印章管理办法-2020年修订-的通知--5b7cff87",
+                "section": "第七条 办公室为公司印章的综合管理部门，主要职责： > （一）负责制定公司印章管理规定并组织实施，对公司各类 > （二）负责组织公司印章刻制、启用、发放、停用、回收、",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.6667,
+                "freshness_score": 0.0,
+                "group_score": 2.8333,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "05a1d92810362ad39b8baf29644013f8:r0",
+                  "05a1d92810362ad39b8baf29644013f8:r1",
+                  "05a1d92810362ad39b8baf29644013f8:r2",
+                  "05a1d92810362ad39b8baf29644013f8:r3"
+                ]
+              },
+              {
+                "group_id": "782123aedf42966a",
+                "knowledge_id": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+                "knowledge_ids": [
+                  "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司数据安全管理办法",
+                "document_revision": "2019",
+                "effective_date": "",
+                "version_year": 2019,
+                "passage_ids": [
+                  "f7d2f4636458475b608c485a6be76365"
+                ],
+                "retrieval_ranks": [
+                  7
+                ],
+                "retrieval_scores": [
+                  0.75
+                ],
+                "title": "中电信桂-2019-370号-关于印发中国电信广西公司数据安全管理办法-试行-的通知--5fd963e8",
+                "section": "（三）监督检查各数据安全归口管理领域职责履行、数据安 > （四）建立数据安全管理体系，牵头制订全区数据安全管理 > （五）牵头组织数据安全监督检查，汇总归口责任部门相关",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.6667,
+                "freshness_score": 0.0,
+                "group_score": 2.8333,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "f7d2f4636458475b608c485a6be76365:r0",
+                  "f7d2f4636458475b608c485a6be76365:r1",
+                  "f7d2f4636458475b608c485a6be76365:r2",
+                  "f7d2f4636458475b608c485a6be76365:r3",
+                  "f7d2f4636458475b608c485a6be76365:r4",
+                  "f7d2f4636458475b608c485a6be76365:r5"
+                ]
+              },
+              {
+                "group_id": "64436f93ec45f7c0",
+                "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+                "knowledge_ids": [
+                  "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司内容信息安全管理办法",
+                "document_revision": "2017",
+                "effective_date": "",
+                "version_year": 2017,
+                "passage_ids": [
+                  "653f9377efecc56ba6b63aace18e90b6"
+                ],
+                "retrieval_ranks": [
+                  9
+                ],
+                "retrieval_scores": [
+                  0.33000000000000007
+                ],
+                "title": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5",
+                "section": "3.负责承接政府主管部门和集团公司下达的内容信息安全 > 4.负责监督、检查、评估、 考核各单位内容信息安全工作， > 5.负责对日常内容信息安全工作进行监督、指导、教育、培何世恒(全渠道运营中心)",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.6667,
+                "freshness_score": 0.0,
+                "group_score": 1.9933,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "653f9377efecc56ba6b63aace18e90b6:r0",
+                  "653f9377efecc56ba6b63aace18e90b6:r1",
+                  "653f9377efecc56ba6b63aace18e90b6:r2",
+                  "653f9377efecc56ba6b63aace18e90b6:r3",
+                  "653f9377efecc56ba6b63aace18e90b6:r4",
+                  "653f9377efecc56ba6b63aace18e90b6:r5",
+                  "653f9377efecc56ba6b63aace18e90b6:r6"
+                ]
+              }
+            ],
+            "primary_group_id": "cecc1bced7bd9523",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "中国电信广西公司各类管理",
+                "办法的归口管理部门",
+                "法律合规审核由谁负责"
+              ],
+              "selection": [
+                {
+                  "group_id": "cecc1bced7bd9523",
+                  "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                  "knowledge_ids": [
+                    "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+                  ],
+                  "score": 9.8,
+                  "role": "primary",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "7fed0ef8b9e24db7",
+                  "knowledge_id": "4e1f17e5-1b81-454d-bf82-db980ee49910",
+                  "knowledge_ids": [
+                    "4e1f17e5-1b81-454d-bf82-db980ee49910"
+                  ],
+                  "score": 3.5,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "fbc36afd660a3d94",
+                  "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+                  "knowledge_ids": [
+                    "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+                  ],
+                  "score": 2.8333,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "2b91359b443aa98a",
+                  "knowledge_id": "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+                  "knowledge_ids": [
+                    "5b7cff87-0015-4703-bcd7-8668c492ac8d"
+                  ],
+                  "score": 2.8333,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "782123aedf42966a",
+                  "knowledge_id": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+                  "knowledge_ids": [
+                    "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22"
+                  ],
+                  "score": 2.8333,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "64436f93ec45f7c0",
+                  "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+                  "knowledge_ids": [
+                    "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+                  ],
+                  "score": 1.9933,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                }
+              ],
+              "top_gap": 6.3
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "subject",
+            "role",
+            "policy_fact",
+            "predicate:负责"
+          ],
+          "candidate_ids": [
+            "b9f09d811beae5bd6937d9d8",
+            "800018a70c7bdd4e8a87dc6a",
+            "fb80b2d8ec4488a5e28f490d",
+            "60a8b690be25020660d3dfa8",
+            "62652c7bfe779b90c3e33281",
+            "9d0f45aeebfcad1ee314d941"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "responsibility",
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact",
+            "predicate:负责",
+            "role",
+            "subject"
+          ],
+          "coverage_matrix": {
+            "subject": {
+              "b9f09d811beae5bd6937d9d8": "hit",
+              "800018a70c7bdd4e8a87dc6a": "hit",
+              "fb80b2d8ec4488a5e28f490d": "hit",
+              "60a8b690be25020660d3dfa8": "hit",
+              "62652c7bfe779b90c3e33281": "hit",
+              "9d0f45aeebfcad1ee314d941": "hit",
+              "21aaac10cc04a1974da1d7e3": "hit",
+              "48522f3e86fdc05a9377ce71": "hit",
+              "4b59c4c8d81aac056c7a8149": "unknown",
+              "682d80fd330f433e3a4b77ef": "unknown",
+              "fe1d3885a7144919cf970448": "hit",
+              "9c5963f87407dc6704e1ae4e": "hit",
+              "e67b6105a30b94c2a7ecf670": "unknown",
+              "ac9d80599920537a16484420": "hit",
+              "e55e8955be357c919b089242": "hit",
+              "c67b43e06befcf3f82e784e9": "hit",
+              "1deb9e7bc4f6dd0866bd82b3": "hit",
+              "3fad11f9b7e812516650b775": "hit",
+              "71024f84f8f84a635f623284": "unknown",
+              "dea739a2d9f6a98fe1fc3e3b": "unknown",
+              "d07718777c0b7d9def1dd77b": "unknown",
+              "502fcc15c4493437b2f891e1": "hit",
+              "c73007b89cf33946dad85a25": "hit",
+              "3eb92a607aaca56289f77de4": "hit",
+              "23125276e09da49c4b6b9875": "hit",
+              "80f093b64ae7c6d0a8e5055e": "hit",
+              "a1f490e80767706c82e28f2e": "unknown",
+              "851cc93a1cb208d8552b5661": "unknown",
+              "bb3710cfc1270d6d1d9fb6da": "unknown",
+              "0257174a1652d600d324f400": "unknown"
+            },
+            "role": {
+              "b9f09d811beae5bd6937d9d8": "hit",
+              "800018a70c7bdd4e8a87dc6a": "hit",
+              "fb80b2d8ec4488a5e28f490d": "hit",
+              "60a8b690be25020660d3dfa8": "hit",
+              "62652c7bfe779b90c3e33281": "hit",
+              "9d0f45aeebfcad1ee314d941": "hit",
+              "21aaac10cc04a1974da1d7e3": "hit",
+              "48522f3e86fdc05a9377ce71": "hit",
+              "4b59c4c8d81aac056c7a8149": "unknown",
+              "682d80fd330f433e3a4b77ef": "unknown",
+              "fe1d3885a7144919cf970448": "hit",
+              "9c5963f87407dc6704e1ae4e": "hit",
+              "e67b6105a30b94c2a7ecf670": "unknown",
+              "ac9d80599920537a16484420": "hit",
+              "e55e8955be357c919b089242": "hit",
+              "c67b43e06befcf3f82e784e9": "hit",
+              "1deb9e7bc4f6dd0866bd82b3": "hit",
+              "3fad11f9b7e812516650b775": "hit",
+              "71024f84f8f84a635f623284": "unknown",
+              "dea739a2d9f6a98fe1fc3e3b": "unknown",
+              "d07718777c0b7d9def1dd77b": "unknown",
+              "502fcc15c4493437b2f891e1": "hit",
+              "c73007b89cf33946dad85a25": "hit",
+              "3eb92a607aaca56289f77de4": "hit",
+              "23125276e09da49c4b6b9875": "hit",
+              "80f093b64ae7c6d0a8e5055e": "hit",
+              "a1f490e80767706c82e28f2e": "unknown",
+              "851cc93a1cb208d8552b5661": "unknown",
+              "bb3710cfc1270d6d1d9fb6da": "unknown",
+              "0257174a1652d600d324f400": "unknown"
+            },
+            "policy_fact": {
+              "b9f09d811beae5bd6937d9d8": "hit",
+              "800018a70c7bdd4e8a87dc6a": "hit",
+              "fb80b2d8ec4488a5e28f490d": "hit",
+              "60a8b690be25020660d3dfa8": "hit",
+              "62652c7bfe779b90c3e33281": "hit",
+              "9d0f45aeebfcad1ee314d941": "hit",
+              "21aaac10cc04a1974da1d7e3": "hit",
+              "48522f3e86fdc05a9377ce71": "hit",
+              "4b59c4c8d81aac056c7a8149": "hit",
+              "682d80fd330f433e3a4b77ef": "hit",
+              "fe1d3885a7144919cf970448": "hit",
+              "9c5963f87407dc6704e1ae4e": "hit",
+              "e67b6105a30b94c2a7ecf670": "hit",
+              "ac9d80599920537a16484420": "hit",
+              "e55e8955be357c919b089242": "hit",
+              "c67b43e06befcf3f82e784e9": "hit",
+              "1deb9e7bc4f6dd0866bd82b3": "hit",
+              "3fad11f9b7e812516650b775": "hit",
+              "71024f84f8f84a635f623284": "hit",
+              "dea739a2d9f6a98fe1fc3e3b": "hit",
+              "d07718777c0b7d9def1dd77b": "hit",
+              "502fcc15c4493437b2f891e1": "hit",
+              "c73007b89cf33946dad85a25": "hit",
+              "3eb92a607aaca56289f77de4": "hit",
+              "23125276e09da49c4b6b9875": "hit",
+              "80f093b64ae7c6d0a8e5055e": "hit",
+              "a1f490e80767706c82e28f2e": "hit",
+              "851cc93a1cb208d8552b5661": "hit",
+              "bb3710cfc1270d6d1d9fb6da": "hit",
+              "0257174a1652d600d324f400": "hit"
+            },
+            "predicate:负责": {
+              "b9f09d811beae5bd6937d9d8": "hit",
+              "800018a70c7bdd4e8a87dc6a": "hit",
+              "fb80b2d8ec4488a5e28f490d": "hit",
+              "60a8b690be25020660d3dfa8": "hit",
+              "62652c7bfe779b90c3e33281": "miss",
+              "9d0f45aeebfcad1ee314d941": "hit",
+              "21aaac10cc04a1974da1d7e3": "hit",
+              "48522f3e86fdc05a9377ce71": "hit",
+              "4b59c4c8d81aac056c7a8149": "hit",
+              "682d80fd330f433e3a4b77ef": "hit",
+              "fe1d3885a7144919cf970448": "miss",
+              "9c5963f87407dc6704e1ae4e": "miss",
+              "e67b6105a30b94c2a7ecf670": "hit",
+              "ac9d80599920537a16484420": "miss",
+              "e55e8955be357c919b089242": "miss",
+              "c67b43e06befcf3f82e784e9": "miss",
+              "1deb9e7bc4f6dd0866bd82b3": "miss",
+              "3fad11f9b7e812516650b775": "miss",
+              "71024f84f8f84a635f623284": "miss",
+              "dea739a2d9f6a98fe1fc3e3b": "hit",
+              "d07718777c0b7d9def1dd77b": "miss",
+              "502fcc15c4493437b2f891e1": "miss",
+              "c73007b89cf33946dad85a25": "miss",
+              "3eb92a607aaca56289f77de4": "miss",
+              "23125276e09da49c4b6b9875": "miss",
+              "80f093b64ae7c6d0a8e5055e": "miss",
+              "a1f490e80767706c82e28f2e": "miss",
+              "851cc93a1cb208d8552b5661": "miss",
+              "bb3710cfc1270d6d1d9fb6da": "miss",
+              "0257174a1652d600d324f400": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+          "intents": [
+            "responsibility",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "subject",
+            "role",
+            "policy_fact",
+            "predicate:负责"
+          ],
+          "entities": [
+            "中国电信",
+            "各类",
+            "管理",
+            "办法",
+            "归口",
+            "部门",
+            "法律",
+            "合规",
+            "审核",
+            "负责",
+            "中国电信广西公司各类管理办法",
+            "中国电信广西公司"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": true,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "responsibility",
+            "policy",
+            "prohibition",
+            "scope",
+            "relationship"
+          ],
+          "subject": "中国电信",
+          "object": "各类",
+          "scope": [
+            "部门"
+          ],
+          "selector": [],
+          "predicate": "负责",
+          "polarity": "positive",
+          "condition_slots": [],
+          "requested_attribute": "responsibility",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [
+            {
+              "text": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+              "anchors": [
+                "中国电信",
+                "各类",
+                "管理",
+                "办法",
+                "归口",
+                "部门"
+              ]
+            }
+          ],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "中国电信",
+            "各类",
+            "管理",
+            "办法",
+            "归口",
+            "部门",
+            "法律",
+            "合规",
+            "审核",
+            "负责",
+            "中国电信广西公司各类管理办法",
+            "中国电信广西公司"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "cecc1bced7bd9523",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "knowledge_ids": [
+                "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司重要决策法律合规审核管理办法",
+              "document_revision": "2025",
+              "effective_date": "",
+              "version_year": 2025,
+              "passage_ids": [
+                "f38d4e88e9371ceabe2566a6973e3166",
+                "640e4ce94f67676be67f83c899e81c82",
+                "0ea0bb1be39826cfef6d6b3adc5ecce0",
+                "4deed0be86707f3bb13e637bed762135",
+                "1c97fc1bd504ae73cbba1c15e76d8a27",
+                "11bbd5056f79c8f85abc10ff9c8ee7ee",
+                "820fa23d66d52741921972289983318c"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                10,
+                11
+              ],
+              "retrieval_scores": [
+                0.9000000000000001,
+                0.9000000000000001,
+                0.9000000000000001,
+                0.9000000000000001,
+                0.9000000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "section": "第六章 附则 > 第二十六条 本办法由区公司法律合规部负责解释。 > 第二十七条 本部分自印发之日起施行，过去规定与本办法",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 9.8,
+              "rejection_reasons": [],
+              "record_ids": [
+                "f38d4e88e9371ceabe2566a6973e3166:r0",
+                "f38d4e88e9371ceabe2566a6973e3166:r1",
+                "f38d4e88e9371ceabe2566a6973e3166:r2",
+                "f38d4e88e9371ceabe2566a6973e3166:r3",
+                "f38d4e88e9371ceabe2566a6973e3166:r4",
+                "f38d4e88e9371ceabe2566a6973e3166:r5",
+                "f38d4e88e9371ceabe2566a6973e3166:r6",
+                "f38d4e88e9371ceabe2566a6973e3166:r7",
+                "640e4ce94f67676be67f83c899e81c82:r0",
+                "640e4ce94f67676be67f83c899e81c82:r1",
+                "640e4ce94f67676be67f83c899e81c82:r2",
+                "640e4ce94f67676be67f83c899e81c82:r3",
+                "640e4ce94f67676be67f83c899e81c82:r4",
+                "640e4ce94f67676be67f83c899e81c82:r5",
+                "0ea0bb1be39826cfef6d6b3adc5ecce0:r0",
+                "0ea0bb1be39826cfef6d6b3adc5ecce0:r1",
+                "0ea0bb1be39826cfef6d6b3adc5ecce0:r2",
+                "0ea0bb1be39826cfef6d6b3adc5ecce0:r3",
+                "0ea0bb1be39826cfef6d6b3adc5ecce0:r4",
+                "0ea0bb1be39826cfef6d6b3adc5ecce0:r5",
+                "4deed0be86707f3bb13e637bed762135:r0",
+                "4deed0be86707f3bb13e637bed762135:r1",
+                "1c97fc1bd504ae73cbba1c15e76d8a27:r0",
+                "1c97fc1bd504ae73cbba1c15e76d8a27:r1",
+                "1c97fc1bd504ae73cbba1c15e76d8a27:r2",
+                "1c97fc1bd504ae73cbba1c15e76d8a27:r3",
+                "1c97fc1bd504ae73cbba1c15e76d8a27:r4",
+                "11bbd5056f79c8f85abc10ff9c8ee7ee:r0",
+                "11bbd5056f79c8f85abc10ff9c8ee7ee:r1",
+                "11bbd5056f79c8f85abc10ff9c8ee7ee:r2",
+                "11bbd5056f79c8f85abc10ff9c8ee7ee:r3",
+                "820fa23d66d52741921972289983318c:r0",
+                "820fa23d66d52741921972289983318c:r1",
+                "820fa23d66d52741921972289983318c:r2",
+                "820fa23d66d52741921972289983318c:r3",
+                "820fa23d66d52741921972289983318c:r4",
+                "820fa23d66d52741921972289983318c:r5",
+                "820fa23d66d52741921972289983318c:r6",
+                "820fa23d66d52741921972289983318c:r7",
+                "820fa23d66d52741921972289983318c:r8",
+                "820fa23d66d52741921972289983318c:r9"
+              ]
+            },
+            {
+              "group_id": "7fed0ef8b9e24db7",
+              "knowledge_id": "4e1f17e5-1b81-454d-bf82-db980ee49910",
+              "knowledge_ids": [
+                "4e1f17e5-1b81-454d-bf82-db980ee49910"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司固定资产管理办法",
+              "document_revision": "2017",
+              "effective_date": "",
+              "version_year": 2017,
+              "passage_ids": [
+                "cb393094729df18ecac6f90f5912c7b7"
+              ],
+              "retrieval_ranks": [
+                8
+              ],
+              "retrieval_scores": [
+                0.75
+              ],
+              "title": "中电信桂-2017-266号-关于印发中国电信广西公司固定资产管理办法-2017年-的通知--4e1f17e5",
+              "section": "1.网络运行维护事业部负责有线传输设备，无线传输设备，何世恒(全渠道运营中心) > 2.市场部负责营业用电话设备，公共电话设备， IC卡电话 > 3.企业信息化事业部负责企业信息系统设备中用于 IT支撑",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 3.5,
+              "rejection_reasons": [],
+              "record_ids": [
+                "cb393094729df18ecac6f90f5912c7b7:r0",
+                "cb393094729df18ecac6f90f5912c7b7:r1",
+                "cb393094729df18ecac6f90f5912c7b7:r2",
+                "cb393094729df18ecac6f90f5912c7b7:r3",
+                "cb393094729df18ecac6f90f5912c7b7:r4",
+                "cb393094729df18ecac6f90f5912c7b7:r5",
+                "cb393094729df18ecac6f90f5912c7b7:r6",
+                "cb393094729df18ecac6f90f5912c7b7:r7"
+              ]
+            },
+            {
+              "group_id": "fbc36afd660a3d94",
+              "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+              "knowledge_ids": [
+                "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司内容信息安全管理办法",
+              "document_revision": "2022",
+              "effective_date": "",
+              "version_year": 2022,
+              "passage_ids": [
+                "097cce346f1026a2cf80d0df41875ee8"
+              ],
+              "retrieval_ranks": [
+                5
+              ],
+              "retrieval_scores": [
+                0.75
+              ],
+              "title": "中电信桂-2022-465号-关于印发中国电信广西公司内容信息安全管理办法-2022年修订-的通知--9e844150",
+              "section": "2.负责内容信息安全事件的处置工作，组织、指导内容信息 > 3.负责承接政府主管部门和集团公司下达的内容信息安全 > 5.负责对日常内容信息安全工作进行监督、指导、教育、培",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.6667,
+              "freshness_score": 0.0,
+              "group_score": 2.8333,
+              "rejection_reasons": [],
+              "record_ids": [
+                "097cce346f1026a2cf80d0df41875ee8:r0",
+                "097cce346f1026a2cf80d0df41875ee8:r1",
+                "097cce346f1026a2cf80d0df41875ee8:r2",
+                "097cce346f1026a2cf80d0df41875ee8:r3",
+                "097cce346f1026a2cf80d0df41875ee8:r4",
+                "097cce346f1026a2cf80d0df41875ee8:r5"
+              ]
+            },
+            {
+              "group_id": "2b91359b443aa98a",
+              "knowledge_id": "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+              "knowledge_ids": [
+                "5b7cff87-0015-4703-bcd7-8668c492ac8d"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司印章管理办法",
+              "document_revision": "2020",
+              "effective_date": "",
+              "version_year": 2020,
+              "passage_ids": [
+                "05a1d92810362ad39b8baf29644013f8"
+              ],
+              "retrieval_ranks": [
+                6
+              ],
+              "retrieval_scores": [
+                0.75
+              ],
+              "title": "中电信桂-2020-381号-关于印发中国电信广西公司印章管理办法-2020年修订-的通知--5b7cff87",
+              "section": "第七条 办公室为公司印章的综合管理部门，主要职责： > （一）负责制定公司印章管理规定并组织实施，对公司各类 > （二）负责组织公司印章刻制、启用、发放、停用、回收、",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.6667,
+              "freshness_score": 0.0,
+              "group_score": 2.8333,
+              "rejection_reasons": [],
+              "record_ids": [
+                "05a1d92810362ad39b8baf29644013f8:r0",
+                "05a1d92810362ad39b8baf29644013f8:r1",
+                "05a1d92810362ad39b8baf29644013f8:r2",
+                "05a1d92810362ad39b8baf29644013f8:r3"
+              ]
+            },
+            {
+              "group_id": "782123aedf42966a",
+              "knowledge_id": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+              "knowledge_ids": [
+                "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司数据安全管理办法",
+              "document_revision": "2019",
+              "effective_date": "",
+              "version_year": 2019,
+              "passage_ids": [
+                "f7d2f4636458475b608c485a6be76365"
+              ],
+              "retrieval_ranks": [
+                7
+              ],
+              "retrieval_scores": [
+                0.75
+              ],
+              "title": "中电信桂-2019-370号-关于印发中国电信广西公司数据安全管理办法-试行-的通知--5fd963e8",
+              "section": "（三）监督检查各数据安全归口管理领域职责履行、数据安 > （四）建立数据安全管理体系，牵头制订全区数据安全管理 > （五）牵头组织数据安全监督检查，汇总归口责任部门相关",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.6667,
+              "freshness_score": 0.0,
+              "group_score": 2.8333,
+              "rejection_reasons": [],
+              "record_ids": [
+                "f7d2f4636458475b608c485a6be76365:r0",
+                "f7d2f4636458475b608c485a6be76365:r1",
+                "f7d2f4636458475b608c485a6be76365:r2",
+                "f7d2f4636458475b608c485a6be76365:r3",
+                "f7d2f4636458475b608c485a6be76365:r4",
+                "f7d2f4636458475b608c485a6be76365:r5"
+              ]
+            },
+            {
+              "group_id": "64436f93ec45f7c0",
+              "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+              "knowledge_ids": [
+                "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司内容信息安全管理办法",
+              "document_revision": "2017",
+              "effective_date": "",
+              "version_year": 2017,
+              "passage_ids": [
+                "653f9377efecc56ba6b63aace18e90b6"
+              ],
+              "retrieval_ranks": [
+                9
+              ],
+              "retrieval_scores": [
+                0.33000000000000007
+              ],
+              "title": "中电信桂-2017-317号-关于印发中国电信广西公司内容信息安全管理办法的通知--37e3bfb5",
+              "section": "3.负责承接政府主管部门和集团公司下达的内容信息安全 > 4.负责监督、检查、评估、 考核各单位内容信息安全工作， > 5.负责对日常内容信息安全工作进行监督、指导、教育、培何世恒(全渠道运营中心)",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.6667,
+              "freshness_score": 0.0,
+              "group_score": 1.9933,
+              "rejection_reasons": [],
+              "record_ids": [
+                "653f9377efecc56ba6b63aace18e90b6:r0",
+                "653f9377efecc56ba6b63aace18e90b6:r1",
+                "653f9377efecc56ba6b63aace18e90b6:r2",
+                "653f9377efecc56ba6b63aace18e90b6:r3",
+                "653f9377efecc56ba6b63aace18e90b6:r4",
+                "653f9377efecc56ba6b63aace18e90b6:r5",
+                "653f9377efecc56ba6b63aace18e90b6:r6"
+              ]
+            }
+          ],
+          "primary_group_id": "cecc1bced7bd9523",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "中国电信广西公司各类管理",
+              "办法的归口管理部门",
+              "法律合规审核由谁负责"
+            ],
+            "selection": [
+              {
+                "group_id": "cecc1bced7bd9523",
+                "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                "knowledge_ids": [
+                  "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+                ],
+                "score": 9.8,
+                "role": "primary",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "7fed0ef8b9e24db7",
+                "knowledge_id": "4e1f17e5-1b81-454d-bf82-db980ee49910",
+                "knowledge_ids": [
+                  "4e1f17e5-1b81-454d-bf82-db980ee49910"
+                ],
+                "score": 3.5,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "fbc36afd660a3d94",
+                "knowledge_id": "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+                "knowledge_ids": [
+                  "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+                ],
+                "score": 2.8333,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "2b91359b443aa98a",
+                "knowledge_id": "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+                "knowledge_ids": [
+                  "5b7cff87-0015-4703-bcd7-8668c492ac8d"
+                ],
+                "score": 2.8333,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "782123aedf42966a",
+                "knowledge_id": "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+                "knowledge_ids": [
+                  "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22"
+                ],
+                "score": 2.8333,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "64436f93ec45f7c0",
+                "knowledge_id": "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+                "knowledge_ids": [
+                  "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+                ],
+                "score": 1.9933,
+                "role": "rejected",
+                "rejection_reasons": []
+              }
+            ],
+            "top_gap": 6.3
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "管理",
+              "归口",
+              "部门"
+            ],
+            "predicate:负责": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "b9f09d811beae5bd6937d9d8"
+              ],
+              "passage_id": "640e4ce94f67676be67f83c899e81c82",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "text": "- 第二章管理职责第七条法律合规审核管理实行归口管理、分级负责的管理体制",
+              "fact_kind": "responsibility"
+            },
+            {
+              "rendered_candidate_ids": [
+                "fb80b2d8ec4488a5e28f490d"
+              ],
+              "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "text": "- 第九条各单位法律部门负责本单位的重要决策法律合规审核管理工作，负责本单位经营管理问题的法律咨询和解答，以及本单位法律审核情况的归纳、总结、汇总和统计",
+              "fact_kind": "responsibility"
+            },
+            {
+              "rendered_candidate_ids": [
+                "60a8b690be25020660d3dfa8"
+              ],
+              "passage_id": "1c97fc1bd504ae73cbba1c15e76d8a27",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "text": "- 第十四条经办部门对重要决策应通过书面形式提出法律合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部门负责人同意，可通过发文会签、工作协同单等方式提出，后续进行系统补录",
+              "fact_kind": "responsibility"
+            }
+          ],
+          "answer_len": 233
+        },
+        "primary_group_id": "cecc1bced7bd9523",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "type": "knowledge",
+              "label": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+            },
+            {
+              "id": "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+              "type": "block",
+              "label": "（八）代管子公司的合并 、分立或重组 ；",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "d6b3d715-2654-4b43-8f5e-3771880e3beb",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "type": "block",
+              "label": "第八条 区公司法律合规部是法律合规审核的归口管理部",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+              "type": "block",
+              "label": "（一）经办部门制定方案或计划时，征求法律部门的意见；",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "9cf7b8c7-b2bb-409b-82b0-18db4991fb59",
+              "type": "block",
+              "label": "[第5页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+              "type": "block",
+              "label": "第二十二条 对于需由外聘律师进行的法律合规审核，应通",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "ec5f1f15-3271-4e89-9bd4-398781a9db80",
+              "type": "block",
+              "label": "[第7页]",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+            },
+            {
+              "id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9"
+            }
+          ],
+          "edges": [
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+              "type": "contains"
+            },
+            {
+              "source": "d6b3d715-2654-4b43-8f5e-3771880e3beb",
+              "target": "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+              "type": "parent"
+            },
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "type": "contains"
+            },
+            {
+              "source": "d6b3d715-2654-4b43-8f5e-3771880e3beb",
+              "target": "87531e1f-d152-4bcb-a20c-6fb75557690d",
+              "type": "parent"
+            },
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+              "type": "contains"
+            },
+            {
+              "source": "9cf7b8c7-b2bb-409b-82b0-18db4991fb59",
+              "target": "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+              "type": "parent"
+            },
+            {
+              "source": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "target": "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+              "type": "contains"
+            },
+            {
+              "source": "ec5f1f15-3271-4e89-9bd4-398781a9db80",
+              "target": "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+              "type": "parent"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 9
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 3,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+            "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+            "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+            "4e1f17e5-1b81-454d-bf82-db980ee49910",
+            "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+          ],
+          "accepted_block_ids": [
+            "58a0f75b-a9c2-44d3-8b81-ccafc170aee5",
+            "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+            "87531e1f-d152-4bcb-a20c-6fb75557690d",
+            "fe5c4213-b2a2-49fa-972a-f13862fec232",
+            "ef053a54-7277-4989-ba47-a5c3e401ba4b",
+            "795a182e-87a5-4108-9485-8ea80c383700",
+            "c27f3d4d-0e07-4daf-a2da-ef29a3cbf2ca",
+            "4c4adf9a-e81f-447c-bde5-92619dfaf58c",
+            "01df5747-e8a0-4180-8911-7b81d4339a61",
+            "e20b6393-88ae-4587-90fa-dc1383998fbd"
+          ],
+          "accepted_passage_ids": [
+            "f38d4e88e9371ceabe2566a6973e3166",
+            "640e4ce94f67676be67f83c899e81c82",
+            "0ea0bb1be39826cfef6d6b3adc5ecce0",
+            "4deed0be86707f3bb13e637bed762135",
+            "1c97fc1bd504ae73cbba1c15e76d8a27",
+            "097cce346f1026a2cf80d0df41875ee8",
+            "05a1d92810362ad39b8baf29644013f8",
+            "f7d2f4636458475b608c485a6be76365",
+            "cb393094729df18ecac6f90f5912c7b7",
+            "653f9377efecc56ba6b63aace18e90b6",
+            "11bbd5056f79c8f85abc10ff9c8ee7ee",
+            "820fa23d66d52741921972289983318c",
+            "ab1960d6ce332c4b1af3ef3a7492c6f1",
+            "b0554250b5e311770232aa1e2fc6f2f3",
+            "4fb443aa443469952bfdc0e31fe1ca91"
+          ],
+          "adjacent_passage_ids": [
+            "11bbd5056f79c8f85abc10ff9c8ee7ee",
+            "4deed0be86707f3bb13e637bed762135",
+            "820fa23d66d52741921972289983318c",
+            "0ea0bb1be39826cfef6d6b3adc5ecce0",
+            "ab1960d6ce332c4b1af3ef3a7492c6f1",
+            "b0554250b5e311770232aa1e2fc6f2f3",
+            "4fb443aa443469952bfdc0e31fe1ca91"
+          ],
+          "generation_knowledge_ids": [
+            "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "37e3bfb5-901c-43c0-b545-1dcfcf3603a7",
+            "4e1f17e5-1b81-454d-bf82-db980ee49910",
+            "5b7cff87-0015-4703-bcd7-8668c492ac8d",
+            "5fd963e8-74f7-4c25-8d9d-b8ad29f2eb22",
+            "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8"
+          ],
+          "top_score": 0.55,
+          "intent": "ordinary",
+          "adjacent_count": 7,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "0db2dee28234e63fd7da0c5e"
+        },
+        "snapshot_fingerprint": "0db2dee28234e63fd7da0c5e",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 4,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 38.55
+  },
+  "top_candidate_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+  "candidates": [
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "passage_id": "f38d4e88e9371ceabe2566a6973e3166",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第六章 附则 > 第二十六条 本办法由区公司法律合规部负责解释。 > 第二十七条 本部分自印发之日起施行，过去规定与本办法\n项的进展情况，根据情况变化及时调整法律意见。同时对法律合\n规审核情况进行经验总结，提供给相关部门和人员作为参考。\n第二十二条 对于需由外聘律师进行的法律合规审核，应通\n过本单位法律部门统筹安排，外聘律师出具的法律意见事先经法\n律部门审核后，反馈需求部门。\n第二十三条 法律部门应做好法律合规审核的工作记录和\n档案保管工作。\n第五章 责任追究\n第二十四条 法律部门在法律审核工作中出现重大失误，给\n公司造成损失的，按照有关规定追究部门和相关人员的责任。\n第二十五条 各单位未按照国家有关规定建立健全法律监\n督机制，经办部门对按本办法规定应当法律合规审核重大决策事\n项未及时送审，导致程序上违规决策的，法律部门应给予风险提\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。"
+    },
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "passage_id": "640e4ce94f67676be67f83c899e81c82",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第八条 区公司法律合规部是法律合规审核的归口管理部 > （一）负责制定法律合规审核相关规章制度并组织实施 ； > （二）负责对规章制度的落实情况进行检查 ；\n\n（六）合并、分立、解散或变更公司形式的方案 ；\n（七）各级分支机构的设立 、合并或撤销 ；\n（八）代管子公司的合并 、分立或重组 ；\n（九）知识产权发展规划以及重大知识产权转让事项 ；\n（十）其他对公司经营管理有重大影响的决策事项 。\n第四条 重要决策作出之前 ，应当进行法律合规审核 。\n第五条 各单位法律部门应当认真履行工作职责 ，充分利用\n单位法律工作人员或外聘律师等法律资源 ，在认真分析具体情况\n的基础上 ，提出切实可行的法律意见 。\n各级单位应充分重视法律部门提出的法律意见 ，采取有效措\n施防范、控制、化解法律风险 ，最大限度地维护公司合法权益 。\n第六条 本办法适用于中国电信股份有限公司广西分公司\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；"
+    },
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第十条 各单位法律部门也可根据实际需要，委托外聘律师 > 第十一条 各单位的业务、职能部门为法律合规审核需求发 > （一）对本办法规定应当提起法律合规审核的重要决策或视\n及其所属企业 （以下简称 “各单位”）。\n第二章 管理职责\n第七条 法律合规审核管理实行归口管理 、分级负责的管理\n体制。\n第八条 区公司法律合规部是法律合规审核的归口管理部\n门，主要职责为 ：\n（一）负责制定法律合规审核相关规章制度并组织实施 ；\n（二）负责对规章制度的落实情况进行检查 ；\n（三）负责全区性经营管理问题的法律审核 ，提供法律意见 ；\n— 4 —（四）负责指导、协助下级单位的法律审核工作，对各单位\n上报的重大法律问题进行分析，提供法律意见；\n（五）负责统计全区法律审核总体情况，上报集团公司；\n（六）其它应当由归口部门承担的管理职责。\n第九条 各单位法律部门负责本单位的重要决策法律合规\n审核管理工作，负责本单位经营管理问题的法律咨询和解答，以\n及本单位法律审核情况的归纳、总结、汇总和统计。\n第十条 各单位法律部门也可根据实际需要，委托外聘律师\n承担部分法律审核工作，并对其进行必要的监督管理。\n第十一条 各单位的业务、职能部门为法律合规审核需求发\n起部门，主要职责为："
+    },
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "passage_id": "4deed0be86707f3bb13e637bed762135",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】2.XXXX > 3.XXXX > 一、XXXXXXXX\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。\n第二十七条 本部分自印发之日起施行，过去规定与本办法\n相悖的，以本办法为准。\n附件：1.重要决策法律合规审核单（模板）\n2.法律意见书（模板）\n— 9 — 附件1\n重要决策法律合规审核单（模板）\n编号 中电信X法审﹝202X﹞XX号\n申请单位\n审核事项\n所提交的文件\n法律部门意见\n初审法律人员： 电话： 时间：\n法律部门领导：\n备注：\n— 10 — 附件2\n关于XXXX的法律意见书\nXXXXXX（部/中心/分公司）\n贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\nXXXX出具法律意见。\n贵（部/中心/分公司）向我部提供的材料包括：\n1.XXXX\n2.XXXX\n3.XXXX\n我部根据上述材料及我国现行有效的相关法律、法规和规范\n性文件，经分析研究，提出以下法律意见："
+    },
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "passage_id": "1c97fc1bd504ae73cbba1c15e76d8a27",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】第十四条 经办部门对重要决策应通过书面形式提出法律 > 第四章 法律合规审核原则及工作要求 > 第十五条 法律合规审核应遵循合法性、有效性、及时性、\n度，对法律合规审核提供必要的协助。\n— 5 — 第三章 法律审核流程\n第十三条 重要决策法律合规审核可以在以下环节进行：\n（一）经办部门制定方案或计划时，征求法律部门的意见；\n（二）方案或计划在提交党委会、总经理办公会议决策前，\n征求法律部门意见或提请法律部门会签。\n（三）方案或计划进行审议时，征求法律部门的意见；\n（四）方案或计划在执行过程中遇到重大法律问题，征求法\n律部门的意见。\n第十四条 经办部门对重要决策应通过书面形式提出法律\n合规审核需求，原则上应通过集团MSS法律辅助管理系统-日常业\n务-法律支撑事项-重要决策法律审核提出，特殊情况下经法律部\n门负责人同意，可通过发文会签、工作协同单等方式提出，后续\n进行系统补录。重大决策会议管理部门应做好上会事项管控，原\n则上按规定应经法律审核事项，未经法律前置审核不得安排上会\n审议。\n第四章 法律合规审核原则及工作要求\n第十五条 法律合规审核应遵循合法性、有效性、及时性、\n规范性的基本原则。"
+    }
+  ],
+  "search_ms": 3483.0,
+  "ask_ms": 38.55,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "FmwLBBEJ2AWSdjvvXekOtpaKjdjcK3BW",
+  "search_snapshot_fingerprint": "0db2dee28234e63fd7da0c5e",
+  "ask_snapshot_fingerprint": "0db2dee28234e63fd7da0c5e",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "c47ca4ab2ac52616d3026fcc"
+}

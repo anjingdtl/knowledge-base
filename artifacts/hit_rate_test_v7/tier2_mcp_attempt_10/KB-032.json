@@ -1,0 +1,388 @@
+{
+  "case": {
+    "case_id": "KB-032",
+    "category": "无答案或越界问题",
+    "query": "中国电信集团总部北京的办公楼地址",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体办公地址"
+    ],
+    "expected_no_answer": true,
+    "notes": "知识库为广西公司制度文档，无集团总部地址；应拒答"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "04ab7d02-36c4-45e1-9375-f3313407b7b5",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】（五）《中国电信广西公司财务集中核算业务手册（试 > （六） 《关于集团总部、股份总部、网络资产分公司集 > 一、 业务流程范围\n摊表的审批记录。\n3.3各级财务部门根据实际的\n成本费用分摊比例计算应调\n整的上半年及全年分摊的成\n本费用，报财务部门负责人审\n批。 手工 半年成\n本费用\n分摊调\n整申请\n和审批\n记录 3.3检查区公司和各市公司\n财务部门负责人对半年成\n本费用分摊调整申请的审\n批记录。\n七、 相关制度及备查文件\n（一）《中国电信集团会会计核算办法〔 2015） 》 （中国\n电信〔2014〕581号）\n（二） 《关于印发中国电信广西公司全面预算管理办法\n（修订）的通知》 （中电信桂〔 2017〕149号） 维护账号(集团互联)\n— 778 — （三）《关于印发中国电信广西公司采购管理办法的通\n知》 （中电信桂〔 2017〕214号）\n（四）《中国电信广西公司库存物资管理办法》 （中电\n信桂〔2008〕355号）\n（五）《中国电信广西公司财务集中核算业务手册（试\n行） 》 （财务〔 2010〕5号）\n（六） 《关于集团总部、股份总部、网络资产分公司集\n中服务等相关成本费用摊分有关问题的请示》 （签报\n〔2009〕317号）\n流程7.4 销售费用支出业务流程",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "0346e290508d3236c22a3b3d1983133a",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "（五）《中国电信广西公司财务集中核算业务手册（试 > （六） 《关于集团总部、股份总部、网络资产分公司集 > 一、 业务流程范围",
+          "block_ids": [
+            "04ab7d02-36c4-45e1-9375-f3313407b7b5",
+            "8e691145-fae5-4b7e-a34a-c4583086d951",
+            "ce717140-25dd-4153-b406-8762ed848304",
+            "eb42828a-2eb2-4d83-b4e3-738b27bb63a1",
+            "7f84b3d1-b7a7-4438-bc1a-8eb3c3b4c09c",
+            "70a532a6-d099-418c-b81f-7d46ae771594",
+            "78a0d073-5fee-4fbd-bf8e-476e80789c52",
+            "0406ea83-b013-4a3d-8b50-15acd276c734",
+            "5813b0d2-08eb-4b91-a633-4a78492d0db8",
+            "b9e2960d-7881-4d8d-a2e4-04b72c3bc9ce",
+            "983ca03a-8a6a-4e62-8fad-82816852c33e",
+            "4e9ff9e7-6dd1-44e4-b99b-0cbeb0d5cd31",
+            "9bce164f-c0ea-4694-94a7-04ee40d6740a",
+            "9ae84156-5738-4757-9275-1ede3d431834",
+            "635e9e65-f0c3-43a8-9a19-c083e547a210",
+            "db6fed2d-9698-4a2b-ad0d-cce63d5901c3",
+            "21ffe001-9e95-484c-873b-ec0a07cb01b4",
+            "753a59ef-866b-4ea8-b3a1-b709da6dffe8"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "04ab7d02-36c4-45e1-9375-f3313407b7b5",
+              "order_idx": 32944,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "8e691145-fae5-4b7e-a34a-c4583086d951",
+              "order_idx": 32945,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "ce717140-25dd-4153-b406-8762ed848304",
+              "order_idx": 32946,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "eb42828a-2eb2-4d83-b4e3-738b27bb63a1",
+              "order_idx": 32947,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "7f84b3d1-b7a7-4438-bc1a-8eb3c3b4c09c",
+              "order_idx": 32948,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "70a532a6-d099-418c-b81f-7d46ae771594",
+              "order_idx": 32949,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "78a0d073-5fee-4fbd-bf8e-476e80789c52",
+              "order_idx": 32950,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "0406ea83-b013-4a3d-8b50-15acd276c734",
+              "order_idx": 32951,
+              "char_start": 0,
+              "char_end": 37
+            },
+            {
+              "block_id": "5813b0d2-08eb-4b91-a633-4a78492d0db8",
+              "order_idx": 32953,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "b9e2960d-7881-4d8d-a2e4-04b72c3bc9ce",
+              "order_idx": 32954,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "983ca03a-8a6a-4e62-8fad-82816852c33e",
+              "order_idx": 32955,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "4e9ff9e7-6dd1-44e4-b99b-0cbeb0d5cd31",
+              "order_idx": 32956,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "9bce164f-c0ea-4694-94a7-04ee40d6740a",
+              "order_idx": 32957,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "9ae84156-5738-4757-9275-1ede3d431834",
+              "order_idx": 32958,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "635e9e65-f0c3-43a8-9a19-c083e547a210",
+              "order_idx": 32959,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "db6fed2d-9698-4a2b-ad0d-cce63d5901c3",
+              "order_idx": 32960,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "21ffe001-9e95-484c-873b-ec0a07cb01b4",
+              "order_idx": 32961,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "753a59ef-866b-4ea8-b3a1-b709da6dffe8",
+              "order_idx": 32962,
+              "char_start": 0,
+              "char_end": 16
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "04ab7d02-36c4-45e1-9375-f3313407b7b5",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.022198731501057077,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": 0.5258979631036248,
+              "rrf": 0.022198731501057077,
+              "rerank": null
+            },
+            "match_channels": [
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "keyword match",
+            "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】（五）《中国电信广西公司财务集中核算业务手册（试 > （六） 《关于集团总部、股份总部、网络资产分公司集 > 一、 业务流程范围\n摊表的审批记录。\n3.3各级财务部门根据实际的\n成本费用分摊比例计算应调\n整的上半年及全年分摊的成\n本费用，报财务部门负责人审\n批。 手工 半年成\n本费用\n分摊调\n整申请\n和审批\n记录 3.3检查区公司和各市公司\n财务部门负责人对半年成\n本费用分摊调整申请的审\n批记录。\n七、 相关制度及备查文件\n（一）《中国电信集团会会计核算办法〔 2015） 》 （中国\n电信〔2014〕581号）\n（二） 《关于印发中国电信广西公司全面预算管理办法\n（修订）的通知》 （中电信桂〔 2017〕149号） 维护账号(集团互联)\n— 778 — （三）《关于印发中国电信广西公司采购管理办法的通\n知》 （中电信桂〔 2017〕214号）\n（四）《中国电信广西公司库存物资管理办法》 （中电\n信桂〔2008〕355号）\n（五）《中国电信广西公司财务集中核算业务手册（试\n行） 》 （财务〔 2010〕5号）\n（六） 《关于集团总部、股份总部、网络资产分公司集\n中服务等相关成本费用摊分有关问题的请示》 （签报\n〔2009〕317号）\n流程7.4 销售费用支出业务流程"
+          },
+          "relevance": {
+            "semantic_score": 0.4048,
+            "fts_score": 0.0,
+            "title_score": 0.375,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.4048,
+            "query_term_coverage": 0.4048,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+        ],
+        "evidence_snapshot_id": "jekKZY7OBPK5IeULPgZ_Gx4loX3FxQRY",
+        "snapshot_fingerprint": "e66b80ffe542c0feef625eec",
+        "accepted_passage_ids": [
+          "0346e290508d3236c22a3b3d1983133a",
+          "43670a7b593e136b84f7b6b71f8068e4",
+          "a716dc0145863258d6410af4c4777dc3"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 1374.79
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.55,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "e66b80ffe542c0feef625eec",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "direct_slot_not_satisfied",
+        "answer_validation_decision": "direct_slot_not_satisfied",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {},
+        "claim_audit": [],
+        "fact_candidate_audit": {},
+        "answer_plan": {},
+        "query_plan": {},
+        "evidence_groups": {},
+        "render_validation": {},
+        "primary_group_id": null,
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "direct_slot_not_satisfied",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "accepted_block_ids": [
+            "04ab7d02-36c4-45e1-9375-f3313407b7b5"
+          ],
+          "accepted_passage_ids": [
+            "0346e290508d3236c22a3b3d1983133a",
+            "43670a7b593e136b84f7b6b71f8068e4",
+            "a716dc0145863258d6410af4c4777dc3"
+          ],
+          "adjacent_passage_ids": [
+            "43670a7b593e136b84f7b6b71f8068e4",
+            "a716dc0145863258d6410af4c4777dc3"
+          ],
+          "generation_knowledge_ids": [
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "top_score": 0.55,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "e66b80ffe542c0feef625eec"
+        },
+        "snapshot_fingerprint": "e66b80ffe542c0feef625eec",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 36.96
+  },
+  "top_candidate_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+  "candidates": [
+    {
+      "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+      "passage_id": "0346e290508d3236c22a3b3d1983133a",
+      "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】（五）《中国电信广西公司财务集中核算业务手册（试 > （六） 《关于集团总部、股份总部、网络资产分公司集 > 一、 业务流程范围\n摊表的审批记录。\n3.3各级财务部门根据实际的\n成本费用分摊比例计算应调\n整的上半年及全年分摊的成\n本费用，报财务部门负责人审\n批。 手工 半年成\n本费用\n分摊调\n整申请\n和审批\n记录 3.3检查区公司和各市公司\n财务部门负责人对半年成\n本费用分摊调整申请的审\n批记录。\n七、 相关制度及备查文件\n（一）《中国电信集团会会计核算办法〔 2015） 》 （中国\n电信〔2014〕581号）\n（二） 《关于印发中国电信广西公司全面预算管理办法\n（修订）的通知》 （中电信桂〔 2017〕149号） 维护账号(集团互联)\n— 778 — （三）《关于印发中国电信广西公司采购管理办法的通\n知》 （中电信桂〔 2017〕214号）\n（四）《中国电信广西公司库存物资管理办法》 （中电\n信桂〔2008〕355号）\n（五）《中国电信广西公司财务集中核算业务手册（试\n行） 》 （财务〔 2010〕5号）\n（六） 《关于集团总部、股份总部、网络资产分公司集\n中服务等相关成本费用摊分有关问题的请示》 （签报\n〔2009〕317号）\n流程7.4 销售费用支出业务流程"
+    }
+  ],
+  "search_ms": 1374.79,
+  "ask_ms": 36.96,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "jekKZY7OBPK5IeULPgZ_Gx4loX3FxQRY",
+  "search_snapshot_fingerprint": "e66b80ffe542c0feef625eec",
+  "ask_snapshot_fingerprint": "e66b80ffe542c0feef625eec",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "direct_slot_not_satisfied",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "acac4a8137a8ecb89b239fdb"
+}

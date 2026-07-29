@@ -1,51 +1,67 @@
-"""direct_slot_evidence — typed QueryPlan matcher without lowering threshold (SPEC v4 §E + v6 §4.1)."""
+"""Direct evidence gate derived from the current user query.
+
+The gate is intentionally vocabulary-free: it cannot contain a catalogue of
+documents, facts, or evaluation examples.  It only verifies that one passage
+directly covers several query-derived anchors plus a generic fact cue.
+"""
 from __future__ import annotations
 
 import re
 from typing import Any
 
-from src.answering.query_planner import plan_query
+from src.answering.query_planner import QueryPlan, plan_query
 
-# Generic high-info patterns retained as fallback synonym tables (not Golden facts).
-_SLOT_DEFS: list[tuple[str, re.Pattern[str], list[str]]] = [
-    ("产品问需", re.compile(r"产品问需|问需工单|问需"), ["产品问需", "问需工单", "问需"]),
-    ("初审", re.compile(r"审核初审|初审"), ["审核初审", "初审"]),
-    ("产品评估", re.compile(r"产品评估|评估时限|评估"), ["产品评估", "评估时限"]),
-    ("工作日时限", re.compile(r"工作日|时限"), ["工作日", "时限"]),
-    ("涉诈", re.compile(r"涉诈|诈骗|防诈"), ["涉诈", "诈骗"]),
-    ("涉骚扰", re.compile(r"涉骚扰|骚扰"), ["涉骚扰", "骚扰"]),
-    ("代理商", re.compile(r"代理商"), ["代理商"]),
-    ("处罚", re.compile(r"处罚|罚款|罚"), ["处罚", "罚款"]),
-    ("自然月", re.compile(r"自然月|每个号码"), ["自然月", "每个号码"]),
-    ("限额", re.compile(r"限额|年付款"), ["限额", "年付款"]),
-    ("III类", re.compile(r"III\s*类|Ⅲ\s*类|三类"), ["III类", "三类"]),
-    ("差旅", re.compile(r"差旅|住宿|伙食"), ["差旅", "住宿", "伙食"]),
-    ("技能竞赛", re.compile(r"技能竞赛|竞赛"), ["技能竞赛", "竞赛"]),
-    ("合同章", re.compile(r"合同专用章|实体章|电子章"), ["合同专用章", "实体章", "电子章"]),
-    ("收支两条线", re.compile(r"收支两条线|小金库"), ["收支两条线", "小金库"]),
-    ("保密", re.compile(r"保密|商业秘密|邮箱|微信"), ["保密", "商业秘密", "邮箱"]),
-    ("准入", re.compile(r"准入|入驻|门槛|合作"), ["准入", "入驻", "门槛"]),
-]
+
+_FACT_CUE_RE = re.compile(
+    r"\d+(?:\.\d+)?\s*(?:元|万元|%|％|日|天|年)|"
+    r"不得|禁止|严禁|取消|不再|应当|必须|负责|牵头|归口|"
+    r"适用|范围|限额|额度|标准|处罚|罚款|准入|资格|审核|审查|审批|流程|时限|期限|效力"
+)
+
+
+def _ordered_unique(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    return [v for v in values if v and not (v in seen or seen.add(v))]
+
+
+def _plan_slots(plan: QueryPlan) -> list[str]:
+    values = list(plan.anchors or []) + list(plan.conditions or []) + list(plan.scope or [])
+    # Predicate *class* is not usually a literal.  Polarity and fact cue are
+    # checked separately instead of pretending it is a source surface form.
+    return _ordered_unique([v for v in values if len(v) >= 2])[:12]
 
 
 def extract_query_high_info_slots(question: str) -> list[str]:
-    """Legacy name: high-info slots from fixed patterns + typed plan anchors."""
-    q = question or ""
-    found: list[str] = []
-    for name, pat, _ in _SLOT_DEFS:
-        if pat.search(q) and name not in found:
-            found.append(name)
-    # Typed plan contributions
-    plan = plan_query(q)
-    for a in (plan.anchors or [])[:6]:
-        if a and a not in found and len(a) >= 2:
-            found.append(a)
-    for c in plan.conditions or []:
-        if c not in found:
-            found.append(c)
-    if plan.predicate and plan.predicate not in found:
-        found.append(plan.predicate)
-    return found
+    """Compatibility API: return only query-derived evidence slots."""
+    return _plan_slots(plan_query(question or ""))
+
+
+def _matches(candidate: dict[str, Any], plan: QueryPlan, slots: list[str]) -> list[dict[str, Any]]:
+    text = str(candidate.get("text") or candidate.get("body_text") or "")
+    title = str(candidate.get("title") or "")
+    blob = f"{title}\n{text}"
+    out: list[dict[str, Any]] = []
+    for slot in slots:
+        idx = blob.find(slot)
+        if idx >= 0:
+            out.append({
+                "slot": slot,
+                "surface": slot,
+                "synonym_source": "query_surface",
+                "span": [idx, idx + len(slot)],
+                "excerpt": blob[max(0, idx - 20): idx + len(slot) + 40],
+            })
+    if plan.polarity == "negative":
+        m = re.search(r"不得|禁止|严禁|取消|不再|废止|停止", blob)
+        if m:
+            out.append({
+                "slot": "polarity_negative",
+                "surface": m.group(0),
+                "synonym_source": "language_operator",
+                "span": [m.start(), m.end()],
+                "excerpt": blob[max(0, m.start() - 20): m.end() + 40],
+            })
+    return out
 
 
 def evaluate_direct_slot_evidence(
@@ -54,21 +70,17 @@ def evaluate_direct_slot_evidence(
     *,
     min_slots: int = 2,
 ) -> dict[str, Any]:
-    """Return direct_slot decision using typed plan + pattern slots.
-
-    Accepts when a single passage matches >= min_slots high-info query slots
-    and includes a fact-type cue, OR when typed anchors+predicate are jointly hit.
-    """
+    """Accept direct passage evidence without changing the global threshold."""
     plan = plan_query(question or "")
-    q_slots = extract_query_high_info_slots(question)
+    slots = _plan_slots(plan)
     empty = {
         "direct_slot_evidence": False,
         "matched_slots": [],
         "passage_id": None,
         "knowledge_id": None,
         "spans": [],
-        "reason": "no_high_info_slots" if not q_slots else "no_candidate_match",
-        "query_slots": q_slots,
+        "reason": "no_query_anchors" if not slots else "no_candidate_match",
+        "query_slots": slots,
         "score": 0.0,
         "typed_plan": {
             "anchors": list(plan.anchors or [])[:8],
@@ -77,134 +89,54 @@ def evaluate_direct_slot_evidence(
             "polarity": plan.polarity,
         },
     }
-
-    fact_type_re = re.compile(
-        r"工作日|时限|处罚|限额|金额|元|%|％|标准|日|不得|禁止|负责|牵头|准入|取消|占比"
-    )
     best: dict[str, Any] | None = None
-
-    for cand in candidates or []:
-        if not isinstance(cand, dict):
+    for candidate in candidates or []:
+        if not isinstance(candidate, dict):
             continue
-        text = str(cand.get("text") or cand.get("body_text") or "")
-        title = str(cand.get("title") or "")
+        text = str(candidate.get("text") or candidate.get("body_text") or "")
+        title = str(candidate.get("title") or "")
         blob = f"{title}\n{text}"
-        if not text.strip() and not title.strip():
+        if not blob.strip():
             continue
-
-        matched: list[dict[str, Any]] = []
-        # Pattern slots
-        for name, pat, synonyms in _SLOT_DEFS:
-            if name not in q_slots:
-                continue
-            m = pat.search(blob)
-            if not m:
-                continue
-            surface = m.group(0)
-            src = "synonym" if surface not in name else "literal"
-            matched.append({
-                "slot": name,
-                "surface": surface,
-                "synonym_source": src,
-                "span": [m.start(), m.end()],
-                "excerpt": blob[max(0, m.start() - 20): m.end() + 40],
-            })
-
-        # Typed anchors / predicate / polarity
-        for a in (plan.anchors or [])[:8]:
-            if not a or len(a) < 2:
-                continue
-            idx = blob.find(a)
-            if idx >= 0 and not any(m["slot"] == a for m in matched):
-                matched.append({
-                    "slot": a,
-                    "surface": a,
-                    "synonym_source": "typed_anchor",
-                    "span": [idx, idx + len(a)],
-                    "excerpt": blob[max(0, idx - 20): idx + len(a) + 40],
-                })
-        if plan.predicate and plan.predicate in blob:
-            if not any(m["slot"] == plan.predicate for m in matched):
-                idx = blob.find(plan.predicate)
-                matched.append({
-                    "slot": plan.predicate,
-                    "surface": plan.predicate,
-                    "synonym_source": "typed_predicate",
-                    "span": [idx, idx + len(plan.predicate)],
-                    "excerpt": blob[max(0, idx - 20): idx + len(plan.predicate) + 40],
-                })
-        if plan.polarity == "negative" and re.search(r"不得|禁止|严禁|取消|不再", blob):
-            if not any(m["slot"] == "polarity_negative" for m in matched):
-                matched.append({
-                    "slot": "polarity_negative",
-                    "surface": "negative",
-                    "synonym_source": "typed_polarity",
-                    "span": [0, 0],
-                    "excerpt": "",
-                })
-
-        # Accept criteria
-        typed_ok = False
-        if plan.anchors:
-            anchor_hits = sum(1 for a in plan.anchors if a and a in blob)
-            if anchor_hits >= 2:
-                typed_ok = True
-            if plan.predicate and plan.predicate in blob and anchor_hits >= 1:
-                typed_ok = True
-        if plan.conditions:
-            cond_hits = sum(1 for c in plan.conditions if c in blob)
-            if cond_hits >= 1 and fact_type_re.search(blob):
-                typed_ok = True
-
-        if len(matched) < min_slots and not typed_ok:
+        matched = _matches(candidate, plan, slots)
+        matched_names = _ordered_unique([m["slot"] for m in matched])
+        cue = bool(_FACT_CUE_RE.search(blob))
+        # When the user named an operational predicate, anchors alone are not
+        # enough: a passage can mention the same entity while describing a
+        # different rule.  Require the predicate surface in the same evidence
+        # item before the direct-gate exception may promote it.
+        predicate_ok = not plan.predicate or plan.predicate in blob
+        # A condition is independently meaningful only when the passage also
+        # contains a factual cue; otherwise generic headings must not pass.
+        condition_hit = bool(set(plan.conditions or []) & set(matched_names)) and cue
+        anchor_hit_count = sum(1 for s in matched_names if s != "polarity_negative")
+        polarity_ok = plan.polarity != "negative" or "polarity_negative" in matched_names
+        direct = cue and predicate_ok and polarity_ok and (
+            anchor_hit_count >= min_slots or (condition_hit and anchor_hit_count >= 1)
+        )
+        if not direct:
             continue
-        if not fact_type_re.search(blob) and not typed_ok:
-            continue
-        score = len(matched) / max(1, len(q_slots) or 1)
-        if typed_ok:
-            score = max(score, 0.75)
-        rec = {
+        score = anchor_hit_count / max(1, len(slots))
+        if condition_hit:
+            score += 0.15
+        if plan.polarity == "negative":
+            score += 0.1
+        record = {
             "direct_slot_evidence": True,
-            "matched_slots": [m["slot"] for m in matched],
-            "passage_id": cand.get("passage_id") or cand.get("id"),
-            "knowledge_id": cand.get("knowledge_id"),
+            "matched_slots": matched_names,
+            "passage_id": candidate.get("passage_id") or candidate.get("id"),
+            "knowledge_id": candidate.get("knowledge_id"),
             "spans": matched,
-            "reason": "multi_slot_fact_match" if len(matched) >= min_slots else "typed_plan_match",
-            "query_slots": q_slots,
+            "reason": "query_anchor_fact_match",
+            "query_slots": slots,
             "score": round(score, 4),
-            "candidate": cand,
+            "candidate": candidate,
             "typed_plan": empty["typed_plan"],
         }
-        if best is None or rec["score"] > best["score"]:
-            best = rec
-
-    if best is None and len(q_slots) < min_slots:
-        # Typed-only path when few fixed slots: still try anchors
-        for cand in candidates or []:
-            if not isinstance(cand, dict):
-                continue
-            text = str(cand.get("text") or cand.get("body_text") or "")
-            title = str(cand.get("title") or "")
-            blob = f"{title}\n{text}"
-            anchor_hits = [a for a in (plan.anchors or []) if a and a in blob]
-            if len(anchor_hits) >= 2 or (
-                plan.predicate and plan.predicate in blob and anchor_hits
-            ):
-                return {
-                    "direct_slot_evidence": True,
-                    "matched_slots": anchor_hits + ([plan.predicate] if plan.predicate else []),
-                    "passage_id": cand.get("passage_id") or cand.get("id"),
-                    "knowledge_id": cand.get("knowledge_id"),
-                    "spans": [],
-                    "reason": "typed_plan_match",
-                    "query_slots": q_slots,
-                    "score": 0.8,
-                    "candidate": cand,
-                    "typed_plan": empty["typed_plan"],
-                }
+        if best is None or record["score"] > best["score"]:
+            best = record
+    if best is None and slots and len(slots) < min_slots:
         empty["reason"] = f"query_slots_lt_{min_slots}"
-        return empty
-
     return best or empty
 
 
@@ -215,48 +147,48 @@ def apply_direct_slot_accept(
     base_decision: dict[str, Any],
     threshold: float = 0.35,
 ) -> dict[str, Any]:
-    """Merge direct_slot into gate decision without changing threshold."""
+    """Merge verified direct evidence into a rejected gate without threshold drift."""
     out = dict(base_decision or {})
     out["threshold"] = threshold
     if out.get("accept"):
         out.setdefault("direct_slot_evidence", False)
         return out
-
-    ds = evaluate_direct_slot_evidence(question, candidates)
-    out["direct_slot_evidence"] = bool(ds.get("direct_slot_evidence"))
+    top_score = float(out.get("top_score") or 0.0)
+    # Near-threshold retrieval with one independently verifiable query anchor
+    # plus a factual cue is stronger than a score-only rejection.  This is an
+    # evidence exception, not a global threshold change.
+    min_slots = 1 if top_score >= threshold * 0.90 else 2
+    evidence = evaluate_direct_slot_evidence(question, candidates, min_slots=min_slots)
+    out["direct_slot_evidence"] = bool(evidence.get("direct_slot_evidence"))
     out["direct_slot_audit"] = {
-        k: ds[k]
-        for k in (
-            "matched_slots", "passage_id", "knowledge_id", "spans",
-            "reason", "query_slots", "score", "typed_plan",
-        )
-        if k in ds
+        key: evidence[key]
+        for key in (
+            "matched_slots", "passage_id", "knowledge_id", "spans", "reason",
+            "query_slots", "score", "typed_plan",
+        ) if key in evidence
     }
-    if not ds.get("direct_slot_evidence"):
+    if not evidence.get("direct_slot_evidence"):
         return out
-
-    cand = ds.get("candidate")
+    candidate = evidence.get("candidate")
     items = list(out.get("items") or [])
-    if isinstance(cand, dict):
-        row = dict(cand)
+    if isinstance(candidate, dict):
+        row = dict(candidate)
         row["direct_slot_evidence"] = True
         row["final_relevance_score"] = max(
-            float(row.get("final_relevance_score") or row.get("score") or 0.0),
-            threshold,
+            float(row.get("final_relevance_score") or row.get("score") or 0.0), threshold,
         )
         row["score"] = row["final_relevance_score"]
         pid = str(row.get("passage_id") or "")
         kid = str(row.get("knowledge_id") or "")
-        filtered = [
-            it for it in items
-            if str(it.get("passage_id") or "") != pid
-            or str(it.get("knowledge_id") or "") != kid
+        items = [row] + [
+            item for item in items
+            if str(item.get("passage_id") or "") != pid
+            or str(item.get("knowledge_id") or "") != kid
         ]
-        items = [row] + filtered
     out["accept"] = True
     out["items"] = items
-    out["reason"] = "direct_slot_evidence"
-    out["direct_slot_top"] = ds.get("score")
+    out["reason"] = "direct_query_evidence"
+    out["direct_slot_top"] = evidence.get("score")
     if out.get("top_score") is None:
-        out["top_score"] = float((cand or {}).get("score") or 0.0)
+        out["top_score"] = float((candidate or {}).get("score") or 0.0)
     return out

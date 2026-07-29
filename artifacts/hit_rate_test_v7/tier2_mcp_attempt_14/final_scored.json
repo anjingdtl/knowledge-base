@@ -1,0 +1,253 @@
+{
+  "metrics": {
+    "answerable_total": 2,
+    "no_answer_total": 0,
+    "top1_correct": 2,
+    "recall5_correct": 2,
+    "ask_fact_correct_count": 1,
+    "ask_citation_valid_count": 2,
+    "e2e_pass_count": 1,
+    "grounded_count": 1,
+    "Top-1 Accuracy": 1.0,
+    "Recall@5": 1.0,
+    "Ask Fact Correctness": 0.5,
+    "Ask Citation Validity": 1.0,
+    "E2E Pass Rate": 0.5,
+    "Answer Groundedness": 0.5,
+    "Citation Validity": 1.0,
+    "citation_total": 9,
+    "citation_valid": 9,
+    "citation_buckets": {
+      "preaccepted": 9,
+      "adjacent_extension": 0,
+      "expected_id": 0,
+      "rejected": 0
+    },
+    "Hallucination Rate": 0.0,
+    "False Positive Rate": 0.0
+  },
+  "gates": {
+    "Top-1 Accuracy": {
+      "value": 1.0,
+      "threshold": 0.75,
+      "pass": true
+    },
+    "Recall@5": {
+      "value": 1.0,
+      "threshold": 0.88,
+      "pass": true
+    },
+    "Ask Fact Correctness": {
+      "value": 0.5,
+      "threshold": 0.9,
+      "pass": false
+    },
+    "Ask Citation Validity": {
+      "value": 1.0,
+      "threshold": 0.95,
+      "pass": true
+    },
+    "E2E Pass Rate": {
+      "value": 0.5,
+      "threshold": 0.9,
+      "pass": false
+    },
+    "Hallucination Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    },
+    "False Positive Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    }
+  },
+  "release_verdict": "不通过放行",
+  "defects": {
+    "P0": [],
+    "P1": [
+      "KB-014"
+    ],
+    "P2": [],
+    "P3": []
+  },
+  "detail": [
+    {
+      "case_id": "KB-012",
+      "category": "同义词与口语表达",
+      "query": "公司大额对外投资并购决策要不要先过法律审核",
+      "expected_ids": [
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+      ],
+      "required_facts": [
+        "法律合规审核",
+        "重大对外投融资"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "cand_count": 4,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 4,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 4,
+      "citation_valid_den": 4,
+      "ask_source_count": 4,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "820fa23d66d52741921972289983318c",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+        },
+        {
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "76e49ef1f4d9bab55d4d019b4bde7227",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+        },
+        {
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "640e4ce94f67676be67f83c899e81c82",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+        },
+        {
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "0ea0bb1be39826cfef6d6b3adc5ecce0",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "passage_trace_completeness_claims": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    },
+    {
+      "case_id": "KB-014",
+      "category": "同义词与口语表达",
+      "query": "异业合作给客户送权益优惠券的合作方准入条件",
+      "expected_ids": [
+        "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+      ],
+      "required_facts": [
+        "注册资本",
+        "100万"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "cand_count": 4,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 5,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 5,
+      "citation_valid_den": 5,
+      "ask_source_count": 5,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": "df081aa8a99ed500f75add479c0d6bee",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+        },
+        {
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": "fd311432f6bbc2c527a84855c4ef2708",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+        },
+        {
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+        },
+        {
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "passage_trace_completeness_claims": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    }
+  ]
+}

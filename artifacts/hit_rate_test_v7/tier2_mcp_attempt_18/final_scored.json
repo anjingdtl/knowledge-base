@@ -1,0 +1,175 @@
+{
+  "metrics": {
+    "answerable_total": 1,
+    "no_answer_total": 0,
+    "top1_correct": 1,
+    "recall5_correct": 1,
+    "ask_fact_correct_count": 0,
+    "ask_citation_valid_count": 1,
+    "e2e_pass_count": 0,
+    "grounded_count": 0,
+    "Top-1 Accuracy": 1.0,
+    "Recall@5": 1.0,
+    "Ask Fact Correctness": 0.0,
+    "Ask Citation Validity": 1.0,
+    "E2E Pass Rate": 0.0,
+    "Answer Groundedness": 0.0,
+    "Citation Validity": 1.0,
+    "citation_total": 5,
+    "citation_valid": 5,
+    "citation_buckets": {
+      "preaccepted": 5,
+      "adjacent_extension": 0,
+      "expected_id": 0,
+      "rejected": 0
+    },
+    "Hallucination Rate": 0.0,
+    "False Positive Rate": 0.0
+  },
+  "gates": {
+    "Top-1 Accuracy": {
+      "value": 1.0,
+      "threshold": 0.75,
+      "pass": true
+    },
+    "Recall@5": {
+      "value": 1.0,
+      "threshold": 0.88,
+      "pass": true
+    },
+    "Ask Fact Correctness": {
+      "value": 0.0,
+      "threshold": 0.9,
+      "pass": false
+    },
+    "Ask Citation Validity": {
+      "value": 1.0,
+      "threshold": 0.95,
+      "pass": true
+    },
+    "E2E Pass Rate": {
+      "value": 0.0,
+      "threshold": 0.9,
+      "pass": false
+    },
+    "Hallucination Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    },
+    "False Positive Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    }
+  },
+  "release_verdict": "不通过放行",
+  "defects": {
+    "P0": [],
+    "P1": [
+      "KB-037"
+    ],
+    "P2": [],
+    "P3": []
+  },
+  "detail": [
+    {
+      "case_id": "KB-037",
+      "category": "新旧规则冲突",
+      "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+      "expected_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      ],
+      "required_facts": [
+        "2026",
+        "158号"
+      ],
+      "forbidden_facts": [
+        "一级竞赛",
+        "二级竞赛"
+      ],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": false,
+      "ask_fact_correct": false,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": false,
+      "e2e_pass": false,
+      "score": 8,
+      "top1_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "cand_count": 5,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 5,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 5,
+      "citation_valid_den": 5,
+      "ask_source_count": 5,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": false,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "246daea17bcb0c50a044240442923165",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+        },
+        {
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+        },
+        {
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "f3a94cf4259bbfdf0715f343d58a3209",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+        },
+        {
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "8c96118236468d5008db0902ff5a2b7c",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+        },
+        {
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "54e93d3c359da6fb2978df551141c70f",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "passage_trace_completeness_claims": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": "P1",
+      "defect_category": "answer_fact",
+      "defect_reason": "search 召回正确文档，但 ask.answer 未覆盖 required_facts 或含 forbidden。"
+    }
+  ]
+}

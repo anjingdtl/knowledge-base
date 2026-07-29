@@ -1,0 +1,142 @@
+{
+  "metrics": {
+    "answerable_total": 1,
+    "no_answer_total": 0,
+    "top1_correct": 1,
+    "recall5_correct": 1,
+    "ask_fact_correct_count": 1,
+    "ask_citation_valid_count": 1,
+    "e2e_pass_count": 1,
+    "grounded_count": 1,
+    "Top-1 Accuracy": 1.0,
+    "Recall@5": 1.0,
+    "Ask Fact Correctness": 1.0,
+    "Ask Citation Validity": 1.0,
+    "E2E Pass Rate": 1.0,
+    "Answer Groundedness": 1.0,
+    "Citation Validity": 1.0,
+    "citation_total": 3,
+    "citation_valid": 3,
+    "citation_buckets": {
+      "preaccepted": 3,
+      "adjacent_extension": 0,
+      "expected_id": 0,
+      "rejected": 0
+    },
+    "Hallucination Rate": 0.0,
+    "False Positive Rate": 0.0
+  },
+  "gates": {
+    "Top-1 Accuracy": {
+      "value": 1.0,
+      "threshold": 0.75,
+      "pass": true
+    },
+    "Recall@5": {
+      "value": 1.0,
+      "threshold": 0.88,
+      "pass": true
+    },
+    "Ask Fact Correctness": {
+      "value": 1.0,
+      "threshold": 0.9,
+      "pass": true
+    },
+    "Ask Citation Validity": {
+      "value": 1.0,
+      "threshold": 0.95,
+      "pass": true
+    },
+    "E2E Pass Rate": {
+      "value": 1.0,
+      "threshold": 0.9,
+      "pass": true
+    },
+    "Hallucination Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    },
+    "False Positive Rate": {
+      "value": 0.0,
+      "threshold": 0.05,
+      "pass": true
+    }
+  },
+  "release_verdict": "通过放行",
+  "defects": {
+    "P0": [],
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "detail": [
+    {
+      "case_id": "KB-014",
+      "category": "同义词与口语表达",
+      "query": "异业合作给客户送权益优惠券的合作方准入条件",
+      "expected_ids": [
+        "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+      ],
+      "required_facts": [
+        "注册资本",
+        "100万"
+      ],
+      "forbidden_facts": [],
+      "type": "answerable",
+      "top1_hit": true,
+      "recall5": true,
+      "facts_correct": true,
+      "ask_fact_correct": true,
+      "citation_valid": true,
+      "ask_citation_valid": true,
+      "no_hallucination": true,
+      "grounded": true,
+      "e2e_pass": true,
+      "score": 10,
+      "top1_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "cand_count": 1,
+      "wrong_version_in_evidence": false,
+      "citation_buckets": {
+        "preaccepted": 3,
+        "adjacent_extension": 0,
+        "expected_id": 0,
+        "rejected": 0
+      },
+      "citation_valid_num": 3,
+      "citation_valid_den": 3,
+      "ask_source_count": 3,
+      "ask_has_answer": true,
+      "expected_doc_recalled": true,
+      "answer_fact_correct": true,
+      "source_trace_valid": true,
+      "passage_trace": [
+        {
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": "df081aa8a99ed500f75add479c0d6bee",
+          "document_family_id": null,
+          "version_year": null,
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+        }
+      ],
+      "normalization_rules": [
+        "whitespace_collapse"
+      ],
+      "source_trace_validity": true,
+      "expected_document_support_rate": 1.0,
+      "passage_trace_completeness_sources": true,
+      "passage_trace_completeness_raw": true,
+      "passage_trace_completeness_claims": true,
+      "version_leakage": {
+        "in_candidates": false,
+        "in_raw_evidence": false,
+        "in_sources": false,
+        "note": "true only when older edition knowledge_id appears in evidence chain"
+      },
+      "answer_mode": "raw_only",
+      "defect_severity": null,
+      "defect_category": null,
+      "defect_reason": null
+    }
+  ]
+}

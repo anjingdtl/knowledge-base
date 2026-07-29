@@ -254,16 +254,28 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
     numeric-unit ranking, document-level dedupe, title-overlap boost and
     version-freshness re-rank. This guarantees ``search`` and ``ask`` evaluate
     the SAME candidate set with the SAME scores (SPEC Phase 1.4) and that the
-    newest effective version of a regulation ranks first (SPEC Phase 4, KB-009).
+    newest effective version of a regulation ranks first.
 
-    SPEC Phase 3.3: colloquial queries are also expanded with domain synonym
-    aliases (e.g. "防诈骗"→"涉诈") so the retriever can surface formal-policy
-    documents that the raw phrasing would miss. The original query always runs
-    first and wins score ties.
+    The compatibility path retains user-derived query variants so formal
+    wording can be found from colloquial wording. The original query always
+    runs first and wins score ties.
 
     SPEC v3: prefer passage units for both semantic and FTS channels; enrich
     any residual micro-block hits with owning passage text.
     """
+    # One production retrieval authority for MCP search and ask.  Keeping this
+    # path aligned with RawRetriever avoids separate legacy synonym tables and
+    # makes the A/B candidate snapshot representative of MCP behavior.
+    try:
+        container = _get_container()
+        service = getattr(container, "search_service", None)
+        if service is not None:
+            raw = service._get_raw_retriever()
+            result = raw.retrieve(query, top_k=max(fetch_k, 5), include_legacy_wiki_fts=False)
+            return [dict(row) for row in result.candidates if isinstance(row, dict)]
+    except Exception as exc:  # legacy path remains an availability fallback
+        logger.debug("unified raw retrieval failed; using compatibility path: %s", exc)
+
     from src.application.retrieval_commands import RetrievalCommands
     from src.services.numeric_unit_match import apply_numeric_unit_ranking
     from src.services.query_rewrite import expand_query, merge_candidates_by_query
@@ -277,8 +289,8 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
                     RetrievalCommands(container).semantic_search(q, top_k=fetch_k) or []
                 )
                 # Tag genuine vector-similarity scores so the relevance gate can
-                # credit high-confidence semantic matches (KB-017: vector score
-                # 1.0 for a synonym match that lexical coverage underestimates).
+                # credit high-confidence semantic matches that lexical coverage
+                # can underestimate.
                 # This tag is only set on candidates from the semantic_search
                 # path — never on ask's pipeline source dicts — so it preserves
                 # the search/ask symmetry invariant.
@@ -350,7 +362,7 @@ def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
     results = boost_title_term_overlap(query, results)
     # NOTE: rank_with_freshness is intentionally NOT applied here. SPEC v2
     # requires freshness to run AFTER final relevance ranking so a later
-    # re-score cannot bury the newest edition (KB-037).
+    # re-score cannot bury the newest edition.
 
     out = []
     for item in results:
@@ -429,6 +441,70 @@ def _neighbor_passages_for_snapshot(
     return out
 
 
+def _select_document_passages_for_snapshot(
+    knowledge_id: str,
+    query: str,
+    existing_passage_ids: set[str],
+    limit: int = 3,
+) -> list[dict]:
+    """Return a bounded, query-relevant passage supplement for one accepted doc."""
+    try:
+        from src.services.passage_store import PassageStore
+        passages = PassageStore().get_by_knowledge(knowledge_id) or []
+        from src.answering.query_planner import plan_query
+        plan = plan_query(query)
+        terms = [x for x in (plan.anchors or []) if len(x) >= 2][:12]
+    except Exception as exc:
+        logger.debug("document passage selection failed for %s: %s", knowledge_id, exc)
+        return []
+
+    scored: list[tuple[float, int, dict]] = []
+    for index, passage in enumerate(passages):
+        pid = str(passage.get("id") or passage.get("passage_id") or "").strip()
+        if not pid or pid in existing_passage_ids:
+            continue
+        text = str(passage.get("text") or "")
+        if not text:
+            continue
+        hits = sum(1 for term in terms if term in text)
+        score = float(hits)
+        if plan.predicate and plan.predicate in text:
+            score += 2.0
+        if any(condition in text for condition in (plan.conditions or [])):
+            score += 1.5
+        if plan.wants_numeric and re.search(r"\d+(?:\.\d+)?\s*(?:元|万元|%|％|天|年|月)", text):
+            score += 1.0
+        if plan.polarity == "negative" and re.search(r"不得|禁止|取消|不再|废止|停止", text):
+            score += 1.0
+        if score <= 0:
+            continue
+        meta = passage.get("metadata") if isinstance(passage.get("metadata"), dict) else {}
+        block_ids = passage.get("block_ids") or meta.get("block_ids") or []
+        if isinstance(block_ids, str):
+            try:
+                import json as _json
+                block_ids = _json.loads(block_ids)
+            except Exception:
+                block_ids = []
+        scored.append((score, index, {
+            "source": "knowledge",
+            "knowledge_id": knowledge_id,
+            "passage_id": pid,
+            "block_id": block_ids[0] if isinstance(block_ids, list) and block_ids else "",
+            "block_ids": list(block_ids) if isinstance(block_ids, list) else [],
+            "title": passage.get("title") or passage.get("title_prefix") or meta.get("title") or "",
+            "text": text,
+            "document_family_id": passage.get("document_family_id") or "",
+            "version_year": passage.get("version_year"),
+            "section_path": passage.get("section_path") or meta.get("section_path") or "",
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "score": score,
+        }))
+    scored.sort(key=lambda item: (-item[0], item[1]))
+    return [row for _, _, row in scored[:max(0, int(limit))]]
+
+
 def _snapshot_config_bits() -> dict:
     return {
         "no_answer_threshold": Config.get("rag.ask.no_answer_threshold", 0.35),
@@ -491,6 +567,7 @@ def _build_shared_snapshot(
         expanded_queries=expand_query(query),
         list_blocks_fn=None,
         list_neighbor_passages_fn=_neighbor_passages_for_snapshot,
+        select_document_passages_fn=_select_document_passages_for_snapshot,
         adjacent_window=1,
     )
 
@@ -961,7 +1038,7 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
     # Final-closure: true deadline + honest cancelled; pre-LLM evidence gate.
     # Hit-rate SPEC Phase 1: unified evidence judgment via
     # ``evaluate_evidence_unified`` — search and ask now score the same evidence
-    # identically (fixes KB-017 ask=0.0957 vs search=1.0 divergence).
+    # identically.
     # SPEC v5: optional evidence_snapshot_id reuses search snapshot (no re-retrieval).
     from src.mcp.tools.support import DeadlineTimeout, run_with_deadline
     from src.services.relevance_gate import (
@@ -1108,6 +1185,11 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
                 "accepted_knowledge_ids": list(snapshot.get("accepted_knowledge_ids") or []),
                 "accepted_block_ids": list(snapshot.get("accepted_block_ids") or []),
                 "accepted_passage_ids": list(snapshot.get("accepted_passage_ids") or []),
+                "adjacent_passage_ids": [
+                    str(entry.get("passage_id"))
+                    for entry in (snapshot.get("adjacent_allowlist") or [])
+                    if isinstance(entry, dict) and entry.get("passage_id")
+                ],
                 "top_score": snapshot.get("top_score"),
                 "intent": snapshot.get("intent"),
                 "direct_slot_evidence": bool(snapshot.get("direct_slot_evidence")),
@@ -1310,6 +1392,11 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
                 "accepted_knowledge_ids": list(snapshot.get("accepted_knowledge_ids") or []),
                 "accepted_block_ids": list(snapshot.get("accepted_block_ids") or []),
                 "accepted_passage_ids": list(snapshot.get("accepted_passage_ids") or []),
+                "adjacent_passage_ids": [
+                    str(entry.get("passage_id"))
+                    for entry in adjacent_allowlist
+                    if isinstance(entry, dict) and entry.get("passage_id")
+                ],
                 "generation_knowledge_ids": list(
                     snapshot.get("generation_knowledge_ids") or []
                 ),

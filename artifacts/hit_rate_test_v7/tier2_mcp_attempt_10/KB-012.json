@@ -1,0 +1,1757 @@
+{
+  "case": {
+    "case_id": "KB-012",
+    "category": "同义词与口语表达",
+    "query": "公司大额对外投资并购决策要不要先过法律审核",
+    "expected_knowledge_ids": [
+      "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+    ],
+    "expected_title_keywords": [
+      "重要决策",
+      "法律合规审核",
+      "2025"
+    ],
+    "required_facts": [
+      "法律合规审核",
+      "重大对外投融资"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕505号第三条/第四条；口语'大额投资并购'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】五、流程概述 > 1.1 长期股权投资的立项及 审批 > 1.2 长期债权投资、短期投资以及其他投资的立项及\n报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)\n— 710 — 目经区公司总经理办公会议审批后报股份公司备案，如涉及\n资产评估的，评估结果须经股份公司备案后方可纳入投资方\n案进行决策。股份公司定期对区公司审批的股权投资项目进\n行监督检查，必要时提出管理意见。\n区公司财务部根据被投资对象的收益状况、资金周转\n安排提出立项申请，报主管财务副总经理审批。\n主管财务副总经理对投资项目立项申请批复同意后，\n财务部立即进行经济可行性研究，编制经济可行性研究报\n告，将可行性研究报告报董事会审批；\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。",
+          "score": 0.7,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "33f005baef2238abc0c0cc2394789deb",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "五、流程概述 > 1.1 长期股权投资的立项及 审批 > 1.2 长期债权投资、短期投资以及其他投资的立项及",
+          "block_ids": [
+            "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+            "0e0f9ffd-a138-4608-91de-84ceb9650242",
+            "955e43ae-71ca-42d7-991f-d0fb8e61a371",
+            "479d3d30-b6f6-45bf-8135-c97c453bbe1b",
+            "2ec46ebd-89b4-4951-85f6-3ceeecb25578",
+            "c4d33cbe-4c80-422b-80a9-f368548eb33a",
+            "35d62564-b9f3-4f70-adda-9c48a2b75e99",
+            "42addfc7-c4be-4fce-88be-b36c7037f85d",
+            "0fbd6ab8-3972-46a0-ad7d-b922dcf361f6",
+            "50ccd275-4275-45cc-90e4-a4b4f12d13a6",
+            "cb0594cf-cf9e-42f7-b76a-3426edcc264d",
+            "9a5c5bbf-95ed-40be-96b8-6d67b683b273",
+            "48a6734c-ddef-4a78-aba4-ccc0d1023860",
+            "cc24b3fd-4e62-4f9c-be15-17881b0726f4",
+            "32916e7c-3483-409b-a97b-5847ffcca6f5",
+            "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+            "463e12aa-856d-43ba-b7b2-18fbabe43d2c",
+            "e5247f81-9737-40b5-93ad-598ff3fa7acc"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+              "order_idx": 30555,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "0e0f9ffd-a138-4608-91de-84ceb9650242",
+              "order_idx": 30556,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "955e43ae-71ca-42d7-991f-d0fb8e61a371",
+              "order_idx": 30557,
+              "char_start": 0,
+              "char_end": 37
+            },
+            {
+              "block_id": "479d3d30-b6f6-45bf-8135-c97c453bbe1b",
+              "order_idx": 30559,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "2ec46ebd-89b4-4951-85f6-3ceeecb25578",
+              "order_idx": 30560,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "c4d33cbe-4c80-422b-80a9-f368548eb33a",
+              "order_idx": 30561,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "35d62564-b9f3-4f70-adda-9c48a2b75e99",
+              "order_idx": 30562,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "42addfc7-c4be-4fce-88be-b36c7037f85d",
+              "order_idx": 30563,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "0fbd6ab8-3972-46a0-ad7d-b922dcf361f6",
+              "order_idx": 30564,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "50ccd275-4275-45cc-90e4-a4b4f12d13a6",
+              "order_idx": 30565,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "cb0594cf-cf9e-42f7-b76a-3426edcc264d",
+              "order_idx": 30566,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "9a5c5bbf-95ed-40be-96b8-6d67b683b273",
+              "order_idx": 30567,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "48a6734c-ddef-4a78-aba4-ccc0d1023860",
+              "order_idx": 30568,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "cc24b3fd-4e62-4f9c-be15-17881b0726f4",
+              "order_idx": 30569,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "32916e7c-3483-409b-a97b-5847ffcca6f5",
+              "order_idx": 30570,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+              "order_idx": 30571,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "463e12aa-856d-43ba-b7b2-18fbabe43d2c",
+              "order_idx": 30572,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "e5247f81-9737-40b5-93ad-598ff3fa7acc",
+              "order_idx": 30573,
+              "char_start": 0,
+              "char_end": 19
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.018386446390418584,
+            "score_breakdown": {
+              "vector": 0.8046178668737411,
+              "keyword": 0.6044537836016667,
+              "rrf": 0.018386446390418584,
+              "rerank": null
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match",
+            "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】五、流程概述 > 1.1 长期股权投资的立项及 审批 > 1.2 长期债权投资、短期投资以及其他投资的立项及\n报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)\n— 710 — 目经区公司总经理办公会议审批后报股份公司备案，如涉及\n资产评估的，评估结果须经股份公司备案后方可纳入投资方\n案进行决策。股份公司定期对区公司审批的股权投资项目进\n行监督检查，必要时提出管理意见。\n区公司财务部根据被投资对象的收益状况、资金周转\n安排提出立项申请，报主管财务副总经理审批。\n主管财务副总经理对投资项目立项申请批复同意后，\n财务部立即进行经济可行性研究，编制经济可行性研究报\n告，将可行性研究报告报董事会审批；\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。"
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.2529,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+        ],
+        "evidence_snapshot_id": "Kk6mHBCyQuwnoGl-qInLVeVhI9NFFv7D",
+        "snapshot_fingerprint": "c9dc95114c4777828a9ba3a7",
+        "accepted_passage_ids": [
+          "33f005baef2238abc0c0cc2394789deb",
+          "def8185bee42dd14c517b4e48b6129b3",
+          "8eb0e0ce4657a7d150db15bae46a67ae"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 1761.63
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续\n- 区公司对外投资要符合国家有关法律、法规及国家产业政策\n- 各市分公司及直属单位不准对外投资",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "passage_id": "33f005baef2238abc0c0cc2394789deb",
+            "block_id": "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+            "block_ids": [
+              "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+              "0e0f9ffd-a138-4608-91de-84ceb9650242",
+              "955e43ae-71ca-42d7-991f-d0fb8e61a371",
+              "479d3d30-b6f6-45bf-8135-c97c453bbe1b",
+              "2ec46ebd-89b4-4951-85f6-3ceeecb25578",
+              "c4d33cbe-4c80-422b-80a9-f368548eb33a",
+              "35d62564-b9f3-4f70-adda-9c48a2b75e99",
+              "42addfc7-c4be-4fce-88be-b36c7037f85d",
+              "0fbd6ab8-3972-46a0-ad7d-b922dcf361f6",
+              "50ccd275-4275-45cc-90e4-a4b4f12d13a6",
+              "cb0594cf-cf9e-42f7-b76a-3426edcc264d",
+              "9a5c5bbf-95ed-40be-96b8-6d67b683b273",
+              "48a6734c-ddef-4a78-aba4-ccc0d1023860",
+              "cc24b3fd-4e62-4f9c-be15-17881b0726f4",
+              "32916e7c-3483-409b-a97b-5847ffcca6f5",
+              "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+              "463e12aa-856d-43ba-b7b2-18fbabe43d2c",
+              "e5247f81-9737-40b5-93ad-598ff3fa7acc"
+            ],
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "text": "报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)\n— 710 — 目经区公司总经理办公会议审批后报股份公司备案，如涉及\n资产评估的，评估结果须经股份公司备案后方可纳入投资方\n案进行决策。股份公司定期对区公司审批的股权投资项目进\n行监督检查，必要时提出管理意见。\n区公司财务部根据被投资对象的收益状况、资金周转\n安排提出立项申请，报主管财务副总经理审批。\n主管财务副总经理对投资项目立项申请批复同意后，\n财务部立即进行经济可行性研究，编制经济可行性研究报\n告，将可行性研究报告报董事会审批；\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。",
+            "score": 0.7,
+            "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "passage_id": "8eb0e0ce4657a7d150db15bae46a67ae",
+            "block_id": "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+            "block_ids": [
+              "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+              "463e12aa-856d-43ba-b7b2-18fbabe43d2c",
+              "e5247f81-9737-40b5-93ad-598ff3fa7acc",
+              "608ca176-a557-4623-b010-838e188c731f",
+              "a75c9118-9014-49e8-9cd1-c112affe6a71",
+              "88f38d73-6246-4b73-8c58-fd29106eab4c",
+              "825e303c-3c46-4c61-a8b7-4e38b6658130",
+              "ba38e77e-7bf2-494b-8474-7507b34893e7",
+              "35e44cdf-6fe9-4d02-9a48-f93452fe0cc5",
+              "350dfdd5-e8e4-4a8f-9416-147f31013a99",
+              "be9cdbe9-43e5-4563-af52-b95772bb0cf4",
+              "8a982a3c-d8b6-4bd4-afdd-4e0e2f40d09c",
+              "6c4848ac-aa04-4dae-9f0b-e4343a0b8eaa",
+              "fb748923-7650-44e0-b7fc-849188262a78",
+              "e2aa2cdb-e839-48c3-b131-c3d9fa283752"
+            ],
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "text": "\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。\n1.3 未经股份公司批准，股份公司所属各单位不得进行\n长期债权投资、短期投资以及其他投资。\n区公司对外投资要符合国家有关法律、法规及国家产\n业政策；对外投资要符合区公司中长期发展战略，具有一\n定的投资回报，有助于增强企业持续竞争力；区公司不得\n通过委托存款、委托贷款、委托理财等形式变相进行对外\n投资；区公司不得投资设立与电信主营业务无 关的合资企\n业；区公司因市场竞争需要，与其他企业合作投资建设电\n信网络，应主要与对方通过联合建设，收益共享，代维代维护账号(集团互联)\n— 711 — 营等方式进行合作，尽量不以权益性投资方式进行。\n1.4 中外合资、合作企业的立项及审批\n股份公司统一管理设立中外合资、合作企业的行为。",
+            "score": 0.0,
+            "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "passage_id": "def8185bee42dd14c517b4e48b6129b3",
+            "block_id": "b5b134bd-dcf8-41b6-a88d-207fcdab92b3",
+            "block_ids": [
+              "b5b134bd-dcf8-41b6-a88d-207fcdab92b3",
+              "136a3a8c-0e39-4b95-9344-506431c041d0",
+              "097bd7f2-16f8-42c3-a54d-9ad389404207",
+              "7c48398e-d795-499b-b91d-7d135e023588",
+              "58dd1280-4b13-4b2b-a3f5-5293354f5e60",
+              "3e24aac3-1833-424d-8980-a044718c6971",
+              "40e8d6bb-4cf0-4957-82c0-893dbc7ee42c",
+              "afb42d74-6035-4cb0-b5bd-615823ad7e61",
+              "f70a9cb6-d1c3-4ef7-8e2a-ad6dfc72e007",
+              "143016b4-6d5c-454c-9a2b-b67128f8068c",
+              "e0213d6a-b106-412e-b3d4-b53b8b481442",
+              "45bac366-a0a3-4662-a995-a901e06b36e5",
+              "49e10cd7-9465-4083-8a46-35650ec12b28",
+              "ddfe438a-b454-4db3-8183-88b5b4b0cc93",
+              "5a04fa13-7070-4f91-b7dc-c991161be321",
+              "f4861c72-8720-4cf9-a30a-11d60dc146c7",
+              "95de5ed1-8ac2-468d-8188-b32f85c1b281",
+              "9a3fcdf9-e46a-439f-9c61-01110a2c779c",
+              "46a32986-dba3-4103-a010-dff90b392b01",
+              "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+              "0e0f9ffd-a138-4608-91de-84ceb9650242",
+              "955e43ae-71ca-42d7-991f-d0fb8e61a371"
+            ],
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "text": " 维护账号(集团互联)\n— 709 — 由项目牵头部门（重大战略性合资、合作项目为企业\n战略部，一般权益性项目为财务部）对权益性投资项目初\n步酝酿后，提出对外投资项目立项申请（附合资、合作意\n向书） ，征求相关专业部门等的意见后，报财务、业务副总\n经理审批；\n财务、业务副总经理对投资项目立项申请批复同意\n后，项目牵头部门即可组织相关专业部门等进行可行性研\n究，编制可行性研究报告。\n项目牵头部门负责组织对拟投资项目的可行性研究报\n告进行评审 ,并将评审结果与可行性研究报告报区公司领\n导，由财务副总经理或相关业务副总经理提 请董事会审\n批。\n董事会对可行性研究报告及评审结果批复同意后，报\n股份公司审批；审批文件包括区公司董事会关于同意投资\n的决议、投资项目的可行性研究报告及其他股份公司需要\n提供的资料。\n区公司的权益性对外投资需上报股份公司审批。\n1.2 长期债权投资、短期投资以及其他投资的立项及\n审批\n区公司长期债权投资、短期投资以及其他投资项目，需\n报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)",
+            "score": 0.0,
+            "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+            "evidence_passage_ids": [
+              "33f005baef2238abc0c0cc2394789deb"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "f2d51ebe07e285a8b8db57b6"
+          },
+          {
+            "text": "区公司对外投资要符合国家有关法律、法规及国家产业政策",
+            "evidence_passage_ids": [
+              "8eb0e0ce4657a7d150db15bae46a67ae"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "048ddc001669286e4833a636"
+          },
+          {
+            "text": "收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+            "evidence_passage_ids": [
+              "8eb0e0ce4657a7d150db15bae46a67ae"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "b35817719c439645cbbe8a21"
+          },
+          {
+            "text": "各市分公司及直属单位不准对外投资",
+            "evidence_passage_ids": [
+              "33f005baef2238abc0c0cc2394789deb"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "e0e06180384a2f5ffabbcd9b"
+          },
+          {
+            "text": "各市分公司及直属单位不准对外投资",
+            "evidence_passage_ids": [
+              "def8185bee42dd14c517b4e48b6129b3"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "1e2a9b12fbd804b63603b3ea"
+          },
+          {
+            "text": "授权领域的股权投资项维护账号(集团互联)—710—目经区公司总经理办公会议审批后报股份公司备案，如涉及资产评估的，评估结果须经股份公司备案后方可纳入投资方案进行决策",
+            "evidence_passage_ids": [
+              "33f005baef2238abc0c0cc2394789deb"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "19a61877af323c086e7eb96a"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "passage_id": "33f005baef2238abc0c0cc2394789deb",
+            "block_id": "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+            "block_ids": [
+              "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+              "0e0f9ffd-a138-4608-91de-84ceb9650242",
+              "955e43ae-71ca-42d7-991f-d0fb8e61a371",
+              "479d3d30-b6f6-45bf-8135-c97c453bbe1b",
+              "2ec46ebd-89b4-4951-85f6-3ceeecb25578",
+              "c4d33cbe-4c80-422b-80a9-f368548eb33a",
+              "35d62564-b9f3-4f70-adda-9c48a2b75e99",
+              "42addfc7-c4be-4fce-88be-b36c7037f85d",
+              "0fbd6ab8-3972-46a0-ad7d-b922dcf361f6",
+              "50ccd275-4275-45cc-90e4-a4b4f12d13a6",
+              "cb0594cf-cf9e-42f7-b76a-3426edcc264d",
+              "9a5c5bbf-95ed-40be-96b8-6d67b683b273",
+              "48a6734c-ddef-4a78-aba4-ccc0d1023860",
+              "cc24b3fd-4e62-4f9c-be15-17881b0726f4",
+              "32916e7c-3483-409b-a97b-5847ffcca6f5",
+              "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+              "463e12aa-856d-43ba-b7b2-18fbabe43d2c",
+              "e5247f81-9737-40b5-93ad-598ff3fa7acc"
+            ],
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": "报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)\n— 710 — 目经区公司总经理办公会议审批后报股份公司备案，如涉及\n资产评估的，评估结果须经股份公司备案后方可纳入投资方\n案进行决策。股份公司定期对区公司审批的股权投资项目进\n行监督检查，必要时提出管理意见。\n区公司财务部根据被投资对象的收益状况、资金周转\n安排提出立项申请，报主管财务副总经理审批。\n主管财务副总经理对投资项目立项申请批复同意后，\n财务部立即进行经济可行性研究，编制经济可行性研究报\n告，将可行性研究报告报董事会审批；\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。",
+            "body_text": "报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)\n— 710 — 目经区公司总经理办公会议审批后报股份公司备案，如涉及\n资产评估的，评估结果须经股份公司备案后方可纳入投资方\n案进行决策。股份公司定期对区公司审批的股权投资项目进\n行监督检查，必要时提出管理意见。\n区公司财务部根据被投资对象的收益状况、资金周转\n安排提出立项申请，报主管财务副总经理审批。\n主管财务副总经理对投资项目立项申请批复同意后，\n财务部立即进行经济可行性研究，编制经济可行性研究报\n告，将可行性研究报告报董事会审批；\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。",
+            "score": 0.7,
+            "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "passage_id": "8eb0e0ce4657a7d150db15bae46a67ae",
+            "block_id": "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+            "block_ids": [
+              "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+              "463e12aa-856d-43ba-b7b2-18fbabe43d2c",
+              "e5247f81-9737-40b5-93ad-598ff3fa7acc",
+              "608ca176-a557-4623-b010-838e188c731f",
+              "a75c9118-9014-49e8-9cd1-c112affe6a71",
+              "88f38d73-6246-4b73-8c58-fd29106eab4c",
+              "825e303c-3c46-4c61-a8b7-4e38b6658130",
+              "ba38e77e-7bf2-494b-8474-7507b34893e7",
+              "35e44cdf-6fe9-4d02-9a48-f93452fe0cc5",
+              "350dfdd5-e8e4-4a8f-9416-147f31013a99",
+              "be9cdbe9-43e5-4563-af52-b95772bb0cf4",
+              "8a982a3c-d8b6-4bd4-afdd-4e0e2f40d09c",
+              "6c4848ac-aa04-4dae-9f0b-e4343a0b8eaa",
+              "fb748923-7650-44e0-b7fc-849188262a78",
+              "e2aa2cdb-e839-48c3-b131-c3d9fa283752"
+            ],
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": "\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。\n1.3 未经股份公司批准，股份公司所属各单位不得进行\n长期债权投资、短期投资以及其他投资。\n区公司对外投资要符合国家有关法律、法规及国家产\n业政策；对外投资要符合区公司中长期发展战略，具有一\n定的投资回报，有助于增强企业持续竞争力；区公司不得\n通过委托存款、委托贷款、委托理财等形式变相进行对外\n投资；区公司不得投资设立与电信主营业务无 关的合资企\n业；区公司因市场竞争需要，与其他企业合作投资建设电\n信网络，应主要与对方通过联合建设，收益共享，代维代维护账号(集团互联)\n— 711 — 营等方式进行合作，尽量不以权益性投资方式进行。\n1.4 中外合资、合作企业的立项及审批\n股份公司统一管理设立中外合资、合作企业的行为。",
+            "body_text": "\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。\n1.3 未经股份公司批准，股份公司所属各单位不得进行\n长期债权投资、短期投资以及其他投资。\n区公司对外投资要符合国家有关法律、法规及国家产\n业政策；对外投资要符合区公司中长期发展战略，具有一\n定的投资回报，有助于增强企业持续竞争力；区公司不得\n通过委托存款、委托贷款、委托理财等形式变相进行对外\n投资；区公司不得投资设立与电信主营业务无 关的合资企\n业；区公司因市场竞争需要，与其他企业合作投资建设电\n信网络，应主要与对方通过联合建设，收益共享，代维代维护账号(集团互联)\n— 711 — 营等方式进行合作，尽量不以权益性投资方式进行。\n1.4 中外合资、合作企业的立项及审批\n股份公司统一管理设立中外合资、合作企业的行为。",
+            "score": 0.0,
+            "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "passage_id": "def8185bee42dd14c517b4e48b6129b3",
+            "block_id": "b5b134bd-dcf8-41b6-a88d-207fcdab92b3",
+            "block_ids": [
+              "b5b134bd-dcf8-41b6-a88d-207fcdab92b3",
+              "136a3a8c-0e39-4b95-9344-506431c041d0",
+              "097bd7f2-16f8-42c3-a54d-9ad389404207",
+              "7c48398e-d795-499b-b91d-7d135e023588",
+              "58dd1280-4b13-4b2b-a3f5-5293354f5e60",
+              "3e24aac3-1833-424d-8980-a044718c6971",
+              "40e8d6bb-4cf0-4957-82c0-893dbc7ee42c",
+              "afb42d74-6035-4cb0-b5bd-615823ad7e61",
+              "f70a9cb6-d1c3-4ef7-8e2a-ad6dfc72e007",
+              "143016b4-6d5c-454c-9a2b-b67128f8068c",
+              "e0213d6a-b106-412e-b3d4-b53b8b481442",
+              "45bac366-a0a3-4662-a995-a901e06b36e5",
+              "49e10cd7-9465-4083-8a46-35650ec12b28",
+              "ddfe438a-b454-4db3-8183-88b5b4b0cc93",
+              "5a04fa13-7070-4f91-b7dc-c991161be321",
+              "f4861c72-8720-4cf9-a30a-11d60dc146c7",
+              "95de5ed1-8ac2-468d-8188-b32f85c1b281",
+              "9a3fcdf9-e46a-439f-9c61-01110a2c779c",
+              "46a32986-dba3-4103-a010-dff90b392b01",
+              "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+              "0e0f9ffd-a138-4608-91de-84ceb9650242",
+              "955e43ae-71ca-42d7-991f-d0fb8e61a371"
+            ],
+            "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "text": " 维护账号(集团互联)\n— 709 — 由项目牵头部门（重大战略性合资、合作项目为企业\n战略部，一般权益性项目为财务部）对权益性投资项目初\n步酝酿后，提出对外投资项目立项申请（附合资、合作意\n向书） ，征求相关专业部门等的意见后，报财务、业务副总\n经理审批；\n财务、业务副总经理对投资项目立项申请批复同意\n后，项目牵头部门即可组织相关专业部门等进行可行性研\n究，编制可行性研究报告。\n项目牵头部门负责组织对拟投资项目的可行性研究报\n告进行评审 ,并将评审结果与可行性研究报告报区公司领\n导，由财务副总经理或相关业务副总经理提 请董事会审\n批。\n董事会对可行性研究报告及评审结果批复同意后，报\n股份公司审批；审批文件包括区公司董事会关于同意投资\n的决议、投资项目的可行性研究报告及其他股份公司需要\n提供的资料。\n区公司的权益性对外投资需上报股份公司审批。\n1.2 长期债权投资、短期投资以及其他投资的立项及\n审批\n区公司长期债权投资、短期投资以及其他投资项目，需\n报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)",
+            "body_text": " 维护账号(集团互联)\n— 709 — 由项目牵头部门（重大战略性合资、合作项目为企业\n战略部，一般权益性项目为财务部）对权益性投资项目初\n步酝酿后，提出对外投资项目立项申请（附合资、合作意\n向书） ，征求相关专业部门等的意见后，报财务、业务副总\n经理审批；\n财务、业务副总经理对投资项目立项申请批复同意\n后，项目牵头部门即可组织相关专业部门等进行可行性研\n究，编制可行性研究报告。\n项目牵头部门负责组织对拟投资项目的可行性研究报\n告进行评审 ,并将评审结果与可行性研究报告报区公司领\n导，由财务副总经理或相关业务副总经理提 请董事会审\n批。\n董事会对可行性研究报告及评审结果批复同意后，报\n股份公司审批；审批文件包括区公司董事会关于同意投资\n的决议、投资项目的可行性研究报告及其他股份公司需要\n提供的资料。\n区公司的权益性对外投资需上报股份公司审批。\n1.2 长期债权投资、短期投资以及其他投资的立项及\n审批\n区公司长期债权投资、短期投资以及其他投资项目，需\n报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)",
+            "score": 0.0,
+            "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.2529,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "对外",
+                "投资",
+                "决策",
+                "法律",
+                "审核"
+              ],
+              "passage_id": "33f005baef2238abc0c0cc2394789deb",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "spans": [
+                {
+                  "slot": "对外",
+                  "surface": "对外",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    208,
+                    210
+                  ],
+                  "excerpt": "公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的"
+                },
+                {
+                  "slot": "投资",
+                  "surface": "投资",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    147,
+                    149
+                  ],
+                  "excerpt": "章节】五、流程概述 > 1.1 长期股权投资的立项及 审批 > 1.2 长期债权投资、短期投资以及其他投资的立项及\n报股份公"
+                },
+                {
+                  "slot": "决策",
+                  "surface": "决策",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    370,
+                    372
+                  ],
+                  "excerpt": "须经股份公司备案后方可纳入投资方\n案进行决策。股份公司定期对区公司审批的股权投资项目进\n行监督检查，必要时提出管理意见。\n区"
+                },
+                {
+                  "slot": "法律",
+                  "surface": "法律",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    624,
+                    626
+                  ],
+                  "excerpt": "务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。"
+                },
+                {
+                  "slot": "审核",
+                  "surface": "审核",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    628,
+                    630
+                  ],
+                  "excerpt": "实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "大额",
+                "对外",
+                "投资",
+                "并购",
+                "决策",
+                "不要",
+                "先过",
+                "法律",
+                "审核",
+                "公司大额对外投资并购决策要不",
+                "公司大额对外投资",
+                "购决策要不要先过法律审核"
+              ],
+              "score": 0.4167,
+              "typed_plan": {
+                "anchors": [
+                  "大额",
+                  "对外",
+                  "投资",
+                  "并购",
+                  "决策",
+                  "不要",
+                  "先过",
+                  "法律"
+                ],
+                "predicate": "审核",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "c9dc95114c4777828a9ba3a7",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "公司大额对外投资并购决策要不要先过法律审核"
+          },
+          "fact_plan": {
+            "raw": "公司大额对外投资并购决策要不要先过法律审核",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:审核"
+            ],
+            "entities": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "大额",
+            "object": "对外",
+            "scope": [],
+            "selector": [],
+            "predicate": "审核",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 14,
+          "candidate_count": 12
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+              "evidence_passage_ids": [
+                "33f005baef2238abc0c0cc2394789deb"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "f2d51ebe07e285a8b8db57b6"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "区公司对外投资要符合国家有关法律、法规及国家产业政策",
+              "evidence_passage_ids": [
+                "8eb0e0ce4657a7d150db15bae46a67ae"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "048ddc001669286e4833a636"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+              "evidence_passage_ids": [
+                "8eb0e0ce4657a7d150db15bae46a67ae"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "b35817719c439645cbbe8a21"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "各市分公司及直属单位不准对外投资",
+              "evidence_passage_ids": [
+                "33f005baef2238abc0c0cc2394789deb"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "e0e06180384a2f5ffabbcd9b"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "各市分公司及直属单位不准对外投资",
+              "evidence_passage_ids": [
+                "def8185bee42dd14c517b4e48b6129b3"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "1e2a9b12fbd804b63603b3ea"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "授权领域的股权投资项维护账号(集团互联)—710—目经区公司总经理办公会议审批后报股份公司备案，如涉及资产评估的，评估结果须经股份公司备案后方可纳入投资方案进行决策",
+              "evidence_passage_ids": [
+                "33f005baef2238abc0c0cc2394789deb"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "19a61877af323c086e7eb96a"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司大额对外投资并购决策要不要先过法律审核",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:审核"
+            ],
+            "entities": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "大额",
+            "object": "对外",
+            "scope": [],
+            "selector": [],
+            "predicate": "审核",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ]
+          },
+          "input_count": 12,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "f2d51ebe07e285a8b8db57b6",
+              "record_id": "33f005baef2238abc0c0cc2394789deb:r8",
+              "passage_id": "33f005baef2238abc0c0cc2394789deb",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "fact_kind": "policy",
+              "subject": "法律",
+              "predicate": "审核",
+              "object": "收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+              "evidence_spans": [
+                [
+                  0,
+                  66
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+              "version_year": 2021,
+              "score": 20.199999999999996,
+              "unstructured_rejected": false,
+              "group_id": "98ca950f3a973cd5",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:审核": "hit",
+                "anchor:大额": "miss",
+                "anchor:对外": "miss",
+                "anchor:投资": "miss",
+                "anchor:并购": "miss",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "hit"
+              },
+              "slot_spans": {
+                "predicate:审核": [
+                  37,
+                  39
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "048ddc001669286e4833a636",
+              "record_id": "8eb0e0ce4657a7d150db15bae46a67ae:r1",
+              "passage_id": "8eb0e0ce4657a7d150db15bae46a67ae",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "fact_kind": "policy",
+              "subject": "对外",
+              "predicate": "审核",
+              "object": "区公司对外投资要符合国家有关法律、法规及国家产业政策",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "区公司对外投资要符合国家有关法律、法规及国家产业政策",
+              "evidence_spans": [
+                [
+                  43,
+                  69
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+              "version_year": 2021,
+              "score": 22.699999999999992,
+              "unstructured_rejected": false,
+              "group_id": "98ca950f3a973cd5",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:审核": "miss",
+                "anchor:大额": "miss",
+                "anchor:对外": "hit",
+                "anchor:投资": "hit",
+                "anchor:并购": "miss",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "hit"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "b35817719c439645cbbe8a21",
+              "record_id": "8eb0e0ce4657a7d150db15bae46a67ae:r0",
+              "passage_id": "8eb0e0ce4657a7d150db15bae46a67ae",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "fact_kind": "policy",
+              "subject": "法律",
+              "predicate": "审核",
+              "object": "收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+              "evidence_spans": [
+                [
+                  63,
+                  129
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+              "version_year": 2021,
+              "score": 20.199999999999996,
+              "unstructured_rejected": false,
+              "group_id": "98ca950f3a973cd5",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:审核": "hit",
+                "anchor:大额": "miss",
+                "anchor:对外": "miss",
+                "anchor:投资": "miss",
+                "anchor:并购": "miss",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "hit"
+              },
+              "slot_spans": {
+                "predicate:审核": [
+                  37,
+                  39
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "e0e06180384a2f5ffabbcd9b",
+              "record_id": "33f005baef2238abc0c0cc2394789deb:r1",
+              "passage_id": "33f005baef2238abc0c0cc2394789deb",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "fact_kind": "policy",
+              "subject": "对外",
+              "predicate": "审核",
+              "object": "各市分公司及直属单位不准对外投资",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "各市分公司及直属单位不准对外投资",
+              "evidence_spans": [
+                [
+                  0,
+                  16
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+              "version_year": 2021,
+              "score": 16.4,
+              "unstructured_rejected": false,
+              "group_id": "98ca950f3a973cd5",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:审核": "miss",
+                "anchor:大额": "miss",
+                "anchor:对外": "hit",
+                "anchor:投资": "hit",
+                "anchor:并购": "miss",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "1e2a9b12fbd804b63603b3ea",
+              "record_id": "def8185bee42dd14c517b4e48b6129b3:r1",
+              "passage_id": "def8185bee42dd14c517b4e48b6129b3",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "fact_kind": "policy",
+              "subject": "对外",
+              "predicate": "审核",
+              "object": "各市分公司及直属单位不准对外投资",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "各市分公司及直属单位不准对外投资",
+              "evidence_spans": [
+                [
+                  60,
+                  76
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+              "version_year": 2021,
+              "score": 16.4,
+              "unstructured_rejected": false,
+              "group_id": "98ca950f3a973cd5",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:审核": "miss",
+                "anchor:大额": "miss",
+                "anchor:对外": "hit",
+                "anchor:投资": "hit",
+                "anchor:并购": "miss",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "19a61877af323c086e7eb96a",
+              "record_id": "33f005baef2238abc0c0cc2394789deb:r3",
+              "passage_id": "33f005baef2238abc0c0cc2394789deb",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "fact_kind": "policy",
+              "subject": "投资",
+              "predicate": "审核",
+              "object": "授权领域的股权投资项维护账号(集团互联)—710—目经区公司总经理办公会议审批后报股份公司备案，如涉及资产评估的，评估结果须经股份公司备案后方可纳入投资方案进行决策",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "授权领域的股权投资项维护账号(集团互联)—710—目经区公司总经理办公会议审批后报股份公司备案，如涉及资产评估的，评估结果须经股份公司备案后方可纳入投资方案进行决策",
+              "evidence_spans": [
+                [
+                  0,
+                  86
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+              "version_year": 2021,
+              "score": 15.899999999999999,
+              "unstructured_rejected": false,
+              "group_id": "98ca950f3a973cd5",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:审核": "miss",
+                "anchor:大额": "miss",
+                "anchor:对外": "miss",
+                "anchor:投资": "hit",
+                "anchor:并购": "miss",
+                "anchor:决策": "hit",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {
+              "048ddc001669286e4833a636": "hit",
+              "f2d51ebe07e285a8b8db57b6": "hit",
+              "b35817719c439645cbbe8a21": "hit",
+              "e0e06180384a2f5ffabbcd9b": "hit",
+              "1e2a9b12fbd804b63603b3ea": "hit",
+              "19a61877af323c086e7eb96a": "hit",
+              "74aba7aba2417d58cd1058c5": "hit",
+              "b072952da48fce4c7892d810": "hit",
+              "f7d329436a238d4108ab337a": "hit",
+              "a74c25b444ece51330bf4c5a": "hit",
+              "6e53074f534eefe6503bc4d8": "hit",
+              "5e4a9f8089d2689929f234c1": "hit"
+            },
+            "predicate:审核": {
+              "048ddc001669286e4833a636": "miss",
+              "f2d51ebe07e285a8b8db57b6": "hit",
+              "b35817719c439645cbbe8a21": "hit",
+              "e0e06180384a2f5ffabbcd9b": "miss",
+              "1e2a9b12fbd804b63603b3ea": "miss",
+              "19a61877af323c086e7eb96a": "miss",
+              "74aba7aba2417d58cd1058c5": "miss",
+              "b072952da48fce4c7892d810": "miss",
+              "f7d329436a238d4108ab337a": "miss",
+              "a74c25b444ece51330bf4c5a": "miss",
+              "6e53074f534eefe6503bc4d8": "miss",
+              "5e4a9f8089d2689929f234c1": "miss"
+            }
+          },
+          "primary_group_id": "98ca950f3a973cd5",
+          "covered_slots": [
+            "policy_fact",
+            "predicate:审核"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "98ca950f3a973cd5",
+                "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                "knowledge_ids": [
+                  "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                ],
+                "organization_scope": "中国电信股份有限公司",
+                "document_family_id": "中国电信股份有限公司:于中国电信股份有限公司广西分公司内控实施细则",
+                "document_revision": "2021",
+                "effective_date": "",
+                "version_year": 2021,
+                "passage_ids": [
+                  "33f005baef2238abc0c0cc2394789deb",
+                  "def8185bee42dd14c517b4e48b6129b3",
+                  "8eb0e0ce4657a7d150db15bae46a67ae"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.7,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+                "section": "五、流程概述 > 1.1 长期股权投资的立项及 审批 > 1.2 长期债权投资、短期投资以及其他投资的立项及",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 9.4,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "33f005baef2238abc0c0cc2394789deb:r0",
+                  "33f005baef2238abc0c0cc2394789deb:r1",
+                  "33f005baef2238abc0c0cc2394789deb:r2",
+                  "33f005baef2238abc0c0cc2394789deb:r3",
+                  "33f005baef2238abc0c0cc2394789deb:r4",
+                  "33f005baef2238abc0c0cc2394789deb:r5",
+                  "33f005baef2238abc0c0cc2394789deb:r6",
+                  "33f005baef2238abc0c0cc2394789deb:r7",
+                  "33f005baef2238abc0c0cc2394789deb:r8",
+                  "def8185bee42dd14c517b4e48b6129b3:r0",
+                  "def8185bee42dd14c517b4e48b6129b3:r1",
+                  "8eb0e0ce4657a7d150db15bae46a67ae:r0",
+                  "8eb0e0ce4657a7d150db15bae46a67ae:r1",
+                  "8eb0e0ce4657a7d150db15bae46a67ae:r2"
+                ]
+              }
+            ],
+            "primary_group_id": "98ca950f3a973cd5",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "公司大额对外投资并购决策",
+                "要不要先过法律审核"
+              ],
+              "selection": [
+                {
+                  "group_id": "98ca950f3a973cd5",
+                  "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                  "knowledge_ids": [
+                    "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                  ],
+                  "score": 9.4,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact",
+            "predicate:审核"
+          ],
+          "candidate_ids": [
+            "f2d51ebe07e285a8b8db57b6",
+            "048ddc001669286e4833a636",
+            "b35817719c439645cbbe8a21",
+            "e0e06180384a2f5ffabbcd9b",
+            "1e2a9b12fbd804b63603b3ea",
+            "19a61877af323c086e7eb96a"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact",
+            "predicate:审核"
+          ],
+          "coverage_matrix": {
+            "policy_fact": {
+              "048ddc001669286e4833a636": "hit",
+              "f2d51ebe07e285a8b8db57b6": "hit",
+              "b35817719c439645cbbe8a21": "hit",
+              "e0e06180384a2f5ffabbcd9b": "hit",
+              "1e2a9b12fbd804b63603b3ea": "hit",
+              "19a61877af323c086e7eb96a": "hit",
+              "74aba7aba2417d58cd1058c5": "hit",
+              "b072952da48fce4c7892d810": "hit",
+              "f7d329436a238d4108ab337a": "hit",
+              "a74c25b444ece51330bf4c5a": "hit",
+              "6e53074f534eefe6503bc4d8": "hit",
+              "5e4a9f8089d2689929f234c1": "hit"
+            },
+            "predicate:审核": {
+              "048ddc001669286e4833a636": "miss",
+              "f2d51ebe07e285a8b8db57b6": "hit",
+              "b35817719c439645cbbe8a21": "hit",
+              "e0e06180384a2f5ffabbcd9b": "miss",
+              "1e2a9b12fbd804b63603b3ea": "miss",
+              "19a61877af323c086e7eb96a": "miss",
+              "74aba7aba2417d58cd1058c5": "miss",
+              "b072952da48fce4c7892d810": "miss",
+              "f7d329436a238d4108ab337a": "miss",
+              "a74c25b444ece51330bf4c5a": "miss",
+              "6e53074f534eefe6503bc4d8": "miss",
+              "5e4a9f8089d2689929f234c1": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "公司大额对外投资并购决策要不要先过法律审核",
+          "intents": [
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "policy_fact",
+            "predicate:审核"
+          ],
+          "entities": [
+            "大额",
+            "对外",
+            "投资",
+            "并购",
+            "决策",
+            "不要",
+            "先过",
+            "法律",
+            "审核",
+            "公司大额对外投资并购决策要不",
+            "公司大额对外投资",
+            "购决策要不要先过法律审核"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "policy",
+            "prohibition",
+            "scope",
+            "responsibility",
+            "relationship"
+          ],
+          "subject": "大额",
+          "object": "对外",
+          "scope": [],
+          "selector": [],
+          "predicate": "审核",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "policy",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "大额",
+            "对外",
+            "投资",
+            "并购",
+            "决策",
+            "不要",
+            "先过",
+            "法律",
+            "审核",
+            "公司大额对外投资并购决策要不",
+            "公司大额对外投资",
+            "购决策要不要先过法律审核"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "98ca950f3a973cd5",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "knowledge_ids": [
+                "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+              ],
+              "organization_scope": "中国电信股份有限公司",
+              "document_family_id": "中国电信股份有限公司:于中国电信股份有限公司广西分公司内控实施细则",
+              "document_revision": "2021",
+              "effective_date": "",
+              "version_year": 2021,
+              "passage_ids": [
+                "33f005baef2238abc0c0cc2394789deb",
+                "def8185bee42dd14c517b4e48b6129b3",
+                "8eb0e0ce4657a7d150db15bae46a67ae"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.7,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "section": "五、流程概述 > 1.1 长期股权投资的立项及 审批 > 1.2 长期债权投资、短期投资以及其他投资的立项及",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 9.4,
+              "rejection_reasons": [],
+              "record_ids": [
+                "33f005baef2238abc0c0cc2394789deb:r0",
+                "33f005baef2238abc0c0cc2394789deb:r1",
+                "33f005baef2238abc0c0cc2394789deb:r2",
+                "33f005baef2238abc0c0cc2394789deb:r3",
+                "33f005baef2238abc0c0cc2394789deb:r4",
+                "33f005baef2238abc0c0cc2394789deb:r5",
+                "33f005baef2238abc0c0cc2394789deb:r6",
+                "33f005baef2238abc0c0cc2394789deb:r7",
+                "33f005baef2238abc0c0cc2394789deb:r8",
+                "def8185bee42dd14c517b4e48b6129b3:r0",
+                "def8185bee42dd14c517b4e48b6129b3:r1",
+                "8eb0e0ce4657a7d150db15bae46a67ae:r0",
+                "8eb0e0ce4657a7d150db15bae46a67ae:r1",
+                "8eb0e0ce4657a7d150db15bae46a67ae:r2"
+              ]
+            }
+          ],
+          "primary_group_id": "98ca950f3a973cd5",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "公司大额对外投资并购决策",
+              "要不要先过法律审核"
+            ],
+            "selection": [
+              {
+                "group_id": "98ca950f3a973cd5",
+                "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                "knowledge_ids": [
+                  "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                ],
+                "score": 9.4,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "对外",
+              "投资"
+            ],
+            "predicate:审核": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "f2d51ebe07e285a8b8db57b6"
+              ],
+              "passage_id": "33f005baef2238abc0c0cc2394789deb",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "text": "- 收到股份公司批复后由区公司财务部拟定实施细则，由区公司企业发展部（法律部）审核后报区公司分管财务副总审定，然后办理相关法律及报批手续",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "048ddc001669286e4833a636"
+              ],
+              "passage_id": "8eb0e0ce4657a7d150db15bae46a67ae",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "text": "- 区公司对外投资要符合国家有关法律、法规及国家产业政策",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "e0e06180384a2f5ffabbcd9b"
+              ],
+              "passage_id": "33f005baef2238abc0c0cc2394789deb",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "text": "- 各市分公司及直属单位不准对外投资",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 116
+        },
+        "primary_group_id": "98ca950f3a973cd5",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "type": "knowledge",
+              "label": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0"
+            },
+            {
+              "id": "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+              "type": "block",
+              "label": "资。在股份公司授权的领域，区公司可自行审批投资总额在",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+            },
+            {
+              "id": "ec8c81b5-cb0c-43c6-8555-1012f829ccfe",
+              "type": "block",
+              "label": "[第906页]",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+            },
+            {
+              "id": "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+              "type": "block",
+              "label": "收到股份公司批复后由区公司财务部拟定实施细则，",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+            },
+            {
+              "id": "b65b688a-d34c-4778-83e3-e0e4b9ba5eee",
+              "type": "block",
+              "label": "[第907页]",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+            },
+            {
+              "id": "b5b134bd-dcf8-41b6-a88d-207fcdab92b3",
+              "type": "block",
+              "label": "步酝酿后，提出对外投资项目立项申请（附合资、合作意",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+            },
+            {
+              "id": "3177663d-3e8d-496e-acef-f5a785119b8a",
+              "type": "knowledge",
+              "label": "中电信桂-2017-186号-关于印发中国电信广西公司与财务报告相关的内部控制管理办法的通知--3177663d"
+            }
+          ],
+          "edges": [
+            {
+              "source": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "target": "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+              "type": "contains"
+            },
+            {
+              "source": "ec8c81b5-cb0c-43c6-8555-1012f829ccfe",
+              "target": "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a",
+              "type": "parent"
+            },
+            {
+              "source": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "target": "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+              "type": "contains"
+            },
+            {
+              "source": "b65b688a-d34c-4778-83e3-e0e4b9ba5eee",
+              "target": "dec52da7-099e-4a37-a1b2-f32d2dcb16a0",
+              "type": "parent"
+            },
+            {
+              "source": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "target": "b5b134bd-dcf8-41b6-a88d-207fcdab92b3",
+              "type": "contains"
+            },
+            {
+              "source": "ec8c81b5-cb0c-43c6-8555-1012f829ccfe",
+              "target": "b5b134bd-dcf8-41b6-a88d-207fcdab92b3",
+              "type": "parent"
+            },
+            {
+              "source": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "target": "3177663d-3e8d-496e-acef-f5a785119b8a",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 7
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 2,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "accepted_block_ids": [
+            "be6ddc68-fcb9-4c75-bc33-1794cffa1a0a"
+          ],
+          "accepted_passage_ids": [
+            "33f005baef2238abc0c0cc2394789deb",
+            "def8185bee42dd14c517b4e48b6129b3",
+            "8eb0e0ce4657a7d150db15bae46a67ae"
+          ],
+          "adjacent_passage_ids": [
+            "def8185bee42dd14c517b4e48b6129b3",
+            "8eb0e0ce4657a7d150db15bae46a67ae"
+          ],
+          "generation_knowledge_ids": [
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "top_score": 0.2529,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "对外",
+              "投资",
+              "决策",
+              "法律",
+              "审核"
+            ],
+            "passage_id": "33f005baef2238abc0c0cc2394789deb",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "spans": [
+              {
+                "slot": "对外",
+                "surface": "对外",
+                "synonym_source": "query_surface",
+                "span": [
+                  208,
+                  210
+                ],
+                "excerpt": "公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的"
+              },
+              {
+                "slot": "投资",
+                "surface": "投资",
+                "synonym_source": "query_surface",
+                "span": [
+                  147,
+                  149
+                ],
+                "excerpt": "章节】五、流程概述 > 1.1 长期股权投资的立项及 审批 > 1.2 长期债权投资、短期投资以及其他投资的立项及\n报股份公"
+              },
+              {
+                "slot": "决策",
+                "surface": "决策",
+                "synonym_source": "query_surface",
+                "span": [
+                  370,
+                  372
+                ],
+                "excerpt": "须经股份公司备案后方可纳入投资方\n案进行决策。股份公司定期对区公司审批的股权投资项目进\n行监督检查，必要时提出管理意见。\n区"
+              },
+              {
+                "slot": "法律",
+                "surface": "法律",
+                "synonym_source": "query_surface",
+                "span": [
+                  624,
+                  626
+                ],
+                "excerpt": "务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。"
+              },
+              {
+                "slot": "审核",
+                "surface": "审核",
+                "synonym_source": "query_surface",
+                "span": [
+                  628,
+                  630
+                ],
+                "excerpt": "实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ],
+            "score": 0.4167,
+            "typed_plan": {
+              "anchors": [
+                "大额",
+                "对外",
+                "投资",
+                "并购",
+                "决策",
+                "不要",
+                "先过",
+                "法律"
+              ],
+              "predicate": "审核",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "c9dc95114c4777828a9ba3a7"
+        },
+        "snapshot_fingerprint": "c9dc95114c4777828a9ba3a7",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 3,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 45.68
+  },
+  "top_candidate_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+  "candidates": [
+    {
+      "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+      "passage_id": "33f005baef2238abc0c0cc2394789deb",
+      "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+      "score": 0.7,
+      "final_relevance_score": 0.35,
+      "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】五、流程概述 > 1.1 长期股权投资的立项及 审批 > 1.2 长期债权投资、短期投资以及其他投资的立项及\n报股份公司审批后实施。各市分公司及直属单位不准对外投\n资。在股份公司授权的领域，区公司可自行审批投资总额在\n股份公司上年末经审计的合并报表资产总额千分之一（不含）\n以下和驻地网建设的股权投资项 目。授权领域的股权投资项维护账号(集团互联)\n— 710 — 目经区公司总经理办公会议审批后报股份公司备案，如涉及\n资产评估的，评估结果须经股份公司备案后方可纳入投资方\n案进行决策。股份公司定期对区公司审批的股权投资项目进\n行监督检查，必要时提出管理意见。\n区公司财务部根据被投资对象的收益状况、资金周转\n安排提出立项申请，报主管财务副总经理审批。\n主管财务副总经理对投资项目立项申请批复同意后，\n财务部立即进行经济可行性研究，编制经济可行性研究报\n告，将可行性研究报告报董事会审批；\n董事会对可行性研究报告批复同意后，报请股份公司\n审批，审批文件包括区公司董事会 关于同意投资的决议、\n投资项目的可行性研究报告。\n收到股份公司批复后由区公司财务部拟定实施细则，\n由区公司企业发展部（法律部）审核后报区公司分管财务\n副总审定，然后办理相关法律及报批手续。"
+    }
+  ],
+  "search_ms": 1761.63,
+  "ask_ms": 45.68,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "Kk6mHBCyQuwnoGl-qInLVeVhI9NFFv7D",
+  "search_snapshot_fingerprint": "c9dc95114c4777828a9ba3a7",
+  "ask_snapshot_fingerprint": "c9dc95114c4777828a9ba3a7",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "acac4a8137a8ecb89b239fdb"
+}

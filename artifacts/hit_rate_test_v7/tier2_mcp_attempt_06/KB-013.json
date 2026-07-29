@@ -1,0 +1,1691 @@
+{
+  "case": {
+    "case_id": "KB-013",
+    "category": "同义词与口语表达",
+    "query": "公司搞比赛给员工发奖金 上限是多少",
+    "expected_knowledge_ids": [
+      "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+    ],
+    "expected_title_keywords": [
+      "劳动竞赛",
+      "2025"
+    ],
+    "required_facts": [
+      "2000元",
+      "15000元"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕54号第二十一条；口语'搞比赛发奖金'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "5caba627-dea8-4899-8c55-9312665ef293",
+          "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+          "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+          "text": "【文档】中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【章节】第四章 表彰和奖励 > 第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。 > 第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n 建\n立健全竞赛协调机制，加强信息沟通和指导，及时了解和帮助解\n决员工需求和问题；总结竞赛先进经验和优秀案例，提炼和命名\n表彰奖励竞赛中员工首创的先进营销、操作法，并组织宣传、学\n习和推广价值高、可复制的竞赛成果（包括竞赛组织管理创新成\n果） 。\n第十八条 劳动竞赛委员会应承接好集团级竞赛， 结合实际 许丹丹(全渠道运营中心)\n— 8 —细化竞赛方案，做好竞赛组织、信息沟通和推荐评选等工作，可\n在保持竞赛主题一致的情况下丰富竞赛内容、创新竞赛形式。\n第十九条 劳动竞赛结束后一个月内， 实施部门或单位应通\n报竞赛完成情况，报劳动竞赛委员会办公室。\n第四章 表彰和奖励\n第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。",
+          "score": 1.0,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "2819437117ed70942edc32c742db57a4",
+          "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+          "version_year": 2025,
+          "source_version": "2025",
+          "section_path": "第四章 表彰和奖励 > 第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。 > 第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。",
+          "block_ids": [
+            "5caba627-dea8-4899-8c55-9312665ef293",
+            "a3184680-74b6-4a3c-8c3f-aa346c013aca",
+            "5a9c43c8-fd66-4baa-9f0f-5656ed4be962",
+            "80c2b8cb-20a1-4b67-b39f-ca984e19910f",
+            "0492530a-55b0-4a3f-8441-49af30bb7167",
+            "93d038d3-4c90-4bd2-9eb3-86b8689e803b",
+            "7cdaa681-4d4b-43c7-a5c2-d3d8db8b1336",
+            "0e488408-1037-45fb-951a-b5249e2afa99",
+            "f5a936f7-d10a-4740-aa8d-eab94ee904e6",
+            "afee8912-bffc-40f3-88ea-3471c0df6739",
+            "afa03bb2-ba3a-49c3-a1cc-a735bcd4479d",
+            "4a170d6e-a793-4614-98bb-1b166340e87e",
+            "b9278cf5-de30-4bd7-aef2-a8d77970da93",
+            "4f14abb9-a788-416a-b736-f1cb9e5daff8"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "5caba627-dea8-4899-8c55-9312665ef293",
+              "order_idx": 121,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "a3184680-74b6-4a3c-8c3f-aa346c013aca",
+              "order_idx": 122,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "5a9c43c8-fd66-4baa-9f0f-5656ed4be962",
+              "order_idx": 123,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "80c2b8cb-20a1-4b67-b39f-ca984e19910f",
+              "order_idx": 124,
+              "char_start": 0,
+              "char_end": 40
+            },
+            {
+              "block_id": "0492530a-55b0-4a3f-8441-49af30bb7167",
+              "order_idx": 126,
+              "char_start": 0,
+              "char_end": 33
+            },
+            {
+              "block_id": "93d038d3-4c90-4bd2-9eb3-86b8689e803b",
+              "order_idx": 127,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "7cdaa681-4d4b-43c7-a5c2-d3d8db8b1336",
+              "order_idx": 128,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "0e488408-1037-45fb-951a-b5249e2afa99",
+              "order_idx": 129,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "f5a936f7-d10a-4740-aa8d-eab94ee904e6",
+              "order_idx": 130,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "afee8912-bffc-40f3-88ea-3471c0df6739",
+              "order_idx": 131,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "afa03bb2-ba3a-49c3-a1cc-a735bcd4479d",
+              "order_idx": 132,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "order_idx": 133,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "b9278cf5-de30-4bd7-aef2-a8d77970da93",
+              "order_idx": 134,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "4f14abb9-a788-416a-b736-f1cb9e5daff8",
+              "order_idx": 135,
+              "char_start": 0,
+              "char_end": 29
+            }
+          ],
+          "effective_year": 2025,
+          "citation": {
+            "document": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+            "path": "",
+            "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+            "block_id": "5caba627-dea8-4899-8c55-9312665ef293",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.770301878452301,
+            "score_breakdown": {
+              "vector": 0.8599615097045898,
+              "keyword": 0.5212265019625211,
+              "rrf": 0.11982228298017772,
+              "rerank": 0.770301878452301
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【章节】第四章 表彰和奖励 > 第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。 > 第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n 建\n立健全竞赛协调机制，加强信息沟通和指导，及时了解和帮助解\n决员工需求和问题；总结竞赛先进经验和优秀案例，提炼和命名\n表彰奖励竞赛中员工首创的先进营销、操作法，并组织宣传、学\n习和推广价值高、可复制的竞赛成果（包括竞赛组织管理创新成\n果） 。\n第十八条 劳动竞赛委员会应承接好集团级竞赛， 结合实际 许丹丹(全渠道运营中心)\n— 8 —细化竞赛方案，做好竞赛组织、信息沟通和推荐评选等工作，可\n在保持竞赛主题一致的情况下丰富竞赛内容、创新竞赛形式。\n第十九条 劳动竞赛结束后一个月内， 实施部门或单位应通\n报竞赛完成情况，报劳动竞赛委员会办公室。\n第四章 表彰和奖励\n第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。"
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.8103018784523011,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "4a170d6e-a793-4614-98bb-1b166340e87e",
+          "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+          "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+          "text": "【文档】中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【章节】第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得 > 第五章 竞赛经费 > 第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。\n第二十二条 对在区公司劳动竞赛中成绩特别突出的员工，\n经劳动竞赛实施部门和单位确认申报，区公司人力资源部审核，\n劳动竞赛委员会将根据相应规则授予 “中国电信广西公司劳动能\n手” 称号 （D2） 、 中国电信广西公司劳动竞赛先进个人” 称号 （D3） 。\n对在区公司劳动竞赛中总结提炼出的先进营销法、 操作法可\n向相关创新评比活动推荐申报。\n第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得\n当、措施有力、成效显著的实施部门和单位可授予组织奖。\n第五章 竞赛经费\n第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n— 9 — 经费和组织经费，纳入预算管理，专款专用。",
+          "score": 0.6266328477859497,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "a3f51915674eabf1b9c811ebfad43236",
+          "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+          "version_year": 2025,
+          "source_version": "2025",
+          "section_path": "第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得 > 第五章 竞赛经费 > 第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)",
+          "block_ids": [
+            "4a170d6e-a793-4614-98bb-1b166340e87e",
+            "b9278cf5-de30-4bd7-aef2-a8d77970da93",
+            "4f14abb9-a788-416a-b736-f1cb9e5daff8",
+            "eecba1fd-0aeb-4ed4-8e43-2915b8c35c4e",
+            "14ee83e9-c120-4d78-b13a-1f73c5e6b83b",
+            "eebddc01-4360-475e-bbe7-72ff7ce91d02",
+            "d4c224f2-cde0-4a14-83c1-40cd7d8e7c13",
+            "8e27bfc3-b3b4-4eca-aa9b-799980748cf2",
+            "62459955-8aa2-4564-9fb3-85dd886a6eb5",
+            "ee404723-fa3c-440e-bff7-e12a00d1e590",
+            "b1c755eb-b34e-45ef-8be2-53ffb386c061",
+            "34fb68ba-6985-4d77-8154-65d0f01606de",
+            "02553f10-da1c-4418-ab58-5e3a319bc611",
+            "3ae3f0bd-d238-4a8d-a5ab-6dff3ebb543e"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "order_idx": 133,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "b9278cf5-de30-4bd7-aef2-a8d77970da93",
+              "order_idx": 134,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "4f14abb9-a788-416a-b736-f1cb9e5daff8",
+              "order_idx": 135,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "eecba1fd-0aeb-4ed4-8e43-2915b8c35c4e",
+              "order_idx": 136,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "14ee83e9-c120-4d78-b13a-1f73c5e6b83b",
+              "order_idx": 137,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "eebddc01-4360-475e-bbe7-72ff7ce91d02",
+              "order_idx": 138,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "d4c224f2-cde0-4a14-83c1-40cd7d8e7c13",
+              "order_idx": 139,
+              "char_start": 0,
+              "char_end": 40
+            },
+            {
+              "block_id": "8e27bfc3-b3b4-4eca-aa9b-799980748cf2",
+              "order_idx": 140,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "62459955-8aa2-4564-9fb3-85dd886a6eb5",
+              "order_idx": 141,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "ee404723-fa3c-440e-bff7-e12a00d1e590",
+              "order_idx": 142,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "b1c755eb-b34e-45ef-8be2-53ffb386c061",
+              "order_idx": 143,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "34fb68ba-6985-4d77-8154-65d0f01606de",
+              "order_idx": 144,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "02553f10-da1c-4418-ab58-5e3a319bc611",
+              "order_idx": 145,
+              "char_start": 0,
+              "char_end": 38
+            },
+            {
+              "block_id": "3ae3f0bd-d238-4a8d-a5ab-6dff3ebb543e",
+              "order_idx": 147,
+              "char_start": 0,
+              "char_end": 26
+            }
+          ],
+          "effective_year": 2025,
+          "citation": {
+            "document": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+            "path": "",
+            "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+            "block_id": "4a170d6e-a793-4614-98bb-1b166340e87e",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.5866328477859497,
+            "score_breakdown": {
+              "vector": 0.8651699721813202,
+              "keyword": 0.49879614364664226,
+              "rrf": 0.11770756343927076,
+              "rerank": 0.5866328477859497
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【章节】第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得 > 第五章 竞赛经费 > 第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。\n第二十二条 对在区公司劳动竞赛中成绩特别突出的员工，\n经劳动竞赛实施部门和单位确认申报，区公司人力资源部审核，\n劳动竞赛委员会将根据相应规则授予 “中国电信广西公司劳动能\n手” 称号 （D2） 、 中国电信广西公司劳动竞赛先进个人” 称号 （D3） 。\n对在区公司劳动竞赛中总结提炼出的先进营销法、 操作法可\n向相关创新评比活动推荐申报。\n第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得\n当、措施有力、成效显著的实施部门和单位可授予组织奖。\n第五章 竞赛经费\n第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n— 9 — 经费和组织经费，纳入预算管理，专款专用。"
+          },
+          "promoted_numeric_passage": true
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.1468,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+        ],
+        "evidence_snapshot_id": "pMH9UjuI3Tso5m8vFHSWmeSr_9LKHue4",
+        "snapshot_fingerprint": "962ad38422d63041c867a460",
+        "accepted_passage_ids": [
+          "2819437117ed70942edc32c742db57a4",
+          "a3f51915674eabf1b9c811ebfad43236",
+          "8f2a217e94479e30199d5fdb692ddeb2",
+          "06b0543c4542eea352aec32ae8db612c"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 3,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 3210.26
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 人均2000元\n- 人均15000元",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+            "passage_id": "2819437117ed70942edc32c742db57a4",
+            "block_id": "5caba627-dea8-4899-8c55-9312665ef293",
+            "block_ids": [
+              "5caba627-dea8-4899-8c55-9312665ef293",
+              "a3184680-74b6-4a3c-8c3f-aa346c013aca",
+              "5a9c43c8-fd66-4baa-9f0f-5656ed4be962",
+              "80c2b8cb-20a1-4b67-b39f-ca984e19910f",
+              "0492530a-55b0-4a3f-8441-49af30bb7167",
+              "93d038d3-4c90-4bd2-9eb3-86b8689e803b",
+              "7cdaa681-4d4b-43c7-a5c2-d3d8db8b1336",
+              "0e488408-1037-45fb-951a-b5249e2afa99",
+              "f5a936f7-d10a-4740-aa8d-eab94ee904e6",
+              "afee8912-bffc-40f3-88ea-3471c0df6739",
+              "afa03bb2-ba3a-49c3-a1cc-a735bcd4479d",
+              "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "b9278cf5-de30-4bd7-aef2-a8d77970da93",
+              "4f14abb9-a788-416a-b736-f1cb9e5daff8"
+            ],
+            "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+            "text": " 建\n立健全竞赛协调机制，加强信息沟通和指导，及时了解和帮助解\n决员工需求和问题；总结竞赛先进经验和优秀案例，提炼和命名\n表彰奖励竞赛中员工首创的先进营销、操作法，并组织宣传、学\n习和推广价值高、可复制的竞赛成果（包括竞赛组织管理创新成\n果） 。\n第十八条 劳动竞赛委员会应承接好集团级竞赛， 结合实际 许丹丹(全渠道运营中心)\n— 8 —细化竞赛方案，做好竞赛组织、信息沟通和推荐评选等工作，可\n在保持竞赛主题一致的情况下丰富竞赛内容、创新竞赛形式。\n第十九条 劳动竞赛结束后一个月内， 实施部门或单位应通\n报竞赛完成情况，报劳动竞赛委员会办公室。\n第四章 表彰和奖励\n第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。",
+            "score": 1.0,
+            "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+            "passage_id": "a3f51915674eabf1b9c811ebfad43236",
+            "block_id": "4a170d6e-a793-4614-98bb-1b166340e87e",
+            "block_ids": [
+              "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "b9278cf5-de30-4bd7-aef2-a8d77970da93",
+              "4f14abb9-a788-416a-b736-f1cb9e5daff8",
+              "eecba1fd-0aeb-4ed4-8e43-2915b8c35c4e",
+              "14ee83e9-c120-4d78-b13a-1f73c5e6b83b",
+              "eebddc01-4360-475e-bbe7-72ff7ce91d02",
+              "d4c224f2-cde0-4a14-83c1-40cd7d8e7c13",
+              "8e27bfc3-b3b4-4eca-aa9b-799980748cf2",
+              "62459955-8aa2-4564-9fb3-85dd886a6eb5",
+              "ee404723-fa3c-440e-bff7-e12a00d1e590",
+              "b1c755eb-b34e-45ef-8be2-53ffb386c061",
+              "34fb68ba-6985-4d77-8154-65d0f01606de",
+              "02553f10-da1c-4418-ab58-5e3a319bc611",
+              "3ae3f0bd-d238-4a8d-a5ab-6dff3ebb543e"
+            ],
+            "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+            "text": "\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。\n第二十二条 对在区公司劳动竞赛中成绩特别突出的员工，\n经劳动竞赛实施部门和单位确认申报，区公司人力资源部审核，\n劳动竞赛委员会将根据相应规则授予 “中国电信广西公司劳动能\n手” 称号 （D2） 、 中国电信广西公司劳动竞赛先进个人” 称号 （D3） 。\n对在区公司劳动竞赛中总结提炼出的先进营销法、 操作法可\n向相关创新评比活动推荐申报。\n第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得\n当、措施有力、成效显著的实施部门和单位可授予组织奖。\n第五章 竞赛经费\n第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n— 9 — 经费和组织经费，纳入预算管理，专款专用。",
+            "score": 0.6266328477859497,
+            "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "人均2000元",
+            "evidence_passage_ids": [
+              "2819437117ed70942edc32c742db57a4"
+            ],
+            "fact_type": "numeric",
+            "condition": "人均",
+            "candidate_id": "f361ddc2e99f9ebc2b6eb90c"
+          },
+          {
+            "text": "人均15000元",
+            "evidence_passage_ids": [
+              "2819437117ed70942edc32c742db57a4"
+            ],
+            "fact_type": "numeric",
+            "condition": "人均",
+            "candidate_id": "5bf9e633a3119cefd2b3eed2"
+          },
+          {
+            "text": "人均2000元",
+            "evidence_passage_ids": [
+              "a3f51915674eabf1b9c811ebfad43236"
+            ],
+            "fact_type": "numeric",
+            "condition": "人均",
+            "candidate_id": "e71d6a997530ec1e51154246"
+          },
+          {
+            "text": "人均15000元",
+            "evidence_passage_ids": [
+              "a3f51915674eabf1b9c811ebfad43236"
+            ],
+            "fact_type": "numeric",
+            "condition": "人均",
+            "candidate_id": "15829002412065cb0f6b220e"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+            "passage_id": "2819437117ed70942edc32c742db57a4",
+            "block_id": "5caba627-dea8-4899-8c55-9312665ef293",
+            "block_ids": [
+              "5caba627-dea8-4899-8c55-9312665ef293",
+              "a3184680-74b6-4a3c-8c3f-aa346c013aca",
+              "5a9c43c8-fd66-4baa-9f0f-5656ed4be962",
+              "80c2b8cb-20a1-4b67-b39f-ca984e19910f",
+              "0492530a-55b0-4a3f-8441-49af30bb7167",
+              "93d038d3-4c90-4bd2-9eb3-86b8689e803b",
+              "7cdaa681-4d4b-43c7-a5c2-d3d8db8b1336",
+              "0e488408-1037-45fb-951a-b5249e2afa99",
+              "f5a936f7-d10a-4740-aa8d-eab94ee904e6",
+              "afee8912-bffc-40f3-88ea-3471c0df6739",
+              "afa03bb2-ba3a-49c3-a1cc-a735bcd4479d",
+              "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "b9278cf5-de30-4bd7-aef2-a8d77970da93",
+              "4f14abb9-a788-416a-b736-f1cb9e5daff8"
+            ],
+            "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+            "path": "",
+            "text": " 建\n立健全竞赛协调机制，加强信息沟通和指导，及时了解和帮助解\n决员工需求和问题；总结竞赛先进经验和优秀案例，提炼和命名\n表彰奖励竞赛中员工首创的先进营销、操作法，并组织宣传、学\n习和推广价值高、可复制的竞赛成果（包括竞赛组织管理创新成\n果） 。\n第十八条 劳动竞赛委员会应承接好集团级竞赛， 结合实际 许丹丹(全渠道运营中心)\n— 8 —细化竞赛方案，做好竞赛组织、信息沟通和推荐评选等工作，可\n在保持竞赛主题一致的情况下丰富竞赛内容、创新竞赛形式。\n第十九条 劳动竞赛结束后一个月内， 实施部门或单位应通\n报竞赛完成情况，报劳动竞赛委员会办公室。\n第四章 表彰和奖励\n第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。",
+            "body_text": " 建\n立健全竞赛协调机制，加强信息沟通和指导，及时了解和帮助解\n决员工需求和问题；总结竞赛先进经验和优秀案例，提炼和命名\n表彰奖励竞赛中员工首创的先进营销、操作法，并组织宣传、学\n习和推广价值高、可复制的竞赛成果（包括竞赛组织管理创新成\n果） 。\n第十八条 劳动竞赛委员会应承接好集团级竞赛， 结合实际 许丹丹(全渠道运营中心)\n— 8 —细化竞赛方案，做好竞赛组织、信息沟通和推荐评选等工作，可\n在保持竞赛主题一致的情况下丰富竞赛内容、创新竞赛形式。\n第十九条 劳动竞赛结束后一个月内， 实施部门或单位应通\n报竞赛完成情况，报劳动竞赛委员会办公室。\n第四章 表彰和奖励\n第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。",
+            "score": 1.0,
+            "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+            "passage_id": "a3f51915674eabf1b9c811ebfad43236",
+            "block_id": "4a170d6e-a793-4614-98bb-1b166340e87e",
+            "block_ids": [
+              "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "b9278cf5-de30-4bd7-aef2-a8d77970da93",
+              "4f14abb9-a788-416a-b736-f1cb9e5daff8",
+              "eecba1fd-0aeb-4ed4-8e43-2915b8c35c4e",
+              "14ee83e9-c120-4d78-b13a-1f73c5e6b83b",
+              "eebddc01-4360-475e-bbe7-72ff7ce91d02",
+              "d4c224f2-cde0-4a14-83c1-40cd7d8e7c13",
+              "8e27bfc3-b3b4-4eca-aa9b-799980748cf2",
+              "62459955-8aa2-4564-9fb3-85dd886a6eb5",
+              "ee404723-fa3c-440e-bff7-e12a00d1e590",
+              "b1c755eb-b34e-45ef-8be2-53ffb386c061",
+              "34fb68ba-6985-4d77-8154-65d0f01606de",
+              "02553f10-da1c-4418-ab58-5e3a319bc611",
+              "3ae3f0bd-d238-4a8d-a5ab-6dff3ebb543e"
+            ],
+            "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+            "path": "",
+            "text": "\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。\n第二十二条 对在区公司劳动竞赛中成绩特别突出的员工，\n经劳动竞赛实施部门和单位确认申报，区公司人力资源部审核，\n劳动竞赛委员会将根据相应规则授予 “中国电信广西公司劳动能\n手” 称号 （D2） 、 中国电信广西公司劳动竞赛先进个人” 称号 （D3） 。\n对在区公司劳动竞赛中总结提炼出的先进营销法、 操作法可\n向相关创新评比活动推荐申报。\n第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得\n当、措施有力、成效显著的实施部门和单位可授予组织奖。\n第五章 竞赛经费\n第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n— 9 — 经费和组织经费，纳入预算管理，专款专用。",
+            "body_text": "\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。\n第二十二条 对在区公司劳动竞赛中成绩特别突出的员工，\n经劳动竞赛实施部门和单位确认申报，区公司人力资源部审核，\n劳动竞赛委员会将根据相应规则授予 “中国电信广西公司劳动能\n手” 称号 （D2） 、 中国电信广西公司劳动竞赛先进个人” 称号 （D3） 。\n对在区公司劳动竞赛中总结提炼出的先进营销法、 操作法可\n向相关创新评比活动推荐申报。\n第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得\n当、措施有力、成效显著的实施部门和单位可授予组织奖。\n第五章 竞赛经费\n第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n— 9 — 经费和组织经费，纳入预算管理，专款专用。",
+            "score": 0.6266328477859497,
+            "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+            "version_year": 2025,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.1468,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "员工",
+                "奖金",
+                "竞赛",
+                "奖励"
+              ],
+              "passage_id": "2819437117ed70942edc32c742db57a4",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "spans": [
+                {
+                  "slot": "员工",
+                  "surface": "员工",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    211,
+                    213
+                  ],
+                  "excerpt": "加强信息沟通和指导，及时了解和帮助解\n决员工需求和问题；总结竞赛先进经验和优秀案例，提炼和命名\n表彰奖励竞赛中员工首创的先进"
+                },
+                {
+                  "slot": "奖金",
+                  "surface": "奖金",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    536,
+                    538
+                  ],
+                  "excerpt": "集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000"
+                },
+                {
+                  "slot": "竞赛",
+                  "surface": "竞赛",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    28,
+                    30
+                  ],
+                  "excerpt": "5-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【文档】中电信桂-2025-54号-"
+                },
+                {
+                  "slot": "奖励",
+                  "surface": "奖励",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    119,
+                    121
+                  ],
+                  "excerpt": "8a8fb5a7\n【章节】第四章 表彰和奖励 > 第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。 > 第二十一条 区公司劳"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "比赛",
+                "员工",
+                "奖金",
+                "上限",
+                "竞赛",
+                "奖励",
+                "公司搞比赛给员工发奖金",
+                "公司搞比赛给",
+                "给员工发奖金",
+                "公司搞比",
+                "工发奖金",
+                "公司搞"
+              ],
+              "score": 0.3333,
+              "typed_plan": {
+                "anchors": [
+                  "比赛",
+                  "员工",
+                  "奖金",
+                  "上限",
+                  "竞赛",
+                  "奖励",
+                  "公司搞比赛给员工发奖金",
+                  "公司搞比赛给"
+                ],
+                "predicate": "上限",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 3,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "962ad38422d63041c867a460",
+            "snapshot_id_count": 4,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "公司搞比赛给员工发奖金 上限是多少"
+          },
+          "fact_plan": {
+            "raw": "公司搞比赛给员工发奖金 上限是多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:上限"
+            ],
+            "entities": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "比赛",
+            "object": "员工",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "上限",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "人均",
+              "value": "2000",
+              "unit": "元",
+              "evidence_passage_id": "2819437117ed70942edc32c742db57a4",
+              "record_id": "2819437117ed70942edc32c742db57a4:r6",
+              "exact_text": "人均2000元",
+              "table_row_ref": "2819437117ed70942edc32c742db57a4:t0",
+              "value_dimension": "per_unit",
+              "group_id": "f822df86a43132b0"
+            },
+            {
+              "condition": "人均",
+              "value": "15000",
+              "unit": "元",
+              "evidence_passage_id": "2819437117ed70942edc32c742db57a4",
+              "record_id": "2819437117ed70942edc32c742db57a4:r6",
+              "exact_text": "人均15000元",
+              "table_row_ref": "2819437117ed70942edc32c742db57a4:t0",
+              "value_dimension": "per_unit",
+              "group_id": "f822df86a43132b0"
+            },
+            {
+              "condition": "人均",
+              "value": "2000",
+              "unit": "元",
+              "evidence_passage_id": "a3f51915674eabf1b9c811ebfad43236",
+              "record_id": "a3f51915674eabf1b9c811ebfad43236:r1",
+              "exact_text": "人均2000元",
+              "table_row_ref": "a3f51915674eabf1b9c811ebfad43236:t0",
+              "value_dimension": "per_unit",
+              "group_id": "f822df86a43132b0"
+            },
+            {
+              "condition": "人均",
+              "value": "15000",
+              "unit": "元",
+              "evidence_passage_id": "a3f51915674eabf1b9c811ebfad43236",
+              "record_id": "a3f51915674eabf1b9c811ebfad43236:r1",
+              "exact_text": "人均15000元",
+              "table_row_ref": "a3f51915674eabf1b9c811ebfad43236:t0",
+              "value_dimension": "per_unit",
+              "group_id": "f822df86a43132b0"
+            }
+          ],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 24,
+          "candidate_count": 4
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "人均2000元",
+              "evidence_passage_ids": [
+                "2819437117ed70942edc32c742db57a4"
+              ],
+              "fact_type": "numeric",
+              "condition": "人均",
+              "candidate_id": "f361ddc2e99f9ebc2b6eb90c"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "人均15000元",
+              "evidence_passage_ids": [
+                "2819437117ed70942edc32c742db57a4"
+              ],
+              "fact_type": "numeric",
+              "condition": "人均",
+              "candidate_id": "5bf9e633a3119cefd2b3eed2"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "人均2000元",
+              "evidence_passage_ids": [
+                "a3f51915674eabf1b9c811ebfad43236"
+              ],
+              "fact_type": "numeric",
+              "condition": "人均",
+              "candidate_id": "e71d6a997530ec1e51154246"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "人均15000元",
+              "evidence_passage_ids": [
+                "a3f51915674eabf1b9c811ebfad43236"
+              ],
+              "fact_type": "numeric",
+              "condition": "人均",
+              "candidate_id": "15829002412065cb0f6b220e"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司搞比赛给员工发奖金 上限是多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:上限"
+            ],
+            "entities": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "比赛",
+            "object": "员工",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "上限",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ]
+          },
+          "input_count": 4,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "f361ddc2e99f9ebc2b6eb90c",
+              "record_id": "2819437117ed70942edc32c742db57a4:r6",
+              "passage_id": "2819437117ed70942edc32c742db57a4",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "2000元",
+              "qualifiers": [],
+              "condition": "人均",
+              "value": "2000",
+              "unit": "元",
+              "exact_text": "人均2000元",
+              "evidence_spans": [
+                [
+                  30,
+                  36
+                ]
+              ],
+              "table_row_ref": "2819437117ed70942edc32c742db57a4:t0",
+              "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+              "version_year": 2025,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "f822df86a43132b0",
+              "polarity": "",
+              "value_dimension": "per_unit",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "miss",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  30,
+                  36
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "5bf9e633a3119cefd2b3eed2",
+              "record_id": "2819437117ed70942edc32c742db57a4:r6",
+              "passage_id": "2819437117ed70942edc32c742db57a4",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "15000元",
+              "qualifiers": [],
+              "condition": "人均",
+              "value": "15000",
+              "unit": "元",
+              "exact_text": "人均15000元",
+              "evidence_spans": [
+                [
+                  56,
+                  63
+                ]
+              ],
+              "table_row_ref": "2819437117ed70942edc32c742db57a4:t0",
+              "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+              "version_year": 2025,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "f822df86a43132b0",
+              "polarity": "",
+              "value_dimension": "per_unit",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "miss",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  56,
+                  63
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "e71d6a997530ec1e51154246",
+              "record_id": "a3f51915674eabf1b9c811ebfad43236:r1",
+              "passage_id": "a3f51915674eabf1b9c811ebfad43236",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "2000元",
+              "qualifiers": [],
+              "condition": "人均",
+              "value": "2000",
+              "unit": "元",
+              "exact_text": "人均2000元",
+              "evidence_spans": [
+                [
+                  30,
+                  36
+                ]
+              ],
+              "table_row_ref": "a3f51915674eabf1b9c811ebfad43236:t0",
+              "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+              "version_year": 2025,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "f822df86a43132b0",
+              "polarity": "",
+              "value_dimension": "per_unit",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "miss",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  30,
+                  36
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "15829002412065cb0f6b220e",
+              "record_id": "a3f51915674eabf1b9c811ebfad43236:r1",
+              "passage_id": "a3f51915674eabf1b9c811ebfad43236",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "15000元",
+              "qualifiers": [],
+              "condition": "人均",
+              "value": "15000",
+              "unit": "元",
+              "exact_text": "人均15000元",
+              "evidence_spans": [
+                [
+                  56,
+                  63
+                ]
+              ],
+              "table_row_ref": "a3f51915674eabf1b9c811ebfad43236:t0",
+              "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+              "version_year": 2025,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "f822df86a43132b0",
+              "polarity": "",
+              "value_dimension": "per_unit",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "miss",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  56,
+                  63
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "f361ddc2e99f9ebc2b6eb90c": "hit",
+              "5bf9e633a3119cefd2b3eed2": "hit",
+              "e71d6a997530ec1e51154246": "hit",
+              "15829002412065cb0f6b220e": "hit"
+            },
+            "unit": {
+              "f361ddc2e99f9ebc2b6eb90c": "hit",
+              "5bf9e633a3119cefd2b3eed2": "hit",
+              "e71d6a997530ec1e51154246": "hit",
+              "15829002412065cb0f6b220e": "hit"
+            },
+            "predicate:上限": {
+              "f361ddc2e99f9ebc2b6eb90c": "miss",
+              "5bf9e633a3119cefd2b3eed2": "miss",
+              "e71d6a997530ec1e51154246": "miss",
+              "15829002412065cb0f6b220e": "miss"
+            }
+          },
+          "primary_group_id": "f822df86a43132b0",
+          "covered_slots": [
+            "condition:人均",
+            "dim:per_unit",
+            "unit",
+            "value",
+            "人均"
+          ],
+          "missing_after_select": [
+            "predicate:上限"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "f822df86a43132b0",
+                "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+                "knowledge_ids": [
+                  "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司劳动竞赛管理办法",
+                "document_revision": "2025",
+                "effective_date": "",
+                "version_year": 2025,
+                "passage_ids": [
+                  "2819437117ed70942edc32c742db57a4",
+                  "a3f51915674eabf1b9c811ebfad43236",
+                  "8f2a217e94479e30199d5fdb692ddeb2",
+                  "06b0543c4542eea352aec32ae8db612c"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  0.6266328477859497,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+                "section": "第四章 表彰和奖励 > 第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。 > 第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 10.0,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "2819437117ed70942edc32c742db57a4:r0",
+                  "2819437117ed70942edc32c742db57a4:r1",
+                  "2819437117ed70942edc32c742db57a4:r2",
+                  "2819437117ed70942edc32c742db57a4:r3",
+                  "2819437117ed70942edc32c742db57a4:r4",
+                  "2819437117ed70942edc32c742db57a4:r5",
+                  "2819437117ed70942edc32c742db57a4:r6",
+                  "a3f51915674eabf1b9c811ebfad43236:r0",
+                  "a3f51915674eabf1b9c811ebfad43236:r1",
+                  "a3f51915674eabf1b9c811ebfad43236:r2",
+                  "a3f51915674eabf1b9c811ebfad43236:r3",
+                  "a3f51915674eabf1b9c811ebfad43236:r4",
+                  "a3f51915674eabf1b9c811ebfad43236:r5",
+                  "8f2a217e94479e30199d5fdb692ddeb2:r0",
+                  "06b0543c4542eea352aec32ae8db612c:r0",
+                  "06b0543c4542eea352aec32ae8db612c:r1",
+                  "06b0543c4542eea352aec32ae8db612c:r2",
+                  "06b0543c4542eea352aec32ae8db612c:r3",
+                  "06b0543c4542eea352aec32ae8db612c:r4",
+                  "06b0543c4542eea352aec32ae8db612c:r5",
+                  "06b0543c4542eea352aec32ae8db612c:r6",
+                  "06b0543c4542eea352aec32ae8db612c:r7",
+                  "06b0543c4542eea352aec32ae8db612c:r8",
+                  "06b0543c4542eea352aec32ae8db612c:r9"
+                ]
+              }
+            ],
+            "primary_group_id": "f822df86a43132b0",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "上限是多少",
+                "公司搞比赛给员工发奖金"
+              ],
+              "selection": [
+                {
+                  "group_id": "f822df86a43132b0",
+                  "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+                  "knowledge_ids": [
+                    "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+                  ],
+                  "score": 10.0,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit",
+            "predicate:上限"
+          ],
+          "candidate_ids": [
+            "f361ddc2e99f9ebc2b6eb90c",
+            "5bf9e633a3119cefd2b3eed2",
+            "e71d6a997530ec1e51154246",
+            "15829002412065cb0f6b220e"
+          ],
+          "missing_slots": [
+            "predicate:上限"
+          ],
+          "complete": false,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "dim:per_unit",
+            "unit",
+            "value",
+            "人均"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "f361ddc2e99f9ebc2b6eb90c": "hit",
+              "5bf9e633a3119cefd2b3eed2": "hit",
+              "e71d6a997530ec1e51154246": "hit",
+              "15829002412065cb0f6b220e": "hit"
+            },
+            "unit": {
+              "f361ddc2e99f9ebc2b6eb90c": "hit",
+              "5bf9e633a3119cefd2b3eed2": "hit",
+              "e71d6a997530ec1e51154246": "hit",
+              "15829002412065cb0f6b220e": "hit"
+            },
+            "predicate:上限": {
+              "f361ddc2e99f9ebc2b6eb90c": "miss",
+              "5bf9e633a3119cefd2b3eed2": "miss",
+              "e71d6a997530ec1e51154246": "miss",
+              "15829002412065cb0f6b220e": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "公司搞比赛给员工发奖金 上限是多少",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "value",
+            "unit",
+            "predicate:上限"
+          ],
+          "entities": [
+            "比赛",
+            "员工",
+            "奖金",
+            "上限",
+            "竞赛",
+            "奖励",
+            "公司搞比赛给员工发奖金",
+            "公司搞比赛给",
+            "给员工发奖金",
+            "公司搞比",
+            "工发奖金",
+            "公司搞"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "比赛",
+          "object": "员工",
+          "scope": [
+            "员工"
+          ],
+          "selector": [],
+          "predicate": "上限",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "numeric",
+          "value_dimensions": [
+            "value"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "比赛",
+            "员工",
+            "奖金",
+            "上限",
+            "竞赛",
+            "奖励",
+            "公司搞比赛给员工发奖金",
+            "公司搞比赛给",
+            "给员工发奖金",
+            "公司搞比",
+            "工发奖金",
+            "公司搞"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "f822df86a43132b0",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "knowledge_ids": [
+                "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司劳动竞赛管理办法",
+              "document_revision": "2025",
+              "effective_date": "",
+              "version_year": 2025,
+              "passage_ids": [
+                "2819437117ed70942edc32c742db57a4",
+                "a3f51915674eabf1b9c811ebfad43236",
+                "8f2a217e94479e30199d5fdb692ddeb2",
+                "06b0543c4542eea352aec32ae8db612c"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "retrieval_scores": [
+                1.0,
+                0.6266328477859497,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+              "section": "第四章 表彰和奖励 > 第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。 > 第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 10.0,
+              "rejection_reasons": [],
+              "record_ids": [
+                "2819437117ed70942edc32c742db57a4:r0",
+                "2819437117ed70942edc32c742db57a4:r1",
+                "2819437117ed70942edc32c742db57a4:r2",
+                "2819437117ed70942edc32c742db57a4:r3",
+                "2819437117ed70942edc32c742db57a4:r4",
+                "2819437117ed70942edc32c742db57a4:r5",
+                "2819437117ed70942edc32c742db57a4:r6",
+                "a3f51915674eabf1b9c811ebfad43236:r0",
+                "a3f51915674eabf1b9c811ebfad43236:r1",
+                "a3f51915674eabf1b9c811ebfad43236:r2",
+                "a3f51915674eabf1b9c811ebfad43236:r3",
+                "a3f51915674eabf1b9c811ebfad43236:r4",
+                "a3f51915674eabf1b9c811ebfad43236:r5",
+                "8f2a217e94479e30199d5fdb692ddeb2:r0",
+                "06b0543c4542eea352aec32ae8db612c:r0",
+                "06b0543c4542eea352aec32ae8db612c:r1",
+                "06b0543c4542eea352aec32ae8db612c:r2",
+                "06b0543c4542eea352aec32ae8db612c:r3",
+                "06b0543c4542eea352aec32ae8db612c:r4",
+                "06b0543c4542eea352aec32ae8db612c:r5",
+                "06b0543c4542eea352aec32ae8db612c:r6",
+                "06b0543c4542eea352aec32ae8db612c:r7",
+                "06b0543c4542eea352aec32ae8db612c:r8",
+                "06b0543c4542eea352aec32ae8db612c:r9"
+              ]
+            }
+          ],
+          "primary_group_id": "f822df86a43132b0",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "上限是多少",
+              "公司搞比赛给员工发奖金"
+            ],
+            "selection": [
+              {
+                "group_id": "f822df86a43132b0",
+                "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+                "knowledge_ids": [
+                  "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+                ],
+                "score": 10.0,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {},
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "f361ddc2e99f9ebc2b6eb90c"
+              ],
+              "passage_id": "2819437117ed70942edc32c742db57a4",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "text": "- 人均2000元",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "5bf9e633a3119cefd2b3eed2"
+              ],
+              "passage_id": "2819437117ed70942edc32c742db57a4",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "text": "- 人均15000元",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 20
+        },
+        "primary_group_id": "f822df86a43132b0",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "type": "knowledge",
+              "label": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7"
+            },
+            {
+              "id": "5caba627-dea8-4899-8c55-9312665ef293",
+              "type": "block",
+              "label": "表彰奖励竞赛中员工首创的先进营销、操作法，并组织宣传、学",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+            },
+            {
+              "id": "96662e94-047f-47fc-b716-6ec769808bf1",
+              "type": "block",
+              "label": "[第7页]",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+            },
+            {
+              "id": "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "type": "block",
+              "label": "集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+            },
+            {
+              "id": "39fb6bf3-c7c8-4c3f-9523-6b0fe7226a18",
+              "type": "block",
+              "label": "[第8页]",
+              "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+            }
+          ],
+          "edges": [
+            {
+              "source": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "target": "5caba627-dea8-4899-8c55-9312665ef293",
+              "type": "contains"
+            },
+            {
+              "source": "96662e94-047f-47fc-b716-6ec769808bf1",
+              "target": "5caba627-dea8-4899-8c55-9312665ef293",
+              "type": "parent"
+            },
+            {
+              "source": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+              "target": "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "type": "contains"
+            },
+            {
+              "source": "39fb6bf3-c7c8-4c3f-9523-6b0fe7226a18",
+              "target": "4a170d6e-a793-4614-98bb-1b166340e87e",
+              "type": "parent"
+            }
+          ],
+          "truncated": false,
+          "node_count": 5
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+          ],
+          "accepted_block_ids": [
+            "5caba627-dea8-4899-8c55-9312665ef293"
+          ],
+          "accepted_passage_ids": [
+            "2819437117ed70942edc32c742db57a4",
+            "a3f51915674eabf1b9c811ebfad43236",
+            "8f2a217e94479e30199d5fdb692ddeb2",
+            "06b0543c4542eea352aec32ae8db612c"
+          ],
+          "adjacent_passage_ids": [
+            "8f2a217e94479e30199d5fdb692ddeb2",
+            "a3f51915674eabf1b9c811ebfad43236",
+            "06b0543c4542eea352aec32ae8db612c"
+          ],
+          "generation_knowledge_ids": [
+            "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+          ],
+          "top_score": 0.1468,
+          "intent": "ordinary",
+          "adjacent_count": 3,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "员工",
+              "奖金",
+              "竞赛",
+              "奖励"
+            ],
+            "passage_id": "2819437117ed70942edc32c742db57a4",
+            "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+            "spans": [
+              {
+                "slot": "员工",
+                "surface": "员工",
+                "synonym_source": "query_surface",
+                "span": [
+                  211,
+                  213
+                ],
+                "excerpt": "加强信息沟通和指导，及时了解和帮助解\n决员工需求和问题；总结竞赛先进经验和优秀案例，提炼和命名\n表彰奖励竞赛中员工首创的先进"
+              },
+              {
+                "slot": "奖金",
+                "surface": "奖金",
+                "synonym_source": "query_surface",
+                "span": [
+                  536,
+                  538
+                ],
+                "excerpt": "集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000"
+              },
+              {
+                "slot": "竞赛",
+                "surface": "竞赛",
+                "synonym_source": "query_surface",
+                "span": [
+                  28,
+                  30
+                ],
+                "excerpt": "5-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【文档】中电信桂-2025-54号-"
+              },
+              {
+                "slot": "奖励",
+                "surface": "奖励",
+                "synonym_source": "query_surface",
+                "span": [
+                  119,
+                  121
+                ],
+                "excerpt": "8a8fb5a7\n【章节】第四章 表彰和奖励 > 第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。 > 第二十一条 区公司劳"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "score": 0.3333,
+            "typed_plan": {
+              "anchors": [
+                "比赛",
+                "员工",
+                "奖金",
+                "上限",
+                "竞赛",
+                "奖励",
+                "公司搞比赛给员工发奖金",
+                "公司搞比赛给"
+              ],
+              "predicate": "上限",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "962ad38422d63041c867a460"
+        },
+        "snapshot_fingerprint": "962ad38422d63041c867a460",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 2,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 30.43
+  },
+  "top_candidate_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+  "candidates": [
+    {
+      "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+      "passage_id": "2819437117ed70942edc32c742db57a4",
+      "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+      "score": 1.0,
+      "final_relevance_score": 0.8103018784523011,
+      "text": "【文档】中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【章节】第四章 表彰和奖励 > 第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。 > 第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n 建\n立健全竞赛协调机制，加强信息沟通和指导，及时了解和帮助解\n决员工需求和问题；总结竞赛先进经验和优秀案例，提炼和命名\n表彰奖励竞赛中员工首创的先进营销、操作法，并组织宣传、学\n习和推广价值高、可复制的竞赛成果（包括竞赛组织管理创新成\n果） 。\n第十八条 劳动竞赛委员会应承接好集团级竞赛， 结合实际 许丹丹(全渠道运营中心)\n— 8 —细化竞赛方案，做好竞赛组织、信息沟通和推荐评选等工作，可\n在保持竞赛主题一致的情况下丰富竞赛内容、创新竞赛形式。\n第十九条 劳动竞赛结束后一个月内， 实施部门或单位应通\n报竞赛完成情况，报劳动竞赛委员会办公室。\n第四章 表彰和奖励\n第二十条 劳动竞赛以精神鼓励为主，物资奖励为辅。\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。"
+    },
+    {
+      "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+      "passage_id": "a3f51915674eabf1b9c811ebfad43236",
+      "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+      "score": 0.6266328477859497,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【章节】第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得 > 第五章 竞赛经费 > 第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n\n第二十一条 区公司劳动竞赛奖项设置分集体和个人奖项。\n集体奖侧重于基层生产经营团队（单位） ，奖金数额应控制在平\n均2000 元/人（税前）以内,且总奖励金额原则上不超15000 元\n/项：个人奖金数额控制在 2000 元/人（税前） 以内。\n第二十二条 对在区公司劳动竞赛中成绩特别突出的员工，\n经劳动竞赛实施部门和单位确认申报，区公司人力资源部审核，\n劳动竞赛委员会将根据相应规则授予 “中国电信广西公司劳动能\n手” 称号 （D2） 、 中国电信广西公司劳动竞赛先进个人” 称号 （D3） 。\n对在区公司劳动竞赛中总结提炼出的先进营销法、 操作法可\n向相关创新评比活动推荐申报。\n第二十三条 对在落实集团公司、 区公司劳动竞赛中组织得\n当、措施有力、成效显著的实施部门和单位可授予组织奖。\n第五章 竞赛经费\n第二十四条 区公司每年度按有关规定提取劳动竞赛奖励 许丹丹(全渠道运营中心)\n— 9 — 经费和组织经费，纳入预算管理，专款专用。"
+    }
+  ],
+  "search_ms": 3210.26,
+  "ask_ms": 30.43,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "pMH9UjuI3Tso5m8vFHSWmeSr_9LKHue4",
+  "search_snapshot_fingerprint": "962ad38422d63041c867a460",
+  "ask_snapshot_fingerprint": "962ad38422d63041c867a460",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "53c0be6f9e69f3b9efcf0538"
+}

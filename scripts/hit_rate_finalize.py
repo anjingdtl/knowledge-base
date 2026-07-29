@@ -8,6 +8,7 @@ Citation Validity 仅看 ask.sources 相对预接受/相邻扩展/期望 ID。
 """
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
@@ -36,7 +37,7 @@ def ask_info(d):
         return {
             "ok": False, "answer": "", "mode": None, "warnings": [],
             "sources": [], "raw_ev": [], "top_score": None, "snap": {},
-            "citation_integrity": {},
+            "citation_integrity": {}, "claims": [],
         }
     return {
         "ok": True,
@@ -48,6 +49,7 @@ def ask_info(d):
         "top_score": _extract_top_score(data.get("warnings") or []),
         "snap": data.get("evidence_snapshot") or {},
         "citation_integrity": data.get("citation_integrity") or {},
+        "claims": data.get("claims_used") or [],
     }
 
 
@@ -140,23 +142,36 @@ def score_answerable(case, d):
     ask_fact_correct = bool(ans.strip()) and ans_has_required and not ans_has_forbidden
     hallucination = ans_has_forbidden
 
-    # Citation validity on ask.sources only
+    # Citation validity on final sources only.  A matching knowledge_id is
+    # insufficient: each final source needs a real passage lineage in the
+    # canonical snapshot or an explicit adjacent extension.
     srcs = [s for s in a["sources"] if isinstance(s, dict)]
     snap = a["snap"]
-    accepted_kids = set(snap.get("accepted_knowledge_ids") or [])
-    accepted_blocks = set(snap.get("accepted_block_ids") or [])
+    accepted_passages = {
+        str(pid) for pid in (snap.get("accepted_passage_ids") or []) if str(pid).strip()
+    }
+    adjacent_passages = {
+        str(item.get("passage_id"))
+        for item in (snap.get("adjacent_allowlist") or [])
+        if isinstance(item, dict) and str(item.get("passage_id") or "").strip()
+    }
+    adjacent_passages.update(
+        str(pid) for pid in (snap.get("adjacent_passage_ids") or []) if str(pid).strip()
+    )
+    raw_passages = {
+        str(item.get("passage_id"))
+        for item in (a.get("raw_ev") or [])
+        if isinstance(item, dict) and str(item.get("passage_id") or "").strip()
+    }
     buckets = {"preaccepted": 0, "adjacent_extension": 0, "expected_id": 0, "rejected": 0}
     for s in srcs:
-        kid = str(s.get("knowledge_id") or "").strip()
-        bid = str(s.get("block_id") or "").strip()
-        if s.get("is_adjacent_extension"):
+        pid = str(s.get("passage_id") or "").strip()
+        if not pid or pid not in raw_passages:
+            buckets["rejected"] += 1
+        elif pid in accepted_passages:
+            buckets["preaccepted"] += 1
+        elif s.get("is_adjacent_extension") and pid in adjacent_passages:
             buckets["adjacent_extension"] += 1
-        elif kid and kid in accepted_kids:
-            buckets["preaccepted"] += 1
-        elif bid and bid in accepted_blocks:
-            buckets["preaccepted"] += 1
-        elif kid and kid in expected:
-            buckets["expected_id"] += 1
         else:
             buckets["rejected"] += 1
     if srcs:
@@ -210,7 +225,18 @@ def score_answerable(case, d):
     raw_with_pid = sum(
         1 for r in ask_raw if isinstance(r, dict) and str(r.get("passage_id") or "").strip()
     )
-    src_passage_complete = (src_with_pid == len(srcs)) if srcs else None
+    claim_passage_ids = [
+        str(pid)
+        for claim in (a.get("claims") or []) if isinstance(claim, dict)
+        for pid in (claim.get("evidence_passage_ids") or []) if str(pid).strip()
+    ]
+    claims_passage_complete = bool(claim_passage_ids) and all(
+        pid in raw_passages for pid in claim_passage_ids
+    ) if a.get("claims") else None
+    src_passage_complete = (
+        src_with_pid == len(srcs)
+        and all(str(s.get("passage_id") or "") in raw_passages for s in srcs)
+    ) if srcs else None
     raw_passage_complete = (raw_with_pid == len(ask_raw)) if ask_raw else None
     expected_doc_support = (
         sum(1 for s in srcs if str(s.get("knowledge_id") or "") in expected) / len(srcs)
@@ -253,6 +279,7 @@ def score_answerable(case, d):
         "expected_document_support_rate": expected_doc_support,
         "passage_trace_completeness_sources": src_passage_complete,
         "passage_trace_completeness_raw": raw_passage_complete,
+        "passage_trace_completeness_claims": claims_passage_complete,
         "version_leakage": version_leakage,
         "answer_mode": a.get("mode"),
     }
@@ -295,7 +322,16 @@ def score_no_answer(case, d):
     }
 
 
-def main():
+def main(argv: list[str] | None = None):
+    global OUT, GOLDEN
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", default=os.environ.get("HIT_RATE_ARTIFACTS_DIR", "artifacts/hit_rate_test"))
+    parser.add_argument("--golden", default="evals/golden_set_hit_rate.json")
+    parser.add_argument("--cases", help="Optional comma-separated case IDs")
+    args = parser.parse_args(argv)
+    OUT = Path(args.out)
+    GOLDEN = json.loads(Path(args.golden).read_text(encoding="utf-8"))["cases"]
+    selected = set(args.cases.split(",")) if args.cases else None
     details = []
     defects = {"P0": [], "P1": [], "P2": [], "P3": []}
     answerable = []
@@ -309,6 +345,8 @@ def main():
 
     for case in GOLDEN:
         cid = case["case_id"]
+        if selected and cid not in selected:
+            continue
         path = OUT / f"{cid}.json"
         if not path.exists():
             print(f"MISSING {cid}")

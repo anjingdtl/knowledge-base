@@ -81,6 +81,25 @@ class TestVersionIsolationKB037:
         assert extract_year_top(ranked) >= 2026
 
 
+def test_snapshot_adds_only_explicit_targeted_passages_for_accepted_document():
+    candidates = [{
+        "knowledge_id": "k1", "passage_id": "p1", "block_id": "b1",
+        "title": "星河采购制度", "text": "星河采购制度适用范围。",
+        "score": 0.9,
+    }]
+    snap = build_canonical_snapshot(
+        "星河采购制度准入金额标准", candidates, threshold=0.35, top_k=1,
+        select_document_passages_fn=lambda kid, query, existing, limit: [{
+            "knowledge_id": kid, "passage_id": "p2", "block_id": "b2",
+            "title": "星河采购制度", "text": "准入注册资本不少于100万元。",
+            "score": 3.0,
+        }],
+    )
+    target = [x for x in snap["generation_items"] if x.get("passage_id") == "p2"]
+    assert len(target) == 1
+    assert any(x.get("passage_id") == "p2" for x in snap["adjacent_allowlist"])
+
+
 def extract_year_top(items):
     from src.services.version_rank import extract_version_year
     if not items:

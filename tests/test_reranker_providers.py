@@ -374,6 +374,19 @@ class TestFactory:
         result = create_reranker(config=config)
         assert isinstance(result, ApiReranker)
 
+    def test_vendor_named_api_provider_uses_dedicated_reranker(self):
+        """A vendor label must not accidentally select the LLM fallback."""
+        config = Mock()
+        config.get.side_effect = lambda key, default=None: {
+            "reranker.enabled": True,
+            "reranker.provider": "siliconflow",
+            "reranker.model": "BAAI/bge-reranker-v2-m3",
+            "reranker.base_url": "https://api.siliconflow.cn/v1/rerank",
+            "reranker.api_key": "test-key",
+            "reranker.timeout": 20,
+        }.get(key, default)
+        assert isinstance(create_reranker(config=config), ApiReranker)
+
     def test_local_provider(self):
         """Factory returns LocalCrossEncoderReranker for provider=local (when available)."""
         config = Mock()

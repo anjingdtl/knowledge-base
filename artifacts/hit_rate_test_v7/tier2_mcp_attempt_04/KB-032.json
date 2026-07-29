@@ -1,0 +1,1329 @@
+{
+  "case": {
+    "case_id": "KB-032",
+    "category": "无答案或越界问题",
+    "query": "中国电信集团总部北京的办公楼地址",
+    "expected_knowledge_ids": [],
+    "expected_title_keywords": [],
+    "required_facts": [],
+    "forbidden_facts": [
+      "具体办公地址"
+    ],
+    "expected_no_answer": true,
+    "notes": "知识库为广西公司制度文档，无集团总部地址；应拒答"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+          "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+          "title": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+          "text": "【文档】中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a\n【章节】十五、群发消息员工客户集合推送记录表 > 十六、群发消息配置表（ T_WORK_GROUP_MESSAGE ） > 十八、企业微信客户与成员好友关系表 -XX省份名\n异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME\n十八、企业微信客户与成员好友关系表 -XX省份名\n序号 省份 简称 表名\n1 北京 BEIJING T_WORK_EXTERNAL_USER_FOLLOW_BEIJING\n2 天津 TIANJIN T_WORK_EXTERNAL_USER_FOLLOW_TIANJIN\n3 河北 HEBEI T_WORK_EXTERNAL_USER_FOLLOW_HEBEI\n4 山西 SHANXI T_WORK_EXTERNAL_USER_FOLLOW_SHANXI\n5 内蒙古 NEIMENGGU T_WORK_EXTERNAL_USER_FOLLOW_NEIMENGGU\n6 辽宁 LIAONING T_WORK_EXTERNAL_USER_FOLLOW_LIAONING\n7 吉林 JILIN T_WORK_EXTERNAL_USER_FOLLOW_JILIN\n8 黑龙江 HEILONGJIANG T_WORK_EXTERNAL_USER_FOLLOW_HEILONGJIANG\n9 上海 SHANGHAI T_WORK_EXTERNAL_USER_FOLLOW_SHANGHAI\n10 江苏 JIANGSU T_WORK_EXTERNAL_USER_FOLLOW_JIANGSU\n11 浙江 ZHEJIANG T_WORK_EXTERNAL_USER_FOLLOW_ZHEJIANG\n12 安徽 ANHUI T_WORK_EXTERNAL_USER_FOLLOW_ANHUI\n13 福建 FUJIAN T_WORK_EXTERNAL_USER_FOLLOW_FUJIAN\n14 江西 JIANGXI T_WORK_EXTERNAL_USER_FOLLOW_JIANGXI\n15 山东 SHANDONG T_WORK_EXTERNAL_USER_FOLLOW_SHANDONG\n16 河南 HENAN T_WORK_EXTERNAL_USER_FOLLOW_HENAN\n17 湖北 HUBEI T_WORK_EXTERNAL_USER_FOLLOW_HUBEI\n18 湖南 HUNAN T_WORK_EXTERNAL_USER_FOLLOW_HUNAN",
+          "score": 0.7,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "proper_noun_boost",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "9b3fdf000b5cbfaad83865b64ac72e22",
+          "document_family_id": "topic:号关于印发中国电信企业微信平台业务规范",
+          "version_year": 2023,
+          "source_version": "2023",
+          "section_path": "十五、群发消息员工客户集合推送记录表 > 十六、群发消息配置表（ T_WORK_GROUP_MESSAGE ） > 十八、企业微信客户与成员好友关系表 -XX省份名",
+          "block_ids": [
+            "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+            "a7a9ddcb-19df-4bca-9313-205d6e5f4469",
+            "e5253403-85cd-413f-8682-fd031fbab527",
+            "5d998197-b833-4cf1-8583-40aa9eff351b",
+            "d0676115-c12e-41dc-a0ce-7ec6ede982cb",
+            "a7726797-ef59-4bd3-8d76-9ae179db9a35",
+            "3666bd67-915d-4243-8a40-1550924c02b9",
+            "914a04f9-4459-42db-b52f-979aade2720b",
+            "bbe12847-328b-4c53-8621-afe2220bb56e",
+            "44e1899b-3b77-42a4-8456-ed0ca65edb47",
+            "0713e7f7-c2b6-4111-b661-f41882a48652",
+            "3e6d6aaa-f102-48e3-911f-d0abf6952e88",
+            "77d3aba5-904d-4347-9308-ba2bc7fec683",
+            "fa11a75b-6ef6-4a73-91af-4e179663c1e8",
+            "15535608-f511-4c5c-86c9-aa50c05ddbd5",
+            "bd58f5a8-7ba2-4dcd-939a-0a1cb77ac28e",
+            "b5bd0fe7-9c23-4fea-9741-fdf1029ad118",
+            "9c7ccef3-0057-4326-a3f5-3520708ad191",
+            "c8fd14e9-c1b9-4381-b328-183992d6a6cf",
+            "e84944e7-0e83-4bbc-8828-a999cefedd97",
+            "f8159de5-2d7a-4e67-bcc9-3bdd8056653b",
+            "c4e9532f-1f8f-4c0d-a564-2e73381de4a5",
+            "530c981f-151b-4da0-a3fb-51d8047cc9c1"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+              "order_idx": 3941,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "a7a9ddcb-19df-4bca-9313-205d6e5f4469",
+              "order_idx": 3942,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "e5253403-85cd-413f-8682-fd031fbab527",
+              "order_idx": 3943,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "5d998197-b833-4cf1-8583-40aa9eff351b",
+              "order_idx": 3944,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "d0676115-c12e-41dc-a0ce-7ec6ede982cb",
+              "order_idx": 3945,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "a7726797-ef59-4bd3-8d76-9ae179db9a35",
+              "order_idx": 3946,
+              "char_start": 0,
+              "char_end": 48
+            },
+            {
+              "block_id": "3666bd67-915d-4243-8a40-1550924c02b9",
+              "order_idx": 3947,
+              "char_start": 0,
+              "char_end": 48
+            },
+            {
+              "block_id": "914a04f9-4459-42db-b52f-979aade2720b",
+              "order_idx": 3948,
+              "char_start": 0,
+              "char_end": 44
+            },
+            {
+              "block_id": "bbe12847-328b-4c53-8621-afe2220bb56e",
+              "order_idx": 3949,
+              "char_start": 0,
+              "char_end": 46
+            },
+            {
+              "block_id": "44e1899b-3b77-42a4-8456-ed0ca65edb47",
+              "order_idx": 3950,
+              "char_start": 0,
+              "char_end": 53
+            },
+            {
+              "block_id": "0713e7f7-c2b6-4111-b661-f41882a48652",
+              "order_idx": 3951,
+              "char_start": 0,
+              "char_end": 50
+            },
+            {
+              "block_id": "3e6d6aaa-f102-48e3-911f-d0abf6952e88",
+              "order_idx": 3952,
+              "char_start": 0,
+              "char_end": 44
+            },
+            {
+              "block_id": "77d3aba5-904d-4347-9308-ba2bc7fec683",
+              "order_idx": 3953,
+              "char_start": 0,
+              "char_end": 59
+            },
+            {
+              "block_id": "fa11a75b-6ef6-4a73-91af-4e179663c1e8",
+              "order_idx": 3954,
+              "char_start": 0,
+              "char_end": 50
+            },
+            {
+              "block_id": "15535608-f511-4c5c-86c9-aa50c05ddbd5",
+              "order_idx": 3955,
+              "char_start": 0,
+              "char_end": 49
+            },
+            {
+              "block_id": "bd58f5a8-7ba2-4dcd-939a-0a1cb77ac28e",
+              "order_idx": 3956,
+              "char_start": 0,
+              "char_end": 51
+            },
+            {
+              "block_id": "b5bd0fe7-9c23-4fea-9741-fdf1029ad118",
+              "order_idx": 3957,
+              "char_start": 0,
+              "char_end": 45
+            },
+            {
+              "block_id": "9c7ccef3-0057-4326-a3f5-3520708ad191",
+              "order_idx": 3958,
+              "char_start": 0,
+              "char_end": 47
+            },
+            {
+              "block_id": "c8fd14e9-c1b9-4381-b328-183992d6a6cf",
+              "order_idx": 3959,
+              "char_start": 0,
+              "char_end": 49
+            },
+            {
+              "block_id": "e84944e7-0e83-4bbc-8828-a999cefedd97",
+              "order_idx": 3960,
+              "char_start": 0,
+              "char_end": 51
+            },
+            {
+              "block_id": "f8159de5-2d7a-4e67-bcc9-3bdd8056653b",
+              "order_idx": 3961,
+              "char_start": 0,
+              "char_end": 45
+            },
+            {
+              "block_id": "c4e9532f-1f8f-4c0d-a564-2e73381de4a5",
+              "order_idx": 3962,
+              "char_start": 0,
+              "char_end": 45
+            },
+            {
+              "block_id": "530c981f-151b-4da0-a3fb-51d8047cc9c1",
+              "order_idx": 3963,
+              "char_start": 0,
+              "char_end": 45
+            }
+          ],
+          "effective_year": 2023,
+          "citation": {
+            "document": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+            "path": "",
+            "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+            "block_id": "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.13080890476703644,
+            "score_breakdown": {
+              "vector": 0.7758375555276871,
+              "keyword": 0.45529736256111547,
+              "rrf": 0.02375449409347714,
+              "rerank": 0.13080890476703644
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "proper_noun_boost",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a\n【章节】十五、群发消息员工客户集合推送记录表 > 十六、群发消息配置表（ T_WORK_GROUP_MESSAGE ） > 十八、企业微信客户与成员好友关系表 -XX省份名\n异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME\n十八、企业微信客户与成员好友关系表 -XX省份名\n序号 省份 简称 表名\n1 北京 BEIJING T_WORK_EXTERNAL_USER_FOLLOW_BEIJING\n2 天津 TIANJIN T_WORK_EXTERNAL_USER_FOLLOW_TIANJIN\n3 河北 HEBEI T_WORK_EXTERNAL_USER_FOLLOW_HEBEI\n4 山西 SHANXI T_WORK_EXTERNAL_USER_FOLLOW_SHANXI\n5 内蒙古 NEIMENGGU T_WORK_EXTERNAL_USER_FOLLOW_NEIMENGGU\n6 辽宁 LIAONING T_WORK_EXTERNAL_USER_FOLLOW_LIAONING\n7 吉林 JILIN T_WORK_EXTERNAL_USER_FOLLOW_JILIN\n8 黑龙江 HEILONGJIANG T_WORK_EXTERNAL_USER_FOLLOW_HEILONGJIANG\n9 上海 SHANGHAI T_WORK_EXTERNAL_USER_FOLLOW_SHANGHAI\n10 江苏 JIANGSU T_WORK_EXTERNAL_USER_FOLLOW_JIANGSU\n11 浙江 ZHEJIANG T_WORK_EXTERNAL_USER_FOLLOW_ZHEJIANG\n12 安徽 ANHUI T_WORK_EXTERNAL_USER_FOLLOW_ANHUI\n13 福建 FUJIAN T_WORK_EXTERNAL_USER_FOLLOW_FUJIAN\n14 江西 JIANGXI T_WORK_EXTERNAL_USER_FOLLOW_JIANGXI\n15 山东 SHANDONG T_WORK_EXTERNAL_USER_FOLLOW_SHANDONG\n16 河南 HENAN T_WORK_EXTERNAL_USER_FOLLOW_HENAN\n17 湖北 HUBEI T_WORK_EXTERNAL_USER_FOLLOW_HUBEI\n18 湖南 HUNAN T_WORK_EXTERNAL_USER_FOLLOW_HUNAN"
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:号关于印发中国电信企业微信平台业务规范",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3104,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+        ],
+        "evidence_snapshot_id": "Y1akaodgufKsBBT080hKh2IPTX7I2mih",
+        "snapshot_fingerprint": "c280c6ce66358ff7bdc2bda1",
+        "accepted_passage_ids": [
+          "9b3fdf000b5cbfaad83865b64ac72e22",
+          "746961751f0e2c396fddeca27433f476",
+          "92df3a7a3d3c80c6ecf7ed537053e298"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 2840.22
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 异网、3未知9数据来源source_typeVARCHAR(50)√10链接地址auth_urlTEXT11创建时间create_timeDATETIME√12更新时间update_timeDATETIME十八、企业微信客户与成员好友关系表\n- 33创建时间create_timeDATETIME√34所属管理组IDcompany_idINT(11)√35所属管理组CODEcompany_codeVARCHAR(100)√77十七、外部联系人与手机号关联表（T_WORK_EXTERN",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+            "passage_id": "9b3fdf000b5cbfaad83865b64ac72e22",
+            "block_id": "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+            "block_ids": [
+              "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+              "a7a9ddcb-19df-4bca-9313-205d6e5f4469",
+              "e5253403-85cd-413f-8682-fd031fbab527",
+              "5d998197-b833-4cf1-8583-40aa9eff351b",
+              "d0676115-c12e-41dc-a0ce-7ec6ede982cb",
+              "a7726797-ef59-4bd3-8d76-9ae179db9a35",
+              "3666bd67-915d-4243-8a40-1550924c02b9",
+              "914a04f9-4459-42db-b52f-979aade2720b",
+              "bbe12847-328b-4c53-8621-afe2220bb56e",
+              "44e1899b-3b77-42a4-8456-ed0ca65edb47",
+              "0713e7f7-c2b6-4111-b661-f41882a48652",
+              "3e6d6aaa-f102-48e3-911f-d0abf6952e88",
+              "77d3aba5-904d-4347-9308-ba2bc7fec683",
+              "fa11a75b-6ef6-4a73-91af-4e179663c1e8",
+              "15535608-f511-4c5c-86c9-aa50c05ddbd5",
+              "bd58f5a8-7ba2-4dcd-939a-0a1cb77ac28e",
+              "b5bd0fe7-9c23-4fea-9741-fdf1029ad118",
+              "9c7ccef3-0057-4326-a3f5-3520708ad191",
+              "c8fd14e9-c1b9-4381-b328-183992d6a6cf",
+              "e84944e7-0e83-4bbc-8828-a999cefedd97",
+              "f8159de5-2d7a-4e67-bcc9-3bdd8056653b",
+              "c4e9532f-1f8f-4c0d-a564-2e73381de4a5",
+              "530c981f-151b-4da0-a3fb-51d8047cc9c1"
+            ],
+            "title": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+            "text": "异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME\n十八、企业微信客户与成员好友关系表 -XX省份名\n序号 省份 简称 表名\n1 北京 BEIJING T_WORK_EXTERNAL_USER_FOLLOW_BEIJING\n2 天津 TIANJIN T_WORK_EXTERNAL_USER_FOLLOW_TIANJIN\n3 河北 HEBEI T_WORK_EXTERNAL_USER_FOLLOW_HEBEI\n4 山西 SHANXI T_WORK_EXTERNAL_USER_FOLLOW_SHANXI\n5 内蒙古 NEIMENGGU T_WORK_EXTERNAL_USER_FOLLOW_NEIMENGGU\n6 辽宁 LIAONING T_WORK_EXTERNAL_USER_FOLLOW_LIAONING\n7 吉林 JILIN T_WORK_EXTERNAL_USER_FOLLOW_JILIN\n8 黑龙江 HEILONGJIANG T_WORK_EXTERNAL_USER_FOLLOW_HEILONGJIANG\n9 上海 SHANGHAI T_WORK_EXTERNAL_USER_FOLLOW_SHANGHAI\n10 江苏 JIANGSU T_WORK_EXTERNAL_USER_FOLLOW_JIANGSU\n11 浙江 ZHEJIANG T_WORK_EXTERNAL_USER_FOLLOW_ZHEJIANG\n12 安徽 ANHUI T_WORK_EXTERNAL_USER_FOLLOW_ANHUI\n13 福建 FUJIAN T_WORK_EXTERNAL_USER_FOLLOW_FUJIAN\n14 江西 JIANGXI T_WORK_EXTERNAL_USER_FOLLOW_JIANGXI\n15 山东 SHANDONG T_WORK_EXTERNAL_USER_FOLLOW_SHANDONG\n16 河南 HENAN T_WORK_EXTERNAL_USER_FOLLOW_HENAN\n17 湖北 HUBEI T_WORK_EXTERNAL_USER_FOLLOW_HUBEI\n18 湖南 HUNAN T_WORK_EXTERNAL_USER_FOLLOW_HUNAN",
+            "score": 0.7,
+            "document_family_id": "topic:号关于印发中国电信企业微信平台业务规范",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+            "passage_id": "746961751f0e2c396fddeca27433f476",
+            "block_id": "741d22bf-d18d-432f-af26-33b9baca4e93",
+            "block_ids": [
+              "741d22bf-d18d-432f-af26-33b9baca4e93",
+              "6e2ef49a-786b-45b8-9659-f285e5f70da8",
+              "ece73044-ac69-4844-b35c-76ccaab38fb0",
+              "917e9e95-44ec-4002-a06d-e6962dae28bc",
+              "162be9bf-b511-4c8f-8d62-43ac31641862",
+              "c4d8a6e0-816f-42a9-9b6d-abf618a245c6",
+              "f9d3c94d-3f86-4e01-9ce7-69ed7a4e3786",
+              "0c9dd56d-e553-4e79-aeea-38d76e14f646",
+              "4fcd9ffa-ee40-4a3a-addd-123b9f535138",
+              "fc7032e1-2c00-451c-a123-4d6070d5dd2e",
+              "f7790ac9-4e26-4139-8d4e-ee4c15074403",
+              "54674c31-e574-462b-b303-1bdc2b78559d",
+              "babea6c9-a469-4eee-b110-fefb3428cc0d",
+              "9f6c7fe5-5c11-47ce-867d-6a4507b13f03",
+              "2c069eda-5dfc-440c-be25-1dc14d0b087e",
+              "56eaf441-0fb9-4850-a265-e3d62133d6dc",
+              "8a446e9a-b7a2-4454-a4a9-df51c28b43f0",
+              "1453222e-e7e6-41e2-aa79-59fa738c091a",
+              "3172cfa7-1928-4e29-8d8b-177bdfbf8c69",
+              "a24b1f1d-bbf5-4779-a92a-008e33820ba7",
+              "6ca3041a-272f-49f2-b6a0-3a7044d1c6b4",
+              "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+              "a7a9ddcb-19df-4bca-9313-205d6e5f4469",
+              "e5253403-85cd-413f-8682-fd031fbab527"
+            ],
+            "title": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+            "text": "33 创建时间 create_time DATETIME √\n34 所属管理组 ID company_id INT(11) √\n35 所属管理组 CODE company_code VARCHAR(100) √\n77\n十七、外部联系人与手机号关联表（ T_WORK_EXTERNAL_USER_PHONE ）\n序号 中文名称 英文名称 字段类型 指标\n解释 主键 非\n空 校验\n规则 系统\n来源\n1 主键ID id BIGINT(20) √ √\n2 企业ID corp_id VARCHAR(50) √\n3 推荐人WORK_ID work_id BIGINT(20)\n4 OPENID open_id VARCHAR(64)\n5 外部联系人 ID external_userid VARCHAR(64)\n6 UNIONID unionid VARCHAR(64)\n7 手机号 phone VARCHAR(20) √\n8 手机号类型 type INT(11) 1本网、2\n异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME",
+            "score": 0.0,
+            "document_family_id": "topic:号关于印发中国电信企业微信平台业务规范",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "异网、3未知9数据来源source_typeVARCHAR(50)√10链接地址auth_urlTEXT11创建时间create_timeDATETIME√12更新时间update_timeDATETIME十八、企业微信客户与成员好友关系表",
+            "evidence_passage_ids": [
+              "9b3fdf000b5cbfaad83865b64ac72e22"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "542209c0978c79e942c15431"
+          },
+          {
+            "text": "33创建时间create_timeDATETIME√34所属管理组IDcompany_idINT(11)√35所属管理组CODEcompany_codeVARCHAR(100)√77十七、外部联系人与手机号关联表（T_WORK_EXTERN",
+            "evidence_passage_ids": [
+              "746961751f0e2c396fddeca27433f476"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "ad0c76b7071a49b3f5922fb3"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+            "passage_id": "9b3fdf000b5cbfaad83865b64ac72e22",
+            "block_id": "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+            "block_ids": [
+              "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+              "a7a9ddcb-19df-4bca-9313-205d6e5f4469",
+              "e5253403-85cd-413f-8682-fd031fbab527",
+              "5d998197-b833-4cf1-8583-40aa9eff351b",
+              "d0676115-c12e-41dc-a0ce-7ec6ede982cb",
+              "a7726797-ef59-4bd3-8d76-9ae179db9a35",
+              "3666bd67-915d-4243-8a40-1550924c02b9",
+              "914a04f9-4459-42db-b52f-979aade2720b",
+              "bbe12847-328b-4c53-8621-afe2220bb56e",
+              "44e1899b-3b77-42a4-8456-ed0ca65edb47",
+              "0713e7f7-c2b6-4111-b661-f41882a48652",
+              "3e6d6aaa-f102-48e3-911f-d0abf6952e88",
+              "77d3aba5-904d-4347-9308-ba2bc7fec683",
+              "fa11a75b-6ef6-4a73-91af-4e179663c1e8",
+              "15535608-f511-4c5c-86c9-aa50c05ddbd5",
+              "bd58f5a8-7ba2-4dcd-939a-0a1cb77ac28e",
+              "b5bd0fe7-9c23-4fea-9741-fdf1029ad118",
+              "9c7ccef3-0057-4326-a3f5-3520708ad191",
+              "c8fd14e9-c1b9-4381-b328-183992d6a6cf",
+              "e84944e7-0e83-4bbc-8828-a999cefedd97",
+              "f8159de5-2d7a-4e67-bcc9-3bdd8056653b",
+              "c4e9532f-1f8f-4c0d-a564-2e73381de4a5",
+              "530c981f-151b-4da0-a3fb-51d8047cc9c1"
+            ],
+            "title": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+            "path": "",
+            "text": "异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME\n十八、企业微信客户与成员好友关系表 -XX省份名\n序号 省份 简称 表名\n1 北京 BEIJING T_WORK_EXTERNAL_USER_FOLLOW_BEIJING\n2 天津 TIANJIN T_WORK_EXTERNAL_USER_FOLLOW_TIANJIN\n3 河北 HEBEI T_WORK_EXTERNAL_USER_FOLLOW_HEBEI\n4 山西 SHANXI T_WORK_EXTERNAL_USER_FOLLOW_SHANXI\n5 内蒙古 NEIMENGGU T_WORK_EXTERNAL_USER_FOLLOW_NEIMENGGU\n6 辽宁 LIAONING T_WORK_EXTERNAL_USER_FOLLOW_LIAONING\n7 吉林 JILIN T_WORK_EXTERNAL_USER_FOLLOW_JILIN\n8 黑龙江 HEILONGJIANG T_WORK_EXTERNAL_USER_FOLLOW_HEILONGJIANG\n9 上海 SHANGHAI T_WORK_EXTERNAL_USER_FOLLOW_SHANGHAI\n10 江苏 JIANGSU T_WORK_EXTERNAL_USER_FOLLOW_JIANGSU\n11 浙江 ZHEJIANG T_WORK_EXTERNAL_USER_FOLLOW_ZHEJIANG\n12 安徽 ANHUI T_WORK_EXTERNAL_USER_FOLLOW_ANHUI\n13 福建 FUJIAN T_WORK_EXTERNAL_USER_FOLLOW_FUJIAN\n14 江西 JIANGXI T_WORK_EXTERNAL_USER_FOLLOW_JIANGXI\n15 山东 SHANDONG T_WORK_EXTERNAL_USER_FOLLOW_SHANDONG\n16 河南 HENAN T_WORK_EXTERNAL_USER_FOLLOW_HENAN\n17 湖北 HUBEI T_WORK_EXTERNAL_USER_FOLLOW_HUBEI\n18 湖南 HUNAN T_WORK_EXTERNAL_USER_FOLLOW_HUNAN",
+            "body_text": "异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME\n十八、企业微信客户与成员好友关系表 -XX省份名\n序号 省份 简称 表名\n1 北京 BEIJING T_WORK_EXTERNAL_USER_FOLLOW_BEIJING\n2 天津 TIANJIN T_WORK_EXTERNAL_USER_FOLLOW_TIANJIN\n3 河北 HEBEI T_WORK_EXTERNAL_USER_FOLLOW_HEBEI\n4 山西 SHANXI T_WORK_EXTERNAL_USER_FOLLOW_SHANXI\n5 内蒙古 NEIMENGGU T_WORK_EXTERNAL_USER_FOLLOW_NEIMENGGU\n6 辽宁 LIAONING T_WORK_EXTERNAL_USER_FOLLOW_LIAONING\n7 吉林 JILIN T_WORK_EXTERNAL_USER_FOLLOW_JILIN\n8 黑龙江 HEILONGJIANG T_WORK_EXTERNAL_USER_FOLLOW_HEILONGJIANG\n9 上海 SHANGHAI T_WORK_EXTERNAL_USER_FOLLOW_SHANGHAI\n10 江苏 JIANGSU T_WORK_EXTERNAL_USER_FOLLOW_JIANGSU\n11 浙江 ZHEJIANG T_WORK_EXTERNAL_USER_FOLLOW_ZHEJIANG\n12 安徽 ANHUI T_WORK_EXTERNAL_USER_FOLLOW_ANHUI\n13 福建 FUJIAN T_WORK_EXTERNAL_USER_FOLLOW_FUJIAN\n14 江西 JIANGXI T_WORK_EXTERNAL_USER_FOLLOW_JIANGXI\n15 山东 SHANDONG T_WORK_EXTERNAL_USER_FOLLOW_SHANDONG\n16 河南 HENAN T_WORK_EXTERNAL_USER_FOLLOW_HENAN\n17 湖北 HUBEI T_WORK_EXTERNAL_USER_FOLLOW_HUBEI\n18 湖南 HUNAN T_WORK_EXTERNAL_USER_FOLLOW_HUNAN",
+            "score": 0.7,
+            "document_family_id": "topic:号关于印发中国电信企业微信平台业务规范",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+            "passage_id": "746961751f0e2c396fddeca27433f476",
+            "block_id": "741d22bf-d18d-432f-af26-33b9baca4e93",
+            "block_ids": [
+              "741d22bf-d18d-432f-af26-33b9baca4e93",
+              "6e2ef49a-786b-45b8-9659-f285e5f70da8",
+              "ece73044-ac69-4844-b35c-76ccaab38fb0",
+              "917e9e95-44ec-4002-a06d-e6962dae28bc",
+              "162be9bf-b511-4c8f-8d62-43ac31641862",
+              "c4d8a6e0-816f-42a9-9b6d-abf618a245c6",
+              "f9d3c94d-3f86-4e01-9ce7-69ed7a4e3786",
+              "0c9dd56d-e553-4e79-aeea-38d76e14f646",
+              "4fcd9ffa-ee40-4a3a-addd-123b9f535138",
+              "fc7032e1-2c00-451c-a123-4d6070d5dd2e",
+              "f7790ac9-4e26-4139-8d4e-ee4c15074403",
+              "54674c31-e574-462b-b303-1bdc2b78559d",
+              "babea6c9-a469-4eee-b110-fefb3428cc0d",
+              "9f6c7fe5-5c11-47ce-867d-6a4507b13f03",
+              "2c069eda-5dfc-440c-be25-1dc14d0b087e",
+              "56eaf441-0fb9-4850-a265-e3d62133d6dc",
+              "8a446e9a-b7a2-4454-a4a9-df51c28b43f0",
+              "1453222e-e7e6-41e2-aa79-59fa738c091a",
+              "3172cfa7-1928-4e29-8d8b-177bdfbf8c69",
+              "a24b1f1d-bbf5-4779-a92a-008e33820ba7",
+              "6ca3041a-272f-49f2-b6a0-3a7044d1c6b4",
+              "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+              "a7a9ddcb-19df-4bca-9313-205d6e5f4469",
+              "e5253403-85cd-413f-8682-fd031fbab527"
+            ],
+            "title": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+            "path": "",
+            "text": "33 创建时间 create_time DATETIME √\n34 所属管理组 ID company_id INT(11) √\n35 所属管理组 CODE company_code VARCHAR(100) √\n77\n十七、外部联系人与手机号关联表（ T_WORK_EXTERNAL_USER_PHONE ）\n序号 中文名称 英文名称 字段类型 指标\n解释 主键 非\n空 校验\n规则 系统\n来源\n1 主键ID id BIGINT(20) √ √\n2 企业ID corp_id VARCHAR(50) √\n3 推荐人WORK_ID work_id BIGINT(20)\n4 OPENID open_id VARCHAR(64)\n5 外部联系人 ID external_userid VARCHAR(64)\n6 UNIONID unionid VARCHAR(64)\n7 手机号 phone VARCHAR(20) √\n8 手机号类型 type INT(11) 1本网、2\n异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME",
+            "body_text": "33 创建时间 create_time DATETIME √\n34 所属管理组 ID company_id INT(11) √\n35 所属管理组 CODE company_code VARCHAR(100) √\n77\n十七、外部联系人与手机号关联表（ T_WORK_EXTERNAL_USER_PHONE ）\n序号 中文名称 英文名称 字段类型 指标\n解释 主键 非\n空 校验\n规则 系统\n来源\n1 主键ID id BIGINT(20) √ √\n2 企业ID corp_id VARCHAR(50) √\n3 推荐人WORK_ID work_id BIGINT(20)\n4 OPENID open_id VARCHAR(64)\n5 外部联系人 ID external_userid VARCHAR(64)\n6 UNIONID unionid VARCHAR(64)\n7 手机号 phone VARCHAR(20) √\n8 手机号类型 type INT(11) 1本网、2\n异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME",
+            "score": 0.0,
+            "document_family_id": "topic:号关于印发中国电信企业微信平台业务规范",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.3104,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "北京",
+                "地址",
+                "中国电信",
+                "中国电"
+              ],
+              "passage_id": "9b3fdf000b5cbfaad83865b64ac72e22",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "spans": [
+                {
+                  "slot": "北京",
+                  "surface": "北京",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    355,
+                    357
+                  ],
+                  "excerpt": "XX省份名\n序号 省份 简称 表名\n1 北京 BEIJING T_WORK_EXTERNAL_USER_FOLLOW_BEI"
+                },
+                {
+                  "slot": "地址",
+                  "surface": "地址",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    239,
+                    241
+                  ],
+                  "excerpt": " VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATET"
+                },
+                {
+                  "slot": "中国电信",
+                  "surface": "中国电信",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    0,
+                    4
+                  ],
+                  "excerpt": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30"
+                },
+                {
+                  "slot": "中国电",
+                  "surface": "中国电",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    0,
+                    3
+                  ],
+                  "excerpt": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--3"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "中国电信集团",
+                "北京",
+                "办公楼",
+                "地址",
+                "中国电信集团总部北京的办公楼",
+                "中国电信集团总部北京",
+                "办公楼地址",
+                "的办公楼地址",
+                "中国电信",
+                "公楼地址",
+                "中国电",
+                "楼地址"
+              ],
+              "score": 0.3333,
+              "typed_plan": {
+                "anchors": [
+                  "中国电信集团",
+                  "北京",
+                  "办公楼",
+                  "地址",
+                  "中国电信集团总部北京的办公楼",
+                  "中国电信集团总部北京",
+                  "办公楼地址",
+                  "的办公楼地址"
+                ],
+                "predicate": "",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "c280c6ce66358ff7bdc2bda1",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "中国电信集团总部北京的办公楼地址"
+          },
+          "fact_plan": {
+            "raw": "中国电信集团总部北京的办公楼地址",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact"
+            ],
+            "entities": [
+              "中国电信集团",
+              "北京",
+              "办公楼",
+              "地址",
+              "中国电信集团总部北京的办公楼",
+              "中国电信集团总部北京",
+              "办公楼地址",
+              "的办公楼地址",
+              "中国电信",
+              "公楼地址",
+              "中国电",
+              "楼地址"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "中国电信集团",
+            "object": "北京",
+            "scope": [],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "中国电信集团",
+              "北京",
+              "办公楼",
+              "地址",
+              "中国电信集团总部北京的办公楼",
+              "中国电信集团总部北京",
+              "办公楼地址",
+              "的办公楼地址",
+              "中国电信",
+              "公楼地址",
+              "中国电",
+              "楼地址"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 3,
+          "candidate_count": 2
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "异网、3未知9数据来源source_typeVARCHAR(50)√10链接地址auth_urlTEXT11创建时间create_timeDATETIME√12更新时间update_timeDATETIME十八、企业微信客户与成员好友关系表",
+              "evidence_passage_ids": [
+                "9b3fdf000b5cbfaad83865b64ac72e22"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "542209c0978c79e942c15431"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "33创建时间create_timeDATETIME√34所属管理组IDcompany_idINT(11)√35所属管理组CODEcompany_codeVARCHAR(100)√77十七、外部联系人与手机号关联表（T_WORK_EXTERN",
+              "evidence_passage_ids": [
+                "746961751f0e2c396fddeca27433f476"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "ad0c76b7071a49b3f5922fb3"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "中国电信集团总部北京的办公楼地址",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact"
+            ],
+            "entities": [
+              "中国电信集团",
+              "北京",
+              "办公楼",
+              "地址",
+              "中国电信集团总部北京的办公楼",
+              "中国电信集团总部北京",
+              "办公楼地址",
+              "的办公楼地址",
+              "中国电信",
+              "公楼地址",
+              "中国电",
+              "楼地址"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "中国电信集团",
+            "object": "北京",
+            "scope": [],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "中国电信集团",
+              "北京",
+              "办公楼",
+              "地址",
+              "中国电信集团总部北京的办公楼",
+              "中国电信集团总部北京",
+              "办公楼地址",
+              "的办公楼地址",
+              "中国电信",
+              "公楼地址",
+              "中国电",
+              "楼地址"
+            ]
+          },
+          "input_count": 2,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "542209c0978c79e942c15431",
+              "record_id": "9b3fdf000b5cbfaad83865b64ac72e22:r0",
+              "passage_id": "9b3fdf000b5cbfaad83865b64ac72e22",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "fact_kind": "policy",
+              "subject": "地址",
+              "predicate": "",
+              "object": "异网、3未知9数据来源source_typeVARCHAR(50)√10链接地址auth_urlTEXT11创建时间create_timeDATETIME√12更新时间update_timeDATETIME十八、企业微信客户与成员好友关系表",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "异网、3未知9数据来源source_typeVARCHAR(50)√10链接地址auth_urlTEXT11创建时间create_timeDATETIME√12更新时间update_timeDATETIME十八、企业微信客户与成员好友关系表",
+              "evidence_spans": [
+                [
+                  0,
+                  1023
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:号关于印发中国电信企业微信平台业务规范",
+              "version_year": 2023,
+              "score": 14.299999999999999,
+              "unstructured_rejected": false,
+              "group_id": "03eb63c7b70df31a",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:中国电信集团": "miss",
+                "anchor:北京": "miss",
+                "anchor:办公楼": "miss",
+                "anchor:地址": "hit",
+                "anchor:中国电信集团总部北京的办公楼": "miss",
+                "anchor:中国电信集团总部北京": "miss",
+                "anchor:办公楼地址": "miss",
+                "anchor:的办公楼地址": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "ad0c76b7071a49b3f5922fb3",
+              "record_id": "746961751f0e2c396fddeca27433f476:r0",
+              "passage_id": "746961751f0e2c396fddeca27433f476",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "fact_kind": "policy",
+              "subject": "",
+              "predicate": "",
+              "object": "33创建时间create_timeDATETIME√34所属管理组IDcompany_idINT(11)√35所属管理组CODEcompany_codeVARCHAR(100)√77十七、外部联系人与手机号关联表（T_WORK_EXTERN",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "33创建时间create_timeDATETIME√34所属管理组IDcompany_idINT(11)√35所属管理组CODEcompany_codeVARCHAR(100)√77十七、外部联系人与手机号关联表（T_WORK_EXTERN",
+              "evidence_spans": [
+                [
+                  0,
+                  542
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:号关于印发中国电信企业微信平台业务规范",
+              "version_year": 2023,
+              "score": 8.0,
+              "unstructured_rejected": false,
+              "group_id": "03eb63c7b70df31a",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:中国电信集团": "miss",
+                "anchor:北京": "miss",
+                "anchor:办公楼": "miss",
+                "anchor:地址": "miss",
+                "anchor:中国电信集团总部北京的办公楼": "miss",
+                "anchor:中国电信集团总部北京": "miss",
+                "anchor:办公楼地址": "miss",
+                "anchor:的办公楼地址": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {
+              "542209c0978c79e942c15431": "hit",
+              "ad0c76b7071a49b3f5922fb3": "hit"
+            }
+          },
+          "primary_group_id": "03eb63c7b70df31a",
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "03eb63c7b70df31a",
+                "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+                "knowledge_ids": [
+                  "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+                ],
+                "organization_scope": "",
+                "document_family_id": "号中国电信企业微信平台业务规范",
+                "document_revision": "2023",
+                "effective_date": "",
+                "version_year": 2023,
+                "passage_ids": [
+                  "9b3fdf000b5cbfaad83865b64ac72e22",
+                  "746961751f0e2c396fddeca27433f476",
+                  "92df3a7a3d3c80c6ecf7ed537053e298"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.7,
+                  0.0,
+                  0.0
+                ],
+                "title": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+                "section": "十五、群发消息员工客户集合推送记录表 > 十六、群发消息配置表（ T_WORK_GROUP_MESSAGE ） > 十八、企业微信客户与成员好友关系表 -XX省份名",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.4,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "9b3fdf000b5cbfaad83865b64ac72e22:r0",
+                  "746961751f0e2c396fddeca27433f476:r0",
+                  "92df3a7a3d3c80c6ecf7ed537053e298:r0"
+                ]
+              }
+            ],
+            "primary_group_id": "03eb63c7b70df31a",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "中国电信集团总部北京的办",
+                "公楼地址"
+              ],
+              "selection": [
+                {
+                  "group_id": "03eb63c7b70df31a",
+                  "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+                  "knowledge_ids": [
+                    "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+                  ],
+                  "score": 7.4,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact"
+          ],
+          "candidate_ids": [
+            "542209c0978c79e942c15431",
+            "ad0c76b7071a49b3f5922fb3"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "coverage_matrix": {
+            "policy_fact": {
+              "542209c0978c79e942c15431": "hit",
+              "ad0c76b7071a49b3f5922fb3": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "中国电信集团总部北京的办公楼地址",
+          "intents": [
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "policy_fact"
+          ],
+          "entities": [
+            "中国电信集团",
+            "北京",
+            "办公楼",
+            "地址",
+            "中国电信集团总部北京的办公楼",
+            "中国电信集团总部北京",
+            "办公楼地址",
+            "的办公楼地址",
+            "中国电信",
+            "公楼地址",
+            "中国电",
+            "楼地址"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "policy",
+            "prohibition",
+            "scope",
+            "responsibility",
+            "relationship"
+          ],
+          "subject": "中国电信集团",
+          "object": "北京",
+          "scope": [],
+          "selector": [],
+          "predicate": "",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "policy",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "中国电信集团",
+            "北京",
+            "办公楼",
+            "地址",
+            "中国电信集团总部北京的办公楼",
+            "中国电信集团总部北京",
+            "办公楼地址",
+            "的办公楼地址",
+            "中国电信",
+            "公楼地址",
+            "中国电",
+            "楼地址"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "03eb63c7b70df31a",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "knowledge_ids": [
+                "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+              ],
+              "organization_scope": "",
+              "document_family_id": "号中国电信企业微信平台业务规范",
+              "document_revision": "2023",
+              "effective_date": "",
+              "version_year": 2023,
+              "passage_ids": [
+                "9b3fdf000b5cbfaad83865b64ac72e22",
+                "746961751f0e2c396fddeca27433f476",
+                "92df3a7a3d3c80c6ecf7ed537053e298"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.7,
+                0.0,
+                0.0
+              ],
+              "title": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+              "section": "十五、群发消息员工客户集合推送记录表 > 十六、群发消息配置表（ T_WORK_GROUP_MESSAGE ） > 十八、企业微信客户与成员好友关系表 -XX省份名",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.4,
+              "rejection_reasons": [],
+              "record_ids": [
+                "9b3fdf000b5cbfaad83865b64ac72e22:r0",
+                "746961751f0e2c396fddeca27433f476:r0",
+                "92df3a7a3d3c80c6ecf7ed537053e298:r0"
+              ]
+            }
+          ],
+          "primary_group_id": "03eb63c7b70df31a",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "中国电信集团总部北京的办",
+              "公楼地址"
+            ],
+            "selection": [
+              {
+                "group_id": "03eb63c7b70df31a",
+                "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+                "knowledge_ids": [
+                  "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+                ],
+                "score": 7.4,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "地址"
+            ]
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "542209c0978c79e942c15431"
+              ],
+              "passage_id": "9b3fdf000b5cbfaad83865b64ac72e22",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "text": "- 异网、3未知9数据来源source_typeVARCHAR(50)√10链接地址auth_urlTEXT11创建时间create_timeDATETIME√12更新时间update_timeDATETIME十八、企业微信客户与成员好友关系表",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "ad0c76b7071a49b3f5922fb3"
+              ],
+              "passage_id": "746961751f0e2c396fddeca27433f476",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "text": "- 33创建时间create_timeDATETIME√34所属管理组IDcompany_idINT(11)√35所属管理组CODEcompany_codeVARCHAR(100)√77十七、外部联系人与手机号关联表（T_WORK_EXTERN",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 245
+        },
+        "primary_group_id": "03eb63c7b70df31a",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "type": "knowledge",
+              "label": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a"
+            },
+            {
+              "id": "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+              "type": "block",
+              "label": "10 链接地址 auth_url TEXT",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+            },
+            {
+              "id": "851f77f7-e6f4-4368-be31-e7135227c1e8",
+              "type": "block",
+              "label": "[第132页]",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+            },
+            {
+              "id": "741d22bf-d18d-432f-af26-33b9baca4e93",
+              "type": "block",
+              "label": "33 创建时间 create_time DATETIME √",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+            },
+            {
+              "id": "65ad6cce-3d61-41a1-92a3-347c6448efbb",
+              "type": "block",
+              "label": "[第131页]",
+              "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+            }
+          ],
+          "edges": [
+            {
+              "source": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "target": "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+              "type": "contains"
+            },
+            {
+              "source": "851f77f7-e6f4-4368-be31-e7135227c1e8",
+              "target": "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9",
+              "type": "parent"
+            },
+            {
+              "source": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+              "target": "741d22bf-d18d-432f-af26-33b9baca4e93",
+              "type": "contains"
+            },
+            {
+              "source": "65ad6cce-3d61-41a1-92a3-347c6448efbb",
+              "target": "741d22bf-d18d-432f-af26-33b9baca4e93",
+              "type": "parent"
+            }
+          ],
+          "truncated": false,
+          "node_count": 5
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+          ],
+          "accepted_block_ids": [
+            "744f74a7-e8d0-4fa3-b6fa-69c7e8ae0ab9"
+          ],
+          "accepted_passage_ids": [
+            "9b3fdf000b5cbfaad83865b64ac72e22",
+            "746961751f0e2c396fddeca27433f476",
+            "92df3a7a3d3c80c6ecf7ed537053e298"
+          ],
+          "adjacent_passage_ids": [
+            "746961751f0e2c396fddeca27433f476",
+            "92df3a7a3d3c80c6ecf7ed537053e298"
+          ],
+          "generation_knowledge_ids": [
+            "30fc3e8a-954a-45f6-a449-57188f8b3d27"
+          ],
+          "top_score": 0.3104,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "北京",
+              "地址",
+              "中国电信",
+              "中国电"
+            ],
+            "passage_id": "9b3fdf000b5cbfaad83865b64ac72e22",
+            "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+            "spans": [
+              {
+                "slot": "北京",
+                "surface": "北京",
+                "synonym_source": "query_surface",
+                "span": [
+                  355,
+                  357
+                ],
+                "excerpt": "XX省份名\n序号 省份 简称 表名\n1 北京 BEIJING T_WORK_EXTERNAL_USER_FOLLOW_BEI"
+              },
+              {
+                "slot": "地址",
+                "surface": "地址",
+                "synonym_source": "query_surface",
+                "span": [
+                  239,
+                  241
+                ],
+                "excerpt": " VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATET"
+              },
+              {
+                "slot": "中国电信",
+                "surface": "中国电信",
+                "synonym_source": "query_surface",
+                "span": [
+                  0,
+                  4
+                ],
+                "excerpt": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30"
+              },
+              {
+                "slot": "中国电",
+                "surface": "中国电",
+                "synonym_source": "query_surface",
+                "span": [
+                  0,
+                  3
+                ],
+                "excerpt": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--3"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "中国电信集团",
+              "北京",
+              "办公楼",
+              "地址",
+              "中国电信集团总部北京的办公楼",
+              "中国电信集团总部北京",
+              "办公楼地址",
+              "的办公楼地址",
+              "中国电信",
+              "公楼地址",
+              "中国电",
+              "楼地址"
+            ],
+            "score": 0.3333,
+            "typed_plan": {
+              "anchors": [
+                "中国电信集团",
+                "北京",
+                "办公楼",
+                "地址",
+                "中国电信集团总部北京的办公楼",
+                "中国电信集团总部北京",
+                "办公楼地址",
+                "的办公楼地址"
+              ],
+              "predicate": "",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "c280c6ce66358ff7bdc2bda1"
+        },
+        "snapshot_fingerprint": "c280c6ce66358ff7bdc2bda1",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 2,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 31.01
+  },
+  "top_candidate_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+  "candidates": [
+    {
+      "knowledge_id": "30fc3e8a-954a-45f6-a449-57188f8b3d27",
+      "passage_id": "9b3fdf000b5cbfaad83865b64ac72e22",
+      "title": "中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a",
+      "score": 0.7,
+      "final_relevance_score": 0.35,
+      "text": "【文档】中国电信渠道-2023-2号关于印发中国电信企业微信平台业务规范和技术规范的通知--30fc3e8a\n【章节】十五、群发消息员工客户集合推送记录表 > 十六、群发消息配置表（ T_WORK_GROUP_MESSAGE ） > 十八、企业微信客户与成员好友关系表 -XX省份名\n异网、3未\n知\n9 数据来源 source_type VARCHAR(50) √\n10 链接地址 auth_url TEXT\n11 创建时间 create_time DATETIME √\n12 更新时间 update_time DATETIME\n十八、企业微信客户与成员好友关系表 -XX省份名\n序号 省份 简称 表名\n1 北京 BEIJING T_WORK_EXTERNAL_USER_FOLLOW_BEIJING\n2 天津 TIANJIN T_WORK_EXTERNAL_USER_FOLLOW_TIANJIN\n3 河北 HEBEI T_WORK_EXTERNAL_USER_FOLLOW_HEBEI\n4 山西 SHANXI T_WORK_EXTERNAL_USER_FOLLOW_SHANXI\n5 内蒙古 NEIMENGGU T_WORK_EXTERNAL_USER_FOLLOW_NEIMENGGU\n6 辽宁 LIAONING T_WORK_EXTERNAL_USER_FOLLOW_LIAONING\n7 吉林 JILIN T_WORK_EXTERNAL_USER_FOLLOW_JILIN\n8 黑龙江 HEILONGJIANG T_WORK_EXTERNAL_USER_FOLLOW_HEILONGJIANG\n9 上海 SHANGHAI T_WORK_EXTERNAL_USER_FOLLOW_SHANGHAI\n10 江苏 JIANGSU T_WORK_EXTERNAL_USER_FOLLOW_JIANGSU\n11 浙江 ZHEJIANG T_WORK_EXTERNAL_USER_FOLLOW_ZHEJIANG\n12 安徽 ANHUI T_WORK_EXTERNAL_USER_FOLLOW_ANHUI\n13 福建 FUJIAN T_WORK_EXTERNAL_USER_FOLLOW_FUJIAN\n14 江西 JIANGXI T_WORK_EXTERNAL_USER_FOLLOW_JIANGXI\n15 山东 SHANDONG T_WORK_EXTERNAL_USER_FOLLOW_SHANDONG\n16 河南 HENAN T_WORK_EXTERNAL_USER_FOLLOW_HENAN\n17 湖北 HUBEI T_WORK_EXTERNAL_USER_FOLLOW_HUBEI\n18 湖南 HUNAN T_WORK_EXTERNAL_USER_FOLLOW_HUNAN"
+    }
+  ],
+  "search_ms": 2840.22,
+  "ask_ms": 31.01,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "Y1akaodgufKsBBT080hKh2IPTX7I2mih",
+  "search_snapshot_fingerprint": "c280c6ce66358ff7bdc2bda1",
+  "ask_snapshot_fingerprint": "c280c6ce66358ff7bdc2bda1",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "03a8367e6908f15aea64b7fd"
+}

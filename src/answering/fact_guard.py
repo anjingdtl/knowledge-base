@@ -1,4 +1,4 @@
-"""Numeric-fact guard for clause-style answers (SPEC Phase 5 / v2 Phase 3, KB-019).
+"""Numeric-fact guard for clause-style answers.
 
 Prevents the answer pipeline from substituting an adjacent clause's value for
 the requested subject. Example: for "翼支付III类账户 年付款限额" the evidence
@@ -54,7 +54,7 @@ def extract_query_subjects(query: str) -> list[str]:
     return found
 
 
-# Multi-condition anchors (SPEC v3 / KB-010): each condition binds its own value.
+# Multi-condition anchors: each condition binds its own value.
 _CONDITION_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"涉诈|诈骗|防诈"), "涉诈"),
     (re.compile(r"涉骚扰|骚扰"), "涉骚扰"),
@@ -95,7 +95,7 @@ def answer_numerics_supported_by_evidence(
     condition in some evidence clause OR appear as the selected value for it.
     When condition is None, values need only appear somewhere in evidence
     (modulo whitespace / 元 variants). Used to avoid false no_answer when
-    subject heuristics fail but the answer is fully grounded (KB-010).
+    subject heuristics fail but the answer is fully grounded.
     """
     if not answer:
         return True

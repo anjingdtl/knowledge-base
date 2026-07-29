@@ -1,0 +1,1670 @@
+{
+  "case": {
+    "case_id": "KB-012",
+    "category": "同义词与口语表达",
+    "query": "公司大额对外投资并购决策要不要先过法律审核",
+    "expected_knowledge_ids": [
+      "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+    ],
+    "expected_title_keywords": [
+      "重要决策",
+      "法律合规审核",
+      "2025"
+    ],
+    "required_facts": [
+      "法律合规审核",
+      "重大对外投融资"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕505号第三条/第四条；口语'大额投资并购'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "c7611c87-2963-4cff-b5ff-22c915b959bd",
+          "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+          "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+          "text": "【文档】中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\n【章节】（八）技术研发过程中的技术策略、技术研发方案，研究报 > （九）人力资源、人事管理、党纪工作、审计工作中的重要 > （十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；\n（三）通信网络(管理系统、支撑系统)状况，网络运行、维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决算，以及业绩披露相关\n信息；\n（六）在招投标、商务谈判、采购、合同签订和履行等过程\n中的情况、数据等信息；\n（七）业务发展过程中的营销策略，经营渠道、销售方案以何世恒(全渠道运营中心)\n— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；",
+          "score": 0.7,
+          "match_channels": [
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+          "document_family_id": "topic:商业秘密保护管理办法",
+          "version_year": 2023,
+          "source_version": "2023",
+          "section_path": "（八）技术研发过程中的技术策略、技术研发方案，研究报 > （九）人力资源、人事管理、党纪工作、审计工作中的重要 > （十）按照法律或合同 (协议 ) 应承担保密责任的第三方",
+          "block_ids": [
+            "c7611c87-2963-4cff-b5ff-22c915b959bd",
+            "5ae330bb-3f80-4a06-aa1d-819cc9dace34",
+            "d7e6459e-0e55-4c72-92e0-17bbe81e2e57",
+            "d3a4c633-a952-466a-ba89-18e711a20654",
+            "4f6e00e2-e535-4d94-84b9-d2f0cb0e9d28",
+            "cfbf37a2-e8d7-4d3d-8748-6259a568d6bf",
+            "7a191986-281f-4253-89ca-9eb7788f1d3a",
+            "b1eddf33-447f-4687-8dc7-d61b4ca91662",
+            "f4b813e8-9218-472c-aacd-e59b7d770385",
+            "77686250-8a0a-4a93-915a-eed811097597",
+            "6c54f9bd-3789-4df6-94ee-96e125390725",
+            "2e64f59f-66ab-4b87-8e80-544ee496e11d",
+            "60afcb01-86d6-4c08-9c64-1a9ca0f85ba4",
+            "97a52650-f9ed-45c8-a2a4-14f0ef39b276",
+            "4ccfc9bf-153d-40c7-b03b-fc127e42b56d",
+            "f7721a0e-85c4-40ac-9e18-f783354b6f10",
+            "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+            "cae061c6-40d4-4885-b333-0191a11fa4bd",
+            "f2a58146-1dbb-4824-a0d7-a84d4142cd17"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "c7611c87-2963-4cff-b5ff-22c915b959bd",
+              "order_idx": 66,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "5ae330bb-3f80-4a06-aa1d-819cc9dace34",
+              "order_idx": 67,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "d7e6459e-0e55-4c72-92e0-17bbe81e2e57",
+              "order_idx": 68,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "d3a4c633-a952-466a-ba89-18e711a20654",
+              "order_idx": 69,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "4f6e00e2-e535-4d94-84b9-d2f0cb0e9d28",
+              "order_idx": 70,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "cfbf37a2-e8d7-4d3d-8748-6259a568d6bf",
+              "order_idx": 71,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "7a191986-281f-4253-89ca-9eb7788f1d3a",
+              "order_idx": 72,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "b1eddf33-447f-4687-8dc7-d61b4ca91662",
+              "order_idx": 73,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "f4b813e8-9218-472c-aacd-e59b7d770385",
+              "order_idx": 74,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "77686250-8a0a-4a93-915a-eed811097597",
+              "order_idx": 75,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "6c54f9bd-3789-4df6-94ee-96e125390725",
+              "order_idx": 76,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "2e64f59f-66ab-4b87-8e80-544ee496e11d",
+              "order_idx": 77,
+              "char_start": 0,
+              "char_end": 38
+            },
+            {
+              "block_id": "60afcb01-86d6-4c08-9c64-1a9ca0f85ba4",
+              "order_idx": 79,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "97a52650-f9ed-45c8-a2a4-14f0ef39b276",
+              "order_idx": 80,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "4ccfc9bf-153d-40c7-b03b-fc127e42b56d",
+              "order_idx": 81,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "f7721a0e-85c4-40ac-9e18-f783354b6f10",
+              "order_idx": 82,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+              "order_idx": 83,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "cae061c6-40d4-4885-b333-0191a11fa4bd",
+              "order_idx": 84,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "f2a58146-1dbb-4824-a0d7-a84d4142cd17",
+              "order_idx": 85,
+              "char_start": 0,
+              "char_end": 5
+            }
+          ],
+          "effective_year": 2023,
+          "citation": {
+            "document": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "path": "",
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "block_id": "c7611c87-2963-4cff-b5ff-22c915b959bd",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.015521064301552104,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": 0.6729879523814933,
+              "rrf": 0.015521064301552104,
+              "rerank": null
+            },
+            "match_channels": [
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "keyword match",
+            "text": "【文档】中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\n【章节】（八）技术研发过程中的技术策略、技术研发方案，研究报 > （九）人力资源、人事管理、党纪工作、审计工作中的重要 > （十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；\n（三）通信网络(管理系统、支撑系统)状况，网络运行、维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决算，以及业绩披露相关\n信息；\n（六）在招投标、商务谈判、采购、合同签订和履行等过程\n中的情况、数据等信息；\n（七）业务发展过程中的营销策略，经营渠道、销售方案以何世恒(全渠道运营中心)\n— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；"
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:商业秘密保护管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.2529,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "102bee52-4b83-438d-9296-c852579473b6"
+        ],
+        "evidence_snapshot_id": "0w7h8VIabPzeIu0aBQBG8LUxVRtFSKQq",
+        "snapshot_fingerprint": "0db74b479f6d878bc592b0d2",
+        "accepted_passage_ids": [
+          "7df30fe0d5065f7020cb1329b22c20b4",
+          "c43207ac63bbc45e1dff2b0dbf215147",
+          "f7fbe68b1c3214cb418f5bdafa583a41"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 2780.74
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 未对外公开的重大决策、决议及重要会议的内容\n- 公司投资并购、重大资本运作、融资投资计划等重要信息\n- 影响企业对外部单位承担保密义务的",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+            "block_id": "c7611c87-2963-4cff-b5ff-22c915b959bd",
+            "block_ids": [
+              "c7611c87-2963-4cff-b5ff-22c915b959bd",
+              "5ae330bb-3f80-4a06-aa1d-819cc9dace34",
+              "d7e6459e-0e55-4c72-92e0-17bbe81e2e57",
+              "d3a4c633-a952-466a-ba89-18e711a20654",
+              "4f6e00e2-e535-4d94-84b9-d2f0cb0e9d28",
+              "cfbf37a2-e8d7-4d3d-8748-6259a568d6bf",
+              "7a191986-281f-4253-89ca-9eb7788f1d3a",
+              "b1eddf33-447f-4687-8dc7-d61b4ca91662",
+              "f4b813e8-9218-472c-aacd-e59b7d770385",
+              "77686250-8a0a-4a93-915a-eed811097597",
+              "6c54f9bd-3789-4df6-94ee-96e125390725",
+              "2e64f59f-66ab-4b87-8e80-544ee496e11d",
+              "60afcb01-86d6-4c08-9c64-1a9ca0f85ba4",
+              "97a52650-f9ed-45c8-a2a4-14f0ef39b276",
+              "4ccfc9bf-153d-40c7-b03b-fc127e42b56d",
+              "f7721a0e-85c4-40ac-9e18-f783354b6f10",
+              "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+              "cae061c6-40d4-4885-b333-0191a11fa4bd",
+              "f2a58146-1dbb-4824-a0d7-a84d4142cd17"
+            ],
+            "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "text": "\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；\n（三）通信网络(管理系统、支撑系统)状况，网络运行、维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决算，以及业绩披露相关\n信息；\n（六）在招投标、商务谈判、采购、合同签订和履行等过程\n中的情况、数据等信息；\n（七）业务发展过程中的营销策略，经营渠道、销售方案以何世恒(全渠道运营中心)\n— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；",
+            "score": 0.7,
+            "document_family_id": "topic:商业秘密保护管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "passage_id": "c43207ac63bbc45e1dff2b0dbf215147",
+            "block_id": "da9fa93f-0239-4a41-9f08-ce9f9ae83b2b",
+            "block_ids": [
+              "da9fa93f-0239-4a41-9f08-ce9f9ae83b2b",
+              "343eb1a8-604c-480c-bf12-b2a51fd173d2",
+              "ea10fe26-791c-419c-b636-8b41921f749c",
+              "b84475b0-6fd0-40ce-8e16-3f532b03211f",
+              "0a22cef4-ff53-4e9b-88c1-e9b43fd00698",
+              "eece9d64-0140-4fcc-9eb6-debc7ee12198",
+              "af1cdea4-f846-4949-98ba-319c104d5dad",
+              "2d533c0b-969b-461b-ba27-726130661d02",
+              "bcb7cd37-d85c-40e3-b1d1-818292cdd18d",
+              "720679b6-5066-416c-abab-1a9b78d8b3da",
+              "deeb69eb-6e6b-4be3-a70f-018ff00ac7bc",
+              "3ee5a89a-0109-413d-98ca-45dd359b9175",
+              "b9ad459c-2548-4a37-834b-6d26f6a2e996",
+              "f12943df-dd19-46b9-8d5e-629795ff1c72",
+              "5bbd3f0b-d82c-4a8d-bccd-aab7d0fb842e",
+              "f1ff748a-43b4-4892-a9c4-1d725479cbe6",
+              "c7611c87-2963-4cff-b5ff-22c915b959bd",
+              "5ae330bb-3f80-4a06-aa1d-819cc9dace34",
+              "d7e6459e-0e55-4c72-92e0-17bbe81e2e57"
+            ],
+            "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "text": "负责依法组织开展商业秘密保护教育培训、保密检查、保密技术\n防护和泄密事件查处等工作。\n第十条 各单位各部门应按照本单位本部门职责，研究工作\n中商业秘密保护和管理的情况及问题，适时确定更新商业秘密保\n护范围，明确具体商业秘密具体事项目录。\n第三章 商业秘密的确定\n第十一条 在企业生产经营管理中，某一信息泄露后会造成\n下列后果之一的，应列入商业秘密范围： 何世恒(全渠道运营中心)\n— 4 —（一）损害企业生产和发展的；\n（二）损害企业经济利益的；\n（三）破坏企业营销活动的；\n（四）使企业在市场竞争中处于被动或不利地位的；\n（五）影响企业的稳定和安全的；\n（六）损害企业技术进步和优势的；\n（七）影响企业对外交流和商业谈判顺利进行的；\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；",
+            "score": 0.0,
+            "document_family_id": "topic:商业秘密保护管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "未对外公开的重大决策、决议及重要会议的内容",
+            "evidence_passage_ids": [
+              "7df30fe0d5065f7020cb1329b22c20b4"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "25c40972c7910b8906cd569d"
+          },
+          {
+            "text": "公司投资并购、重大资本运作、融资投资计划等重要信息",
+            "evidence_passage_ids": [
+              "7df30fe0d5065f7020cb1329b22c20b4"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "9fa0dbb2b3528b9e359e5e67"
+          },
+          {
+            "text": "未对外公开的重大决策、决议及重要会议的内容",
+            "evidence_passage_ids": [
+              "c43207ac63bbc45e1dff2b0dbf215147"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "09d95441f405fcd9a9d541dd"
+          },
+          {
+            "text": "影响企业对外部单位承担保密义务的",
+            "evidence_passage_ids": [
+              "7df30fe0d5065f7020cb1329b22c20b4"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "7aa383fb2c7b29064270fbd0"
+          },
+          {
+            "text": "按照法律或合同(协议)应承担保密责任的第三方商业秘密",
+            "evidence_passage_ids": [
+              "7df30fe0d5065f7020cb1329b22c20b4"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "efe5ed5fcc88d898dfa80f21"
+          },
+          {
+            "text": "影响企业对外交流和商业谈判顺利进行的",
+            "evidence_passage_ids": [
+              "c43207ac63bbc45e1dff2b0dbf215147"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "b831d2c5b9fc8a04cf42a2e3"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+            "block_id": "c7611c87-2963-4cff-b5ff-22c915b959bd",
+            "block_ids": [
+              "c7611c87-2963-4cff-b5ff-22c915b959bd",
+              "5ae330bb-3f80-4a06-aa1d-819cc9dace34",
+              "d7e6459e-0e55-4c72-92e0-17bbe81e2e57",
+              "d3a4c633-a952-466a-ba89-18e711a20654",
+              "4f6e00e2-e535-4d94-84b9-d2f0cb0e9d28",
+              "cfbf37a2-e8d7-4d3d-8748-6259a568d6bf",
+              "7a191986-281f-4253-89ca-9eb7788f1d3a",
+              "b1eddf33-447f-4687-8dc7-d61b4ca91662",
+              "f4b813e8-9218-472c-aacd-e59b7d770385",
+              "77686250-8a0a-4a93-915a-eed811097597",
+              "6c54f9bd-3789-4df6-94ee-96e125390725",
+              "2e64f59f-66ab-4b87-8e80-544ee496e11d",
+              "60afcb01-86d6-4c08-9c64-1a9ca0f85ba4",
+              "97a52650-f9ed-45c8-a2a4-14f0ef39b276",
+              "4ccfc9bf-153d-40c7-b03b-fc127e42b56d",
+              "f7721a0e-85c4-40ac-9e18-f783354b6f10",
+              "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+              "cae061c6-40d4-4885-b333-0191a11fa4bd",
+              "f2a58146-1dbb-4824-a0d7-a84d4142cd17"
+            ],
+            "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "path": "",
+            "text": "\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；\n（三）通信网络(管理系统、支撑系统)状况，网络运行、维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决算，以及业绩披露相关\n信息；\n（六）在招投标、商务谈判、采购、合同签订和履行等过程\n中的情况、数据等信息；\n（七）业务发展过程中的营销策略，经营渠道、销售方案以何世恒(全渠道运营中心)\n— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；",
+            "body_text": "\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；\n（三）通信网络(管理系统、支撑系统)状况，网络运行、维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决算，以及业绩披露相关\n信息；\n（六）在招投标、商务谈判、采购、合同签订和履行等过程\n中的情况、数据等信息；\n（七）业务发展过程中的营销策略，经营渠道、销售方案以何世恒(全渠道运营中心)\n— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；",
+            "score": 0.7,
+            "document_family_id": "topic:商业秘密保护管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "passage_id": "c43207ac63bbc45e1dff2b0dbf215147",
+            "block_id": "da9fa93f-0239-4a41-9f08-ce9f9ae83b2b",
+            "block_ids": [
+              "da9fa93f-0239-4a41-9f08-ce9f9ae83b2b",
+              "343eb1a8-604c-480c-bf12-b2a51fd173d2",
+              "ea10fe26-791c-419c-b636-8b41921f749c",
+              "b84475b0-6fd0-40ce-8e16-3f532b03211f",
+              "0a22cef4-ff53-4e9b-88c1-e9b43fd00698",
+              "eece9d64-0140-4fcc-9eb6-debc7ee12198",
+              "af1cdea4-f846-4949-98ba-319c104d5dad",
+              "2d533c0b-969b-461b-ba27-726130661d02",
+              "bcb7cd37-d85c-40e3-b1d1-818292cdd18d",
+              "720679b6-5066-416c-abab-1a9b78d8b3da",
+              "deeb69eb-6e6b-4be3-a70f-018ff00ac7bc",
+              "3ee5a89a-0109-413d-98ca-45dd359b9175",
+              "b9ad459c-2548-4a37-834b-6d26f6a2e996",
+              "f12943df-dd19-46b9-8d5e-629795ff1c72",
+              "5bbd3f0b-d82c-4a8d-bccd-aab7d0fb842e",
+              "f1ff748a-43b4-4892-a9c4-1d725479cbe6",
+              "c7611c87-2963-4cff-b5ff-22c915b959bd",
+              "5ae330bb-3f80-4a06-aa1d-819cc9dace34",
+              "d7e6459e-0e55-4c72-92e0-17bbe81e2e57"
+            ],
+            "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "path": "",
+            "text": "负责依法组织开展商业秘密保护教育培训、保密检查、保密技术\n防护和泄密事件查处等工作。\n第十条 各单位各部门应按照本单位本部门职责，研究工作\n中商业秘密保护和管理的情况及问题，适时确定更新商业秘密保\n护范围，明确具体商业秘密具体事项目录。\n第三章 商业秘密的确定\n第十一条 在企业生产经营管理中，某一信息泄露后会造成\n下列后果之一的，应列入商业秘密范围： 何世恒(全渠道运营中心)\n— 4 —（一）损害企业生产和发展的；\n（二）损害企业经济利益的；\n（三）破坏企业营销活动的；\n（四）使企业在市场竞争中处于被动或不利地位的；\n（五）影响企业的稳定和安全的；\n（六）损害企业技术进步和优势的；\n（七）影响企业对外交流和商业谈判顺利进行的；\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；",
+            "body_text": "负责依法组织开展商业秘密保护教育培训、保密检查、保密技术\n防护和泄密事件查处等工作。\n第十条 各单位各部门应按照本单位本部门职责，研究工作\n中商业秘密保护和管理的情况及问题，适时确定更新商业秘密保\n护范围，明确具体商业秘密具体事项目录。\n第三章 商业秘密的确定\n第十一条 在企业生产经营管理中，某一信息泄露后会造成\n下列后果之一的，应列入商业秘密范围： 何世恒(全渠道运营中心)\n— 4 —（一）损害企业生产和发展的；\n（二）损害企业经济利益的；\n（三）破坏企业营销活动的；\n（四）使企业在市场竞争中处于被动或不利地位的；\n（五）影响企业的稳定和安全的；\n（六）损害企业技术进步和优势的；\n（七）影响企业对外交流和商业谈判顺利进行的；\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；",
+            "score": 0.0,
+            "document_family_id": "topic:商业秘密保护管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.2529,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "对外",
+                "投资",
+                "并购",
+                "决策",
+                "法律"
+              ],
+              "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "spans": [
+                {
+                  "slot": "对外",
+                  "surface": "对外",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    205,
+                    207
+                  ],
+                  "excerpt": "应承担保密责任的第三方\n\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密"
+                },
+                {
+                  "slot": "投资",
+                  "surface": "投资",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    361,
+                    363
+                  ],
+                  "excerpt": "行、维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决"
+                },
+                {
+                  "slot": "并购",
+                  "surface": "并购",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    363,
+                    365
+                  ],
+                  "excerpt": "维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决算，"
+                },
+                {
+                  "slot": "决策",
+                  "surface": "决策",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    302,
+                    304
+                  ],
+                  "excerpt": "度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；\n（三）通信网络(管理系统、支撑系统)状况，网络运行、维"
+                },
+                {
+                  "slot": "法律",
+                  "surface": "法律",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    173,
+                    175
+                  ],
+                  "excerpt": "纪工作、审计工作中的重要 > （十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n\n（八）影响企业对外部单位承担保密义"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "大额",
+                "对外",
+                "投资",
+                "并购",
+                "决策",
+                "不要",
+                "先过",
+                "法律",
+                "审核",
+                "公司大额对外投资并购决策要不",
+                "公司大额对外投资",
+                "购决策要不要先过法律审核"
+              ],
+              "score": 0.4167,
+              "typed_plan": {
+                "anchors": [
+                  "大额",
+                  "对外",
+                  "投资",
+                  "并购",
+                  "决策",
+                  "不要",
+                  "先过",
+                  "法律"
+                ],
+                "predicate": "",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "0db74b479f6d878bc592b0d2",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "公司大额对外投资并购决策要不要先过法律审核"
+          },
+          "fact_plan": {
+            "raw": "公司大额对外投资并购决策要不要先过法律审核",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact"
+            ],
+            "entities": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "大额",
+            "object": "对外",
+            "scope": [],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 29,
+          "candidate_count": 8
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "未对外公开的重大决策、决议及重要会议的内容",
+              "evidence_passage_ids": [
+                "7df30fe0d5065f7020cb1329b22c20b4"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "25c40972c7910b8906cd569d"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "公司投资并购、重大资本运作、融资投资计划等重要信息",
+              "evidence_passage_ids": [
+                "7df30fe0d5065f7020cb1329b22c20b4"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "9fa0dbb2b3528b9e359e5e67"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "未对外公开的重大决策、决议及重要会议的内容",
+              "evidence_passage_ids": [
+                "c43207ac63bbc45e1dff2b0dbf215147"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "09d95441f405fcd9a9d541dd"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "影响企业对外部单位承担保密义务的",
+              "evidence_passage_ids": [
+                "7df30fe0d5065f7020cb1329b22c20b4"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "7aa383fb2c7b29064270fbd0"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "按照法律或合同(协议)应承担保密责任的第三方商业秘密",
+              "evidence_passage_ids": [
+                "7df30fe0d5065f7020cb1329b22c20b4"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "efe5ed5fcc88d898dfa80f21"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "影响企业对外交流和商业谈判顺利进行的",
+              "evidence_passage_ids": [
+                "c43207ac63bbc45e1dff2b0dbf215147"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "b831d2c5b9fc8a04cf42a2e3"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司大额对外投资并购决策要不要先过法律审核",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact"
+            ],
+            "entities": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "大额",
+            "object": "对外",
+            "scope": [],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ]
+          },
+          "input_count": 8,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "25c40972c7910b8906cd569d",
+              "record_id": "7df30fe0d5065f7020cb1329b22c20b4:r3",
+              "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "对外",
+              "predicate": "",
+              "object": "未对外公开的重大决策、决议及重要会议的内容",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "未对外公开的重大决策、决议及重要会议的内容",
+              "evidence_spans": [
+                [
+                  0,
+                  21
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 16.4,
+              "unstructured_rejected": false,
+              "group_id": "a0b9aacf8ce3f867",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:大额": "miss",
+                "anchor:对外": "hit",
+                "anchor:投资": "miss",
+                "anchor:并购": "miss",
+                "anchor:决策": "hit",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "9fa0dbb2b3528b9e359e5e67",
+              "record_id": "7df30fe0d5065f7020cb1329b22c20b4:r5",
+              "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "投资",
+              "predicate": "",
+              "object": "公司投资并购、重大资本运作、融资投资计划等重要信息",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "公司投资并购、重大资本运作、融资投资计划等重要信息",
+              "evidence_spans": [
+                [
+                  0,
+                  25
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 16.4,
+              "unstructured_rejected": false,
+              "group_id": "a0b9aacf8ce3f867",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:大额": "miss",
+                "anchor:对外": "miss",
+                "anchor:投资": "hit",
+                "anchor:并购": "hit",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "09d95441f405fcd9a9d541dd",
+              "record_id": "c43207ac63bbc45e1dff2b0dbf215147:r10",
+              "passage_id": "c43207ac63bbc45e1dff2b0dbf215147",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "对外",
+              "predicate": "",
+              "object": "未对外公开的重大决策、决议及重要会议的内容",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "未对外公开的重大决策、决议及重要会议的内容",
+              "evidence_spans": [
+                [
+                  0,
+                  21
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 16.4,
+              "unstructured_rejected": false,
+              "group_id": "a0b9aacf8ce3f867",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:大额": "miss",
+                "anchor:对外": "hit",
+                "anchor:投资": "miss",
+                "anchor:并购": "miss",
+                "anchor:决策": "hit",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "7aa383fb2c7b29064270fbd0",
+              "record_id": "7df30fe0d5065f7020cb1329b22c20b4:r0",
+              "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "对外",
+              "predicate": "",
+              "object": "影响企业对外部单位承担保密义务的",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "影响企业对外部单位承担保密义务的",
+              "evidence_spans": [
+                [
+                  0,
+                  16
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 10.1,
+              "unstructured_rejected": false,
+              "group_id": "a0b9aacf8ce3f867",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:大额": "miss",
+                "anchor:对外": "hit",
+                "anchor:投资": "miss",
+                "anchor:并购": "miss",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "efe5ed5fcc88d898dfa80f21",
+              "record_id": "7df30fe0d5065f7020cb1329b22c20b4:r11",
+              "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "法律",
+              "predicate": "",
+              "object": "按照法律或合同(协议)应承担保密责任的第三方商业秘密",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "按照法律或合同(协议)应承担保密责任的第三方商业秘密",
+              "evidence_spans": [
+                [
+                  0,
+                  29
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 10.1,
+              "unstructured_rejected": false,
+              "group_id": "a0b9aacf8ce3f867",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:大额": "miss",
+                "anchor:对外": "miss",
+                "anchor:投资": "miss",
+                "anchor:并购": "miss",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "hit"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "b831d2c5b9fc8a04cf42a2e3",
+              "record_id": "c43207ac63bbc45e1dff2b0dbf215147:r6",
+              "passage_id": "c43207ac63bbc45e1dff2b0dbf215147",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "对外",
+              "predicate": "",
+              "object": "影响企业对外交流和商业谈判顺利进行的",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "影响企业对外交流和商业谈判顺利进行的",
+              "evidence_spans": [
+                [
+                  0,
+                  18
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 10.1,
+              "unstructured_rejected": false,
+              "group_id": "a0b9aacf8ce3f867",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:大额": "miss",
+                "anchor:对外": "hit",
+                "anchor:投资": "miss",
+                "anchor:并购": "miss",
+                "anchor:决策": "miss",
+                "anchor:不要": "miss",
+                "anchor:先过": "miss",
+                "anchor:法律": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {
+              "25c40972c7910b8906cd569d": "hit",
+              "9fa0dbb2b3528b9e359e5e67": "hit",
+              "09d95441f405fcd9a9d541dd": "hit",
+              "7aa383fb2c7b29064270fbd0": "hit",
+              "efe5ed5fcc88d898dfa80f21": "hit",
+              "b831d2c5b9fc8a04cf42a2e3": "hit",
+              "eb5c8ecc7b9f1161fa6e3a23": "hit",
+              "b1555e963f84808133a3392f": "hit"
+            }
+          },
+          "primary_group_id": "a0b9aacf8ce3f867",
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "a0b9aacf8ce3f867",
+                "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+                "knowledge_ids": [
+                  "102bee52-4b83-438d-9296-c852579473b6"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:商业秘密保护管理办法",
+                "document_revision": "2023",
+                "effective_date": "",
+                "version_year": 2023,
+                "passage_ids": [
+                  "7df30fe0d5065f7020cb1329b22c20b4",
+                  "c43207ac63bbc45e1dff2b0dbf215147",
+                  "f7fbe68b1c3214cb418f5bdafa583a41"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.7,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+                "section": "（八）技术研发过程中的技术策略、技术研发方案，研究报 > （九）人力资源、人事管理、党纪工作、审计工作中的重要 > （十）按照法律或合同 (协议 ) 应承担保密责任的第三方",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.4,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "7df30fe0d5065f7020cb1329b22c20b4:r0",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r1",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r2",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r3",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r4",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r5",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r6",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r7",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r8",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r9",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r10",
+                  "7df30fe0d5065f7020cb1329b22c20b4:r11",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r0",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r1",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r2",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r3",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r4",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r5",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r6",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r7",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r8",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r9",
+                  "c43207ac63bbc45e1dff2b0dbf215147:r10",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r0",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r1",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r2",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r3",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r4",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r5"
+                ]
+              }
+            ],
+            "primary_group_id": "a0b9aacf8ce3f867",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "公司大额对外投资并购决策",
+                "要不要先过法律审核"
+              ],
+              "selection": [
+                {
+                  "group_id": "a0b9aacf8ce3f867",
+                  "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+                  "knowledge_ids": [
+                    "102bee52-4b83-438d-9296-c852579473b6"
+                  ],
+                  "score": 7.4,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact"
+          ],
+          "candidate_ids": [
+            "25c40972c7910b8906cd569d",
+            "9fa0dbb2b3528b9e359e5e67",
+            "09d95441f405fcd9a9d541dd",
+            "7aa383fb2c7b29064270fbd0",
+            "efe5ed5fcc88d898dfa80f21",
+            "b831d2c5b9fc8a04cf42a2e3"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "coverage_matrix": {
+            "policy_fact": {
+              "25c40972c7910b8906cd569d": "hit",
+              "9fa0dbb2b3528b9e359e5e67": "hit",
+              "09d95441f405fcd9a9d541dd": "hit",
+              "7aa383fb2c7b29064270fbd0": "hit",
+              "efe5ed5fcc88d898dfa80f21": "hit",
+              "b831d2c5b9fc8a04cf42a2e3": "hit",
+              "eb5c8ecc7b9f1161fa6e3a23": "hit",
+              "b1555e963f84808133a3392f": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "公司大额对外投资并购决策要不要先过法律审核",
+          "intents": [
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "policy_fact"
+          ],
+          "entities": [
+            "大额",
+            "对外",
+            "投资",
+            "并购",
+            "决策",
+            "不要",
+            "先过",
+            "法律",
+            "审核",
+            "公司大额对外投资并购决策要不",
+            "公司大额对外投资",
+            "购决策要不要先过法律审核"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "policy",
+            "prohibition",
+            "scope",
+            "responsibility",
+            "relationship"
+          ],
+          "subject": "大额",
+          "object": "对外",
+          "scope": [],
+          "selector": [],
+          "predicate": "",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "policy",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "大额",
+            "对外",
+            "投资",
+            "并购",
+            "决策",
+            "不要",
+            "先过",
+            "法律",
+            "审核",
+            "公司大额对外投资并购决策要不",
+            "公司大额对外投资",
+            "购决策要不要先过法律审核"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "a0b9aacf8ce3f867",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "knowledge_ids": [
+                "102bee52-4b83-438d-9296-c852579473b6"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:商业秘密保护管理办法",
+              "document_revision": "2023",
+              "effective_date": "",
+              "version_year": 2023,
+              "passage_ids": [
+                "7df30fe0d5065f7020cb1329b22c20b4",
+                "c43207ac63bbc45e1dff2b0dbf215147",
+                "f7fbe68b1c3214cb418f5bdafa583a41"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.7,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+              "section": "（八）技术研发过程中的技术策略、技术研发方案，研究报 > （九）人力资源、人事管理、党纪工作、审计工作中的重要 > （十）按照法律或合同 (协议 ) 应承担保密责任的第三方",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.4,
+              "rejection_reasons": [],
+              "record_ids": [
+                "7df30fe0d5065f7020cb1329b22c20b4:r0",
+                "7df30fe0d5065f7020cb1329b22c20b4:r1",
+                "7df30fe0d5065f7020cb1329b22c20b4:r2",
+                "7df30fe0d5065f7020cb1329b22c20b4:r3",
+                "7df30fe0d5065f7020cb1329b22c20b4:r4",
+                "7df30fe0d5065f7020cb1329b22c20b4:r5",
+                "7df30fe0d5065f7020cb1329b22c20b4:r6",
+                "7df30fe0d5065f7020cb1329b22c20b4:r7",
+                "7df30fe0d5065f7020cb1329b22c20b4:r8",
+                "7df30fe0d5065f7020cb1329b22c20b4:r9",
+                "7df30fe0d5065f7020cb1329b22c20b4:r10",
+                "7df30fe0d5065f7020cb1329b22c20b4:r11",
+                "c43207ac63bbc45e1dff2b0dbf215147:r0",
+                "c43207ac63bbc45e1dff2b0dbf215147:r1",
+                "c43207ac63bbc45e1dff2b0dbf215147:r2",
+                "c43207ac63bbc45e1dff2b0dbf215147:r3",
+                "c43207ac63bbc45e1dff2b0dbf215147:r4",
+                "c43207ac63bbc45e1dff2b0dbf215147:r5",
+                "c43207ac63bbc45e1dff2b0dbf215147:r6",
+                "c43207ac63bbc45e1dff2b0dbf215147:r7",
+                "c43207ac63bbc45e1dff2b0dbf215147:r8",
+                "c43207ac63bbc45e1dff2b0dbf215147:r9",
+                "c43207ac63bbc45e1dff2b0dbf215147:r10",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r0",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r1",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r2",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r3",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r4",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r5"
+              ]
+            }
+          ],
+          "primary_group_id": "a0b9aacf8ce3f867",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "公司大额对外投资并购决策",
+              "要不要先过法律审核"
+            ],
+            "selection": [
+              {
+                "group_id": "a0b9aacf8ce3f867",
+                "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+                "knowledge_ids": [
+                  "102bee52-4b83-438d-9296-c852579473b6"
+                ],
+                "score": 7.4,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "对外",
+              "投资",
+              "并购",
+              "决策"
+            ]
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "25c40972c7910b8906cd569d"
+              ],
+              "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "text": "- 未对外公开的重大决策、决议及重要会议的内容",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "9fa0dbb2b3528b9e359e5e67"
+              ],
+              "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "text": "- 公司投资并购、重大资本运作、融资投资计划等重要信息",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "7aa383fb2c7b29064270fbd0"
+              ],
+              "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "text": "- 影响企业对外部单位承担保密义务的",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 70
+        },
+        "primary_group_id": "a0b9aacf8ce3f867",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "102bee52-4b83-438d-9296-c852579473b6",
+              "type": "knowledge",
+              "label": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52"
+            },
+            {
+              "id": "c7611c87-2963-4cff-b5ff-22c915b959bd",
+              "type": "block",
+              "label": "（一）公司发展战略、发展规划，中长期建设规划、年度计",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6"
+            },
+            {
+              "id": "86a6da12-5811-45cb-9c9f-5e6bcc7f6c4d",
+              "type": "block",
+              "label": "[第4页]",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6"
+            },
+            {
+              "id": "da9fa93f-0239-4a41-9f08-ce9f9ae83b2b",
+              "type": "block",
+              "label": "第十条 各单位各部门应按照本单位本部门职责，研究工作",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6"
+            },
+            {
+              "id": "d89b7d4c-2838-484f-9186-77f35078869a",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6"
+            },
+            {
+              "id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "type": "knowledge",
+              "label": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa"
+            },
+            {
+              "id": "5dda10ae-0080-4988-bc94-38f900770ac8",
+              "type": "knowledge",
+              "label": "中电信桂-2023-365号-关于印发中国电信广西公司商业秘密事项目录的通知--5dda10ae"
+            },
+            {
+              "id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9"
+            }
+          ],
+          "edges": [
+            {
+              "source": "102bee52-4b83-438d-9296-c852579473b6",
+              "target": "c7611c87-2963-4cff-b5ff-22c915b959bd",
+              "type": "contains"
+            },
+            {
+              "source": "86a6da12-5811-45cb-9c9f-5e6bcc7f6c4d",
+              "target": "c7611c87-2963-4cff-b5ff-22c915b959bd",
+              "type": "parent"
+            },
+            {
+              "source": "102bee52-4b83-438d-9296-c852579473b6",
+              "target": "da9fa93f-0239-4a41-9f08-ce9f9ae83b2b",
+              "type": "contains"
+            },
+            {
+              "source": "d89b7d4c-2838-484f-9186-77f35078869a",
+              "target": "da9fa93f-0239-4a41-9f08-ce9f9ae83b2b",
+              "type": "parent"
+            },
+            {
+              "source": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "target": "102bee52-4b83-438d-9296-c852579473b6",
+              "type": "contains"
+            },
+            {
+              "source": "102bee52-4b83-438d-9296-c852579473b6",
+              "target": "5dda10ae-0080-4988-bc94-38f900770ac8",
+              "type": "references"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "102bee52-4b83-438d-9296-c852579473b6",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 8
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "102bee52-4b83-438d-9296-c852579473b6"
+          ],
+          "accepted_block_ids": [
+            "c7611c87-2963-4cff-b5ff-22c915b959bd"
+          ],
+          "accepted_passage_ids": [
+            "7df30fe0d5065f7020cb1329b22c20b4",
+            "c43207ac63bbc45e1dff2b0dbf215147",
+            "f7fbe68b1c3214cb418f5bdafa583a41"
+          ],
+          "adjacent_passage_ids": [
+            "c43207ac63bbc45e1dff2b0dbf215147",
+            "f7fbe68b1c3214cb418f5bdafa583a41"
+          ],
+          "generation_knowledge_ids": [
+            "102bee52-4b83-438d-9296-c852579473b6"
+          ],
+          "top_score": 0.2529,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "法律"
+            ],
+            "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "spans": [
+              {
+                "slot": "对外",
+                "surface": "对外",
+                "synonym_source": "query_surface",
+                "span": [
+                  205,
+                  207
+                ],
+                "excerpt": "应承担保密责任的第三方\n\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密"
+              },
+              {
+                "slot": "投资",
+                "surface": "投资",
+                "synonym_source": "query_surface",
+                "span": [
+                  361,
+                  363
+                ],
+                "excerpt": "行、维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决"
+              },
+              {
+                "slot": "并购",
+                "surface": "并购",
+                "synonym_source": "query_surface",
+                "span": [
+                  363,
+                  365
+                ],
+                "excerpt": "维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决算，"
+              },
+              {
+                "slot": "决策",
+                "surface": "决策",
+                "synonym_source": "query_surface",
+                "span": [
+                  302,
+                  304
+                ],
+                "excerpt": "度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；\n（三）通信网络(管理系统、支撑系统)状况，网络运行、维"
+              },
+              {
+                "slot": "法律",
+                "surface": "法律",
+                "synonym_source": "query_surface",
+                "span": [
+                  173,
+                  175
+                ],
+                "excerpt": "纪工作、审计工作中的重要 > （十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n\n（八）影响企业对外部单位承担保密义"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "大额",
+              "对外",
+              "投资",
+              "并购",
+              "决策",
+              "不要",
+              "先过",
+              "法律",
+              "审核",
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核"
+            ],
+            "score": 0.4167,
+            "typed_plan": {
+              "anchors": [
+                "大额",
+                "对外",
+                "投资",
+                "并购",
+                "决策",
+                "不要",
+                "先过",
+                "法律"
+              ],
+              "predicate": "",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "0db74b479f6d878bc592b0d2"
+        },
+        "snapshot_fingerprint": "0db74b479f6d878bc592b0d2",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 2,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 21.25
+  },
+  "top_candidate_id": "102bee52-4b83-438d-9296-c852579473b6",
+  "candidates": [
+    {
+      "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+      "passage_id": "7df30fe0d5065f7020cb1329b22c20b4",
+      "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+      "score": 0.7,
+      "final_relevance_score": 0.35,
+      "text": "【文档】中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\n【章节】（八）技术研发过程中的技术策略、技术研发方案，研究报 > （九）人力资源、人事管理、党纪工作、审计工作中的重要 > （十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n\n（八）影响企业对外部单位承担保密义务的；\n（九）影响企业对客户承担保密义务等。\n第十二条 商业秘密保护的范围主要包括:\n（一）公司发展战略、发展规划，中长期建设规划、年度计\n划等信息；\n（二）未对外公开的重大决策、决议及重要会议的内容；\n（三）通信网络(管理系统、支撑系统)状况，网络运行、维\n护、优化方案等信息；\n（四）公司投资并购、重大资本运作、融资投资计划等重要\n信息；\n（五）生产经营数据，财务预算、决算，以及业绩披露相关\n信息；\n（六）在招投标、商务谈判、采购、合同签订和履行等过程\n中的情况、数据等信息；\n（七）业务发展过程中的营销策略，经营渠道、销售方案以何世恒(全渠道运营中心)\n— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；"
+    }
+  ],
+  "search_ms": 2780.74,
+  "ask_ms": 21.25,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "0w7h8VIabPzeIu0aBQBG8LUxVRtFSKQq",
+  "search_snapshot_fingerprint": "0db74b479f6d878bc592b0d2",
+  "ask_snapshot_fingerprint": "0db74b479f6d878bc592b0d2",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "03a8367e6908f15aea64b7fd"
+}

@@ -72,8 +72,12 @@ def create_reranker(
             )
             # Fall through to next available provider
 
-    # API reranker
-    if provider == "api" or (provider == "" and config.get("reranker.model", "")):
+    # API reranker. Provider names such as ``siliconflow`` and ``cohere``
+    # identify the hosted vendor; they are not a request to fall through to
+    # the unrelated LLM fallback. Any configured non-local/non-LLM provider
+    # with complete API settings uses the dedicated rerank endpoint.
+    use_api_provider = provider not in {"local", "llm", "disabled"}
+    if use_api_provider and (provider or config.get("reranker.model", "")):
         model = config.get("reranker.model", "")
         base_url = config.get("reranker.base_url", "")
         api_key = config.get("reranker.api_key", "")
@@ -95,9 +99,10 @@ def create_reranker(
                 timeout=float(timeout),
             )
 
-        if provider == "api":
+        if provider:
             logger.warning(
-                "API reranker requested but model/base_url/api_key not fully configured"
+                "API reranker provider=%s lacks model/base_url/api_key",
+                provider,
             )
 
     # LLM fallback

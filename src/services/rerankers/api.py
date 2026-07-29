@@ -36,14 +36,36 @@ class ApiReranker:
         if not candidates:
             return []
 
-        # 准备文档文本
-        texts = [cand.get("text", "")[:1000] for cand in candidates]
+        # A broad raw pool is valuable for recall, but sending every long
+        # passage to a remote cross-encoder turns one ranking request into a
+        # multi-second (often timed-out) payload.  Rank a bounded prefix and
+        # keep the rest in deterministic raw-score order as a safety net.
+        max_candidates = 12
+        max_document_chars = 800
+        if self._config is not None:
+            configured_candidates = self._config.get("reranker.max_candidates", None)
+            configured_chars = self._config.get("reranker.max_document_chars", None)
+            try:
+                if int(configured_candidates) >= 1:
+                    max_candidates = int(configured_candidates)
+            except (TypeError, ValueError):
+                pass
+            try:
+                if int(configured_chars) >= 100:
+                    max_document_chars = int(configured_chars)
+            except (TypeError, ValueError):
+                pass
+        max_candidates = max(1, max_candidates)
+        max_document_chars = max(100, max_document_chars)
+        ranking_candidates = candidates[:max_candidates]
+        remainder = candidates[max_candidates:]
+        texts = [str(cand.get("text", ""))[:max_document_chars] for cand in ranking_candidates]
 
         try:
             payload = {
                 "query": query,
                 "documents": texts,
-                "top_n": min(len(texts), 10),
+                "top_n": min(len(texts), top_n),
             }
             provider_timeout = float(self._timeout)
             remaining = remaining_deadline()
@@ -80,24 +102,27 @@ class ApiReranker:
                     scores_map[idx] = score
 
             # 附加分数到候选
-            for i, cand in enumerate(candidates):
+            for i, cand in enumerate(ranking_candidates):
                 cand["rerank_score"] = scores_map.get(i, 0.5)
 
             # 按分数排序
-            candidates.sort(key=lambda x: x.get("rerank_score", 0), reverse=True)
+            ranking_candidates.sort(key=lambda x: x.get("rerank_score", 0), reverse=True)
 
             # 应用最低分数过滤
             min_score = 0.3
             if self._config is not None:
                 min_score = self._config.get("rag.rerank.min_score", 0.3)
 
-            filtered = [c for c in candidates if c.get("rerank_score", 0) >= min_score][:top_n]
+            filtered = [c for c in ranking_candidates if c.get("rerank_score", 0) >= min_score][:top_n]
 
             # 过滤太严时保留 top_n 避免上下文为空
-            if not filtered and candidates:
-                filtered = candidates[:top_n]
+            if not filtered and ranking_candidates:
+                filtered = ranking_candidates[:top_n]
 
-            return filtered
+            # Keep a deterministic fallback tail for callers that request
+            # more results than the rerank output, without assigning invented
+            # rerank scores to documents that were not sent to the provider.
+            return filtered + remainder[:max(0, top_n - len(filtered))]
 
         except DeadlineTimeout:
             raise

@@ -1,0 +1,1771 @@
+{
+  "case": {
+    "case_id": "KB-014",
+    "category": "同义词与口语表达",
+    "query": "异业合作给客户送权益优惠券的合作方准入条件",
+    "expected_knowledge_ids": [
+      "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+    ],
+    "expected_title_keywords": [
+      "权益业务",
+      "2026"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕34号第十七条；口语'送权益优惠券/异业合作'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+          "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】第七条 权益合作的类型 > （一）采购型合作：主要指权益业务内容或服务等的采购类 > （二）分成型合作:作为权益产品的主要合作模式。权益产\n态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。\n第六条 权益的合作引入\n本办法的权益合作引入指面向权益产品内容服务的合作引\n入，由合作方向电信输出产品服务内容，电信负责包装并组织销\n售。产品推广销售类渠道合作参照《关于印发中国电信广西公司\n代理商管理规范》（中电信桂〔2008〕312号）、《关于印发中国\n电信广西公司线上合作管理办法（2025年修订）的通知》（中电\n信桂〔2025〕155号）执行。\n第七条 权益合作的类型\n（一）采购型合作：主要指权益业务内容或服务等的采购类\n合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。",
+          "score": 0.7284887135028839,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+          "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "第七条 权益合作的类型 > （一）采购型合作：主要指权益业务内容或服务等的采购类 > （二）分成型合作:作为权益产品的主要合作模式。权益产",
+          "block_ids": [
+            "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+            "6aea01bc-7ba2-4c66-b6d4-010e720ffe83",
+            "b3240a6a-e3fd-4832-8227-ff584f6e793e",
+            "e57d11b0-0e79-4f32-b5f3-edec45914b93",
+            "6b8c5e48-530f-4a11-b4f1-05c2158aa6b4",
+            "189c61da-08a5-4215-be54-b5708f6c6608",
+            "ba697907-3109-4306-bb9d-dae4b3fa93f5",
+            "5b0885f0-2503-4ba0-9bdb-99003ab453e7",
+            "e1f3e11b-ae23-4c53-9ccb-c937a8753d41",
+            "e609414c-604a-45ff-8291-0f9014b5a31d",
+            "7cc6c9b2-ddd1-46a5-a1bc-bb7315bdd839",
+            "7ebf0824-71c8-42c2-b1a2-85dc5c78b59b",
+            "a9661b85-99b7-42d9-bc1f-27d60795074f",
+            "88c7043d-3cc7-4bf6-9327-6dc1cafd004f",
+            "b2881979-14f4-4b7b-b125-00bc96464347",
+            "9666de57-c55b-41e9-b217-311664e92cac",
+            "90c17348-60eb-46a6-a896-87890b9a04b6",
+            "f109ae67-a891-427b-a03b-b66f74df90f8"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+              "order_idx": 36,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "6aea01bc-7ba2-4c66-b6d4-010e720ffe83",
+              "order_idx": 37,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "b3240a6a-e3fd-4832-8227-ff584f6e793e",
+              "order_idx": 39,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "e57d11b0-0e79-4f32-b5f3-edec45914b93",
+              "order_idx": 40,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "6b8c5e48-530f-4a11-b4f1-05c2158aa6b4",
+              "order_idx": 41,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "189c61da-08a5-4215-be54-b5708f6c6608",
+              "order_idx": 42,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "ba697907-3109-4306-bb9d-dae4b3fa93f5",
+              "order_idx": 43,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "5b0885f0-2503-4ba0-9bdb-99003ab453e7",
+              "order_idx": 44,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "e1f3e11b-ae23-4c53-9ccb-c937a8753d41",
+              "order_idx": 45,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "e609414c-604a-45ff-8291-0f9014b5a31d",
+              "order_idx": 46,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "7cc6c9b2-ddd1-46a5-a1bc-bb7315bdd839",
+              "order_idx": 47,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "7ebf0824-71c8-42c2-b1a2-85dc5c78b59b",
+              "order_idx": 48,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "a9661b85-99b7-42d9-bc1f-27d60795074f",
+              "order_idx": 49,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "88c7043d-3cc7-4bf6-9327-6dc1cafd004f",
+              "order_idx": 50,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "b2881979-14f4-4b7b-b125-00bc96464347",
+              "order_idx": 51,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "9666de57-c55b-41e9-b217-311664e92cac",
+              "order_idx": 52,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "90c17348-60eb-46a6-a896-87890b9a04b6",
+              "order_idx": 53,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "f109ae67-a891-427b-a03b-b66f74df90f8",
+              "order_idx": 54,
+              "char_start": 0,
+              "char_end": 4
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "path": "",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "block_id": "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.3534887135028839,
+            "score_breakdown": {
+              "vector": 0.8040826469659805,
+              "keyword": 0.7803305888514471,
+              "rrf": 0.02159293469453897,
+              "rerank": 0.3534887135028839
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】第七条 权益合作的类型 > （一）采购型合作：主要指权益业务内容或服务等的采购类 > （二）分成型合作:作为权益产品的主要合作模式。权益产\n态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。\n第六条 权益的合作引入\n本办法的权益合作引入指面向权益产品内容服务的合作引\n入，由合作方向电信输出产品服务内容，电信负责包装并组织销\n售。产品推广销售类渠道合作参照《关于印发中国电信广西公司\n代理商管理规范》（中电信桂〔2008〕312号）、《关于印发中国\n电信广西公司线上合作管理办法（2025年修订）的通知》（中电\n信桂〔2025〕155号）执行。\n第七条 权益合作的类型\n（一）采购型合作：主要指权益业务内容或服务等的采购类\n合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。"
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.37848871350288393,
+          "ranking_score": 0.7284887135028839,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.2102,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+        ],
+        "evidence_snapshot_id": "zUejJUiSBqdXWiaURJQeavihQSx5_ycZ",
+        "snapshot_fingerprint": "5a720ac077ed22d9eb067eac",
+        "accepted_passage_ids": [
+          "dc6df3d2c012302ce70ee749d21f4b96",
+          "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+          "3b04480ea0fdd2916f25a2644d520b9d"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 3129.28
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 第二章相关定义第五条权益业务的定义权益业务是指在电信自有通信产品之外，通过与异业开展生态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品\n- 第二条本办法旨在加强权益合作方及产品引入管理、细化管理组织及职责分工、建立多维度的效益分析机制、加强对权益合作引入的后评估及退出管理、完善客户服务流程等规范化管理制度，保障权益业务有序平稳开展\n- 态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+            "block_id": "552ce6c0-3fbf-476c-a961-c13c8a3b96c0",
+            "block_ids": [
+              "552ce6c0-3fbf-476c-a961-c13c8a3b96c0",
+              "5b86047b-08a6-4a48-b665-ea613fb1901c",
+              "c6f55720-40c8-4e60-ab05-e995c5858c97",
+              "07a3e655-6a55-4a11-a5bb-dbd47a799245",
+              "3b40a733-d464-4926-954e-a81ffa22f174",
+              "16d3857b-0821-49f4-a6b3-0530aab4ecfb",
+              "9ffe5b9d-78de-42d0-b396-2a80559ad220",
+              "cb47ea1f-8b42-4a89-9b4f-d2cab2d7e27c",
+              "9053ea88-7fe1-46c9-bdce-833b2c834908",
+              "cde0916a-1537-4a67-ac6e-6f603ba6df5b",
+              "42faa9b5-550d-4cc9-a86d-dea727d7b3a0",
+              "34236a39-7c4c-4667-8105-066d32dc4a22",
+              "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+              "6aea01bc-7ba2-4c66-b6d4-010e720ffe83",
+              "b3240a6a-e3fd-4832-8227-ff584f6e793e"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "text": "机制，加强权益运营全流程管理，特制订本管理办法（以下简称\n“本办法”）。\n第二条 本办法旨在加强权益合作方及产品引入管理、细化\n管理组织及职责分工、建立多维度的效益分析机制、加强对权益\n合作引入的后评估及退出管理、完善客户服务流程等规范化管理\n制度，保障权益业务有序平稳开展。\n第三条 本办法面向中国电信广西公司自有或合作引入的权\n益类产品和服务。包括惠民类、娱乐类、教育类、智家类等线上\n线下优质权益。\n第四条 本办法适用于中国电信股份有限公司广西分公司及\n其所属企业(以下统称“各单位”）。\n第二章 相关定义\n第五条 权益业务的定义\n权益业务是指在电信自有通信产品之外，通过与异业开展生\n态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+            "block_id": "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+            "block_ids": [
+              "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+              "6aea01bc-7ba2-4c66-b6d4-010e720ffe83",
+              "b3240a6a-e3fd-4832-8227-ff584f6e793e",
+              "e57d11b0-0e79-4f32-b5f3-edec45914b93",
+              "6b8c5e48-530f-4a11-b4f1-05c2158aa6b4",
+              "189c61da-08a5-4215-be54-b5708f6c6608",
+              "ba697907-3109-4306-bb9d-dae4b3fa93f5",
+              "5b0885f0-2503-4ba0-9bdb-99003ab453e7",
+              "e1f3e11b-ae23-4c53-9ccb-c937a8753d41",
+              "e609414c-604a-45ff-8291-0f9014b5a31d",
+              "7cc6c9b2-ddd1-46a5-a1bc-bb7315bdd839",
+              "7ebf0824-71c8-42c2-b1a2-85dc5c78b59b",
+              "a9661b85-99b7-42d9-bc1f-27d60795074f",
+              "88c7043d-3cc7-4bf6-9327-6dc1cafd004f",
+              "b2881979-14f4-4b7b-b125-00bc96464347",
+              "9666de57-c55b-41e9-b217-311664e92cac",
+              "90c17348-60eb-46a6-a896-87890b9a04b6",
+              "f109ae67-a891-427b-a03b-b66f74df90f8"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "text": "态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。\n第六条 权益的合作引入\n本办法的权益合作引入指面向权益产品内容服务的合作引\n入，由合作方向电信输出产品服务内容，电信负责包装并组织销\n售。产品推广销售类渠道合作参照《关于印发中国电信广西公司\n代理商管理规范》（中电信桂〔2008〕312号）、《关于印发中国\n电信广西公司线上合作管理办法（2025年修订）的通知》（中电\n信桂〔2025〕155号）执行。\n第七条 权益合作的类型\n（一）采购型合作：主要指权益业务内容或服务等的采购类\n合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。",
+            "score": 0.7284887135028839,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "3b04480ea0fdd2916f25a2644d520b9d",
+            "block_id": "9666de57-c55b-41e9-b217-311664e92cac",
+            "block_ids": [
+              "9666de57-c55b-41e9-b217-311664e92cac",
+              "90c17348-60eb-46a6-a896-87890b9a04b6",
+              "f109ae67-a891-427b-a03b-b66f74df90f8",
+              "7748fce5-4a90-4a8e-8ce5-3ec1f40fe6ef",
+              "68f19996-a51f-47a6-b884-4aab03ca7001",
+              "d49f40f4-dad5-4d61-9c1d-3c9352f22478",
+              "5ab00151-dd78-4ca1-8e2b-8f5737fcf858",
+              "02840534-8130-4bbb-882b-de55e5f2d50e",
+              "5a49e3e3-a5dc-42ed-97c6-f97d4210f2dd",
+              "af25e5ce-90ee-4257-ba73-95ab3e5c9647",
+              "20d9ad34-2396-4e84-97f6-dd145ca838e1",
+              "32040ddf-8185-43d7-abe6-f9b4eb045c48",
+              "f342924f-5c6b-4067-b705-88248cf49fd6",
+              "d14c1d37-0095-4f9c-b28f-823095992662",
+              "9e959f6a-91ea-4be9-b267-d87fe53884b8",
+              "4c94d616-e8b3-48d6-9988-1f99c36665ab",
+              "10275f0a-91c7-48af-af76-6f1159b3f581"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "text": "合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。\n第八条 权益产品的属性\n权益产品的属性主要指权益内容的特性，主要包括权益类\n别、权益名称、服务内容、使用范围、价格、有效期、领取和使\n用的方法、权益的使用授权资质等。\n第九条 权益产品的分类\n按照业务形态分类，权益可分为功能开通类、优惠领取类、\n— 5 — 会员订购类以及卡券充值类。\n（一）功能开通类，是指为用户开通应用功能，例如天翼超\n高清、视频彩铃、流量包、语音包等；\n（二）会员优惠领取类，是指为用户提供相应的服务或订购\n优惠，如代金券、折扣，用户使用优惠类权益，可获得更低价的\n产品或服务；\n（三）会员订购类，是指在应用内购买会员，让用户可以享\n受相应的会员特权，例如爱奇艺黄金VIP会员五折购；",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "第二章相关定义第五条权益业务的定义权益业务是指在电信自有通信产品之外，通过与异业开展生态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+            "evidence_passage_ids": [
+              "5ce3a1a4ee37e0e16be4ebfa7efb99ad"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "22f7bcf247479ccef682a31d"
+          },
+          {
+            "text": "第二条本办法旨在加强权益合作方及产品引入管理、细化管理组织及职责分工、建立多维度的效益分析机制、加强对权益合作引入的后评估及退出管理、完善客户服务流程等规范化管理制度，保障权益业务有序平稳开展",
+            "evidence_passage_ids": [
+              "5ce3a1a4ee37e0e16be4ebfa7efb99ad"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "1bb70be54feb868bd618393e"
+          },
+          {
+            "text": "态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+            "evidence_passage_ids": [
+              "dc6df3d2c012302ce70ee749d21f4b96"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "2330941484ed2c668c06ac2b"
+          },
+          {
+            "text": "权益产品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠道推广，电信根据销售比例分成，或产品差额定价的方式与合作方结算",
+            "evidence_passage_ids": [
+              "dc6df3d2c012302ce70ee749d21f4b96"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "282552c6d75dcd71dbc1e982"
+          },
+          {
+            "text": "权益产品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠道推广，电信根据销售比例分成，或产品差额定价的方式与合作方结算",
+            "evidence_passage_ids": [
+              "3b04480ea0fdd2916f25a2644d520b9d"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "c08e897f066e71729f66b41a"
+          },
+          {
+            "text": "是基于客户需求，引入异业、生态的产品，是构—4—成“连接+终端+应用+权益”大融合经营体系的“产品”单元",
+            "evidence_passage_ids": [
+              "5ce3a1a4ee37e0e16be4ebfa7efb99ad"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "ca74c3126e167751cb29a7d1"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+            "block_id": "552ce6c0-3fbf-476c-a961-c13c8a3b96c0",
+            "block_ids": [
+              "552ce6c0-3fbf-476c-a961-c13c8a3b96c0",
+              "5b86047b-08a6-4a48-b665-ea613fb1901c",
+              "c6f55720-40c8-4e60-ab05-e995c5858c97",
+              "07a3e655-6a55-4a11-a5bb-dbd47a799245",
+              "3b40a733-d464-4926-954e-a81ffa22f174",
+              "16d3857b-0821-49f4-a6b3-0530aab4ecfb",
+              "9ffe5b9d-78de-42d0-b396-2a80559ad220",
+              "cb47ea1f-8b42-4a89-9b4f-d2cab2d7e27c",
+              "9053ea88-7fe1-46c9-bdce-833b2c834908",
+              "cde0916a-1537-4a67-ac6e-6f603ba6df5b",
+              "42faa9b5-550d-4cc9-a86d-dea727d7b3a0",
+              "34236a39-7c4c-4667-8105-066d32dc4a22",
+              "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+              "6aea01bc-7ba2-4c66-b6d4-010e720ffe83",
+              "b3240a6a-e3fd-4832-8227-ff584f6e793e"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "path": "",
+            "text": "机制，加强权益运营全流程管理，特制订本管理办法（以下简称\n“本办法”）。\n第二条 本办法旨在加强权益合作方及产品引入管理、细化\n管理组织及职责分工、建立多维度的效益分析机制、加强对权益\n合作引入的后评估及退出管理、完善客户服务流程等规范化管理\n制度，保障权益业务有序平稳开展。\n第三条 本办法面向中国电信广西公司自有或合作引入的权\n益类产品和服务。包括惠民类、娱乐类、教育类、智家类等线上\n线下优质权益。\n第四条 本办法适用于中国电信股份有限公司广西分公司及\n其所属企业(以下统称“各单位”）。\n第二章 相关定义\n第五条 权益业务的定义\n权益业务是指在电信自有通信产品之外，通过与异业开展生\n态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。",
+            "body_text": "机制，加强权益运营全流程管理，特制订本管理办法（以下简称\n“本办法”）。\n第二条 本办法旨在加强权益合作方及产品引入管理、细化\n管理组织及职责分工、建立多维度的效益分析机制、加强对权益\n合作引入的后评估及退出管理、完善客户服务流程等规范化管理\n制度，保障权益业务有序平稳开展。\n第三条 本办法面向中国电信广西公司自有或合作引入的权\n益类产品和服务。包括惠民类、娱乐类、教育类、智家类等线上\n线下优质权益。\n第四条 本办法适用于中国电信股份有限公司广西分公司及\n其所属企业(以下统称“各单位”）。\n第二章 相关定义\n第五条 权益业务的定义\n权益业务是指在电信自有通信产品之外，通过与异业开展生\n态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+            "block_id": "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+            "block_ids": [
+              "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+              "6aea01bc-7ba2-4c66-b6d4-010e720ffe83",
+              "b3240a6a-e3fd-4832-8227-ff584f6e793e",
+              "e57d11b0-0e79-4f32-b5f3-edec45914b93",
+              "6b8c5e48-530f-4a11-b4f1-05c2158aa6b4",
+              "189c61da-08a5-4215-be54-b5708f6c6608",
+              "ba697907-3109-4306-bb9d-dae4b3fa93f5",
+              "5b0885f0-2503-4ba0-9bdb-99003ab453e7",
+              "e1f3e11b-ae23-4c53-9ccb-c937a8753d41",
+              "e609414c-604a-45ff-8291-0f9014b5a31d",
+              "7cc6c9b2-ddd1-46a5-a1bc-bb7315bdd839",
+              "7ebf0824-71c8-42c2-b1a2-85dc5c78b59b",
+              "a9661b85-99b7-42d9-bc1f-27d60795074f",
+              "88c7043d-3cc7-4bf6-9327-6dc1cafd004f",
+              "b2881979-14f4-4b7b-b125-00bc96464347",
+              "9666de57-c55b-41e9-b217-311664e92cac",
+              "90c17348-60eb-46a6-a896-87890b9a04b6",
+              "f109ae67-a891-427b-a03b-b66f74df90f8"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "path": "",
+            "text": "态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。\n第六条 权益的合作引入\n本办法的权益合作引入指面向权益产品内容服务的合作引\n入，由合作方向电信输出产品服务内容，电信负责包装并组织销\n售。产品推广销售类渠道合作参照《关于印发中国电信广西公司\n代理商管理规范》（中电信桂〔2008〕312号）、《关于印发中国\n电信广西公司线上合作管理办法（2025年修订）的通知》（中电\n信桂〔2025〕155号）执行。\n第七条 权益合作的类型\n（一）采购型合作：主要指权益业务内容或服务等的采购类\n合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。",
+            "body_text": "态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。\n第六条 权益的合作引入\n本办法的权益合作引入指面向权益产品内容服务的合作引\n入，由合作方向电信输出产品服务内容，电信负责包装并组织销\n售。产品推广销售类渠道合作参照《关于印发中国电信广西公司\n代理商管理规范》（中电信桂〔2008〕312号）、《关于印发中国\n电信广西公司线上合作管理办法（2025年修订）的通知》（中电\n信桂〔2025〕155号）执行。\n第七条 权益合作的类型\n（一）采购型合作：主要指权益业务内容或服务等的采购类\n合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。",
+            "score": 0.7284887135028839,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "passage_id": "3b04480ea0fdd2916f25a2644d520b9d",
+            "block_id": "9666de57-c55b-41e9-b217-311664e92cac",
+            "block_ids": [
+              "9666de57-c55b-41e9-b217-311664e92cac",
+              "90c17348-60eb-46a6-a896-87890b9a04b6",
+              "f109ae67-a891-427b-a03b-b66f74df90f8",
+              "7748fce5-4a90-4a8e-8ce5-3ec1f40fe6ef",
+              "68f19996-a51f-47a6-b884-4aab03ca7001",
+              "d49f40f4-dad5-4d61-9c1d-3c9352f22478",
+              "5ab00151-dd78-4ca1-8e2b-8f5737fcf858",
+              "02840534-8130-4bbb-882b-de55e5f2d50e",
+              "5a49e3e3-a5dc-42ed-97c6-f97d4210f2dd",
+              "af25e5ce-90ee-4257-ba73-95ab3e5c9647",
+              "20d9ad34-2396-4e84-97f6-dd145ca838e1",
+              "32040ddf-8185-43d7-abe6-f9b4eb045c48",
+              "f342924f-5c6b-4067-b705-88248cf49fd6",
+              "d14c1d37-0095-4f9c-b28f-823095992662",
+              "9e959f6a-91ea-4be9-b267-d87fe53884b8",
+              "4c94d616-e8b3-48d6-9988-1f99c36665ab",
+              "10275f0a-91c7-48af-af76-6f1159b3f581"
+            ],
+            "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "path": "",
+            "text": "合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。\n第八条 权益产品的属性\n权益产品的属性主要指权益内容的特性，主要包括权益类\n别、权益名称、服务内容、使用范围、价格、有效期、领取和使\n用的方法、权益的使用授权资质等。\n第九条 权益产品的分类\n按照业务形态分类，权益可分为功能开通类、优惠领取类、\n— 5 — 会员订购类以及卡券充值类。\n（一）功能开通类，是指为用户开通应用功能，例如天翼超\n高清、视频彩铃、流量包、语音包等；\n（二）会员优惠领取类，是指为用户提供相应的服务或订购\n优惠，如代金券、折扣，用户使用优惠类权益，可获得更低价的\n产品或服务；\n（三）会员订购类，是指在应用内购买会员，让用户可以享\n受相应的会员特权，例如爱奇艺黄金VIP会员五折购；",
+            "body_text": "合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。\n第八条 权益产品的属性\n权益产品的属性主要指权益内容的特性，主要包括权益类\n别、权益名称、服务内容、使用范围、价格、有效期、领取和使\n用的方法、权益的使用授权资质等。\n第九条 权益产品的分类\n按照业务形态分类，权益可分为功能开通类、优惠领取类、\n— 5 — 会员订购类以及卡券充值类。\n（一）功能开通类，是指为用户开通应用功能，例如天翼超\n高清、视频彩铃、流量包、语音包等；\n（二）会员优惠领取类，是指为用户提供相应的服务或订购\n优惠，如代金券、折扣，用户使用优惠类权益，可获得更低价的\n产品或服务；\n（三）会员订购类，是指在应用内购买会员，让用户可以享\n受相应的会员特权，例如爱奇艺黄金VIP会员五折购；",
+            "score": 0.0,
+            "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.2102,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "异业",
+                "合作",
+                "客户",
+                "权益",
+                "优惠券",
+                "合作方"
+              ],
+              "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "spans": [
+                {
+                  "slot": "异业",
+                  "surface": "异业",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    254,
+                    256
+                  ],
+                  "excerpt": "等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品"
+                },
+                {
+                  "slot": "合作",
+                  "surface": "合作",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    110,
+                    112
+                  ],
+                  "excerpt": "-ad35a556\n【章节】第七条 权益合作的类型 > （一）采购型合作：主要指权益业务内容或服务等的采购类 > （二）分成"
+                },
+                {
+                  "slot": "客户",
+                  "surface": "客户",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    179,
+                    181
+                  ],
+                  "excerpt": "益产品的主要合作模式。权益产\n态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“"
+                },
+                {
+                  "slot": "权益",
+                  "surface": "权益",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    26,
+                    28
+                  ],
+                  "excerpt": "026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【文档】中电信桂-2026-34号-关于"
+                },
+                {
+                  "slot": "优惠券",
+                  "surface": "优惠券",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    210,
+                    213
+                  ],
+                  "excerpt": "会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引"
+                },
+                {
+                  "slot": "合作方",
+                  "surface": "合作方",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    342,
+                    345
+                  ],
+                  "excerpt": "入指面向权益产品内容服务的合作引\n入，由合作方向电信输出产品服务内容，电信负责包装并组织销\n售。产品推广销售类渠道合作参照《关"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "异业",
+                "合作",
+                "客户",
+                "权益",
+                "优惠券",
+                "合作方",
+                "准入条件",
+                "异业合作给客户送权益优惠券的",
+                "异业合作给客户送权益优惠",
+                "合作方准入条件",
+                "异业合作给客",
+                "作方准入条件"
+              ],
+              "score": 0.5,
+              "typed_plan": {
+                "anchors": [
+                  "异业",
+                  "合作",
+                  "客户",
+                  "权益",
+                  "优惠券",
+                  "合作方",
+                  "准入条件",
+                  "异业合作给客户送权益优惠券的"
+                ],
+                "predicate": "准入",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "5a720ac077ed22d9eb067eac",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "异业合作给客户送权益优惠券的合作方准入条件"
+          },
+          "fact_plan": {
+            "raw": "异业合作给客户送权益优惠券的合作方准入条件",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:准入"
+            ],
+            "entities": [
+              "异业",
+              "合作",
+              "客户",
+              "权益",
+              "优惠券",
+              "合作方",
+              "准入条件",
+              "异业合作给客户送权益优惠券的",
+              "异业合作给客户送权益优惠",
+              "合作方准入条件",
+              "异业合作给客",
+              "作方准入条件"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "异业",
+            "object": "合作",
+            "scope": [
+              "客户",
+              "合作方"
+            ],
+            "selector": [],
+            "predicate": "准入",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "异业",
+              "合作",
+              "客户",
+              "权益",
+              "优惠券",
+              "合作方",
+              "准入条件",
+              "异业合作给客户送权益优惠券的",
+              "异业合作给客户送权益优惠",
+              "合作方准入条件",
+              "异业合作给客",
+              "作方准入条件"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 14,
+          "candidate_count": 11
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "第二章相关定义第五条权益业务的定义权益业务是指在电信自有通信产品之外，通过与异业开展生态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+              "evidence_passage_ids": [
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "22f7bcf247479ccef682a31d"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第二条本办法旨在加强权益合作方及产品引入管理、细化管理组织及职责分工、建立多维度的效益分析机制、加强对权益合作引入的后评估及退出管理、完善客户服务流程等规范化管理制度，保障权益业务有序平稳开展",
+              "evidence_passage_ids": [
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "1bb70be54feb868bd618393e"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+              "evidence_passage_ids": [
+                "dc6df3d2c012302ce70ee749d21f4b96"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "2330941484ed2c668c06ac2b"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "权益产品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠道推广，电信根据销售比例分成，或产品差额定价的方式与合作方结算",
+              "evidence_passage_ids": [
+                "dc6df3d2c012302ce70ee749d21f4b96"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "282552c6d75dcd71dbc1e982"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "权益产品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠道推广，电信根据销售比例分成，或产品差额定价的方式与合作方结算",
+              "evidence_passage_ids": [
+                "3b04480ea0fdd2916f25a2644d520b9d"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "c08e897f066e71729f66b41a"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "是基于客户需求，引入异业、生态的产品，是构—4—成“连接+终端+应用+权益”大融合经营体系的“产品”单元",
+              "evidence_passage_ids": [
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "ca74c3126e167751cb29a7d1"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "异业合作给客户送权益优惠券的合作方准入条件",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:准入"
+            ],
+            "entities": [
+              "异业",
+              "合作",
+              "客户",
+              "权益",
+              "优惠券",
+              "合作方",
+              "准入条件",
+              "异业合作给客户送权益优惠券的",
+              "异业合作给客户送权益优惠",
+              "合作方准入条件",
+              "异业合作给客",
+              "作方准入条件"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "异业",
+            "object": "合作",
+            "scope": [
+              "客户",
+              "合作方"
+            ],
+            "selector": [],
+            "predicate": "准入",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "异业",
+              "合作",
+              "客户",
+              "权益",
+              "优惠券",
+              "合作方",
+              "准入条件",
+              "异业合作给客户送权益优惠券的",
+              "异业合作给客户送权益优惠",
+              "合作方准入条件",
+              "异业合作给客",
+              "作方准入条件"
+            ]
+          },
+          "input_count": 11,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "22f7bcf247479ccef682a31d",
+              "record_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r5",
+              "passage_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "异业",
+              "predicate": "准入",
+              "object": "第二章相关定义第五条权益业务的定义权益业务是指在电信自有通信产品之外，通过与异业开展生态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第二章相关定义第五条权益业务的定义权益业务是指在电信自有通信产品之外，通过与异业开展生态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+              "evidence_spans": [
+                [
+                  0,
+                  112
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 35.04999999999998,
+              "unstructured_rejected": false,
+              "group_id": "e9691ece0c86f7b4",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:准入": "miss",
+                "anchor:异业": "hit",
+                "anchor:合作": "hit",
+                "anchor:客户": "hit",
+                "anchor:权益": "hit",
+                "anchor:优惠券": "hit",
+                "anchor:合作方": "miss",
+                "anchor:准入条件": "miss",
+                "anchor:异业合作给客户送权益优惠券的": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "1bb70be54feb868bd618393e",
+              "record_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r1",
+              "passage_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "合作",
+              "predicate": "准入",
+              "object": "第二条本办法旨在加强权益合作方及产品引入管理、细化管理组织及职责分工、建立多维度的效益分析机制、加强对权益合作引入的后评估及退出管理、完善客户服务流程等规范化管理制度，保障权益业务有序平稳开展",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第二条本办法旨在加强权益合作方及产品引入管理、细化管理组织及职责分工、建立多维度的效益分析机制、加强对权益合作引入的后评估及退出管理、完善客户服务流程等规范化管理制度，保障权益业务有序平稳开展",
+              "evidence_spans": [
+                [
+                  0,
+                  97
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 28.74999999999999,
+              "unstructured_rejected": false,
+              "group_id": "e9691ece0c86f7b4",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:准入": "miss",
+                "anchor:异业": "miss",
+                "anchor:合作": "hit",
+                "anchor:客户": "hit",
+                "anchor:权益": "hit",
+                "anchor:优惠券": "miss",
+                "anchor:合作方": "hit",
+                "anchor:准入条件": "miss",
+                "anchor:异业合作给客户送权益优惠券的": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "2330941484ed2c668c06ac2b",
+              "record_id": "dc6df3d2c012302ce70ee749d21f4b96:r0",
+              "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "合作",
+              "predicate": "准入",
+              "object": "态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+              "evidence_spans": [
+                [
+                  0,
+                  67
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 22.449999999999992,
+              "unstructured_rejected": false,
+              "group_id": "e9691ece0c86f7b4",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:准入": "miss",
+                "anchor:异业": "miss",
+                "anchor:合作": "hit",
+                "anchor:客户": "hit",
+                "anchor:权益": "miss",
+                "anchor:优惠券": "hit",
+                "anchor:合作方": "miss",
+                "anchor:准入条件": "miss",
+                "anchor:异业合作给客户送权益优惠券的": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "282552c6d75dcd71dbc1e982",
+              "record_id": "dc6df3d2c012302ce70ee749d21f4b96:r1",
+              "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "合作",
+              "predicate": "准入",
+              "object": "权益产品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠道推广，电信根据销售比例分成，或产品差额定价的方式与合作方结算",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "权益产品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠道推广，电信根据销售比例分成，或产品差额定价的方式与合作方结算",
+              "evidence_spans": [
+                [
+                  20,
+                  82
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 22.449999999999992,
+              "unstructured_rejected": false,
+              "group_id": "e9691ece0c86f7b4",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:准入": "miss",
+                "anchor:异业": "miss",
+                "anchor:合作": "hit",
+                "anchor:客户": "miss",
+                "anchor:权益": "hit",
+                "anchor:优惠券": "miss",
+                "anchor:合作方": "hit",
+                "anchor:准入条件": "miss",
+                "anchor:异业合作给客户送权益优惠券的": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "c08e897f066e71729f66b41a",
+              "record_id": "3b04480ea0fdd2916f25a2644d520b9d:r1",
+              "passage_id": "3b04480ea0fdd2916f25a2644d520b9d",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "合作",
+              "predicate": "准入",
+              "object": "权益产品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠道推广，电信根据销售比例分成，或产品差额定价的方式与合作方结算",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "权益产品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠道推广，电信根据销售比例分成，或产品差额定价的方式与合作方结算",
+              "evidence_spans": [
+                [
+                  20,
+                  82
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 22.449999999999992,
+              "unstructured_rejected": false,
+              "group_id": "e9691ece0c86f7b4",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:准入": "miss",
+                "anchor:异业": "miss",
+                "anchor:合作": "hit",
+                "anchor:客户": "miss",
+                "anchor:权益": "hit",
+                "anchor:优惠券": "miss",
+                "anchor:合作方": "hit",
+                "anchor:准入条件": "miss",
+                "anchor:异业合作给客户送权益优惠券的": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "ca74c3126e167751cb29a7d1",
+              "record_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r6",
+              "passage_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "fact_kind": "policy",
+              "subject": "异业",
+              "predicate": "准入",
+              "object": "是基于客户需求，引入异业、生态的产品，是构—4—成“连接+终端+应用+权益”大融合经营体系的“产品”单元",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "是基于客户需求，引入异业、生态的产品，是构—4—成“连接+终端+应用+权益”大融合经营体系的“产品”单元",
+              "evidence_spans": [
+                [
+                  0,
+                  55
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "score": 22.199999999999992,
+              "unstructured_rejected": false,
+              "group_id": "e9691ece0c86f7b4",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:准入": "miss",
+                "anchor:异业": "hit",
+                "anchor:合作": "miss",
+                "anchor:客户": "hit",
+                "anchor:权益": "hit",
+                "anchor:优惠券": "miss",
+                "anchor:合作方": "miss",
+                "anchor:准入条件": "miss",
+                "anchor:异业合作给客户送权益优惠券的": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {
+              "22f7bcf247479ccef682a31d": "hit",
+              "1bb70be54feb868bd618393e": "hit",
+              "2330941484ed2c668c06ac2b": "hit",
+              "282552c6d75dcd71dbc1e982": "hit",
+              "c08e897f066e71729f66b41a": "hit",
+              "ca74c3126e167751cb29a7d1": "hit",
+              "7645bc3e41009484d9adc025": "hit",
+              "dd00b590acdff8724267eb1b": "hit",
+              "71f628ebd56c71aaae7e3479": "hit",
+              "428fa35ad232c0af421f5698": "hit",
+              "1bf73ae04a9e670a6591ebce": "hit"
+            },
+            "predicate:准入": {
+              "22f7bcf247479ccef682a31d": "miss",
+              "1bb70be54feb868bd618393e": "miss",
+              "2330941484ed2c668c06ac2b": "miss",
+              "282552c6d75dcd71dbc1e982": "miss",
+              "c08e897f066e71729f66b41a": "miss",
+              "ca74c3126e167751cb29a7d1": "miss",
+              "7645bc3e41009484d9adc025": "miss",
+              "dd00b590acdff8724267eb1b": "miss",
+              "71f628ebd56c71aaae7e3479": "miss",
+              "428fa35ad232c0af421f5698": "miss",
+              "1bf73ae04a9e670a6591ebce": "miss"
+            }
+          },
+          "primary_group_id": "e9691ece0c86f7b4",
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "missing_after_select": [
+            "predicate:准入"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "e9691ece0c86f7b4",
+                "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+                "knowledge_ids": [
+                  "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司权益业务管理办法",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "dc6df3d2c012302ce70ee749d21f4b96",
+                  "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+                  "3b04480ea0fdd2916f25a2644d520b9d"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.7284887135028839,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+                "section": "第七条 权益合作的类型 > （一）采购型合作：主要指权益业务内容或服务等的采购类 > （二）分成型合作:作为权益产品的主要合作模式。权益产",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.457,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "dc6df3d2c012302ce70ee749d21f4b96:r0",
+                  "dc6df3d2c012302ce70ee749d21f4b96:r1",
+                  "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r0",
+                  "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r1",
+                  "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r2",
+                  "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r3",
+                  "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r4",
+                  "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r5",
+                  "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r6",
+                  "3b04480ea0fdd2916f25a2644d520b9d:r0",
+                  "3b04480ea0fdd2916f25a2644d520b9d:r1",
+                  "3b04480ea0fdd2916f25a2644d520b9d:r2",
+                  "3b04480ea0fdd2916f25a2644d520b9d:r3",
+                  "3b04480ea0fdd2916f25a2644d520b9d:r4"
+                ]
+              }
+            ],
+            "primary_group_id": "e9691ece0c86f7b4",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "券的合作方准入条件",
+                "异业合作给客户送权益优惠"
+              ],
+              "selection": [
+                {
+                  "group_id": "e9691ece0c86f7b4",
+                  "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+                  "knowledge_ids": [
+                    "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+                  ],
+                  "score": 7.457,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact",
+            "predicate:准入"
+          ],
+          "candidate_ids": [
+            "22f7bcf247479ccef682a31d",
+            "1bb70be54feb868bd618393e",
+            "2330941484ed2c668c06ac2b",
+            "282552c6d75dcd71dbc1e982",
+            "c08e897f066e71729f66b41a",
+            "ca74c3126e167751cb29a7d1"
+          ],
+          "missing_slots": [
+            "predicate:准入"
+          ],
+          "complete": false,
+          "intents": [
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "coverage_matrix": {
+            "policy_fact": {
+              "22f7bcf247479ccef682a31d": "hit",
+              "1bb70be54feb868bd618393e": "hit",
+              "2330941484ed2c668c06ac2b": "hit",
+              "282552c6d75dcd71dbc1e982": "hit",
+              "c08e897f066e71729f66b41a": "hit",
+              "ca74c3126e167751cb29a7d1": "hit",
+              "7645bc3e41009484d9adc025": "hit",
+              "dd00b590acdff8724267eb1b": "hit",
+              "71f628ebd56c71aaae7e3479": "hit",
+              "428fa35ad232c0af421f5698": "hit",
+              "1bf73ae04a9e670a6591ebce": "hit"
+            },
+            "predicate:准入": {
+              "22f7bcf247479ccef682a31d": "miss",
+              "1bb70be54feb868bd618393e": "miss",
+              "2330941484ed2c668c06ac2b": "miss",
+              "282552c6d75dcd71dbc1e982": "miss",
+              "c08e897f066e71729f66b41a": "miss",
+              "ca74c3126e167751cb29a7d1": "miss",
+              "7645bc3e41009484d9adc025": "miss",
+              "dd00b590acdff8724267eb1b": "miss",
+              "71f628ebd56c71aaae7e3479": "miss",
+              "428fa35ad232c0af421f5698": "miss",
+              "1bf73ae04a9e670a6591ebce": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "异业合作给客户送权益优惠券的合作方准入条件",
+          "intents": [
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "policy_fact",
+            "predicate:准入"
+          ],
+          "entities": [
+            "异业",
+            "合作",
+            "客户",
+            "权益",
+            "优惠券",
+            "合作方",
+            "准入条件",
+            "异业合作给客户送权益优惠券的",
+            "异业合作给客户送权益优惠",
+            "合作方准入条件",
+            "异业合作给客",
+            "作方准入条件"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "policy",
+            "prohibition",
+            "scope",
+            "responsibility",
+            "relationship"
+          ],
+          "subject": "异业",
+          "object": "合作",
+          "scope": [
+            "客户",
+            "合作方"
+          ],
+          "selector": [],
+          "predicate": "准入",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "policy",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "异业",
+            "合作",
+            "客户",
+            "权益",
+            "优惠券",
+            "合作方",
+            "准入条件",
+            "异业合作给客户送权益优惠券的",
+            "异业合作给客户送权益优惠",
+            "合作方准入条件",
+            "异业合作给客",
+            "作方准入条件"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "e9691ece0c86f7b4",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "knowledge_ids": [
+                "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司权益业务管理办法",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "dc6df3d2c012302ce70ee749d21f4b96",
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+                "3b04480ea0fdd2916f25a2644d520b9d"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.7284887135028839,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+              "section": "第七条 权益合作的类型 > （一）采购型合作：主要指权益业务内容或服务等的采购类 > （二）分成型合作:作为权益产品的主要合作模式。权益产",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.457,
+              "rejection_reasons": [],
+              "record_ids": [
+                "dc6df3d2c012302ce70ee749d21f4b96:r0",
+                "dc6df3d2c012302ce70ee749d21f4b96:r1",
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r0",
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r1",
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r2",
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r3",
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r4",
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r5",
+                "5ce3a1a4ee37e0e16be4ebfa7efb99ad:r6",
+                "3b04480ea0fdd2916f25a2644d520b9d:r0",
+                "3b04480ea0fdd2916f25a2644d520b9d:r1",
+                "3b04480ea0fdd2916f25a2644d520b9d:r2",
+                "3b04480ea0fdd2916f25a2644d520b9d:r3",
+                "3b04480ea0fdd2916f25a2644d520b9d:r4"
+              ]
+            }
+          ],
+          "primary_group_id": "e9691ece0c86f7b4",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "券的合作方准入条件",
+              "异业合作给客户送权益优惠"
+            ],
+            "selection": [
+              {
+                "group_id": "e9691ece0c86f7b4",
+                "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+                "knowledge_ids": [
+                  "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+                ],
+                "score": 7.457,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": false,
+          "missing_slots": [
+            "predicate:准入"
+          ],
+          "checks": {
+            "policy_anchors": [
+              "异业",
+              "合作",
+              "客户",
+              "权益",
+              "优惠券",
+              "合作方"
+            ],
+            "predicate:准入": false
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "22f7bcf247479ccef682a31d"
+              ],
+              "passage_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "text": "- 第二章相关定义第五条权益业务的定义权益业务是指在电信自有通信产品之外，通过与异业开展生态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "1bb70be54feb868bd618393e"
+              ],
+              "passage_id": "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "text": "- 第二条本办法旨在加强权益合作方及产品引入管理、细化管理组织及职责分工、建立多维度的效益分析机制、加强对权益合作引入的后评估及退出管理、完善客户服务流程等规范化管理制度，保障权益业务有序平稳开展",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "2330941484ed2c668c06ac2b"
+              ],
+              "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "text": "- 态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）等形态的产品",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 281
+        },
+        "primary_group_id": "e9691ece0c86f7b4",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "type": "knowledge",
+              "label": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556"
+            },
+            {
+              "id": "552ce6c0-3fbf-476c-a961-c13c8a3b96c0",
+              "type": "block",
+              "label": "管理组织及职责分工、建立多维度的效益分析机制、加强对权益",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            },
+            {
+              "id": "c8b4a5a9-3764-4ef2-839e-917ce838cede",
+              "type": "block",
+              "label": "[第3页]",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            },
+            {
+              "id": "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+              "type": "block",
+              "label": "惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            },
+            {
+              "id": "9666de57-c55b-41e9-b217-311664e92cac",
+              "type": "block",
+              "label": "品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            },
+            {
+              "id": "0d9b77e8-a38c-47bc-b26c-b6fe95461d5a",
+              "type": "block",
+              "label": "[第4页]",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            },
+            {
+              "id": "8e81cfc4-6f5f-4e2d-ae49-d1bd701a3880",
+              "type": "knowledge",
+              "label": "市场-2023-7号-关于印发中国电信广西公司电话外呼实施细则的通知--8e81cfc4"
+            }
+          ],
+          "edges": [
+            {
+              "source": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "target": "552ce6c0-3fbf-476c-a961-c13c8a3b96c0",
+              "type": "contains"
+            },
+            {
+              "source": "c8b4a5a9-3764-4ef2-839e-917ce838cede",
+              "target": "552ce6c0-3fbf-476c-a961-c13c8a3b96c0",
+              "type": "parent"
+            },
+            {
+              "source": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "target": "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+              "type": "contains"
+            },
+            {
+              "source": "c8b4a5a9-3764-4ef2-839e-917ce838cede",
+              "target": "22cbf2cb-af02-42f7-a473-75fdf93ac2a9",
+              "type": "parent"
+            },
+            {
+              "source": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "target": "9666de57-c55b-41e9-b217-311664e92cac",
+              "type": "contains"
+            },
+            {
+              "source": "0d9b77e8-a38c-47bc-b26c-b6fe95461d5a",
+              "target": "9666de57-c55b-41e9-b217-311664e92cac",
+              "type": "parent"
+            },
+            {
+              "source": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "target": "8e81cfc4-6f5f-4e2d-ae49-d1bd701a3880",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 7
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 2,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+          ],
+          "accepted_block_ids": [
+            "22cbf2cb-af02-42f7-a473-75fdf93ac2a9"
+          ],
+          "accepted_passage_ids": [
+            "dc6df3d2c012302ce70ee749d21f4b96",
+            "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+            "3b04480ea0fdd2916f25a2644d520b9d"
+          ],
+          "adjacent_passage_ids": [
+            "5ce3a1a4ee37e0e16be4ebfa7efb99ad",
+            "3b04480ea0fdd2916f25a2644d520b9d"
+          ],
+          "generation_knowledge_ids": [
+            "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+          ],
+          "top_score": 0.2102,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "异业",
+              "合作",
+              "客户",
+              "权益",
+              "优惠券",
+              "合作方"
+            ],
+            "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "spans": [
+              {
+                "slot": "异业",
+                "surface": "异业",
+                "synonym_source": "query_surface",
+                "span": [
+                  254,
+                  256
+                ],
+                "excerpt": "等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品"
+              },
+              {
+                "slot": "合作",
+                "surface": "合作",
+                "synonym_source": "query_surface",
+                "span": [
+                  110,
+                  112
+                ],
+                "excerpt": "-ad35a556\n【章节】第七条 权益合作的类型 > （一）采购型合作：主要指权益业务内容或服务等的采购类 > （二）分成"
+              },
+              {
+                "slot": "客户",
+                "surface": "客户",
+                "synonym_source": "query_surface",
+                "span": [
+                  179,
+                  181
+                ],
+                "excerpt": "益产品的主要合作模式。权益产\n态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“"
+              },
+              {
+                "slot": "权益",
+                "surface": "权益",
+                "synonym_source": "query_surface",
+                "span": [
+                  26,
+                  28
+                ],
+                "excerpt": "026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【文档】中电信桂-2026-34号-关于"
+              },
+              {
+                "slot": "优惠券",
+                "surface": "优惠券",
+                "synonym_source": "query_surface",
+                "span": [
+                  210,
+                  213
+                ],
+                "excerpt": "会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引"
+              },
+              {
+                "slot": "合作方",
+                "surface": "合作方",
+                "synonym_source": "query_surface",
+                "span": [
+                  342,
+                  345
+                ],
+                "excerpt": "入指面向权益产品内容服务的合作引\n入，由合作方向电信输出产品服务内容，电信负责包装并组织销\n售。产品推广销售类渠道合作参照《关"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "异业",
+              "合作",
+              "客户",
+              "权益",
+              "优惠券",
+              "合作方",
+              "准入条件",
+              "异业合作给客户送权益优惠券的",
+              "异业合作给客户送权益优惠",
+              "合作方准入条件",
+              "异业合作给客",
+              "作方准入条件"
+            ],
+            "score": 0.5,
+            "typed_plan": {
+              "anchors": [
+                "异业",
+                "合作",
+                "客户",
+                "权益",
+                "优惠券",
+                "合作方",
+                "准入条件",
+                "异业合作给客户送权益优惠券的"
+              ],
+              "predicate": "准入",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "5a720ac077ed22d9eb067eac"
+        },
+        "snapshot_fingerprint": "5a720ac077ed22d9eb067eac",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 3,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 36.49
+  },
+  "top_candidate_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+  "candidates": [
+    {
+      "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "passage_id": "dc6df3d2c012302ce70ee749d21f4b96",
+      "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+      "score": 0.7284887135028839,
+      "final_relevance_score": 0.37848871350288393,
+      "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】第七条 权益合作的类型 > （一）采购型合作：主要指权益业务内容或服务等的采购类 > （二）分成型合作:作为权益产品的主要合作模式。权益产\n态合作，为客户提供“特权资格”（会员资格、使用特权等）,“特\n惠券卡”(优惠券、兑换券等)、“特定内容”（体验包、专属包等）\n等形态的产品。是基于客户需求，引入异业、生态的产品，是构\n— 4 —成“连接+终端+应用+权益”大融合经营体系的“产品”单元。\n第六条 权益的合作引入\n本办法的权益合作引入指面向权益产品内容服务的合作引\n入，由合作方向电信输出产品服务内容，电信负责包装并组织销\n售。产品推广销售类渠道合作参照《关于印发中国电信广西公司\n代理商管理规范》（中电信桂〔2008〕312号）、《关于印发中国\n电信广西公司线上合作管理办法（2025年修订）的通知》（中电\n信桂〔2025〕155号）执行。\n第七条 权益合作的类型\n（一）采购型合作：主要指权益业务内容或服务等的采购类\n合作，须严格参照省公司采购管理办法实施，以“一事一议”的\n签报件形式，按公示内控要求审批执行；\n（二）分成型合作:作为权益产品的主要合作模式。权益产\n品可与电信主营业务捆绑销售，或自身通过包装后在电信销售渠\n道推广，电信根据销售比例分成，或产品差额定价的方式与合作\n方结算。"
+    }
+  ],
+  "search_ms": 3129.28,
+  "ask_ms": 36.49,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "zUejJUiSBqdXWiaURJQeavihQSx5_ycZ",
+  "search_snapshot_fingerprint": "5a720ac077ed22d9eb067eac",
+  "ask_snapshot_fingerprint": "5a720ac077ed22d9eb067eac",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "53c0be6f9e69f3b9efcf0538"
+}

@@ -1,0 +1,1758 @@
+{
+  "ping": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "status": "alive",
+        "timestamp": 1785300725.001192,
+        "version": "1.11.1",
+        "uptime_hint": "ok"
+      }
+    },
+    "latency_ms": 5.76,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":{\"status\":\"alive\",\"timestamp\":1785300725.001192,\"version\":\"1.11.1\",\"uptime_hint\":\"ok\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": {
+            "status": "alive",
+            "timestamp": 1785300725.001192,
+            "version": "1.11.1",
+            "uptime_hint": "ok"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "kb_capabilities": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "name": "ShineHeKnowledge",
+        "version": "1.11.1",
+        "envelope": {
+          "ok": "bool — 成功/失败判断字段",
+          "data": "any — 成功时的负载",
+          "error": "{code, message, details} — 失败时的稳定错误码",
+          "meta": "分页/截断/计数等元信息",
+          "operation_id": "写操作的 audit log id（与 get_operation_log 配合）",
+          "dry_run": "预览变更不执行"
+        },
+        "error_codes": {
+          "NOT_FOUND": "资源不存在",
+          "VALIDATION_ERROR": "参数校验失败",
+          "PERMISSION_DENIED": "路径越权",
+          "INGEST_FAILED": "文件/URL 导入失败",
+          "INTERNAL_ERROR": "内部异常",
+          "WIKI_DISABLED": "Wiki 未启用",
+          "JOB_NOT_FOUND": "任务不存在",
+          "QUERY_PARSE_ERROR": "DSL/JSON 解析失败"
+        },
+        "limits": {
+          "default_page_size": 20,
+          "max_payload_bytes": 1000000,
+          "max_graph_nodes": 200,
+          "max_graph_depth": 3
+        },
+        "tool_metadata": {
+          "ping": {
+            "group": "ops",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "连通性检测"
+          },
+          "kb_capabilities": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "能力清单"
+          },
+          "search": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "语义搜索"
+          },
+          "search_fulltext": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "全文搜索"
+          },
+          "ask": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "RAG 问答"
+          },
+          "ask_with_query": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "QuerySpec RAG"
+          },
+          "create": {
+            "group": "kb",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "创建知识"
+          },
+          "read": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "读取知识"
+          },
+          "update": {
+            "group": "kb",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "更新知识"
+          },
+          "delete": {
+            "group": "kb",
+            "side_effect": "destructive",
+            "requires_confirmation": true,
+            "short_desc": "删除知识"
+          },
+          "restore_knowledge": {
+            "group": "kb",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "恢复知识"
+          },
+          "reindex_all": {
+            "group": "kb",
+            "side_effect": "destructive",
+            "requires_confirmation": true,
+            "short_desc": "重建索引"
+          },
+          "list_knowledge": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "列出知识"
+          },
+          "index_path": {
+            "group": "kb",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "索引路径"
+          },
+          "tags": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "列出标签"
+          },
+          "ingest_file": {
+            "group": "kb",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "导入文件"
+          },
+          "ingest_url": {
+            "group": "kb",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "导入网页"
+          },
+          "create_ingest_job": {
+            "group": "kb",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "创建导入任务"
+          },
+          "get_job": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "查询任务"
+          },
+          "list_jobs": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "列出任务"
+          },
+          "cancel_job": {
+            "group": "kb",
+            "side_effect": "destructive",
+            "requires_confirmation": true,
+            "short_desc": "取消任务"
+          },
+          "route_query": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "路由分析"
+          },
+          "execute_query": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "执行 DSL"
+          },
+          "structured_query": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "结构化查询"
+          },
+          "explain_query": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "查询解释"
+          },
+          "get_source_graph": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "来源图谱"
+          },
+          "preview_operation": {
+            "group": "kb",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "预览操作"
+          },
+          "save_to_wiki": {
+            "group": "wiki",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "保存到 Wiki"
+          },
+          "wiki_lint": {
+            "group": "wiki",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "Wiki 体检"
+          },
+          "fix_dead_references": {
+            "group": "wiki",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "修复死链"
+          },
+          "wiki_submit_review": {
+            "group": "wiki",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "提交审核"
+          },
+          "wiki_approve": {
+            "group": "wiki",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "审批通过"
+          },
+          "wiki_reject": {
+            "group": "wiki",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "驳回"
+          },
+          "wiki_deprecate": {
+            "group": "wiki",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "弃用"
+          },
+          "wiki_workflow_history": {
+            "group": "wiki",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "工作流历史"
+          },
+          "wiki_list_versions": {
+            "group": "wiki",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "版本列表"
+          },
+          "wiki_restore_version": {
+            "group": "wiki",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "恢复版本"
+          },
+          "delete_wiki_page": {
+            "group": "wiki",
+            "side_effect": "destructive",
+            "requires_confirmation": true,
+            "short_desc": "删除 Wiki 页面"
+          },
+          "graph_traverse": {
+            "group": "graph",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "图遍历"
+          },
+          "query_operation_logs": {
+            "group": "ops",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "查询日志"
+          },
+          "get_operation_log": {
+            "group": "ops",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "获取日志"
+          },
+          "undo_operation": {
+            "group": "ops",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "撤销操作"
+          },
+          "list_recent_operations": {
+            "group": "ops",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "最近操作"
+          },
+          "kb_health_check": {
+            "group": "ops",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "健康检查"
+          },
+          "auto_tag": {
+            "group": "ops",
+            "side_effect": "write",
+            "requires_confirmation": true,
+            "short_desc": "自动打标"
+          },
+          "get_trace": {
+            "group": "ops",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "链路追踪"
+          },
+          "create_async_job": {
+            "group": "ops",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "创建任务"
+          },
+          "get_async_job": {
+            "group": "ops",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "获取任务"
+          },
+          "list_async_jobs": {
+            "group": "ops",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "列出任务"
+          },
+          "cancel_async_job": {
+            "group": "ops",
+            "side_effect": "destructive",
+            "requires_confirmation": true,
+            "short_desc": "取消任务"
+          },
+          "remember_fact": {
+            "group": "memory",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "记住事实"
+          },
+          "recall_facts": {
+            "group": "memory",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "搜索记忆"
+          },
+          "update_project_context": {
+            "group": "memory",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "更新项目上下文"
+          },
+          "search_decisions": {
+            "group": "memory",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "搜索决策"
+          },
+          "summarize_recent_changes": {
+            "group": "memory",
+            "side_effect": "read",
+            "requires_confirmation": false,
+            "short_desc": "变更总结"
+          },
+          "extract_tasks_from_doc": {
+            "group": "memory",
+            "side_effect": "write",
+            "requires_confirmation": false,
+            "short_desc": "提取任务"
+          },
+          "delete_memory": {
+            "group": "memory",
+            "side_effect": "destructive",
+            "requires_confirmation": true,
+            "short_desc": "删除记忆"
+          }
+        },
+        "tool_aliases": {
+          "kb.search": "search",
+          "kb.search_fulltext": "search_fulltext",
+          "kb.ask": "ask",
+          "kb.ask_with_query": "ask_with_query",
+          "kb.read": "read",
+          "kb.list": "list_knowledge",
+          "kb.tags": "tags",
+          "kb.preview": "preview_operation",
+          "kb.capabilities": "kb_capabilities",
+          "kb.route_query": "route_query",
+          "kb.execute_query": "execute_query",
+          "kb.structured_query": "structured_query",
+          "kb.explain_query": "explain_query",
+          "kb.get_source_graph": "get_source_graph",
+          "kb.get_job": "get_job",
+          "kb.list_jobs": "list_jobs",
+          "wiki.lint": "wiki_lint",
+          "wiki.history": "wiki_workflow_history",
+          "wiki.list_versions": "wiki_list_versions",
+          "graph.traverse": "graph_traverse",
+          "ops.ping": "ping",
+          "ops.query_logs": "query_operation_logs",
+          "ops.get_log": "get_operation_log",
+          "ops.list_recent": "list_recent_operations",
+          "ops.get_job": "get_async_job",
+          "ops.list_jobs": "list_async_jobs",
+          "memory.recall": "recall_facts",
+          "memory.search_decisions": "search_decisions",
+          "memory.summarize_changes": "summarize_recent_changes"
+        },
+        "tools": [
+          {
+            "name": "query_operation_logs",
+            "description": "查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。"
+          },
+          {
+            "name": "preview_operation",
+            "description": "预览写操作而不实际执行。支持 update / create / delete / ingest_file / reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。"
+          },
+          {
+            "name": "get_operation_log",
+            "description": "按 ID 查询单条操作日志的完整记录。"
+          },
+          {
+            "name": "list_recent_operations",
+            "description": "列出最近的操作日志（query_operation_logs 的便捷别名）。按 created_at DESC 排序，缺省 limit=20。"
+          },
+          {
+            "name": "ping",
+            "description": "轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。"
+          },
+          {
+            "name": "search",
+            "description": "基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。支持 top_k 或 limit；低相关结果触发 no_match 门禁。"
+          },
+          {
+            "name": "search_fulltext",
+            "description": "基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。"
+          },
+          {
+            "name": "ask",
+            "description": "向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。返回结构化 payload：answer / sources / source_graph / route / query_plan / block_contexts / warnings。[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），超时返回空 answer + warnings，建议客户端超时 ≥ 100s]"
+          },
+          {
+            "name": "read",
+            "description": "根据 ID 读取知识/块/Claim/Wiki 页面。支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。"
+          },
+          {
+            "name": "structured_query",
+            "description": "执行结构化查询 DSL，返回知识条目列表"
+          },
+          {
+            "name": "explain_query",
+            "description": "解释结构化查询的执行计划与匹配条件"
+          },
+          {
+            "name": "route_query",
+            "description": "路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + traverse + explanation + evidence_preview（top 3 匹配标题+摘要），Agent 据此决定下一步走 execute_query 还是 ask_with_query。"
+          },
+          {
+            "name": "execute_query",
+            "description": "执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。"
+          },
+          {
+            "name": "ask_with_query",
+            "description": "用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\n调用要求：至少提供 question 或 search_query 其中一个。\n简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\n标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\n高级模式：传 question + query_spec（支持复杂过滤条件），query_spec 格式如 {\"filter\": {\"fulltext\": \"关键词\"}, \"sort\": {\"by\": \"updated_at\", \"order\": \"desc\"}}，filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。"
+          },
+          {
+            "name": "kb_capabilities",
+            "description": "查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。"
+          },
+          {
+            "name": "kb_health_check",
+            "description": "知识库健康度检查。返回 API Key 状态、向量覆盖率、标签覆盖率、缓存命中率、P95 延迟等指标。用于运维巡检和问题定位。"
+          },
+          {
+            "name": "get_trace",
+            "description": "根据 trace_id 查询链路追踪记录，包含各管线阶段耗时、结果数等信息。用于问题定位和性能分析。"
+          },
+          {
+            "name": "graph_traverse",
+            "description": "从给定节点遍历知识图谱（多跳、限深度、限节点数）。start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'；使用 limit 限制返回节点数。"
+          },
+          {
+            "name": "get_source_graph",
+            "description": "根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。"
+          },
+          {
+            "name": "list_knowledge",
+            "description": "列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。"
+          },
+          {
+            "name": "tags",
+            "description": "获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。"
+          },
+          {
+            "name": "get_job",
+            "description": "查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。"
+          },
+          {
+            "name": "list_jobs",
+            "description": "列出异步任务，可按状态/类型筛选。"
+          },
+          {
+            "name": "recall_facts",
+            "description": "搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。"
+          },
+          {
+            "name": "search_decisions",
+            "description": "搜索架构/技术决策记录（category=decision 的记忆）。"
+          },
+          {
+            "name": "summarize_recent_changes",
+            "description": "总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。"
+          },
+          {
+            "name": "get_async_job",
+            "description": "获取异步任务状态"
+          },
+          {
+            "name": "list_async_jobs",
+            "description": "列出异步任务"
+          },
+          {
+            "name": "wiki_lint",
+            "description": "对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。"
+          },
+          {
+            "name": "wiki_workflow_history",
+            "description": "获取 Wiki 页面工作流历史"
+          },
+          {
+            "name": "wiki_list_versions",
+            "description": "获取 Wiki 页面版本列表"
+          },
+          {
+            "name": "kb.search",
+            "description": "基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。支持 top_k 或 limit；低相关结果触发 no_match 门禁。 (alias of search)"
+          },
+          {
+            "name": "kb.search_fulltext",
+            "description": "基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。 (alias of search_fulltext)"
+          },
+          {
+            "name": "kb.ask",
+            "description": "向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。返回结构化 payload：answer / sources / source_graph / route / query_plan / block_contexts / warnings。[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），超时返回空 answer + warnings，建议客户端超时 ≥ 100s] (alias of ask)"
+          },
+          {
+            "name": "kb.ask_with_query",
+            "description": "用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\n调用要求：至少提供 question 或 search_query 其中一个。\n简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\n标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\n高级模式：传 question + query_spec（支持复杂过滤条件），query_spec 格式如 {\"filter\": {\"fulltext\": \"关键词\"}, \"sort\": {\"by\": \"updated_at\", \"order\": \"desc\"}}，filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。 (alias of ask_with_query)"
+          },
+          {
+            "name": "kb.read",
+            "description": "根据 ID 读取知识/块/Claim/Wiki 页面。支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。 (alias of read)"
+          },
+          {
+            "name": "kb.list",
+            "description": "列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。 (alias of list_knowledge)"
+          },
+          {
+            "name": "kb.tags",
+            "description": "获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。 (alias of tags)"
+          },
+          {
+            "name": "kb.preview",
+            "description": "预览写操作而不实际执行。支持 update / create / delete / ingest_file / reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。 (alias of preview_operation)"
+          },
+          {
+            "name": "kb.capabilities",
+            "description": "查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。 (alias of kb_capabilities)"
+          },
+          {
+            "name": "kb.route_query",
+            "description": "路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + traverse + explanation + evidence_preview（top 3 匹配标题+摘要），Agent 据此决定下一步走 execute_query 还是 ask_with_query。 (alias of route_query)"
+          },
+          {
+            "name": "kb.execute_query",
+            "description": "执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。 (alias of execute_query)"
+          },
+          {
+            "name": "kb.structured_query",
+            "description": "执行结构化查询 DSL，返回知识条目列表 (alias of structured_query)"
+          },
+          {
+            "name": "kb.explain_query",
+            "description": "解释结构化查询的执行计划与匹配条件 (alias of explain_query)"
+          },
+          {
+            "name": "kb.get_source_graph",
+            "description": "根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。 (alias of get_source_graph)"
+          },
+          {
+            "name": "kb.get_job",
+            "description": "查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。 (alias of get_job)"
+          },
+          {
+            "name": "kb.list_jobs",
+            "description": "列出异步任务，可按状态/类型筛选。 (alias of list_jobs)"
+          },
+          {
+            "name": "wiki.lint",
+            "description": "对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。 (alias of wiki_lint)"
+          },
+          {
+            "name": "wiki.history",
+            "description": "获取 Wiki 页面工作流历史 (alias of wiki_workflow_history)"
+          },
+          {
+            "name": "wiki.list_versions",
+            "description": "获取 Wiki 页面版本列表 (alias of wiki_list_versions)"
+          },
+          {
+            "name": "graph.traverse",
+            "description": "从给定节点遍历知识图谱（多跳、限深度、限节点数）。start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'；使用 limit 限制返回节点数。 (alias of graph_traverse)"
+          },
+          {
+            "name": "ops.ping",
+            "description": "轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。 (alias of ping)"
+          },
+          {
+            "name": "ops.query_logs",
+            "description": "查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。 (alias of query_operation_logs)"
+          },
+          {
+            "name": "ops.get_log",
+            "description": "按 ID 查询单条操作日志的完整记录。 (alias of get_operation_log)"
+          },
+          {
+            "name": "ops.list_recent",
+            "description": "列出最近的操作日志（query_operation_logs 的便捷别名）。按 created_at DESC 排序，缺省 limit=20。 (alias of list_recent_operations)"
+          },
+          {
+            "name": "ops.get_job",
+            "description": "获取异步任务状态 (alias of get_async_job)"
+          },
+          {
+            "name": "ops.list_jobs",
+            "description": "列出异步任务 (alias of list_async_jobs)"
+          },
+          {
+            "name": "memory.recall",
+            "description": "搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。 (alias of recall_facts)"
+          },
+          {
+            "name": "memory.search_decisions",
+            "description": "搜索架构/技术决策记录（category=decision 的记忆）。 (alias of search_decisions)"
+          },
+          {
+            "name": "memory.summarize_changes",
+            "description": "总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。 (alias of summarize_recent_changes)"
+          }
+        ],
+        "runtime_diagnostics": {
+          "api_keys": {
+            "llm": true,
+            "embedding": true,
+            "reranker": true
+          },
+          "retrieval_index_unit": "passage",
+          "passage_index": {
+            "retrieval_index_unit": "passage",
+            "passages": 6456,
+            "embedded": 6456,
+            "fts": 6456,
+            "vector_coverage": 1.0,
+            "fts_coverage": 1.0,
+            "avg_char_count": 646.1,
+            "p50_char_count": 596.0,
+            "p95_char_count": 1107.0,
+            "short_passage_count": 0,
+            "length_gate_ok": true,
+            "blocks_note": "blocks/vectors reported separately; not retrieval unit"
+          },
+          "vector_index": {
+            "blocks": 128348,
+            "vectors": 128348,
+            "coverage": 1.0,
+            "sqlite_vec_ok": true,
+            "error": "",
+            "recommendation": "向量索引状态正常",
+            "note": "block-level coverage is structural; use passage_index for retrieval health"
+          },
+          "vector": {
+            "enabled": true,
+            "backend": "sqlite-vec",
+            "storage_path": "D:\\AiWorkSpace\\knowledge-base\\data",
+            "block_count": 128348,
+            "vector_count": 128348,
+            "coverage": 1.0,
+            "model": "BAAI/bge-m3",
+            "dimension": 1024,
+            "healthy": true,
+            "degraded_reason": null,
+            "recommendation": "向量索引状态正常"
+          }
+        },
+        "recommended_flows": {
+          "research": [
+            "kb_capabilities",
+            "route_query",
+            "execute_query|ask",
+            "get_source_graph",
+            "read"
+          ],
+          "safe_update": [
+            "read",
+            "preview_operation",
+            "update(dry_run=true)",
+            "update",
+            "get_operation_log"
+          ],
+          "import": [
+            "kb_capabilities",
+            "create_ingest_job|ingest_file",
+            "get_job",
+            "structured_query",
+            "ask"
+          ],
+          "import_large": [
+            "kb_capabilities",
+            "create_ingest_job",
+            "get_job",
+            "structured_query",
+            "ask"
+          ],
+          "qna": [
+            "route_query",
+            "ask(include_graph=true, include_context=true)",
+            "get_source_graph",
+            "read"
+          ],
+          "agent_memory": [
+            "remember_fact",
+            "recall_facts",
+            "update_project_context",
+            "search_decisions",
+            "summarize_recent_changes"
+          ]
+        },
+        "tool_profile": "full",
+        "write_policy": "",
+        "experimental_tools_enabled": true,
+        "visible_tools": [
+          "ask",
+          "ask_with_query",
+          "execute_query",
+          "explain_query",
+          "get_async_job",
+          "get_job",
+          "get_operation_log",
+          "get_source_graph",
+          "get_trace",
+          "graph_traverse",
+          "kb_capabilities",
+          "kb_health_check",
+          "list_async_jobs",
+          "list_jobs",
+          "list_knowledge",
+          "list_recent_operations",
+          "ping",
+          "preview_operation",
+          "query_operation_logs",
+          "read",
+          "recall_facts",
+          "route_query",
+          "search",
+          "search_decisions",
+          "search_fulltext",
+          "structured_query",
+          "summarize_recent_changes",
+          "tags",
+          "wiki_lint",
+          "wiki_list_versions",
+          "wiki_workflow_history"
+        ],
+        "hidden_groups": [],
+        "legacy_aliases_enabled": true,
+        "knowledge_mode": "verified",
+        "raw_retrieval": true,
+        "verified_wiki_read": true,
+        "wiki_authoring": false,
+        "wiki_serving_status": "empty",
+        "fallback": "raw_retrieval",
+        "registered_tools": [
+          "ask",
+          "ask_with_query",
+          "execute_query",
+          "explain_query",
+          "get_async_job",
+          "get_job",
+          "get_operation_log",
+          "get_source_graph",
+          "get_trace",
+          "graph_traverse",
+          "kb_capabilities",
+          "kb_health_check",
+          "list_async_jobs",
+          "list_jobs",
+          "list_knowledge",
+          "list_recent_operations",
+          "ping",
+          "preview_operation",
+          "query_operation_logs",
+          "read",
+          "recall_facts",
+          "route_query",
+          "search",
+          "search_decisions",
+          "search_fulltext",
+          "structured_query",
+          "summarize_recent_changes",
+          "tags",
+          "wiki_lint",
+          "wiki_list_versions",
+          "wiki_workflow_history"
+        ],
+        "hidden_by_policy": [
+          "auto_tag",
+          "cancel_async_job",
+          "cancel_job",
+          "create",
+          "create_async_job",
+          "create_ingest_job",
+          "delete",
+          "delete_memory",
+          "delete_wiki_page",
+          "extract_tasks_from_doc",
+          "fix_dead_references",
+          "index_path",
+          "ingest_file",
+          "ingest_url",
+          "reindex_all",
+          "remember_fact",
+          "restore_knowledge",
+          "save_to_wiki",
+          "undo_operation",
+          "update",
+          "update_project_context",
+          "wiki_approve",
+          "wiki_deprecate",
+          "wiki_reject",
+          "wiki_restore_version",
+          "wiki_submit_review"
+        ],
+        "serving_claim_statuses": [
+          "active"
+        ],
+        "citation_layers": [
+          "claim",
+          "raw_evidence"
+        ],
+        "recommended_flow": [
+          "search",
+          "read",
+          "ask"
+        ]
+      }
+    },
+    "latency_ms": 101.3,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":{\"name\":\"ShineHeKnowledge\",\"version\":\"1.11.1\",\"envelope\":{\"ok\":\"bool — 成功/失败判断字段\",\"data\":\"any — 成功时的负载\",\"error\":\"{code, message, details} — 失败时的稳定错误码\",\"meta\":\"分页/截断/计数等元信息\",\"operation_id\":\"写操作的 audit log id（与 get_operation_log 配合）\",\"dry_run\":\"预览变更不执行\"},\"error_codes\":{\"NOT_FOUND\":\"资源不存在\",\"VALIDATION_ERROR\":\"参数校验失败\",\"PERMISSION_DENIED\":\"路径越权\",\"INGEST_FAILED\":\"文件/URL 导入失败\",\"INTERNAL_ERROR\":\"内部异常\",\"WIKI_DISABLED\":\"Wiki 未启用\",\"JOB_NOT_FOUND\":\"任务不存在\",\"QUERY_PARSE_ERROR\":\"DSL/JSON 解析失败\"},\"limits\":{\"default_page_size\":20,\"max_payload_bytes\":1000000,\"max_graph_nodes\":200,\"max_graph_depth\":3},\"tool_metadata\":{\"ping\":{\"group\":\"ops\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"连通性检测\"},\"kb_capabilities\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"能力清单\"},\"search\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"语义搜索\"},\"search_fulltext\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"全文搜索\"},\"ask\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"RAG 问答\"},\"ask_with_query\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"QuerySpec RAG\"},\"create\":{\"group\":\"kb\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"创建知识\"},\"read\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"读取知识\"},\"update\":{\"group\":\"kb\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"更新知识\"},\"delete\":{\"group\":\"kb\",\"side_effect\":\"destructive\",\"requires_confirmation\":true,\"short_desc\":\"删除知识\"},\"restore_knowledge\":{\"group\":\"kb\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"恢复知识\"},\"reindex_all\":{\"group\":\"kb\",\"side_effect\":\"destructive\",\"requires_confirmation\":true,\"short_desc\":\"重建索引\"},\"list_knowledge\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"列出知识\"},\"index_path\":{\"group\":\"kb\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"索引路径\"},\"tags\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"列出标签\"},\"ingest_file\":{\"group\":\"kb\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"导入文件\"},\"ingest_url\":{\"group\":\"kb\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"导入网页\"},\"create_ingest_job\":{\"group\":\"kb\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"创建导入任务\"},\"get_job\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"查询任务\"},\"list_jobs\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"列出任务\"},\"cancel_job\":{\"group\":\"kb\",\"side_effect\":\"destructive\",\"requires_confirmation\":true,\"short_desc\":\"取消任务\"},\"route_query\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"路由分析\"},\"execute_query\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"执行 DSL\"},\"structured_query\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"结构化查询\"},\"explain_query\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"查询解释\"},\"get_source_graph\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"来源图谱\"},\"preview_operation\":{\"group\":\"kb\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"预览操作\"},\"save_to_wiki\":{\"group\":\"wiki\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"保存到 Wiki\"},\"wiki_lint\":{\"group\":\"wiki\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"Wiki 体检\"},\"fix_dead_references\":{\"group\":\"wiki\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"修复死链\"},\"wiki_submit_review\":{\"group\":\"wiki\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"提交审核\"},\"wiki_approve\":{\"group\":\"wiki\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"审批通过\"},\"wiki_reject\":{\"group\":\"wiki\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"驳回\"},\"wiki_deprecate\":{\"group\":\"wiki\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"弃用\"},\"wiki_workflow_history\":{\"group\":\"wiki\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"工作流历史\"},\"wiki_list_versions\":{\"group\":\"wiki\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"版本列表\"},\"wiki_restore_version\":{\"group\":\"wiki\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"恢复版本\"},\"delete_wiki_page\":{\"group\":\"wiki\",\"side_effect\":\"destructive\",\"requires_confirmation\":true,\"short_desc\":\"删除 Wiki 页面\"},\"graph_traverse\":{\"group\":\"graph\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"图遍历\"},\"query_operation_logs\":{\"group\":\"ops\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"查询日志\"},\"get_operation_log\":{\"group\":\"ops\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"获取日志\"},\"undo_operation\":{\"group\":\"ops\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"撤销操作\"},\"list_recent_operations\":{\"group\":\"ops\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"最近操作\"},\"kb_health_check\":{\"group\":\"ops\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"健康检查\"},\"auto_tag\":{\"group\":\"ops\",\"side_effect\":\"write\",\"requires_confirmation\":true,\"short_desc\":\"自动打标\"},\"get_trace\":{\"group\":\"ops\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"链路追踪\"},\"create_async_job\":{\"group\":\"ops\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"创建任务\"},\"get_async_job\":{\"group\":\"ops\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"获取任务\"},\"list_async_jobs\":{\"group\":\"ops\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"列出任务\"},\"cancel_async_job\":{\"group\":\"ops\",\"side_effect\":\"destructive\",\"requires_confirmation\":true,\"short_desc\":\"取消任务\"},\"remember_fact\":{\"group\":\"memory\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"记住事实\"},\"recall_facts\":{\"group\":\"memory\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"搜索记忆\"},\"update_project_context\":{\"group\":\"memory\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"更新项目上下文\"},\"search_decisions\":{\"group\":\"memory\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"搜索决策\"},\"summarize_recent_changes\":{\"group\":\"memory\",\"side_effect\":\"read\",\"requires_confirmation\":false,\"short_desc\":\"变更总结\"},\"extract_tasks_from_doc\":{\"group\":\"memory\",\"side_effect\":\"write\",\"requires_confirmation\":false,\"short_desc\":\"提取任务\"},\"delete_memory\":{\"group\":\"memory\",\"side_effect\":\"destructive\",\"requires_confirmation\":true,\"short_desc\":\"删除记忆\"}},\"tool_aliases\":{\"kb.search\":\"search\",\"kb.search_fulltext\":\"search_fulltext\",\"kb.ask\":\"ask\",\"kb.ask_with_query\":\"ask_with_query\",\"kb.read\":\"read\",\"kb.list\":\"list_knowledge\",\"kb.tags\":\"tags\",\"kb.preview\":\"preview_operation\",\"kb.capabilities\":\"kb_capabilities\",\"kb.route_query\":\"route_query\",\"kb.execute_query\":\"execute_query\",\"kb.structured_query\":\"structured_query\",\"kb.explain_query\":\"explain_query\",\"kb.get_source_graph\":\"get_source_graph\",\"kb.get_job\":\"get_job\",\"kb.list_jobs\":\"list_jobs\",\"wiki.lint\":\"wiki_lint\",\"wiki.history\":\"wiki_workflow_history\",\"wiki.list_versions\":\"wiki_list_versions\",\"graph.traverse\":\"graph_traverse\",\"ops.ping\":\"ping\",\"ops.query_logs\":\"query_operation_logs\",\"ops.get_log\":\"get_operation_log\",\"ops.list_recent\":\"list_recent_operations\",\"ops.get_job\":\"get_async_job\",\"ops.list_jobs\":\"list_async_jobs\",\"memory.recall\":\"recall_facts\",\"memory.search_decisions\":\"search_decisions\",\"memory.summarize_changes\":\"summarize_recent_changes\"},\"tools\":[{\"name\":\"query_operation_logs\",\"description\":\"查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。\"},{\"name\":\"preview_operation\",\"description\":\"预览写操作而不实际执行。支持 update / create / delete / ingest_file / reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。\"},{\"name\":\"get_operation_log\",\"description\":\"按 ID 查询单条操作日志的完整记录。\"},{\"name\":\"list_recent_operations\",\"description\":\"列出最近的操作日志（query_operation_logs 的便捷别名）。按 created_at DESC 排序，缺省 limit=20。\"},{\"name\":\"ping\",\"description\":\"轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。\"},{\"name\":\"search\",\"description\":\"基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。支持 top_k 或 limit；低相关结果触发 no_match 门禁。\"},{\"name\":\"search_fulltext\",\"description\":\"基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。\"},{\"name\":\"ask\",\"description\":\"向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。返回结构化 payload：answer / sources / source_graph / route / query_plan / block_contexts / warnings。[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），超时返回空 answer + warnings，建议客户端超时 ≥ 100s]\"},{\"name\":\"read\",\"description\":\"根据 ID 读取知识/块/Claim/Wiki 页面。支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。\"},{\"name\":\"structured_query\",\"description\":\"执行结构化查询 DSL，返回知识条目列表\"},{\"name\":\"explain_query\",\"description\":\"解释结构化查询的执行计划与匹配条件\"},{\"name\":\"route_query\",\"description\":\"路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + traverse + explanation + evidence_preview（top 3 匹配标题+摘要），Agent 据此决定下一步走 execute_query 还是 ask_with_query。\"},{\"name\":\"execute_query\",\"description\":\"执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。\"},{\"name\":\"ask_with_query\",\"description\":\"用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\\n调用要求：至少提供 question 或 search_query 其中一个。\\n简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\\n标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\\n高级模式：传 question + query_spec（支持复杂过滤条件），query_spec 格式如 {\\\"filter\\\": {\\\"fulltext\\\": \\\"关键词\\\"}, \\\"sort\\\": {\\\"by\\\": \\\"updated_at\\\", \\\"order\\\": \\\"desc\\\"}}，filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。\"},{\"name\":\"kb_capabilities\",\"description\":\"查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。\"},{\"name\":\"kb_health_check\",\"description\":\"知识库健康度检查。返回 API Key 状态、向量覆盖率、标签覆盖率、缓存命中率、P95 延迟等指标。用于运维巡检和问题定位。\"},{\"name\":\"get_trace\",\"description\":\"根据 trace_id 查询链路追踪记录，包含各管线阶段耗时、结果数等信息。用于问题定位和性能分析。\"},{\"name\":\"graph_traverse\",\"description\":\"从给定节点遍历知识图谱（多跳、限深度、限节点数）。start_ids 必须是 JSON 数组字符串，例如 '[\\\"knowledge-id\\\"]'；使用 limit 限制返回节点数。\"},{\"name\":\"get_source_graph\",\"description\":\"根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。\"},{\"name\":\"list_knowledge\",\"description\":\"列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。\"},{\"name\":\"tags\",\"description\":\"获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。\"},{\"name\":\"get_job\",\"description\":\"查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。\"},{\"name\":\"list_jobs\",\"description\":\"列出异步任务，可按状态/类型筛选。\"},{\"name\":\"recall_facts\",\"description\":\"搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。\"},{\"name\":\"search_decisions\",\"description\":\"搜索架构/技术决策记录（category=decision 的记忆）。\"},{\"name\":\"summarize_recent_changes\",\"description\":\"总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。\"},{\"name\":\"get_async_job\",\"description\":\"获取异步任务状态\"},{\"name\":\"list_async_jobs\",\"description\":\"列出异步任务\"},{\"name\":\"wiki_lint\",\"description\":\"对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。\"},{\"name\":\"wiki_workflow_history\",\"description\":\"获取 Wiki 页面工作流历史\"},{\"name\":\"wiki_list_versions\",\"description\":\"获取 Wiki 页面版本列表\"},{\"name\":\"kb.search\",\"description\":\"基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。支持 top_k 或 limit；低相关结果触发 no_match 门禁。 (alias of search)\"},{\"name\":\"kb.search_fulltext\",\"description\":\"基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。 (alias of search_fulltext)\"},{\"name\":\"kb.ask\",\"description\":\"向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。返回结构化 payload：answer / sources / source_graph / route / query_plan / block_contexts / warnings。[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），超时返回空 answer + warnings，建议客户端超时 ≥ 100s] (alias of ask)\"},{\"name\":\"kb.ask_with_query\",\"description\":\"用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\\n调用要求：至少提供 question 或 search_query 其中一个。\\n简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\\n标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\\n高级模式：传 question + query_spec（支持复杂过滤条件），query_spec 格式如 {\\\"filter\\\": {\\\"fulltext\\\": \\\"关键词\\\"}, \\\"sort\\\": {\\\"by\\\": \\\"updated_at\\\", \\\"order\\\": \\\"desc\\\"}}，filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。 (alias of ask_with_query)\"},{\"name\":\"kb.read\",\"description\":\"根据 ID 读取知识/块/Claim/Wiki 页面。支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。 (alias of read)\"},{\"name\":\"kb.list\",\"description\":\"列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。 (alias of list_knowledge)\"},{\"name\":\"kb.tags\",\"description\":\"获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。 (alias of tags)\"},{\"name\":\"kb.preview\",\"description\":\"预览写操作而不实际执行。支持 update / create / delete / ingest_file / reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。 (alias of preview_operation)\"},{\"name\":\"kb.capabilities\",\"description\":\"查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。 (alias of kb_capabilities)\"},{\"name\":\"kb.route_query\",\"description\":\"路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + traverse + explanation + evidence_preview（top 3 匹配标题+摘要），Agent 据此决定下一步走 execute_query 还是 ask_with_query。 (alias of route_query)\"},{\"name\":\"kb.execute_query\",\"description\":\"执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。 (alias of execute_query)\"},{\"name\":\"kb.structured_query\",\"description\":\"执行结构化查询 DSL，返回知识条目列表 (alias of structured_query)\"},{\"name\":\"kb.explain_query\",\"description\":\"解释结构化查询的执行计划与匹配条件 (alias of explain_query)\"},{\"name\":\"kb.get_source_graph\",\"description\":\"根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。 (alias of get_source_graph)\"},{\"name\":\"kb.get_job\",\"description\":\"查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。 (alias of get_job)\"},{\"name\":\"kb.list_jobs\",\"description\":\"列出异步任务，可按状态/类型筛选。 (alias of list_jobs)\"},{\"name\":\"wiki.lint\",\"description\":\"对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。 (alias of wiki_lint)\"},{\"name\":\"wiki.history\",\"description\":\"获取 Wiki 页面工作流历史 (alias of wiki_workflow_history)\"},{\"name\":\"wiki.list_versions\",\"description\":\"获取 Wiki 页面版本列表 (alias of wiki_list_versions)\"},{\"name\":\"graph.traverse\",\"description\":\"从给定节点遍历知识图谱（多跳、限深度、限节点数）。start_ids 必须是 JSON 数组字符串，例如 '[\\\"knowledge-id\\\"]'；使用 limit 限制返回节点数。 (alias of graph_traverse)\"},{\"name\":\"ops.ping\",\"description\":\"轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。 (alias of ping)\"},{\"name\":\"ops.query_logs\",\"description\":\"查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。 (alias of query_operation_logs)\"},{\"name\":\"ops.get_log\",\"description\":\"按 ID 查询单条操作日志的完整记录。 (alias of get_operation_log)\"},{\"name\":\"ops.list_recent\",\"description\":\"列出最近的操作日志（query_operation_logs 的便捷别名）。按 created_at DESC 排序，缺省 limit=20。 (alias of list_recent_operations)\"},{\"name\":\"ops.get_job\",\"description\":\"获取异步任务状态 (alias of get_async_job)\"},{\"name\":\"ops.list_jobs\",\"description\":\"列出异步任务 (alias of list_async_jobs)\"},{\"name\":\"memory.recall\",\"description\":\"搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。 (alias of recall_facts)\"},{\"name\":\"memory.search_decisions\",\"description\":\"搜索架构/技术决策记录（category=decision 的记忆）。 (alias of search_decisions)\"},{\"name\":\"memory.summarize_changes\",\"description\":\"总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。 (alias of summarize_recent_changes)\"}],\"runtime_diagnostics\":{\"api_keys\":{\"llm\":true,\"embedding\":true,\"reranker\":true},\"retrieval_index_unit\":\"passage\",\"passage_index\":{\"retrieval_index_unit\":\"passage\",\"passages\":6456,\"embedded\":6456,\"fts\":6456,\"vector_coverage\":1.0,\"fts_coverage\":1.0,\"avg_char_count\":646.1,\"p50_char_count\":596.0,\"p95_char_count\":1107.0,\"short_passage_count\":0,\"length_gate_ok\":true,\"blocks_note\":\"blocks/vectors reported separately; not retrieval unit\"},\"vector_index\":{\"blocks\":128348,\"vectors\":128348,\"coverage\":1.0,\"sqlite_vec_ok\":true,\"error\":\"\",\"recommendation\":\"向量索引状态正常\",\"note\":\"block-level coverage is structural; use passage_index for retrieval health\"},\"vector\":{\"enabled\":true,\"backend\":\"sqlite-vec\",\"storage_path\":\"D:\\\\AiWorkSpace\\\\knowledge-base\\\\data\",\"block_count\":128348,\"vector_count\":128348,\"coverage\":1.0,\"model\":\"BAAI/bge-m3\",\"dimension\":1024,\"healthy\":true,\"degraded_reason\":null,\"recommendation\":\"向量索引状态正常\"}},\"recommended_flows\":{\"research\":[\"kb_capabilities\",\"route_query\",\"execute_query|ask\",\"get_source_graph\",\"read\"],\"safe_update\":[\"read\",\"preview_operation\",\"update(dry_run=true)\",\"update\",\"get_operation_log\"],\"import\":[\"kb_capabilities\",\"create_ingest_job|ingest_file\",\"get_job\",\"structured_query\",\"ask\"],\"import_large\":[\"kb_capabilities\",\"create_ingest_job\",\"get_job\",\"structured_query\",\"ask\"],\"qna\":[\"route_query\",\"ask(include_graph=true, include_context=true)\",\"get_source_graph\",\"read\"],\"agent_memory\":[\"remember_fact\",\"recall_facts\",\"update_project_context\",\"search_decisions\",\"summarize_recent_changes\"]},\"tool_profile\":\"full\",\"write_policy\":\"\",\"experimental_tools_enabled\":true,\"visible_tools\":[\"ask\",\"ask_with_query\",\"execute_query\",\"explain_query\",\"get_async_job\",\"get_job\",\"get_operation_log\",\"get_source_graph\",\"get_trace\",\"graph_traverse\",\"kb_capabilities\",\"kb_health_check\",\"list_async_jobs\",\"list_jobs\",\"list_knowledge\",\"list_recent_operations\",\"ping\",\"preview_operation\",\"query_operation_logs\",\"read\",\"recall_facts\",\"route_query\",\"search\",\"search_decisions\",\"search_fulltext\",\"structured_query\",\"summarize_recent_changes\",\"tags\",\"wiki_lint\",\"wiki_list_versions\",\"wiki_workflow_history\"],\"hidden_groups\":[],\"legacy_aliases_enabled\":true,\"knowledge_mode\":\"verified\",\"raw_retrieval\":true,\"verified_wiki_read\":true,\"wiki_authoring\":false,\"wiki_serving_status\":\"empty\",\"fallback\":\"raw_retrieval\",\"registered_tools\":[\"ask\",\"ask_with_query\",\"execute_query\",\"explain_query\",\"get_async_job\",\"get_job\",\"get_operation_log\",\"get_source_graph\",\"get_trace\",\"graph_traverse\",\"kb_capabilities\",\"kb_health_check\",\"list_async_jobs\",\"list_jobs\",\"list_knowledge\",\"list_recent_operations\",\"ping\",\"preview_operation\",\"query_operation_logs\",\"read\",\"recall_facts\",\"route_query\",\"search\",\"search_decisions\",\"search_fulltext\",\"structured_query\",\"summarize_recent_changes\",\"tags\",\"wiki_lint\",\"wiki_list_versions\",\"wiki_workflow_history\"],\"hidden_by_policy\":[\"auto_tag\",\"cancel_async_job\",\"cancel_job\",\"create\",\"create_async_job\",\"create_ingest_job\",\"delete\",\"delete_memory\",\"delete_wiki_page\",\"extract_tasks_from_doc\",\"fix_dead_references\",\"index_path\",\"ingest_file\",\"ingest_url\",\"reindex_all\",\"remember_fact\",\"restore_knowledge\",\"save_to_wiki\",\"undo_operation\",\"update\",\"update_project_context\",\"wiki_approve\",\"wiki_deprecate\",\"wiki_reject\",\"wiki_restore_version\",\"wiki_submit_review\"],\"serving_claim_statuses\":[\"active\"],\"citation_layers\":[\"claim\",\"raw_evidence\"],\"recommended_flow\":[\"search\",\"read\",\"ask\"]}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": {
+            "name": "ShineHeKnowledge",
+            "version": "1.11.1",
+            "envelope": {
+              "ok": "bool — 成功/失败判断字段",
+              "data": "any — 成功时的负载",
+              "error": "{code, message, details} — 失败时的稳定错误码",
+              "meta": "分页/截断/计数等元信息",
+              "operation_id": "写操作的 audit log id（与 get_operation_log 配合）",
+              "dry_run": "预览变更不执行"
+            },
+            "error_codes": {
+              "NOT_FOUND": "资源不存在",
+              "VALIDATION_ERROR": "参数校验失败",
+              "PERMISSION_DENIED": "路径越权",
+              "INGEST_FAILED": "文件/URL 导入失败",
+              "INTERNAL_ERROR": "内部异常",
+              "WIKI_DISABLED": "Wiki 未启用",
+              "JOB_NOT_FOUND": "任务不存在",
+              "QUERY_PARSE_ERROR": "DSL/JSON 解析失败"
+            },
+            "limits": {
+              "default_page_size": 20,
+              "max_payload_bytes": 1000000,
+              "max_graph_nodes": 200,
+              "max_graph_depth": 3
+            },
+            "tool_metadata": {
+              "ping": {
+                "group": "ops",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "连通性检测"
+              },
+              "kb_capabilities": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "能力清单"
+              },
+              "search": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "语义搜索"
+              },
+              "search_fulltext": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "全文搜索"
+              },
+              "ask": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "RAG 问答"
+              },
+              "ask_with_query": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "QuerySpec RAG"
+              },
+              "create": {
+                "group": "kb",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "创建知识"
+              },
+              "read": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "读取知识"
+              },
+              "update": {
+                "group": "kb",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "更新知识"
+              },
+              "delete": {
+                "group": "kb",
+                "side_effect": "destructive",
+                "requires_confirmation": true,
+                "short_desc": "删除知识"
+              },
+              "restore_knowledge": {
+                "group": "kb",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "恢复知识"
+              },
+              "reindex_all": {
+                "group": "kb",
+                "side_effect": "destructive",
+                "requires_confirmation": true,
+                "short_desc": "重建索引"
+              },
+              "list_knowledge": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "列出知识"
+              },
+              "index_path": {
+                "group": "kb",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "索引路径"
+              },
+              "tags": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "列出标签"
+              },
+              "ingest_file": {
+                "group": "kb",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "导入文件"
+              },
+              "ingest_url": {
+                "group": "kb",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "导入网页"
+              },
+              "create_ingest_job": {
+                "group": "kb",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "创建导入任务"
+              },
+              "get_job": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "查询任务"
+              },
+              "list_jobs": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "列出任务"
+              },
+              "cancel_job": {
+                "group": "kb",
+                "side_effect": "destructive",
+                "requires_confirmation": true,
+                "short_desc": "取消任务"
+              },
+              "route_query": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "路由分析"
+              },
+              "execute_query": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "执行 DSL"
+              },
+              "structured_query": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "结构化查询"
+              },
+              "explain_query": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "查询解释"
+              },
+              "get_source_graph": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "来源图谱"
+              },
+              "preview_operation": {
+                "group": "kb",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "预览操作"
+              },
+              "save_to_wiki": {
+                "group": "wiki",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "保存到 Wiki"
+              },
+              "wiki_lint": {
+                "group": "wiki",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "Wiki 体检"
+              },
+              "fix_dead_references": {
+                "group": "wiki",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "修复死链"
+              },
+              "wiki_submit_review": {
+                "group": "wiki",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "提交审核"
+              },
+              "wiki_approve": {
+                "group": "wiki",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "审批通过"
+              },
+              "wiki_reject": {
+                "group": "wiki",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "驳回"
+              },
+              "wiki_deprecate": {
+                "group": "wiki",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "弃用"
+              },
+              "wiki_workflow_history": {
+                "group": "wiki",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "工作流历史"
+              },
+              "wiki_list_versions": {
+                "group": "wiki",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "版本列表"
+              },
+              "wiki_restore_version": {
+                "group": "wiki",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "恢复版本"
+              },
+              "delete_wiki_page": {
+                "group": "wiki",
+                "side_effect": "destructive",
+                "requires_confirmation": true,
+                "short_desc": "删除 Wiki 页面"
+              },
+              "graph_traverse": {
+                "group": "graph",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "图遍历"
+              },
+              "query_operation_logs": {
+                "group": "ops",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "查询日志"
+              },
+              "get_operation_log": {
+                "group": "ops",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "获取日志"
+              },
+              "undo_operation": {
+                "group": "ops",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "撤销操作"
+              },
+              "list_recent_operations": {
+                "group": "ops",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "最近操作"
+              },
+              "kb_health_check": {
+                "group": "ops",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "健康检查"
+              },
+              "auto_tag": {
+                "group": "ops",
+                "side_effect": "write",
+                "requires_confirmation": true,
+                "short_desc": "自动打标"
+              },
+              "get_trace": {
+                "group": "ops",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "链路追踪"
+              },
+              "create_async_job": {
+                "group": "ops",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "创建任务"
+              },
+              "get_async_job": {
+                "group": "ops",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "获取任务"
+              },
+              "list_async_jobs": {
+                "group": "ops",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "列出任务"
+              },
+              "cancel_async_job": {
+                "group": "ops",
+                "side_effect": "destructive",
+                "requires_confirmation": true,
+                "short_desc": "取消任务"
+              },
+              "remember_fact": {
+                "group": "memory",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "记住事实"
+              },
+              "recall_facts": {
+                "group": "memory",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "搜索记忆"
+              },
+              "update_project_context": {
+                "group": "memory",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "更新项目上下文"
+              },
+              "search_decisions": {
+                "group": "memory",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "搜索决策"
+              },
+              "summarize_recent_changes": {
+                "group": "memory",
+                "side_effect": "read",
+                "requires_confirmation": false,
+                "short_desc": "变更总结"
+              },
+              "extract_tasks_from_doc": {
+                "group": "memory",
+                "side_effect": "write",
+                "requires_confirmation": false,
+                "short_desc": "提取任务"
+              },
+              "delete_memory": {
+                "group": "memory",
+                "side_effect": "destructive",
+                "requires_confirmation": true,
+                "short_desc": "删除记忆"
+              }
+            },
+            "tool_aliases": {
+              "kb.search": "search",
+              "kb.search_fulltext": "search_fulltext",
+              "kb.ask": "ask",
+              "kb.ask_with_query": "ask_with_query",
+              "kb.read": "read",
+              "kb.list": "list_knowledge",
+              "kb.tags": "tags",
+              "kb.preview": "preview_operation",
+              "kb.capabilities": "kb_capabilities",
+              "kb.route_query": "route_query",
+              "kb.execute_query": "execute_query",
+              "kb.structured_query": "structured_query",
+              "kb.explain_query": "explain_query",
+              "kb.get_source_graph": "get_source_graph",
+              "kb.get_job": "get_job",
+              "kb.list_jobs": "list_jobs",
+              "wiki.lint": "wiki_lint",
+              "wiki.history": "wiki_workflow_history",
+              "wiki.list_versions": "wiki_list_versions",
+              "graph.traverse": "graph_traverse",
+              "ops.ping": "ping",
+              "ops.query_logs": "query_operation_logs",
+              "ops.get_log": "get_operation_log",
+              "ops.list_recent": "list_recent_operations",
+              "ops.get_job": "get_async_job",
+              "ops.list_jobs": "list_async_jobs",
+              "memory.recall": "recall_facts",
+              "memory.search_decisions": "search_decisions",
+              "memory.summarize_changes": "summarize_recent_changes"
+            },
+            "tools": [
+              {
+                "name": "query_operation_logs",
+                "description": "查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。"
+              },
+              {
+                "name": "preview_operation",
+                "description": "预览写操作而不实际执行。支持 update / create / delete / ingest_file / reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。"
+              },
+              {
+                "name": "get_operation_log",
+                "description": "按 ID 查询单条操作日志的完整记录。"
+              },
+              {
+                "name": "list_recent_operations",
+                "description": "列出最近的操作日志（query_operation_logs 的便捷别名）。按 created_at DESC 排序，缺省 limit=20。"
+              },
+              {
+                "name": "ping",
+                "description": "轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。"
+              },
+              {
+                "name": "search",
+                "description": "基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。支持 top_k 或 limit；低相关结果触发 no_match 门禁。"
+              },
+              {
+                "name": "search_fulltext",
+                "description": "基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。"
+              },
+              {
+                "name": "ask",
+                "description": "向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。返回结构化 payload：answer / sources / source_graph / route / query_plan / block_contexts / warnings。[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），超时返回空 answer + warnings，建议客户端超时 ≥ 100s]"
+              },
+              {
+                "name": "read",
+                "description": "根据 ID 读取知识/块/Claim/Wiki 页面。支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。"
+              },
+              {
+                "name": "structured_query",
+                "description": "执行结构化查询 DSL，返回知识条目列表"
+              },
+              {
+                "name": "explain_query",
+                "description": "解释结构化查询的执行计划与匹配条件"
+              },
+              {
+                "name": "route_query",
+                "description": "路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + traverse + explanation + evidence_preview（top 3 匹配标题+摘要），Agent 据此决定下一步走 execute_query 还是 ask_with_query。"
+              },
+              {
+                "name": "execute_query",
+                "description": "执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。"
+              },
+              {
+                "name": "ask_with_query",
+                "description": "用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\n调用要求：至少提供 question 或 search_query 其中一个。\n简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\n标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\n高级模式：传 question + query_spec（支持复杂过滤条件），query_spec 格式如 {\"filter\": {\"fulltext\": \"关键词\"}, \"sort\": {\"by\": \"updated_at\", \"order\": \"desc\"}}，filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。"
+              },
+              {
+                "name": "kb_capabilities",
+                "description": "查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。"
+              },
+              {
+                "name": "kb_health_check",
+                "description": "知识库健康度检查。返回 API Key 状态、向量覆盖率、标签覆盖率、缓存命中率、P95 延迟等指标。用于运维巡检和问题定位。"
+              },
+              {
+                "name": "get_trace",
+                "description": "根据 trace_id 查询链路追踪记录，包含各管线阶段耗时、结果数等信息。用于问题定位和性能分析。"
+              },
+              {
+                "name": "graph_traverse",
+                "description": "从给定节点遍历知识图谱（多跳、限深度、限节点数）。start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'；使用 limit 限制返回节点数。"
+              },
+              {
+                "name": "get_source_graph",
+                "description": "根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。"
+              },
+              {
+                "name": "list_knowledge",
+                "description": "列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。"
+              },
+              {
+                "name": "tags",
+                "description": "获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。"
+              },
+              {
+                "name": "get_job",
+                "description": "查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。"
+              },
+              {
+                "name": "list_jobs",
+                "description": "列出异步任务，可按状态/类型筛选。"
+              },
+              {
+                "name": "recall_facts",
+                "description": "搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。"
+              },
+              {
+                "name": "search_decisions",
+                "description": "搜索架构/技术决策记录（category=decision 的记忆）。"
+              },
+              {
+                "name": "summarize_recent_changes",
+                "description": "总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。"
+              },
+              {
+                "name": "get_async_job",
+                "description": "获取异步任务状态"
+              },
+              {
+                "name": "list_async_jobs",
+                "description": "列出异步任务"
+              },
+              {
+                "name": "wiki_lint",
+                "description": "对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。"
+              },
+              {
+                "name": "wiki_workflow_history",
+                "description": "获取 Wiki 页面工作流历史"
+              },
+              {
+                "name": "wiki_list_versions",
+                "description": "获取 Wiki 页面版本列表"
+              },
+              {
+                "name": "kb.search",
+                "description": "基于语义相似度搜索知识库。使用向量嵌入查找与查询含义最相关的知识条目。Wiki 结构化知识优先返回。支持 top_k 或 limit；低相关结果触发 no_match 门禁。 (alias of search)"
+              },
+              {
+                "name": "kb.search_fulltext",
+                "description": "基于关键词的全文搜索（FTS5）。适用于精确匹配关键词的场景。Wiki 结构化知识优先返回。 (alias of search_fulltext)"
+              },
+              {
+                "name": "kb.ask",
+                "description": "向知识库提问，使用 RAG（检索增强生成）流程自动检索相关内容并生成回答。返回结构化 payload：answer / sources / source_graph / route / query_plan / block_contexts / warnings。[耗时提示：通常 5-30 秒，首次调用可能更长；服务端总超时 rag.ask.total_timeout（默认 90s），超时返回空 answer + warnings，建议客户端超时 ≥ 100s] (alias of ask)"
+              },
+              {
+                "name": "kb.ask_with_query",
+                "description": "用显式 QuerySpec 或简化参数控制 RAG 检索阶段，再调用 LLM 生成回答。返回结构化 payload（含 answer / sources / route / query_plan / block_contexts / warnings）。[耗时提示：通常 5-30 秒，建议客户端超时 ≥ 60s]\n调用要求：至少提供 question 或 search_query 其中一个。\n简化模式：仅需传 search_query 即可（自动用 search_query 作为 question 并构造 fulltext QuerySpec）。\n标准模式：传 question + search_query（question 为用户原始问题，search_query 控制检索）。\n高级模式：传 question + query_spec（支持复杂过滤条件），query_spec 格式如 {\"filter\": {\"fulltext\": \"关键词\"}, \"sort\": {\"by\": \"updated_at\", \"order\": \"desc\"}}，filter 支持 tag/property/fulltext/title/link/file_type/source_type/and/or/not 类型。 (alias of ask_with_query)"
+              },
+              {
+                "name": "kb.read",
+                "description": "根据 ID 读取知识/块/Claim/Wiki 页面。支持 item_id=知识ID、block_id、claim_id、page_id（或带前缀 claim:/block:/page:）。 (alias of read)"
+              },
+              {
+                "name": "kb.list",
+                "description": "列出知识库中的知识条目，支持按标签、文件类型筛选，分页和排序。 (alias of list_knowledge)"
+              },
+              {
+                "name": "kb.tags",
+                "description": "获取知识库中所有已使用的标签列表。默认返回完整列表；可用 limit 和 offset 分页。 (alias of tags)"
+              },
+              {
+                "name": "kb.preview",
+                "description": "预览写操作而不实际执行。支持 update / create / delete / ingest_file / reindex_all — 调用对应写工具的 dry_run 路径。Agent 在执行前必先调用。 (alias of preview_operation)"
+              },
+              {
+                "name": "kb.capabilities",
+                "description": "查询知识库 MCP 能力清单、payload 限制、推荐调用流程。Agent 第一个应调用的工具。 (alias of kb_capabilities)"
+              },
+              {
+                "name": "kb.route_query",
+                "description": "路由分析并附带轻量搜索线索。返回 mode (structured|graph|hybrid) + query_spec + traverse + explanation + evidence_preview（top 3 匹配标题+摘要），Agent 据此决定下一步走 execute_query 还是 ask_with_query。 (alias of route_query)"
+              },
+              {
+                "name": "kb.execute_query",
+                "description": "执行显式 QuerySpec DSL。支持 type=structured（条件过滤）或 graph（图遍历）。混合检索请使用 search、ask 或 ask_with_query。分页透传 limit/offset/next_offset/truncated。 (alias of execute_query)"
+              },
+              {
+                "name": "kb.structured_query",
+                "description": "执行结构化查询 DSL，返回知识条目列表 (alias of structured_query)"
+              },
+              {
+                "name": "kb.explain_query",
+                "description": "解释结构化查询的执行计划与匹配条件 (alias of explain_query)"
+              },
+              {
+                "name": "kb.get_source_graph",
+                "description": "根据 sources、block_ids 或 knowledge_ids 构建 bounded source graph，供 Agent 追溯 RAG 证据链。 (alias of get_source_graph)"
+              },
+              {
+                "name": "kb.get_job",
+                "description": "查询异步任务状态和进度。返回 job 详情含 progress / progress_message / result。 (alias of get_job)"
+              },
+              {
+                "name": "kb.list_jobs",
+                "description": "列出异步任务，可按状态/类型筛选。 (alias of list_jobs)"
+              },
+              {
+                "name": "wiki.lint",
+                "description": "对知识库 Wiki 执行健康检查，找出孤立页面、过时信息和损坏链接。 (alias of wiki_lint)"
+              },
+              {
+                "name": "wiki.history",
+                "description": "获取 Wiki 页面工作流历史 (alias of wiki_workflow_history)"
+              },
+              {
+                "name": "wiki.list_versions",
+                "description": "获取 Wiki 页面版本列表 (alias of wiki_list_versions)"
+              },
+              {
+                "name": "graph.traverse",
+                "description": "从给定节点遍历知识图谱（多跳、限深度、限节点数）。start_ids 必须是 JSON 数组字符串，例如 '[\"knowledge-id\"]'；使用 limit 限制返回节点数。 (alias of graph_traverse)"
+              },
+              {
+                "name": "ops.ping",
+                "description": "轻量级连通性检测（ping）。客户端可用此工具验证 MCP 连接是否存活，无需访问数据库或 LLM，响应 <10ms。推荐在会话开始时和工具调用前调用。 (alias of ping)"
+              },
+              {
+                "name": "ops.query_logs",
+                "description": "查询操作审计日志。可按目标类型、目标 ID、操作类型筛选。 (alias of query_operation_logs)"
+              },
+              {
+                "name": "ops.get_log",
+                "description": "按 ID 查询单条操作日志的完整记录。 (alias of get_operation_log)"
+              },
+              {
+                "name": "ops.list_recent",
+                "description": "列出最近的操作日志（query_operation_logs 的便捷别名）。按 created_at DESC 排序，缺省 limit=20。 (alias of list_recent_operations)"
+              },
+              {
+                "name": "ops.get_job",
+                "description": "获取异步任务状态 (alias of get_async_job)"
+              },
+              {
+                "name": "ops.list_jobs",
+                "description": "列出异步任务 (alias of list_async_jobs)"
+              },
+              {
+                "name": "memory.recall",
+                "description": "搜索已记住的事实/决策/上下文/任务。支持全文关键词匹配。 (alias of recall_facts)"
+              },
+              {
+                "name": "memory.search_decisions",
+                "description": "搜索架构/技术决策记录（category=decision 的记忆）。 (alias of search_decisions)"
+              },
+              {
+                "name": "memory.summarize_changes",
+                "description": "总结近期知识库变更（记忆 + 操作日志）。可指定时间范围。 (alias of summarize_recent_changes)"
+              }
+            ],
+            "runtime_diagnostics": {
+              "api_keys": {
+                "llm": true,
+                "embedding": true,
+                "reranker": true
+              },
+              "retrieval_index_unit": "passage",
+              "passage_index": {
+                "retrieval_index_unit": "passage",
+                "passages": 6456,
+                "embedded": 6456,
+                "fts": 6456,
+                "vector_coverage": 1.0,
+                "fts_coverage": 1.0,
+                "avg_char_count": 646.1,
+                "p50_char_count": 596.0,
+                "p95_char_count": 1107.0,
+                "short_passage_count": 0,
+                "length_gate_ok": true,
+                "blocks_note": "blocks/vectors reported separately; not retrieval unit"
+              },
+              "vector_index": {
+                "blocks": 128348,
+                "vectors": 128348,
+                "coverage": 1.0,
+                "sqlite_vec_ok": true,
+                "error": "",
+                "recommendation": "向量索引状态正常",
+                "note": "block-level coverage is structural; use passage_index for retrieval health"
+              },
+              "vector": {
+                "enabled": true,
+                "backend": "sqlite-vec",
+                "storage_path": "D:\\AiWorkSpace\\knowledge-base\\data",
+                "block_count": 128348,
+                "vector_count": 128348,
+                "coverage": 1.0,
+                "model": "BAAI/bge-m3",
+                "dimension": 1024,
+                "healthy": true,
+                "degraded_reason": null,
+                "recommendation": "向量索引状态正常"
+              }
+            },
+            "recommended_flows": {
+              "research": [
+                "kb_capabilities",
+                "route_query",
+                "execute_query|ask",
+                "get_source_graph",
+                "read"
+              ],
+              "safe_update": [
+                "read",
+                "preview_operation",
+                "update(dry_run=true)",
+                "update",
+                "get_operation_log"
+              ],
+              "import": [
+                "kb_capabilities",
+                "create_ingest_job|ingest_file",
+                "get_job",
+                "structured_query",
+                "ask"
+              ],
+              "import_large": [
+                "kb_capabilities",
+                "create_ingest_job",
+                "get_job",
+                "structured_query",
+                "ask"
+              ],
+              "qna": [
+                "route_query",
+                "ask(include_graph=true, include_context=true)",
+                "get_source_graph",
+                "read"
+              ],
+              "agent_memory": [
+                "remember_fact",
+                "recall_facts",
+                "update_project_context",
+                "search_decisions",
+                "summarize_recent_changes"
+              ]
+            },
+            "tool_profile": "full",
+            "write_policy": "",
+            "experimental_tools_enabled": true,
+            "visible_tools": [
+              "ask",
+              "ask_with_query",
+              "execute_query",
+              "explain_query",
+              "get_async_job",
+              "get_job",
+              "get_operation_log",
+              "get_source_graph",
+              "get_trace",
+              "graph_traverse",
+              "kb_capabilities",
+              "kb_health_check",
+              "list_async_jobs",
+              "list_jobs",
+              "list_knowledge",
+              "list_recent_operations",
+              "ping",
+              "preview_operation",
+              "query_operation_logs",
+              "read",
+              "recall_facts",
+              "route_query",
+              "search",
+              "search_decisions",
+              "search_fulltext",
+              "structured_query",
+              "summarize_recent_changes",
+              "tags",
+              "wiki_lint",
+              "wiki_list_versions",
+              "wiki_workflow_history"
+            ],
+            "hidden_groups": [],
+            "legacy_aliases_enabled": true,
+            "knowledge_mode": "verified",
+            "raw_retrieval": true,
+            "verified_wiki_read": true,
+            "wiki_authoring": false,
+            "wiki_serving_status": "empty",
+            "fallback": "raw_retrieval",
+            "registered_tools": [
+              "ask",
+              "ask_with_query",
+              "execute_query",
+              "explain_query",
+              "get_async_job",
+              "get_job",
+              "get_operation_log",
+              "get_source_graph",
+              "get_trace",
+              "graph_traverse",
+              "kb_capabilities",
+              "kb_health_check",
+              "list_async_jobs",
+              "list_jobs",
+              "list_knowledge",
+              "list_recent_operations",
+              "ping",
+              "preview_operation",
+              "query_operation_logs",
+              "read",
+              "recall_facts",
+              "route_query",
+              "search",
+              "search_decisions",
+              "search_fulltext",
+              "structured_query",
+              "summarize_recent_changes",
+              "tags",
+              "wiki_lint",
+              "wiki_list_versions",
+              "wiki_workflow_history"
+            ],
+            "hidden_by_policy": [
+              "auto_tag",
+              "cancel_async_job",
+              "cancel_job",
+              "create",
+              "create_async_job",
+              "create_ingest_job",
+              "delete",
+              "delete_memory",
+              "delete_wiki_page",
+              "extract_tasks_from_doc",
+              "fix_dead_references",
+              "index_path",
+              "ingest_file",
+              "ingest_url",
+              "reindex_all",
+              "remember_fact",
+              "restore_knowledge",
+              "save_to_wiki",
+              "undo_operation",
+              "update",
+              "update_project_context",
+              "wiki_approve",
+              "wiki_deprecate",
+              "wiki_reject",
+              "wiki_restore_version",
+              "wiki_submit_review"
+            ],
+            "serving_claim_statuses": [
+              "active"
+            ],
+            "citation_layers": [
+              "claim",
+              "raw_evidence"
+            ],
+            "recommended_flow": [
+              "search",
+              "read",
+              "ask"
+            ]
+          }
+        },
+        "isError": false
+      }
+    }
+  }
+}

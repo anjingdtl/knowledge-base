@@ -1,0 +1,3075 @@
+{
+  "case": {
+    "case_id": "KB-037",
+    "category": "新旧规则冲突",
+    "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+    "expected_knowledge_ids": [
+      "2b63b216-9850-4e82-803e-4006cb9f62ad"
+    ],
+    "expected_title_keywords": [
+      "技能竞赛",
+      "2026"
+    ],
+    "required_facts": [
+      "2026",
+      "158号"
+    ],
+    "forbidden_facts": [
+      "一级竞赛",
+      "二级竞赛"
+    ],
+    "expected_no_answer": false,
+    "notes": "〔2026〕158号取消分级；不应返回2023版〔2023〕278号"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "35c21d92-1693-45df-8e20-519786a085b0",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十六条 应加强竞赛策划、宣传，创新竞赛组织方式， > 第四章 表彰奖励 > 第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。",
+          "score": 0.9000000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "246daea17bcb0c50a044240442923165",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "第十六条 应加强竞赛策划、宣传，创新竞赛组织方式， > 第四章 表彰奖励 > 第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。",
+          "block_ids": [
+            "35c21d92-1693-45df-8e20-519786a085b0",
+            "b6f8772b-79ce-42e2-8398-d15503da9f33",
+            "18c783f8-858a-4701-8094-493458a3b191",
+            "21fc17c7-ddb8-43cb-b813-7e70fdb10911",
+            "98c01fe5-da4c-47c3-ae4e-8f67affda76e",
+            "21f51d46-f0ab-4b79-bbb3-e9d98e6d12c1",
+            "b8763623-c307-4717-a381-4793f158a783",
+            "4cb38a7f-1629-4037-928d-002048d827da",
+            "64599769-f735-4ca7-9bc0-2295c0d4a67c",
+            "285d8090-6676-4c3b-bc82-bec752f306b3",
+            "c10d6117-c1ce-4624-9f61-c337e1252b1f",
+            "df39af57-0fb8-4b13-9aa1-de5923c2539e",
+            "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+            "dbff8995-450b-48ad-a234-c1efef126419",
+            "1c38b679-1ef2-4c5e-85d2-ca8f29431e5f"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "35c21d92-1693-45df-8e20-519786a085b0",
+              "order_idx": 101,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "b6f8772b-79ce-42e2-8398-d15503da9f33",
+              "order_idx": 102,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "18c783f8-858a-4701-8094-493458a3b191",
+              "order_idx": 103,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "21fc17c7-ddb8-43cb-b813-7e70fdb10911",
+              "order_idx": 104,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "98c01fe5-da4c-47c3-ae4e-8f67affda76e",
+              "order_idx": 105,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "21f51d46-f0ab-4b79-bbb3-e9d98e6d12c1",
+              "order_idx": 106,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "b8763623-c307-4717-a381-4793f158a783",
+              "order_idx": 108,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "4cb38a7f-1629-4037-928d-002048d827da",
+              "order_idx": 109,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "64599769-f735-4ca7-9bc0-2295c0d4a67c",
+              "order_idx": 110,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "285d8090-6676-4c3b-bc82-bec752f306b3",
+              "order_idx": 111,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "c10d6117-c1ce-4624-9f61-c337e1252b1f",
+              "order_idx": 112,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "df39af57-0fb8-4b13-9aa1-de5923c2539e",
+              "order_idx": 113,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+              "order_idx": 114,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "dbff8995-450b-48ad-a234-c1efef126419",
+              "order_idx": 115,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "1c38b679-1ef2-4c5e-85d2-ca8f29431e5f",
+              "order_idx": 116,
+              "char_start": 0,
+              "char_end": 28
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "block_id": "35c21d92-1693-45df-8e20-519786a085b0",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.7450396418571472,
+            "score_breakdown": {
+              "vector": 0.820292666554451,
+              "keyword": 0.7643177934265475,
+              "rrf": 0.022727272727272724,
+              "rerank": 0.7450396418571472
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十六条 应加强竞赛策划、宣传，创新竞赛组织方式， > 第四章 表彰奖励 > 第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。"
+          },
+          "relevance": {
+            "semantic_score": 0.4287,
+            "fts_score": 0.0,
+            "title_score": 0.5263,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.3636,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "822889ea-69a7-424f-87a4-88761909fc83",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第二十三条 各市分公司可参照本办法，结合实际，制订 > 第二十四条 本办法由区电信工会负责解释。 > 第二十五条 本办法自印发之日起实施，《中国电信广西\n广西公司承办或参加的\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n申请流程按照公司内控权限列表的预算外项目进行审批。\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\n司内控权限列表的预算外项目进行审批。\n第六章 附则\n第二十三条 各市分公司可参照本办法，结合实际，制订\n本单位技能竞赛管理办法细则，并积极组织员工参加各级技能\n竞赛，提升技能竞赛的广泛性和参与度。\n第二十四条 本办法由区电信工会负责解释。\n第二十五条 本办法自印发之日起实施，《中国电信广西\n公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废\n止。\n中国电信广西公司办公室 2026年6月2日印发",
+          "score": 0.8500000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "第二十三条 各市分公司可参照本办法，结合实际，制订 > 第二十四条 本办法由区电信工会负责解释。 > 第二十五条 本办法自印发之日起实施，《中国电信广西",
+          "block_ids": [
+            "822889ea-69a7-424f-87a4-88761909fc83",
+            "f7c55d88-5cd3-4215-80a2-4ad2b03ed3ba",
+            "c0e7c767-dee3-43d1-9a34-9cf577fa5399",
+            "fe926919-6010-40db-ae1e-7f07506661e8",
+            "9f56a1b9-b2cb-4307-9a20-e2f87702e6fd",
+            "c78bf79a-41ab-440f-ad65-2d2f8e079e26",
+            "4cb3e663-3b4d-42d5-8edd-741645fd4636",
+            "cf642213-e59d-410d-93d6-3d35e247d463",
+            "d25bc748-28f1-4c27-aed3-92f5db0e59e3",
+            "7e0afa6a-62cf-43a2-95b1-9d23ea3fac2b",
+            "db173c06-746a-4ed0-942f-e5b53373e5a3",
+            "694df35c-71e1-4740-b5e8-3619e5fee44c"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "822889ea-69a7-424f-87a4-88761909fc83",
+              "order_idx": 142,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "f7c55d88-5cd3-4215-80a2-4ad2b03ed3ba",
+              "order_idx": 143,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "c0e7c767-dee3-43d1-9a34-9cf577fa5399",
+              "order_idx": 144,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "fe926919-6010-40db-ae1e-7f07506661e8",
+              "order_idx": 145,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "9f56a1b9-b2cb-4307-9a20-e2f87702e6fd",
+              "order_idx": 146,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "c78bf79a-41ab-440f-ad65-2d2f8e079e26",
+              "order_idx": 147,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "4cb3e663-3b4d-42d5-8edd-741645fd4636",
+              "order_idx": 148,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "cf642213-e59d-410d-93d6-3d35e247d463",
+              "order_idx": 149,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "d25bc748-28f1-4c27-aed3-92f5db0e59e3",
+              "order_idx": 150,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "7e0afa6a-62cf-43a2-95b1-9d23ea3fac2b",
+              "order_idx": 151,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "db173c06-746a-4ed0-942f-e5b53373e5a3",
+              "order_idx": 152,
+              "char_start": 0,
+              "char_end": 2
+            },
+            {
+              "block_id": "694df35c-71e1-4740-b5e8-3619e5fee44c",
+              "order_idx": 154,
+              "char_start": 0,
+              "char_end": 23
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "block_id": "822889ea-69a7-424f-87a4-88761909fc83",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.7924964427947998,
+            "score_breakdown": {
+              "vector": 0.8227512091398239,
+              "keyword": 0.736232816590436,
+              "rrf": 0.020895770895770896,
+              "rerank": 0.7924964427947998
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第二十三条 各市分公司可参照本办法，结合实际，制订 > 第二十四条 本办法由区电信工会负责解释。 > 第二十五条 本办法自印发之日起实施，《中国电信广西\n广西公司承办或参加的\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n申请流程按照公司内控权限列表的预算外项目进行审批。\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\n司内控权限列表的预算外项目进行审批。\n第六章 附则\n第二十三条 各市分公司可参照本办法，结合实际，制订\n本单位技能竞赛管理办法细则，并积极组织员工参加各级技能\n竞赛，提升技能竞赛的广泛性和参与度。\n第二十四条 本办法由区电信工会负责解释。\n第二十五条 本办法自印发之日起实施，《中国电信广西\n公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废\n止。\n中国电信广西公司办公室 2026年6月2日印发"
+          },
+          "relevance": {
+            "semantic_score": 0.4178,
+            "fts_score": 0.0,
+            "title_score": 0.5263,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.3455,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5,
+          "ranking_score": 0.8500000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十八条 全区电信职业技能竞赛每个项目的个人第1-6 > 第十九条 联合劳务派遣、业务外包单位开展的技能竞赛， > 第二十条 广西公司组队参加自治区级及以上技能竞赛\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。\n第十八条 全区电信职业技能竞赛每个项目的个人第1-6\n名经审核可授予“中国电信广西公司技术能手”称号（D2级），\n其中每个项目的第1名视竞赛情况可向集团公司申报“中国电\n信集团技术能手”（C2级）。广西公司其他技能竞赛根据获奖\n情况可授予个人第1名D2级荣誉；竞赛有多个项目的，可授\n予每个项目个人第1名D3级荣誉。单次比赛的荣誉获得人数\n不得超过参加现场决赛人数的三分之一。\n第十九条 联合劳务派遣、业务外包单位开展的技能竞赛，\n在遵守相关法律规定的前提下，竞赛组织领导机构可以与其协\n商对获奖人员进行表彰奖励。\n第二十条 广西公司组队参加自治区级及以上技能竞赛\n（含受集团指派参加全国性竞赛）获奖的，执行竞赛主办方统\n一要求的奖励规定。如主办方、集团公司未向获奖选手、团队",
+          "score": 0.8500000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "f3a94cf4259bbfdf0715f343d58a3209",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "第十八条 全区电信职业技能竞赛每个项目的个人第1-6 > 第十九条 联合劳务派遣、业务外包单位开展的技能竞赛， > 第二十条 广西公司组队参加自治区级及以上技能竞赛",
+          "block_ids": [
+            "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+            "dbff8995-450b-48ad-a234-c1efef126419",
+            "1c38b679-1ef2-4c5e-85d2-ca8f29431e5f",
+            "6ab7b1ec-2c7e-4eb6-968a-f3bae12ddd9e",
+            "e8169f07-ac52-4936-a0f8-4821164e75f3",
+            "73249fa4-975b-4294-bd1b-91845d34e79b",
+            "6d585ed9-ca39-4e43-90d4-7c2dceeb7b26",
+            "c60afcf5-f3d6-4326-8d4b-4d8829294f16",
+            "f85d970b-cac9-47ba-9a96-46ac613a625a",
+            "cddfa8f3-7a79-4110-a313-c333ed305ba0",
+            "3e13b34f-33e4-4247-bd10-37be2d6d41ae",
+            "1f42fb42-697e-473f-9820-dcd7cd380283",
+            "31d57884-b87c-433d-a3bd-588e68dacd5f",
+            "9e11c032-2d9d-4ed1-a0c1-6c39f6eaa3c3",
+            "5fcd6a61-fd7e-452e-849f-7b59d399b3cf",
+            "cfdd3044-94dc-4516-96b4-819123be8d76"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+              "order_idx": 114,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "dbff8995-450b-48ad-a234-c1efef126419",
+              "order_idx": 115,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "1c38b679-1ef2-4c5e-85d2-ca8f29431e5f",
+              "order_idx": 116,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "6ab7b1ec-2c7e-4eb6-968a-f3bae12ddd9e",
+              "order_idx": 117,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "e8169f07-ac52-4936-a0f8-4821164e75f3",
+              "order_idx": 118,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "73249fa4-975b-4294-bd1b-91845d34e79b",
+              "order_idx": 119,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "6d585ed9-ca39-4e43-90d4-7c2dceeb7b26",
+              "order_idx": 120,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "c60afcf5-f3d6-4326-8d4b-4d8829294f16",
+              "order_idx": 121,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "f85d970b-cac9-47ba-9a96-46ac613a625a",
+              "order_idx": 122,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "cddfa8f3-7a79-4110-a313-c333ed305ba0",
+              "order_idx": 123,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "3e13b34f-33e4-4247-bd10-37be2d6d41ae",
+              "order_idx": 124,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "1f42fb42-697e-473f-9820-dcd7cd380283",
+              "order_idx": 125,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "31d57884-b87c-433d-a3bd-588e68dacd5f",
+              "order_idx": 126,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "9e11c032-2d9d-4ed1-a0c1-6c39f6eaa3c3",
+              "order_idx": 127,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "5fcd6a61-fd7e-452e-849f-7b59d399b3cf",
+              "order_idx": 128,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "cfdd3044-94dc-4516-96b4-819123be8d76",
+              "order_idx": 129,
+              "char_start": 0,
+              "char_end": 27
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "block_id": "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.7196282148361206,
+            "score_breakdown": {
+              "vector": 0.8218328058719635,
+              "keyword": 0.7410562961559992,
+              "rrf": 0.020934377979521617,
+              "rerank": 0.7196282148361206
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十八条 全区电信职业技能竞赛每个项目的个人第1-6 > 第十九条 联合劳务派遣、业务外包单位开展的技能竞赛， > 第二十条 广西公司组队参加自治区级及以上技能竞赛\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。\n第十八条 全区电信职业技能竞赛每个项目的个人第1-6\n名经审核可授予“中国电信广西公司技术能手”称号（D2级），\n其中每个项目的第1名视竞赛情况可向集团公司申报“中国电\n信集团技术能手”（C2级）。广西公司其他技能竞赛根据获奖\n情况可授予个人第1名D2级荣誉；竞赛有多个项目的，可授\n予每个项目个人第1名D3级荣誉。单次比赛的荣誉获得人数\n不得超过参加现场决赛人数的三分之一。\n第十九条 联合劳务派遣、业务外包单位开展的技能竞赛，\n在遵守相关法律规定的前提下，竞赛组织领导机构可以与其协\n商对获奖人员进行表彰奖励。\n第二十条 广西公司组队参加自治区级及以上技能竞赛\n（含受集团指派参加全国性竞赛）获奖的，执行竞赛主办方统\n一要求的奖励规定。如主办方、集团公司未向获奖选手、团队"
+          },
+          "relevance": {
+            "semantic_score": 0.4178,
+            "fts_score": 0.0,
+            "title_score": 0.5263,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.3455,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5,
+          "ranking_score": 0.8500000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "2e2cc9fe-f718-4fbc-b7fe-6db1020208aa",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】（五）落实技能竞赛委员会交办的其他事项。 > 第九条 各部门应按各自职能积极发挥在技能竞赛中的作 > （一）人力资源部门应结合人才队伍建设、岗位培训和岗\n由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n合举办。\n第六条 广西公司成立由人力资源部门、财务部门、区电\n信工会和竞赛专业主管部门组成的技能竞赛委员会，负责技能\n竞赛的组织领导工作。技能竞赛委员会下设办公室。\n第七条 技能竞赛委员会主要职责是:\n（一）审定技能竞赛组织实施方案;\n（二）审定承办或参加同专业外部技能竞赛的方案;\n（三）审定报上级主管部门备案的技能竞赛方案;\n（四）其他需竞赛委员会审定的重大事项。\n第八条 竞赛委员会办公室主要职责是:\n— 5 — （一）制订技能竞赛实施方案;\n（二）负责技能竞赛的组织实施;\n（三）提出承办或参加同专业外部技能竞赛的方案;\n（四）向上级主管部门备案技能竞赛方案;\n（五）落实技能竞赛委员会交办的其他事项。\n第九条 各部门应按各自职能积极发挥在技能竞赛中的作\n用，形成齐抓共管、高效协同、各司其职的工作格局。\n（一）人力资源部门应结合人才队伍建设、岗位培训和岗\n位资格认证要求，组织研究制定技能竞赛相关政策、制度和办\n法。",
+          "score": 0.8500000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "8c96118236468d5008db0902ff5a2b7c",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "（五）落实技能竞赛委员会交办的其他事项。 > 第九条 各部门应按各自职能积极发挥在技能竞赛中的作 > （一）人力资源部门应结合人才队伍建设、岗位培训和岗",
+          "block_ids": [
+            "2e2cc9fe-f718-4fbc-b7fe-6db1020208aa",
+            "6aff64cb-4217-4d5c-b373-75050572d2ec",
+            "58ff7386-03a2-4200-975a-8e4709018b41",
+            "a5148898-df3d-44c5-ba59-40beace8dfa4",
+            "3a3ef4a7-b3db-4973-9737-d088bc3052b6",
+            "1eff2c7c-5a2f-414a-ab83-2629571b2db5",
+            "e039299a-5505-45f1-b350-e1c12b0c5db2",
+            "1fee4465-63c0-4143-90ce-829f314a6ddf",
+            "31b3c3ff-5a94-46ae-a12a-630ad1002539",
+            "07394fb6-5d57-4dbc-9894-c50424a902db",
+            "062c1839-f4a2-4341-b2c7-3a2d692a82ce",
+            "c12602f0-db1a-4dba-af1a-017fd4e7afd1",
+            "90007d46-bcbd-42df-8e73-fb0b80430856",
+            "e9986c67-ab98-451d-85e9-98abae11b29c",
+            "9c1447c1-6c5f-463b-af03-cc072a0c9cd2",
+            "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+            "a818837d-9283-4011-a52c-bbccbb9e92c8",
+            "7b01e61b-3688-4c1d-95f3-1026cd48585b"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "2e2cc9fe-f718-4fbc-b7fe-6db1020208aa",
+              "order_idx": 53,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "6aff64cb-4217-4d5c-b373-75050572d2ec",
+              "order_idx": 54,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "58ff7386-03a2-4200-975a-8e4709018b41",
+              "order_idx": 55,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "a5148898-df3d-44c5-ba59-40beace8dfa4",
+              "order_idx": 56,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "3a3ef4a7-b3db-4973-9737-d088bc3052b6",
+              "order_idx": 57,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "1eff2c7c-5a2f-414a-ab83-2629571b2db5",
+              "order_idx": 58,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "e039299a-5505-45f1-b350-e1c12b0c5db2",
+              "order_idx": 59,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "1fee4465-63c0-4143-90ce-829f314a6ddf",
+              "order_idx": 60,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "31b3c3ff-5a94-46ae-a12a-630ad1002539",
+              "order_idx": 62,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "07394fb6-5d57-4dbc-9894-c50424a902db",
+              "order_idx": 63,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "062c1839-f4a2-4341-b2c7-3a2d692a82ce",
+              "order_idx": 64,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "c12602f0-db1a-4dba-af1a-017fd4e7afd1",
+              "order_idx": 65,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "90007d46-bcbd-42df-8e73-fb0b80430856",
+              "order_idx": 66,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "e9986c67-ab98-451d-85e9-98abae11b29c",
+              "order_idx": 67,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "9c1447c1-6c5f-463b-af03-cc072a0c9cd2",
+              "order_idx": 68,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "460b2e50-80e0-4f34-b1b7-373cf3cb99c6",
+              "order_idx": 69,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "a818837d-9283-4011-a52c-bbccbb9e92c8",
+              "order_idx": 70,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "7b01e61b-3688-4c1d-95f3-1026cd48585b",
+              "order_idx": 71,
+              "char_start": 0,
+              "char_end": 2
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "block_id": "2e2cc9fe-f718-4fbc-b7fe-6db1020208aa",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.7114046216011047,
+            "score_breakdown": {
+              "vector": 0.8088203966617584,
+              "keyword": 0.7466824040630599,
+              "rrf": 0.021255142373154793,
+              "rerank": 0.7114046216011047
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】（五）落实技能竞赛委员会交办的其他事项。 > 第九条 各部门应按各自职能积极发挥在技能竞赛中的作 > （一）人力资源部门应结合人才队伍建设、岗位培训和岗\n由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n合举办。\n第六条 广西公司成立由人力资源部门、财务部门、区电\n信工会和竞赛专业主管部门组成的技能竞赛委员会，负责技能\n竞赛的组织领导工作。技能竞赛委员会下设办公室。\n第七条 技能竞赛委员会主要职责是:\n（一）审定技能竞赛组织实施方案;\n（二）审定承办或参加同专业外部技能竞赛的方案;\n（三）审定报上级主管部门备案的技能竞赛方案;\n（四）其他需竞赛委员会审定的重大事项。\n第八条 竞赛委员会办公室主要职责是:\n— 5 — （一）制订技能竞赛实施方案;\n（二）负责技能竞赛的组织实施;\n（三）提出承办或参加同专业外部技能竞赛的方案;\n（四）向上级主管部门备案技能竞赛方案;\n（五）落实技能竞赛委员会交办的其他事项。\n第九条 各部门应按各自职能积极发挥在技能竞赛中的作\n用，形成齐抓共管、高效协同、各司其职的工作格局。\n（一）人力资源部门应结合人才队伍建设、岗位培训和岗\n位资格认证要求，组织研究制定技能竞赛相关政策、制度和办\n法。"
+          },
+          "relevance": {
+            "semantic_score": 0.4178,
+            "fts_score": 0.0,
+            "title_score": 0.5263,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.3455,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5,
+          "ranking_score": 0.8500000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第一章 总则 > 第一条 为深入学习贯彻习近平新时代中国特色社会主义\n中电信桂〔2026〕158号\n关于印发中国电信广西公司技能竞赛\n管理办法（修订）的通知\n各市分公司及同级工会，各专业公司，区公司各部门：\n自《中国电信广西公司技能竞赛管理办法》（中电信桂\n〔2023〕278号）印发实施以来，在激发员工活力和内生动力，\n促进企业高质量发展和员工成长成才等方面发挥了积极作用。\n为进一步激发各单位和员工参赛热情，持续完善公司技能人才\n培养与激励机制，强化以赛促学、以赛促练的导向，结合近年\n竞赛工作实际开展情况，区公司、区电信工会修订了该办法,\n— 2 —现印发给你们，请认真组织学习，严格遵照执行。\n中国电信广西公司 中国电信广西区工会\n2026年5月29日\n— 3 — 中国电信广西公司技能竞赛管理办法\n（修订）\n第一章 总则\n第一条 为深入学习贯彻习近平新时代中国特色社会主义\n思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技\n能型、创新型职工队伍，弘扬劳模精神、劳动精神、工匠精神，\n营造发展光荣的企业风尚和全心全意为客户服务的敬业风气，\n积极倡导与企业共同发展文化，增强员工的职业荣誉感、自豪\n感和获得感，进一步发挥技能竞赛在高技能人才队伍建设中的\n作用，根据《中国电信集团技能竞赛管理办法》，结合中国电\n信广西公司（以下简称“广西公司”）实际，制订本办法。",
+          "score": 0.8500000000000001,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "335bca188df0216bc17ad28daf648620",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "第一章 总则 > 第一条 为深入学习贯彻习近平新时代中国特色社会主义",
+          "block_ids": [
+            "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+            "fd807fa5-1b22-4c23-9b5b-2492009c0379",
+            "f7741b9e-6c28-4e89-b329-07167650eda5",
+            "715f51e8-6443-4f09-9f86-5315024c2ec5",
+            "b00a24aa-4b47-46b9-a077-80b3d9d5cf6b",
+            "effaefc9-7755-460e-9480-eacefd70c10f",
+            "8163b01a-7a2a-41ad-944d-b9cdd2493520",
+            "0f4faa91-52a9-47dc-b51f-363ddbd9c90c",
+            "80123dbc-cc44-4fe4-9fc4-f6ffaf7425f2",
+            "103e072f-71fc-4d55-9b2b-29033fc0a3ef",
+            "2aa102b2-5f79-4882-a83e-8b8849b86653",
+            "5c2c4a1d-73ab-4e6f-a79e-1a9b6b646e84",
+            "244fe2ca-7d89-4a50-b96f-f073109f223a",
+            "534330af-a696-4719-8f48-0906de83dfe0",
+            "94a7d7b7-58e8-4e5a-b0ed-4d2f83017074",
+            "1839a440-6f4f-4deb-bfee-bbe40582c28b",
+            "30df6fd4-41af-44d5-9ca1-db74fdeb6479",
+            "5764261b-0867-4546-9cb8-f38edef731d3",
+            "4ee75068-dc98-4616-9d86-06f24ba5f4c9",
+            "af051118-dde9-4e28-b7d5-0aae59ba0962",
+            "bfb43609-0bc7-46b4-b69e-b7c556a29e36",
+            "115c4479-9fd4-4656-902d-9bf96cf792b7",
+            "9068f263-6669-45f0-90d8-b53bd4898fd9",
+            "180112b4-f926-43ab-99f9-c981799eacc2"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+              "order_idx": 2,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "fd807fa5-1b22-4c23-9b5b-2492009c0379",
+              "order_idx": 3,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "f7741b9e-6c28-4e89-b329-07167650eda5",
+              "order_idx": 4,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "715f51e8-6443-4f09-9f86-5315024c2ec5",
+              "order_idx": 5,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "b00a24aa-4b47-46b9-a077-80b3d9d5cf6b",
+              "order_idx": 6,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "effaefc9-7755-460e-9480-eacefd70c10f",
+              "order_idx": 7,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "8163b01a-7a2a-41ad-944d-b9cdd2493520",
+              "order_idx": 8,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "0f4faa91-52a9-47dc-b51f-363ddbd9c90c",
+              "order_idx": 9,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "80123dbc-cc44-4fe4-9fc4-f6ffaf7425f2",
+              "order_idx": 10,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "103e072f-71fc-4d55-9b2b-29033fc0a3ef",
+              "order_idx": 11,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "2aa102b2-5f79-4882-a83e-8b8849b86653",
+              "order_idx": 13,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "5c2c4a1d-73ab-4e6f-a79e-1a9b6b646e84",
+              "order_idx": 14,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "244fe2ca-7d89-4a50-b96f-f073109f223a",
+              "order_idx": 15,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "534330af-a696-4719-8f48-0906de83dfe0",
+              "order_idx": 17,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "94a7d7b7-58e8-4e5a-b0ed-4d2f83017074",
+              "order_idx": 18,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "1839a440-6f4f-4deb-bfee-bbe40582c28b",
+              "order_idx": 19,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "30df6fd4-41af-44d5-9ca1-db74fdeb6479",
+              "order_idx": 20,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "5764261b-0867-4546-9cb8-f38edef731d3",
+              "order_idx": 21,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "4ee75068-dc98-4616-9d86-06f24ba5f4c9",
+              "order_idx": 22,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "af051118-dde9-4e28-b7d5-0aae59ba0962",
+              "order_idx": 23,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "bfb43609-0bc7-46b4-b69e-b7c556a29e36",
+              "order_idx": 24,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "115c4479-9fd4-4656-902d-9bf96cf792b7",
+              "order_idx": 25,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "9068f263-6669-45f0-90d8-b53bd4898fd9",
+              "order_idx": 26,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "180112b4-f926-43ab-99f9-c981799eacc2",
+              "order_idx": 27,
+              "char_start": 0,
+              "char_end": 26
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "block_id": "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.6966673135757446,
+            "score_breakdown": {
+              "vector": 0.7985583543777466,
+              "keyword": 0.7415708692373263,
+              "rrf": 0.019220779220779218,
+              "rerank": 0.6966673135757446
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第一章 总则 > 第一条 为深入学习贯彻习近平新时代中国特色社会主义\n中电信桂〔2026〕158号\n关于印发中国电信广西公司技能竞赛\n管理办法（修订）的通知\n各市分公司及同级工会，各专业公司，区公司各部门：\n自《中国电信广西公司技能竞赛管理办法》（中电信桂\n〔2023〕278号）印发实施以来，在激发员工活力和内生动力，\n促进企业高质量发展和员工成长成才等方面发挥了积极作用。\n为进一步激发各单位和员工参赛热情，持续完善公司技能人才\n培养与激励机制，强化以赛促学、以赛促练的导向，结合近年\n竞赛工作实际开展情况，区公司、区电信工会修订了该办法,\n— 2 —现印发给你们，请认真组织学习，严格遵照执行。\n中国电信广西公司 中国电信广西区工会\n2026年5月29日\n— 3 — 中国电信广西公司技能竞赛管理办法\n（修订）\n第一章 总则\n第一条 为深入学习贯彻习近平新时代中国特色社会主义\n思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技\n能型、创新型职工队伍，弘扬劳模精神、劳动精神、工匠精神，\n营造发展光荣的企业风尚和全心全意为客户服务的敬业风气，\n积极倡导与企业共同发展文化，增强员工的职业荣誉感、自豪\n感和获得感，进一步发挥技能竞赛在高技能人才队伍建设中的\n作用，根据《中国电信集团技能竞赛管理办法》，结合中国电\n信广西公司（以下简称“广西公司”）实际，制订本办法。"
+          },
+          "relevance": {
+            "semantic_score": 0.4178,
+            "fts_score": 0.0,
+            "title_score": 0.5263,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.3455,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5,
+          "ranking_score": 0.8500000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 5,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.5,
+        "source_path": "canonical_snapshot",
+        "intent": "local_version",
+        "accepted_knowledge_ids": [
+          "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+        ],
+        "evidence_snapshot_id": "ZU9zl2at1S61XISQZ1ClGGtTdhHdh4re",
+        "snapshot_fingerprint": "282c232c25580776e193b562",
+        "accepted_passage_ids": [
+          "246daea17bcb0c50a044240442923165",
+          "f888b9d28b2f6f72c7e04468549d4e70",
+          "f3a94cf4259bbfdf0715f343d58a3209",
+          "8c96118236468d5008db0902ff5a2b7c",
+          "335bca188df0216bc17ad28daf648620",
+          "c21ec60c41b528d524b03eee394a13e8",
+          "ff36ccda4b04ec796c503bf2e151bda8",
+          "33115481de8de9d955a0ba3ecde2cf77",
+          "e70a54754d3d6c49c8f5a0936f8439af",
+          "22fd60c986751fb73ce23dc30d300a54",
+          "bf27507f3dc0eb11e670f7ff673a6f01",
+          "54e93d3c359da6fb2978df551141c70f"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 6,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 2950.71
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%\n- 第六章附则第二十三条各市分公司可参照本办法，结合实际，制订本单位技能竞赛管理办法细则，并积极组织员工参加各级技能竞赛，提升技能竞赛的广泛性和参与度\n- 第二十五条本办法自印发之日起实施，《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废止",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "246daea17bcb0c50a044240442923165",
+            "block_id": "35c21d92-1693-45df-8e20-519786a085b0",
+            "block_ids": [
+              "35c21d92-1693-45df-8e20-519786a085b0",
+              "b6f8772b-79ce-42e2-8398-d15503da9f33",
+              "18c783f8-858a-4701-8094-493458a3b191",
+              "21fc17c7-ddb8-43cb-b813-7e70fdb10911",
+              "98c01fe5-da4c-47c3-ae4e-8f67affda76e",
+              "21f51d46-f0ab-4b79-bbb3-e9d98e6d12c1",
+              "b8763623-c307-4717-a381-4793f158a783",
+              "4cb38a7f-1629-4037-928d-002048d827da",
+              "64599769-f735-4ca7-9bc0-2295c0d4a67c",
+              "285d8090-6676-4c3b-bc82-bec752f306b3",
+              "c10d6117-c1ce-4624-9f61-c337e1252b1f",
+              "df39af57-0fb8-4b13-9aa1-de5923c2539e",
+              "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+              "dbff8995-450b-48ad-a234-c1efef126419",
+              "1c38b679-1ef2-4c5e-85d2-ca8f29431e5f"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "text": "\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+            "block_id": "822889ea-69a7-424f-87a4-88761909fc83",
+            "block_ids": [
+              "822889ea-69a7-424f-87a4-88761909fc83",
+              "f7c55d88-5cd3-4215-80a2-4ad2b03ed3ba",
+              "c0e7c767-dee3-43d1-9a34-9cf577fa5399",
+              "fe926919-6010-40db-ae1e-7f07506661e8",
+              "9f56a1b9-b2cb-4307-9a20-e2f87702e6fd",
+              "c78bf79a-41ab-440f-ad65-2d2f8e079e26",
+              "4cb3e663-3b4d-42d5-8edd-741645fd4636",
+              "cf642213-e59d-410d-93d6-3d35e247d463",
+              "d25bc748-28f1-4c27-aed3-92f5db0e59e3",
+              "7e0afa6a-62cf-43a2-95b1-9d23ea3fac2b",
+              "db173c06-746a-4ed0-942f-e5b53373e5a3",
+              "694df35c-71e1-4740-b5e8-3619e5fee44c"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "text": "广西公司承办或参加的\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n申请流程按照公司内控权限列表的预算外项目进行审批。\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\n司内控权限列表的预算外项目进行审批。\n第六章 附则\n第二十三条 各市分公司可参照本办法，结合实际，制订\n本单位技能竞赛管理办法细则，并积极组织员工参加各级技能\n竞赛，提升技能竞赛的广泛性和参与度。\n第二十四条 本办法由区电信工会负责解释。\n第二十五条 本办法自印发之日起实施，《中国电信广西\n公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废\n止。\n中国电信广西公司办公室 2026年6月2日印发",
+            "score": 0.8500000000000001,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "335bca188df0216bc17ad28daf648620",
+            "block_id": "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+            "block_ids": [
+              "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+              "fd807fa5-1b22-4c23-9b5b-2492009c0379",
+              "f7741b9e-6c28-4e89-b329-07167650eda5",
+              "715f51e8-6443-4f09-9f86-5315024c2ec5",
+              "b00a24aa-4b47-46b9-a077-80b3d9d5cf6b",
+              "effaefc9-7755-460e-9480-eacefd70c10f",
+              "8163b01a-7a2a-41ad-944d-b9cdd2493520",
+              "0f4faa91-52a9-47dc-b51f-363ddbd9c90c",
+              "80123dbc-cc44-4fe4-9fc4-f6ffaf7425f2",
+              "103e072f-71fc-4d55-9b2b-29033fc0a3ef",
+              "2aa102b2-5f79-4882-a83e-8b8849b86653",
+              "5c2c4a1d-73ab-4e6f-a79e-1a9b6b646e84",
+              "244fe2ca-7d89-4a50-b96f-f073109f223a",
+              "534330af-a696-4719-8f48-0906de83dfe0",
+              "94a7d7b7-58e8-4e5a-b0ed-4d2f83017074",
+              "1839a440-6f4f-4deb-bfee-bbe40582c28b",
+              "30df6fd4-41af-44d5-9ca1-db74fdeb6479",
+              "5764261b-0867-4546-9cb8-f38edef731d3",
+              "4ee75068-dc98-4616-9d86-06f24ba5f4c9",
+              "af051118-dde9-4e28-b7d5-0aae59ba0962",
+              "bfb43609-0bc7-46b4-b69e-b7c556a29e36",
+              "115c4479-9fd4-4656-902d-9bf96cf792b7",
+              "9068f263-6669-45f0-90d8-b53bd4898fd9",
+              "180112b4-f926-43ab-99f9-c981799eacc2"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "text": "中电信桂〔2026〕158号\n关于印发中国电信广西公司技能竞赛\n管理办法（修订）的通知\n各市分公司及同级工会，各专业公司，区公司各部门：\n自《中国电信广西公司技能竞赛管理办法》（中电信桂\n〔2023〕278号）印发实施以来，在激发员工活力和内生动力，\n促进企业高质量发展和员工成长成才等方面发挥了积极作用。\n为进一步激发各单位和员工参赛热情，持续完善公司技能人才\n培养与激励机制，强化以赛促学、以赛促练的导向，结合近年\n竞赛工作实际开展情况，区公司、区电信工会修订了该办法,\n— 2 —现印发给你们，请认真组织学习，严格遵照执行。\n中国电信广西公司 中国电信广西区工会\n2026年5月29日\n— 3 — 中国电信广西公司技能竞赛管理办法\n（修订）\n第一章 总则\n第一条 为深入学习贯彻习近平新时代中国特色社会主义\n思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技\n能型、创新型职工队伍，弘扬劳模精神、劳动精神、工匠精神，\n营造发展光荣的企业风尚和全心全意为客户服务的敬业风气，\n积极倡导与企业共同发展文化，增强员工的职业荣誉感、自豪\n感和获得感，进一步发挥技能竞赛在高技能人才队伍建设中的\n作用，根据《中国电信集团技能竞赛管理办法》，结合中国电\n信广西公司（以下简称“广西公司”）实际，制订本办法。",
+            "score": 0.8500000000000001,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+            "evidence_passage_ids": [
+              "246daea17bcb0c50a044240442923165"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "233cf853dc8ba41f443ad016"
+          },
+          {
+            "text": "第六章附则第二十三条各市分公司可参照本办法，结合实际，制订本单位技能竞赛管理办法细则，并积极组织员工参加各级技能竞赛，提升技能竞赛的广泛性和参与度",
+            "evidence_passage_ids": [
+              "f888b9d28b2f6f72c7e04468549d4e70"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "6f96ac5182089ed2912ab5d0"
+          },
+          {
+            "text": "第二十五条本办法自印发之日起实施，《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废止",
+            "evidence_passage_ids": [
+              "f888b9d28b2f6f72c7e04468549d4e70"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "eed08e767aef406342b21c2b"
+          },
+          {
+            "text": "中电信桂〔2026〕158号关于印发中国电信广西公司技能竞赛管理办法（修订）的通知各市分公司及同级工会，各专业公司，区公司各部门：",
+            "evidence_passage_ids": [
+              "335bca188df0216bc17ad28daf648620"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "dbd5a5389665efc8376ccdeb"
+          },
+          {
+            "text": "自《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）印发实施以来，在激发员工活力和内生动力，促进企业高质量发展和员工成长成才等方面发挥了积极作用",
+            "evidence_passage_ids": [
+              "335bca188df0216bc17ad28daf648620"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "637b6e1de7dde3f57e72a27c"
+          },
+          {
+            "text": "中国电信广西公司中国电信广西区工会2026年5月29日—3—中国电信广西公司技能竞赛管理办法（修订）第一章总则第一条为深入学习贯彻习近平新时代中国特色社会主义思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技能型、创新型职工队伍，弘扬劳",
+            "evidence_passage_ids": [
+              "335bca188df0216bc17ad28daf648620"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "ac16771978e24d8438edbf8e"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "246daea17bcb0c50a044240442923165",
+            "block_id": "35c21d92-1693-45df-8e20-519786a085b0",
+            "block_ids": [
+              "35c21d92-1693-45df-8e20-519786a085b0",
+              "b6f8772b-79ce-42e2-8398-d15503da9f33",
+              "18c783f8-858a-4701-8094-493458a3b191",
+              "21fc17c7-ddb8-43cb-b813-7e70fdb10911",
+              "98c01fe5-da4c-47c3-ae4e-8f67affda76e",
+              "21f51d46-f0ab-4b79-bbb3-e9d98e6d12c1",
+              "b8763623-c307-4717-a381-4793f158a783",
+              "4cb38a7f-1629-4037-928d-002048d827da",
+              "64599769-f735-4ca7-9bc0-2295c0d4a67c",
+              "285d8090-6676-4c3b-bc82-bec752f306b3",
+              "c10d6117-c1ce-4624-9f61-c337e1252b1f",
+              "df39af57-0fb8-4b13-9aa1-de5923c2539e",
+              "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+              "dbff8995-450b-48ad-a234-c1efef126419",
+              "1c38b679-1ef2-4c5e-85d2-ca8f29431e5f"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "text": "\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。",
+            "body_text": "\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。",
+            "score": 0.9000000000000001,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+            "block_id": "822889ea-69a7-424f-87a4-88761909fc83",
+            "block_ids": [
+              "822889ea-69a7-424f-87a4-88761909fc83",
+              "f7c55d88-5cd3-4215-80a2-4ad2b03ed3ba",
+              "c0e7c767-dee3-43d1-9a34-9cf577fa5399",
+              "fe926919-6010-40db-ae1e-7f07506661e8",
+              "9f56a1b9-b2cb-4307-9a20-e2f87702e6fd",
+              "c78bf79a-41ab-440f-ad65-2d2f8e079e26",
+              "4cb3e663-3b4d-42d5-8edd-741645fd4636",
+              "cf642213-e59d-410d-93d6-3d35e247d463",
+              "d25bc748-28f1-4c27-aed3-92f5db0e59e3",
+              "7e0afa6a-62cf-43a2-95b1-9d23ea3fac2b",
+              "db173c06-746a-4ed0-942f-e5b53373e5a3",
+              "694df35c-71e1-4740-b5e8-3619e5fee44c"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "text": "广西公司承办或参加的\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n申请流程按照公司内控权限列表的预算外项目进行审批。\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\n司内控权限列表的预算外项目进行审批。\n第六章 附则\n第二十三条 各市分公司可参照本办法，结合实际，制订\n本单位技能竞赛管理办法细则，并积极组织员工参加各级技能\n竞赛，提升技能竞赛的广泛性和参与度。\n第二十四条 本办法由区电信工会负责解释。\n第二十五条 本办法自印发之日起实施，《中国电信广西\n公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废\n止。\n中国电信广西公司办公室 2026年6月2日印发",
+            "body_text": "广西公司承办或参加的\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n申请流程按照公司内控权限列表的预算外项目进行审批。\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\n司内控权限列表的预算外项目进行审批。\n第六章 附则\n第二十三条 各市分公司可参照本办法，结合实际，制订\n本单位技能竞赛管理办法细则，并积极组织员工参加各级技能\n竞赛，提升技能竞赛的广泛性和参与度。\n第二十四条 本办法由区电信工会负责解释。\n第二十五条 本办法自印发之日起实施，《中国电信广西\n公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废\n止。\n中国电信广西公司办公室 2026年6月2日印发",
+            "score": 0.8500000000000001,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "passage_id": "335bca188df0216bc17ad28daf648620",
+            "block_id": "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+            "block_ids": [
+              "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+              "fd807fa5-1b22-4c23-9b5b-2492009c0379",
+              "f7741b9e-6c28-4e89-b329-07167650eda5",
+              "715f51e8-6443-4f09-9f86-5315024c2ec5",
+              "b00a24aa-4b47-46b9-a077-80b3d9d5cf6b",
+              "effaefc9-7755-460e-9480-eacefd70c10f",
+              "8163b01a-7a2a-41ad-944d-b9cdd2493520",
+              "0f4faa91-52a9-47dc-b51f-363ddbd9c90c",
+              "80123dbc-cc44-4fe4-9fc4-f6ffaf7425f2",
+              "103e072f-71fc-4d55-9b2b-29033fc0a3ef",
+              "2aa102b2-5f79-4882-a83e-8b8849b86653",
+              "5c2c4a1d-73ab-4e6f-a79e-1a9b6b646e84",
+              "244fe2ca-7d89-4a50-b96f-f073109f223a",
+              "534330af-a696-4719-8f48-0906de83dfe0",
+              "94a7d7b7-58e8-4e5a-b0ed-4d2f83017074",
+              "1839a440-6f4f-4deb-bfee-bbe40582c28b",
+              "30df6fd4-41af-44d5-9ca1-db74fdeb6479",
+              "5764261b-0867-4546-9cb8-f38edef731d3",
+              "4ee75068-dc98-4616-9d86-06f24ba5f4c9",
+              "af051118-dde9-4e28-b7d5-0aae59ba0962",
+              "bfb43609-0bc7-46b4-b69e-b7c556a29e36",
+              "115c4479-9fd4-4656-902d-9bf96cf792b7",
+              "9068f263-6669-45f0-90d8-b53bd4898fd9",
+              "180112b4-f926-43ab-99f9-c981799eacc2"
+            ],
+            "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+            "path": "",
+            "text": "中电信桂〔2026〕158号\n关于印发中国电信广西公司技能竞赛\n管理办法（修订）的通知\n各市分公司及同级工会，各专业公司，区公司各部门：\n自《中国电信广西公司技能竞赛管理办法》（中电信桂\n〔2023〕278号）印发实施以来，在激发员工活力和内生动力，\n促进企业高质量发展和员工成长成才等方面发挥了积极作用。\n为进一步激发各单位和员工参赛热情，持续完善公司技能人才\n培养与激励机制，强化以赛促学、以赛促练的导向，结合近年\n竞赛工作实际开展情况，区公司、区电信工会修订了该办法,\n— 2 —现印发给你们，请认真组织学习，严格遵照执行。\n中国电信广西公司 中国电信广西区工会\n2026年5月29日\n— 3 — 中国电信广西公司技能竞赛管理办法\n（修订）\n第一章 总则\n第一条 为深入学习贯彻习近平新时代中国特色社会主义\n思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技\n能型、创新型职工队伍，弘扬劳模精神、劳动精神、工匠精神，\n营造发展光荣的企业风尚和全心全意为客户服务的敬业风气，\n积极倡导与企业共同发展文化，增强员工的职业荣誉感、自豪\n感和获得感，进一步发挥技能竞赛在高技能人才队伍建设中的\n作用，根据《中国电信集团技能竞赛管理办法》，结合中国电\n信广西公司（以下简称“广西公司”）实际，制订本办法。",
+            "body_text": "中电信桂〔2026〕158号\n关于印发中国电信广西公司技能竞赛\n管理办法（修订）的通知\n各市分公司及同级工会，各专业公司，区公司各部门：\n自《中国电信广西公司技能竞赛管理办法》（中电信桂\n〔2023〕278号）印发实施以来，在激发员工活力和内生动力，\n促进企业高质量发展和员工成长成才等方面发挥了积极作用。\n为进一步激发各单位和员工参赛热情，持续完善公司技能人才\n培养与激励机制，强化以赛促学、以赛促练的导向，结合近年\n竞赛工作实际开展情况，区公司、区电信工会修订了该办法,\n— 2 —现印发给你们，请认真组织学习，严格遵照执行。\n中国电信广西公司 中国电信广西区工会\n2026年5月29日\n— 3 — 中国电信广西公司技能竞赛管理办法\n（修订）\n第一章 总则\n第一条 为深入学习贯彻习近平新时代中国特色社会主义\n思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技\n能型、创新型职工队伍，弘扬劳模精神、劳动精神、工匠精神，\n营造发展光荣的企业风尚和全心全意为客户服务的敬业风气，\n积极倡导与企业共同发展文化，增强员工的职业荣誉感、自豪\n感和获得感，进一步发挥技能竞赛在高技能人才队伍建设中的\n作用，根据《中国电信集团技能竞赛管理办法》，结合中国电\n信广西公司（以下简称“广西公司”）实际，制订本办法。",
+            "score": 0.8500000000000001,
+            "document_family_id": "topic:技能竞赛管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": true,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.5,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": true,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 6,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "282c232c25580776e193b562",
+            "snapshot_id_count": 10,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "version"
+            ],
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级"
+          },
+          "fact_plan": {
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+            "intents": [
+              "version",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "version",
+              "policy_fact",
+              "polarity_negative",
+              "predicate:取消"
+            ],
+            "entities": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法",
+              "修订版",
+              "取消",
+              "一级",
+              "二级",
+              "分级",
+              "技能竞赛管理办法最新修订版",
+              "技能竞赛管理办法最新修订",
+              "技能竞赛管理"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": true,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "version",
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "技能",
+            "object": "竞赛",
+            "scope": [],
+            "selector": [],
+            "predicate": "取消",
+            "polarity": "negative",
+            "condition_slots": [],
+            "requested_attribute": "version",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "latest",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法",
+              "修订版",
+              "取消",
+              "一级",
+              "二级",
+              "分级",
+              "技能竞赛管理办法最新修订版",
+              "技能竞赛管理办法最新修订",
+              "技能竞赛管理"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 66,
+          "candidate_count": 65
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+              "evidence_passage_ids": [
+                "246daea17bcb0c50a044240442923165"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "233cf853dc8ba41f443ad016"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第六章附则第二十三条各市分公司可参照本办法，结合实际，制订本单位技能竞赛管理办法细则，并积极组织员工参加各级技能竞赛，提升技能竞赛的广泛性和参与度",
+              "evidence_passage_ids": [
+                "f888b9d28b2f6f72c7e04468549d4e70"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "6f96ac5182089ed2912ab5d0"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第二十五条本办法自印发之日起实施，《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废止",
+              "evidence_passage_ids": [
+                "f888b9d28b2f6f72c7e04468549d4e70"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "eed08e767aef406342b21c2b"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "中电信桂〔2026〕158号关于印发中国电信广西公司技能竞赛管理办法（修订）的通知各市分公司及同级工会，各专业公司，区公司各部门：",
+              "evidence_passage_ids": [
+                "335bca188df0216bc17ad28daf648620"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "dbd5a5389665efc8376ccdeb"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "自《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）印发实施以来，在激发员工活力和内生动力，促进企业高质量发展和员工成长成才等方面发挥了积极作用",
+              "evidence_passage_ids": [
+                "335bca188df0216bc17ad28daf648620"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "637b6e1de7dde3f57e72a27c"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "中国电信广西公司中国电信广西区工会2026年5月29日—3—中国电信广西公司技能竞赛管理办法（修订）第一章总则第一条为深入学习贯彻习近平新时代中国特色社会主义思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技能型、创新型职工队伍，弘扬劳",
+              "evidence_passage_ids": [
+                "335bca188df0216bc17ad28daf648620"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "ac16771978e24d8438edbf8e"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+            "intents": [
+              "version",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "version",
+              "policy_fact",
+              "polarity_negative",
+              "predicate:取消"
+            ],
+            "entities": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法",
+              "修订版",
+              "取消",
+              "一级",
+              "二级",
+              "分级",
+              "技能竞赛管理办法最新修订版",
+              "技能竞赛管理办法最新修订",
+              "技能竞赛管理"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": true,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "version",
+              "policy",
+              "prohibition",
+              "scope",
+              "responsibility",
+              "relationship"
+            ],
+            "subject": "技能",
+            "object": "竞赛",
+            "scope": [],
+            "selector": [],
+            "predicate": "取消",
+            "polarity": "negative",
+            "condition_slots": [],
+            "requested_attribute": "version",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "latest",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法",
+              "修订版",
+              "取消",
+              "一级",
+              "二级",
+              "分级",
+              "技能竞赛管理办法最新修订版",
+              "技能竞赛管理办法最新修订",
+              "技能竞赛管理"
+            ]
+          },
+          "input_count": 65,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "233cf853dc8ba41f443ad016",
+              "record_id": "246daea17bcb0c50a044240442923165:r2",
+              "passage_id": "246daea17bcb0c50a044240442923165",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "prohibition",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+              "evidence_spans": [
+                [
+                  0,
+                  107
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 19.499999999999996,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "negative",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "hit",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "miss",
+                "anchor:办法": "miss",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "6f96ac5182089ed2912ab5d0",
+              "record_id": "f888b9d28b2f6f72c7e04468549d4e70:r4",
+              "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "第六章附则第二十三条各市分公司可参照本办法，结合实际，制订本单位技能竞赛管理办法细则，并积极组织员工参加各级技能竞赛，提升技能竞赛的广泛性和参与度",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第六章附则第二十三条各市分公司可参照本办法，结合实际，制订本单位技能竞赛管理办法细则，并积极组织员工参加各级技能竞赛，提升技能竞赛的广泛性和参与度",
+              "evidence_spans": [
+                [
+                  0,
+                  75
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 36.09999999999999,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "hit",
+                "anchor:办法": "hit",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "eed08e767aef406342b21c2b",
+              "record_id": "f888b9d28b2f6f72c7e04468549d4e70:r6",
+              "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "第二十五条本办法自印发之日起实施，《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废止",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第二十五条本办法自印发之日起实施，《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废止",
+              "evidence_spans": [
+                [
+                  0,
+                  56
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 36.09999999999999,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "hit",
+                "anchor:办法": "hit",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "dbd5a5389665efc8376ccdeb",
+              "record_id": "335bca188df0216bc17ad28daf648620:r0",
+              "passage_id": "335bca188df0216bc17ad28daf648620",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "中电信桂〔2026〕158号关于印发中国电信广西公司技能竞赛管理办法（修订）的通知各市分公司及同级工会，各专业公司，区公司各部门：",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "中电信桂〔2026〕158号关于印发中国电信广西公司技能竞赛管理办法（修订）的通知各市分公司及同级工会，各专业公司，区公司各部门：",
+              "evidence_spans": [
+                [
+                  0,
+                  65
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 36.09999999999999,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "hit",
+                "anchor:办法": "hit",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "637b6e1de7dde3f57e72a27c",
+              "record_id": "335bca188df0216bc17ad28daf648620:r1",
+              "passage_id": "335bca188df0216bc17ad28daf648620",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "自《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）印发实施以来，在激发员工活力和内生动力，促进企业高质量发展和员工成长成才等方面发挥了积极作用",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "自《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）印发实施以来，在激发员工活力和内生动力，促进企业高质量发展和员工成长成才等方面发挥了积极作用",
+              "evidence_spans": [
+                [
+                  0,
+                  82
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 36.09999999999999,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "hit",
+                "anchor:办法": "hit",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "ac16771978e24d8438edbf8e",
+              "record_id": "335bca188df0216bc17ad28daf648620:r3",
+              "passage_id": "335bca188df0216bc17ad28daf648620",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "fact_kind": "policy",
+              "subject": "技能",
+              "predicate": "取消",
+              "object": "中国电信广西公司中国电信广西区工会2026年5月29日—3—中国电信广西公司技能竞赛管理办法（修订）第一章总则第一条为深入学习贯彻习近平新时代中国特色社会主义思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技能型、创新型职工队伍，弘扬劳",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "中国电信广西公司中国电信广西区工会2026年5月29日—3—中国电信广西公司技能竞赛管理办法（修订）第一章总则第一条为深入学习贯彻习近平新时代中国特色社会主义思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技能型、创新型职工队伍，弘扬劳",
+              "evidence_spans": [
+                [
+                  0,
+                  274
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "score": 36.09999999999999,
+              "unstructured_rejected": false,
+              "group_id": "e0d4dc98beefe973",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "version": "hit",
+                "policy_fact": "hit",
+                "polarity_negative": "miss",
+                "predicate:取消": "miss",
+                "anchor:技能": "hit",
+                "anchor:竞赛": "hit",
+                "anchor:管理": "hit",
+                "anchor:办法": "hit",
+                "anchor:修订版": "miss",
+                "anchor:取消": "miss",
+                "anchor:一级": "miss",
+                "anchor:二级": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "version": {
+              "6f96ac5182089ed2912ab5d0": "hit",
+              "eed08e767aef406342b21c2b": "hit",
+              "dbd5a5389665efc8376ccdeb": "hit",
+              "637b6e1de7dde3f57e72a27c": "hit",
+              "ac16771978e24d8438edbf8e": "hit",
+              "74eb048e42d3e885f12500d8": "hit",
+              "c8ccf42fd575bd7830bce5d5": "hit",
+              "45dddac6275acf2fdf480647": "hit",
+              "763675a7f0d16957dd04162a": "hit",
+              "aa6693547b3681e0b6509bc7": "hit",
+              "70c35223c8e5f1860b652046": "hit",
+              "3e9c024d8a7e1273a7594027": "hit",
+              "3fd354c76241f0de86e1e41b": "hit",
+              "877e6dff7414b1c68692e38c": "hit",
+              "7d8d1337563f3e7f03e19d3d": "hit",
+              "aee578136f383fdc0621ffda": "hit",
+              "56c72c21789d2db29cad9c6a": "hit",
+              "233cf853dc8ba41f443ad016": "hit",
+              "70c561f1c9dddb6356218544": "hit",
+              "acbb2b356539854a97d8ead0": "hit",
+              "222acb924eb71b04f3d13477": "hit",
+              "61dfb98f55aabe70e0dfaed0": "hit",
+              "6ce0917f1864ecdfa40cc551": "hit",
+              "e1350468242c2ce717b476b1": "hit",
+              "90b77455df0bedec20655e6e": "hit",
+              "798b3c8c426683d3f963e1d0": "hit",
+              "05df1f18db7ec638f26eabae": "hit",
+              "71307d38f5b081d1de4d663a": "hit",
+              "39de215fd1b6b0d96e05f1e5": "hit",
+              "86d2867fc21026e691ca0e44": "hit",
+              "3c426da27855f10771c08fc6": "hit",
+              "e4fbb1039b38d429a5cc430e": "hit",
+              "e9291cf1472380d7f2157166": "hit",
+              "8397c04e909e4c9a5dcf5cc5": "hit",
+              "261767d446bce24e872ed454": "hit",
+              "71a3d4a7e09d489b327f23e8": "hit",
+              "05f909bfdb0da85c381fabc3": "hit",
+              "02c807faa334a15cbf138ae0": "hit",
+              "1b3995c8e343631f901d1fe4": "hit",
+              "8095a3f42841a9f661d12309": "hit",
+              "acf2893841c1d59ee1dbfa4d": "hit",
+              "8becab1e73d3312fc27a25b8": "hit",
+              "8dd9801c0717f06b4333ab2f": "hit",
+              "7d4bd13a3acd22d46006f632": "hit",
+              "8b60f1875b37889376423c9c": "hit",
+              "67913faa008b6840a3cbfbf0": "hit",
+              "aeaa0575be366e07b3e1b40e": "hit",
+              "a22f6f751fd1d38bb0044aaa": "hit",
+              "0f762b14b016a44fb2990c54": "hit",
+              "20959b8d927bc0af599c63af": "hit",
+              "32d15975f3c3c9173280d0f8": "hit",
+              "cddb9c61d9d3976ab6257e9d": "hit",
+              "4953421ca0f4997fe7fa0881": "hit",
+              "08a3b2ed8057ed554006bc54": "hit",
+              "4978e046f86c788bfe0b0f79": "unknown",
+              "7d214897643529a80325e299": "hit",
+              "e3fa1dfa011cb6aa18d6e210": "hit",
+              "7762702605846e904565245e": "hit",
+              "354c5c2e99707956a534b4e0": "hit",
+              "e8ce345c69e5313484e291aa": "hit",
+              "a0622e6e0364d0a602e6716c": "hit",
+              "56f2b89dde5358dd34513256": "hit",
+              "a5929fc14c4d9c590fc41534": "hit",
+              "48e1a823474571676fb0cae3": "hit",
+              "67a458c770d7e0bff4ebb646": "hit"
+            },
+            "policy_fact": {
+              "6f96ac5182089ed2912ab5d0": "hit",
+              "eed08e767aef406342b21c2b": "hit",
+              "dbd5a5389665efc8376ccdeb": "hit",
+              "637b6e1de7dde3f57e72a27c": "hit",
+              "ac16771978e24d8438edbf8e": "hit",
+              "74eb048e42d3e885f12500d8": "hit",
+              "c8ccf42fd575bd7830bce5d5": "hit",
+              "45dddac6275acf2fdf480647": "hit",
+              "763675a7f0d16957dd04162a": "hit",
+              "aa6693547b3681e0b6509bc7": "hit",
+              "70c35223c8e5f1860b652046": "hit",
+              "3e9c024d8a7e1273a7594027": "hit",
+              "3fd354c76241f0de86e1e41b": "hit",
+              "877e6dff7414b1c68692e38c": "hit",
+              "7d8d1337563f3e7f03e19d3d": "hit",
+              "aee578136f383fdc0621ffda": "hit",
+              "56c72c21789d2db29cad9c6a": "hit",
+              "233cf853dc8ba41f443ad016": "hit",
+              "70c561f1c9dddb6356218544": "hit",
+              "acbb2b356539854a97d8ead0": "hit",
+              "222acb924eb71b04f3d13477": "hit",
+              "61dfb98f55aabe70e0dfaed0": "hit",
+              "6ce0917f1864ecdfa40cc551": "hit",
+              "e1350468242c2ce717b476b1": "hit",
+              "90b77455df0bedec20655e6e": "hit",
+              "798b3c8c426683d3f963e1d0": "hit",
+              "05df1f18db7ec638f26eabae": "hit",
+              "71307d38f5b081d1de4d663a": "hit",
+              "39de215fd1b6b0d96e05f1e5": "hit",
+              "86d2867fc21026e691ca0e44": "hit",
+              "3c426da27855f10771c08fc6": "hit",
+              "e4fbb1039b38d429a5cc430e": "hit",
+              "e9291cf1472380d7f2157166": "hit",
+              "8397c04e909e4c9a5dcf5cc5": "hit",
+              "261767d446bce24e872ed454": "hit",
+              "71a3d4a7e09d489b327f23e8": "hit",
+              "05f909bfdb0da85c381fabc3": "hit",
+              "02c807faa334a15cbf138ae0": "hit",
+              "1b3995c8e343631f901d1fe4": "hit",
+              "8095a3f42841a9f661d12309": "hit",
+              "acf2893841c1d59ee1dbfa4d": "hit",
+              "8becab1e73d3312fc27a25b8": "hit",
+              "8dd9801c0717f06b4333ab2f": "hit",
+              "7d4bd13a3acd22d46006f632": "hit",
+              "8b60f1875b37889376423c9c": "hit",
+              "67913faa008b6840a3cbfbf0": "hit",
+              "aeaa0575be366e07b3e1b40e": "hit",
+              "a22f6f751fd1d38bb0044aaa": "hit",
+              "0f762b14b016a44fb2990c54": "hit",
+              "20959b8d927bc0af599c63af": "hit",
+              "32d15975f3c3c9173280d0f8": "hit",
+              "cddb9c61d9d3976ab6257e9d": "hit",
+              "4953421ca0f4997fe7fa0881": "hit",
+              "08a3b2ed8057ed554006bc54": "hit",
+              "4978e046f86c788bfe0b0f79": "hit",
+              "7d214897643529a80325e299": "hit",
+              "e3fa1dfa011cb6aa18d6e210": "hit",
+              "7762702605846e904565245e": "hit",
+              "354c5c2e99707956a534b4e0": "hit",
+              "e8ce345c69e5313484e291aa": "hit",
+              "a0622e6e0364d0a602e6716c": "hit",
+              "56f2b89dde5358dd34513256": "hit",
+              "a5929fc14c4d9c590fc41534": "hit",
+              "48e1a823474571676fb0cae3": "hit",
+              "67a458c770d7e0bff4ebb646": "hit"
+            },
+            "polarity_negative": {
+              "6f96ac5182089ed2912ab5d0": "miss",
+              "eed08e767aef406342b21c2b": "miss",
+              "dbd5a5389665efc8376ccdeb": "miss",
+              "637b6e1de7dde3f57e72a27c": "miss",
+              "ac16771978e24d8438edbf8e": "miss",
+              "74eb048e42d3e885f12500d8": "miss",
+              "c8ccf42fd575bd7830bce5d5": "miss",
+              "45dddac6275acf2fdf480647": "miss",
+              "763675a7f0d16957dd04162a": "miss",
+              "aa6693547b3681e0b6509bc7": "miss",
+              "70c35223c8e5f1860b652046": "miss",
+              "3e9c024d8a7e1273a7594027": "miss",
+              "3fd354c76241f0de86e1e41b": "miss",
+              "877e6dff7414b1c68692e38c": "miss",
+              "7d8d1337563f3e7f03e19d3d": "miss",
+              "aee578136f383fdc0621ffda": "miss",
+              "56c72c21789d2db29cad9c6a": "miss",
+              "233cf853dc8ba41f443ad016": "hit",
+              "70c561f1c9dddb6356218544": "miss",
+              "acbb2b356539854a97d8ead0": "miss",
+              "222acb924eb71b04f3d13477": "miss",
+              "61dfb98f55aabe70e0dfaed0": "miss",
+              "6ce0917f1864ecdfa40cc551": "miss",
+              "e1350468242c2ce717b476b1": "miss",
+              "90b77455df0bedec20655e6e": "miss",
+              "798b3c8c426683d3f963e1d0": "miss",
+              "05df1f18db7ec638f26eabae": "miss",
+              "71307d38f5b081d1de4d663a": "miss",
+              "39de215fd1b6b0d96e05f1e5": "miss",
+              "86d2867fc21026e691ca0e44": "miss",
+              "3c426da27855f10771c08fc6": "miss",
+              "e4fbb1039b38d429a5cc430e": "miss",
+              "e9291cf1472380d7f2157166": "miss",
+              "8397c04e909e4c9a5dcf5cc5": "miss",
+              "261767d446bce24e872ed454": "miss",
+              "71a3d4a7e09d489b327f23e8": "miss",
+              "05f909bfdb0da85c381fabc3": "miss",
+              "02c807faa334a15cbf138ae0": "miss",
+              "1b3995c8e343631f901d1fe4": "miss",
+              "8095a3f42841a9f661d12309": "miss",
+              "acf2893841c1d59ee1dbfa4d": "miss",
+              "8becab1e73d3312fc27a25b8": "miss",
+              "8dd9801c0717f06b4333ab2f": "miss",
+              "7d4bd13a3acd22d46006f632": "miss",
+              "8b60f1875b37889376423c9c": "miss",
+              "67913faa008b6840a3cbfbf0": "miss",
+              "aeaa0575be366e07b3e1b40e": "miss",
+              "a22f6f751fd1d38bb0044aaa": "miss",
+              "0f762b14b016a44fb2990c54": "miss",
+              "20959b8d927bc0af599c63af": "miss",
+              "32d15975f3c3c9173280d0f8": "miss",
+              "cddb9c61d9d3976ab6257e9d": "miss",
+              "4953421ca0f4997fe7fa0881": "miss",
+              "08a3b2ed8057ed554006bc54": "miss",
+              "4978e046f86c788bfe0b0f79": "hit",
+              "7d214897643529a80325e299": "miss",
+              "e3fa1dfa011cb6aa18d6e210": "miss",
+              "7762702605846e904565245e": "miss",
+              "354c5c2e99707956a534b4e0": "miss",
+              "e8ce345c69e5313484e291aa": "miss",
+              "a0622e6e0364d0a602e6716c": "miss",
+              "56f2b89dde5358dd34513256": "miss",
+              "a5929fc14c4d9c590fc41534": "miss",
+              "48e1a823474571676fb0cae3": "miss",
+              "67a458c770d7e0bff4ebb646": "miss"
+            },
+            "predicate:取消": {
+              "6f96ac5182089ed2912ab5d0": "miss",
+              "eed08e767aef406342b21c2b": "miss",
+              "dbd5a5389665efc8376ccdeb": "miss",
+              "637b6e1de7dde3f57e72a27c": "miss",
+              "ac16771978e24d8438edbf8e": "miss",
+              "74eb048e42d3e885f12500d8": "miss",
+              "c8ccf42fd575bd7830bce5d5": "miss",
+              "45dddac6275acf2fdf480647": "miss",
+              "763675a7f0d16957dd04162a": "miss",
+              "aa6693547b3681e0b6509bc7": "miss",
+              "70c35223c8e5f1860b652046": "miss",
+              "3e9c024d8a7e1273a7594027": "miss",
+              "3fd354c76241f0de86e1e41b": "miss",
+              "877e6dff7414b1c68692e38c": "miss",
+              "7d8d1337563f3e7f03e19d3d": "miss",
+              "aee578136f383fdc0621ffda": "miss",
+              "56c72c21789d2db29cad9c6a": "miss",
+              "233cf853dc8ba41f443ad016": "miss",
+              "70c561f1c9dddb6356218544": "miss",
+              "acbb2b356539854a97d8ead0": "miss",
+              "222acb924eb71b04f3d13477": "miss",
+              "61dfb98f55aabe70e0dfaed0": "miss",
+              "6ce0917f1864ecdfa40cc551": "miss",
+              "e1350468242c2ce717b476b1": "miss",
+              "90b77455df0bedec20655e6e": "miss",
+              "798b3c8c426683d3f963e1d0": "miss",
+              "05df1f18db7ec638f26eabae": "miss",
+              "71307d38f5b081d1de4d663a": "miss",
+              "39de215fd1b6b0d96e05f1e5": "miss",
+              "86d2867fc21026e691ca0e44": "miss",
+              "3c426da27855f10771c08fc6": "miss",
+              "e4fbb1039b38d429a5cc430e": "miss",
+              "e9291cf1472380d7f2157166": "miss",
+              "8397c04e909e4c9a5dcf5cc5": "miss",
+              "261767d446bce24e872ed454": "miss",
+              "71a3d4a7e09d489b327f23e8": "miss",
+              "05f909bfdb0da85c381fabc3": "miss",
+              "02c807faa334a15cbf138ae0": "miss",
+              "1b3995c8e343631f901d1fe4": "miss",
+              "8095a3f42841a9f661d12309": "miss",
+              "acf2893841c1d59ee1dbfa4d": "miss",
+              "8becab1e73d3312fc27a25b8": "miss",
+              "8dd9801c0717f06b4333ab2f": "miss",
+              "7d4bd13a3acd22d46006f632": "miss",
+              "8b60f1875b37889376423c9c": "miss",
+              "67913faa008b6840a3cbfbf0": "miss",
+              "aeaa0575be366e07b3e1b40e": "miss",
+              "a22f6f751fd1d38bb0044aaa": "miss",
+              "0f762b14b016a44fb2990c54": "miss",
+              "20959b8d927bc0af599c63af": "miss",
+              "32d15975f3c3c9173280d0f8": "miss",
+              "cddb9c61d9d3976ab6257e9d": "miss",
+              "4953421ca0f4997fe7fa0881": "miss",
+              "08a3b2ed8057ed554006bc54": "miss",
+              "4978e046f86c788bfe0b0f79": "miss",
+              "7d214897643529a80325e299": "miss",
+              "e3fa1dfa011cb6aa18d6e210": "miss",
+              "7762702605846e904565245e": "miss",
+              "354c5c2e99707956a534b4e0": "miss",
+              "e8ce345c69e5313484e291aa": "miss",
+              "a0622e6e0364d0a602e6716c": "miss",
+              "56f2b89dde5358dd34513256": "miss",
+              "a5929fc14c4d9c590fc41534": "miss",
+              "48e1a823474571676fb0cae3": "miss",
+              "67a458c770d7e0bff4ebb646": "miss"
+            }
+          },
+          "primary_group_id": "e0d4dc98beefe973",
+          "covered_slots": [
+            "polarity_negative",
+            "policy_fact",
+            "version"
+          ],
+          "missing_after_select": [
+            "predicate:取消"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "e0d4dc98beefe973",
+                "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+                "knowledge_ids": [
+                  "2b63b216-9850-4e82-803e-4006cb9f62ad"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:技能竞赛管理办法",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "246daea17bcb0c50a044240442923165",
+                  "f888b9d28b2f6f72c7e04468549d4e70",
+                  "f3a94cf4259bbfdf0715f343d58a3209",
+                  "8c96118236468d5008db0902ff5a2b7c",
+                  "335bca188df0216bc17ad28daf648620",
+                  "33115481de8de9d955a0ba3ecde2cf77",
+                  "e70a54754d3d6c49c8f5a0936f8439af",
+                  "22fd60c986751fb73ce23dc30d300a54",
+                  "bf27507f3dc0eb11e670f7ff673a6f01",
+                  "54e93d3c359da6fb2978df551141c70f"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9
+                ],
+                "retrieval_scores": [
+                  0.9000000000000001,
+                  0.8500000000000001,
+                  0.8500000000000001,
+                  0.8500000000000001,
+                  0.8500000000000001,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+                "section": "第十六条 应加强竞赛策划、宣传，创新竞赛组织方式， > 第四章 表彰奖励 > 第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.7333,
+                "group_score": 8.9,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "246daea17bcb0c50a044240442923165:r0",
+                  "246daea17bcb0c50a044240442923165:r1",
+                  "246daea17bcb0c50a044240442923165:r2",
+                  "246daea17bcb0c50a044240442923165:r3",
+                  "246daea17bcb0c50a044240442923165:r4",
+                  "246daea17bcb0c50a044240442923165:r5",
+                  "246daea17bcb0c50a044240442923165:r6",
+                  "f888b9d28b2f6f72c7e04468549d4e70:r0",
+                  "f888b9d28b2f6f72c7e04468549d4e70:r1",
+                  "f888b9d28b2f6f72c7e04468549d4e70:r2",
+                  "f888b9d28b2f6f72c7e04468549d4e70:r3",
+                  "f888b9d28b2f6f72c7e04468549d4e70:r4",
+                  "f888b9d28b2f6f72c7e04468549d4e70:r5",
+                  "f888b9d28b2f6f72c7e04468549d4e70:r6",
+                  "f888b9d28b2f6f72c7e04468549d4e70:r7",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r0",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r1",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r2",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r3",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r4",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r5",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r6",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r7",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r8",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r9",
+                  "f3a94cf4259bbfdf0715f343d58a3209:r10",
+                  "8c96118236468d5008db0902ff5a2b7c:r0",
+                  "8c96118236468d5008db0902ff5a2b7c:r1",
+                  "8c96118236468d5008db0902ff5a2b7c:r2",
+                  "8c96118236468d5008db0902ff5a2b7c:r3",
+                  "8c96118236468d5008db0902ff5a2b7c:r4",
+                  "8c96118236468d5008db0902ff5a2b7c:r5",
+                  "8c96118236468d5008db0902ff5a2b7c:r6",
+                  "8c96118236468d5008db0902ff5a2b7c:r7",
+                  "8c96118236468d5008db0902ff5a2b7c:r8",
+                  "8c96118236468d5008db0902ff5a2b7c:r9",
+                  "335bca188df0216bc17ad28daf648620:r0",
+                  "335bca188df0216bc17ad28daf648620:r1",
+                  "335bca188df0216bc17ad28daf648620:r2",
+                  "335bca188df0216bc17ad28daf648620:r3",
+                  "33115481de8de9d955a0ba3ecde2cf77:r0",
+                  "33115481de8de9d955a0ba3ecde2cf77:r1",
+                  "33115481de8de9d955a0ba3ecde2cf77:r2",
+                  "33115481de8de9d955a0ba3ecde2cf77:r3",
+                  "33115481de8de9d955a0ba3ecde2cf77:r4",
+                  "33115481de8de9d955a0ba3ecde2cf77:r5",
+                  "33115481de8de9d955a0ba3ecde2cf77:r6",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r0",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r1",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r2",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r3",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r4",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r5",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r6",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r7",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r8",
+                  "e70a54754d3d6c49c8f5a0936f8439af:r9",
+                  "22fd60c986751fb73ce23dc30d300a54:r0",
+                  "22fd60c986751fb73ce23dc30d300a54:r1",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r0",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r1",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r2",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r3",
+                  "bf27507f3dc0eb11e670f7ff673a6f01:r4",
+                  "54e93d3c359da6fb2978df551141c70f:r0",
+                  "54e93d3c359da6fb2978df551141c70f:r1"
+                ]
+              }
+            ],
+            "primary_group_id": "e0d4dc98beefe973",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": true,
+              "query_tokens": [
+                "取消一级二级竞赛分级",
+                "技能竞赛管理办法最新修订"
+              ],
+              "selection": [
+                {
+                  "group_id": "e0d4dc98beefe973",
+                  "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+                  "knowledge_ids": [
+                    "2b63b216-9850-4e82-803e-4006cb9f62ad"
+                  ],
+                  "score": 8.9,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "version",
+            "policy_fact",
+            "polarity_negative",
+            "predicate:取消"
+          ],
+          "candidate_ids": [
+            "233cf853dc8ba41f443ad016",
+            "6f96ac5182089ed2912ab5d0",
+            "eed08e767aef406342b21c2b",
+            "dbd5a5389665efc8376ccdeb",
+            "637b6e1de7dde3f57e72a27c",
+            "ac16771978e24d8438edbf8e"
+          ],
+          "missing_slots": [
+            "predicate:取消"
+          ],
+          "complete": false,
+          "intents": [
+            "version",
+            "policy"
+          ],
+          "covered_slots": [
+            "polarity_negative",
+            "policy_fact",
+            "version"
+          ],
+          "coverage_matrix": {
+            "version": {
+              "6f96ac5182089ed2912ab5d0": "hit",
+              "eed08e767aef406342b21c2b": "hit",
+              "dbd5a5389665efc8376ccdeb": "hit",
+              "637b6e1de7dde3f57e72a27c": "hit",
+              "ac16771978e24d8438edbf8e": "hit",
+              "74eb048e42d3e885f12500d8": "hit",
+              "c8ccf42fd575bd7830bce5d5": "hit",
+              "45dddac6275acf2fdf480647": "hit",
+              "763675a7f0d16957dd04162a": "hit",
+              "aa6693547b3681e0b6509bc7": "hit",
+              "70c35223c8e5f1860b652046": "hit",
+              "3e9c024d8a7e1273a7594027": "hit",
+              "3fd354c76241f0de86e1e41b": "hit",
+              "877e6dff7414b1c68692e38c": "hit",
+              "7d8d1337563f3e7f03e19d3d": "hit",
+              "aee578136f383fdc0621ffda": "hit",
+              "56c72c21789d2db29cad9c6a": "hit",
+              "233cf853dc8ba41f443ad016": "hit",
+              "70c561f1c9dddb6356218544": "hit",
+              "acbb2b356539854a97d8ead0": "hit",
+              "222acb924eb71b04f3d13477": "hit",
+              "61dfb98f55aabe70e0dfaed0": "hit",
+              "6ce0917f1864ecdfa40cc551": "hit",
+              "e1350468242c2ce717b476b1": "hit",
+              "90b77455df0bedec20655e6e": "hit",
+              "798b3c8c426683d3f963e1d0": "hit",
+              "05df1f18db7ec638f26eabae": "hit",
+              "71307d38f5b081d1de4d663a": "hit",
+              "39de215fd1b6b0d96e05f1e5": "hit",
+              "86d2867fc21026e691ca0e44": "hit",
+              "3c426da27855f10771c08fc6": "hit",
+              "e4fbb1039b38d429a5cc430e": "hit",
+              "e9291cf1472380d7f2157166": "hit",
+              "8397c04e909e4c9a5dcf5cc5": "hit",
+              "261767d446bce24e872ed454": "hit",
+              "71a3d4a7e09d489b327f23e8": "hit",
+              "05f909bfdb0da85c381fabc3": "hit",
+              "02c807faa334a15cbf138ae0": "hit",
+              "1b3995c8e343631f901d1fe4": "hit",
+              "8095a3f42841a9f661d12309": "hit",
+              "acf2893841c1d59ee1dbfa4d": "hit",
+              "8becab1e73d3312fc27a25b8": "hit",
+              "8dd9801c0717f06b4333ab2f": "hit",
+              "7d4bd13a3acd22d46006f632": "hit",
+              "8b60f1875b37889376423c9c": "hit",
+              "67913faa008b6840a3cbfbf0": "hit",
+              "aeaa0575be366e07b3e1b40e": "hit",
+              "a22f6f751fd1d38bb0044aaa": "hit",
+              "0f762b14b016a44fb2990c54": "hit",
+              "20959b8d927bc0af599c63af": "hit",
+              "32d15975f3c3c9173280d0f8": "hit",
+              "cddb9c61d9d3976ab6257e9d": "hit",
+              "4953421ca0f4997fe7fa0881": "hit",
+              "08a3b2ed8057ed554006bc54": "hit",
+              "4978e046f86c788bfe0b0f79": "unknown",
+              "7d214897643529a80325e299": "hit",
+              "e3fa1dfa011cb6aa18d6e210": "hit",
+              "7762702605846e904565245e": "hit",
+              "354c5c2e99707956a534b4e0": "hit",
+              "e8ce345c69e5313484e291aa": "hit",
+              "a0622e6e0364d0a602e6716c": "hit",
+              "56f2b89dde5358dd34513256": "hit",
+              "a5929fc14c4d9c590fc41534": "hit",
+              "48e1a823474571676fb0cae3": "hit",
+              "67a458c770d7e0bff4ebb646": "hit"
+            },
+            "policy_fact": {
+              "6f96ac5182089ed2912ab5d0": "hit",
+              "eed08e767aef406342b21c2b": "hit",
+              "dbd5a5389665efc8376ccdeb": "hit",
+              "637b6e1de7dde3f57e72a27c": "hit",
+              "ac16771978e24d8438edbf8e": "hit",
+              "74eb048e42d3e885f12500d8": "hit",
+              "c8ccf42fd575bd7830bce5d5": "hit",
+              "45dddac6275acf2fdf480647": "hit",
+              "763675a7f0d16957dd04162a": "hit",
+              "aa6693547b3681e0b6509bc7": "hit",
+              "70c35223c8e5f1860b652046": "hit",
+              "3e9c024d8a7e1273a7594027": "hit",
+              "3fd354c76241f0de86e1e41b": "hit",
+              "877e6dff7414b1c68692e38c": "hit",
+              "7d8d1337563f3e7f03e19d3d": "hit",
+              "aee578136f383fdc0621ffda": "hit",
+              "56c72c21789d2db29cad9c6a": "hit",
+              "233cf853dc8ba41f443ad016": "hit",
+              "70c561f1c9dddb6356218544": "hit",
+              "acbb2b356539854a97d8ead0": "hit",
+              "222acb924eb71b04f3d13477": "hit",
+              "61dfb98f55aabe70e0dfaed0": "hit",
+              "6ce0917f1864ecdfa40cc551": "hit",
+              "e1350468242c2ce717b476b1": "hit",
+              "90b77455df0bedec20655e6e": "hit",
+              "798b3c8c426683d3f963e1d0": "hit",
+              "05df1f18db7ec638f26eabae": "hit",
+              "71307d38f5b081d1de4d663a": "hit",
+              "39de215fd1b6b0d96e05f1e5": "hit",
+              "86d2867fc21026e691ca0e44": "hit",
+              "3c426da27855f10771c08fc6": "hit",
+              "e4fbb1039b38d429a5cc430e": "hit",
+              "e9291cf1472380d7f2157166": "hit",
+              "8397c04e909e4c9a5dcf5cc5": "hit",
+              "261767d446bce24e872ed454": "hit",
+              "71a3d4a7e09d489b327f23e8": "hit",
+              "05f909bfdb0da85c381fabc3": "hit",
+              "02c807faa334a15cbf138ae0": "hit",
+              "1b3995c8e343631f901d1fe4": "hit",
+              "8095a3f42841a9f661d12309": "hit",
+              "acf2893841c1d59ee1dbfa4d": "hit",
+              "8becab1e73d3312fc27a25b8": "hit",
+              "8dd9801c0717f06b4333ab2f": "hit",
+              "7d4bd13a3acd22d46006f632": "hit",
+              "8b60f1875b37889376423c9c": "hit",
+              "67913faa008b6840a3cbfbf0": "hit",
+              "aeaa0575be366e07b3e1b40e": "hit",
+              "a22f6f751fd1d38bb0044aaa": "hit",
+              "0f762b14b016a44fb2990c54": "hit",
+              "20959b8d927bc0af599c63af": "hit",
+              "32d15975f3c3c9173280d0f8": "hit",
+              "cddb9c61d9d3976ab6257e9d": "hit",
+              "4953421ca0f4997fe7fa0881": "hit",
+              "08a3b2ed8057ed554006bc54": "hit",
+              "4978e046f86c788bfe0b0f79": "hit",
+              "7d214897643529a80325e299": "hit",
+              "e3fa1dfa011cb6aa18d6e210": "hit",
+              "7762702605846e904565245e": "hit",
+              "354c5c2e99707956a534b4e0": "hit",
+              "e8ce345c69e5313484e291aa": "hit",
+              "a0622e6e0364d0a602e6716c": "hit",
+              "56f2b89dde5358dd34513256": "hit",
+              "a5929fc14c4d9c590fc41534": "hit",
+              "48e1a823474571676fb0cae3": "hit",
+              "67a458c770d7e0bff4ebb646": "hit"
+            },
+            "polarity_negative": {
+              "6f96ac5182089ed2912ab5d0": "miss",
+              "eed08e767aef406342b21c2b": "miss",
+              "dbd5a5389665efc8376ccdeb": "miss",
+              "637b6e1de7dde3f57e72a27c": "miss",
+              "ac16771978e24d8438edbf8e": "miss",
+              "74eb048e42d3e885f12500d8": "miss",
+              "c8ccf42fd575bd7830bce5d5": "miss",
+              "45dddac6275acf2fdf480647": "miss",
+              "763675a7f0d16957dd04162a": "miss",
+              "aa6693547b3681e0b6509bc7": "miss",
+              "70c35223c8e5f1860b652046": "miss",
+              "3e9c024d8a7e1273a7594027": "miss",
+              "3fd354c76241f0de86e1e41b": "miss",
+              "877e6dff7414b1c68692e38c": "miss",
+              "7d8d1337563f3e7f03e19d3d": "miss",
+              "aee578136f383fdc0621ffda": "miss",
+              "56c72c21789d2db29cad9c6a": "miss",
+              "233cf853dc8ba41f443ad016": "hit",
+              "70c561f1c9dddb6356218544": "miss",
+              "acbb2b356539854a97d8ead0": "miss",
+              "222acb924eb71b04f3d13477": "miss",
+              "61dfb98f55aabe70e0dfaed0": "miss",
+              "6ce0917f1864ecdfa40cc551": "miss",
+              "e1350468242c2ce717b476b1": "miss",
+              "90b77455df0bedec20655e6e": "miss",
+              "798b3c8c426683d3f963e1d0": "miss",
+              "05df1f18db7ec638f26eabae": "miss",
+              "71307d38f5b081d1de4d663a": "miss",
+              "39de215fd1b6b0d96e05f1e5": "miss",
+              "86d2867fc21026e691ca0e44": "miss",
+              "3c426da27855f10771c08fc6": "miss",
+              "e4fbb1039b38d429a5cc430e": "miss",
+              "e9291cf1472380d7f2157166": "miss",
+              "8397c04e909e4c9a5dcf5cc5": "miss",
+              "261767d446bce24e872ed454": "miss",
+              "71a3d4a7e09d489b327f23e8": "miss",
+              "05f909bfdb0da85c381fabc3": "miss",
+              "02c807faa334a15cbf138ae0": "miss",
+              "1b3995c8e343631f901d1fe4": "miss",
+              "8095a3f42841a9f661d12309": "miss",
+              "acf2893841c1d59ee1dbfa4d": "miss",
+              "8becab1e73d3312fc27a25b8": "miss",
+              "8dd9801c0717f06b4333ab2f": "miss",
+              "7d4bd13a3acd22d46006f632": "miss",
+              "8b60f1875b37889376423c9c": "miss",
+              "67913faa008b6840a3cbfbf0": "miss",
+              "aeaa0575be366e07b3e1b40e": "miss",
+              "a22f6f751fd1d38bb0044aaa": "miss",
+              "0f762b14b016a44fb2990c54": "miss",
+              "20959b8d927bc0af599c63af": "miss",
+              "32d15975f3c3c9173280d0f8": "miss",
+              "cddb9c61d9d3976ab6257e9d": "miss",
+              "4953421ca0f4997fe7fa0881": "miss",
+              "08a3b2ed8057ed554006bc54": "miss",
+              "4978e046f86c788bfe0b0f79": "hit",
+              "7d214897643529a80325e299": "miss",
+              "e3fa1dfa011cb6aa18d6e210": "miss",
+              "7762702605846e904565245e": "miss",
+              "354c5c2e99707956a534b4e0": "miss",
+              "e8ce345c69e5313484e291aa": "miss",
+              "a0622e6e0364d0a602e6716c": "miss",
+              "56f2b89dde5358dd34513256": "miss",
+              "a5929fc14c4d9c590fc41534": "miss",
+              "48e1a823474571676fb0cae3": "miss",
+              "67a458c770d7e0bff4ebb646": "miss"
+            },
+            "predicate:取消": {
+              "6f96ac5182089ed2912ab5d0": "miss",
+              "eed08e767aef406342b21c2b": "miss",
+              "dbd5a5389665efc8376ccdeb": "miss",
+              "637b6e1de7dde3f57e72a27c": "miss",
+              "ac16771978e24d8438edbf8e": "miss",
+              "74eb048e42d3e885f12500d8": "miss",
+              "c8ccf42fd575bd7830bce5d5": "miss",
+              "45dddac6275acf2fdf480647": "miss",
+              "763675a7f0d16957dd04162a": "miss",
+              "aa6693547b3681e0b6509bc7": "miss",
+              "70c35223c8e5f1860b652046": "miss",
+              "3e9c024d8a7e1273a7594027": "miss",
+              "3fd354c76241f0de86e1e41b": "miss",
+              "877e6dff7414b1c68692e38c": "miss",
+              "7d8d1337563f3e7f03e19d3d": "miss",
+              "aee578136f383fdc0621ffda": "miss",
+              "56c72c21789d2db29cad9c6a": "miss",
+              "233cf853dc8ba41f443ad016": "miss",
+              "70c561f1c9dddb6356218544": "miss",
+              "acbb2b356539854a97d8ead0": "miss",
+              "222acb924eb71b04f3d13477": "miss",
+              "61dfb98f55aabe70e0dfaed0": "miss",
+              "6ce0917f1864ecdfa40cc551": "miss",
+              "e1350468242c2ce717b476b1": "miss",
+              "90b77455df0bedec20655e6e": "miss",
+              "798b3c8c426683d3f963e1d0": "miss",
+              "05df1f18db7ec638f26eabae": "miss",
+              "71307d38f5b081d1de4d663a": "miss",
+              "39de215fd1b6b0d96e05f1e5": "miss",
+              "86d2867fc21026e691ca0e44": "miss",
+              "3c426da27855f10771c08fc6": "miss",
+              "e4fbb1039b38d429a5cc430e": "miss",
+              "e9291cf1472380d7f2157166": "miss",
+              "8397c04e909e4c9a5dcf5cc5": "miss",
+              "261767d446bce24e872ed454": "miss",
+              "71a3d4a7e09d489b327f23e8": "miss",
+              "05f909bfdb0da85c381fabc3": "miss",
+              "02c807faa334a15cbf138ae0": "miss",
+              "1b3995c8e343631f901d1fe4": "miss",
+              "8095a3f42841a9f661d12309": "miss",
+              "acf2893841c1d59ee1dbfa4d": "miss",
+              "8becab1e73d3312fc27a25b8": "miss",
+              "8dd9801c0717f06b4333ab2f": "miss",
+              "7d4bd13a3acd22d46006f632": "miss",
+              "8b60f1875b37889376423c9c": "miss",
+              "67913faa008b6840a3cbfbf0": "miss",
+              "aeaa0575be366e07b3e1b40e": "miss",
+              "a22f6f751fd1d38bb0044aaa": "miss",
+              "0f762b14b016a44fb2990c54": "miss",
+              "20959b8d927bc0af599c63af": "miss",
+              "32d15975f3c3c9173280d0f8": "miss",
+              "cddb9c61d9d3976ab6257e9d": "miss",
+              "4953421ca0f4997fe7fa0881": "miss",
+              "08a3b2ed8057ed554006bc54": "miss",
+              "4978e046f86c788bfe0b0f79": "miss",
+              "7d214897643529a80325e299": "miss",
+              "e3fa1dfa011cb6aa18d6e210": "miss",
+              "7762702605846e904565245e": "miss",
+              "354c5c2e99707956a534b4e0": "miss",
+              "e8ce345c69e5313484e291aa": "miss",
+              "a0622e6e0364d0a602e6716c": "miss",
+              "56f2b89dde5358dd34513256": "miss",
+              "a5929fc14c4d9c590fc41534": "miss",
+              "48e1a823474571676fb0cae3": "miss",
+              "67a458c770d7e0bff4ebb646": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+          "intents": [
+            "version",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "version",
+            "policy_fact",
+            "polarity_negative",
+            "predicate:取消"
+          ],
+          "entities": [
+            "技能",
+            "竞赛",
+            "管理",
+            "办法",
+            "修订版",
+            "取消",
+            "一级",
+            "二级",
+            "分级",
+            "技能竞赛管理办法最新修订版",
+            "技能竞赛管理办法最新修订",
+            "技能竞赛管理"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": true,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "version",
+            "policy",
+            "prohibition",
+            "scope",
+            "responsibility",
+            "relationship"
+          ],
+          "subject": "技能",
+          "object": "竞赛",
+          "scope": [],
+          "selector": [],
+          "predicate": "取消",
+          "polarity": "negative",
+          "condition_slots": [],
+          "requested_attribute": "version",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "latest",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "技能",
+            "竞赛",
+            "管理",
+            "办法",
+            "修订版",
+            "取消",
+            "一级",
+            "二级",
+            "分级",
+            "技能竞赛管理办法最新修订版",
+            "技能竞赛管理办法最新修订",
+            "技能竞赛管理"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "e0d4dc98beefe973",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "knowledge_ids": [
+                "2b63b216-9850-4e82-803e-4006cb9f62ad"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:技能竞赛管理办法",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "246daea17bcb0c50a044240442923165",
+                "f888b9d28b2f6f72c7e04468549d4e70",
+                "f3a94cf4259bbfdf0715f343d58a3209",
+                "8c96118236468d5008db0902ff5a2b7c",
+                "335bca188df0216bc17ad28daf648620",
+                "33115481de8de9d955a0ba3ecde2cf77",
+                "e70a54754d3d6c49c8f5a0936f8439af",
+                "22fd60c986751fb73ce23dc30d300a54",
+                "bf27507f3dc0eb11e670f7ff673a6f01",
+                "54e93d3c359da6fb2978df551141c70f"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "retrieval_scores": [
+                0.9000000000000001,
+                0.8500000000000001,
+                0.8500000000000001,
+                0.8500000000000001,
+                0.8500000000000001,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+              "section": "第十六条 应加强竞赛策划、宣传，创新竞赛组织方式， > 第四章 表彰奖励 > 第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.7333,
+              "group_score": 8.9,
+              "rejection_reasons": [],
+              "record_ids": [
+                "246daea17bcb0c50a044240442923165:r0",
+                "246daea17bcb0c50a044240442923165:r1",
+                "246daea17bcb0c50a044240442923165:r2",
+                "246daea17bcb0c50a044240442923165:r3",
+                "246daea17bcb0c50a044240442923165:r4",
+                "246daea17bcb0c50a044240442923165:r5",
+                "246daea17bcb0c50a044240442923165:r6",
+                "f888b9d28b2f6f72c7e04468549d4e70:r0",
+                "f888b9d28b2f6f72c7e04468549d4e70:r1",
+                "f888b9d28b2f6f72c7e04468549d4e70:r2",
+                "f888b9d28b2f6f72c7e04468549d4e70:r3",
+                "f888b9d28b2f6f72c7e04468549d4e70:r4",
+                "f888b9d28b2f6f72c7e04468549d4e70:r5",
+                "f888b9d28b2f6f72c7e04468549d4e70:r6",
+                "f888b9d28b2f6f72c7e04468549d4e70:r7",
+                "f3a94cf4259bbfdf0715f343d58a3209:r0",
+                "f3a94cf4259bbfdf0715f343d58a3209:r1",
+                "f3a94cf4259bbfdf0715f343d58a3209:r2",
+                "f3a94cf4259bbfdf0715f343d58a3209:r3",
+                "f3a94cf4259bbfdf0715f343d58a3209:r4",
+                "f3a94cf4259bbfdf0715f343d58a3209:r5",
+                "f3a94cf4259bbfdf0715f343d58a3209:r6",
+                "f3a94cf4259bbfdf0715f343d58a3209:r7",
+                "f3a94cf4259bbfdf0715f343d58a3209:r8",
+                "f3a94cf4259bbfdf0715f343d58a3209:r9",
+                "f3a94cf4259bbfdf0715f343d58a3209:r10",
+                "8c96118236468d5008db0902ff5a2b7c:r0",
+                "8c96118236468d5008db0902ff5a2b7c:r1",
+                "8c96118236468d5008db0902ff5a2b7c:r2",
+                "8c96118236468d5008db0902ff5a2b7c:r3",
+                "8c96118236468d5008db0902ff5a2b7c:r4",
+                "8c96118236468d5008db0902ff5a2b7c:r5",
+                "8c96118236468d5008db0902ff5a2b7c:r6",
+                "8c96118236468d5008db0902ff5a2b7c:r7",
+                "8c96118236468d5008db0902ff5a2b7c:r8",
+                "8c96118236468d5008db0902ff5a2b7c:r9",
+                "335bca188df0216bc17ad28daf648620:r0",
+                "335bca188df0216bc17ad28daf648620:r1",
+                "335bca188df0216bc17ad28daf648620:r2",
+                "335bca188df0216bc17ad28daf648620:r3",
+                "33115481de8de9d955a0ba3ecde2cf77:r0",
+                "33115481de8de9d955a0ba3ecde2cf77:r1",
+                "33115481de8de9d955a0ba3ecde2cf77:r2",
+                "33115481de8de9d955a0ba3ecde2cf77:r3",
+                "33115481de8de9d955a0ba3ecde2cf77:r4",
+                "33115481de8de9d955a0ba3ecde2cf77:r5",
+                "33115481de8de9d955a0ba3ecde2cf77:r6",
+                "e70a54754d3d6c49c8f5a0936f8439af:r0",
+                "e70a54754d3d6c49c8f5a0936f8439af:r1",
+                "e70a54754d3d6c49c8f5a0936f8439af:r2",
+                "e70a54754d3d6c49c8f5a0936f8439af:r3",
+                "e70a54754d3d6c49c8f5a0936f8439af:r4",
+                "e70a54754d3d6c49c8f5a0936f8439af:r5",
+                "e70a54754d3d6c49c8f5a0936f8439af:r6",
+                "e70a54754d3d6c49c8f5a0936f8439af:r7",
+                "e70a54754d3d6c49c8f5a0936f8439af:r8",
+                "e70a54754d3d6c49c8f5a0936f8439af:r9",
+                "22fd60c986751fb73ce23dc30d300a54:r0",
+                "22fd60c986751fb73ce23dc30d300a54:r1",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r0",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r1",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r2",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r3",
+                "bf27507f3dc0eb11e670f7ff673a6f01:r4",
+                "54e93d3c359da6fb2978df551141c70f:r0",
+                "54e93d3c359da6fb2978df551141c70f:r1"
+              ]
+            }
+          ],
+          "primary_group_id": "e0d4dc98beefe973",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": true,
+            "query_tokens": [
+              "取消一级二级竞赛分级",
+              "技能竞赛管理办法最新修订"
+            ],
+            "selection": [
+              {
+                "group_id": "e0d4dc98beefe973",
+                "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+                "knowledge_ids": [
+                  "2b63b216-9850-4e82-803e-4006cb9f62ad"
+                ],
+                "score": 8.9,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "version": true,
+            "policy_anchors": [
+              "技能",
+              "竞赛",
+              "管理",
+              "办法"
+            ],
+            "polarity_negative": true,
+            "predicate:取消": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "233cf853dc8ba41f443ad016"
+              ],
+              "passage_id": "246daea17bcb0c50a044240442923165",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "text": "- 第十五条技能竞赛一般分为预赛和决赛两个阶段，预赛一般由市级企业组织，决赛应以实际操作考核为主，理论考试为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所—7—不同，但实际操作成绩所占比例不得少于70%",
+              "fact_kind": "prohibition"
+            },
+            {
+              "rendered_candidate_ids": [
+                "6f96ac5182089ed2912ab5d0"
+              ],
+              "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "text": "- 第六章附则第二十三条各市分公司可参照本办法，结合实际，制订本单位技能竞赛管理办法细则，并积极组织员工参加各级技能竞赛，提升技能竞赛的广泛性和参与度",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "eed08e767aef406342b21c2b"
+              ],
+              "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "text": "- 第二十五条本办法自印发之日起实施，《中国电信广西公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废止",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 238
+        },
+        "primary_group_id": "e0d4dc98beefe973",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "type": "knowledge",
+              "label": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216"
+            },
+            {
+              "id": "35c21d92-1693-45df-8e20-519786a085b0",
+              "type": "block",
+              "label": "等级一级。基于新技术、新业务和创新领域等暂无岗位资格认",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "df76c8e4-9135-41df-8b62-2a6de1374bc9",
+              "type": "block",
+              "label": "[第6页]",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "822889ea-69a7-424f-87a4-88761909fc83",
+              "type": "block",
+              "label": "第二十二条 技能竞赛的组织费用由各竞赛的主办部门在",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "9d770345-5121-4117-a1a1-385235a43ea9",
+              "type": "block",
+              "label": "[第8页]",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+              "type": "block",
+              "label": "中电信桂〔2026〕158号",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            },
+            {
+              "id": "026d7b15-a469-4f2b-b54c-8b41e21acd7e",
+              "type": "block",
+              "label": "[第1页]",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            }
+          ],
+          "edges": [
+            {
+              "source": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "target": "35c21d92-1693-45df-8e20-519786a085b0",
+              "type": "contains"
+            },
+            {
+              "source": "df76c8e4-9135-41df-8b62-2a6de1374bc9",
+              "target": "35c21d92-1693-45df-8e20-519786a085b0",
+              "type": "parent"
+            },
+            {
+              "source": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "target": "822889ea-69a7-424f-87a4-88761909fc83",
+              "type": "contains"
+            },
+            {
+              "source": "9d770345-5121-4117-a1a1-385235a43ea9",
+              "target": "822889ea-69a7-424f-87a4-88761909fc83",
+              "type": "parent"
+            },
+            {
+              "source": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "target": "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+              "type": "contains"
+            },
+            {
+              "source": "026d7b15-a469-4f2b-b54c-8b41e21acd7e",
+              "target": "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+              "type": "parent"
+            }
+          ],
+          "truncated": false,
+          "node_count": 7
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "local_version"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 3,
+          "adjacent_extension": 0,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "2b63b216-9850-4e82-803e-4006cb9f62ad",
+            "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+          ],
+          "accepted_block_ids": [
+            "35c21d92-1693-45df-8e20-519786a085b0",
+            "822889ea-69a7-424f-87a4-88761909fc83",
+            "e5eea58f-be4b-4f87-9ab0-de36b9626f43",
+            "2e2cc9fe-f718-4fbc-b7fe-6db1020208aa",
+            "0def016d-ebde-4c75-8f6d-a2589ec5551d",
+            "65d51882-5469-490a-9905-ac7c7793d29c",
+            "1ffdd27a-2d3e-4e77-9dee-1802db00e12b"
+          ],
+          "accepted_passage_ids": [
+            "246daea17bcb0c50a044240442923165",
+            "f888b9d28b2f6f72c7e04468549d4e70",
+            "f3a94cf4259bbfdf0715f343d58a3209",
+            "8c96118236468d5008db0902ff5a2b7c",
+            "335bca188df0216bc17ad28daf648620",
+            "c21ec60c41b528d524b03eee394a13e8",
+            "ff36ccda4b04ec796c503bf2e151bda8",
+            "33115481de8de9d955a0ba3ecde2cf77",
+            "e70a54754d3d6c49c8f5a0936f8439af",
+            "22fd60c986751fb73ce23dc30d300a54",
+            "bf27507f3dc0eb11e670f7ff673a6f01",
+            "54e93d3c359da6fb2978df551141c70f"
+          ],
+          "adjacent_passage_ids": [
+            "33115481de8de9d955a0ba3ecde2cf77",
+            "f3a94cf4259bbfdf0715f343d58a3209",
+            "e70a54754d3d6c49c8f5a0936f8439af",
+            "22fd60c986751fb73ce23dc30d300a54",
+            "bf27507f3dc0eb11e670f7ff673a6f01",
+            "54e93d3c359da6fb2978df551141c70f"
+          ],
+          "generation_knowledge_ids": [
+            "2b63b216-9850-4e82-803e-4006cb9f62ad"
+          ],
+          "top_score": 0.5,
+          "intent": "local_version",
+          "adjacent_count": 6,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "282c232c25580776e193b562"
+        },
+        "snapshot_fingerprint": "282c232c25580776e193b562",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 3,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 42.85
+  },
+  "top_candidate_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+  "candidates": [
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "passage_id": "246daea17bcb0c50a044240442923165",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十六条 应加强竞赛策划、宣传，创新竞赛组织方式， > 第四章 表彰奖励 > 第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n\n第十四条 技能竞赛应依据国家、行业职业技能标准和企\n业岗位资格认证标准命题，并至少高于岗位资格认证标准最低\n等级一级。基于新技术、新业务和创新领域等暂无岗位资格认\n证标准的技能竞赛，可根据竞赛要求另行制订竞赛标准或参照\n国内、国际同类标准进行命题。\n第十五条 技能竞赛一般分为预赛和决赛两个阶段，预赛\n一般由市级企业组织，决赛应以实际操作考核为主，理论考试\n为辅，理论考试和实际操作考核比例根据竞赛具体要求可有所\n— 7 — 不同，但实际操作成绩所占比例不得少于70%。\n第十六条 应加强竞赛策划、宣传，创新竞赛组织方式，\n强化竞赛过程管控，注重并及时总结竞赛成效，培养和树立一\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。"
+    },
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "passage_id": "f888b9d28b2f6f72c7e04468549d4e70",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 0.8500000000000001,
+      "final_relevance_score": 0.5,
+      "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第二十三条 各市分公司可参照本办法，结合实际，制订 > 第二十四条 本办法由区电信工会负责解释。 > 第二十五条 本办法自印发之日起实施，《中国电信广西\n广西公司承办或参加的\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n申请流程按照公司内控权限列表的预算外项目进行审批。\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\n司内控权限列表的预算外项目进行审批。\n第六章 附则\n第二十三条 各市分公司可参照本办法，结合实际，制订\n本单位技能竞赛管理办法细则，并积极组织员工参加各级技能\n竞赛，提升技能竞赛的广泛性和参与度。\n第二十四条 本办法由区电信工会负责解释。\n第二十五条 本办法自印发之日起实施，《中国电信广西\n公司技能竞赛管理办法》（中电信桂〔2023〕278号）同时废\n止。\n中国电信广西公司办公室 2026年6月2日印发"
+    },
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "passage_id": "f3a94cf4259bbfdf0715f343d58a3209",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 0.8500000000000001,
+      "final_relevance_score": 0.5,
+      "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第十八条 全区电信职业技能竞赛每个项目的个人第1-6 > 第十九条 联合劳务派遣、业务外包单位开展的技能竞赛， > 第二十条 广西公司组队参加自治区级及以上技能竞赛\n批竞赛品牌。\n第四章 表彰奖励\n第十七条 技能竞赛应坚持精神鼓励为主，物质奖励为辅。\n要通过各种方式宣传、学习在竞赛中涌现出来的优秀技能人才。\n要及时总结、提炼竞赛过程中发现的由员工首创的先进操作法，\n各级企业可以个人或团队（单位）名称命名，并组织宣传推广。\n第十八条 全区电信职业技能竞赛每个项目的个人第1-6\n名经审核可授予“中国电信广西公司技术能手”称号（D2级），\n其中每个项目的第1名视竞赛情况可向集团公司申报“中国电\n信集团技术能手”（C2级）。广西公司其他技能竞赛根据获奖\n情况可授予个人第1名D2级荣誉；竞赛有多个项目的，可授\n予每个项目个人第1名D3级荣誉。单次比赛的荣誉获得人数\n不得超过参加现场决赛人数的三分之一。\n第十九条 联合劳务派遣、业务外包单位开展的技能竞赛，\n在遵守相关法律规定的前提下，竞赛组织领导机构可以与其协\n商对获奖人员进行表彰奖励。\n第二十条 广西公司组队参加自治区级及以上技能竞赛\n（含受集团指派参加全国性竞赛）获奖的，执行竞赛主办方统\n一要求的奖励规定。如主办方、集团公司未向获奖选手、团队"
+    },
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "passage_id": "8c96118236468d5008db0902ff5a2b7c",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 0.8500000000000001,
+      "final_relevance_score": 0.5,
+      "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】（五）落实技能竞赛委员会交办的其他事项。 > 第九条 各部门应按各自职能积极发挥在技能竞赛中的作 > （一）人力资源部门应结合人才队伍建设、岗位培训和岗\n由广西公司、中国电信广西区工会（以下称“区电信工会”）联\n合举办。\n第六条 广西公司成立由人力资源部门、财务部门、区电\n信工会和竞赛专业主管部门组成的技能竞赛委员会，负责技能\n竞赛的组织领导工作。技能竞赛委员会下设办公室。\n第七条 技能竞赛委员会主要职责是:\n（一）审定技能竞赛组织实施方案;\n（二）审定承办或参加同专业外部技能竞赛的方案;\n（三）审定报上级主管部门备案的技能竞赛方案;\n（四）其他需竞赛委员会审定的重大事项。\n第八条 竞赛委员会办公室主要职责是:\n— 5 — （一）制订技能竞赛实施方案;\n（二）负责技能竞赛的组织实施;\n（三）提出承办或参加同专业外部技能竞赛的方案;\n（四）向上级主管部门备案技能竞赛方案;\n（五）落实技能竞赛委员会交办的其他事项。\n第九条 各部门应按各自职能积极发挥在技能竞赛中的作\n用，形成齐抓共管、高效协同、各司其职的工作格局。\n（一）人力资源部门应结合人才队伍建设、岗位培训和岗\n位资格认证要求，组织研究制定技能竞赛相关政策、制度和办\n法。"
+    },
+    {
+      "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+      "passage_id": "335bca188df0216bc17ad28daf648620",
+      "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+      "score": 0.8500000000000001,
+      "final_relevance_score": 0.5,
+      "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第一章 总则 > 第一条 为深入学习贯彻习近平新时代中国特色社会主义\n中电信桂〔2026〕158号\n关于印发中国电信广西公司技能竞赛\n管理办法（修订）的通知\n各市分公司及同级工会，各专业公司，区公司各部门：\n自《中国电信广西公司技能竞赛管理办法》（中电信桂\n〔2023〕278号）印发实施以来，在激发员工活力和内生动力，\n促进企业高质量发展和员工成长成才等方面发挥了积极作用。\n为进一步激发各单位和员工参赛热情，持续完善公司技能人才\n培养与激励机制，强化以赛促学、以赛促练的导向，结合近年\n竞赛工作实际开展情况，区公司、区电信工会修订了该办法,\n— 2 —现印发给你们，请认真组织学习，严格遵照执行。\n中国电信广西公司 中国电信广西区工会\n2026年5月29日\n— 3 — 中国电信广西公司技能竞赛管理办法\n（修订）\n第一章 总则\n第一条 为深入学习贯彻习近平新时代中国特色社会主义\n思想，围绕企业发展定位，聚焦发展和服务，建设专业型、技\n能型、创新型职工队伍，弘扬劳模精神、劳动精神、工匠精神，\n营造发展光荣的企业风尚和全心全意为客户服务的敬业风气，\n积极倡导与企业共同发展文化，增强员工的职业荣誉感、自豪\n感和获得感，进一步发挥技能竞赛在高技能人才队伍建设中的\n作用，根据《中国电信集团技能竞赛管理办法》，结合中国电\n信广西公司（以下简称“广西公司”）实际，制订本办法。"
+    }
+  ],
+  "search_ms": 2950.71,
+  "ask_ms": 42.85,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "ZU9zl2at1S61XISQZ1ClGGtTdhHdh4re",
+  "search_snapshot_fingerprint": "282c232c25580776e193b562",
+  "ask_snapshot_fingerprint": "282c232c25580776e193b562",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "53c0be6f9e69f3b9efcf0538"
+}

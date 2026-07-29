@@ -1,0 +1,3606 @@
+{
+  "case": {
+    "case_id": "KB-010",
+    "category": "同义词与口语表达",
+    "query": "防诈骗和骚扰电话 代理商被罚多少钱",
+    "expected_knowledge_ids": [
+      "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+    ],
+    "expected_title_keywords": [
+      "涉诈",
+      "涉骚扰",
+      "2026"
+    ],
+    "required_facts": [
+      "2000元",
+      "涉诈"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "市场〔2026〕8号附件1；口语'防诈骗/罚多少钱'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "73533405-09e3-4388-8551-03506729614c",
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+          "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。\n2.约谈代理商暂停营业1个\n月。-\n—11—近 12 个月累计涉\n诈月份（含跨年）3 个月 工号永久关闭 - -\n近 12 个月内累计\n涉诈号码数量（含\n跨年）累计达到 30\n个（含）- - 处罚 50000 元\n累计达到 50\n个（含）的- -1.关停代理商网点名下\n全部工号。 2.停止合作。\n3.列入电信业务代理代\n办黑名单。\n说明：1.各场景处罚互不包含。\n2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n—12—附件 2\n场景（按号\n码入网时间\n判定）触发条件入网涉及\n的代理商\n营业员入网涉及的代\n理商网点 （按营\n业网点分别统\n计）入网涉及的代理\n商（按市分公司\n分别统计）备注\n一个自然月\n内涉骚扰号\n码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，\n不再统计和处置。",
+          "score": 1.0,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "f9159242a68d8d9a1268abce68d7a9a3",
+          "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。",
+          "block_ids": [
+            "73533405-09e3-4388-8551-03506729614c",
+            "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+            "aa843875-174b-4f55-b541-c693491a7611",
+            "a105fcfa-781d-41b7-a9c2-c036a019e441",
+            "48e847dd-e49d-408f-8329-a95659882b7f",
+            "18c90e9d-69f1-4dfa-afd3-b0a74161bb97",
+            "8096f082-5c82-41bb-8f4a-31933dd6e5ba",
+            "a41d50b4-f30d-4fea-a17c-5dbedbef4f3b",
+            "5f92f7c9-8009-49af-845d-6d690a5aeb36",
+            "90127c73-0e5b-4d28-8fac-c3fa27ae0542",
+            "4e709da3-022d-4617-aa81-96d7b2e92c9b",
+            "bf5caa29-a76c-460f-b2b8-e58d92c64824",
+            "91344594-17ea-44bb-b411-32972c90b5c6",
+            "1ae7059f-36f5-4405-839f-215a13bd7737",
+            "087a668e-3263-44eb-bf29-f9fdd10a8185",
+            "576d74d9-9d51-4ea1-9329-c3e628d92325",
+            "0777b79e-77ae-4fa7-a19d-9f32fd7c1966",
+            "12aaf4b7-1227-48a9-8b76-4615470c642e",
+            "86710f79-b49e-498d-9b33-2e0bd28d13c7",
+            "2fc4e682-4e3c-4424-8659-615ddae37ff2",
+            "647b3508-833a-4337-9a8f-9069e8a7b3fe",
+            "1b7031d8-ad61-42f7-9b4e-6a40da939470",
+            "2fb38045-67fc-4ce5-b24a-5d030b20d00c",
+            "bab47d06-faa2-45fb-bd70-98e27fef6761",
+            "f817fd8e-a701-4d08-b403-8af803d626a6",
+            "6b8b983a-ea02-48d8-90e4-8bd5ed58fec5",
+            "9c7ccb72-4ca7-4634-8f50-eb4f7cc311cc",
+            "a65f98fc-c851-4a35-b55f-b7847378fda2",
+            "7996d4c2-05c7-4a88-ace0-5e4e63818fac",
+            "8a556415-ce83-40f2-b2d2-29a8b9de5b3f",
+            "db1ad68f-45ed-4572-b043-c10e0aad5d77",
+            "80fcdbfa-f4f3-44c0-8eb3-c8fc1cb60172",
+            "f8abf96e-44b9-4d93-8297-ce52ae7f3bea"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "73533405-09e3-4388-8551-03506729614c",
+              "order_idx": 210,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+              "order_idx": 211,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "aa843875-174b-4f55-b541-c693491a7611",
+              "order_idx": 212,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "a105fcfa-781d-41b7-a9c2-c036a019e441",
+              "order_idx": 213,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "48e847dd-e49d-408f-8329-a95659882b7f",
+              "order_idx": 214,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "18c90e9d-69f1-4dfa-afd3-b0a74161bb97",
+              "order_idx": 216,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "8096f082-5c82-41bb-8f4a-31933dd6e5ba",
+              "order_idx": 217,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "a41d50b4-f30d-4fea-a17c-5dbedbef4f3b",
+              "order_idx": 218,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "5f92f7c9-8009-49af-845d-6d690a5aeb36",
+              "order_idx": 219,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "90127c73-0e5b-4d28-8fac-c3fa27ae0542",
+              "order_idx": 220,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "4e709da3-022d-4617-aa81-96d7b2e92c9b",
+              "order_idx": 221,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "bf5caa29-a76c-460f-b2b8-e58d92c64824",
+              "order_idx": 222,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "91344594-17ea-44bb-b411-32972c90b5c6",
+              "order_idx": 223,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "1ae7059f-36f5-4405-839f-215a13bd7737",
+              "order_idx": 224,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "087a668e-3263-44eb-bf29-f9fdd10a8185",
+              "order_idx": 225,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "576d74d9-9d51-4ea1-9329-c3e628d92325",
+              "order_idx": 226,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "0777b79e-77ae-4fa7-a19d-9f32fd7c1966",
+              "order_idx": 227,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "12aaf4b7-1227-48a9-8b76-4615470c642e",
+              "order_idx": 228,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "86710f79-b49e-498d-9b33-2e0bd28d13c7",
+              "order_idx": 230,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "2fc4e682-4e3c-4424-8659-615ddae37ff2",
+              "order_idx": 231,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "647b3508-833a-4337-9a8f-9069e8a7b3fe",
+              "order_idx": 232,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "1b7031d8-ad61-42f7-9b4e-6a40da939470",
+              "order_idx": 233,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "2fb38045-67fc-4ce5-b24a-5d030b20d00c",
+              "order_idx": 234,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "bab47d06-faa2-45fb-bd70-98e27fef6761",
+              "order_idx": 235,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "f817fd8e-a701-4d08-b403-8af803d626a6",
+              "order_idx": 236,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "6b8b983a-ea02-48d8-90e4-8bd5ed58fec5",
+              "order_idx": 237,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "9c7ccb72-4ca7-4634-8f50-eb4f7cc311cc",
+              "order_idx": 238,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "a65f98fc-c851-4a35-b55f-b7847378fda2",
+              "order_idx": 239,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "7996d4c2-05c7-4a88-ace0-5e4e63818fac",
+              "order_idx": 240,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "8a556415-ce83-40f2-b2d2-29a8b9de5b3f",
+              "order_idx": 241,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "db1ad68f-45ed-4572-b043-c10e0aad5d77",
+              "order_idx": 242,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "80fcdbfa-f4f3-44c0-8eb3-c8fc1cb60172",
+              "order_idx": 243,
+              "char_start": 0,
+              "char_end": 49
+            },
+            {
+              "block_id": "f8abf96e-44b9-4d93-8297-ce52ae7f3bea",
+              "order_idx": 244,
+              "char_start": 0,
+              "char_end": 8
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "73533405-09e3-4388-8551-03506729614c",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9745980501174927,
+            "score_breakdown": {
+              "vector": 0.8631557375192642,
+              "keyword": 0.7250917060654611,
+              "rrf": 0.12023281596452329,
+              "rerank": 0.9745980501174927
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。\n2.约谈代理商暂停营业1个\n月。-\n—11—近 12 个月累计涉\n诈月份（含跨年）3 个月 工号永久关闭 - -\n近 12 个月内累计\n涉诈号码数量（含\n跨年）累计达到 30\n个（含）- - 处罚 50000 元\n累计达到 50\n个（含）的- -1.关停代理商网点名下\n全部工号。 2.停止合作。\n3.列入电信业务代理代\n办黑名单。\n说明：1.各场景处罚互不包含。\n2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n—12—附件 2\n场景（按号\n码入网时间\n判定）触发条件入网涉及\n的代理商\n营业员入网涉及的代\n理商网点 （按营\n业网点分别统\n计）入网涉及的代理\n商（按市分公司\n分别统计）备注\n一个自然月\n内涉骚扰号\n码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，\n不再统计和处置。"
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 1.0,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "db1ad68f-45ed-4572-b043-c10e0aad5d77",
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+          "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚扰、 > (4)不是在营业厅场所内办理入网的； > (5)一年内有 3 个（含）以上号码被举报电信营销业务的代\n判定）触发条件入网涉及\n的代理商\n营业员入网涉及的代\n理商网点 （按营\n业网点分别统\n计）入网涉及的代理\n商（按市分公司\n分别统计）备注\n一个自然月\n内涉骚扰号\n码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，\n不再统计和处置。\n2.入网时间和涉骚扰月份间隔未超过 12 个月（含）的号码，\n分公司提供号码入网资料，在符合实名入网前提下，营业员\n已按规范一看、二讲、三圈示，营业员已签署防诈承诺书，\n可申诉免责考核。\n3. 以下情形之一的不允许申诉免考核：\n(1)举报内容为电信营销业务的，或手机号码为员工号码的\n（含第三方人员、代理商人员）；\n(2)核实举报号码和被举报号码之间有信令的；\n(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚扰、\n涉诈举报）；\n(4)不是在营业厅场所内办理入网的；\n(5)一年内有 3 个（含）以上号码被举报电信营销业务的代\n理商，其他号码不得申请减免。近12个月内\n累计涉骚扰\n号码数量\n（含跨年）累计达到\n160 个\n（含）- -关停代理商网点\n名下全部工号，\n预警帮扶后方可\n恢复。",
+          "score": 1.0,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "e3ff6c70841a21b963ab9eee02beab08",
+          "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚扰、 > (4)不是在营业厅场所内办理入网的； > (5)一年内有 3 个（含）以上号码被举报电信营销业务的代",
+          "block_ids": [
+            "db1ad68f-45ed-4572-b043-c10e0aad5d77",
+            "80fcdbfa-f4f3-44c0-8eb3-c8fc1cb60172",
+            "f8abf96e-44b9-4d93-8297-ce52ae7f3bea",
+            "8b4f0cb5-dbbf-45de-8e84-24823c430845",
+            "4cca8639-b71e-49e3-bdd7-e329b22b0626",
+            "b2079b66-f604-4de7-a122-5646b8967ceb",
+            "2bfacaf5-935b-428f-a53d-652d1ed963ef",
+            "9b64ede3-16f6-4ee7-aa18-bafaa4caf47f",
+            "8284150a-9b14-4960-8aeb-a3b2f85d044d",
+            "6bab6234-db2c-4fea-b131-ff73bab92312",
+            "a672f29b-260d-495c-98cc-f01eeb538f52",
+            "170a1281-c224-4dd0-9436-6ff62538a07a",
+            "533b70cb-4524-4f8e-aec4-6be18e773ed6",
+            "7b64d443-fcf9-4b80-b9d6-011bea242388",
+            "b38763f6-89df-4b18-a3ef-b99804752a7b",
+            "b122de61-fb0d-48fc-be11-d7fccb40869c",
+            "7968f8fb-66dd-467b-99b4-b2839d99a1bd",
+            "b8829cf4-4deb-44de-b213-0035dc200a47",
+            "e98d42bb-c57b-489c-8090-e473b1228799",
+            "3cd80db3-2af3-496f-8d07-4b6e6e9f31c2",
+            "8866aa3c-419c-474a-a844-dcdd13c79286",
+            "f538f22e-0927-4fd0-908d-d2281446286c",
+            "4c81059b-4a7d-4a09-86e9-9b731affe849",
+            "42aba6d0-d0c8-48e7-bd6c-9ec76616b6b1"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "db1ad68f-45ed-4572-b043-c10e0aad5d77",
+              "order_idx": 242,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "80fcdbfa-f4f3-44c0-8eb3-c8fc1cb60172",
+              "order_idx": 243,
+              "char_start": 0,
+              "char_end": 49
+            },
+            {
+              "block_id": "f8abf96e-44b9-4d93-8297-ce52ae7f3bea",
+              "order_idx": 244,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "8b4f0cb5-dbbf-45de-8e84-24823c430845",
+              "order_idx": 245,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "4cca8639-b71e-49e3-bdd7-e329b22b0626",
+              "order_idx": 246,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "b2079b66-f604-4de7-a122-5646b8967ceb",
+              "order_idx": 247,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "2bfacaf5-935b-428f-a53d-652d1ed963ef",
+              "order_idx": 248,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "9b64ede3-16f6-4ee7-aa18-bafaa4caf47f",
+              "order_idx": 249,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "8284150a-9b14-4960-8aeb-a3b2f85d044d",
+              "order_idx": 250,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "6bab6234-db2c-4fea-b131-ff73bab92312",
+              "order_idx": 251,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "a672f29b-260d-495c-98cc-f01eeb538f52",
+              "order_idx": 252,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "170a1281-c224-4dd0-9436-6ff62538a07a",
+              "order_idx": 253,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "533b70cb-4524-4f8e-aec4-6be18e773ed6",
+              "order_idx": 254,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "7b64d443-fcf9-4b80-b9d6-011bea242388",
+              "order_idx": 255,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "b38763f6-89df-4b18-a3ef-b99804752a7b",
+              "order_idx": 256,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "b122de61-fb0d-48fc-be11-d7fccb40869c",
+              "order_idx": 257,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "7968f8fb-66dd-467b-99b4-b2839d99a1bd",
+              "order_idx": 258,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "b8829cf4-4deb-44de-b213-0035dc200a47",
+              "order_idx": 259,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "e98d42bb-c57b-489c-8090-e473b1228799",
+              "order_idx": 260,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "3cd80db3-2af3-496f-8d07-4b6e6e9f31c2",
+              "order_idx": 261,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "8866aa3c-419c-474a-a844-dcdd13c79286",
+              "order_idx": 262,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "f538f22e-0927-4fd0-908d-d2281446286c",
+              "order_idx": 263,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "4c81059b-4a7d-4a09-86e9-9b731affe849",
+              "order_idx": 264,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "42aba6d0-d0c8-48e7-bd6c-9ec76616b6b1",
+              "order_idx": 265,
+              "char_start": 0,
+              "char_end": 3
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "db1ad68f-45ed-4572-b043-c10e0aad5d77",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9597635865211487,
+            "score_breakdown": {
+              "vector": 0.8535018414258957,
+              "keyword": 0.7762821288562016,
+              "rrf": 0.12306361714395542,
+              "rerank": 0.9597635865211487
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚扰、 > (4)不是在营业厅场所内办理入网的； > (5)一年内有 3 个（含）以上号码被举报电信营销业务的代\n判定）触发条件入网涉及\n的代理商\n营业员入网涉及的代\n理商网点 （按营\n业网点分别统\n计）入网涉及的代理\n商（按市分公司\n分别统计）备注\n一个自然月\n内涉骚扰号\n码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，\n不再统计和处置。\n2.入网时间和涉骚扰月份间隔未超过 12 个月（含）的号码，\n分公司提供号码入网资料，在符合实名入网前提下，营业员\n已按规范一看、二讲、三圈示，营业员已签署防诈承诺书，\n可申诉免责考核。\n3. 以下情形之一的不允许申诉免考核：\n(1)举报内容为电信营销业务的，或手机号码为员工号码的\n（含第三方人员、代理商人员）；\n(2)核实举报号码和被举报号码之间有信令的；\n(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚扰、\n涉诈举报）；\n(4)不是在营业厅场所内办理入网的；\n(5)一年内有 3 个（含）以上号码被举报电信营销业务的代\n理商，其他号码不得申请减免。近12个月内\n累计涉骚扰\n号码数量\n（含跨年）累计达到\n160 个\n（含）- -关停代理商网点\n名下全部工号，\n预警帮扶后方可\n恢复。"
+          },
+          "promoted_numeric_passage": true
+        },
+        {
+          "source": "knowledge",
+          "block_id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+          "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】4.自营渠道入网号码涉骚扰号码处置规则 > 5.累计涉骚扰免考核申请清单（模板） > 6.信息安全生产沟通表\n等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。",
+          "score": 1.0,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "83fb103cba98000e98863f715dc075c6",
+          "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "4.自营渠道入网号码涉骚扰号码处置规则 > 5.累计涉骚扰免考核申请清单（模板） > 6.信息安全生产沟通表",
+          "block_ids": [
+            "202963f9-82a7-4a80-8316-c8776bfeb58c",
+            "bb4a587b-ed99-4b92-b812-131cf346c471",
+            "519fedde-2270-49d4-91f8-32b331ed04b9",
+            "dca1684b-632d-4fea-a70b-95bf15a1cf9f",
+            "0974504d-5c01-4ecb-8ae7-5806e04715f7",
+            "d9e3b6c7-2a66-4fdf-983b-4b110f1be6b5",
+            "2c7a8f34-30e4-499b-a2d5-1add2abce828",
+            "53eba63a-52a1-4a53-b0de-483c65562973",
+            "f4f39b46-ee97-44a5-a19a-0e85eb71805c",
+            "afd773f4-444b-43e3-9d0a-04f1ca1d328c",
+            "cd916b93-4801-4264-bbd6-5c24559d9d78",
+            "4b71cd6b-5b90-4e80-9804-e713d5305aa2",
+            "9bd96344-5174-4da6-81ea-efa9f2437e20",
+            "25269d78-0b70-405f-9418-db270f06246d",
+            "58272eb3-d0bd-4b7f-b5fd-5de6dc8548be",
+            "ce2f4884-75ab-4126-adad-9dd69e284036",
+            "f9222ebd-9454-4bea-884d-e45f2d29c56d",
+            "347fe33c-179b-4247-9121-90db9a073cc1",
+            "fb09b453-6ba0-41f6-be7f-d393bc9c26c3",
+            "2493619f-967b-4fc1-93b7-d384fdc6c438",
+            "6333a816-5633-47e2-915b-7b1be2824b13",
+            "d26d8e5e-35a2-4b5b-b72e-155633a00ff7",
+            "ef9db277-20c0-48ec-90b0-47a77e799186",
+            "73533405-09e3-4388-8551-03506729614c",
+            "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+            "aa843875-174b-4f55-b541-c693491a7611"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "order_idx": 185,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "bb4a587b-ed99-4b92-b812-131cf346c471",
+              "order_idx": 186,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "519fedde-2270-49d4-91f8-32b331ed04b9",
+              "order_idx": 187,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "dca1684b-632d-4fea-a70b-95bf15a1cf9f",
+              "order_idx": 189,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "0974504d-5c01-4ecb-8ae7-5806e04715f7",
+              "order_idx": 190,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "d9e3b6c7-2a66-4fdf-983b-4b110f1be6b5",
+              "order_idx": 191,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "2c7a8f34-30e4-499b-a2d5-1add2abce828",
+              "order_idx": 192,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "53eba63a-52a1-4a53-b0de-483c65562973",
+              "order_idx": 194,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "f4f39b46-ee97-44a5-a19a-0e85eb71805c",
+              "order_idx": 195,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "afd773f4-444b-43e3-9d0a-04f1ca1d328c",
+              "order_idx": 196,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "cd916b93-4801-4264-bbd6-5c24559d9d78",
+              "order_idx": 197,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "4b71cd6b-5b90-4e80-9804-e713d5305aa2",
+              "order_idx": 198,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "9bd96344-5174-4da6-81ea-efa9f2437e20",
+              "order_idx": 199,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "25269d78-0b70-405f-9418-db270f06246d",
+              "order_idx": 200,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "58272eb3-d0bd-4b7f-b5fd-5de6dc8548be",
+              "order_idx": 201,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "ce2f4884-75ab-4126-adad-9dd69e284036",
+              "order_idx": 202,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "f9222ebd-9454-4bea-884d-e45f2d29c56d",
+              "order_idx": 203,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "347fe33c-179b-4247-9121-90db9a073cc1",
+              "order_idx": 204,
+              "char_start": 0,
+              "char_end": 2
+            },
+            {
+              "block_id": "fb09b453-6ba0-41f6-be7f-d393bc9c26c3",
+              "order_idx": 205,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "2493619f-967b-4fc1-93b7-d384fdc6c438",
+              "order_idx": 206,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "6333a816-5633-47e2-915b-7b1be2824b13",
+              "order_idx": 207,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "d26d8e5e-35a2-4b5b-b72e-155633a00ff7",
+              "order_idx": 208,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "ef9db277-20c0-48ec-90b0-47a77e799186",
+              "order_idx": 209,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "73533405-09e3-4388-8551-03506729614c",
+              "order_idx": 210,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+              "order_idx": 211,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "aa843875-174b-4f55-b541-c693491a7611",
+              "order_idx": 212,
+              "char_start": 0,
+              "char_end": 4
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9543188810348511,
+            "score_breakdown": {
+              "vector": 0.8499915599822998,
+              "keyword": 0.7338503709100744,
+              "rrf": 0.11930719184104097,
+              "rerank": 0.9543188810348511
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】4.自营渠道入网号码涉骚扰号码处置规则 > 5.累计涉骚扰免考核申请清单（模板） > 6.信息安全生产沟通表\n等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。"
+          },
+          "promoted_numeric_passage": true
+        },
+        {
+          "source": "knowledge",
+          "block_id": "df77f08b-b1ae-410a-90d5-547e2ecb519e",
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+          "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚 > (4)不是在营业厅场所内办理入网的； > (5)一年内有 3 个（含）以上号码被举报电信营销业务\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。\n2.入网时间和涉骚扰月份间隔未超过 12 个月（含）的\n号码，分公司提供号码入网资料，在符合实名入网前提\n下，营业员已按规范一看、二讲、三圈示，营业员已签\n署防诈承诺书，可申诉免责考核。\n3.以下情形之一的不允许申诉免考核：\n(1)举报内容为电信营销业务的，或手机号码为员工号\n码的（含第三方人员、代理商人员）；\n(2)核实举报号码和被举报号码之间有信令的；\n(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚\n扰、涉诈举报）；\n(4)不是在营业厅场所内办理入网的；\n(5)一年内有 3 个（含）以上号码被举报电信营销业务\n的代理商，其他号码不得申请减免。近 12 个月\n内累计涉\n骚扰号码\n数量 （含跨\n年）累计达到\n160个 （含）\n的-由各经营单\n位渠道部门\n负责人对网\n点进行预警\n帮扶。-由各经营单\n位渠道部门\n负责人对网\n点进行预警\n帮扶。",
+          "score": 0.9948790550231934,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "56fe87e3821a18e795cc06367c81d396",
+          "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚 > (4)不是在营业厅场所内办理入网的； > (5)一年内有 3 个（含）以上号码被举报电信营销业务",
+          "block_ids": [
+            "df77f08b-b1ae-410a-90d5-547e2ecb519e",
+            "d3a4bae0-8fed-44ab-8515-013a39c668f8",
+            "cb024e2a-e0fd-46a7-a911-bbab3c2f8ad9",
+            "f9a49757-c556-4ff4-8bfa-12ce9d4cb086",
+            "aaa0667a-6016-401f-af29-a4091f250fcc",
+            "fa8bf8e6-6589-4d57-bf81-e7f14e35da12",
+            "d484d2f8-839a-4073-a2eb-879c320a8d5b",
+            "497d8a61-002d-4d09-bf2f-5c2f835f7ea7",
+            "9d801eb5-fce6-4fc1-b749-f193f8f95f60",
+            "23ce64a5-f4d3-4e5a-b75e-63adb31e7b68",
+            "a007295c-344c-4e5e-b90f-722b8c3946aa",
+            "7c5c75e8-fb43-4179-ab6d-4cfe6d5f3b95",
+            "111fe52c-926a-493a-a06b-d9b9f5c865be",
+            "fccd1550-0574-4acd-a7b0-7cb581b5f2c3",
+            "c18db81f-0061-4fac-ad1f-24af188b939c",
+            "a4ee8390-d9ce-4307-8119-8d6ee6d2b26f",
+            "c8afe040-1483-498d-94dc-c4cfdcc7cd37",
+            "85c25cd4-dc05-4f74-8d74-5681e2e0b4c7",
+            "29ceb19d-c30c-4804-a4a3-e953eaa41984",
+            "d3d1cddd-cb64-45a4-baa4-f8c83c26c7da",
+            "dd6fbfc7-90e4-494f-a432-82ebcb90c6fc",
+            "bfc1d221-b3a9-4da5-a16a-747eb3e43945",
+            "e8be2a24-6d56-44e0-9aa1-3c035d10ea97",
+            "ad7d6612-4852-4177-ba21-8c7778b0510f",
+            "25136d62-a102-4c31-ae29-0086d0643ce4",
+            "fc0bfbc8-fe3b-426f-b7f5-ad91dd330874",
+            "4d0f9610-2383-4cbe-b6bd-ba18cad3c4a1",
+            "92cdb171-bf99-4184-84d1-d61d95b9a0d7",
+            "25ceb5c2-372b-4fc4-bc8a-29c7aa38e4fc",
+            "ce549e57-ec35-45cd-bff0-898a2340e6b5"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "df77f08b-b1ae-410a-90d5-547e2ecb519e",
+              "order_idx": 411,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "d3a4bae0-8fed-44ab-8515-013a39c668f8",
+              "order_idx": 412,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "cb024e2a-e0fd-46a7-a911-bbab3c2f8ad9",
+              "order_idx": 413,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "f9a49757-c556-4ff4-8bfa-12ce9d4cb086",
+              "order_idx": 414,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "aaa0667a-6016-401f-af29-a4091f250fcc",
+              "order_idx": 415,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "fa8bf8e6-6589-4d57-bf81-e7f14e35da12",
+              "order_idx": 416,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "d484d2f8-839a-4073-a2eb-879c320a8d5b",
+              "order_idx": 417,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "497d8a61-002d-4d09-bf2f-5c2f835f7ea7",
+              "order_idx": 418,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "9d801eb5-fce6-4fc1-b749-f193f8f95f60",
+              "order_idx": 419,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "23ce64a5-f4d3-4e5a-b75e-63adb31e7b68",
+              "order_idx": 420,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "a007295c-344c-4e5e-b90f-722b8c3946aa",
+              "order_idx": 421,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "7c5c75e8-fb43-4179-ab6d-4cfe6d5f3b95",
+              "order_idx": 422,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "111fe52c-926a-493a-a06b-d9b9f5c865be",
+              "order_idx": 423,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "fccd1550-0574-4acd-a7b0-7cb581b5f2c3",
+              "order_idx": 424,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "c18db81f-0061-4fac-ad1f-24af188b939c",
+              "order_idx": 425,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "a4ee8390-d9ce-4307-8119-8d6ee6d2b26f",
+              "order_idx": 426,
+              "char_start": 0,
+              "char_end": 23
+            },
+            {
+              "block_id": "c8afe040-1483-498d-94dc-c4cfdcc7cd37",
+              "order_idx": 427,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "85c25cd4-dc05-4f74-8d74-5681e2e0b4c7",
+              "order_idx": 428,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "29ceb19d-c30c-4804-a4a3-e953eaa41984",
+              "order_idx": 429,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "d3d1cddd-cb64-45a4-baa4-f8c83c26c7da",
+              "order_idx": 430,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "dd6fbfc7-90e4-494f-a432-82ebcb90c6fc",
+              "order_idx": 431,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "bfc1d221-b3a9-4da5-a16a-747eb3e43945",
+              "order_idx": 432,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "e8be2a24-6d56-44e0-9aa1-3c035d10ea97",
+              "order_idx": 433,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "ad7d6612-4852-4177-ba21-8c7778b0510f",
+              "order_idx": 434,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "25136d62-a102-4c31-ae29-0086d0643ce4",
+              "order_idx": 435,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "fc0bfbc8-fe3b-426f-b7f5-ad91dd330874",
+              "order_idx": 436,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "4d0f9610-2383-4cbe-b6bd-ba18cad3c4a1",
+              "order_idx": 437,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "92cdb171-bf99-4184-84d1-d61d95b9a0d7",
+              "order_idx": 438,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "25ceb5c2-372b-4fc4-bc8a-29c7aa38e4fc",
+              "order_idx": 439,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "ce549e57-ec35-45cd-bff0-898a2340e6b5",
+              "order_idx": 440,
+              "char_start": 0,
+              "char_end": 3
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "df77f08b-b1ae-410a-90d5-547e2ecb519e",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9448790550231934,
+            "score_breakdown": {
+              "vector": 0.8434051722288132,
+              "keyword": 0.7612166811121833,
+              "rrf": 0.12141414141414142,
+              "rerank": 0.9448790550231934
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚 > (4)不是在营业厅场所内办理入网的； > (5)一年内有 3 个（含）以上号码被举报电信营销业务\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。\n2.入网时间和涉骚扰月份间隔未超过 12 个月（含）的\n号码，分公司提供号码入网资料，在符合实名入网前提\n下，营业员已按规范一看、二讲、三圈示，营业员已签\n署防诈承诺书，可申诉免责考核。\n3.以下情形之一的不允许申诉免考核：\n(1)举报内容为电信营销业务的，或手机号码为员工号\n码的（含第三方人员、代理商人员）；\n(2)核实举报号码和被举报号码之间有信令的；\n(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚\n扰、涉诈举报）；\n(4)不是在营业厅场所内办理入网的；\n(5)一年内有 3 个（含）以上号码被举报电信营销业务\n的代理商，其他号码不得申请减免。近 12 个月\n内累计涉\n骚扰号码\n数量 （含跨\n年）累计达到\n160个 （含）\n的-由各经营单\n位渠道部门\n负责人对网\n点进行预警\n帮扶。-由各经营单\n位渠道部门\n负责人对网\n点进行预警\n帮扶。"
+          },
+          "promoted_numeric_passage": true
+        },
+        {
+          "source": "knowledge",
+          "block_id": "c7797221-317d-4cb9-9d83-c3f125958453",
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+          "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】2.预警帮扶后方可 > 2.扣罚网点归属经营单\n内累计涉\n诈号码数\n量（含跨\n年）累计达\n到50个\n（含）\n的-1.由各经营单位渠\n道部门负责人对网\n点进行预警帮扶。2.\n扣罚网点归属经营\n单位绩效 10000 元。-1.由各经营单位渠道部\n门负责人对网点进行预\n警帮扶。2.扣罚网点归属\n经营单位绩效 10000 元。\n累计达\n到70个\n（含）-1.由各经营单位分\n管领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 30000 元。-1.由各经营单位分管领\n导对网点进行预警帮扶\n2.扣罚网点归属经营单\n位绩效 30000 元。\n累计达\n到 100\n个（含）-1.由各经营单位正\n职领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 50000 元。-1.由区各经营单位正职\n领导对网点进行预警帮\n扶。2.扣罚网点归属经营\n单位绩效 50000 元。\n说明：1.各场景处罚互不包含。2.按同一营业员工号、同一网点、同一代理商分别计算触发条件。\n—16—附件 4\n场景（按\n号码入网\n时间判\n定）触发条件入网涉及\n的实体直\n营渠道营\n业员 （或促\n销人）入网涉及的\n实体直营渠\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。",
+          "score": 0.9919713616371155,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+          "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+          "version_year": 2026,
+          "source_version": "2026",
+          "section_path": "2.预警帮扶后方可 > 2.扣罚网点归属经营单",
+          "block_ids": [
+            "c7797221-317d-4cb9-9d83-c3f125958453",
+            "eb70e0f3-1b38-453b-9ecc-9bc96e5e2f39",
+            "eb33f5cd-e6ab-48cd-ada4-fa2b38c86ed9",
+            "cce72db0-3e62-4248-bf77-075d33a774c8",
+            "3c09502b-4536-4ed5-af55-6e784df540af",
+            "fe106f63-17eb-4650-93f3-a3a25ae1043a",
+            "99b517f3-25a2-4928-9e4a-3028c46d789c",
+            "872d339e-46d5-4453-a6cc-eb2c89bdaced",
+            "6ae7e604-6c31-404e-ac42-a981c7000848",
+            "b519fbee-e9fa-42a2-9342-9a1ff159ae40",
+            "75b869e2-8131-42f5-b8fd-b72e446920e4",
+            "804e8fe0-307c-420f-b57b-d773970cb456",
+            "ecd72aed-3ed7-4df5-a350-6ee2a9e125c5",
+            "eb556b5a-6e8b-4ecd-a389-3966d86bbd72",
+            "dd7b82fc-26df-4241-b62f-b57ce0a9128b",
+            "f2e120c6-38b3-40bc-b8d1-ace6628803c5",
+            "7ca59872-58f8-4476-8642-eabe89d01f8e",
+            "ece7d52c-110b-4fe6-884c-731bcf24339e",
+            "fa67d3cd-f0b1-476e-b0c1-8e9667aa366b",
+            "10a6e48e-f17b-480e-9276-5207662b4604",
+            "00e5e06c-eae8-4660-bfd2-e7330bc95bc9",
+            "670cff01-5311-4068-b683-264be5a22e91",
+            "60a2b022-7355-420c-9c82-20293bcde118",
+            "06347f8d-b075-438f-ae1c-48451ef813cb",
+            "1a0cfb2a-4f13-482b-8cd3-1c1d25bbd6bd",
+            "052d108a-343b-4891-ba59-3cee3b8b12a7",
+            "ee553762-1639-4786-99f2-ac359318a157",
+            "001470fe-60cc-4b2b-8594-25005ae65628",
+            "b00c98c6-1158-4e6b-8a5c-385617d28d9f",
+            "cad9fea4-4fc1-408d-b6b0-b28500cce129",
+            "2a83610e-be32-49bc-bf9a-7a758ba00f64",
+            "4161525c-0851-4548-ba1d-fc7361d0332d",
+            "c48ee5fd-642d-45e3-8209-7d40dc3d4f5b",
+            "568d3202-e050-4667-8d35-4d98d7c8b370",
+            "25dea2e2-a0f0-4010-9809-54cc772a87cb",
+            "7693b003-da19-4d3d-be9c-0d617275d2e8",
+            "7abce000-aa2b-4a0f-8e03-196fe63c7be0",
+            "ba36a355-1f02-4d23-bd7b-39072953184d",
+            "3215b80d-aace-425e-996e-58e59cdcb75e",
+            "5fc32d76-9773-4a0a-9cdf-30c3f74ff879",
+            "fa48cd6a-ee56-44d2-afe0-4525dcdc61fb",
+            "9054b0d0-b8fc-480a-b2f9-412b445efdcd",
+            "cdd4f9e3-eb60-4359-bc52-a7f0c41db597",
+            "322d3682-d1b1-4041-b45a-047187ed52fc",
+            "11857b9a-c618-4588-a164-9cbc516ec486",
+            "7b6a3626-4951-4f61-a3e2-703117515475",
+            "df77f08b-b1ae-410a-90d5-547e2ecb519e",
+            "d3a4bae0-8fed-44ab-8515-013a39c668f8",
+            "cb024e2a-e0fd-46a7-a911-bbab3c2f8ad9"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "c7797221-317d-4cb9-9d83-c3f125958453",
+              "order_idx": 364,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "eb70e0f3-1b38-453b-9ecc-9bc96e5e2f39",
+              "order_idx": 365,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "eb33f5cd-e6ab-48cd-ada4-fa2b38c86ed9",
+              "order_idx": 366,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "cce72db0-3e62-4248-bf77-075d33a774c8",
+              "order_idx": 367,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "3c09502b-4536-4ed5-af55-6e784df540af",
+              "order_idx": 368,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "fe106f63-17eb-4650-93f3-a3a25ae1043a",
+              "order_idx": 369,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "99b517f3-25a2-4928-9e4a-3028c46d789c",
+              "order_idx": 370,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "872d339e-46d5-4453-a6cc-eb2c89bdaced",
+              "order_idx": 371,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "6ae7e604-6c31-404e-ac42-a981c7000848",
+              "order_idx": 372,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "b519fbee-e9fa-42a2-9342-9a1ff159ae40",
+              "order_idx": 373,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "75b869e2-8131-42f5-b8fd-b72e446920e4",
+              "order_idx": 374,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "804e8fe0-307c-420f-b57b-d773970cb456",
+              "order_idx": 375,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "ecd72aed-3ed7-4df5-a350-6ee2a9e125c5",
+              "order_idx": 376,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "eb556b5a-6e8b-4ecd-a389-3966d86bbd72",
+              "order_idx": 377,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "dd7b82fc-26df-4241-b62f-b57ce0a9128b",
+              "order_idx": 378,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "f2e120c6-38b3-40bc-b8d1-ace6628803c5",
+              "order_idx": 379,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "7ca59872-58f8-4476-8642-eabe89d01f8e",
+              "order_idx": 380,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "ece7d52c-110b-4fe6-884c-731bcf24339e",
+              "order_idx": 381,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "fa67d3cd-f0b1-476e-b0c1-8e9667aa366b",
+              "order_idx": 382,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "10a6e48e-f17b-480e-9276-5207662b4604",
+              "order_idx": 383,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "00e5e06c-eae8-4660-bfd2-e7330bc95bc9",
+              "order_idx": 384,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "670cff01-5311-4068-b683-264be5a22e91",
+              "order_idx": 385,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "60a2b022-7355-420c-9c82-20293bcde118",
+              "order_idx": 386,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "06347f8d-b075-438f-ae1c-48451ef813cb",
+              "order_idx": 387,
+              "char_start": 0,
+              "char_end": 45
+            },
+            {
+              "block_id": "1a0cfb2a-4f13-482b-8cd3-1c1d25bbd6bd",
+              "order_idx": 389,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "052d108a-343b-4891-ba59-3cee3b8b12a7",
+              "order_idx": 390,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "ee553762-1639-4786-99f2-ac359318a157",
+              "order_idx": 391,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "001470fe-60cc-4b2b-8594-25005ae65628",
+              "order_idx": 392,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "b00c98c6-1158-4e6b-8a5c-385617d28d9f",
+              "order_idx": 393,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "cad9fea4-4fc1-408d-b6b0-b28500cce129",
+              "order_idx": 394,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "2a83610e-be32-49bc-bf9a-7a758ba00f64",
+              "order_idx": 395,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "4161525c-0851-4548-ba1d-fc7361d0332d",
+              "order_idx": 396,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "c48ee5fd-642d-45e3-8209-7d40dc3d4f5b",
+              "order_idx": 397,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "568d3202-e050-4667-8d35-4d98d7c8b370",
+              "order_idx": 398,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "25dea2e2-a0f0-4010-9809-54cc772a87cb",
+              "order_idx": 399,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "7693b003-da19-4d3d-be9c-0d617275d2e8",
+              "order_idx": 400,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "7abce000-aa2b-4a0f-8e03-196fe63c7be0",
+              "order_idx": 401,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "ba36a355-1f02-4d23-bd7b-39072953184d",
+              "order_idx": 402,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "3215b80d-aace-425e-996e-58e59cdcb75e",
+              "order_idx": 403,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "5fc32d76-9773-4a0a-9cdf-30c3f74ff879",
+              "order_idx": 404,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "fa48cd6a-ee56-44d2-afe0-4525dcdc61fb",
+              "order_idx": 405,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "9054b0d0-b8fc-480a-b2f9-412b445efdcd",
+              "order_idx": 406,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "cdd4f9e3-eb60-4359-bc52-a7f0c41db597",
+              "order_idx": 407,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "322d3682-d1b1-4041-b45a-047187ed52fc",
+              "order_idx": 408,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "11857b9a-c618-4588-a164-9cbc516ec486",
+              "order_idx": 409,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "7b6a3626-4951-4f61-a3e2-703117515475",
+              "order_idx": 410,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "df77f08b-b1ae-410a-90d5-547e2ecb519e",
+              "order_idx": 411,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "d3a4bae0-8fed-44ab-8515-013a39c668f8",
+              "order_idx": 412,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "cb024e2a-e0fd-46a7-a911-bbab3c2f8ad9",
+              "order_idx": 413,
+              "char_start": 0,
+              "char_end": 11
+            }
+          ],
+          "effective_year": 2026,
+          "citation": {
+            "document": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "block_id": "c7797221-317d-4cb9-9d83-c3f125958453",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9419713616371155,
+            "score_breakdown": {
+              "vector": 0.8519088178873062,
+              "keyword": 0.6646104862178206,
+              "rrf": 0.11730346947738252,
+              "rerank": 0.9419713616371155
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】2.预警帮扶后方可 > 2.扣罚网点归属经营单\n内累计涉\n诈号码数\n量（含跨\n年）累计达\n到50个\n（含）\n的-1.由各经营单位渠\n道部门负责人对网\n点进行预警帮扶。2.\n扣罚网点归属经营\n单位绩效 10000 元。-1.由各经营单位渠道部\n门负责人对网点进行预\n警帮扶。2.扣罚网点归属\n经营单位绩效 10000 元。\n累计达\n到70个\n（含）-1.由各经营单位分\n管领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 30000 元。-1.由各经营单位分管领\n导对网点进行预警帮扶\n2.扣罚网点归属经营单\n位绩效 30000 元。\n累计达\n到 100\n个（含）-1.由各经营单位正\n职领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 50000 元。-1.由区各经营单位正职\n领导对网点进行预警帮\n扶。2.扣罚网点归属经营\n单位绩效 50000 元。\n说明：1.各场景处罚互不包含。2.按同一营业员工号、同一网点、同一代理商分别计算触发条件。\n—16—附件 4\n场景（按\n号码入网\n时间判\n定）触发条件入网涉及\n的实体直\n营渠道营\n业员 （或促\n销人）入网涉及的\n实体直营渠\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。"
+          },
+          "promoted_numeric_passage": true
+        }
+      ],
+      "meta": {
+        "total_estimate": 5,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.2424,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+        ],
+        "evidence_snapshot_id": "-kBdcnJiEcZUmtCQxxwgQEuj3x_A_S9b",
+        "snapshot_fingerprint": "fda121798f2ce07f18d98cf6",
+        "accepted_passage_ids": [
+          "f9159242a68d8d9a1268abce68d7a9a3",
+          "e3ff6c70841a21b963ab9eee02beab08",
+          "83fb103cba98000e98863f715dc075c6",
+          "56fe87e3821a18e795cc06367c81d396",
+          "c4048fee20e3d8390635c3cc2346675c",
+          "ca020dda10c6470de5ae6773757d87d1",
+          "73eb9de24badb90bc55db035406b0fdb",
+          "84d70f932ebf4631c94fe4b9cc650817",
+          "2c2ede2a5467eb902b9fa4d0ed02b543"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 7,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 2864.39
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈\n- 2.扣罚网点归属经营单位绩效10000元。\n- 2.扣罚网点归属经营单位绩效30000元。",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "83fb103cba98000e98863f715dc075c6",
+            "block_id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+            "block_ids": [
+              "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "bb4a587b-ed99-4b92-b812-131cf346c471",
+              "519fedde-2270-49d4-91f8-32b331ed04b9",
+              "dca1684b-632d-4fea-a70b-95bf15a1cf9f",
+              "0974504d-5c01-4ecb-8ae7-5806e04715f7",
+              "d9e3b6c7-2a66-4fdf-983b-4b110f1be6b5",
+              "2c7a8f34-30e4-499b-a2d5-1add2abce828",
+              "53eba63a-52a1-4a53-b0de-483c65562973",
+              "f4f39b46-ee97-44a5-a19a-0e85eb71805c",
+              "afd773f4-444b-43e3-9d0a-04f1ca1d328c",
+              "cd916b93-4801-4264-bbd6-5c24559d9d78",
+              "4b71cd6b-5b90-4e80-9804-e713d5305aa2",
+              "9bd96344-5174-4da6-81ea-efa9f2437e20",
+              "25269d78-0b70-405f-9418-db270f06246d",
+              "58272eb3-d0bd-4b7f-b5fd-5de6dc8548be",
+              "ce2f4884-75ab-4126-adad-9dd69e284036",
+              "f9222ebd-9454-4bea-884d-e45f2d29c56d",
+              "347fe33c-179b-4247-9121-90db9a073cc1",
+              "fb09b453-6ba0-41f6-be7f-d393bc9c26c3",
+              "2493619f-967b-4fc1-93b7-d384fdc6c438",
+              "6333a816-5633-47e2-915b-7b1be2824b13",
+              "d26d8e5e-35a2-4b5b-b72e-155633a00ff7",
+              "ef9db277-20c0-48ec-90b0-47a77e799186",
+              "73533405-09e3-4388-8551-03506729614c",
+              "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+              "aa843875-174b-4f55-b541-c693491a7611"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "text": "等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。",
+            "score": 1.0,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+            "block_id": "c7797221-317d-4cb9-9d83-c3f125958453",
+            "block_ids": [
+              "c7797221-317d-4cb9-9d83-c3f125958453",
+              "eb70e0f3-1b38-453b-9ecc-9bc96e5e2f39",
+              "eb33f5cd-e6ab-48cd-ada4-fa2b38c86ed9",
+              "cce72db0-3e62-4248-bf77-075d33a774c8",
+              "3c09502b-4536-4ed5-af55-6e784df540af",
+              "fe106f63-17eb-4650-93f3-a3a25ae1043a",
+              "99b517f3-25a2-4928-9e4a-3028c46d789c",
+              "872d339e-46d5-4453-a6cc-eb2c89bdaced",
+              "6ae7e604-6c31-404e-ac42-a981c7000848",
+              "b519fbee-e9fa-42a2-9342-9a1ff159ae40",
+              "75b869e2-8131-42f5-b8fd-b72e446920e4",
+              "804e8fe0-307c-420f-b57b-d773970cb456",
+              "ecd72aed-3ed7-4df5-a350-6ee2a9e125c5",
+              "eb556b5a-6e8b-4ecd-a389-3966d86bbd72",
+              "dd7b82fc-26df-4241-b62f-b57ce0a9128b",
+              "f2e120c6-38b3-40bc-b8d1-ace6628803c5",
+              "7ca59872-58f8-4476-8642-eabe89d01f8e",
+              "ece7d52c-110b-4fe6-884c-731bcf24339e",
+              "fa67d3cd-f0b1-476e-b0c1-8e9667aa366b",
+              "10a6e48e-f17b-480e-9276-5207662b4604",
+              "00e5e06c-eae8-4660-bfd2-e7330bc95bc9",
+              "670cff01-5311-4068-b683-264be5a22e91",
+              "60a2b022-7355-420c-9c82-20293bcde118",
+              "06347f8d-b075-438f-ae1c-48451ef813cb",
+              "1a0cfb2a-4f13-482b-8cd3-1c1d25bbd6bd",
+              "052d108a-343b-4891-ba59-3cee3b8b12a7",
+              "ee553762-1639-4786-99f2-ac359318a157",
+              "001470fe-60cc-4b2b-8594-25005ae65628",
+              "b00c98c6-1158-4e6b-8a5c-385617d28d9f",
+              "cad9fea4-4fc1-408d-b6b0-b28500cce129",
+              "2a83610e-be32-49bc-bf9a-7a758ba00f64",
+              "4161525c-0851-4548-ba1d-fc7361d0332d",
+              "c48ee5fd-642d-45e3-8209-7d40dc3d4f5b",
+              "568d3202-e050-4667-8d35-4d98d7c8b370",
+              "25dea2e2-a0f0-4010-9809-54cc772a87cb",
+              "7693b003-da19-4d3d-be9c-0d617275d2e8",
+              "7abce000-aa2b-4a0f-8e03-196fe63c7be0",
+              "ba36a355-1f02-4d23-bd7b-39072953184d",
+              "3215b80d-aace-425e-996e-58e59cdcb75e",
+              "5fc32d76-9773-4a0a-9cdf-30c3f74ff879",
+              "fa48cd6a-ee56-44d2-afe0-4525dcdc61fb",
+              "9054b0d0-b8fc-480a-b2f9-412b445efdcd",
+              "cdd4f9e3-eb60-4359-bc52-a7f0c41db597",
+              "322d3682-d1b1-4041-b45a-047187ed52fc",
+              "11857b9a-c618-4588-a164-9cbc516ec486",
+              "7b6a3626-4951-4f61-a3e2-703117515475",
+              "df77f08b-b1ae-410a-90d5-547e2ecb519e",
+              "d3a4bae0-8fed-44ab-8515-013a39c668f8",
+              "cb024e2a-e0fd-46a7-a911-bbab3c2f8ad9"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "text": "内累计涉\n诈号码数\n量（含跨\n年）累计达\n到50个\n（含）\n的-1.由各经营单位渠\n道部门负责人对网\n点进行预警帮扶。2.\n扣罚网点归属经营\n单位绩效 10000 元。-1.由各经营单位渠道部\n门负责人对网点进行预\n警帮扶。2.扣罚网点归属\n经营单位绩效 10000 元。\n累计达\n到70个\n（含）-1.由各经营单位分\n管领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 30000 元。-1.由各经营单位分管领\n导对网点进行预警帮扶\n2.扣罚网点归属经营单\n位绩效 30000 元。\n累计达\n到 100\n个（含）-1.由各经营单位正\n职领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 50000 元。-1.由区各经营单位正职\n领导对网点进行预警帮\n扶。2.扣罚网点归属经营\n单位绩效 50000 元。\n说明：1.各场景处罚互不包含。2.按同一营业员工号、同一网点、同一代理商分别计算触发条件。\n—16—附件 4\n场景（按\n号码入网\n时间判\n定）触发条件入网涉及\n的实体直\n营渠道营\n业员 （或促\n销人）入网涉及的\n实体直营渠\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。",
+            "score": 0.9919713616371155,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+            "evidence_passage_ids": [
+              "83fb103cba98000e98863f715dc075c6"
+            ],
+            "fact_type": "numeric",
+            "condition": "涉诈",
+            "candidate_id": "ffe585403a5a94300db1a848"
+          },
+          {
+            "text": "2.扣罚网点归属经营单位绩效10000元。",
+            "evidence_passage_ids": [
+              "c4048fee20e3d8390635c3cc2346675c"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "a7f27346fddbc5c2b32a858f"
+          },
+          {
+            "text": "2.扣罚网点归属经营单位绩效30000元。",
+            "evidence_passage_ids": [
+              "c4048fee20e3d8390635c3cc2346675c"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "e857c55fcbe57bd01f0b77e5"
+          },
+          {
+            "text": "行预警帮扶2.扣罚网点归属经营单位绩效30000元。",
+            "evidence_passage_ids": [
+              "c4048fee20e3d8390635c3cc2346675c"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "82690403290a653d56bfd075"
+          },
+          {
+            "text": "2.扣罚网点归属经营单位绩效50000元。",
+            "evidence_passage_ids": [
+              "c4048fee20e3d8390635c3cc2346675c"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "9ccc1ee684b9eb68a23c60e2"
+          },
+          {
+            "text": "备注一个自然月内涉骚扰号码每个号码处罚30元/个-处罚30元",
+            "evidence_passage_ids": [
+              "c4048fee20e3d8390635c3cc2346675c"
+            ],
+            "fact_type": "numeric",
+            "condition": "涉骚",
+            "candidate_id": "68818a262af27844c4d1dcb2"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "83fb103cba98000e98863f715dc075c6",
+            "block_id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+            "block_ids": [
+              "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "bb4a587b-ed99-4b92-b812-131cf346c471",
+              "519fedde-2270-49d4-91f8-32b331ed04b9",
+              "dca1684b-632d-4fea-a70b-95bf15a1cf9f",
+              "0974504d-5c01-4ecb-8ae7-5806e04715f7",
+              "d9e3b6c7-2a66-4fdf-983b-4b110f1be6b5",
+              "2c7a8f34-30e4-499b-a2d5-1add2abce828",
+              "53eba63a-52a1-4a53-b0de-483c65562973",
+              "f4f39b46-ee97-44a5-a19a-0e85eb71805c",
+              "afd773f4-444b-43e3-9d0a-04f1ca1d328c",
+              "cd916b93-4801-4264-bbd6-5c24559d9d78",
+              "4b71cd6b-5b90-4e80-9804-e713d5305aa2",
+              "9bd96344-5174-4da6-81ea-efa9f2437e20",
+              "25269d78-0b70-405f-9418-db270f06246d",
+              "58272eb3-d0bd-4b7f-b5fd-5de6dc8548be",
+              "ce2f4884-75ab-4126-adad-9dd69e284036",
+              "f9222ebd-9454-4bea-884d-e45f2d29c56d",
+              "347fe33c-179b-4247-9121-90db9a073cc1",
+              "fb09b453-6ba0-41f6-be7f-d393bc9c26c3",
+              "2493619f-967b-4fc1-93b7-d384fdc6c438",
+              "6333a816-5633-47e2-915b-7b1be2824b13",
+              "d26d8e5e-35a2-4b5b-b72e-155633a00ff7",
+              "ef9db277-20c0-48ec-90b0-47a77e799186",
+              "73533405-09e3-4388-8551-03506729614c",
+              "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+              "aa843875-174b-4f55-b541-c693491a7611"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。",
+            "body_text": "等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。",
+            "score": 1.0,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+            "block_id": "c7797221-317d-4cb9-9d83-c3f125958453",
+            "block_ids": [
+              "c7797221-317d-4cb9-9d83-c3f125958453",
+              "eb70e0f3-1b38-453b-9ecc-9bc96e5e2f39",
+              "eb33f5cd-e6ab-48cd-ada4-fa2b38c86ed9",
+              "cce72db0-3e62-4248-bf77-075d33a774c8",
+              "3c09502b-4536-4ed5-af55-6e784df540af",
+              "fe106f63-17eb-4650-93f3-a3a25ae1043a",
+              "99b517f3-25a2-4928-9e4a-3028c46d789c",
+              "872d339e-46d5-4453-a6cc-eb2c89bdaced",
+              "6ae7e604-6c31-404e-ac42-a981c7000848",
+              "b519fbee-e9fa-42a2-9342-9a1ff159ae40",
+              "75b869e2-8131-42f5-b8fd-b72e446920e4",
+              "804e8fe0-307c-420f-b57b-d773970cb456",
+              "ecd72aed-3ed7-4df5-a350-6ee2a9e125c5",
+              "eb556b5a-6e8b-4ecd-a389-3966d86bbd72",
+              "dd7b82fc-26df-4241-b62f-b57ce0a9128b",
+              "f2e120c6-38b3-40bc-b8d1-ace6628803c5",
+              "7ca59872-58f8-4476-8642-eabe89d01f8e",
+              "ece7d52c-110b-4fe6-884c-731bcf24339e",
+              "fa67d3cd-f0b1-476e-b0c1-8e9667aa366b",
+              "10a6e48e-f17b-480e-9276-5207662b4604",
+              "00e5e06c-eae8-4660-bfd2-e7330bc95bc9",
+              "670cff01-5311-4068-b683-264be5a22e91",
+              "60a2b022-7355-420c-9c82-20293bcde118",
+              "06347f8d-b075-438f-ae1c-48451ef813cb",
+              "1a0cfb2a-4f13-482b-8cd3-1c1d25bbd6bd",
+              "052d108a-343b-4891-ba59-3cee3b8b12a7",
+              "ee553762-1639-4786-99f2-ac359318a157",
+              "001470fe-60cc-4b2b-8594-25005ae65628",
+              "b00c98c6-1158-4e6b-8a5c-385617d28d9f",
+              "cad9fea4-4fc1-408d-b6b0-b28500cce129",
+              "2a83610e-be32-49bc-bf9a-7a758ba00f64",
+              "4161525c-0851-4548-ba1d-fc7361d0332d",
+              "c48ee5fd-642d-45e3-8209-7d40dc3d4f5b",
+              "568d3202-e050-4667-8d35-4d98d7c8b370",
+              "25dea2e2-a0f0-4010-9809-54cc772a87cb",
+              "7693b003-da19-4d3d-be9c-0d617275d2e8",
+              "7abce000-aa2b-4a0f-8e03-196fe63c7be0",
+              "ba36a355-1f02-4d23-bd7b-39072953184d",
+              "3215b80d-aace-425e-996e-58e59cdcb75e",
+              "5fc32d76-9773-4a0a-9cdf-30c3f74ff879",
+              "fa48cd6a-ee56-44d2-afe0-4525dcdc61fb",
+              "9054b0d0-b8fc-480a-b2f9-412b445efdcd",
+              "cdd4f9e3-eb60-4359-bc52-a7f0c41db597",
+              "322d3682-d1b1-4041-b45a-047187ed52fc",
+              "11857b9a-c618-4588-a164-9cbc516ec486",
+              "7b6a3626-4951-4f61-a3e2-703117515475",
+              "df77f08b-b1ae-410a-90d5-547e2ecb519e",
+              "d3a4bae0-8fed-44ab-8515-013a39c668f8",
+              "cb024e2a-e0fd-46a7-a911-bbab3c2f8ad9"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "内累计涉\n诈号码数\n量（含跨\n年）累计达\n到50个\n（含）\n的-1.由各经营单位渠\n道部门负责人对网\n点进行预警帮扶。2.\n扣罚网点归属经营\n单位绩效 10000 元。-1.由各经营单位渠道部\n门负责人对网点进行预\n警帮扶。2.扣罚网点归属\n经营单位绩效 10000 元。\n累计达\n到70个\n（含）-1.由各经营单位分\n管领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 30000 元。-1.由各经营单位分管领\n导对网点进行预警帮扶\n2.扣罚网点归属经营单\n位绩效 30000 元。\n累计达\n到 100\n个（含）-1.由各经营单位正\n职领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 50000 元。-1.由区各经营单位正职\n领导对网点进行预警帮\n扶。2.扣罚网点归属经营\n单位绩效 50000 元。\n说明：1.各场景处罚互不包含。2.按同一营业员工号、同一网点、同一代理商分别计算触发条件。\n—16—附件 4\n场景（按\n号码入网\n时间判\n定）触发条件入网涉及\n的实体直\n营渠道营\n业员 （或促\n销人）入网涉及的\n实体直营渠\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。",
+            "body_text": "内累计涉\n诈号码数\n量（含跨\n年）累计达\n到50个\n（含）\n的-1.由各经营单位渠\n道部门负责人对网\n点进行预警帮扶。2.\n扣罚网点归属经营\n单位绩效 10000 元。-1.由各经营单位渠道部\n门负责人对网点进行预\n警帮扶。2.扣罚网点归属\n经营单位绩效 10000 元。\n累计达\n到70个\n（含）-1.由各经营单位分\n管领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 30000 元。-1.由各经营单位分管领\n导对网点进行预警帮扶\n2.扣罚网点归属经营单\n位绩效 30000 元。\n累计达\n到 100\n个（含）-1.由各经营单位正\n职领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 50000 元。-1.由区各经营单位正职\n领导对网点进行预警帮\n扶。2.扣罚网点归属经营\n单位绩效 50000 元。\n说明：1.各场景处罚互不包含。2.按同一营业员工号、同一网点、同一代理商分别计算触发条件。\n—16—附件 4\n场景（按\n号码入网\n时间判\n定）触发条件入网涉及\n的实体直\n营渠道营\n业员 （或促\n销人）入网涉及的\n实体直营渠\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。",
+            "score": 0.9919713616371155,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.2424,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "骚扰电话",
+                "代理商",
+                "扰电话"
+              ],
+              "passage_id": "f9159242a68d8d9a1268abce68d7a9a3",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "spans": [
+                {
+                  "slot": "骚扰电话",
+                  "surface": "骚扰电话",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    26,
+                    30
+                  ],
+                  "excerpt": "6-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【文档】市场-20"
+                },
+                {
+                  "slot": "代理商",
+                  "surface": "代理商",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    134,
+                    137
+                  ],
+                  "excerpt": "通知--51b17ab\n【章节】2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同"
+                },
+                {
+                  "slot": "扰电话",
+                  "surface": "扰电话",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    27,
+                    30
+                  ],
+                  "excerpt": "-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【文档】市场-20"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "诈骗",
+                "骚扰电话",
+                "代理商",
+                "防诈骗和骚扰电话",
+                "防诈骗",
+                "防诈骗和骚扰",
+                "骗和骚扰电话",
+                "防诈骗和",
+                "扰电话",
+                "代理商被罚多少钱",
+                "代理商被罚多",
+                "商被罚多少钱"
+              ],
+              "score": 0.25,
+              "typed_plan": {
+                "anchors": [
+                  "诈骗",
+                  "骚扰电话",
+                  "代理商",
+                  "防诈骗和骚扰电话",
+                  "防诈骗",
+                  "防诈骗和骚扰",
+                  "骗和骚扰电话",
+                  "防诈骗和"
+                ],
+                "predicate": "",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 7,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "fda121798f2ce07f18d98cf6",
+            "snapshot_id_count": 9,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "防诈骗和骚扰电话 代理商被罚多少钱"
+          },
+          "fact_plan": {
+            "raw": "防诈骗和骚扰电话 代理商被罚多少钱",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit"
+            ],
+            "entities": [
+              "诈骗",
+              "骚扰电话",
+              "代理商",
+              "防诈骗和骚扰电话",
+              "防诈骗",
+              "防诈骗和骚扰",
+              "骗和骚扰电话",
+              "防诈骗和",
+              "扰电话",
+              "代理商被罚多少钱",
+              "代理商被罚多",
+              "商被罚多少钱"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "诈骗",
+            "object": "骚扰电话",
+            "scope": [
+              "代理商"
+            ],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "诈骗",
+              "骚扰电话",
+              "代理商",
+              "防诈骗和骚扰电话",
+              "防诈骗",
+              "防诈骗和骚扰",
+              "骗和骚扰电话",
+              "防诈骗和",
+              "扰电话",
+              "代理商被罚多少钱",
+              "代理商被罚多",
+              "商被罚多少钱"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "涉诈",
+              "value": "2000",
+              "unit": "元",
+              "evidence_passage_id": "83fb103cba98000e98863f715dc075c6",
+              "record_id": "83fb103cba98000e98863f715dc075c6:r4",
+              "exact_text": "一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+              "table_row_ref": "83fb103cba98000e98863f715dc075c6:t0",
+              "value_dimension": "per_unit",
+              "group_id": "e341706f52c04f13"
+            },
+            {
+              "condition": "",
+              "value": "10000",
+              "unit": "元",
+              "evidence_passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r1",
+              "exact_text": "2.扣罚网点归属经营单位绩效10000元。",
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "value_dimension": "",
+              "group_id": "e341706f52c04f13"
+            },
+            {
+              "condition": "",
+              "value": "30000",
+              "unit": "元",
+              "evidence_passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r5",
+              "exact_text": "2.扣罚网点归属经营单位绩效30000元。",
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "value_dimension": "",
+              "group_id": "e341706f52c04f13"
+            },
+            {
+              "condition": "",
+              "value": "30000",
+              "unit": "元",
+              "evidence_passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r6",
+              "exact_text": "行预警帮扶2.扣罚网点归属经营单位绩效30000元。",
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "value_dimension": "",
+              "group_id": "e341706f52c04f13"
+            },
+            {
+              "condition": "",
+              "value": "50000",
+              "unit": "元",
+              "evidence_passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r8",
+              "exact_text": "2.扣罚网点归属经营单位绩效50000元。",
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "value_dimension": "",
+              "group_id": "e341706f52c04f13"
+            },
+            {
+              "condition": "涉骚",
+              "value": "30",
+              "unit": "元",
+              "evidence_passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r13",
+              "exact_text": "备注一个自然月内涉骚扰号码每个号码处罚30元/个-处罚30元",
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "value_dimension": "per_unit",
+              "group_id": "e341706f52c04f13"
+            }
+          ],
+          "dropped": [
+            {
+              "id": "9d059233920b9e8907465de1",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "966f8c1cc6efc880307d097d",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1edfcc0bd75bb8e9df281716",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7edb14325698e25eb6289c81",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4b44ba8d1e958f61fe7679bf",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "bd7a4b4f19a1e856f03a44b7",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4dec5a3fcd06e1aac0cdd789",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "188710151a786b96b406dcf4",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1e0cf170af2dbd2917a6852d",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "af6c81a35eb694dbae2fdf4b",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "751ea4e8a746083b6a9042fc",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "66df90b81de00b4568ef9e83",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "411d9d6f38dc2cdb13701ace",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7102f1e46b18b3338b4ec36c",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1763e0e47ac4356871364056",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "73dd14c53cdf9d01d8ac3cdb",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "e9499810d5bb6d2c0c9a2c33",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "82f4b79f3e2e0ead1e9000f5",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1a4a5207c2c3a337e608e755",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "8700b2ee82a5a2a7e90add45",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1a38089c8fe1fd41b7c12cc3",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "b08a1a125aef1a4952cbb085",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "cb99b0a395de6b8d0f80310a",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "acedb97b7f3ed13eef6cf758",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "41efe860e00deb8c01696074",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "893aa74d02d21cf99fc629cc",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1a634921283f1c45b96bcc94",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4511f7c8a6a877b5790a86ca",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "0b42ca36b607612a5734f211",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "18a789f282796ea9c41bfbd5",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1fd996dea8237e6224a84938",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "74f7febf61b83717a31f6fe2",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "da0084aa83cf35a95d20fe64",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "995f633051c47340f943a9ae",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "cddba0e7c4e87efccd8e4604",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "c4430b93a63c7d604a3518ca",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "bc9af9a720646d5d0c4d48cc",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "dd32b6818f293d4047833fff",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "0a35b350af098bda8f09873f",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "11f992db562f6cdd5dc7ea12",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "77b2f9e3149b069066e58630",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "813539084cb22d5a44765fc9",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "cfa86b9322654aa207279347",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "138402bce0bb797db56f5c75",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "e7107952990228b97f6c844d",
+              "reason": "unit_not_money"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 60,
+          "candidate_count": 64
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+              "evidence_passage_ids": [
+                "83fb103cba98000e98863f715dc075c6"
+              ],
+              "fact_type": "numeric",
+              "condition": "涉诈",
+              "candidate_id": "ffe585403a5a94300db1a848"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "2.扣罚网点归属经营单位绩效10000元。",
+              "evidence_passage_ids": [
+                "c4048fee20e3d8390635c3cc2346675c"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "a7f27346fddbc5c2b32a858f"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "2.扣罚网点归属经营单位绩效30000元。",
+              "evidence_passage_ids": [
+                "c4048fee20e3d8390635c3cc2346675c"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "e857c55fcbe57bd01f0b77e5"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "行预警帮扶2.扣罚网点归属经营单位绩效30000元。",
+              "evidence_passage_ids": [
+                "c4048fee20e3d8390635c3cc2346675c"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "82690403290a653d56bfd075"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "2.扣罚网点归属经营单位绩效50000元。",
+              "evidence_passage_ids": [
+                "c4048fee20e3d8390635c3cc2346675c"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "9ccc1ee684b9eb68a23c60e2"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "备注一个自然月内涉骚扰号码每个号码处罚30元/个-处罚30元",
+              "evidence_passage_ids": [
+                "c4048fee20e3d8390635c3cc2346675c"
+              ],
+              "fact_type": "numeric",
+              "condition": "涉骚",
+              "candidate_id": "68818a262af27844c4d1dcb2"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "防诈骗和骚扰电话 代理商被罚多少钱",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit"
+            ],
+            "entities": [
+              "诈骗",
+              "骚扰电话",
+              "代理商",
+              "防诈骗和骚扰电话",
+              "防诈骗",
+              "防诈骗和骚扰",
+              "骗和骚扰电话",
+              "防诈骗和",
+              "扰电话",
+              "代理商被罚多少钱",
+              "代理商被罚多",
+              "商被罚多少钱"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "诈骗",
+            "object": "骚扰电话",
+            "scope": [
+              "代理商"
+            ],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "诈骗",
+              "骚扰电话",
+              "代理商",
+              "防诈骗和骚扰电话",
+              "防诈骗",
+              "防诈骗和骚扰",
+              "骗和骚扰电话",
+              "防诈骗和",
+              "扰电话",
+              "代理商被罚多少钱",
+              "代理商被罚多",
+              "商被罚多少钱"
+            ]
+          },
+          "input_count": 64,
+          "dropped": [
+            {
+              "id": "9d059233920b9e8907465de1",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "966f8c1cc6efc880307d097d",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1edfcc0bd75bb8e9df281716",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7edb14325698e25eb6289c81",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4b44ba8d1e958f61fe7679bf",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "bd7a4b4f19a1e856f03a44b7",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4dec5a3fcd06e1aac0cdd789",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "188710151a786b96b406dcf4",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1e0cf170af2dbd2917a6852d",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "af6c81a35eb694dbae2fdf4b",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "751ea4e8a746083b6a9042fc",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "66df90b81de00b4568ef9e83",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "411d9d6f38dc2cdb13701ace",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7102f1e46b18b3338b4ec36c",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1763e0e47ac4356871364056",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "73dd14c53cdf9d01d8ac3cdb",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "e9499810d5bb6d2c0c9a2c33",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "82f4b79f3e2e0ead1e9000f5",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1a4a5207c2c3a337e608e755",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "8700b2ee82a5a2a7e90add45",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1a38089c8fe1fd41b7c12cc3",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "b08a1a125aef1a4952cbb085",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "cb99b0a395de6b8d0f80310a",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "acedb97b7f3ed13eef6cf758",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "41efe860e00deb8c01696074",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "893aa74d02d21cf99fc629cc",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1a634921283f1c45b96bcc94",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4511f7c8a6a877b5790a86ca",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "0b42ca36b607612a5734f211",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "18a789f282796ea9c41bfbd5",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1fd996dea8237e6224a84938",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "74f7febf61b83717a31f6fe2",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "da0084aa83cf35a95d20fe64",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "995f633051c47340f943a9ae",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "cddba0e7c4e87efccd8e4604",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "c4430b93a63c7d604a3518ca",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "bc9af9a720646d5d0c4d48cc",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "dd32b6818f293d4047833fff",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "0a35b350af098bda8f09873f",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "11f992db562f6cdd5dc7ea12",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "77b2f9e3149b069066e58630",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "813539084cb22d5a44765fc9",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "cfa86b9322654aa207279347",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "138402bce0bb797db56f5c75",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "e7107952990228b97f6c844d",
+              "reason": "unit_not_money"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "ffe585403a5a94300db1a848",
+              "record_id": "83fb103cba98000e98863f715dc075c6:r4",
+              "passage_id": "83fb103cba98000e98863f715dc075c6",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "2000元",
+              "qualifiers": [],
+              "condition": "涉诈",
+              "value": "2000",
+              "unit": "元",
+              "exact_text": "一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+              "evidence_spans": [
+                [
+                  202,
+                  208
+                ]
+              ],
+              "table_row_ref": "83fb103cba98000e98863f715dc075c6:t0",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "e341706f52c04f13",
+              "polarity": "",
+              "value_dimension": "per_unit",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "anchor:诈骗": "miss",
+                "anchor:骚扰电话": "miss",
+                "anchor:代理商": "miss",
+                "anchor:防诈骗和骚扰电话": "miss",
+                "anchor:防诈骗": "miss",
+                "anchor:防诈骗和骚扰": "miss",
+                "anchor:骗和骚扰电话": "miss",
+                "anchor:防诈骗和": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  202,
+                  208
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "a7f27346fddbc5c2b32a858f",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r1",
+              "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "10000元",
+              "qualifiers": [],
+              "condition": "",
+              "value": "10000",
+              "unit": "元",
+              "exact_text": "2.扣罚网点归属经营单位绩效10000元。",
+              "evidence_spans": [
+                [
+                  16,
+                  23
+                ]
+              ],
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "e341706f52c04f13",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "anchor:诈骗": "miss",
+                "anchor:骚扰电话": "miss",
+                "anchor:代理商": "miss",
+                "anchor:防诈骗和骚扰电话": "miss",
+                "anchor:防诈骗": "miss",
+                "anchor:防诈骗和骚扰": "miss",
+                "anchor:骗和骚扰电话": "miss",
+                "anchor:防诈骗和": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  16,
+                  23
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "e857c55fcbe57bd01f0b77e5",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r5",
+              "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "30000元",
+              "qualifiers": [],
+              "condition": "",
+              "value": "30000",
+              "unit": "元",
+              "exact_text": "2.扣罚网点归属经营单位绩效30000元。",
+              "evidence_spans": [
+                [
+                  15,
+                  22
+                ]
+              ],
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "e341706f52c04f13",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "anchor:诈骗": "miss",
+                "anchor:骚扰电话": "miss",
+                "anchor:代理商": "miss",
+                "anchor:防诈骗和骚扰电话": "miss",
+                "anchor:防诈骗": "miss",
+                "anchor:防诈骗和骚扰": "miss",
+                "anchor:骗和骚扰电话": "miss",
+                "anchor:防诈骗和": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  15,
+                  22
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "82690403290a653d56bfd075",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r6",
+              "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "30000元",
+              "qualifiers": [],
+              "condition": "",
+              "value": "30000",
+              "unit": "元",
+              "exact_text": "行预警帮扶2.扣罚网点归属经营单位绩效30000元。",
+              "evidence_spans": [
+                [
+                  37,
+                  44
+                ]
+              ],
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "e341706f52c04f13",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "anchor:诈骗": "miss",
+                "anchor:骚扰电话": "miss",
+                "anchor:代理商": "miss",
+                "anchor:防诈骗和骚扰电话": "miss",
+                "anchor:防诈骗": "miss",
+                "anchor:防诈骗和骚扰": "miss",
+                "anchor:骗和骚扰电话": "miss",
+                "anchor:防诈骗和": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  37,
+                  44
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "9ccc1ee684b9eb68a23c60e2",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r8",
+              "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "50000元",
+              "qualifiers": [],
+              "condition": "",
+              "value": "50000",
+              "unit": "元",
+              "exact_text": "2.扣罚网点归属经营单位绩效50000元。",
+              "evidence_spans": [
+                [
+                  15,
+                  22
+                ]
+              ],
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "e341706f52c04f13",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "anchor:诈骗": "miss",
+                "anchor:骚扰电话": "miss",
+                "anchor:代理商": "miss",
+                "anchor:防诈骗和骚扰电话": "miss",
+                "anchor:防诈骗": "miss",
+                "anchor:防诈骗和骚扰": "miss",
+                "anchor:骗和骚扰电话": "miss",
+                "anchor:防诈骗和": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  15,
+                  22
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "68818a262af27844c4d1dcb2",
+              "record_id": "c4048fee20e3d8390635c3cc2346675c:r13",
+              "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "30元",
+              "qualifiers": [],
+              "condition": "涉骚",
+              "value": "30",
+              "unit": "元",
+              "exact_text": "备注一个自然月内涉骚扰号码每个号码处罚30元/个-处罚30元",
+              "evidence_spans": [
+                [
+                  121,
+                  125
+                ]
+              ],
+              "table_row_ref": "c4048fee20e3d8390635c3cc2346675c:t0",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 5.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "e341706f52c04f13",
+              "polarity": "",
+              "value_dimension": "per_unit",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "anchor:诈骗": "miss",
+                "anchor:骚扰电话": "miss",
+                "anchor:代理商": "miss",
+                "anchor:防诈骗和骚扰电话": "miss",
+                "anchor:防诈骗": "miss",
+                "anchor:防诈骗和骚扰": "miss",
+                "anchor:骗和骚扰电话": "miss",
+                "anchor:防诈骗和": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  121,
+                  125
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "ffe585403a5a94300db1a848": "hit",
+              "a7f27346fddbc5c2b32a858f": "hit",
+              "e857c55fcbe57bd01f0b77e5": "hit",
+              "82690403290a653d56bfd075": "hit",
+              "9ccc1ee684b9eb68a23c60e2": "hit",
+              "68818a262af27844c4d1dcb2": "hit",
+              "aa30fcf7040dc504c0ac7630": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit",
+              "a7124951de1aecbaf6c63612": "hit",
+              "6ac49ea7339b96db061d620f": "hit",
+              "af06bc7d7f670a4d848d46b3": "hit",
+              "7aaed209afb057da3ae8cf7a": "hit",
+              "8ca0ab361af0b1fa3644a8e8": "hit",
+              "809330c3def5554c27e8413c": "hit",
+              "99d1ade185f0b98f41c2001e": "hit",
+              "ee2b9f7d1ad04bb3350f2c6f": "hit",
+              "2129288476f5b213d4f5c6a7": "hit",
+              "b76d94e754cfd48ab985632a": "hit"
+            },
+            "unit": {
+              "ffe585403a5a94300db1a848": "hit",
+              "a7f27346fddbc5c2b32a858f": "hit",
+              "e857c55fcbe57bd01f0b77e5": "hit",
+              "82690403290a653d56bfd075": "hit",
+              "9ccc1ee684b9eb68a23c60e2": "hit",
+              "68818a262af27844c4d1dcb2": "hit",
+              "aa30fcf7040dc504c0ac7630": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit",
+              "a7124951de1aecbaf6c63612": "hit",
+              "6ac49ea7339b96db061d620f": "hit",
+              "af06bc7d7f670a4d848d46b3": "hit",
+              "7aaed209afb057da3ae8cf7a": "hit",
+              "8ca0ab361af0b1fa3644a8e8": "hit",
+              "809330c3def5554c27e8413c": "hit",
+              "99d1ade185f0b98f41c2001e": "hit",
+              "ee2b9f7d1ad04bb3350f2c6f": "hit",
+              "2129288476f5b213d4f5c6a7": "hit",
+              "b76d94e754cfd48ab985632a": "hit"
+            }
+          },
+          "primary_group_id": "e341706f52c04f13",
+          "covered_slots": [
+            "condition:涉诈",
+            "condition:涉骚",
+            "dim:per_unit",
+            "unit",
+            "value",
+            "涉诈",
+            "涉骚"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "e341706f52c04f13",
+                "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                "knowledge_ids": [
+                  "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:涉诈涉骚扰电话号码入网渠道处置细则",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "f9159242a68d8d9a1268abce68d7a9a3",
+                  "e3ff6c70841a21b963ab9eee02beab08",
+                  "83fb103cba98000e98863f715dc075c6",
+                  "56fe87e3821a18e795cc06367c81d396",
+                  "c4048fee20e3d8390635c3cc2346675c",
+                  "ca020dda10c6470de5ae6773757d87d1",
+                  "73eb9de24badb90bc55db035406b0fdb",
+                  "84d70f932ebf4631c94fe4b9cc650817",
+                  "2c2ede2a5467eb902b9fa4d0ed02b543"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  0.9948790550231934,
+                  0.9919713616371155,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+                "section": "2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 8.0,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "f9159242a68d8d9a1268abce68d7a9a3:r0",
+                  "f9159242a68d8d9a1268abce68d7a9a3:r1",
+                  "f9159242a68d8d9a1268abce68d7a9a3:r2",
+                  "f9159242a68d8d9a1268abce68d7a9a3:r3",
+                  "e3ff6c70841a21b963ab9eee02beab08:r0",
+                  "e3ff6c70841a21b963ab9eee02beab08:r1",
+                  "e3ff6c70841a21b963ab9eee02beab08:r2",
+                  "e3ff6c70841a21b963ab9eee02beab08:r3",
+                  "e3ff6c70841a21b963ab9eee02beab08:r4",
+                  "e3ff6c70841a21b963ab9eee02beab08:r5",
+                  "e3ff6c70841a21b963ab9eee02beab08:r6",
+                  "e3ff6c70841a21b963ab9eee02beab08:r7",
+                  "83fb103cba98000e98863f715dc075c6:r0",
+                  "83fb103cba98000e98863f715dc075c6:r1",
+                  "83fb103cba98000e98863f715dc075c6:r2",
+                  "83fb103cba98000e98863f715dc075c6:r3",
+                  "83fb103cba98000e98863f715dc075c6:r4",
+                  "83fb103cba98000e98863f715dc075c6:r5",
+                  "83fb103cba98000e98863f715dc075c6:r6",
+                  "83fb103cba98000e98863f715dc075c6:r7",
+                  "56fe87e3821a18e795cc06367c81d396:r0",
+                  "56fe87e3821a18e795cc06367c81d396:r1",
+                  "56fe87e3821a18e795cc06367c81d396:r2",
+                  "56fe87e3821a18e795cc06367c81d396:r3",
+                  "56fe87e3821a18e795cc06367c81d396:r4",
+                  "56fe87e3821a18e795cc06367c81d396:r5",
+                  "56fe87e3821a18e795cc06367c81d396:r6",
+                  "56fe87e3821a18e795cc06367c81d396:r7",
+                  "c4048fee20e3d8390635c3cc2346675c:r0",
+                  "c4048fee20e3d8390635c3cc2346675c:r1",
+                  "c4048fee20e3d8390635c3cc2346675c:r2",
+                  "c4048fee20e3d8390635c3cc2346675c:r3",
+                  "c4048fee20e3d8390635c3cc2346675c:r4",
+                  "c4048fee20e3d8390635c3cc2346675c:r5",
+                  "c4048fee20e3d8390635c3cc2346675c:r6",
+                  "c4048fee20e3d8390635c3cc2346675c:r7",
+                  "c4048fee20e3d8390635c3cc2346675c:r8",
+                  "c4048fee20e3d8390635c3cc2346675c:r9",
+                  "c4048fee20e3d8390635c3cc2346675c:r10",
+                  "c4048fee20e3d8390635c3cc2346675c:r11",
+                  "c4048fee20e3d8390635c3cc2346675c:r12",
+                  "c4048fee20e3d8390635c3cc2346675c:r13",
+                  "ca020dda10c6470de5ae6773757d87d1:r0",
+                  "ca020dda10c6470de5ae6773757d87d1:r1",
+                  "ca020dda10c6470de5ae6773757d87d1:r2",
+                  "ca020dda10c6470de5ae6773757d87d1:r3",
+                  "73eb9de24badb90bc55db035406b0fdb:r0",
+                  "73eb9de24badb90bc55db035406b0fdb:r1",
+                  "73eb9de24badb90bc55db035406b0fdb:r2",
+                  "73eb9de24badb90bc55db035406b0fdb:r3",
+                  "73eb9de24badb90bc55db035406b0fdb:r4",
+                  "73eb9de24badb90bc55db035406b0fdb:r5",
+                  "73eb9de24badb90bc55db035406b0fdb:r6",
+                  "84d70f932ebf4631c94fe4b9cc650817:r0",
+                  "84d70f932ebf4631c94fe4b9cc650817:r1",
+                  "84d70f932ebf4631c94fe4b9cc650817:r2",
+                  "84d70f932ebf4631c94fe4b9cc650817:r3",
+                  "2c2ede2a5467eb902b9fa4d0ed02b543:r0",
+                  "2c2ede2a5467eb902b9fa4d0ed02b543:r1",
+                  "2c2ede2a5467eb902b9fa4d0ed02b543:r2"
+                ]
+              }
+            ],
+            "primary_group_id": "e341706f52c04f13",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "代理商被罚多少钱",
+                "防诈骗和骚扰电话"
+              ],
+              "selection": [
+                {
+                  "group_id": "e341706f52c04f13",
+                  "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                  "knowledge_ids": [
+                    "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+                  ],
+                  "score": 8.0,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit"
+          ],
+          "candidate_ids": [
+            "ffe585403a5a94300db1a848",
+            "a7f27346fddbc5c2b32a858f",
+            "e857c55fcbe57bd01f0b77e5",
+            "82690403290a653d56bfd075",
+            "9ccc1ee684b9eb68a23c60e2",
+            "68818a262af27844c4d1dcb2"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "dim:per_unit",
+            "unit",
+            "value",
+            "涉诈",
+            "涉骚"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "ffe585403a5a94300db1a848": "hit",
+              "a7f27346fddbc5c2b32a858f": "hit",
+              "e857c55fcbe57bd01f0b77e5": "hit",
+              "82690403290a653d56bfd075": "hit",
+              "9ccc1ee684b9eb68a23c60e2": "hit",
+              "68818a262af27844c4d1dcb2": "hit",
+              "aa30fcf7040dc504c0ac7630": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit",
+              "a7124951de1aecbaf6c63612": "hit",
+              "6ac49ea7339b96db061d620f": "hit",
+              "af06bc7d7f670a4d848d46b3": "hit",
+              "7aaed209afb057da3ae8cf7a": "hit",
+              "8ca0ab361af0b1fa3644a8e8": "hit",
+              "809330c3def5554c27e8413c": "hit",
+              "99d1ade185f0b98f41c2001e": "hit",
+              "ee2b9f7d1ad04bb3350f2c6f": "hit",
+              "2129288476f5b213d4f5c6a7": "hit",
+              "b76d94e754cfd48ab985632a": "hit"
+            },
+            "unit": {
+              "ffe585403a5a94300db1a848": "hit",
+              "a7f27346fddbc5c2b32a858f": "hit",
+              "e857c55fcbe57bd01f0b77e5": "hit",
+              "82690403290a653d56bfd075": "hit",
+              "9ccc1ee684b9eb68a23c60e2": "hit",
+              "68818a262af27844c4d1dcb2": "hit",
+              "aa30fcf7040dc504c0ac7630": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit",
+              "a7124951de1aecbaf6c63612": "hit",
+              "6ac49ea7339b96db061d620f": "hit",
+              "af06bc7d7f670a4d848d46b3": "hit",
+              "7aaed209afb057da3ae8cf7a": "hit",
+              "8ca0ab361af0b1fa3644a8e8": "hit",
+              "809330c3def5554c27e8413c": "hit",
+              "99d1ade185f0b98f41c2001e": "hit",
+              "ee2b9f7d1ad04bb3350f2c6f": "hit",
+              "2129288476f5b213d4f5c6a7": "hit",
+              "b76d94e754cfd48ab985632a": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "防诈骗和骚扰电话 代理商被罚多少钱",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "value",
+            "unit"
+          ],
+          "entities": [
+            "诈骗",
+            "骚扰电话",
+            "代理商",
+            "防诈骗和骚扰电话",
+            "防诈骗",
+            "防诈骗和骚扰",
+            "骗和骚扰电话",
+            "防诈骗和",
+            "扰电话",
+            "代理商被罚多少钱",
+            "代理商被罚多",
+            "商被罚多少钱"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "诈骗",
+          "object": "骚扰电话",
+          "scope": [
+            "代理商"
+          ],
+          "selector": [],
+          "predicate": "",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "numeric",
+          "value_dimensions": [
+            "value"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "诈骗",
+            "骚扰电话",
+            "代理商",
+            "防诈骗和骚扰电话",
+            "防诈骗",
+            "防诈骗和骚扰",
+            "骗和骚扰电话",
+            "防诈骗和",
+            "扰电话",
+            "代理商被罚多少钱",
+            "代理商被罚多",
+            "商被罚多少钱"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "e341706f52c04f13",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "knowledge_ids": [
+                "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:涉诈涉骚扰电话号码入网渠道处置细则",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "f9159242a68d8d9a1268abce68d7a9a3",
+                "e3ff6c70841a21b963ab9eee02beab08",
+                "83fb103cba98000e98863f715dc075c6",
+                "56fe87e3821a18e795cc06367c81d396",
+                "c4048fee20e3d8390635c3cc2346675c",
+                "ca020dda10c6470de5ae6773757d87d1",
+                "73eb9de24badb90bc55db035406b0fdb",
+                "84d70f932ebf4631c94fe4b9cc650817",
+                "2c2ede2a5467eb902b9fa4d0ed02b543"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ],
+              "retrieval_scores": [
+                1.0,
+                1.0,
+                1.0,
+                0.9948790550231934,
+                0.9919713616371155,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "section": "2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 8.0,
+              "rejection_reasons": [],
+              "record_ids": [
+                "f9159242a68d8d9a1268abce68d7a9a3:r0",
+                "f9159242a68d8d9a1268abce68d7a9a3:r1",
+                "f9159242a68d8d9a1268abce68d7a9a3:r2",
+                "f9159242a68d8d9a1268abce68d7a9a3:r3",
+                "e3ff6c70841a21b963ab9eee02beab08:r0",
+                "e3ff6c70841a21b963ab9eee02beab08:r1",
+                "e3ff6c70841a21b963ab9eee02beab08:r2",
+                "e3ff6c70841a21b963ab9eee02beab08:r3",
+                "e3ff6c70841a21b963ab9eee02beab08:r4",
+                "e3ff6c70841a21b963ab9eee02beab08:r5",
+                "e3ff6c70841a21b963ab9eee02beab08:r6",
+                "e3ff6c70841a21b963ab9eee02beab08:r7",
+                "83fb103cba98000e98863f715dc075c6:r0",
+                "83fb103cba98000e98863f715dc075c6:r1",
+                "83fb103cba98000e98863f715dc075c6:r2",
+                "83fb103cba98000e98863f715dc075c6:r3",
+                "83fb103cba98000e98863f715dc075c6:r4",
+                "83fb103cba98000e98863f715dc075c6:r5",
+                "83fb103cba98000e98863f715dc075c6:r6",
+                "83fb103cba98000e98863f715dc075c6:r7",
+                "56fe87e3821a18e795cc06367c81d396:r0",
+                "56fe87e3821a18e795cc06367c81d396:r1",
+                "56fe87e3821a18e795cc06367c81d396:r2",
+                "56fe87e3821a18e795cc06367c81d396:r3",
+                "56fe87e3821a18e795cc06367c81d396:r4",
+                "56fe87e3821a18e795cc06367c81d396:r5",
+                "56fe87e3821a18e795cc06367c81d396:r6",
+                "56fe87e3821a18e795cc06367c81d396:r7",
+                "c4048fee20e3d8390635c3cc2346675c:r0",
+                "c4048fee20e3d8390635c3cc2346675c:r1",
+                "c4048fee20e3d8390635c3cc2346675c:r2",
+                "c4048fee20e3d8390635c3cc2346675c:r3",
+                "c4048fee20e3d8390635c3cc2346675c:r4",
+                "c4048fee20e3d8390635c3cc2346675c:r5",
+                "c4048fee20e3d8390635c3cc2346675c:r6",
+                "c4048fee20e3d8390635c3cc2346675c:r7",
+                "c4048fee20e3d8390635c3cc2346675c:r8",
+                "c4048fee20e3d8390635c3cc2346675c:r9",
+                "c4048fee20e3d8390635c3cc2346675c:r10",
+                "c4048fee20e3d8390635c3cc2346675c:r11",
+                "c4048fee20e3d8390635c3cc2346675c:r12",
+                "c4048fee20e3d8390635c3cc2346675c:r13",
+                "ca020dda10c6470de5ae6773757d87d1:r0",
+                "ca020dda10c6470de5ae6773757d87d1:r1",
+                "ca020dda10c6470de5ae6773757d87d1:r2",
+                "ca020dda10c6470de5ae6773757d87d1:r3",
+                "73eb9de24badb90bc55db035406b0fdb:r0",
+                "73eb9de24badb90bc55db035406b0fdb:r1",
+                "73eb9de24badb90bc55db035406b0fdb:r2",
+                "73eb9de24badb90bc55db035406b0fdb:r3",
+                "73eb9de24badb90bc55db035406b0fdb:r4",
+                "73eb9de24badb90bc55db035406b0fdb:r5",
+                "73eb9de24badb90bc55db035406b0fdb:r6",
+                "84d70f932ebf4631c94fe4b9cc650817:r0",
+                "84d70f932ebf4631c94fe4b9cc650817:r1",
+                "84d70f932ebf4631c94fe4b9cc650817:r2",
+                "84d70f932ebf4631c94fe4b9cc650817:r3",
+                "2c2ede2a5467eb902b9fa4d0ed02b543:r0",
+                "2c2ede2a5467eb902b9fa4d0ed02b543:r1",
+                "2c2ede2a5467eb902b9fa4d0ed02b543:r2"
+              ]
+            }
+          ],
+          "primary_group_id": "e341706f52c04f13",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "代理商被罚多少钱",
+              "防诈骗和骚扰电话"
+            ],
+            "selection": [
+              {
+                "group_id": "e341706f52c04f13",
+                "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                "knowledge_ids": [
+                  "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+                ],
+                "score": 8.0,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {},
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "ffe585403a5a94300db1a848"
+              ],
+              "passage_id": "83fb103cba98000e98863f715dc075c6",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "text": "- 一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "a7f27346fddbc5c2b32a858f"
+              ],
+              "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "text": "- 2.扣罚网点归属经营单位绩效10000元。",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "e857c55fcbe57bd01f0b77e5"
+              ],
+              "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "text": "- 2.扣罚网点归属经营单位绩效30000元。",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 83
+        },
+        "primary_group_id": "e341706f52c04f13",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "type": "knowledge",
+              "label": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab"
+            },
+            {
+              "id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "type": "block",
+              "label": "第十九条 本细则自 2026年5月1日起执行。",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "d368090a-5268-4a57-b9ce-a85907076876",
+              "type": "block",
+              "label": "[第8页]",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "c7797221-317d-4cb9-9d83-c3f125958453",
+              "type": "block",
+              "label": "门负责人对网点进行预",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "02f3b3cd-48f6-4b05-9745-517c41098220",
+              "type": "block",
+              "label": "[第15页]",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "91006138-d944-4b1c-b5b6-6b0ab0e34440",
+              "type": "knowledge",
+              "label": "中电信桂-2021-125号-关于印发中国电信广西公司2021年社会渠道费用标准的通知--91006138"
+            },
+            {
+              "id": "af1f904e-36d3-48e5-a6b4-a4c416c33488",
+              "type": "knowledge",
+              "label": "渠道-2026-2号-关于印发中国电信广西公司营业用房租赁管理规范的通知--af1f904e"
+            }
+          ],
+          "edges": [
+            {
+              "source": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "target": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "type": "contains"
+            },
+            {
+              "source": "d368090a-5268-4a57-b9ce-a85907076876",
+              "target": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "type": "parent"
+            },
+            {
+              "source": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "target": "c7797221-317d-4cb9-9d83-c3f125958453",
+              "type": "contains"
+            },
+            {
+              "source": "02f3b3cd-48f6-4b05-9745-517c41098220",
+              "target": "c7797221-317d-4cb9-9d83-c3f125958453",
+              "type": "parent"
+            },
+            {
+              "source": "91006138-d944-4b1c-b5b6-6b0ab0e34440",
+              "target": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "type": "related"
+            },
+            {
+              "source": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "target": "af1f904e-36d3-48e5-a6b4-a4c416c33488",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 7
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 0,
+          "adjacent_extension": 2,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+          ],
+          "accepted_block_ids": [
+            "73533405-09e3-4388-8551-03506729614c"
+          ],
+          "accepted_passage_ids": [
+            "f9159242a68d8d9a1268abce68d7a9a3",
+            "e3ff6c70841a21b963ab9eee02beab08",
+            "83fb103cba98000e98863f715dc075c6",
+            "56fe87e3821a18e795cc06367c81d396",
+            "c4048fee20e3d8390635c3cc2346675c",
+            "ca020dda10c6470de5ae6773757d87d1",
+            "73eb9de24badb90bc55db035406b0fdb",
+            "84d70f932ebf4631c94fe4b9cc650817",
+            "2c2ede2a5467eb902b9fa4d0ed02b543"
+          ],
+          "adjacent_passage_ids": [
+            "83fb103cba98000e98863f715dc075c6",
+            "e3ff6c70841a21b963ab9eee02beab08",
+            "ca020dda10c6470de5ae6773757d87d1",
+            "73eb9de24badb90bc55db035406b0fdb",
+            "c4048fee20e3d8390635c3cc2346675c",
+            "84d70f932ebf4631c94fe4b9cc650817",
+            "2c2ede2a5467eb902b9fa4d0ed02b543"
+          ],
+          "generation_knowledge_ids": [
+            "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+          ],
+          "top_score": 0.2424,
+          "intent": "ordinary",
+          "adjacent_count": 7,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "骚扰电话",
+              "代理商",
+              "扰电话"
+            ],
+            "passage_id": "f9159242a68d8d9a1268abce68d7a9a3",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "spans": [
+              {
+                "slot": "骚扰电话",
+                "surface": "骚扰电话",
+                "synonym_source": "query_surface",
+                "span": [
+                  26,
+                  30
+                ],
+                "excerpt": "6-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【文档】市场-20"
+              },
+              {
+                "slot": "代理商",
+                "surface": "代理商",
+                "synonym_source": "query_surface",
+                "span": [
+                  134,
+                  137
+                ],
+                "excerpt": "通知--51b17ab\n【章节】2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同"
+              },
+              {
+                "slot": "扰电话",
+                "surface": "扰电话",
+                "synonym_source": "query_surface",
+                "span": [
+                  27,
+                  30
+                ],
+                "excerpt": "-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【文档】市场-20"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "诈骗",
+              "骚扰电话",
+              "代理商",
+              "防诈骗和骚扰电话",
+              "防诈骗",
+              "防诈骗和骚扰",
+              "骗和骚扰电话",
+              "防诈骗和",
+              "扰电话",
+              "代理商被罚多少钱",
+              "代理商被罚多",
+              "商被罚多少钱"
+            ],
+            "score": 0.25,
+            "typed_plan": {
+              "anchors": [
+                "诈骗",
+                "骚扰电话",
+                "代理商",
+                "防诈骗和骚扰电话",
+                "防诈骗",
+                "防诈骗和骚扰",
+                "骗和骚扰电话",
+                "防诈骗和"
+              ],
+              "predicate": "",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "fda121798f2ce07f18d98cf6"
+        },
+        "snapshot_fingerprint": "fda121798f2ce07f18d98cf6",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 2,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 39.45
+  },
+  "top_candidate_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+  "candidates": [
+    {
+      "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "passage_id": "f9159242a68d8d9a1268abce68d7a9a3",
+      "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+      "score": 1.0,
+      "final_relevance_score": 1.0,
+      "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。\n2.约谈代理商暂停营业1个\n月。-\n—11—近 12 个月累计涉\n诈月份（含跨年）3 个月 工号永久关闭 - -\n近 12 个月内累计\n涉诈号码数量（含\n跨年）累计达到 30\n个（含）- - 处罚 50000 元\n累计达到 50\n个（含）的- -1.关停代理商网点名下\n全部工号。 2.停止合作。\n3.列入电信业务代理代\n办黑名单。\n说明：1.各场景处罚互不包含。\n2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n—12—附件 2\n场景（按号\n码入网时间\n判定）触发条件入网涉及\n的代理商\n营业员入网涉及的代\n理商网点 （按营\n业网点分别统\n计）入网涉及的代理\n商（按市分公司\n分别统计）备注\n一个自然月\n内涉骚扰号\n码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，\n不再统计和处置。"
+    },
+    {
+      "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "passage_id": "e3ff6c70841a21b963ab9eee02beab08",
+      "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+      "score": 1.0,
+      "final_relevance_score": null,
+      "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚扰、 > (4)不是在营业厅场所内办理入网的； > (5)一年内有 3 个（含）以上号码被举报电信营销业务的代\n判定）触发条件入网涉及\n的代理商\n营业员入网涉及的代\n理商网点 （按营\n业网点分别统\n计）入网涉及的代理\n商（按市分公司\n分别统计）备注\n一个自然月\n内涉骚扰号\n码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，\n不再统计和处置。\n2.入网时间和涉骚扰月份间隔未超过 12 个月（含）的号码，\n分公司提供号码入网资料，在符合实名入网前提下，营业员\n已按规范一看、二讲、三圈示，营业员已签署防诈承诺书，\n可申诉免责考核。\n3. 以下情形之一的不允许申诉免考核：\n(1)举报内容为电信营销业务的，或手机号码为员工号码的\n（含第三方人员、代理商人员）；\n(2)核实举报号码和被举报号码之间有信令的；\n(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚扰、\n涉诈举报）；\n(4)不是在营业厅场所内办理入网的；\n(5)一年内有 3 个（含）以上号码被举报电信营销业务的代\n理商，其他号码不得申请减免。近12个月内\n累计涉骚扰\n号码数量\n（含跨年）累计达到\n160 个\n（含）- -关停代理商网点\n名下全部工号，\n预警帮扶后方可\n恢复。"
+    },
+    {
+      "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "passage_id": "83fb103cba98000e98863f715dc075c6",
+      "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+      "score": 1.0,
+      "final_relevance_score": null,
+      "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】4.自营渠道入网号码涉骚扰号码处置规则 > 5.累计涉骚扰免考核申请清单（模板） > 6.信息安全生产沟通表\n等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。"
+    },
+    {
+      "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "passage_id": "56fe87e3821a18e795cc06367c81d396",
+      "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+      "score": 0.9948790550231934,
+      "final_relevance_score": null,
+      "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚 > (4)不是在营业厅场所内办理入网的； > (5)一年内有 3 个（含）以上号码被举报电信营销业务\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。\n2.入网时间和涉骚扰月份间隔未超过 12 个月（含）的\n号码，分公司提供号码入网资料，在符合实名入网前提\n下，营业员已按规范一看、二讲、三圈示，营业员已签\n署防诈承诺书，可申诉免责考核。\n3.以下情形之一的不允许申诉免考核：\n(1)举报内容为电信营销业务的，或手机号码为员工号\n码的（含第三方人员、代理商人员）；\n(2)核实举报号码和被举报号码之间有信令的；\n(3)该号码 12 个月内被举报 2 次（含）以上的（含涉骚\n扰、涉诈举报）；\n(4)不是在营业厅场所内办理入网的；\n(5)一年内有 3 个（含）以上号码被举报电信营销业务\n的代理商，其他号码不得申请减免。近 12 个月\n内累计涉\n骚扰号码\n数量 （含跨\n年）累计达到\n160个 （含）\n的-由各经营单\n位渠道部门\n负责人对网\n点进行预警\n帮扶。-由各经营单\n位渠道部门\n负责人对网\n点进行预警\n帮扶。"
+    },
+    {
+      "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "passage_id": "c4048fee20e3d8390635c3cc2346675c",
+      "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+      "score": 0.9919713616371155,
+      "final_relevance_score": null,
+      "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】2.预警帮扶后方可 > 2.扣罚网点归属经营单\n内累计涉\n诈号码数\n量（含跨\n年）累计达\n到50个\n（含）\n的-1.由各经营单位渠\n道部门负责人对网\n点进行预警帮扶。2.\n扣罚网点归属经营\n单位绩效 10000 元。-1.由各经营单位渠道部\n门负责人对网点进行预\n警帮扶。2.扣罚网点归属\n经营单位绩效 10000 元。\n累计达\n到70个\n（含）-1.由各经营单位分\n管领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 30000 元。-1.由各经营单位分管领\n导对网点进行预警帮扶\n2.扣罚网点归属经营单\n位绩效 30000 元。\n累计达\n到 100\n个（含）-1.由各经营单位正\n职领导对网点进行\n预警帮扶。2.扣罚网\n点归属经营单位绩\n效 50000 元。-1.由区各经营单位正职\n领导对网点进行预警帮\n扶。2.扣罚网点归属经营\n单位绩效 50000 元。\n说明：1.各场景处罚互不包含。2.按同一营业员工号、同一网点、同一代理商分别计算触发条件。\n—16—附件 4\n场景（按\n号码入网\n时间判\n定）触发条件入网涉及\n的实体直\n营渠道营\n业员 （或促\n销人）入网涉及的\n实体直营渠\n道网点（按\n营业网点分\n别统计）入网涉及\n的电子直\n营渠道促\n销员入网涉及的\n电子直营渠\n道线上渠道\n网点备注\n一个自然\n月内涉骚\n扰号码每个号码处罚 30 元\n/个-处罚 30 元\n/个-1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的\n号码，不再统计和处置。"
+    }
+  ],
+  "search_ms": 2864.39,
+  "ask_ms": 39.45,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "-kBdcnJiEcZUmtCQxxwgQEuj3x_A_S9b",
+  "search_snapshot_fingerprint": "fda121798f2ce07f18d98cf6",
+  "ask_snapshot_fingerprint": "fda121798f2ce07f18d98cf6",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "4031909534343a8803ea668d"
+}

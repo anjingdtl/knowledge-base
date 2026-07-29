@@ -1,6 +1,6 @@
 """ContextBuilder — limited generation context from retrieval rows.
 
-SPEC Phase 5 (KB-019): when a hit block sits inside a clause that is split
+When a hit block sits inside a clause that is split
 across consecutive blocks (e.g. "II类 10万元；III类 20万元" cut between
 "...III类支付账" and "户，其余额年付款限额为20万元"), the answer pipeline must
 re-join adjacent blocks of the SAME knowledge item so the LLM sees the complete

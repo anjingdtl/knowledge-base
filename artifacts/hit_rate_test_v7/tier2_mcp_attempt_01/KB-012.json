@@ -1,0 +1,997 @@
+{
+  "case": {
+    "case_id": "KB-012",
+    "category": "同义词与口语表达",
+    "query": "公司大额对外投资并购决策要不要先过法律审核",
+    "expected_knowledge_ids": [
+      "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+    ],
+    "expected_title_keywords": [
+      "重要决策",
+      "法律合规审核",
+      "2025"
+    ],
+    "required_facts": [
+      "法律合规审核",
+      "重大对外投融资"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕505号第三条/第四条；口语'大额投资并购'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "09382c38-3f7f-4916-9fa8-6b2af9abb604",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "820fa23d66d52741921972289983318c",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】（九）知识产权发展规划以及重大知识产权转让事项 ； > （十）其他对公司经营管理有重大影响的决策事项 。 > 第四条 重要决策作出之前 ，应当进行法律合规审核 。\n定本办法。\n第二条 本办法所称法律合规审核，是指公司法律工作人员\n或外聘律师，根据国家政策法律法规、政府规范性文件和公司规\n章制度，对公司经营管理中涉及的重要决策进行法律分析、开展\n合法合规性论证，提出法律意见、建议或解决方案（以下统称“法\n律意见”）的活动。\n第三条 本办法所称重要决策是指对企业生存发展有重大\n影响，列入党委研究决策重大事项清单中需要经过法律审核的经\n营管理决策，具体包括：\n（一）重大对外投融资、资本运作事项；\n（二）重大资产重组、资产处置等事项；\n（三）重大对外担保事项；\n（四）企业民主管理、职工分流安置等涉及职工权益方面的\n重要事项；\n— 3 — （五）涉及职工重大切身利益方面的重要事项 ；\n（六）合并、分立、解散或变更公司形式的方案 ；\n（七）各级分支机构的设立 、合并或撤销 ；\n（八）代管子公司的合并 、分立或重组 ；\n（九）知识产权发展规划以及重大知识产权转让事项 ；\n（十）其他对公司经营管理有重大影响的决策事项 。",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "section_path": "（九）知识产权发展规划以及重大知识产权转让事项 ； > （十）其他对公司经营管理有重大影响的决策事项 。 > 第四条 重要决策作出之前 ，应当进行法律合规审核 。",
+          "block_ids": [
+            "09382c38-3f7f-4916-9fa8-6b2af9abb604",
+            "956f2368-9450-429e-bcfb-61d79645aeff",
+            "fc7d168a-9606-4586-ac3c-4a6c5ca959b1",
+            "ee2f4dbe-b744-445c-90d0-9d8c16ec3485",
+            "899c7d0a-6119-48ef-818d-b7cab15192a2",
+            "35be744a-cde9-4d28-b60e-6f0656911f77",
+            "5648827a-212f-4497-9796-edb7586ee940",
+            "cdc87d05-f6dd-4e33-b344-ee674cfbc165",
+            "d2b8523c-3701-483a-a008-94892a2d5761",
+            "8bb563d2-dec0-488e-805a-644e13069952",
+            "902a34c2-abad-4396-ba18-ecf6f04b0746",
+            "632b1344-73f1-471f-969e-dd4f493770f2",
+            "6fbfb6c7-a82d-4e9a-a832-593dfaa985eb",
+            "27caf8e4-ff8d-4ef0-b193-bf94b6d4a7f4",
+            "00ad2bcc-096b-4d88-bb43-21b8917c5e1e",
+            "1b986344-f8e3-4fed-8356-af7541b3deb9",
+            "bbe51b50-d4e2-4f2e-9e2e-ff8b1a2f8f4c"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -21.059372364368404,
+          "fts_score": 1.0,
+          "score": 0.8214999999999999,
+          "alias_fts_match": true,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 1.0,
+            "title_score": 0.3202,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.2456,
+            "query_term_coverage": 0.2456,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4715,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4715,
+          "ranking_score": 0.8214999999999999,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "926155e5-976d-4a09-801b-2c725cc51f21",
+          "knowledge_id": "917d55a9-10b9-41da-8199-1cab744a757a",
+          "passage_id": "075edb407add95be60b42f1ec5ddc48e",
+          "title": "中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--917d55a9",
+          "text": "【文档】中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--917d55a9\n【章节】第二章 管理职责 > 第五条 区公司企业发展部（法律部）作为公司业务外包统 > 第六条 区公司市场部主要负责组织制定前端相关业务外包\n\n（三）集约化原则：区公司专业部门是本专业条线的业务外\n包管理工作的责任主体，应本着能集约完成的工作均集约处理的\n原则，合理分配事权，减少下放事项。\n（四）合规化原则：实施业务外包要加强合规管理，在外包\n价格标准、外包商采购、外包合作、监督检查等方面加强合规管\n理，防范风险。\n第四条 本办法适用于各市分公司、各专业公司、区公司各\n部门（以下简称“各单位”）。\n第二章 管理职责\n第五条 区公司企业发展部（法律部）作为公司业务外包统\n筹协调部门，统筹协调业务外包管理的相关事项，主要负责公司\n业务外包制度制定、业务外包协议法律审核、法律风险和合规风\n险防范、法律服务支撑等工作。\n第六条 区公司市场部主要负责组织制定前端相关业务外包\n管理规范，负责协调前端业务外包相关事项，会同人力资源部、\n财务部（财务共享服务中心）对前端相关业务外包需求（包括但\n不限于业务需求、人员需求、成本需求）进行管理，负责前端相\n关业务外包框架协议业务审核，负责市场经营业务外包风险防\n范。",
+          "document_family_id": "topic:关于印发中国电信广西公司业务外包管理办法",
+          "version_year": 2021,
+          "section_path": "第二章 管理职责 > 第五条 区公司企业发展部（法律部）作为公司业务外包统 > 第六条 区公司市场部主要负责组织制定前端相关业务外包",
+          "block_ids": [
+            "926155e5-976d-4a09-801b-2c725cc51f21",
+            "d303f393-c28e-44b5-b002-f78e9c762f33",
+            "7f17689b-932d-4a90-bfcb-067d5694188e",
+            "929d891f-e541-4ff8-a6ca-a1369ee5240a",
+            "d5eed18f-c383-4e76-9a9b-b6a755dd17e5",
+            "6136f5d4-d7fd-4976-9f8a-80d4684f5432",
+            "f680228b-a271-4eb6-a9da-807dcbffccd4",
+            "d4e205b8-b27f-4225-a388-b3e0020cfdbe",
+            "c456ae6a-228f-4681-9f58-aea008162832",
+            "e451b5b7-c41f-4b2d-af57-0b40665cf616",
+            "20a57426-9b0a-447e-a2a7-40cd878f4880",
+            "f14c6260-80ee-4bee-9c61-ac4d38a0249e",
+            "3413321d-8e25-4920-a251-b83d33c8c0d7",
+            "dc0c1a0e-01cc-410c-baed-057c4f1268ad",
+            "1b4b4d17-67a0-4067-91fc-5b25ba91b747",
+            "58d3ed2d-bf62-467a-93c1-2b21cf19ff55"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -9.682775234918438,
+          "fts_score": 0.6119415641012151,
+          "score": 0.5523,
+          "alias_fts_match": true,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 0.6119,
+            "title_score": 0.2,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.1228,
+            "query_term_coverage": 0.1228,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3523,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3523,
+          "ranking_score": 0.5523,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司业务外包管理办法",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "c6870d33-85cd-4a35-9ef1-742d23660e55",
+          "knowledge_id": "befd93bd-9674-4b43-9fb7-bf96cb695268",
+          "passage_id": "accb21c51eefe8b779b76f443fbb2b90",
+          "title": "中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--befd93bd",
+          "text": "【文档】中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--befd93bd\n【章节】第二章 管理职责 > 第五条 区公司企业发展部（法律部）作为公司业务外包统 > 第六条 区公司市场部主要负责组织制定前端相关业务外包\n\n（三）集约化原则：区公司专业部门是本专业条线的业务外\n包管理工作的责任主体，应本着能集约完成的工作均集约处理的\n原则，合理分配事权，减少下放事项。\n（四）合规化原则：实施业务外包要加强合规管理，在外包\n价格标准、外包商采购、外包合作、监督检查等方面加强合规管\n理，防范风险。\n第四条 本办法适用于各市分公司、各专业公司、区公司各\n部门（以下简称“各单位”）。\n第二章 管理职责\n第五条 区公司企业发展部（法律部）作为公司业务外包统\n筹协调部门，统筹协调业务外包管理的相关事项，主要负责公司\n业务外包制度制定、业务外包协议法律审核、法律风险和合规风\n险防范、法律服务支撑等工作。\n第六条 区公司市场部主要负责组织制定前端相关业务外包\n管理规范，负责协调前端业务外包相关事项，会同人力资源部、\n财务部（财务共享服务中心）对前端相关业务外包需求（包括但\n不限于业务需求、人员需求、成本需求）进行管理，负责前端相\n关业务外包框架协议业务审核，负责市场经营业务外包风险防\n范。",
+          "document_family_id": "topic:关于印发中国电信广西公司业务外包管理办法",
+          "version_year": 2021,
+          "section_path": "第二章 管理职责 > 第五条 区公司企业发展部（法律部）作为公司业务外包统 > 第六条 区公司市场部主要负责组织制定前端相关业务外包",
+          "block_ids": [
+            "c6870d33-85cd-4a35-9ef1-742d23660e55",
+            "82d49144-9cde-48bb-bcb1-3452c74a26ac",
+            "f39d5c90-d45d-4e84-8603-a3b039558675",
+            "8f49c31b-61f0-47ca-93cc-72bdd57444ec",
+            "2d76de0b-bbaf-4288-b332-06299ccedfdb",
+            "fb0f2815-1332-420d-9dbb-a3a5b8d0faf8",
+            "fb9f7561-054a-4b59-ba86-c42b7b432e67",
+            "0385bfb9-76db-4d04-b511-f7a72ec59e90",
+            "ce768c52-7c06-4c24-a00b-d4ba21323949",
+            "29a46e02-b5e3-4b72-8db2-06d6e0745228",
+            "f19a47cf-5085-4bc2-ac7c-ae662a2d0385",
+            "1e72ece7-bbd4-4d4f-8f60-2fd5b506fd84",
+            "5063aa6a-271a-4ee6-a793-91c996531c66",
+            "40248e59-1464-41ac-aa3b-d82378567c40",
+            "3f0a5d27-6aae-4837-8aff-96e744fa120e",
+            "4b998d3a-8889-4f94-ac66-9d8061210857"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -9.682775234918438,
+          "fts_score": 0.6119415641012151,
+          "score": 0.5523,
+          "alias_fts_match": true,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 0.6119,
+            "title_score": 0.2,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.1228,
+            "query_term_coverage": 0.1228,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3523,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3523,
+          "ranking_score": 0.5523,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司业务外包管理办法",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 3,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.4715,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "917d55a9-10b9-41da-8199-1cab744a757a",
+          "befd93bd-9674-4b43-9fb7-bf96cb695268"
+        ],
+        "evidence_snapshot_id": "JDLXBn29iqYwPgDTOCmsp_F7CbLZWDa7",
+        "snapshot_fingerprint": "7d40ffa1d2448a202f699828",
+        "accepted_passage_ids": [
+          "820fa23d66d52741921972289983318c",
+          "075edb407add95be60b42f1ec5ddc48e",
+          "accb21c51eefe8b779b76f443fbb2b90",
+          "76e49ef1f4d9bab55d4d019b4bde7227",
+          "640e4ce94f67676be67f83c899e81c82",
+          "f4f67a797a6bbb3f0031e059cd858d31",
+          "0b1368c953f24930a783a75b05685d02",
+          "7d3529c0adf8f2fdd1a62e15508e3680",
+          "725bbd61ebf5adfadcbb8629ff36e4a8"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 6,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 18238.44
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "render_missing:['policy_anchor']",
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.4715,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 6,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "7d40ffa1d2448a202f699828",
+            "snapshot_id_count": 9,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "render_validation_failed",
+        "answer_validation_decision": "render_validation_failed",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "公司大额对外投资并购决策要不要先过法律审核"
+          },
+          "fact_plan": {
+            "raw": "公司大额对外投资并购决策要不要先过法律审核",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact"
+            ],
+            "entities": [
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核",
+              "公司大额对外",
+              "先过法律审核",
+              "公司大额",
+              "法律审核",
+              "公司大",
+              "律审核"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ],
+            "subject": "公司大额对外投资并购决策要不",
+            "object": "公司大额对外投资",
+            "scope": [],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核",
+              "公司大额对外",
+              "先过法律审核",
+              "公司大额",
+              "法律审核",
+              "公司大",
+              "律审核"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 21,
+          "candidate_count": 1
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "第三条本办法所称重要决策是指对企业生存发展有重大影响，列入党委研究决策重大事项清单中需要经过法律审核的经营管理决策，具体包括：",
+              "evidence_passage_ids": [
+                "820fa23d66d52741921972289983318c"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "c6071e47ff388efb56634b20"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司大额对外投资并购决策要不要先过法律审核",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact"
+            ],
+            "entities": [
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核",
+              "公司大额对外",
+              "先过法律审核",
+              "公司大额",
+              "法律审核",
+              "公司大",
+              "律审核"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ],
+            "subject": "公司大额对外投资并购决策要不",
+            "object": "公司大额对外投资",
+            "scope": [],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "公司大额对外投资并购决策要不",
+              "公司大额对外投资",
+              "购决策要不要先过法律审核",
+              "公司大额对外",
+              "先过法律审核",
+              "公司大额",
+              "法律审核",
+              "公司大",
+              "律审核"
+            ]
+          },
+          "input_count": 1,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "c6071e47ff388efb56634b20",
+              "record_id": "820fa23d66d52741921972289983318c:r0",
+              "passage_id": "820fa23d66d52741921972289983318c",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "fact_kind": "policy",
+              "subject": "法律审核",
+              "predicate": "",
+              "object": "第三条本办法所称重要决策是指对企业生存发展有重大影响，列入党委研究决策重大事项清单中需要经过法律审核的经营管理决策，具体包括：",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第三条本办法所称重要决策是指对企业生存发展有重大影响，列入党委研究决策重大事项清单中需要经过法律审核的经营管理决策，具体包括：",
+              "evidence_spans": [
+                [
+                  127,
+                  191
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "score": 16.65,
+              "unstructured_rejected": false,
+              "group_id": "cecc1bced7bd9523",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "anchor:公司大额对外投资并购决策要不": "miss",
+                "anchor:公司大额对外投资": "miss",
+                "anchor:购决策要不要先过法律审核": "miss",
+                "anchor:公司大额对外": "miss",
+                "anchor:先过法律审核": "miss",
+                "anchor:公司大额": "miss",
+                "anchor:法律审核": "hit",
+                "anchor:公司大": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {
+              "c6071e47ff388efb56634b20": "hit"
+            }
+          },
+          "primary_group_id": "cecc1bced7bd9523",
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "cecc1bced7bd9523",
+                "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                "knowledge_ids": [
+                  "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司重要决策法律合规审核管理办法",
+                "document_revision": "2025",
+                "effective_date": "",
+                "version_year": 2025,
+                "passage_ids": [
+                  "820fa23d66d52741921972289983318c",
+                  "76e49ef1f4d9bab55d4d019b4bde7227",
+                  "640e4ce94f67676be67f83c899e81c82"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  3,
+                  4
+                ],
+                "retrieval_scores": [
+                  0.8214999999999999,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+                "section": "（九）知识产权发展规划以及重大知识产权转让事项 ； > （十）其他对公司经营管理有重大影响的决策事项 。 > 第四条 重要决策作出之前 ，应当进行法律合规审核 。",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 9.643,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "820fa23d66d52741921972289983318c:r0",
+                  "820fa23d66d52741921972289983318c:r1",
+                  "820fa23d66d52741921972289983318c:r2",
+                  "820fa23d66d52741921972289983318c:r3",
+                  "820fa23d66d52741921972289983318c:r4",
+                  "820fa23d66d52741921972289983318c:r5",
+                  "820fa23d66d52741921972289983318c:r6",
+                  "820fa23d66d52741921972289983318c:r7",
+                  "820fa23d66d52741921972289983318c:r8",
+                  "820fa23d66d52741921972289983318c:r9",
+                  "76e49ef1f4d9bab55d4d019b4bde7227:r0",
+                  "76e49ef1f4d9bab55d4d019b4bde7227:r1",
+                  "76e49ef1f4d9bab55d4d019b4bde7227:r2",
+                  "76e49ef1f4d9bab55d4d019b4bde7227:r3",
+                  "76e49ef1f4d9bab55d4d019b4bde7227:r4",
+                  "640e4ce94f67676be67f83c899e81c82:r0",
+                  "640e4ce94f67676be67f83c899e81c82:r1",
+                  "640e4ce94f67676be67f83c899e81c82:r2",
+                  "640e4ce94f67676be67f83c899e81c82:r3",
+                  "640e4ce94f67676be67f83c899e81c82:r4",
+                  "640e4ce94f67676be67f83c899e81c82:r5"
+                ]
+              },
+              {
+                "group_id": "fefaaf352f015dfe",
+                "knowledge_id": "917d55a9-10b9-41da-8199-1cab744a757a",
+                "knowledge_ids": [
+                  "917d55a9-10b9-41da-8199-1cab744a757a",
+                  "befd93bd-9674-4b43-9fb7-bf96cb695268"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司业务外包管理办法",
+                "document_revision": "2021",
+                "effective_date": "",
+                "version_year": 2021,
+                "passage_ids": [
+                  "075edb407add95be60b42f1ec5ddc48e",
+                  "accb21c51eefe8b779b76f443fbb2b90",
+                  "f4f67a797a6bbb3f0031e059cd858d31",
+                  "0b1368c953f24930a783a75b05685d02",
+                  "7d3529c0adf8f2fdd1a62e15508e3680",
+                  "725bbd61ebf5adfadcbb8629ff36e4a8"
+                ],
+                "retrieval_ranks": [
+                  1,
+                  2,
+                  5,
+                  6,
+                  7,
+                  8
+                ],
+                "retrieval_scores": [
+                  0.5523,
+                  0.5523,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--917d55a9",
+                "section": "第二章 管理职责 > 第五条 区公司企业发展部（法律部）作为公司业务外包统 > 第六条 区公司市场部主要负责组织制定前端相关业务外包",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 7.9046,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "075edb407add95be60b42f1ec5ddc48e:r0",
+                  "075edb407add95be60b42f1ec5ddc48e:r1",
+                  "accb21c51eefe8b779b76f443fbb2b90:r0",
+                  "accb21c51eefe8b779b76f443fbb2b90:r1",
+                  "f4f67a797a6bbb3f0031e059cd858d31:r0",
+                  "f4f67a797a6bbb3f0031e059cd858d31:r1",
+                  "f4f67a797a6bbb3f0031e059cd858d31:r2",
+                  "f4f67a797a6bbb3f0031e059cd858d31:r3",
+                  "0b1368c953f24930a783a75b05685d02:r0",
+                  "0b1368c953f24930a783a75b05685d02:r1",
+                  "0b1368c953f24930a783a75b05685d02:r2",
+                  "7d3529c0adf8f2fdd1a62e15508e3680:r0",
+                  "7d3529c0adf8f2fdd1a62e15508e3680:r1",
+                  "7d3529c0adf8f2fdd1a62e15508e3680:r2",
+                  "7d3529c0adf8f2fdd1a62e15508e3680:r3",
+                  "725bbd61ebf5adfadcbb8629ff36e4a8:r0",
+                  "725bbd61ebf5adfadcbb8629ff36e4a8:r1",
+                  "725bbd61ebf5adfadcbb8629ff36e4a8:r2"
+                ]
+              }
+            ],
+            "primary_group_id": "cecc1bced7bd9523",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "公司大额对外投资并购决策",
+                "要不要先过法律审核"
+              ],
+              "selection": [
+                {
+                  "group_id": "cecc1bced7bd9523",
+                  "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                  "knowledge_ids": [
+                    "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+                  ],
+                  "score": 9.643,
+                  "role": "primary",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "fefaaf352f015dfe",
+                  "knowledge_id": "917d55a9-10b9-41da-8199-1cab744a757a",
+                  "knowledge_ids": [
+                    "917d55a9-10b9-41da-8199-1cab744a757a",
+                    "befd93bd-9674-4b43-9fb7-bf96cb695268"
+                  ],
+                  "score": 7.9046,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                }
+              ],
+              "top_gap": 1.7384
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact"
+          ],
+          "candidate_ids": [
+            "c6071e47ff388efb56634b20"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact"
+          ],
+          "coverage_matrix": {
+            "policy_fact": {
+              "c6071e47ff388efb56634b20": "hit"
+            }
+          }
+        },
+        "query_plan": {},
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "cecc1bced7bd9523",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "knowledge_ids": [
+                "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司重要决策法律合规审核管理办法",
+              "document_revision": "2025",
+              "effective_date": "",
+              "version_year": 2025,
+              "passage_ids": [
+                "820fa23d66d52741921972289983318c",
+                "76e49ef1f4d9bab55d4d019b4bde7227",
+                "640e4ce94f67676be67f83c899e81c82"
+              ],
+              "retrieval_ranks": [
+                0,
+                3,
+                4
+              ],
+              "retrieval_scores": [
+                0.8214999999999999,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "section": "（九）知识产权发展规划以及重大知识产权转让事项 ； > （十）其他对公司经营管理有重大影响的决策事项 。 > 第四条 重要决策作出之前 ，应当进行法律合规审核 。",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 9.643,
+              "rejection_reasons": [],
+              "record_ids": [
+                "820fa23d66d52741921972289983318c:r0",
+                "820fa23d66d52741921972289983318c:r1",
+                "820fa23d66d52741921972289983318c:r2",
+                "820fa23d66d52741921972289983318c:r3",
+                "820fa23d66d52741921972289983318c:r4",
+                "820fa23d66d52741921972289983318c:r5",
+                "820fa23d66d52741921972289983318c:r6",
+                "820fa23d66d52741921972289983318c:r7",
+                "820fa23d66d52741921972289983318c:r8",
+                "820fa23d66d52741921972289983318c:r9",
+                "76e49ef1f4d9bab55d4d019b4bde7227:r0",
+                "76e49ef1f4d9bab55d4d019b4bde7227:r1",
+                "76e49ef1f4d9bab55d4d019b4bde7227:r2",
+                "76e49ef1f4d9bab55d4d019b4bde7227:r3",
+                "76e49ef1f4d9bab55d4d019b4bde7227:r4",
+                "640e4ce94f67676be67f83c899e81c82:r0",
+                "640e4ce94f67676be67f83c899e81c82:r1",
+                "640e4ce94f67676be67f83c899e81c82:r2",
+                "640e4ce94f67676be67f83c899e81c82:r3",
+                "640e4ce94f67676be67f83c899e81c82:r4",
+                "640e4ce94f67676be67f83c899e81c82:r5"
+              ]
+            },
+            {
+              "group_id": "fefaaf352f015dfe",
+              "knowledge_id": "917d55a9-10b9-41da-8199-1cab744a757a",
+              "knowledge_ids": [
+                "917d55a9-10b9-41da-8199-1cab744a757a",
+                "befd93bd-9674-4b43-9fb7-bf96cb695268"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司业务外包管理办法",
+              "document_revision": "2021",
+              "effective_date": "",
+              "version_year": 2021,
+              "passage_ids": [
+                "075edb407add95be60b42f1ec5ddc48e",
+                "accb21c51eefe8b779b76f443fbb2b90",
+                "f4f67a797a6bbb3f0031e059cd858d31",
+                "0b1368c953f24930a783a75b05685d02",
+                "7d3529c0adf8f2fdd1a62e15508e3680",
+                "725bbd61ebf5adfadcbb8629ff36e4a8"
+              ],
+              "retrieval_ranks": [
+                1,
+                2,
+                5,
+                6,
+                7,
+                8
+              ],
+              "retrieval_scores": [
+                0.5523,
+                0.5523,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--917d55a9",
+              "section": "第二章 管理职责 > 第五条 区公司企业发展部（法律部）作为公司业务外包统 > 第六条 区公司市场部主要负责组织制定前端相关业务外包",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 7.9046,
+              "rejection_reasons": [],
+              "record_ids": [
+                "075edb407add95be60b42f1ec5ddc48e:r0",
+                "075edb407add95be60b42f1ec5ddc48e:r1",
+                "accb21c51eefe8b779b76f443fbb2b90:r0",
+                "accb21c51eefe8b779b76f443fbb2b90:r1",
+                "f4f67a797a6bbb3f0031e059cd858d31:r0",
+                "f4f67a797a6bbb3f0031e059cd858d31:r1",
+                "f4f67a797a6bbb3f0031e059cd858d31:r2",
+                "f4f67a797a6bbb3f0031e059cd858d31:r3",
+                "0b1368c953f24930a783a75b05685d02:r0",
+                "0b1368c953f24930a783a75b05685d02:r1",
+                "0b1368c953f24930a783a75b05685d02:r2",
+                "7d3529c0adf8f2fdd1a62e15508e3680:r0",
+                "7d3529c0adf8f2fdd1a62e15508e3680:r1",
+                "7d3529c0adf8f2fdd1a62e15508e3680:r2",
+                "7d3529c0adf8f2fdd1a62e15508e3680:r3",
+                "725bbd61ebf5adfadcbb8629ff36e4a8:r0",
+                "725bbd61ebf5adfadcbb8629ff36e4a8:r1",
+                "725bbd61ebf5adfadcbb8629ff36e4a8:r2"
+              ]
+            }
+          ],
+          "primary_group_id": "cecc1bced7bd9523",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "公司大额对外投资并购决策",
+              "要不要先过法律审核"
+            ],
+            "selection": [
+              {
+                "group_id": "cecc1bced7bd9523",
+                "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                "knowledge_ids": [
+                  "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+                ],
+                "score": 9.643,
+                "role": "primary",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "fefaaf352f015dfe",
+                "knowledge_id": "917d55a9-10b9-41da-8199-1cab744a757a",
+                "knowledge_ids": [
+                  "917d55a9-10b9-41da-8199-1cab744a757a",
+                  "befd93bd-9674-4b43-9fb7-bf96cb695268"
+                ],
+                "score": 7.9046,
+                "role": "rejected",
+                "rejection_reasons": []
+              }
+            ],
+            "top_gap": 1.7384
+          }
+        },
+        "render_validation": {
+          "ok": false,
+          "missing_slots": [
+            "policy_anchor"
+          ],
+          "checks": {
+            "policy_anchors": []
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "c6071e47ff388efb56634b20"
+              ],
+              "passage_id": "820fa23d66d52741921972289983318c",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "text": "- 第三条本办法所称重要决策是指对企业生存发展有重大影响，列入党委研究决策重大事项清单中需要经过法律审核的经营管理决策，具体包括",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 64
+        },
+        "primary_group_id": null,
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "render_validation_failed",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "917d55a9-10b9-41da-8199-1cab744a757a",
+            "befd93bd-9674-4b43-9fb7-bf96cb695268"
+          ],
+          "accepted_block_ids": [
+            "09382c38-3f7f-4916-9fa8-6b2af9abb604",
+            "926155e5-976d-4a09-801b-2c725cc51f21",
+            "c6870d33-85cd-4a35-9ef1-742d23660e55"
+          ],
+          "accepted_passage_ids": [
+            "820fa23d66d52741921972289983318c",
+            "075edb407add95be60b42f1ec5ddc48e",
+            "accb21c51eefe8b779b76f443fbb2b90",
+            "76e49ef1f4d9bab55d4d019b4bde7227",
+            "640e4ce94f67676be67f83c899e81c82",
+            "f4f67a797a6bbb3f0031e059cd858d31",
+            "0b1368c953f24930a783a75b05685d02",
+            "7d3529c0adf8f2fdd1a62e15508e3680",
+            "725bbd61ebf5adfadcbb8629ff36e4a8"
+          ],
+          "adjacent_passage_ids": [
+            "76e49ef1f4d9bab55d4d019b4bde7227",
+            "640e4ce94f67676be67f83c899e81c82",
+            "f4f67a797a6bbb3f0031e059cd858d31",
+            "0b1368c953f24930a783a75b05685d02",
+            "7d3529c0adf8f2fdd1a62e15508e3680",
+            "725bbd61ebf5adfadcbb8629ff36e4a8"
+          ],
+          "generation_knowledge_ids": [
+            "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "917d55a9-10b9-41da-8199-1cab744a757a",
+            "befd93bd-9674-4b43-9fb7-bf96cb695268"
+          ],
+          "top_score": 0.4715,
+          "intent": "ordinary",
+          "adjacent_count": 6,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "7d40ffa1d2448a202f699828"
+        },
+        "snapshot_fingerprint": "7d40ffa1d2448a202f699828",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 2,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 30.37
+  },
+  "top_candidate_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+  "candidates": [
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "passage_id": "820fa23d66d52741921972289983318c",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 0.8214999999999999,
+      "final_relevance_score": 0.4715,
+      "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】（九）知识产权发展规划以及重大知识产权转让事项 ； > （十）其他对公司经营管理有重大影响的决策事项 。 > 第四条 重要决策作出之前 ，应当进行法律合规审核 。\n定本办法。\n第二条 本办法所称法律合规审核，是指公司法律工作人员\n或外聘律师，根据国家政策法律法规、政府规范性文件和公司规\n章制度，对公司经营管理中涉及的重要决策进行法律分析、开展\n合法合规性论证，提出法律意见、建议或解决方案（以下统称“法\n律意见”）的活动。\n第三条 本办法所称重要决策是指对企业生存发展有重大\n影响，列入党委研究决策重大事项清单中需要经过法律审核的经\n营管理决策，具体包括：\n（一）重大对外投融资、资本运作事项；\n（二）重大资产重组、资产处置等事项；\n（三）重大对外担保事项；\n（四）企业民主管理、职工分流安置等涉及职工权益方面的\n重要事项；\n— 3 — （五）涉及职工重大切身利益方面的重要事项 ；\n（六）合并、分立、解散或变更公司形式的方案 ；\n（七）各级分支机构的设立 、合并或撤销 ；\n（八）代管子公司的合并 、分立或重组 ；\n（九）知识产权发展规划以及重大知识产权转让事项 ；\n（十）其他对公司经营管理有重大影响的决策事项 。"
+    },
+    {
+      "knowledge_id": "917d55a9-10b9-41da-8199-1cab744a757a",
+      "passage_id": "075edb407add95be60b42f1ec5ddc48e",
+      "title": "中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--917d55a9",
+      "score": 0.5523,
+      "final_relevance_score": 0.3523,
+      "text": "【文档】中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--917d55a9\n【章节】第二章 管理职责 > 第五条 区公司企业发展部（法律部）作为公司业务外包统 > 第六条 区公司市场部主要负责组织制定前端相关业务外包\n\n（三）集约化原则：区公司专业部门是本专业条线的业务外\n包管理工作的责任主体，应本着能集约完成的工作均集约处理的\n原则，合理分配事权，减少下放事项。\n（四）合规化原则：实施业务外包要加强合规管理，在外包\n价格标准、外包商采购、外包合作、监督检查等方面加强合规管\n理，防范风险。\n第四条 本办法适用于各市分公司、各专业公司、区公司各\n部门（以下简称“各单位”）。\n第二章 管理职责\n第五条 区公司企业发展部（法律部）作为公司业务外包统\n筹协调部门，统筹协调业务外包管理的相关事项，主要负责公司\n业务外包制度制定、业务外包协议法律审核、法律风险和合规风\n险防范、法律服务支撑等工作。\n第六条 区公司市场部主要负责组织制定前端相关业务外包\n管理规范，负责协调前端业务外包相关事项，会同人力资源部、\n财务部（财务共享服务中心）对前端相关业务外包需求（包括但\n不限于业务需求、人员需求、成本需求）进行管理，负责前端相\n关业务外包框架协议业务审核，负责市场经营业务外包风险防\n范。"
+    },
+    {
+      "knowledge_id": "befd93bd-9674-4b43-9fb7-bf96cb695268",
+      "passage_id": "accb21c51eefe8b779b76f443fbb2b90",
+      "title": "中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--befd93bd",
+      "score": 0.5523,
+      "final_relevance_score": 0.3523,
+      "text": "【文档】中电信桂-2021-405号-关于印发中国电信广西公司业务外包管理办法-修订-的通知--befd93bd\n【章节】第二章 管理职责 > 第五条 区公司企业发展部（法律部）作为公司业务外包统 > 第六条 区公司市场部主要负责组织制定前端相关业务外包\n\n（三）集约化原则：区公司专业部门是本专业条线的业务外\n包管理工作的责任主体，应本着能集约完成的工作均集约处理的\n原则，合理分配事权，减少下放事项。\n（四）合规化原则：实施业务外包要加强合规管理，在外包\n价格标准、外包商采购、外包合作、监督检查等方面加强合规管\n理，防范风险。\n第四条 本办法适用于各市分公司、各专业公司、区公司各\n部门（以下简称“各单位”）。\n第二章 管理职责\n第五条 区公司企业发展部（法律部）作为公司业务外包统\n筹协调部门，统筹协调业务外包管理的相关事项，主要负责公司\n业务外包制度制定、业务外包协议法律审核、法律风险和合规风\n险防范、法律服务支撑等工作。\n第六条 区公司市场部主要负责组织制定前端相关业务外包\n管理规范，负责协调前端业务外包相关事项，会同人力资源部、\n财务部（财务共享服务中心）对前端相关业务外包需求（包括但\n不限于业务需求、人员需求、成本需求）进行管理，负责前端相\n关业务外包框架协议业务审核，负责市场经营业务外包风险防\n范。"
+    }
+  ],
+  "search_ms": 18238.44,
+  "ask_ms": 30.37,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "JDLXBn29iqYwPgDTOCmsp_F7CbLZWDa7",
+  "search_snapshot_fingerprint": "7d40ffa1d2448a202f699828",
+  "ask_snapshot_fingerprint": "7d40ffa1d2448a202f699828",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "render_validation_failed",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "da1ad49053192fa081442077"
+}

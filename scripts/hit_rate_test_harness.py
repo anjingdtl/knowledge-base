@@ -15,6 +15,8 @@ import hashlib
 import http.client
 import json
 import os
+import subprocess
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -23,6 +25,7 @@ from typing import Any
 HOST = "127.0.0.1"
 PORT = 9000
 PATH = "/mcp"
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class MCPClient:
@@ -133,6 +136,74 @@ def _file_sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def _files_sha256(paths: list[Path]) -> str:
+    """Stable content digest for a small, explicit set of release inputs."""
+    digest = hashlib.sha256()
+    for path in sorted((p for p in paths if p.exists() and p.is_file()), key=lambda p: str(p)):
+        digest.update(str(path.relative_to(ROOT) if path.is_relative_to(ROOT) else path).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(_file_sha256(path).encode("ascii"))
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
+def _production_source_sha256() -> str:
+    paths = list((ROOT / "src").rglob("*.py"))
+    paths.extend(p for p in (ROOT / "config.yaml", ROOT / "pyproject.toml") if p.exists())
+    return _files_sha256(paths)
+
+
+def _dirty_patch_sha256() -> str:
+    try:
+        blob = subprocess.check_output(
+            ["git", "diff", "--binary", "HEAD"], cwd=ROOT, stderr=subprocess.DEVNULL
+        )
+        return hashlib.sha256(blob).hexdigest()
+    except Exception:
+        return "unavailable"
+
+
+def _path_content_sha256(path: Path) -> str:
+    """Digest a file or bounded directory inventory without returning an empty revision."""
+    if path.is_file():
+        return _file_sha256(path)
+    if not path.is_dir():
+        return hashlib.sha256(f"missing:{path}".encode("utf-8")).hexdigest()
+    entries = [p for p in path.rglob("*") if p.is_file()]
+    digest = hashlib.sha256()
+    for item in sorted(entries, key=lambda p: str(p)):
+        try:
+            rel = item.relative_to(path)
+            digest.update(str(rel).encode("utf-8"))
+            digest.update(b"\0")
+            digest.update(_file_sha256(item).encode("ascii"))
+            digest.update(b"\n")
+        except OSError:
+            continue
+    return digest.hexdigest()
+
+
+def _runtime_revision(env_key: str, candidates: list[Path]) -> str:
+    explicit = (os.environ.get(env_key) or "").strip()
+    if explicit:
+        return explicit
+    existing = [p for p in candidates if p.exists()]
+    if existing:
+        return _files_sha256(existing) if all(p.is_file() for p in existing) else _path_content_sha256(existing[0])
+    return hashlib.sha256((env_key + ":missing").encode("utf-8")).hexdigest()
+
+
+def _process_start_id() -> str:
+    explicit = (os.environ.get("HIT_RATE_PROCESS_START_ID") or "").strip()
+    if explicit:
+        return explicit
+    try:
+        from src.retrieval.snapshot_registry import process_start_id
+        return str(process_start_id())
+    except Exception:
+        return f"harness-pid-{os.getpid()}"
+
+
 def _git_revision() -> str:
     try:
         import subprocess
@@ -156,14 +227,37 @@ def _build_manifest(
     workers: int,
     case_filter: list[str] | None,
 ) -> dict[str, Any]:
+    config_path = ROOT / "config.yaml"
+    db_candidates = [ROOT / "data" / "knowledge.db", ROOT / "data" / "shinehe.db"]
+    index_candidates = [
+        ROOT / "data" / "passage_index",
+        ROOT / "data" / "vector_store",
+        ROOT / "data" / "vectors",
+    ]
+    timeout_settings = {
+        "search_request_s": int(os.environ.get("HIT_RATE_SEARCH_TIMEOUT_S", "180")),
+        "ask_request_s": int(os.environ.get("HIT_RATE_ASK_TIMEOUT_S", "180")),
+        "rerank_mode": os.environ.get("HIT_RATE_RERANK_MODE", "circuit_breaker"),
+    }
     return {
         "git_revision": _git_revision(),
+        "dirty_patch_sha256": _dirty_patch_sha256(),
+        "production_source_sha256": _production_source_sha256(),
         "golden_path": str(golden_path),
         "golden_sha256": _file_sha256(golden_path) if golden_path.exists() else "",
-        "config_hash": os.environ.get("HIT_RATE_CONFIG_HASH", ""),
-        "index_revision": os.environ.get("HIT_RATE_INDEX_REVISION", ""),
-        "db_revision": os.environ.get("HIT_RATE_DB_REVISION", ""),
-        "process_start_id": os.environ.get("HIT_RATE_PROCESS_START_ID", ""),
+        "scorer_sha256": _files_sha256([
+            ROOT / "scripts" / "hit_rate_score.py",
+            ROOT / "scripts" / "hit_rate_finalize.py",
+        ]),
+        "config_hash": os.environ.get("HIT_RATE_CONFIG_HASH") or _file_sha256(config_path),
+        "index_revision": _runtime_revision("HIT_RATE_INDEX_REVISION", index_candidates),
+        "db_revision": _runtime_revision("HIT_RATE_DB_REVISION", db_candidates),
+        "process_start_id": _process_start_id(),
+        "python_version": sys.version.replace("\n", " "),
+        "dependency_lock_sha256": _file_sha256(ROOT / "pyproject.toml"),
+        "retrieval_mode": os.environ.get("HIT_RATE_RETRIEVAL_MODE", "unified"),
+        "rerank_mode": timeout_settings["rerank_mode"],
+        "timeout_settings": timeout_settings,
         "reuse_snapshot": bool(reuse_snapshot),
         "read_mode": read_mode,
         "workers": int(workers),
@@ -174,29 +268,36 @@ def _build_manifest(
     }
 
 
+def _manifest_fingerprint(manifest: dict[str, Any]) -> str:
+    excluded = {"started_at", "ended_at", "elapsed_s", "run_fingerprint"}
+    stable = {k: v for k, v in manifest.items() if k not in excluded}
+    raw = json.dumps(stable, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
+
+
 def _manifest_compatible(prev: dict, cur: dict) -> tuple[bool, str]:
     keys = (
         "git_revision",
+        "dirty_patch_sha256",
+        "production_source_sha256",
         "golden_sha256",
+        "scorer_sha256",
         "config_hash",
         "index_revision",
         "db_revision",
         "process_start_id",
+        "python_version",
+        "dependency_lock_sha256",
+        "retrieval_mode",
+        "rerank_mode",
+        "timeout_settings",
         "reuse_snapshot",
         "read_mode",
         "workers",
     )
     for k in keys:
-        if (prev.get(k) or "") != (cur.get(k) or "") and k not in ("config_hash", "index_revision", "db_revision", "process_start_id"):
-            # Empty env fingerprints: only enforce when both sides non-empty.
-            if k in ("config_hash", "index_revision", "db_revision", "process_start_id"):
-                if prev.get(k) and cur.get(k) and prev.get(k) != cur.get(k):
-                    return False, f"manifest_mismatch:{k}"
-            else:
-                return False, f"manifest_mismatch:{k}"
-        if k in ("git_revision", "golden_sha256", "reuse_snapshot", "read_mode", "workers"):
-            if prev.get(k) != cur.get(k):
-                return False, f"manifest_mismatch:{k}"
+        if prev.get(k) != cur.get(k):
+            return False, f"manifest_mismatch:{k}"
     return True, ""
 
 
@@ -210,6 +311,15 @@ def _extract_snapshot_id(search_envelope: dict) -> str | None:
     data = search_envelope.get("data")
     if isinstance(data, dict) and data.get("evidence_snapshot_id"):
         return str(data["evidence_snapshot_id"])
+    return None
+
+
+def _extract_snapshot_fingerprint(envelope: dict) -> str | None:
+    if not isinstance(envelope, dict):
+        return None
+    for container in (envelope.get("meta"), envelope.get("data")):
+        if isinstance(container, dict) and container.get("snapshot_fingerprint"):
+            return str(container["snapshot_fingerprint"])
     return None
 
 
@@ -264,9 +374,25 @@ def _run_one_case(
     ask_ms = ask["latency_ms"]
     ask_data = (ask["envelope"] or {}).get("data") or {}
     snapshot_reused = bool(ask_data.get("snapshot_reused")) if isinstance(ask_data, dict) else False
+    snapshot_reuse_reason = (
+        str(ask_data.get("snapshot_reuse_reason") or "")
+        if isinstance(ask_data, dict) else "ask_data_missing"
+    )
     retrieval_count = ask_data.get("retrieval_count") if isinstance(ask_data, dict) else None
     if retrieval_count is None:
         retrieval_count = 0 if snapshot_reused else 1
+    search_fp = _extract_snapshot_fingerprint(env)
+    ask_fp = (
+        str(ask_data.get("snapshot_fingerprint") or "")
+        if isinstance(ask_data, dict) else ""
+    )
+    snapshot_integrity_error = bool(
+        snapshot_reused and (not search_fp or not ask_fp or search_fp != ask_fp)
+    )
+    if snapshot_integrity_error:
+        snapshot_reuse_reason = "snapshot_fingerprint_mismatch"
+    elif not snapshot_reused and not snapshot_reuse_reason:
+        snapshot_reuse_reason = "snapshot_id_missing" if not snap_id else "not_reused_unspecified"
 
     # read modes
     read_resp = None
@@ -305,7 +431,11 @@ def _run_one_case(
         "ask_ms": ask_ms,
         "read_ms": read_ms,
         "snapshot_reused": snapshot_reused,
+        "snapshot_reuse_reason": snapshot_reuse_reason,
         "snapshot_id": snap_id,
+        "search_snapshot_fingerprint": search_fp,
+        "ask_snapshot_fingerprint": ask_fp,
+        "snapshot_integrity_error": snapshot_integrity_error,
         "retrieval_count": retrieval_count,
         "answer_validation_decision": (
             ask_data.get("answer_validation_decision") if isinstance(ask_data, dict) else None
@@ -345,6 +475,7 @@ def run(
         workers=workers,
         case_filter=case_ids,
     )
+    manifest["run_fingerprint"] = _manifest_fingerprint(manifest)
     manifest_path = out_dir / "manifest.json"
     if resume and manifest_path.exists():
         prev = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -398,6 +529,7 @@ def run(
     workers = max(1, int(workers))
 
     def _handle(result: dict, i: int, total: int) -> None:
+        result["run_fingerprint"] = manifest["run_fingerprint"]
         cid = result["case"]["case_id"]
         case_path = out_dir / f"{cid}.json"
         # Atomic write via temp then replace
@@ -516,6 +648,10 @@ def run(
                 "ask_ms": r.get("ask_ms"),
                 "read_ms": r.get("read_ms"),
                 "snapshot_reused": r.get("snapshot_reused"),
+                "snapshot_reuse_reason": r.get("snapshot_reuse_reason"),
+                "snapshot_integrity_error": r.get("snapshot_integrity_error"),
+                "search_snapshot_fingerprint": r.get("search_snapshot_fingerprint"),
+                "ask_snapshot_fingerprint": r.get("ask_snapshot_fingerprint"),
                 "retrieval_count": r.get("retrieval_count"),
                 "answer_validation_decision": r.get("answer_validation_decision"),
                 "retrieval_decision": r.get("retrieval_decision"),
@@ -525,6 +661,29 @@ def run(
     }
     (out_dir / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    snapshot_audit = {
+        "hits": sum(1 for r in results if r.get("snapshot_reused")),
+        "misses": [
+            {
+                "case_id": r["case"]["case_id"],
+                "reason": r.get("snapshot_reuse_reason") or "not_reused_unspecified",
+                "snapshot_id_present": bool(r.get("snapshot_id")),
+                "search_snapshot_fingerprint": r.get("search_snapshot_fingerprint"),
+                "ask_snapshot_fingerprint": r.get("ask_snapshot_fingerprint"),
+                "retrieval_count": r.get("retrieval_count"),
+                "ask_ms": r.get("ask_ms"),
+                "extra_retrieval": bool(int(r.get("retrieval_count") or 0) > 0),
+            }
+            for r in results if not r.get("snapshot_reused")
+        ],
+        "integrity_errors": [
+            r["case"]["case_id"] for r in results if r.get("snapshot_integrity_error")
+        ],
+        "retrieval_count_sum": summary["retrieval_count_sum"],
+    }
+    (out_dir / "snapshot_reuse_audit.json").write_text(
+        json.dumps(snapshot_audit, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     if write_manifest:
         manifest["ended_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")

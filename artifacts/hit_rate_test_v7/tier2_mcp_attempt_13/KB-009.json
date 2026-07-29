@@ -1,0 +1,2010 @@
+{
+  "case": {
+    "case_id": "KB-009",
+    "category": "同义词与口语表达",
+    "query": "员工出差的住宿费和伙食补助每天能报多少",
+    "expected_knowledge_ids": [
+      "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+    ],
+    "expected_title_keywords": [
+      "差旅费",
+      "2025"
+    ],
+    "required_facts": [
+      "100元",
+      "伙食补助"
+    ],
+    "forbidden_facts": [
+      "区内出差每人每天80元"
+    ],
+    "expected_no_answer": false,
+    "notes": "口语化问报销标准；正确版本为2025年〔2025〕256号"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "2c7a0359-601a-414a-870d-59681aae8d90",
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+          "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第二十六条 市内交通费实行限额内凭票报销，报销标准为 > 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。\n第五章 市内交通费\n第二十五条 市内交通费是指工作人员因公出差期间发生\n的市内交通费用。\n第二十六条 市内交通费实行限额内凭票报销，报销标准为\n区外往返两天每人每天 150 元，中途每人每天 80 元；区内每人\n每天 50 元。出差往返机场、火车站、客运站、码头等发生的大\n巴、地铁、公交等公共交通费用凭据报销，不占用限额标准。\n第二十七条 参加会议、培训的出差，只能报销往返在途期\n间的市内交通费。出差期间由接待单位提供交通工具的，或由单\n位派车的，不再另行报销市内交通费。\n第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)\n— 8 —第二十八条 员工因工作调动所发生的交通费、住宿费、伙\n食补助费， 按出差办理， 由调入单位报销。 随同调动的同居父母、\n配偶、子女所需的交通费按普通员工出差标准报销，不得乘坐飞\n机。",
+          "score": 1.0,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "ebe5a29ec7882ec511152d0123e44ef3",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2018,
+          "source_version": "2018",
+          "section_path": "第二十六条 市内交通费实行限额内凭票报销，报销标准为 > 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)",
+          "block_ids": [
+            "2c7a0359-601a-414a-870d-59681aae8d90",
+            "d4d46851-2d95-4b75-8b3e-0c7bb470317c",
+            "bf76b1e3-f27e-4264-ade3-d1872ff66ff5",
+            "3569267e-aa09-47b0-ae3a-df1901461d4d",
+            "87c03aa0-7a02-40a5-a5fa-ce40c4002580",
+            "cb8c50b9-cc24-4829-9a48-7fdd6467d4d2",
+            "75e1b0f1-b599-4551-aa49-847ed482da24",
+            "da8875b6-3fde-4a20-b86b-a99a1fc53d60",
+            "0dfc65a0-608b-46b9-b762-de807d626752",
+            "3d0156c5-823a-4fad-be75-6ac278eb8536",
+            "2f76aa71-6ab8-4518-a65b-379780d97adb",
+            "09910cb0-8702-4055-acb9-72f17ad73a15",
+            "c47ae980-5188-474a-8d12-f070ac77c720",
+            "3fd3543c-245d-4b93-a6df-395cb0033dbd",
+            "b0ae1894-6055-4fe1-97e3-b0c2cf43d06b",
+            "c12e3b70-e0f2-4ec1-953a-e6d945f0da9c",
+            "c5081f47-2f0b-4aca-b90d-125bbe888653",
+            "e83e4e01-7653-43a7-b232-3583a0728227"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "2c7a0359-601a-414a-870d-59681aae8d90",
+              "order_idx": 131,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "d4d46851-2d95-4b75-8b3e-0c7bb470317c",
+              "order_idx": 132,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "bf76b1e3-f27e-4264-ade3-d1872ff66ff5",
+              "order_idx": 133,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "3569267e-aa09-47b0-ae3a-df1901461d4d",
+              "order_idx": 134,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "87c03aa0-7a02-40a5-a5fa-ce40c4002580",
+              "order_idx": 135,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "cb8c50b9-cc24-4829-9a48-7fdd6467d4d2",
+              "order_idx": 136,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "75e1b0f1-b599-4551-aa49-847ed482da24",
+              "order_idx": 137,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "da8875b6-3fde-4a20-b86b-a99a1fc53d60",
+              "order_idx": 138,
+              "char_start": 0,
+              "char_end": 33
+            },
+            {
+              "block_id": "0dfc65a0-608b-46b9-b762-de807d626752",
+              "order_idx": 139,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "3d0156c5-823a-4fad-be75-6ac278eb8536",
+              "order_idx": 140,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "2f76aa71-6ab8-4518-a65b-379780d97adb",
+              "order_idx": 141,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "09910cb0-8702-4055-acb9-72f17ad73a15",
+              "order_idx": 142,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "c47ae980-5188-474a-8d12-f070ac77c720",
+              "order_idx": 143,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "3fd3543c-245d-4b93-a6df-395cb0033dbd",
+              "order_idx": 144,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "b0ae1894-6055-4fe1-97e3-b0c2cf43d06b",
+              "order_idx": 146,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "c12e3b70-e0f2-4ec1-953a-e6d945f0da9c",
+              "order_idx": 147,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "c5081f47-2f0b-4aca-b90d-125bbe888653",
+              "order_idx": 148,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "e83e4e01-7653-43a7-b232-3583a0728227",
+              "order_idx": 149,
+              "char_start": 0,
+              "char_end": 2
+            }
+          ],
+          "effective_year": 2018,
+          "citation": {
+            "document": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+            "path": "",
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "block_id": "2c7a0359-601a-414a-870d-59681aae8d90",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9453261494636536,
+            "score_breakdown": {
+              "vector": 0.8494777530431747,
+              "keyword": 0.8466892479545839,
+              "rrf": 0.11925660546350202,
+              "rerank": 0.9453261494636536
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第二十六条 市内交通费实行限额内凭票报销，报销标准为 > 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。\n第五章 市内交通费\n第二十五条 市内交通费是指工作人员因公出差期间发生\n的市内交通费用。\n第二十六条 市内交通费实行限额内凭票报销，报销标准为\n区外往返两天每人每天 150 元，中途每人每天 80 元；区内每人\n每天 50 元。出差往返机场、火车站、客运站、码头等发生的大\n巴、地铁、公交等公共交通费用凭据报销，不占用限额标准。\n第二十七条 参加会议、培训的出差，只能报销往返在途期\n间的市内交通费。出差期间由接待单位提供交通工具的，或由单\n位派车的，不再另行报销市内交通费。\n第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)\n— 8 —第二十八条 员工因工作调动所发生的交通费、住宿费、伙\n食补助费， 按出差办理， 由调入单位报销。 随同调动的同居父母、\n配偶、子女所需的交通费按普通员工出差标准报销，不得乘坐飞\n机。"
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.962973208287183,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2018,
+            "deprecated": false,
+            "family_key": "topic:差旅费管理办法",
+            "family_newest_year": 2018,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "5248d7f8-75f0-463d-b72b-994eb735894d",
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+          "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第二十二条 出差人员应当自行用餐。凡由接待单位统一安 > 第二十三条 出差人员参加会议、培训期间已由主办单位收 > 第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。\n第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的伙\n食补助费用。\n第二十一条 伙食补助标准为区外出差每人每天 100 元，区ÝgóZU\u0000(NTQÑè\u0000)\n— 7 — 内出差每人每天 80 元。\n第二十二条 出差人员应当自行用餐。凡由接待单位统一安\n排用餐的，应当向接待单位交纳伙食费，接待单位负责向出差人\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。",
+          "score": 0.9839449833421147,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "0ce4ea7195bdc84cc73699fdf1e69323",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2018,
+          "source_version": "2018",
+          "section_path": "第二十二条 出差人员应当自行用餐。凡由接待单位统一安 > 第二十三条 出差人员参加会议、培训期间已由主办单位收 > 第二十四条 接待单位收到出差人员交纳的伙食费，用于对",
+          "block_ids": [
+            "5248d7f8-75f0-463d-b72b-994eb735894d",
+            "4e19cec7-fbe9-46a1-9b28-52abbf30e4a4",
+            "0684c107-c6d1-41a5-ada2-c80f41b0886d",
+            "4b834038-13d7-4b87-b25f-b2b602c75a2c",
+            "3931bfb6-916f-49cd-aad5-53427b5fea30",
+            "f743e3bb-05cb-49b5-8221-b49e336c94f9",
+            "88111a8e-11df-48f3-8416-33e61934cf68",
+            "782b5358-6feb-4e4a-ac33-311f95ae2c8e",
+            "1735b7ac-c773-4fd6-a36e-c3dee7d34511",
+            "1ed3526b-e4e9-4dfb-83fc-ce2fe34fec22",
+            "bd28e291-7afb-4365-ab94-054b1776d45f",
+            "64677538-f62e-4f84-a363-55387335bcd3",
+            "e1a13f9d-d744-4f38-b818-1c6cdfc7ce85",
+            "2c7a0359-601a-414a-870d-59681aae8d90",
+            "d4d46851-2d95-4b75-8b3e-0c7bb470317c",
+            "bf76b1e3-f27e-4264-ade3-d1872ff66ff5"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "5248d7f8-75f0-463d-b72b-994eb735894d",
+              "order_idx": 117,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "4e19cec7-fbe9-46a1-9b28-52abbf30e4a4",
+              "order_idx": 118,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "0684c107-c6d1-41a5-ada2-c80f41b0886d",
+              "order_idx": 119,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "4b834038-13d7-4b87-b25f-b2b602c75a2c",
+              "order_idx": 120,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "3931bfb6-916f-49cd-aad5-53427b5fea30",
+              "order_idx": 121,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "f743e3bb-05cb-49b5-8221-b49e336c94f9",
+              "order_idx": 122,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "88111a8e-11df-48f3-8416-33e61934cf68",
+              "order_idx": 123,
+              "char_start": 0,
+              "char_end": 51
+            },
+            {
+              "block_id": "782b5358-6feb-4e4a-ac33-311f95ae2c8e",
+              "order_idx": 125,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "1735b7ac-c773-4fd6-a36e-c3dee7d34511",
+              "order_idx": 126,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "1ed3526b-e4e9-4dfb-83fc-ce2fe34fec22",
+              "order_idx": 127,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "bd28e291-7afb-4365-ab94-054b1776d45f",
+              "order_idx": 128,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "64677538-f62e-4f84-a363-55387335bcd3",
+              "order_idx": 129,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "e1a13f9d-d744-4f38-b818-1c6cdfc7ce85",
+              "order_idx": 130,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "2c7a0359-601a-414a-870d-59681aae8d90",
+              "order_idx": 131,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "d4d46851-2d95-4b75-8b3e-0c7bb470317c",
+              "order_idx": 132,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "bf76b1e3-f27e-4264-ade3-d1872ff66ff5",
+              "order_idx": 133,
+              "char_start": 0,
+              "char_end": 20
+            }
+          ],
+          "effective_year": 2018,
+          "citation": {
+            "document": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+            "path": "",
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "block_id": "5248d7f8-75f0-463d-b72b-994eb735894d",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.9662979245185852,
+            "score_breakdown": {
+              "vector": 0.8816439509391785,
+              "keyword": 0.868621997787124,
+              "rrf": 0.12291946953680569,
+              "rerank": 0.9662979245185852
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第二十二条 出差人员应当自行用餐。凡由接待单位统一安 > 第二十三条 出差人员参加会议、培训期间已由主办单位收 > 第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。\n第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的伙\n食补助费用。\n第二十一条 伙食补助标准为区外出差每人每天 100 元，区ÝgóZU\u0000(NTQÑè\u0000)\n— 7 — 内出差每人每天 80 元。\n第二十二条 出差人员应当自行用餐。凡由接待单位统一安\n排用餐的，应当向接待单位交纳伙食费，接待单位负责向出差人\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。"
+          },
+          "promoted_numeric_passage": true
+        },
+        {
+          "source": "knowledge",
+          "block_id": "aa06769d-1922-44fb-876d-93dfa733d60e",
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+          "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】（二）提高住宿标准。参照股份公司总部及广西区本级党政 > （四）提高伙食补助标准，员工区内出差伙食补助由原 50 > （五）提高市内交通费标准。员工区外出差往返两天的市内\n中电信桂号百〔 2018〕53 号\n关于印发中国电信广西号百分公司差旅费\n管理办法 （2018 年版 ）的通知\n各部门：\n现将《中国电信广西号百分公司差旅费管理办法（ 2018 年\n版） 》印发给你们，请遵照执行，有关事项通知如下：\n一、本次修订的主要内容\n（一）补充校招新生入职交通报销规则，明确校招新生毕业\n离校入职时可按一定标准报销城市间交通费。\n（二）提高住宿标准。参照股份公司总部及广西区本级党政\n机关文件，修订员工差旅住宿费标准，其中南宁市与区外其他城\n市住宿标准持平，县级城市与区内其他城市住宿标准持平。\n（三）补充住宿安排要求。除号百公司领导、号百公司各部 ÝgóZU\u0000(NTQÑè\u0000)\n门领导及相当职级人员安排单人间或标准间， 其余人员原则上同\n性别两人安排一个标准间。\n（四）提高伙食补助标准，员工区内出差伙食补助由原 50\n元/天提升至 80 元/天。\n（五）提高市内交通费标准。员工区外出差往返两天的市内\n交通费报销限额由 80 元/天提升至 150 元/天，且往返机场、火\n车站等发生的公共交通费不占用限额； 区内出差的市内交通费报\n销限额由 30 元/天提升至 50 元/天。",
+          "score": 0.9087544392136967,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "95e48f77b5fe3461e51dd6c9c485bc5f",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2018,
+          "source_version": "2018",
+          "section_path": "（二）提高住宿标准。参照股份公司总部及广西区本级党政 > （四）提高伙食补助标准，员工区内出差伙食补助由原 50 > （五）提高市内交通费标准。员工区外出差往返两天的市内",
+          "block_ids": [
+            "aa06769d-1922-44fb-876d-93dfa733d60e",
+            "d5bb4e7b-27be-4c89-a56d-4afae4793791",
+            "368abfc1-938c-4ff9-816e-32a684b4fd3c",
+            "a8431e7b-8aea-4c63-a808-26b020aa17f1",
+            "6be628f9-dba1-418b-89a9-b850caf300b5",
+            "ef04228c-6416-4d31-a9c4-f6b76502840a",
+            "2c5808cb-670b-4e62-8da0-25a46f5df73f",
+            "a5b58509-685b-4508-a3d0-81eb6589be9a",
+            "a190e7d0-b82b-456f-b612-6fdd79d3d846",
+            "ab5e096c-56ce-49b9-895b-22b419efd3a2",
+            "56966a86-473d-482a-8e38-387e27039be2",
+            "7ca66f3c-491d-4e2a-b08a-034dc3d47726",
+            "e50ec0f8-4082-4697-bdbc-e74472f47372",
+            "cfeff026-30ec-4a05-b76d-aab5dcf99156",
+            "4be732aa-2f0c-4578-aab2-69fd4542267c",
+            "e3885e89-0f21-48ba-84f6-69f12a3a90be",
+            "f6133b93-1823-4e19-9287-9e78e98f7429",
+            "235b4017-0239-4fcb-9716-9be6eb791e70",
+            "1b423e5a-c75a-47e6-9e1c-9734234fdbc5",
+            "158bff4d-4d40-44c8-a0b5-edd6b6ccb691",
+            "c9124458-7506-4a36-b425-9e73a811a9cd"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "aa06769d-1922-44fb-876d-93dfa733d60e",
+              "order_idx": 2,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "d5bb4e7b-27be-4c89-a56d-4afae4793791",
+              "order_idx": 3,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "368abfc1-938c-4ff9-816e-32a684b4fd3c",
+              "order_idx": 4,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "a8431e7b-8aea-4c63-a808-26b020aa17f1",
+              "order_idx": 5,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "6be628f9-dba1-418b-89a9-b850caf300b5",
+              "order_idx": 6,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "ef04228c-6416-4d31-a9c4-f6b76502840a",
+              "order_idx": 7,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "2c5808cb-670b-4e62-8da0-25a46f5df73f",
+              "order_idx": 8,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "a5b58509-685b-4508-a3d0-81eb6589be9a",
+              "order_idx": 9,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "a190e7d0-b82b-456f-b612-6fdd79d3d846",
+              "order_idx": 10,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "ab5e096c-56ce-49b9-895b-22b419efd3a2",
+              "order_idx": 11,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "56966a86-473d-482a-8e38-387e27039be2",
+              "order_idx": 12,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "7ca66f3c-491d-4e2a-b08a-034dc3d47726",
+              "order_idx": 13,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "e50ec0f8-4082-4697-bdbc-e74472f47372",
+              "order_idx": 14,
+              "char_start": 0,
+              "char_end": 49
+            },
+            {
+              "block_id": "cfeff026-30ec-4a05-b76d-aab5dcf99156",
+              "order_idx": 17,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "4be732aa-2f0c-4578-aab2-69fd4542267c",
+              "order_idx": 18,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "e3885e89-0f21-48ba-84f6-69f12a3a90be",
+              "order_idx": 19,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "f6133b93-1823-4e19-9287-9e78e98f7429",
+              "order_idx": 20,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "235b4017-0239-4fcb-9716-9be6eb791e70",
+              "order_idx": 21,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "1b423e5a-c75a-47e6-9e1c-9734234fdbc5",
+              "order_idx": 22,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "158bff4d-4d40-44c8-a0b5-edd6b6ccb691",
+              "order_idx": 23,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "c9124458-7506-4a36-b425-9e73a811a9cd",
+              "order_idx": 24,
+              "char_start": 0,
+              "char_end": 22
+            }
+          ],
+          "effective_year": 2018,
+          "citation": {
+            "document": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+            "path": "",
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "block_id": "aa06769d-1922-44fb-876d-93dfa733d60e",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.8911073803901672,
+            "score_breakdown": {
+              "vector": 0.8376993387937546,
+              "keyword": 0.849523165167172,
+              "rrf": 0.1186849841700588,
+              "rerank": 0.8911073803901672
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】（二）提高住宿标准。参照股份公司总部及广西区本级党政 > （四）提高伙食补助标准，员工区内出差伙食补助由原 50 > （五）提高市内交通费标准。员工区外出差往返两天的市内\n中电信桂号百〔 2018〕53 号\n关于印发中国电信广西号百分公司差旅费\n管理办法 （2018 年版 ）的通知\n各部门：\n现将《中国电信广西号百分公司差旅费管理办法（ 2018 年\n版） 》印发给你们，请遵照执行，有关事项通知如下：\n一、本次修订的主要内容\n（一）补充校招新生入职交通报销规则，明确校招新生毕业\n离校入职时可按一定标准报销城市间交通费。\n（二）提高住宿标准。参照股份公司总部及广西区本级党政\n机关文件，修订员工差旅住宿费标准，其中南宁市与区外其他城\n市住宿标准持平，县级城市与区内其他城市住宿标准持平。\n（三）补充住宿安排要求。除号百公司领导、号百公司各部 ÝgóZU\u0000(NTQÑè\u0000)\n门领导及相当职级人员安排单人间或标准间， 其余人员原则上同\n性别两人安排一个标准间。\n（四）提高伙食补助标准，员工区内出差伙食补助由原 50\n元/天提升至 80 元/天。\n（五）提高市内交通费标准。员工区外出差往返两天的市内\n交通费报销限额由 80 元/天提升至 150 元/天，且往返机场、火\n车站等发生的公共交通费不占用限额； 区内出差的市内交通费报\n销限额由 30 元/天提升至 50 元/天。"
+          },
+          "promoted_numeric_passage": true
+        },
+        {
+          "source": "knowledge",
+          "block_id": "daf609d6-8279-4b0c-9a24-14f74e349d44",
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+          "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第十七条 出差人员按照降本增效、 节约从简的原则安排住 > 第十八条 出差人员应当在职务级别对应住宿费限额内优先 > 第十九条 住宿费按出差自然（日历）天数计算，在规定的\n— 6 —1. 号百分公司全体员工出差住宿费标准每人每天 400 元。 考\n虑到不同地区的物价差异，北京、上海的住宿费标准在上述标准\n的基础上各上浮 100 元，天津、重庆、省会城市（南宁除外）\n和计划单列市住宿费标准在上述标准的基础上各上浮 50 元。\n2. 拉萨、西宁、海口等受地理、气候等自然条件限制和季节\n性热点影响较大的城市，实行差旅住宿费淡旺季标准。\n（二）区内其他城市及县出差（南宁市市区除外）\n号百分公司全体员工住宿费标准每人每天 350 元。\n第十七条 出差人员按照降本增效、 节约从简的原则安排住\n宿。号百公司领导、号百公司各部门领导及相当职级人员安排单\n人间或标准间，其余人员原则上同性别两人安排一个标准间。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。",
+          "score": 0.843421788075391,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "6f551f54e66037d72d7930e8bfb8c819",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2018,
+          "source_version": "2018",
+          "section_path": "第十七条 出差人员按照降本增效、 节约从简的原则安排住 > 第十八条 出差人员应当在职务级别对应住宿费限额内优先 > 第十九条 住宿费按出差自然（日历）天数计算，在规定的",
+          "block_ids": [
+            "daf609d6-8279-4b0c-9a24-14f74e349d44",
+            "e8baf808-6dd7-43b2-937c-fbb36d602c76",
+            "817a7924-bd36-45dd-afb0-6c14150ee465",
+            "b4716a13-f7f3-4567-9af6-4ee24bcb7cc0",
+            "378bf3ea-53a2-4ba3-a6e1-392ed7cf3e06",
+            "ba5a979b-1e8a-493e-a754-206ab0857e0a",
+            "fc71a0c4-bdba-4412-8a86-25cd7f1b695c",
+            "32806764-feb4-48f7-b784-e069afe8cae6",
+            "baf49e1f-5b6c-4678-9805-3d7822a8df8d",
+            "7e1ef453-716b-4a52-a929-583281084c70",
+            "3ec891a0-b4b0-40c0-b394-09aa82bdecef",
+            "ceab07b0-43b1-4a82-92fd-17b7d27308c9",
+            "ebb6d1f2-a0a5-40ad-a0f1-e9e836b66dda",
+            "5248d7f8-75f0-463d-b72b-994eb735894d",
+            "4e19cec7-fbe9-46a1-9b28-52abbf30e4a4",
+            "0684c107-c6d1-41a5-ada2-c80f41b0886d"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "daf609d6-8279-4b0c-9a24-14f74e349d44",
+              "order_idx": 104,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "e8baf808-6dd7-43b2-937c-fbb36d602c76",
+              "order_idx": 105,
+              "char_start": 0,
+              "char_end": 30
+            },
+            {
+              "block_id": "817a7924-bd36-45dd-afb0-6c14150ee465",
+              "order_idx": 106,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "b4716a13-f7f3-4567-9af6-4ee24bcb7cc0",
+              "order_idx": 107,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "378bf3ea-53a2-4ba3-a6e1-392ed7cf3e06",
+              "order_idx": 108,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "ba5a979b-1e8a-493e-a754-206ab0857e0a",
+              "order_idx": 109,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "fc71a0c4-bdba-4412-8a86-25cd7f1b695c",
+              "order_idx": 110,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "32806764-feb4-48f7-b784-e069afe8cae6",
+              "order_idx": 111,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "baf49e1f-5b6c-4678-9805-3d7822a8df8d",
+              "order_idx": 112,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "7e1ef453-716b-4a52-a929-583281084c70",
+              "order_idx": 113,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "3ec891a0-b4b0-40c0-b394-09aa82bdecef",
+              "order_idx": 114,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "ceab07b0-43b1-4a82-92fd-17b7d27308c9",
+              "order_idx": 115,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "ebb6d1f2-a0a5-40ad-a0f1-e9e836b66dda",
+              "order_idx": 116,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "5248d7f8-75f0-463d-b72b-994eb735894d",
+              "order_idx": 117,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "4e19cec7-fbe9-46a1-9b28-52abbf30e4a4",
+              "order_idx": 118,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "0684c107-c6d1-41a5-ada2-c80f41b0886d",
+              "order_idx": 119,
+              "char_start": 0,
+              "char_end": 20
+            }
+          ],
+          "effective_year": 2018,
+          "citation": {
+            "document": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+            "path": "",
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "block_id": "daf609d6-8279-4b0c-9a24-14f74e349d44",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.8257747292518616,
+            "score_breakdown": {
+              "vector": 0.8668782114982605,
+              "keyword": 0.8197470961912436,
+              "rrf": 0.11899139821217744,
+              "rerank": 0.8257747292518616
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match; reranked",
+            "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第十七条 出差人员按照降本增效、 节约从简的原则安排住 > 第十八条 出差人员应当在职务级别对应住宿费限额内优先 > 第十九条 住宿费按出差自然（日历）天数计算，在规定的\n— 6 —1. 号百分公司全体员工出差住宿费标准每人每天 400 元。 考\n虑到不同地区的物价差异，北京、上海的住宿费标准在上述标准\n的基础上各上浮 100 元，天津、重庆、省会城市（南宁除外）\n和计划单列市住宿费标准在上述标准的基础上各上浮 50 元。\n2. 拉萨、西宁、海口等受地理、气候等自然条件限制和季节\n性热点影响较大的城市，实行差旅住宿费淡旺季标准。\n（二）区内其他城市及县出差（南宁市市区除外）\n号百分公司全体员工住宿费标准每人每天 350 元。\n第十七条 出差人员按照降本增效、 节约从简的原则安排住\n宿。号百公司领导、号百公司各部门领导及相当职级人员安排单\n人间或标准间，其余人员原则上同性别两人安排一个标准间。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。"
+          },
+          "promoted_numeric_passage": true
+        }
+      ],
+      "meta": {
+        "total_estimate": 4,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.2777,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+        ],
+        "evidence_snapshot_id": "Annx-gCvH9EPZMCtZLbE-JgeYOBNGF3H",
+        "snapshot_fingerprint": "784077d85558201f31a76118",
+        "accepted_passage_ids": [
+          "ebe5a29ec7882ec511152d0123e44ef3",
+          "0ce4ea7195bdc84cc73699fdf1e69323",
+          "95e48f77b5fe3461e51dd6c9c485bc5f",
+          "6f551f54e66037d72d7930e8bfb8c819",
+          "20344efedd1641b9414e7ec6365315b4",
+          "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+          "cc571a19eb4a7d1755ebe9f2a6f6fbb1"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 5,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 3088.7
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 十一条伙食补助标准为区外出差每人每天100元，区ÝgóZU\u0000(N",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "passage_id": "0ce4ea7195bdc84cc73699fdf1e69323",
+            "block_id": "5248d7f8-75f0-463d-b72b-994eb735894d",
+            "block_ids": [
+              "5248d7f8-75f0-463d-b72b-994eb735894d",
+              "4e19cec7-fbe9-46a1-9b28-52abbf30e4a4",
+              "0684c107-c6d1-41a5-ada2-c80f41b0886d",
+              "4b834038-13d7-4b87-b25f-b2b602c75a2c",
+              "3931bfb6-916f-49cd-aad5-53427b5fea30",
+              "f743e3bb-05cb-49b5-8221-b49e336c94f9",
+              "88111a8e-11df-48f3-8416-33e61934cf68",
+              "782b5358-6feb-4e4a-ac33-311f95ae2c8e",
+              "1735b7ac-c773-4fd6-a36e-c3dee7d34511",
+              "1ed3526b-e4e9-4dfb-83fc-ce2fe34fec22",
+              "bd28e291-7afb-4365-ab94-054b1776d45f",
+              "64677538-f62e-4f84-a363-55387335bcd3",
+              "e1a13f9d-d744-4f38-b818-1c6cdfc7ce85",
+              "2c7a0359-601a-414a-870d-59681aae8d90",
+              "d4d46851-2d95-4b75-8b3e-0c7bb470317c",
+              "bf76b1e3-f27e-4264-ade3-d1872ff66ff5"
+            ],
+            "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+            "text": "\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。\n第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的伙\n食补助费用。\n第二十一条 伙食补助标准为区外出差每人每天 100 元，区ÝgóZU\u0000(NTQÑè\u0000)\n— 7 — 内出差每人每天 80 元。\n第二十二条 出差人员应当自行用餐。凡由接待单位统一安\n排用餐的，应当向接待单位交纳伙食费，接待单位负责向出差人\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。",
+            "score": 0.9839449833421147,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2018,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "十一条伙食补助标准为区外出差每人每天100元，区ÝgóZU\u0000(N",
+            "evidence_passage_ids": [
+              "0ce4ea7195bdc84cc73699fdf1e69323"
+            ],
+            "fact_type": "numeric",
+            "condition": "区外",
+            "candidate_id": "f16f95c57570ab2846c1187f"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "passage_id": "0ce4ea7195bdc84cc73699fdf1e69323",
+            "block_id": "5248d7f8-75f0-463d-b72b-994eb735894d",
+            "block_ids": [
+              "5248d7f8-75f0-463d-b72b-994eb735894d",
+              "4e19cec7-fbe9-46a1-9b28-52abbf30e4a4",
+              "0684c107-c6d1-41a5-ada2-c80f41b0886d",
+              "4b834038-13d7-4b87-b25f-b2b602c75a2c",
+              "3931bfb6-916f-49cd-aad5-53427b5fea30",
+              "f743e3bb-05cb-49b5-8221-b49e336c94f9",
+              "88111a8e-11df-48f3-8416-33e61934cf68",
+              "782b5358-6feb-4e4a-ac33-311f95ae2c8e",
+              "1735b7ac-c773-4fd6-a36e-c3dee7d34511",
+              "1ed3526b-e4e9-4dfb-83fc-ce2fe34fec22",
+              "bd28e291-7afb-4365-ab94-054b1776d45f",
+              "64677538-f62e-4f84-a363-55387335bcd3",
+              "e1a13f9d-d744-4f38-b818-1c6cdfc7ce85",
+              "2c7a0359-601a-414a-870d-59681aae8d90",
+              "d4d46851-2d95-4b75-8b3e-0c7bb470317c",
+              "bf76b1e3-f27e-4264-ade3-d1872ff66ff5"
+            ],
+            "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+            "path": "",
+            "text": "\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。\n第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的伙\n食补助费用。\n第二十一条 伙食补助标准为区外出差每人每天 100 元，区ÝgóZU\u0000(NTQÑè\u0000)\n— 7 — 内出差每人每天 80 元。\n第二十二条 出差人员应当自行用餐。凡由接待单位统一安\n排用餐的，应当向接待单位交纳伙食费，接待单位负责向出差人\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。",
+            "body_text": "\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。\n第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的伙\n食补助费用。\n第二十一条 伙食补助标准为区外出差每人每天 100 元，区ÝgóZU\u0000(NTQÑè\u0000)\n— 7 — 内出差每人每天 80 元。\n第二十二条 出差人员应当自行用餐。凡由接待单位统一安\n排用餐的，应当向接待单位交纳伙食费，接待单位负责向出差人\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。",
+            "score": 0.9839449833421147,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2018,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.2777,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "员工",
+                "出差",
+                "住宿费",
+                "伙食",
+                "补助",
+                "每天",
+                "能报",
+                "员工出差",
+                "伙食补助"
+              ],
+              "passage_id": "ebe5a29ec7882ec511152d0123e44ef3",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "spans": [
+                {
+                  "slot": "员工",
+                  "surface": "员工",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    635,
+                    637
+                  ],
+                  "excerpt": "Ñè\u0000)\n— 8 —第二十八条 员工因工作调动所发生的交通费、住宿费、伙\n食补助费， 按出差办理， 由调入单位报销。"
+                },
+                {
+                  "slot": "出差",
+                  "surface": "出差",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    171,
+                    173
+                  ],
+                  "excerpt": "标准为 > 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑ"
+                },
+                {
+                  "slot": "住宿费",
+                  "surface": "住宿费",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    650,
+                    653
+                  ],
+                  "excerpt": "二十八条 员工因工作调动所发生的交通费、住宿费、伙\n食补助费， 按出差办理， 由调入单位报销。 随同调动的同居父母、\n配偶、子"
+                },
+                {
+                  "slot": "伙食",
+                  "surface": "伙食",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    277,
+                    279
+                  ],
+                  "excerpt": "宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人"
+                },
+                {
+                  "slot": "补助",
+                  "surface": "补助",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    279,
+                    281
+                  ],
+                  "excerpt": "或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交"
+                },
+                {
+                  "slot": "每天",
+                  "surface": "每天",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    432,
+                    434
+                  ],
+                  "excerpt": "内凭票报销，报销标准为\n区外往返两天每人每天 150 元，中途每人每天 80 元；区内每人\n每天 50 元。出差往返机场、火"
+                },
+                {
+                  "slot": "能报",
+                  "surface": "能报",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    175,
+                    177
+                  ],
+                  "excerpt": "> 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000"
+                },
+                {
+                  "slot": "员工出差",
+                  "surface": "员工出差",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    703,
+                    707
+                  ],
+                  "excerpt": "同居父母、\n配偶、子女所需的交通费按普通员工出差标准报销，不得乘坐飞\n机。"
+                },
+                {
+                  "slot": "伙食补助",
+                  "surface": "伙食补助",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    277,
+                    281
+                  ],
+                  "excerpt": "宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "员工",
+                "出差",
+                "住宿费",
+                "伙食",
+                "补助",
+                "每天",
+                "能报",
+                "员工出差的住宿费和伙食补助每",
+                "员工出差",
+                "伙食补助",
+                "天能报多少",
+                "员工出差的住"
+              ],
+              "score": 0.75,
+              "typed_plan": {
+                "anchors": [
+                  "员工",
+                  "出差",
+                  "住宿费",
+                  "伙食",
+                  "补助",
+                  "每天",
+                  "能报",
+                  "员工出差的住宿费和伙食补助每"
+                ],
+                "predicate": "",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 5,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "784077d85558201f31a76118",
+            "snapshot_id_count": 7,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "员工出差的住宿费和伙食补助每天能报多少"
+          },
+          "fact_plan": {
+            "raw": "员工出差的住宿费和伙食补助每天能报多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit"
+            ],
+            "entities": [
+              "员工",
+              "出差",
+              "住宿费",
+              "伙食",
+              "补助",
+              "每天",
+              "能报",
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "员工",
+            "object": "出差",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "员工",
+              "出差",
+              "住宿费",
+              "伙食",
+              "补助",
+              "每天",
+              "能报",
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "区外",
+              "value": "100",
+              "unit": "元",
+              "evidence_passage_id": "0ce4ea7195bdc84cc73699fdf1e69323",
+              "record_id": "0ce4ea7195bdc84cc73699fdf1e69323:r4",
+              "exact_text": "十一条伙食补助标准为区外出差每人每天100元，区ÝgóZU\u0000(N",
+              "table_row_ref": "0ce4ea7195bdc84cc73699fdf1e69323:t0",
+              "value_dimension": "per_unit",
+              "group_id": "51c0f8c2eebeda8a"
+            }
+          ],
+          "dropped": [
+            {
+              "id": "197b218734eb0da0c19121ff",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7fa2e7bdfab9e4f01dce6bc7",
+              "reason": "unit_not_money"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 41,
+          "candidate_count": 21
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "十一条伙食补助标准为区外出差每人每天100元，区ÝgóZU\u0000(N",
+              "evidence_passage_ids": [
+                "0ce4ea7195bdc84cc73699fdf1e69323"
+              ],
+              "fact_type": "numeric",
+              "condition": "区外",
+              "candidate_id": "f16f95c57570ab2846c1187f"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "员工出差的住宿费和伙食补助每天能报多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit"
+            ],
+            "entities": [
+              "员工",
+              "出差",
+              "住宿费",
+              "伙食",
+              "补助",
+              "每天",
+              "能报",
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "员工",
+            "object": "出差",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "员工",
+              "出差",
+              "住宿费",
+              "伙食",
+              "补助",
+              "每天",
+              "能报",
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住"
+            ]
+          },
+          "input_count": 21,
+          "dropped": [
+            {
+              "id": "197b218734eb0da0c19121ff",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7fa2e7bdfab9e4f01dce6bc7",
+              "reason": "unit_not_money"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "f16f95c57570ab2846c1187f",
+              "record_id": "0ce4ea7195bdc84cc73699fdf1e69323:r4",
+              "passage_id": "0ce4ea7195bdc84cc73699fdf1e69323",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "100元",
+              "qualifiers": [],
+              "condition": "区外",
+              "value": "100",
+              "unit": "元",
+              "exact_text": "十一条伙食补助标准为区外出差每人每天100元，区ÝgóZU\u0000(N",
+              "evidence_spans": [
+                [
+                  22,
+                  27
+                ]
+              ],
+              "table_row_ref": "0ce4ea7195bdc84cc73699fdf1e69323:t0",
+              "document_family_id": "topic:差旅费管理办法",
+              "version_year": 2018,
+              "score": 13.400000000000002,
+              "unstructured_rejected": false,
+              "group_id": "51c0f8c2eebeda8a",
+              "polarity": "",
+              "value_dimension": "per_unit",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "anchor:员工": "miss",
+                "anchor:出差": "hit",
+                "anchor:住宿费": "miss",
+                "anchor:伙食": "hit",
+                "anchor:补助": "hit",
+                "anchor:每天": "hit",
+                "anchor:能报": "miss",
+                "anchor:员工出差的住宿费和伙食补助每": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  22,
+                  27
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "f16f95c57570ab2846c1187f": "hit",
+              "495adcae87f1f169961630ab": "hit",
+              "ee9eedb1044d6ee0c5e4cf3e": "hit",
+              "f21bab4ffc15517557053a44": "hit",
+              "3d82616b9c0ade91e75208eb": "hit",
+              "5fe25d28520a21750242ad3a": "hit",
+              "f159f752228a299e929e478b": "hit",
+              "bfbc27e55a999850e53f9972": "hit",
+              "8a78cd4dd4416eaaad948589": "hit",
+              "b8cadc827f6529850a15bd6f": "hit",
+              "0e7ede9527796ca432bc2d5f": "hit",
+              "4ed50f77c37ee1eada901cda": "hit",
+              "581d0e5310172ea3f2d23179": "hit",
+              "9f1a8846858400f12ba4f00b": "hit",
+              "f5af9416a2433e14425eaa1d": "hit",
+              "144bd1b080bb312e25b82cff": "hit",
+              "956c4216b6f48097ca27ff1c": "hit",
+              "d29adeeb74cce90cf4165b46": "hit"
+            },
+            "unit": {
+              "f16f95c57570ab2846c1187f": "hit",
+              "495adcae87f1f169961630ab": "hit",
+              "ee9eedb1044d6ee0c5e4cf3e": "hit",
+              "f21bab4ffc15517557053a44": "hit",
+              "3d82616b9c0ade91e75208eb": "hit",
+              "5fe25d28520a21750242ad3a": "hit",
+              "f159f752228a299e929e478b": "hit",
+              "bfbc27e55a999850e53f9972": "hit",
+              "8a78cd4dd4416eaaad948589": "hit",
+              "b8cadc827f6529850a15bd6f": "hit",
+              "0e7ede9527796ca432bc2d5f": "hit",
+              "4ed50f77c37ee1eada901cda": "hit",
+              "581d0e5310172ea3f2d23179": "hit",
+              "9f1a8846858400f12ba4f00b": "hit",
+              "f5af9416a2433e14425eaa1d": "hit",
+              "144bd1b080bb312e25b82cff": "hit",
+              "956c4216b6f48097ca27ff1c": "hit",
+              "d29adeeb74cce90cf4165b46": "hit"
+            }
+          },
+          "primary_group_id": "51c0f8c2eebeda8a",
+          "covered_slots": [
+            "condition:区外",
+            "dim:per_unit",
+            "unit",
+            "value",
+            "区外"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "51c0f8c2eebeda8a",
+                "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+                "knowledge_ids": [
+                  "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+                ],
+                "organization_scope": "中国电信广西号百分公司",
+                "document_family_id": "中国电信广西号百分公司:差旅费管理办法",
+                "document_revision": "2018",
+                "effective_date": "",
+                "version_year": 2018,
+                "passage_ids": [
+                  "ebe5a29ec7882ec511152d0123e44ef3",
+                  "0ce4ea7195bdc84cc73699fdf1e69323",
+                  "95e48f77b5fe3461e51dd6c9c485bc5f",
+                  "6f551f54e66037d72d7930e8bfb8c819",
+                  "20344efedd1641b9414e7ec6365315b4",
+                  "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+                  "cc571a19eb4a7d1755ebe9f2a6f6fbb1"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  0.9839449833421147,
+                  0.9087544392136967,
+                  0.843421788075391,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+                "section": "第二十六条 市内交通费实行限额内凭票报销，报销标准为 > 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 8.0,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "ebe5a29ec7882ec511152d0123e44ef3:r0",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r1",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r2",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r3",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r4",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r5",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r6",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r7",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r8",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r9",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r10",
+                  "ebe5a29ec7882ec511152d0123e44ef3:r11",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r0",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r1",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r2",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r3",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r4",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r5",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r6",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r7",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r8",
+                  "0ce4ea7195bdc84cc73699fdf1e69323:r9",
+                  "95e48f77b5fe3461e51dd6c9c485bc5f:r0",
+                  "95e48f77b5fe3461e51dd6c9c485bc5f:r1",
+                  "95e48f77b5fe3461e51dd6c9c485bc5f:r2",
+                  "95e48f77b5fe3461e51dd6c9c485bc5f:r3",
+                  "95e48f77b5fe3461e51dd6c9c485bc5f:r4",
+                  "6f551f54e66037d72d7930e8bfb8c819:r0",
+                  "6f551f54e66037d72d7930e8bfb8c819:r1",
+                  "6f551f54e66037d72d7930e8bfb8c819:r2",
+                  "20344efedd1641b9414e7ec6365315b4:r0",
+                  "20344efedd1641b9414e7ec6365315b4:r1",
+                  "20344efedd1641b9414e7ec6365315b4:r2",
+                  "20344efedd1641b9414e7ec6365315b4:r3",
+                  "20344efedd1641b9414e7ec6365315b4:r4",
+                  "20344efedd1641b9414e7ec6365315b4:r5",
+                  "20344efedd1641b9414e7ec6365315b4:r6",
+                  "9a5b9d5b3d03ba3dea4800bc8b807b1b:r0",
+                  "9a5b9d5b3d03ba3dea4800bc8b807b1b:r1",
+                  "9a5b9d5b3d03ba3dea4800bc8b807b1b:r2",
+                  "cc571a19eb4a7d1755ebe9f2a6f6fbb1:unstructured:0"
+                ]
+              }
+            ],
+            "primary_group_id": "51c0f8c2eebeda8a",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "助每天能报多少",
+                "员工出差的住宿费和伙食补"
+              ],
+              "selection": [
+                {
+                  "group_id": "51c0f8c2eebeda8a",
+                  "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+                  "knowledge_ids": [
+                    "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+                  ],
+                  "score": 8.0,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit"
+          ],
+          "candidate_ids": [
+            "f16f95c57570ab2846c1187f"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "dim:per_unit",
+            "unit",
+            "value",
+            "区外"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "f16f95c57570ab2846c1187f": "hit",
+              "495adcae87f1f169961630ab": "hit",
+              "ee9eedb1044d6ee0c5e4cf3e": "hit",
+              "f21bab4ffc15517557053a44": "hit",
+              "3d82616b9c0ade91e75208eb": "hit",
+              "5fe25d28520a21750242ad3a": "hit",
+              "f159f752228a299e929e478b": "hit",
+              "bfbc27e55a999850e53f9972": "hit",
+              "8a78cd4dd4416eaaad948589": "hit",
+              "b8cadc827f6529850a15bd6f": "hit",
+              "0e7ede9527796ca432bc2d5f": "hit",
+              "4ed50f77c37ee1eada901cda": "hit",
+              "581d0e5310172ea3f2d23179": "hit",
+              "9f1a8846858400f12ba4f00b": "hit",
+              "f5af9416a2433e14425eaa1d": "hit",
+              "144bd1b080bb312e25b82cff": "hit",
+              "956c4216b6f48097ca27ff1c": "hit",
+              "d29adeeb74cce90cf4165b46": "hit"
+            },
+            "unit": {
+              "f16f95c57570ab2846c1187f": "hit",
+              "495adcae87f1f169961630ab": "hit",
+              "ee9eedb1044d6ee0c5e4cf3e": "hit",
+              "f21bab4ffc15517557053a44": "hit",
+              "3d82616b9c0ade91e75208eb": "hit",
+              "5fe25d28520a21750242ad3a": "hit",
+              "f159f752228a299e929e478b": "hit",
+              "bfbc27e55a999850e53f9972": "hit",
+              "8a78cd4dd4416eaaad948589": "hit",
+              "b8cadc827f6529850a15bd6f": "hit",
+              "0e7ede9527796ca432bc2d5f": "hit",
+              "4ed50f77c37ee1eada901cda": "hit",
+              "581d0e5310172ea3f2d23179": "hit",
+              "9f1a8846858400f12ba4f00b": "hit",
+              "f5af9416a2433e14425eaa1d": "hit",
+              "144bd1b080bb312e25b82cff": "hit",
+              "956c4216b6f48097ca27ff1c": "hit",
+              "d29adeeb74cce90cf4165b46": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "员工出差的住宿费和伙食补助每天能报多少",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "value",
+            "unit"
+          ],
+          "entities": [
+            "员工",
+            "出差",
+            "住宿费",
+            "伙食",
+            "补助",
+            "每天",
+            "能报",
+            "员工出差的住宿费和伙食补助每",
+            "员工出差",
+            "伙食补助",
+            "天能报多少",
+            "员工出差的住"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "员工",
+          "object": "出差",
+          "scope": [
+            "员工"
+          ],
+          "selector": [],
+          "predicate": "",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "numeric",
+          "value_dimensions": [
+            "value"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "员工",
+            "出差",
+            "住宿费",
+            "伙食",
+            "补助",
+            "每天",
+            "能报",
+            "员工出差的住宿费和伙食补助每",
+            "员工出差",
+            "伙食补助",
+            "天能报多少",
+            "员工出差的住"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "51c0f8c2eebeda8a",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "knowledge_ids": [
+                "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+              ],
+              "organization_scope": "中国电信广西号百分公司",
+              "document_family_id": "中国电信广西号百分公司:差旅费管理办法",
+              "document_revision": "2018",
+              "effective_date": "",
+              "version_year": 2018,
+              "passage_ids": [
+                "ebe5a29ec7882ec511152d0123e44ef3",
+                "0ce4ea7195bdc84cc73699fdf1e69323",
+                "95e48f77b5fe3461e51dd6c9c485bc5f",
+                "6f551f54e66037d72d7930e8bfb8c819",
+                "20344efedd1641b9414e7ec6365315b4",
+                "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+                "cc571a19eb4a7d1755ebe9f2a6f6fbb1"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "retrieval_scores": [
+                1.0,
+                0.9839449833421147,
+                0.9087544392136967,
+                0.843421788075391,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+              "section": "第二十六条 市内交通费实行限额内凭票报销，报销标准为 > 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 8.0,
+              "rejection_reasons": [],
+              "record_ids": [
+                "ebe5a29ec7882ec511152d0123e44ef3:r0",
+                "ebe5a29ec7882ec511152d0123e44ef3:r1",
+                "ebe5a29ec7882ec511152d0123e44ef3:r2",
+                "ebe5a29ec7882ec511152d0123e44ef3:r3",
+                "ebe5a29ec7882ec511152d0123e44ef3:r4",
+                "ebe5a29ec7882ec511152d0123e44ef3:r5",
+                "ebe5a29ec7882ec511152d0123e44ef3:r6",
+                "ebe5a29ec7882ec511152d0123e44ef3:r7",
+                "ebe5a29ec7882ec511152d0123e44ef3:r8",
+                "ebe5a29ec7882ec511152d0123e44ef3:r9",
+                "ebe5a29ec7882ec511152d0123e44ef3:r10",
+                "ebe5a29ec7882ec511152d0123e44ef3:r11",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r0",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r1",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r2",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r3",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r4",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r5",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r6",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r7",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r8",
+                "0ce4ea7195bdc84cc73699fdf1e69323:r9",
+                "95e48f77b5fe3461e51dd6c9c485bc5f:r0",
+                "95e48f77b5fe3461e51dd6c9c485bc5f:r1",
+                "95e48f77b5fe3461e51dd6c9c485bc5f:r2",
+                "95e48f77b5fe3461e51dd6c9c485bc5f:r3",
+                "95e48f77b5fe3461e51dd6c9c485bc5f:r4",
+                "6f551f54e66037d72d7930e8bfb8c819:r0",
+                "6f551f54e66037d72d7930e8bfb8c819:r1",
+                "6f551f54e66037d72d7930e8bfb8c819:r2",
+                "20344efedd1641b9414e7ec6365315b4:r0",
+                "20344efedd1641b9414e7ec6365315b4:r1",
+                "20344efedd1641b9414e7ec6365315b4:r2",
+                "20344efedd1641b9414e7ec6365315b4:r3",
+                "20344efedd1641b9414e7ec6365315b4:r4",
+                "20344efedd1641b9414e7ec6365315b4:r5",
+                "20344efedd1641b9414e7ec6365315b4:r6",
+                "9a5b9d5b3d03ba3dea4800bc8b807b1b:r0",
+                "9a5b9d5b3d03ba3dea4800bc8b807b1b:r1",
+                "9a5b9d5b3d03ba3dea4800bc8b807b1b:r2",
+                "cc571a19eb4a7d1755ebe9f2a6f6fbb1:unstructured:0"
+              ]
+            }
+          ],
+          "primary_group_id": "51c0f8c2eebeda8a",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "助每天能报多少",
+              "员工出差的住宿费和伙食补"
+            ],
+            "selection": [
+              {
+                "group_id": "51c0f8c2eebeda8a",
+                "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+                "knowledge_ids": [
+                  "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+                ],
+                "score": 8.0,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {},
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "f16f95c57570ab2846c1187f"
+              ],
+              "passage_id": "0ce4ea7195bdc84cc73699fdf1e69323",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "text": "- 十一条伙食补助标准为区外出差每人每天100元，区ÝgóZU\u0000(N",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 36
+        },
+        "primary_group_id": "51c0f8c2eebeda8a",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "type": "knowledge",
+              "label": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf"
+            },
+            {
+              "id": "5248d7f8-75f0-463d-b72b-994eb735894d",
+              "type": "block",
+              "label": "据实报销。",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+            },
+            {
+              "id": "c07387e3-d561-4f81-8643-6ec82b4a1827",
+              "type": "block",
+              "label": "[第6页]",
+              "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+            }
+          ],
+          "edges": [
+            {
+              "source": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+              "target": "5248d7f8-75f0-463d-b72b-994eb735894d",
+              "type": "contains"
+            },
+            {
+              "source": "c07387e3-d561-4f81-8643-6ec82b4a1827",
+              "target": "5248d7f8-75f0-463d-b72b-994eb735894d",
+              "type": "parent"
+            }
+          ],
+          "truncated": false,
+          "node_count": 3
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 0,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+          ],
+          "accepted_block_ids": [
+            "2c7a0359-601a-414a-870d-59681aae8d90"
+          ],
+          "accepted_passage_ids": [
+            "ebe5a29ec7882ec511152d0123e44ef3",
+            "0ce4ea7195bdc84cc73699fdf1e69323",
+            "95e48f77b5fe3461e51dd6c9c485bc5f",
+            "6f551f54e66037d72d7930e8bfb8c819",
+            "20344efedd1641b9414e7ec6365315b4",
+            "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+            "cc571a19eb4a7d1755ebe9f2a6f6fbb1"
+          ],
+          "adjacent_passage_ids": [
+            "0ce4ea7195bdc84cc73699fdf1e69323",
+            "20344efedd1641b9414e7ec6365315b4",
+            "6f551f54e66037d72d7930e8bfb8c819",
+            "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+            "cc571a19eb4a7d1755ebe9f2a6f6fbb1"
+          ],
+          "generation_knowledge_ids": [
+            "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+          ],
+          "top_score": 0.2777,
+          "intent": "ordinary",
+          "adjacent_count": 5,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "员工",
+              "出差",
+              "住宿费",
+              "伙食",
+              "补助",
+              "每天",
+              "能报",
+              "员工出差",
+              "伙食补助"
+            ],
+            "passage_id": "ebe5a29ec7882ec511152d0123e44ef3",
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "spans": [
+              {
+                "slot": "员工",
+                "surface": "员工",
+                "synonym_source": "query_surface",
+                "span": [
+                  635,
+                  637
+                ],
+                "excerpt": "Ñè\u0000)\n— 8 —第二十八条 员工因工作调动所发生的交通费、住宿费、伙\n食补助费， 按出差办理， 由调入单位报销。"
+              },
+              {
+                "slot": "出差",
+                "surface": "出差",
+                "synonym_source": "query_surface",
+                "span": [
+                  171,
+                  173
+                ],
+                "excerpt": "标准为 > 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑ"
+              },
+              {
+                "slot": "住宿费",
+                "surface": "住宿费",
+                "synonym_source": "query_surface",
+                "span": [
+                  650,
+                  653
+                ],
+                "excerpt": "二十八条 员工因工作调动所发生的交通费、住宿费、伙\n食补助费， 按出差办理， 由调入单位报销。 随同调动的同居父母、\n配偶、子"
+              },
+              {
+                "slot": "伙食",
+                "surface": "伙食",
+                "synonym_source": "query_surface",
+                "span": [
+                  277,
+                  279
+                ],
+                "excerpt": "宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人"
+              },
+              {
+                "slot": "补助",
+                "surface": "补助",
+                "synonym_source": "query_surface",
+                "span": [
+                  279,
+                  281
+                ],
+                "excerpt": "或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交"
+              },
+              {
+                "slot": "每天",
+                "surface": "每天",
+                "synonym_source": "query_surface",
+                "span": [
+                  432,
+                  434
+                ],
+                "excerpt": "内凭票报销，报销标准为\n区外往返两天每人每天 150 元，中途每人每天 80 元；区内每人\n每天 50 元。出差往返机场、火"
+              },
+              {
+                "slot": "能报",
+                "surface": "能报",
+                "synonym_source": "query_surface",
+                "span": [
+                  175,
+                  177
+                ],
+                "excerpt": "> 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000"
+              },
+              {
+                "slot": "员工出差",
+                "surface": "员工出差",
+                "synonym_source": "query_surface",
+                "span": [
+                  703,
+                  707
+                ],
+                "excerpt": "同居父母、\n配偶、子女所需的交通费按普通员工出差标准报销，不得乘坐飞\n机。"
+              },
+              {
+                "slot": "伙食补助",
+                "surface": "伙食补助",
+                "synonym_source": "query_surface",
+                "span": [
+                  277,
+                  281
+                ],
+                "excerpt": "宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "员工",
+              "出差",
+              "住宿费",
+              "伙食",
+              "补助",
+              "每天",
+              "能报",
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住"
+            ],
+            "score": 0.75,
+            "typed_plan": {
+              "anchors": [
+                "员工",
+                "出差",
+                "住宿费",
+                "伙食",
+                "补助",
+                "每天",
+                "能报",
+                "员工出差的住宿费和伙食补助每"
+              ],
+              "predicate": "",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "784077d85558201f31a76118"
+        },
+        "snapshot_fingerprint": "784077d85558201f31a76118",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 34.58
+  },
+  "top_candidate_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+  "candidates": [
+    {
+      "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+      "passage_id": "ebe5a29ec7882ec511152d0123e44ef3",
+      "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+      "score": 1.0,
+      "final_relevance_score": 0.962973208287183,
+      "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第二十六条 市内交通费实行限额内凭票报销，报销标准为 > 第二十七条 参加会议、培训的出差，只能报销往返在途期 > 第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。\n第五章 市内交通费\n第二十五条 市内交通费是指工作人员因公出差期间发生\n的市内交通费用。\n第二十六条 市内交通费实行限额内凭票报销，报销标准为\n区外往返两天每人每天 150 元，中途每人每天 80 元；区内每人\n每天 50 元。出差往返机场、火车站、客运站、码头等发生的大\n巴、地铁、公交等公共交通费用凭据报销，不占用限额标准。\n第二十七条 参加会议、培训的出差，只能报销往返在途期\n间的市内交通费。出差期间由接待单位提供交通工具的，或由单\n位派车的，不再另行报销市内交通费。\n第六章 调动差旅费 ÝgóZU\u0000(NTQÑè\u0000)\n— 8 —第二十八条 员工因工作调动所发生的交通费、住宿费、伙\n食补助费， 按出差办理， 由调入单位报销。 随同调动的同居父母、\n配偶、子女所需的交通费按普通员工出差标准报销，不得乘坐飞\n机。"
+    },
+    {
+      "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+      "passage_id": "0ce4ea7195bdc84cc73699fdf1e69323",
+      "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+      "score": 0.9839449833421147,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第二十二条 出差人员应当自行用餐。凡由接待单位统一安 > 第二十三条 出差人员参加会议、培训期间已由主办单位收 > 第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。\n第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的伙\n食补助费用。\n第二十一条 伙食补助标准为区外出差每人每天 100 元，区ÝgóZU\u0000(NTQÑè\u0000)\n— 7 — 内出差每人每天 80 元。\n第二十二条 出差人员应当自行用餐。凡由接待单位统一安\n排用餐的，应当向接待单位交纳伙食费，接待单位负责向出差人\n员出具收款收据。\n第二十三条 出差人员参加会议、培训期间已由主办单位收\n取食宿费或安排食宿的，可以按照往返各一天报销伙食补助费；\n当天往返的，报销一天的出差伙食补助费。\n第二十四条 接待单位收到出差人员交纳的伙食费，用于对\n外结算相关费用或冲减原支出列支费用项目。"
+    },
+    {
+      "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+      "passage_id": "95e48f77b5fe3461e51dd6c9c485bc5f",
+      "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+      "score": 0.9087544392136967,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】（二）提高住宿标准。参照股份公司总部及广西区本级党政 > （四）提高伙食补助标准，员工区内出差伙食补助由原 50 > （五）提高市内交通费标准。员工区外出差往返两天的市内\n中电信桂号百〔 2018〕53 号\n关于印发中国电信广西号百分公司差旅费\n管理办法 （2018 年版 ）的通知\n各部门：\n现将《中国电信广西号百分公司差旅费管理办法（ 2018 年\n版） 》印发给你们，请遵照执行，有关事项通知如下：\n一、本次修订的主要内容\n（一）补充校招新生入职交通报销规则，明确校招新生毕业\n离校入职时可按一定标准报销城市间交通费。\n（二）提高住宿标准。参照股份公司总部及广西区本级党政\n机关文件，修订员工差旅住宿费标准，其中南宁市与区外其他城\n市住宿标准持平，县级城市与区内其他城市住宿标准持平。\n（三）补充住宿安排要求。除号百公司领导、号百公司各部 ÝgóZU\u0000(NTQÑè\u0000)\n门领导及相当职级人员安排单人间或标准间， 其余人员原则上同\n性别两人安排一个标准间。\n（四）提高伙食补助标准，员工区内出差伙食补助由原 50\n元/天提升至 80 元/天。\n（五）提高市内交通费标准。员工区外出差往返两天的市内\n交通费报销限额由 80 元/天提升至 150 元/天，且往返机场、火\n车站等发生的公共交通费不占用限额； 区内出差的市内交通费报\n销限额由 30 元/天提升至 50 元/天。"
+    },
+    {
+      "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+      "passage_id": "6f551f54e66037d72d7930e8bfb8c819",
+      "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+      "score": 0.843421788075391,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf\n【章节】第十七条 出差人员按照降本增效、 节约从简的原则安排住 > 第十八条 出差人员应当在职务级别对应住宿费限额内优先 > 第十九条 住宿费按出差自然（日历）天数计算，在规定的\n— 6 —1. 号百分公司全体员工出差住宿费标准每人每天 400 元。 考\n虑到不同地区的物价差异，北京、上海的住宿费标准在上述标准\n的基础上各上浮 100 元，天津、重庆、省会城市（南宁除外）\n和计划单列市住宿费标准在上述标准的基础上各上浮 50 元。\n2. 拉萨、西宁、海口等受地理、气候等自然条件限制和季节\n性热点影响较大的城市，实行差旅住宿费淡旺季标准。\n（二）区内其他城市及县出差（南宁市市区除外）\n号百分公司全体员工住宿费标准每人每天 350 元。\n第十七条 出差人员按照降本增效、 节约从简的原则安排住\n宿。号百公司领导、号百公司各部门领导及相当职级人员安排单\n人间或标准间，其余人员原则上同性别两人安排一个标准间。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。"
+    }
+  ],
+  "search_ms": 3088.7,
+  "ask_ms": 34.58,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "Annx-gCvH9EPZMCtZLbE-JgeYOBNGF3H",
+  "search_snapshot_fingerprint": "784077d85558201f31a76118",
+  "ask_snapshot_fingerprint": "784077d85558201f31a76118",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "8bd1ebaa7144213846fc1e2f"
+}

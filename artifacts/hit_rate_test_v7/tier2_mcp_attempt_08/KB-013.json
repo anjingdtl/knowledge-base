@@ -1,0 +1,1151 @@
+{
+  "case": {
+    "case_id": "KB-013",
+    "category": "同义词与口语表达",
+    "query": "公司搞比赛给员工发奖金 上限是多少",
+    "expected_knowledge_ids": [
+      "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+    ],
+    "expected_title_keywords": [
+      "劳动竞赛",
+      "2025"
+    ],
+    "required_facts": [
+      "2000元",
+      "15000元"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕54号第二十一条；口语'搞比赛发奖金'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "443be64a-0384-4df0-b1fc-b4f06138779b",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框 > 1.10 资金管理 > 1.10.1银行开户审批（含\n超上限标准，但月补贴额超过50万\n元时需事前审批。\n2.其他支撑费：单店超过50万元须\n事前审批1.营业厅房租支撑费：\n单店补贴不超上限标\n准，但月补贴额超50万\n元时需事前审批。\n2.其他支撑费：单店超\n过50万元须事前审批参照分公司合同上报区公司的额度\n进行审批\n1.9 合作伙伴引入\n1.9.1 代理商引入 销拓部 销拓部 市场部区公司统谈代理商\n中突破全区渠道费\n用上限管理的区公司统谈代理商中\n突破全区渠道费用上\n限管理的区公司统谈的代理商，且在统谈时\n明确某一类渠道费用超过全区上限\n标准，才需要区公司审批\n1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框\n架的确定全区性的、年度框架\n的确定市公司及以下的年度框架，由市公\n司党委会/总经理办公会审批\n1.10 资金管理\n1.10.1银行开户审批（含\n第三方支付账户）开户申\n请部门财务部、市场\n部等审核 审核 审批 审批≤20万\n重大经济事项管理\n公司薪酬分配及员\n工重大切身利益的\n事项公司薪酬分配及员工\n重大切身利益的事项\n《中国电信股份有限公司广西分公\n司资金账户管理实施细则》（中电\n信桂〔2018〕450号），统一在MSS\n主数据完成审批 财务部人力资\n源部\n发起部\n门\n第 7 页，共 54 页维护账号(集团互联)",
+          "score": 0.7,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "ebcbe7dbf9bea2e2c27c1987e256724b",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框 > 1.10 资金管理 > 1.10.1银行开户审批（含",
+          "block_ids": [
+            "443be64a-0384-4df0-b1fc-b4f06138779b",
+            "4ca175e4-ed76-498d-9271-09eb2413df17",
+            "2f476a6d-4614-4001-b6b7-fb5cb8618ec8",
+            "4859ddba-0d1b-4dd9-9f5d-9b1475d71e36",
+            "206c3681-f901-4bea-9e25-7f8ab8e82225",
+            "310822e9-1112-4e3c-ae7f-46f33e9340d3",
+            "b4c2420b-fc32-49ff-8cea-a32c1faf0e71",
+            "71f11ec4-b642-418f-8f71-e2df05b690ba",
+            "1c959d93-9a2e-4a81-a9ba-439ebe40ddcb",
+            "f969d0bc-804d-4ad2-bc04-ae67028e2410",
+            "15bf3409-24e1-4631-b6f2-8e2846aa4ffb",
+            "f5b043bd-547c-4298-84c7-9a73e7e0955b",
+            "5bd590ee-334b-4733-9bf9-d41007ae732f",
+            "d1d643ab-657b-484c-aeb4-c10adc2b752a",
+            "560a1dd5-0ce4-47c9-a1c5-c806bb5a5f33",
+            "82e4af05-beb0-41f2-9797-3d039834d6ed",
+            "ca3aa44f-b1d1-40f3-b51b-b9d8831c4707",
+            "af208a5e-75ca-46d9-a5f7-fb0634413faa",
+            "f2ed3b47-3ca5-485a-bd9a-713dadcc96c1",
+            "3ec8b538-9d18-4cc3-82f3-959e53c5387c",
+            "968bd3b8-1373-453b-97a1-60f2ff062989",
+            "1f4f6051-3eab-4237-9e74-a6db140d694d",
+            "f450737b-c4f5-45ce-8c87-7e069a1db70a",
+            "b8a24943-ca27-487f-b0ae-4597043c1f61",
+            "ada35d06-fd24-476d-9ac6-781493258e2d",
+            "8204d790-1efe-420c-be93-bbcc25f77d79",
+            "024ad01b-de8a-41ff-89da-611dabf83bc0",
+            "5801c723-de5e-41d5-8a46-3592c61825f6",
+            "2871eccd-1cdd-4a4a-9215-58e2d7f336ed",
+            "96f348d8-4eda-4d1a-ac9e-83a9bb83dfdc",
+            "d887061c-6a1b-4792-bddb-338a8621bb06",
+            "3b489c49-8459-43ca-9819-bcf880c73e2b",
+            "73b148c5-4ba5-4c0e-86d2-c14762c10877"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "443be64a-0384-4df0-b1fc-b4f06138779b",
+              "order_idx": 44698,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "4ca175e4-ed76-498d-9271-09eb2413df17",
+              "order_idx": 44699,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "2f476a6d-4614-4001-b6b7-fb5cb8618ec8",
+              "order_idx": 44700,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "4859ddba-0d1b-4dd9-9f5d-9b1475d71e36",
+              "order_idx": 44701,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "206c3681-f901-4bea-9e25-7f8ab8e82225",
+              "order_idx": 44702,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "310822e9-1112-4e3c-ae7f-46f33e9340d3",
+              "order_idx": 44703,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "b4c2420b-fc32-49ff-8cea-a32c1faf0e71",
+              "order_idx": 44704,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "71f11ec4-b642-418f-8f71-e2df05b690ba",
+              "order_idx": 44705,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "1c959d93-9a2e-4a81-a9ba-439ebe40ddcb",
+              "order_idx": 44706,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "f969d0bc-804d-4ad2-bc04-ae67028e2410",
+              "order_idx": 44707,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "15bf3409-24e1-4631-b6f2-8e2846aa4ffb",
+              "order_idx": 44708,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "f5b043bd-547c-4298-84c7-9a73e7e0955b",
+              "order_idx": 44709,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "5bd590ee-334b-4733-9bf9-d41007ae732f",
+              "order_idx": 44710,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "d1d643ab-657b-484c-aeb4-c10adc2b752a",
+              "order_idx": 44711,
+              "char_start": 0,
+              "char_end": 18
+            },
+            {
+              "block_id": "560a1dd5-0ce4-47c9-a1c5-c806bb5a5f33",
+              "order_idx": 44712,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "82e4af05-beb0-41f2-9797-3d039834d6ed",
+              "order_idx": 44713,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "ca3aa44f-b1d1-40f3-b51b-b9d8831c4707",
+              "order_idx": 44714,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "af208a5e-75ca-46d9-a5f7-fb0634413faa",
+              "order_idx": 44715,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "f2ed3b47-3ca5-485a-bd9a-713dadcc96c1",
+              "order_idx": 44716,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "3ec8b538-9d18-4cc3-82f3-959e53c5387c",
+              "order_idx": 44717,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "968bd3b8-1373-453b-97a1-60f2ff062989",
+              "order_idx": 44718,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "1f4f6051-3eab-4237-9e74-a6db140d694d",
+              "order_idx": 44719,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "f450737b-c4f5-45ce-8c87-7e069a1db70a",
+              "order_idx": 44720,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "b8a24943-ca27-487f-b0ae-4597043c1f61",
+              "order_idx": 44721,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "ada35d06-fd24-476d-9ac6-781493258e2d",
+              "order_idx": 44722,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "8204d790-1efe-420c-be93-bbcc25f77d79",
+              "order_idx": 44723,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "024ad01b-de8a-41ff-89da-611dabf83bc0",
+              "order_idx": 44724,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "5801c723-de5e-41d5-8a46-3592c61825f6",
+              "order_idx": 44725,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "2871eccd-1cdd-4a4a-9215-58e2d7f336ed",
+              "order_idx": 44726,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "96f348d8-4eda-4d1a-ac9e-83a9bb83dfdc",
+              "order_idx": 44727,
+              "char_start": 0,
+              "char_end": 2
+            },
+            {
+              "block_id": "d887061c-6a1b-4792-bddb-338a8621bb06",
+              "order_idx": 44728,
+              "char_start": 0,
+              "char_end": 3
+            },
+            {
+              "block_id": "3b489c49-8459-43ca-9819-bcf880c73e2b",
+              "order_idx": 44729,
+              "char_start": 0,
+              "char_end": 1
+            },
+            {
+              "block_id": "73b148c5-4ba5-4c0e-86d2-c14762c10877",
+              "order_idx": 44730,
+              "char_start": 0,
+              "char_end": 22
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "443be64a-0384-4df0-b1fc-b4f06138779b",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.1080548128342246,
+            "score_breakdown": {
+              "vector": 0.7673551738262177,
+              "keyword": 0.44978837955654927,
+              "rrf": 0.1080548128342246,
+              "rerank": null
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match",
+            "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框 > 1.10 资金管理 > 1.10.1银行开户审批（含\n超上限标准，但月补贴额超过50万\n元时需事前审批。\n2.其他支撑费：单店超过50万元须\n事前审批1.营业厅房租支撑费：\n单店补贴不超上限标\n准，但月补贴额超50万\n元时需事前审批。\n2.其他支撑费：单店超\n过50万元须事前审批参照分公司合同上报区公司的额度\n进行审批\n1.9 合作伙伴引入\n1.9.1 代理商引入 销拓部 销拓部 市场部区公司统谈代理商\n中突破全区渠道费\n用上限管理的区公司统谈代理商中\n突破全区渠道费用上\n限管理的区公司统谈的代理商，且在统谈时\n明确某一类渠道费用超过全区上限\n标准，才需要区公司审批\n1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框\n架的确定全区性的、年度框架\n的确定市公司及以下的年度框架，由市公\n司党委会/总经理办公会审批\n1.10 资金管理\n1.10.1银行开户审批（含\n第三方支付账户）开户申\n请部门财务部、市场\n部等审核 审核 审批 审批≤20万\n重大经济事项管理\n公司薪酬分配及员\n工重大切身利益的\n事项公司薪酬分配及员工\n重大切身利益的事项\n《中国电信股份有限公司广西分公\n司资金账户管理实施细则》（中电\n信桂〔2018〕450号），统一在MSS\n主数据完成审批 财务部人力资\n源部\n发起部\n门\n第 7 页，共 54 页维护账号(集团互联)"
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "f87e4bd9-4a93-4500-959d-f89e3b451d69",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】2.其他支撑费：单店超过50万元须 > 2.其他支撑费：单店超 > 1.9 合作伙伴引入\n审批财务部 审核分公司自行审批（工资总额分配方\n案报区公司备案）\n1.7.4 员工福利方案审批财务部、工会\n、后勤管理部审核 审核 分公司自行审批\n1.7.5单项交易性金融资\n产投资，期权、期\n货等金融衍生业\n务，发行债 劵财务部 业务相关部门 审核 审批 审批 上报\n1.8 专项管控成本\n1.8.1 业务招待费 部门预算内自行审批\n1.8.2 会议费用 办公室 联签 审批\n1.8.3差旅费/职工培训\n费发起部\n门部门员工出差审批 部门负责人出差审批无论是否出省或乘坐飞机，部门员\n工出差由部门负责人根据出差通知\n进行事前审批，部门负责人出差由\n分管领导进行事前审批\n1.8.4 渠道建设补贴 分公司 销拓部1.营业厅房租支撑费：单店补贴不\n超上限标准，但月补贴额超过50万\n元时需事前审批。\n2.其他支撑费：单店超过50万元须\n事前审批1.营业厅房租支撑费：\n单店补贴不超上限标\n准，但月补贴额超50万\n元时需事前审批。\n2.其他支撑费：单店超\n过50万元须事前审批参照分公司合同上报区公司的额度\n进行审批",
+          "score": 0.14763312349846425,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "143b698ae72c715eda3e67a136fa14eb",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "2.其他支撑费：单店超过50万元须 > 2.其他支撑费：单店超 > 1.9 合作伙伴引入",
+          "block_ids": [
+            "f87e4bd9-4a93-4500-959d-f89e3b451d69",
+            "a0666200-c0c1-4838-b170-88e527a53243",
+            "fab8d926-38d1-40f4-8770-db45f5347582",
+            "e19575f9-64df-4a85-a196-83033f757ee4",
+            "b67853f6-4f4c-40ba-9af5-17111cac9ada",
+            "c3eb4d39-a330-4c33-baf8-46fb1bf0cd0e",
+            "7e62ea76-c767-435d-b771-cf499dbf7c0a",
+            "c24ad516-1577-4d06-bff3-d3fd2b1d4f94",
+            "5932d2ac-ae47-4bd0-acd3-34e092e40bd5",
+            "bbfb55eb-0e69-4ede-bc13-eca59d7d65a7",
+            "11976f8d-8552-4134-a8b2-7ae9b15abe22",
+            "9bd430e3-027b-4644-94c9-d501c4f53025",
+            "be5508be-cc40-456f-a2f9-28e214f1151b",
+            "2fea4ae3-2402-43a3-b165-cce53a51484e",
+            "db3a6c71-18a6-44b7-a8b9-a855215bd166",
+            "dc531968-f300-4e3d-8fb7-7c16ef6481e5",
+            "50ae61e8-3b8c-40c1-94c1-92c576c8e3a2",
+            "d495cba7-8b9c-4e98-9ad4-4ebb7000cabb",
+            "1d3c64ea-4a17-47cd-bebc-8052419559db",
+            "1ac6e1e3-f810-4c89-b934-000d19ae0ce3",
+            "443be64a-0384-4df0-b1fc-b4f06138779b",
+            "4ca175e4-ed76-498d-9271-09eb2413df17",
+            "2f476a6d-4614-4001-b6b7-fb5cb8618ec8"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "f87e4bd9-4a93-4500-959d-f89e3b451d69",
+              "order_idx": 44678,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "a0666200-c0c1-4838-b170-88e527a53243",
+              "order_idx": 44679,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "fab8d926-38d1-40f4-8770-db45f5347582",
+              "order_idx": 44680,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "e19575f9-64df-4a85-a196-83033f757ee4",
+              "order_idx": 44681,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "b67853f6-4f4c-40ba-9af5-17111cac9ada",
+              "order_idx": 44682,
+              "char_start": 0,
+              "char_end": 21
+            },
+            {
+              "block_id": "c3eb4d39-a330-4c33-baf8-46fb1bf0cd0e",
+              "order_idx": 44683,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "7e62ea76-c767-435d-b771-cf499dbf7c0a",
+              "order_idx": 44684,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "c24ad516-1577-4d06-bff3-d3fd2b1d4f94",
+              "order_idx": 44685,
+              "char_start": 0,
+              "char_end": 4
+            },
+            {
+              "block_id": "5932d2ac-ae47-4bd0-acd3-34e092e40bd5",
+              "order_idx": 44686,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "bbfb55eb-0e69-4ede-bc13-eca59d7d65a7",
+              "order_idx": 44687,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "11976f8d-8552-4134-a8b2-7ae9b15abe22",
+              "order_idx": 44688,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "9bd430e3-027b-4644-94c9-d501c4f53025",
+              "order_idx": 44689,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "be5508be-cc40-456f-a2f9-28e214f1151b",
+              "order_idx": 44690,
+              "char_start": 0,
+              "char_end": 36
+            },
+            {
+              "block_id": "2fea4ae3-2402-43a3-b165-cce53a51484e",
+              "order_idx": 44691,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "db3a6c71-18a6-44b7-a8b9-a855215bd166",
+              "order_idx": 44692,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "dc531968-f300-4e3d-8fb7-7c16ef6481e5",
+              "order_idx": 44693,
+              "char_start": 0,
+              "char_end": 17
+            },
+            {
+              "block_id": "50ae61e8-3b8c-40c1-94c1-92c576c8e3a2",
+              "order_idx": 44694,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "d495cba7-8b9c-4e98-9ad4-4ebb7000cabb",
+              "order_idx": 44695,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "1d3c64ea-4a17-47cd-bebc-8052419559db",
+              "order_idx": 44696,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "1ac6e1e3-f810-4c89-b934-000d19ae0ce3",
+              "order_idx": 44697,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "443be64a-0384-4df0-b1fc-b4f06138779b",
+              "order_idx": 44698,
+              "char_start": 0,
+              "char_end": 11
+            },
+            {
+              "block_id": "4ca175e4-ed76-498d-9271-09eb2413df17",
+              "order_idx": 44699,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "2f476a6d-4614-4001-b6b7-fb5cb8618ec8",
+              "order_idx": 44700,
+              "char_start": 0,
+              "char_end": 4
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+            "path": "",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "block_id": "f87e4bd9-4a93-4500-959d-f89e3b451d69",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.10763312349846425,
+            "score_breakdown": {
+              "vector": 0.763022169470787,
+              "keyword": 0.4476344904075728,
+              "rrf": 0.10763312349846425,
+              "rerank": null
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match",
+            "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】2.其他支撑费：单店超过50万元须 > 2.其他支撑费：单店超 > 1.9 合作伙伴引入\n审批财务部 审核分公司自行审批（工资总额分配方\n案报区公司备案）\n1.7.4 员工福利方案审批财务部、工会\n、后勤管理部审核 审核 分公司自行审批\n1.7.5单项交易性金融资\n产投资，期权、期\n货等金融衍生业\n务，发行债 劵财务部 业务相关部门 审核 审批 审批 上报\n1.8 专项管控成本\n1.8.1 业务招待费 部门预算内自行审批\n1.8.2 会议费用 办公室 联签 审批\n1.8.3差旅费/职工培训\n费发起部\n门部门员工出差审批 部门负责人出差审批无论是否出省或乘坐飞机，部门员\n工出差由部门负责人根据出差通知\n进行事前审批，部门负责人出差由\n分管领导进行事前审批\n1.8.4 渠道建设补贴 分公司 销拓部1.营业厅房租支撑费：单店补贴不\n超上限标准，但月补贴额超过50万\n元时需事前审批。\n2.其他支撑费：单店超过50万元须\n事前审批1.营业厅房租支撑费：\n单店补贴不超上限标\n准，但月补贴额超50万\n元时需事前审批。\n2.其他支撑费：单店超\n过50万元须事前审批参照分公司合同上报区公司的额度\n进行审批"
+          },
+          "promoted_numeric_passage": true
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.1468,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+        ],
+        "evidence_snapshot_id": "oOwihT8jiYAsFoUeMSdAUvSHo4R_qDl9",
+        "snapshot_fingerprint": "afc58c231b455b04b4371990",
+        "accepted_passage_ids": [
+          "ebcbe7dbf9bea2e2c27c1987e256724b",
+          "143b698ae72c715eda3e67a136fa14eb",
+          "d20b88c9ffeafb4e6125ff423206b971",
+          "d52ab337e775ca4cc925c81796b6abf1"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 3,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 3064.0
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.1468,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "员工",
+                "上限"
+              ],
+              "passage_id": "ebcbe7dbf9bea2e2c27c1987e256724b",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "spans": [
+                {
+                  "slot": "员工",
+                  "surface": "员工",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    637,
+                    639
+                  ],
+                  "excerpt": "员\n工重大切身利益的\n事项公司薪酬分配及员工\n重大切身利益的事项\n《中国电信股份有限公司广西分公\n司资金账户管理实施细则》（"
+                },
+                {
+                  "slot": "上限",
+                  "surface": "上限",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    195,
+                    197
+                  ],
+                  "excerpt": "理 > 1.10.1银行开户审批（含\n超上限标准，但月补贴额超过50万\n元时需事前审批。\n2.其他支撑费：单店超过50万元须"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "比赛",
+                "员工",
+                "奖金",
+                "上限",
+                "竞赛",
+                "奖励",
+                "公司搞比赛给员工发奖金",
+                "公司搞比赛给",
+                "给员工发奖金",
+                "公司搞比",
+                "工发奖金",
+                "公司搞"
+              ],
+              "score": 0.1667,
+              "typed_plan": {
+                "anchors": [
+                  "比赛",
+                  "员工",
+                  "奖金",
+                  "上限",
+                  "竞赛",
+                  "奖励",
+                  "公司搞比赛给员工发奖金",
+                  "公司搞比赛给"
+                ],
+                "predicate": "上限",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 3,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "afc58c231b455b04b4371990",
+            "snapshot_id_count": 4,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "table_structure_ambiguous",
+        "answer_validation_decision": "table_structure_ambiguous",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "公司搞比赛给员工发奖金 上限是多少"
+          },
+          "fact_plan": {
+            "raw": "公司搞比赛给员工发奖金 上限是多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:上限"
+            ],
+            "entities": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "比赛",
+            "object": "员工",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "上限",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ]
+          },
+          "kept": [],
+          "dropped": [
+            {
+              "reason": "table_structure_ambiguous",
+              "count": 2
+            }
+          ],
+          "table_structure_ambiguous": true,
+          "logical_record_count": 10,
+          "candidate_count": 2
+        },
+        "claim_audit": [],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司搞比赛给员工发奖金 上限是多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:上限"
+            ],
+            "entities": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "比赛",
+            "object": "员工",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "上限",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ]
+          },
+          "input_count": 2,
+          "dropped": [
+            {
+              "reason": "table_structure_ambiguous",
+              "count": 2
+            }
+          ],
+          "selected": [],
+          "table_structure_ambiguous": true,
+          "coverage_matrix": {},
+          "primary_group_id": "98ca950f3a973cd5",
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "98ca950f3a973cd5",
+                "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                "knowledge_ids": [
+                  "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                ],
+                "organization_scope": "中国电信股份有限公司",
+                "document_family_id": "中国电信股份有限公司:于中国电信股份有限公司广西分公司内控实施细则",
+                "document_revision": "2021",
+                "effective_date": "",
+                "version_year": 2021,
+                "passage_ids": [
+                  "ebcbe7dbf9bea2e2c27c1987e256724b",
+                  "143b698ae72c715eda3e67a136fa14eb",
+                  "d20b88c9ffeafb4e6125ff423206b971",
+                  "d52ab337e775ca4cc925c81796b6abf1"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "retrieval_scores": [
+                  0.7,
+                  0.14763312349846425,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+                "section": "1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框 > 1.10 资金管理 > 1.10.1银行开户审批（含",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.4,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "ebcbe7dbf9bea2e2c27c1987e256724b:unstructured:0",
+                  "143b698ae72c715eda3e67a136fa14eb:unstructured:0",
+                  "d20b88c9ffeafb4e6125ff423206b971:r0",
+                  "d20b88c9ffeafb4e6125ff423206b971:r1",
+                  "d20b88c9ffeafb4e6125ff423206b971:r2",
+                  "d20b88c9ffeafb4e6125ff423206b971:r3",
+                  "d20b88c9ffeafb4e6125ff423206b971:r4",
+                  "d52ab337e775ca4cc925c81796b6abf1:r0",
+                  "d52ab337e775ca4cc925c81796b6abf1:r1",
+                  "d52ab337e775ca4cc925c81796b6abf1:r2"
+                ]
+              }
+            ],
+            "primary_group_id": "98ca950f3a973cd5",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "上限是多少",
+                "公司搞比赛给员工发奖金"
+              ],
+              "selection": [
+                {
+                  "group_id": "98ca950f3a973cd5",
+                  "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                  "knowledge_ids": [
+                    "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                  ],
+                  "score": 7.4,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {},
+        "query_plan": {},
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "98ca950f3a973cd5",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "knowledge_ids": [
+                "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+              ],
+              "organization_scope": "中国电信股份有限公司",
+              "document_family_id": "中国电信股份有限公司:于中国电信股份有限公司广西分公司内控实施细则",
+              "document_revision": "2021",
+              "effective_date": "",
+              "version_year": 2021,
+              "passage_ids": [
+                "ebcbe7dbf9bea2e2c27c1987e256724b",
+                "143b698ae72c715eda3e67a136fa14eb",
+                "d20b88c9ffeafb4e6125ff423206b971",
+                "d52ab337e775ca4cc925c81796b6abf1"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "retrieval_scores": [
+                0.7,
+                0.14763312349846425,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "section": "1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框 > 1.10 资金管理 > 1.10.1银行开户审批（含",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.4,
+              "rejection_reasons": [],
+              "record_ids": [
+                "ebcbe7dbf9bea2e2c27c1987e256724b:unstructured:0",
+                "143b698ae72c715eda3e67a136fa14eb:unstructured:0",
+                "d20b88c9ffeafb4e6125ff423206b971:r0",
+                "d20b88c9ffeafb4e6125ff423206b971:r1",
+                "d20b88c9ffeafb4e6125ff423206b971:r2",
+                "d20b88c9ffeafb4e6125ff423206b971:r3",
+                "d20b88c9ffeafb4e6125ff423206b971:r4",
+                "d52ab337e775ca4cc925c81796b6abf1:r0",
+                "d52ab337e775ca4cc925c81796b6abf1:r1",
+                "d52ab337e775ca4cc925c81796b6abf1:r2"
+              ]
+            }
+          ],
+          "primary_group_id": "98ca950f3a973cd5",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "上限是多少",
+              "公司搞比赛给员工发奖金"
+            ],
+            "selection": [
+              {
+                "group_id": "98ca950f3a973cd5",
+                "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+                "knowledge_ids": [
+                  "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+                ],
+                "score": 7.4,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {},
+        "primary_group_id": null,
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "table_structure_ambiguous",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "accepted_block_ids": [
+            "443be64a-0384-4df0-b1fc-b4f06138779b"
+          ],
+          "accepted_passage_ids": [
+            "ebcbe7dbf9bea2e2c27c1987e256724b",
+            "143b698ae72c715eda3e67a136fa14eb",
+            "d20b88c9ffeafb4e6125ff423206b971",
+            "d52ab337e775ca4cc925c81796b6abf1"
+          ],
+          "adjacent_passage_ids": [
+            "143b698ae72c715eda3e67a136fa14eb",
+            "d20b88c9ffeafb4e6125ff423206b971",
+            "d52ab337e775ca4cc925c81796b6abf1"
+          ],
+          "generation_knowledge_ids": [
+            "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+          ],
+          "top_score": 0.1468,
+          "intent": "ordinary",
+          "adjacent_count": 3,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "员工",
+              "上限"
+            ],
+            "passage_id": "ebcbe7dbf9bea2e2c27c1987e256724b",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "spans": [
+              {
+                "slot": "员工",
+                "surface": "员工",
+                "synonym_source": "query_surface",
+                "span": [
+                  637,
+                  639
+                ],
+                "excerpt": "员\n工重大切身利益的\n事项公司薪酬分配及员工\n重大切身利益的事项\n《中国电信股份有限公司广西分公\n司资金账户管理实施细则》（"
+              },
+              {
+                "slot": "上限",
+                "surface": "上限",
+                "synonym_source": "query_surface",
+                "span": [
+                  195,
+                  197
+                ],
+                "excerpt": "理 > 1.10.1银行开户审批（含\n超上限标准，但月补贴额超过50万\n元时需事前审批。\n2.其他支撑费：单店超过50万元须"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "score": 0.1667,
+            "typed_plan": {
+              "anchors": [
+                "比赛",
+                "员工",
+                "奖金",
+                "上限",
+                "竞赛",
+                "奖励",
+                "公司搞比赛给员工发奖金",
+                "公司搞比赛给"
+              ],
+              "predicate": "上限",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "afc58c231b455b04b4371990"
+        },
+        "snapshot_fingerprint": "afc58c231b455b04b4371990",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 28.03
+  },
+  "top_candidate_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+  "candidates": [
+    {
+      "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+      "passage_id": "ebcbe7dbf9bea2e2c27c1987e256724b",
+      "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+      "score": 0.7,
+      "final_relevance_score": 0.35,
+      "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框 > 1.10 资金管理 > 1.10.1银行开户审批（含\n超上限标准，但月补贴额超过50万\n元时需事前审批。\n2.其他支撑费：单店超过50万元须\n事前审批1.营业厅房租支撑费：\n单店补贴不超上限标\n准，但月补贴额超50万\n元时需事前审批。\n2.其他支撑费：单店超\n过50万元须事前审批参照分公司合同上报区公司的额度\n进行审批\n1.9 合作伙伴引入\n1.9.1 代理商引入 销拓部 销拓部 市场部区公司统谈代理商\n中突破全区渠道费\n用上限管理的区公司统谈代理商中\n突破全区渠道费用上\n限管理的区公司统谈的代理商，且在统谈时\n明确某一类渠道费用超过全区上限\n标准，才需要区公司审批\n1.9.2 驻地网合作方引入 网发部 网发部 市场部全区性的、年度框\n架的确定全区性的、年度框架\n的确定市公司及以下的年度框架，由市公\n司党委会/总经理办公会审批\n1.10 资金管理\n1.10.1银行开户审批（含\n第三方支付账户）开户申\n请部门财务部、市场\n部等审核 审核 审批 审批≤20万\n重大经济事项管理\n公司薪酬分配及员\n工重大切身利益的\n事项公司薪酬分配及员工\n重大切身利益的事项\n《中国电信股份有限公司广西分公\n司资金账户管理实施细则》（中电\n信桂〔2018〕450号），统一在MSS\n主数据完成审批 财务部人力资\n源部\n发起部\n门\n第 7 页，共 54 页维护账号(集团互联)"
+    },
+    {
+      "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+      "passage_id": "143b698ae72c715eda3e67a136fa14eb",
+      "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+      "score": 0.14763312349846425,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】2.其他支撑费：单店超过50万元须 > 2.其他支撑费：单店超 > 1.9 合作伙伴引入\n审批财务部 审核分公司自行审批（工资总额分配方\n案报区公司备案）\n1.7.4 员工福利方案审批财务部、工会\n、后勤管理部审核 审核 分公司自行审批\n1.7.5单项交易性金融资\n产投资，期权、期\n货等金融衍生业\n务，发行债 劵财务部 业务相关部门 审核 审批 审批 上报\n1.8 专项管控成本\n1.8.1 业务招待费 部门预算内自行审批\n1.8.2 会议费用 办公室 联签 审批\n1.8.3差旅费/职工培训\n费发起部\n门部门员工出差审批 部门负责人出差审批无论是否出省或乘坐飞机，部门员\n工出差由部门负责人根据出差通知\n进行事前审批，部门负责人出差由\n分管领导进行事前审批\n1.8.4 渠道建设补贴 分公司 销拓部1.营业厅房租支撑费：单店补贴不\n超上限标准，但月补贴额超过50万\n元时需事前审批。\n2.其他支撑费：单店超过50万元须\n事前审批1.营业厅房租支撑费：\n单店补贴不超上限标\n准，但月补贴额超50万\n元时需事前审批。\n2.其他支撑费：单店超\n过50万元须事前审批参照分公司合同上报区公司的额度\n进行审批"
+    }
+  ],
+  "search_ms": 3064.0,
+  "ask_ms": 28.03,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "oOwihT8jiYAsFoUeMSdAUvSHo4R_qDl9",
+  "search_snapshot_fingerprint": "afc58c231b455b04b4371990",
+  "ask_snapshot_fingerprint": "afc58c231b455b04b4371990",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "table_structure_ambiguous",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "7c7c48ea58647d0ad4580408"
+}

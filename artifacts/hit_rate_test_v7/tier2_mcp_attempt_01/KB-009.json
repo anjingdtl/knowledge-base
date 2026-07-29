@@ -1,0 +1,1037 @@
+{
+  "case": {
+    "case_id": "KB-009",
+    "category": "同义词与口语表达",
+    "query": "员工出差的住宿费和伙食补助每天能报多少",
+    "expected_knowledge_ids": [
+      "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+    ],
+    "expected_title_keywords": [
+      "差旅费",
+      "2025"
+    ],
+    "required_facts": [
+      "100元",
+      "伙食补助"
+    ],
+    "forbidden_facts": [
+      "区内出差每人每天80元"
+    ],
+    "expected_no_answer": false,
+    "notes": "口语化问报销标准；正确版本为2025年〔2025〕256号"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+          "text": "【文档】中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d\n【章节】第二十条 伙食补助费是指工作人员因公出差期间给予的 > 第二十一条 伙食补助标准为每人每天100 元。 > 第二十二条 出差人员应当自行用餐。若需由接待单位协助\n标准间，其余人员原则上同性别两人安排一个标准间。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。房费以外的其他费\n用（如就医、通讯、洗衣、订餐、饮品等个人消费）不在住宿费\n限额内报账。 何世恒(全渠道运营中心)\n— 8 —第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的\n伙食补助费用。\n第二十一条 伙食补助标准为每人每天100 元。\n第二十二条 出差人员应当自行用餐。若需由接待单位协助\n安排用餐的，应按伙食提供方的对外收费标准交纳伙食费；伙食\n提供方未制定收费标准的，则按出差人员所在单位的日伙食补助\n标准，以早餐20%、中晚餐各40%的比例交纳。伙食提供方负\n责向出差人员出具收款收据。在宾馆、饭店等餐饮服务单位用餐\n的，按餐饮服务单位的收费标准交纳相关费用。",
+          "document_family_id": "topic:差旅费管理办法",
+          "version_year": 2022,
+          "section_path": "第二十条 伙食补助费是指工作人员因公出差期间给予的 > 第二十一条 伙食补助标准为每人每天100 元。 > 第二十二条 出差人员应当自行用餐。若需由接待单位协助",
+          "block_ids": [
+            "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+            "4a3e7a80-f7c2-458c-9da1-88ae2356156e",
+            "9813d3a9-3699-4f77-bb73-f78526ac2350",
+            "a2212781-dd03-41c9-b960-f6e6bbae6478",
+            "6407f81d-06b2-4de4-8aa2-6ce85462bd24",
+            "bacdb97f-9dbb-47df-8ada-9f8fff1dcf86",
+            "e84aaa56-7f3f-4224-a2ed-ff53dc033d91",
+            "de68e669-4a78-4f2a-886b-f829b15358b1",
+            "ef56395a-5298-4426-8058-c09069c8fb7b",
+            "967bcb29-d807-4b58-ad8c-6c1856b6ebaa",
+            "7661e577-aa44-4141-afef-52881c729a1d",
+            "861b7a3a-3050-4ce9-8cb8-1a4318b63b67",
+            "20b8813d-0a06-4652-b917-604c8d871b07",
+            "987a8998-ddcb-45b7-93a7-ab48581bb5a2",
+            "cfb4415d-8030-47b1-a1aa-c4188d1f053d",
+            "53d4304f-9475-4904-bbdb-a8657074c736",
+            "4ee48ffd-4b62-419a-9ed8-9b10a3298a06"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -68.05196510532262,
+          "fts_score": 0.8718802276597893,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.8718802276597893,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2022,
+            "deprecated": false,
+            "family_key": "topic:差旅费管理办法",
+            "family_newest_year": 2022,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+        ],
+        "evidence_snapshot_id": "uzJ28ni99DIanXmPOXboEgTF3IxJGPoO",
+        "snapshot_fingerprint": "898804c9aec6f226d2d159c6",
+        "accepted_passage_ids": [
+          "1f9105971f7f879b1b74fa4c585f84ea",
+          "2103d0a24aad467b2299693b64dd1dab",
+          "23462f6eefa3399323e356f05d7add6e"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 11383.38
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 出差人员所在单位的日伙食补助标准，以早餐20%、中晚餐各40%的比例交",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+            "block_id": "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+            "block_ids": [
+              "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+              "4a3e7a80-f7c2-458c-9da1-88ae2356156e",
+              "9813d3a9-3699-4f77-bb73-f78526ac2350",
+              "a2212781-dd03-41c9-b960-f6e6bbae6478",
+              "6407f81d-06b2-4de4-8aa2-6ce85462bd24",
+              "bacdb97f-9dbb-47df-8ada-9f8fff1dcf86",
+              "e84aaa56-7f3f-4224-a2ed-ff53dc033d91",
+              "de68e669-4a78-4f2a-886b-f829b15358b1",
+              "ef56395a-5298-4426-8058-c09069c8fb7b",
+              "967bcb29-d807-4b58-ad8c-6c1856b6ebaa",
+              "7661e577-aa44-4141-afef-52881c729a1d",
+              "861b7a3a-3050-4ce9-8cb8-1a4318b63b67",
+              "20b8813d-0a06-4652-b917-604c8d871b07",
+              "987a8998-ddcb-45b7-93a7-ab48581bb5a2",
+              "cfb4415d-8030-47b1-a1aa-c4188d1f053d",
+              "53d4304f-9475-4904-bbdb-a8657074c736",
+              "4ee48ffd-4b62-419a-9ed8-9b10a3298a06"
+            ],
+            "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+            "text": "标准间，其余人员原则上同性别两人安排一个标准间。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。房费以外的其他费\n用（如就医、通讯、洗衣、订餐、饮品等个人消费）不在住宿费\n限额内报账。 何世恒(全渠道运营中心)\n— 8 —第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的\n伙食补助费用。\n第二十一条 伙食补助标准为每人每天100 元。\n第二十二条 出差人员应当自行用餐。若需由接待单位协助\n安排用餐的，应按伙食提供方的对外收费标准交纳伙食费；伙食\n提供方未制定收费标准的，则按出差人员所在单位的日伙食补助\n标准，以早餐20%、中晚餐各40%的比例交纳。伙食提供方负\n责向出差人员出具收款收据。在宾馆、饭店等餐饮服务单位用餐\n的，按餐饮服务单位的收费标准交纳相关费用。",
+            "score": 1.0,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2022,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "出差人员所在单位的日伙食补助标准，以早餐20%、中晚餐各40%的比例交",
+            "evidence_passage_ids": [
+              "1f9105971f7f879b1b74fa4c585f84ea"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "e96fe50424781dcd3424fbfa"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+            "block_id": "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+            "block_ids": [
+              "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+              "4a3e7a80-f7c2-458c-9da1-88ae2356156e",
+              "9813d3a9-3699-4f77-bb73-f78526ac2350",
+              "a2212781-dd03-41c9-b960-f6e6bbae6478",
+              "6407f81d-06b2-4de4-8aa2-6ce85462bd24",
+              "bacdb97f-9dbb-47df-8ada-9f8fff1dcf86",
+              "e84aaa56-7f3f-4224-a2ed-ff53dc033d91",
+              "de68e669-4a78-4f2a-886b-f829b15358b1",
+              "ef56395a-5298-4426-8058-c09069c8fb7b",
+              "967bcb29-d807-4b58-ad8c-6c1856b6ebaa",
+              "7661e577-aa44-4141-afef-52881c729a1d",
+              "861b7a3a-3050-4ce9-8cb8-1a4318b63b67",
+              "20b8813d-0a06-4652-b917-604c8d871b07",
+              "987a8998-ddcb-45b7-93a7-ab48581bb5a2",
+              "cfb4415d-8030-47b1-a1aa-c4188d1f053d",
+              "53d4304f-9475-4904-bbdb-a8657074c736",
+              "4ee48ffd-4b62-419a-9ed8-9b10a3298a06"
+            ],
+            "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+            "path": "",
+            "text": "标准间，其余人员原则上同性别两人安排一个标准间。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。房费以外的其他费\n用（如就医、通讯、洗衣、订餐、饮品等个人消费）不在住宿费\n限额内报账。 何世恒(全渠道运营中心)\n— 8 —第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的\n伙食补助费用。\n第二十一条 伙食补助标准为每人每天100 元。\n第二十二条 出差人员应当自行用餐。若需由接待单位协助\n安排用餐的，应按伙食提供方的对外收费标准交纳伙食费；伙食\n提供方未制定收费标准的，则按出差人员所在单位的日伙食补助\n标准，以早餐20%、中晚餐各40%的比例交纳。伙食提供方负\n责向出差人员出具收款收据。在宾馆、饭店等餐饮服务单位用餐\n的，按餐饮服务单位的收费标准交纳相关费用。",
+            "body_text": "标准间，其余人员原则上同性别两人安排一个标准间。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。房费以外的其他费\n用（如就医、通讯、洗衣、订餐、饮品等个人消费）不在住宿费\n限额内报账。 何世恒(全渠道运营中心)\n— 8 —第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的\n伙食补助费用。\n第二十一条 伙食补助标准为每人每天100 元。\n第二十二条 出差人员应当自行用餐。若需由接待单位协助\n安排用餐的，应按伙食提供方的对外收费标准交纳伙食费；伙食\n提供方未制定收费标准的，则按出差人员所在单位的日伙食补助\n标准，以早餐20%、中晚餐各40%的比例交纳。伙食提供方负\n责向出差人员出具收款收据。在宾馆、饭店等餐饮服务单位用餐\n的，按餐饮服务单位的收费标准交纳相关费用。",
+            "score": 1.0,
+            "document_family_id": "topic:差旅费管理办法",
+            "version_year": 2022,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.3,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "住宿费",
+                "伙食补助"
+              ],
+              "passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "spans": [
+                {
+                  "slot": "住宿费",
+                  "surface": "住宿费",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    240,
+                    243
+                  ],
+                  "excerpt": "。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议"
+                },
+                {
+                  "slot": "伙食补助",
+                  "surface": "伙食补助",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    121,
+                    125
+                  ],
+                  "excerpt": "--3f57bb0d\n【章节】第二十条 伙食补助费是指工作人员因公出差期间给予的 > 第二十一条 伙食补助标准为每人每天100 "
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "员工出差的住宿费和伙食补助每",
+                "员工出差",
+                "住宿费",
+                "伙食补助",
+                "天能报多少",
+                "员工出差的住",
+                "每天能报多少",
+                "能报多少",
+                "员工出",
+                "报多少",
+                "员工"
+              ],
+              "score": 0.1818,
+              "typed_plan": {
+                "anchors": [
+                  "员工出差的住宿费和伙食补助每",
+                  "员工出差",
+                  "住宿费",
+                  "伙食补助",
+                  "天能报多少",
+                  "员工出差的住",
+                  "每天能报多少",
+                  "能报多少"
+                ],
+                "predicate": "",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "898804c9aec6f226d2d159c6",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "员工出差的住宿费和伙食补助每天能报多少"
+          },
+          "fact_plan": {
+            "raw": "员工出差的住宿费和伙食补助每天能报多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit"
+            ],
+            "entities": [
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "住宿费",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住",
+              "每天能报多少",
+              "能报多少",
+              "员工出",
+              "报多少"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "员工出差的住宿费和伙食补助每",
+            "object": "员工出差",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "住宿费",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住",
+              "每天能报多少",
+              "能报多少",
+              "员工出",
+              "报多少",
+              "员工"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "",
+              "value": "20",
+              "unit": "%",
+              "evidence_passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+              "record_id": "1f9105971f7f879b1b74fa4c585f84ea:r9",
+              "exact_text": "出差人员所在单位的日伙食补助标准，以早餐20%、中晚餐各40%的比例交",
+              "table_row_ref": "1f9105971f7f879b1b74fa4c585f84ea:t0",
+              "value_dimension": "ratio",
+              "group_id": "6dcc9e60c0b6c789"
+            }
+          ],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 26,
+          "candidate_count": 12
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "出差人员所在单位的日伙食补助标准，以早餐20%、中晚餐各40%的比例交",
+              "evidence_passage_ids": [
+                "1f9105971f7f879b1b74fa4c585f84ea"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "e96fe50424781dcd3424fbfa"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "员工出差的住宿费和伙食补助每天能报多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit"
+            ],
+            "entities": [
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "住宿费",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住",
+              "每天能报多少",
+              "能报多少",
+              "员工出",
+              "报多少"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "员工出差的住宿费和伙食补助每",
+            "object": "员工出差",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "住宿费",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住",
+              "每天能报多少",
+              "能报多少",
+              "员工出",
+              "报多少",
+              "员工"
+            ]
+          },
+          "input_count": 12,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "e96fe50424781dcd3424fbfa",
+              "record_id": "1f9105971f7f879b1b74fa4c585f84ea:r9",
+              "passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "20%",
+              "qualifiers": [],
+              "condition": "",
+              "value": "20",
+              "unit": "%",
+              "exact_text": "出差人员所在单位的日伙食补助标准，以早餐20%、中晚餐各40%的比例交",
+              "evidence_spans": [
+                [
+                  36,
+                  39
+                ]
+              ],
+              "table_row_ref": "1f9105971f7f879b1b74fa4c585f84ea:t0",
+              "document_family_id": "topic:差旅费管理办法",
+              "version_year": 2022,
+              "score": 7.0,
+              "unstructured_rejected": false,
+              "group_id": "6dcc9e60c0b6c789",
+              "polarity": "",
+              "value_dimension": "ratio",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "anchor:员工出差的住宿费和伙食补助每": "miss",
+                "anchor:员工出差": "miss",
+                "anchor:住宿费": "miss",
+                "anchor:伙食补助": "hit",
+                "anchor:天能报多少": "miss",
+                "anchor:员工出差的住": "miss",
+                "anchor:每天能报多少": "miss",
+                "anchor:能报多少": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  36,
+                  39
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "e96fe50424781dcd3424fbfa": "hit",
+              "0da6e96b877702859d962582": "hit",
+              "461d3edb76cb7746813c3c91": "hit",
+              "8ca303914427f42642e9d1f2": "hit",
+              "d9ce89eef692728fd52d0fd5": "hit",
+              "c093df09f1378cc12e247106": "hit",
+              "fc87122166a671b399e888a4": "hit",
+              "9333c90b13fd29726553ef9b": "hit",
+              "a151a3265eaad5f4997b3518": "hit",
+              "e64d05ffa7f8cbaa940f71fa": "hit",
+              "0a35f35c22db1242d396e1b1": "hit",
+              "fe08cdc9e77d008ccd34bede": "hit"
+            },
+            "unit": {
+              "e96fe50424781dcd3424fbfa": "hit",
+              "0da6e96b877702859d962582": "hit",
+              "461d3edb76cb7746813c3c91": "hit",
+              "8ca303914427f42642e9d1f2": "hit",
+              "d9ce89eef692728fd52d0fd5": "hit",
+              "c093df09f1378cc12e247106": "hit",
+              "fc87122166a671b399e888a4": "hit",
+              "9333c90b13fd29726553ef9b": "hit",
+              "a151a3265eaad5f4997b3518": "hit",
+              "e64d05ffa7f8cbaa940f71fa": "hit",
+              "0a35f35c22db1242d396e1b1": "hit",
+              "fe08cdc9e77d008ccd34bede": "hit"
+            }
+          },
+          "primary_group_id": "6dcc9e60c0b6c789",
+          "covered_slots": [
+            "dim:ratio",
+            "unit",
+            "value"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "6dcc9e60c0b6c789",
+                "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+                "knowledge_ids": [
+                  "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:差旅费管理办法",
+                "document_revision": "2022",
+                "effective_date": "",
+                "version_year": 2022,
+                "passage_ids": [
+                  "1f9105971f7f879b1b74fa4c585f84ea",
+                  "2103d0a24aad467b2299693b64dd1dab",
+                  "23462f6eefa3399323e356f05d7add6e"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+                "section": "第二十条 伙食补助费是指工作人员因公出差期间给予的 > 第二十一条 伙食补助标准为每人每天100 元。 > 第二十二条 出差人员应当自行用餐。若需由接待单位协助",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 8.0,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "1f9105971f7f879b1b74fa4c585f84ea:r0",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r1",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r2",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r3",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r4",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r5",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r6",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r7",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r8",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r9",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r10",
+                  "1f9105971f7f879b1b74fa4c585f84ea:r11",
+                  "2103d0a24aad467b2299693b64dd1dab:r0",
+                  "2103d0a24aad467b2299693b64dd1dab:r1",
+                  "2103d0a24aad467b2299693b64dd1dab:r2",
+                  "23462f6eefa3399323e356f05d7add6e:r0",
+                  "23462f6eefa3399323e356f05d7add6e:r1",
+                  "23462f6eefa3399323e356f05d7add6e:r2",
+                  "23462f6eefa3399323e356f05d7add6e:r3",
+                  "23462f6eefa3399323e356f05d7add6e:r4",
+                  "23462f6eefa3399323e356f05d7add6e:r5",
+                  "23462f6eefa3399323e356f05d7add6e:r6",
+                  "23462f6eefa3399323e356f05d7add6e:r7",
+                  "23462f6eefa3399323e356f05d7add6e:r8",
+                  "23462f6eefa3399323e356f05d7add6e:r9",
+                  "23462f6eefa3399323e356f05d7add6e:r10"
+                ]
+              }
+            ],
+            "primary_group_id": "6dcc9e60c0b6c789",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "助每天能报多少",
+                "员工出差的住宿费和伙食补"
+              ],
+              "selection": [
+                {
+                  "group_id": "6dcc9e60c0b6c789",
+                  "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+                  "knowledge_ids": [
+                    "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+                  ],
+                  "score": 8.0,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit"
+          ],
+          "candidate_ids": [
+            "e96fe50424781dcd3424fbfa"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "dim:ratio",
+            "unit",
+            "value"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "e96fe50424781dcd3424fbfa": "hit",
+              "0da6e96b877702859d962582": "hit",
+              "461d3edb76cb7746813c3c91": "hit",
+              "8ca303914427f42642e9d1f2": "hit",
+              "d9ce89eef692728fd52d0fd5": "hit",
+              "c093df09f1378cc12e247106": "hit",
+              "fc87122166a671b399e888a4": "hit",
+              "9333c90b13fd29726553ef9b": "hit",
+              "a151a3265eaad5f4997b3518": "hit",
+              "e64d05ffa7f8cbaa940f71fa": "hit",
+              "0a35f35c22db1242d396e1b1": "hit",
+              "fe08cdc9e77d008ccd34bede": "hit"
+            },
+            "unit": {
+              "e96fe50424781dcd3424fbfa": "hit",
+              "0da6e96b877702859d962582": "hit",
+              "461d3edb76cb7746813c3c91": "hit",
+              "8ca303914427f42642e9d1f2": "hit",
+              "d9ce89eef692728fd52d0fd5": "hit",
+              "c093df09f1378cc12e247106": "hit",
+              "fc87122166a671b399e888a4": "hit",
+              "9333c90b13fd29726553ef9b": "hit",
+              "a151a3265eaad5f4997b3518": "hit",
+              "e64d05ffa7f8cbaa940f71fa": "hit",
+              "0a35f35c22db1242d396e1b1": "hit",
+              "fe08cdc9e77d008ccd34bede": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "员工出差的住宿费和伙食补助每天能报多少",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "value",
+            "unit"
+          ],
+          "entities": [
+            "员工出差的住宿费和伙食补助每",
+            "员工出差",
+            "住宿费",
+            "伙食补助",
+            "天能报多少",
+            "员工出差的住",
+            "每天能报多少",
+            "能报多少",
+            "员工出",
+            "报多少"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "员工出差的住宿费和伙食补助每",
+          "object": "员工出差",
+          "scope": [
+            "员工"
+          ],
+          "selector": [],
+          "predicate": "",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "numeric",
+          "value_dimensions": [
+            "value"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "员工出差的住宿费和伙食补助每",
+            "员工出差",
+            "住宿费",
+            "伙食补助",
+            "天能报多少",
+            "员工出差的住",
+            "每天能报多少",
+            "能报多少",
+            "员工出",
+            "报多少",
+            "员工"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "6dcc9e60c0b6c789",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "knowledge_ids": [
+                "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:差旅费管理办法",
+              "document_revision": "2022",
+              "effective_date": "",
+              "version_year": 2022,
+              "passage_ids": [
+                "1f9105971f7f879b1b74fa4c585f84ea",
+                "2103d0a24aad467b2299693b64dd1dab",
+                "23462f6eefa3399323e356f05d7add6e"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+              "section": "第二十条 伙食补助费是指工作人员因公出差期间给予的 > 第二十一条 伙食补助标准为每人每天100 元。 > 第二十二条 出差人员应当自行用餐。若需由接待单位协助",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 8.0,
+              "rejection_reasons": [],
+              "record_ids": [
+                "1f9105971f7f879b1b74fa4c585f84ea:r0",
+                "1f9105971f7f879b1b74fa4c585f84ea:r1",
+                "1f9105971f7f879b1b74fa4c585f84ea:r2",
+                "1f9105971f7f879b1b74fa4c585f84ea:r3",
+                "1f9105971f7f879b1b74fa4c585f84ea:r4",
+                "1f9105971f7f879b1b74fa4c585f84ea:r5",
+                "1f9105971f7f879b1b74fa4c585f84ea:r6",
+                "1f9105971f7f879b1b74fa4c585f84ea:r7",
+                "1f9105971f7f879b1b74fa4c585f84ea:r8",
+                "1f9105971f7f879b1b74fa4c585f84ea:r9",
+                "1f9105971f7f879b1b74fa4c585f84ea:r10",
+                "1f9105971f7f879b1b74fa4c585f84ea:r11",
+                "2103d0a24aad467b2299693b64dd1dab:r0",
+                "2103d0a24aad467b2299693b64dd1dab:r1",
+                "2103d0a24aad467b2299693b64dd1dab:r2",
+                "23462f6eefa3399323e356f05d7add6e:r0",
+                "23462f6eefa3399323e356f05d7add6e:r1",
+                "23462f6eefa3399323e356f05d7add6e:r2",
+                "23462f6eefa3399323e356f05d7add6e:r3",
+                "23462f6eefa3399323e356f05d7add6e:r4",
+                "23462f6eefa3399323e356f05d7add6e:r5",
+                "23462f6eefa3399323e356f05d7add6e:r6",
+                "23462f6eefa3399323e356f05d7add6e:r7",
+                "23462f6eefa3399323e356f05d7add6e:r8",
+                "23462f6eefa3399323e356f05d7add6e:r9",
+                "23462f6eefa3399323e356f05d7add6e:r10"
+              ]
+            }
+          ],
+          "primary_group_id": "6dcc9e60c0b6c789",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "助每天能报多少",
+              "员工出差的住宿费和伙食补"
+            ],
+            "selection": [
+              {
+                "group_id": "6dcc9e60c0b6c789",
+                "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+                "knowledge_ids": [
+                  "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+                ],
+                "score": 8.0,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {},
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "e96fe50424781dcd3424fbfa"
+              ],
+              "passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "text": "- 出差人员所在单位的日伙食补助标准，以早餐20%、中晚餐各40%的比例交",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 37
+        },
+        "primary_group_id": "6dcc9e60c0b6c789",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "type": "knowledge",
+              "label": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d"
+            },
+            {
+              "id": "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+              "type": "block",
+              "label": "选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+            },
+            {
+              "id": "fb7d1a55-290b-493b-9932-477c73eb8f48",
+              "type": "block",
+              "label": "[第7页]",
+              "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+            }
+          ],
+          "edges": [
+            {
+              "source": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+              "target": "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+              "type": "contains"
+            },
+            {
+              "source": "fb7d1a55-290b-493b-9932-477c73eb8f48",
+              "target": "8efa54e5-1705-411e-9f31-15fa8c9b344a",
+              "type": "parent"
+            }
+          ],
+          "truncated": false,
+          "node_count": 3
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 0,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+          ],
+          "accepted_block_ids": [
+            "8efa54e5-1705-411e-9f31-15fa8c9b344a"
+          ],
+          "accepted_passage_ids": [
+            "1f9105971f7f879b1b74fa4c585f84ea",
+            "2103d0a24aad467b2299693b64dd1dab",
+            "23462f6eefa3399323e356f05d7add6e"
+          ],
+          "adjacent_passage_ids": [
+            "2103d0a24aad467b2299693b64dd1dab",
+            "23462f6eefa3399323e356f05d7add6e"
+          ],
+          "generation_knowledge_ids": [
+            "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6"
+          ],
+          "top_score": 0.3,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "住宿费",
+              "伙食补助"
+            ],
+            "passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+            "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "spans": [
+              {
+                "slot": "住宿费",
+                "surface": "住宿费",
+                "synonym_source": "query_surface",
+                "span": [
+                  240,
+                  243
+                ],
+                "excerpt": "。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议"
+              },
+              {
+                "slot": "伙食补助",
+                "surface": "伙食补助",
+                "synonym_source": "query_surface",
+                "span": [
+                  121,
+                  125
+                ],
+                "excerpt": "--3f57bb0d\n【章节】第二十条 伙食补助费是指工作人员因公出差期间给予的 > 第二十一条 伙食补助标准为每人每天100 "
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "员工出差的住宿费和伙食补助每",
+              "员工出差",
+              "住宿费",
+              "伙食补助",
+              "天能报多少",
+              "员工出差的住",
+              "每天能报多少",
+              "能报多少",
+              "员工出",
+              "报多少",
+              "员工"
+            ],
+            "score": 0.1818,
+            "typed_plan": {
+              "anchors": [
+                "员工出差的住宿费和伙食补助每",
+                "员工出差",
+                "住宿费",
+                "伙食补助",
+                "天能报多少",
+                "员工出差的住",
+                "每天能报多少",
+                "能报多少"
+              ],
+              "predicate": "",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "898804c9aec6f226d2d159c6"
+        },
+        "snapshot_fingerprint": "898804c9aec6f226d2d159c6",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 46.05
+  },
+  "top_candidate_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+  "candidates": [
+    {
+      "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+      "passage_id": "1f9105971f7f879b1b74fa4c585f84ea",
+      "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+      "score": 1.0,
+      "final_relevance_score": 0.8718802276597893,
+      "text": "【文档】中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d\n【章节】第二十条 伙食补助费是指工作人员因公出差期间给予的 > 第二十一条 伙食补助标准为每人每天100 元。 > 第二十二条 出差人员应当自行用餐。若需由接待单位协助\n标准间，其余人员原则上同性别两人安排一个标准间。\n第十八条 出差人员应当在职务级别对应住宿费限额内优先\n选择集团公司、省级公司及各地市分公司协议酒店住宿。集团公\n司组织会议、培训的住宿费用超过上述标准时，凭主办单位通知\n据实报销。\n第十九条 住宿费按出差自然（日历）天数计算，在规定的\n限额标准内凭有效票据按实际住宿天数报销。房费以外的其他费\n用（如就医、通讯、洗衣、订餐、饮品等个人消费）不在住宿费\n限额内报账。 何世恒(全渠道运营中心)\n— 8 —第四章 伙食补助费\n第二十条 伙食补助费是指工作人员因公出差期间给予的\n伙食补助费用。\n第二十一条 伙食补助标准为每人每天100 元。\n第二十二条 出差人员应当自行用餐。若需由接待单位协助\n安排用餐的，应按伙食提供方的对外收费标准交纳伙食费；伙食\n提供方未制定收费标准的，则按出差人员所在单位的日伙食补助\n标准，以早餐20%、中晚餐各40%的比例交纳。伙食提供方负\n责向出差人员出具收款收据。在宾馆、饭店等餐饮服务单位用餐\n的，按餐饮服务单位的收费标准交纳相关费用。"
+    }
+  ],
+  "search_ms": 11383.38,
+  "ask_ms": 46.05,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "uzJ28ni99DIanXmPOXboEgTF3IxJGPoO",
+  "search_snapshot_fingerprint": "898804c9aec6f226d2d159c6",
+  "ask_snapshot_fingerprint": "898804c9aec6f226d2d159c6",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "da1ad49053192fa081442077"
+}

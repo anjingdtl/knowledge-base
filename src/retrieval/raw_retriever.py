@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import re
 import time
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeout
@@ -121,36 +122,114 @@ def _query_fingerprint(query: str) -> str:
 
 
 def build_deterministic_query_variants(query: str, *, max_variants: int = 4) -> list[dict[str, str]]:
-    """Limited, auditable query variants from query + controlled domain norms (SPEC v6 §4.2)."""
+    """Limited query-surface variants without a document/fact synonym table.
+
+    Variants preserve the user's terms.  Domain vocabulary may only be derived
+    later from retrieved corpus evidence, never from a hand-maintained mapping
+    of colloquial evaluation questions to policy titles.
+    """
     import re
     q = (query or "").strip()
     if not q:
         return []
     out: list[dict[str, str]] = [{"query": q, "source": "original"}]
-    # Entity / predicate normalizations (generic domain, not Golden-bound).
-    norms: list[tuple[str, str, str]] = [
-        (r"防诈骗和骚扰电话|防诈骗|骚扰电话", "涉诈涉骚扰电话号码入网渠道处置细则", "domain_synonym"),
-        (r"被罚多少钱|处罚金额|被罚", "代理商 处罚 每个号码", "predicate_normalize"),
-        (r"线上店铺入驻门槛|入驻门槛", "线上合作管理办法 入驻", "domain_synonym"),
-        (r"异业合作.*准入|权益优惠券", "权益业务管理办法 合作方准入", "domain_synonym"),
-        (r"客户提出对产品的需求|产品的需求|怎么响应处理", "产品问需响应管理 五级闭环", "domain_synonym"),
-        (r"办公楼地址|总部.*地址", "办公地址", "domain_synonym"),
-        (r"搞比赛给员工发奖金|员工发奖金|奖金.*上限", "劳动竞赛管理办法 奖金 限额", "domain_synonym"),
-        (r"大额对外投资并购|法律审核", "重要决策法律合规审核", "domain_synonym"),
-        (r"代理商被罚", "涉诈 涉骚扰 代理商 处罚", "domain_synonym"),
-    ]
-    for pat, repl, src in norms:
-        if re.search(pat, q):
-            # Keep key nouns from original + normalized phrase
-            variant = re.sub(pat, repl, q)
-            if variant != q and not any(v["query"] == variant for v in out):
-                out.append({"query": variant, "source": src})
-            # Also add pure normalized form if short
-            if repl not in q and not any(v["query"] == repl for v in out):
-                out.append({"query": repl, "source": src})
-        if len(out) >= max_variants:
-            break
+    # Remove only conversational wrappers/interrogatives; retain nouns,
+    # constraints and negation exactly as the user supplied them.
+    compact = re.sub(r"(?:请问|请帮我|一下|如何|怎么|多少|是什么|有没有)", " ", q)
+    compact = re.sub(r"\s+", " ", compact).strip(" ，。？?；;")
+    if compact and compact != q:
+        out.append({"query": compact, "source": "remove_interrogative_wrapper"})
+
+    chunks = re.findall(r"[\u4e00-\u9fff]{2,18}|[A-Za-z0-9][A-Za-z0-9._-]{1,}", q)
+    stop = {"什么", "多少", "如何", "怎么", "是否", "哪个", "哪些", "公司", "关于", "通知"}
+    terms = [c for c in chunks if c not in stop]
+    if len(terms) >= 2:
+        # Surface-term query is a deterministic fallback for tokenizers that
+        # handle question wrappers poorly.  It never invents corpus terms.
+        surface = " ".join(terms[:6])
+        if surface and surface != q and not any(v["query"] == surface for v in out):
+            out.append({"query": surface, "source": "query_surface_terms"})
     return out[:max_variants]
+
+
+_GENERIC_QUERY_ALIASES = {
+    # General Chinese surface forms, deliberately independent of any document
+    # title, knowledge ID, or evaluation question.
+    "比赛": ("竞赛",),
+    "赛事": ("竞赛",),
+    "奖金": ("奖励",),
+    "钱": ("金额", "费用"),
+}
+
+
+def deterministic_fallback_rank(
+    query: str, candidates: list[dict[str, Any]], *, top_k: int,
+) -> list[dict[str, Any]]:
+    """Explainable local fallback when a remote reranker circuit is open.
+
+    It combines the existing fused score with query-term overlap, title
+    overlap, and explicit recency intent.  It never introduces document names
+    or answer facts; all additional signals come from the user query and each
+    candidate's own text/metadata.
+    """
+    import re
+    q = (query or "").strip()
+    try:
+        import jieba
+        tokens = jieba.lcut(q)
+    except Exception:  # pragma: no cover - tokenizer is optional in minimal installs
+        tokens = re.findall(r"[\u4e00-\u9fff]{2,}|[A-Za-z0-9][A-Za-z0-9_-]*", q)
+    stop = {"公司", "请问", "怎么", "如何", "多少", "是否", "有没有", "什么", "这个"}
+    terms = [str(token).strip() for token in tokens if len(str(token).strip()) >= 2]
+    terms = [term for term in terms if term not in stop]
+    expanded = list(terms)
+    for term in terms:
+        expanded.extend(_GENERIC_QUERY_ALIASES.get(term, ()))
+    query_terms = list(dict.fromkeys(expanded))[:20]
+    wants_recent = bool(re.search(r"最新|现行|新版|修订|变更", q))
+    years = [
+        int(row.get("version_year") or (row.get("metadata") or {}).get("version_year") or 0)
+        for row in candidates
+    ]
+    newest = max(years, default=0)
+
+    scored: list[tuple[float, int, dict[str, Any]]] = []
+    for index, candidate in enumerate(candidates):
+        row = dict(candidate)
+        meta = row.get("metadata") or {}
+        title = str(row.get("title") or meta.get("title") or "")
+        text = str(row.get("text") or "")
+        title_hits = sum(1 for term in query_terms if term in title)
+        body_hits = sum(1 for term in query_terms if term in text)
+        base = 0.0
+        for key in ("final_relevance_score", "rrf_score", "final_score", "score", "vector_score", "fts_score"):
+            try:
+                value = row.get(key)
+                if value is not None:
+                    base = float(value)
+                    break
+            except (TypeError, ValueError):
+                continue
+        recency = 0.0
+        try:
+            year = int(row.get("version_year") or meta.get("version_year") or 0)
+        except (TypeError, ValueError):
+            year = 0
+        if wants_recent and newest and year:
+            # Explicit latest/current language is a scope constraint, not a
+            # mild preference: stale passages often contain stronger literal
+            # matches precisely because they describe superseded rules.
+            recency = 0.35 * max(0.0, min(1.0, (year - (newest - 8)) / 8))
+        # The position term only breaks ties between equally-supported rows.
+        local_score = base + title_hits * 0.08 + body_hits * 0.025 + recency - index * 1e-7
+        row["fallback_score"] = round(local_score, 8)
+        row["fallback_score_breakdown"] = {
+            "base": round(base, 8), "title_term_hits": title_hits,
+            "body_term_hits": body_hits, "recency": round(recency, 8),
+        }
+        scored.append((local_score, index, row))
+    scored.sort(key=lambda item: (-item[0], item[1]))
+    return [row for _, _, row in scored[:top_k]]
 
 
 class RawRetriever:
@@ -275,15 +354,23 @@ class RawRetriever:
                 queries.append(vq)
         queries = queries[:6]
 
+        # Keep a wider pre-rerank pool so a single sparse FTS/vector branch
+        # cannot collapse recall before fusion/rerank has a chance to compare
+        # evidence.  Packaging still returns the caller's requested top_k.
+        raw_pool_k = max(int(top_k) * 4, 20)
         t_ret0 = time.monotonic()
-        candidates = self.raw_retrieve(queries, query, top_k)
+        candidates = self.raw_retrieve(queries, query, raw_pool_k)
         trace["stages"]["raw_retrieval"] = {
             "count": len(candidates),
+            "requested_pool_k": raw_pool_k,
             "ms": round((time.monotonic() - t_ret0) * 1000, 2),
         }
 
         # Entity+predicate joint-hit boost before rerank (SPEC v6 §4.2).
         candidates = self._boost_entity_predicate_hits(query, candidates)
+        trace["stages"]["pre_rerank_candidate_ids"] = [
+            self._candidate_identity(row) for row in candidates[:raw_pool_k]
+        ]
 
         if candidates:
             qfp = _query_fingerprint(query)
@@ -308,6 +395,7 @@ class RawRetriever:
                     cb_reason,
                     qfp,
                 )
+                candidates = deterministic_fallback_rank(query, candidates, top_k=raw_pool_k)
             else:
                 try:
                     candidates = self.timed_rerank(query, candidates, top_k)
@@ -334,6 +422,9 @@ class RawRetriever:
                 "fallback": used_fallback,
                 "circuit": get_rerank_circuit_state(),
                 "query_fingerprint": qfp,
+                "output_candidate_ids": [
+                    self._candidate_identity(row) for row in candidates[:top_k]
+                ],
             }
 
         if candidates:
@@ -359,6 +450,13 @@ class RawRetriever:
             trace=trace,
             warnings=tuple(warnings),
             fallbacks=tuple(fallbacks),
+        )
+
+    @staticmethod
+    def _candidate_identity(row: dict[str, Any]) -> str:
+        meta = row.get("metadata") or {}
+        return str(
+            row.get("knowledge_id") or meta.get("knowledge_id") or meta.get("page_id") or row.get("id") or ""
         )
 
     def rewrite_query(self, query: str) -> list[str]:
@@ -448,16 +546,14 @@ class RawRetriever:
         if not candidates:
             return candidates
         q = query or ""
-        entities = re.findall(r"[\u4e00-\u9fff]{2,10}", q)
+        entities = re.findall(r"[\u4e00-\u9fff]{2,12}", q)
         stop = {"什么", "多少", "如何", "怎么", "是否", "哪个", "中国", "电信", "广西", "公司", "关于"}
         entities = [e for e in entities if e not in stop][:8]
-        predicates = [
-            p for p in (
-                "处罚", "限额", "不得", "禁止", "取消", "准入", "负责", "牵头",
-                "占比", "两条线", "问需", "报账", "审核",
-            )
-            if p in q
-        ]
+        predicates = re.findall(
+            r"不得|禁止|严禁|取消|不再|处罚|罚款|扣分|限额|额度|标准|"
+            r"占比|比例|负责|牵头|归口|准入|资格|审核|报销|支付|流程|时限",
+            q,
+        )
         if not entities and not predicates:
             return candidates
         out: list[dict] = []

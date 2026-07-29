@@ -1,0 +1,2605 @@
+{
+  "case": {
+    "case_id": "KB-013",
+    "category": "同义词与口语表达",
+    "query": "公司搞比赛给员工发奖金 上限是多少",
+    "expected_knowledge_ids": [
+      "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+    ],
+    "expected_title_keywords": [
+      "劳动竞赛",
+      "2025"
+    ],
+    "required_facts": [
+      "2000元",
+      "15000元"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕54号第二十一条；口语'搞比赛发奖金'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "block_id": "55c12f76-328b-48da-a132-ad96825186f3",
+          "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+          "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+          "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】4. 撤职、降级，减发 3个月至 12 个月绩效工资。 > （二） 经济赔偿根据违纪行为给公司造成的直接经济损失计 > 1. 损失金额 2万元以下的，赔偿 100% ；\n\n第三十一条 员工违纪受到行政处理处分的，一般可根据违\n纪行为给企业造成的经济损失、不良影响，以及当事人所犯错误\n性质、认错改过情况等因素给予一定经济处罚或免于经济处罚。\n经济处罚包括减发绩效工资和给予经济赔偿， 两种经济处罚可以\n单处，也可以并处。 维护账号(集团互联)\n— 12 —（一）减发绩效工资，一般规定为：\n1. 提醒谈话、责令检查、通报批评，减发 1000 元以下绩效工\n资；\n2. 予以诫勉、警告处分，减发半个月至 1个月绩效工资；\n3. 记过，记大过，减发 1个月至 3个月绩效工资；\n4. 撤职、降级，减发 3个月至 12 个月绩效工资。\n月度绩效工资一般指当事员工上年度实发绩效工资总数的\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为：",
+          "score": 0.7,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "91cb6b8612c676884bd39a5f4d2b8cc4",
+          "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "4. 撤职、降级，减发 3个月至 12 个月绩效工资。 > （二） 经济赔偿根据违纪行为给公司造成的直接经济损失计 > 1. 损失金额 2万元以下的，赔偿 100% ；",
+          "block_ids": [
+            "55c12f76-328b-48da-a132-ad96825186f3",
+            "7e0855e9-7a21-4a06-b2b9-b36526b13d9d",
+            "ce97ee53-eeb8-4ea5-96b9-860813b65daf",
+            "5c2d2a03-e279-4afc-8896-7a3dcec8bef9",
+            "68048129-172b-4a8b-990f-a75df5735b3d",
+            "c3d92b00-0319-4762-8c9d-4c722d46cb91",
+            "07721151-900a-4562-8f35-89baa6a9c4b7",
+            "907c189c-d409-42d3-b71a-140634ec491c",
+            "0062cbf9-54cb-44ef-8e44-381b6b235f69",
+            "f7c8ac9b-e76f-4421-bb24-0c7c9143c517",
+            "fdee03e4-f97e-4cd0-a4e7-ab3c083779f3",
+            "52bb47a9-105e-408b-9dac-72e185dfc637",
+            "5a38c860-6819-41c4-af8a-98084134b93b",
+            "0b8f1b48-9acc-4ff5-86cd-64d6742974de",
+            "523b48b0-e5e6-4b41-956c-54db655609f8",
+            "8e62eb4c-2ed5-4a97-9940-329565fa166c"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "55c12f76-328b-48da-a132-ad96825186f3",
+              "order_idx": 232,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "7e0855e9-7a21-4a06-b2b9-b36526b13d9d",
+              "order_idx": 233,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "ce97ee53-eeb8-4ea5-96b9-860813b65daf",
+              "order_idx": 234,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "5c2d2a03-e279-4afc-8896-7a3dcec8bef9",
+              "order_idx": 236,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "68048129-172b-4a8b-990f-a75df5735b3d",
+              "order_idx": 237,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "c3d92b00-0319-4762-8c9d-4c722d46cb91",
+              "order_idx": 238,
+              "char_start": 0,
+              "char_end": 2
+            },
+            {
+              "block_id": "07721151-900a-4562-8f35-89baa6a9c4b7",
+              "order_idx": 239,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "907c189c-d409-42d3-b71a-140634ec491c",
+              "order_idx": 240,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "0062cbf9-54cb-44ef-8e44-381b6b235f69",
+              "order_idx": 241,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "f7c8ac9b-e76f-4421-bb24-0c7c9143c517",
+              "order_idx": 242,
+              "char_start": 0,
+              "char_end": 25
+            },
+            {
+              "block_id": "fdee03e4-f97e-4cd0-a4e7-ab3c083779f3",
+              "order_idx": 243,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "52bb47a9-105e-408b-9dac-72e185dfc637",
+              "order_idx": 244,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "5a38c860-6819-41c4-af8a-98084134b93b",
+              "order_idx": 245,
+              "char_start": 0,
+              "char_end": 29
+            },
+            {
+              "block_id": "0b8f1b48-9acc-4ff5-86cd-64d6742974de",
+              "order_idx": 246,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "523b48b0-e5e6-4b41-956c-54db655609f8",
+              "order_idx": 247,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "8e62eb4c-2ed5-4a97-9940-329565fa166c",
+              "order_idx": 248,
+              "char_start": 0,
+              "char_end": 8
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "path": "",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "block_id": "55c12f76-328b-48da-a132-ad96825186f3",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.11824972413207707,
+            "score_breakdown": {
+              "vector": 0.8039311170578003,
+              "keyword": 0.5451445413090348,
+              "rrf": 0.11824972413207707,
+              "rerank": null
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match",
+            "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】4. 撤职、降级，减发 3个月至 12 个月绩效工资。 > （二） 经济赔偿根据违纪行为给公司造成的直接经济损失计 > 1. 损失金额 2万元以下的，赔偿 100% ；\n\n第三十一条 员工违纪受到行政处理处分的，一般可根据违\n纪行为给企业造成的经济损失、不良影响，以及当事人所犯错误\n性质、认错改过情况等因素给予一定经济处罚或免于经济处罚。\n经济处罚包括减发绩效工资和给予经济赔偿， 两种经济处罚可以\n单处，也可以并处。 维护账号(集团互联)\n— 12 —（一）减发绩效工资，一般规定为：\n1. 提醒谈话、责令检查、通报批评，减发 1000 元以下绩效工\n资；\n2. 予以诫勉、警告处分，减发半个月至 1个月绩效工资；\n3. 记过，记大过，减发 1个月至 3个月绩效工资；\n4. 撤职、降级，减发 3个月至 12 个月绩效工资。\n月度绩效工资一般指当事员工上年度实发绩效工资总数的\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为："
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "block_id": "57978153-20ab-4d49-8eaf-c2f1b9244221",
+          "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+          "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+          "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】（一）通令嘉奖物质奖励标准 > （二）授予荣誉称号物质奖励标准 > 第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n\n（六）在维护法纪，维护公司信誉，弘扬企业文化、社会公\n德等方面有特殊贡献或事迹突出的；\n（七）紧急情况下，坚守岗位保证通信畅通，出色完成通信\n任务，或在抢救、抢修通信线路、通信生产设备等过程中有特殊\n贡献或事迹突出的；\n（八）其他应给予奖励的情形。\n第十二条 在给予员工精神奖励的同时， 可给予相应物质奖\n励，即可以给予一次性奖金，也可以给予奖品、培训、疗休等不\n同形式的奖励。一次性奖金按以下标准执行：\n（一）通令嘉奖物质奖励标准\n区公司级，团体可一次性奖励 3000 ～10000 元，个人可一 维护账号(集团互联)\n— 6 —次性奖励 2000 ～5000 元；市分公司级，团体可一次性奖励\n2000 ～5000 元，个人可一次性奖励 1000 ～3000 元。\n（二）授予荣誉称号物质奖励标准\n按照《中国电信广西公司员工先进荣誉奖励办法》（中电信\n桂〔 2015 〕214 号）相关文件执行。\n第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n个物质奖励中金额或等级最高的奖励。",
+          "score": 0.1805022250476796,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "4263e1617c5d72435bc16091b4345158",
+          "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "（一）通令嘉奖物质奖励标准 > （二）授予荣誉称号物质奖励标准 > 第十三条 因同一事项获多个物质奖励的，公司将仅给予多",
+          "block_ids": [
+            "57978153-20ab-4d49-8eaf-c2f1b9244221",
+            "9dd75130-0f47-425d-b660-9279f6b990eb",
+            "37883586-eb11-4804-8b92-10ae031c3550",
+            "d42e359f-056b-4fd0-9d7b-0ec529be2544",
+            "fb8efa67-451f-46fd-80e0-fe9036250e03",
+            "1713e77c-8861-4610-a136-c5ef0b98754d",
+            "4f8f57d8-08ee-4885-96e0-cf25b294ca00",
+            "391fa577-5283-44b7-bf67-3d0c421a3fb3",
+            "07f558df-854c-4c99-9019-b03ce110702b",
+            "8010f184-2021-4ff8-9f88-52bc3dbd8ab1",
+            "589e4d9a-f474-4985-8789-5c7650aca133",
+            "65afd3fd-0e74-4891-94ae-5c2f9c19e447",
+            "9c6498d0-17dd-4416-a0f6-89ab7d8f3481",
+            "acc48011-fdd4-4014-a529-c5ab94e1e2e4",
+            "c0cf4b9c-6659-45ae-9c84-6fe54462e55e"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "57978153-20ab-4d49-8eaf-c2f1b9244221",
+              "order_idx": 94,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "9dd75130-0f47-425d-b660-9279f6b990eb",
+              "order_idx": 95,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "37883586-eb11-4804-8b92-10ae031c3550",
+              "order_idx": 96,
+              "char_start": 0,
+              "char_end": 14
+            },
+            {
+              "block_id": "d42e359f-056b-4fd0-9d7b-0ec529be2544",
+              "order_idx": 97,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "fb8efa67-451f-46fd-80e0-fe9036250e03",
+              "order_idx": 98,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "1713e77c-8861-4610-a136-c5ef0b98754d",
+              "order_idx": 99,
+              "char_start": 0,
+              "char_end": 20
+            },
+            {
+              "block_id": "4f8f57d8-08ee-4885-96e0-cf25b294ca00",
+              "order_idx": 100,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "391fa577-5283-44b7-bf67-3d0c421a3fb3",
+              "order_idx": 101,
+              "char_start": 0,
+              "char_end": 43
+            },
+            {
+              "block_id": "07f558df-854c-4c99-9019-b03ce110702b",
+              "order_idx": 103,
+              "char_start": 0,
+              "char_end": 37
+            },
+            {
+              "block_id": "8010f184-2021-4ff8-9f88-52bc3dbd8ab1",
+              "order_idx": 104,
+              "char_start": 0,
+              "char_end": 35
+            },
+            {
+              "block_id": "589e4d9a-f474-4985-8789-5c7650aca133",
+              "order_idx": 105,
+              "char_start": 0,
+              "char_end": 15
+            },
+            {
+              "block_id": "65afd3fd-0e74-4891-94ae-5c2f9c19e447",
+              "order_idx": 106,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "9c6498d0-17dd-4416-a0f6-89ab7d8f3481",
+              "order_idx": 107,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "acc48011-fdd4-4014-a529-c5ab94e1e2e4",
+              "order_idx": 108,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "c0cf4b9c-6659-45ae-9c84-6fe54462e55e",
+              "order_idx": 109,
+              "char_start": 0,
+              "char_end": 17
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "path": "",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "block_id": "57978153-20ab-4d49-8eaf-c2f1b9244221",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.1205022250476796,
+            "score_breakdown": {
+              "vector": 0.8255672007799149,
+              "keyword": 0.5332674371912312,
+              "rrf": 0.1205022250476796,
+              "rerank": null
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match",
+            "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】（一）通令嘉奖物质奖励标准 > （二）授予荣誉称号物质奖励标准 > 第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n\n（六）在维护法纪，维护公司信誉，弘扬企业文化、社会公\n德等方面有特殊贡献或事迹突出的；\n（七）紧急情况下，坚守岗位保证通信畅通，出色完成通信\n任务，或在抢救、抢修通信线路、通信生产设备等过程中有特殊\n贡献或事迹突出的；\n（八）其他应给予奖励的情形。\n第十二条 在给予员工精神奖励的同时， 可给予相应物质奖\n励，即可以给予一次性奖金，也可以给予奖品、培训、疗休等不\n同形式的奖励。一次性奖金按以下标准执行：\n（一）通令嘉奖物质奖励标准\n区公司级，团体可一次性奖励 3000 ～10000 元，个人可一 维护账号(集团互联)\n— 6 —次性奖励 2000 ～5000 元；市分公司级，团体可一次性奖励\n2000 ～5000 元，个人可一次性奖励 1000 ～3000 元。\n（二）授予荣誉称号物质奖励标准\n按照《中国电信广西公司员工先进荣誉奖励办法》（中电信\n桂〔 2015 〕214 号）相关文件执行。\n第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n个物质奖励中金额或等级最高的奖励。"
+          },
+          "promoted_numeric_passage": true
+        },
+        {
+          "source": "knowledge",
+          "block_id": "0b8f1b48-9acc-4ff5-86cd-64d6742974de",
+          "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+          "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+          "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】3. 损失金额 4万元以上的，按： 4万×80 ％+（实际损失金额 -4 > 第三十二条 本办法所指违纪一般指违反公司纪律，包含本 > （一）造成经济损失的情节\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为：\n1. 损失金额 2万元以下的，赔偿 100% ；\n2. 损失金额 2万以上 4万元以下的，按： 2万+（实际损失金额\n-2万） ×60 ％赔偿；\n3. 损失金额 4万元以上的，按： 4万×80 ％+（实际损失金额 -4\n万） ×20 ％赔偿；总计赔偿限额不超过该员工 18 个月绩效工资。\n赔偿经济损失可一次性支付，也可按月从本人收入中扣除 ，\n但每月扣除后的实发工资金额应大于当地最低月工资标准。\n第三十二条 本办法所指违纪一般指违反公司纪律，包含本\n办法及企业相关管理制度。违纪行为的性质、情节、危害程度分 维护账号(集团互联)\n— 13 — 为一般、较重、严重三个等次。划分依据有造成企业直接经济损\n失情况、谋取不当利益情况、造成不良影响程度情况，以及企业\n其他规章制度与法律法规规定，具体如下：",
+          "score": 0.17557837355201017,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "6a6be0544e60b9309797307f9b16f3a1",
+          "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "3. 损失金额 4万元以上的，按： 4万×80 ％+（实际损失金额 -4 > 第三十二条 本办法所指违纪一般指违反公司纪律，包含本 > （一）造成经济损失的情节",
+          "block_ids": [
+            "0b8f1b48-9acc-4ff5-86cd-64d6742974de",
+            "523b48b0-e5e6-4b41-956c-54db655609f8",
+            "8e62eb4c-2ed5-4a97-9940-329565fa166c",
+            "a6a1c542-69d9-4ff2-8cc7-2fce6eec6559",
+            "aca7b336-3592-41c4-a972-5870cccd3757",
+            "872ae314-fd93-4b1d-87f6-797c3bfe33d3",
+            "7bb95f9d-a170-436c-83c4-21ff2d26dce5",
+            "cbc3ede4-50c3-47de-b4aa-3df5d1a707cd",
+            "3d1ef8d2-4c5e-4b68-8b7a-094d996d61d0",
+            "c434aebd-bc9c-4272-9988-9313084135f3",
+            "a4c8fa22-6c1e-4509-8f9d-46fcc8f82cca",
+            "7bcfc1f9-87b7-44b7-9ded-27c12b0d663a",
+            "50dde178-8bdf-4673-bc94-a5b533ae23cc",
+            "239a2b8f-1f1e-4f50-a438-2c6fd9b54619",
+            "2360ed81-d5c6-4692-82bf-3b7e46fe0409"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "0b8f1b48-9acc-4ff5-86cd-64d6742974de",
+              "order_idx": 246,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "523b48b0-e5e6-4b41-956c-54db655609f8",
+              "order_idx": 247,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "8e62eb4c-2ed5-4a97-9940-329565fa166c",
+              "order_idx": 248,
+              "char_start": 0,
+              "char_end": 8
+            },
+            {
+              "block_id": "a6a1c542-69d9-4ff2-8cc7-2fce6eec6559",
+              "order_idx": 249,
+              "char_start": 0,
+              "char_end": 24
+            },
+            {
+              "block_id": "aca7b336-3592-41c4-a972-5870cccd3757",
+              "order_idx": 250,
+              "char_start": 0,
+              "char_end": 33
+            },
+            {
+              "block_id": "872ae314-fd93-4b1d-87f6-797c3bfe33d3",
+              "order_idx": 251,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "7bb95f9d-a170-436c-83c4-21ff2d26dce5",
+              "order_idx": 252,
+              "char_start": 0,
+              "char_end": 36
+            },
+            {
+              "block_id": "cbc3ede4-50c3-47de-b4aa-3df5d1a707cd",
+              "order_idx": 253,
+              "char_start": 0,
+              "char_end": 34
+            },
+            {
+              "block_id": "3d1ef8d2-4c5e-4b68-8b7a-094d996d61d0",
+              "order_idx": 254,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "c434aebd-bc9c-4272-9988-9313084135f3",
+              "order_idx": 255,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "a4c8fa22-6c1e-4509-8f9d-46fcc8f82cca",
+              "order_idx": 256,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "7bcfc1f9-87b7-44b7-9ded-27c12b0d663a",
+              "order_idx": 257,
+              "char_start": 0,
+              "char_end": 39
+            },
+            {
+              "block_id": "50dde178-8bdf-4673-bc94-a5b533ae23cc",
+              "order_idx": 259,
+              "char_start": 0,
+              "char_end": 35
+            },
+            {
+              "block_id": "239a2b8f-1f1e-4f50-a438-2c6fd9b54619",
+              "order_idx": 260,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "2360ed81-d5c6-4692-82bf-3b7e46fe0409",
+              "order_idx": 261,
+              "char_start": 0,
+              "char_end": 19
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "path": "",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "block_id": "0b8f1b48-9acc-4ff5-86cd-64d6742974de",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.11557837355201016,
+            "score_breakdown": {
+              "vector": 0.8100623935461044,
+              "keyword": 0.4936603798409712,
+              "rrf": 0.11557837355201016,
+              "rerank": null
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match",
+            "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】3. 损失金额 4万元以上的，按： 4万×80 ％+（实际损失金额 -4 > 第三十二条 本办法所指违纪一般指违反公司纪律，包含本 > （一）造成经济损失的情节\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为：\n1. 损失金额 2万元以下的，赔偿 100% ；\n2. 损失金额 2万以上 4万元以下的，按： 2万+（实际损失金额\n-2万） ×60 ％赔偿；\n3. 损失金额 4万元以上的，按： 4万×80 ％+（实际损失金额 -4\n万） ×20 ％赔偿；总计赔偿限额不超过该员工 18 个月绩效工资。\n赔偿经济损失可一次性支付，也可按月从本人收入中扣除 ，\n但每月扣除后的实发工资金额应大于当地最低月工资标准。\n第三十二条 本办法所指违纪一般指违反公司纪律，包含本\n办法及企业相关管理制度。违纪行为的性质、情节、危害程度分 维护账号(集团互联)\n— 13 — 为一般、较重、严重三个等次。划分依据有造成企业直接经济损\n失情况、谋取不当利益情况、造成不良影响程度情况，以及企业\n其他规章制度与法律法规规定，具体如下："
+          },
+          "promoted_numeric_passage": true
+        },
+        {
+          "source": "knowledge",
+          "block_id": "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+          "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+          "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+          "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】（三）授予荣誉称号。 > 第十一条 员工符合以下行为情形之一，可给予通报表扬奖 > （二）在经营发展工作中开拓创新或提出合理化建议，取得\n\n（二）决定权限\n1. 县（区域）分公司、未成立党委的专业公司奖惩委员会有\n权作出谈话提醒、责令检查、通报批评及减发 1000 元以下绩效工\n资的惩戒决定。\n2. 区公司、市分公司、成立党委的专业公司奖惩委员会办公\n室有权作出除解除劳动合同以外的处理处分决定。\n3. 区公司、市分公司、成立党委的专业公司奖惩委员会有权\n作出各种行政处理处分决定。\n第三章 奖励的种类和适用\n第十条 奖励的种类\n（一）通报表扬 ;\n（二）通令嘉奖 ;\n（三）授予荣誉称号。\n第十一条 员工符合以下行为情形之一，可给予通报表扬奖\n励；表现或事迹特别优异的可给予通令嘉奖或授予荣誉称号奖\n励。授予荣誉称号按照《中国电信广西公司员工荣誉体系》（中\n电信桂〔 2013 〕300 号）等相关文件执行。 维护账号(集团互联)\n— 5 — （一）在经营发展工作中取得重大销售业绩、明显提升客户\n服务水平或网络质量、显著降低公司成本或提高生产效率的；\n（二）在经营发展工作中开拓创新或提出合理化建议，取得\n重大成果或显著成效的；",
+          "score": 0.16626959247648904,
+          "match_channels": [
+            "semantic",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "b3cf81589e897cb739e5a169d0bfe4d9",
+          "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "（三）授予荣誉称号。 > 第十一条 员工符合以下行为情形之一，可给予通报表扬奖 > （二）在经营发展工作中开拓创新或提出合理化建议，取得",
+          "block_ids": [
+            "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+            "81cc6ac1-937c-4300-86d7-9647e0a35cbd",
+            "873c64a1-83d2-4f3c-bcd4-5fac0622de6f",
+            "88c1f048-e90f-4034-a64f-e7d8e615f3c1",
+            "94d2cba3-3c74-40f1-895f-71df4103a69c",
+            "529f55c2-dfed-444d-903c-e51138596132",
+            "3fe127f9-9fe1-41f5-9232-0a915e34c991",
+            "5f2568df-ed48-4905-a042-1728f05e5025",
+            "f53cc95e-382b-43fe-81e4-169272140438",
+            "db6ca39e-c8e4-4d08-b433-761fe8890be3",
+            "d1a7a5f4-ab3b-444c-8e92-d7ae40152186",
+            "7b1be266-3710-4b6e-a09a-1824ead92ed4",
+            "8d3b7b55-6fd8-4bba-83df-025ea23a7537",
+            "2595c501-8e2b-4c21-806b-28464e361d20",
+            "1e34e1ef-7d48-4c98-be8f-dc5378673888",
+            "f3938ae6-a053-4578-a28f-0d17ef2b9b63",
+            "315a3e51-5a57-4c8b-82f1-ced1a658dbbe",
+            "59e71344-b21f-4d18-8acd-4a0fe2c2ce63"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+              "order_idx": 65,
+              "char_start": 0,
+              "char_end": 7
+            },
+            {
+              "block_id": "81cc6ac1-937c-4300-86d7-9647e0a35cbd",
+              "order_idx": 66,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "873c64a1-83d2-4f3c-bcd4-5fac0622de6f",
+              "order_idx": 67,
+              "char_start": 0,
+              "char_end": 22
+            },
+            {
+              "block_id": "88c1f048-e90f-4034-a64f-e7d8e615f3c1",
+              "order_idx": 68,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "94d2cba3-3c74-40f1-895f-71df4103a69c",
+              "order_idx": 69,
+              "char_start": 0,
+              "char_end": 13
+            },
+            {
+              "block_id": "529f55c2-dfed-444d-903c-e51138596132",
+              "order_idx": 70,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "3fe127f9-9fe1-41f5-9232-0a915e34c991",
+              "order_idx": 71,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "5f2568df-ed48-4905-a042-1728f05e5025",
+              "order_idx": 72,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "f53cc95e-382b-43fe-81e4-169272140438",
+              "order_idx": 73,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "db6ca39e-c8e4-4d08-b433-761fe8890be3",
+              "order_idx": 74,
+              "char_start": 0,
+              "char_end": 10
+            },
+            {
+              "block_id": "d1a7a5f4-ab3b-444c-8e92-d7ae40152186",
+              "order_idx": 75,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "7b1be266-3710-4b6e-a09a-1824ead92ed4",
+              "order_idx": 76,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "8d3b7b55-6fd8-4bba-83df-025ea23a7537",
+              "order_idx": 77,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "2595c501-8e2b-4c21-806b-28464e361d20",
+              "order_idx": 78,
+              "char_start": 0,
+              "char_end": 36
+            },
+            {
+              "block_id": "1e34e1ef-7d48-4c98-be8f-dc5378673888",
+              "order_idx": 80,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "f3938ae6-a053-4578-a28f-0d17ef2b9b63",
+              "order_idx": 81,
+              "char_start": 0,
+              "char_end": 27
+            },
+            {
+              "block_id": "315a3e51-5a57-4c8b-82f1-ced1a658dbbe",
+              "order_idx": 82,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "59e71344-b21f-4d18-8acd-4a0fe2c2ce63",
+              "order_idx": 83,
+              "char_start": 0,
+              "char_end": 11
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "path": "",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "block_id": "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.10626959247648904,
+            "score_breakdown": {
+              "vector": 0.80652916431427,
+              "keyword": null,
+              "rrf": 0.10626959247648904,
+              "rerank": null
+            },
+            "match_channels": [
+              "semantic",
+              "title_boost"
+            ],
+            "reason": "semantic match",
+            "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】（三）授予荣誉称号。 > 第十一条 员工符合以下行为情形之一，可给予通报表扬奖 > （二）在经营发展工作中开拓创新或提出合理化建议，取得\n\n（二）决定权限\n1. 县（区域）分公司、未成立党委的专业公司奖惩委员会有\n权作出谈话提醒、责令检查、通报批评及减发 1000 元以下绩效工\n资的惩戒决定。\n2. 区公司、市分公司、成立党委的专业公司奖惩委员会办公\n室有权作出除解除劳动合同以外的处理处分决定。\n3. 区公司、市分公司、成立党委的专业公司奖惩委员会有权\n作出各种行政处理处分决定。\n第三章 奖励的种类和适用\n第十条 奖励的种类\n（一）通报表扬 ;\n（二）通令嘉奖 ;\n（三）授予荣誉称号。\n第十一条 员工符合以下行为情形之一，可给予通报表扬奖\n励；表现或事迹特别优异的可给予通令嘉奖或授予荣誉称号奖\n励。授予荣誉称号按照《中国电信广西公司员工荣誉体系》（中\n电信桂〔 2013 〕300 号）等相关文件执行。 维护账号(集团互联)\n— 5 — （一）在经营发展工作中取得重大销售业绩、明显提升客户\n服务水平或网络质量、显著降低公司成本或提高生产效率的；\n（二）在经营发展工作中开拓创新或提出合理化建议，取得\n重大成果或显著成效的；"
+          },
+          "promoted_numeric_passage": true
+        },
+        {
+          "source": "knowledge",
+          "block_id": "50dde178-8bdf-4673-bc94-a5b533ae23cc",
+          "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+          "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+          "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】2.“ 情节较重 ”是指谋取不当利益金额在 5000 元及以上、 3万 > 3.“ 情节严重 ”是指谋取不当利益金额在 3万元及以上的。 > （三）造成不良影响的情节\n办法及企业相关管理制度。违纪行为的性质、情节、危害程度分 维护账号(集团互联)\n— 13 — 为一般、较重、严重三个等次。划分依据有造成企业直接经济损\n失情况、谋取不当利益情况、造成不良影响程度情况，以及企业\n其他规章制度与法律法规规定，具体如下：\n（一）造成经济损失的情节\n1.“ 情节一般 ”是指造成公司直接经济损失在 1万元及以上、\n10 万元以下的一定经济损失的；\n2.“情节较重 ”是指造成公司直接经济损失在 10 万元及以上、\n50 万元以下的较大经济损失的；\n3.“情节严重 ”是指造成公司直接经济损失在 50 万元及以上\n的重大经济损失的。\n（二）员工有贪污受贿、职务侵占、以权谋私等谋取不当利\n益行为的情节\n1.“ 情节一般 ”是指谋取不当利益金额在 5000 元以下的；\n2.“ 情节较重 ”是指谋取不当利益金额在 5000 元及以上、 3万\n元以下的；\n3.“ 情节严重 ”是指谋取不当利益金额在 3万元及以上的。",
+          "score": 0.16555006094481092,
+          "match_channels": [
+            "semantic",
+            "keyword",
+            "title_boost"
+          ],
+          "warnings": [],
+          "candidate_type": "passage",
+          "retrieval_unit": "passage",
+          "passage_id": "c2f17324d08162d86e3d22391017cfad",
+          "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+          "version_year": 2021,
+          "source_version": "2021",
+          "section_path": "2.“ 情节较重 ”是指谋取不当利益金额在 5000 元及以上、 3万 > 3.“ 情节严重 ”是指谋取不当利益金额在 3万元及以上的。 > （三）造成不良影响的情节",
+          "block_ids": [
+            "50dde178-8bdf-4673-bc94-a5b533ae23cc",
+            "239a2b8f-1f1e-4f50-a438-2c6fd9b54619",
+            "2360ed81-d5c6-4692-82bf-3b7e46fe0409",
+            "0c6e62b5-dc92-4a06-a027-7259e5409d79",
+            "0ebe8d13-146a-4692-ba9a-d7ae1d2af04d",
+            "1b9ad23a-b0a5-4627-9c74-5d368ce5df93",
+            "8c2fc406-aaa6-482c-af7f-cd4a186a69bc",
+            "87e9479f-8fea-44ea-bd7e-2ad2cad6f2fb",
+            "0e377fff-5a13-4436-8d56-f5a03b1e59b6",
+            "57c74c18-f213-4382-bca7-089636db4275",
+            "a15c8087-5490-4953-a42d-b4a13d38e6eb",
+            "1210d04f-124f-4a2a-bc5f-e687213d7b3a",
+            "7150d0c4-95cb-4523-b32a-e91aae43b4bc",
+            "d7950a1b-eee6-4739-97c1-6eababa25160",
+            "68fdc324-7271-4740-84d0-b32e82048c26",
+            "eefe89c0-ac08-4890-80bf-92a8a89956e4"
+          ],
+          "block_ranges": [
+            {
+              "block_id": "50dde178-8bdf-4673-bc94-a5b533ae23cc",
+              "order_idx": 259,
+              "char_start": 0,
+              "char_end": 35
+            },
+            {
+              "block_id": "239a2b8f-1f1e-4f50-a438-2c6fd9b54619",
+              "order_idx": 260,
+              "char_start": 0,
+              "char_end": 28
+            },
+            {
+              "block_id": "2360ed81-d5c6-4692-82bf-3b7e46fe0409",
+              "order_idx": 261,
+              "char_start": 0,
+              "char_end": 19
+            },
+            {
+              "block_id": "0c6e62b5-dc92-4a06-a027-7259e5409d79",
+              "order_idx": 262,
+              "char_start": 0,
+              "char_end": 12
+            },
+            {
+              "block_id": "0ebe8d13-146a-4692-ba9a-d7ae1d2af04d",
+              "order_idx": 263,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "1b9ad23a-b0a5-4627-9c74-5d368ce5df93",
+              "order_idx": 264,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "8c2fc406-aaa6-482c-af7f-cd4a186a69bc",
+              "order_idx": 265,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "87e9479f-8fea-44ea-bd7e-2ad2cad6f2fb",
+              "order_idx": 266,
+              "char_start": 0,
+              "char_end": 16
+            },
+            {
+              "block_id": "0e377fff-5a13-4436-8d56-f5a03b1e59b6",
+              "order_idx": 267,
+              "char_start": 0,
+              "char_end": 31
+            },
+            {
+              "block_id": "57c74c18-f213-4382-bca7-089636db4275",
+              "order_idx": 268,
+              "char_start": 0,
+              "char_end": 9
+            },
+            {
+              "block_id": "a15c8087-5490-4953-a42d-b4a13d38e6eb",
+              "order_idx": 269,
+              "char_start": 0,
+              "char_end": 26
+            },
+            {
+              "block_id": "1210d04f-124f-4a2a-bc5f-e687213d7b3a",
+              "order_idx": 270,
+              "char_start": 0,
+              "char_end": 6
+            },
+            {
+              "block_id": "7150d0c4-95cb-4523-b32a-e91aae43b4bc",
+              "order_idx": 271,
+              "char_start": 0,
+              "char_end": 32
+            },
+            {
+              "block_id": "d7950a1b-eee6-4739-97c1-6eababa25160",
+              "order_idx": 272,
+              "char_start": 0,
+              "char_end": 35
+            },
+            {
+              "block_id": "68fdc324-7271-4740-84d0-b32e82048c26",
+              "order_idx": 273,
+              "char_start": 0,
+              "char_end": 5
+            },
+            {
+              "block_id": "eefe89c0-ac08-4890-80bf-92a8a89956e4",
+              "order_idx": 274,
+              "char_start": 0,
+              "char_end": 30
+            }
+          ],
+          "effective_year": 2021,
+          "citation": {
+            "document": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "path": "",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "block_id": "50dde178-8bdf-4673-bc94-a5b533ae23cc",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.10555006094481093,
+            "score_breakdown": {
+              "vector": 0.7827028632164001,
+              "keyword": 0.34470442445981686,
+              "rrf": 0.10555006094481093,
+              "rerank": null
+            },
+            "match_channels": [
+              "semantic",
+              "keyword",
+              "title_boost"
+            ],
+            "reason": "semantic + keyword match",
+            "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】2.“ 情节较重 ”是指谋取不当利益金额在 5000 元及以上、 3万 > 3.“ 情节严重 ”是指谋取不当利益金额在 3万元及以上的。 > （三）造成不良影响的情节\n办法及企业相关管理制度。违纪行为的性质、情节、危害程度分 维护账号(集团互联)\n— 13 — 为一般、较重、严重三个等次。划分依据有造成企业直接经济损\n失情况、谋取不当利益情况、造成不良影响程度情况，以及企业\n其他规章制度与法律法规规定，具体如下：\n（一）造成经济损失的情节\n1.“ 情节一般 ”是指造成公司直接经济损失在 1万元及以上、\n10 万元以下的一定经济损失的；\n2.“情节较重 ”是指造成公司直接经济损失在 10 万元及以上、\n50 万元以下的较大经济损失的；\n3.“情节严重 ”是指造成公司直接经济损失在 50 万元及以上\n的重大经济损失的。\n（二）员工有贪污受贿、职务侵占、以权谋私等谋取不当利\n益行为的情节\n1.“ 情节一般 ”是指谋取不当利益金额在 5000 元以下的；\n2.“ 情节较重 ”是指谋取不当利益金额在 5000 元及以上、 3万\n元以下的；\n3.“ 情节严重 ”是指谋取不当利益金额在 3万元及以上的。"
+          },
+          "promoted_numeric_passage": true
+        }
+      ],
+      "meta": {
+        "total_estimate": 5,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.1611,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+        ],
+        "evidence_snapshot_id": "uiJSGAdR4v3vaZOiLUstwZyyg8l52jKC",
+        "snapshot_fingerprint": "33e8cd293b007aa623fc9382",
+        "accepted_passage_ids": [
+          "91cb6b8612c676884bd39a5f4d2b8cc4",
+          "4263e1617c5d72435bc16091b4345158",
+          "6a6be0544e60b9309797307f9b16f3a1",
+          "b3cf81589e897cb739e5a169d0bfe4d9",
+          "c2f17324d08162d86e3d22391017cfad",
+          "be7bf1179311689f3b78da0938f08498",
+          "692d52ef1d54ac34df3724a5291e66b6",
+          "1a29e750c078aae2297aae9897d90d00",
+          "f49f95e53b5d80aaee3329a8b8d3fe86",
+          "98bbc760ec9bf4ece1f0de8ee999246a"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 7,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 1495.44
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 区公司级，团体可一次性奖励3000～10000元，个人可一维护账号(集\n- 互联)—6—次性奖励2000～5000元；市分公司级，团体可一次\n- 市分公司级，团体可一次性奖励2000～5000元，个人可一次性奖励10",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "passage_id": "4263e1617c5d72435bc16091b4345158",
+            "block_id": "57978153-20ab-4d49-8eaf-c2f1b9244221",
+            "block_ids": [
+              "57978153-20ab-4d49-8eaf-c2f1b9244221",
+              "9dd75130-0f47-425d-b660-9279f6b990eb",
+              "37883586-eb11-4804-8b92-10ae031c3550",
+              "d42e359f-056b-4fd0-9d7b-0ec529be2544",
+              "fb8efa67-451f-46fd-80e0-fe9036250e03",
+              "1713e77c-8861-4610-a136-c5ef0b98754d",
+              "4f8f57d8-08ee-4885-96e0-cf25b294ca00",
+              "391fa577-5283-44b7-bf67-3d0c421a3fb3",
+              "07f558df-854c-4c99-9019-b03ce110702b",
+              "8010f184-2021-4ff8-9f88-52bc3dbd8ab1",
+              "589e4d9a-f474-4985-8789-5c7650aca133",
+              "65afd3fd-0e74-4891-94ae-5c2f9c19e447",
+              "9c6498d0-17dd-4416-a0f6-89ab7d8f3481",
+              "acc48011-fdd4-4014-a529-c5ab94e1e2e4",
+              "c0cf4b9c-6659-45ae-9c84-6fe54462e55e"
+            ],
+            "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "text": "\n（六）在维护法纪，维护公司信誉，弘扬企业文化、社会公\n德等方面有特殊贡献或事迹突出的；\n（七）紧急情况下，坚守岗位保证通信畅通，出色完成通信\n任务，或在抢救、抢修通信线路、通信生产设备等过程中有特殊\n贡献或事迹突出的；\n（八）其他应给予奖励的情形。\n第十二条 在给予员工精神奖励的同时， 可给予相应物质奖\n励，即可以给予一次性奖金，也可以给予奖品、培训、疗休等不\n同形式的奖励。一次性奖金按以下标准执行：\n（一）通令嘉奖物质奖励标准\n区公司级，团体可一次性奖励 3000 ～10000 元，个人可一 维护账号(集团互联)\n— 6 —次性奖励 2000 ～5000 元；市分公司级，团体可一次性奖励\n2000 ～5000 元，个人可一次性奖励 1000 ～3000 元。\n（二）授予荣誉称号物质奖励标准\n按照《中国电信广西公司员工先进荣誉奖励办法》（中电信\n桂〔 2015 〕214 号）相关文件执行。\n第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n个物质奖励中金额或等级最高的奖励。",
+            "score": 0.1805022250476796,
+            "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "passage_id": "91cb6b8612c676884bd39a5f4d2b8cc4",
+            "block_id": "55c12f76-328b-48da-a132-ad96825186f3",
+            "block_ids": [
+              "55c12f76-328b-48da-a132-ad96825186f3",
+              "7e0855e9-7a21-4a06-b2b9-b36526b13d9d",
+              "ce97ee53-eeb8-4ea5-96b9-860813b65daf",
+              "5c2d2a03-e279-4afc-8896-7a3dcec8bef9",
+              "68048129-172b-4a8b-990f-a75df5735b3d",
+              "c3d92b00-0319-4762-8c9d-4c722d46cb91",
+              "07721151-900a-4562-8f35-89baa6a9c4b7",
+              "907c189c-d409-42d3-b71a-140634ec491c",
+              "0062cbf9-54cb-44ef-8e44-381b6b235f69",
+              "f7c8ac9b-e76f-4421-bb24-0c7c9143c517",
+              "fdee03e4-f97e-4cd0-a4e7-ab3c083779f3",
+              "52bb47a9-105e-408b-9dac-72e185dfc637",
+              "5a38c860-6819-41c4-af8a-98084134b93b",
+              "0b8f1b48-9acc-4ff5-86cd-64d6742974de",
+              "523b48b0-e5e6-4b41-956c-54db655609f8",
+              "8e62eb4c-2ed5-4a97-9940-329565fa166c"
+            ],
+            "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "text": "\n第三十一条 员工违纪受到行政处理处分的，一般可根据违\n纪行为给企业造成的经济损失、不良影响，以及当事人所犯错误\n性质、认错改过情况等因素给予一定经济处罚或免于经济处罚。\n经济处罚包括减发绩效工资和给予经济赔偿， 两种经济处罚可以\n单处，也可以并处。 维护账号(集团互联)\n— 12 —（一）减发绩效工资，一般规定为：\n1. 提醒谈话、责令检查、通报批评，减发 1000 元以下绩效工\n资；\n2. 予以诫勉、警告处分，减发半个月至 1个月绩效工资；\n3. 记过，记大过，减发 1个月至 3个月绩效工资；\n4. 撤职、降级，减发 3个月至 12 个月绩效工资。\n月度绩效工资一般指当事员工上年度实发绩效工资总数的\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为：",
+            "score": 0.7,
+            "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "passage_id": "b3cf81589e897cb739e5a169d0bfe4d9",
+            "block_id": "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+            "block_ids": [
+              "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+              "81cc6ac1-937c-4300-86d7-9647e0a35cbd",
+              "873c64a1-83d2-4f3c-bcd4-5fac0622de6f",
+              "88c1f048-e90f-4034-a64f-e7d8e615f3c1",
+              "94d2cba3-3c74-40f1-895f-71df4103a69c",
+              "529f55c2-dfed-444d-903c-e51138596132",
+              "3fe127f9-9fe1-41f5-9232-0a915e34c991",
+              "5f2568df-ed48-4905-a042-1728f05e5025",
+              "f53cc95e-382b-43fe-81e4-169272140438",
+              "db6ca39e-c8e4-4d08-b433-761fe8890be3",
+              "d1a7a5f4-ab3b-444c-8e92-d7ae40152186",
+              "7b1be266-3710-4b6e-a09a-1824ead92ed4",
+              "8d3b7b55-6fd8-4bba-83df-025ea23a7537",
+              "2595c501-8e2b-4c21-806b-28464e361d20",
+              "1e34e1ef-7d48-4c98-be8f-dc5378673888",
+              "f3938ae6-a053-4578-a28f-0d17ef2b9b63",
+              "315a3e51-5a57-4c8b-82f1-ced1a658dbbe",
+              "59e71344-b21f-4d18-8acd-4a0fe2c2ce63"
+            ],
+            "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "text": "\n（二）决定权限\n1. 县（区域）分公司、未成立党委的专业公司奖惩委员会有\n权作出谈话提醒、责令检查、通报批评及减发 1000 元以下绩效工\n资的惩戒决定。\n2. 区公司、市分公司、成立党委的专业公司奖惩委员会办公\n室有权作出除解除劳动合同以外的处理处分决定。\n3. 区公司、市分公司、成立党委的专业公司奖惩委员会有权\n作出各种行政处理处分决定。\n第三章 奖励的种类和适用\n第十条 奖励的种类\n（一）通报表扬 ;\n（二）通令嘉奖 ;\n（三）授予荣誉称号。\n第十一条 员工符合以下行为情形之一，可给予通报表扬奖\n励；表现或事迹特别优异的可给予通令嘉奖或授予荣誉称号奖\n励。授予荣誉称号按照《中国电信广西公司员工荣誉体系》（中\n电信桂〔 2013 〕300 号）等相关文件执行。 维护账号(集团互联)\n— 5 — （一）在经营发展工作中取得重大销售业绩、明显提升客户\n服务水平或网络质量、显著降低公司成本或提高生产效率的；\n（二）在经营发展工作中开拓创新或提出合理化建议，取得\n重大成果或显著成效的；",
+            "score": 0.16626959247648904,
+            "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "区公司级，团体可一次性奖励3000～10000元，个人可一维护账号(集",
+            "evidence_passage_ids": [
+              "4263e1617c5d72435bc16091b4345158"
+            ],
+            "fact_type": "numeric",
+            "condition": "团体",
+            "candidate_id": "fbf7621957e0c52b87414b8c"
+          },
+          {
+            "text": "互联)—6—次性奖励2000～5000元；市分公司级，团体可一次",
+            "evidence_passage_ids": [
+              "4263e1617c5d72435bc16091b4345158"
+            ],
+            "fact_type": "numeric",
+            "condition": "团体",
+            "candidate_id": "ba2958af41b67b731ae648da"
+          },
+          {
+            "text": "市分公司级，团体可一次性奖励2000～5000元，个人可一次性奖励10",
+            "evidence_passage_ids": [
+              "4263e1617c5d72435bc16091b4345158"
+            ],
+            "fact_type": "numeric",
+            "condition": "团体",
+            "candidate_id": "cf6f8d23d31ee68225af3570"
+          },
+          {
+            "text": "提醒谈话、责令检查、通报批评，减发1000元以下绩效工资；",
+            "evidence_passage_ids": [
+              "91cb6b8612c676884bd39a5f4d2b8cc4"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "6c1c36c08e2170a14d0cd4b0"
+          },
+          {
+            "text": "团体3000元",
+            "evidence_passage_ids": [
+              "4263e1617c5d72435bc16091b4345158"
+            ],
+            "fact_type": "numeric",
+            "condition": "团体",
+            "candidate_id": "52c3400a40e7cd55d367a3a8"
+          },
+          {
+            "text": "作出谈话提醒、责令检查、通报批评及减发1000元以下绩效工资的惩戒决定。",
+            "evidence_passage_ids": [
+              "b3cf81589e897cb739e5a169d0bfe4d9"
+            ],
+            "fact_type": "numeric",
+            "condition": "",
+            "candidate_id": "c00c41dff6aec4ec26606dc4"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "passage_id": "4263e1617c5d72435bc16091b4345158",
+            "block_id": "57978153-20ab-4d49-8eaf-c2f1b9244221",
+            "block_ids": [
+              "57978153-20ab-4d49-8eaf-c2f1b9244221",
+              "9dd75130-0f47-425d-b660-9279f6b990eb",
+              "37883586-eb11-4804-8b92-10ae031c3550",
+              "d42e359f-056b-4fd0-9d7b-0ec529be2544",
+              "fb8efa67-451f-46fd-80e0-fe9036250e03",
+              "1713e77c-8861-4610-a136-c5ef0b98754d",
+              "4f8f57d8-08ee-4885-96e0-cf25b294ca00",
+              "391fa577-5283-44b7-bf67-3d0c421a3fb3",
+              "07f558df-854c-4c99-9019-b03ce110702b",
+              "8010f184-2021-4ff8-9f88-52bc3dbd8ab1",
+              "589e4d9a-f474-4985-8789-5c7650aca133",
+              "65afd3fd-0e74-4891-94ae-5c2f9c19e447",
+              "9c6498d0-17dd-4416-a0f6-89ab7d8f3481",
+              "acc48011-fdd4-4014-a529-c5ab94e1e2e4",
+              "c0cf4b9c-6659-45ae-9c84-6fe54462e55e"
+            ],
+            "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "path": "",
+            "text": "\n（六）在维护法纪，维护公司信誉，弘扬企业文化、社会公\n德等方面有特殊贡献或事迹突出的；\n（七）紧急情况下，坚守岗位保证通信畅通，出色完成通信\n任务，或在抢救、抢修通信线路、通信生产设备等过程中有特殊\n贡献或事迹突出的；\n（八）其他应给予奖励的情形。\n第十二条 在给予员工精神奖励的同时， 可给予相应物质奖\n励，即可以给予一次性奖金，也可以给予奖品、培训、疗休等不\n同形式的奖励。一次性奖金按以下标准执行：\n（一）通令嘉奖物质奖励标准\n区公司级，团体可一次性奖励 3000 ～10000 元，个人可一 维护账号(集团互联)\n— 6 —次性奖励 2000 ～5000 元；市分公司级，团体可一次性奖励\n2000 ～5000 元，个人可一次性奖励 1000 ～3000 元。\n（二）授予荣誉称号物质奖励标准\n按照《中国电信广西公司员工先进荣誉奖励办法》（中电信\n桂〔 2015 〕214 号）相关文件执行。\n第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n个物质奖励中金额或等级最高的奖励。",
+            "body_text": "\n（六）在维护法纪，维护公司信誉，弘扬企业文化、社会公\n德等方面有特殊贡献或事迹突出的；\n（七）紧急情况下，坚守岗位保证通信畅通，出色完成通信\n任务，或在抢救、抢修通信线路、通信生产设备等过程中有特殊\n贡献或事迹突出的；\n（八）其他应给予奖励的情形。\n第十二条 在给予员工精神奖励的同时， 可给予相应物质奖\n励，即可以给予一次性奖金，也可以给予奖品、培训、疗休等不\n同形式的奖励。一次性奖金按以下标准执行：\n（一）通令嘉奖物质奖励标准\n区公司级，团体可一次性奖励 3000 ～10000 元，个人可一 维护账号(集团互联)\n— 6 —次性奖励 2000 ～5000 元；市分公司级，团体可一次性奖励\n2000 ～5000 元，个人可一次性奖励 1000 ～3000 元。\n（二）授予荣誉称号物质奖励标准\n按照《中国电信广西公司员工先进荣誉奖励办法》（中电信\n桂〔 2015 〕214 号）相关文件执行。\n第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n个物质奖励中金额或等级最高的奖励。",
+            "score": 0.1805022250476796,
+            "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "passage_id": "91cb6b8612c676884bd39a5f4d2b8cc4",
+            "block_id": "55c12f76-328b-48da-a132-ad96825186f3",
+            "block_ids": [
+              "55c12f76-328b-48da-a132-ad96825186f3",
+              "7e0855e9-7a21-4a06-b2b9-b36526b13d9d",
+              "ce97ee53-eeb8-4ea5-96b9-860813b65daf",
+              "5c2d2a03-e279-4afc-8896-7a3dcec8bef9",
+              "68048129-172b-4a8b-990f-a75df5735b3d",
+              "c3d92b00-0319-4762-8c9d-4c722d46cb91",
+              "07721151-900a-4562-8f35-89baa6a9c4b7",
+              "907c189c-d409-42d3-b71a-140634ec491c",
+              "0062cbf9-54cb-44ef-8e44-381b6b235f69",
+              "f7c8ac9b-e76f-4421-bb24-0c7c9143c517",
+              "fdee03e4-f97e-4cd0-a4e7-ab3c083779f3",
+              "52bb47a9-105e-408b-9dac-72e185dfc637",
+              "5a38c860-6819-41c4-af8a-98084134b93b",
+              "0b8f1b48-9acc-4ff5-86cd-64d6742974de",
+              "523b48b0-e5e6-4b41-956c-54db655609f8",
+              "8e62eb4c-2ed5-4a97-9940-329565fa166c"
+            ],
+            "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "path": "",
+            "text": "\n第三十一条 员工违纪受到行政处理处分的，一般可根据违\n纪行为给企业造成的经济损失、不良影响，以及当事人所犯错误\n性质、认错改过情况等因素给予一定经济处罚或免于经济处罚。\n经济处罚包括减发绩效工资和给予经济赔偿， 两种经济处罚可以\n单处，也可以并处。 维护账号(集团互联)\n— 12 —（一）减发绩效工资，一般规定为：\n1. 提醒谈话、责令检查、通报批评，减发 1000 元以下绩效工\n资；\n2. 予以诫勉、警告处分，减发半个月至 1个月绩效工资；\n3. 记过，记大过，减发 1个月至 3个月绩效工资；\n4. 撤职、降级，减发 3个月至 12 个月绩效工资。\n月度绩效工资一般指当事员工上年度实发绩效工资总数的\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为：",
+            "body_text": "\n第三十一条 员工违纪受到行政处理处分的，一般可根据违\n纪行为给企业造成的经济损失、不良影响，以及当事人所犯错误\n性质、认错改过情况等因素给予一定经济处罚或免于经济处罚。\n经济处罚包括减发绩效工资和给予经济赔偿， 两种经济处罚可以\n单处，也可以并处。 维护账号(集团互联)\n— 12 —（一）减发绩效工资，一般规定为：\n1. 提醒谈话、责令检查、通报批评，减发 1000 元以下绩效工\n资；\n2. 予以诫勉、警告处分，减发半个月至 1个月绩效工资；\n3. 记过，记大过，减发 1个月至 3个月绩效工资；\n4. 撤职、降级，减发 3个月至 12 个月绩效工资。\n月度绩效工资一般指当事员工上年度实发绩效工资总数的\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为：",
+            "score": 0.7,
+            "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "passage_id": "b3cf81589e897cb739e5a169d0bfe4d9",
+            "block_id": "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+            "block_ids": [
+              "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+              "81cc6ac1-937c-4300-86d7-9647e0a35cbd",
+              "873c64a1-83d2-4f3c-bcd4-5fac0622de6f",
+              "88c1f048-e90f-4034-a64f-e7d8e615f3c1",
+              "94d2cba3-3c74-40f1-895f-71df4103a69c",
+              "529f55c2-dfed-444d-903c-e51138596132",
+              "3fe127f9-9fe1-41f5-9232-0a915e34c991",
+              "5f2568df-ed48-4905-a042-1728f05e5025",
+              "f53cc95e-382b-43fe-81e4-169272140438",
+              "db6ca39e-c8e4-4d08-b433-761fe8890be3",
+              "d1a7a5f4-ab3b-444c-8e92-d7ae40152186",
+              "7b1be266-3710-4b6e-a09a-1824ead92ed4",
+              "8d3b7b55-6fd8-4bba-83df-025ea23a7537",
+              "2595c501-8e2b-4c21-806b-28464e361d20",
+              "1e34e1ef-7d48-4c98-be8f-dc5378673888",
+              "f3938ae6-a053-4578-a28f-0d17ef2b9b63",
+              "315a3e51-5a57-4c8b-82f1-ced1a658dbbe",
+              "59e71344-b21f-4d18-8acd-4a0fe2c2ce63"
+            ],
+            "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+            "path": "",
+            "text": "\n（二）决定权限\n1. 县（区域）分公司、未成立党委的专业公司奖惩委员会有\n权作出谈话提醒、责令检查、通报批评及减发 1000 元以下绩效工\n资的惩戒决定。\n2. 区公司、市分公司、成立党委的专业公司奖惩委员会办公\n室有权作出除解除劳动合同以外的处理处分决定。\n3. 区公司、市分公司、成立党委的专业公司奖惩委员会有权\n作出各种行政处理处分决定。\n第三章 奖励的种类和适用\n第十条 奖励的种类\n（一）通报表扬 ;\n（二）通令嘉奖 ;\n（三）授予荣誉称号。\n第十一条 员工符合以下行为情形之一，可给予通报表扬奖\n励；表现或事迹特别优异的可给予通令嘉奖或授予荣誉称号奖\n励。授予荣誉称号按照《中国电信广西公司员工荣誉体系》（中\n电信桂〔 2013 〕300 号）等相关文件执行。 维护账号(集团互联)\n— 5 — （一）在经营发展工作中取得重大销售业绩、明显提升客户\n服务水平或网络质量、显著降低公司成本或提高生产效率的；\n（二）在经营发展工作中开拓创新或提出合理化建议，取得\n重大成果或显著成效的；",
+            "body_text": "\n（二）决定权限\n1. 县（区域）分公司、未成立党委的专业公司奖惩委员会有\n权作出谈话提醒、责令检查、通报批评及减发 1000 元以下绩效工\n资的惩戒决定。\n2. 区公司、市分公司、成立党委的专业公司奖惩委员会办公\n室有权作出除解除劳动合同以外的处理处分决定。\n3. 区公司、市分公司、成立党委的专业公司奖惩委员会有权\n作出各种行政处理处分决定。\n第三章 奖励的种类和适用\n第十条 奖励的种类\n（一）通报表扬 ;\n（二）通令嘉奖 ;\n（三）授予荣誉称号。\n第十一条 员工符合以下行为情形之一，可给予通报表扬奖\n励；表现或事迹特别优异的可给予通令嘉奖或授予荣誉称号奖\n励。授予荣誉称号按照《中国电信广西公司员工荣誉体系》（中\n电信桂〔 2013 〕300 号）等相关文件执行。 维护账号(集团互联)\n— 5 — （一）在经营发展工作中取得重大销售业绩、明显提升客户\n服务水平或网络质量、显著降低公司成本或提高生产效率的；\n（二）在经营发展工作中开拓创新或提出合理化建议，取得\n重大成果或显著成效的；",
+            "score": 0.16626959247648904,
+            "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+            "version_year": 2021,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.1611,
+              "threshold": 0.35,
+              "reason": "direct_query_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "员工",
+                "上限"
+              ],
+              "passage_id": "91cb6b8612c676884bd39a5f4d2b8cc4",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "spans": [
+                {
+                  "slot": "员工",
+                  "surface": "员工",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    26,
+                    28
+                  ],
+                  "excerpt": "021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【文档】中电信桂-2021-54"
+                },
+                {
+                  "slot": "上限",
+                  "surface": "上限",
+                  "synonym_source": "query_surface",
+                  "span": [
+                    582,
+                    584
+                  ],
+                  "excerpt": "一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经"
+                }
+              ],
+              "reason": "query_anchor_fact_match",
+              "query_slots": [
+                "比赛",
+                "员工",
+                "奖金",
+                "上限",
+                "竞赛",
+                "奖励",
+                "公司搞比赛给员工发奖金",
+                "公司搞比赛给",
+                "给员工发奖金",
+                "公司搞比",
+                "工发奖金",
+                "公司搞"
+              ],
+              "score": 0.1667,
+              "typed_plan": {
+                "anchors": [
+                  "比赛",
+                  "员工",
+                  "奖金",
+                  "上限",
+                  "竞赛",
+                  "奖励",
+                  "公司搞比赛给员工发奖金",
+                  "公司搞比赛给"
+                ],
+                "predicate": "上限",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 7,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "33e8cd293b007aa623fc9382",
+            "snapshot_id_count": 10,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "公司搞比赛给员工发奖金 上限是多少"
+          },
+          "fact_plan": {
+            "raw": "公司搞比赛给员工发奖金 上限是多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:上限"
+            ],
+            "entities": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "比赛",
+            "object": "员工",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "上限",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "团体",
+              "value": "10000",
+              "unit": "元",
+              "evidence_passage_id": "4263e1617c5d72435bc16091b4345158",
+              "record_id": "4263e1617c5d72435bc16091b4345158:r3",
+              "exact_text": "区公司级，团体可一次性奖励3000～10000元，个人可一维护账号(集",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "3e0d7f57200c6ff3"
+            },
+            {
+              "condition": "团体",
+              "value": "5000",
+              "unit": "元",
+              "evidence_passage_id": "4263e1617c5d72435bc16091b4345158",
+              "record_id": "4263e1617c5d72435bc16091b4345158:r3",
+              "exact_text": "互联)—6—次性奖励2000～5000元；市分公司级，团体可一次",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "3e0d7f57200c6ff3"
+            },
+            {
+              "condition": "团体",
+              "value": "5000",
+              "unit": "元",
+              "evidence_passage_id": "4263e1617c5d72435bc16091b4345158",
+              "record_id": "4263e1617c5d72435bc16091b4345158:r3",
+              "exact_text": "市分公司级，团体可一次性奖励2000～5000元，个人可一次性奖励10",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "3e0d7f57200c6ff3"
+            },
+            {
+              "condition": "",
+              "value": "1000",
+              "unit": "元",
+              "evidence_passage_id": "91cb6b8612c676884bd39a5f4d2b8cc4",
+              "record_id": "91cb6b8612c676884bd39a5f4d2b8cc4:r1",
+              "exact_text": "提醒谈话、责令检查、通报批评，减发1000元以下绩效工资；",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "3e0d7f57200c6ff3"
+            },
+            {
+              "condition": "团体",
+              "value": "3000",
+              "unit": "元",
+              "evidence_passage_id": "4263e1617c5d72435bc16091b4345158",
+              "record_id": "4263e1617c5d72435bc16091b4345158:r3",
+              "exact_text": "团体3000元",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "3e0d7f57200c6ff3"
+            },
+            {
+              "condition": "",
+              "value": "1000",
+              "unit": "元",
+              "evidence_passage_id": "b3cf81589e897cb739e5a169d0bfe4d9",
+              "record_id": "b3cf81589e897cb739e5a169d0bfe4d9:r0",
+              "exact_text": "作出谈话提醒、责令检查、通报批评及减发1000元以下绩效工资的惩戒决定。",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "3e0d7f57200c6ff3"
+            }
+          ],
+          "dropped": [
+            {
+              "id": "8d0cd05dd0e8355d336677dc",
+              "reason": "unit_not_money"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 42,
+          "candidate_count": 11
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "区公司级，团体可一次性奖励3000～10000元，个人可一维护账号(集",
+              "evidence_passage_ids": [
+                "4263e1617c5d72435bc16091b4345158"
+              ],
+              "fact_type": "numeric",
+              "condition": "团体",
+              "candidate_id": "fbf7621957e0c52b87414b8c"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "互联)—6—次性奖励2000～5000元；市分公司级，团体可一次",
+              "evidence_passage_ids": [
+                "4263e1617c5d72435bc16091b4345158"
+              ],
+              "fact_type": "numeric",
+              "condition": "团体",
+              "candidate_id": "ba2958af41b67b731ae648da"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "市分公司级，团体可一次性奖励2000～5000元，个人可一次性奖励10",
+              "evidence_passage_ids": [
+                "4263e1617c5d72435bc16091b4345158"
+              ],
+              "fact_type": "numeric",
+              "condition": "团体",
+              "candidate_id": "cf6f8d23d31ee68225af3570"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "提醒谈话、责令检查、通报批评，减发1000元以下绩效工资；",
+              "evidence_passage_ids": [
+                "91cb6b8612c676884bd39a5f4d2b8cc4"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "6c1c36c08e2170a14d0cd4b0"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "团体3000元",
+              "evidence_passage_ids": [
+                "4263e1617c5d72435bc16091b4345158"
+              ],
+              "fact_type": "numeric",
+              "condition": "团体",
+              "candidate_id": "52c3400a40e7cd55d367a3a8"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "作出谈话提醒、责令检查、通报批评及减发1000元以下绩效工资的惩戒决定。",
+              "evidence_passage_ids": [
+                "b3cf81589e897cb739e5a169d0bfe4d9"
+              ],
+              "fact_type": "numeric",
+              "condition": "",
+              "candidate_id": "c00c41dff6aec4ec26606dc4"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司搞比赛给员工发奖金 上限是多少",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "predicate:上限"
+            ],
+            "entities": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "比赛",
+            "object": "员工",
+            "scope": [
+              "员工"
+            ],
+            "selector": [],
+            "predicate": "上限",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ]
+          },
+          "input_count": 11,
+          "dropped": [
+            {
+              "id": "8d0cd05dd0e8355d336677dc",
+              "reason": "unit_not_money"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "fbf7621957e0c52b87414b8c",
+              "record_id": "4263e1617c5d72435bc16091b4345158:r3",
+              "passage_id": "4263e1617c5d72435bc16091b4345158",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "10000元",
+              "qualifiers": [],
+              "condition": "团体",
+              "value": "10000",
+              "unit": "元",
+              "exact_text": "区公司级，团体可一次性奖励3000～10000元，个人可一维护账号(集",
+              "evidence_spans": [
+                [
+                  30,
+                  37
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+              "version_year": 2021,
+              "score": 6.7,
+              "unstructured_rejected": false,
+              "group_id": "3e0d7f57200c6ff3",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "hit",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  30,
+                  37
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "ba2958af41b67b731ae648da",
+              "record_id": "4263e1617c5d72435bc16091b4345158:r3",
+              "passage_id": "4263e1617c5d72435bc16091b4345158",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "5000元",
+              "qualifiers": [],
+              "condition": "团体",
+              "value": "5000",
+              "unit": "元",
+              "exact_text": "互联)—6—次性奖励2000～5000元；市分公司级，团体可一次",
+              "evidence_spans": [
+                [
+                  70,
+                  76
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+              "version_year": 2021,
+              "score": 6.7,
+              "unstructured_rejected": false,
+              "group_id": "3e0d7f57200c6ff3",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "hit",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  70,
+                  76
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "cf6f8d23d31ee68225af3570",
+              "record_id": "4263e1617c5d72435bc16091b4345158:r3",
+              "passage_id": "4263e1617c5d72435bc16091b4345158",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "5000元",
+              "qualifiers": [],
+              "condition": "团体",
+              "value": "5000",
+              "unit": "元",
+              "exact_text": "市分公司级，团体可一次性奖励2000～5000元，个人可一次性奖励10",
+              "evidence_spans": [
+                [
+                  97,
+                  103
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+              "version_year": 2021,
+              "score": 6.7,
+              "unstructured_rejected": false,
+              "group_id": "3e0d7f57200c6ff3",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "hit",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  97,
+                  103
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "6c1c36c08e2170a14d0cd4b0",
+              "record_id": "91cb6b8612c676884bd39a5f4d2b8cc4:r1",
+              "passage_id": "91cb6b8612c676884bd39a5f4d2b8cc4",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "1000元",
+              "qualifiers": [],
+              "condition": "",
+              "value": "1000",
+              "unit": "元",
+              "exact_text": "提醒谈话、责令检查、通报批评，减发1000元以下绩效工资；",
+              "evidence_spans": [
+                [
+                  18,
+                  24
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+              "version_year": 2021,
+              "score": 5.1,
+              "unstructured_rejected": false,
+              "group_id": "3e0d7f57200c6ff3",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "miss",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  18,
+                  24
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "52c3400a40e7cd55d367a3a8",
+              "record_id": "4263e1617c5d72435bc16091b4345158:r3",
+              "passage_id": "4263e1617c5d72435bc16091b4345158",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "3000元",
+              "qualifiers": [],
+              "condition": "团体",
+              "value": "3000",
+              "unit": "元",
+              "exact_text": "团体3000元",
+              "evidence_spans": [
+                [
+                  119,
+                  125
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+              "version_year": 2021,
+              "score": 5.1,
+              "unstructured_rejected": false,
+              "group_id": "3e0d7f57200c6ff3",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "miss",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  119,
+                  125
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "c00c41dff6aec4ec26606dc4",
+              "record_id": "b3cf81589e897cb739e5a169d0bfe4d9:r0",
+              "passage_id": "b3cf81589e897cb739e5a169d0bfe4d9",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "数值",
+              "object": "1000元",
+              "qualifiers": [],
+              "condition": "",
+              "value": "1000",
+              "unit": "元",
+              "exact_text": "作出谈话提醒、责令检查、通报批评及减发1000元以下绩效工资的惩戒决定。",
+              "evidence_spans": [
+                [
+                  53,
+                  59
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信广西公司员工奖惩管理办法",
+              "version_year": 2021,
+              "score": 5.1,
+              "unstructured_rejected": false,
+              "group_id": "3e0d7f57200c6ff3",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "predicate:上限": "miss",
+                "anchor:比赛": "miss",
+                "anchor:员工": "miss",
+                "anchor:奖金": "miss",
+                "anchor:上限": "miss",
+                "anchor:竞赛": "miss",
+                "anchor:奖励": "miss",
+                "anchor:公司搞比赛给员工发奖金": "miss",
+                "anchor:公司搞比赛给": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  53,
+                  59
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "fbf7621957e0c52b87414b8c": "hit",
+              "ba2958af41b67b731ae648da": "hit",
+              "cf6f8d23d31ee68225af3570": "hit",
+              "6c1c36c08e2170a14d0cd4b0": "hit",
+              "52c3400a40e7cd55d367a3a8": "hit",
+              "c00c41dff6aec4ec26606dc4": "hit",
+              "c8861cae425c3daa94706f58": "hit"
+            },
+            "unit": {
+              "fbf7621957e0c52b87414b8c": "hit",
+              "ba2958af41b67b731ae648da": "hit",
+              "cf6f8d23d31ee68225af3570": "hit",
+              "6c1c36c08e2170a14d0cd4b0": "hit",
+              "52c3400a40e7cd55d367a3a8": "hit",
+              "c00c41dff6aec4ec26606dc4": "hit",
+              "c8861cae425c3daa94706f58": "hit"
+            },
+            "predicate:上限": {
+              "fbf7621957e0c52b87414b8c": "miss",
+              "ba2958af41b67b731ae648da": "miss",
+              "cf6f8d23d31ee68225af3570": "miss",
+              "6c1c36c08e2170a14d0cd4b0": "miss",
+              "52c3400a40e7cd55d367a3a8": "miss",
+              "c00c41dff6aec4ec26606dc4": "miss",
+              "c8861cae425c3daa94706f58": "miss"
+            }
+          },
+          "primary_group_id": "3e0d7f57200c6ff3",
+          "covered_slots": [
+            "condition:团体",
+            "unit",
+            "value",
+            "团体"
+          ],
+          "missing_after_select": [
+            "predicate:上限"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "3e0d7f57200c6ff3",
+                "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+                "knowledge_ids": [
+                  "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+                ],
+                "organization_scope": "中国电信广西公司",
+                "document_family_id": "中国电信广西公司:中国电信广西公司员工奖惩管理办法",
+                "document_revision": "2021",
+                "effective_date": "",
+                "version_year": 2021,
+                "passage_ids": [
+                  "91cb6b8612c676884bd39a5f4d2b8cc4",
+                  "4263e1617c5d72435bc16091b4345158",
+                  "6a6be0544e60b9309797307f9b16f3a1",
+                  "b3cf81589e897cb739e5a169d0bfe4d9",
+                  "c2f17324d08162d86e3d22391017cfad",
+                  "be7bf1179311689f3b78da0938f08498",
+                  "692d52ef1d54ac34df3724a5291e66b6",
+                  "1a29e750c078aae2297aae9897d90d00",
+                  "f49f95e53b5d80aaee3329a8b8d3fe86",
+                  "98bbc760ec9bf4ece1f0de8ee999246a"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9
+                ],
+                "retrieval_scores": [
+                  0.7,
+                  0.1805022250476796,
+                  0.17557837355201017,
+                  0.16626959247648904,
+                  0.16555006094481092,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+                "section": "4. 撤职、降级，减发 3个月至 12 个月绩效工资。 > （二） 经济赔偿根据违纪行为给公司造成的直接经济损失计 > 1. 损失金额 2万元以下的，赔偿 100% ；",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 9.4,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "91cb6b8612c676884bd39a5f4d2b8cc4:r0",
+                  "91cb6b8612c676884bd39a5f4d2b8cc4:r1",
+                  "91cb6b8612c676884bd39a5f4d2b8cc4:r2",
+                  "91cb6b8612c676884bd39a5f4d2b8cc4:r3",
+                  "91cb6b8612c676884bd39a5f4d2b8cc4:r4",
+                  "91cb6b8612c676884bd39a5f4d2b8cc4:r5",
+                  "4263e1617c5d72435bc16091b4345158:r0",
+                  "4263e1617c5d72435bc16091b4345158:r1",
+                  "4263e1617c5d72435bc16091b4345158:r2",
+                  "4263e1617c5d72435bc16091b4345158:r3",
+                  "4263e1617c5d72435bc16091b4345158:r4",
+                  "6a6be0544e60b9309797307f9b16f3a1:unstructured:0",
+                  "b3cf81589e897cb739e5a169d0bfe4d9:r0",
+                  "b3cf81589e897cb739e5a169d0bfe4d9:r1",
+                  "b3cf81589e897cb739e5a169d0bfe4d9:r2",
+                  "b3cf81589e897cb739e5a169d0bfe4d9:r3",
+                  "b3cf81589e897cb739e5a169d0bfe4d9:r4",
+                  "b3cf81589e897cb739e5a169d0bfe4d9:r5",
+                  "c2f17324d08162d86e3d22391017cfad:unstructured:0",
+                  "be7bf1179311689f3b78da0938f08498:r0",
+                  "be7bf1179311689f3b78da0938f08498:r1",
+                  "be7bf1179311689f3b78da0938f08498:r2",
+                  "be7bf1179311689f3b78da0938f08498:r3",
+                  "be7bf1179311689f3b78da0938f08498:r4",
+                  "be7bf1179311689f3b78da0938f08498:r5",
+                  "be7bf1179311689f3b78da0938f08498:r6",
+                  "be7bf1179311689f3b78da0938f08498:r7",
+                  "692d52ef1d54ac34df3724a5291e66b6:r0",
+                  "692d52ef1d54ac34df3724a5291e66b6:r1",
+                  "692d52ef1d54ac34df3724a5291e66b6:r2",
+                  "692d52ef1d54ac34df3724a5291e66b6:r3",
+                  "692d52ef1d54ac34df3724a5291e66b6:r4",
+                  "692d52ef1d54ac34df3724a5291e66b6:r5",
+                  "692d52ef1d54ac34df3724a5291e66b6:r6",
+                  "692d52ef1d54ac34df3724a5291e66b6:r7",
+                  "1a29e750c078aae2297aae9897d90d00:r0",
+                  "f49f95e53b5d80aaee3329a8b8d3fe86:r0",
+                  "f49f95e53b5d80aaee3329a8b8d3fe86:r1",
+                  "f49f95e53b5d80aaee3329a8b8d3fe86:r2",
+                  "f49f95e53b5d80aaee3329a8b8d3fe86:r3",
+                  "f49f95e53b5d80aaee3329a8b8d3fe86:r4",
+                  "98bbc760ec9bf4ece1f0de8ee999246a:unstructured:0"
+                ]
+              }
+            ],
+            "primary_group_id": "3e0d7f57200c6ff3",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "上限是多少",
+                "公司搞比赛给员工发奖金"
+              ],
+              "selection": [
+                {
+                  "group_id": "3e0d7f57200c6ff3",
+                  "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+                  "knowledge_ids": [
+                    "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+                  ],
+                  "score": 9.4,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit",
+            "predicate:上限"
+          ],
+          "candidate_ids": [
+            "fbf7621957e0c52b87414b8c",
+            "ba2958af41b67b731ae648da",
+            "cf6f8d23d31ee68225af3570",
+            "6c1c36c08e2170a14d0cd4b0",
+            "52c3400a40e7cd55d367a3a8",
+            "c00c41dff6aec4ec26606dc4"
+          ],
+          "missing_slots": [
+            "predicate:上限"
+          ],
+          "complete": false,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "unit",
+            "value",
+            "团体"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "fbf7621957e0c52b87414b8c": "hit",
+              "ba2958af41b67b731ae648da": "hit",
+              "cf6f8d23d31ee68225af3570": "hit",
+              "6c1c36c08e2170a14d0cd4b0": "hit",
+              "52c3400a40e7cd55d367a3a8": "hit",
+              "c00c41dff6aec4ec26606dc4": "hit",
+              "c8861cae425c3daa94706f58": "hit"
+            },
+            "unit": {
+              "fbf7621957e0c52b87414b8c": "hit",
+              "ba2958af41b67b731ae648da": "hit",
+              "cf6f8d23d31ee68225af3570": "hit",
+              "6c1c36c08e2170a14d0cd4b0": "hit",
+              "52c3400a40e7cd55d367a3a8": "hit",
+              "c00c41dff6aec4ec26606dc4": "hit",
+              "c8861cae425c3daa94706f58": "hit"
+            },
+            "predicate:上限": {
+              "fbf7621957e0c52b87414b8c": "miss",
+              "ba2958af41b67b731ae648da": "miss",
+              "cf6f8d23d31ee68225af3570": "miss",
+              "6c1c36c08e2170a14d0cd4b0": "miss",
+              "52c3400a40e7cd55d367a3a8": "miss",
+              "c00c41dff6aec4ec26606dc4": "miss",
+              "c8861cae425c3daa94706f58": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "公司搞比赛给员工发奖金 上限是多少",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "value",
+            "unit",
+            "predicate:上限"
+          ],
+          "entities": [
+            "比赛",
+            "员工",
+            "奖金",
+            "上限",
+            "竞赛",
+            "奖励",
+            "公司搞比赛给员工发奖金",
+            "公司搞比赛给",
+            "给员工发奖金",
+            "公司搞比",
+            "工发奖金",
+            "公司搞"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "比赛",
+          "object": "员工",
+          "scope": [
+            "员工"
+          ],
+          "selector": [],
+          "predicate": "上限",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "numeric",
+          "value_dimensions": [
+            "value"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "比赛",
+            "员工",
+            "奖金",
+            "上限",
+            "竞赛",
+            "奖励",
+            "公司搞比赛给员工发奖金",
+            "公司搞比赛给",
+            "给员工发奖金",
+            "公司搞比",
+            "工发奖金",
+            "公司搞"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "3e0d7f57200c6ff3",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "knowledge_ids": [
+                "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+              ],
+              "organization_scope": "中国电信广西公司",
+              "document_family_id": "中国电信广西公司:中国电信广西公司员工奖惩管理办法",
+              "document_revision": "2021",
+              "effective_date": "",
+              "version_year": 2021,
+              "passage_ids": [
+                "91cb6b8612c676884bd39a5f4d2b8cc4",
+                "4263e1617c5d72435bc16091b4345158",
+                "6a6be0544e60b9309797307f9b16f3a1",
+                "b3cf81589e897cb739e5a169d0bfe4d9",
+                "c2f17324d08162d86e3d22391017cfad",
+                "be7bf1179311689f3b78da0938f08498",
+                "692d52ef1d54ac34df3724a5291e66b6",
+                "1a29e750c078aae2297aae9897d90d00",
+                "f49f95e53b5d80aaee3329a8b8d3fe86",
+                "98bbc760ec9bf4ece1f0de8ee999246a"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "retrieval_scores": [
+                0.7,
+                0.1805022250476796,
+                0.17557837355201017,
+                0.16626959247648904,
+                0.16555006094481092,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+              "section": "4. 撤职、降级，减发 3个月至 12 个月绩效工资。 > （二） 经济赔偿根据违纪行为给公司造成的直接经济损失计 > 1. 损失金额 2万元以下的，赔偿 100% ；",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 9.4,
+              "rejection_reasons": [],
+              "record_ids": [
+                "91cb6b8612c676884bd39a5f4d2b8cc4:r0",
+                "91cb6b8612c676884bd39a5f4d2b8cc4:r1",
+                "91cb6b8612c676884bd39a5f4d2b8cc4:r2",
+                "91cb6b8612c676884bd39a5f4d2b8cc4:r3",
+                "91cb6b8612c676884bd39a5f4d2b8cc4:r4",
+                "91cb6b8612c676884bd39a5f4d2b8cc4:r5",
+                "4263e1617c5d72435bc16091b4345158:r0",
+                "4263e1617c5d72435bc16091b4345158:r1",
+                "4263e1617c5d72435bc16091b4345158:r2",
+                "4263e1617c5d72435bc16091b4345158:r3",
+                "4263e1617c5d72435bc16091b4345158:r4",
+                "6a6be0544e60b9309797307f9b16f3a1:unstructured:0",
+                "b3cf81589e897cb739e5a169d0bfe4d9:r0",
+                "b3cf81589e897cb739e5a169d0bfe4d9:r1",
+                "b3cf81589e897cb739e5a169d0bfe4d9:r2",
+                "b3cf81589e897cb739e5a169d0bfe4d9:r3",
+                "b3cf81589e897cb739e5a169d0bfe4d9:r4",
+                "b3cf81589e897cb739e5a169d0bfe4d9:r5",
+                "c2f17324d08162d86e3d22391017cfad:unstructured:0",
+                "be7bf1179311689f3b78da0938f08498:r0",
+                "be7bf1179311689f3b78da0938f08498:r1",
+                "be7bf1179311689f3b78da0938f08498:r2",
+                "be7bf1179311689f3b78da0938f08498:r3",
+                "be7bf1179311689f3b78da0938f08498:r4",
+                "be7bf1179311689f3b78da0938f08498:r5",
+                "be7bf1179311689f3b78da0938f08498:r6",
+                "be7bf1179311689f3b78da0938f08498:r7",
+                "692d52ef1d54ac34df3724a5291e66b6:r0",
+                "692d52ef1d54ac34df3724a5291e66b6:r1",
+                "692d52ef1d54ac34df3724a5291e66b6:r2",
+                "692d52ef1d54ac34df3724a5291e66b6:r3",
+                "692d52ef1d54ac34df3724a5291e66b6:r4",
+                "692d52ef1d54ac34df3724a5291e66b6:r5",
+                "692d52ef1d54ac34df3724a5291e66b6:r6",
+                "692d52ef1d54ac34df3724a5291e66b6:r7",
+                "1a29e750c078aae2297aae9897d90d00:r0",
+                "f49f95e53b5d80aaee3329a8b8d3fe86:r0",
+                "f49f95e53b5d80aaee3329a8b8d3fe86:r1",
+                "f49f95e53b5d80aaee3329a8b8d3fe86:r2",
+                "f49f95e53b5d80aaee3329a8b8d3fe86:r3",
+                "f49f95e53b5d80aaee3329a8b8d3fe86:r4",
+                "98bbc760ec9bf4ece1f0de8ee999246a:unstructured:0"
+              ]
+            }
+          ],
+          "primary_group_id": "3e0d7f57200c6ff3",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "上限是多少",
+              "公司搞比赛给员工发奖金"
+            ],
+            "selection": [
+              {
+                "group_id": "3e0d7f57200c6ff3",
+                "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+                "knowledge_ids": [
+                  "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+                ],
+                "score": 9.4,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {},
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "fbf7621957e0c52b87414b8c"
+              ],
+              "passage_id": "4263e1617c5d72435bc16091b4345158",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "text": "- 区公司级，团体可一次性奖励3000～10000元，个人可一维护账号(集",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "ba2958af41b67b731ae648da"
+              ],
+              "passage_id": "4263e1617c5d72435bc16091b4345158",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "text": "- 互联)—6—次性奖励2000～5000元；市分公司级，团体可一次",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "cf6f8d23d31ee68225af3570"
+              ],
+              "passage_id": "4263e1617c5d72435bc16091b4345158",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "text": "- 市分公司级，团体可一次性奖励2000～5000元，个人可一次性奖励10",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 110
+        },
+        "primary_group_id": "3e0d7f57200c6ff3",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "type": "knowledge",
+              "label": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35"
+            },
+            {
+              "id": "57978153-20ab-4d49-8eaf-c2f1b9244221",
+              "type": "block",
+              "label": "任务，或在抢救、抢修通信线路、通信生产设备等过程中有特殊",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+            },
+            {
+              "id": "2ba2f098-4af8-4fe6-8a9d-3e950adf62e0",
+              "type": "block",
+              "label": "[第5页]",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+            },
+            {
+              "id": "55c12f76-328b-48da-a132-ad96825186f3",
+              "type": "block",
+              "label": "性质、认错改过情况等因素给予一定经济处罚或免于经济处罚。",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+            },
+            {
+              "id": "d1703a3e-8c54-4c13-b26f-ba958fe2bba1",
+              "type": "block",
+              "label": "[第11页]",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+            },
+            {
+              "id": "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+              "type": "block",
+              "label": "资的惩戒决定。",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+            },
+            {
+              "id": "d7f9ee30-b430-40a2-acbf-42c91bb99a2b",
+              "type": "block",
+              "label": "[第4页]",
+              "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+            },
+            {
+              "id": "1498df43-3c1e-4d7b-a34a-351435939817",
+              "type": "knowledge",
+              "label": "中电信桂-2015-214号-关于印发-中国电信广西公司员工先进荣誉奖励办法-的通知--1498df43"
+            },
+            {
+              "id": "5b801f4c-51dd-4ea3-b013-58868daecf49",
+              "type": "knowledge",
+              "label": "中电信桂-2022-298号-关于印发中国电信广西公司员工荣誉体系-修订-的通知--5b801f4c"
+            }
+          ],
+          "edges": [
+            {
+              "source": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "target": "57978153-20ab-4d49-8eaf-c2f1b9244221",
+              "type": "contains"
+            },
+            {
+              "source": "2ba2f098-4af8-4fe6-8a9d-3e950adf62e0",
+              "target": "57978153-20ab-4d49-8eaf-c2f1b9244221",
+              "type": "parent"
+            },
+            {
+              "source": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "target": "55c12f76-328b-48da-a132-ad96825186f3",
+              "type": "contains"
+            },
+            {
+              "source": "d1703a3e-8c54-4c13-b26f-ba958fe2bba1",
+              "target": "55c12f76-328b-48da-a132-ad96825186f3",
+              "type": "parent"
+            },
+            {
+              "source": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "target": "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+              "type": "contains"
+            },
+            {
+              "source": "d7f9ee30-b430-40a2-acbf-42c91bb99a2b",
+              "target": "7a430552-e0f9-41b1-bd21-2327a2b798eb",
+              "type": "parent"
+            },
+            {
+              "source": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "target": "1498df43-3c1e-4d7b-a34a-351435939817",
+              "type": "related"
+            },
+            {
+              "source": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+              "target": "5b801f4c-51dd-4ea3-b013-58868daecf49",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 9
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 3,
+          "adjacent_extension": 0,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+          ],
+          "accepted_block_ids": [
+            "55c12f76-328b-48da-a132-ad96825186f3"
+          ],
+          "accepted_passage_ids": [
+            "91cb6b8612c676884bd39a5f4d2b8cc4",
+            "4263e1617c5d72435bc16091b4345158",
+            "6a6be0544e60b9309797307f9b16f3a1",
+            "b3cf81589e897cb739e5a169d0bfe4d9",
+            "c2f17324d08162d86e3d22391017cfad",
+            "be7bf1179311689f3b78da0938f08498",
+            "692d52ef1d54ac34df3724a5291e66b6",
+            "1a29e750c078aae2297aae9897d90d00",
+            "f49f95e53b5d80aaee3329a8b8d3fe86",
+            "98bbc760ec9bf4ece1f0de8ee999246a"
+          ],
+          "adjacent_passage_ids": [
+            "be7bf1179311689f3b78da0938f08498",
+            "6a6be0544e60b9309797307f9b16f3a1",
+            "692d52ef1d54ac34df3724a5291e66b6",
+            "1a29e750c078aae2297aae9897d90d00",
+            "c2f17324d08162d86e3d22391017cfad",
+            "f49f95e53b5d80aaee3329a8b8d3fe86",
+            "98bbc760ec9bf4ece1f0de8ee999246a"
+          ],
+          "generation_knowledge_ids": [
+            "4fbd0f35-0fb3-407a-812d-ff03f1b441fb"
+          ],
+          "top_score": 0.1611,
+          "intent": "ordinary",
+          "adjacent_count": 7,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "员工",
+              "上限"
+            ],
+            "passage_id": "91cb6b8612c676884bd39a5f4d2b8cc4",
+            "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+            "spans": [
+              {
+                "slot": "员工",
+                "surface": "员工",
+                "synonym_source": "query_surface",
+                "span": [
+                  26,
+                  28
+                ],
+                "excerpt": "021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【文档】中电信桂-2021-54"
+              },
+              {
+                "slot": "上限",
+                "surface": "上限",
+                "synonym_source": "query_surface",
+                "span": [
+                  582,
+                  584
+                ],
+                "excerpt": "一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经"
+              }
+            ],
+            "reason": "query_anchor_fact_match",
+            "query_slots": [
+              "比赛",
+              "员工",
+              "奖金",
+              "上限",
+              "竞赛",
+              "奖励",
+              "公司搞比赛给员工发奖金",
+              "公司搞比赛给",
+              "给员工发奖金",
+              "公司搞比",
+              "工发奖金",
+              "公司搞"
+            ],
+            "score": 0.1667,
+            "typed_plan": {
+              "anchors": [
+                "比赛",
+                "员工",
+                "奖金",
+                "上限",
+                "竞赛",
+                "奖励",
+                "公司搞比赛给员工发奖金",
+                "公司搞比赛给"
+              ],
+              "predicate": "上限",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "33e8cd293b007aa623fc9382"
+        },
+        "snapshot_fingerprint": "33e8cd293b007aa623fc9382",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 3,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 37.72
+  },
+  "top_candidate_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+  "candidates": [
+    {
+      "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+      "passage_id": "91cb6b8612c676884bd39a5f4d2b8cc4",
+      "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+      "score": 0.7,
+      "final_relevance_score": 0.35,
+      "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】4. 撤职、降级，减发 3个月至 12 个月绩效工资。 > （二） 经济赔偿根据违纪行为给公司造成的直接经济损失计 > 1. 损失金额 2万元以下的，赔偿 100% ；\n\n第三十一条 员工违纪受到行政处理处分的，一般可根据违\n纪行为给企业造成的经济损失、不良影响，以及当事人所犯错误\n性质、认错改过情况等因素给予一定经济处罚或免于经济处罚。\n经济处罚包括减发绩效工资和给予经济赔偿， 两种经济处罚可以\n单处，也可以并处。 维护账号(集团互联)\n— 12 —（一）减发绩效工资，一般规定为：\n1. 提醒谈话、责令检查、通报批评，减发 1000 元以下绩效工\n资；\n2. 予以诫勉、警告处分，减发半个月至 1个月绩效工资；\n3. 记过，记大过，减发 1个月至 3个月绩效工资；\n4. 撤职、降级，减发 3个月至 12 个月绩效工资。\n月度绩效工资一般指当事员工上年度实发绩效工资总数的\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为："
+    },
+    {
+      "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+      "passage_id": "4263e1617c5d72435bc16091b4345158",
+      "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+      "score": 0.1805022250476796,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】（一）通令嘉奖物质奖励标准 > （二）授予荣誉称号物质奖励标准 > 第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n\n（六）在维护法纪，维护公司信誉，弘扬企业文化、社会公\n德等方面有特殊贡献或事迹突出的；\n（七）紧急情况下，坚守岗位保证通信畅通，出色完成通信\n任务，或在抢救、抢修通信线路、通信生产设备等过程中有特殊\n贡献或事迹突出的；\n（八）其他应给予奖励的情形。\n第十二条 在给予员工精神奖励的同时， 可给予相应物质奖\n励，即可以给予一次性奖金，也可以给予奖品、培训、疗休等不\n同形式的奖励。一次性奖金按以下标准执行：\n（一）通令嘉奖物质奖励标准\n区公司级，团体可一次性奖励 3000 ～10000 元，个人可一 维护账号(集团互联)\n— 6 —次性奖励 2000 ～5000 元；市分公司级，团体可一次性奖励\n2000 ～5000 元，个人可一次性奖励 1000 ～3000 元。\n（二）授予荣誉称号物质奖励标准\n按照《中国电信广西公司员工先进荣誉奖励办法》（中电信\n桂〔 2015 〕214 号）相关文件执行。\n第十三条 因同一事项获多个物质奖励的，公司将仅给予多\n个物质奖励中金额或等级最高的奖励。"
+    },
+    {
+      "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+      "passage_id": "6a6be0544e60b9309797307f9b16f3a1",
+      "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+      "score": 0.17557837355201017,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】3. 损失金额 4万元以上的，按： 4万×80 ％+（实际损失金额 -4 > 第三十二条 本办法所指违纪一般指违反公司纪律，包含本 > （一）造成经济损失的情节\n每月平均数。如员工上年度任职未满一年，以最近 12 个月内实发\n绩效工资的月度平均数计算。根据案件情况，如直接给予减发一\n定金额绩效工资更有效率的， 可在相应上限幅度内减发一定金额\n的绩效工资。\n（二） 经济赔偿根据违纪行为给公司造成的直接经济损失计\n算，具体标准为：\n1. 损失金额 2万元以下的，赔偿 100% ；\n2. 损失金额 2万以上 4万元以下的，按： 2万+（实际损失金额\n-2万） ×60 ％赔偿；\n3. 损失金额 4万元以上的，按： 4万×80 ％+（实际损失金额 -4\n万） ×20 ％赔偿；总计赔偿限额不超过该员工 18 个月绩效工资。\n赔偿经济损失可一次性支付，也可按月从本人收入中扣除 ，\n但每月扣除后的实发工资金额应大于当地最低月工资标准。\n第三十二条 本办法所指违纪一般指违反公司纪律，包含本\n办法及企业相关管理制度。违纪行为的性质、情节、危害程度分 维护账号(集团互联)\n— 13 — 为一般、较重、严重三个等次。划分依据有造成企业直接经济损\n失情况、谋取不当利益情况、造成不良影响程度情况，以及企业\n其他规章制度与法律法规规定，具体如下："
+    },
+    {
+      "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+      "passage_id": "b3cf81589e897cb739e5a169d0bfe4d9",
+      "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+      "score": 0.16626959247648904,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】（三）授予荣誉称号。 > 第十一条 员工符合以下行为情形之一，可给予通报表扬奖 > （二）在经营发展工作中开拓创新或提出合理化建议，取得\n\n（二）决定权限\n1. 县（区域）分公司、未成立党委的专业公司奖惩委员会有\n权作出谈话提醒、责令检查、通报批评及减发 1000 元以下绩效工\n资的惩戒决定。\n2. 区公司、市分公司、成立党委的专业公司奖惩委员会办公\n室有权作出除解除劳动合同以外的处理处分决定。\n3. 区公司、市分公司、成立党委的专业公司奖惩委员会有权\n作出各种行政处理处分决定。\n第三章 奖励的种类和适用\n第十条 奖励的种类\n（一）通报表扬 ;\n（二）通令嘉奖 ;\n（三）授予荣誉称号。\n第十一条 员工符合以下行为情形之一，可给予通报表扬奖\n励；表现或事迹特别优异的可给予通令嘉奖或授予荣誉称号奖\n励。授予荣誉称号按照《中国电信广西公司员工荣誉体系》（中\n电信桂〔 2013 〕300 号）等相关文件执行。 维护账号(集团互联)\n— 5 — （一）在经营发展工作中取得重大销售业绩、明显提升客户\n服务水平或网络质量、显著降低公司成本或提高生产效率的；\n（二）在经营发展工作中开拓创新或提出合理化建议，取得\n重大成果或显著成效的；"
+    },
+    {
+      "knowledge_id": "4fbd0f35-0fb3-407a-812d-ff03f1b441fb",
+      "passage_id": "c2f17324d08162d86e3d22391017cfad",
+      "title": "中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35",
+      "score": 0.16555006094481092,
+      "final_relevance_score": null,
+      "text": "【文档】中电信桂-2021-54号-关于印发中国电信广西公司员工奖惩管理办法-修订-的通知--4fbd0f35\n【章节】2.“ 情节较重 ”是指谋取不当利益金额在 5000 元及以上、 3万 > 3.“ 情节严重 ”是指谋取不当利益金额在 3万元及以上的。 > （三）造成不良影响的情节\n办法及企业相关管理制度。违纪行为的性质、情节、危害程度分 维护账号(集团互联)\n— 13 — 为一般、较重、严重三个等次。划分依据有造成企业直接经济损\n失情况、谋取不当利益情况、造成不良影响程度情况，以及企业\n其他规章制度与法律法规规定，具体如下：\n（一）造成经济损失的情节\n1.“ 情节一般 ”是指造成公司直接经济损失在 1万元及以上、\n10 万元以下的一定经济损失的；\n2.“情节较重 ”是指造成公司直接经济损失在 10 万元及以上、\n50 万元以下的较大经济损失的；\n3.“情节严重 ”是指造成公司直接经济损失在 50 万元及以上\n的重大经济损失的。\n（二）员工有贪污受贿、职务侵占、以权谋私等谋取不当利\n益行为的情节\n1.“ 情节一般 ”是指谋取不当利益金额在 5000 元以下的；\n2.“ 情节较重 ”是指谋取不当利益金额在 5000 元及以上、 3万\n元以下的；\n3.“ 情节严重 ”是指谋取不当利益金额在 3万元及以上的。"
+    }
+  ],
+  "search_ms": 1495.44,
+  "ask_ms": 37.72,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_reuse_reason": "",
+  "snapshot_id": "uiJSGAdR4v3vaZOiLUstwZyyg8l52jKC",
+  "search_snapshot_fingerprint": "33e8cd293b007aa623fc9382",
+  "ask_snapshot_fingerprint": "33e8cd293b007aa623fc9382",
+  "snapshot_integrity_error": false,
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted",
+  "run_fingerprint": "acac4a8137a8ecb89b239fdb"
+}
