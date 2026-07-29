@@ -1,0 +1,13 @@
+{
+  "input": "D:\\AiWorkSpace\\knowledge-base\\evals\\golden_set_hit_rate.json",
+  "output": "D:\\AiWorkSpace\\knowledge-base\\tests\\eval\\datasets\\hit_rate\\candidates\\golden_v1_migrated.jsonl",
+  "total": 37,
+  "success": 37,
+  "schema_errors": 0,
+  "missing_passage": 32,
+  "ambiguity": 2,
+  "pending_human_review": 37,
+  "failed": 0,
+  "dataset_hash": "2a84b269345e15e05557ff67ce2847102549eed266fd608f7afea9eaab54158c",
+  "note": "All rows are candidates only. Phase 1 engineering complete; formal dataset freeze blocked by human review."
+}

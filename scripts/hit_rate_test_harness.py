@@ -226,29 +226,55 @@ def _build_manifest(
     read_mode: str,
     workers: int,
     case_filter: list[str] | None,
+    rerank_profile: str = "deterministic-baseline",
+    formal: bool = False,
+    non_formal: bool = False,
+    split: str | None = None,
+    schema_hash: str = "",
+    dataset_hash: str = "",
+    review_manifest_hash: str = "",
+    corpus_snapshot: str = "",
+    rerank_status: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     config_path = ROOT / "config.yaml"
-    db_candidates = [ROOT / "data" / "knowledge.db", ROOT / "data" / "shinehe.db"]
+    db_candidates = [
+        ROOT / "data" / "kb.db",
+        ROOT / "data" / "knowledge.db",
+        ROOT / "data" / "shinehe.db",
+    ]
     index_candidates = [
         ROOT / "data" / "passage_index",
         ROOT / "data" / "vector_store",
         ROOT / "data" / "vectors",
     ]
+    # Legacy field retained for resume compatibility; profile is authoritative.
+    legacy_rerank_mode = os.environ.get("HIT_RATE_RERANK_MODE", rerank_profile)
     timeout_settings = {
         "search_request_s": int(os.environ.get("HIT_RATE_SEARCH_TIMEOUT_S", "180")),
         "ask_request_s": int(os.environ.get("HIT_RATE_ASK_TIMEOUT_S", "180")),
-        "rerank_mode": os.environ.get("HIT_RATE_RERANK_MODE", "circuit_breaker"),
+        "rerank_mode": legacy_rerank_mode,
+        "rerank_profile": rerank_profile,
+        "provider_timeout_s": float(os.environ.get("HIT_RATE_RERANK_TIMEOUT_S", "20")),
     }
+    scorer_paths = [
+        ROOT / "evals" / "hit_rate_v2" / "scoring.py",
+        ROOT / "evals" / "hit_rate_v2" / "models.py",
+        ROOT / "scripts" / "hit_rate_score.py",
+        ROOT / "scripts" / "hit_rate_finalize.py",
+    ]
     return {
         "git_revision": _git_revision(),
         "dirty_patch_sha256": _dirty_patch_sha256(),
         "production_source_sha256": _production_source_sha256(),
         "golden_path": str(golden_path),
         "golden_sha256": _file_sha256(golden_path) if golden_path.exists() else "",
-        "scorer_sha256": _files_sha256([
-            ROOT / "scripts" / "hit_rate_score.py",
-            ROOT / "scripts" / "hit_rate_finalize.py",
-        ]),
+        "scorer_sha256": _files_sha256(scorer_paths),
+        "scorer_contract_version": "2.0",
+        "schema_hash": schema_hash,
+        "dataset_hash": dataset_hash,
+        "split": split,
+        "review_manifest_hash": review_manifest_hash,
+        "corpus_snapshot": corpus_snapshot,
         "config_hash": os.environ.get("HIT_RATE_CONFIG_HASH") or _file_sha256(config_path),
         "index_revision": _runtime_revision("HIT_RATE_INDEX_REVISION", index_candidates),
         "db_revision": _runtime_revision("HIT_RATE_DB_REVISION", db_candidates),
@@ -257,11 +283,15 @@ def _build_manifest(
         "dependency_lock_sha256": _file_sha256(ROOT / "pyproject.toml"),
         "retrieval_mode": os.environ.get("HIT_RATE_RETRIEVAL_MODE", "unified"),
         "rerank_mode": timeout_settings["rerank_mode"],
+        "rerank_profile": rerank_profile,
+        "rerank_status": rerank_status or {},
         "timeout_settings": timeout_settings,
         "reuse_snapshot": bool(reuse_snapshot),
         "read_mode": read_mode,
         "workers": int(workers),
         "case_filter": list(case_filter or []),
+        "formal": bool(formal),
+        "non_formal": bool(non_formal) or (not formal),
         "started_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "host": HOST,
         "port": PORT,
@@ -282,6 +312,12 @@ def _manifest_compatible(prev: dict, cur: dict) -> tuple[bool, str]:
         "production_source_sha256",
         "golden_sha256",
         "scorer_sha256",
+        "scorer_contract_version",
+        "schema_hash",
+        "dataset_hash",
+        "split",
+        "review_manifest_hash",
+        "corpus_snapshot",
         "config_hash",
         "index_revision",
         "db_revision",
@@ -290,15 +326,49 @@ def _manifest_compatible(prev: dict, cur: dict) -> tuple[bool, str]:
         "dependency_lock_sha256",
         "retrieval_mode",
         "rerank_mode",
+        "rerank_profile",
         "timeout_settings",
         "reuse_snapshot",
         "read_mode",
         "workers",
+        "formal",
     )
     for k in keys:
+        # New keys: only enforce when present on previous manifest (back-compat)
+        if k not in prev and k in {
+            "scorer_contract_version",
+            "schema_hash",
+            "dataset_hash",
+            "split",
+            "review_manifest_hash",
+            "corpus_snapshot",
+            "rerank_profile",
+            "formal",
+        }:
+            continue
         if prev.get(k) != cur.get(k):
             return False, f"manifest_mismatch:{k}"
     return True, ""
+
+
+def validate_formal_run_inputs(
+    golden_path: Path,
+    *,
+    formal: bool,
+    allow_candidates_dev: bool = False,
+) -> None:
+    """Fail closed for formal mode when golden is not frozen V2."""
+    if not formal:
+        return
+    from evals.hit_rate_v2.validation import validate_formal_golden_path
+
+    errors = validate_formal_golden_path(Path(golden_path))
+    if errors:
+        raise SystemExit(
+            "formal harness rejected golden path: " + ", ".join(errors)
+        )
+    if allow_candidates_dev:
+        raise SystemExit("internal error: formal cannot allow candidates")
 
 
 def _extract_snapshot_id(search_envelope: dict) -> str | None:
@@ -459,13 +529,51 @@ def run(
     host: str = HOST,
     port: int = PORT,
     write_manifest: bool = True,
+    rerank_profile: str = "deterministic-baseline",
+    formal: bool = False,
+    provider_available: bool | None = None,
 ):
+    from evals.hit_rate_v2.rerank_profiles import resolve_rerank_profile
+    from evals.hit_rate_v2.validation import (
+        dataset_hash as _dataset_hash,
+        scorer_contract_hash,
+        sha256_file,
+    )
+
+    # Formal mode: fail closed unless golden is under frozen/
+    validate_formal_run_inputs(Path(golden_path), formal=bool(formal))
+
     out_dir.mkdir(parents=True, exist_ok=True)
-    golden = json.loads(golden_path.read_text(encoding="utf-8"))
-    cases = golden["cases"] if isinstance(golden, dict) and "cases" in golden else golden
+
+    # Load golden: support JSON array/object or JSONL (frozen V2)
+    text = golden_path.read_text(encoding="utf-8")
+    if golden_path.suffix == ".jsonl":
+        cases = [json.loads(line) for line in text.splitlines() if line.strip()]
+        golden = {"cases": cases}
+    else:
+        golden = json.loads(text)
+        cases = golden["cases"] if isinstance(golden, dict) and "cases" in golden else golden
     if case_ids:
         want = set(case_ids)
         cases = [c for c in cases if c.get("case_id") in want]
+
+    status = resolve_rerank_profile(
+        rerank_profile,
+        provider_available=provider_available,
+        provider_timeout_s=float(os.environ.get("HIT_RATE_RERANK_TIMEOUT_S", "20")),
+        probe_error=os.environ.get("HIT_RATE_RERANK_PROBE_ERROR") or None,
+    )
+    if formal and status.blocked:
+        raise SystemExit(
+            "formal provider-enhanced track blocked: "
+            f"{status.fallback_reason or 'provider_unavailable'}"
+        )
+
+    schema_path = ROOT / "schema" / "hit-rate-golden-v2.schema.json"
+    schema_hash = sha256_file(schema_path) if schema_path.exists() else ""
+    ds_hash = _dataset_hash(list(cases)) if cases else ""
+    splits = sorted({str(c.get("split") or "") for c in cases if isinstance(c, dict)})
+    split_label = ",".join(s for s in splits if s) or None
 
     manifest = _build_manifest(
         golden_path=golden_path,
@@ -474,7 +582,17 @@ def run(
         read_mode=read_mode,
         workers=workers,
         case_filter=case_ids,
+        rerank_profile=rerank_profile,
+        formal=bool(formal),
+        non_formal=not bool(formal),
+        split=split_label,
+        schema_hash=schema_hash,
+        dataset_hash=ds_hash,
+        review_manifest_hash="",
+        corpus_snapshot="",
+        rerank_status=status.to_dict(),
     )
+    manifest["scorer_contract_hash"] = scorer_contract_hash(ROOT)
     manifest["run_fingerprint"] = _manifest_fingerprint(manifest)
     manifest_path = out_dir / "manifest.json"
     if resume and manifest_path.exists():
@@ -728,7 +846,25 @@ if __name__ == "__main__":
     ap.add_argument("--host", default=HOST)
     ap.add_argument("--port", type=int, default=PORT)
     ap.add_argument("--manifest", action=argparse.BooleanOptionalAction, default=True)
+    ap.add_argument(
+        "--rerank-profile",
+        choices=["deterministic-baseline", "provider-enhanced"],
+        default="deterministic-baseline",
+        help="Evaluation rerank track (Phase 0: honest requested/effective profiles)",
+    )
+    ap.add_argument(
+        "--formal",
+        action="store_true",
+        help="Formal evaluation mode: only accepts frozen/ golden data (fail closed)",
+    )
+    ap.add_argument(
+        "--dev-candidates",
+        action="store_true",
+        help="Explicit non-formal development mode using candidates (marks non_formal=true)",
+    )
     args = ap.parse_args()
+    if args.formal and args.dev_candidates:
+        raise SystemExit("--formal and --dev-candidates are mutually exclusive")
     case_ids = [c.strip() for c in (args.cases or "").split(",") if c.strip()] or None
     run(
         Path(args.golden),
@@ -741,4 +877,6 @@ if __name__ == "__main__":
         host=str(args.host),
         port=int(args.port),
         write_manifest=bool(args.manifest),
+        rerank_profile=str(args.rerank_profile),
+        formal=bool(args.formal),
     )

@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shinehe.local/schema/hit-rate-golden-v2.schema.json",
+  "title": "Hit Rate Golden Set V2 Case",
+  "type": "object",
+  "required": [
+    "case_id",
+    "schema_version",
+    "split",
+    "category",
+    "risk_level",
+    "query",
+    "answerability",
+    "annotation_source"
+  ],
+  "properties": {
+    "case_id": { "type": "string", "minLength": 1 },
+    "schema_version": { "type": "string", "const": "2.0" },
+    "split": {
+      "type": "string",
+      "enum": ["development", "regression", "validation", "holdout"]
+    },
+    "category": { "type": "string", "minLength": 1 },
+    "risk_level": { "type": "string", "enum": ["P0", "P1", "P2", "P3"] },
+    "query": { "type": "string", "minLength": 1 },
+    "answerability": {
+      "type": "string",
+      "enum": ["answerable", "no_answer", "clarification_required"]
+    },
+    "intent": {
+      "type": "string",
+      "enum": [
+        "fact",
+        "numeric",
+        "policy",
+        "scope",
+        "version",
+        "cross_document",
+        "other"
+      ]
+    },
+    "expected_action": {
+      "type": "string",
+      "enum": ["answer", "refuse", "clarify"]
+    },
+    "expected_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["knowledge_id"],
+        "properties": {
+          "knowledge_id": { "type": "string" },
+          "passage_id": { "type": ["string", "null"] },
+          "passage_missing_reason": { "type": "string" },
+          "block_id": { "type": "string" },
+          "evidence_hash": { "type": "string" },
+          "document_family_id": { "type": "string" },
+          "version_year": { "type": ["integer", "null"] },
+          "source_role": {
+            "type": "string",
+            "enum": ["primary", "supporting", "acceptable", "forbidden"]
+          },
+          "title_keywords": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "required_fact_groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fact_id"],
+        "properties": {
+          "fact_id": { "type": "string" },
+          "subject": { "type": "string" },
+          "predicate": { "type": "string" },
+          "object_text": { "type": "string" },
+          "value": {},
+          "unit": { "type": "string" },
+          "condition": { "type": "string" },
+          "scope": { "type": "string" },
+          "version": { "type": "string" },
+          "match_policy": {
+            "type": "string",
+            "enum": ["exact", "normalized", "numeric_unit", "semantic_review"]
+          },
+          "acceptable_variants": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "required": { "type": "boolean" },
+          "evidence_passage_id": { "type": "string" },
+          "passage_id": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "forbidden_assertions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "acceptable_variants": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "ambiguity": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["clear", "needs_clarification", "disputed"]
+        },
+        "reason": { "type": "string" },
+        "clarifying_question": { "type": "string" },
+        "adjudication_notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "corpus_snapshot": {
+      "type": "object",
+      "properties": {
+        "sha": { "type": "string" },
+        "corpus_snapshot_sha": { "type": "string" },
+        "db_path": { "type": "string" },
+        "recorded_at": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "annotation_source": {
+      "type": "string",
+      "enum": ["candidate", "human_reviewed"]
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "primary_reviewer": { "type": "string" },
+        "primary_reviewed_at": { "type": "string" },
+        "secondary_reviewer": { "type": "string" },
+        "secondary_reviewed_at": { "type": "string" },
+        "adjudicator": { "type": "string" },
+        "adjudicated_at": { "type": "string" },
+        "disagreement": { "type": "boolean" },
+        "decision_notes": { "type": "string" },
+        "evidence_checked": { "type": "array" }
+      },
+      "additionalProperties": true
+    },
+    "no_answer_reason": { "type": "string" },
+    "legacy_v1": {
+      "type": "object",
+      "description": "Optional V1 fields retained for migration audit",
+      "additionalProperties": true
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": true
+}

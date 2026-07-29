@@ -1,15 +1,42 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-20  
-> 源码版本：`src/version.py` 中的 **`1.11.0`**
+> 最后更新：2026-07-29  
+> 源码版本：`src/version.py` 中的 **`1.11.1`**
 >
-> 当前分支：`master`（Golden Time UI 重设计已合入，Tag `v1.11.0`）
+> 当前分支：`master`（HEAD 基线 `19195d4`；版本元数据已统一为 1.11.1）
 >
-> 发布说明：Golden Time 暖色编辑感双主题系统，衬线字体，大圆角扁平无阴影
+> 发布说明：源码权威版本 1.11.1；**未**因 Phase 0–1 发布新版本
 >
-> 迁移：v1.11.0 无 Schema 变更；GUI 主题与样式表全面重写
+> 迁移：无 Schema 变更；hit-rate 评测进入 V2 评分合同与 Golden V2 治理
 >
-> 当前方向：**v1.11.0 已发布** — GUI 界面采用 Golden Time 设计系统重设计，暖白羊皮纸底色 + 深可可棕主色 + 橄榄辅色，衬线字体优先，32px 大圆角扁平无阴影；全量回归测试 2117 passed / 2 skipped / 0 failed。
+> 当前方向：**MCP 命中率 Phase 0–1 质量地基重建（工程完成）** — 唯一 scorer V2、no-answer 漏判修复、Golden V2 candidates、formal 冻结门禁。  
+> **正式数据集冻结被人工审核阻塞**；**仍 NO-GO 发布**；工程上可进入 Phase 2 检索/回答重构。  
+> 报告：`docs/evaluation/mcp-hit-rate-phase0-phase1-report.md`  
+> 方案：`docs/superpowers/plans/2026-07-29-hit-rate-phase0-phase1-quality-foundation.md`
+
+---
+
+## MCP 命中率 Phase 0–1：质量地基重建（2026-07-29，工程完成 / 人工冻结阻塞）
+
+执行报告：`docs/evaluation/mcp-hit-rate-phase0-phase1-report.md`
+
+完成项（工程）：
+
+- ✅ 架构债 strict gate / 版本一致性恢复（`PassageStore` 不再碰 `Database._instance`；元数据 1.11.1）
+- ✅ 唯一评分权威 `evals/hit_rate_v2/scoring.py`（`metric_contract_version=2.0`）
+- ✅ KB-032 形态 no-answer 非空误答检出；Hallucination Rate 不再伪报 0
+- ✅ rerank profile：`deterministic-baseline` / `provider-enhanced`（blocked 不冒充 normal）
+- ✅ 原始评测产物脱敏 + `.local/eval-runs/` Git ignore
+- ✅ Golden V2 Schema + 37 条 candidates 迁移；review/freeze/formal harness 门禁
+- ❌ reviewed=0 / frozen=0 — 需两名真实审核人；**禁止伪造 reviewer**
+
+attempt 20 离线重评分（V1→V2）：Ask/E2E 等主指标不变；**False Positive Rate 0.0 → 1.0**（KB-032）；结论仍 **NO-GO**。
+
+声明：
+
+```text
+Phase 1 engineering complete; formal dataset freeze blocked by human review.
+```
 
 ---
 

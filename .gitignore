@@ -45,3 +45,10 @@ artifacts/production-pilot-final-validation/kb.db.vector-repair-backup-*
 
 # 本地 pytest 临时目录
 .tmp_pytest/
+
+# Hit-rate raw eval runs (fulltext / evidence) — Git ignored; keep summaries only
+.local/eval-runs/
+.local/
+
+# Optional local redaction workspace
+artifacts/eval-runs-raw/

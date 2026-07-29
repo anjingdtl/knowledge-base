@@ -78,22 +78,14 @@ class PassageStore:
         return Database
 
     def _get_conn(self):
-        # Mirror BlockStore: prefer injected db instance; else Database singleton.
+        # Mirror BlockStore: prefer injected db; else public Database.get_conn() facade.
+        # Do not touch private singleton fields; architecture debt gate requires public API only.
         if self._db is not None:
             if hasattr(self._db, "get_conn"):
                 return self._db.get_conn()
             return self._db
         from src.services.db import Database
-        # Database may be a dualmethod/singleton facade (same as BlockStore).
-        try:
-            return Database.get_conn()
-        except TypeError:
-            # Instance method path
-            inst = getattr(Database, "_instance", None)
-            if inst is None:
-                Database()  # ensure singleton
-                inst = Database._instance
-            return inst.get_conn()
+        return Database.get_conn()
 
     def _get_dimension(self) -> int:
         return int(Config.get("embedding.dimension", 1024))

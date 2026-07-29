@@ -2,7 +2,16 @@
 
 ## 当前方向（权威入口）
 
-> 产品版本：**v1.11.0** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+> 产品版本：**v1.11.1** · 源码：`src/version.py` · 状态见 [PROGRESS](../PROGRESS.md)
+
+### MCP 命中率 Phase 0–1（2026-07-29，当前）
+
+- [Phase 0–1 执行报告](evaluation/mcp-hit-rate-phase0-phase1-report.md)
+- [实施方案](superpowers/plans/2026-07-29-hit-rate-phase0-phase1-quality-foundation.md)
+- Golden V2 candidates：`tests/eval/datasets/hit_rate/candidates/`
+- 评分权威：`evals/hit_rate_v2/scoring.py`（`metric_contract_version=2.0`）
+- **结论：工程完成；formal freeze 被人工审核阻塞；仍 NO-GO 发布；可进入 Phase 2 链路重构**
+- 声明：`Phase 1 engineering complete; formal dataset freeze blocked by human review.`
 
 ### 界面定位（当前有效）
 
