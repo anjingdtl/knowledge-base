@@ -1,0 +1,249 @@
+{
+  "case": {
+    "case_id": "KB-013",
+    "category": "同义词与口语表达",
+    "query": "公司搞比赛给员工发奖金 上限是多少",
+    "expected_knowledge_ids": [
+      "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+    ],
+    "expected_title_keywords": [
+      "劳动竞赛",
+      "2025"
+    ],
+    "required_facts": [
+      "2000元",
+      "15000元"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕54号第二十一条；口语'搞比赛发奖金'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "5a1c0170-5650-4de7-bdb8-04509632d1e3",
+          "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+          "passage_id": "960e8fc10c452b0bf211ce55d43a78fd",
+          "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+          "text": "【文档】中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【章节】（三）组织审核各项劳动竞赛经费预算： > （四）负责劳动竞赛的组织协调和竞赛信息发布； > （五）指导下级单位开展劳动竞赛；\n况承接集团级的劳动竞赛，或组织开展区公司级的劳动竞赛\n第六条 成立中国电信广西公司劳动竞赛委员会 （以下简称\n劳动竞赛委员会） ，作为劳动竞赛组织协调机构，由区公司领导\n人员，以及相关专业部门和区电信工会负责人组成，负责集团级\n劳动竞赛和区公司级劳动竞赛的组织领导、协调和管理。\n劳动竞赛委员会下设办公室， 由委员会成员部门和单位的相\n关人员组成，办公室挂靠区电信工会。\n第七条 劳动竞赛委员会的主要职责：\n（一）研究制订劳动竞赛政策、制度和办法； 许丹丹(全渠道运营中心)\n— 5 — （二）审定劳动竞赛规划、年度劳动竞赛计划、组织实施方\n案和经费预算；\n（三）审定、命名先进营销法、操作法等；\n（四）其他需劳动竞赛委员会审定的事项。\n第八条 劳动竞赛委员会办公室主要职责：\n（一）组织审核劳动竞赛规划、年度劳动竞赛计划；\n（二）组织审核劳动竞赛实施方案；\n（三）组织审核各项劳动竞赛经费预算：\n（四）负责劳动竞赛的组织协调和竞赛信息发布；",
+          "document_family_id": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+          "version_year": 2025,
+          "section_path": "（三）组织审核各项劳动竞赛经费预算： > （四）负责劳动竞赛的组织协调和竞赛信息发布； > （五）指导下级单位开展劳动竞赛；",
+          "block_ids": [
+            "5a1c0170-5650-4de7-bdb8-04509632d1e3",
+            "652528e3-e27e-42c4-ab57-c116821536f1",
+            "91c3c444-2b04-4b97-8ce8-cb47088986b0",
+            "591fee40-b401-4f2b-a9da-e42e8fbcbcde",
+            "4afc3db0-d383-4db5-be80-5e7663ebebbf",
+            "7d6dcffd-d749-43b0-ba11-87b52e0e2a67",
+            "74e49eed-5dd8-4179-9e64-1c3b8278626c",
+            "480187ac-5dbf-45cf-8136-b7f24b543fa6",
+            "dd062a67-5cdb-4bde-a04a-d12f17d4b111",
+            "add2f759-60ef-469a-9761-d9026c9be268",
+            "c7160071-59b4-426b-be4b-3b68ad84315f",
+            "a24bad30-3589-496c-b2b0-1b9d3f659aa1",
+            "b74349a9-370a-4d0e-8831-73063283fe5a",
+            "0390c5f5-af62-4c82-b7fe-157a6a055be0",
+            "7de24f48-9060-4d75-b175-bac348bca4f6",
+            "c3e5ea2a-b21d-4a8c-be3d-14f09e05e2f2"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -27.0702258052312,
+          "fts_score": 0.8502417295071117,
+          "score": 0.7097,
+          "alias_fts_match": true,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 0.8502,
+            "title_score": 0.25,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.0286,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3597,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3597,
+          "ranking_score": 0.7097,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司劳动竞赛管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3597,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+        ],
+        "evidence_snapshot_id": "4ZqIbNRI_wgm4WsK3BBYew5eSNtgTdgP",
+        "snapshot_fingerprint": "52b8d797de031f3376a00075",
+        "accepted_passage_ids": [
+          "960e8fc10c452b0bf211ce55d43a78fd",
+          "baf06ea33d51306e5384d66346687063",
+          "39ec011f7f590919aabf1ae9abca76fd"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 73069.32
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.3597,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "52b8d797de031f3376a00075",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "direct_slot_not_satisfied",
+        "answer_validation_decision": "direct_slot_not_satisfied",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {},
+        "claim_audit": [],
+        "fact_candidate_audit": {},
+        "answer_plan": {},
+        "query_plan": {},
+        "evidence_groups": {},
+        "render_validation": {},
+        "primary_group_id": null,
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "direct_slot_not_satisfied",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+          ],
+          "accepted_block_ids": [
+            "5a1c0170-5650-4de7-bdb8-04509632d1e3"
+          ],
+          "accepted_passage_ids": [
+            "960e8fc10c452b0bf211ce55d43a78fd",
+            "baf06ea33d51306e5384d66346687063",
+            "39ec011f7f590919aabf1ae9abca76fd"
+          ],
+          "generation_knowledge_ids": [
+            "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+          ],
+          "top_score": 0.3597,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "52b8d797de031f3376a00075"
+        },
+        "snapshot_fingerprint": "52b8d797de031f3376a00075",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 25.26
+  },
+  "top_candidate_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+  "candidates": [
+    {
+      "knowledge_id": "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011",
+      "passage_id": "960e8fc10c452b0bf211ce55d43a78fd",
+      "title": "中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7",
+      "score": 0.7097,
+      "final_relevance_score": 0.3597,
+      "text": "【文档】中电信桂-2025-54号-关于印发中国电信广西公司劳动竞赛管理办法-修订-的通知--8a8fb5a7\n【章节】（三）组织审核各项劳动竞赛经费预算： > （四）负责劳动竞赛的组织协调和竞赛信息发布； > （五）指导下级单位开展劳动竞赛；\n况承接集团级的劳动竞赛，或组织开展区公司级的劳动竞赛\n第六条 成立中国电信广西公司劳动竞赛委员会 （以下简称\n劳动竞赛委员会） ，作为劳动竞赛组织协调机构，由区公司领导\n人员，以及相关专业部门和区电信工会负责人组成，负责集团级\n劳动竞赛和区公司级劳动竞赛的组织领导、协调和管理。\n劳动竞赛委员会下设办公室， 由委员会成员部门和单位的相\n关人员组成，办公室挂靠区电信工会。\n第七条 劳动竞赛委员会的主要职责：\n（一）研究制订劳动竞赛政策、制度和办法； 许丹丹(全渠道运营中心)\n— 5 — （二）审定劳动竞赛规划、年度劳动竞赛计划、组织实施方\n案和经费预算；\n（三）审定、命名先进营销法、操作法等；\n（四）其他需劳动竞赛委员会审定的事项。\n第八条 劳动竞赛委员会办公室主要职责：\n（一）组织审核劳动竞赛规划、年度劳动竞赛计划；\n（二）组织审核劳动竞赛实施方案；\n（三）组织审核各项劳动竞赛经费预算：\n（四）负责劳动竞赛的组织协调和竞赛信息发布；"
+    }
+  ],
+  "search_ms": 73069.32,
+  "ask_ms": 25.26,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "4ZqIbNRI_wgm4WsK3BBYew5eSNtgTdgP",
+  "retrieval_count": 0,
+  "answer_validation_decision": "direct_slot_not_satisfied",
+  "retrieval_decision": "accepted"
+}

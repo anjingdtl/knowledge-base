@@ -1,0 +1,549 @@
+{
+  "case": {
+    "case_id": "KB-011",
+    "category": "同义词与口语表达",
+    "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+    "expected_knowledge_ids": [
+      "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+    ],
+    "expected_title_keywords": [
+      "线上合作",
+      "2025"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万",
+      "等级保护"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕155号第九条；口语'线上店铺入驻'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "candidate_type": "raw_block",
+          "block_id": "fd311432f6bbc2c527a84855c4ef2708",
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+          "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】（2）主动提报模式可由需求部门或分公司结合自身业务或 > 2.合作资质初审 > （1）准入条件\n信相关管理办法规定及其它应具备的资质证明。市分公司上报的\n属地权益合作方，注册资本等条件可以适当下调，但要确保合作\n方的权益履约能力，对于零散的中小权益合作方非必要不合作，\n如需合作可通过专业公司整合一起合作确保履约能力。\n③具备权益合作相关项目的运营实力和经验，并配备管理团\n队、支撑团队及客服团队，以满足合作运营需求，需提供相关人\n员名单及社保缴纳证明。市分公司上报的属地权益合作方应当在\n本地配备线上或线下专职团队支撑履约及售后运营问题，确保履\n约服务闭环管理。\n④应承诺提供完备的客户服务支撑以及满足电信需要的信\n息安全对接及保障机制。\n⑤应提供权益产品的广西或本地区域市场覆盖面分析、产品\n服务内容、合作优势、渠道资源及结算报价等介绍材料。结算报\n价中，单产品类权益结算价不应高于市场售价及集团供价；N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。",
+          "score": 0.7,
+          "match_channels": [
+            "keyword",
+            "raw",
+            "semantic"
+          ],
+          "warnings": [],
+          "source_layer": "evidence",
+          "score_breakdown": {
+            "rerank_score": 0.5,
+            "rrf_score": 0.011029411764705881,
+            "vector_score": 0.7819269299507141,
+            "rank": 5
+          },
+          "citation": {
+            "document": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+            "path": "",
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "block_id": "98ec4ac3-1df1-463d-bfba-16f90ac7db2a",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.0,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": null,
+              "rrf": null,
+              "rerank": null
+            },
+            "match_channels": [],
+            "reason": "match",
+            "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】（2）主动提报模式可由需求部门或分公司结合自身业务或 > 2.合作资质初审 > （1）准入条件\n信相关管理办法规定及其它应具备的资质证明。市分公司上报的\n属地权益合作方，注册资本等条件可以适当下调，但要确保合作\n方的权益履约能力，对于零散的中小权益合作方非必要不合作，\n如需合作可通过专业公司整合一起合作确保履约能力。\n③具备权益合作相关项目的运营实力和经验，并配备管理团\n队、支撑团队及客服团队，以满足合作运营需求，需提供相关人\n员名单及社保缴纳证明。市分公司上报的属地权益合作方应当在\n本地配备线上或线下专职团队支撑履约及售后运营问题，确保履\n约服务闭环管理。\n④应承诺提供完备的客户服务支撑以及满足电信需要的信\n息安全对接及保障机制。\n⑤应提供权益产品的广西或本地区域市场覆盖面分析、产品\n服务内容、合作优势、渠道资源及结算报价等介绍材料。结算报\n价中，单产品类权益结算价不应高于市场售价及集团供价；N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。"
+          },
+          "_semantic_similarity": 0.012499999999999999,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "fts_score": 0.1325,
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "中电信桂关于印发中国电信广西公司权益业务管理办法的通知ad35a556",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3389,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+        ],
+        "evidence_snapshot_id": "K7MxeXjlyyb4uSRUEvibCVnBPFMP7aKL",
+        "snapshot_fingerprint": "cc6419f562d58b64fcf3beae",
+        "accepted_passage_ids": [],
+        "adjacent_unit": "block",
+        "adjacent_count": 0,
+        "adjacent_fallback_reason": "no_list_blocks_fn"
+      }
+    },
+    "latency_ms": 110382.11
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "",
+        "answer_mode": "no_answer",
+        "sources": [],
+        "claims_used": [],
+        "raw_evidence_used": [],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [
+          "answer validation: no traceable sources for final answer"
+        ],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.3389,
+              "threshold": 0.35,
+              "reason": "direct_slot_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "block",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "准入"
+              ],
+              "passage_id": null,
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "spans": [
+                {
+                  "slot": "准入",
+                  "surface": "合作",
+                  "synonym_source": "synonym",
+                  "span": [
+                    135,
+                    137
+                  ],
+                  "excerpt": "需求部门或分公司结合自身业务或 > 2.合作资质初审 > （1）准入条件\n信相关管理办法规定及其它应具备的资质证明。市分公司"
+                }
+              ],
+              "reason": "typed_plan_match",
+              "query_slots": [
+                "准入",
+                "公司和外部商家合作卖东西",
+                "的线上店铺入驻门槛",
+                "入驻门槛"
+              ],
+              "score": 0.75,
+              "typed_plan": {
+                "anchors": [
+                  "准入",
+                  "公司和外部商家合作卖东西",
+                  "的线上店铺入驻门槛",
+                  "入驻门槛"
+                ],
+                "predicate": "准入",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "block",
+            "adjacent_count": 0,
+            "adjacent_fallback_reason": "no_list_blocks_fn",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "cc6419f562d58b64fcf3beae",
+            "snapshot_id_count": 1
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "no_fact_candidate",
+        "answer_validation_decision": "no_fact_candidate",
+        "user_notice": "知识库中未找到可直接支持该问题的证据。",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛"
+          },
+          "fact_plan": {
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:准入"
+            ],
+            "entities": [
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ],
+            "subject": "公司和外部商家合作卖东西",
+            "object": "的线上店铺入驻门槛",
+            "scope": [],
+            "selector": [],
+            "predicate": "准入",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "准入",
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛",
+              "入驻门槛"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 11,
+          "candidate_count": 0
+        },
+        "claim_audit": [],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:准入"
+            ],
+            "entities": [
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ],
+            "subject": "公司和外部商家合作卖东西",
+            "object": "的线上店铺入驻门槛",
+            "scope": [],
+            "selector": [],
+            "predicate": "准入",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "准入",
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛",
+              "入驻门槛"
+            ]
+          },
+          "input_count": 0,
+          "dropped": [],
+          "selected": [],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {},
+            "predicate:准入": {}
+          },
+          "primary_group_id": "977d390beaafd3e7",
+          "covered_slots": [],
+          "missing_after_select": [
+            "policy_fact",
+            "predicate:准入"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "977d390beaafd3e7",
+                "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+                "document_family_id": "",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708"
+                ],
+                "retrieval_ranks": [
+                  0
+                ],
+                "retrieval_scores": [
+                  0.7
+                ],
+                "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+                "section": "",
+                "family_unknown": true,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.4,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r0",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r1",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r2",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r3",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r4",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r5",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r6",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r7",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r8",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r9",
+                  "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r10"
+                ]
+              }
+            ],
+            "primary_group_id": "977d390beaafd3e7",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "公司和外部商家合作卖东西",
+                "的线上店铺入驻门槛"
+              ],
+              "selection": [
+                {
+                  "group_id": "977d390beaafd3e7",
+                  "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+                  "score": 7.4,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {},
+        "query_plan": {},
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "977d390beaafd3e7",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "document_family_id": "",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708"
+              ],
+              "retrieval_ranks": [
+                0
+              ],
+              "retrieval_scores": [
+                0.7
+              ],
+              "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+              "section": "",
+              "family_unknown": true,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.4,
+              "rejection_reasons": [],
+              "record_ids": [
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r0",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r1",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r2",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r3",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r4",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r5",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r6",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r7",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r8",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r9",
+                "block:ad35a556-0c08-41c9-bbdb-5216e5d9bb1d:fd311432f6bbc2c527a84855c4ef2708:r10"
+              ]
+            }
+          ],
+          "primary_group_id": "977d390beaafd3e7",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛"
+            ],
+            "selection": [
+              {
+                "group_id": "977d390beaafd3e7",
+                "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+                "score": 7.4,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {},
+        "primary_group_id": null,
+        "source_graph": {
+          "nodes": [],
+          "edges": [],
+          "truncated": false,
+          "node_count": 0
+        },
+        "route": {
+          "mode": "no_answer",
+          "explanation": "no_fact_candidate",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+          ],
+          "accepted_block_ids": [
+            "fd311432f6bbc2c527a84855c4ef2708"
+          ],
+          "accepted_passage_ids": [],
+          "generation_knowledge_ids": [
+            "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+          ],
+          "top_score": 0.3389,
+          "intent": "ordinary",
+          "adjacent_count": 0,
+          "adjacent_unit": "block",
+          "adjacent_fallback_reason": "no_list_blocks_fn",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "准入"
+            ],
+            "passage_id": null,
+            "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+            "spans": [
+              {
+                "slot": "准入",
+                "surface": "合作",
+                "synonym_source": "synonym",
+                "span": [
+                  135,
+                  137
+                ],
+                "excerpt": "需求部门或分公司结合自身业务或 > 2.合作资质初审 > （1）准入条件\n信相关管理办法规定及其它应具备的资质证明。市分公司"
+              }
+            ],
+            "reason": "typed_plan_match",
+            "query_slots": [
+              "准入",
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛",
+              "入驻门槛"
+            ],
+            "score": 0.75,
+            "typed_plan": {
+              "anchors": [
+                "准入",
+                "公司和外部商家合作卖东西",
+                "的线上店铺入驻门槛",
+                "入驻门槛"
+              ],
+              "predicate": "准入",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "cc6419f562d58b64fcf3beae"
+        },
+        "snapshot_fingerprint": "cc6419f562d58b64fcf3beae",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 0,
+        "warning_count": 1,
+        "route_mode": "no_answer",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 50.83
+  },
+  "top_candidate_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+  "candidates": [
+    {
+      "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+      "passage_id": null,
+      "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+      "score": 0.7,
+      "final_relevance_score": 0.35,
+      "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】（2）主动提报模式可由需求部门或分公司结合自身业务或 > 2.合作资质初审 > （1）准入条件\n信相关管理办法规定及其它应具备的资质证明。市分公司上报的\n属地权益合作方，注册资本等条件可以适当下调，但要确保合作\n方的权益履约能力，对于零散的中小权益合作方非必要不合作，\n如需合作可通过专业公司整合一起合作确保履约能力。\n③具备权益合作相关项目的运营实力和经验，并配备管理团\n队、支撑团队及客服团队，以满足合作运营需求，需提供相关人\n员名单及社保缴纳证明。市分公司上报的属地权益合作方应当在\n本地配备线上或线下专职团队支撑履约及售后运营问题，确保履\n约服务闭环管理。\n④应承诺提供完备的客户服务支撑以及满足电信需要的信\n息安全对接及保障机制。\n⑤应提供权益产品的广西或本地区域市场覆盖面分析、产品\n服务内容、合作优势、渠道资源及结算报价等介绍材料。结算报\n价中，单产品类权益结算价不应高于市场售价及集团供价；N选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。"
+    }
+  ],
+  "search_ms": 110382.11,
+  "ask_ms": 50.83,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "K7MxeXjlyyb4uSRUEvibCVnBPFMP7aKL",
+  "retrieval_count": 0,
+  "answer_validation_decision": "no_fact_candidate",
+  "retrieval_decision": "accepted"
+}

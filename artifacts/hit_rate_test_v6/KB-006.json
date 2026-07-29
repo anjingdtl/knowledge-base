@@ -1,0 +1,1543 @@
+{
+  "case": {
+    "case_id": "KB-006",
+    "category": "精确关键词",
+    "query": "商业秘密保护管理办法 核心商密 普通商密 保密期限",
+    "expected_knowledge_ids": [
+      "102bee52-4b83-438d-9296-c852579473b6"
+    ],
+    "expected_title_keywords": [
+      "商业秘密",
+      "2023"
+    ],
+    "required_facts": [
+      "核心商密",
+      "10年",
+      "5年"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2023〕528号第十四条/第十五条"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+          "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+          "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+          "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+          "text": "【文档】中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\n【章节】第十六条 商业秘密的密级和保密期限一经确定，应当在商 > 第十七条 商业秘密的知悉范围，应当根据工作需要和 > （一）该事项公开后无损于公司的安全和利益的；\n的损害。“普通商密”是指企业重要的商业秘密，泄露后会使企业\n利益遭受比较严重的损害。\n第十五条 在确定商业秘密的密级时，应根据事项区别\n下列情况确定其保密期限：\n（一）以某事件的发生或终止为解密条件的，根据该事\n件的发生或终止情况确定保密期限；\n（二）能预见解密时间的，根据解密时间确定保密期限；\n（三）暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)\n— 6 —商密级事项10年，普通商密级事项5年认定。\n（四）对涉及商业秘密事项的保密期限如需另设规定，应\n上报区公司保密委员会批准后方可实施。\n第十六条 商业秘密的密级和保密期限一经确定，应当在商\n业秘密载体上做出明显标志。商业秘密在首页左上角或明显处标\n注“核心商密”或“普通商密”，可根据实际情况标注保密期限。例\n如：核心商密★10年。\n第十七条 商业秘密的知悉范围，应当根据工作需要和\n最小化原则，限定到具体岗位和人员，并按照涉密程度实行\n分类管理。扩大原定知悉范围、调阅或复印商业秘密须履行相\n应的审批程序。对保密期限内的商业秘密事项，根据情况变化，\n有下列情形之一的，应及时解密：",
+          "document_family_id": "topic:商业秘密保护管理办法",
+          "version_year": 2023,
+          "section_path": "第十六条 商业秘密的密级和保密期限一经确定，应当在商 > 第十七条 商业秘密的知悉范围，应当根据工作需要和 > （一）该事项公开后无损于公司的安全和利益的；",
+          "block_ids": [
+            "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+            "054f6745-7916-4939-a57d-985e2dcbb254",
+            "1e71a169-461a-4d60-ba5c-bc004ac31bf2",
+            "6b55591d-2850-456c-a5e7-4e2cebe9db4c",
+            "954d4057-16ba-461d-a0bf-f372ecacb751",
+            "c27106fc-754b-46cf-ab4c-95d993ae6184",
+            "b7ca3d60-897f-495d-8632-42d1af49c51b",
+            "95be925e-17c1-444a-b5de-15b7a9784fe6",
+            "a98a4ad6-9ab8-4dbe-aa86-a8808cd35d00",
+            "5576ffac-f6f3-42a1-ad50-4c59d9a124f2",
+            "d03bc919-2cda-41fb-8421-f53bd1d0ceff",
+            "5eaf87a0-582f-45d2-8b9d-a9e0e27e3a21",
+            "cfa78ada-a380-4f1e-9b6a-87facd59b498",
+            "0a20b019-6d09-4fc0-b75a-393a8714ff44",
+            "58061eb0-2dc7-440f-8fe5-5311377e6ae6",
+            "d539462e-27ec-4b61-8eda-f692b3c9e829",
+            "59bce0e7-9b65-40e5-9c15-69ea4fd311c4"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -78.52662441180769,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 1.0,
+            "fts_score": 1.0,
+            "title_score": 0.8889,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 1.0,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.8333,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.8333,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:商业秘密保护管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "92c2b2b0-d0dc-471c-bf5d-f13206e3cb24",
+          "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "passage_id": "9647980114a596bfaea692d4535f9a8b",
+          "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa",
+          "text": "【文档】中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa\n【章节】第九条 各市分公司、各专业公司应依据区公司保密工作机 > 第三章 定密管理 > 第十条 本办法所称定密是指各类秘密依法依规确定、变更\n密事项，其保密期限按照绝密级事项30年、机密级事项20年、\n秘密级事项10年执行；非书面形式的国家秘密标志，应标在明\n显易于识别的地方。\n工作秘密为内部敏感事项不分密级，应在相应载体的明显部\n位做出“内部”、“内部事项 注意保管”等标志。\n企业商业秘密的密级分为核心商密、普通商密。核心商密是\n指企业最重要的商业秘密，泄露后会使企业利益遭受特别严重的\n损害；普通商密是指企业重要的商业秘密，泄露后会使企业利益\n遭受比较严重的损害。企业商业秘密在首页左上角或明显处标注\n“核心商密”或“普通商密”，可根据实际情况标注保密期限。 何世恒(全渠道运营中心)\n— 6 —第十一条 各单位办理国家秘密和工作秘密事宜应当按照\n“密来密往、密来密复”原则派生定密，沿用原定密单位确定的\n密级标识和期限。\n各单位履行职能过程中产生的确需定为国家秘密的事项，应\n根据国家保密法律法规以及中央和国家有关机关、单位制订的行\n业、领域国家秘密具体范围、事项清单来确定，并报请相关主管\n机关单位审批，实行一事一定。在履行职能过程中产生的涉及工\n作秘密事项应按照《中国电信广西公司工作秘密管理办法》确定。",
+          "document_family_id": "topic:保密工作管理办法",
+          "version_year": 2023,
+          "section_path": "第九条 各市分公司、各专业公司应依据区公司保密工作机 > 第三章 定密管理 > 第十条 本办法所称定密是指各类秘密依法依规确定、变更",
+          "block_ids": [
+            "92c2b2b0-d0dc-471c-bf5d-f13206e3cb24",
+            "addd2424-16af-4b39-8002-b96bb4aeabfe",
+            "3f5169f0-e7ba-4226-bfe0-478726e0d61f",
+            "8adb7886-7f52-443f-8afa-c280d1b93997",
+            "1849f151-fa7c-4934-b561-7841dd417b7a",
+            "4b0bea1f-7df2-456b-8db7-023e778bc527",
+            "5686722c-f769-46e5-a8f7-2c3cac11e09c",
+            "ef09ed0d-dc2d-4a99-9deb-2fb52424b4b9",
+            "f7430628-aac8-4813-9364-70a3b25ea53e",
+            "6b07ddf4-e64b-4e5a-a2ac-7d5779b205df",
+            "5989d113-dd48-4505-98b6-6904195d8b2c",
+            "5b453bb3-5919-419d-ae7c-bf9da1f47871",
+            "48c7dd53-9bbe-4799-9ed9-f65f1157b9ad",
+            "59540101-5a2c-4308-b110-1e10ccb9f3cf",
+            "b548b5c0-fb20-455f-b798-4eca2e4dae9d",
+            "23779381-d0b6-42a7-a7a6-54a5ff3afb07"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -73.84981123675556,
+          "fts_score": 1.0,
+          "score": 0.9000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5556,
+            "fts_score": 1.0,
+            "title_score": 0.4375,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5556,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:保密工作管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.8333,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "102bee52-4b83-438d-9296-c852579473b6",
+          "e8f52cfa-2e86-4048-9358-0649094a41b9"
+        ],
+        "evidence_snapshot_id": "JZBGNWgUZR8Qx--DgqE-KeNPI3_2r8RJ",
+        "snapshot_fingerprint": "981e7ff3d52e39cb485b0a2c",
+        "accepted_passage_ids": [
+          "dc1860affc682ff23df9a83226b2c9da",
+          "9647980114a596bfaea692d4535f9a8b",
+          "f7fbe68b1c3214cb418f5bdafa583a41",
+          "cbe3a9a2c13c87b5e720b160889a18b6",
+          "0bf945ee9b1ca35863fd1d9f6961da76",
+          "e6b07275684ff88468ff4cbba7e3e49c"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 4,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 28539.21
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 商业秘密在首页左上角或明显处标注“核心商密”或“普通商密”，可根据实际情况标注保密期限\n- 暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)—6—商密级事项10年，普通商密级事项5年认定\n- 第十四条商业秘密的密级，根据泄露会使企业的经济利益遭受损害的程度，确定为核心商密、普通商密两级",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+            "block_id": "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+            "block_ids": [
+              "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+              "054f6745-7916-4939-a57d-985e2dcbb254",
+              "1e71a169-461a-4d60-ba5c-bc004ac31bf2",
+              "6b55591d-2850-456c-a5e7-4e2cebe9db4c",
+              "954d4057-16ba-461d-a0bf-f372ecacb751",
+              "c27106fc-754b-46cf-ab4c-95d993ae6184",
+              "b7ca3d60-897f-495d-8632-42d1af49c51b",
+              "95be925e-17c1-444a-b5de-15b7a9784fe6",
+              "a98a4ad6-9ab8-4dbe-aa86-a8808cd35d00",
+              "5576ffac-f6f3-42a1-ad50-4c59d9a124f2",
+              "d03bc919-2cda-41fb-8421-f53bd1d0ceff",
+              "5eaf87a0-582f-45d2-8b9d-a9e0e27e3a21",
+              "cfa78ada-a380-4f1e-9b6a-87facd59b498",
+              "0a20b019-6d09-4fc0-b75a-393a8714ff44",
+              "58061eb0-2dc7-440f-8fe5-5311377e6ae6",
+              "d539462e-27ec-4b61-8eda-f692b3c9e829",
+              "59bce0e7-9b65-40e5-9c15-69ea4fd311c4"
+            ],
+            "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "text": "的损害。“普通商密”是指企业重要的商业秘密，泄露后会使企业\n利益遭受比较严重的损害。\n第十五条 在确定商业秘密的密级时，应根据事项区别\n下列情况确定其保密期限：\n（一）以某事件的发生或终止为解密条件的，根据该事\n件的发生或终止情况确定保密期限；\n（二）能预见解密时间的，根据解密时间确定保密期限；\n（三）暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)\n— 6 —商密级事项10年，普通商密级事项5年认定。\n（四）对涉及商业秘密事项的保密期限如需另设规定，应\n上报区公司保密委员会批准后方可实施。\n第十六条 商业秘密的密级和保密期限一经确定，应当在商\n业秘密载体上做出明显标志。商业秘密在首页左上角或明显处标\n注“核心商密”或“普通商密”，可根据实际情况标注保密期限。例\n如：核心商密★10年。\n第十七条 商业秘密的知悉范围，应当根据工作需要和\n最小化原则，限定到具体岗位和人员，并按照涉密程度实行\n分类管理。扩大原定知悉范围、调阅或复印商业秘密须履行相\n应的审批程序。对保密期限内的商业秘密事项，根据情况变化，\n有下列情形之一的，应及时解密：",
+            "score": 1.0,
+            "document_family_id": "topic:商业秘密保护管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "passage_id": "f7fbe68b1c3214cb418f5bdafa583a41",
+            "block_id": "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+            "block_ids": [
+              "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+              "cae061c6-40d4-4885-b333-0191a11fa4bd",
+              "f2a58146-1dbb-4824-a0d7-a84d4142cd17",
+              "18b8d4fe-0271-469f-b0c4-27fb68af0f97",
+              "04f2661d-97cf-4e87-8b70-4aa295cad8a4",
+              "2ebddf7d-5e6b-4be1-b2a5-fe5b3d8332ae",
+              "387d191b-0bdb-4486-b80c-a518d1f2d071",
+              "1c12d0d6-27f4-4a12-a812-f740b770e340",
+              "7dab195f-055d-4e43-943a-d79fa5a67911",
+              "2d995aa8-065f-4777-a102-b5042fefd06f",
+              "fe3bb098-5ab9-47dd-89ea-00618b1327ba",
+              "409dab47-78f3-4d97-b37f-8ccb6c531d43",
+              "141626b3-ce4e-43ba-9875-61e3d27650e3",
+              "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+              "054f6745-7916-4939-a57d-985e2dcbb254",
+              "1e71a169-461a-4d60-ba5c-bc004ac31bf2"
+            ],
+            "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "text": "— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；\n（十一）其他涉及公司重要经济利益、核心竞争力以及可能\n损坏公司良好形象的内部信息。\n第十三条 因国家秘密范围调整，商业秘密需要变更为国家\n秘密的，必须依法定程序将其确定为国家秘密。\n第十四条 商业秘密的密级，根据泄露会使企业的经济利益\n遭受损害的程度，确定为核心商密、普通商密两级。“核心商密”\n是指企业最重要的商业秘密，泄露后会使企业利益遭受特别严重\n的损害。“普通商密”是指企业重要的商业秘密，泄露后会使企业\n利益遭受比较严重的损害。\n第十五条 在确定商业秘密的密级时，应根据事项区别\n下列情况确定其保密期限：\n（一）以某事件的发生或终止为解密条件的，根据该事\n件的发生或终止情况确定保密期限；",
+            "score": 0.0,
+            "document_family_id": "topic:商业秘密保护管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "商业秘密在首页左上角或明显处标注“核心商密”或“普通商密”，可根据实际情况标注保密期限",
+            "evidence_passage_ids": [
+              "dc1860affc682ff23df9a83226b2c9da"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "aeb2b1c28691d1ebd1b2a0d0"
+          },
+          {
+            "text": "暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)—6—商密级事项10年，普通商密级事项5年认定",
+            "evidence_passage_ids": [
+              "dc1860affc682ff23df9a83226b2c9da"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "c4759b6f49d263dac15cab91"
+          },
+          {
+            "text": "第十四条商业秘密的密级，根据泄露会使企业的经济利益遭受损害的程度，确定为核心商密、普通商密两级",
+            "evidence_passage_ids": [
+              "f7fbe68b1c3214cb418f5bdafa583a41"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "488982d8d78ae8ad5d1916bc"
+          },
+          {
+            "text": "第十五条在确定商业秘密的密级时，应根据事项区别下列情况确定其保密期限：",
+            "evidence_passage_ids": [
+              "dc1860affc682ff23df9a83226b2c9da"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "0ad96552c781c7e31ef1891f"
+          },
+          {
+            "text": "以某事件的发生或终止为解密条件的，根据该事件的发生或终止情况确定保密期限",
+            "evidence_passage_ids": [
+              "dc1860affc682ff23df9a83226b2c9da"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "8bed33a8106e58c56ac14ffb"
+          },
+          {
+            "text": "能预见解密时间的，根据解密时间确定保密期限",
+            "evidence_passage_ids": [
+              "dc1860affc682ff23df9a83226b2c9da"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "ebdcd595f695e05caacab703"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+            "block_id": "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+            "block_ids": [
+              "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+              "054f6745-7916-4939-a57d-985e2dcbb254",
+              "1e71a169-461a-4d60-ba5c-bc004ac31bf2",
+              "6b55591d-2850-456c-a5e7-4e2cebe9db4c",
+              "954d4057-16ba-461d-a0bf-f372ecacb751",
+              "c27106fc-754b-46cf-ab4c-95d993ae6184",
+              "b7ca3d60-897f-495d-8632-42d1af49c51b",
+              "95be925e-17c1-444a-b5de-15b7a9784fe6",
+              "a98a4ad6-9ab8-4dbe-aa86-a8808cd35d00",
+              "5576ffac-f6f3-42a1-ad50-4c59d9a124f2",
+              "d03bc919-2cda-41fb-8421-f53bd1d0ceff",
+              "5eaf87a0-582f-45d2-8b9d-a9e0e27e3a21",
+              "cfa78ada-a380-4f1e-9b6a-87facd59b498",
+              "0a20b019-6d09-4fc0-b75a-393a8714ff44",
+              "58061eb0-2dc7-440f-8fe5-5311377e6ae6",
+              "d539462e-27ec-4b61-8eda-f692b3c9e829",
+              "59bce0e7-9b65-40e5-9c15-69ea4fd311c4"
+            ],
+            "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "path": "",
+            "text": "的损害。“普通商密”是指企业重要的商业秘密，泄露后会使企业\n利益遭受比较严重的损害。\n第十五条 在确定商业秘密的密级时，应根据事项区别\n下列情况确定其保密期限：\n（一）以某事件的发生或终止为解密条件的，根据该事\n件的发生或终止情况确定保密期限；\n（二）能预见解密时间的，根据解密时间确定保密期限；\n（三）暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)\n— 6 —商密级事项10年，普通商密级事项5年认定。\n（四）对涉及商业秘密事项的保密期限如需另设规定，应\n上报区公司保密委员会批准后方可实施。\n第十六条 商业秘密的密级和保密期限一经确定，应当在商\n业秘密载体上做出明显标志。商业秘密在首页左上角或明显处标\n注“核心商密”或“普通商密”，可根据实际情况标注保密期限。例\n如：核心商密★10年。\n第十七条 商业秘密的知悉范围，应当根据工作需要和\n最小化原则，限定到具体岗位和人员，并按照涉密程度实行\n分类管理。扩大原定知悉范围、调阅或复印商业秘密须履行相\n应的审批程序。对保密期限内的商业秘密事项，根据情况变化，\n有下列情形之一的，应及时解密：",
+            "body_text": "的损害。“普通商密”是指企业重要的商业秘密，泄露后会使企业\n利益遭受比较严重的损害。\n第十五条 在确定商业秘密的密级时，应根据事项区别\n下列情况确定其保密期限：\n（一）以某事件的发生或终止为解密条件的，根据该事\n件的发生或终止情况确定保密期限；\n（二）能预见解密时间的，根据解密时间确定保密期限；\n（三）暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)\n— 6 —商密级事项10年，普通商密级事项5年认定。\n（四）对涉及商业秘密事项的保密期限如需另设规定，应\n上报区公司保密委员会批准后方可实施。\n第十六条 商业秘密的密级和保密期限一经确定，应当在商\n业秘密载体上做出明显标志。商业秘密在首页左上角或明显处标\n注“核心商密”或“普通商密”，可根据实际情况标注保密期限。例\n如：核心商密★10年。\n第十七条 商业秘密的知悉范围，应当根据工作需要和\n最小化原则，限定到具体岗位和人员，并按照涉密程度实行\n分类管理。扩大原定知悉范围、调阅或复印商业秘密须履行相\n应的审批程序。对保密期限内的商业秘密事项，根据情况变化，\n有下列情形之一的，应及时解密：",
+            "score": 1.0,
+            "document_family_id": "topic:商业秘密保护管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "passage_id": "f7fbe68b1c3214cb418f5bdafa583a41",
+            "block_id": "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+            "block_ids": [
+              "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+              "cae061c6-40d4-4885-b333-0191a11fa4bd",
+              "f2a58146-1dbb-4824-a0d7-a84d4142cd17",
+              "18b8d4fe-0271-469f-b0c4-27fb68af0f97",
+              "04f2661d-97cf-4e87-8b70-4aa295cad8a4",
+              "2ebddf7d-5e6b-4be1-b2a5-fe5b3d8332ae",
+              "387d191b-0bdb-4486-b80c-a518d1f2d071",
+              "1c12d0d6-27f4-4a12-a812-f740b770e340",
+              "7dab195f-055d-4e43-943a-d79fa5a67911",
+              "2d995aa8-065f-4777-a102-b5042fefd06f",
+              "fe3bb098-5ab9-47dd-89ea-00618b1327ba",
+              "409dab47-78f3-4d97-b37f-8ccb6c531d43",
+              "141626b3-ce4e-43ba-9875-61e3d27650e3",
+              "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+              "054f6745-7916-4939-a57d-985e2dcbb254",
+              "1e71a169-461a-4d60-ba5c-bc004ac31bf2"
+            ],
+            "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+            "path": "",
+            "text": "— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；\n（十一）其他涉及公司重要经济利益、核心竞争力以及可能\n损坏公司良好形象的内部信息。\n第十三条 因国家秘密范围调整，商业秘密需要变更为国家\n秘密的，必须依法定程序将其确定为国家秘密。\n第十四条 商业秘密的密级，根据泄露会使企业的经济利益\n遭受损害的程度，确定为核心商密、普通商密两级。“核心商密”\n是指企业最重要的商业秘密，泄露后会使企业利益遭受特别严重\n的损害。“普通商密”是指企业重要的商业秘密，泄露后会使企业\n利益遭受比较严重的损害。\n第十五条 在确定商业秘密的密级时，应根据事项区别\n下列情况确定其保密期限：\n（一）以某事件的发生或终止为解密条件的，根据该事\n件的发生或终止情况确定保密期限；",
+            "body_text": "— 5 — 及客户资料等重要信息;\n（八）技术研发过程中的技术策略、技术研发方案，研究报\n告、试验数据等信息；\n（九）人力资源、人事管理、党纪工作、审计工作中的重要\n信息；\n（十）按照法律或合同 (协议 ) 应承担保密责任的第三方\n商业秘密；\n（十一）其他涉及公司重要经济利益、核心竞争力以及可能\n损坏公司良好形象的内部信息。\n第十三条 因国家秘密范围调整，商业秘密需要变更为国家\n秘密的，必须依法定程序将其确定为国家秘密。\n第十四条 商业秘密的密级，根据泄露会使企业的经济利益\n遭受损害的程度，确定为核心商密、普通商密两级。“核心商密”\n是指企业最重要的商业秘密，泄露后会使企业利益遭受特别严重\n的损害。“普通商密”是指企业重要的商业秘密，泄露后会使企业\n利益遭受比较严重的损害。\n第十五条 在确定商业秘密的密级时，应根据事项区别\n下列情况确定其保密期限：\n（一）以某事件的发生或终止为解密条件的，根据该事\n件的发生或终止情况确定保密期限；",
+            "score": 0.0,
+            "document_family_id": "topic:商业秘密保护管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.8333,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 4,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "981e7ff3d52e39cb485b0a2c",
+            "snapshot_id_count": 6,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [
+              "deadline"
+            ],
+            "raw": "商业秘密保护管理办法 核心商密 普通商密 保密期限"
+          },
+          "fact_plan": {
+            "raw": "商业秘密保护管理办法 核心商密 普通商密 保密期限",
+            "intents": [
+              "deadline",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "deadline",
+              "policy_fact",
+              "predicate:保密期限"
+            ],
+            "entities": [
+              "商业秘密保护管理办法",
+              "核心商密",
+              "普通商密",
+              "保密期限"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": true,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "deadline",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "商业秘密保护管理办法",
+            "object": "核心商密",
+            "scope": [],
+            "selector": [],
+            "predicate": "保密期限",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "deadline",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "商业秘密保护管理办法",
+              "核心商密",
+              "普通商密",
+              "保密期限"
+            ]
+          },
+          "kept": [],
+          "dropped": [
+            {
+              "id": "2a3dfdda5548bb5d2885f491",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 14,
+          "candidate_count": 9
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "商业秘密在首页左上角或明显处标注“核心商密”或“普通商密”，可根据实际情况标注保密期限",
+              "evidence_passage_ids": [
+                "dc1860affc682ff23df9a83226b2c9da"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "aeb2b1c28691d1ebd1b2a0d0"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)—6—商密级事项10年，普通商密级事项5年认定",
+              "evidence_passage_ids": [
+                "dc1860affc682ff23df9a83226b2c9da"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "c4759b6f49d263dac15cab91"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第十四条商业秘密的密级，根据泄露会使企业的经济利益遭受损害的程度，确定为核心商密、普通商密两级",
+              "evidence_passage_ids": [
+                "f7fbe68b1c3214cb418f5bdafa583a41"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "488982d8d78ae8ad5d1916bc"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第十五条在确定商业秘密的密级时，应根据事项区别下列情况确定其保密期限：",
+              "evidence_passage_ids": [
+                "dc1860affc682ff23df9a83226b2c9da"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "0ad96552c781c7e31ef1891f"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "以某事件的发生或终止为解密条件的，根据该事件的发生或终止情况确定保密期限",
+              "evidence_passage_ids": [
+                "dc1860affc682ff23df9a83226b2c9da"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "8bed33a8106e58c56ac14ffb"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "能预见解密时间的，根据解密时间确定保密期限",
+              "evidence_passage_ids": [
+                "dc1860affc682ff23df9a83226b2c9da"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "ebdcd595f695e05caacab703"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "商业秘密保护管理办法 核心商密 普通商密 保密期限",
+            "intents": [
+              "deadline",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "deadline",
+              "policy_fact",
+              "predicate:保密期限"
+            ],
+            "entities": [
+              "商业秘密保护管理办法",
+              "核心商密",
+              "普通商密",
+              "保密期限"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": true,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "deadline",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "商业秘密保护管理办法",
+            "object": "核心商密",
+            "scope": [],
+            "selector": [],
+            "predicate": "保密期限",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "deadline",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "商业秘密保护管理办法",
+              "核心商密",
+              "普通商密",
+              "保密期限"
+            ]
+          },
+          "input_count": 9,
+          "dropped": [
+            {
+              "id": "2a3dfdda5548bb5d2885f491",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "aeb2b1c28691d1ebd1b2a0d0",
+              "record_id": "dc1860affc682ff23df9a83226b2c9da:r4",
+              "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "核心商密",
+              "predicate": "保密期限",
+              "object": "商业秘密在首页左上角或明显处标注“核心商密”或“普通商密”，可根据实际情况标注保密期限",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "商业秘密在首页左上角或明显处标注“核心商密”或“普通商密”，可根据实际情况标注保密期限",
+              "evidence_spans": [
+                [
+                  80,
+                  123
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 29.349999999999994,
+              "unstructured_rejected": false,
+              "group_id": "2d64517897f6ee19",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "deadline": "hit",
+                "policy_fact": "hit",
+                "predicate:保密期限": "hit",
+                "anchor:商业秘密保护管理办法": "miss",
+                "anchor:核心商密": "hit",
+                "anchor:普通商密": "hit",
+                "anchor:保密期限": "hit"
+              },
+              "slot_spans": {
+                "predicate:保密期限": [
+                  39,
+                  43
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "c4759b6f49d263dac15cab91",
+              "record_id": "dc1860affc682ff23df9a83226b2c9da:r3",
+              "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "普通商密",
+              "predicate": "保密期限",
+              "object": "暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)—6—商密级事项10年，普通商密级事项5年认定",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)—6—商密级事项10年，普通商密级事项5年认定",
+              "evidence_spans": [
+                [
+                  0,
+                  59
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 22.199999999999996,
+              "unstructured_rejected": false,
+              "group_id": "2d64517897f6ee19",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "deadline": "hit",
+                "policy_fact": "hit",
+                "predicate:保密期限": "hit",
+                "anchor:商业秘密保护管理办法": "miss",
+                "anchor:核心商密": "miss",
+                "anchor:普通商密": "hit",
+                "anchor:保密期限": "hit"
+              },
+              "slot_spans": {
+                "predicate:保密期限": [
+                  13,
+                  17
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "488982d8d78ae8ad5d1916bc",
+              "record_id": "f7fbe68b1c3214cb418f5bdafa583a41:r4",
+              "passage_id": "f7fbe68b1c3214cb418f5bdafa583a41",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "核心商密",
+              "predicate": "保密期限",
+              "object": "第十四条商业秘密的密级，根据泄露会使企业的经济利益遭受损害的程度，确定为核心商密、普通商密两级",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十四条商业秘密的密级，根据泄露会使企业的经济利益遭受损害的程度，确定为核心商密、普通商密两级",
+              "evidence_spans": [
+                [
+                  85,
+                  133
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 17.899999999999995,
+              "unstructured_rejected": false,
+              "group_id": "2d64517897f6ee19",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "deadline": "hit",
+                "policy_fact": "hit",
+                "predicate:保密期限": "miss",
+                "anchor:商业秘密保护管理办法": "miss",
+                "anchor:核心商密": "hit",
+                "anchor:普通商密": "hit",
+                "anchor:保密期限": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "0ad96552c781c7e31ef1891f",
+              "record_id": "dc1860affc682ff23df9a83226b2c9da:r0",
+              "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "保密期限",
+              "predicate": "保密期限",
+              "object": "第十五条在确定商业秘密的密级时，应根据事项区别下列情况确定其保密期限：",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十五条在确定商业秘密的密级时，应根据事项区别下列情况确定其保密期限：",
+              "evidence_spans": [
+                [
+                  42,
+                  78
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 15.550000000000002,
+              "unstructured_rejected": false,
+              "group_id": "2d64517897f6ee19",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "deadline": "hit",
+                "policy_fact": "hit",
+                "predicate:保密期限": "hit",
+                "anchor:商业秘密保护管理办法": "miss",
+                "anchor:核心商密": "miss",
+                "anchor:普通商密": "miss",
+                "anchor:保密期限": "hit"
+              },
+              "slot_spans": {
+                "predicate:保密期限": [
+                  30,
+                  34
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "8bed33a8106e58c56ac14ffb",
+              "record_id": "dc1860affc682ff23df9a83226b2c9da:r1",
+              "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "保密期限",
+              "predicate": "保密期限",
+              "object": "以某事件的发生或终止为解密条件的，根据该事件的发生或终止情况确定保密期限",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "以某事件的发生或终止为解密条件的，根据该事件的发生或终止情况确定保密期限",
+              "evidence_spans": [
+                [
+                  0,
+                  36
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 15.550000000000002,
+              "unstructured_rejected": false,
+              "group_id": "2d64517897f6ee19",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "deadline": "hit",
+                "policy_fact": "hit",
+                "predicate:保密期限": "hit",
+                "anchor:商业秘密保护管理办法": "miss",
+                "anchor:核心商密": "miss",
+                "anchor:普通商密": "miss",
+                "anchor:保密期限": "hit"
+              },
+              "slot_spans": {
+                "predicate:保密期限": [
+                  32,
+                  36
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "ebdcd595f695e05caacab703",
+              "record_id": "dc1860affc682ff23df9a83226b2c9da:r2",
+              "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "fact_kind": "policy",
+              "subject": "保密期限",
+              "predicate": "保密期限",
+              "object": "能预见解密时间的，根据解密时间确定保密期限",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "能预见解密时间的，根据解密时间确定保密期限",
+              "evidence_spans": [
+                [
+                  0,
+                  21
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "score": 15.550000000000002,
+              "unstructured_rejected": false,
+              "group_id": "2d64517897f6ee19",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "deadline": "hit",
+                "policy_fact": "hit",
+                "predicate:保密期限": "hit",
+                "anchor:商业秘密保护管理办法": "miss",
+                "anchor:核心商密": "miss",
+                "anchor:普通商密": "miss",
+                "anchor:保密期限": "hit"
+              },
+              "slot_spans": {
+                "predicate:保密期限": [
+                  17,
+                  21
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "deadline": {
+              "aeb2b1c28691d1ebd1b2a0d0": "hit",
+              "c4759b6f49d263dac15cab91": "hit",
+              "488982d8d78ae8ad5d1916bc": "hit",
+              "0ad96552c781c7e31ef1891f": "hit",
+              "8bed33a8106e58c56ac14ffb": "hit",
+              "ebdcd595f695e05caacab703": "hit",
+              "e89a7c9141d3f22d7a24cd4d": "hit",
+              "5207220168270f1f0af0abc4": "hit"
+            },
+            "policy_fact": {
+              "aeb2b1c28691d1ebd1b2a0d0": "hit",
+              "c4759b6f49d263dac15cab91": "hit",
+              "488982d8d78ae8ad5d1916bc": "hit",
+              "0ad96552c781c7e31ef1891f": "hit",
+              "8bed33a8106e58c56ac14ffb": "hit",
+              "ebdcd595f695e05caacab703": "hit",
+              "e89a7c9141d3f22d7a24cd4d": "hit",
+              "5207220168270f1f0af0abc4": "hit"
+            },
+            "predicate:保密期限": {
+              "aeb2b1c28691d1ebd1b2a0d0": "hit",
+              "c4759b6f49d263dac15cab91": "hit",
+              "488982d8d78ae8ad5d1916bc": "miss",
+              "0ad96552c781c7e31ef1891f": "hit",
+              "8bed33a8106e58c56ac14ffb": "hit",
+              "ebdcd595f695e05caacab703": "hit",
+              "e89a7c9141d3f22d7a24cd4d": "hit",
+              "5207220168270f1f0af0abc4": "hit"
+            }
+          },
+          "primary_group_id": "2d64517897f6ee19",
+          "covered_slots": [
+            "deadline",
+            "policy_fact",
+            "predicate:保密期限"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "2d64517897f6ee19",
+                "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+                "document_family_id": "topic:商业秘密保护管理办法",
+                "document_revision": "2023",
+                "effective_date": "",
+                "version_year": 2023,
+                "passage_ids": [
+                  "dc1860affc682ff23df9a83226b2c9da",
+                  "f7fbe68b1c3214cb418f5bdafa583a41",
+                  "cbe3a9a2c13c87b5e720b160889a18b6"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  2,
+                  3
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+                "section": "第十六条 商业秘密的密级和保密期限一经确定，应当在商 > 第十七条 商业秘密的知悉范围，应当根据工作需要和 > （一）该事项公开后无损于公司的安全和利益的；",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.25,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 11.875,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "dc1860affc682ff23df9a83226b2c9da:r0",
+                  "dc1860affc682ff23df9a83226b2c9da:r1",
+                  "dc1860affc682ff23df9a83226b2c9da:r2",
+                  "dc1860affc682ff23df9a83226b2c9da:r3",
+                  "dc1860affc682ff23df9a83226b2c9da:r4",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r0",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r1",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r2",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r3",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r4",
+                  "f7fbe68b1c3214cb418f5bdafa583a41:r5",
+                  "cbe3a9a2c13c87b5e720b160889a18b6:r0",
+                  "cbe3a9a2c13c87b5e720b160889a18b6:r1",
+                  "cbe3a9a2c13c87b5e720b160889a18b6:r2"
+                ]
+              },
+              {
+                "group_id": "2cbf4201e5c2d043",
+                "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+                "document_family_id": "topic:保密工作管理办法",
+                "document_revision": "2023",
+                "effective_date": "",
+                "version_year": 2023,
+                "passage_ids": [
+                  "9647980114a596bfaea692d4535f9a8b",
+                  "0bf945ee9b1ca35863fd1d9f6961da76",
+                  "e6b07275684ff88468ff4cbba7e3e49c"
+                ],
+                "retrieval_ranks": [
+                  1,
+                  4,
+                  5
+                ],
+                "retrieval_scores": [
+                  0.9000000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa",
+                "section": "第九条 各市分公司、各专业公司应依据区公司保密工作机 > 第三章 定密管理 > 第十条 本办法所称定密是指各类秘密依法依规确定、变更",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.25,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 10.1,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "9647980114a596bfaea692d4535f9a8b:r0",
+                  "9647980114a596bfaea692d4535f9a8b:r1",
+                  "9647980114a596bfaea692d4535f9a8b:r2",
+                  "9647980114a596bfaea692d4535f9a8b:r3",
+                  "9647980114a596bfaea692d4535f9a8b:r4",
+                  "9647980114a596bfaea692d4535f9a8b:r5",
+                  "9647980114a596bfaea692d4535f9a8b:r6",
+                  "9647980114a596bfaea692d4535f9a8b:r7",
+                  "9647980114a596bfaea692d4535f9a8b:r8",
+                  "9647980114a596bfaea692d4535f9a8b:r9",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r0",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r1",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r2",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r3",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r4",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r5",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r6",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r7",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r8",
+                  "0bf945ee9b1ca35863fd1d9f6961da76:r9",
+                  "e6b07275684ff88468ff4cbba7e3e49c:r0",
+                  "e6b07275684ff88468ff4cbba7e3e49c:r1",
+                  "e6b07275684ff88468ff4cbba7e3e49c:r2",
+                  "e6b07275684ff88468ff4cbba7e3e49c:r3",
+                  "e6b07275684ff88468ff4cbba7e3e49c:r4",
+                  "e6b07275684ff88468ff4cbba7e3e49c:r5",
+                  "e6b07275684ff88468ff4cbba7e3e49c:r6",
+                  "e6b07275684ff88468ff4cbba7e3e49c:r7"
+                ]
+              }
+            ],
+            "primary_group_id": "2d64517897f6ee19",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "保密期限",
+                "商业秘密保护管理办法",
+                "普通商密",
+                "核心商密"
+              ],
+              "selection": [
+                {
+                  "group_id": "2d64517897f6ee19",
+                  "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+                  "score": 11.875,
+                  "role": "primary",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "2cbf4201e5c2d043",
+                  "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+                  "score": 10.1,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                }
+              ],
+              "top_gap": 1.775
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "deadline",
+            "policy_fact",
+            "predicate:保密期限"
+          ],
+          "candidate_ids": [
+            "aeb2b1c28691d1ebd1b2a0d0",
+            "c4759b6f49d263dac15cab91",
+            "488982d8d78ae8ad5d1916bc",
+            "0ad96552c781c7e31ef1891f",
+            "8bed33a8106e58c56ac14ffb",
+            "ebdcd595f695e05caacab703"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "deadline",
+            "policy"
+          ],
+          "covered_slots": [
+            "deadline",
+            "policy_fact",
+            "predicate:保密期限"
+          ],
+          "coverage_matrix": {
+            "deadline": {
+              "aeb2b1c28691d1ebd1b2a0d0": "hit",
+              "c4759b6f49d263dac15cab91": "hit",
+              "488982d8d78ae8ad5d1916bc": "hit",
+              "0ad96552c781c7e31ef1891f": "hit",
+              "8bed33a8106e58c56ac14ffb": "hit",
+              "ebdcd595f695e05caacab703": "hit",
+              "e89a7c9141d3f22d7a24cd4d": "hit",
+              "5207220168270f1f0af0abc4": "hit"
+            },
+            "policy_fact": {
+              "aeb2b1c28691d1ebd1b2a0d0": "hit",
+              "c4759b6f49d263dac15cab91": "hit",
+              "488982d8d78ae8ad5d1916bc": "hit",
+              "0ad96552c781c7e31ef1891f": "hit",
+              "8bed33a8106e58c56ac14ffb": "hit",
+              "ebdcd595f695e05caacab703": "hit",
+              "e89a7c9141d3f22d7a24cd4d": "hit",
+              "5207220168270f1f0af0abc4": "hit"
+            },
+            "predicate:保密期限": {
+              "aeb2b1c28691d1ebd1b2a0d0": "hit",
+              "c4759b6f49d263dac15cab91": "hit",
+              "488982d8d78ae8ad5d1916bc": "miss",
+              "0ad96552c781c7e31ef1891f": "hit",
+              "8bed33a8106e58c56ac14ffb": "hit",
+              "ebdcd595f695e05caacab703": "hit",
+              "e89a7c9141d3f22d7a24cd4d": "hit",
+              "5207220168270f1f0af0abc4": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "商业秘密保护管理办法 核心商密 普通商密 保密期限",
+          "intents": [
+            "deadline",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "deadline",
+            "policy_fact",
+            "predicate:保密期限"
+          ],
+          "entities": [
+            "商业秘密保护管理办法",
+            "核心商密",
+            "普通商密",
+            "保密期限"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": true,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "deadline",
+            "policy",
+            "prohibition"
+          ],
+          "subject": "商业秘密保护管理办法",
+          "object": "核心商密",
+          "scope": [],
+          "selector": [],
+          "predicate": "保密期限",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "deadline",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "商业秘密保护管理办法",
+            "核心商密",
+            "普通商密",
+            "保密期限"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "2d64517897f6ee19",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "document_revision": "2023",
+              "effective_date": "",
+              "version_year": 2023,
+              "passage_ids": [
+                "dc1860affc682ff23df9a83226b2c9da",
+                "f7fbe68b1c3214cb418f5bdafa583a41",
+                "cbe3a9a2c13c87b5e720b160889a18b6"
+              ],
+              "retrieval_ranks": [
+                0,
+                2,
+                3
+              ],
+              "retrieval_scores": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+              "section": "第十六条 商业秘密的密级和保密期限一经确定，应当在商 > 第十七条 商业秘密的知悉范围，应当根据工作需要和 > （一）该事项公开后无损于公司的安全和利益的；",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.25,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 11.875,
+              "rejection_reasons": [],
+              "record_ids": [
+                "dc1860affc682ff23df9a83226b2c9da:r0",
+                "dc1860affc682ff23df9a83226b2c9da:r1",
+                "dc1860affc682ff23df9a83226b2c9da:r2",
+                "dc1860affc682ff23df9a83226b2c9da:r3",
+                "dc1860affc682ff23df9a83226b2c9da:r4",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r0",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r1",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r2",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r3",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r4",
+                "f7fbe68b1c3214cb418f5bdafa583a41:r5",
+                "cbe3a9a2c13c87b5e720b160889a18b6:r0",
+                "cbe3a9a2c13c87b5e720b160889a18b6:r1",
+                "cbe3a9a2c13c87b5e720b160889a18b6:r2"
+              ]
+            },
+            {
+              "group_id": "2cbf4201e5c2d043",
+              "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "document_family_id": "topic:保密工作管理办法",
+              "document_revision": "2023",
+              "effective_date": "",
+              "version_year": 2023,
+              "passage_ids": [
+                "9647980114a596bfaea692d4535f9a8b",
+                "0bf945ee9b1ca35863fd1d9f6961da76",
+                "e6b07275684ff88468ff4cbba7e3e49c"
+              ],
+              "retrieval_ranks": [
+                1,
+                4,
+                5
+              ],
+              "retrieval_scores": [
+                0.9000000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa",
+              "section": "第九条 各市分公司、各专业公司应依据区公司保密工作机 > 第三章 定密管理 > 第十条 本办法所称定密是指各类秘密依法依规确定、变更",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.25,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 10.1,
+              "rejection_reasons": [],
+              "record_ids": [
+                "9647980114a596bfaea692d4535f9a8b:r0",
+                "9647980114a596bfaea692d4535f9a8b:r1",
+                "9647980114a596bfaea692d4535f9a8b:r2",
+                "9647980114a596bfaea692d4535f9a8b:r3",
+                "9647980114a596bfaea692d4535f9a8b:r4",
+                "9647980114a596bfaea692d4535f9a8b:r5",
+                "9647980114a596bfaea692d4535f9a8b:r6",
+                "9647980114a596bfaea692d4535f9a8b:r7",
+                "9647980114a596bfaea692d4535f9a8b:r8",
+                "9647980114a596bfaea692d4535f9a8b:r9",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r0",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r1",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r2",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r3",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r4",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r5",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r6",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r7",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r8",
+                "0bf945ee9b1ca35863fd1d9f6961da76:r9",
+                "e6b07275684ff88468ff4cbba7e3e49c:r0",
+                "e6b07275684ff88468ff4cbba7e3e49c:r1",
+                "e6b07275684ff88468ff4cbba7e3e49c:r2",
+                "e6b07275684ff88468ff4cbba7e3e49c:r3",
+                "e6b07275684ff88468ff4cbba7e3e49c:r4",
+                "e6b07275684ff88468ff4cbba7e3e49c:r5",
+                "e6b07275684ff88468ff4cbba7e3e49c:r6",
+                "e6b07275684ff88468ff4cbba7e3e49c:r7"
+              ]
+            }
+          ],
+          "primary_group_id": "2d64517897f6ee19",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "保密期限",
+              "商业秘密保护管理办法",
+              "普通商密",
+              "核心商密"
+            ],
+            "selection": [
+              {
+                "group_id": "2d64517897f6ee19",
+                "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+                "score": 11.875,
+                "role": "primary",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "2cbf4201e5c2d043",
+                "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+                "score": 10.1,
+                "role": "rejected",
+                "rejection_reasons": []
+              }
+            ],
+            "top_gap": 1.775
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "核心商密",
+              "普通商密",
+              "保密期限"
+            ],
+            "predicate:保密期限": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "aeb2b1c28691d1ebd1b2a0d0"
+              ],
+              "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "text": "- 商业秘密在首页左上角或明显处标注“核心商密”或“普通商密”，可根据实际情况标注保密期限",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "c4759b6f49d263dac15cab91"
+              ],
+              "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "text": "- 暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)—6—商密级事项10年，普通商密级事项5年认定",
+              "fact_kind": "policy"
+            },
+            {
+              "rendered_candidate_ids": [
+                "488982d8d78ae8ad5d1916bc"
+              ],
+              "passage_id": "f7fbe68b1c3214cb418f5bdafa583a41",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "text": "- 第十四条商业秘密的密级，根据泄露会使企业的经济利益遭受损害的程度，确定为核心商密、普通商密两级",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 154
+        },
+        "primary_group_id": "2d64517897f6ee19",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "102bee52-4b83-438d-9296-c852579473b6",
+              "type": "knowledge",
+              "label": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52"
+            },
+            {
+              "id": "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+              "type": "block",
+              "label": "下列情况确定其保密期限：",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6"
+            },
+            {
+              "id": "4f99fb29-abd5-4f6c-87ef-a9fdc39491d0",
+              "type": "block",
+              "label": "[第5页]",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6"
+            },
+            {
+              "id": "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+              "type": "block",
+              "label": "信息；",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6"
+            },
+            {
+              "id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "type": "knowledge",
+              "label": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa"
+            },
+            {
+              "id": "5dda10ae-0080-4988-bc94-38f900770ac8",
+              "type": "knowledge",
+              "label": "中电信桂-2023-365号-关于印发中国电信广西公司商业秘密事项目录的通知--5dda10ae"
+            },
+            {
+              "id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9"
+            }
+          ],
+          "edges": [
+            {
+              "source": "102bee52-4b83-438d-9296-c852579473b6",
+              "target": "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+              "type": "contains"
+            },
+            {
+              "source": "4f99fb29-abd5-4f6c-87ef-a9fdc39491d0",
+              "target": "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+              "type": "parent"
+            },
+            {
+              "source": "102bee52-4b83-438d-9296-c852579473b6",
+              "target": "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+              "type": "contains"
+            },
+            {
+              "source": "4f99fb29-abd5-4f6c-87ef-a9fdc39491d0",
+              "target": "3b4db624-f282-4fa7-8e6d-4bfa04134c41",
+              "type": "parent"
+            },
+            {
+              "source": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "target": "102bee52-4b83-438d-9296-c852579473b6",
+              "type": "contains"
+            },
+            {
+              "source": "102bee52-4b83-438d-9296-c852579473b6",
+              "target": "5dda10ae-0080-4988-bc94-38f900770ac8",
+              "type": "references"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "102bee52-4b83-438d-9296-c852579473b6",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 7
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "102bee52-4b83-438d-9296-c852579473b6",
+            "e8f52cfa-2e86-4048-9358-0649094a41b9"
+          ],
+          "accepted_block_ids": [
+            "f4706f32-9b1c-4657-b94c-ab4137a526ea",
+            "92c2b2b0-d0dc-471c-bf5d-f13206e3cb24"
+          ],
+          "accepted_passage_ids": [
+            "dc1860affc682ff23df9a83226b2c9da",
+            "9647980114a596bfaea692d4535f9a8b",
+            "f7fbe68b1c3214cb418f5bdafa583a41",
+            "cbe3a9a2c13c87b5e720b160889a18b6",
+            "0bf945ee9b1ca35863fd1d9f6961da76",
+            "e6b07275684ff88468ff4cbba7e3e49c"
+          ],
+          "generation_knowledge_ids": [
+            "102bee52-4b83-438d-9296-c852579473b6",
+            "e8f52cfa-2e86-4048-9358-0649094a41b9"
+          ],
+          "top_score": 0.8333,
+          "intent": "ordinary",
+          "adjacent_count": 4,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "981e7ff3d52e39cb485b0a2c"
+        },
+        "snapshot_fingerprint": "981e7ff3d52e39cb485b0a2c",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 2,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 36.01
+  },
+  "top_candidate_id": "102bee52-4b83-438d-9296-c852579473b6",
+  "candidates": [
+    {
+      "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+      "passage_id": "dc1860affc682ff23df9a83226b2c9da",
+      "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+      "score": 1.0,
+      "final_relevance_score": 0.8333,
+      "text": "【文档】中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\n【章节】第十六条 商业秘密的密级和保密期限一经确定，应当在商 > 第十七条 商业秘密的知悉范围，应当根据工作需要和 > （一）该事项公开后无损于公司的安全和利益的；\n的损害。“普通商密”是指企业重要的商业秘密，泄露后会使企业\n利益遭受比较严重的损害。\n第十五条 在确定商业秘密的密级时，应根据事项区别\n下列情况确定其保密期限：\n（一）以某事件的发生或终止为解密条件的，根据该事\n件的发生或终止情况确定保密期限；\n（二）能预见解密时间的，根据解密时间确定保密期限；\n（三）暂时不能预见解密时间的，其保密期限按照核心何世恒(全渠道运营中心)\n— 6 —商密级事项10年，普通商密级事项5年认定。\n（四）对涉及商业秘密事项的保密期限如需另设规定，应\n上报区公司保密委员会批准后方可实施。\n第十六条 商业秘密的密级和保密期限一经确定，应当在商\n业秘密载体上做出明显标志。商业秘密在首页左上角或明显处标\n注“核心商密”或“普通商密”，可根据实际情况标注保密期限。例\n如：核心商密★10年。\n第十七条 商业秘密的知悉范围，应当根据工作需要和\n最小化原则，限定到具体岗位和人员，并按照涉密程度实行\n分类管理。扩大原定知悉范围、调阅或复印商业秘密须履行相\n应的审批程序。对保密期限内的商业秘密事项，根据情况变化，\n有下列情形之一的，应及时解密："
+    },
+    {
+      "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+      "passage_id": "9647980114a596bfaea692d4535f9a8b",
+      "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa",
+      "score": 0.9000000000000001,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa\n【章节】第九条 各市分公司、各专业公司应依据区公司保密工作机 > 第三章 定密管理 > 第十条 本办法所称定密是指各类秘密依法依规确定、变更\n密事项，其保密期限按照绝密级事项30年、机密级事项20年、\n秘密级事项10年执行；非书面形式的国家秘密标志，应标在明\n显易于识别的地方。\n工作秘密为内部敏感事项不分密级，应在相应载体的明显部\n位做出“内部”、“内部事项 注意保管”等标志。\n企业商业秘密的密级分为核心商密、普通商密。核心商密是\n指企业最重要的商业秘密，泄露后会使企业利益遭受特别严重的\n损害；普通商密是指企业重要的商业秘密，泄露后会使企业利益\n遭受比较严重的损害。企业商业秘密在首页左上角或明显处标注\n“核心商密”或“普通商密”，可根据实际情况标注保密期限。 何世恒(全渠道运营中心)\n— 6 —第十一条 各单位办理国家秘密和工作秘密事宜应当按照\n“密来密往、密来密复”原则派生定密，沿用原定密单位确定的\n密级标识和期限。\n各单位履行职能过程中产生的确需定为国家秘密的事项，应\n根据国家保密法律法规以及中央和国家有关机关、单位制订的行\n业、领域国家秘密具体范围、事项清单来确定，并报请相关主管\n机关单位审批，实行一事一定。在履行职能过程中产生的涉及工\n作秘密事项应按照《中国电信广西公司工作秘密管理办法》确定。"
+    }
+  ],
+  "search_ms": 28539.21,
+  "ask_ms": 36.01,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "JZBGNWgUZR8Qx--DgqE-KeNPI3_2r8RJ",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

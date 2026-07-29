@@ -1,0 +1,431 @@
+{
+  "case": {
+    "case_id": "KB-001",
+    "category": "精确关键词",
+    "query": "营收资金管理办法 收支两条线",
+    "expected_knowledge_ids": [
+      "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+    ],
+    "expected_title_keywords": [
+      "营收资金",
+      "2026"
+    ],
+    "required_facts": [
+      "收支两条线",
+      "小金库"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕22号，原文第二条/第六条"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "534ceabe-939d-4f7a-a365-88c4d9c5527f",
+          "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+          "passage_id": "fa0a7ed5b47854058cdeb925ee56cae1",
+          "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+          "text": "【文档】中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593\n【章节】第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属\n合规使用，并实现应收款项、预存款项与实收资金数据的全面关\n联。\n第五条 各单位根据本办法规范营收资金管理业务流程、考\n核规则，建立定期检查的营收资金监察体系，完善稽核流程，明\n确岗位责任，将稽核责任落实到各层级稽核岗位绩效考核中并严\n— 4 —格实施，确保营收资金稽核工作的有序开展。\n第六条 营收资金管理应遵循 “收支两条线”的原则，已收取\n的营收资金应及时入账，严禁收款不入账、资金体外循环、收入\n资金坐支、设立“小金库”、通过个人及非公司收款渠道收取客户\n资金等违规行为。\n第七条 区公司建立全区营收资金管理平台系统，实现营收\n资金全流程线上闭环管理，实现营收资金全流程可视可控和数据\n源头可追溯。\n第八条 本办法中涉及相关名词解释\n（一）本办法所述“司库平台”，是指集团集约建设的司库管\n理平台，不包括省内自行与银行搭建的银企直联系统。\n（二）本办法所述营收资金管理平台，是指供广西公司所属\n营业单元实体渠道受理的营收资金稽核、实体渠道资金稽核、银\n行到账资金稽核工作并出具相关营收资金报表，以及政企渠道开\n展政企资金认领、充值、销账等额业务处理的信息化管理平台。",
+          "document_family_id": "topic:营收资金管理办法",
+          "version_year": 2026,
+          "section_path": "第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属",
+          "block_ids": [
+            "534ceabe-939d-4f7a-a365-88c4d9c5527f",
+            "d5177357-60c2-449e-8cd0-271e404b94da",
+            "665ea7eb-2402-4dc7-af94-fb8b71e56840",
+            "1b7be302-227d-4b0e-9b6f-a5b5f711488e",
+            "b2ad651c-45f9-4650-a535-1610978424f1",
+            "358b1321-d719-43fe-ac8e-7b07cddd5fc8",
+            "40a78ab7-0cad-491c-b2e3-82584dee00d4",
+            "d996006f-501d-4ed2-ad49-21799300e26f",
+            "cdf4866a-390e-47d5-8aea-a51886c19e5e",
+            "6a3bf419-8dbe-4211-a524-2e2089d19152",
+            "2277aa12-7377-405e-9406-0a43b22da791",
+            "0a763a77-3d66-4f52-be6e-e50ba77aced7",
+            "bda8c49a-c424-43e2-9d6e-fcfcf715b714",
+            "060ef016-1ebc-41b8-b415-06e824cf8e36",
+            "66e371c0-cefa-4b31-9dcd-c4ea47469841",
+            "046b2d55-4810-4cb6-934b-23878d492629",
+            "418f8986-bc32-49b9-8bae-48677b4d0c4e",
+            "ba90219f-c143-462b-bc68-d61bfccad6bf"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -35.00182426022617,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 1.0,
+            "fts_score": 1.0,
+            "title_score": 0.6667,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 1.0,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.8,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.8,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:营收资金管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "4121ccee-c710-4e98-b052-79da68246c21",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "passage_id": "ec97da5db2eb7457e94e34b94b15474f",
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】3.1 界定收支两条线 > 3.2 市分公司收入上交省市子 > 3.2.1 市公司的收入账户\n码更改情况记\n录。 维护账号(集团互联)\n— 690 — 控制点 手工\n/自\n动 主要相关文\n档 监督检查方法\n2.5.5 客户证书使用人员因调\n动等原因发生变更时，应由区公\n司财务部资金主管或市分公司计\n划财务资金管理人员书面向银行\n提出客户证书变更事项申请表。\n申请由区 公司财务部或市分公司\n财务部主任签字审批，加盖公司\n公章，银行根据盖章后的申请办\n理变更客户证书手续。 手工 2.5.5 检查客\n户证书变更事项\n申请及手续\n2.5.6 使用人员应经常更换密\n码，防止泄密。 手工 原有 2.5.6 检查客\n户证书的密码更\n改情况记录。\n3 实行收支两条线管理\n3.1 界定收支两条线\n区公司内的各项现金流入全\n部上缴股份公司，同时区公司内\n的支出统一由股份公司拨付。 手工\n3.2 市分公司收入上交省市子\n公司\n3.2.1 市公司的收入账户\n资金通过 区公司合作银行上划至\n股份公司；属于非股份公司合作\n银行的现金流入，由市公司先行\n通过横向归集至合作银行。各级\n单位所有收入按照“纵向优先、\n横向就近”的原则，全额缴存至\n收入归集户或营收户。营收户资\n金要求于当日汇划至同级收入归\n集户，确因地域偏远交通不便无\n法实现当日上划的，收入存放不\n得超过五个工作日。 手工 3.2.1 检查资\n金归集情况是否\n按时限及额度要\n求完成。 维护账号(集团互联)",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "version_year": 2021,
+          "section_path": "3.1 界定收支两条线 > 3.2 市分公司收入上交省市子 > 3.2.1 市公司的收入账户",
+          "block_ids": [
+            "4121ccee-c710-4e98-b052-79da68246c21",
+            "01b8733d-a898-4c9d-ba22-5eb4a0c4f1d1",
+            "d33de7b7-411b-49c6-a9ed-264fb08cc762",
+            "f9c236b9-055f-433d-b50a-21e6b82b6012",
+            "8cf57a75-80d1-42aa-93ac-5923c4025846",
+            "7b4b5dcc-5f58-4b59-b368-ac361ac0428a",
+            "d54697b9-0fd5-4189-82ec-070db35f1a9b",
+            "cf6fa420-919a-44af-a075-f8bbbddc46e2",
+            "04e2e31a-4a28-4a49-bcb8-1c1deb97c0d3",
+            "1db56874-dd77-4237-9c5e-81185c624dab",
+            "4612f543-f4e4-4a66-a48d-854e0ee6059f",
+            "9d63bf1d-2ec6-4c98-a62d-df301828bf55",
+            "77b3949a-4ae7-45ea-b88d-03b925b7bf2c",
+            "346c2e6f-ca52-42cb-81bb-024dff92efb6",
+            "4635d070-ce0a-4d03-9bd1-a587efe71cb5",
+            "33eb0686-7c8f-4e7f-8de4-d04cd2b5ec1f",
+            "891037c3-f4e0-41b7-806d-cc490b0829dd",
+            "059a6324-4cd6-40f4-a9f8-87c86b01be02",
+            "eb4ed8c1-ea12-4091-af3f-570c29f228b1",
+            "04263db2-e2f1-4a1d-a78d-98aee19fb637",
+            "c1d1e561-a7f9-44e6-9356-9a48f80ac37b",
+            "4fc1b4bb-0132-477a-88be-d4f40002d9fd",
+            "65456108-1796-4d97-bbb0-7457637a9003",
+            "7e550d9d-b6e1-4a5e-bbe7-f755cb0256c5",
+            "2032da3c-f75f-4235-8e36-843b950831dc",
+            "68ab5e4c-360d-4223-9fe5-fe2b2fbba39a",
+            "84e120e8-1ddc-4052-ad16-f83a6d8ceac9",
+            "0aebdb97-f3da-45b0-82fb-ef607de0c263",
+            "6ffb03b7-d3fd-4c67-baf7-781ec0054e9f",
+            "ebc6743a-0362-4917-b661-d664a19267ca",
+            "4cce6b39-4eb1-4f8c-87c1-0afa2645ef4e",
+            "269b22a7-f903-4d44-9a48-56d117a5a777",
+            "dd88e622-4b0d-4ff9-8a71-711240a9f679",
+            "6bcfd0eb-ccf7-4a99-966f-1a8229dedd97",
+            "51db113a-939a-4278-b1d6-926330c9c607"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -38.483137499737936,
+          "fts_score": 0.7937427213728886,
+          "score": 0.6654,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5926,
+            "fts_score": 0.7937,
+            "title_score": 0.0,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5926,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4654,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4654,
+          "ranking_score": 0.6654,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+            "family_newest_year": 2021,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.8,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+          "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+        ],
+        "evidence_snapshot_id": "QO5EvUdid-wwyEH9tJ05TpvVX8kiqXjK",
+        "snapshot_fingerprint": "e47cb73239aecad979b08099",
+        "accepted_passage_ids": [
+          "fa0a7ed5b47854058cdeb925ee56cae1",
+          "ec97da5db2eb7457e94e34b94b15474f",
+          "4863dd53e9138452cc595e98db4d9728",
+          "2a47f485eacadb9a5c5dc147e949cf0a",
+          "9424f22ccebdc36611f4cbc2729f85b2",
+          "a1680b5a62ac6de4458a380faaf7b29f"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 4,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 43266.57,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"534ceabe-939d-4f7a-a365-88c4d9c5527f\",\"knowledge_id\":\"574f1593-2a9f-455d-ab16-bbc5b6d0d879\",\"passage_id\":\"fa0a7ed5b47854058cdeb925ee56cae1\",\"title\":\"中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593\",\"text\":\"【文档】中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593\\n【章节】第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属\\n合规使用，并实现应收款项、预存款项与实收资金数据的全面关\\n联。\\n第五条 各单位根据本办法规范营收资金管理业务流程、考\\n核规则，建立定期检查的营收资金监察体系，完善稽核流程，明\\n确岗位责任，将稽核责任落实到各层级稽核岗位绩效考核中并严\\n— 4 —格实施，确保营收资金稽核工作的有序开展。\\n第六条 营收资金管理应遵循 “收支两条线”的原则，已收取\\n的营收资金应及时入账，严禁收款不入账、资金体外循环、收入\\n资金坐支、设立“小金库”、通过个人及非公司收款渠道收取客户\\n资金等违规行为。\\n第七条 区公司建立全区营收资金管理平台系统，实现营收\\n资金全流程线上闭环管理，实现营收资金全流程可视可控和数据\\n源头可追溯。\\n第八条 本办法中涉及相关名词解释\\n（一）本办法所述“司库平台”，是指集团集约建设的司库管\\n理平台，不包括省内自行与银行搭建的银企直联系统。\\n（二）本办法所述营收资金管理平台，是指供广西公司所属\\n营业单元实体渠道受理的营收资金稽核、实体渠道资金稽核、银\\n行到账资金稽核工作并出具相关营收资金报表，以及政企渠道开\\n展政企资金认领、充值、销账等额业务处理的信息化管理平台。\",\"document_family_id\":\"topic:营收资金管理办法\",\"version_year\":2026,\"section_path\":\"第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属\",\"block_ids\":[\"534ceabe-939d-4f7a-a365-88c4d9c5527f\",\"d5177357-60c2-449e-8cd0-271e404b94da\",\"665ea7eb-2402-4dc7-af94-fb8b71e56840\",\"1b7be302-227d-4b0e-9b6f-a5b5f711488e\",\"b2ad651c-45f9-4650-a535-1610978424f1\",\"358b1321-d719-43fe-ac8e-7b07cddd5fc8\",\"40a78ab7-0cad-491c-b2e3-82584dee00d4\",\"d996006f-501d-4ed2-ad49-21799300e26f\",\"cdf4866a-390e-47d5-8aea-a51886c19e5e\",\"6a3bf419-8dbe-4211-a524-2e2089d19152\",\"2277aa12-7377-405e-9406-0a43b22da791\",\"0a763a77-3d66-4f52-be6e-e50ba77aced7\",\"bda8c49a-c424-43e2-9d6e-fcfcf715b714\",\"060ef016-1ebc-41b8-b415-06e824cf8e36\",\"66e371c0-cefa-4b31-9dcd-c4ea47469841\",\"046b2d55-4810-4cb6-934b-23878d492629\",\"418f8986-bc32-49b9-8bae-48677b4d0c4e\",\"ba90219f-c143-462b-bc68-d61bfccad6bf\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-35.00182426022617,\"fts_score\":1.0,\"score\":1.0,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":1.0,\"fts_score\":1.0,\"title_score\":0.6667,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":1.0,\"freshness_score\":0.5,\"final_relevance_score\":0.8,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.8,\"ranking_score\":1.0,\"version_rank\":{\"version_year\":2026,\"deprecated\":false,\"family_key\":\"topic:营收资金管理办法\",\"family_newest_year\":2026,\"is_family_newest\":true}},{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"4121ccee-c710-4e98-b052-79da68246c21\",\"knowledge_id\":\"6d072751-3ae6-408c-a494-00dad4ae0bd1\",\"passage_id\":\"ec97da5db2eb7457e94e34b94b15474f\",\"title\":\"中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\",\"text\":\"【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\\n【章节】3.1 界定收支两条线 > 3.2 市分公司收入上交省市子 > 3.2.1 市公司的收入账户\\n码更改情况记\\n录。 维护账号(集团互联)\\n— 690 — 控制点 手工\\n/自\\n动 主要相关文\\n档 监督检查方法\\n2.5.5 客户证书使用人员因调\\n动等原因发生变更时，应由区公\\n司财务部资金主管或市分公司计\\n划财务资金管理人员书面向银行\\n提出客户证书变更事项申请表。\\n申请由区 公司财务部或市分公司\\n财务部主任签字审批，加盖公司\\n公章，银行根据盖章后的申请办\\n理变更客户证书手续。 手工 2.5.5 检查客\\n户证书变更事项\\n申请及手续\\n2.5.6 使用人员应经常更换密\\n码，防止泄密。 手工 原有 2.5.6 检查客\\n户证书的密码更\\n改情况记录。\\n3 实行收支两条线管理\\n3.1 界定收支两条线\\n区公司内的各项现金流入全\\n部上缴股份公司，同时区公司内\\n的支出统一由股份公司拨付。 手工\\n3.2 市分公司收入上交省市子\\n公司\\n3.2.1 市公司的收入账户\\n资金通过 区公司合作银行上划至\\n股份公司；属于非股份公司合作\\n银行的现金流入，由市公司先行\\n通过横向归集至合作银行。各级\\n单位所有收入按照“纵向优先、\\n横向就近”的原则，全额缴存至\\n收入归集户或营收户。营收户资\\n金要求于当日汇划至同级收入归\\n集户，确因地域偏远交通不便无\\n法实现当日上划的，收入存放不\\n得超过五个工作日。 手工 3.2.1 检查资\\n金归集情况是否\\n按时限及额度要\\n求完成。 维护账号(集团互联)\",\"document_family_id\":\"topic:于印发中国电信股份有限公司广西分公司内控实施细则\",\"version_year\":2021,\"section_path\":\"3.1 界定收支两条线 > 3.2 市分公司收入上交省市子 > 3.2.1 市公司的收入账户\",\"block_ids\":[\"4121ccee-c710-4e98-b052-79da68246c21\",\"01b8733d-a898-4c9d-ba22-5eb4a0c4f1d1\",\"d33de7b7-411b-49c6-a9ed-264fb08cc762\",\"f9c236b9-055f-433d-b50a-21e6b82b6012\",\"8cf57a75-80d1-42aa-93ac-5923c4025846\",\"7b4b5dcc-5f58-4b59-b368-ac361ac0428a\",\"d54697b9-0fd5-4189-82ec-070db35f1a9b\",\"cf6fa420-919a-44af-a075-f8bbbddc46e2\",\"04e2e31a-4a28-4a49-bcb8-1c1deb97c0d3\",\"1db56874-dd77-4237-9c5e-81185c624dab\",\"4612f543-f4e4-4a66-a48d-854e0ee6059f\",\"9d63bf1d-2ec6-4c98-a62d-df301828bf55\",\"77b3949a-4ae7-45ea-b88d-03b925b7bf2c\",\"346c2e6f-ca52-42cb-81bb-024dff92efb6\",\"4635d070-ce0a-4d03-9bd1-a587efe71cb5\",\"33eb0686-7c8f-4e7f-8de4-d04cd2b5ec1f\",\"891037c3-f4e0-41b7-806d-cc490b0829dd\",\"059a6324-4cd6-40f4-a9f8-87c86b01be02\",\"eb4ed8c1-ea12-4091-af3f-570c29f228b1\",\"04263db2-e2f1-4a1d-a78d-98aee19fb637\",\"c1d1e561-a7f9-44e6-9356-9a48f80ac37b\",\"4fc1b4bb-0132-477a-88be-d4f40002d9fd\",\"65456108-1796-4d97-bbb0-7457637a9003\",\"7e550d9d-b6e1-4a5e-bbe7-f755cb0256c5\",\"2032da3c-f75f-4235-8e36-843b950831dc\",\"68ab5e4c-360d-4223-9fe5-fe2b2fbba39a\",\"84e120e8-1ddc-4052-ad16-f83a6d8ceac9\",\"0aebdb97-f3da-45b0-82fb-ef607de0c263\",\"6ffb03b7-d3fd-4c67-baf7-781ec0054e9f\",\"ebc6743a-0362-4917-b661-d664a19267ca\",\"4cce6b39-4eb1-4f8c-87c1-0afa2645ef4e\",\"269b22a7-f903-4d44-9a48-56d117a5a777\",\"dd88e622-4b0d-4ff9-8a71-711240a9f679\",\"6bcfd0eb-ccf7-4a99-966f-1a8229dedd97\",\"51db113a-939a-4278-b1d6-926330c9c607\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-38.483137499737936,\"fts_score\":0.7937427213728886,\"score\":0.6654,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":0.5926,\"fts_score\":0.7937,\"title_score\":0.0,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":0.5926,\"freshness_score\":0.5,\"final_relevance_score\":0.4654,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.4654,\"ranking_score\":0.6654,\"version_rank\":{\"version_year\":2021,\"deprecated\":false,\"family_key\":\"topic:于印发中国电信股份有限公司广西分公司内控实施细则\",\"family_newest_year\":2021,\"is_family_newest\":true}}],\"meta\":{\"total_estimate\":2,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.8,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"574f1593-2a9f-455d-ab16-bbc5b6d0d879\",\"6d072751-3ae6-408c-a494-00dad4ae0bd1\"],\"evidence_snapshot_id\":\"QO5EvUdid-wwyEH9tJ05TpvVX8kiqXjK\",\"snapshot_fingerprint\":\"e47cb73239aecad979b08099\",\"accepted_passage_ids\":[\"fa0a7ed5b47854058cdeb925ee56cae1\",\"ec97da5db2eb7457e94e34b94b15474f\",\"4863dd53e9138452cc595e98db4d9728\",\"2a47f485eacadb9a5c5dc147e949cf0a\",\"9424f22ccebdc36611f4cbc2729f85b2\",\"a1680b5a62ac6de4458a380faaf7b29f\"],\"adjacent_unit\":\"passage\",\"adjacent_count\":4,\"adjacent_fallback_reason\":\"passage_index_neighbors\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "534ceabe-939d-4f7a-a365-88c4d9c5527f",
+              "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "passage_id": "fa0a7ed5b47854058cdeb925ee56cae1",
+              "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+              "text": "【文档】中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593\n【章节】第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属\n合规使用，并实现应收款项、预存款项与实收资金数据的全面关\n联。\n第五条 各单位根据本办法规范营收资金管理业务流程、考\n核规则，建立定期检查的营收资金监察体系，完善稽核流程，明\n确岗位责任，将稽核责任落实到各层级稽核岗位绩效考核中并严\n— 4 —格实施，确保营收资金稽核工作的有序开展。\n第六条 营收资金管理应遵循 “收支两条线”的原则，已收取\n的营收资金应及时入账，严禁收款不入账、资金体外循环、收入\n资金坐支、设立“小金库”、通过个人及非公司收款渠道收取客户\n资金等违规行为。\n第七条 区公司建立全区营收资金管理平台系统，实现营收\n资金全流程线上闭环管理，实现营收资金全流程可视可控和数据\n源头可追溯。\n第八条 本办法中涉及相关名词解释\n（一）本办法所述“司库平台”，是指集团集约建设的司库管\n理平台，不包括省内自行与银行搭建的银企直联系统。\n（二）本办法所述营收资金管理平台，是指供广西公司所属\n营业单元实体渠道受理的营收资金稽核、实体渠道资金稽核、银\n行到账资金稽核工作并出具相关营收资金报表，以及政企渠道开\n展政企资金认领、充值、销账等额业务处理的信息化管理平台。",
+              "document_family_id": "topic:营收资金管理办法",
+              "version_year": 2026,
+              "section_path": "第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属",
+              "block_ids": [
+                "534ceabe-939d-4f7a-a365-88c4d9c5527f",
+                "d5177357-60c2-449e-8cd0-271e404b94da",
+                "665ea7eb-2402-4dc7-af94-fb8b71e56840",
+                "1b7be302-227d-4b0e-9b6f-a5b5f711488e",
+                "b2ad651c-45f9-4650-a535-1610978424f1",
+                "358b1321-d719-43fe-ac8e-7b07cddd5fc8",
+                "40a78ab7-0cad-491c-b2e3-82584dee00d4",
+                "d996006f-501d-4ed2-ad49-21799300e26f",
+                "cdf4866a-390e-47d5-8aea-a51886c19e5e",
+                "6a3bf419-8dbe-4211-a524-2e2089d19152",
+                "2277aa12-7377-405e-9406-0a43b22da791",
+                "0a763a77-3d66-4f52-be6e-e50ba77aced7",
+                "bda8c49a-c424-43e2-9d6e-fcfcf715b714",
+                "060ef016-1ebc-41b8-b415-06e824cf8e36",
+                "66e371c0-cefa-4b31-9dcd-c4ea47469841",
+                "046b2d55-4810-4cb6-934b-23878d492629",
+                "418f8986-bc32-49b9-8bae-48677b4d0c4e",
+                "ba90219f-c143-462b-bc68-d61bfccad6bf"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -35.00182426022617,
+              "fts_score": 1.0,
+              "score": 1.0,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 1.0,
+                "fts_score": 1.0,
+                "title_score": 0.6667,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 1.0,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.8,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.8,
+              "ranking_score": 1.0,
+              "version_rank": {
+                "version_year": 2026,
+                "deprecated": false,
+                "family_key": "topic:营收资金管理办法",
+                "family_newest_year": 2026,
+                "is_family_newest": true
+              }
+            },
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "4121ccee-c710-4e98-b052-79da68246c21",
+              "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+              "passage_id": "ec97da5db2eb7457e94e34b94b15474f",
+              "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+              "text": "【文档】中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0\n【章节】3.1 界定收支两条线 > 3.2 市分公司收入上交省市子 > 3.2.1 市公司的收入账户\n码更改情况记\n录。 维护账号(集团互联)\n— 690 — 控制点 手工\n/自\n动 主要相关文\n档 监督检查方法\n2.5.5 客户证书使用人员因调\n动等原因发生变更时，应由区公\n司财务部资金主管或市分公司计\n划财务资金管理人员书面向银行\n提出客户证书变更事项申请表。\n申请由区 公司财务部或市分公司\n财务部主任签字审批，加盖公司\n公章，银行根据盖章后的申请办\n理变更客户证书手续。 手工 2.5.5 检查客\n户证书变更事项\n申请及手续\n2.5.6 使用人员应经常更换密\n码，防止泄密。 手工 原有 2.5.6 检查客\n户证书的密码更\n改情况记录。\n3 实行收支两条线管理\n3.1 界定收支两条线\n区公司内的各项现金流入全\n部上缴股份公司，同时区公司内\n的支出统一由股份公司拨付。 手工\n3.2 市分公司收入上交省市子\n公司\n3.2.1 市公司的收入账户\n资金通过 区公司合作银行上划至\n股份公司；属于非股份公司合作\n银行的现金流入，由市公司先行\n通过横向归集至合作银行。各级\n单位所有收入按照“纵向优先、\n横向就近”的原则，全额缴存至\n收入归集户或营收户。营收户资\n金要求于当日汇划至同级收入归\n集户，确因地域偏远交通不便无\n法实现当日上划的，收入存放不\n得超过五个工作日。 手工 3.2.1 检查资\n金归集情况是否\n按时限及额度要\n求完成。 维护账号(集团互联)",
+              "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+              "version_year": 2021,
+              "section_path": "3.1 界定收支两条线 > 3.2 市分公司收入上交省市子 > 3.2.1 市公司的收入账户",
+              "block_ids": [
+                "4121ccee-c710-4e98-b052-79da68246c21",
+                "01b8733d-a898-4c9d-ba22-5eb4a0c4f1d1",
+                "d33de7b7-411b-49c6-a9ed-264fb08cc762",
+                "f9c236b9-055f-433d-b50a-21e6b82b6012",
+                "8cf57a75-80d1-42aa-93ac-5923c4025846",
+                "7b4b5dcc-5f58-4b59-b368-ac361ac0428a",
+                "d54697b9-0fd5-4189-82ec-070db35f1a9b",
+                "cf6fa420-919a-44af-a075-f8bbbddc46e2",
+                "04e2e31a-4a28-4a49-bcb8-1c1deb97c0d3",
+                "1db56874-dd77-4237-9c5e-81185c624dab",
+                "4612f543-f4e4-4a66-a48d-854e0ee6059f",
+                "9d63bf1d-2ec6-4c98-a62d-df301828bf55",
+                "77b3949a-4ae7-45ea-b88d-03b925b7bf2c",
+                "346c2e6f-ca52-42cb-81bb-024dff92efb6",
+                "4635d070-ce0a-4d03-9bd1-a587efe71cb5",
+                "33eb0686-7c8f-4e7f-8de4-d04cd2b5ec1f",
+                "891037c3-f4e0-41b7-806d-cc490b0829dd",
+                "059a6324-4cd6-40f4-a9f8-87c86b01be02",
+                "eb4ed8c1-ea12-4091-af3f-570c29f228b1",
+                "04263db2-e2f1-4a1d-a78d-98aee19fb637",
+                "c1d1e561-a7f9-44e6-9356-9a48f80ac37b",
+                "4fc1b4bb-0132-477a-88be-d4f40002d9fd",
+                "65456108-1796-4d97-bbb0-7457637a9003",
+                "7e550d9d-b6e1-4a5e-bbe7-f755cb0256c5",
+                "2032da3c-f75f-4235-8e36-843b950831dc",
+                "68ab5e4c-360d-4223-9fe5-fe2b2fbba39a",
+                "84e120e8-1ddc-4052-ad16-f83a6d8ceac9",
+                "0aebdb97-f3da-45b0-82fb-ef607de0c263",
+                "6ffb03b7-d3fd-4c67-baf7-781ec0054e9f",
+                "ebc6743a-0362-4917-b661-d664a19267ca",
+                "4cce6b39-4eb1-4f8c-87c1-0afa2645ef4e",
+                "269b22a7-f903-4d44-9a48-56d117a5a777",
+                "dd88e622-4b0d-4ff9-8a71-711240a9f679",
+                "6bcfd0eb-ccf7-4a99-966f-1a8229dedd97",
+                "51db113a-939a-4278-b1d6-926330c9c607"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -38.483137499737936,
+              "fts_score": 0.7937427213728886,
+              "score": 0.6654,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 0.5926,
+                "fts_score": 0.7937,
+                "title_score": 0.0,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 0.5926,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.4654,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.4654,
+              "ranking_score": 0.6654,
+              "version_rank": {
+                "version_year": 2021,
+                "deprecated": false,
+                "family_key": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+                "family_newest_year": 2021,
+                "is_family_newest": true
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 2,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.8,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+              "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+            ],
+            "evidence_snapshot_id": "QO5EvUdid-wwyEH9tJ05TpvVX8kiqXjK",
+            "snapshot_fingerprint": "e47cb73239aecad979b08099",
+            "accepted_passage_ids": [
+              "fa0a7ed5b47854058cdeb925ee56cae1",
+              "ec97da5db2eb7457e94e34b94b15474f",
+              "4863dd53e9138452cc595e98db4d9728",
+              "2a47f485eacadb9a5c5dc147e949cf0a",
+              "9424f22ccebdc36611f4cbc2729f85b2",
+              "a1680b5a62ac6de4458a380faaf7b29f"
+            ],
+            "adjacent_unit": "passage",
+            "adjacent_count": 4,
+            "adjacent_fallback_reason": "passage_index_neighbors"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-001",
+    "label": "baseline",
+    "query": "营收资金管理办法 收支两条线",
+    "expected_knowledge_ids": [
+      "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+    ],
+    "top_ids": [
+      "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+      "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+    ],
+    "top1_ok": true,
+    "recall5_ok": true,
+    "search_ms": 43266.57,
+    "n_results": 2,
+    "snapshot_fingerprint": null
+  }
+}

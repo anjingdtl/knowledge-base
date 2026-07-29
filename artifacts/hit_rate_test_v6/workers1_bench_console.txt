@@ -1,0 +1,14 @@
+[step] initialize MCP session ... OK session=388ec82a3ab34e5eba6cb347ba4749d9
+[step] ping ok=True caps ok=True
+[step] reuse_snapshot=True read_mode=unique workers=1
+[1/8] KB-001 top=574f1593-2a9f-455d-ab16-bbc5b6d0d879 search=39046ms ask=40ms reused=True retrieval_count=0
+[2/8] KB-003 top=940317f3-1c33-4afc-9cad-b838ebdcf12d search=44424ms ask=16ms reused=True retrieval_count=0
+[3/8] KB-017 top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search=40329ms ask=21ms reused=True retrieval_count=0
+[4/8] KB-018 top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search=52874ms ask=36ms reused=True retrieval_count=0
+[5/8] KB-019 top=27922ca4-aa1a-4cee-bf16-b4ee182a5201 search=37286ms ask=28ms reused=True retrieval_count=0
+[6/8] KB-021 top=b40b8949-e458-408a-aa75-292b0540516b search=46167ms ask=39ms reused=True retrieval_count=0
+[7/8] KB-032 top=423eb665-1382-4fc3-9805-8597e3c25276 search=33290ms ask=36ms reused=True retrieval_count=0
+[8/8] KB-037 top=2b63b216-9850-4e82-803e-4006cb9f62ad search=50545ms ask=37ms reused=True retrieval_count=0
+[step] unique read for 7 knowledge ids
+
+[done] 8 cases (skipped_resume=0) elapsed=344.4s -> artifacts\hit_rate_test_v6\workers1_bench

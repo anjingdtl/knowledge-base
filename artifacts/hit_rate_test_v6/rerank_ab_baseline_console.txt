@@ -1,0 +1,39 @@
+[1/32] KB-001 top1=True recall5=True ms=43266.57
+[2/32] KB-002 top1=True recall5=True ms=32809.39
+[3/32] KB-003 top1=True recall5=True ms=33991.91
+[4/32] KB-004 top1=True recall5=True ms=51748.26
+[5/32] KB-005 top1=True recall5=True ms=42824.02
+[6/32] KB-006 top1=True recall5=True ms=42114.07
+[7/32] KB-007 top1=True recall5=True ms=45771.25
+[8/32] KB-008 top1=True recall5=True ms=35327.5
+[9/32] KB-009 top1=False recall5=True ms=96063.65
+[10/32] KB-010 top1=False recall5=False ms=210993.51
+[11/32] KB-011 top1=False recall5=False ms=154340.44
+[12/32] KB-012 top1=True recall5=True ms=138375.4
+[13/32] KB-013 top1=True recall5=True ms=85249.62
+[14/32] KB-014 top1=True recall5=True ms=102160.9
+[15/32] KB-015 top1=True recall5=True ms=96165.33
+[16/32] KB-016 top1=True recall5=True ms=107390.51
+[17/32] KB-017 top1=True recall5=True ms=64651.0
+[18/32] KB-018 top1=True recall5=True ms=61121.06
+[19/32] KB-019 top1=True recall5=True ms=19651.66
+[20/32] KB-020 top1=True recall5=True ms=83311.69
+[21/32] KB-021 top1=True recall5=True ms=48388.21
+[22/32] KB-022 top1=True recall5=True ms=41508.12
+[23/32] KB-023 top1=True recall5=True ms=45109.81
+[24/32] KB-024 top1=True recall5=True ms=46541.3
+[25/32] KB-025 top1=True recall5=True ms=31388.53
+[26/32] KB-026 top1=False recall5=True ms=42590.46
+[27/32] KB-027 top1=True recall5=True ms=28097.98
+[28/32] KB-028 top1=True recall5=True ms=90087.02
+[29/32] KB-029 top1=True recall5=True ms=53268.72
+[30/32] KB-035 top1=True recall5=True ms=34529.15
+[31/32] KB-036 top1=True recall5=True ms=42361.4
+[32/32] KB-037 top1=True recall5=True ms=33066.65
+{
+  "label": "baseline",
+  "n": 32,
+  "top1": 0.875,
+  "recall5": 0.9375,
+  "elapsed_s": 2084.3
+}

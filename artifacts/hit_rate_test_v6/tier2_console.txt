@@ -1,0 +1,19 @@
+[step] initialize MCP session ... OK session=df8afd1a5a114221ada510efc4e6ba21
+[step] ping ok=True caps ok=True
+[step] reuse_snapshot=True read_mode=unique workers=1
+[1/13] KB-001 top=574f1593-2a9f-455d-ab16-bbc5b6d0d879 search=43583ms ask=41ms reused=True retrieval_count=0
+[2/13] KB-002 top=27922ca4-aa1a-4cee-bf16-b4ee182a5201 search=28252ms ask=12ms reused=True retrieval_count=0
+[3/13] KB-004 top=e8f52cfa-2e86-4048-9358-0649094a41b9 search=32646ms ask=39ms reused=True retrieval_count=0
+[4/13] KB-007 top=acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7 search=39215ms ask=17ms reused=True retrieval_count=0
+[5/13] KB-010 top=e0a6c23a-bf1e-4bd7-a07c-41046b17ed29 search=120226ms ask=37ms reused=True retrieval_count=0
+[6/13] KB-011 top=d2901dbf-a0b2-47d8-9e72-0f627589ddcc search=119867ms ask=43ms reused=True retrieval_count=0
+[7/13] KB-013 top=8a8fb5a7-42b8-4a35-b7fe-fdc352c55011 search=76132ms ask=11ms reused=True retrieval_count=0
+[8/13] KB-015 top=b40b8949-e458-408a-aa75-292b0540516b search=95224ms ask=17ms reused=True retrieval_count=0
+[9/13] KB-017 top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search=41654ms ask=30ms reused=True retrieval_count=0
+[10/13] KB-021 top=b40b8949-e458-408a-aa75-292b0540516b search=36892ms ask=16ms reused=True retrieval_count=0
+[11/13] KB-027 top=2b63b216-9850-4e82-803e-4006cb9f62ad search=29532ms ask=42ms reused=True retrieval_count=0
+[12/13] KB-028 top=2b63b216-9850-4e82-803e-4006cb9f62ad search=109748ms ask=14ms reused=True retrieval_count=0
+[13/13] KB-036 top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search=49690ms ask=33ms reused=True retrieval_count=0
+[step] unique read for 11 knowledge ids
+
+[done] 13 cases (skipped_resume=0) elapsed=823.3s -> artifacts\hit_rate_test_v6\tier2

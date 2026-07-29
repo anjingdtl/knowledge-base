@@ -1,4 +1,4 @@
-"""Structured claim / FactCandidate draft → ground → short render (SPEC v4 §B + v5 §2)."""
+"""Structured claim / FactCandidate draft → ground → short render (SPEC v4 §B + v5 §2 + v6)."""
 from __future__ import annotations
 
 import json
@@ -6,12 +6,19 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
+from src.answering.evidence_groups import (
+    filter_candidates_to_groups,
+    filter_records_to_groups,
+    resolve_evidence_groups,
+)
 from src.answering.fact_candidates import (
     FactCandidate,
     build_answer_plan,
     extract_candidates_from_evidence,
+    extract_candidates_from_records,
     render_from_candidates,
     select_fact_candidates,
+    validate_render_coverage,
 )
 from src.answering.numeric_triples import (
     extract_query_slots,
@@ -32,8 +39,6 @@ _PROCESS_MARKERS = re.compile(
     re.I,
 )
 
-# Machine-readable answer validation reasons (SPEC v5 §2.5) — never overwrite
-# these with a generic retrieval gate reason at the MCP layer.
 ANSWER_VALIDATION_REASONS = frozenset({
     "retrieval_gate_rejected",
     "direct_slot_not_satisfied",
@@ -47,6 +52,7 @@ ANSWER_VALIDATION_REASONS = frozenset({
     "no_matching_numeric_triple",
     "no_grounded_claims",
     "empty_render",
+    "render_validation_failed",
     "structured_claim_answer",
 })
 
@@ -132,8 +138,9 @@ def ground_claims(
     pmap = passage_map(evidence)
     for e in evidence:
         e.ensure_body()
-    slots = extract_query_slots(question)
-    conditions = slots.get("conditions") or []
+    # SPEC v6: use typed exclusive conditions only (scope words like 个人 are not conditions).
+    plan = plan_query(question)
+    conditions = list(plan.conditions or [])
     kept: list[ClaimDraft] = []
     audit: list[dict[str, Any]] = []
 
@@ -149,12 +156,10 @@ def ground_claims(
                 "unknown": unknown,
             })
             continue
-        # Ground against body_text only (SPEC v5 — no title/doc-no metadata).
         blobs = " ".join(
             (pmap[pid].body_text or pmap[pid].text or "")
             for pid in d.evidence_passage_ids
         )
-        # Version claims may also use title (version metadata).
         if d.fact_type == "version":
             blobs = " ".join(
                 ((pmap[pid].title or "") + " " + (pmap[pid].body_text or pmap[pid].text or ""))
@@ -202,22 +207,33 @@ def ground_claims(
         if not ok:
             continue
 
-        if conditions and d.condition and d.condition not in conditions:
-            audit.append({
-                "claim": d.to_dict(),
-                "reason": "condition_not_in_query",
-            })
-            continue
-        if conditions:
-            exclusive = {"涉诈", "涉骚扰", "II类", "III类", "I类", "区外", "区内"}
-            other = [c for c in exclusive if c in d.text and c not in conditions]
-            if other and not any(c in d.text for c in conditions):
+        # Only exclusive typed conditions gate drafts (not scope/selector).
+        exclusive = {"涉诈", "涉骚扰", "II类", "III类", "I类", "区外", "区内"}
+        if conditions and d.condition and d.condition in exclusive and d.condition not in conditions:
+            # Allow class limits when query asked for account limits without naming class.
+            if not (
+                d.condition in ("I类", "II类", "III类")
+                and re.search(r"年付款|支付账户|账户余额", question or "")
+            ):
                 audit.append({
                     "claim": d.to_dict(),
-                    "reason": "exclusive_condition_mismatch",
-                    "other": other,
+                    "reason": "condition_not_in_query",
                 })
                 continue
+        if conditions:
+            other = [c for c in exclusive if c in d.text and c not in conditions]
+            # Multi-class account answers may mention both II/III even if query only said 个人.
+            if other and not any(c in d.text for c in conditions):
+                if not (
+                    set(other) <= {"I类", "II类", "III类"}
+                    and re.search(r"年付款|支付账户|账户余额", question or "")
+                ):
+                    audit.append({
+                        "claim": d.to_dict(),
+                        "reason": "exclusive_condition_mismatch",
+                        "other": other,
+                    })
+                    continue
         kept.append(d)
         audit.append({"claim": d.to_dict(), "reason": "kept"})
     return kept, audit
@@ -242,18 +258,30 @@ def rule_extract_claims(
     question: str,
     evidence: list[PassageEvidence],
 ) -> list[ClaimDraft]:
-    """Deterministic claim extractor via FactCandidate pipeline (SPEC v5).
-
-    No longer runs unconditional numeric-first extraction. Query planner
-    decides which fact kinds are extracted.
-    """
+    """Deterministic claim extractor via FactCandidate pipeline (SPEC v5/v6)."""
     if not evidence:
         return []
-    cands, plan, _records = extract_candidates_from_evidence(
+    cands, plan, records = extract_candidates_from_evidence(
         [e.to_row() for e in evidence],
         question=question,
     )
-    selected, _audit = select_fact_candidates(cands, plan=plan)
+    resolution = resolve_evidence_groups(
+        [e.to_row() for e in evidence],
+        question=question,
+        records=records,
+        subqueries=plan.subqueries,
+    )
+    group_kids = set()
+    for g in resolution.groups:
+        if g.group_id == resolution.primary_group_id:
+            if g.knowledge_id:
+                group_kids.add(g.knowledge_id)
+    selected, _audit = select_fact_candidates(
+        cands,
+        plan=plan,
+        primary_group_id=resolution.primary_group_id,
+        group_knowledge_ids=group_kids or None,
+    )
     drafts: list[ClaimDraft] = []
     for c in selected:
         if c.unstructured_rejected or not (c.exact_text or c.display()):
@@ -265,7 +293,6 @@ def rule_extract_claims(
             condition=c.condition,
             candidate_id=c.candidate_id,
         ))
-    # Dedupe by text
     seen: set[str] = set()
     uniq: list[ClaimDraft] = []
     for d in drafts:
@@ -304,6 +331,61 @@ def filter_latest_family_evidence(
     return kept or evidence
 
 
+def repair_passage_ids(
+    candidates: list[FactCandidate],
+    evidence: list[PassageEvidence],
+) -> tuple[list[FactCandidate], list[dict[str, Any]]]:
+    """Fill missing passage_id from unique snapshot source when possible (SPEC v6 §2.2)."""
+    pmap = passage_map(evidence)
+    by_kid: dict[str, list[PassageEvidence]] = {}
+    for e in evidence:
+        if e.knowledge_id:
+            by_kid.setdefault(e.knowledge_id, []).append(e)
+    audit: list[dict[str, Any]] = []
+    out: list[FactCandidate] = []
+    for c in candidates:
+        if c.passage_id and c.passage_id in pmap:
+            out.append(c)
+            continue
+        if c.passage_id and c.passage_id not in pmap:
+            # Try repair via knowledge_id unique mapping
+            opts = by_kid.get(c.knowledge_id or "", [])
+            if len(opts) == 1 and opts[0].passage_id:
+                c.passage_id = opts[0].passage_id
+                c.trace_repaired = True
+                audit.append({
+                    "candidate_id": c.candidate_id,
+                    "action": "trace_repaired",
+                    "passage_id": c.passage_id,
+                })
+                out.append(c)
+                continue
+            audit.append({
+                "candidate_id": c.candidate_id,
+                "action": "missing_passage_id",
+                "reason": "passage_not_in_snapshot",
+            })
+            continue
+        # Empty passage_id
+        opts = by_kid.get(c.knowledge_id or "", [])
+        if len(opts) == 1 and opts[0].passage_id:
+            c.passage_id = opts[0].passage_id
+            c.trace_repaired = True
+            audit.append({
+                "candidate_id": c.candidate_id,
+                "action": "trace_repaired",
+                "passage_id": c.passage_id,
+            })
+            out.append(c)
+        else:
+            audit.append({
+                "candidate_id": c.candidate_id,
+                "action": "missing_passage_id",
+                "reason": "no_unique_source_mapping",
+            })
+    return out, audit
+
+
 def structured_answer_from_evidence(
     *,
     question: str,
@@ -312,7 +394,7 @@ def structured_answer_from_evidence(
     prefer_latest_family: bool = False,
     require_passage: bool = False,
 ) -> dict[str, Any]:
-    """Full FactCandidate → ground → render path with strict no-answer contract."""
+    """Full FactCandidate → group → cover → render → validate path."""
     evidence = normalize_evidence_list(evidence_rows)
     for e in evidence:
         e.ensure_body()
@@ -323,6 +405,8 @@ def structured_answer_from_evidence(
     numeric_audit: dict[str, Any] = {}
     fact_audit: dict[str, Any] = {}
     answer_plan: dict[str, Any] = {}
+    group_audit: dict[str, Any] = {}
+    render_validation: dict[str, Any] = {}
 
     if require_passage and evidence:
         ok, reason = ensure_passage_trace([e.to_row() for e in evidence], require_passage=True)
@@ -340,12 +424,49 @@ def structured_answer_from_evidence(
             answer_validation_decision="direct_slot_not_satisfied",
         )
 
-    # --- FactCandidate pipeline (primary) ---
-    cands, plan, records = extract_candidates_from_evidence(
+    plan = plan_query(question)
+    from src.answering.logical_evidence import records_from_evidence_list
+
+    records = records_from_evidence_list([e.to_row() for e in evidence])
+    resolution = resolve_evidence_groups(
         [e.to_row() for e in evidence],
         question=question,
+        records=records,
+        subqueries=plan.subqueries,
     )
-    selected, fact_audit = select_fact_candidates(cands, plan=plan)
+    group_audit = resolution.to_dict()
+    records_g = filter_records_to_groups(records, resolution, allow_secondary=bool(plan.subqueries))
+    cands = extract_candidates_from_records(records_g, plan=plan)
+
+    # Tag group_id on candidates
+    kid_to_gid = {g.knowledge_id: g.group_id for g in resolution.groups if g.knowledge_id}
+    for c in cands:
+        c.group_id = kid_to_gid.get(c.knowledge_id, "")
+
+    cands, repair_audit = repair_passage_ids(cands, evidence)
+    if repair_audit:
+        warnings.append(f"passage_repair:{len(repair_audit)}")
+
+    group_kids = {
+        g.knowledge_id
+        for g in resolution.groups
+        if g.group_id == resolution.primary_group_id and g.knowledge_id
+    }
+    # Multi-subquery may include secondary
+    if plan.subqueries:
+        for g in resolution.groups:
+            if g.group_id in resolution.secondary_group_ids and g.knowledge_id:
+                group_kids.add(g.knowledge_id)
+
+    selected, fact_audit = select_fact_candidates(
+        cands,
+        plan=plan,
+        primary_group_id=resolution.primary_group_id,
+        group_knowledge_ids=group_kids or None,
+    )
+    fact_audit["evidence_groups"] = group_audit
+    fact_audit["passage_repair"] = repair_audit
+
     numeric_audit = {
         "query_slots": extract_query_slots(question),
         "fact_plan": plan.to_dict(),
@@ -358,13 +479,15 @@ def structured_answer_from_evidence(
                 "record_id": c.record_id,
                 "exact_text": c.exact_text,
                 "table_row_ref": c.table_row_ref,
+                "value_dimension": c.value_dimension,
+                "group_id": c.group_id,
             }
             for c in selected
             if c.fact_kind in ("numeric", "deadline")
         ],
         "dropped": fact_audit.get("dropped") or [],
         "table_structure_ambiguous": bool(fact_audit.get("table_structure_ambiguous")),
-        "logical_record_count": len(records),
+        "logical_record_count": len(records_g),
         "candidate_count": len(cands),
     }
 
@@ -375,6 +498,7 @@ def structured_answer_from_evidence(
             numeric_fact_audit=numeric_audit,
             fact_candidate_audit=fact_audit,
             answer_validation_decision="table_structure_ambiguous",
+            evidence_groups=group_audit,
         )
 
     drafts: list[ClaimDraft] = []
@@ -408,18 +532,20 @@ def structured_answer_from_evidence(
                 numeric_fact_audit=numeric_audit,
                 fact_candidate_audit=fact_audit,
                 answer_validation_decision="no_fact_candidate",
+                evidence_groups=group_audit,
             )
 
     kept, ground_audit = ground_claims(drafts, evidence=evidence, question=question)
 
-    # Synthesize from selected FactCandidates if grounding dropped LLM noise.
     if not kept and selected:
         for c in selected:
             if c.unstructured_rejected:
                 continue
+            if not c.passage_id:
+                continue
             kept.append(ClaimDraft(
                 text=c.exact_text or c.display(),
-                evidence_passage_ids=[c.passage_id] if c.passage_id else [],
+                evidence_passage_ids=[c.passage_id],
                 fact_type=c.fact_kind if c.fact_kind != "prohibition" else "policy",
                 condition=c.condition,
                 candidate_id=c.candidate_id,
@@ -435,23 +561,28 @@ def structured_answer_from_evidence(
             claim_audit=ground_audit,
             fact_candidate_audit=fact_audit,
             answer_validation_decision="no_fact_candidate",
+            evidence_groups=group_audit,
         )
 
-    answer_plan = build_answer_plan(plan=plan, selected=selected or [
-        FactCandidate(
-            candidate_id=d.candidate_id or f"draft:{i}",
-            record_id="",
-            passage_id=d.evidence_passage_ids[0] if d.evidence_passage_ids else "",
-            knowledge_id="",
-            fact_kind=d.fact_type,
-            condition=d.condition,
-            exact_text=d.text,
-        )
-        for i, d in enumerate(kept)
-    ])
-    # For multi-condition numeric, incomplete plan → refuse rather than partial wrong.
+    answer_plan = build_answer_plan(
+        plan=plan,
+        selected=selected or [
+            FactCandidate(
+                candidate_id=d.candidate_id or f"draft:{i}",
+                record_id="",
+                passage_id=d.evidence_passage_ids[0] if d.evidence_passage_ids else "",
+                knowledge_id="",
+                fact_kind=d.fact_type,
+                condition=d.condition,
+                exact_text=d.text,
+            )
+            for i, d in enumerate(kept)
+        ],
+        coverage_matrix=fact_audit.get("coverage_matrix"),
+    )
+
+    # Incomplete exclusive multi-condition → refuse
     if plan.wants_numeric and plan.conditions and answer_plan.get("missing_slots"):
-        # Allow partial only when at least one condition is covered; still prefer complete.
         missing_conds = [s for s in answer_plan["missing_slots"] if s in plan.conditions]
         if missing_conds and not any(d.condition in plan.conditions for d in kept):
             return _no_answer(
@@ -462,21 +593,29 @@ def structured_answer_from_evidence(
                 fact_candidate_audit=fact_audit,
                 answer_plan=answer_plan,
                 answer_validation_decision="answer_plan_incomplete",
+                evidence_groups=group_audit,
             )
 
-    answer = render_short_answer(kept)
-    # Also prefer candidate renderer for consistency.
+    # Prefer candidate renderer (coverage-ordered selection already done)
+    answer = ""
+    bullet_audit: list[dict[str, Any]] = []
     if selected:
-        rendered = render_from_candidates(selected)
-        if rendered and len(rendered) >= len(answer or ""):
-            answer = rendered
+        answer, bullet_audit = render_from_candidates(selected)
+    if not answer:
+        answer = render_short_answer(kept)
 
-    # Strip cross-condition numbers not in selected set.
     allowed_nums = {
         re.sub(r"\s+", "", f"{c.value}{c.unit}")
         for c in selected
-        if c.fact_kind == "numeric" and c.value
+        if c.value and c.unit
     }
+    # Also keep any number already present in selected exact_text (policy spans).
+    for c in selected:
+        for m in re.finditer(
+            r"\d+(?:\.\d+)?\s*(?:万元|亿|元|%|％|个工作日|工作日|天|个)",
+            c.exact_text or "",
+        ):
+            allowed_nums.add(re.sub(r"\s+", "", m.group(0)))
     if allowed_nums:
         answer = _strip_disallowed_numbers(answer, allowed_nums)
 
@@ -486,22 +625,82 @@ def structured_answer_from_evidence(
             warnings=warnings,
             numeric_fact_audit=numeric_audit,
             answer_validation_decision="empty_render",
+            evidence_groups=group_audit,
         )
+
+    # SPEC v6 §3.3: render validation
+    render_validation = validate_render_coverage(
+        plan=plan,
+        answer_text=answer,
+        selected=selected,
+        bullet_audit=bullet_audit,
+    )
+    if not render_validation.get("ok"):
+        # Hard fail for exclusive numeric / polarity / multi-dim when missing critical slots
+        hard_missing = [
+            s for s in (render_validation.get("missing_slots") or [])
+            if s in (plan.conditions or [])
+            or s.startswith("dim:")
+            or s in ("polarity_negative", "policy_anchor", "version")
+            or s.startswith("predicate:")
+            or s.startswith("value:")
+        ]
+        if hard_missing and plan.wants_policy and not plan.wants_numeric:
+            # Policy without anchors → incomplete rather than wrong generic text
+            return _no_answer(
+                reason="render_validation_failed",
+                warnings=warnings + [f"render_missing:{hard_missing}"],
+                numeric_fact_audit=numeric_audit,
+                claim_audit=ground_audit,
+                fact_candidate_audit=fact_audit,
+                answer_plan=answer_plan,
+                answer_validation_decision="render_validation_failed",
+                evidence_groups=group_audit,
+                render_validation=render_validation,
+            )
+        if hard_missing and plan.wants_numeric and any(
+            s in plan.conditions or s.startswith("dim:") for s in hard_missing
+        ):
+            # Allow partial multi-dim only when at least one dim covered and answer non-empty;
+            # for exclusive conditions still refuse if none present.
+            if plan.conditions and not any(c in answer for c in plan.conditions):
+                return _no_answer(
+                    reason="render_validation_failed",
+                    warnings=warnings + [f"render_missing:{hard_missing}"],
+                    numeric_fact_audit=numeric_audit,
+                    claim_audit=ground_audit,
+                    fact_candidate_audit=fact_audit,
+                    answer_plan=answer_plan,
+                    answer_validation_decision="render_validation_failed",
+                    evidence_groups=group_audit,
+                    render_validation=render_validation,
+                )
 
     used_ids: list[str] = []
     for c in kept:
         for pid in c.evidence_passage_ids:
             if pid and pid not in used_ids:
                 used_ids.append(pid)
+    for b in bullet_audit:
+        pid = b.get("passage_id")
+        if pid and pid not in used_ids:
+            used_ids.append(pid)
     pmap = passage_map(evidence)
     used_evidence = [pmap[pid] for pid in used_ids if pid in pmap]
     if not used_evidence:
-        used_evidence = evidence[:3]
+        # Prefer primary group evidence
+        primary_kids = group_kids
+        used_evidence = [
+            e for e in evidence
+            if e.knowledge_id in primary_kids
+        ][:3] or evidence[:3]
 
     raw_evidence_used = []
     sources = []
     for e in used_evidence:
         e.ensure_body()
+        if not e.passage_id:
+            continue
         raw_evidence_used.append({
             "knowledge_id": e.knowledge_id,
             "passage_id": e.passage_id,
@@ -541,6 +740,8 @@ def structured_answer_from_evidence(
             reason="passage_trace_failed",
             warnings=warnings + [f"passage_trace:{trace_reason}"],
             answer_validation_decision="passage_trace_failed",
+            evidence_groups=group_audit,
+            render_validation=render_validation,
         )
 
     return {
@@ -555,6 +756,9 @@ def structured_answer_from_evidence(
         "fact_candidate_audit": fact_audit,
         "answer_plan": answer_plan,
         "query_plan": plan.to_dict(),
+        "evidence_groups": group_audit,
+        "primary_group_id": resolution.primary_group_id,
+        "render_validation": render_validation,
         "reason": "structured_claim_answer",
         "answer_validation_decision": "structured_claim_answer",
         "conflict_disclosed": False,
@@ -583,7 +787,7 @@ def _strip_disallowed_numbers(answer: str, allowed: set[str]) -> str:
 
 
 def _evidence_supports_query(question: str, evidence: list[PassageEvidence]) -> bool:
-    """Cheap core-slot check: at least one high-info term from query in evidence body."""
+    """Core-slot check via typed plan matcher + term overlap (SPEC v6 §4.1)."""
     from src.answering.direct_slot_gate import evaluate_direct_slot_evidence
 
     q = question or ""
@@ -600,6 +804,14 @@ def _evidence_supports_query(question: str, evidence: list[PassageEvidence]) -> 
     ds = evaluate_direct_slot_evidence(question, rows, min_slots=2)
     if ds.get("direct_slot_evidence"):
         return True
+    # Typed plan anchors: any anchor or entity hit is enough with one more term
+    plan = plan_query(q)
+    blob = "\n".join((e.title or "") + "\n" + (e.body_text or e.text or "") for e in evidence)
+    anchor_hits = sum(1 for a in (plan.anchors or []) if a and a in blob)
+    if anchor_hits >= 1 and plan.predicate and plan.predicate in blob:
+        return True
+    if anchor_hits >= 2:
+        return True
     terms: set[str] = set()
     for run in re.findall(r"[\u4e00-\u9fff]{2,}", q):
         if len(run) <= 4:
@@ -614,7 +826,6 @@ def _evidence_supports_query(question: str, evidence: list[PassageEvidence]) -> 
         "中国", "电信", "广西", "集团", "总部", "北京",
     }
     terms = {t for t in terms if t not in stop}
-    blob = "\n".join((e.title or "") + "\n" + (e.body_text or e.text or "") for e in evidence)
     hits = sum(1 for t in terms if t in blob)
     return hits >= 2 if len(terms) >= 2 else (hits >= 1 if terms else bool(blob.strip()))
 
@@ -628,6 +839,8 @@ def _no_answer(
     fact_candidate_audit: dict | None = None,
     answer_plan: dict | None = None,
     answer_validation_decision: str | None = None,
+    evidence_groups: dict | None = None,
+    render_validation: dict | None = None,
 ) -> dict[str, Any]:
     return {
         "answer": "",
@@ -643,6 +856,8 @@ def _no_answer(
         "claim_audit": claim_audit or [],
         "fact_candidate_audit": fact_candidate_audit or {},
         "answer_plan": answer_plan or {},
+        "evidence_groups": evidence_groups or {},
+        "render_validation": render_validation or {},
         "conflict_disclosed": False,
         "conflicts": [],
         "fallbacks": [],

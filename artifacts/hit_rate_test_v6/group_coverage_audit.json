@@ -1,0 +1,1021 @@
+[
+  {
+    "case_id": "KB-001",
+    "primary_group_id": "5e85d45fc337ff80",
+    "evidence_groups": {
+      "groups": [
+        {
+          "group_id": "5e85d45fc337ff80",
+          "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+          "document_family_id": "topic:营收资金管理办法",
+          "document_revision": "2026",
+          "effective_date": "",
+          "version_year": 2026,
+          "passage_ids": [
+            "fa0a7ed5b47854058cdeb925ee56cae1",
+            "4863dd53e9138452cc595e98db4d9728",
+            "2a47f485eacadb9a5c5dc147e949cf0a"
+          ],
+          "retrieval_ranks": [
+            0,
+            2,
+            3
+          ],
+          "retrieval_scores": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "title": "中电信桂-2026-22号-关于印发中国电信广西公司营收资金管理办法的通知--574f1593",
+          "section": "第八条 本办法中涉及相关名词解释 > （一）本办法所述“司库平台”，是指集团集约建设的司库管 > （二）本办法所述营收资金管理平台，是指供广西公司所属",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.5,
+          "predicate_coverage": 1.0,
+          "freshness_score": 0.0,
+          "group_score": 12.25,
+          "rejection_reasons": [],
+          "record_ids": [
+            "fa0a7ed5b47854058cdeb925ee56cae1:r0",
+            "fa0a7ed5b47854058cdeb925ee56cae1:r1",
+            "4863dd53e9138452cc595e98db4d9728:r0",
+            "4863dd53e9138452cc595e98db4d9728:r1",
+            "4863dd53e9138452cc595e98db4d9728:r2",
+            "4863dd53e9138452cc595e98db4d9728:r3",
+            "4863dd53e9138452cc595e98db4d9728:r4",
+            "2a47f485eacadb9a5c5dc147e949cf0a:r0",
+            "2a47f485eacadb9a5c5dc147e949cf0a:r1",
+            "2a47f485eacadb9a5c5dc147e949cf0a:r2",
+            "2a47f485eacadb9a5c5dc147e949cf0a:r3",
+            "2a47f485eacadb9a5c5dc147e949cf0a:r4",
+            "2a47f485eacadb9a5c5dc147e949cf0a:r5"
+          ]
+        },
+        {
+          "group_id": "5d277ee447643411",
+          "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+          "document_family_id": "topic:于印发中国电信股份有限公司广西分公司内控实施细则",
+          "document_revision": "2021",
+          "effective_date": "",
+          "version_year": 2021,
+          "passage_ids": [
+            "ec97da5db2eb7457e94e34b94b15474f",
+            "9424f22ccebdc36611f4cbc2729f85b2",
+            "a1680b5a62ac6de4458a380faaf7b29f"
+          ],
+          "retrieval_ranks": [
+            1,
+            4,
+            5
+          ],
+          "retrieval_scores": [
+            0.6654,
+            0.0,
+            0.0
+          ],
+          "title": "中电信桂-2021-108号-关于印发中国电信股份有限公司广西分公司内控实施细则及权限列表-2021年-的通知--6d0",
+          "section": "3.1 界定收支两条线 > 3.2 市分公司收入上交省市子 > 3.2.1 市公司的收入账户",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.0,
+          "predicate_coverage": 1.0,
+          "freshness_score": 0.0,
+          "group_score": 8.1308,
+          "rejection_reasons": [],
+          "record_ids": [
+            "ec97da5db2eb7457e94e34b94b15474f:r0",
+            "ec97da5db2eb7457e94e34b94b15474f:r1",
+            "ec97da5db2eb7457e94e34b94b15474f:r2",
+            "ec97da5db2eb7457e94e34b94b15474f:r3",
+            "ec97da5db2eb7457e94e34b94b15474f:r4",
+            "ec97da5db2eb7457e94e34b94b15474f:r5",
+            "ec97da5db2eb7457e94e34b94b15474f:r6",
+            "ec97da5db2eb7457e94e34b94b15474f:r7",
+            "ec97da5db2eb7457e94e34b94b15474f:r8",
+            "ec97da5db2eb7457e94e34b94b15474f:r9",
+            "ec97da5db2eb7457e94e34b94b15474f:r10",
+            "ec97da5db2eb7457e94e34b94b15474f:r11",
+            "9424f22ccebdc36611f4cbc2729f85b2:r0",
+            "9424f22ccebdc36611f4cbc2729f85b2:r1",
+            "9424f22ccebdc36611f4cbc2729f85b2:r2",
+            "a1680b5a62ac6de4458a380faaf7b29f:r0",
+            "a1680b5a62ac6de4458a380faaf7b29f:r1",
+            "a1680b5a62ac6de4458a380faaf7b29f:r2",
+            "a1680b5a62ac6de4458a380faaf7b29f:r3",
+            "a1680b5a62ac6de4458a380faaf7b29f:r4",
+            "a1680b5a62ac6de4458a380faaf7b29f:r5",
+            "a1680b5a62ac6de4458a380faaf7b29f:r6",
+            "a1680b5a62ac6de4458a380faaf7b29f:r7"
+          ]
+        }
+      ],
+      "primary_group_id": "5e85d45fc337ff80",
+      "secondary_group_ids": [],
+      "multi_subquery": false,
+      "ambiguous": false,
+      "audit": {
+        "wants_freshness": false,
+        "query_tokens": [
+          "收支两条线",
+          "营收资金管理办法"
+        ],
+        "selection": [
+          {
+            "group_id": "5e85d45fc337ff80",
+            "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+            "score": 12.25,
+            "role": "primary",
+            "rejection_reasons": []
+          },
+          {
+            "group_id": "5d277ee447643411",
+            "knowledge_id": "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+            "score": 8.1308,
+            "role": "rejected",
+            "rejection_reasons": []
+          }
+        ],
+        "top_gap": 4.1192
+      }
+    },
+    "render_validation": {
+      "ok": true,
+      "missing_slots": [],
+      "checks": {
+        "policy_anchors": [
+          "收支两条线"
+        ],
+        "predicate:收支两条线": true
+      },
+      "bullet_audit": [
+        {
+          "rendered_candidate_ids": [
+            "29af69f229163a586d7108d8"
+          ],
+          "passage_id": "fa0a7ed5b47854058cdeb925ee56cae1",
+          "knowledge_id": "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+          "text": "- 第六条营收资金管理应遵循“收支两条线”的原则，已收取的营收资金应及时入账，严禁收款不入账、资金体外循环、收入资金坐支、设立“小金库”、通过个人及非公司收款渠道收取客户资金等违规行为",
+          "fact_kind": "prohibition"
+        }
+      ],
+      "answer_len": 92
+    },
+    "answer_plan": {
+      "required_slots": [
+        "policy_fact",
+        "predicate:收支两条线"
+      ],
+      "candidate_ids": [
+        "29af69f229163a586d7108d8"
+      ],
+      "missing_slots": [],
+      "complete": true,
+      "intents": [
+        "policy"
+      ],
+      "covered_slots": [
+        "policy_fact",
+        "predicate:收支两条线"
+      ],
+      "coverage_matrix": {
+        "policy_fact": {
+          "29af69f229163a586d7108d8": "hit"
+        },
+        "predicate:收支两条线": {
+          "29af69f229163a586d7108d8": "hit"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "KB-002",
+    "primary_group_id": "f13a8be54fde0bd2",
+    "evidence_groups": {
+      "groups": [
+        {
+          "group_id": "f13a8be54fde0bd2",
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "document_family_id": "topic:翼支付业务管理办法",
+          "document_revision": "2026",
+          "effective_date": "",
+          "version_year": 2026,
+          "passage_ids": [
+            "b70adbe973c7e295104418fba7e0fac0",
+            "bb21d01a87b4b9d237a62c9fc366c1e0",
+            "3c7a08568ce26db0437fda38059ae1da"
+          ],
+          "retrieval_ranks": [
+            0,
+            1,
+            2
+          ],
+          "retrieval_scores": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+          "section": "第十七条按照央行颁发的《非银行机构网络支付业务管理 > （一）翼支付个人会员账户：分为翼支付个人未实名会员账 > （二）翼支付个人支付账户：分为翼支付个人II类支付账",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.5,
+          "predicate_coverage": 1.0,
+          "freshness_score": 0.0,
+          "group_score": 11.5,
+          "rejection_reasons": [],
+          "record_ids": [
+            "b70adbe973c7e295104418fba7e0fac0:r0",
+            "b70adbe973c7e295104418fba7e0fac0:r1",
+            "b70adbe973c7e295104418fba7e0fac0:r2",
+            "bb21d01a87b4b9d237a62c9fc366c1e0:r0",
+            "bb21d01a87b4b9d237a62c9fc366c1e0:r1",
+            "bb21d01a87b4b9d237a62c9fc366c1e0:r2",
+            "bb21d01a87b4b9d237a62c9fc366c1e0:r3",
+            "bb21d01a87b4b9d237a62c9fc366c1e0:r4",
+            "bb21d01a87b4b9d237a62c9fc366c1e0:r5",
+            "3c7a08568ce26db0437fda38059ae1da:r0",
+            "3c7a08568ce26db0437fda38059ae1da:r1",
+            "3c7a08568ce26db0437fda38059ae1da:r2",
+            "3c7a08568ce26db0437fda38059ae1da:r3",
+            "3c7a08568ce26db0437fda38059ae1da:r4",
+            "3c7a08568ce26db0437fda38059ae1da:r5",
+            "3c7a08568ce26db0437fda38059ae1da:r6",
+            "3c7a08568ce26db0437fda38059ae1da:r7"
+          ]
+        }
+      ],
+      "primary_group_id": "f13a8be54fde0bd2",
+      "secondary_group_ids": [],
+      "multi_subquery": false,
+      "ambiguous": false,
+      "audit": {
+        "wants_freshness": false,
+        "query_tokens": [
+          "个人支付账户余额年付款限",
+          "翼支付业务管理办法"
+        ],
+        "selection": [
+          {
+            "group_id": "f13a8be54fde0bd2",
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "score": 11.5,
+            "role": "primary",
+            "rejection_reasons": []
+          }
+        ]
+      }
+    },
+    "render_validation": {
+      "ok": true,
+      "missing_slots": [],
+      "checks": {
+        "dim:II类": true,
+        "dim:III类": true
+      },
+      "bullet_audit": [
+        {
+          "rendered_candidate_ids": [
+            "879847e9e04d4c3025273d29"
+          ],
+          "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "text": "- III类支付账户，其余额年付款限额为20万元（不含提现）。",
+          "fact_kind": "numeric"
+        },
+        {
+          "rendered_candidate_ids": [
+            "0592124c19eca654c9137780"
+          ],
+          "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "text": "- 其中，II类支付账户，其余额年付款限额为10万元（不含提现）；",
+          "fact_kind": "numeric"
+        },
+        {
+          "rendered_candidate_ids": [
+            "af6093e34c2a35e42b2f8442"
+          ],
+          "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "text": "- III类支付账户，其余额年付款限额为20万元（不含提现）",
+          "fact_kind": "policy"
+        }
+      ],
+      "answer_len": 96
+    },
+    "answer_plan": {
+      "required_slots": [
+        "value",
+        "unit",
+        "dim:年付款",
+        "dim:II类",
+        "dim:III类",
+        "policy_fact",
+        "predicate:限额"
+      ],
+      "candidate_ids": [
+        "879847e9e04d4c3025273d29",
+        "0592124c19eca654c9137780",
+        "af6093e34c2a35e42b2f8442",
+        "58438dfc3623760c6879ee34",
+        "3baf5079a2fb44be22853131",
+        "0def585b321dc058d836ed9a"
+      ],
+      "missing_slots": [],
+      "complete": true,
+      "intents": [
+        "numeric",
+        "policy"
+      ],
+      "covered_slots": [
+        "III类",
+        "II类",
+        "dim:III类",
+        "dim:II类",
+        "dim:年付款",
+        "policy_fact",
+        "predicate:限额",
+        "unit",
+        "value"
+      ],
+      "coverage_matrix": {
+        "value": {
+          "af6093e34c2a35e42b2f8442": "unknown",
+          "58438dfc3623760c6879ee34": "unknown",
+          "3baf5079a2fb44be22853131": "unknown",
+          "879847e9e04d4c3025273d29": "hit",
+          "3e6a32ac2f402ba1f8127ae6": "hit",
+          "107dc941f84a913021c2e7f5": "hit",
+          "0592124c19eca654c9137780": "hit",
+          "0def585b321dc058d836ed9a": "unknown",
+          "1cdead67dd89f76b5a253859": "unknown"
+        },
+        "unit": {
+          "af6093e34c2a35e42b2f8442": "unknown",
+          "58438dfc3623760c6879ee34": "unknown",
+          "3baf5079a2fb44be22853131": "unknown",
+          "879847e9e04d4c3025273d29": "hit",
+          "3e6a32ac2f402ba1f8127ae6": "hit",
+          "107dc941f84a913021c2e7f5": "hit",
+          "0592124c19eca654c9137780": "hit",
+          "0def585b321dc058d836ed9a": "unknown",
+          "1cdead67dd89f76b5a253859": "unknown"
+        },
+        "dim:年付款": {
+          "af6093e34c2a35e42b2f8442": "hit",
+          "58438dfc3623760c6879ee34": "hit",
+          "3baf5079a2fb44be22853131": "hit",
+          "879847e9e04d4c3025273d29": "hit",
+          "3e6a32ac2f402ba1f8127ae6": "hit",
+          "107dc941f84a913021c2e7f5": "hit",
+          "0592124c19eca654c9137780": "hit",
+          "0def585b321dc058d836ed9a": "unknown",
+          "1cdead67dd89f76b5a253859": "unknown"
+        },
+        "dim:II类": {
+          "af6093e34c2a35e42b2f8442": "hit",
+          "58438dfc3623760c6879ee34": "hit",
+          "3baf5079a2fb44be22853131": "hit",
+          "879847e9e04d4c3025273d29": "hit",
+          "3e6a32ac2f402ba1f8127ae6": "hit",
+          "107dc941f84a913021c2e7f5": "hit",
+          "0592124c19eca654c9137780": "hit",
+          "0def585b321dc058d836ed9a": "miss",
+          "1cdead67dd89f76b5a253859": "miss"
+        },
+        "dim:III类": {
+          "af6093e34c2a35e42b2f8442": "hit",
+          "58438dfc3623760c6879ee34": "miss",
+          "3baf5079a2fb44be22853131": "miss",
+          "879847e9e04d4c3025273d29": "hit",
+          "3e6a32ac2f402ba1f8127ae6": "hit",
+          "107dc941f84a913021c2e7f5": "hit",
+          "0592124c19eca654c9137780": "miss",
+          "0def585b321dc058d836ed9a": "miss",
+          "1cdead67dd89f76b5a253859": "miss"
+        },
+        "policy_fact": {
+          "af6093e34c2a35e42b2f8442": "hit",
+          "58438dfc3623760c6879ee34": "hit",
+          "3baf5079a2fb44be22853131": "hit",
+          "879847e9e04d4c3025273d29": "hit",
+          "3e6a32ac2f402ba1f8127ae6": "hit",
+          "107dc941f84a913021c2e7f5": "hit",
+          "0592124c19eca654c9137780": "hit",
+          "0def585b321dc058d836ed9a": "hit",
+          "1cdead67dd89f76b5a253859": "hit"
+        },
+        "predicate:限额": {
+          "af6093e34c2a35e42b2f8442": "hit",
+          "58438dfc3623760c6879ee34": "hit",
+          "3baf5079a2fb44be22853131": "hit",
+          "879847e9e04d4c3025273d29": "hit",
+          "3e6a32ac2f402ba1f8127ae6": "hit",
+          "107dc941f84a913021c2e7f5": "hit",
+          "0592124c19eca654c9137780": "hit",
+          "0def585b321dc058d836ed9a": "hit",
+          "1cdead67dd89f76b5a253859": "hit"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "KB-004",
+    "primary_group_id": "2cbf4201e5c2d043",
+    "evidence_groups": {
+      "groups": [
+        {
+          "group_id": "2cbf4201e5c2d043",
+          "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "document_family_id": "topic:保密工作管理办法",
+          "document_revision": "2023",
+          "effective_date": "",
+          "version_year": 2023,
+          "passage_ids": [
+            "9941c3c7b0fb92b60e9d24823edc9979",
+            "1cab133d7265545293dd8f29b05fa462",
+            "1d827171a43c2f65658e6f9135a72de9"
+          ],
+          "retrieval_ranks": [
+            0,
+            2,
+            3
+          ],
+          "retrieval_scores": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa",
+          "section": "第六章 企业商业秘密载体和信息管理 > 第二十七条 企业商业秘密载体的制作、收发、传递、使用、 > 第二十八条 企业商业秘密文件资料和信息应当使用企业",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.0,
+          "predicate_coverage": 1.0,
+          "freshness_score": 0.0,
+          "group_score": 10.75,
+          "rejection_reasons": [],
+          "record_ids": [
+            "9941c3c7b0fb92b60e9d24823edc9979:r0",
+            "9941c3c7b0fb92b60e9d24823edc9979:r1",
+            "9941c3c7b0fb92b60e9d24823edc9979:r2",
+            "9941c3c7b0fb92b60e9d24823edc9979:r3",
+            "9941c3c7b0fb92b60e9d24823edc9979:r4",
+            "9941c3c7b0fb92b60e9d24823edc9979:r5",
+            "9941c3c7b0fb92b60e9d24823edc9979:r6",
+            "9941c3c7b0fb92b60e9d24823edc9979:r7",
+            "1cab133d7265545293dd8f29b05fa462:r0",
+            "1cab133d7265545293dd8f29b05fa462:r1",
+            "1cab133d7265545293dd8f29b05fa462:r2",
+            "1cab133d7265545293dd8f29b05fa462:r3",
+            "1cab133d7265545293dd8f29b05fa462:r4",
+            "1cab133d7265545293dd8f29b05fa462:r5",
+            "1cab133d7265545293dd8f29b05fa462:r6",
+            "1cab133d7265545293dd8f29b05fa462:r7",
+            "1cab133d7265545293dd8f29b05fa462:r8",
+            "1cab133d7265545293dd8f29b05fa462:r9",
+            "1cab133d7265545293dd8f29b05fa462:r10",
+            "1d827171a43c2f65658e6f9135a72de9:r0",
+            "1d827171a43c2f65658e6f9135a72de9:r1",
+            "1d827171a43c2f65658e6f9135a72de9:r2",
+            "1d827171a43c2f65658e6f9135a72de9:r3",
+            "1d827171a43c2f65658e6f9135a72de9:r4",
+            "1d827171a43c2f65658e6f9135a72de9:r5",
+            "1d827171a43c2f65658e6f9135a72de9:r6"
+          ]
+        },
+        {
+          "group_id": "2d64517897f6ee19",
+          "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+          "document_family_id": "topic:商业秘密保护管理办法",
+          "document_revision": "2023",
+          "effective_date": "",
+          "version_year": 2023,
+          "passage_ids": [
+            "4372bb32b60bade271e3c682e25af9c8",
+            "72be42fc0a53201c48bb7f366aec80ad",
+            "ab6ec3ff0e41ee47514aad3c616e02af"
+          ],
+          "retrieval_ranks": [
+            1,
+            4,
+            5
+          ],
+          "retrieval_scores": [
+            0.7974000000000001,
+            0.0,
+            0.0
+          ],
+          "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+          "section": "第三十三条 禁止使用非企业内各类公共互联网存储空间、 > 第三十四条 各单位应当将商业秘密保护工作纳入风险管 > 第三十五条 各单位对侵犯商业秘密的行为，应依法主张权",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.0,
+          "predicate_coverage": 1.0,
+          "freshness_score": 0.0,
+          "group_score": 8.3948,
+          "rejection_reasons": [],
+          "record_ids": [
+            "4372bb32b60bade271e3c682e25af9c8:r0",
+            "4372bb32b60bade271e3c682e25af9c8:r1",
+            "4372bb32b60bade271e3c682e25af9c8:r2",
+            "4372bb32b60bade271e3c682e25af9c8:r3",
+            "4372bb32b60bade271e3c682e25af9c8:r4",
+            "4372bb32b60bade271e3c682e25af9c8:r5",
+            "4372bb32b60bade271e3c682e25af9c8:r6",
+            "4372bb32b60bade271e3c682e25af9c8:r7",
+            "4372bb32b60bade271e3c682e25af9c8:r8",
+            "4372bb32b60bade271e3c682e25af9c8:r9",
+            "72be42fc0a53201c48bb7f366aec80ad:r0",
+            "72be42fc0a53201c48bb7f366aec80ad:r1",
+            "72be42fc0a53201c48bb7f366aec80ad:r2",
+            "72be42fc0a53201c48bb7f366aec80ad:r3",
+            "72be42fc0a53201c48bb7f366aec80ad:r4",
+            "72be42fc0a53201c48bb7f366aec80ad:r5",
+            "72be42fc0a53201c48bb7f366aec80ad:r6",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r0",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r1",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r2",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r3",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r4",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r5",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r6",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r7",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r8",
+            "ab6ec3ff0e41ee47514aad3c616e02af:r9"
+          ]
+        }
+      ],
+      "primary_group_id": "2cbf4201e5c2d043",
+      "secondary_group_ids": [],
+      "multi_subquery": false,
+      "ambiguous": false,
+      "audit": {
+        "wants_freshness": false,
+        "query_tokens": [
+          "不得使用外部互联网邮箱",
+          "保密工作管理办法"
+        ],
+        "selection": [
+          {
+            "group_id": "2cbf4201e5c2d043",
+            "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+            "score": 10.75,
+            "role": "primary",
+            "rejection_reasons": []
+          },
+          {
+            "group_id": "2d64517897f6ee19",
+            "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+            "score": 8.3948,
+            "role": "rejected",
+            "rejection_reasons": []
+          }
+        ],
+        "top_gap": 2.3552
+      }
+    },
+    "render_validation": {
+      "ok": true,
+      "missing_slots": [],
+      "checks": {
+        "policy_anchors": [
+          "不得使用",
+          "不得使用外部互联网邮箱",
+          "外部互联网邮箱"
+        ],
+        "polarity_negative": true,
+        "predicate:不得使用": true
+      },
+      "bullet_audit": [
+        {
+          "rendered_candidate_ids": [
+            "d7514c669deb152a630317fb"
+          ],
+          "passage_id": "9941c3c7b0fb92b60e9d24823edc9979",
+          "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "text": "- 不得使用外部互联网邮箱、网络会议、微信、易信、钉钉、彩信、QQ、博客、微博、论坛等形式发布或转发涉及企业商业秘密的文件资料等",
+          "fact_kind": "prohibition"
+        },
+        {
+          "rendered_candidate_ids": [
+            "aa64523f3d8774228e2d1eae"
+          ],
+          "passage_id": "1cab133d7265545293dd8f29b05fa462",
+          "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "text": "- 其中，绝密级载体未经原定密机关、单位或者上级机关批准，不得复制和摘抄",
+          "fact_kind": "prohibition"
+        },
+        {
+          "rendered_candidate_ids": [
+            "1350426e609cdc65f0ad073c"
+          ],
+          "passage_id": "1cab133d7265545293dd8f29b05fa462",
+          "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "text": "- 维修单位和人员，不得擅自对载体数据进行复制或备份",
+          "fact_kind": "prohibition"
+        }
+      ],
+      "answer_len": 128
+    },
+    "answer_plan": {
+      "required_slots": [
+        "policy_fact",
+        "polarity_negative",
+        "predicate:不得使用"
+      ],
+      "candidate_ids": [
+        "d7514c669deb152a630317fb",
+        "3f770c37f1de43e4275d1790",
+        "aa64523f3d8774228e2d1eae",
+        "1350426e609cdc65f0ad073c",
+        "a2129e916f76cfdce7bbf217",
+        "37b278940005e1e7cddb07bb"
+      ],
+      "missing_slots": [],
+      "complete": true,
+      "intents": [
+        "policy"
+      ],
+      "covered_slots": [
+        "polarity_negative",
+        "policy_fact",
+        "predicate:不得使用"
+      ],
+      "coverage_matrix": {
+        "policy_fact": {
+          "d7514c669deb152a630317fb": "hit",
+          "3f770c37f1de43e4275d1790": "hit",
+          "aa64523f3d8774228e2d1eae": "hit",
+          "1350426e609cdc65f0ad073c": "hit",
+          "a2129e916f76cfdce7bbf217": "hit",
+          "37b278940005e1e7cddb07bb": "hit",
+          "61b6b7b4a25a982ced6314ec": "hit",
+          "8d7a6b54a93ff629f319bd09": "hit",
+          "0d550582e5566aed38a2d50e": "hit"
+        },
+        "polarity_negative": {
+          "d7514c669deb152a630317fb": "hit",
+          "3f770c37f1de43e4275d1790": "hit",
+          "aa64523f3d8774228e2d1eae": "hit",
+          "1350426e609cdc65f0ad073c": "hit",
+          "a2129e916f76cfdce7bbf217": "hit",
+          "37b278940005e1e7cddb07bb": "hit",
+          "61b6b7b4a25a982ced6314ec": "hit",
+          "8d7a6b54a93ff629f319bd09": "hit",
+          "0d550582e5566aed38a2d50e": "miss"
+        },
+        "predicate:不得使用": {
+          "d7514c669deb152a630317fb": "hit",
+          "3f770c37f1de43e4275d1790": "hit",
+          "aa64523f3d8774228e2d1eae": "miss",
+          "1350426e609cdc65f0ad073c": "miss",
+          "a2129e916f76cfdce7bbf217": "miss",
+          "37b278940005e1e7cddb07bb": "miss",
+          "61b6b7b4a25a982ced6314ec": "miss",
+          "8d7a6b54a93ff629f319bd09": "miss",
+          "0d550582e5566aed38a2d50e": "miss"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "KB-036",
+    "primary_group_id": "841148ebdd8f0e0a",
+    "evidence_groups": {
+      "groups": [
+        {
+          "group_id": "841148ebdd8f0e0a",
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "document_family_id": "topic:差旅费管理办法",
+          "document_revision": "2025",
+          "effective_date": "",
+          "version_year": 2025,
+          "passage_ids": [
+            "392c97de4f338615d10f30b4f939e65f",
+            "61521a66233c3a7ee143526701cbb55a"
+          ],
+          "retrieval_ranks": [
+            0,
+            4
+          ],
+          "retrieval_scores": [
+            1.0,
+            0.0
+          ],
+          "title": "中电信桂-2025-256号-关于印发中国电信广西公司差旅费管理办法-2025年-的通知--960ce8f2",
+          "section": "（一）明确差旅范围 > （三）取消出差期间的市内交通费 > （四）增加行程变更报账规定",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.3333,
+          "predicate_coverage": 1.0,
+          "freshness_score": 0.6667,
+          "group_score": 13.5,
+          "rejection_reasons": [],
+          "record_ids": [
+            "392c97de4f338615d10f30b4f939e65f:r0",
+            "392c97de4f338615d10f30b4f939e65f:r1",
+            "392c97de4f338615d10f30b4f939e65f:r2",
+            "61521a66233c3a7ee143526701cbb55a:r0",
+            "61521a66233c3a7ee143526701cbb55a:r1",
+            "61521a66233c3a7ee143526701cbb55a:r2",
+            "61521a66233c3a7ee143526701cbb55a:r3"
+          ]
+        },
+        {
+          "group_id": "a88cc84f1c8e12f6",
+          "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+          "document_family_id": "topic:差旅费管理办法",
+          "document_revision": "2022",
+          "effective_date": "",
+          "version_year": 2022,
+          "passage_ids": [
+            "7d948bad3637022ab5aada4f8d85d85b",
+            "0ca28b45f5ebc155a41ff92c566c0236",
+            "22306a9200c48082eda52a832ed930f2"
+          ],
+          "retrieval_ranks": [
+            1,
+            5,
+            6
+          ],
+          "retrieval_scores": [
+            0.33000000000000007,
+            0.0,
+            0.0
+          ],
+          "title": "中电信桂-2022-57号-关于印发中国电信广西公司差旅费管理办法-2022年-的通知--3f57bb0d",
+          "section": "（五）是否巧立名目或虚开发票报销差旅费，串项报账挪作 > （六）号百商旅公司结算的票务费用是否经过审核； > （七）接待单位收取出差人员缴纳的伙食、交通费用是否及",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.3333,
+          "predicate_coverage": 0.5,
+          "freshness_score": 0.4667,
+          "group_score": 8.16,
+          "rejection_reasons": [],
+          "record_ids": [
+            "7d948bad3637022ab5aada4f8d85d85b:r0",
+            "7d948bad3637022ab5aada4f8d85d85b:r1",
+            "7d948bad3637022ab5aada4f8d85d85b:r2",
+            "7d948bad3637022ab5aada4f8d85d85b:r3",
+            "7d948bad3637022ab5aada4f8d85d85b:r4",
+            "7d948bad3637022ab5aada4f8d85d85b:r5",
+            "7d948bad3637022ab5aada4f8d85d85b:r6",
+            "7d948bad3637022ab5aada4f8d85d85b:r7",
+            "0ca28b45f5ebc155a41ff92c566c0236:r0",
+            "0ca28b45f5ebc155a41ff92c566c0236:r1",
+            "0ca28b45f5ebc155a41ff92c566c0236:r2",
+            "0ca28b45f5ebc155a41ff92c566c0236:r3",
+            "0ca28b45f5ebc155a41ff92c566c0236:r4",
+            "0ca28b45f5ebc155a41ff92c566c0236:r5",
+            "0ca28b45f5ebc155a41ff92c566c0236:r6",
+            "0ca28b45f5ebc155a41ff92c566c0236:r7",
+            "0ca28b45f5ebc155a41ff92c566c0236:r8",
+            "0ca28b45f5ebc155a41ff92c566c0236:r9",
+            "22306a9200c48082eda52a832ed930f2:r0",
+            "22306a9200c48082eda52a832ed930f2:r1",
+            "22306a9200c48082eda52a832ed930f2:r2",
+            "22306a9200c48082eda52a832ed930f2:r3",
+            "22306a9200c48082eda52a832ed930f2:r4",
+            "22306a9200c48082eda52a832ed930f2:r5",
+            "22306a9200c48082eda52a832ed930f2:r6",
+            "22306a9200c48082eda52a832ed930f2:r7",
+            "22306a9200c48082eda52a832ed930f2:r8",
+            "22306a9200c48082eda52a832ed930f2:r9",
+            "22306a9200c48082eda52a832ed930f2:r10"
+          ]
+        },
+        {
+          "group_id": "a2a6f5c7b96d28f9",
+          "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+          "document_family_id": "topic:差旅费管理办法",
+          "document_revision": "2018",
+          "effective_date": "",
+          "version_year": 2018,
+          "passage_ids": [
+            "9a5b9d5b3d03ba3dea4800bc8b807b1b",
+            "95e48f77b5fe3461e51dd6c9c485bc5f",
+            "5ed687afeda843ae890d0bceb6b63e4f"
+          ],
+          "retrieval_ranks": [
+            2,
+            7,
+            8
+          ],
+          "retrieval_scores": [
+            0.28,
+            0.0,
+            0.0
+          ],
+          "title": "中电信桂号百-2018-53号-关于印发中国电信广西号百分公司差旅费管理办法-2018年版-的通知--906b7eaf",
+          "section": "二、 各部门应当严格按照差旅费管理办法和厉行节约反对浪 > 第一章 总 则 > 第一条 为加强和规范公司国内差旅费管理，推进厉行节约",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.0,
+          "predicate_coverage": 0.0,
+          "freshness_score": 0.2,
+          "group_score": 4.46,
+          "rejection_reasons": [],
+          "record_ids": [
+            "9a5b9d5b3d03ba3dea4800bc8b807b1b:r0",
+            "9a5b9d5b3d03ba3dea4800bc8b807b1b:r1",
+            "9a5b9d5b3d03ba3dea4800bc8b807b1b:r2",
+            "95e48f77b5fe3461e51dd6c9c485bc5f:r0",
+            "95e48f77b5fe3461e51dd6c9c485bc5f:r1",
+            "95e48f77b5fe3461e51dd6c9c485bc5f:r2",
+            "95e48f77b5fe3461e51dd6c9c485bc5f:r3",
+            "95e48f77b5fe3461e51dd6c9c485bc5f:r4",
+            "5ed687afeda843ae890d0bceb6b63e4f:r0",
+            "5ed687afeda843ae890d0bceb6b63e4f:r1",
+            "5ed687afeda843ae890d0bceb6b63e4f:r2"
+          ]
+        },
+        {
+          "group_id": "9f5c1f98cd5580fd",
+          "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+          "document_family_id": "topic:差旅费管理办法",
+          "document_revision": "2018",
+          "effective_date": "",
+          "version_year": 2018,
+          "passage_ids": [
+            "f1ccb310c35aa420a8d4f3787fc238a1",
+            "78d25e8885bc84b0bc1c8d6694a49021",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2"
+          ],
+          "retrieval_ranks": [
+            3,
+            9,
+            10
+          ],
+          "retrieval_scores": [
+            0.28,
+            0.0,
+            0.0
+          ],
+          "title": "中电信桂-2018-477号-关于印发中国电信广西公司差旅费管理办法-2018年-的通知--5f8ab691",
+          "section": "第五条 区公司按照分级别、 分项目的原则制定差旅费标准， > 第二章 城市间交通费 > 第六条 城市间交通费是指工作人员因公到常驻地以外地区",
+          "family_unknown": false,
+          "query_anchor_coverage": 0.3333,
+          "predicate_coverage": 0.0,
+          "freshness_score": 0.2,
+          "group_score": 4.26,
+          "rejection_reasons": [],
+          "record_ids": [
+            "f1ccb310c35aa420a8d4f3787fc238a1:r0",
+            "f1ccb310c35aa420a8d4f3787fc238a1:r1",
+            "78d25e8885bc84b0bc1c8d6694a49021:r0",
+            "78d25e8885bc84b0bc1c8d6694a49021:r1",
+            "78d25e8885bc84b0bc1c8d6694a49021:r2",
+            "78d25e8885bc84b0bc1c8d6694a49021:r3",
+            "78d25e8885bc84b0bc1c8d6694a49021:r4",
+            "78d25e8885bc84b0bc1c8d6694a49021:r5",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r0",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r1",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r2",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r3",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r4",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r5",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r6",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r7",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r8",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r9",
+            "99d76d09b8ebf99513ef9eca0cb5c9b2:r10"
+          ]
+        }
+      ],
+      "primary_group_id": "841148ebdd8f0e0a",
+      "secondary_group_ids": [],
+      "multi_subquery": false,
+      "ambiguous": false,
+      "audit": {
+        "wants_freshness": true,
+        "query_tokens": [
+          "取消交通意外险在差旅费中",
+          "差旅费管理办法",
+          "报账"
+        ],
+        "selection": [
+          {
+            "group_id": "841148ebdd8f0e0a",
+            "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+            "score": 13.5,
+            "role": "primary",
+            "rejection_reasons": []
+          },
+          {
+            "group_id": "a88cc84f1c8e12f6",
+            "knowledge_id": "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+            "score": 8.16,
+            "role": "rejected",
+            "rejection_reasons": []
+          },
+          {
+            "group_id": "a2a6f5c7b96d28f9",
+            "knowledge_id": "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+            "score": 4.46,
+            "role": "rejected",
+            "rejection_reasons": []
+          },
+          {
+            "group_id": "9f5c1f98cd5580fd",
+            "knowledge_id": "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+            "score": 4.26,
+            "role": "rejected",
+            "rejection_reasons": []
+          }
+        ],
+        "top_gap": 5.34
+      }
+    },
+    "render_validation": {
+      "ok": true,
+      "missing_slots": [],
+      "checks": {
+        "policy_anchors": [
+          "取消",
+          "取消交通意外险在差旅费中",
+          "报账",
+          "交通意外"
+        ],
+        "polarity_negative": true,
+        "predicate:取消": true
+      },
+      "bullet_audit": [
+        {
+          "rendered_candidate_ids": [
+            "5056a95997c68b0626042a1b"
+          ],
+          "passage_id": "392c97de4f338615d10f30b4f939e65f",
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "text": "- —2—（二）取消交通意外险在差旅费中报账乘坐飞机、火车、轮船等交通工具的，因公司已统一购买交通意外保险，不再重复报销交通意外保险",
+          "fact_kind": "policy"
+        },
+        {
+          "rendered_candidate_ids": [
+            "0ebcd06018c23567c889e254"
+          ],
+          "passage_id": "392c97de4f338615d10f30b4f939e65f",
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "text": "- 取消出差期间的市内交通费往返出差地的市内交通费实行限额内凭票报销，报销标准为区外往返两天每人每天150元，区内往返两天每人每天50元",
+          "fact_kind": "policy"
+        },
+        {
+          "rendered_candidate_ids": [
+            "c86172f44b9988b05dfad472"
+          ],
+          "passage_id": "61521a66233c3a7ee143526701cbb55a",
+          "knowledge_id": "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+          "text": "- 取消异地调动随迁家属和搬迁家具的费用工作人员因组织安排异地调动工作的，随迁家属和搬迁家具发生的费用由调动人员自理",
+          "fact_kind": "policy"
+        }
+      ],
+      "answer_len": 194
+    },
+    "answer_plan": {
+      "required_slots": [
+        "policy_fact",
+        "polarity_negative",
+        "predicate:取消"
+      ],
+      "candidate_ids": [
+        "5056a95997c68b0626042a1b",
+        "0ebcd06018c23567c889e254",
+        "c86172f44b9988b05dfad472",
+        "341418492abf69bbcf2473c6",
+        "d08a31de9ebcfe467d645f76",
+        "e1ee4d37231539c4e29e17d4"
+      ],
+      "missing_slots": [],
+      "complete": true,
+      "intents": [
+        "policy"
+      ],
+      "covered_slots": [
+        "polarity_negative",
+        "policy_fact",
+        "predicate:取消"
+      ],
+      "coverage_matrix": {
+        "policy_fact": {
+          "5056a95997c68b0626042a1b": "hit",
+          "0ebcd06018c23567c889e254": "hit",
+          "c86172f44b9988b05dfad472": "hit",
+          "341418492abf69bbcf2473c6": "hit",
+          "d08a31de9ebcfe467d645f76": "hit",
+          "e1ee4d37231539c4e29e17d4": "hit",
+          "ea2bbc8f47f64f83fd55bb7d": "hit"
+        },
+        "polarity_negative": {
+          "5056a95997c68b0626042a1b": "hit",
+          "0ebcd06018c23567c889e254": "hit",
+          "c86172f44b9988b05dfad472": "hit",
+          "341418492abf69bbcf2473c6": "miss",
+          "d08a31de9ebcfe467d645f76": "miss",
+          "e1ee4d37231539c4e29e17d4": "miss",
+          "ea2bbc8f47f64f83fd55bb7d": "hit"
+        },
+        "predicate:取消": {
+          "5056a95997c68b0626042a1b": "hit",
+          "0ebcd06018c23567c889e254": "hit",
+          "c86172f44b9988b05dfad472": "hit",
+          "341418492abf69bbcf2473c6": "miss",
+          "d08a31de9ebcfe467d645f76": "miss",
+          "e1ee4d37231539c4e29e17d4": "miss",
+          "ea2bbc8f47f64f83fd55bb7d": "miss"
+        }
+      }
+    }
+  }
+]

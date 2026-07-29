@@ -1,0 +1,391 @@
+{
+  "case": {
+    "case_id": "KB-004",
+    "category": "精确关键词",
+    "query": "保密工作管理办法 不得使用外部互联网邮箱",
+    "expected_knowledge_ids": [
+      "e8f52cfa-2e86-4048-9358-0649094a41b9"
+    ],
+    "expected_title_keywords": [
+      "保密工作",
+      "2023"
+    ],
+    "required_facts": [
+      "企业商业秘密",
+      "微信"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2023〕446号第二十八条"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "6db23896-3a75-48cc-94f7-8c06e11757db",
+          "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "passage_id": "9941c3c7b0fb92b60e9d24823edc9979",
+          "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa",
+          "text": "【文档】中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa\n【章节】第六章 企业商业秘密载体和信息管理 > 第二十七条 企业商业秘密载体的制作、收发、传递、使用、 > 第二十八条 企业商业秘密文件资料和信息应当使用企业\n准的销毁设备和方法，确保国家秘密信息不能还原。\n第二十五条 凡汇编文件涉及国家秘密的，需经原制发单位\n及相应级别的保密委员会审查同意。汇编文件不得擅自改变原件\n的密级、保密期限和知悉范围，同时应按文件中的最高密级、最\n长保密期限标明密级和保密期限。\n第二十六条 公司涉及工作秘密的载体比照国家秘密载体\n管理方式和要求进行管理。\n第六章 企业商业秘密载体和信息管理\n第二十七条 企业商业秘密载体的制作、收发、传递、使用、\n保存、维修、销毁等，应当采取有效的保护措施，确保商业秘密\n的安全。\n第二十八条 企业商业秘密文件资料和信息应当使用企业\n内部网络、云服务、电子邮箱、协作平台等方式传递。\n禁止使用第三方服务商提供的网络应用服务传输和存储企何世恒(全渠道运营中心)\n— 11 — 业商业秘密，包括但不限于外部邮件服务、外部云计算技术的服\n务（云盘、网盘等）、即时通信服务等。\n不得使用外部互联网邮箱、网络会议、微信、易信、钉钉、\n彩信、QQ、博客、微博、论坛等形式发布或转发涉及企业商业\n秘密的文件资料等。",
+          "document_family_id": "topic:保密工作管理办法",
+          "version_year": 2023,
+          "section_path": "第六章 企业商业秘密载体和信息管理 > 第二十七条 企业商业秘密载体的制作、收发、传递、使用、 > 第二十八条 企业商业秘密文件资料和信息应当使用企业",
+          "block_ids": [
+            "6db23896-3a75-48cc-94f7-8c06e11757db",
+            "b4870549-de2c-41c6-aa62-8d807041c8fc",
+            "e5e715c7-ab06-4154-ae37-d74d844424dc",
+            "0be67c95-a12a-4431-ab9e-058a9c98f88a",
+            "7ac03f11-03e4-46bb-8c46-76866fe8e719",
+            "8564d755-c984-41db-9095-85abfdb4ef38",
+            "2f753b8c-7d80-46bf-922a-d313a8adf7b6",
+            "7baaf5ad-84f5-4ffa-af20-139f2df4c69a",
+            "c6bf1123-aa3f-4fe2-aba4-d448065bb9fd",
+            "aea86654-7d27-48f1-b80d-ca0e5ff44ddb",
+            "eb422659-1d0f-4938-ae0f-4c830db28116",
+            "d9258b40-1bc8-4e6e-afb4-c3e2e52cdc7d",
+            "9434acd2-0e9c-4b2c-99c7-e8282fc5bf47",
+            "65dd6a8c-60ee-436e-b8b3-bc4fa99e3e65",
+            "f121aee0-9ab1-4eb1-968c-d75428595a7e",
+            "f1b68090-2236-42c1-8040-dfe7588e5cda",
+            "901bd5f5-bc12-4c6d-a398-d8290df363c8"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -33.86602123210449,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 1.0,
+            "fts_score": 1.0,
+            "title_score": 0.4211,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 1.0,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7632,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7632,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:保密工作管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "75d8a7a8-b7c7-4164-aa08-05f5526eb369",
+          "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+          "passage_id": "4372bb32b60bade271e3c682e25af9c8",
+          "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+          "text": "【文档】中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\n【章节】第三十三条 禁止使用非企业内各类公共互联网存储空间、 > 第三十四条 各单位应当将商业秘密保护工作纳入风险管 > 第三十五条 各单位对侵犯商业秘密的行为，应依法主张权\n\n第三十二条 涉及重要商业秘密的会议、活动，主办单位要\n提前制定保密工作预案，应选择具有保密条件的场所，限定参加\n会议人员，管好会议文件、资料。相关电子文件应加载使用人水\n印。会前应当宣布保密纪律，会议的宣传报道内容应经保密办审\n核，不得涉及商业秘密和内部敏感信息。\n第三十三条 禁止使用非企业内各类公共互联网存储空间、\n邮箱、网络会议、云会议等过程中存储、处理、共享、传输、发\n布涉及商业秘密信息。\n第三十四条 各单位应当将商业秘密保护工作纳入风险管\n理，制定泄密应急处置预案，增强风险防范能力。各单位如发现\n商业秘密被盗、遗失、失控情况，应立即采取补救措施；发生重\n大泄密事件，应当立即报告区公司保密委员会办公室，迅速组织\n查处，及时采取补救措施。\n泄密事件由区公司保密委员会负责组织有关部门认定责任，\n相关部门依法依规进行处理。构成犯罪的，移送司法机关依法处\n理。\n第三十五条 各单位对侵犯商业秘密的行为，应依法主张权\n利，要求停止侵权，消除影响，赔偿损失。",
+          "document_family_id": "topic:商业秘密保护管理办法",
+          "version_year": 2023,
+          "section_path": "第三十三条 禁止使用非企业内各类公共互联网存储空间、 > 第三十四条 各单位应当将商业秘密保护工作纳入风险管 > 第三十五条 各单位对侵犯商业秘密的行为，应依法主张权",
+          "block_ids": [
+            "75d8a7a8-b7c7-4164-aa08-05f5526eb369",
+            "239adc6a-4587-4147-849b-8355cc79af7c",
+            "222c5ee8-eab7-4ef1-921d-6f48e0e4b693",
+            "8f2300ba-4d59-4e5c-a26e-11ee8ed35b50",
+            "09723059-ff30-4438-b413-99d408dab245",
+            "887a5d72-2e67-49c3-9ab1-8837f0cf84d6",
+            "7d894891-74fb-4147-97ba-afc916336835",
+            "dbea6f00-996f-4b14-b03a-cb099e790dd7",
+            "34337e35-46bf-4cb6-91ff-07168b76c69b",
+            "284a8a12-f9bc-4fe8-90b8-54cea8f84c61",
+            "08dc588e-e344-454d-b7ed-1e069b271ad3",
+            "6247f045-a363-4d55-98f8-f8d9bbc65767",
+            "fcdcef7b-e46c-46d9-a7cc-fe7cba4b4a35",
+            "f7c405b3-a41e-4b81-9c33-a654803e10ac",
+            "2a97508b-6057-453a-a208-1e88d8f3b587",
+            "9e7df513-175a-4134-884c-89e197636692"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -30.02614577220086,
+          "fts_score": 1.0,
+          "score": 0.7974000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4,
+            "fts_score": 1.0,
+            "title_score": 0.3158,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4474,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4474,
+          "ranking_score": 0.7974000000000001,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:商业秘密保护管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7632,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "e8f52cfa-2e86-4048-9358-0649094a41b9",
+          "102bee52-4b83-438d-9296-c852579473b6"
+        ],
+        "evidence_snapshot_id": "GM4cRzbqNcZkU8z4nQk7BCFCMUktjXL2",
+        "snapshot_fingerprint": "50ae69d3e4698506894a3f88",
+        "accepted_passage_ids": [
+          "9941c3c7b0fb92b60e9d24823edc9979",
+          "4372bb32b60bade271e3c682e25af9c8",
+          "1cab133d7265545293dd8f29b05fa462",
+          "1d827171a43c2f65658e6f9135a72de9",
+          "72be42fc0a53201c48bb7f366aec80ad",
+          "ab6ec3ff0e41ee47514aad3c616e02af"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 4,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 51748.26,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 5,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"6db23896-3a75-48cc-94f7-8c06e11757db\",\"knowledge_id\":\"e8f52cfa-2e86-4048-9358-0649094a41b9\",\"passage_id\":\"9941c3c7b0fb92b60e9d24823edc9979\",\"title\":\"中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa\",\"text\":\"【文档】中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa\\n【章节】第六章 企业商业秘密载体和信息管理 > 第二十七条 企业商业秘密载体的制作、收发、传递、使用、 > 第二十八条 企业商业秘密文件资料和信息应当使用企业\\n准的销毁设备和方法，确保国家秘密信息不能还原。\\n第二十五条 凡汇编文件涉及国家秘密的，需经原制发单位\\n及相应级别的保密委员会审查同意。汇编文件不得擅自改变原件\\n的密级、保密期限和知悉范围，同时应按文件中的最高密级、最\\n长保密期限标明密级和保密期限。\\n第二十六条 公司涉及工作秘密的载体比照国家秘密载体\\n管理方式和要求进行管理。\\n第六章 企业商业秘密载体和信息管理\\n第二十七条 企业商业秘密载体的制作、收发、传递、使用、\\n保存、维修、销毁等，应当采取有效的保护措施，确保商业秘密\\n的安全。\\n第二十八条 企业商业秘密文件资料和信息应当使用企业\\n内部网络、云服务、电子邮箱、协作平台等方式传递。\\n禁止使用第三方服务商提供的网络应用服务传输和存储企何世恒(全渠道运营中心)\\n— 11 — 业商业秘密，包括但不限于外部邮件服务、外部云计算技术的服\\n务（云盘、网盘等）、即时通信服务等。\\n不得使用外部互联网邮箱、网络会议、微信、易信、钉钉、\\n彩信、QQ、博客、微博、论坛等形式发布或转发涉及企业商业\\n秘密的文件资料等。\",\"document_family_id\":\"topic:保密工作管理办法\",\"version_year\":2023,\"section_path\":\"第六章 企业商业秘密载体和信息管理 > 第二十七条 企业商业秘密载体的制作、收发、传递、使用、 > 第二十八条 企业商业秘密文件资料和信息应当使用企业\",\"block_ids\":[\"6db23896-3a75-48cc-94f7-8c06e11757db\",\"b4870549-de2c-41c6-aa62-8d807041c8fc\",\"e5e715c7-ab06-4154-ae37-d74d844424dc\",\"0be67c95-a12a-4431-ab9e-058a9c98f88a\",\"7ac03f11-03e4-46bb-8c46-76866fe8e719\",\"8564d755-c984-41db-9095-85abfdb4ef38\",\"2f753b8c-7d80-46bf-922a-d313a8adf7b6\",\"7baaf5ad-84f5-4ffa-af20-139f2df4c69a\",\"c6bf1123-aa3f-4fe2-aba4-d448065bb9fd\",\"aea86654-7d27-48f1-b80d-ca0e5ff44ddb\",\"eb422659-1d0f-4938-ae0f-4c830db28116\",\"d9258b40-1bc8-4e6e-afb4-c3e2e52cdc7d\",\"9434acd2-0e9c-4b2c-99c7-e8282fc5bf47\",\"65dd6a8c-60ee-436e-b8b3-bc4fa99e3e65\",\"f121aee0-9ab1-4eb1-968c-d75428595a7e\",\"f1b68090-2236-42c1-8040-dfe7588e5cda\",\"901bd5f5-bc12-4c6d-a398-d8290df363c8\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-33.86602123210449,\"fts_score\":1.0,\"score\":1.0,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":1.0,\"fts_score\":1.0,\"title_score\":0.4211,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":1.0,\"freshness_score\":0.5,\"final_relevance_score\":0.7632,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.7632,\"ranking_score\":1.0,\"version_rank\":{\"version_year\":2023,\"deprecated\":false,\"family_key\":\"topic:保密工作管理办法\",\"family_newest_year\":2023,\"is_family_newest\":true}},{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"75d8a7a8-b7c7-4164-aa08-05f5526eb369\",\"knowledge_id\":\"102bee52-4b83-438d-9296-c852579473b6\",\"passage_id\":\"4372bb32b60bade271e3c682e25af9c8\",\"title\":\"中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\",\"text\":\"【文档】中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\\n【章节】第三十三条 禁止使用非企业内各类公共互联网存储空间、 > 第三十四条 各单位应当将商业秘密保护工作纳入风险管 > 第三十五条 各单位对侵犯商业秘密的行为，应依法主张权\\n\\n第三十二条 涉及重要商业秘密的会议、活动，主办单位要\\n提前制定保密工作预案，应选择具有保密条件的场所，限定参加\\n会议人员，管好会议文件、资料。相关电子文件应加载使用人水\\n印。会前应当宣布保密纪律，会议的宣传报道内容应经保密办审\\n核，不得涉及商业秘密和内部敏感信息。\\n第三十三条 禁止使用非企业内各类公共互联网存储空间、\\n邮箱、网络会议、云会议等过程中存储、处理、共享、传输、发\\n布涉及商业秘密信息。\\n第三十四条 各单位应当将商业秘密保护工作纳入风险管\\n理，制定泄密应急处置预案，增强风险防范能力。各单位如发现\\n商业秘密被盗、遗失、失控情况，应立即采取补救措施；发生重\\n大泄密事件，应当立即报告区公司保密委员会办公室，迅速组织\\n查处，及时采取补救措施。\\n泄密事件由区公司保密委员会负责组织有关部门认定责任，\\n相关部门依法依规进行处理。构成犯罪的，移送司法机关依法处\\n理。\\n第三十五条 各单位对侵犯商业秘密的行为，应依法主张权\\n利，要求停止侵权，消除影响，赔偿损失。\",\"document_family_id\":\"topic:商业秘密保护管理办法\",\"version_year\":2023,\"section_path\":\"第三十三条 禁止使用非企业内各类公共互联网存储空间、 > 第三十四条 各单位应当将商业秘密保护工作纳入风险管 > 第三十五条 各单位对侵犯商业秘密的行为，应依法主张权\",\"block_ids\":[\"75d8a7a8-b7c7-4164-aa08-05f5526eb369\",\"239adc6a-4587-4147-849b-8355cc79af7c\",\"222c5ee8-eab7-4ef1-921d-6f48e0e4b693\",\"8f2300ba-4d59-4e5c-a26e-11ee8ed35b50\",\"09723059-ff30-4438-b413-99d408dab245\",\"887a5d72-2e67-49c3-9ab1-8837f0cf84d6\",\"7d894891-74fb-4147-97ba-afc916336835\",\"dbea6f00-996f-4b14-b03a-cb099e790dd7\",\"34337e35-46bf-4cb6-91ff-07168b76c69b\",\"284a8a12-f9bc-4fe8-90b8-54cea8f84c61\",\"08dc588e-e344-454d-b7ed-1e069b271ad3\",\"6247f045-a363-4d55-98f8-f8d9bbc65767\",\"fcdcef7b-e46c-46d9-a7cc-fe7cba4b4a35\",\"f7c405b3-a41e-4b81-9c33-a654803e10ac\",\"2a97508b-6057-453a-a208-1e88d8f3b587\",\"9e7df513-175a-4134-884c-89e197636692\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-30.02614577220086,\"fts_score\":1.0,\"score\":0.7974000000000001,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":0.4,\"fts_score\":1.0,\"title_score\":0.3158,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":0.4,\"freshness_score\":0.5,\"final_relevance_score\":0.4474,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.4474,\"ranking_score\":0.7974000000000001,\"version_rank\":{\"version_year\":2023,\"deprecated\":false,\"family_key\":\"topic:商业秘密保护管理办法\",\"family_newest_year\":2023,\"is_family_newest\":true}}],\"meta\":{\"total_estimate\":2,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.7632,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"e8f52cfa-2e86-4048-9358-0649094a41b9\",\"102bee52-4b83-438d-9296-c852579473b6\"],\"evidence_snapshot_id\":\"GM4cRzbqNcZkU8z4nQk7BCFCMUktjXL2\",\"snapshot_fingerprint\":\"50ae69d3e4698506894a3f88\",\"accepted_passage_ids\":[\"9941c3c7b0fb92b60e9d24823edc9979\",\"4372bb32b60bade271e3c682e25af9c8\",\"1cab133d7265545293dd8f29b05fa462\",\"1d827171a43c2f65658e6f9135a72de9\",\"72be42fc0a53201c48bb7f366aec80ad\",\"ab6ec3ff0e41ee47514aad3c616e02af\"],\"adjacent_unit\":\"passage\",\"adjacent_count\":4,\"adjacent_fallback_reason\":\"passage_index_neighbors\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "6db23896-3a75-48cc-94f7-8c06e11757db",
+              "knowledge_id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "passage_id": "9941c3c7b0fb92b60e9d24823edc9979",
+              "title": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa",
+              "text": "【文档】中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa\n【章节】第六章 企业商业秘密载体和信息管理 > 第二十七条 企业商业秘密载体的制作、收发、传递、使用、 > 第二十八条 企业商业秘密文件资料和信息应当使用企业\n准的销毁设备和方法，确保国家秘密信息不能还原。\n第二十五条 凡汇编文件涉及国家秘密的，需经原制发单位\n及相应级别的保密委员会审查同意。汇编文件不得擅自改变原件\n的密级、保密期限和知悉范围，同时应按文件中的最高密级、最\n长保密期限标明密级和保密期限。\n第二十六条 公司涉及工作秘密的载体比照国家秘密载体\n管理方式和要求进行管理。\n第六章 企业商业秘密载体和信息管理\n第二十七条 企业商业秘密载体的制作、收发、传递、使用、\n保存、维修、销毁等，应当采取有效的保护措施，确保商业秘密\n的安全。\n第二十八条 企业商业秘密文件资料和信息应当使用企业\n内部网络、云服务、电子邮箱、协作平台等方式传递。\n禁止使用第三方服务商提供的网络应用服务传输和存储企何世恒(全渠道运营中心)\n— 11 — 业商业秘密，包括但不限于外部邮件服务、外部云计算技术的服\n务（云盘、网盘等）、即时通信服务等。\n不得使用外部互联网邮箱、网络会议、微信、易信、钉钉、\n彩信、QQ、博客、微博、论坛等形式发布或转发涉及企业商业\n秘密的文件资料等。",
+              "document_family_id": "topic:保密工作管理办法",
+              "version_year": 2023,
+              "section_path": "第六章 企业商业秘密载体和信息管理 > 第二十七条 企业商业秘密载体的制作、收发、传递、使用、 > 第二十八条 企业商业秘密文件资料和信息应当使用企业",
+              "block_ids": [
+                "6db23896-3a75-48cc-94f7-8c06e11757db",
+                "b4870549-de2c-41c6-aa62-8d807041c8fc",
+                "e5e715c7-ab06-4154-ae37-d74d844424dc",
+                "0be67c95-a12a-4431-ab9e-058a9c98f88a",
+                "7ac03f11-03e4-46bb-8c46-76866fe8e719",
+                "8564d755-c984-41db-9095-85abfdb4ef38",
+                "2f753b8c-7d80-46bf-922a-d313a8adf7b6",
+                "7baaf5ad-84f5-4ffa-af20-139f2df4c69a",
+                "c6bf1123-aa3f-4fe2-aba4-d448065bb9fd",
+                "aea86654-7d27-48f1-b80d-ca0e5ff44ddb",
+                "eb422659-1d0f-4938-ae0f-4c830db28116",
+                "d9258b40-1bc8-4e6e-afb4-c3e2e52cdc7d",
+                "9434acd2-0e9c-4b2c-99c7-e8282fc5bf47",
+                "65dd6a8c-60ee-436e-b8b3-bc4fa99e3e65",
+                "f121aee0-9ab1-4eb1-968c-d75428595a7e",
+                "f1b68090-2236-42c1-8040-dfe7588e5cda",
+                "901bd5f5-bc12-4c6d-a398-d8290df363c8"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -33.86602123210449,
+              "fts_score": 1.0,
+              "score": 1.0,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 1.0,
+                "fts_score": 1.0,
+                "title_score": 0.4211,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 1.0,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.7632,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.7632,
+              "ranking_score": 1.0,
+              "version_rank": {
+                "version_year": 2023,
+                "deprecated": false,
+                "family_key": "topic:保密工作管理办法",
+                "family_newest_year": 2023,
+                "is_family_newest": true
+              }
+            },
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "75d8a7a8-b7c7-4164-aa08-05f5526eb369",
+              "knowledge_id": "102bee52-4b83-438d-9296-c852579473b6",
+              "passage_id": "4372bb32b60bade271e3c682e25af9c8",
+              "title": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52",
+              "text": "【文档】中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52\n【章节】第三十三条 禁止使用非企业内各类公共互联网存储空间、 > 第三十四条 各单位应当将商业秘密保护工作纳入风险管 > 第三十五条 各单位对侵犯商业秘密的行为，应依法主张权\n\n第三十二条 涉及重要商业秘密的会议、活动，主办单位要\n提前制定保密工作预案，应选择具有保密条件的场所，限定参加\n会议人员，管好会议文件、资料。相关电子文件应加载使用人水\n印。会前应当宣布保密纪律，会议的宣传报道内容应经保密办审\n核，不得涉及商业秘密和内部敏感信息。\n第三十三条 禁止使用非企业内各类公共互联网存储空间、\n邮箱、网络会议、云会议等过程中存储、处理、共享、传输、发\n布涉及商业秘密信息。\n第三十四条 各单位应当将商业秘密保护工作纳入风险管\n理，制定泄密应急处置预案，增强风险防范能力。各单位如发现\n商业秘密被盗、遗失、失控情况，应立即采取补救措施；发生重\n大泄密事件，应当立即报告区公司保密委员会办公室，迅速组织\n查处，及时采取补救措施。\n泄密事件由区公司保密委员会负责组织有关部门认定责任，\n相关部门依法依规进行处理。构成犯罪的，移送司法机关依法处\n理。\n第三十五条 各单位对侵犯商业秘密的行为，应依法主张权\n利，要求停止侵权，消除影响，赔偿损失。",
+              "document_family_id": "topic:商业秘密保护管理办法",
+              "version_year": 2023,
+              "section_path": "第三十三条 禁止使用非企业内各类公共互联网存储空间、 > 第三十四条 各单位应当将商业秘密保护工作纳入风险管 > 第三十五条 各单位对侵犯商业秘密的行为，应依法主张权",
+              "block_ids": [
+                "75d8a7a8-b7c7-4164-aa08-05f5526eb369",
+                "239adc6a-4587-4147-849b-8355cc79af7c",
+                "222c5ee8-eab7-4ef1-921d-6f48e0e4b693",
+                "8f2300ba-4d59-4e5c-a26e-11ee8ed35b50",
+                "09723059-ff30-4438-b413-99d408dab245",
+                "887a5d72-2e67-49c3-9ab1-8837f0cf84d6",
+                "7d894891-74fb-4147-97ba-afc916336835",
+                "dbea6f00-996f-4b14-b03a-cb099e790dd7",
+                "34337e35-46bf-4cb6-91ff-07168b76c69b",
+                "284a8a12-f9bc-4fe8-90b8-54cea8f84c61",
+                "08dc588e-e344-454d-b7ed-1e069b271ad3",
+                "6247f045-a363-4d55-98f8-f8d9bbc65767",
+                "fcdcef7b-e46c-46d9-a7cc-fe7cba4b4a35",
+                "f7c405b3-a41e-4b81-9c33-a654803e10ac",
+                "2a97508b-6057-453a-a208-1e88d8f3b587",
+                "9e7df513-175a-4134-884c-89e197636692"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -30.02614577220086,
+              "fts_score": 1.0,
+              "score": 0.7974000000000001,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 0.4,
+                "fts_score": 1.0,
+                "title_score": 0.3158,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 0.4,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.4474,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.4474,
+              "ranking_score": 0.7974000000000001,
+              "version_rank": {
+                "version_year": 2023,
+                "deprecated": false,
+                "family_key": "topic:商业秘密保护管理办法",
+                "family_newest_year": 2023,
+                "is_family_newest": true
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 2,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.7632,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "102bee52-4b83-438d-9296-c852579473b6"
+            ],
+            "evidence_snapshot_id": "GM4cRzbqNcZkU8z4nQk7BCFCMUktjXL2",
+            "snapshot_fingerprint": "50ae69d3e4698506894a3f88",
+            "accepted_passage_ids": [
+              "9941c3c7b0fb92b60e9d24823edc9979",
+              "4372bb32b60bade271e3c682e25af9c8",
+              "1cab133d7265545293dd8f29b05fa462",
+              "1d827171a43c2f65658e6f9135a72de9",
+              "72be42fc0a53201c48bb7f366aec80ad",
+              "ab6ec3ff0e41ee47514aad3c616e02af"
+            ],
+            "adjacent_unit": "passage",
+            "adjacent_count": 4,
+            "adjacent_fallback_reason": "passage_index_neighbors"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-004",
+    "label": "baseline",
+    "query": "保密工作管理办法 不得使用外部互联网邮箱",
+    "expected_knowledge_ids": [
+      "e8f52cfa-2e86-4048-9358-0649094a41b9"
+    ],
+    "top_ids": [
+      "e8f52cfa-2e86-4048-9358-0649094a41b9",
+      "102bee52-4b83-438d-9296-c852579473b6"
+    ],
+    "top1_ok": true,
+    "recall5_ok": true,
+    "search_ms": 51748.26,
+    "n_results": 2,
+    "snapshot_fingerprint": null
+  }
+}

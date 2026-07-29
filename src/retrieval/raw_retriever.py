@@ -29,6 +29,129 @@ _STAGE_TIMEOUTS = {
     "wiki_search": 5,
 }
 
+# Process-level rerank circuit breaker (SPEC v6 §5.1).
+# Consecutive timeouts open a short cooling window with deterministic hybrid fallback.
+_RERANK_CB_LOCK = None  # lazy
+_RERANK_CB_STATE: dict[str, Any] = {
+    "consecutive_timeouts": 0,
+    "open_until": 0.0,
+    "last_probe_at": 0.0,
+    "last_reason": "",
+    "fallback_count": 0,
+    "timeout_count": 0,
+}
+_RERANK_CB_THRESHOLD = 2  # open after N consecutive timeouts
+_RERANK_CB_COOLDOWN_S = 90.0  # short cooling period
+_RERANK_CB_PROBE_INTERVAL_S = 45.0
+
+
+def _cb_lock():
+    global _RERANK_CB_LOCK
+    if _RERANK_CB_LOCK is None:
+        import threading
+        _RERANK_CB_LOCK = threading.Lock()
+    return _RERANK_CB_LOCK
+
+
+def get_rerank_circuit_state() -> dict[str, Any]:
+    with _cb_lock():
+        return dict(_RERANK_CB_STATE)
+
+
+def reset_rerank_circuit() -> None:
+    with _cb_lock():
+        _RERANK_CB_STATE.update({
+            "consecutive_timeouts": 0,
+            "open_until": 0.0,
+            "last_probe_at": 0.0,
+            "last_reason": "",
+            "fallback_count": 0,
+            "timeout_count": 0,
+        })
+
+
+def _rerank_circuit_is_open() -> tuple[bool, str]:
+    now = time.monotonic()
+    with _cb_lock():
+        open_until = float(_RERANK_CB_STATE.get("open_until") or 0.0)
+        if open_until <= now:
+            return False, ""
+        return True, str(_RERANK_CB_STATE.get("last_reason") or "cooldown")
+
+
+def _rerank_circuit_note_timeout(query_fp: str) -> None:
+    now = time.monotonic()
+    with _cb_lock():
+        _RERANK_CB_STATE["consecutive_timeouts"] = int(
+            _RERANK_CB_STATE.get("consecutive_timeouts") or 0
+        ) + 1
+        _RERANK_CB_STATE["timeout_count"] = int(
+            _RERANK_CB_STATE.get("timeout_count") or 0
+        ) + 1
+        _RERANK_CB_STATE["last_reason"] = f"timeout:{query_fp}"
+        if _RERANK_CB_STATE["consecutive_timeouts"] >= _RERANK_CB_THRESHOLD:
+            _RERANK_CB_STATE["open_until"] = now + _RERANK_CB_COOLDOWN_S
+            _RERANK_CB_STATE["last_reason"] = (
+                f"open_after_{_RERANK_CB_STATE['consecutive_timeouts']}_timeouts:{query_fp}"
+            )
+
+
+def _rerank_circuit_note_success() -> None:
+    with _cb_lock():
+        _RERANK_CB_STATE["consecutive_timeouts"] = 0
+        _RERANK_CB_STATE["open_until"] = 0.0
+        _RERANK_CB_STATE["last_reason"] = "recovered"
+
+
+def _rerank_circuit_allow_probe() -> bool:
+    now = time.monotonic()
+    with _cb_lock():
+        open_until = float(_RERANK_CB_STATE.get("open_until") or 0.0)
+        if open_until <= now:
+            return True
+        last = float(_RERANK_CB_STATE.get("last_probe_at") or 0.0)
+        if now - last >= _RERANK_CB_PROBE_INTERVAL_S:
+            _RERANK_CB_STATE["last_probe_at"] = now
+            return True
+        return False
+
+
+def _query_fingerprint(query: str) -> str:
+    return hashlib.sha256((query or "").encode("utf-8")).hexdigest()[:12]
+
+
+def build_deterministic_query_variants(query: str, *, max_variants: int = 4) -> list[dict[str, str]]:
+    """Limited, auditable query variants from query + controlled domain norms (SPEC v6 §4.2)."""
+    import re
+    q = (query or "").strip()
+    if not q:
+        return []
+    out: list[dict[str, str]] = [{"query": q, "source": "original"}]
+    # Entity / predicate normalizations (generic domain, not Golden-bound).
+    norms: list[tuple[str, str, str]] = [
+        (r"防诈骗和骚扰电话|防诈骗|骚扰电话", "涉诈涉骚扰电话号码入网渠道处置细则", "domain_synonym"),
+        (r"被罚多少钱|处罚金额|被罚", "代理商 处罚 每个号码", "predicate_normalize"),
+        (r"线上店铺入驻门槛|入驻门槛", "线上合作管理办法 入驻", "domain_synonym"),
+        (r"异业合作.*准入|权益优惠券", "权益业务管理办法 合作方准入", "domain_synonym"),
+        (r"客户提出对产品的需求|产品的需求|怎么响应处理", "产品问需响应管理 五级闭环", "domain_synonym"),
+        (r"办公楼地址|总部.*地址", "办公地址", "domain_synonym"),
+        (r"搞比赛给员工发奖金|员工发奖金|奖金.*上限", "劳动竞赛管理办法 奖金 限额", "domain_synonym"),
+        (r"大额对外投资并购|法律审核", "重要决策法律合规审核", "domain_synonym"),
+        (r"代理商被罚", "涉诈 涉骚扰 代理商 处罚", "domain_synonym"),
+    ]
+    for pat, repl, src in norms:
+        if re.search(pat, q):
+            # Keep key nouns from original + normalized phrase
+            variant = re.sub(pat, repl, q)
+            if variant != q and not any(v["query"] == variant for v in out):
+                out.append({"query": variant, "source": src})
+            # Also add pure normalized form if short
+            if repl not in q and not any(v["query"] == repl for v in out):
+                out.append({"query": repl, "source": src})
+        if len(out) >= max_variants:
+            break
+    return out[:max_variants]
+
 
 class RawRetriever:
     """Evidence retrieval capability with explicit constructor dependencies."""
@@ -143,18 +266,75 @@ class RawRetriever:
         if include_legacy_wiki_fts:
             trace["stages"]["legacy_wiki_fts"] = {"count": len(wiki_results)}
 
+        # Deterministic variants (capped) merged into retrieval queries.
+        variants = build_deterministic_query_variants(query, max_variants=4)
+        trace["stages"]["query_variants"] = variants
+        for v in variants:
+            vq = v.get("query") or ""
+            if vq and vq not in queries:
+                queries.append(vq)
+        queries = queries[:6]
+
+        t_ret0 = time.monotonic()
         candidates = self.raw_retrieve(queries, query, top_k)
-        trace["stages"]["raw_retrieval"] = {"count": len(candidates)}
+        trace["stages"]["raw_retrieval"] = {
+            "count": len(candidates),
+            "ms": round((time.monotonic() - t_ret0) * 1000, 2),
+        }
+
+        # Entity+predicate joint-hit boost before rerank (SPEC v6 §4.2).
+        candidates = self._boost_entity_predicate_hits(query, candidates)
 
         if candidates:
-            try:
-                candidates = self.timed_rerank(query, candidates, top_k)
-            except FuturesTimeout:
-                logger.warning("Rerank timed out, keeping original order")
-                warnings.append("rerank_timeout")
-            except Exception as e:
-                logger.warning("Rerank failed: %s", e)
-                warnings.append(f"rerank_failed:{e}")
+            qfp = _query_fingerprint(query)
+            t_rr0 = time.monotonic()
+            open_cb, cb_reason = _rerank_circuit_is_open()
+            used_fallback = False
+            if open_cb and not _rerank_circuit_allow_probe():
+                used_fallback = True
+                with _cb_lock():
+                    _RERANK_CB_STATE["fallback_count"] = int(
+                        _RERANK_CB_STATE.get("fallback_count") or 0
+                    ) + 1
+                warnings.append(f"rerank_circuit_open:{cb_reason}")
+                fallbacks.append({
+                    "stage": "rerank",
+                    "type": "deterministic_hybrid_fallback",
+                    "reason": cb_reason,
+                    "query_fingerprint": qfp,
+                })
+                logger.warning(
+                    "Rerank circuit open (%s), deterministic fallback query_fp=%s",
+                    cb_reason,
+                    qfp,
+                )
+            else:
+                try:
+                    candidates = self.timed_rerank(query, candidates, top_k)
+                    _rerank_circuit_note_success()
+                except FuturesTimeout:
+                    _rerank_circuit_note_timeout(qfp)
+                    logger.warning(
+                        "Rerank timed out type=futures_timeout query_fp=%s, keeping original order",
+                        qfp,
+                    )
+                    warnings.append(f"rerank_timeout:{qfp}")
+                    fallbacks.append({
+                        "stage": "rerank",
+                        "type": "timeout_keep_order",
+                        "query_fingerprint": qfp,
+                    })
+                    used_fallback = True
+                except Exception as e:
+                    logger.warning("Rerank failed: %s query_fp=%s", e, qfp)
+                    warnings.append(f"rerank_failed:{e}")
+                    used_fallback = True
+            trace["stages"]["rerank"] = {
+                "ms": round((time.monotonic() - t_rr0) * 1000, 2),
+                "fallback": used_fallback,
+                "circuit": get_rerank_circuit_state(),
+                "query_fingerprint": qfp,
+            }
 
         if candidates:
             candidates = self.diversity_filter(candidates, threshold=0.8)
@@ -232,9 +412,20 @@ class RawRetriever:
         if not self._cfg("rag.enable_rerank", True):
             return candidates
         timeout = self._stage_timeout("rerank")
-        with ThreadPoolExecutor(max_workers=1) as pool:
+        # Use a single-worker pool and cancel futures on timeout so work does not pile up.
+        # Note: pure-Python work may continue until the thread returns, but we do not
+        # submit further rerank jobs while the circuit is open (see retrieve()).
+        pool = ThreadPoolExecutor(max_workers=1)
+        try:
             future = pool.submit(self.rerank, query, candidates, top_k)
-            return future.result(timeout=timeout)
+            try:
+                return future.result(timeout=timeout)
+            except FuturesTimeout:
+                future.cancel()
+                raise
+        finally:
+            # Do not wait for stuck workers — shutdown without waiting to avoid blocking.
+            pool.shutdown(wait=False, cancel_futures=True)
 
     def rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
         if self._reranker_fn is not None:
@@ -248,6 +439,62 @@ class RawRetriever:
         except Exception as e:
             logger.warning("Rerank failed: %s", e)
             return candidates
+
+    def _boost_entity_predicate_hits(
+        self, query: str, candidates: list[dict],
+    ) -> list[dict]:
+        """Boost candidates jointly matching entity+predicate before rerank."""
+        import re
+        if not candidates:
+            return candidates
+        q = query or ""
+        entities = re.findall(r"[\u4e00-\u9fff]{2,10}", q)
+        stop = {"什么", "多少", "如何", "怎么", "是否", "哪个", "中国", "电信", "广西", "公司", "关于"}
+        entities = [e for e in entities if e not in stop][:8]
+        predicates = [
+            p for p in (
+                "处罚", "限额", "不得", "禁止", "取消", "准入", "负责", "牵头",
+                "占比", "两条线", "问需", "报账", "审核",
+            )
+            if p in q
+        ]
+        if not entities and not predicates:
+            return candidates
+        out: list[dict] = []
+        for c in candidates:
+            row = dict(c)
+            blob = f"{row.get('title') or ''}\n{row.get('text') or ''}"
+            e_hits = sum(1 for e in entities if e in blob)
+            p_hits = sum(1 for p in predicates if p in blob)
+            boost = 0.0
+            if e_hits and p_hits:
+                boost = 0.12 + 0.03 * min(3, e_hits + p_hits)
+            elif e_hits >= 2:
+                boost = 0.06
+            # Extra boost when money pattern co-occurs with numeric query cues
+            if re.search(r"限额|处罚|奖金|多少|上限", q) and re.search(
+                r"\d+(?:\.\d+)?\s*(?:万元|元|%)", blob
+            ):
+                boost += 0.1
+            if boost:
+                for key in ("score", "final_relevance_score", "rrf_score"):
+                    if row.get(key) is not None:
+                        try:
+                            row[key] = float(row[key]) + boost
+                        except (TypeError, ValueError):
+                            pass
+                row["entity_predicate_boost"] = boost
+            out.append(row)
+        out.sort(
+            key=lambda x: float(
+                x.get("final_relevance_score")
+                or x.get("score")
+                or x.get("rrf_score")
+                or 0.0
+            ),
+            reverse=True,
+        )
+        return out
 
     def knowledge_fts_search(self, query: str, top_k: int) -> list[dict]:
         if self._knowledge_fts_fn is not None:

@@ -1,0 +1,1067 @@
+{
+  "case": {
+    "case_id": "KB-021",
+    "category": "多条件组合",
+    "query": "产品问需工单 审核初审和产品评估的工作日时限",
+    "expected_knowledge_ids": [
+      "b40b8949-e458-408a-aa75-292b0540516b"
+    ],
+    "expected_title_keywords": [
+      "产品问需",
+      "2026"
+    ],
+    "required_facts": [
+      "1个工作日",
+      "5个工作日"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "市场〔2026〕5号第十七条；组合'问需+初审+评估时限'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "8d05cd78-874d-47f3-ba11-51e3cb589829",
+          "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+          "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+          "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+          "text": "【文档】市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【章节】（一）问需发起。广西公司全体员工均可发起问需工单，通 > （二）问需审核。问需发起人所发起的问需工单，首先提交 > （三）问需评估。产品单位接单处理人应在接到工单后5个\n问需工单详情要完整清晰，包含\n问需背景、现象描述等必要信息；正确选择问需类别；合理预估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问需审核人进行审核，本级无法处理的则提\n交上一级单位进行处理。\n问需审核人在收到工单后1个工作日内完成初审，审核工单\n信息是否完整、诉求是否明确、是否为无效/重复工单，初审通\n过的按问需类型精准选择转派分发至本级处理单位，审核不通过\n的退回问需发起人补充完善。\n（三）问需评估。产品单位接单处理人应在接到工单后5个\n工作日内完成产品问题或需求的评估，评估需求合规性、技术可\n行性、可覆盖性、实施难度、资源需求、预计处理周期、投入产\n出效益。\n问需评估结果可为采纳、不采纳、纳入长期规划三类。对于\n符合国家及行业政策规定、技术方案可行、需求合理且具备实施\n—10—条件的问需列为采纳，产品单位出具解决方案并进入后续流程。",
+          "document_family_id": "topic:产品问需",
+          "version_year": 2026,
+          "section_path": "（一）问需发起。广西公司全体员工均可发起问需工单，通 > （二）问需审核。问需发起人所发起的问需工单，首先提交 > （三）问需评估。产品单位接单处理人应在接到工单后5个",
+          "block_ids": [
+            "8d05cd78-874d-47f3-ba11-51e3cb589829",
+            "919bf5c1-b05b-4ab9-a534-41e607e97ff9",
+            "aae68115-e8b7-41fd-aa68-b919ad869cf8",
+            "0289563d-76a9-479f-8b33-a611f03fb294",
+            "0b873c71-e009-4541-884d-ece3ebaf98e0",
+            "0b0c4e9a-3c37-494e-a120-4cf866f8dafc",
+            "ed09bf0a-6482-49c8-8921-be8e2e2a854d",
+            "41c20baa-d088-4021-8773-53fd3d0b29e0",
+            "96bfad05-a0fc-4bee-980b-e7172ea0cd0d",
+            "19fa9b74-cfb7-4fda-9b00-33152cc74fb1",
+            "33b8784d-d567-4344-af3b-23979c3b2760",
+            "d7bbd1bc-3808-48db-a079-54f8d080742b",
+            "edaedc17-1a30-4988-9705-ffaf25b1f3e8",
+            "f0148e70-5656-462d-b7f1-38c270023005"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -43.860856756011756,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 1.0,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:产品问需",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "b40b8949-e458-408a-aa75-292b0540516b"
+        ],
+        "evidence_snapshot_id": "8hts3IomQptL2Af1bWB3Yq0eutaxHHyi",
+        "snapshot_fingerprint": "3e8432cd2484528555c1d83d",
+        "accepted_passage_ids": [
+          "ad17a2232d1a9a2a213ae88d6ef21d5d",
+          "f28e0167b5b0fcfbd8e34234b6c1fe90",
+          "6b82e20c4be79cbab3f54f394ddd4033"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 36891.98
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 1个工作日内完成初审，审核\n- 5个工作日内完成产品问题或需求的评估，评估",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+            "block_id": "8d05cd78-874d-47f3-ba11-51e3cb589829",
+            "block_ids": [
+              "8d05cd78-874d-47f3-ba11-51e3cb589829",
+              "919bf5c1-b05b-4ab9-a534-41e607e97ff9",
+              "aae68115-e8b7-41fd-aa68-b919ad869cf8",
+              "0289563d-76a9-479f-8b33-a611f03fb294",
+              "0b873c71-e009-4541-884d-ece3ebaf98e0",
+              "0b0c4e9a-3c37-494e-a120-4cf866f8dafc",
+              "ed09bf0a-6482-49c8-8921-be8e2e2a854d",
+              "41c20baa-d088-4021-8773-53fd3d0b29e0",
+              "96bfad05-a0fc-4bee-980b-e7172ea0cd0d",
+              "19fa9b74-cfb7-4fda-9b00-33152cc74fb1",
+              "33b8784d-d567-4344-af3b-23979c3b2760",
+              "d7bbd1bc-3808-48db-a079-54f8d080742b",
+              "edaedc17-1a30-4988-9705-ffaf25b1f3e8",
+              "f0148e70-5656-462d-b7f1-38c270023005"
+            ],
+            "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+            "text": "问需工单详情要完整清晰，包含\n问需背景、现象描述等必要信息；正确选择问需类别；合理预估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问需审核人进行审核，本级无法处理的则提\n交上一级单位进行处理。\n问需审核人在收到工单后1个工作日内完成初审，审核工单\n信息是否完整、诉求是否明确、是否为无效/重复工单，初审通\n过的按问需类型精准选择转派分发至本级处理单位，审核不通过\n的退回问需发起人补充完善。\n（三）问需评估。产品单位接单处理人应在接到工单后5个\n工作日内完成产品问题或需求的评估，评估需求合规性、技术可\n行性、可覆盖性、实施难度、资源需求、预计处理周期、投入产\n出效益。\n问需评估结果可为采纳、不采纳、纳入长期规划三类。对于\n符合国家及行业政策规定、技术方案可行、需求合理且具备实施\n—10—条件的问需列为采纳，产品单位出具解决方案并进入后续流程。",
+            "score": 1.0,
+            "document_family_id": "topic:产品问需",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "1个工作日内完成初审，审核",
+            "evidence_passage_ids": [
+              "ad17a2232d1a9a2a213ae88d6ef21d5d"
+            ],
+            "fact_type": "deadline",
+            "condition": "初审",
+            "candidate_id": "e773bb2fde1b77502d0c7339"
+          },
+          {
+            "text": "5个工作日内完成产品问题或需求的评估，评估",
+            "evidence_passage_ids": [
+              "ad17a2232d1a9a2a213ae88d6ef21d5d"
+            ],
+            "fact_type": "deadline",
+            "condition": "产品评估",
+            "candidate_id": "aee571da1b3455909cd34bdd"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+            "block_id": "8d05cd78-874d-47f3-ba11-51e3cb589829",
+            "block_ids": [
+              "8d05cd78-874d-47f3-ba11-51e3cb589829",
+              "919bf5c1-b05b-4ab9-a534-41e607e97ff9",
+              "aae68115-e8b7-41fd-aa68-b919ad869cf8",
+              "0289563d-76a9-479f-8b33-a611f03fb294",
+              "0b873c71-e009-4541-884d-ece3ebaf98e0",
+              "0b0c4e9a-3c37-494e-a120-4cf866f8dafc",
+              "ed09bf0a-6482-49c8-8921-be8e2e2a854d",
+              "41c20baa-d088-4021-8773-53fd3d0b29e0",
+              "96bfad05-a0fc-4bee-980b-e7172ea0cd0d",
+              "19fa9b74-cfb7-4fda-9b00-33152cc74fb1",
+              "33b8784d-d567-4344-af3b-23979c3b2760",
+              "d7bbd1bc-3808-48db-a079-54f8d080742b",
+              "edaedc17-1a30-4988-9705-ffaf25b1f3e8",
+              "f0148e70-5656-462d-b7f1-38c270023005"
+            ],
+            "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+            "path": "",
+            "text": "问需工单详情要完整清晰，包含\n问需背景、现象描述等必要信息；正确选择问需类别；合理预估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问需审核人进行审核，本级无法处理的则提\n交上一级单位进行处理。\n问需审核人在收到工单后1个工作日内完成初审，审核工单\n信息是否完整、诉求是否明确、是否为无效/重复工单，初审通\n过的按问需类型精准选择转派分发至本级处理单位，审核不通过\n的退回问需发起人补充完善。\n（三）问需评估。产品单位接单处理人应在接到工单后5个\n工作日内完成产品问题或需求的评估，评估需求合规性、技术可\n行性、可覆盖性、实施难度、资源需求、预计处理周期、投入产\n出效益。\n问需评估结果可为采纳、不采纳、纳入长期规划三类。对于\n符合国家及行业政策规定、技术方案可行、需求合理且具备实施\n—10—条件的问需列为采纳，产品单位出具解决方案并进入后续流程。",
+            "body_text": "问需工单详情要完整清晰，包含\n问需背景、现象描述等必要信息；正确选择问需类别；合理预估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问需审核人进行审核，本级无法处理的则提\n交上一级单位进行处理。\n问需审核人在收到工单后1个工作日内完成初审，审核工单\n信息是否完整、诉求是否明确、是否为无效/重复工单，初审通\n过的按问需类型精准选择转派分发至本级处理单位，审核不通过\n的退回问需发起人补充完善。\n（三）问需评估。产品单位接单处理人应在接到工单后5个\n工作日内完成产品问题或需求的评估，评估需求合规性、技术可\n行性、可覆盖性、实施难度、资源需求、预计处理周期、投入产\n出效益。\n问需评估结果可为采纳、不采纳、纳入长期规划三类。对于\n符合国家及行业政策规定、技术方案可行、需求合理且具备实施\n—10—条件的问需列为采纳，产品单位出具解决方案并进入后续流程。",
+            "score": 1.0,
+            "document_family_id": "topic:产品问需",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.3,
+              "threshold": 0.35,
+              "reason": "direct_slot_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "产品问需",
+                "初审",
+                "产品评估",
+                "工作日时限",
+                "问需响应"
+              ],
+              "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "spans": [
+                {
+                  "slot": "产品问需",
+                  "surface": "产品问需",
+                  "synonym_source": "literal",
+                  "span": [
+                    23,
+                    27
+                  ],
+                  "excerpt": "2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【文档】市场-2026-5号-关"
+                },
+                {
+                  "slot": "初审",
+                  "surface": "初审",
+                  "synonym_source": "literal",
+                  "span": [
+                    350,
+                    352
+                  ],
+                  "excerpt": "\n问需审核人在收到工单后1个工作日内完成初审，审核工单\n信息是否完整、诉求是否明确、是否为无效/重复工单，初审通\n过的按问需"
+                },
+                {
+                  "slot": "产品评估",
+                  "surface": "评估",
+                  "synonym_source": "literal",
+                  "span": [
+                    173,
+                    175
+                  ],
+                  "excerpt": "发起的问需工单，首先提交 > （三）问需评估。产品单位接单处理人应在接到工单后5个\n问需工单详情要完整清晰，包含\n问需背景、"
+                },
+                {
+                  "slot": "工作日时限",
+                  "surface": "工作日",
+                  "synonym_source": "literal",
+                  "span": [
+                    257,
+                    260
+                  ],
+                  "excerpt": "估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问"
+                },
+                {
+                  "slot": "问需响应",
+                  "surface": "问需响应",
+                  "synonym_source": "typed_anchor",
+                  "span": [
+                    25,
+                    29
+                  ],
+                  "excerpt": "26-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【文档】市场-2026-5号-关于印"
+                }
+              ],
+              "reason": "multi_slot_fact_match",
+              "query_slots": [
+                "产品问需",
+                "初审",
+                "产品评估",
+                "工作日时限",
+                "问需响应",
+                "产品问需工单",
+                "审核初审和产品评估的工作",
+                "日时限"
+              ],
+              "score": 0.75,
+              "typed_plan": {
+                "anchors": [
+                  "问需响应",
+                  "产品问需工单",
+                  "审核初审和产品评估的工作",
+                  "日时限"
+                ],
+                "predicate": "问需响应",
+                "conditions": [
+                  "初审",
+                  "产品评估"
+                ],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "3e8432cd2484528555c1d83d",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [
+              "初审",
+              "产品评估"
+            ],
+            "fact_types": [
+              "deadline"
+            ],
+            "raw": "产品问需工单 审核初审和产品评估的工作日时限"
+          },
+          "fact_plan": {
+            "raw": "产品问需工单 审核初审和产品评估的工作日时限",
+            "intents": [
+              "deadline"
+            ],
+            "conditions": [
+              "初审",
+              "产品评估"
+            ],
+            "required_slots": [
+              "deadline",
+              "初审",
+              "产品评估"
+            ],
+            "entities": [
+              "产品问需工单",
+              "审核初审和产品评估的工作",
+              "日时限"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": true,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "deadline"
+            ],
+            "subject": "产品问需工单",
+            "object": "审核初审和产品评估的工作",
+            "scope": [],
+            "selector": [],
+            "predicate": "问需响应",
+            "polarity": "neutral",
+            "condition_slots": [
+              "初审",
+              "产品评估"
+            ],
+            "requested_attribute": "deadline",
+            "value_dimensions": [],
+            "unit": "个工作日",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "问需响应",
+              "产品问需工单",
+              "审核初审和产品评估的工作",
+              "日时限"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "初审",
+              "value": "1",
+              "unit": "个工作日",
+              "evidence_passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+              "record_id": "ad17a2232d1a9a2a213ae88d6ef21d5d:r1",
+              "exact_text": "1个工作日内完成初审，审核",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "dc012a37070e40e8"
+            },
+            {
+              "condition": "产品评估",
+              "value": "5",
+              "unit": "个工作日",
+              "evidence_passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+              "record_id": "ad17a2232d1a9a2a213ae88d6ef21d5d:r2",
+              "exact_text": "5个工作日内完成产品问题或需求的评估，评估",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "dc012a37070e40e8"
+            }
+          ],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 9,
+          "candidate_count": 4
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "1个工作日内完成初审，审核",
+              "evidence_passage_ids": [
+                "ad17a2232d1a9a2a213ae88d6ef21d5d"
+              ],
+              "fact_type": "deadline",
+              "condition": "初审",
+              "candidate_id": "e773bb2fde1b77502d0c7339"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "5个工作日内完成产品问题或需求的评估，评估",
+              "evidence_passage_ids": [
+                "ad17a2232d1a9a2a213ae88d6ef21d5d"
+              ],
+              "fact_type": "deadline",
+              "condition": "产品评估",
+              "candidate_id": "aee571da1b3455909cd34bdd"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "产品问需工单 审核初审和产品评估的工作日时限",
+            "intents": [
+              "deadline"
+            ],
+            "conditions": [
+              "初审",
+              "产品评估"
+            ],
+            "required_slots": [
+              "deadline",
+              "初审",
+              "产品评估"
+            ],
+            "entities": [
+              "产品问需工单",
+              "审核初审和产品评估的工作",
+              "日时限"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": true,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "deadline"
+            ],
+            "subject": "产品问需工单",
+            "object": "审核初审和产品评估的工作",
+            "scope": [],
+            "selector": [],
+            "predicate": "问需响应",
+            "polarity": "neutral",
+            "condition_slots": [
+              "初审",
+              "产品评估"
+            ],
+            "requested_attribute": "deadline",
+            "value_dimensions": [],
+            "unit": "个工作日",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "问需响应",
+              "产品问需工单",
+              "审核初审和产品评估的工作",
+              "日时限"
+            ]
+          },
+          "input_count": 4,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "e773bb2fde1b77502d0c7339",
+              "record_id": "ad17a2232d1a9a2a213ae88d6ef21d5d:r1",
+              "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "fact_kind": "deadline",
+              "subject": "",
+              "predicate": "",
+              "object": "",
+              "qualifiers": [],
+              "condition": "初审",
+              "value": "1",
+              "unit": "个工作日",
+              "exact_text": "1个工作日内完成初审，审核",
+              "evidence_spans": [
+                [
+                  74,
+                  87
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:产品问需",
+              "version_year": 2026,
+              "score": 8.600000000000001,
+              "unstructured_rejected": false,
+              "group_id": "dc012a37070e40e8",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "deadline": "hit",
+                "初审": "hit",
+                "产品评估": "miss",
+                "anchor:问需响应": "miss",
+                "anchor:产品问需工单": "miss",
+                "anchor:审核初审和产品评估的工作": "miss",
+                "anchor:日时限": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "aee571da1b3455909cd34bdd",
+              "record_id": "ad17a2232d1a9a2a213ae88d6ef21d5d:r2",
+              "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "fact_kind": "deadline",
+              "subject": "",
+              "predicate": "",
+              "object": "",
+              "qualifiers": [],
+              "condition": "产品评估",
+              "value": "5",
+              "unit": "个工作日",
+              "exact_text": "5个工作日内完成产品问题或需求的评估，评估",
+              "evidence_spans": [
+                [
+                  21,
+                  42
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:产品问需",
+              "version_year": 2026,
+              "score": 8.600000000000001,
+              "unstructured_rejected": false,
+              "group_id": "dc012a37070e40e8",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "deadline": "hit",
+                "初审": "miss",
+                "产品评估": "hit",
+                "anchor:问需响应": "miss",
+                "anchor:产品问需工单": "miss",
+                "anchor:审核初审和产品评估的工作": "miss",
+                "anchor:日时限": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "deadline": {
+              "e773bb2fde1b77502d0c7339": "hit",
+              "aee571da1b3455909cd34bdd": "hit",
+              "ec8410d672c4ca352a8b3232": "hit",
+              "690be201d16e584583e579b7": "hit"
+            },
+            "初审": {
+              "e773bb2fde1b77502d0c7339": "hit",
+              "aee571da1b3455909cd34bdd": "miss",
+              "ec8410d672c4ca352a8b3232": "hit",
+              "690be201d16e584583e579b7": "miss"
+            },
+            "产品评估": {
+              "e773bb2fde1b77502d0c7339": "miss",
+              "aee571da1b3455909cd34bdd": "hit",
+              "ec8410d672c4ca352a8b3232": "miss",
+              "690be201d16e584583e579b7": "hit"
+            }
+          },
+          "primary_group_id": "dc012a37070e40e8",
+          "covered_slots": [
+            "deadline",
+            "产品评估",
+            "初审"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "dc012a37070e40e8",
+                "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+                "document_family_id": "topic:产品问需",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "ad17a2232d1a9a2a213ae88d6ef21d5d",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90",
+                  "6b82e20c4be79cbab3f54f394ddd4033"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+                "section": "（一）问需发起。广西公司全体员工均可发起问需工单，通 > （二）问需审核。问需发起人所发起的问需工单，首先提交 > （三）问需评估。产品单位接单处理人应在接到工单后5个",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 10.0,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "ad17a2232d1a9a2a213ae88d6ef21d5d:r0",
+                  "ad17a2232d1a9a2a213ae88d6ef21d5d:r1",
+                  "ad17a2232d1a9a2a213ae88d6ef21d5d:r2",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90:r0",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90:r1",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90:r2",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90:r3",
+                  "6b82e20c4be79cbab3f54f394ddd4033:r0",
+                  "6b82e20c4be79cbab3f54f394ddd4033:r1"
+                ]
+              }
+            ],
+            "primary_group_id": "dc012a37070e40e8",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "产品问需工单",
+                "审核初审和产品评估的工作",
+                "日时限"
+              ],
+              "selection": [
+                {
+                  "group_id": "dc012a37070e40e8",
+                  "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+                  "score": 10.0,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "deadline",
+            "初审",
+            "产品评估"
+          ],
+          "candidate_ids": [
+            "e773bb2fde1b77502d0c7339",
+            "aee571da1b3455909cd34bdd"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "deadline"
+          ],
+          "covered_slots": [
+            "deadline",
+            "产品评估",
+            "初审"
+          ],
+          "coverage_matrix": {
+            "deadline": {
+              "e773bb2fde1b77502d0c7339": "hit",
+              "aee571da1b3455909cd34bdd": "hit",
+              "ec8410d672c4ca352a8b3232": "hit",
+              "690be201d16e584583e579b7": "hit"
+            },
+            "初审": {
+              "e773bb2fde1b77502d0c7339": "hit",
+              "aee571da1b3455909cd34bdd": "miss",
+              "ec8410d672c4ca352a8b3232": "hit",
+              "690be201d16e584583e579b7": "miss"
+            },
+            "产品评估": {
+              "e773bb2fde1b77502d0c7339": "miss",
+              "aee571da1b3455909cd34bdd": "hit",
+              "ec8410d672c4ca352a8b3232": "miss",
+              "690be201d16e584583e579b7": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "产品问需工单 审核初审和产品评估的工作日时限",
+          "intents": [
+            "deadline"
+          ],
+          "conditions": [
+            "初审",
+            "产品评估"
+          ],
+          "required_slots": [
+            "deadline",
+            "初审",
+            "产品评估"
+          ],
+          "entities": [
+            "产品问需工单",
+            "审核初审和产品评估的工作",
+            "日时限"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": true,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "deadline"
+          ],
+          "subject": "产品问需工单",
+          "object": "审核初审和产品评估的工作",
+          "scope": [],
+          "selector": [],
+          "predicate": "问需响应",
+          "polarity": "neutral",
+          "condition_slots": [
+            "初审",
+            "产品评估"
+          ],
+          "requested_attribute": "deadline",
+          "value_dimensions": [],
+          "unit": "个工作日",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "问需响应",
+            "产品问需工单",
+            "审核初审和产品评估的工作",
+            "日时限"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "dc012a37070e40e8",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "document_family_id": "topic:产品问需",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "ad17a2232d1a9a2a213ae88d6ef21d5d",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90",
+                "6b82e20c4be79cbab3f54f394ddd4033"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+              "section": "（一）问需发起。广西公司全体员工均可发起问需工单，通 > （二）问需审核。问需发起人所发起的问需工单，首先提交 > （三）问需评估。产品单位接单处理人应在接到工单后5个",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 10.0,
+              "rejection_reasons": [],
+              "record_ids": [
+                "ad17a2232d1a9a2a213ae88d6ef21d5d:r0",
+                "ad17a2232d1a9a2a213ae88d6ef21d5d:r1",
+                "ad17a2232d1a9a2a213ae88d6ef21d5d:r2",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90:r0",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90:r1",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90:r2",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90:r3",
+                "6b82e20c4be79cbab3f54f394ddd4033:r0",
+                "6b82e20c4be79cbab3f54f394ddd4033:r1"
+              ]
+            }
+          ],
+          "primary_group_id": "dc012a37070e40e8",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "产品问需工单",
+              "审核初审和产品评估的工作",
+              "日时限"
+            ],
+            "selection": [
+              {
+                "group_id": "dc012a37070e40e8",
+                "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+                "score": 10.0,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "初审": true,
+            "产品评估": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "e773bb2fde1b77502d0c7339"
+              ],
+              "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "text": "- 1个工作日内完成初审，审核",
+              "fact_kind": "deadline"
+            },
+            {
+              "rendered_candidate_ids": [
+                "aee571da1b3455909cd34bdd"
+              ],
+              "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "text": "- 5个工作日内完成产品问题或需求的评估，评估",
+              "fact_kind": "deadline"
+            }
+          ],
+          "answer_len": 39
+        },
+        "primary_group_id": "dc012a37070e40e8",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "type": "knowledge",
+              "label": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949"
+            },
+            {
+              "id": "8d05cd78-874d-47f3-ba11-51e3cb589829",
+              "type": "block",
+              "label": "（二）问需审核。问需发起人所发起的问需工单，首先提交",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b"
+            },
+            {
+              "id": "953975ac-706d-4f7e-9b2f-fa4cd16321d8",
+              "type": "block",
+              "label": "[第9页]",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b"
+            },
+            {
+              "id": "c8c0ef9e-1275-4f0d-9e30-45479d651385",
+              "type": "knowledge",
+              "label": "市场-2024-9号-关于印发中国电信广西公司前端业务外包实施细则的通知--c8c0ef9e"
+            }
+          ],
+          "edges": [
+            {
+              "source": "b40b8949-e458-408a-aa75-292b0540516b",
+              "target": "8d05cd78-874d-47f3-ba11-51e3cb589829",
+              "type": "contains"
+            },
+            {
+              "source": "953975ac-706d-4f7e-9b2f-fa4cd16321d8",
+              "target": "8d05cd78-874d-47f3-ba11-51e3cb589829",
+              "type": "parent"
+            },
+            {
+              "source": "c8c0ef9e-1275-4f0d-9e30-45479d651385",
+              "target": "b40b8949-e458-408a-aa75-292b0540516b",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 4
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 0,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "b40b8949-e458-408a-aa75-292b0540516b"
+          ],
+          "accepted_block_ids": [
+            "8d05cd78-874d-47f3-ba11-51e3cb589829"
+          ],
+          "accepted_passage_ids": [
+            "ad17a2232d1a9a2a213ae88d6ef21d5d",
+            "f28e0167b5b0fcfbd8e34234b6c1fe90",
+            "6b82e20c4be79cbab3f54f394ddd4033"
+          ],
+          "generation_knowledge_ids": [
+            "b40b8949-e458-408a-aa75-292b0540516b"
+          ],
+          "top_score": 0.3,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "产品问需",
+              "初审",
+              "产品评估",
+              "工作日时限",
+              "问需响应"
+            ],
+            "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "spans": [
+              {
+                "slot": "产品问需",
+                "surface": "产品问需",
+                "synonym_source": "literal",
+                "span": [
+                  23,
+                  27
+                ],
+                "excerpt": "2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【文档】市场-2026-5号-关"
+              },
+              {
+                "slot": "初审",
+                "surface": "初审",
+                "synonym_source": "literal",
+                "span": [
+                  350,
+                  352
+                ],
+                "excerpt": "\n问需审核人在收到工单后1个工作日内完成初审，审核工单\n信息是否完整、诉求是否明确、是否为无效/重复工单，初审通\n过的按问需"
+              },
+              {
+                "slot": "产品评估",
+                "surface": "评估",
+                "synonym_source": "literal",
+                "span": [
+                  173,
+                  175
+                ],
+                "excerpt": "发起的问需工单，首先提交 > （三）问需评估。产品单位接单处理人应在接到工单后5个\n问需工单详情要完整清晰，包含\n问需背景、"
+              },
+              {
+                "slot": "工作日时限",
+                "surface": "工作日",
+                "synonym_source": "literal",
+                "span": [
+                  257,
+                  260
+                ],
+                "excerpt": "估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问"
+              },
+              {
+                "slot": "问需响应",
+                "surface": "问需响应",
+                "synonym_source": "typed_anchor",
+                "span": [
+                  25,
+                  29
+                ],
+                "excerpt": "26-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【文档】市场-2026-5号-关于印"
+              }
+            ],
+            "reason": "multi_slot_fact_match",
+            "query_slots": [
+              "产品问需",
+              "初审",
+              "产品评估",
+              "工作日时限",
+              "问需响应",
+              "产品问需工单",
+              "审核初审和产品评估的工作",
+              "日时限"
+            ],
+            "score": 0.75,
+            "typed_plan": {
+              "anchors": [
+                "问需响应",
+                "产品问需工单",
+                "审核初审和产品评估的工作",
+                "日时限"
+              ],
+              "predicate": "问需响应",
+              "conditions": [
+                "初审",
+                "产品评估"
+              ],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "3e8432cd2484528555c1d83d"
+        },
+        "snapshot_fingerprint": "3e8432cd2484528555c1d83d",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 16.38
+  },
+  "top_candidate_id": "b40b8949-e458-408a-aa75-292b0540516b",
+  "candidates": [
+    {
+      "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+      "passage_id": "ad17a2232d1a9a2a213ae88d6ef21d5d",
+      "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+      "score": 1.0,
+      "final_relevance_score": 1.0,
+      "text": "【文档】市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【章节】（一）问需发起。广西公司全体员工均可发起问需工单，通 > （二）问需审核。问需发起人所发起的问需工单，首先提交 > （三）问需评估。产品单位接单处理人应在接到工单后5个\n问需工单详情要完整清晰，包含\n问需背景、现象描述等必要信息；正确选择问需类别；合理预估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问需审核人进行审核，本级无法处理的则提\n交上一级单位进行处理。\n问需审核人在收到工单后1个工作日内完成初审，审核工单\n信息是否完整、诉求是否明确、是否为无效/重复工单，初审通\n过的按问需类型精准选择转派分发至本级处理单位，审核不通过\n的退回问需发起人补充完善。\n（三）问需评估。产品单位接单处理人应在接到工单后5个\n工作日内完成产品问题或需求的评估，评估需求合规性、技术可\n行性、可覆盖性、实施难度、资源需求、预计处理周期、投入产\n出效益。\n问需评估结果可为采纳、不采纳、纳入长期规划三类。对于\n符合国家及行业政策规定、技术方案可行、需求合理且具备实施\n—10—条件的问需列为采纳，产品单位出具解决方案并进入后续流程。"
+    }
+  ],
+  "search_ms": 36891.98,
+  "ask_ms": 16.38,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "8hts3IomQptL2Af1bWB3Yq0eutaxHHyi",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

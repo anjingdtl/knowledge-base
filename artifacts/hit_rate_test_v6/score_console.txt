@@ -1,0 +1,1 @@
+scored 37 cases -> artifacts\hit_rate_test_v6\scored.json

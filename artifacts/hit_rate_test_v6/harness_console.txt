@@ -1,0 +1,43 @@
+[step] initialize MCP session ... OK session=a63d9b06aab64d8b9b6e76b3136c0fb9
+[step] ping ok=True caps ok=True
+[step] reuse_snapshot=True read_mode=unique workers=1
+[1/37] KB-001 top=574f1593-2a9f-455d-ab16-bbc5b6d0d879 search=43186ms ask=30ms reused=True retrieval_count=0
+[2/37] KB-002 top=27922ca4-aa1a-4cee-bf16-b4ee182a5201 search=66467ms ask=43ms reused=True retrieval_count=0
+[3/37] KB-003 top=940317f3-1c33-4afc-9cad-b838ebdcf12d search=36702ms ask=46ms reused=True retrieval_count=0
+[4/37] KB-004 top=e8f52cfa-2e86-4048-9358-0649094a41b9 search=42178ms ask=44ms reused=True retrieval_count=0
+[5/37] KB-005 top=3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3 search=46153ms ask=40ms reused=True retrieval_count=0
+[6/37] KB-006 top=102bee52-4b83-438d-9296-c852579473b6 search=28539ms ask=36ms reused=True retrieval_count=0
+[7/37] KB-007 top=acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7 search=43692ms ask=21ms reused=True retrieval_count=0
+[8/37] KB-008 top=f39e6e2e-1c71-484e-a24d-276cde30f0a9 search=28696ms ask=32ms reused=True retrieval_count=0
+[9/37] KB-009 top=906b7eaf-82fe-4ea3-b860-36d465ee0400 search=83549ms ask=84883ms reused=False retrieval_count=1
+[10/37] KB-010 top=e0a6c23a-bf1e-4bd7-a07c-41046b17ed29 search=147599ms ask=37ms reused=True retrieval_count=0
+[11/37] KB-011 top=d2901dbf-a0b2-47d8-9e72-0f627589ddcc search=114045ms ask=38ms reused=True retrieval_count=0
+[12/37] KB-012 top=0b5f5cf6-d4bc-42e9-afcf-73173c428a68 search=127957ms ask=28ms reused=True retrieval_count=0
+[13/37] KB-013 top=8a8fb5a7-42b8-4a35-b7fe-fdc352c55011 search=75754ms ask=25ms reused=True retrieval_count=0
+[14/37] KB-014 top=ad35a556-0c08-41c9-bbdb-5216e5d9bb1d search=93023ms ask=36ms reused=True retrieval_count=0
+[15/37] KB-015 top=b40b8949-e458-408a-aa75-292b0540516b search=83015ms ask=39ms reused=True retrieval_count=0
+[16/37] KB-016 top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search=87882ms ask=14ms reused=True retrieval_count=0
+[17/37] KB-017 top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search=43328ms ask=50ms reused=True retrieval_count=0
+[18/37] KB-018 top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search=27009ms ask=39ms reused=True retrieval_count=0
+[19/37] KB-019 top=27922ca4-aa1a-4cee-bf16-b4ee182a5201 search=43316ms ask=32ms reused=True retrieval_count=0
+[20/37] KB-020 top=24a0fd9e-a285-4230-b58c-09715016758f search=69449ms ask=47ms reused=True retrieval_count=0
+[21/37] KB-021 top=b40b8949-e458-408a-aa75-292b0540516b search=41346ms ask=16ms reused=True retrieval_count=0
+[22/37] KB-022 top=51b17abe-8fe3-42fb-8c90-2b9b3d6fb934 search=41614ms ask=43ms reused=True retrieval_count=0
+[23/37] KB-023 top=940317f3-1c33-4afc-9cad-b838ebdcf12d search=42747ms ask=33ms reused=True retrieval_count=0
+[24/37] KB-024 top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search=30661ms ask=41ms reused=True retrieval_count=0
+[25/37] KB-025 top=0b5f5cf6-d4bc-42e9-afcf-73173c428a68 search=34988ms ask=43ms reused=True retrieval_count=0
+[26/37] KB-026 top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search=37210ms ask=14ms reused=True retrieval_count=0
+[27/37] KB-027 top=2b63b216-9850-4e82-803e-4006cb9f62ad search=29352ms ask=26ms reused=True retrieval_count=0
+[28/37] KB-028 top=2b63b216-9850-4e82-803e-4006cb9f62ad search=77782ms ask=30ms reused=True retrieval_count=0
+[29/37] KB-029 top=ad35a556-0c08-41c9-bbdb-5216e5d9bb1d search=35258ms ask=39ms reused=True retrieval_count=0
+[30/37] KB-030 top=574f1593-2a9f-455d-ab16-bbc5b6d0d879 search=17434ms ask=27ms reused=True retrieval_count=0
+[31/37] KB-031 top=None search=41133ms ask=44907ms reused=False retrieval_count=1
+[32/37] KB-032 top=423eb665-1382-4fc3-9805-8597e3c25276 search=37410ms ask=24ms reused=True retrieval_count=0
+[33/37] KB-033 top=None search=17ms ask=16ms reused=False retrieval_count=0
+[34/37] KB-034 top=None search=21145ms ask=16118ms reused=False retrieval_count=1
+[35/37] KB-035 top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search=41451ms ask=36ms reused=True retrieval_count=0
+[36/37] KB-036 top=960ce8f2-41a3-4aaa-9cb2-27295fd5441f search=29622ms ask=21ms reused=True retrieval_count=0
+[37/37] KB-037 top=2b63b216-9850-4e82-803e-4006cb9f62ad search=35504ms ask=48ms reused=True retrieval_count=0
+[step] unique read for 20 knowledge ids
+
+[done] 37 cases (skipped_resume=0) elapsed=2074.1s -> artifacts\hit_rate_test_v6

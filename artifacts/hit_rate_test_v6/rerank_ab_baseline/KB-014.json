@@ -1,0 +1,214 @@
+{
+  "case": {
+    "case_id": "KB-014",
+    "category": "同义词与口语表达",
+    "query": "异业合作给客户送权益优惠券的合作方准入条件",
+    "expected_knowledge_ids": [
+      "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+    ],
+    "expected_title_keywords": [
+      "权益业务",
+      "2026"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕34号第十七条；口语'送权益优惠券/异业合作'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+          "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+          "passage_id": "bc8a98c68db50eadb443380f6b772f23",
+          "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+          "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】（1）准入条件 > （2）由数字生活中心（号百中心）、全渠道运营中心分别完 > 3.合作引入评审\nN选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。\n⑥提供权益产品中各品牌授予至合作方的清晰且完整的授\n— 14 —权链路，且授权有效期限不应少于半年。\n（2）由数字生活中心（号百中心）、全渠道运营中心分别完\n成材料初审。其中，数字生活中心（号百中心）负责对合作方资\n质、产品介绍、授权资质、服务流程进行审核并进行对标比价；\n全渠道运营中心对产品市场分析、渠道资源、推广需求进行评估\n和确认，对于不满足准入条件或没有推广需求的产品，则直接退\n回材料至需求提报部门或合作方。\n3.合作引入评审\n权益合作引入对标区公司级对外合作管理办法，日常合作方\n引入、续签的常规评审执行“一评一审一决定”的原则，由区公\n司各部门组会审议后方可引入。",
+          "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+          "version_year": 2026,
+          "section_path": "（1）准入条件 > （2）由数字生活中心（号百中心）、全渠道运营中心分别完 > 3.合作引入评审",
+          "block_ids": [
+            "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+            "a651b152-b3bf-4027-8b70-86d74207dd67",
+            "66a2ee63-d0d6-4896-a83b-0be4f4e52c91",
+            "46c9ed56-3fea-447d-9261-9e4af8a5e6a8",
+            "d745688d-e5c1-474c-b1da-e8558a4e6aeb",
+            "2f6339d5-58b8-4954-99d3-3a0721a1887b",
+            "72cfd5bb-d6bf-4052-b4f6-d0c05ec7ffae",
+            "8ac986bf-d9d0-4907-8bc9-6c9a960c9d3f",
+            "185e0721-57d0-48bc-ba9f-12099f6d2844",
+            "bb1db203-4a25-4e14-bdd2-d64ee0f2e4f0",
+            "88574720-a6be-4be9-81ac-a360ec522f1a",
+            "f7edeba8-2a82-4386-a2fa-89a4f651f831",
+            "9ce443ed-fb63-47c0-a5d9-fdc0013cccf3",
+            "9e3a78f9-7beb-4969-8265-267340b7ec4c",
+            "d2ab9bec-c386-4481-966d-294ab99a907a"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -39.02327736827715,
+          "fts_score": 0.9160152699527393,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.9160152699527393,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信广西公司权益业务管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+        ],
+        "evidence_snapshot_id": "lxmj2ib8H3Ov3W--YWMk_ynB4GCyRYLC",
+        "snapshot_fingerprint": "6778235fcf1a2a275d244fc0",
+        "accepted_passage_ids": [
+          "bc8a98c68db50eadb443380f6b772f23",
+          "fd311432f6bbc2c527a84855c4ef2708",
+          "b87507bf13f851e70e0002101b483667"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 102160.9,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 15,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"93ad4a3d-19bd-46dd-86ee-dd354e7a90d9\",\"knowledge_id\":\"ad35a556-0c08-41c9-bbdb-5216e5d9bb1d\",\"passage_id\":\"bc8a98c68db50eadb443380f6b772f23\",\"title\":\"中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\",\"text\":\"【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\\n【章节】（1）准入条件 > （2）由数字生活中心（号百中心）、全渠道运营中心分别完 > 3.合作引入评审\\nN选\\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\\n相关介绍和说明。\\n⑥提供权益产品中各品牌授予至合作方的清晰且完整的授\\n— 14 —权链路，且授权有效期限不应少于半年。\\n（2）由数字生活中心（号百中心）、全渠道运营中心分别完\\n成材料初审。其中，数字生活中心（号百中心）负责对合作方资\\n质、产品介绍、授权资质、服务流程进行审核并进行对标比价；\\n全渠道运营中心对产品市场分析、渠道资源、推广需求进行评估\\n和确认，对于不满足准入条件或没有推广需求的产品，则直接退\\n回材料至需求提报部门或合作方。\\n3.合作引入评审\\n权益合作引入对标区公司级对外合作管理办法，日常合作方\\n引入、续签的常规评审执行“一评一审一决定”的原则，由区公\\n司各部门组会审议后方可引入。\",\"document_family_id\":\"topic:关于印发中国电信广西公司权益业务管理办法\",\"version_year\":2026,\"section_path\":\"（1）准入条件 > （2）由数字生活中心（号百中心）、全渠道运营中心分别完 > 3.合作引入评审\",\"block_ids\":[\"93ad4a3d-19bd-46dd-86ee-dd354e7a90d9\",\"a651b152-b3bf-4027-8b70-86d74207dd67\",\"66a2ee63-d0d6-4896-a83b-0be4f4e52c91\",\"46c9ed56-3fea-447d-9261-9e4af8a5e6a8\",\"d745688d-e5c1-474c-b1da-e8558a4e6aeb\",\"2f6339d5-58b8-4954-99d3-3a0721a1887b\",\"72cfd5bb-d6bf-4052-b4f6-d0c05ec7ffae\",\"8ac986bf-d9d0-4907-8bc9-6c9a960c9d3f\",\"185e0721-57d0-48bc-ba9f-12099f6d2844\",\"bb1db203-4a25-4e14-bdd2-d64ee0f2e4f0\",\"88574720-a6be-4be9-81ac-a360ec522f1a\",\"f7edeba8-2a82-4386-a2fa-89a4f651f831\",\"9ce443ed-fb63-47c0-a5d9-fdc0013cccf3\",\"9e3a78f9-7beb-4969-8265-267340b7ec4c\",\"d2ab9bec-c386-4481-966d-294ab99a907a\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-39.02327736827715,\"fts_score\":0.9160152699527393,\"score\":1.0,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"direct_slot_evidence\":true,\"final_relevance_score\":0.9160152699527393,\"ranking_score\":1.0,\"version_rank\":{\"version_year\":2026,\"deprecated\":false,\"family_key\":\"topic:关于印发中国电信广西公司权益业务管理办法\",\"family_newest_year\":2026,\"is_family_newest\":true}}],\"meta\":{\"total_estimate\":1,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.3,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"ad35a556-0c08-41c9-bbdb-5216e5d9bb1d\"],\"evidence_snapshot_id\":\"lxmj2ib8H3Ov3W--YWMk_ynB4GCyRYLC\",\"snapshot_fingerprint\":\"6778235fcf1a2a275d244fc0\",\"accepted_passage_ids\":[\"bc8a98c68db50eadb443380f6b772f23\",\"fd311432f6bbc2c527a84855c4ef2708\",\"b87507bf13f851e70e0002101b483667\"],\"adjacent_unit\":\"passage\",\"adjacent_count\":2,\"adjacent_fallback_reason\":\"passage_index_neighbors\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+              "knowledge_id": "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d",
+              "passage_id": "bc8a98c68db50eadb443380f6b772f23",
+              "title": "中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556",
+              "text": "【文档】中电信桂-2026-34号-关于印发中国电信广西公司权益业务管理办法的通知--ad35a556\n【章节】（1）准入条件 > （2）由数字生活中心（号百中心）、全渠道运营中心分别完 > 3.合作引入评审\nN选\n组合型权益产品的市场价值不应低于结算定价的2倍。其中，市\n场售价可由品牌方盖章确认或官方销售渠道截图提供；而集团供\n价可通过集团相关结算文件或向集团专业公司邮件询价的方式\n获得，相关比价材料需作为线下评审依据；特殊供价产品应提供\n相关介绍和说明。\n⑥提供权益产品中各品牌授予至合作方的清晰且完整的授\n— 14 —权链路，且授权有效期限不应少于半年。\n（2）由数字生活中心（号百中心）、全渠道运营中心分别完\n成材料初审。其中，数字生活中心（号百中心）负责对合作方资\n质、产品介绍、授权资质、服务流程进行审核并进行对标比价；\n全渠道运营中心对产品市场分析、渠道资源、推广需求进行评估\n和确认，对于不满足准入条件或没有推广需求的产品，则直接退\n回材料至需求提报部门或合作方。\n3.合作引入评审\n权益合作引入对标区公司级对外合作管理办法，日常合作方\n引入、续签的常规评审执行“一评一审一决定”的原则，由区公\n司各部门组会审议后方可引入。",
+              "document_family_id": "topic:关于印发中国电信广西公司权益业务管理办法",
+              "version_year": 2026,
+              "section_path": "（1）准入条件 > （2）由数字生活中心（号百中心）、全渠道运营中心分别完 > 3.合作引入评审",
+              "block_ids": [
+                "93ad4a3d-19bd-46dd-86ee-dd354e7a90d9",
+                "a651b152-b3bf-4027-8b70-86d74207dd67",
+                "66a2ee63-d0d6-4896-a83b-0be4f4e52c91",
+                "46c9ed56-3fea-447d-9261-9e4af8a5e6a8",
+                "d745688d-e5c1-474c-b1da-e8558a4e6aeb",
+                "2f6339d5-58b8-4954-99d3-3a0721a1887b",
+                "72cfd5bb-d6bf-4052-b4f6-d0c05ec7ffae",
+                "8ac986bf-d9d0-4907-8bc9-6c9a960c9d3f",
+                "185e0721-57d0-48bc-ba9f-12099f6d2844",
+                "bb1db203-4a25-4e14-bdd2-d64ee0f2e4f0",
+                "88574720-a6be-4be9-81ac-a360ec522f1a",
+                "f7edeba8-2a82-4386-a2fa-89a4f651f831",
+                "9ce443ed-fb63-47c0-a5d9-fdc0013cccf3",
+                "9e3a78f9-7beb-4969-8265-267340b7ec4c",
+                "d2ab9bec-c386-4481-966d-294ab99a907a"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -39.02327736827715,
+              "fts_score": 0.9160152699527393,
+              "score": 1.0,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "direct_slot_evidence": true,
+              "final_relevance_score": 0.9160152699527393,
+              "ranking_score": 1.0,
+              "version_rank": {
+                "version_year": 2026,
+                "deprecated": false,
+                "family_key": "topic:关于印发中国电信广西公司权益业务管理办法",
+                "family_newest_year": 2026,
+                "is_family_newest": true
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 1,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.3,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+            ],
+            "evidence_snapshot_id": "lxmj2ib8H3Ov3W--YWMk_ynB4GCyRYLC",
+            "snapshot_fingerprint": "6778235fcf1a2a275d244fc0",
+            "accepted_passage_ids": [
+              "bc8a98c68db50eadb443380f6b772f23",
+              "fd311432f6bbc2c527a84855c4ef2708",
+              "b87507bf13f851e70e0002101b483667"
+            ],
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-014",
+    "label": "baseline",
+    "query": "异业合作给客户送权益优惠券的合作方准入条件",
+    "expected_knowledge_ids": [
+      "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+    ],
+    "top_ids": [
+      "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+    ],
+    "top1_ok": true,
+    "recall5_ok": true,
+    "search_ms": 102160.9,
+    "n_results": 1,
+    "snapshot_fingerprint": null
+  }
+}

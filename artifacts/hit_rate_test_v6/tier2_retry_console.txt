@@ -1,0 +1,9 @@
+[step] initialize MCP session ... OK session=72216dda138c4c87adb59ff4e02f627c
+[step] ping ok=True caps ok=True
+[step] reuse_snapshot=True read_mode=unique workers=1
+[1/3] KB-010 top=e0a6c23a-bf1e-4bd7-a07c-41046b17ed29 search=163535ms ask=45ms reused=True retrieval_count=0
+[2/3] KB-011 top=ad35a556-0c08-41c9-bbdb-5216e5d9bb1d search=110382ms ask=51ms reused=True retrieval_count=0
+[3/3] KB-013 top=8a8fb5a7-42b8-4a35-b7fe-fdc352c55011 search=73069ms ask=25ms reused=True retrieval_count=0
+[step] unique read for 3 knowledge ids
+
+[done] 3 cases (skipped_resume=0) elapsed=347.2s -> artifacts\hit_rate_test_v6\tier2_retry

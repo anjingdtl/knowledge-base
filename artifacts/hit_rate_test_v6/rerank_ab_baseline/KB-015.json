@@ -1,0 +1,216 @@
+{
+  "case": {
+    "case_id": "KB-015",
+    "category": "同义词与口语表达",
+    "query": "客户提出对产品的需求 公司怎么响应处理",
+    "expected_knowledge_ids": [
+      "b40b8949-e458-408a-aa75-292b0540516b"
+    ],
+    "expected_title_keywords": [
+      "产品问需",
+      "2026"
+    ],
+    "required_facts": [
+      "问需",
+      "五级闭环"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "市场〔2026〕5号第十七条；口语'客户提需求/怎么响应'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "25d484c2-1017-4f3a-8d76-8fb2aa49e8aa",
+          "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+          "passage_id": "673dc94572e9d0cca80ad07b6d319a8e",
+          "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+          "text": "【文档】市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【章节】（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计\n真实性、完整性负责；\n（二）问需审批人：指在易问系统问需模块负责本级问需工\n单接收、初审、分发、流转的专职人员，由各单位指定产品主管\n担任，可查看、初审本级问需工单并分发流转至上一层级处置单\n位，对本级工单规范性、流转效率、验收及时性负责。\n区/县分公司、市分公司分别设置本层级问需审批人，原则\n上问需审批人应为该产品在所辖区域对应的产品具体运营负责\n人，熟悉掌握产品的相关信息，对问需发起人提出的产品需求、\n问题具备初步研判及处置能力。\n区公司问需审批人由区公司市场部、政企信息服务事业群的\n产品主管担任，负责产品运营支撑的各专业公司产品经理负责协\n助审批工作。\n问需发起人所提出的产品问题、需求需上一层级处理的，须\n经本级问需审批人审核后方可逐级提交上一层级进行处理。\n（四）系统管理员：指在易问系统负责账号分配、日志审计\n—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市\n分公司、各专业公司系统管理员由各单位指派，区公司本部系统\n管理员由区公司数字化运营支撑中心人员担任。",
+          "document_family_id": "topic:产品问需",
+          "version_year": 2026,
+          "section_path": "（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计",
+          "block_ids": [
+            "25d484c2-1017-4f3a-8d76-8fb2aa49e8aa",
+            "e251f5be-9ae2-40e7-a312-7c771be581a4",
+            "947e4ddf-f31b-403a-814a-655654741512",
+            "fa92606e-3517-44e8-8bb1-d11556f48b55",
+            "cf1edd15-8e04-41db-a8dc-7cf48d031976",
+            "87d377fa-4b23-4939-8204-c6c6b595f1dd",
+            "ab6281dc-d978-48e2-89ce-5938e5f9deab",
+            "6e5b350a-1046-45c7-b664-8a10bbd3c2d6",
+            "81952a5a-dbff-4884-a9c5-af374896935a",
+            "00c7376f-f7fa-4117-bf7c-47b8c18eb9dd",
+            "5248ebee-45e6-41fd-b6cd-0ad8aeea83d2",
+            "9131bd71-3b52-4e9a-804a-ed873244b7a3",
+            "8e086f15-3cad-4c31-967c-3ca2f76cb398",
+            "77ab2781-9df3-41a2-a8c6-30528920b60a",
+            "5d10615b-71ef-4849-9068-031f992ea97f",
+            "0fef7947-4951-4bd8-b0dd-84d31205cd25"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -15.723577296007667,
+          "fts_score": 0.971251581188437,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.971251581188437,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:产品问需",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "b40b8949-e458-408a-aa75-292b0540516b"
+        ],
+        "evidence_snapshot_id": "eG1TVQLjuxfnrqPRQtTF4WAIXCrPj-FM",
+        "snapshot_fingerprint": "db60c7769268fa203cfca227",
+        "accepted_passage_ids": [
+          "673dc94572e9d0cca80ad07b6d319a8e",
+          "d7dc7cee5f3504379b1e76d4d6b25d3d",
+          "f28e0167b5b0fcfbd8e34234b6c1fe90"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 96165.33,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 16,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"25d484c2-1017-4f3a-8d76-8fb2aa49e8aa\",\"knowledge_id\":\"b40b8949-e458-408a-aa75-292b0540516b\",\"passage_id\":\"673dc94572e9d0cca80ad07b6d319a8e\",\"title\":\"市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\",\"text\":\"【文档】市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\\n【章节】（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计\\n真实性、完整性负责；\\n（二）问需审批人：指在易问系统问需模块负责本级问需工\\n单接收、初审、分发、流转的专职人员，由各单位指定产品主管\\n担任，可查看、初审本级问需工单并分发流转至上一层级处置单\\n位，对本级工单规范性、流转效率、验收及时性负责。\\n区/县分公司、市分公司分别设置本层级问需审批人，原则\\n上问需审批人应为该产品在所辖区域对应的产品具体运营负责\\n人，熟悉掌握产品的相关信息，对问需发起人提出的产品需求、\\n问题具备初步研判及处置能力。\\n区公司问需审批人由区公司市场部、政企信息服务事业群的\\n产品主管担任，负责产品运营支撑的各专业公司产品经理负责协\\n助审批工作。\\n问需发起人所提出的产品问题、需求需上一层级处理的，须\\n经本级问需审批人审核后方可逐级提交上一层级进行处理。\\n（四）系统管理员：指在易问系统负责账号分配、日志审计\\n—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市\\n分公司、各专业公司系统管理员由各单位指派，区公司本部系统\\n管理员由区公司数字化运营支撑中心人员担任。\",\"document_family_id\":\"topic:产品问需\",\"version_year\":2026,\"section_path\":\"（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计\",\"block_ids\":[\"25d484c2-1017-4f3a-8d76-8fb2aa49e8aa\",\"e251f5be-9ae2-40e7-a312-7c771be581a4\",\"947e4ddf-f31b-403a-814a-655654741512\",\"fa92606e-3517-44e8-8bb1-d11556f48b55\",\"cf1edd15-8e04-41db-a8dc-7cf48d031976\",\"87d377fa-4b23-4939-8204-c6c6b595f1dd\",\"ab6281dc-d978-48e2-89ce-5938e5f9deab\",\"6e5b350a-1046-45c7-b664-8a10bbd3c2d6\",\"81952a5a-dbff-4884-a9c5-af374896935a\",\"00c7376f-f7fa-4117-bf7c-47b8c18eb9dd\",\"5248ebee-45e6-41fd-b6cd-0ad8aeea83d2\",\"9131bd71-3b52-4e9a-804a-ed873244b7a3\",\"8e086f15-3cad-4c31-967c-3ca2f76cb398\",\"77ab2781-9df3-41a2-a8c6-30528920b60a\",\"5d10615b-71ef-4849-9068-031f992ea97f\",\"0fef7947-4951-4bd8-b0dd-84d31205cd25\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-15.723577296007667,\"fts_score\":0.971251581188437,\"score\":1.0,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"direct_slot_evidence\":true,\"final_relevance_score\":0.971251581188437,\"ranking_score\":1.0,\"version_rank\":{\"version_year\":2026,\"deprecated\":false,\"family_key\":\"topic:产品问需\",\"family_newest_year\":2026,\"is_family_newest\":true}}],\"meta\":{\"total_estimate\":1,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.3,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"b40b8949-e458-408a-aa75-292b0540516b\"],\"evidence_snapshot_id\":\"eG1TVQLjuxfnrqPRQtTF4WAIXCrPj-FM\",\"snapshot_fingerprint\":\"db60c7769268fa203cfca227\",\"accepted_passage_ids\":[\"673dc94572e9d0cca80ad07b6d319a8e\",\"d7dc7cee5f3504379b1e76d4d6b25d3d\",\"f28e0167b5b0fcfbd8e34234b6c1fe90\"],\"adjacent_unit\":\"passage\",\"adjacent_count\":2,\"adjacent_fallback_reason\":\"passage_index_neighbors\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "25d484c2-1017-4f3a-8d76-8fb2aa49e8aa",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "passage_id": "673dc94572e9d0cca80ad07b6d319a8e",
+              "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+              "text": "【文档】市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【章节】（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计\n真实性、完整性负责；\n（二）问需审批人：指在易问系统问需模块负责本级问需工\n单接收、初审、分发、流转的专职人员，由各单位指定产品主管\n担任，可查看、初审本级问需工单并分发流转至上一层级处置单\n位，对本级工单规范性、流转效率、验收及时性负责。\n区/县分公司、市分公司分别设置本层级问需审批人，原则\n上问需审批人应为该产品在所辖区域对应的产品具体运营负责\n人，熟悉掌握产品的相关信息，对问需发起人提出的产品需求、\n问题具备初步研判及处置能力。\n区公司问需审批人由区公司市场部、政企信息服务事业群的\n产品主管担任，负责产品运营支撑的各专业公司产品经理负责协\n助审批工作。\n问需发起人所提出的产品问题、需求需上一层级处理的，须\n经本级问需审批人审核后方可逐级提交上一层级进行处理。\n（四）系统管理员：指在易问系统负责账号分配、日志审计\n—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市\n分公司、各专业公司系统管理员由各单位指派，区公司本部系统\n管理员由区公司数字化运营支撑中心人员担任。",
+              "document_family_id": "topic:产品问需",
+              "version_year": 2026,
+              "section_path": "（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计",
+              "block_ids": [
+                "25d484c2-1017-4f3a-8d76-8fb2aa49e8aa",
+                "e251f5be-9ae2-40e7-a312-7c771be581a4",
+                "947e4ddf-f31b-403a-814a-655654741512",
+                "fa92606e-3517-44e8-8bb1-d11556f48b55",
+                "cf1edd15-8e04-41db-a8dc-7cf48d031976",
+                "87d377fa-4b23-4939-8204-c6c6b595f1dd",
+                "ab6281dc-d978-48e2-89ce-5938e5f9deab",
+                "6e5b350a-1046-45c7-b664-8a10bbd3c2d6",
+                "81952a5a-dbff-4884-a9c5-af374896935a",
+                "00c7376f-f7fa-4117-bf7c-47b8c18eb9dd",
+                "5248ebee-45e6-41fd-b6cd-0ad8aeea83d2",
+                "9131bd71-3b52-4e9a-804a-ed873244b7a3",
+                "8e086f15-3cad-4c31-967c-3ca2f76cb398",
+                "77ab2781-9df3-41a2-a8c6-30528920b60a",
+                "5d10615b-71ef-4849-9068-031f992ea97f",
+                "0fef7947-4951-4bd8-b0dd-84d31205cd25"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -15.723577296007667,
+              "fts_score": 0.971251581188437,
+              "score": 1.0,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "direct_slot_evidence": true,
+              "final_relevance_score": 0.971251581188437,
+              "ranking_score": 1.0,
+              "version_rank": {
+                "version_year": 2026,
+                "deprecated": false,
+                "family_key": "topic:产品问需",
+                "family_newest_year": 2026,
+                "is_family_newest": true
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 1,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.3,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "b40b8949-e458-408a-aa75-292b0540516b"
+            ],
+            "evidence_snapshot_id": "eG1TVQLjuxfnrqPRQtTF4WAIXCrPj-FM",
+            "snapshot_fingerprint": "db60c7769268fa203cfca227",
+            "accepted_passage_ids": [
+              "673dc94572e9d0cca80ad07b6d319a8e",
+              "d7dc7cee5f3504379b1e76d4d6b25d3d",
+              "f28e0167b5b0fcfbd8e34234b6c1fe90"
+            ],
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-015",
+    "label": "baseline",
+    "query": "客户提出对产品的需求 公司怎么响应处理",
+    "expected_knowledge_ids": [
+      "b40b8949-e458-408a-aa75-292b0540516b"
+    ],
+    "top_ids": [
+      "b40b8949-e458-408a-aa75-292b0540516b"
+    ],
+    "top1_ok": true,
+    "recall5_ok": true,
+    "search_ms": 96165.33,
+    "n_results": 1,
+    "snapshot_fingerprint": null
+  }
+}

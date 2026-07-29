@@ -1,0 +1,32 @@
+{
+  "git_revision": "7f4863bb2b57afa84d21bf86bdee3e2d32373ff1",
+  "golden_path": "evals\\golden_set_hit_rate.json",
+  "golden_sha256": "649be48fee5658368ceb679407029248cdcbc215d7060e8590e71fbb94adb03b",
+  "config_hash": "",
+  "index_revision": "",
+  "db_revision": "",
+  "process_start_id": "",
+  "reuse_snapshot": true,
+  "read_mode": "unique",
+  "workers": 1,
+  "case_filter": [
+    "KB-001",
+    "KB-002",
+    "KB-004",
+    "KB-007",
+    "KB-010",
+    "KB-011",
+    "KB-013",
+    "KB-015",
+    "KB-017",
+    "KB-021",
+    "KB-027",
+    "KB-028",
+    "KB-036"
+  ],
+  "started_at": "2026-07-29T09:21:22+0800",
+  "host": "127.0.0.1",
+  "port": 9000,
+  "ended_at": "2026-07-29T09:35:06+0800",
+  "elapsed_s": 823.29
+}

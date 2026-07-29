@@ -1,0 +1,865 @@
+{
+  "case": {
+    "case_id": "KB-015",
+    "category": "同义词与口语表达",
+    "query": "客户提出对产品的需求 公司怎么响应处理",
+    "expected_knowledge_ids": [
+      "b40b8949-e458-408a-aa75-292b0540516b"
+    ],
+    "expected_title_keywords": [
+      "产品问需",
+      "2026"
+    ],
+    "required_facts": [
+      "问需",
+      "五级闭环"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "市场〔2026〕5号第十七条；口语'客户提需求/怎么响应'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "25d484c2-1017-4f3a-8d76-8fb2aa49e8aa",
+          "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+          "passage_id": "673dc94572e9d0cca80ad07b6d319a8e",
+          "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+          "text": "【文档】市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【章节】（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计\n真实性、完整性负责；\n（二）问需审批人：指在易问系统问需模块负责本级问需工\n单接收、初审、分发、流转的专职人员，由各单位指定产品主管\n担任，可查看、初审本级问需工单并分发流转至上一层级处置单\n位，对本级工单规范性、流转效率、验收及时性负责。\n区/县分公司、市分公司分别设置本层级问需审批人，原则\n上问需审批人应为该产品在所辖区域对应的产品具体运营负责\n人，熟悉掌握产品的相关信息，对问需发起人提出的产品需求、\n问题具备初步研判及处置能力。\n区公司问需审批人由区公司市场部、政企信息服务事业群的\n产品主管担任，负责产品运营支撑的各专业公司产品经理负责协\n助审批工作。\n问需发起人所提出的产品问题、需求需上一层级处理的，须\n经本级问需审批人审核后方可逐级提交上一层级进行处理。\n（四）系统管理员：指在易问系统负责账号分配、日志审计\n—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市\n分公司、各专业公司系统管理员由各单位指派，区公司本部系统\n管理员由区公司数字化运营支撑中心人员担任。",
+          "document_family_id": "topic:产品问需",
+          "version_year": 2026,
+          "section_path": "（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计",
+          "block_ids": [
+            "25d484c2-1017-4f3a-8d76-8fb2aa49e8aa",
+            "e251f5be-9ae2-40e7-a312-7c771be581a4",
+            "947e4ddf-f31b-403a-814a-655654741512",
+            "fa92606e-3517-44e8-8bb1-d11556f48b55",
+            "cf1edd15-8e04-41db-a8dc-7cf48d031976",
+            "87d377fa-4b23-4939-8204-c6c6b595f1dd",
+            "ab6281dc-d978-48e2-89ce-5938e5f9deab",
+            "6e5b350a-1046-45c7-b664-8a10bbd3c2d6",
+            "81952a5a-dbff-4884-a9c5-af374896935a",
+            "00c7376f-f7fa-4117-bf7c-47b8c18eb9dd",
+            "5248ebee-45e6-41fd-b6cd-0ad8aeea83d2",
+            "9131bd71-3b52-4e9a-804a-ed873244b7a3",
+            "8e086f15-3cad-4c31-967c-3ca2f76cb398",
+            "77ab2781-9df3-41a2-a8c6-30528920b60a",
+            "5d10615b-71ef-4849-9068-031f992ea97f",
+            "0fef7947-4951-4bd8-b0dd-84d31205cd25"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -15.723577296007667,
+          "fts_score": 0.971251581188437,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.971251581188437,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:产品问需",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "b40b8949-e458-408a-aa75-292b0540516b"
+        ],
+        "evidence_snapshot_id": "UlFQfG39sPPmyryPtqMxfPxQpuoijXW9",
+        "snapshot_fingerprint": "db60c7769268fa203cfca227",
+        "accepted_passage_ids": [
+          "673dc94572e9d0cca80ad07b6d319a8e",
+          "d7dc7cee5f3504379b1e76d4d6b25d3d",
+          "f28e0167b5b0fcfbd8e34234b6c1fe90"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 95223.74
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 第五章问需响应流程及要求第十七条产品问需响应实行“五级闭环”管理，全流程数字化操作及记录，包括问需发起、问需审核、问需评估、问需解决、验收评价等闭环流程",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "passage_id": "f28e0167b5b0fcfbd8e34234b6c1fe90",
+            "block_id": "77ab2781-9df3-41a2-a8c6-30528920b60a",
+            "block_ids": [
+              "77ab2781-9df3-41a2-a8c6-30528920b60a",
+              "5d10615b-71ef-4849-9068-031f992ea97f",
+              "0fef7947-4951-4bd8-b0dd-84d31205cd25",
+              "61ecc6c6-9007-40cc-9600-7d5f7cdf9c30",
+              "4dd1d33b-cf20-4ba7-9223-1608f69a3920",
+              "a7b27f41-f20c-48da-a95a-57edb14116ec",
+              "506a97a9-2bc9-46eb-8d07-902b2baa2f0b",
+              "05ac45d3-75b6-43c2-b53b-ebeba5edde80",
+              "01aa9f56-28b8-48fd-86a6-88299672ab58",
+              "b6eb3d13-1162-4e7d-88f2-4632dd901ce4",
+              "27a0b4a5-de44-4e63-9441-83b8f1c94582",
+              "71dd7d2a-a9ca-46c6-8631-bd26fa9ae473",
+              "8d05cd78-874d-47f3-ba11-51e3cb589829",
+              "919bf5c1-b05b-4ab9-a534-41e607e97ff9",
+              "aae68115-e8b7-41fd-aa68-b919ad869cf8"
+            ],
+            "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+            "text": "经本级问需审批人审核后方可逐级提交上一层级进行处理。\n（四）系统管理员：指在易问系统负责账号分配、日志审计\n—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市\n分公司、各专业公司系统管理员由各单位指派，区公司本部系统\n管理员由区公司数字化运营支撑中心人员担任。\n第五章问需响应流程及要求\n第十七条产品问需响应实行“五级闭环”管理，全流程数\n字化操作及记录，包括问需发起、问需审核、问需评估、问需解\n决、验收评价等闭环流程。\n（一）问需发起。广西公司全体员工均可发起问需工单，通\n过易问系统问需模块发起问需工单，问需工单标题应简明扼要，\n准确表达具体产品的核心诉求；问需工单详情要完整清晰，包含\n问需背景、现象描述等必要信息；正确选择问需类别；合理预估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问需审核人进行审核，本级无法处理的则提\n交上一级单位进行处理。",
+            "score": 0.0,
+            "document_family_id": "topic:产品问需",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "第五章问需响应流程及要求第十七条产品问需响应实行“五级闭环”管理，全流程数字化操作及记录，包括问需发起、问需审核、问需评估、问需解决、验收评价等闭环流程",
+            "evidence_passage_ids": [
+              "f28e0167b5b0fcfbd8e34234b6c1fe90"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "d40ed3e5a1ad4ef459e5f32d"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "passage_id": "f28e0167b5b0fcfbd8e34234b6c1fe90",
+            "block_id": "77ab2781-9df3-41a2-a8c6-30528920b60a",
+            "block_ids": [
+              "77ab2781-9df3-41a2-a8c6-30528920b60a",
+              "5d10615b-71ef-4849-9068-031f992ea97f",
+              "0fef7947-4951-4bd8-b0dd-84d31205cd25",
+              "61ecc6c6-9007-40cc-9600-7d5f7cdf9c30",
+              "4dd1d33b-cf20-4ba7-9223-1608f69a3920",
+              "a7b27f41-f20c-48da-a95a-57edb14116ec",
+              "506a97a9-2bc9-46eb-8d07-902b2baa2f0b",
+              "05ac45d3-75b6-43c2-b53b-ebeba5edde80",
+              "01aa9f56-28b8-48fd-86a6-88299672ab58",
+              "b6eb3d13-1162-4e7d-88f2-4632dd901ce4",
+              "27a0b4a5-de44-4e63-9441-83b8f1c94582",
+              "71dd7d2a-a9ca-46c6-8631-bd26fa9ae473",
+              "8d05cd78-874d-47f3-ba11-51e3cb589829",
+              "919bf5c1-b05b-4ab9-a534-41e607e97ff9",
+              "aae68115-e8b7-41fd-aa68-b919ad869cf8"
+            ],
+            "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+            "path": "",
+            "text": "经本级问需审批人审核后方可逐级提交上一层级进行处理。\n（四）系统管理员：指在易问系统负责账号分配、日志审计\n—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市\n分公司、各专业公司系统管理员由各单位指派，区公司本部系统\n管理员由区公司数字化运营支撑中心人员担任。\n第五章问需响应流程及要求\n第十七条产品问需响应实行“五级闭环”管理，全流程数\n字化操作及记录，包括问需发起、问需审核、问需评估、问需解\n决、验收评价等闭环流程。\n（一）问需发起。广西公司全体员工均可发起问需工单，通\n过易问系统问需模块发起问需工单，问需工单标题应简明扼要，\n准确表达具体产品的核心诉求；问需工单详情要完整清晰，包含\n问需背景、现象描述等必要信息；正确选择问需类别；合理预估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问需审核人进行审核，本级无法处理的则提\n交上一级单位进行处理。",
+            "body_text": "经本级问需审批人审核后方可逐级提交上一层级进行处理。\n（四）系统管理员：指在易问系统负责账号分配、日志审计\n—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市\n分公司、各专业公司系统管理员由各单位指派，区公司本部系统\n管理员由区公司数字化运营支撑中心人员担任。\n第五章问需响应流程及要求\n第十七条产品问需响应实行“五级闭环”管理，全流程数\n字化操作及记录，包括问需发起、问需审核、问需评估、问需解\n决、验收评价等闭环流程。\n（一）问需发起。广西公司全体员工均可发起问需工单，通\n过易问系统问需模块发起问需工单，问需工单标题应简明扼要，\n准确表达具体产品的核心诉求；问需工单详情要完整清晰，包含\n问需背景、现象描述等必要信息；正确选择问需类别；合理预估\n期望解决时间，一般在问需工单创建5个工作日后。\n（二）问需审核。问需发起人所发起的问需工单，首先提交\n问需发起人所在层级问需审核人进行审核，本级无法处理的则提\n交上一级单位进行处理。",
+            "score": 0.0,
+            "document_family_id": "topic:产品问需",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.3,
+              "threshold": 0.35,
+              "reason": "direct_slot_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "问需响应"
+              ],
+              "passage_id": "673dc94572e9d0cca80ad07b6d319a8e",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "spans": [
+                {
+                  "slot": "问需响应",
+                  "surface": "问需响应",
+                  "synonym_source": "typed_anchor",
+                  "span": [
+                    25,
+                    29
+                  ],
+                  "excerpt": "26-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【文档】市场-2026-5号-关于印"
+                }
+              ],
+              "reason": "typed_plan_match",
+              "query_slots": [
+                "问需响应",
+                "客户提出对产品的需求",
+                "公司怎么响应处理"
+              ],
+              "score": 0.75,
+              "typed_plan": {
+                "anchors": [
+                  "问需响应",
+                  "客户提出对产品的需求",
+                  "公司怎么响应处理"
+                ],
+                "predicate": "问需响应",
+                "conditions": [],
+                "polarity": "positive"
+              }
+            },
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "db60c7769268fa203cfca227",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "客户提出对产品的需求 公司怎么响应处理"
+          },
+          "fact_plan": {
+            "raw": "客户提出对产品的需求 公司怎么响应处理",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:问需响应"
+            ],
+            "entities": [
+              "客户提出对产品的需求",
+              "公司怎么响应处理"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ],
+            "subject": "客户提出对产品的需求",
+            "object": "公司怎么响应处理",
+            "scope": [],
+            "selector": [],
+            "predicate": "问需响应",
+            "polarity": "positive",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "问需响应",
+              "客户提出对产品的需求",
+              "公司怎么响应处理"
+            ]
+          },
+          "kept": [],
+          "dropped": [
+            {
+              "id": "1d6f977e8e3509f57aeb02c9",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "4e9fb6b709d789fd49d0a3d6",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "05d264ded503c8a403bbb9bd",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "163897884dc6f81e8b783acf",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "ae254efffcc2e6ac786cb4cd",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 11,
+          "candidate_count": 6
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "第五章问需响应流程及要求第十七条产品问需响应实行“五级闭环”管理，全流程数字化操作及记录，包括问需发起、问需审核、问需评估、问需解决、验收评价等闭环流程",
+              "evidence_passage_ids": [
+                "f28e0167b5b0fcfbd8e34234b6c1fe90"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "d40ed3e5a1ad4ef459e5f32d"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "客户提出对产品的需求 公司怎么响应处理",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:问需响应"
+            ],
+            "entities": [
+              "客户提出对产品的需求",
+              "公司怎么响应处理"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ],
+            "subject": "客户提出对产品的需求",
+            "object": "公司怎么响应处理",
+            "scope": [],
+            "selector": [],
+            "predicate": "问需响应",
+            "polarity": "positive",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "问需响应",
+              "客户提出对产品的需求",
+              "公司怎么响应处理"
+            ]
+          },
+          "input_count": 6,
+          "dropped": [
+            {
+              "id": "1d6f977e8e3509f57aeb02c9",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "4e9fb6b709d789fd49d0a3d6",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "05d264ded503c8a403bbb9bd",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "163897884dc6f81e8b783acf",
+              "reason": "kind_not_allowed"
+            },
+            {
+              "id": "ae254efffcc2e6ac786cb4cd",
+              "reason": "kind_not_allowed"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "d40ed3e5a1ad4ef459e5f32d",
+              "record_id": "f28e0167b5b0fcfbd8e34234b6c1fe90:r1",
+              "passage_id": "f28e0167b5b0fcfbd8e34234b6c1fe90",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "fact_kind": "policy",
+              "subject": "问需响应",
+              "predicate": "问需响应",
+              "object": "第五章问需响应流程及要求第十七条产品问需响应实行“五级闭环”管理，全流程数字化操作及记录，包括问需发起、问需审核、问需评估、问需解决、验收评价等闭环流程",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第五章问需响应流程及要求第十七条产品问需响应实行“五级闭环”管理，全流程数字化操作及记录，包括问需发起、问需审核、问需评估、问需解决、验收评价等闭环流程",
+              "evidence_spans": [
+                [
+                  105,
+                  181
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:产品问需",
+              "version_year": 2026,
+              "score": 12.8,
+              "unstructured_rejected": false,
+              "group_id": "dc012a37070e40e8",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:问需响应": "hit",
+                "anchor:问需响应": "hit",
+                "anchor:客户提出对产品的需求": "miss",
+                "anchor:公司怎么响应处理": "miss"
+              },
+              "slot_spans": {
+                "predicate:问需响应": [
+                  3,
+                  7
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {
+              "d40ed3e5a1ad4ef459e5f32d": "hit"
+            },
+            "predicate:问需响应": {
+              "d40ed3e5a1ad4ef459e5f32d": "hit"
+            }
+          },
+          "primary_group_id": "dc012a37070e40e8",
+          "covered_slots": [
+            "policy_fact",
+            "predicate:问需响应"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "dc012a37070e40e8",
+                "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+                "document_family_id": "topic:产品问需",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "673dc94572e9d0cca80ad07b6d319a8e",
+                  "d7dc7cee5f3504379b1e76d4d6b25d3d",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+                "section": "（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 10.0,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "673dc94572e9d0cca80ad07b6d319a8e:r0",
+                  "673dc94572e9d0cca80ad07b6d319a8e:r1",
+                  "673dc94572e9d0cca80ad07b6d319a8e:r2",
+                  "d7dc7cee5f3504379b1e76d4d6b25d3d:r0",
+                  "d7dc7cee5f3504379b1e76d4d6b25d3d:r1",
+                  "d7dc7cee5f3504379b1e76d4d6b25d3d:r2",
+                  "d7dc7cee5f3504379b1e76d4d6b25d3d:r3",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90:r0",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90:r1",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90:r2",
+                  "f28e0167b5b0fcfbd8e34234b6c1fe90:r3"
+                ]
+              }
+            ],
+            "primary_group_id": "dc012a37070e40e8",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "公司怎么响应处理",
+                "客户提出对产品的需求"
+              ],
+              "selection": [
+                {
+                  "group_id": "dc012a37070e40e8",
+                  "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+                  "score": 10.0,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact",
+            "predicate:问需响应"
+          ],
+          "candidate_ids": [
+            "d40ed3e5a1ad4ef459e5f32d"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact",
+            "predicate:问需响应"
+          ],
+          "coverage_matrix": {
+            "policy_fact": {
+              "d40ed3e5a1ad4ef459e5f32d": "hit"
+            },
+            "predicate:问需响应": {
+              "d40ed3e5a1ad4ef459e5f32d": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "客户提出对产品的需求 公司怎么响应处理",
+          "intents": [
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "policy_fact",
+            "predicate:问需响应"
+          ],
+          "entities": [
+            "客户提出对产品的需求",
+            "公司怎么响应处理"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "policy",
+            "prohibition"
+          ],
+          "subject": "客户提出对产品的需求",
+          "object": "公司怎么响应处理",
+          "scope": [],
+          "selector": [],
+          "predicate": "问需响应",
+          "polarity": "positive",
+          "condition_slots": [],
+          "requested_attribute": "policy",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "问需响应",
+            "客户提出对产品的需求",
+            "公司怎么响应处理"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "dc012a37070e40e8",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "document_family_id": "topic:产品问需",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "673dc94572e9d0cca80ad07b6d319a8e",
+                "d7dc7cee5f3504379b1e76d4d6b25d3d",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+              "section": "（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 10.0,
+              "rejection_reasons": [],
+              "record_ids": [
+                "673dc94572e9d0cca80ad07b6d319a8e:r0",
+                "673dc94572e9d0cca80ad07b6d319a8e:r1",
+                "673dc94572e9d0cca80ad07b6d319a8e:r2",
+                "d7dc7cee5f3504379b1e76d4d6b25d3d:r0",
+                "d7dc7cee5f3504379b1e76d4d6b25d3d:r1",
+                "d7dc7cee5f3504379b1e76d4d6b25d3d:r2",
+                "d7dc7cee5f3504379b1e76d4d6b25d3d:r3",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90:r0",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90:r1",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90:r2",
+                "f28e0167b5b0fcfbd8e34234b6c1fe90:r3"
+              ]
+            }
+          ],
+          "primary_group_id": "dc012a37070e40e8",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "公司怎么响应处理",
+              "客户提出对产品的需求"
+            ],
+            "selection": [
+              {
+                "group_id": "dc012a37070e40e8",
+                "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+                "score": 10.0,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "问需响应"
+            ],
+            "predicate:问需响应": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "d40ed3e5a1ad4ef459e5f32d"
+              ],
+              "passage_id": "f28e0167b5b0fcfbd8e34234b6c1fe90",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "text": "- 第五章问需响应流程及要求第十七条产品问需响应实行“五级闭环”管理，全流程数字化操作及记录，包括问需发起、问需审核、问需评估、问需解决、验收评价等闭环流程",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 78
+        },
+        "primary_group_id": "dc012a37070e40e8",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "b40b8949-e458-408a-aa75-292b0540516b",
+              "type": "knowledge",
+              "label": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949"
+            },
+            {
+              "id": "77ab2781-9df3-41a2-a8c6-30528920b60a",
+              "type": "block",
+              "label": "—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b"
+            },
+            {
+              "id": "953975ac-706d-4f7e-9b2f-fa4cd16321d8",
+              "type": "block",
+              "label": "[第9页]",
+              "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b"
+            },
+            {
+              "id": "c8c0ef9e-1275-4f0d-9e30-45479d651385",
+              "type": "knowledge",
+              "label": "市场-2024-9号-关于印发中国电信广西公司前端业务外包实施细则的通知--c8c0ef9e"
+            }
+          ],
+          "edges": [
+            {
+              "source": "b40b8949-e458-408a-aa75-292b0540516b",
+              "target": "77ab2781-9df3-41a2-a8c6-30528920b60a",
+              "type": "contains"
+            },
+            {
+              "source": "953975ac-706d-4f7e-9b2f-fa4cd16321d8",
+              "target": "77ab2781-9df3-41a2-a8c6-30528920b60a",
+              "type": "parent"
+            },
+            {
+              "source": "c8c0ef9e-1275-4f0d-9e30-45479d651385",
+              "target": "b40b8949-e458-408a-aa75-292b0540516b",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 4
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 0,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "b40b8949-e458-408a-aa75-292b0540516b"
+          ],
+          "accepted_block_ids": [
+            "25d484c2-1017-4f3a-8d76-8fb2aa49e8aa"
+          ],
+          "accepted_passage_ids": [
+            "673dc94572e9d0cca80ad07b6d319a8e",
+            "d7dc7cee5f3504379b1e76d4d6b25d3d",
+            "f28e0167b5b0fcfbd8e34234b6c1fe90"
+          ],
+          "generation_knowledge_ids": [
+            "b40b8949-e458-408a-aa75-292b0540516b"
+          ],
+          "top_score": 0.3,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "问需响应"
+            ],
+            "passage_id": "673dc94572e9d0cca80ad07b6d319a8e",
+            "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+            "spans": [
+              {
+                "slot": "问需响应",
+                "surface": "问需响应",
+                "synonym_source": "typed_anchor",
+                "span": [
+                  25,
+                  29
+                ],
+                "excerpt": "26-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【文档】市场-2026-5号-关于印"
+              }
+            ],
+            "reason": "typed_plan_match",
+            "query_slots": [
+              "问需响应",
+              "客户提出对产品的需求",
+              "公司怎么响应处理"
+            ],
+            "score": 0.75,
+            "typed_plan": {
+              "anchors": [
+                "问需响应",
+                "客户提出对产品的需求",
+                "公司怎么响应处理"
+              ],
+              "predicate": "问需响应",
+              "conditions": [],
+              "polarity": "positive"
+            }
+          },
+          "snapshot_fingerprint": "db60c7769268fa203cfca227"
+        },
+        "snapshot_fingerprint": "db60c7769268fa203cfca227",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 17.13
+  },
+  "top_candidate_id": "b40b8949-e458-408a-aa75-292b0540516b",
+  "candidates": [
+    {
+      "knowledge_id": "b40b8949-e458-408a-aa75-292b0540516b",
+      "passage_id": "673dc94572e9d0cca80ad07b6d319a8e",
+      "title": "市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949",
+      "score": 1.0,
+      "final_relevance_score": 0.971251581188437,
+      "text": "【文档】市场-2026-5号-关于印发中国电信广西公司产品问需响应管理-试行-办法的通知--b40b8949\n【章节】（一）问需发起人：指在易问系统发起问需工单的人员，主 > （二）问需审批人：指在易问系统问需模块负责本级问需工 > （四）系统管理员：指在易问系统负责账号分配、日志审计\n真实性、完整性负责；\n（二）问需审批人：指在易问系统问需模块负责本级问需工\n单接收、初审、分发、流转的专职人员，由各单位指定产品主管\n担任，可查看、初审本级问需工单并分发流转至上一层级处置单\n位，对本级工单规范性、流转效率、验收及时性负责。\n区/县分公司、市分公司分别设置本层级问需审批人，原则\n上问需审批人应为该产品在所辖区域对应的产品具体运营负责\n人，熟悉掌握产品的相关信息，对问需发起人提出的产品需求、\n问题具备初步研判及处置能力。\n区公司问需审批人由区公司市场部、政企信息服务事业群的\n产品主管担任，负责产品运营支撑的各专业公司产品经理负责协\n助审批工作。\n问需发起人所提出的产品问题、需求需上一层级处理的，须\n经本级问需审批人审核后方可逐级提交上一层级进行处理。\n（四）系统管理员：指在易问系统负责账号分配、日志审计\n—9—等管理、系统技术及故障支撑响应处理等系统维护的人员。各市\n分公司、各专业公司系统管理员由各单位指派，区公司本部系统\n管理员由区公司数字化运营支撑中心人员担任。"
+    }
+  ],
+  "search_ms": 95223.74,
+  "ask_ms": 17.13,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "UlFQfG39sPPmyryPtqMxfPxQpuoijXW9",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

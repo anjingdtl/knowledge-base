@@ -1,0 +1,26 @@
+{
+  "hits": 33,
+  "misses": [
+    {
+      "case_id": "KB-009",
+      "retrieval_count": 1,
+      "ask_ms": 84882.72
+    },
+    {
+      "case_id": "KB-031",
+      "retrieval_count": 1,
+      "ask_ms": 44906.86
+    },
+    {
+      "case_id": "KB-033",
+      "retrieval_count": 0,
+      "ask_ms": 15.6
+    },
+    {
+      "case_id": "KB-034",
+      "retrieval_count": 1,
+      "ask_ms": 16117.56
+    }
+  ],
+  "retrieval_count_sum": 3
+}

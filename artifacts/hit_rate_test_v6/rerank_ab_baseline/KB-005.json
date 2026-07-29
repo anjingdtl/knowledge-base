@@ -1,0 +1,570 @@
+{
+  "case": {
+    "case_id": "KB-005",
+    "category": "精确关键词",
+    "query": "合规管理办法 首席合规官 总法律顾问",
+    "expected_knowledge_ids": [
+      "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+    ],
+    "expected_title_keywords": [
+      "合规",
+      "2023"
+    ],
+    "required_facts": [
+      "首席合规官",
+      "总法律顾问"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2023〕299号第十二条"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+          "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+          "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+          "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+          "text": "【文档】中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9\n【章节】（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。\n动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)\n— 5 — 第十二条 区公司设立首席合规官，由总法律顾问兼任，对\n区公司主要负责人负责，领导合规管理部门组织开展相关工作。\n第十三条 各单位业务及职能部门是合规管理的第一道防\n线，承担合规管理主体责任，主要履行以下职责：\n（一）建立健全本专业条线业务合规管理制度和流程，开展\n合规风险识别评估，编制风险清单和应对预案。\n（二）定期梳理重点岗位合规风险，将合规要求纳入岗位职\n责。\n（三）定期梳理业务管理流程，将合规要求和管控措施嵌入\n关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。",
+          "document_family_id": "topic:合规管理办法",
+          "version_year": 2023,
+          "section_path": "（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。",
+          "block_ids": [
+            "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+            "b01fa907-e282-44a4-815e-edeece0d2e4b",
+            "10fe803f-bdc0-47db-907b-68921ac189eb",
+            "6429dddd-3c17-4420-af6a-70b0953cff28",
+            "ad8e8fc6-d9c4-4ee5-bf9e-4eac23d9cd81",
+            "b7a9a06d-f580-4c76-9e3e-fb9e63929b93",
+            "bd9d7cd3-2e41-403a-8fff-d366b7339cb9",
+            "8c8bcf43-3d52-4cfe-ae0f-28349b7dbc70",
+            "a867b012-7c07-4910-8d66-0cda7a5d3583",
+            "6f308674-d276-4117-af3c-5f86a25f6e2e",
+            "83d2ab41-e1a3-4271-acd2-2a1cdc5e5597",
+            "58a65aff-4c12-473e-b368-a0f0e8911ea4",
+            "ce80d9af-7d56-49cc-9966-28f4a8bcd91a",
+            "8a8bfd62-dd37-491e-93f5-89b0c0129d58",
+            "b5a46970-9ff7-4faa-91f1-c3bbe3e84b2c",
+            "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+            "bbb8d47b-c657-4d70-8ae1-70b4b9b8622e",
+            "32492333-078b-43e4-b856-544e716b0cc6"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -40.83198988796836,
+          "fts_score": 1.0,
+          "score": 0.9992000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 1.0,
+            "fts_score": 1.0,
+            "title_score": 0.4615,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 1.0,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7692,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7692,
+          "ranking_score": 0.9992000000000001,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:合规管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "fe5c4213-b2a2-49fa-972a-f13862fec232",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "4deed0be86707f3bb13e637bed762135",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】2.XXXX > 3.XXXX > 一、XXXXXXXX\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。\n第二十七条 本部分自印发之日起施行，过去规定与本办法\n相悖的，以本办法为准。\n附件：1.重要决策法律合规审核单（模板）\n2.法律意见书（模板）\n— 9 — 附件1\n重要决策法律合规审核单（模板）\n编号 中电信X法审﹝202X﹞XX号\n申请单位\n审核事项\n所提交的文件\n法律部门意见\n初审法律人员： 电话： 时间：\n法律部门领导：\n备注：\n— 10 — 附件2\n关于XXXX的法律意见书\nXXXXXX（部/中心/分公司）\n贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\nXXXX出具法律意见。\n贵（部/中心/分公司）向我部提供的材料包括：\n1.XXXX\n2.XXXX\n3.XXXX\n我部根据上述材料及我国现行有效的相关法律、法规和规范\n性文件，经分析研究，提出以下法律意见：",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "section_path": "2.XXXX > 3.XXXX > 一、XXXXXXXX",
+          "block_ids": [
+            "fe5c4213-b2a2-49fa-972a-f13862fec232",
+            "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+            "1a563d2b-0509-4b6c-83c0-8361de2b2600",
+            "30d9794e-8364-4cde-9d6a-49f8b56daa40",
+            "15ff7860-4398-4c78-bb8a-9fb8ea1a1255",
+            "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+            "85f15f23-351e-4029-b0f7-ae43032e3b2a",
+            "66319ae3-8f75-4b7c-a979-ad9bea4e8a0c",
+            "16669462-dae2-49e2-bca5-bf3f72c88b76",
+            "6e2feb11-56fe-4b03-a546-a671bbc0bd85",
+            "7121069b-c185-4f1b-9e80-c604d41a9717",
+            "5987b782-c1fb-42c2-8c04-893abf8ebebe",
+            "44b2fdaf-df26-4dfd-a363-d214c3184537",
+            "aeb1226c-8512-49ff-917c-7c8fae71b5c1",
+            "cc77b84b-9774-43af-8e24-36c41a11bb10",
+            "af23fc74-c046-4d4a-a69d-8b18b8fdedd7",
+            "c9f6309c-ebd5-4b8b-92a1-cfdf1787687d",
+            "660d8dd9-3161-43e4-b6f6-6d1459084ec3",
+            "2999f88f-6536-452f-a653-a6a399bc9de1",
+            "519dbf60-f2a4-4f36-8d50-5348b3f5e641",
+            "dd8c2569-23cb-44e7-81b0-8d0ec9d1f9f3",
+            "43721ab6-bef2-4a33-8657-64a7aa64e600",
+            "44014f26-07b9-4cff-ab9c-50c13253cfcc",
+            "9820b821-9a5e-4ff2-b54a-880883b5b997",
+            "c0e29307-991e-45cd-894c-f058007f71d1",
+            "6934aeeb-2fb3-4b0d-86b9-d72a98286975",
+            "af9c9d5a-8ce9-425c-a505-5bb8235fe0a5",
+            "91f7f9e1-a1a9-4b80-8152-67cbc95dc0e3"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -30.63472318966335,
+          "fts_score": 1.0,
+          "score": 0.9047000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5517,
+            "fts_score": 1.0,
+            "title_score": 0.5259,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5517,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5547,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5547,
+          "ranking_score": 0.9047000000000001,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "34aea653-4781-4739-ad7c-579e179e9f62",
+          "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+          "passage_id": "c042ed35dfd7407bdf482d4ce12180b1",
+          "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+          "text": "【文档】中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1\n【章节】第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集\n中电信桂〔2021〕335号\n关于印发中国电信广西公司面向客户APP\n收集使用个人信息合规管理办法的通知\n各市分公司，各专业公司，区公司相关部门：\n为深入贯彻党和国家有关网络和信息安全工作要求，进一步\n落实政府监管部门对APP违法违规收集使用个人信息专项治理\n的任务，推动建立长效工作机制，区公司制定了《中国电信广西\n公司面向客户APP收集使用个人信息合规管理办法》，现印发你\n们，请各单位按照本办法认真执行。\n中国电信广西公司\n2021年9月9日 维护账号(集团互联)\n— 2 — 中国电信广西公司面向客户APP收集使用\n个人信息合规管理办法\n第一章 总 则\n第一条 为推动和规范中国电信广西公司面向客户APP收集\n使用个人信息合规工作，明确管理职责，强化监督检查，提高合\n规管理工作质量，依据《网络安全法》、《个人信息保护法》等法\n律法规和政府监管工作要求，以及国家互联网信息办公室、工业\n和信息化部、公安部、市场监管总局（以下简称“四部委”）《APP\n违法违规收集使用个人信息行为认定方法》，结合广西实际，特\n制定本办法。",
+          "document_family_id": "topic:合规管理办法",
+          "version_year": 2021,
+          "section_path": "第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集",
+          "block_ids": [
+            "34aea653-4781-4739-ad7c-579e179e9f62",
+            "f9249a58-f89c-4009-99a4-204c494dfbfc",
+            "27fb867d-e548-48fc-8d19-f305b7a0abc8",
+            "ab0be04d-36d8-4879-ba16-1107e0b49505",
+            "4d775de5-db22-4528-a784-2b019216eb1d",
+            "12581e24-511c-471a-98bb-8d8ff354927b",
+            "25d13c4b-0aed-41b1-b107-1ced62a0b1ce",
+            "4d433406-7491-40a6-949b-757ed94eaf42",
+            "f6819ab2-79d3-403e-bbf3-7eada217429d",
+            "ba866255-4f0e-4c4e-b12a-729bb2ccb700",
+            "604beb91-fc7c-49e2-b8b9-c3fa6e159c7d",
+            "ae57277e-a667-4b2a-a5b5-afff1036828e",
+            "0a12b04d-cb21-4735-9f90-d01025ba130e",
+            "a16352a9-d72d-4b4a-847e-f0ad5a942a7e",
+            "13efca92-6763-447a-a4e9-d83fddd78b65",
+            "39893892-e144-4545-8d16-7b072ef151c8",
+            "70b4e881-5126-406b-b91e-5598fb93705b",
+            "772ac6e8-9803-4dd9-9e3e-b23157289e9f",
+            "9490909a-6131-477a-9f46-ea5f84eeb41e",
+            "a54a13ec-7cd4-4752-bfe1-491dc4b1197b",
+            "5d58ba1b-f03a-40ff-9784-c877c86a9318"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -14.763271144976231,
+          "fts_score": 1.0,
+          "score": 0.33000000000000007,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4329,
+            "fts_score": 1.0,
+            "title_score": 0.4615,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4138,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.33000000000000007,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:合规管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 3,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7692,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+          "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "77ea3d15-7437-4d18-acbc-a48ba245630a"
+        ],
+        "evidence_snapshot_id": "XmUVITYFTYpxoPZVPuWj3pAmCSrq_gap",
+        "snapshot_fingerprint": "af83b418cc38b2383164a311",
+        "accepted_passage_ids": [
+          "1eb95044a22204ea1d006482cfe1585e",
+          "4deed0be86707f3bb13e637bed762135",
+          "c042ed35dfd7407bdf482d4ce12180b1",
+          "bdea47ebf2575a5a1e0a097bf881106f",
+          "149465a32d8ef1bf4a6e6293cc7abdc4",
+          "f38d4e88e9371ceabe2566a6973e3166",
+          "b0554250b5e311770232aa1e2fc6f2f3",
+          "e3b29031240e5cb19e435882ac40270f"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 5,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 42824.02,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 6,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"479b36ce-9a90-4d7b-95fe-d62bd37eb644\",\"knowledge_id\":\"3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3\",\"passage_id\":\"1eb95044a22204ea1d006482cfe1585e\",\"title\":\"中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9\",\"text\":\"【文档】中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9\\n【章节】（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。\\n动者和实践者的职责，积极推进合规管理各项工作。\\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)\\n— 5 — 第十二条 区公司设立首席合规官，由总法律顾问兼任，对\\n区公司主要负责人负责，领导合规管理部门组织开展相关工作。\\n第十三条 各单位业务及职能部门是合规管理的第一道防\\n线，承担合规管理主体责任，主要履行以下职责：\\n（一）建立健全本专业条线业务合规管理制度和流程，开展\\n合规风险识别评估，编制风险清单和应对预案。\\n（二）定期梳理重点岗位合规风险，将合规要求纳入岗位职\\n责。\\n（三）定期梳理业务管理流程，将合规要求和管控措施嵌入\\n关键流程节点。\\n（四）负责本专业条线经营管理行为的合规审查。\\n（五）及时报告合规风险，组织或者配合开展应对处置。\\n（六）组织或者配合开展违规问题调查和整改。\\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\\n骨干担任，接受合规管理部门业务指导和培训。\",\"document_family_id\":\"topic:合规管理办法\",\"version_year\":2023,\"section_path\":\"（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。\",\"block_ids\":[\"479b36ce-9a90-4d7b-95fe-d62bd37eb644\",\"b01fa907-e282-44a4-815e-edeece0d2e4b\",\"10fe803f-bdc0-47db-907b-68921ac189eb\",\"6429dddd-3c17-4420-af6a-70b0953cff28\",\"ad8e8fc6-d9c4-4ee5-bf9e-4eac23d9cd81\",\"b7a9a06d-f580-4c76-9e3e-fb9e63929b93\",\"bd9d7cd3-2e41-403a-8fff-d366b7339cb9\",\"8c8bcf43-3d52-4cfe-ae0f-28349b7dbc70\",\"a867b012-7c07-4910-8d66-0cda7a5d3583\",\"6f308674-d276-4117-af3c-5f86a25f6e2e\",\"83d2ab41-e1a3-4271-acd2-2a1cdc5e5597\",\"58a65aff-4c12-473e-b368-a0f0e8911ea4\",\"ce80d9af-7d56-49cc-9966-28f4a8bcd91a\",\"8a8bfd62-dd37-491e-93f5-89b0c0129d58\",\"b5a46970-9ff7-4faa-91f1-c3bbe3e84b2c\",\"c92a4e15-6bb3-4698-bfb2-d3fe8c15a956\",\"bbb8d47b-c657-4d70-8ae1-70b4b9b8622e\",\"32492333-078b-43e4-b856-544e716b0cc6\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-40.83198988796836,\"fts_score\":1.0,\"score\":0.9992000000000001,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":1.0,\"fts_score\":1.0,\"title_score\":0.4615,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":1.0,\"freshness_score\":0.5,\"final_relevance_score\":0.7692,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.7692,\"ranking_score\":0.9992000000000001,\"version_rank\":{\"version_year\":2023,\"deprecated\":false,\"family_key\":\"topic:合规管理办法\",\"family_newest_year\":2023,\"is_family_newest\":true}},{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"fe5c4213-b2a2-49fa-972a-f13862fec232\",\"knowledge_id\":\"0b5f5cf6-d4bc-42e9-afcf-73173c428a68\",\"passage_id\":\"4deed0be86707f3bb13e637bed762135\",\"title\":\"中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\",\"text\":\"【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\\n【章节】2.XXXX > 3.XXXX > 一、XXXXXXXX\\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\\n风险造成损失的，追究相关领导人员责任。\\n第六章 附则\\n第二十六条 本办法由区公司法律合规部负责解释。\\n第二十七条 本部分自印发之日起施行，过去规定与本办法\\n相悖的，以本办法为准。\\n附件：1.重要决策法律合规审核单（模板）\\n2.法律意见书（模板）\\n— 9 — 附件1\\n重要决策法律合规审核单（模板）\\n编号 中电信X法审﹝202X﹞XX号\\n申请单位\\n审核事项\\n所提交的文件\\n法律部门意见\\n初审法律人员： 电话： 时间：\\n法律部门领导：\\n备注：\\n— 10 — 附件2\\n关于XXXX的法律意见书\\nXXXXXX（部/中心/分公司）\\n贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\\nXXXX出具法律意见。\\n贵（部/中心/分公司）向我部提供的材料包括：\\n1.XXXX\\n2.XXXX\\n3.XXXX\\n我部根据上述材料及我国现行有效的相关法律、法规和规范\\n性文件，经分析研究，提出以下法律意见：\",\"document_family_id\":\"topic:印发中国电信广西公司重要决策法律合规审核管理办法\",\"version_year\":2025,\"section_path\":\"2.XXXX > 3.XXXX > 一、XXXXXXXX\",\"block_ids\":[\"fe5c4213-b2a2-49fa-972a-f13862fec232\",\"b2ada7fd-bae0-4480-aa19-b41b6913788e\",\"1a563d2b-0509-4b6c-83c0-8361de2b2600\",\"30d9794e-8364-4cde-9d6a-49f8b56daa40\",\"15ff7860-4398-4c78-bb8a-9fb8ea1a1255\",\"4b5d08a7-f2e3-435e-9a87-1187736abdc9\",\"85f15f23-351e-4029-b0f7-ae43032e3b2a\",\"66319ae3-8f75-4b7c-a979-ad9bea4e8a0c\",\"16669462-dae2-49e2-bca5-bf3f72c88b76\",\"6e2feb11-56fe-4b03-a546-a671bbc0bd85\",\"7121069b-c185-4f1b-9e80-c604d41a9717\",\"5987b782-c1fb-42c2-8c04-893abf8ebebe\",\"44b2fdaf-df26-4dfd-a363-d214c3184537\",\"aeb1226c-8512-49ff-917c-7c8fae71b5c1\",\"cc77b84b-9774-43af-8e24-36c41a11bb10\",\"af23fc74-c046-4d4a-a69d-8b18b8fdedd7\",\"c9f6309c-ebd5-4b8b-92a1-cfdf1787687d\",\"660d8dd9-3161-43e4-b6f6-6d1459084ec3\",\"2999f88f-6536-452f-a653-a6a399bc9de1\",\"519dbf60-f2a4-4f36-8d50-5348b3f5e641\",\"dd8c2569-23cb-44e7-81b0-8d0ec9d1f9f3\",\"43721ab6-bef2-4a33-8657-64a7aa64e600\",\"44014f26-07b9-4cff-ab9c-50c13253cfcc\",\"9820b821-9a5e-4ff2-b54a-880883b5b997\",\"c0e29307-991e-45cd-894c-f058007f71d1\",\"6934aeeb-2fb3-4b0d-86b9-d72a98286975\",\"af9c9d5a-8ce9-425c-a505-5bb8235fe0a5\",\"91f7f9e1-a1a9-4b80-8152-67cbc95dc0e3\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-30.63472318966335,\"fts_score\":1.0,\"score\":0.9047000000000001,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":0.5517,\"fts_score\":1.0,\"title_score\":0.5259,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":0.5517,\"freshness_score\":0.5,\"final_relevance_score\":0.5547,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.5547,\"ranking_score\":0.9047000000000001,\"version_rank\":{\"version_year\":2025,\"deprecated\":false,\"family_key\":\"topic:印发中国电信广西公司重要决策法律合规审核管理办法\",\"family_newest_year\":2025,\"is_family_newest\":true}},{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"34aea653-4781-4739-ad7c-579e179e9f62\",\"knowledge_id\":\"77ea3d15-7437-4d18-acbc-a48ba245630a\",\"passage_id\":\"c042ed35dfd7407bdf482d4ce12180b1\",\"title\":\"中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1\",\"text\":\"【文档】中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1\\n【章节】第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集\\n中电信桂〔2021〕335号\\n关于印发中国电信广西公司面向客户APP\\n收集使用个人信息合规管理办法的通知\\n各市分公司，各专业公司，区公司相关部门：\\n为深入贯彻党和国家有关网络和信息安全工作要求，进一步\\n落实政府监管部门对APP违法违规收集使用个人信息专项治理\\n的任务，推动建立长效工作机制，区公司制定了《中国电信广西\\n公司面向客户APP收集使用个人信息合规管理办法》，现印发你\\n们，请各单位按照本办法认真执行。\\n中国电信广西公司\\n2021年9月9日 维护账号(集团互联)\\n— 2 — 中国电信广西公司面向客户APP收集使用\\n个人信息合规管理办法\\n第一章 总 则\\n第一条 为推动和规范中国电信广西公司面向客户APP收集\\n使用个人信息合规工作，明确管理职责，强化监督检查，提高合\\n规管理工作质量，依据《网络安全法》、《个人信息保护法》等法\\n律法规和政府监管工作要求，以及国家互联网信息办公室、工业\\n和信息化部、公安部、市场监管总局（以下简称“四部委”）《APP\\n违法违规收集使用个人信息行为认定方法》，结合广西实际，特\\n制定本办法。\",\"document_family_id\":\"topic:合规管理办法\",\"version_year\":2021,\"section_path\":\"第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集\",\"block_ids\":[\"34aea653-4781-4739-ad7c-579e179e9f62\",\"f9249a58-f89c-4009-99a4-204c494dfbfc\",\"27fb867d-e548-48fc-8d19-f305b7a0abc8\",\"ab0be04d-36d8-4879-ba16-1107e0b49505\",\"4d775de5-db22-4528-a784-2b019216eb1d\",\"12581e24-511c-471a-98bb-8d8ff354927b\",\"25d13c4b-0aed-41b1-b107-1ced62a0b1ce\",\"4d433406-7491-40a6-949b-757ed94eaf42\",\"f6819ab2-79d3-403e-bbf3-7eada217429d\",\"ba866255-4f0e-4c4e-b12a-729bb2ccb700\",\"604beb91-fc7c-49e2-b8b9-c3fa6e159c7d\",\"ae57277e-a667-4b2a-a5b5-afff1036828e\",\"0a12b04d-cb21-4735-9f90-d01025ba130e\",\"a16352a9-d72d-4b4a-847e-f0ad5a942a7e\",\"13efca92-6763-447a-a4e9-d83fddd78b65\",\"39893892-e144-4545-8d16-7b072ef151c8\",\"70b4e881-5126-406b-b91e-5598fb93705b\",\"772ac6e8-9803-4dd9-9e3e-b23157289e9f\",\"9490909a-6131-477a-9f46-ea5f84eeb41e\",\"a54a13ec-7cd4-4752-bfe1-491dc4b1197b\",\"5d58ba1b-f03a-40ff-9784-c877c86a9318\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-14.763271144976231,\"fts_score\":1.0,\"score\":0.33000000000000007,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":0.4329,\"fts_score\":1.0,\"title_score\":0.4615,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":0.4138,\"freshness_score\":0.5,\"final_relevance_score\":0.55,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.55,\"ranking_score\":0.33000000000000007,\"version_rank\":{\"version_year\":2021,\"deprecated\":false,\"family_key\":\"topic:合规管理办法\",\"family_newest_year\":2023,\"is_family_newest\":false}}],\"meta\":{\"total_estimate\":3,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.7692,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3\",\"0b5f5cf6-d4bc-42e9-afcf-73173c428a68\",\"77ea3d15-7437-4d18-acbc-a48ba245630a\"],\"evidence_snapshot_id\":\"XmUVITYFTYpxoPZVPuWj3pAmCSrq_gap\",\"snapshot_fingerprint\":\"af83b418cc38b2383164a311\",\"accepted_passage_ids\":[\"1eb95044a22204ea1d006482cfe1585e\",\"4deed0be86707f3bb13e637bed762135\",\"c042ed35dfd7407bdf482d4ce12180b1\",\"bdea47ebf2575a5a1e0a097bf881106f\",\"149465a32d8ef1bf4a6e6293cc7abdc4\",\"f38d4e88e9371ceabe2566a6973e3166\",\"b0554250b5e311770232aa1e2fc6f2f3\",\"e3b29031240e5cb19e435882ac40270f\"],\"adjacent_unit\":\"passage\",\"adjacent_count\":5,\"adjacent_fallback_reason\":\"passage_index_neighbors\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+              "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+              "text": "【文档】中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9\n【章节】（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。\n动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)\n— 5 — 第十二条 区公司设立首席合规官，由总法律顾问兼任，对\n区公司主要负责人负责，领导合规管理部门组织开展相关工作。\n第十三条 各单位业务及职能部门是合规管理的第一道防\n线，承担合规管理主体责任，主要履行以下职责：\n（一）建立健全本专业条线业务合规管理制度和流程，开展\n合规风险识别评估，编制风险清单和应对预案。\n（二）定期梳理重点岗位合规风险，将合规要求纳入岗位职\n责。\n（三）定期梳理业务管理流程，将合规要求和管控措施嵌入\n关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。",
+              "document_family_id": "topic:合规管理办法",
+              "version_year": 2023,
+              "section_path": "（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。",
+              "block_ids": [
+                "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+                "b01fa907-e282-44a4-815e-edeece0d2e4b",
+                "10fe803f-bdc0-47db-907b-68921ac189eb",
+                "6429dddd-3c17-4420-af6a-70b0953cff28",
+                "ad8e8fc6-d9c4-4ee5-bf9e-4eac23d9cd81",
+                "b7a9a06d-f580-4c76-9e3e-fb9e63929b93",
+                "bd9d7cd3-2e41-403a-8fff-d366b7339cb9",
+                "8c8bcf43-3d52-4cfe-ae0f-28349b7dbc70",
+                "a867b012-7c07-4910-8d66-0cda7a5d3583",
+                "6f308674-d276-4117-af3c-5f86a25f6e2e",
+                "83d2ab41-e1a3-4271-acd2-2a1cdc5e5597",
+                "58a65aff-4c12-473e-b368-a0f0e8911ea4",
+                "ce80d9af-7d56-49cc-9966-28f4a8bcd91a",
+                "8a8bfd62-dd37-491e-93f5-89b0c0129d58",
+                "b5a46970-9ff7-4faa-91f1-c3bbe3e84b2c",
+                "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+                "bbb8d47b-c657-4d70-8ae1-70b4b9b8622e",
+                "32492333-078b-43e4-b856-544e716b0cc6"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -40.83198988796836,
+              "fts_score": 1.0,
+              "score": 0.9992000000000001,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 1.0,
+                "fts_score": 1.0,
+                "title_score": 0.4615,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 1.0,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.7692,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.7692,
+              "ranking_score": 0.9992000000000001,
+              "version_rank": {
+                "version_year": 2023,
+                "deprecated": false,
+                "family_key": "topic:合规管理办法",
+                "family_newest_year": 2023,
+                "is_family_newest": true
+              }
+            },
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "fe5c4213-b2a2-49fa-972a-f13862fec232",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "passage_id": "4deed0be86707f3bb13e637bed762135",
+              "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】2.XXXX > 3.XXXX > 一、XXXXXXXX\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。\n第二十七条 本部分自印发之日起施行，过去规定与本办法\n相悖的，以本办法为准。\n附件：1.重要决策法律合规审核单（模板）\n2.法律意见书（模板）\n— 9 — 附件1\n重要决策法律合规审核单（模板）\n编号 中电信X法审﹝202X﹞XX号\n申请单位\n审核事项\n所提交的文件\n法律部门意见\n初审法律人员： 电话： 时间：\n法律部门领导：\n备注：\n— 10 — 附件2\n关于XXXX的法律意见书\nXXXXXX（部/中心/分公司）\n贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\nXXXX出具法律意见。\n贵（部/中心/分公司）向我部提供的材料包括：\n1.XXXX\n2.XXXX\n3.XXXX\n我部根据上述材料及我国现行有效的相关法律、法规和规范\n性文件，经分析研究，提出以下法律意见：",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "version_year": 2025,
+              "section_path": "2.XXXX > 3.XXXX > 一、XXXXXXXX",
+              "block_ids": [
+                "fe5c4213-b2a2-49fa-972a-f13862fec232",
+                "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+                "1a563d2b-0509-4b6c-83c0-8361de2b2600",
+                "30d9794e-8364-4cde-9d6a-49f8b56daa40",
+                "15ff7860-4398-4c78-bb8a-9fb8ea1a1255",
+                "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+                "85f15f23-351e-4029-b0f7-ae43032e3b2a",
+                "66319ae3-8f75-4b7c-a979-ad9bea4e8a0c",
+                "16669462-dae2-49e2-bca5-bf3f72c88b76",
+                "6e2feb11-56fe-4b03-a546-a671bbc0bd85",
+                "7121069b-c185-4f1b-9e80-c604d41a9717",
+                "5987b782-c1fb-42c2-8c04-893abf8ebebe",
+                "44b2fdaf-df26-4dfd-a363-d214c3184537",
+                "aeb1226c-8512-49ff-917c-7c8fae71b5c1",
+                "cc77b84b-9774-43af-8e24-36c41a11bb10",
+                "af23fc74-c046-4d4a-a69d-8b18b8fdedd7",
+                "c9f6309c-ebd5-4b8b-92a1-cfdf1787687d",
+                "660d8dd9-3161-43e4-b6f6-6d1459084ec3",
+                "2999f88f-6536-452f-a653-a6a399bc9de1",
+                "519dbf60-f2a4-4f36-8d50-5348b3f5e641",
+                "dd8c2569-23cb-44e7-81b0-8d0ec9d1f9f3",
+                "43721ab6-bef2-4a33-8657-64a7aa64e600",
+                "44014f26-07b9-4cff-ab9c-50c13253cfcc",
+                "9820b821-9a5e-4ff2-b54a-880883b5b997",
+                "c0e29307-991e-45cd-894c-f058007f71d1",
+                "6934aeeb-2fb3-4b0d-86b9-d72a98286975",
+                "af9c9d5a-8ce9-425c-a505-5bb8235fe0a5",
+                "91f7f9e1-a1a9-4b80-8152-67cbc95dc0e3"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -30.63472318966335,
+              "fts_score": 1.0,
+              "score": 0.9047000000000001,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 0.5517,
+                "fts_score": 1.0,
+                "title_score": 0.5259,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 0.5517,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.5547,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.5547,
+              "ranking_score": 0.9047000000000001,
+              "version_rank": {
+                "version_year": 2025,
+                "deprecated": false,
+                "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+                "family_newest_year": 2025,
+                "is_family_newest": true
+              }
+            },
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "34aea653-4781-4739-ad7c-579e179e9f62",
+              "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+              "passage_id": "c042ed35dfd7407bdf482d4ce12180b1",
+              "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+              "text": "【文档】中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1\n【章节】第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集\n中电信桂〔2021〕335号\n关于印发中国电信广西公司面向客户APP\n收集使用个人信息合规管理办法的通知\n各市分公司，各专业公司，区公司相关部门：\n为深入贯彻党和国家有关网络和信息安全工作要求，进一步\n落实政府监管部门对APP违法违规收集使用个人信息专项治理\n的任务，推动建立长效工作机制，区公司制定了《中国电信广西\n公司面向客户APP收集使用个人信息合规管理办法》，现印发你\n们，请各单位按照本办法认真执行。\n中国电信广西公司\n2021年9月9日 维护账号(集团互联)\n— 2 — 中国电信广西公司面向客户APP收集使用\n个人信息合规管理办法\n第一章 总 则\n第一条 为推动和规范中国电信广西公司面向客户APP收集\n使用个人信息合规工作，明确管理职责，强化监督检查，提高合\n规管理工作质量，依据《网络安全法》、《个人信息保护法》等法\n律法规和政府监管工作要求，以及国家互联网信息办公室、工业\n和信息化部、公安部、市场监管总局（以下简称“四部委”）《APP\n违法违规收集使用个人信息行为认定方法》，结合广西实际，特\n制定本办法。",
+              "document_family_id": "topic:合规管理办法",
+              "version_year": 2021,
+              "section_path": "第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集",
+              "block_ids": [
+                "34aea653-4781-4739-ad7c-579e179e9f62",
+                "f9249a58-f89c-4009-99a4-204c494dfbfc",
+                "27fb867d-e548-48fc-8d19-f305b7a0abc8",
+                "ab0be04d-36d8-4879-ba16-1107e0b49505",
+                "4d775de5-db22-4528-a784-2b019216eb1d",
+                "12581e24-511c-471a-98bb-8d8ff354927b",
+                "25d13c4b-0aed-41b1-b107-1ced62a0b1ce",
+                "4d433406-7491-40a6-949b-757ed94eaf42",
+                "f6819ab2-79d3-403e-bbf3-7eada217429d",
+                "ba866255-4f0e-4c4e-b12a-729bb2ccb700",
+                "604beb91-fc7c-49e2-b8b9-c3fa6e159c7d",
+                "ae57277e-a667-4b2a-a5b5-afff1036828e",
+                "0a12b04d-cb21-4735-9f90-d01025ba130e",
+                "a16352a9-d72d-4b4a-847e-f0ad5a942a7e",
+                "13efca92-6763-447a-a4e9-d83fddd78b65",
+                "39893892-e144-4545-8d16-7b072ef151c8",
+                "70b4e881-5126-406b-b91e-5598fb93705b",
+                "772ac6e8-9803-4dd9-9e3e-b23157289e9f",
+                "9490909a-6131-477a-9f46-ea5f84eeb41e",
+                "a54a13ec-7cd4-4752-bfe1-491dc4b1197b",
+                "5d58ba1b-f03a-40ff-9784-c877c86a9318"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -14.763271144976231,
+              "fts_score": 1.0,
+              "score": 0.33000000000000007,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 0.4329,
+                "fts_score": 1.0,
+                "title_score": 0.4615,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 0.4138,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.55,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.55,
+              "ranking_score": 0.33000000000000007,
+              "version_rank": {
+                "version_year": 2021,
+                "deprecated": false,
+                "family_key": "topic:合规管理办法",
+                "family_newest_year": 2023,
+                "is_family_newest": false
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 3,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.7692,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "77ea3d15-7437-4d18-acbc-a48ba245630a"
+            ],
+            "evidence_snapshot_id": "XmUVITYFTYpxoPZVPuWj3pAmCSrq_gap",
+            "snapshot_fingerprint": "af83b418cc38b2383164a311",
+            "accepted_passage_ids": [
+              "1eb95044a22204ea1d006482cfe1585e",
+              "4deed0be86707f3bb13e637bed762135",
+              "c042ed35dfd7407bdf482d4ce12180b1",
+              "bdea47ebf2575a5a1e0a097bf881106f",
+              "149465a32d8ef1bf4a6e6293cc7abdc4",
+              "f38d4e88e9371ceabe2566a6973e3166",
+              "b0554250b5e311770232aa1e2fc6f2f3",
+              "e3b29031240e5cb19e435882ac40270f"
+            ],
+            "adjacent_unit": "passage",
+            "adjacent_count": 5,
+            "adjacent_fallback_reason": "passage_index_neighbors"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-005",
+    "label": "baseline",
+    "query": "合规管理办法 首席合规官 总法律顾问",
+    "expected_knowledge_ids": [
+      "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+    ],
+    "top_ids": [
+      "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+      "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "77ea3d15-7437-4d18-acbc-a48ba245630a"
+    ],
+    "top1_ok": true,
+    "recall5_ok": true,
+    "search_ms": 42824.02,
+    "n_results": 3,
+    "snapshot_fingerprint": null
+  }
+}

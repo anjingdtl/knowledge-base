@@ -1,0 +1,1762 @@
+{
+  "case": {
+    "case_id": "KB-005",
+    "category": "精确关键词",
+    "query": "合规管理办法 首席合规官 总法律顾问",
+    "expected_knowledge_ids": [
+      "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+    ],
+    "expected_title_keywords": [
+      "合规",
+      "2023"
+    ],
+    "required_facts": [
+      "首席合规官",
+      "总法律顾问"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2023〕299号第十二条"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+          "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+          "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+          "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+          "text": "【文档】中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9\n【章节】（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。\n动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)\n— 5 — 第十二条 区公司设立首席合规官，由总法律顾问兼任，对\n区公司主要负责人负责，领导合规管理部门组织开展相关工作。\n第十三条 各单位业务及职能部门是合规管理的第一道防\n线，承担合规管理主体责任，主要履行以下职责：\n（一）建立健全本专业条线业务合规管理制度和流程，开展\n合规风险识别评估，编制风险清单和应对预案。\n（二）定期梳理重点岗位合规风险，将合规要求纳入岗位职\n责。\n（三）定期梳理业务管理流程，将合规要求和管控措施嵌入\n关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。",
+          "document_family_id": "topic:合规管理办法",
+          "version_year": 2023,
+          "section_path": "（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。",
+          "block_ids": [
+            "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+            "b01fa907-e282-44a4-815e-edeece0d2e4b",
+            "10fe803f-bdc0-47db-907b-68921ac189eb",
+            "6429dddd-3c17-4420-af6a-70b0953cff28",
+            "ad8e8fc6-d9c4-4ee5-bf9e-4eac23d9cd81",
+            "b7a9a06d-f580-4c76-9e3e-fb9e63929b93",
+            "bd9d7cd3-2e41-403a-8fff-d366b7339cb9",
+            "8c8bcf43-3d52-4cfe-ae0f-28349b7dbc70",
+            "a867b012-7c07-4910-8d66-0cda7a5d3583",
+            "6f308674-d276-4117-af3c-5f86a25f6e2e",
+            "83d2ab41-e1a3-4271-acd2-2a1cdc5e5597",
+            "58a65aff-4c12-473e-b368-a0f0e8911ea4",
+            "ce80d9af-7d56-49cc-9966-28f4a8bcd91a",
+            "8a8bfd62-dd37-491e-93f5-89b0c0129d58",
+            "b5a46970-9ff7-4faa-91f1-c3bbe3e84b2c",
+            "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+            "bbb8d47b-c657-4d70-8ae1-70b4b9b8622e",
+            "32492333-078b-43e4-b856-544e716b0cc6"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -40.83198988796836,
+          "fts_score": 1.0,
+          "score": 0.9992000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 1.0,
+            "fts_score": 1.0,
+            "title_score": 0.4615,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 1.0,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7692,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7692,
+          "ranking_score": 0.9992000000000001,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:合规管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "fe5c4213-b2a2-49fa-972a-f13862fec232",
+          "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "passage_id": "4deed0be86707f3bb13e637bed762135",
+          "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+          "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】2.XXXX > 3.XXXX > 一、XXXXXXXX\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。\n第二十七条 本部分自印发之日起施行，过去规定与本办法\n相悖的，以本办法为准。\n附件：1.重要决策法律合规审核单（模板）\n2.法律意见书（模板）\n— 9 — 附件1\n重要决策法律合规审核单（模板）\n编号 中电信X法审﹝202X﹞XX号\n申请单位\n审核事项\n所提交的文件\n法律部门意见\n初审法律人员： 电话： 时间：\n法律部门领导：\n备注：\n— 10 — 附件2\n关于XXXX的法律意见书\nXXXXXX（部/中心/分公司）\n贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\nXXXX出具法律意见。\n贵（部/中心/分公司）向我部提供的材料包括：\n1.XXXX\n2.XXXX\n3.XXXX\n我部根据上述材料及我国现行有效的相关法律、法规和规范\n性文件，经分析研究，提出以下法律意见：",
+          "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+          "version_year": 2025,
+          "section_path": "2.XXXX > 3.XXXX > 一、XXXXXXXX",
+          "block_ids": [
+            "fe5c4213-b2a2-49fa-972a-f13862fec232",
+            "b2ada7fd-bae0-4480-aa19-b41b6913788e",
+            "1a563d2b-0509-4b6c-83c0-8361de2b2600",
+            "30d9794e-8364-4cde-9d6a-49f8b56daa40",
+            "15ff7860-4398-4c78-bb8a-9fb8ea1a1255",
+            "4b5d08a7-f2e3-435e-9a87-1187736abdc9",
+            "85f15f23-351e-4029-b0f7-ae43032e3b2a",
+            "66319ae3-8f75-4b7c-a979-ad9bea4e8a0c",
+            "16669462-dae2-49e2-bca5-bf3f72c88b76",
+            "6e2feb11-56fe-4b03-a546-a671bbc0bd85",
+            "7121069b-c185-4f1b-9e80-c604d41a9717",
+            "5987b782-c1fb-42c2-8c04-893abf8ebebe",
+            "44b2fdaf-df26-4dfd-a363-d214c3184537",
+            "aeb1226c-8512-49ff-917c-7c8fae71b5c1",
+            "cc77b84b-9774-43af-8e24-36c41a11bb10",
+            "af23fc74-c046-4d4a-a69d-8b18b8fdedd7",
+            "c9f6309c-ebd5-4b8b-92a1-cfdf1787687d",
+            "660d8dd9-3161-43e4-b6f6-6d1459084ec3",
+            "2999f88f-6536-452f-a653-a6a399bc9de1",
+            "519dbf60-f2a4-4f36-8d50-5348b3f5e641",
+            "dd8c2569-23cb-44e7-81b0-8d0ec9d1f9f3",
+            "43721ab6-bef2-4a33-8657-64a7aa64e600",
+            "44014f26-07b9-4cff-ab9c-50c13253cfcc",
+            "9820b821-9a5e-4ff2-b54a-880883b5b997",
+            "c0e29307-991e-45cd-894c-f058007f71d1",
+            "6934aeeb-2fb3-4b0d-86b9-d72a98286975",
+            "af9c9d5a-8ce9-425c-a505-5bb8235fe0a5",
+            "91f7f9e1-a1a9-4b80-8152-67cbc95dc0e3"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -30.63472318966335,
+          "fts_score": 1.0,
+          "score": 0.9047000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5517,
+            "fts_score": 1.0,
+            "title_score": 0.5259,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5517,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5547,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5547,
+          "ranking_score": 0.9047000000000001,
+          "version_rank": {
+            "version_year": 2025,
+            "deprecated": false,
+            "family_key": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+            "family_newest_year": 2025,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "34aea653-4781-4739-ad7c-579e179e9f62",
+          "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+          "passage_id": "c042ed35dfd7407bdf482d4ce12180b1",
+          "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+          "text": "【文档】中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1\n【章节】第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集\n中电信桂〔2021〕335号\n关于印发中国电信广西公司面向客户APP\n收集使用个人信息合规管理办法的通知\n各市分公司，各专业公司，区公司相关部门：\n为深入贯彻党和国家有关网络和信息安全工作要求，进一步\n落实政府监管部门对APP违法违规收集使用个人信息专项治理\n的任务，推动建立长效工作机制，区公司制定了《中国电信广西\n公司面向客户APP收集使用个人信息合规管理办法》，现印发你\n们，请各单位按照本办法认真执行。\n中国电信广西公司\n2021年9月9日 维护账号(集团互联)\n— 2 — 中国电信广西公司面向客户APP收集使用\n个人信息合规管理办法\n第一章 总 则\n第一条 为推动和规范中国电信广西公司面向客户APP收集\n使用个人信息合规工作，明确管理职责，强化监督检查，提高合\n规管理工作质量，依据《网络安全法》、《个人信息保护法》等法\n律法规和政府监管工作要求，以及国家互联网信息办公室、工业\n和信息化部、公安部、市场监管总局（以下简称“四部委”）《APP\n违法违规收集使用个人信息行为认定方法》，结合广西实际，特\n制定本办法。",
+          "document_family_id": "topic:合规管理办法",
+          "version_year": 2021,
+          "section_path": "第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集",
+          "block_ids": [
+            "34aea653-4781-4739-ad7c-579e179e9f62",
+            "f9249a58-f89c-4009-99a4-204c494dfbfc",
+            "27fb867d-e548-48fc-8d19-f305b7a0abc8",
+            "ab0be04d-36d8-4879-ba16-1107e0b49505",
+            "4d775de5-db22-4528-a784-2b019216eb1d",
+            "12581e24-511c-471a-98bb-8d8ff354927b",
+            "25d13c4b-0aed-41b1-b107-1ced62a0b1ce",
+            "4d433406-7491-40a6-949b-757ed94eaf42",
+            "f6819ab2-79d3-403e-bbf3-7eada217429d",
+            "ba866255-4f0e-4c4e-b12a-729bb2ccb700",
+            "604beb91-fc7c-49e2-b8b9-c3fa6e159c7d",
+            "ae57277e-a667-4b2a-a5b5-afff1036828e",
+            "0a12b04d-cb21-4735-9f90-d01025ba130e",
+            "a16352a9-d72d-4b4a-847e-f0ad5a942a7e",
+            "13efca92-6763-447a-a4e9-d83fddd78b65",
+            "39893892-e144-4545-8d16-7b072ef151c8",
+            "70b4e881-5126-406b-b91e-5598fb93705b",
+            "772ac6e8-9803-4dd9-9e3e-b23157289e9f",
+            "9490909a-6131-477a-9f46-ea5f84eeb41e",
+            "a54a13ec-7cd4-4752-bfe1-491dc4b1197b",
+            "5d58ba1b-f03a-40ff-9784-c877c86a9318"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -14.763271144976231,
+          "fts_score": 1.0,
+          "score": 0.33000000000000007,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4329,
+            "fts_score": 1.0,
+            "title_score": 0.4615,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4138,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.33000000000000007,
+          "version_rank": {
+            "version_year": 2021,
+            "deprecated": false,
+            "family_key": "topic:合规管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": false
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 3,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7692,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+          "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+          "77ea3d15-7437-4d18-acbc-a48ba245630a"
+        ],
+        "evidence_snapshot_id": "JTnpYr8_9ye4CMqtZ7u2-1mvsiqkA6yj",
+        "snapshot_fingerprint": "af83b418cc38b2383164a311",
+        "accepted_passage_ids": [
+          "1eb95044a22204ea1d006482cfe1585e",
+          "4deed0be86707f3bb13e637bed762135",
+          "c042ed35dfd7407bdf482d4ce12180b1",
+          "bdea47ebf2575a5a1e0a097bf881106f",
+          "149465a32d8ef1bf4a6e6293cc7abdc4",
+          "f38d4e88e9371ceabe2566a6973e3166",
+          "b0554250b5e311770232aa1e2fc6f2f3",
+          "e3b29031240e5cb19e435882ac40270f"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 5,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 46153.24
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 吴先萍(企业发展部（法律部）)—5—第十二条区公司设立首席合规官，由总法律顾问兼任，对区公司主要负责人负责，领导合规管理部门组织开展相关工作\n- 负责本专业条线经营管理行为的合规审查\n- 负责规章制度、经济合同、重大决策合规审查",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+            "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+            "block_id": "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+            "block_ids": [
+              "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+              "b01fa907-e282-44a4-815e-edeece0d2e4b",
+              "10fe803f-bdc0-47db-907b-68921ac189eb",
+              "6429dddd-3c17-4420-af6a-70b0953cff28",
+              "ad8e8fc6-d9c4-4ee5-bf9e-4eac23d9cd81",
+              "b7a9a06d-f580-4c76-9e3e-fb9e63929b93",
+              "bd9d7cd3-2e41-403a-8fff-d366b7339cb9",
+              "8c8bcf43-3d52-4cfe-ae0f-28349b7dbc70",
+              "a867b012-7c07-4910-8d66-0cda7a5d3583",
+              "6f308674-d276-4117-af3c-5f86a25f6e2e",
+              "83d2ab41-e1a3-4271-acd2-2a1cdc5e5597",
+              "58a65aff-4c12-473e-b368-a0f0e8911ea4",
+              "ce80d9af-7d56-49cc-9966-28f4a8bcd91a",
+              "8a8bfd62-dd37-491e-93f5-89b0c0129d58",
+              "b5a46970-9ff7-4faa-91f1-c3bbe3e84b2c",
+              "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+              "bbb8d47b-c657-4d70-8ae1-70b4b9b8622e",
+              "32492333-078b-43e4-b856-544e716b0cc6"
+            ],
+            "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+            "text": "动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)\n— 5 — 第十二条 区公司设立首席合规官，由总法律顾问兼任，对\n区公司主要负责人负责，领导合规管理部门组织开展相关工作。\n第十三条 各单位业务及职能部门是合规管理的第一道防\n线，承担合规管理主体责任，主要履行以下职责：\n（一）建立健全本专业条线业务合规管理制度和流程，开展\n合规风险识别评估，编制风险清单和应对预案。\n（二）定期梳理重点岗位合规风险，将合规要求纳入岗位职\n责。\n（三）定期梳理业务管理流程，将合规要求和管控措施嵌入\n关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。",
+            "score": 0.9992000000000001,
+            "document_family_id": "topic:合规管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+            "passage_id": "149465a32d8ef1bf4a6e6293cc7abdc4",
+            "block_id": "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+            "block_ids": [
+              "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+              "bbb8d47b-c657-4d70-8ae1-70b4b9b8622e",
+              "32492333-078b-43e4-b856-544e716b0cc6",
+              "b71c17f4-02d2-4a6d-9c2b-e3429bc57f7e",
+              "a06014f5-8215-4553-9c1f-f179ae2f5356",
+              "dbcb9592-19d4-4092-9791-266625a5440a",
+              "3eb82365-1062-4980-aea8-72dc99fc8187",
+              "cb4fce62-16ad-465d-93b5-86c92eaf746c",
+              "4e82ba80-1805-4b5d-ae5b-0b57e00aef6e",
+              "d68eeef9-aad7-4971-9357-22f844c788a0",
+              "76f9932b-705d-49bc-bce4-a47c6ea1b989",
+              "ccf437fc-52a8-4da3-95b9-791f1d5b1084",
+              "6441b3bb-6b37-49a9-bf22-45c8c52cab46",
+              "c19e62a2-ff93-4377-a6d3-a96b69007858",
+              "d7a910e5-e77b-4489-994e-45140c3d37d4",
+              "cdd2d676-35fb-432a-9960-bf8579df66c0",
+              "b1987078-3f40-450e-9ef9-2cf0788d41bd"
+            ],
+            "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+            "text": "关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。\n第十四条 各单位法律部门是合规管理的第二道防线，牵头\n负责本单位合规管理工作，主要履行以下职责：\n（一）组织起草合规管理基本制度、具体制度、年度计划和\n工作报告等。\n（二）负责规章制度、经济合同、重大决策合规审查。\n（三）组织开展合规风险识别、预警和应对处置，以及合规\n管理体系有效性评价。 吴先萍(企业发展部（法律部）)\n— 6 —（四）受理职责范围内的违规举报，提出分类处置意见，组\n织或者参与对违规行为的调查。\n（五）组织或者协助业务及职能部门开展合规培训，受理合\n规咨询，推进合规管理信息化建设。\n第十五条 各单位纪检机构和审计、巡察等部门是合规管理\n的第三道防线，依据有关规定，在职权范围内对合规要求落实情\n况进行监督，对违规行为进行调查，按照规定开展责任追究。",
+            "score": 0.0,
+            "document_family_id": "topic:合规管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+            "passage_id": "bdea47ebf2575a5a1e0a097bf881106f",
+            "block_id": "4018f014-3fc1-4900-86f4-349fc68ae583",
+            "block_ids": [
+              "4018f014-3fc1-4900-86f4-349fc68ae583",
+              "1cebbfd4-7d9f-4eee-80ff-f3980c53c296",
+              "39ab9026-d94c-47b9-9bf0-820df03718c7",
+              "ba312f43-95fd-46d0-897a-3665f6acd43c",
+              "232a0483-589d-40eb-ac40-f59524170b0e",
+              "bba835c2-4127-40cd-a420-c7055ea6f101",
+              "d0c91a37-d596-4286-b6b9-bd3ff3ea9fdd",
+              "a694f95e-449e-47b2-b249-35e55ebc9134",
+              "cd45a055-ee20-41df-9795-02624508be29",
+              "56d446a0-57a7-46ab-9808-8d22942ab85e",
+              "0d9ddfc8-031b-426c-9c19-b04f0e9cdd26",
+              "795dcfeb-ade6-4563-8072-c5b772210ad1",
+              "8f2d2b18-a410-4dfc-a548-fb7a1dc16d33",
+              "99e83e3a-1719-482b-9917-4c1e94dc997c",
+              "ba87a7d1-817a-4bc0-892f-fb8c73b47893",
+              "fa086e9e-79b2-4d12-b67d-37662e20b618",
+              "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+              "b01fa907-e282-44a4-815e-edeece0d2e4b",
+              "10fe803f-bdc0-47db-907b-68921ac189eb"
+            ],
+            "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+            "text": "— 4 —第八条 各单位党委发挥把方向、管大局、保落实的领导作\n用，推动合规要求得到严格遵循和落实，不断提升依法合规经营\n管理水平。\n各单位应当严格遵守党内法规制度，党建工作机构在党委领\n导下，按照有关规定履行相应职责，推动相关党内法规制度有效\n贯彻落实。\n第九条 各单位经理层（或总经理办公会）主要履行以下职\n责：\n（一）审议批准本单位合规管理制度、体系建设方案、年度\n计划和工作报告等。\n（二）研究决定本单位合规管理重大事项。\n（三）推动完善本单位合规管理体系并对其有效性进行评\n价。\n（四）决定本单位合规管理部门设置及职责。\n（五）组织应对本单位重大合规风险事件。\n（六）指导监督本单位各部门和所属单位合规管理工作。\n第十条 各单位主要负责人作为本单位推进法治建设第一\n责任人，应当切实履行本单位依法合规经营管理重要组织者、推\n动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)",
+            "score": 0.0,
+            "document_family_id": "topic:合规管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "吴先萍(企业发展部（法律部）)—5—第十二条区公司设立首席合规官，由总法律顾问兼任，对区公司主要负责人负责，领导合规管理部门组织开展相关工作",
+            "evidence_passage_ids": [
+              "1eb95044a22204ea1d006482cfe1585e"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "fff34bdfb40746cedb711277"
+          },
+          {
+            "text": "负责本专业条线经营管理行为的合规审查",
+            "evidence_passage_ids": [
+              "1eb95044a22204ea1d006482cfe1585e"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "ae4b50c927603bf81752d7b3"
+          },
+          {
+            "text": "负责本专业条线经营管理行为的合规审查",
+            "evidence_passage_ids": [
+              "149465a32d8ef1bf4a6e6293cc7abdc4"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "fae345abb1052ea81b7e94e6"
+          },
+          {
+            "text": "负责规章制度、经济合同、重大决策合规审查",
+            "evidence_passage_ids": [
+              "149465a32d8ef1bf4a6e6293cc7abdc4"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "f7f7bbf6b647cab72c3e62fc"
+          },
+          {
+            "text": "第十条各单位主要负责人作为本单位推进法治建设第一责任人，应当切实履行本单位依法合规经营管理重要组织者、推动者和实践者的职责，积极推进合规管理各项工作",
+            "evidence_passage_ids": [
+              "bdea47ebf2575a5a1e0a097bf881106f"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "a886989c563360e29e292586"
+          },
+          {
+            "text": "第十四条各单位法律部门是合规管理的第二道防线，牵头负责本单位合规管理工作，主要履行以下职责：",
+            "evidence_passage_ids": [
+              "149465a32d8ef1bf4a6e6293cc7abdc4"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "931bad96e0e075a3164cf979"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+            "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+            "block_id": "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+            "block_ids": [
+              "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+              "b01fa907-e282-44a4-815e-edeece0d2e4b",
+              "10fe803f-bdc0-47db-907b-68921ac189eb",
+              "6429dddd-3c17-4420-af6a-70b0953cff28",
+              "ad8e8fc6-d9c4-4ee5-bf9e-4eac23d9cd81",
+              "b7a9a06d-f580-4c76-9e3e-fb9e63929b93",
+              "bd9d7cd3-2e41-403a-8fff-d366b7339cb9",
+              "8c8bcf43-3d52-4cfe-ae0f-28349b7dbc70",
+              "a867b012-7c07-4910-8d66-0cda7a5d3583",
+              "6f308674-d276-4117-af3c-5f86a25f6e2e",
+              "83d2ab41-e1a3-4271-acd2-2a1cdc5e5597",
+              "58a65aff-4c12-473e-b368-a0f0e8911ea4",
+              "ce80d9af-7d56-49cc-9966-28f4a8bcd91a",
+              "8a8bfd62-dd37-491e-93f5-89b0c0129d58",
+              "b5a46970-9ff7-4faa-91f1-c3bbe3e84b2c",
+              "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+              "bbb8d47b-c657-4d70-8ae1-70b4b9b8622e",
+              "32492333-078b-43e4-b856-544e716b0cc6"
+            ],
+            "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+            "path": "",
+            "text": "动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)\n— 5 — 第十二条 区公司设立首席合规官，由总法律顾问兼任，对\n区公司主要负责人负责，领导合规管理部门组织开展相关工作。\n第十三条 各单位业务及职能部门是合规管理的第一道防\n线，承担合规管理主体责任，主要履行以下职责：\n（一）建立健全本专业条线业务合规管理制度和流程，开展\n合规风险识别评估，编制风险清单和应对预案。\n（二）定期梳理重点岗位合规风险，将合规要求纳入岗位职\n责。\n（三）定期梳理业务管理流程，将合规要求和管控措施嵌入\n关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。",
+            "body_text": "动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)\n— 5 — 第十二条 区公司设立首席合规官，由总法律顾问兼任，对\n区公司主要负责人负责，领导合规管理部门组织开展相关工作。\n第十三条 各单位业务及职能部门是合规管理的第一道防\n线，承担合规管理主体责任，主要履行以下职责：\n（一）建立健全本专业条线业务合规管理制度和流程，开展\n合规风险识别评估，编制风险清单和应对预案。\n（二）定期梳理重点岗位合规风险，将合规要求纳入岗位职\n责。\n（三）定期梳理业务管理流程，将合规要求和管控措施嵌入\n关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。",
+            "score": 0.9992000000000001,
+            "document_family_id": "topic:合规管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+            "passage_id": "149465a32d8ef1bf4a6e6293cc7abdc4",
+            "block_id": "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+            "block_ids": [
+              "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+              "bbb8d47b-c657-4d70-8ae1-70b4b9b8622e",
+              "32492333-078b-43e4-b856-544e716b0cc6",
+              "b71c17f4-02d2-4a6d-9c2b-e3429bc57f7e",
+              "a06014f5-8215-4553-9c1f-f179ae2f5356",
+              "dbcb9592-19d4-4092-9791-266625a5440a",
+              "3eb82365-1062-4980-aea8-72dc99fc8187",
+              "cb4fce62-16ad-465d-93b5-86c92eaf746c",
+              "4e82ba80-1805-4b5d-ae5b-0b57e00aef6e",
+              "d68eeef9-aad7-4971-9357-22f844c788a0",
+              "76f9932b-705d-49bc-bce4-a47c6ea1b989",
+              "ccf437fc-52a8-4da3-95b9-791f1d5b1084",
+              "6441b3bb-6b37-49a9-bf22-45c8c52cab46",
+              "c19e62a2-ff93-4377-a6d3-a96b69007858",
+              "d7a910e5-e77b-4489-994e-45140c3d37d4",
+              "cdd2d676-35fb-432a-9960-bf8579df66c0",
+              "b1987078-3f40-450e-9ef9-2cf0788d41bd"
+            ],
+            "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+            "path": "",
+            "text": "关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。\n第十四条 各单位法律部门是合规管理的第二道防线，牵头\n负责本单位合规管理工作，主要履行以下职责：\n（一）组织起草合规管理基本制度、具体制度、年度计划和\n工作报告等。\n（二）负责规章制度、经济合同、重大决策合规审查。\n（三）组织开展合规风险识别、预警和应对处置，以及合规\n管理体系有效性评价。 吴先萍(企业发展部（法律部）)\n— 6 —（四）受理职责范围内的违规举报，提出分类处置意见，组\n织或者参与对违规行为的调查。\n（五）组织或者协助业务及职能部门开展合规培训，受理合\n规咨询，推进合规管理信息化建设。\n第十五条 各单位纪检机构和审计、巡察等部门是合规管理\n的第三道防线，依据有关规定，在职权范围内对合规要求落实情\n况进行监督，对违规行为进行调查，按照规定开展责任追究。",
+            "body_text": "关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。\n第十四条 各单位法律部门是合规管理的第二道防线，牵头\n负责本单位合规管理工作，主要履行以下职责：\n（一）组织起草合规管理基本制度、具体制度、年度计划和\n工作报告等。\n（二）负责规章制度、经济合同、重大决策合规审查。\n（三）组织开展合规风险识别、预警和应对处置，以及合规\n管理体系有效性评价。 吴先萍(企业发展部（法律部）)\n— 6 —（四）受理职责范围内的违规举报，提出分类处置意见，组\n织或者参与对违规行为的调查。\n（五）组织或者协助业务及职能部门开展合规培训，受理合\n规咨询，推进合规管理信息化建设。\n第十五条 各单位纪检机构和审计、巡察等部门是合规管理\n的第三道防线，依据有关规定，在职权范围内对合规要求落实情\n况进行监督，对违规行为进行调查，按照规定开展责任追究。",
+            "score": 0.0,
+            "document_family_id": "topic:合规管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+            "passage_id": "bdea47ebf2575a5a1e0a097bf881106f",
+            "block_id": "4018f014-3fc1-4900-86f4-349fc68ae583",
+            "block_ids": [
+              "4018f014-3fc1-4900-86f4-349fc68ae583",
+              "1cebbfd4-7d9f-4eee-80ff-f3980c53c296",
+              "39ab9026-d94c-47b9-9bf0-820df03718c7",
+              "ba312f43-95fd-46d0-897a-3665f6acd43c",
+              "232a0483-589d-40eb-ac40-f59524170b0e",
+              "bba835c2-4127-40cd-a420-c7055ea6f101",
+              "d0c91a37-d596-4286-b6b9-bd3ff3ea9fdd",
+              "a694f95e-449e-47b2-b249-35e55ebc9134",
+              "cd45a055-ee20-41df-9795-02624508be29",
+              "56d446a0-57a7-46ab-9808-8d22942ab85e",
+              "0d9ddfc8-031b-426c-9c19-b04f0e9cdd26",
+              "795dcfeb-ade6-4563-8072-c5b772210ad1",
+              "8f2d2b18-a410-4dfc-a548-fb7a1dc16d33",
+              "99e83e3a-1719-482b-9917-4c1e94dc997c",
+              "ba87a7d1-817a-4bc0-892f-fb8c73b47893",
+              "fa086e9e-79b2-4d12-b67d-37662e20b618",
+              "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+              "b01fa907-e282-44a4-815e-edeece0d2e4b",
+              "10fe803f-bdc0-47db-907b-68921ac189eb"
+            ],
+            "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+            "path": "",
+            "text": "— 4 —第八条 各单位党委发挥把方向、管大局、保落实的领导作\n用，推动合规要求得到严格遵循和落实，不断提升依法合规经营\n管理水平。\n各单位应当严格遵守党内法规制度，党建工作机构在党委领\n导下，按照有关规定履行相应职责，推动相关党内法规制度有效\n贯彻落实。\n第九条 各单位经理层（或总经理办公会）主要履行以下职\n责：\n（一）审议批准本单位合规管理制度、体系建设方案、年度\n计划和工作报告等。\n（二）研究决定本单位合规管理重大事项。\n（三）推动完善本单位合规管理体系并对其有效性进行评\n价。\n（四）决定本单位合规管理部门设置及职责。\n（五）组织应对本单位重大合规风险事件。\n（六）指导监督本单位各部门和所属单位合规管理工作。\n第十条 各单位主要负责人作为本单位推进法治建设第一\n责任人，应当切实履行本单位依法合规经营管理重要组织者、推\n动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)",
+            "body_text": "— 4 —第八条 各单位党委发挥把方向、管大局、保落实的领导作\n用，推动合规要求得到严格遵循和落实，不断提升依法合规经营\n管理水平。\n各单位应当严格遵守党内法规制度，党建工作机构在党委领\n导下，按照有关规定履行相应职责，推动相关党内法规制度有效\n贯彻落实。\n第九条 各单位经理层（或总经理办公会）主要履行以下职\n责：\n（一）审议批准本单位合规管理制度、体系建设方案、年度\n计划和工作报告等。\n（二）研究决定本单位合规管理重大事项。\n（三）推动完善本单位合规管理体系并对其有效性进行评\n价。\n（四）决定本单位合规管理部门设置及职责。\n（五）组织应对本单位重大合规风险事件。\n（六）指导监督本单位各部门和所属单位合规管理工作。\n第十条 各单位主要负责人作为本单位推进法治建设第一\n责任人，应当切实履行本单位依法合规经营管理重要组织者、推\n动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)",
+            "score": 0.0,
+            "document_family_id": "topic:合规管理办法",
+            "version_year": 2023,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.7692,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 5,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "af83b418cc38b2383164a311",
+            "snapshot_id_count": 8,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "合规管理办法 首席合规官 总法律顾问"
+          },
+          "fact_plan": {
+            "raw": "合规管理办法 首席合规官 总法律顾问",
+            "intents": [
+              "responsibility",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "subject",
+              "role",
+              "policy_fact"
+            ],
+            "entities": [
+              "合规管理办法",
+              "首席合规官",
+              "总法律顾问"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": true,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "responsibility",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "合规管理办法",
+            "object": "首席合规官",
+            "scope": [],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "responsibility",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "合规管理办法",
+              "首席合规官",
+              "总法律顾问"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 22,
+          "candidate_count": 6
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "吴先萍(企业发展部（法律部）)—5—第十二条区公司设立首席合规官，由总法律顾问兼任，对区公司主要负责人负责，领导合规管理部门组织开展相关工作",
+              "evidence_passage_ids": [
+                "1eb95044a22204ea1d006482cfe1585e"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "fff34bdfb40746cedb711277"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责本专业条线经营管理行为的合规审查",
+              "evidence_passage_ids": [
+                "1eb95044a22204ea1d006482cfe1585e"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "ae4b50c927603bf81752d7b3"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责本专业条线经营管理行为的合规审查",
+              "evidence_passage_ids": [
+                "149465a32d8ef1bf4a6e6293cc7abdc4"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "fae345abb1052ea81b7e94e6"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责规章制度、经济合同、重大决策合规审查",
+              "evidence_passage_ids": [
+                "149465a32d8ef1bf4a6e6293cc7abdc4"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "f7f7bbf6b647cab72c3e62fc"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第十条各单位主要负责人作为本单位推进法治建设第一责任人，应当切实履行本单位依法合规经营管理重要组织者、推动者和实践者的职责，积极推进合规管理各项工作",
+              "evidence_passage_ids": [
+                "bdea47ebf2575a5a1e0a097bf881106f"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "a886989c563360e29e292586"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第十四条各单位法律部门是合规管理的第二道防线，牵头负责本单位合规管理工作，主要履行以下职责：",
+              "evidence_passage_ids": [
+                "149465a32d8ef1bf4a6e6293cc7abdc4"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "931bad96e0e075a3164cf979"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "合规管理办法 首席合规官 总法律顾问",
+            "intents": [
+              "responsibility",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "subject",
+              "role",
+              "policy_fact"
+            ],
+            "entities": [
+              "合规管理办法",
+              "首席合规官",
+              "总法律顾问"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": true,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "responsibility",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "合规管理办法",
+            "object": "首席合规官",
+            "scope": [],
+            "selector": [],
+            "predicate": "",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "responsibility",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "合规管理办法",
+              "首席合规官",
+              "总法律顾问"
+            ]
+          },
+          "input_count": 6,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "fff34bdfb40746cedb711277",
+              "record_id": "1eb95044a22204ea1d006482cfe1585e:r0",
+              "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "fact_kind": "responsibility",
+              "subject": "首席合规官",
+              "predicate": "",
+              "object": "吴先萍(企业发展部（法律部）)—5—第十二条区公司设立首席合规官，由总法律顾问兼任，对区公司主要负责人负责，领导合规管理部门组织开展相关工作",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "吴先萍(企业发展部（法律部）)—5—第十二条区公司设立首席合规官，由总法律顾问兼任，对区公司主要负责人负责，领导合规管理部门组织开展相关工作",
+              "evidence_spans": [
+                [
+                  95,
+                  170
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合规管理办法",
+              "version_year": 2023,
+              "score": 20.699999999999996,
+              "unstructured_rejected": false,
+              "group_id": "95baba0033aaacfb",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "anchor:合规管理办法": "miss",
+                "anchor:首席合规官": "hit",
+                "anchor:总法律顾问": "hit"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "ae4b50c927603bf81752d7b3",
+              "record_id": "1eb95044a22204ea1d006482cfe1585e:r4",
+              "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "fact_kind": "responsibility",
+              "subject": "",
+              "predicate": "",
+              "object": "负责本专业条线经营管理行为的合规审查",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责本专业条线经营管理行为的合规审查",
+              "evidence_spans": [
+                [
+                  0,
+                  18
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合规管理办法",
+              "version_year": 2023,
+              "score": 5.8,
+              "unstructured_rejected": false,
+              "group_id": "95baba0033aaacfb",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "unknown",
+                "role": "unknown",
+                "policy_fact": "hit",
+                "anchor:合规管理办法": "miss",
+                "anchor:首席合规官": "miss",
+                "anchor:总法律顾问": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "fae345abb1052ea81b7e94e6",
+              "record_id": "149465a32d8ef1bf4a6e6293cc7abdc4:r1",
+              "passage_id": "149465a32d8ef1bf4a6e6293cc7abdc4",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "fact_kind": "responsibility",
+              "subject": "",
+              "predicate": "",
+              "object": "负责本专业条线经营管理行为的合规审查",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责本专业条线经营管理行为的合规审查",
+              "evidence_spans": [
+                [
+                  0,
+                  18
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合规管理办法",
+              "version_year": 2023,
+              "score": 5.8,
+              "unstructured_rejected": false,
+              "group_id": "95baba0033aaacfb",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "unknown",
+                "role": "unknown",
+                "policy_fact": "hit",
+                "anchor:合规管理办法": "miss",
+                "anchor:首席合规官": "miss",
+                "anchor:总法律顾问": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "f7f7bbf6b647cab72c3e62fc",
+              "record_id": "149465a32d8ef1bf4a6e6293cc7abdc4:r5",
+              "passage_id": "149465a32d8ef1bf4a6e6293cc7abdc4",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "fact_kind": "responsibility",
+              "subject": "",
+              "predicate": "",
+              "object": "负责规章制度、经济合同、重大决策合规审查",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责规章制度、经济合同、重大决策合规审查",
+              "evidence_spans": [
+                [
+                  0,
+                  20
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合规管理办法",
+              "version_year": 2023,
+              "score": 5.8,
+              "unstructured_rejected": false,
+              "group_id": "95baba0033aaacfb",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "unknown",
+                "role": "unknown",
+                "policy_fact": "hit",
+                "anchor:合规管理办法": "miss",
+                "anchor:首席合规官": "miss",
+                "anchor:总法律顾问": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "a886989c563360e29e292586",
+              "record_id": "bdea47ebf2575a5a1e0a097bf881106f:r6",
+              "passage_id": "bdea47ebf2575a5a1e0a097bf881106f",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "fact_kind": "responsibility",
+              "subject": "",
+              "predicate": "",
+              "object": "第十条各单位主要负责人作为本单位推进法治建设第一责任人，应当切实履行本单位依法合规经营管理重要组织者、推动者和实践者的职责，积极推进合规管理各项工作",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十条各单位主要负责人作为本单位推进法治建设第一责任人，应当切实履行本单位依法合规经营管理重要组织者、推动者和实践者的职责，积极推进合规管理各项工作",
+              "evidence_spans": [
+                [
+                  23,
+                  98
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合规管理办法",
+              "version_year": 2023,
+              "score": 5.3,
+              "unstructured_rejected": false,
+              "group_id": "95baba0033aaacfb",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "unknown",
+                "role": "unknown",
+                "policy_fact": "hit",
+                "anchor:合规管理办法": "miss",
+                "anchor:首席合规官": "miss",
+                "anchor:总法律顾问": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "931bad96e0e075a3164cf979",
+              "record_id": "149465a32d8ef1bf4a6e6293cc7abdc4:r3",
+              "passage_id": "149465a32d8ef1bf4a6e6293cc7abdc4",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "fact_kind": "responsibility",
+              "subject": "",
+              "predicate": "",
+              "object": "第十四条各单位法律部门是合规管理的第二道防线，牵头负责本单位合规管理工作，主要履行以下职责：",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第十四条各单位法律部门是合规管理的第二道防线，牵头负责本单位合规管理工作，主要履行以下职责：",
+              "evidence_spans": [
+                [
+                  67,
+                  114
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:合规管理办法",
+              "version_year": 2023,
+              "score": 5.3,
+              "unstructured_rejected": false,
+              "group_id": "95baba0033aaacfb",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "unknown",
+                "role": "unknown",
+                "policy_fact": "hit",
+                "anchor:合规管理办法": "miss",
+                "anchor:首席合规官": "miss",
+                "anchor:总法律顾问": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "subject": {
+              "fff34bdfb40746cedb711277": "hit",
+              "ae4b50c927603bf81752d7b3": "unknown",
+              "fae345abb1052ea81b7e94e6": "unknown",
+              "f7f7bbf6b647cab72c3e62fc": "unknown",
+              "a886989c563360e29e292586": "unknown",
+              "931bad96e0e075a3164cf979": "unknown"
+            },
+            "role": {
+              "fff34bdfb40746cedb711277": "hit",
+              "ae4b50c927603bf81752d7b3": "unknown",
+              "fae345abb1052ea81b7e94e6": "unknown",
+              "f7f7bbf6b647cab72c3e62fc": "unknown",
+              "a886989c563360e29e292586": "unknown",
+              "931bad96e0e075a3164cf979": "unknown"
+            },
+            "policy_fact": {
+              "fff34bdfb40746cedb711277": "hit",
+              "ae4b50c927603bf81752d7b3": "hit",
+              "fae345abb1052ea81b7e94e6": "hit",
+              "f7f7bbf6b647cab72c3e62fc": "hit",
+              "a886989c563360e29e292586": "hit",
+              "931bad96e0e075a3164cf979": "hit"
+            }
+          },
+          "primary_group_id": "95baba0033aaacfb",
+          "covered_slots": [
+            "policy_fact",
+            "role",
+            "subject"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "95baba0033aaacfb",
+                "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+                "document_family_id": "topic:合规管理办法",
+                "document_revision": "2023",
+                "effective_date": "",
+                "version_year": 2023,
+                "passage_ids": [
+                  "1eb95044a22204ea1d006482cfe1585e",
+                  "bdea47ebf2575a5a1e0a097bf881106f",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  3,
+                  4
+                ],
+                "retrieval_scores": [
+                  0.9992000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+                "section": "（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.9984,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "1eb95044a22204ea1d006482cfe1585e:r0",
+                  "1eb95044a22204ea1d006482cfe1585e:r1",
+                  "1eb95044a22204ea1d006482cfe1585e:r2",
+                  "1eb95044a22204ea1d006482cfe1585e:r3",
+                  "1eb95044a22204ea1d006482cfe1585e:r4",
+                  "1eb95044a22204ea1d006482cfe1585e:r5",
+                  "1eb95044a22204ea1d006482cfe1585e:r6",
+                  "bdea47ebf2575a5a1e0a097bf881106f:r0",
+                  "bdea47ebf2575a5a1e0a097bf881106f:r1",
+                  "bdea47ebf2575a5a1e0a097bf881106f:r2",
+                  "bdea47ebf2575a5a1e0a097bf881106f:r3",
+                  "bdea47ebf2575a5a1e0a097bf881106f:r4",
+                  "bdea47ebf2575a5a1e0a097bf881106f:r5",
+                  "bdea47ebf2575a5a1e0a097bf881106f:r6",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4:r0",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4:r1",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4:r2",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4:r3",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4:r4",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4:r5",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4:r6",
+                  "149465a32d8ef1bf4a6e6293cc7abdc4:r7"
+                ]
+              },
+              {
+                "group_id": "0a78bc14f44106d8",
+                "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+                "document_revision": "2025",
+                "effective_date": "",
+                "version_year": 2025,
+                "passage_ids": [
+                  "4deed0be86707f3bb13e637bed762135",
+                  "f38d4e88e9371ceabe2566a6973e3166",
+                  "b0554250b5e311770232aa1e2fc6f2f3"
+                ],
+                "retrieval_ranks": [
+                  1,
+                  5,
+                  6
+                ],
+                "retrieval_scores": [
+                  0.9047000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+                "section": "2.XXXX > 3.XXXX > 一、XXXXXXXX",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 6.6094,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "4deed0be86707f3bb13e637bed762135:r0",
+                  "4deed0be86707f3bb13e637bed762135:r1",
+                  "f38d4e88e9371ceabe2566a6973e3166:r0",
+                  "f38d4e88e9371ceabe2566a6973e3166:r1",
+                  "f38d4e88e9371ceabe2566a6973e3166:r2",
+                  "f38d4e88e9371ceabe2566a6973e3166:r3",
+                  "f38d4e88e9371ceabe2566a6973e3166:r4",
+                  "f38d4e88e9371ceabe2566a6973e3166:r5",
+                  "f38d4e88e9371ceabe2566a6973e3166:r6",
+                  "f38d4e88e9371ceabe2566a6973e3166:r7",
+                  "b0554250b5e311770232aa1e2fc6f2f3:r0",
+                  "b0554250b5e311770232aa1e2fc6f2f3:r1"
+                ]
+              },
+              {
+                "group_id": "c3e37e0359c29048",
+                "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+                "document_family_id": "topic:合规管理办法",
+                "document_revision": "2021",
+                "effective_date": "",
+                "version_year": 2021,
+                "passage_ids": [
+                  "c042ed35dfd7407bdf482d4ce12180b1",
+                  "e3b29031240e5cb19e435882ac40270f"
+                ],
+                "retrieval_ranks": [
+                  2,
+                  7
+                ],
+                "retrieval_scores": [
+                  0.33000000000000007,
+                  0.0
+                ],
+                "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+                "section": "第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 4.26,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "c042ed35dfd7407bdf482d4ce12180b1:r0",
+                  "c042ed35dfd7407bdf482d4ce12180b1:r1",
+                  "c042ed35dfd7407bdf482d4ce12180b1:r2",
+                  "e3b29031240e5cb19e435882ac40270f:r0",
+                  "e3b29031240e5cb19e435882ac40270f:r1",
+                  "e3b29031240e5cb19e435882ac40270f:r2",
+                  "e3b29031240e5cb19e435882ac40270f:r3",
+                  "e3b29031240e5cb19e435882ac40270f:r4"
+                ]
+              }
+            ],
+            "primary_group_id": "95baba0033aaacfb",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "合规管理办法",
+                "总法律顾问",
+                "首席合规官"
+              ],
+              "selection": [
+                {
+                  "group_id": "95baba0033aaacfb",
+                  "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+                  "score": 7.9984,
+                  "role": "primary",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "0a78bc14f44106d8",
+                  "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                  "score": 6.6094,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                },
+                {
+                  "group_id": "c3e37e0359c29048",
+                  "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+                  "score": 4.26,
+                  "role": "rejected",
+                  "rejection_reasons": []
+                }
+              ],
+              "top_gap": 1.389
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "subject",
+            "role",
+            "policy_fact"
+          ],
+          "candidate_ids": [
+            "fff34bdfb40746cedb711277",
+            "ae4b50c927603bf81752d7b3",
+            "fae345abb1052ea81b7e94e6",
+            "f7f7bbf6b647cab72c3e62fc",
+            "a886989c563360e29e292586",
+            "931bad96e0e075a3164cf979"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "responsibility",
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact",
+            "role",
+            "subject"
+          ],
+          "coverage_matrix": {
+            "subject": {
+              "fff34bdfb40746cedb711277": "hit",
+              "ae4b50c927603bf81752d7b3": "unknown",
+              "fae345abb1052ea81b7e94e6": "unknown",
+              "f7f7bbf6b647cab72c3e62fc": "unknown",
+              "a886989c563360e29e292586": "unknown",
+              "931bad96e0e075a3164cf979": "unknown"
+            },
+            "role": {
+              "fff34bdfb40746cedb711277": "hit",
+              "ae4b50c927603bf81752d7b3": "unknown",
+              "fae345abb1052ea81b7e94e6": "unknown",
+              "f7f7bbf6b647cab72c3e62fc": "unknown",
+              "a886989c563360e29e292586": "unknown",
+              "931bad96e0e075a3164cf979": "unknown"
+            },
+            "policy_fact": {
+              "fff34bdfb40746cedb711277": "hit",
+              "ae4b50c927603bf81752d7b3": "hit",
+              "fae345abb1052ea81b7e94e6": "hit",
+              "f7f7bbf6b647cab72c3e62fc": "hit",
+              "a886989c563360e29e292586": "hit",
+              "931bad96e0e075a3164cf979": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "合规管理办法 首席合规官 总法律顾问",
+          "intents": [
+            "responsibility",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "subject",
+            "role",
+            "policy_fact"
+          ],
+          "entities": [
+            "合规管理办法",
+            "首席合规官",
+            "总法律顾问"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": true,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "responsibility",
+            "policy",
+            "prohibition"
+          ],
+          "subject": "合规管理办法",
+          "object": "首席合规官",
+          "scope": [],
+          "selector": [],
+          "predicate": "",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "responsibility",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "合规管理办法",
+            "首席合规官",
+            "总法律顾问"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "95baba0033aaacfb",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "document_family_id": "topic:合规管理办法",
+              "document_revision": "2023",
+              "effective_date": "",
+              "version_year": 2023,
+              "passage_ids": [
+                "1eb95044a22204ea1d006482cfe1585e",
+                "bdea47ebf2575a5a1e0a097bf881106f",
+                "149465a32d8ef1bf4a6e6293cc7abdc4"
+              ],
+              "retrieval_ranks": [
+                0,
+                3,
+                4
+              ],
+              "retrieval_scores": [
+                0.9992000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+              "section": "（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.9984,
+              "rejection_reasons": [],
+              "record_ids": [
+                "1eb95044a22204ea1d006482cfe1585e:r0",
+                "1eb95044a22204ea1d006482cfe1585e:r1",
+                "1eb95044a22204ea1d006482cfe1585e:r2",
+                "1eb95044a22204ea1d006482cfe1585e:r3",
+                "1eb95044a22204ea1d006482cfe1585e:r4",
+                "1eb95044a22204ea1d006482cfe1585e:r5",
+                "1eb95044a22204ea1d006482cfe1585e:r6",
+                "bdea47ebf2575a5a1e0a097bf881106f:r0",
+                "bdea47ebf2575a5a1e0a097bf881106f:r1",
+                "bdea47ebf2575a5a1e0a097bf881106f:r2",
+                "bdea47ebf2575a5a1e0a097bf881106f:r3",
+                "bdea47ebf2575a5a1e0a097bf881106f:r4",
+                "bdea47ebf2575a5a1e0a097bf881106f:r5",
+                "bdea47ebf2575a5a1e0a097bf881106f:r6",
+                "149465a32d8ef1bf4a6e6293cc7abdc4:r0",
+                "149465a32d8ef1bf4a6e6293cc7abdc4:r1",
+                "149465a32d8ef1bf4a6e6293cc7abdc4:r2",
+                "149465a32d8ef1bf4a6e6293cc7abdc4:r3",
+                "149465a32d8ef1bf4a6e6293cc7abdc4:r4",
+                "149465a32d8ef1bf4a6e6293cc7abdc4:r5",
+                "149465a32d8ef1bf4a6e6293cc7abdc4:r6",
+                "149465a32d8ef1bf4a6e6293cc7abdc4:r7"
+              ]
+            },
+            {
+              "group_id": "0a78bc14f44106d8",
+              "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "document_family_id": "topic:印发中国电信广西公司重要决策法律合规审核管理办法",
+              "document_revision": "2025",
+              "effective_date": "",
+              "version_year": 2025,
+              "passage_ids": [
+                "4deed0be86707f3bb13e637bed762135",
+                "f38d4e88e9371ceabe2566a6973e3166",
+                "b0554250b5e311770232aa1e2fc6f2f3"
+              ],
+              "retrieval_ranks": [
+                1,
+                5,
+                6
+              ],
+              "retrieval_scores": [
+                0.9047000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+              "section": "2.XXXX > 3.XXXX > 一、XXXXXXXX",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 6.6094,
+              "rejection_reasons": [],
+              "record_ids": [
+                "4deed0be86707f3bb13e637bed762135:r0",
+                "4deed0be86707f3bb13e637bed762135:r1",
+                "f38d4e88e9371ceabe2566a6973e3166:r0",
+                "f38d4e88e9371ceabe2566a6973e3166:r1",
+                "f38d4e88e9371ceabe2566a6973e3166:r2",
+                "f38d4e88e9371ceabe2566a6973e3166:r3",
+                "f38d4e88e9371ceabe2566a6973e3166:r4",
+                "f38d4e88e9371ceabe2566a6973e3166:r5",
+                "f38d4e88e9371ceabe2566a6973e3166:r6",
+                "f38d4e88e9371ceabe2566a6973e3166:r7",
+                "b0554250b5e311770232aa1e2fc6f2f3:r0",
+                "b0554250b5e311770232aa1e2fc6f2f3:r1"
+              ]
+            },
+            {
+              "group_id": "c3e37e0359c29048",
+              "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+              "document_family_id": "topic:合规管理办法",
+              "document_revision": "2021",
+              "effective_date": "",
+              "version_year": 2021,
+              "passage_ids": [
+                "c042ed35dfd7407bdf482d4ce12180b1",
+                "e3b29031240e5cb19e435882ac40270f"
+              ],
+              "retrieval_ranks": [
+                2,
+                7
+              ],
+              "retrieval_scores": [
+                0.33000000000000007,
+                0.0
+              ],
+              "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+              "section": "第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 4.26,
+              "rejection_reasons": [],
+              "record_ids": [
+                "c042ed35dfd7407bdf482d4ce12180b1:r0",
+                "c042ed35dfd7407bdf482d4ce12180b1:r1",
+                "c042ed35dfd7407bdf482d4ce12180b1:r2",
+                "e3b29031240e5cb19e435882ac40270f:r0",
+                "e3b29031240e5cb19e435882ac40270f:r1",
+                "e3b29031240e5cb19e435882ac40270f:r2",
+                "e3b29031240e5cb19e435882ac40270f:r3",
+                "e3b29031240e5cb19e435882ac40270f:r4"
+              ]
+            }
+          ],
+          "primary_group_id": "95baba0033aaacfb",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "合规管理办法",
+              "总法律顾问",
+              "首席合规官"
+            ],
+            "selection": [
+              {
+                "group_id": "95baba0033aaacfb",
+                "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+                "score": 7.9984,
+                "role": "primary",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "0a78bc14f44106d8",
+                "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+                "score": 6.6094,
+                "role": "rejected",
+                "rejection_reasons": []
+              },
+              {
+                "group_id": "c3e37e0359c29048",
+                "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+                "score": 4.26,
+                "role": "rejected",
+                "rejection_reasons": []
+              }
+            ],
+            "top_gap": 1.389
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "首席合规官",
+              "总法律顾问"
+            ]
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "fff34bdfb40746cedb711277"
+              ],
+              "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "text": "- 吴先萍(企业发展部（法律部）)—5—第十二条区公司设立首席合规官，由总法律顾问兼任，对区公司主要负责人负责，领导合规管理部门组织开展相关工作",
+              "fact_kind": "responsibility"
+            },
+            {
+              "rendered_candidate_ids": [
+                "ae4b50c927603bf81752d7b3"
+              ],
+              "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "text": "- 负责本专业条线经营管理行为的合规审查",
+              "fact_kind": "responsibility"
+            },
+            {
+              "rendered_candidate_ids": [
+                "f7f7bbf6b647cab72c3e62fc"
+              ],
+              "passage_id": "149465a32d8ef1bf4a6e6293cc7abdc4",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "text": "- 负责规章制度、经济合同、重大决策合规审查",
+              "fact_kind": "responsibility"
+            }
+          ],
+          "answer_len": 116
+        },
+        "primary_group_id": "95baba0033aaacfb",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9"
+            },
+            {
+              "id": "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+              "type": "block",
+              "label": "第十一条 区公司、各市分公司、信产公司设立合规委员会，",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+            },
+            {
+              "id": "e76f0396-1260-4d91-a6a3-68f267d39ebf",
+              "type": "block",
+              "label": "[第4页]",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+            },
+            {
+              "id": "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+              "type": "block",
+              "label": "（六）组织或者配合开展违规问题调查和整改。",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+            },
+            {
+              "id": "5783a07a-f17a-407c-952c-f181a7397a04",
+              "type": "block",
+              "label": "[第5页]",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+            },
+            {
+              "id": "4018f014-3fc1-4900-86f4-349fc68ae583",
+              "type": "block",
+              "label": "各单位应当严格遵守党内法规制度，党建工作机构在党委领",
+              "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+            },
+            {
+              "id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "type": "knowledge",
+              "label": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6"
+            },
+            {
+              "id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+              "type": "knowledge",
+              "label": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1"
+            },
+            {
+              "id": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "type": "knowledge",
+              "label": "中电信桂-2023-446号-关于印发中国电信广西公司保密工作管理办法的通知-2023年修订--e8f52cfa"
+            },
+            {
+              "id": "102bee52-4b83-438d-9296-c852579473b6",
+              "type": "knowledge",
+              "label": "中电信桂-2023-528号-关于印发中国电信广西公司商业秘密保护管理办法的通知--102bee52"
+            }
+          ],
+          "edges": [
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+              "type": "contains"
+            },
+            {
+              "source": "e76f0396-1260-4d91-a6a3-68f267d39ebf",
+              "target": "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+              "type": "parent"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+              "type": "contains"
+            },
+            {
+              "source": "5783a07a-f17a-407c-952c-f181a7397a04",
+              "target": "c92a4e15-6bb3-4698-bfb2-d3fe8c15a956",
+              "type": "parent"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "4018f014-3fc1-4900-86f4-349fc68ae583",
+              "type": "contains"
+            },
+            {
+              "source": "e76f0396-1260-4d91-a6a3-68f267d39ebf",
+              "target": "4018f014-3fc1-4900-86f4-349fc68ae583",
+              "type": "parent"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+              "type": "related"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+              "type": "related"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "e8f52cfa-2e86-4048-9358-0649094a41b9",
+              "type": "related"
+            },
+            {
+              "source": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+              "target": "102bee52-4b83-438d-9296-c852579473b6",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 10
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 2,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+            "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "77ea3d15-7437-4d18-acbc-a48ba245630a"
+          ],
+          "accepted_block_ids": [
+            "479b36ce-9a90-4d7b-95fe-d62bd37eb644",
+            "fe5c4213-b2a2-49fa-972a-f13862fec232",
+            "34aea653-4781-4739-ad7c-579e179e9f62"
+          ],
+          "accepted_passage_ids": [
+            "1eb95044a22204ea1d006482cfe1585e",
+            "4deed0be86707f3bb13e637bed762135",
+            "c042ed35dfd7407bdf482d4ce12180b1",
+            "bdea47ebf2575a5a1e0a097bf881106f",
+            "149465a32d8ef1bf4a6e6293cc7abdc4",
+            "f38d4e88e9371ceabe2566a6973e3166",
+            "b0554250b5e311770232aa1e2fc6f2f3",
+            "e3b29031240e5cb19e435882ac40270f"
+          ],
+          "generation_knowledge_ids": [
+            "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+            "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+            "77ea3d15-7437-4d18-acbc-a48ba245630a"
+          ],
+          "top_score": 0.7692,
+          "intent": "ordinary",
+          "adjacent_count": 5,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "af83b418cc38b2383164a311"
+        },
+        "snapshot_fingerprint": "af83b418cc38b2383164a311",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 3,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 39.67
+  },
+  "top_candidate_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+  "candidates": [
+    {
+      "knowledge_id": "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+      "passage_id": "1eb95044a22204ea1d006482cfe1585e",
+      "title": "中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9",
+      "score": 0.9992000000000001,
+      "final_relevance_score": 0.7692,
+      "text": "【文档】中电信桂-2023-299号-关于印发中国电信广西公司合规管理办法的通知--3eebb9f9\n【章节】（四）负责本专业条线经营管理行为的合规审查。 > （五）及时报告合规风险，组织或者配合开展应对处置。 > （六）组织或者配合开展违规问题调查和整改。\n动者和实践者的职责，积极推进合规管理各项工作。\n第十一条 区公司、各市分公司、信产公司设立合规委员会，\n与依法治企领导机构合署办公，统筹协调合规管理工作，定期召\n开会议，研究解决重点难点问题。 吴先萍(企业发展部（法律部）)\n— 5 — 第十二条 区公司设立首席合规官，由总法律顾问兼任，对\n区公司主要负责人负责，领导合规管理部门组织开展相关工作。\n第十三条 各单位业务及职能部门是合规管理的第一道防\n线，承担合规管理主体责任，主要履行以下职责：\n（一）建立健全本专业条线业务合规管理制度和流程，开展\n合规风险识别评估，编制风险清单和应对预案。\n（二）定期梳理重点岗位合规风险，将合规要求纳入岗位职\n责。\n（三）定期梳理业务管理流程，将合规要求和管控措施嵌入\n关键流程节点。\n（四）负责本专业条线经营管理行为的合规审查。\n（五）及时报告合规风险，组织或者配合开展应对处置。\n（六）组织或者配合开展违规问题调查和整改。\n各单位应当在业务及职能部门设置兼职合规管理员，由业务\n骨干担任，接受合规管理部门业务指导和培训。"
+    },
+    {
+      "knowledge_id": "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+      "passage_id": "4deed0be86707f3bb13e637bed762135",
+      "title": "中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6",
+      "score": 0.9047000000000001,
+      "final_relevance_score": 0.5547,
+      "text": "【文档】中电信桂-2025-505号-关于印发中国电信广西公司重要决策法律合规审核管理办法的通知--0b5f5cf6\n【章节】2.XXXX > 3.XXXX > 一、XXXXXXXX\n— 8 —示并通报公司总法律顾问。对按本办法规定应当法律合规审核事\n项，未经合法合规性审查或者虽经审查但未采纳正确意见，引发\n风险造成损失的，追究相关领导人员责任。\n第六章 附则\n第二十六条 本办法由区公司法律合规部负责解释。\n第二十七条 本部分自印发之日起施行，过去规定与本办法\n相悖的，以本办法为准。\n附件：1.重要决策法律合规审核单（模板）\n2.法律意见书（模板）\n— 9 — 附件1\n重要决策法律合规审核单（模板）\n编号 中电信X法审﹝202X﹞XX号\n申请单位\n审核事项\n所提交的文件\n法律部门意见\n初审法律人员： 电话： 时间：\n法律部门领导：\n备注：\n— 10 — 附件2\n关于XXXX的法律意见书\nXXXXXX（部/中心/分公司）\n贵（部/中心/分公司）《关于 》已收悉，其中要求我部对\nXXXX出具法律意见。\n贵（部/中心/分公司）向我部提供的材料包括：\n1.XXXX\n2.XXXX\n3.XXXX\n我部根据上述材料及我国现行有效的相关法律、法规和规范\n性文件，经分析研究，提出以下法律意见："
+    },
+    {
+      "knowledge_id": "77ea3d15-7437-4d18-acbc-a48ba245630a",
+      "passage_id": "c042ed35dfd7407bdf482d4ce12180b1",
+      "title": "中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1",
+      "score": 0.33000000000000007,
+      "final_relevance_score": 0.55,
+      "text": "【文档】中电信桂-2021-335号-关于印发中国电信广西公司面向客户APP收集使用个人信息合规管理办法的通知--77ea3d1\n【章节】第一章 总 则 > 第一条 为推动和规范中国电信广西公司面向客户APP收集\n中电信桂〔2021〕335号\n关于印发中国电信广西公司面向客户APP\n收集使用个人信息合规管理办法的通知\n各市分公司，各专业公司，区公司相关部门：\n为深入贯彻党和国家有关网络和信息安全工作要求，进一步\n落实政府监管部门对APP违法违规收集使用个人信息专项治理\n的任务，推动建立长效工作机制，区公司制定了《中国电信广西\n公司面向客户APP收集使用个人信息合规管理办法》，现印发你\n们，请各单位按照本办法认真执行。\n中国电信广西公司\n2021年9月9日 维护账号(集团互联)\n— 2 — 中国电信广西公司面向客户APP收集使用\n个人信息合规管理办法\n第一章 总 则\n第一条 为推动和规范中国电信广西公司面向客户APP收集\n使用个人信息合规工作，明确管理职责，强化监督检查，提高合\n规管理工作质量，依据《网络安全法》、《个人信息保护法》等法\n律法规和政府监管工作要求，以及国家互联网信息办公室、工业\n和信息化部、公安部、市场监管总局（以下简称“四部委”）《APP\n违法违规收集使用个人信息行为认定方法》，结合广西实际，特\n制定本办法。"
+    }
+  ],
+  "search_ms": 46153.24,
+  "ask_ms": 39.67,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "JTnpYr8_9ye4CMqtZ7u2-1mvsiqkA6yj",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

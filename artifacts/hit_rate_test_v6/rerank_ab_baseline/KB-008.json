@@ -1,0 +1,248 @@
+{
+  "case": {
+    "case_id": "KB-008",
+    "category": "精确关键词",
+    "query": "授权管理办法 特定事项授权 一事一授权 MSS法律辅助系统",
+    "expected_knowledge_ids": [
+      "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+    ],
+    "expected_title_keywords": [
+      "授权",
+      "2024"
+    ],
+    "required_facts": [
+      "一事一授权",
+      "MSS法律辅助系统"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2024〕423号第十八条/第二十条"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "688e2789-cd86-449c-8b29-c4ee025585ca",
+          "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+          "passage_id": "86a2b84b13e93069f4f6f49b4643f050",
+          "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+          "text": "【文档】中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e\n【章节】第七章 授权委托管理 > 第二十二条 各级授权书由各单位负责人签署，其他人员无 > 第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)\n项，需要按照一事一授权的原则进行特定事项授权，特定事项授\n权授权期限一般至该事项结束时止。\n第十九条 分公司副总经理、未获得签约授权的部门负责人、\n部门负责人以外的人员因工作需要对外签订合同的，需要按照一\n事一授权的原则进行特定事项授权。\n第二十条 特定事项授权委托应通过MSS法律辅助系统进行\n线上审批。涉密或其他敏感事项的，应按照公司保密制度要求执\n行。\n第二十一条 特定事项授权由承办部门起草授权委托书，并\n附决策依据、背景说明等材料，授权委托书应当明确被授权单位\n/人员名称、授权的具体事项、权限、期限以及签发时间，履行\n相应审批流程并经系统生成统一编号，由承办部门办理用印后生\n效。\n第七章 授权委托管理\n第二十二条 各级授权书由各单位负责人签署，其他人员无\n权进行授权。\n第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)\n— 9 — （一）需要本单位授权的，由送审部门根据职责权限、内控\n管理等相关规定，履行本单位内部审批程序，经本单位法律部门\n对授权委托事项进行合法合规性审核后，报公司领导签批。",
+          "document_family_id": "topic:授权管理办法",
+          "version_year": 2024,
+          "section_path": "第七章 授权委托管理 > 第二十二条 各级授权书由各单位负责人签署，其他人员无 > 第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)",
+          "block_ids": [
+            "688e2789-cd86-449c-8b29-c4ee025585ca",
+            "cb76dd3c-fa6f-49e3-9980-5e250e29d752",
+            "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+            "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+            "cfc57575-2310-4d58-afaf-bbf74352dc84",
+            "b0187277-b2a5-4b01-a33c-4b1648d0adcb",
+            "1e58d423-c171-49c9-962a-f8e8d302ce4f",
+            "f3ccc8ef-4859-4e9e-9ef0-9e256909be5c",
+            "48e5da71-6360-4889-9e23-e35a0bec8698",
+            "c27863d5-9064-4935-9bda-ec43faea13c4",
+            "d9a5485a-c371-4bdc-8d40-c36d5d7ea31f",
+            "4e5a44d5-43f6-4c4f-bd25-1aa243ba7d51",
+            "ee2cf3d1-524e-4cd3-bf2b-5f2aaaa68185",
+            "8973293f-2886-47e3-ae8a-54bb284f3635",
+            "2f3f00fd-e22c-4eb7-8e23-ba510452413e",
+            "22c64d8f-664a-4e39-bfd9-47e5593e6d16",
+            "207430f6-6778-48d8-9abb-a3e5ed05315b",
+            "93122b4d-2bbf-4922-8de2-55b60c8c3e44"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -39.004012106900966,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 1.0,
+            "fts_score": 1.0,
+            "title_score": 0.375,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 1.0,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7563,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7563,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2024,
+            "deprecated": false,
+            "family_key": "topic:授权管理办法",
+            "family_newest_year": 2024,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7563,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+        ],
+        "evidence_snapshot_id": "vyd_fTp4Sz0jQMqWJEnNmPenTd30in_r",
+        "snapshot_fingerprint": "b55e531483fc935718bd0cca",
+        "accepted_passage_ids": [
+          "86a2b84b13e93069f4f6f49b4643f050",
+          "239a4d42997abbf2e0fed0335291511f",
+          "933ee27469fc824ec5da274d61dabd5c"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 35327.5,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 9,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"688e2789-cd86-449c-8b29-c4ee025585ca\",\"knowledge_id\":\"f39e6e2e-1c71-484e-a24d-276cde30f0a9\",\"passage_id\":\"86a2b84b13e93069f4f6f49b4643f050\",\"title\":\"中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e\",\"text\":\"【文档】中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e\\n【章节】第七章 授权委托管理 > 第二十二条 各级授权书由各单位负责人签署，其他人员无 > 第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)\\n项，需要按照一事一授权的原则进行特定事项授权，特定事项授\\n权授权期限一般至该事项结束时止。\\n第十九条 分公司副总经理、未获得签约授权的部门负责人、\\n部门负责人以外的人员因工作需要对外签订合同的，需要按照一\\n事一授权的原则进行特定事项授权。\\n第二十条 特定事项授权委托应通过MSS法律辅助系统进行\\n线上审批。涉密或其他敏感事项的，应按照公司保密制度要求执\\n行。\\n第二十一条 特定事项授权由承办部门起草授权委托书，并\\n附决策依据、背景说明等材料，授权委托书应当明确被授权单位\\n/人员名称、授权的具体事项、权限、期限以及签发时间，履行\\n相应审批流程并经系统生成统一编号，由承办部门办理用印后生\\n效。\\n第七章 授权委托管理\\n第二十二条 各级授权书由各单位负责人签署，其他人员无\\n权进行授权。\\n第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)\\n— 9 — （一）需要本单位授权的，由送审部门根据职责权限、内控\\n管理等相关规定，履行本单位内部审批程序，经本单位法律部门\\n对授权委托事项进行合法合规性审核后，报公司领导签批。\",\"document_family_id\":\"topic:授权管理办法\",\"version_year\":2024,\"section_path\":\"第七章 授权委托管理 > 第二十二条 各级授权书由各单位负责人签署，其他人员无 > 第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)\",\"block_ids\":[\"688e2789-cd86-449c-8b29-c4ee025585ca\",\"cb76dd3c-fa6f-49e3-9980-5e250e29d752\",\"94a5c376-1ddf-4577-b07e-b6684e8624d7\",\"3fbb1051-f273-410c-bb4b-4c95cb9326f2\",\"cfc57575-2310-4d58-afaf-bbf74352dc84\",\"b0187277-b2a5-4b01-a33c-4b1648d0adcb\",\"1e58d423-c171-49c9-962a-f8e8d302ce4f\",\"f3ccc8ef-4859-4e9e-9ef0-9e256909be5c\",\"48e5da71-6360-4889-9e23-e35a0bec8698\",\"c27863d5-9064-4935-9bda-ec43faea13c4\",\"d9a5485a-c371-4bdc-8d40-c36d5d7ea31f\",\"4e5a44d5-43f6-4c4f-bd25-1aa243ba7d51\",\"ee2cf3d1-524e-4cd3-bf2b-5f2aaaa68185\",\"8973293f-2886-47e3-ae8a-54bb284f3635\",\"2f3f00fd-e22c-4eb7-8e23-ba510452413e\",\"22c64d8f-664a-4e39-bfd9-47e5593e6d16\",\"207430f6-6778-48d8-9abb-a3e5ed05315b\",\"93122b4d-2bbf-4922-8de2-55b60c8c3e44\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-39.004012106900966,\"fts_score\":1.0,\"score\":1.0,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":1.0,\"fts_score\":1.0,\"title_score\":0.375,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":1.0,\"freshness_score\":0.5,\"final_relevance_score\":0.7563,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.7563,\"ranking_score\":1.0,\"version_rank\":{\"version_year\":2024,\"deprecated\":false,\"family_key\":\"topic:授权管理办法\",\"family_newest_year\":2024,\"is_family_newest\":true}}],\"meta\":{\"total_estimate\":1,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.7563,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"f39e6e2e-1c71-484e-a24d-276cde30f0a9\"],\"evidence_snapshot_id\":\"vyd_fTp4Sz0jQMqWJEnNmPenTd30in_r\",\"snapshot_fingerprint\":\"b55e531483fc935718bd0cca\",\"accepted_passage_ids\":[\"86a2b84b13e93069f4f6f49b4643f050\",\"239a4d42997abbf2e0fed0335291511f\",\"933ee27469fc824ec5da274d61dabd5c\"],\"adjacent_unit\":\"passage\",\"adjacent_count\":2,\"adjacent_fallback_reason\":\"passage_index_neighbors\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "688e2789-cd86-449c-8b29-c4ee025585ca",
+              "knowledge_id": "f39e6e2e-1c71-484e-a24d-276cde30f0a9",
+              "passage_id": "86a2b84b13e93069f4f6f49b4643f050",
+              "title": "中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e",
+              "text": "【文档】中电信桂-2024-423号-关于印发中国电信广西公司授权管理办法-2024年版-的通知--f39e6e2e\n【章节】第七章 授权委托管理 > 第二十二条 各级授权书由各单位负责人签署，其他人员无 > 第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)\n项，需要按照一事一授权的原则进行特定事项授权，特定事项授\n权授权期限一般至该事项结束时止。\n第十九条 分公司副总经理、未获得签约授权的部门负责人、\n部门负责人以外的人员因工作需要对外签订合同的，需要按照一\n事一授权的原则进行特定事项授权。\n第二十条 特定事项授权委托应通过MSS法律辅助系统进行\n线上审批。涉密或其他敏感事项的，应按照公司保密制度要求执\n行。\n第二十一条 特定事项授权由承办部门起草授权委托书，并\n附决策依据、背景说明等材料，授权委托书应当明确被授权单位\n/人员名称、授权的具体事项、权限、期限以及签发时间，履行\n相应审批流程并经系统生成统一编号，由承办部门办理用印后生\n效。\n第七章 授权委托管理\n第二十二条 各级授权书由各单位负责人签署，其他人员无\n权进行授权。\n第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)\n— 9 — （一）需要本单位授权的，由送审部门根据职责权限、内控\n管理等相关规定，履行本单位内部审批程序，经本单位法律部门\n对授权委托事项进行合法合规性审核后，报公司领导签批。",
+              "document_family_id": "topic:授权管理办法",
+              "version_year": 2024,
+              "section_path": "第七章 授权委托管理 > 第二十二条 各级授权书由各单位负责人签署，其他人员无 > 第二十三条 授权委托事项需履行以下审批程序： 邹碧华(全渠道运营中心)",
+              "block_ids": [
+                "688e2789-cd86-449c-8b29-c4ee025585ca",
+                "cb76dd3c-fa6f-49e3-9980-5e250e29d752",
+                "94a5c376-1ddf-4577-b07e-b6684e8624d7",
+                "3fbb1051-f273-410c-bb4b-4c95cb9326f2",
+                "cfc57575-2310-4d58-afaf-bbf74352dc84",
+                "b0187277-b2a5-4b01-a33c-4b1648d0adcb",
+                "1e58d423-c171-49c9-962a-f8e8d302ce4f",
+                "f3ccc8ef-4859-4e9e-9ef0-9e256909be5c",
+                "48e5da71-6360-4889-9e23-e35a0bec8698",
+                "c27863d5-9064-4935-9bda-ec43faea13c4",
+                "d9a5485a-c371-4bdc-8d40-c36d5d7ea31f",
+                "4e5a44d5-43f6-4c4f-bd25-1aa243ba7d51",
+                "ee2cf3d1-524e-4cd3-bf2b-5f2aaaa68185",
+                "8973293f-2886-47e3-ae8a-54bb284f3635",
+                "2f3f00fd-e22c-4eb7-8e23-ba510452413e",
+                "22c64d8f-664a-4e39-bfd9-47e5593e6d16",
+                "207430f6-6778-48d8-9abb-a3e5ed05315b",
+                "93122b4d-2bbf-4922-8de2-55b60c8c3e44"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -39.004012106900966,
+              "fts_score": 1.0,
+              "score": 1.0,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 1.0,
+                "fts_score": 1.0,
+                "title_score": 0.375,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 1.0,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.7563,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.7563,
+              "ranking_score": 1.0,
+              "version_rank": {
+                "version_year": 2024,
+                "deprecated": false,
+                "family_key": "topic:授权管理办法",
+                "family_newest_year": 2024,
+                "is_family_newest": true
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 1,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.7563,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+            ],
+            "evidence_snapshot_id": "vyd_fTp4Sz0jQMqWJEnNmPenTd30in_r",
+            "snapshot_fingerprint": "b55e531483fc935718bd0cca",
+            "accepted_passage_ids": [
+              "86a2b84b13e93069f4f6f49b4643f050",
+              "239a4d42997abbf2e0fed0335291511f",
+              "933ee27469fc824ec5da274d61dabd5c"
+            ],
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-008",
+    "label": "baseline",
+    "query": "授权管理办法 特定事项授权 一事一授权 MSS法律辅助系统",
+    "expected_knowledge_ids": [
+      "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+    ],
+    "top_ids": [
+      "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+    ],
+    "top1_ok": true,
+    "recall5_ok": true,
+    "search_ms": 35327.5,
+    "n_results": 1,
+    "snapshot_fingerprint": null
+  }
+}

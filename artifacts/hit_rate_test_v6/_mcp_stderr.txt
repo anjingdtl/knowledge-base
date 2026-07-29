@@ -1,0 +1,31 @@
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 3.4.4                                 │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│                  🖥  Server:      ShineHeKnowledge, 1.11.1                    │
+│                  🚀 Deploy free: https://horizon.prefect.io                  │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                          🎉 Update available: 3.4.5                          │
+│                      Run: pip install --upgrade fastmcp                      │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+[07/29/26 09:03:20] INFO     Starting MCP server                transport.py:361
+                             'ShineHeKnowledge' with transport                  
+                             'streamable-http' on                               
+                             http://127.0.0.1:9000/mcp                          
+INFO:     Started server process [20008]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:9000 (Press CTRL+C to quit)

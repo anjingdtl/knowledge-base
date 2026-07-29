@@ -1,0 +1,160 @@
+.............................................F...............FFFF.F..... [  3%]
+....................................FFFF...FFFFF.F...................... [  6%]
+........................................................................ [  9%]
+........................................................................ [ 12%]
+........................................................................ [ 15%]
+........................................................................ [ 19%]
+........................................................................ [ 22%]
+........................................................................ [ 25%]
+........................................................................ [ 28%]
+........................................................................ [ 31%]
+........................................................................ [ 34%]
+........................................................................ [ 38%]
+........................................................................ [ 41%]
+........................................................................ [ 44%]
+........................................................................ [ 47%]
+....................................s................................... [ 50%]
+..........................................F............................. [ 53%]
+.......................................F................................ [ 57%]
+........................................................................ [ 60%]
+...................................................................F..FF [ 63%]
+F..F.................................................................... [ 66%]
+........................................................................ [ 69%]
+.....................................F.................................. [ 72%]
+..............F......................................................... [ 76%]
+........................................................................ [ 79%]
+........................................................................ [ 82%]
+.................s...................................................... [ 85%]
+........................................................................ [ 88%]
+......................................................................FF [ 91%]
+.F..........................F........................................... [ 95%]
+........................................................................ [ 98%]
+.......................................                                  [100%]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\config\__init__.py:1464
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\config\__init__.py:1464: PytestConfigWarning: Unknown config option: asyncio_mode
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+tests\eval\test_routing_graph_flow_execution.py:8
+  D:\AiWorkSpace\knowledge-base\tests\eval\test_routing_graph_flow_execution.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\eval\test_routing_harness_preserves_arguments.py:8
+  D:\AiWorkSpace\knowledge-base\tests\eval\test_routing_harness_preserves_arguments.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\eval\test_routing_raw_response_saved.py:8
+  D:\AiWorkSpace\knowledge-base\tests\eval\test_routing_raw_response_saved.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\eval\test_routing_timeout_is_not_complete.py:8
+  D:\AiWorkSpace\knowledge-base\tests\eval\test_routing_timeout_is_not_complete.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\eval\test_routing_validation_error_classification.py:14
+  D:\AiWorkSpace\knowledge-base\tests\eval\test_routing_validation_error_classification.py:14: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\test_size_aware_legacy.py:62
+  D:\AiWorkSpace\knowledge-base\tests\test_size_aware_legacy.py:62: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\test_wiki_read_stage.py:59
+  D:\AiWorkSpace\knowledge-base\tests\test_wiki_read_stage.py:59: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\test_wiki_read_stage.py:81
+  D:\AiWorkSpace\knowledge-base\tests\test_wiki_read_stage.py:81: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\test_wiki_read_stage.py:104
+  D:\AiWorkSpace\knowledge-base\tests\test_wiki_read_stage.py:104: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/mcp_post_fix_test.py::test_bug1_route_query
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\python.py:171: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug1_route_query returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_bug5_ask_with_query
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\python.py:171: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug5_ask_with_query returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_bug6_structured_query
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\python.py:171: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug6_structured_query returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_bug7_ask
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\python.py:171: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug7_ask returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_bug4_health_check
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\python.py:171: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_bug4_health_check returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_auto_tag_exists
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\python.py:171: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_auto_tag_exists returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/mcp_post_fix_test.py::test_search_basic
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\python.py:171: PytestReturnNotNoneWarning: Test functions should return None, but tests/mcp_post_fix_test.py::test_search_basic returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/test_api.py::TestAuthAPI::test_register
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_project_setup.py::TestConfigExampleConvergence::test_no_chroma_dir
+  D:\AiWorkSpace\knowledge-base\.venv\Lib\site-packages\_pytest\fixtures.py:1313: PytestRemovedIn10Warning: Class-scoped fixture defined as instance method is deprecated.
+  Instance attributes set in this fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use @classmethod decorator and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/architecture/test_closure_debt_baseline.py::test_baseline_reflects_current_debt_shape
+FAILED tests/architecture/test_version_consistency.py::TestVersionConsistency::test_src_version_is_expected
+FAILED tests/architecture/test_version_consistency.py::TestVersionConsistency::test_readme_badge_matches_src
+FAILED tests/architecture/test_version_consistency.py::TestVersionConsistency::test_readme_zh_badge_matches_src
+FAILED tests/architecture/test_version_consistency.py::TestVersionConsistency::test_package_json_matches_src
+FAILED tests/architecture/test_version_consistency.py::TestVersionConsistency::test_lockfile_root_matches_src
+FAILED tests/eval/test_routing_graph_flow_execution.py::test_search_then_graph_flow_passes_previous_ids
+FAILED tests/eval/test_routing_harness_preserves_arguments.py::test_agent_arguments_are_executed_byte_for_byte[search-arguments0]
+FAILED tests/eval/test_routing_harness_preserves_arguments.py::test_agent_arguments_are_executed_byte_for_byte[ask_with_query-arguments1]
+FAILED tests/eval/test_routing_raw_response_saved.py::test_raw_execution_record_is_preserved
+FAILED tests/eval/test_routing_timeout_is_not_complete.py::test_timeout_flags_are_not_task_completion[payload0]
+FAILED tests/eval/test_routing_timeout_is_not_complete.py::test_timeout_flags_are_not_task_completion[payload1]
+FAILED tests/eval/test_routing_timeout_is_not_complete.py::test_timeout_flags_are_not_task_completion[payload2]
+FAILED tests/eval/test_routing_timeout_is_not_complete.py::test_timeout_flags_are_not_task_completion[payload3]
+FAILED tests/eval/test_routing_timeout_is_not_complete.py::test_timeout_flags_are_not_task_completion[payload4]
+FAILED tests/eval/test_routing_validation_error_classification.py::test_transport_error_is_distinct_and_incomplete
+FAILED tests/test_mcp_gui_status.py::test_launcher_status_does_not_query_windows_service
+FAILED tests/test_mcp_stability.py::test_rag_query_bounds_timed_out_async_bridge_workers
+FAILED tests/test_public_ask_contract.py::TestPublicAskContract::test_ask_raw_only
+FAILED tests/test_public_ask_contract.py::TestPublicAskContract::test_ask_timeout_generate_failed
+FAILED tests/test_public_ask_contract.py::TestPublicAskContract::test_ask_consumes_execute_not_last_state
+FAILED tests/test_public_search_contract.py::TestPublicSearchContract::test_search_raw_snapshot
+FAILED tests/test_public_search_contract.py::TestPublicSearchContract::test_search_no_result
+FAILED tests/test_search_service.py::TestSearchService::test_search_calls_rewrite_hybrid_rerank
+FAILED tests/test_size_aware_legacy.py::test_size_aware_enabled_in_wiki_first_sets_scale
+FAILED tests/test_wiki_read_stage.py::test_wiki_read_stage_zero_vector_calls
+FAILED tests/test_wiki_read_stage.py::test_wiki_read_stage_skipped_for_full_search
+FAILED tests/test_wiki_read_stage.py::test_wiki_read_stage_legacy_skipped - F...
+FAILED tests/test_wiki_serving_contract.py::TestWikiServingContract::test_wiki_001_raw_evidence_is_final_base
+29 failed, 2240 passed, 2 skipped, 19 warnings in 1006.59s (0:16:46)

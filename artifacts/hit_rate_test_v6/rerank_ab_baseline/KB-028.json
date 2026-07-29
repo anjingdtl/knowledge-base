@@ -1,0 +1,246 @@
+{
+  "case": {
+    "case_id": "KB-028",
+    "category": "易混淆知识",
+    "query": "技能竞赛团体奖金限额 2026年修订",
+    "expected_knowledge_ids": [
+      "2b63b216-9850-4e82-803e-4006cb9f62ad"
+    ],
+    "expected_title_keywords": [
+      "技能竞赛",
+      "2026"
+    ],
+    "required_facts": [
+      "15000元",
+      "1200元"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕158号第二十条；团体奖金限额为2026版新增"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "9e11c032-2d9d-4ed1-a0c1-6c39f6eaa3c3",
+          "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+          "passage_id": "e70a54754d3d6c49c8f5a0936f8439af",
+          "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+          "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第五章 竞赛经费 > 第二十一条 技能竞赛奖励经费纳入广西公司人工成本预 > 第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n在遵守相关法律规定的前提下，竞赛组织领导机构可以与其协\n商对获奖人员进行表彰奖励。\n第二十条 广西公司组队参加自治区级及以上技能竞赛\n（含受集团指派参加全国性竞赛）获奖的，执行竞赛主办方统\n一要求的奖励规定。如主办方、集团公司未向获奖选手、团队\n— 8 —授予荣誉称号及颁发物质奖励的，则获个人前三名或一、二等\n奖的选手可由广西公司授予“中国电信广西公司技术能手”称号\n（D2级），并给予相应物质奖励；获团体项目一、二、三等奖\n的，广西公司可给予团队总额不超过15000元且平均每人不超\n过1200元的物质奖励。同一赛事选手分获团体奖和个人奖的，\n就高不重复奖励。\n第五章 竞赛经费\n第二十一条 技能竞赛奖励经费纳入广西公司人工成本预\n算管理，由劳动竞赛委员会归口管理。广西公司承办或参加的\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n申请流程按照公司内控权限列表的预算外项目进行审批。\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\n司内控权限列表的预算外项目进行审批。",
+          "document_family_id": "topic:技能竞赛管理办法",
+          "version_year": 2026,
+          "section_path": "第五章 竞赛经费 > 第二十一条 技能竞赛奖励经费纳入广西公司人工成本预 > 第二十二条 技能竞赛的组织费用由各竞赛的主办部门在",
+          "block_ids": [
+            "9e11c032-2d9d-4ed1-a0c1-6c39f6eaa3c3",
+            "5fcd6a61-fd7e-452e-849f-7b59d399b3cf",
+            "cfdd3044-94dc-4516-96b4-819123be8d76",
+            "ad52acca-ae4b-4b92-b417-69ef1408301c",
+            "219a2f44-bf89-4320-9de8-20306c20799a",
+            "c579b33c-68b9-4426-a4b8-bbccf02a65f5",
+            "d921477a-abee-4596-89cc-0fb8e18d996d",
+            "809c8d49-6179-46fc-b79d-a65b5ab5f3ef",
+            "fcd42b4e-05ef-4294-abe2-6c8dff106826",
+            "be64bb67-fc41-49d7-9efd-f6eba3c7e6f5",
+            "7cd9b26c-2564-4660-bd12-7e96cf049de3",
+            "c57c3f72-d360-441c-b04e-e8e6a0684ed6",
+            "48bd7b17-2fe7-4902-91c2-755c2d27b008",
+            "37458105-7478-4ca4-9704-4bae00f9b47d",
+            "822889ea-69a7-424f-87a4-88761909fc83",
+            "f7c55d88-5cd3-4215-80a2-4ad2b03ed3ba",
+            "c0e7c767-dee3-43d1-9a34-9cf577fa5399"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -26.814403612326092,
+          "fts_score": 1.0,
+          "score": 0.9000000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": true,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4154,
+            "fts_score": 1.0,
+            "title_score": 0.4615,
+            "numeric_unit_score": 1.0,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.3846,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.55,
+            "features": {
+              "exact_number_unit_match": true,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.55,
+          "ranking_score": 0.9000000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:技能竞赛管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.55,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "2b63b216-9850-4e82-803e-4006cb9f62ad"
+        ],
+        "evidence_snapshot_id": "mriJ5WnPOKwJXELUu7LxaVDtRyVixGhO",
+        "snapshot_fingerprint": "89c2ca49f1de70eac834e26d",
+        "accepted_passage_ids": [
+          "e70a54754d3d6c49c8f5a0936f8439af",
+          "f3a94cf4259bbfdf0715f343d58a3209",
+          "f888b9d28b2f6f72c7e04468549d4e70"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 90087.02,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 29,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"9e11c032-2d9d-4ed1-a0c1-6c39f6eaa3c3\",\"knowledge_id\":\"2b63b216-9850-4e82-803e-4006cb9f62ad\",\"passage_id\":\"e70a54754d3d6c49c8f5a0936f8439af\",\"title\":\"中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\",\"text\":\"【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\\n【章节】第五章 竞赛经费 > 第二十一条 技能竞赛奖励经费纳入广西公司人工成本预 > 第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\\n在遵守相关法律规定的前提下，竞赛组织领导机构可以与其协\\n商对获奖人员进行表彰奖励。\\n第二十条 广西公司组队参加自治区级及以上技能竞赛\\n（含受集团指派参加全国性竞赛）获奖的，执行竞赛主办方统\\n一要求的奖励规定。如主办方、集团公司未向获奖选手、团队\\n— 8 —授予荣誉称号及颁发物质奖励的，则获个人前三名或一、二等\\n奖的选手可由广西公司授予“中国电信广西公司技术能手”称号\\n（D2级），并给予相应物质奖励；获团体项目一、二、三等奖\\n的，广西公司可给予团队总额不超过15000元且平均每人不超\\n过1200元的物质奖励。同一赛事选手分获团体奖和个人奖的，\\n就高不重复奖励。\\n第五章 竞赛经费\\n第二十一条 技能竞赛奖励经费纳入广西公司人工成本预\\n算管理，由劳动竞赛委员会归口管理。广西公司承办或参加的\\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\\n申请流程按照公司内控权限列表的预算外项目进行审批。\\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\\n司内控权限列表的预算外项目进行审批。\",\"document_family_id\":\"topic:技能竞赛管理办法\",\"version_year\":2026,\"section_path\":\"第五章 竞赛经费 > 第二十一条 技能竞赛奖励经费纳入广西公司人工成本预 > 第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\",\"block_ids\":[\"9e11c032-2d9d-4ed1-a0c1-6c39f6eaa3c3\",\"5fcd6a61-fd7e-452e-849f-7b59d399b3cf\",\"cfdd3044-94dc-4516-96b4-819123be8d76\",\"ad52acca-ae4b-4b92-b417-69ef1408301c\",\"219a2f44-bf89-4320-9de8-20306c20799a\",\"c579b33c-68b9-4426-a4b8-bbccf02a65f5\",\"d921477a-abee-4596-89cc-0fb8e18d996d\",\"809c8d49-6179-46fc-b79d-a65b5ab5f3ef\",\"fcd42b4e-05ef-4294-abe2-6c8dff106826\",\"be64bb67-fc41-49d7-9efd-f6eba3c7e6f5\",\"7cd9b26c-2564-4660-bd12-7e96cf049de3\",\"c57c3f72-d360-441c-b04e-e8e6a0684ed6\",\"48bd7b17-2fe7-4902-91c2-755c2d27b008\",\"37458105-7478-4ca4-9704-4bae00f9b47d\",\"822889ea-69a7-424f-87a4-88761909fc83\",\"f7c55d88-5cd3-4215-80a2-4ad2b03ed3ba\",\"c0e7c767-dee3-43d1-9a34-9cf577fa5399\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-26.814403612326092,\"fts_score\":1.0,\"score\":0.9000000000000001,\"numeric_unit_features\":{\"exact_number_unit_match\":true,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":0.4154,\"fts_score\":1.0,\"title_score\":0.4615,\"numeric_unit_score\":1.0,\"phrase_coverage\":0.0,\"query_term_coverage\":0.3846,\"freshness_score\":0.5,\"final_relevance_score\":0.55,\"features\":{\"exact_number_unit_match\":true,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.55,\"ranking_score\":0.9000000000000001,\"version_rank\":{\"version_year\":2026,\"deprecated\":false,\"family_key\":\"topic:技能竞赛管理办法\",\"family_newest_year\":2026,\"is_family_newest\":true}}],\"meta\":{\"total_estimate\":1,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.55,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"2b63b216-9850-4e82-803e-4006cb9f62ad\"],\"evidence_snapshot_id\":\"mriJ5WnPOKwJXELUu7LxaVDtRyVixGhO\",\"snapshot_fingerprint\":\"89c2ca49f1de70eac834e26d\",\"accepted_passage_ids\":[\"e70a54754d3d6c49c8f5a0936f8439af\",\"f3a94cf4259bbfdf0715f343d58a3209\",\"f888b9d28b2f6f72c7e04468549d4e70\"],\"adjacent_unit\":\"passage\",\"adjacent_count\":2,\"adjacent_fallback_reason\":\"passage_index_neighbors\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "9e11c032-2d9d-4ed1-a0c1-6c39f6eaa3c3",
+              "knowledge_id": "2b63b216-9850-4e82-803e-4006cb9f62ad",
+              "passage_id": "e70a54754d3d6c49c8f5a0936f8439af",
+              "title": "中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216",
+              "text": "【文档】中电信桂-2026-158号-关于印发中国电信广西公司技能竞赛管理办法-修订-的通知--2b63b216\n【章节】第五章 竞赛经费 > 第二十一条 技能竞赛奖励经费纳入广西公司人工成本预 > 第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n在遵守相关法律规定的前提下，竞赛组织领导机构可以与其协\n商对获奖人员进行表彰奖励。\n第二十条 广西公司组队参加自治区级及以上技能竞赛\n（含受集团指派参加全国性竞赛）获奖的，执行竞赛主办方统\n一要求的奖励规定。如主办方、集团公司未向获奖选手、团队\n— 8 —授予荣誉称号及颁发物质奖励的，则获个人前三名或一、二等\n奖的选手可由广西公司授予“中国电信广西公司技术能手”称号\n（D2级），并给予相应物质奖励；获团体项目一、二、三等奖\n的，广西公司可给予团队总额不超过15000元且平均每人不超\n过1200元的物质奖励。同一赛事选手分获团体奖和个人奖的，\n就高不重复奖励。\n第五章 竞赛经费\n第二十一条 技能竞赛奖励经费纳入广西公司人工成本预\n算管理，由劳动竞赛委员会归口管理。广西公司承办或参加的\n自治区级及以上竞赛所需组织经费及奖励经费另行申请。另行\n申请流程按照公司内控权限列表的预算外项目进行审批。\n第二十二条 技能竞赛的组织费用由各竞赛的主办部门在\n本部门年度预算列支或向公司另行申请。另行申请流程按照公\n司内控权限列表的预算外项目进行审批。",
+              "document_family_id": "topic:技能竞赛管理办法",
+              "version_year": 2026,
+              "section_path": "第五章 竞赛经费 > 第二十一条 技能竞赛奖励经费纳入广西公司人工成本预 > 第二十二条 技能竞赛的组织费用由各竞赛的主办部门在",
+              "block_ids": [
+                "9e11c032-2d9d-4ed1-a0c1-6c39f6eaa3c3",
+                "5fcd6a61-fd7e-452e-849f-7b59d399b3cf",
+                "cfdd3044-94dc-4516-96b4-819123be8d76",
+                "ad52acca-ae4b-4b92-b417-69ef1408301c",
+                "219a2f44-bf89-4320-9de8-20306c20799a",
+                "c579b33c-68b9-4426-a4b8-bbccf02a65f5",
+                "d921477a-abee-4596-89cc-0fb8e18d996d",
+                "809c8d49-6179-46fc-b79d-a65b5ab5f3ef",
+                "fcd42b4e-05ef-4294-abe2-6c8dff106826",
+                "be64bb67-fc41-49d7-9efd-f6eba3c7e6f5",
+                "7cd9b26c-2564-4660-bd12-7e96cf049de3",
+                "c57c3f72-d360-441c-b04e-e8e6a0684ed6",
+                "48bd7b17-2fe7-4902-91c2-755c2d27b008",
+                "37458105-7478-4ca4-9704-4bae00f9b47d",
+                "822889ea-69a7-424f-87a4-88761909fc83",
+                "f7c55d88-5cd3-4215-80a2-4ad2b03ed3ba",
+                "c0e7c767-dee3-43d1-9a34-9cf577fa5399"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -26.814403612326092,
+              "fts_score": 1.0,
+              "score": 0.9000000000000001,
+              "numeric_unit_features": {
+                "exact_number_unit_match": true,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 0.4154,
+                "fts_score": 1.0,
+                "title_score": 0.4615,
+                "numeric_unit_score": 1.0,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 0.3846,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.55,
+                "features": {
+                  "exact_number_unit_match": true,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.55,
+              "ranking_score": 0.9000000000000001,
+              "version_rank": {
+                "version_year": 2026,
+                "deprecated": false,
+                "family_key": "topic:技能竞赛管理办法",
+                "family_newest_year": 2026,
+                "is_family_newest": true
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 1,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.55,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "2b63b216-9850-4e82-803e-4006cb9f62ad"
+            ],
+            "evidence_snapshot_id": "mriJ5WnPOKwJXELUu7LxaVDtRyVixGhO",
+            "snapshot_fingerprint": "89c2ca49f1de70eac834e26d",
+            "accepted_passage_ids": [
+              "e70a54754d3d6c49c8f5a0936f8439af",
+              "f3a94cf4259bbfdf0715f343d58a3209",
+              "f888b9d28b2f6f72c7e04468549d4e70"
+            ],
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-028",
+    "label": "baseline",
+    "query": "技能竞赛团体奖金限额 2026年修订",
+    "expected_knowledge_ids": [
+      "2b63b216-9850-4e82-803e-4006cb9f62ad"
+    ],
+    "top_ids": [
+      "2b63b216-9850-4e82-803e-4006cb9f62ad"
+    ],
+    "top1_ok": true,
+    "recall5_ok": true,
+    "search_ms": 90087.02,
+    "n_results": 1,
+    "snapshot_fingerprint": null
+  }
+}

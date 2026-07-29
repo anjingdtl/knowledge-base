@@ -1,0 +1,394 @@
+{
+  "case": {
+    "case_id": "KB-003",
+    "category": "精确关键词",
+    "query": "合同专用章管理办法 一个主体只允许制作一个",
+    "expected_knowledge_ids": [
+      "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+      "940317f3-1c33-4afc-9cad-b838ebdcf12d"
+    ],
+    "expected_title_keywords": [
+      "合同专用章",
+      "2023"
+    ],
+    "required_facts": [
+      "一个主体只允许制作一个合同实体章"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2023〕44号第十一条；库中存在两份近似重复件"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+          "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+          "passage_id": "8d4addbe5bba5f8f6382d91632763926",
+          "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3",
+          "text": "【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3\n【章节】第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许\n（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 李霞(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+          "document_family_id": "topic:合同专用章管理办法",
+          "version_year": 2023,
+          "section_path": "第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许",
+          "block_ids": [
+            "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+            "e29e669b-2bb3-419e-975a-7ead3b2838a0",
+            "49d8da79-06d5-4f5d-9d76-d37bffcb4e3e",
+            "cfeb0273-29e5-42c1-9462-d10bb47bad4b",
+            "988de74b-6e4a-470a-8e01-0f30829b70f5",
+            "91649bb0-e31a-401b-bc37-c4737c3ff57c",
+            "5edaeea9-377f-4e49-83cd-ed5f5e794fb6",
+            "f4f89831-5cfd-482f-ac57-5030d64fc4f8",
+            "a9b6744d-75cf-4722-8348-ef4bc9dcf3af",
+            "5667b40d-ac7d-4b72-8ba8-bd0c9b4c4e6c",
+            "d2cc355b-bd3b-4ad2-bd47-be7449e17a0a",
+            "ef1f591b-dbc4-4433-b61d-3790ea19a5c2",
+            "62f59bd0-68f9-4230-a38d-4608019c1aa8",
+            "03131fc4-48ff-4075-b04f-1afd460d3b7c",
+            "4d506d9d-834e-4db5-8631-4beee116820c",
+            "27c99465-d474-4155-8f81-b654cb06d5f1",
+            "aa665dfb-f66a-4c6b-a877-d933bbbfeeea"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -52.77161518444576,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.8696,
+            "fts_score": 1.0,
+            "title_score": 0.5,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.8696,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7098,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7098,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:合同专用章管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        },
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+          "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+          "passage_id": "39cdbd30bb110479500edaff4cabeab0",
+          "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8",
+          "text": "【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8\n【章节】第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许\n（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 吴先萍(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+          "document_family_id": "topic:合同专用章管理办法",
+          "version_year": 2023,
+          "section_path": "第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许",
+          "block_ids": [
+            "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+            "0385ffc4-8538-4f6e-9143-d3b57aa2dcd2",
+            "0499251c-c7e2-4d8f-b4a1-4175f84db9b1",
+            "9cb18ab3-94ba-4b3c-b68e-afed8d609f1b",
+            "d7de2bb4-8b02-435e-b741-ec84fe305b21",
+            "b391fba7-df12-4287-89d7-2a30ade64dc1",
+            "0df78807-26ae-443e-a937-cba2bdef1f8a",
+            "05ce105b-2d23-4594-a619-9cbfe2fca948",
+            "0bd735db-42e4-44ea-8489-a2bdbbbd8f0b",
+            "c4b88d38-3437-421d-b72e-4b6b715b4f21",
+            "b2fa3039-46c3-4f74-b28d-1b2f8fab3864",
+            "e710bd8a-c431-4f4d-b866-343c712f1cb8",
+            "0c4466d5-8de6-41ce-bcbb-f48296c0c659",
+            "b379c497-6ae7-4f09-ae09-bd9f93879f91",
+            "959f287f-70c4-44bc-83c3-eafbcf2cf351",
+            "63b52c40-6dd0-4a4a-9f46-daf3087f8eb9",
+            "b8d8fac4-dba5-4828-b965-00e5d1fd89f9"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -52.74300704248499,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.8696,
+            "fts_score": 1.0,
+            "title_score": 0.5,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.8696,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7098,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7098,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2023,
+            "deprecated": false,
+            "family_key": "topic:合同专用章管理办法",
+            "family_newest_year": 2023,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 2,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7098,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+          "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+        ],
+        "evidence_snapshot_id": "eTt57FU3MMJcZ77acJAIJtnbIz0AnLqV",
+        "snapshot_fingerprint": "a6a695db6bc1b7e37526c323",
+        "accepted_passage_ids": [
+          "8d4addbe5bba5f8f6382d91632763926",
+          "39cdbd30bb110479500edaff4cabeab0",
+          "381518ae9620f75eadbfa8fc018ce5b6",
+          "b13ec58fc58baa5fa4ae03c9bbbd4865",
+          "eb74ad5c633732a51f7cdda5699442ca",
+          "840b1329f15d1d28bdf3e0ecf173bc92"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 4,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 33991.91,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 4,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"7aa9f18a-4f3e-448f-9214-79e5533d3dfe\",\"knowledge_id\":\"940317f3-1c33-4afc-9cad-b838ebdcf12d\",\"passage_id\":\"8d4addbe5bba5f8f6382d91632763926\",\"title\":\"中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3\",\"text\":\"【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3\\n【章节】第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许\\n（一）负责制定合同专用章管理办法；\\n（二）负责合同专用章的日常管理；\\n（三）负责各市分公司、各专业公司和区公司合同电子章需\\n求管理；\\n（四）负责对全区合同专用章使用情况进行监督检查。\\n第九条 各市分公司、各专业公司法律部门为本单位合同专\\n用章归口管理部门，主要职责包括：\\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\\n注销等需求管理； 李霞(企业发展部（法律部）)\\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\\n行监督检查。\\n第十条 区公司企业发展部（法律部），各市分公司、各县分\\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\\n同管理人员。\\n第三章 合同专用章的申请、变更与注销\\n第十一条 合同专用章使用单位主要包括区公司、各市分公\\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\\n合同专用章。\\n（一）合同专用章按照使用单位主体制作，一个主体只允许\\n制作一个合同实体章及合同电子章。\",\"document_family_id\":\"topic:合同专用章管理办法\",\"version_year\":2023,\"section_path\":\"第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许\",\"block_ids\":[\"7aa9f18a-4f3e-448f-9214-79e5533d3dfe\",\"e29e669b-2bb3-419e-975a-7ead3b2838a0\",\"49d8da79-06d5-4f5d-9d76-d37bffcb4e3e\",\"cfeb0273-29e5-42c1-9462-d10bb47bad4b\",\"988de74b-6e4a-470a-8e01-0f30829b70f5\",\"91649bb0-e31a-401b-bc37-c4737c3ff57c\",\"5edaeea9-377f-4e49-83cd-ed5f5e794fb6\",\"f4f89831-5cfd-482f-ac57-5030d64fc4f8\",\"a9b6744d-75cf-4722-8348-ef4bc9dcf3af\",\"5667b40d-ac7d-4b72-8ba8-bd0c9b4c4e6c\",\"d2cc355b-bd3b-4ad2-bd47-be7449e17a0a\",\"ef1f591b-dbc4-4433-b61d-3790ea19a5c2\",\"62f59bd0-68f9-4230-a38d-4608019c1aa8\",\"03131fc4-48ff-4075-b04f-1afd460d3b7c\",\"4d506d9d-834e-4db5-8631-4beee116820c\",\"27c99465-d474-4155-8f81-b654cb06d5f1\",\"aa665dfb-f66a-4c6b-a877-d933bbbfeeea\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-52.77161518444576,\"fts_score\":1.0,\"score\":1.0,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":0.8696,\"fts_score\":1.0,\"title_score\":0.5,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":0.8696,\"freshness_score\":0.5,\"final_relevance_score\":0.7098,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.7098,\"ranking_score\":1.0,\"version_rank\":{\"version_year\":2023,\"deprecated\":false,\"family_key\":\"topic:合同专用章管理办法\",\"family_newest_year\":2023,\"is_family_newest\":true}},{\"source\":\"knowledge\",\"match_channel\":\"passage_fts\",\"match_channels\":[\"passage_fts\",\"keyword\"],\"block_id\":\"0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106\",\"knowledge_id\":\"16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69\",\"passage_id\":\"39cdbd30bb110479500edaff4cabeab0\",\"title\":\"中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8\",\"text\":\"【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8\\n【章节】第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许\\n（一）负责制定合同专用章管理办法；\\n（二）负责合同专用章的日常管理；\\n（三）负责各市分公司、各专业公司和区公司合同电子章需\\n求管理；\\n（四）负责对全区合同专用章使用情况进行监督检查。\\n第九条 各市分公司、各专业公司法律部门为本单位合同专\\n用章归口管理部门，主要职责包括：\\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\\n注销等需求管理； 吴先萍(企业发展部（法律部）)\\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\\n行监督检查。\\n第十条 区公司企业发展部（法律部），各市分公司、各县分\\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\\n同管理人员。\\n第三章 合同专用章的申请、变更与注销\\n第十一条 合同专用章使用单位主要包括区公司、各市分公\\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\\n合同专用章。\\n（一）合同专用章按照使用单位主体制作，一个主体只允许\\n制作一个合同实体章及合同电子章。\",\"document_family_id\":\"topic:合同专用章管理办法\",\"version_year\":2023,\"section_path\":\"第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许\",\"block_ids\":[\"0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106\",\"0385ffc4-8538-4f6e-9143-d3b57aa2dcd2\",\"0499251c-c7e2-4d8f-b4a1-4175f84db9b1\",\"9cb18ab3-94ba-4b3c-b68e-afed8d609f1b\",\"d7de2bb4-8b02-435e-b741-ec84fe305b21\",\"b391fba7-df12-4287-89d7-2a30ade64dc1\",\"0df78807-26ae-443e-a937-cba2bdef1f8a\",\"05ce105b-2d23-4594-a619-9cbfe2fca948\",\"0bd735db-42e4-44ea-8489-a2bdbbbd8f0b\",\"c4b88d38-3437-421d-b72e-4b6b715b4f21\",\"b2fa3039-46c3-4f74-b28d-1b2f8fab3864\",\"e710bd8a-c431-4f4d-b866-343c712f1cb8\",\"0c4466d5-8de6-41ce-bcbb-f48296c0c659\",\"b379c497-6ae7-4f09-ae09-bd9f93879f91\",\"959f287f-70c4-44bc-83c3-eafbcf2cf351\",\"63b52c40-6dd0-4a4a-9f46-daf3087f8eb9\",\"b8d8fac4-dba5-4828-b965-00e5d1fd89f9\"],\"retrieval_unit\":\"passage\",\"candidate_type\":\"passage\",\"fts_rank\":-52.74300704248499,\"fts_score\":1.0,\"score\":1.0,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"relevance\":{\"semantic_score\":0.8696,\"fts_score\":1.0,\"title_score\":0.5,\"numeric_unit_score\":0.5,\"phrase_coverage\":0.0,\"query_term_coverage\":0.8696,\"freshness_score\":0.5,\"final_relevance_score\":0.7098,\"features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false}},\"final_relevance_score\":0.7098,\"ranking_score\":1.0,\"version_rank\":{\"version_year\":2023,\"deprecated\":false,\"family_key\":\"topic:合同专用章管理办法\",\"family_newest_year\":2023,\"is_family_newest\":true}}],\"meta\":{\"total_estimate\":2,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.7098,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"940317f3-1c33-4afc-9cad-b838ebdcf12d\",\"16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69\"],\"evidence_snapshot_id\":\"eTt57FU3MMJcZ77acJAIJtnbIz0AnLqV\",\"snapshot_fingerprint\":\"a6a695db6bc1b7e37526c323\",\"accepted_passage_ids\":[\"8d4addbe5bba5f8f6382d91632763926\",\"39cdbd30bb110479500edaff4cabeab0\",\"381518ae9620f75eadbfa8fc018ce5b6\",\"b13ec58fc58baa5fa4ae03c9bbbd4865\",\"eb74ad5c633732a51f7cdda5699442ca\",\"840b1329f15d1d28bdf3e0ecf173bc92\"],\"adjacent_unit\":\"passage\",\"adjacent_count\":4,\"adjacent_fallback_reason\":\"passage_index_neighbors\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+              "knowledge_id": "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "passage_id": "8d4addbe5bba5f8f6382d91632763926",
+              "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3",
+              "text": "【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--940317f3\n【章节】第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许\n（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 李霞(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+              "document_family_id": "topic:合同专用章管理办法",
+              "version_year": 2023,
+              "section_path": "第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许",
+              "block_ids": [
+                "7aa9f18a-4f3e-448f-9214-79e5533d3dfe",
+                "e29e669b-2bb3-419e-975a-7ead3b2838a0",
+                "49d8da79-06d5-4f5d-9d76-d37bffcb4e3e",
+                "cfeb0273-29e5-42c1-9462-d10bb47bad4b",
+                "988de74b-6e4a-470a-8e01-0f30829b70f5",
+                "91649bb0-e31a-401b-bc37-c4737c3ff57c",
+                "5edaeea9-377f-4e49-83cd-ed5f5e794fb6",
+                "f4f89831-5cfd-482f-ac57-5030d64fc4f8",
+                "a9b6744d-75cf-4722-8348-ef4bc9dcf3af",
+                "5667b40d-ac7d-4b72-8ba8-bd0c9b4c4e6c",
+                "d2cc355b-bd3b-4ad2-bd47-be7449e17a0a",
+                "ef1f591b-dbc4-4433-b61d-3790ea19a5c2",
+                "62f59bd0-68f9-4230-a38d-4608019c1aa8",
+                "03131fc4-48ff-4075-b04f-1afd460d3b7c",
+                "4d506d9d-834e-4db5-8631-4beee116820c",
+                "27c99465-d474-4155-8f81-b654cb06d5f1",
+                "aa665dfb-f66a-4c6b-a877-d933bbbfeeea"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -52.77161518444576,
+              "fts_score": 1.0,
+              "score": 1.0,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 0.8696,
+                "fts_score": 1.0,
+                "title_score": 0.5,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 0.8696,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.7098,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.7098,
+              "ranking_score": 1.0,
+              "version_rank": {
+                "version_year": 2023,
+                "deprecated": false,
+                "family_key": "topic:合同专用章管理办法",
+                "family_newest_year": 2023,
+                "is_family_newest": true
+              }
+            },
+            {
+              "source": "knowledge",
+              "match_channel": "passage_fts",
+              "match_channels": [
+                "passage_fts",
+                "keyword"
+              ],
+              "block_id": "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+              "knowledge_id": "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69",
+              "passage_id": "39cdbd30bb110479500edaff4cabeab0",
+              "title": "中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8",
+              "text": "【文档】中电信桂-2023-44号-关于印发中国电信广西公司合同专用章管理办法的通知--16a152f8\n【章节】第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许\n（一）负责制定合同专用章管理办法；\n（二）负责合同专用章的日常管理；\n（三）负责各市分公司、各专业公司和区公司合同电子章需\n求管理；\n（四）负责对全区合同专用章使用情况进行监督检查。\n第九条 各市分公司、各专业公司法律部门为本单位合同专\n用章归口管理部门，主要职责包括：\n（一）负责本单位及所辖县分公司合同专用章的日常管理；\n（二）负责本单位及所辖县分公司合同电子章申请、变更、\n注销等需求管理； 吴先萍(企业发展部（法律部）)\n— 4 —（三）负责对本单位及所辖县分公司合同专用章使用情况进\n行监督检查。\n第十条 区公司企业发展部（法律部），各市分公司、各县分\n公司、各专业公司法律部门应确定一名印章管理员，原则上是合\n同管理人员。\n第三章 合同专用章的申请、变更与注销\n第十一条 合同专用章使用单位主要包括区公司、各市分公\n司、各县分公司、各专业公司。各城区分公司使用所在市分公司\n合同专用章。\n（一）合同专用章按照使用单位主体制作，一个主体只允许\n制作一个合同实体章及合同电子章。",
+              "document_family_id": "topic:合同专用章管理办法",
+              "version_year": 2023,
+              "section_path": "第三章 合同专用章的申请、变更与注销 > 第十一条 合同专用章使用单位主要包括区公司、各市分公 > （一）合同专用章按照使用单位主体制作，一个主体只允许",
+              "block_ids": [
+                "0ba4cb67-7e49-44d1-a9dd-bb36eb9ef106",
+                "0385ffc4-8538-4f6e-9143-d3b57aa2dcd2",
+                "0499251c-c7e2-4d8f-b4a1-4175f84db9b1",
+                "9cb18ab3-94ba-4b3c-b68e-afed8d609f1b",
+                "d7de2bb4-8b02-435e-b741-ec84fe305b21",
+                "b391fba7-df12-4287-89d7-2a30ade64dc1",
+                "0df78807-26ae-443e-a937-cba2bdef1f8a",
+                "05ce105b-2d23-4594-a619-9cbfe2fca948",
+                "0bd735db-42e4-44ea-8489-a2bdbbbd8f0b",
+                "c4b88d38-3437-421d-b72e-4b6b715b4f21",
+                "b2fa3039-46c3-4f74-b28d-1b2f8fab3864",
+                "e710bd8a-c431-4f4d-b866-343c712f1cb8",
+                "0c4466d5-8de6-41ce-bcbb-f48296c0c659",
+                "b379c497-6ae7-4f09-ae09-bd9f93879f91",
+                "959f287f-70c4-44bc-83c3-eafbcf2cf351",
+                "63b52c40-6dd0-4a4a-9f46-daf3087f8eb9",
+                "b8d8fac4-dba5-4828-b965-00e5d1fd89f9"
+              ],
+              "retrieval_unit": "passage",
+              "candidate_type": "passage",
+              "fts_rank": -52.74300704248499,
+              "fts_score": 1.0,
+              "score": 1.0,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "relevance": {
+                "semantic_score": 0.8696,
+                "fts_score": 1.0,
+                "title_score": 0.5,
+                "numeric_unit_score": 0.5,
+                "phrase_coverage": 0.0,
+                "query_term_coverage": 0.8696,
+                "freshness_score": 0.5,
+                "final_relevance_score": 0.7098,
+                "features": {
+                  "exact_number_unit_match": false,
+                  "number_match_unit_mismatch": false,
+                  "context_phrase_match": false
+                }
+              },
+              "final_relevance_score": 0.7098,
+              "ranking_score": 1.0,
+              "version_rank": {
+                "version_year": 2023,
+                "deprecated": false,
+                "family_key": "topic:合同专用章管理办法",
+                "family_newest_year": 2023,
+                "is_family_newest": true
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 2,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.7098,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+              "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+            ],
+            "evidence_snapshot_id": "eTt57FU3MMJcZ77acJAIJtnbIz0AnLqV",
+            "snapshot_fingerprint": "a6a695db6bc1b7e37526c323",
+            "accepted_passage_ids": [
+              "8d4addbe5bba5f8f6382d91632763926",
+              "39cdbd30bb110479500edaff4cabeab0",
+              "381518ae9620f75eadbfa8fc018ce5b6",
+              "b13ec58fc58baa5fa4ae03c9bbbd4865",
+              "eb74ad5c633732a51f7cdda5699442ca",
+              "840b1329f15d1d28bdf3e0ecf173bc92"
+            ],
+            "adjacent_unit": "passage",
+            "adjacent_count": 4,
+            "adjacent_fallback_reason": "passage_index_neighbors"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-003",
+    "label": "baseline",
+    "query": "合同专用章管理办法 一个主体只允许制作一个",
+    "expected_knowledge_ids": [
+      "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+      "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+    ],
+    "top_ids": [
+      "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+      "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+    ],
+    "top1_ok": true,
+    "recall5_ok": true,
+    "search_ms": 33991.91,
+    "n_results": 2,
+    "snapshot_fingerprint": null
+  }
+}

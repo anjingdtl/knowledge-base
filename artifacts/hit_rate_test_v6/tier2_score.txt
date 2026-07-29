@@ -1,0 +1,64 @@
+MISSING KB-003
+MISSING KB-005
+MISSING KB-006
+MISSING KB-008
+MISSING KB-009
+MISSING KB-012
+MISSING KB-014
+MISSING KB-016
+MISSING KB-018
+MISSING KB-019
+MISSING KB-020
+MISSING KB-022
+MISSING KB-023
+MISSING KB-024
+MISSING KB-025
+MISSING KB-026
+MISSING KB-029
+MISSING KB-030
+MISSING KB-031
+MISSING KB-032
+MISSING KB-033
+MISSING KB-034
+MISSING KB-035
+MISSING KB-037
+{
+  "metrics": {
+    "answerable_total": 13,
+    "no_answer_total": 0,
+    "top1_correct": 11,
+    "recall5_correct": 11,
+    "ask_fact_correct_count": 10,
+    "ask_citation_valid_count": 12,
+    "e2e_pass_count": 10,
+    "grounded_count": 10,
+    "Top-1 Accuracy": 0.8462,
+    "Recall@5": 0.8462,
+    "Ask Fact Correctness": 0.7692,
+    "Ask Citation Validity": 0.9231,
+    "E2E Pass Rate": 0.7692,
+    "Answer Groundedness": 0.7692,
+    "Citation Validity": 0.9,
+    "citation_total": 20,
+    "citation_valid": 18,
+    "citation_buckets": {
+      "preaccepted": 10,
+      "adjacent_extension": 10,
+      "expected_id": 0,
+      "rejected": 0
+    },
+    "Hallucination Rate": 0.0,
+    "False Positive Rate": 0.0
+  },
+  "release_verdict": "涓嶉€氳繃鏀捐",
+  "defects": {
+    "P0": [],
+    "P1": [
+      "KB-010",
+      "KB-011",
+      "KB-013"
+    ],
+    "P2": [],
+    "P3": []
+  }
+}

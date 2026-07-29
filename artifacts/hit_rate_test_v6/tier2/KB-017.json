@@ -1,0 +1,1144 @@
+{
+  "case": {
+    "case_id": "KB-017",
+    "category": "多条件组合",
+    "query": "涉诈电话 代理商一个自然月内每个号码处罚金额",
+    "expected_knowledge_ids": [
+      "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+    ],
+    "expected_title_keywords": [
+      "涉诈",
+      "2026"
+    ],
+    "required_facts": [
+      "2000元",
+      "一个自然月"
+    ],
+    "forbidden_facts": [
+      "30元"
+    ],
+    "expected_no_answer": false,
+    "notes": "组合'涉诈+代理商+单号处罚'；正确2000元，禁忌30元(涉骚扰值)"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "73533405-09e3-4388-8551-03506729614c",
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "passage_id": "f9159242a68d8d9a1268abce68d7a9a3",
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+          "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。\n2.约谈代理商暂停营业1个\n月。-\n—11—近 12 个月累计涉\n诈月份（含跨年）3 个月 工号永久关闭 - -\n近 12 个月内累计\n涉诈号码数量（含\n跨年）累计达到 30\n个（含）- - 处罚 50000 元\n累计达到 50\n个（含）的- -1.关停代理商网点名下\n全部工号。 2.停止合作。\n3.列入电信业务代理代\n办黑名单。\n说明：1.各场景处罚互不包含。\n2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n—12—附件 2\n场景（按号\n码入网时间\n判定）触发条件入网涉及\n的代理商\n营业员入网涉及的代\n理商网点 （按营\n业网点分别统\n计）入网涉及的代理\n商（按市分公司\n分别统计）备注\n一个自然月\n内涉骚扰号\n码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，\n不再统计和处置。",
+          "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+          "version_year": 2026,
+          "section_path": "2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。",
+          "block_ids": [
+            "73533405-09e3-4388-8551-03506729614c",
+            "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+            "aa843875-174b-4f55-b541-c693491a7611",
+            "a105fcfa-781d-41b7-a9c2-c036a019e441",
+            "48e847dd-e49d-408f-8329-a95659882b7f",
+            "18c90e9d-69f1-4dfa-afd3-b0a74161bb97",
+            "8096f082-5c82-41bb-8f4a-31933dd6e5ba",
+            "a41d50b4-f30d-4fea-a17c-5dbedbef4f3b",
+            "5f92f7c9-8009-49af-845d-6d690a5aeb36",
+            "90127c73-0e5b-4d28-8fac-c3fa27ae0542",
+            "4e709da3-022d-4617-aa81-96d7b2e92c9b",
+            "bf5caa29-a76c-460f-b2b8-e58d92c64824",
+            "91344594-17ea-44bb-b411-32972c90b5c6",
+            "1ae7059f-36f5-4405-839f-215a13bd7737",
+            "087a668e-3263-44eb-bf29-f9fdd10a8185",
+            "576d74d9-9d51-4ea1-9329-c3e628d92325",
+            "0777b79e-77ae-4fa7-a19d-9f32fd7c1966",
+            "12aaf4b7-1227-48a9-8b76-4615470c642e",
+            "86710f79-b49e-498d-9b33-2e0bd28d13c7",
+            "2fc4e682-4e3c-4424-8659-615ddae37ff2",
+            "647b3508-833a-4337-9a8f-9069e8a7b3fe",
+            "1b7031d8-ad61-42f7-9b4e-6a40da939470",
+            "2fb38045-67fc-4ce5-b24a-5d030b20d00c",
+            "bab47d06-faa2-45fb-bd70-98e27fef6761",
+            "f817fd8e-a701-4d08-b403-8af803d626a6",
+            "6b8b983a-ea02-48d8-90e4-8bd5ed58fec5",
+            "9c7ccb72-4ca7-4634-8f50-eb4f7cc311cc",
+            "a65f98fc-c851-4a35-b55f-b7847378fda2",
+            "7996d4c2-05c7-4a88-ace0-5e4e63818fac",
+            "8a556415-ce83-40f2-b2d2-29a8b9de5b3f",
+            "db1ad68f-45ed-4572-b043-c10e0aad5d77",
+            "80fcdbfa-f4f3-44c0-8eb3-c8fc1cb60172",
+            "f8abf96e-44b9-4d93-8297-ce52ae7f3bea"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -56.74521585261437,
+          "fts_score": 0.9701765276768027,
+          "score": 0.7975000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.4222,
+            "fts_score": 0.9702,
+            "title_score": 0.2722,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.4222,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.4475,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.4475,
+          "ranking_score": 0.7975000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.4475,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+        ],
+        "evidence_snapshot_id": "v6lujTOMoCMvhhB8f84P33m4iPPI_ULP",
+        "snapshot_fingerprint": "5d7d862a802ec9c2f6081121",
+        "accepted_passage_ids": [
+          "f9159242a68d8d9a1268abce68d7a9a3",
+          "83fb103cba98000e98863f715dc075c6",
+          "e3ff6c70841a21b963ab9eee02beab08"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 41653.98
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "83fb103cba98000e98863f715dc075c6",
+            "block_id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+            "block_ids": [
+              "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "bb4a587b-ed99-4b92-b812-131cf346c471",
+              "519fedde-2270-49d4-91f8-32b331ed04b9",
+              "dca1684b-632d-4fea-a70b-95bf15a1cf9f",
+              "0974504d-5c01-4ecb-8ae7-5806e04715f7",
+              "d9e3b6c7-2a66-4fdf-983b-4b110f1be6b5",
+              "2c7a8f34-30e4-499b-a2d5-1add2abce828",
+              "53eba63a-52a1-4a53-b0de-483c65562973",
+              "f4f39b46-ee97-44a5-a19a-0e85eb71805c",
+              "afd773f4-444b-43e3-9d0a-04f1ca1d328c",
+              "cd916b93-4801-4264-bbd6-5c24559d9d78",
+              "4b71cd6b-5b90-4e80-9804-e713d5305aa2",
+              "9bd96344-5174-4da6-81ea-efa9f2437e20",
+              "25269d78-0b70-405f-9418-db270f06246d",
+              "58272eb3-d0bd-4b7f-b5fd-5de6dc8548be",
+              "ce2f4884-75ab-4126-adad-9dd69e284036",
+              "f9222ebd-9454-4bea-884d-e45f2d29c56d",
+              "347fe33c-179b-4247-9121-90db9a073cc1",
+              "fb09b453-6ba0-41f6-be7f-d393bc9c26c3",
+              "2493619f-967b-4fc1-93b7-d384fdc6c438",
+              "6333a816-5633-47e2-915b-7b1be2824b13",
+              "d26d8e5e-35a2-4b5b-b72e-155633a00ff7",
+              "ef9db277-20c0-48ec-90b0-47a77e799186",
+              "73533405-09e3-4388-8551-03506729614c",
+              "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+              "aa843875-174b-4f55-b541-c693491a7611"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "text": "等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。",
+            "score": 0.0,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+            "evidence_passage_ids": [
+              "83fb103cba98000e98863f715dc075c6"
+            ],
+            "fact_type": "numeric",
+            "condition": "涉诈",
+            "candidate_id": "ffe585403a5a94300db1a848"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "83fb103cba98000e98863f715dc075c6",
+            "block_id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+            "block_ids": [
+              "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "bb4a587b-ed99-4b92-b812-131cf346c471",
+              "519fedde-2270-49d4-91f8-32b331ed04b9",
+              "dca1684b-632d-4fea-a70b-95bf15a1cf9f",
+              "0974504d-5c01-4ecb-8ae7-5806e04715f7",
+              "d9e3b6c7-2a66-4fdf-983b-4b110f1be6b5",
+              "2c7a8f34-30e4-499b-a2d5-1add2abce828",
+              "53eba63a-52a1-4a53-b0de-483c65562973",
+              "f4f39b46-ee97-44a5-a19a-0e85eb71805c",
+              "afd773f4-444b-43e3-9d0a-04f1ca1d328c",
+              "cd916b93-4801-4264-bbd6-5c24559d9d78",
+              "4b71cd6b-5b90-4e80-9804-e713d5305aa2",
+              "9bd96344-5174-4da6-81ea-efa9f2437e20",
+              "25269d78-0b70-405f-9418-db270f06246d",
+              "58272eb3-d0bd-4b7f-b5fd-5de6dc8548be",
+              "ce2f4884-75ab-4126-adad-9dd69e284036",
+              "f9222ebd-9454-4bea-884d-e45f2d29c56d",
+              "347fe33c-179b-4247-9121-90db9a073cc1",
+              "fb09b453-6ba0-41f6-be7f-d393bc9c26c3",
+              "2493619f-967b-4fc1-93b7-d384fdc6c438",
+              "6333a816-5633-47e2-915b-7b1be2824b13",
+              "d26d8e5e-35a2-4b5b-b72e-155633a00ff7",
+              "ef9db277-20c0-48ec-90b0-47a77e799186",
+              "73533405-09e3-4388-8551-03506729614c",
+              "bcc4fa7b-918f-43e2-b9d4-a129e04104de",
+              "aa843875-174b-4f55-b541-c693491a7611"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。",
+            "body_text": "等相关办法进行责任追究。\n第十八条 本细则由区公司市场部负责解释、修订。后续将\n按照上级部门要求和涉诈涉骚扰态势变化进行设置和调整。\n第十九条 本细则自 2026年5月1日起执行。\n附件：1.代理商入网号码涉诈处置规则\n2.代理商入网号码涉骚扰处置规则\n—9—3.自营渠道入网号码涉诈处置规则\n4.自营渠道入网号码涉骚扰号码处置规则\n5.累计涉骚扰免考核申请清单（模板）\n6.信息安全生产沟通表\n—10—附件 1\n场景（按号码入网\n时间判定）触发条件入网涉及的代理\n商营业员入网涉及的代理商网点 （按\n营业网点分别统计）入网涉及的代理商（按\n市分公司分别统计）备注\n一个自然月内涉\n诈号码每个号码 - 处罚 2000 元/个， -入网时间和涉诈月份间\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。",
+            "score": 0.0,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.4475,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "5d7d862a802ec9c2f6081121",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [
+              "涉诈"
+            ],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "涉诈电话 代理商一个自然月内每个号码处罚金额"
+          },
+          "fact_plan": {
+            "raw": "涉诈电话 代理商一个自然月内每个号码处罚金额",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [
+              "涉诈"
+            ],
+            "required_slots": [
+              "value",
+              "unit",
+              "condition",
+              "dim:人均",
+              "dim:周期",
+              "涉诈"
+            ],
+            "entities": [
+              "涉诈电话",
+              "代理商一个自然月内每个号",
+              "码处罚金额"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "涉诈电话",
+            "object": "代理商一个自然月内每个号",
+            "scope": [
+              "代理商"
+            ],
+            "selector": [
+              "人均",
+              "周期"
+            ],
+            "predicate": "处罚",
+            "polarity": "neutral",
+            "condition_slots": [
+              "涉诈"
+            ],
+            "requested_attribute": "numeric_limit",
+            "value_dimensions": [
+              "人均",
+              "周期"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "处罚",
+              "涉诈电话",
+              "代理商一个自然月内每个号",
+              "码处罚金额"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "涉诈",
+              "value": "2000",
+              "unit": "元",
+              "evidence_passage_id": "83fb103cba98000e98863f715dc075c6",
+              "record_id": "83fb103cba98000e98863f715dc075c6:r4",
+              "exact_text": "一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+              "table_row_ref": "83fb103cba98000e98863f715dc075c6:t0",
+              "value_dimension": "",
+              "group_id": "9c6ece4c369940c0"
+            }
+          ],
+          "dropped": [
+            {
+              "id": "9d059233920b9e8907465de1",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "966f8c1cc6efc880307d097d",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1edfcc0bd75bb8e9df281716",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7edb14325698e25eb6289c81",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4b44ba8d1e958f61fe7679bf",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "bd7a4b4f19a1e856f03a44b7",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4dec5a3fcd06e1aac0cdd789",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "188710151a786b96b406dcf4",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1e0cf170af2dbd2917a6852d",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "a7124951de1aecbaf6c63612",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "涉诈"
+              ]
+            },
+            {
+              "id": "af6c81a35eb694dbae2fdf4b",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "82f4b79f3e2e0ead1e9000f5",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "6ac49ea7339b96db061d620f",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "涉诈"
+              ]
+            },
+            {
+              "id": "751ea4e8a746083b6a9042fc",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "66df90b81de00b4568ef9e83",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "411d9d6f38dc2cdb13701ace",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7102f1e46b18b3338b4ec36c",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "d8d9504f3b51b6a2a26ba985",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "73dd14c53cdf9d01d8ac3cdb",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "e9499810d5bb6d2c0c9a2c33",
+              "reason": "unit_not_money"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 20,
+          "candidate_count": 23
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+              "evidence_passage_ids": [
+                "83fb103cba98000e98863f715dc075c6"
+              ],
+              "fact_type": "numeric",
+              "condition": "涉诈",
+              "candidate_id": "ffe585403a5a94300db1a848"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "涉诈电话 代理商一个自然月内每个号码处罚金额",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [
+              "涉诈"
+            ],
+            "required_slots": [
+              "value",
+              "unit",
+              "condition",
+              "dim:人均",
+              "dim:周期",
+              "涉诈"
+            ],
+            "entities": [
+              "涉诈电话",
+              "代理商一个自然月内每个号",
+              "码处罚金额"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "涉诈电话",
+            "object": "代理商一个自然月内每个号",
+            "scope": [
+              "代理商"
+            ],
+            "selector": [
+              "人均",
+              "周期"
+            ],
+            "predicate": "处罚",
+            "polarity": "neutral",
+            "condition_slots": [
+              "涉诈"
+            ],
+            "requested_attribute": "numeric_limit",
+            "value_dimensions": [
+              "人均",
+              "周期"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "处罚",
+              "涉诈电话",
+              "代理商一个自然月内每个号",
+              "码处罚金额"
+            ]
+          },
+          "input_count": 23,
+          "dropped": [
+            {
+              "id": "9d059233920b9e8907465de1",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "966f8c1cc6efc880307d097d",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1edfcc0bd75bb8e9df281716",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7edb14325698e25eb6289c81",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4b44ba8d1e958f61fe7679bf",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "bd7a4b4f19a1e856f03a44b7",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "4dec5a3fcd06e1aac0cdd789",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "188710151a786b96b406dcf4",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "1e0cf170af2dbd2917a6852d",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "a7124951de1aecbaf6c63612",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "涉诈"
+              ]
+            },
+            {
+              "id": "af6c81a35eb694dbae2fdf4b",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "82f4b79f3e2e0ead1e9000f5",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "6ac49ea7339b96db061d620f",
+              "reason": "condition_mismatch",
+              "wanted": [
+                "涉诈"
+              ]
+            },
+            {
+              "id": "751ea4e8a746083b6a9042fc",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "66df90b81de00b4568ef9e83",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "411d9d6f38dc2cdb13701ace",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "7102f1e46b18b3338b4ec36c",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "d8d9504f3b51b6a2a26ba985",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "73dd14c53cdf9d01d8ac3cdb",
+              "reason": "unit_not_money"
+            },
+            {
+              "id": "e9499810d5bb6d2c0c9a2c33",
+              "reason": "unit_not_money"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "ffe585403a5a94300db1a848",
+              "record_id": "83fb103cba98000e98863f715dc075c6:r4",
+              "passage_id": "83fb103cba98000e98863f715dc075c6",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "2000元",
+              "qualifiers": [],
+              "condition": "涉诈",
+              "value": "2000",
+              "unit": "元",
+              "exact_text": "一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+              "evidence_spans": [
+                [
+                  202,
+                  208
+                ]
+              ],
+              "table_row_ref": "83fb103cba98000e98863f715dc075c6:t0",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 16.200000000000003,
+              "unstructured_rejected": false,
+              "group_id": "9c6ece4c369940c0",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "condition": "hit",
+                "dim:人均": "miss",
+                "dim:周期": "miss",
+                "涉诈": "hit",
+                "anchor:处罚": "hit",
+                "anchor:涉诈电话": "miss",
+                "anchor:代理商一个自然月内每个号": "miss",
+                "anchor:码处罚金额": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  202,
+                  208
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "ffe585403a5a94300db1a848": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit"
+            },
+            "unit": {
+              "ffe585403a5a94300db1a848": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit"
+            },
+            "condition": {
+              "ffe585403a5a94300db1a848": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit"
+            },
+            "dim:人均": {
+              "ffe585403a5a94300db1a848": "miss",
+              "8b2f0ae6680c02dd896821cf": "miss",
+              "52f9b5fe3e809a120060f353": "miss"
+            },
+            "dim:周期": {
+              "ffe585403a5a94300db1a848": "miss",
+              "8b2f0ae6680c02dd896821cf": "miss",
+              "52f9b5fe3e809a120060f353": "miss"
+            },
+            "涉诈": {
+              "ffe585403a5a94300db1a848": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit"
+            }
+          },
+          "primary_group_id": "9c6ece4c369940c0",
+          "covered_slots": [
+            "condition",
+            "unit",
+            "value",
+            "涉诈"
+          ],
+          "missing_after_select": [
+            "dim:人均",
+            "dim:周期"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "9c6ece4c369940c0",
+                "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "f9159242a68d8d9a1268abce68d7a9a3",
+                  "83fb103cba98000e98863f715dc075c6",
+                  "e3ff6c70841a21b963ab9eee02beab08"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.7975000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+                "section": "2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 9.595,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "f9159242a68d8d9a1268abce68d7a9a3:r0",
+                  "f9159242a68d8d9a1268abce68d7a9a3:r1",
+                  "f9159242a68d8d9a1268abce68d7a9a3:r2",
+                  "f9159242a68d8d9a1268abce68d7a9a3:r3",
+                  "83fb103cba98000e98863f715dc075c6:r0",
+                  "83fb103cba98000e98863f715dc075c6:r1",
+                  "83fb103cba98000e98863f715dc075c6:r2",
+                  "83fb103cba98000e98863f715dc075c6:r3",
+                  "83fb103cba98000e98863f715dc075c6:r4",
+                  "83fb103cba98000e98863f715dc075c6:r5",
+                  "83fb103cba98000e98863f715dc075c6:r6",
+                  "83fb103cba98000e98863f715dc075c6:r7",
+                  "e3ff6c70841a21b963ab9eee02beab08:r0",
+                  "e3ff6c70841a21b963ab9eee02beab08:r1",
+                  "e3ff6c70841a21b963ab9eee02beab08:r2",
+                  "e3ff6c70841a21b963ab9eee02beab08:r3",
+                  "e3ff6c70841a21b963ab9eee02beab08:r4",
+                  "e3ff6c70841a21b963ab9eee02beab08:r5",
+                  "e3ff6c70841a21b963ab9eee02beab08:r6",
+                  "e3ff6c70841a21b963ab9eee02beab08:r7"
+                ]
+              }
+            ],
+            "primary_group_id": "9c6ece4c369940c0",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "代理商一个自然月内每个号",
+                "涉诈电话",
+                "码处罚金额"
+              ],
+              "selection": [
+                {
+                  "group_id": "9c6ece4c369940c0",
+                  "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                  "score": 9.595,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit",
+            "condition",
+            "dim:人均",
+            "dim:周期",
+            "涉诈"
+          ],
+          "candidate_ids": [
+            "ffe585403a5a94300db1a848"
+          ],
+          "missing_slots": [
+            "dim:人均",
+            "dim:周期"
+          ],
+          "complete": false,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "condition",
+            "unit",
+            "value",
+            "涉诈"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "ffe585403a5a94300db1a848": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit"
+            },
+            "unit": {
+              "ffe585403a5a94300db1a848": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit"
+            },
+            "condition": {
+              "ffe585403a5a94300db1a848": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit"
+            },
+            "dim:人均": {
+              "ffe585403a5a94300db1a848": "miss",
+              "8b2f0ae6680c02dd896821cf": "miss",
+              "52f9b5fe3e809a120060f353": "miss"
+            },
+            "dim:周期": {
+              "ffe585403a5a94300db1a848": "miss",
+              "8b2f0ae6680c02dd896821cf": "miss",
+              "52f9b5fe3e809a120060f353": "miss"
+            },
+            "涉诈": {
+              "ffe585403a5a94300db1a848": "hit",
+              "8b2f0ae6680c02dd896821cf": "hit",
+              "52f9b5fe3e809a120060f353": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "涉诈电话 代理商一个自然月内每个号码处罚金额",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [
+            "涉诈"
+          ],
+          "required_slots": [
+            "value",
+            "unit",
+            "condition",
+            "dim:人均",
+            "dim:周期",
+            "涉诈"
+          ],
+          "entities": [
+            "涉诈电话",
+            "代理商一个自然月内每个号",
+            "码处罚金额"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "涉诈电话",
+          "object": "代理商一个自然月内每个号",
+          "scope": [
+            "代理商"
+          ],
+          "selector": [
+            "人均",
+            "周期"
+          ],
+          "predicate": "处罚",
+          "polarity": "neutral",
+          "condition_slots": [
+            "涉诈"
+          ],
+          "requested_attribute": "numeric_limit",
+          "value_dimensions": [
+            "人均",
+            "周期"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "处罚",
+            "涉诈电话",
+            "代理商一个自然月内每个号",
+            "码处罚金额"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "9c6ece4c369940c0",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "f9159242a68d8d9a1268abce68d7a9a3",
+                "83fb103cba98000e98863f715dc075c6",
+                "e3ff6c70841a21b963ab9eee02beab08"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.7975000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "section": "2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 9.595,
+              "rejection_reasons": [],
+              "record_ids": [
+                "f9159242a68d8d9a1268abce68d7a9a3:r0",
+                "f9159242a68d8d9a1268abce68d7a9a3:r1",
+                "f9159242a68d8d9a1268abce68d7a9a3:r2",
+                "f9159242a68d8d9a1268abce68d7a9a3:r3",
+                "83fb103cba98000e98863f715dc075c6:r0",
+                "83fb103cba98000e98863f715dc075c6:r1",
+                "83fb103cba98000e98863f715dc075c6:r2",
+                "83fb103cba98000e98863f715dc075c6:r3",
+                "83fb103cba98000e98863f715dc075c6:r4",
+                "83fb103cba98000e98863f715dc075c6:r5",
+                "83fb103cba98000e98863f715dc075c6:r6",
+                "83fb103cba98000e98863f715dc075c6:r7",
+                "e3ff6c70841a21b963ab9eee02beab08:r0",
+                "e3ff6c70841a21b963ab9eee02beab08:r1",
+                "e3ff6c70841a21b963ab9eee02beab08:r2",
+                "e3ff6c70841a21b963ab9eee02beab08:r3",
+                "e3ff6c70841a21b963ab9eee02beab08:r4",
+                "e3ff6c70841a21b963ab9eee02beab08:r5",
+                "e3ff6c70841a21b963ab9eee02beab08:r6",
+                "e3ff6c70841a21b963ab9eee02beab08:r7"
+              ]
+            }
+          ],
+          "primary_group_id": "9c6ece4c369940c0",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "代理商一个自然月内每个号",
+              "涉诈电话",
+              "码处罚金额"
+            ],
+            "selection": [
+              {
+                "group_id": "9c6ece4c369940c0",
+                "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                "score": 9.595,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "涉诈": true,
+            "value:2000元": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "ffe585403a5a94300db1a848"
+              ],
+              "passage_id": "83fb103cba98000e98863f715dc075c6",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "text": "- 一个自然月内涉诈号码每个号码-处罚2000元/个，-入网时间和涉诈",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 35
+        },
+        "primary_group_id": "9c6ece4c369940c0",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "type": "knowledge",
+              "label": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab"
+            },
+            {
+              "id": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "type": "block",
+              "label": "第十九条 本细则自 2026年5月1日起执行。",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "d368090a-5268-4a57-b9ce-a85907076876",
+              "type": "block",
+              "label": "[第8页]",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "91006138-d944-4b1c-b5b6-6b0ab0e34440",
+              "type": "knowledge",
+              "label": "中电信桂-2021-125号-关于印发中国电信广西公司2021年社会渠道费用标准的通知--91006138"
+            },
+            {
+              "id": "af1f904e-36d3-48e5-a6b4-a4c416c33488",
+              "type": "knowledge",
+              "label": "渠道-2026-2号-关于印发中国电信广西公司营业用房租赁管理规范的通知--af1f904e"
+            }
+          ],
+          "edges": [
+            {
+              "source": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "target": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "type": "contains"
+            },
+            {
+              "source": "d368090a-5268-4a57-b9ce-a85907076876",
+              "target": "202963f9-82a7-4a80-8316-c8776bfeb58c",
+              "type": "parent"
+            },
+            {
+              "source": "91006138-d944-4b1c-b5b6-6b0ab0e34440",
+              "target": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "type": "related"
+            },
+            {
+              "source": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "target": "af1f904e-36d3-48e5-a6b4-a4c416c33488",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 5
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 0,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+          ],
+          "accepted_block_ids": [
+            "73533405-09e3-4388-8551-03506729614c"
+          ],
+          "accepted_passage_ids": [
+            "f9159242a68d8d9a1268abce68d7a9a3",
+            "83fb103cba98000e98863f715dc075c6",
+            "e3ff6c70841a21b963ab9eee02beab08"
+          ],
+          "generation_knowledge_ids": [
+            "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+          ],
+          "top_score": 0.4475,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "5d7d862a802ec9c2f6081121"
+        },
+        "snapshot_fingerprint": "5d7d862a802ec9c2f6081121",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 30.13
+  },
+  "top_candidate_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+  "candidates": [
+    {
+      "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "passage_id": "f9159242a68d8d9a1268abce68d7a9a3",
+      "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+      "score": 0.7975000000000001,
+      "final_relevance_score": 0.4475,
+      "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】2.约谈代理商暂停营业1个 > 3.列入电信业务代理代 > 2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n隔超过 24 个月（不含）\n的号码，不再统计和处\n置。\n涉诈连续月份（含\n跨年）首月1.工号须立即关\n停。2.预警帮扶后\n方可恢复营业员工\n号。- -\n连续 2 个月 工号永久关闭 处罚 10000 元 -\n连续 3 个月 -1.关停代理商网点名下全\n部工号。\n2.约谈代理商暂停营业1个\n月。-\n—11—近 12 个月累计涉\n诈月份（含跨年）3 个月 工号永久关闭 - -\n近 12 个月内累计\n涉诈号码数量（含\n跨年）累计达到 30\n个（含）- - 处罚 50000 元\n累计达到 50\n个（含）的- -1.关停代理商网点名下\n全部工号。 2.停止合作。\n3.列入电信业务代理代\n办黑名单。\n说明：1.各场景处罚互不包含。\n2.按同一营业员工号、同一网点、同一代理商分别计算触发条件 。\n—12—附件 2\n场景（按号\n码入网时间\n判定）触发条件入网涉及\n的代理商\n营业员入网涉及的代\n理商网点 （按营\n业网点分别统\n计）入网涉及的代理\n商（按市分公司\n分别统计）备注\n一个自然月\n内涉骚扰号\n码每个号码 - 处罚 30 元/个 -1.入网时间和涉骚扰月份间隔超过 12 个月（不含）的号码，\n不再统计和处置。"
+    }
+  ],
+  "search_ms": 41653.98,
+  "ask_ms": 30.13,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "v6lujTOMoCMvhhB8f84P33m4iPPI_ULP",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

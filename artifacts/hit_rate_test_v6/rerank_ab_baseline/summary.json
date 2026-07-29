@@ -1,0 +1,569 @@
+{
+  "label": "baseline",
+  "n": 32,
+  "top1": 0.875,
+  "recall5": 0.9375,
+  "elapsed_s": 2084.3,
+  "rows": [
+    {
+      "case_id": "KB-001",
+      "label": "baseline",
+      "query": "营收资金管理办法 收支两条线",
+      "expected_knowledge_ids": [
+        "574f1593-2a9f-455d-ab16-bbc5b6d0d879"
+      ],
+      "top_ids": [
+        "574f1593-2a9f-455d-ab16-bbc5b6d0d879",
+        "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 43266.57,
+      "n_results": 2,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-002",
+      "label": "baseline",
+      "query": "翼支付业务管理办法 个人支付账户余额年付款限额",
+      "expected_knowledge_ids": [
+        "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+      ],
+      "top_ids": [
+        "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 32809.39,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-003",
+      "label": "baseline",
+      "query": "合同专用章管理办法 一个主体只允许制作一个",
+      "expected_knowledge_ids": [
+        "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+        "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+      ],
+      "top_ids": [
+        "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+        "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 33991.91,
+      "n_results": 2,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-004",
+      "label": "baseline",
+      "query": "保密工作管理办法 不得使用外部互联网邮箱",
+      "expected_knowledge_ids": [
+        "e8f52cfa-2e86-4048-9358-0649094a41b9"
+      ],
+      "top_ids": [
+        "e8f52cfa-2e86-4048-9358-0649094a41b9",
+        "102bee52-4b83-438d-9296-c852579473b6"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 51748.26,
+      "n_results": 2,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-005",
+      "label": "baseline",
+      "query": "合规管理办法 首席合规官 总法律顾问",
+      "expected_knowledge_ids": [
+        "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3"
+      ],
+      "top_ids": [
+        "3eebb9f9-dabf-4cc9-a05c-18f9c9dd8bb3",
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+        "77ea3d15-7437-4d18-acbc-a48ba245630a"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 42824.02,
+      "n_results": 3,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-006",
+      "label": "baseline",
+      "query": "商业秘密保护管理办法 核心商密 普通商密 保密期限",
+      "expected_knowledge_ids": [
+        "102bee52-4b83-438d-9296-c852579473b6"
+      ],
+      "top_ids": [
+        "102bee52-4b83-438d-9296-c852579473b6",
+        "e8f52cfa-2e86-4048-9358-0649094a41b9"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 42114.07,
+      "n_results": 2,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-007",
+      "label": "baseline",
+      "query": "安全生产管理办法 专职安全员 南宁分公司不少于5人",
+      "expected_knowledge_ids": [
+        "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7"
+      ],
+      "top_ids": [
+        "acf5e2d6-1145-4cf4-bf7f-e2e6a748fea7",
+        "35c01dbd-bf6a-49a7-a111-6f65fd689111",
+        "80a7969d-1ba7-4207-a971-b530f91ae357",
+        "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+        "6246d57f-6fe0-4592-b172-c11822200aa9"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 45771.25,
+      "n_results": 5,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-008",
+      "label": "baseline",
+      "query": "授权管理办法 特定事项授权 一事一授权 MSS法律辅助系统",
+      "expected_knowledge_ids": [
+        "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+      ],
+      "top_ids": [
+        "f39e6e2e-1c71-484e-a24d-276cde30f0a9"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 35327.5,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-009",
+      "label": "baseline",
+      "query": "员工出差的住宿费和伙食补助每天能报多少",
+      "expected_knowledge_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "top_ids": [
+        "",
+        "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+        "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+        "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "top1_ok": false,
+      "recall5_ok": true,
+      "search_ms": 96063.65,
+      "n_results": 5,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-010",
+      "label": "baseline",
+      "query": "防诈骗和骚扰电话 代理商被罚多少钱",
+      "expected_knowledge_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "top_ids": [
+        "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29"
+      ],
+      "top1_ok": false,
+      "recall5_ok": false,
+      "search_ms": 210993.51,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-011",
+      "label": "baseline",
+      "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+      "expected_knowledge_ids": [
+        "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+      ],
+      "top_ids": [
+        "d2901dbf-a0b2-47d8-9e72-0f627589ddcc"
+      ],
+      "top1_ok": false,
+      "recall5_ok": false,
+      "search_ms": 154340.44,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-012",
+      "label": "baseline",
+      "query": "公司大额对外投资并购决策要不要先过法律审核",
+      "expected_knowledge_ids": [
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+      ],
+      "top_ids": [
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+        "917d55a9-10b9-41da-8199-1cab744a757a",
+        "befd93bd-9674-4b43-9fb7-bf96cb695268"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 138375.4,
+      "n_results": 3,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-013",
+      "label": "baseline",
+      "query": "公司搞比赛给员工发奖金 上限是多少",
+      "expected_knowledge_ids": [
+        "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+      ],
+      "top_ids": [
+        "8a8fb5a7-42b8-4a35-b7fe-fdc352c55011"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 85249.62,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-014",
+      "label": "baseline",
+      "query": "异业合作给客户送权益优惠券的合作方准入条件",
+      "expected_knowledge_ids": [
+        "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+      ],
+      "top_ids": [
+        "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 102160.9,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-015",
+      "label": "baseline",
+      "query": "客户提出对产品的需求 公司怎么响应处理",
+      "expected_knowledge_ids": [
+        "b40b8949-e458-408a-aa75-292b0540516b"
+      ],
+      "top_ids": [
+        "b40b8949-e458-408a-aa75-292b0540516b"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 96165.33,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-016",
+      "label": "baseline",
+      "query": "2025年差旅费管理办法 区外往返市内交通费报销标准",
+      "expected_knowledge_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "top_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+        "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+        "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+        "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 107390.51,
+      "n_results": 4,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-017",
+      "label": "baseline",
+      "query": "涉诈电话 代理商一个自然月内每个号码处罚金额",
+      "expected_knowledge_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "top_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 64651.0,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-018",
+      "label": "baseline",
+      "query": "涉骚扰电话 代理商一个自然月内每个号码处罚金额",
+      "expected_knowledge_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "top_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 61121.06,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-019",
+      "label": "baseline",
+      "query": "翼支付III类支付账户 年付款限额",
+      "expected_knowledge_ids": [
+        "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+      ],
+      "top_ids": [
+        "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+        "6d072751-3ae6-408c-a494-00dad4ae0bd1"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 19651.66,
+      "n_results": 2,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-020",
+      "label": "baseline",
+      "query": "网络信息安全考核 电话实名制实名登记率未达标扣分阈值",
+      "expected_knowledge_ids": [
+        "24a0fd9e-a285-4230-b58c-09715016758f"
+      ],
+      "top_ids": [
+        "24a0fd9e-a285-4230-b58c-09715016758f",
+        "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+        "6d072751-3ae6-408c-a494-00dad4ae0bd1",
+        "37e3bfb5-901c-43c0-b545-1dcfcf3603a7"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 83311.69,
+      "n_results": 4,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-021",
+      "label": "baseline",
+      "query": "产品问需工单 审核初审和产品评估的工作日时限",
+      "expected_knowledge_ids": [
+        "b40b8949-e458-408a-aa75-292b0540516b"
+      ],
+      "top_ids": [
+        "b40b8949-e458-408a-aa75-292b0540516b"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 48388.21,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-022",
+      "label": "baseline",
+      "query": "中国电信广西公司涉诈和涉骚扰电话处置 分别由哪个部门牵头",
+      "expected_knowledge_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "top_ids": [
+        "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 41508.12,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-023",
+      "label": "baseline",
+      "query": "合同实体章和合同电子章的法律效力关系",
+      "expected_knowledge_ids": [
+        "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+        "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+      ],
+      "top_ids": [
+        "940317f3-1c33-4afc-9cad-b838ebdcf12d",
+        "16a152f8-f1ae-4250-a3f3-bc4fd0e6fd69"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 45109.81,
+      "n_results": 2,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-024",
+      "label": "baseline",
+      "query": "广西公司差旅费伙食补助标准历年变化",
+      "expected_knowledge_ids": [
+        "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+        "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+      ],
+      "top_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+        "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+        "5f8ab691-a9d5-465f-a9a6-c9142bcac741",
+        "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 46541.3,
+      "n_results": 4,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-025",
+      "label": "baseline",
+      "query": "中国电信广西公司各类管理办法的归口管理部门 法律合规审核由谁负责",
+      "expected_knowledge_ids": [
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68"
+      ],
+      "top_ids": [
+        "0b5f5cf6-d4bc-42e9-afcf-73173c428a68",
+        "423eb665-1382-4fc3-9805-8597e3c25276",
+        "7a105c2a-9de9-414b-8ae4-7de195a21325",
+        "9e844150-1fcd-41a0-ac78-00dfd1a2aaa8",
+        "77ea3d15-7437-4d18-acbc-a48ba245630a"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 31388.53,
+      "n_results": 5,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-026",
+      "label": "baseline",
+      "query": "号百分公司差旅费管理办法 适用范围",
+      "expected_knowledge_ids": [
+        "906b7eaf-82fe-4ea3-b860-36d465ee0400"
+      ],
+      "top_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+        "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+        "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+        "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+      ],
+      "top1_ok": false,
+      "recall5_ok": true,
+      "search_ms": 42590.46,
+      "n_results": 4,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-027",
+      "label": "baseline",
+      "query": "技能竞赛 实际操作成绩占比不得少于",
+      "expected_knowledge_ids": [
+        "1acb61b4-c5ee-40b6-89e5-9c03732d957f",
+        "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      ],
+      "top_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad",
+        "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 28097.98,
+      "n_results": 2,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-028",
+      "label": "baseline",
+      "query": "技能竞赛团体奖金限额 2026年修订",
+      "expected_knowledge_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      ],
+      "top_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 90087.02,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-029",
+      "label": "baseline",
+      "query": "权益业务合作方单产品类权益结算价不应高于",
+      "expected_knowledge_ids": [
+        "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+      ],
+      "top_ids": [
+        "ad35a556-0c08-41c9-bbdb-5216e5d9bb1d"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 53268.72,
+      "n_results": 1,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-035",
+      "label": "baseline",
+      "query": "中国电信广西公司差旅费管理办法最新版本是哪一年的",
+      "expected_knowledge_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "top_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+        "77ea3d15-7437-4d18-acbc-a48ba245630a",
+        "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+        "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+        "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 34529.15,
+      "n_results": 5,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-036",
+      "label": "baseline",
+      "query": "差旅费管理办法 取消交通意外险在差旅费中报账",
+      "expected_knowledge_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f"
+      ],
+      "top_ids": [
+        "960ce8f2-41a3-4aaa-9cb2-27295fd5441f",
+        "3f57bb0d-cdb9-4257-aa0a-8692d898d2f6",
+        "906b7eaf-82fe-4ea3-b860-36d465ee0400",
+        "5f8ab691-a9d5-465f-a9a6-c9142bcac741"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 42361.4,
+      "n_results": 4,
+      "snapshot_fingerprint": null
+    },
+    {
+      "case_id": "KB-037",
+      "label": "baseline",
+      "query": "技能竞赛管理办法最新修订版 取消一级二级竞赛分级",
+      "expected_knowledge_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad"
+      ],
+      "top_ids": [
+        "2b63b216-9850-4e82-803e-4006cb9f62ad",
+        "1acb61b4-c5ee-40b6-89e5-9c03732d957f"
+      ],
+      "top1_ok": true,
+      "recall5_ok": true,
+      "search_ms": 33066.65,
+      "n_results": 2,
+      "snapshot_fingerprint": null
+    }
+  ]
+}

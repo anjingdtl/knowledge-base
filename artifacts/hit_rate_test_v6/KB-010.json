@@ -1,0 +1,962 @@
+{
+  "case": {
+    "case_id": "KB-010",
+    "category": "同义词与口语表达",
+    "query": "防诈骗和骚扰电话 代理商被罚多少钱",
+    "expected_knowledge_ids": [
+      "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+    ],
+    "expected_title_keywords": [
+      "涉诈",
+      "涉骚扰",
+      "2026"
+    ],
+    "required_facts": [
+      "2000元",
+      "涉诈"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "市场〔2026〕8号附件1；口语'防诈骗/罚多少钱'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+          "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+          "passage_id": "21c6c0e9ea80bb2df0ce5e0907f62931",
+          "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+          "text": "【文档】关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a\n【章节】3.未要求经办人提供有效证件原件、 未按要求进行用户真实 > 4.违反实名制管理规定销售已激活号卡的，每次最低处罚 > 5.对在工信部、集团公司、区通信管理局、区公司等各级单\n\n二、违规处罚规则\n（一）一旦代理商违反实名登记规定的，立即按照代理商合\n作协议的实名制相关条款处罚代理商、停业整顿、终止合作并将\n其纳入黑名单，如有违反国家法律法规的，由违规代理商承担相\n关法律责任，接受公安机关或司法机关的处理。\n1.未张贴社会渠道标识牌最低按500 元/店处罚。\n2.违反委托代理渠道管理规定进行号卡二次批发销售的， 最\n低按 1000 元/户处罚，异地违规销售最低按 2000 元/户处罚。\n3.未要求经办人提供有效证件原件、 未按要求进行用户真实\n身份信息登记或未核验用户出示证件是否本人即进行销售的， 每\n次最低处罚 3000 元/户。\n4.违反实名制管理规定销售已激活号卡的，每次最低处罚\n3000 元/户，如造成中国电信及用户经济损失，损害中国电信社\n会形象的，追究相应赔偿及法律责任。\n5.对在工信部、集团公司、区通信管理局、区公司等各级单\n位组织的实名制落实情况明察暗访中发生违规行为的厅店； 以及\n实名受理违规、相关号码被举报的厅店，一律先停业整顿，并按\n照每号（每户）不低于 10000 元的标准进行处罚。若号卡涉案、\n涉诈，并以 50000 元起处罚，视具体情节，按涉案、涉诈骗每\n号并以 10000 元累加，上不封顶。整改到位、罚款到账方可重",
+          "document_family_id": "topic:关于印发中国电信南宁分公司代理商管理办法",
+          "version_year": 2018,
+          "section_path": "3.未要求经办人提供有效证件原件、 未按要求进行用户真实 > 4.违反实名制管理规定销售已激活号卡的，每次最低处罚 > 5.对在工信部、集团公司、区通信管理局、区公司等各级单",
+          "block_ids": [
+            "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+            "281ed69b-0040-4513-b8be-803b873114df",
+            "3caf1b6b-59c8-4173-b64c-78890aa61627",
+            "76265d3f-5369-4cdd-873c-4774b9880b22",
+            "ff624a59-2be1-4afb-9d57-9e891a2a8dbc",
+            "95ee9f22-5c03-4a29-8b78-01781b697656",
+            "e5c41b47-f2d6-4b09-81b0-89def89dea96",
+            "2cf15261-3884-4ede-9ddf-ccabb1dfe12a",
+            "802134a5-e134-4c9e-8476-bbd4ee18ffea",
+            "9a34bfd7-9d9d-496c-87bc-94311b400497",
+            "4dc40324-33b7-44d8-ba80-1bcdecb57dbe",
+            "70f2649d-38f4-4f05-b398-5ec892fd66cf",
+            "8e336c41-3e54-4e91-836c-5262cdbbb02a",
+            "8dbe2fa2-36f1-4286-8088-1f3766c16b56",
+            "95ca1d88-c1eb-4fad-b732-c02079232494",
+            "3171bdd5-04d4-4938-8545-1c54128eaf1b",
+            "40cf56a2-d62f-435c-a204-cadfb3ec9eb5",
+            "11577d30-458f-42da-b60a-3755b0b0e2b9"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -6.866557272085044,
+          "fts_score": 0.7671107791184821,
+          "score": 0.7185999999999999,
+          "alias_fts_match": true,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.55,
+            "fts_score": 0.7671,
+            "title_score": 0.25,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.1143,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.3686,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.3686,
+          "ranking_score": 0.7185999999999999,
+          "version_rank": {
+            "version_year": 2018,
+            "deprecated": false,
+            "family_key": "topic:关于印发中国电信南宁分公司代理商管理办法",
+            "family_newest_year": 2018,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3686,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29"
+        ],
+        "evidence_snapshot_id": "czOK04hUcUpkkmw-TQLCro52lEBpJknT",
+        "snapshot_fingerprint": "402e629a2623a536e17d5f78",
+        "accepted_passage_ids": [
+          "21c6c0e9ea80bb2df0ce5e0907f62931",
+          "8debc7c136eeb3ce9fbb1aed25774a3c",
+          "ec8d1b83dd08c01fd60d7768de67bc62"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 147598.55
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 的标准进行处罚。若号卡涉案、涉诈，并以50000元起处罚，视具体情节，按涉",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+            "passage_id": "21c6c0e9ea80bb2df0ce5e0907f62931",
+            "block_id": "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+            "block_ids": [
+              "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+              "281ed69b-0040-4513-b8be-803b873114df",
+              "3caf1b6b-59c8-4173-b64c-78890aa61627",
+              "76265d3f-5369-4cdd-873c-4774b9880b22",
+              "ff624a59-2be1-4afb-9d57-9e891a2a8dbc",
+              "95ee9f22-5c03-4a29-8b78-01781b697656",
+              "e5c41b47-f2d6-4b09-81b0-89def89dea96",
+              "2cf15261-3884-4ede-9ddf-ccabb1dfe12a",
+              "802134a5-e134-4c9e-8476-bbd4ee18ffea",
+              "9a34bfd7-9d9d-496c-87bc-94311b400497",
+              "4dc40324-33b7-44d8-ba80-1bcdecb57dbe",
+              "70f2649d-38f4-4f05-b398-5ec892fd66cf",
+              "8e336c41-3e54-4e91-836c-5262cdbbb02a",
+              "8dbe2fa2-36f1-4286-8088-1f3766c16b56",
+              "95ca1d88-c1eb-4fad-b732-c02079232494",
+              "3171bdd5-04d4-4938-8545-1c54128eaf1b",
+              "40cf56a2-d62f-435c-a204-cadfb3ec9eb5",
+              "11577d30-458f-42da-b60a-3755b0b0e2b9"
+            ],
+            "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+            "text": "\n二、违规处罚规则\n（一）一旦代理商违反实名登记规定的，立即按照代理商合\n作协议的实名制相关条款处罚代理商、停业整顿、终止合作并将\n其纳入黑名单，如有违反国家法律法规的，由违规代理商承担相\n关法律责任，接受公安机关或司法机关的处理。\n1.未张贴社会渠道标识牌最低按500 元/店处罚。\n2.违反委托代理渠道管理规定进行号卡二次批发销售的， 最\n低按 1000 元/户处罚，异地违规销售最低按 2000 元/户处罚。\n3.未要求经办人提供有效证件原件、 未按要求进行用户真实\n身份信息登记或未核验用户出示证件是否本人即进行销售的， 每\n次最低处罚 3000 元/户。\n4.违反实名制管理规定销售已激活号卡的，每次最低处罚\n3000 元/户，如造成中国电信及用户经济损失，损害中国电信社\n会形象的，追究相应赔偿及法律责任。\n5.对在工信部、集团公司、区通信管理局、区公司等各级单\n位组织的实名制落实情况明察暗访中发生违规行为的厅店； 以及\n实名受理违规、相关号码被举报的厅店，一律先停业整顿，并按\n照每号（每户）不低于 10000 元的标准进行处罚。若号卡涉案、\n涉诈，并以 50000 元起处罚，视具体情节，按涉案、涉诈骗每\n号并以 10000 元累加，上不封顶。整改到位、罚款到账方可重",
+            "score": 0.7185999999999999,
+            "document_family_id": "topic:关于印发中国电信南宁分公司代理商管理办法",
+            "version_year": 2018,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "的标准进行处罚。若号卡涉案、涉诈，并以50000元起处罚，视具体情节，按涉",
+            "evidence_passage_ids": [
+              "21c6c0e9ea80bb2df0ce5e0907f62931"
+            ],
+            "fact_type": "numeric",
+            "condition": "涉诈",
+            "candidate_id": "99674158d5167e11b7764928"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+            "passage_id": "21c6c0e9ea80bb2df0ce5e0907f62931",
+            "block_id": "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+            "block_ids": [
+              "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+              "281ed69b-0040-4513-b8be-803b873114df",
+              "3caf1b6b-59c8-4173-b64c-78890aa61627",
+              "76265d3f-5369-4cdd-873c-4774b9880b22",
+              "ff624a59-2be1-4afb-9d57-9e891a2a8dbc",
+              "95ee9f22-5c03-4a29-8b78-01781b697656",
+              "e5c41b47-f2d6-4b09-81b0-89def89dea96",
+              "2cf15261-3884-4ede-9ddf-ccabb1dfe12a",
+              "802134a5-e134-4c9e-8476-bbd4ee18ffea",
+              "9a34bfd7-9d9d-496c-87bc-94311b400497",
+              "4dc40324-33b7-44d8-ba80-1bcdecb57dbe",
+              "70f2649d-38f4-4f05-b398-5ec892fd66cf",
+              "8e336c41-3e54-4e91-836c-5262cdbbb02a",
+              "8dbe2fa2-36f1-4286-8088-1f3766c16b56",
+              "95ca1d88-c1eb-4fad-b732-c02079232494",
+              "3171bdd5-04d4-4938-8545-1c54128eaf1b",
+              "40cf56a2-d62f-435c-a204-cadfb3ec9eb5",
+              "11577d30-458f-42da-b60a-3755b0b0e2b9"
+            ],
+            "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+            "path": "",
+            "text": "\n二、违规处罚规则\n（一）一旦代理商违反实名登记规定的，立即按照代理商合\n作协议的实名制相关条款处罚代理商、停业整顿、终止合作并将\n其纳入黑名单，如有违反国家法律法规的，由违规代理商承担相\n关法律责任，接受公安机关或司法机关的处理。\n1.未张贴社会渠道标识牌最低按500 元/店处罚。\n2.违反委托代理渠道管理规定进行号卡二次批发销售的， 最\n低按 1000 元/户处罚，异地违规销售最低按 2000 元/户处罚。\n3.未要求经办人提供有效证件原件、 未按要求进行用户真实\n身份信息登记或未核验用户出示证件是否本人即进行销售的， 每\n次最低处罚 3000 元/户。\n4.违反实名制管理规定销售已激活号卡的，每次最低处罚\n3000 元/户，如造成中国电信及用户经济损失，损害中国电信社\n会形象的，追究相应赔偿及法律责任。\n5.对在工信部、集团公司、区通信管理局、区公司等各级单\n位组织的实名制落实情况明察暗访中发生违规行为的厅店； 以及\n实名受理违规、相关号码被举报的厅店，一律先停业整顿，并按\n照每号（每户）不低于 10000 元的标准进行处罚。若号卡涉案、\n涉诈，并以 50000 元起处罚，视具体情节，按涉案、涉诈骗每\n号并以 10000 元累加，上不封顶。整改到位、罚款到账方可重",
+            "body_text": "\n二、违规处罚规则\n（一）一旦代理商违反实名登记规定的，立即按照代理商合\n作协议的实名制相关条款处罚代理商、停业整顿、终止合作并将\n其纳入黑名单，如有违反国家法律法规的，由违规代理商承担相\n关法律责任，接受公安机关或司法机关的处理。\n1.未张贴社会渠道标识牌最低按500 元/店处罚。\n2.违反委托代理渠道管理规定进行号卡二次批发销售的， 最\n低按 1000 元/户处罚，异地违规销售最低按 2000 元/户处罚。\n3.未要求经办人提供有效证件原件、 未按要求进行用户真实\n身份信息登记或未核验用户出示证件是否本人即进行销售的， 每\n次最低处罚 3000 元/户。\n4.违反实名制管理规定销售已激活号卡的，每次最低处罚\n3000 元/户，如造成中国电信及用户经济损失，损害中国电信社\n会形象的，追究相应赔偿及法律责任。\n5.对在工信部、集团公司、区通信管理局、区公司等各级单\n位组织的实名制落实情况明察暗访中发生违规行为的厅店； 以及\n实名受理违规、相关号码被举报的厅店，一律先停业整顿，并按\n照每号（每户）不低于 10000 元的标准进行处罚。若号卡涉案、\n涉诈，并以 50000 元起处罚，视具体情节，按涉案、涉诈骗每\n号并以 10000 元累加，上不封顶。整改到位、罚款到账方可重",
+            "score": 0.7185999999999999,
+            "document_family_id": "topic:关于印发中国电信南宁分公司代理商管理办法",
+            "version_year": 2018,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.3686,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "402e629a2623a536e17d5f78",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "防诈骗和骚扰电话 代理商被罚多少钱"
+          },
+          "fact_plan": {
+            "raw": "防诈骗和骚扰电话 代理商被罚多少钱",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "required_slots": [
+              "value",
+              "unit",
+              "condition",
+              "涉诈",
+              "涉骚扰"
+            ],
+            "entities": [
+              "防诈骗和骚扰电话",
+              "代理商被罚多少钱"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "防诈骗和骚扰电话",
+            "object": "代理商被罚多少钱",
+            "scope": [
+              "代理商"
+            ],
+            "selector": [],
+            "predicate": "处罚",
+            "polarity": "neutral",
+            "condition_slots": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "requested_attribute": "numeric_limit",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "处罚",
+              "防诈骗和骚扰电话",
+              "代理商被罚多少钱"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "涉诈",
+              "value": "50000",
+              "unit": "元",
+              "evidence_passage_id": "21c6c0e9ea80bb2df0ce5e0907f62931",
+              "record_id": "21c6c0e9ea80bb2df0ce5e0907f62931:r5",
+              "exact_text": "的标准进行处罚。若号卡涉案、涉诈，并以50000元起处罚，视具体情节，按涉",
+              "table_row_ref": "",
+              "value_dimension": "",
+              "group_id": "c81520f578893ef9"
+            }
+          ],
+          "dropped": [
+            {
+              "id": "a1bcedd754ed51edd3064f9c",
+              "reason": "missing_condition_for_conditioned_query"
+            },
+            {
+              "id": "92f52f2407c1343ca70fcb9e",
+              "reason": "missing_condition_for_conditioned_query"
+            },
+            {
+              "id": "0351a69e89139b11c38a652e",
+              "reason": "missing_condition_for_conditioned_query"
+            },
+            {
+              "id": "b63390afbaf466079ccf70e7",
+              "reason": "missing_condition_for_conditioned_query"
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 14,
+          "candidate_count": 10
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "的标准进行处罚。若号卡涉案、涉诈，并以50000元起处罚，视具体情节，按涉",
+              "evidence_passage_ids": [
+                "21c6c0e9ea80bb2df0ce5e0907f62931"
+              ],
+              "fact_type": "numeric",
+              "condition": "涉诈",
+              "candidate_id": "99674158d5167e11b7764928"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "防诈骗和骚扰电话 代理商被罚多少钱",
+            "intents": [
+              "numeric"
+            ],
+            "conditions": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "required_slots": [
+              "value",
+              "unit",
+              "condition",
+              "涉诈",
+              "涉骚扰"
+            ],
+            "entities": [
+              "防诈骗和骚扰电话",
+              "代理商被罚多少钱"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": false,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric"
+            ],
+            "subject": "防诈骗和骚扰电话",
+            "object": "代理商被罚多少钱",
+            "scope": [
+              "代理商"
+            ],
+            "selector": [],
+            "predicate": "处罚",
+            "polarity": "neutral",
+            "condition_slots": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "requested_attribute": "numeric_limit",
+            "value_dimensions": [
+              "value"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "处罚",
+              "防诈骗和骚扰电话",
+              "代理商被罚多少钱"
+            ]
+          },
+          "input_count": 10,
+          "dropped": [
+            {
+              "id": "a1bcedd754ed51edd3064f9c",
+              "reason": "missing_condition_for_conditioned_query"
+            },
+            {
+              "id": "92f52f2407c1343ca70fcb9e",
+              "reason": "missing_condition_for_conditioned_query"
+            },
+            {
+              "id": "0351a69e89139b11c38a652e",
+              "reason": "missing_condition_for_conditioned_query"
+            },
+            {
+              "id": "b63390afbaf466079ccf70e7",
+              "reason": "missing_condition_for_conditioned_query"
+            }
+          ],
+          "selected": [
+            {
+              "candidate_id": "99674158d5167e11b7764928",
+              "record_id": "21c6c0e9ea80bb2df0ce5e0907f62931:r5",
+              "passage_id": "21c6c0e9ea80bb2df0ce5e0907f62931",
+              "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "50000元",
+              "qualifiers": [],
+              "condition": "涉诈",
+              "value": "50000",
+              "unit": "元",
+              "exact_text": "的标准进行处罚。若号卡涉案、涉诈，并以50000元起处罚，视具体情节，按涉",
+              "evidence_spans": [
+                [
+                  120,
+                  127
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:关于印发中国电信南宁分公司代理商管理办法",
+              "version_year": 2018,
+              "score": 11.400000000000002,
+              "unstructured_rejected": false,
+              "group_id": "c81520f578893ef9",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "condition": "hit",
+                "涉诈": "hit",
+                "涉骚扰": "miss",
+                "anchor:处罚": "hit",
+                "anchor:防诈骗和骚扰电话": "miss",
+                "anchor:代理商被罚多少钱": "miss"
+              },
+              "slot_spans": {
+                "value": [
+                  120,
+                  127
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "99674158d5167e11b7764928": "hit",
+              "8bad46b7885cc2735a995b37": "hit",
+              "34183676a88e4594c271d912": "hit",
+              "ce606005ea30fa3ab10fb773": "hit",
+              "f6c3d18cb2e55f0ec2e33da5": "hit",
+              "7f93a4647d94314e18abf119": "hit"
+            },
+            "unit": {
+              "99674158d5167e11b7764928": "hit",
+              "8bad46b7885cc2735a995b37": "hit",
+              "34183676a88e4594c271d912": "hit",
+              "ce606005ea30fa3ab10fb773": "hit",
+              "f6c3d18cb2e55f0ec2e33da5": "hit",
+              "7f93a4647d94314e18abf119": "hit"
+            },
+            "condition": {
+              "99674158d5167e11b7764928": "hit",
+              "8bad46b7885cc2735a995b37": "hit",
+              "34183676a88e4594c271d912": "hit",
+              "ce606005ea30fa3ab10fb773": "hit",
+              "f6c3d18cb2e55f0ec2e33da5": "hit",
+              "7f93a4647d94314e18abf119": "hit"
+            },
+            "涉诈": {
+              "99674158d5167e11b7764928": "hit",
+              "8bad46b7885cc2735a995b37": "hit",
+              "34183676a88e4594c271d912": "hit",
+              "ce606005ea30fa3ab10fb773": "hit",
+              "f6c3d18cb2e55f0ec2e33da5": "hit",
+              "7f93a4647d94314e18abf119": "hit"
+            },
+            "涉骚扰": {
+              "99674158d5167e11b7764928": "miss",
+              "8bad46b7885cc2735a995b37": "miss",
+              "34183676a88e4594c271d912": "miss",
+              "ce606005ea30fa3ab10fb773": "miss",
+              "f6c3d18cb2e55f0ec2e33da5": "miss",
+              "7f93a4647d94314e18abf119": "miss"
+            }
+          },
+          "primary_group_id": "c81520f578893ef9",
+          "covered_slots": [
+            "condition",
+            "unit",
+            "value",
+            "涉诈"
+          ],
+          "missing_after_select": [
+            "涉骚扰"
+          ],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "c81520f578893ef9",
+                "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+                "document_family_id": "topic:关于印发中国电信南宁分公司代理商管理办法",
+                "document_revision": "2018",
+                "effective_date": "",
+                "version_year": 2018,
+                "passage_ids": [
+                  "21c6c0e9ea80bb2df0ce5e0907f62931",
+                  "8debc7c136eeb3ce9fbb1aed25774a3c",
+                  "ec8d1b83dd08c01fd60d7768de67bc62"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.7185999999999999,
+                  0.0,
+                  0.0
+                ],
+                "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+                "section": "3.未要求经办人提供有效证件原件、 未按要求进行用户真实 > 4.违反实名制管理规定销售已激活号卡的，每次最低处罚 > 5.对在工信部、集团公司、区通信管理局、区公司等各级单",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.4372,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "21c6c0e9ea80bb2df0ce5e0907f62931:r0",
+                  "21c6c0e9ea80bb2df0ce5e0907f62931:r1",
+                  "21c6c0e9ea80bb2df0ce5e0907f62931:r2",
+                  "21c6c0e9ea80bb2df0ce5e0907f62931:r3",
+                  "21c6c0e9ea80bb2df0ce5e0907f62931:r4",
+                  "21c6c0e9ea80bb2df0ce5e0907f62931:r5",
+                  "8debc7c136eeb3ce9fbb1aed25774a3c:r0",
+                  "8debc7c136eeb3ce9fbb1aed25774a3c:r1",
+                  "8debc7c136eeb3ce9fbb1aed25774a3c:r2",
+                  "8debc7c136eeb3ce9fbb1aed25774a3c:r3",
+                  "8debc7c136eeb3ce9fbb1aed25774a3c:r4",
+                  "ec8d1b83dd08c01fd60d7768de67bc62:r0",
+                  "ec8d1b83dd08c01fd60d7768de67bc62:r1",
+                  "ec8d1b83dd08c01fd60d7768de67bc62:r2"
+                ]
+              }
+            ],
+            "primary_group_id": "c81520f578893ef9",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "代理商被罚多少钱",
+                "防诈骗和骚扰电话"
+              ],
+              "selection": [
+                {
+                  "group_id": "c81520f578893ef9",
+                  "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+                  "score": 7.4372,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit",
+            "condition",
+            "涉诈",
+            "涉骚扰"
+          ],
+          "candidate_ids": [
+            "99674158d5167e11b7764928"
+          ],
+          "missing_slots": [
+            "涉骚扰"
+          ],
+          "complete": false,
+          "intents": [
+            "numeric"
+          ],
+          "covered_slots": [
+            "condition",
+            "unit",
+            "value",
+            "涉诈"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "99674158d5167e11b7764928": "hit",
+              "8bad46b7885cc2735a995b37": "hit",
+              "34183676a88e4594c271d912": "hit",
+              "ce606005ea30fa3ab10fb773": "hit",
+              "f6c3d18cb2e55f0ec2e33da5": "hit",
+              "7f93a4647d94314e18abf119": "hit"
+            },
+            "unit": {
+              "99674158d5167e11b7764928": "hit",
+              "8bad46b7885cc2735a995b37": "hit",
+              "34183676a88e4594c271d912": "hit",
+              "ce606005ea30fa3ab10fb773": "hit",
+              "f6c3d18cb2e55f0ec2e33da5": "hit",
+              "7f93a4647d94314e18abf119": "hit"
+            },
+            "condition": {
+              "99674158d5167e11b7764928": "hit",
+              "8bad46b7885cc2735a995b37": "hit",
+              "34183676a88e4594c271d912": "hit",
+              "ce606005ea30fa3ab10fb773": "hit",
+              "f6c3d18cb2e55f0ec2e33da5": "hit",
+              "7f93a4647d94314e18abf119": "hit"
+            },
+            "涉诈": {
+              "99674158d5167e11b7764928": "hit",
+              "8bad46b7885cc2735a995b37": "hit",
+              "34183676a88e4594c271d912": "hit",
+              "ce606005ea30fa3ab10fb773": "hit",
+              "f6c3d18cb2e55f0ec2e33da5": "hit",
+              "7f93a4647d94314e18abf119": "hit"
+            },
+            "涉骚扰": {
+              "99674158d5167e11b7764928": "miss",
+              "8bad46b7885cc2735a995b37": "miss",
+              "34183676a88e4594c271d912": "miss",
+              "ce606005ea30fa3ab10fb773": "miss",
+              "f6c3d18cb2e55f0ec2e33da5": "miss",
+              "7f93a4647d94314e18abf119": "miss"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "防诈骗和骚扰电话 代理商被罚多少钱",
+          "intents": [
+            "numeric"
+          ],
+          "conditions": [
+            "涉诈",
+            "涉骚扰"
+          ],
+          "required_slots": [
+            "value",
+            "unit",
+            "condition",
+            "涉诈",
+            "涉骚扰"
+          ],
+          "entities": [
+            "防诈骗和骚扰电话",
+            "代理商被罚多少钱"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": false,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric"
+          ],
+          "subject": "防诈骗和骚扰电话",
+          "object": "代理商被罚多少钱",
+          "scope": [
+            "代理商"
+          ],
+          "selector": [],
+          "predicate": "处罚",
+          "polarity": "neutral",
+          "condition_slots": [
+            "涉诈",
+            "涉骚扰"
+          ],
+          "requested_attribute": "numeric_limit",
+          "value_dimensions": [
+            "value"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "处罚",
+            "防诈骗和骚扰电话",
+            "代理商被罚多少钱"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "c81520f578893ef9",
+              "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "document_family_id": "topic:关于印发中国电信南宁分公司代理商管理办法",
+              "document_revision": "2018",
+              "effective_date": "",
+              "version_year": 2018,
+              "passage_ids": [
+                "21c6c0e9ea80bb2df0ce5e0907f62931",
+                "8debc7c136eeb3ce9fbb1aed25774a3c",
+                "ec8d1b83dd08c01fd60d7768de67bc62"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.7185999999999999,
+                0.0,
+                0.0
+              ],
+              "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+              "section": "3.未要求经办人提供有效证件原件、 未按要求进行用户真实 > 4.违反实名制管理规定销售已激活号卡的，每次最低处罚 > 5.对在工信部、集团公司、区通信管理局、区公司等各级单",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.4372,
+              "rejection_reasons": [],
+              "record_ids": [
+                "21c6c0e9ea80bb2df0ce5e0907f62931:r0",
+                "21c6c0e9ea80bb2df0ce5e0907f62931:r1",
+                "21c6c0e9ea80bb2df0ce5e0907f62931:r2",
+                "21c6c0e9ea80bb2df0ce5e0907f62931:r3",
+                "21c6c0e9ea80bb2df0ce5e0907f62931:r4",
+                "21c6c0e9ea80bb2df0ce5e0907f62931:r5",
+                "8debc7c136eeb3ce9fbb1aed25774a3c:r0",
+                "8debc7c136eeb3ce9fbb1aed25774a3c:r1",
+                "8debc7c136eeb3ce9fbb1aed25774a3c:r2",
+                "8debc7c136eeb3ce9fbb1aed25774a3c:r3",
+                "8debc7c136eeb3ce9fbb1aed25774a3c:r4",
+                "ec8d1b83dd08c01fd60d7768de67bc62:r0",
+                "ec8d1b83dd08c01fd60d7768de67bc62:r1",
+                "ec8d1b83dd08c01fd60d7768de67bc62:r2"
+              ]
+            }
+          ],
+          "primary_group_id": "c81520f578893ef9",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "代理商被罚多少钱",
+              "防诈骗和骚扰电话"
+            ],
+            "selection": [
+              {
+                "group_id": "c81520f578893ef9",
+                "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+                "score": 7.4372,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": false,
+          "missing_slots": [
+            "涉骚扰"
+          ],
+          "checks": {
+            "涉诈": true,
+            "涉骚扰": false,
+            "value:50000元": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "99674158d5167e11b7764928"
+              ],
+              "passage_id": "21c6c0e9ea80bb2df0ce5e0907f62931",
+              "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "text": "- 的标准进行处罚。若号卡涉案、涉诈，并以50000元起处罚，视具体情节，按涉",
+              "fact_kind": "numeric"
+            }
+          ],
+          "answer_len": 39
+        },
+        "primary_group_id": "c81520f578893ef9",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "type": "knowledge",
+              "label": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a"
+            },
+            {
+              "id": "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+              "type": "block",
+              "label": "作协议的实名制相关条款处罚代理商、停业整顿、终止合作并将",
+              "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29"
+            },
+            {
+              "id": "2af4198a-d1ee-4ce4-a2c2-97c8d9be399a",
+              "type": "block",
+              "label": "[第16页]",
+              "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29"
+            },
+            {
+              "id": "14f06ce8-e67a-4713-b88f-fa7738ee0b87",
+              "type": "knowledge",
+              "label": "中电信桂-2008-312号-关于印发-中国电信广西公司代理商管理规范-的通知--14f06ce8"
+            },
+            {
+              "id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "type": "knowledge",
+              "label": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf"
+            }
+          ],
+          "edges": [
+            {
+              "source": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "target": "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+              "type": "contains"
+            },
+            {
+              "source": "2af4198a-d1ee-4ce4-a2c2-97c8d9be399a",
+              "target": "adb41dd9-c106-43ab-8f28-40df6fa417dd",
+              "type": "parent"
+            },
+            {
+              "source": "14f06ce8-e67a-4713-b88f-fa7738ee0b87",
+              "target": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "type": "related"
+            },
+            {
+              "source": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "target": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 5
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 0,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29"
+          ],
+          "accepted_block_ids": [
+            "adb41dd9-c106-43ab-8f28-40df6fa417dd"
+          ],
+          "accepted_passage_ids": [
+            "21c6c0e9ea80bb2df0ce5e0907f62931",
+            "8debc7c136eeb3ce9fbb1aed25774a3c",
+            "ec8d1b83dd08c01fd60d7768de67bc62"
+          ],
+          "generation_knowledge_ids": [
+            "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29"
+          ],
+          "top_score": 0.3686,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "402e629a2623a536e17d5f78"
+        },
+        "snapshot_fingerprint": "402e629a2623a536e17d5f78",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 36.78
+  },
+  "top_candidate_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+  "candidates": [
+    {
+      "knowledge_id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+      "passage_id": "21c6c0e9ea80bb2df0ce5e0907f62931",
+      "title": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a",
+      "score": 0.7185999999999999,
+      "final_relevance_score": 0.3686,
+      "text": "【文档】关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a\n【章节】3.未要求经办人提供有效证件原件、 未按要求进行用户真实 > 4.违反实名制管理规定销售已激活号卡的，每次最低处罚 > 5.对在工信部、集团公司、区通信管理局、区公司等各级单\n\n二、违规处罚规则\n（一）一旦代理商违反实名登记规定的，立即按照代理商合\n作协议的实名制相关条款处罚代理商、停业整顿、终止合作并将\n其纳入黑名单，如有违反国家法律法规的，由违规代理商承担相\n关法律责任，接受公安机关或司法机关的处理。\n1.未张贴社会渠道标识牌最低按500 元/店处罚。\n2.违反委托代理渠道管理规定进行号卡二次批发销售的， 最\n低按 1000 元/户处罚，异地违规销售最低按 2000 元/户处罚。\n3.未要求经办人提供有效证件原件、 未按要求进行用户真实\n身份信息登记或未核验用户出示证件是否本人即进行销售的， 每\n次最低处罚 3000 元/户。\n4.违反实名制管理规定销售已激活号卡的，每次最低处罚\n3000 元/户，如造成中国电信及用户经济损失，损害中国电信社\n会形象的，追究相应赔偿及法律责任。\n5.对在工信部、集团公司、区通信管理局、区公司等各级单\n位组织的实名制落实情况明察暗访中发生违规行为的厅店； 以及\n实名受理违规、相关号码被举报的厅店，一律先停业整顿，并按\n照每号（每户）不低于 10000 元的标准进行处罚。若号卡涉案、\n涉诈，并以 50000 元起处罚，视具体情节，按涉案、涉诈骗每\n号并以 10000 元累加，上不封顶。整改到位、罚款到账方可重"
+    }
+  ],
+  "search_ms": 147598.55,
+  "ask_ms": 36.78,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "czOK04hUcUpkkmw-TQLCro52lEBpJknT",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

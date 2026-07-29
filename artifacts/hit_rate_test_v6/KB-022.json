@@ -1,0 +1,1546 @@
+{
+  "case": {
+    "case_id": "KB-022",
+    "category": "跨文档综合",
+    "query": "中国电信广西公司涉诈和涉骚扰电话处置 分别由哪个部门牵头",
+    "expected_knowledge_ids": [
+      "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+    ],
+    "expected_title_keywords": [
+      "涉诈",
+      "涉骚扰"
+    ],
+    "required_facts": [
+      "网络和信息安全管理部",
+      "市场部"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "市场〔2026〕8号第五条；涉诈=网信安部，涉骚扰=市场部，需区分两个部门"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "19369e35-835f-4481-8090-5fa27d8d3eb5",
+          "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+          "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+          "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+          "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、 > 4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作 > 第六条 对涉及的代理商营业员、代理商（网点），分涉诈、\n提取需处置入网渠道的号码；\n3.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置\n工作的数据支撑部门， 负责配合提供涉诈涉骚扰电话入网渠道处\n置工作所需的数据。\n（六）市分公司、专业公司、生产单位是涉诈涉骚扰电话入\n网渠道处置工作的发展责任部门， 负责本单位发展的入网渠道处\n置工作的具体落实，具体职责包括：\n—5—1.贯彻落实政府部门、集团公司、区公司上级主管部门的涉\n诈涉骚扰电话入网渠道处置政策和规定，承接入网渠道处置工\n作，完成相关工作要求和目标；\n2.负责细化本单位涉诈涉骚扰电话入网渠道处置规则；\n3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、\n整改等日常管理工作，集中处置涉及的自营渠道奖励、绩效等罚\n金；\n4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作\n的监督检查，对存在问题进行整改。\n第六条 对涉及的代理商营业员、代理商（网点），分涉诈、\n涉骚扰二类性质分别进行处置。",
+          "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+          "version_year": 2026,
+          "section_path": "3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、 > 4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作 > 第六条 对涉及的代理商营业员、代理商（网点），分涉诈、",
+          "block_ids": [
+            "19369e35-835f-4481-8090-5fa27d8d3eb5",
+            "fcfdee16-156a-4a5f-9093-0de3d71c645f",
+            "476b81c0-ef5c-4a5d-aad7-31655a8435d2",
+            "d95fd1bc-61d0-4ff6-92cc-80730513a792",
+            "16b37e5b-a4a3-46fd-bde1-60f102a7384f",
+            "6cce7e90-2380-4c64-afab-9d42712f78b5",
+            "7ea6da4b-fc0e-4645-88d4-4145e2c72680",
+            "f26b6d79-c89e-4c29-beae-bbda1dd1031d",
+            "61f6daae-8d7f-4cb8-9388-86abf3d4b0d4",
+            "9520609b-4d00-40f3-8690-86b6bccedd47",
+            "ca40c093-51e0-4303-a22d-31bf2aa28034",
+            "742b7374-546d-445e-8c93-df7458518777",
+            "a024682e-ad96-46d0-88fc-199463ecda43",
+            "5a093f61-6909-4f86-877d-946bef6bdd01",
+            "b3aa2a05-3c3b-4a16-9d9d-370dff8aaa00",
+            "9b21cf32-ca06-4637-b72a-6df7ff3cfbae",
+            "9dcd4152-ba40-4b85-a638-34114d0b5baf"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -64.64105115872013,
+          "fts_score": 1.0,
+          "score": 0.9145000000000001,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.5617,
+            "fts_score": 1.0,
+            "title_score": 0.6,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.5362,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.5645,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.5645,
+          "ranking_score": 0.9145000000000001,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.5645,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+        ],
+        "evidence_snapshot_id": "rS0H2q9F88C8pE_0yZmlWlECx--9iLjc",
+        "snapshot_fingerprint": "7ed3d3a4fd1d50cfcb52565d",
+        "accepted_passage_ids": [
+          "e765cfe2a9e091908e0adbf1eddd023e",
+          "e46b643a3a3217691163b8e65c618eea",
+          "fcd763c29555217f5f7d2107c7798dd3"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 41613.52
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 市分公司、专业公司、生产单位是涉诈涉骚扰电话入网渠道处置工作的发展责任部门，负责本单位发展的入网渠道处置工作的具体落实，具体职责包括\n- 数字生活中心（号百中心）是涉诈涉骚扰电话通报工作的数据支撑部门，负责通报工作，具体职责包括\n- 配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+            "block_id": "19369e35-835f-4481-8090-5fa27d8d3eb5",
+            "block_ids": [
+              "19369e35-835f-4481-8090-5fa27d8d3eb5",
+              "fcfdee16-156a-4a5f-9093-0de3d71c645f",
+              "476b81c0-ef5c-4a5d-aad7-31655a8435d2",
+              "d95fd1bc-61d0-4ff6-92cc-80730513a792",
+              "16b37e5b-a4a3-46fd-bde1-60f102a7384f",
+              "6cce7e90-2380-4c64-afab-9d42712f78b5",
+              "7ea6da4b-fc0e-4645-88d4-4145e2c72680",
+              "f26b6d79-c89e-4c29-beae-bbda1dd1031d",
+              "61f6daae-8d7f-4cb8-9388-86abf3d4b0d4",
+              "9520609b-4d00-40f3-8690-86b6bccedd47",
+              "ca40c093-51e0-4303-a22d-31bf2aa28034",
+              "742b7374-546d-445e-8c93-df7458518777",
+              "a024682e-ad96-46d0-88fc-199463ecda43",
+              "5a093f61-6909-4f86-877d-946bef6bdd01",
+              "b3aa2a05-3c3b-4a16-9d9d-370dff8aaa00",
+              "9b21cf32-ca06-4637-b72a-6df7ff3cfbae",
+              "9dcd4152-ba40-4b85-a638-34114d0b5baf"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "text": "提取需处置入网渠道的号码；\n3.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置\n工作的数据支撑部门， 负责配合提供涉诈涉骚扰电话入网渠道处\n置工作所需的数据。\n（六）市分公司、专业公司、生产单位是涉诈涉骚扰电话入\n网渠道处置工作的发展责任部门， 负责本单位发展的入网渠道处\n置工作的具体落实，具体职责包括：\n—5—1.贯彻落实政府部门、集团公司、区公司上级主管部门的涉\n诈涉骚扰电话入网渠道处置政策和规定，承接入网渠道处置工\n作，完成相关工作要求和目标；\n2.负责细化本单位涉诈涉骚扰电话入网渠道处置规则；\n3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、\n整改等日常管理工作，集中处置涉及的自营渠道奖励、绩效等罚\n金；\n4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作\n的监督检查，对存在问题进行整改。\n第六条 对涉及的代理商营业员、代理商（网点），分涉诈、\n涉骚扰二类性质分别进行处置。",
+            "score": 0.9145000000000001,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "e46b643a3a3217691163b8e65c618eea",
+            "block_id": "e0f8a976-b752-4548-99e8-9aa9e293e881",
+            "block_ids": [
+              "e0f8a976-b752-4548-99e8-9aa9e293e881",
+              "6a32a830-c91f-41f2-b355-b1cc05023d59",
+              "e66e74f0-2503-482b-bfad-45b6befb925f",
+              "7a0f5d90-e66d-4dca-975f-4610fab7eb45",
+              "6a2c773b-64d2-4c95-a2c3-2efe711d813e",
+              "6731a108-273a-4ef5-b3a4-c437fcb3e688",
+              "8ffb9f47-bbf7-4aee-9a3b-c5b91525df1e",
+              "a3c62b15-435c-4995-acd3-989d5bb78c73",
+              "ec5ac296-6648-424e-9f2c-a1af33206c07",
+              "0f532413-cdbd-4032-827f-1e66606221fb",
+              "e2de7712-3a93-4d59-a28b-bef5a900d3c1",
+              "5de1ce6d-a057-464c-a71e-70b4a9203e52",
+              "bc18d330-52b3-421a-a5da-5f823a90e8ab",
+              "19369e35-835f-4481-8090-5fa27d8d3eb5",
+              "fcfdee16-156a-4a5f-9093-0de3d71c645f",
+              "476b81c0-ef5c-4a5d-aad7-31655a8435d2"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "text": "和目标；\n2.负责归口管理全区涉诈涉骚扰电话的实体、电子、及直销\n入网渠道的预警帮扶、处罚、整改等工作，集中处置涉及的代理\n商佣金等罚金；\n3.负责对涉诈涉骚扰电话的实体、电子、及直销入网渠道处\n置情况进行监督检查，对存在问题督促整改；\n4.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（四）数字生活中心（号百中心）是涉诈涉骚扰电话通报工\n作的数据支撑部门，负责通报工作，具体职责包括：\n1.负责承接涉诈涉骚扰电话的通报要求，汇总各类涉诈涉骚\n扰号码，补充完善处置入网渠道所需的数据，定期进行通报；\n2.负责对涉诈、涉骚扰电话、涉垃圾短信的号码进行核查，\n提取需处置入网渠道的号码；\n3.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置\n工作的数据支撑部门， 负责配合提供涉诈涉骚扰电话入网渠道处\n置工作所需的数据。",
+            "score": 0.0,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "市分公司、专业公司、生产单位是涉诈涉骚扰电话入网渠道处置工作的发展责任部门，负责本单位发展的入网渠道处置工作的具体落实，具体职责包括：",
+            "evidence_passage_ids": [
+              "e765cfe2a9e091908e0adbf1eddd023e"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "40427f6b0dd3166c83ab4009"
+          },
+          {
+            "text": "数字生活中心（号百中心）是涉诈涉骚扰电话通报工作的数据支撑部门，负责通报工作，具体职责包括：",
+            "evidence_passage_ids": [
+              "e46b643a3a3217691163b8e65c618eea"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "66b09b15f420bc81cb92f000"
+          },
+          {
+            "text": "配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+            "evidence_passage_ids": [
+              "e765cfe2a9e091908e0adbf1eddd023e"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "235bbc6a6c4cb156294087ec"
+          },
+          {
+            "text": "配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+            "evidence_passage_ids": [
+              "e46b643a3a3217691163b8e65c618eea"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "dcafead81e75e3e63a253982"
+          },
+          {
+            "text": "负责细化本单位涉诈涉骚扰电话入网渠道处置规则",
+            "evidence_passage_ids": [
+              "e765cfe2a9e091908e0adbf1eddd023e"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "af508886f3b6ae5c7676d559"
+          },
+          {
+            "text": "负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作的监督检查，对存在问题进行整改",
+            "evidence_passage_ids": [
+              "e765cfe2a9e091908e0adbf1eddd023e"
+            ],
+            "fact_type": "responsibility",
+            "condition": "",
+            "candidate_id": "b0afe3c4cacf9202abc1707a"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+            "block_id": "19369e35-835f-4481-8090-5fa27d8d3eb5",
+            "block_ids": [
+              "19369e35-835f-4481-8090-5fa27d8d3eb5",
+              "fcfdee16-156a-4a5f-9093-0de3d71c645f",
+              "476b81c0-ef5c-4a5d-aad7-31655a8435d2",
+              "d95fd1bc-61d0-4ff6-92cc-80730513a792",
+              "16b37e5b-a4a3-46fd-bde1-60f102a7384f",
+              "6cce7e90-2380-4c64-afab-9d42712f78b5",
+              "7ea6da4b-fc0e-4645-88d4-4145e2c72680",
+              "f26b6d79-c89e-4c29-beae-bbda1dd1031d",
+              "61f6daae-8d7f-4cb8-9388-86abf3d4b0d4",
+              "9520609b-4d00-40f3-8690-86b6bccedd47",
+              "ca40c093-51e0-4303-a22d-31bf2aa28034",
+              "742b7374-546d-445e-8c93-df7458518777",
+              "a024682e-ad96-46d0-88fc-199463ecda43",
+              "5a093f61-6909-4f86-877d-946bef6bdd01",
+              "b3aa2a05-3c3b-4a16-9d9d-370dff8aaa00",
+              "9b21cf32-ca06-4637-b72a-6df7ff3cfbae",
+              "9dcd4152-ba40-4b85-a638-34114d0b5baf"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "提取需处置入网渠道的号码；\n3.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置\n工作的数据支撑部门， 负责配合提供涉诈涉骚扰电话入网渠道处\n置工作所需的数据。\n（六）市分公司、专业公司、生产单位是涉诈涉骚扰电话入\n网渠道处置工作的发展责任部门， 负责本单位发展的入网渠道处\n置工作的具体落实，具体职责包括：\n—5—1.贯彻落实政府部门、集团公司、区公司上级主管部门的涉\n诈涉骚扰电话入网渠道处置政策和规定，承接入网渠道处置工\n作，完成相关工作要求和目标；\n2.负责细化本单位涉诈涉骚扰电话入网渠道处置规则；\n3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、\n整改等日常管理工作，集中处置涉及的自营渠道奖励、绩效等罚\n金；\n4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作\n的监督检查，对存在问题进行整改。\n第六条 对涉及的代理商营业员、代理商（网点），分涉诈、\n涉骚扰二类性质分别进行处置。",
+            "body_text": "提取需处置入网渠道的号码；\n3.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置\n工作的数据支撑部门， 负责配合提供涉诈涉骚扰电话入网渠道处\n置工作所需的数据。\n（六）市分公司、专业公司、生产单位是涉诈涉骚扰电话入\n网渠道处置工作的发展责任部门， 负责本单位发展的入网渠道处\n置工作的具体落实，具体职责包括：\n—5—1.贯彻落实政府部门、集团公司、区公司上级主管部门的涉\n诈涉骚扰电话入网渠道处置政策和规定，承接入网渠道处置工\n作，完成相关工作要求和目标；\n2.负责细化本单位涉诈涉骚扰电话入网渠道处置规则；\n3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、\n整改等日常管理工作，集中处置涉及的自营渠道奖励、绩效等罚\n金；\n4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作\n的监督检查，对存在问题进行整改。\n第六条 对涉及的代理商营业员、代理商（网点），分涉诈、\n涉骚扰二类性质分别进行处置。",
+            "score": 0.9145000000000001,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+            "passage_id": "e46b643a3a3217691163b8e65c618eea",
+            "block_id": "e0f8a976-b752-4548-99e8-9aa9e293e881",
+            "block_ids": [
+              "e0f8a976-b752-4548-99e8-9aa9e293e881",
+              "6a32a830-c91f-41f2-b355-b1cc05023d59",
+              "e66e74f0-2503-482b-bfad-45b6befb925f",
+              "7a0f5d90-e66d-4dca-975f-4610fab7eb45",
+              "6a2c773b-64d2-4c95-a2c3-2efe711d813e",
+              "6731a108-273a-4ef5-b3a4-c437fcb3e688",
+              "8ffb9f47-bbf7-4aee-9a3b-c5b91525df1e",
+              "a3c62b15-435c-4995-acd3-989d5bb78c73",
+              "ec5ac296-6648-424e-9f2c-a1af33206c07",
+              "0f532413-cdbd-4032-827f-1e66606221fb",
+              "e2de7712-3a93-4d59-a28b-bef5a900d3c1",
+              "5de1ce6d-a057-464c-a71e-70b4a9203e52",
+              "bc18d330-52b3-421a-a5da-5f823a90e8ab",
+              "19369e35-835f-4481-8090-5fa27d8d3eb5",
+              "fcfdee16-156a-4a5f-9093-0de3d71c645f",
+              "476b81c0-ef5c-4a5d-aad7-31655a8435d2"
+            ],
+            "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+            "path": "",
+            "text": "和目标；\n2.负责归口管理全区涉诈涉骚扰电话的实体、电子、及直销\n入网渠道的预警帮扶、处罚、整改等工作，集中处置涉及的代理\n商佣金等罚金；\n3.负责对涉诈涉骚扰电话的实体、电子、及直销入网渠道处\n置情况进行监督检查，对存在问题督促整改；\n4.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（四）数字生活中心（号百中心）是涉诈涉骚扰电话通报工\n作的数据支撑部门，负责通报工作，具体职责包括：\n1.负责承接涉诈涉骚扰电话的通报要求，汇总各类涉诈涉骚\n扰号码，补充完善处置入网渠道所需的数据，定期进行通报；\n2.负责对涉诈、涉骚扰电话、涉垃圾短信的号码进行核查，\n提取需处置入网渠道的号码；\n3.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置\n工作的数据支撑部门， 负责配合提供涉诈涉骚扰电话入网渠道处\n置工作所需的数据。",
+            "body_text": "和目标；\n2.负责归口管理全区涉诈涉骚扰电话的实体、电子、及直销\n入网渠道的预警帮扶、处罚、整改等工作，集中处置涉及的代理\n商佣金等罚金；\n3.负责对涉诈涉骚扰电话的实体、电子、及直销入网渠道处\n置情况进行监督检查，对存在问题督促整改；\n4.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（四）数字生活中心（号百中心）是涉诈涉骚扰电话通报工\n作的数据支撑部门，负责通报工作，具体职责包括：\n1.负责承接涉诈涉骚扰电话的通报要求，汇总各类涉诈涉骚\n扰号码，补充完善处置入网渠道所需的数据，定期进行通报；\n2.负责对涉诈、涉骚扰电话、涉垃圾短信的号码进行核查，\n提取需处置入网渠道的号码；\n3.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置\n工作的数据支撑部门， 负责配合提供涉诈涉骚扰电话入网渠道处\n置工作所需的数据。",
+            "score": 0.0,
+            "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.5645,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "7ed3d3a4fd1d50cfcb52565d",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "fact_types": [],
+            "raw": "中国电信广西公司涉诈和涉骚扰电话处置 分别由哪个部门牵头"
+          },
+          "fact_plan": {
+            "raw": "中国电信广西公司涉诈和涉骚扰电话处置 分别由哪个部门牵头",
+            "intents": [
+              "responsibility",
+              "policy"
+            ],
+            "conditions": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "required_slots": [
+              "subject",
+              "role",
+              "policy_fact",
+              "predicate:职责",
+              "涉诈",
+              "涉骚扰"
+            ],
+            "entities": [
+              "中国电信广西公司涉诈和涉",
+              "骚扰电话处置",
+              "分别由哪个部门牵头"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": true,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "responsibility",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "中国电信广西公司涉诈和涉",
+            "object": "骚扰电话处置",
+            "scope": [],
+            "selector": [],
+            "predicate": "职责",
+            "polarity": "positive",
+            "condition_slots": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "requested_attribute": "responsibility",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [
+              {
+                "text": "中国电信广西公司涉诈",
+                "anchors": [
+                  "中国电信广西公司涉诈"
+                ]
+              },
+              {
+                "text": "涉骚扰电话处置",
+                "anchors": [
+                  "涉骚扰电话处置"
+                ]
+              },
+              {
+                "text": "由哪个部门牵头",
+                "anchors": [
+                  "由哪个部门牵头"
+                ]
+              }
+            ],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "职责",
+              "中国电信广西公司涉诈和涉",
+              "骚扰电话处置",
+              "分别由哪个部门牵头"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 22,
+          "candidate_count": 14
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "市分公司、专业公司、生产单位是涉诈涉骚扰电话入网渠道处置工作的发展责任部门，负责本单位发展的入网渠道处置工作的具体落实，具体职责包括：",
+              "evidence_passage_ids": [
+                "e765cfe2a9e091908e0adbf1eddd023e"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "40427f6b0dd3166c83ab4009"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "数字生活中心（号百中心）是涉诈涉骚扰电话通报工作的数据支撑部门，负责通报工作，具体职责包括：",
+              "evidence_passage_ids": [
+                "e46b643a3a3217691163b8e65c618eea"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "66b09b15f420bc81cb92f000"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+              "evidence_passage_ids": [
+                "e765cfe2a9e091908e0adbf1eddd023e"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "235bbc6a6c4cb156294087ec"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+              "evidence_passage_ids": [
+                "e46b643a3a3217691163b8e65c618eea"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "dcafead81e75e3e63a253982"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责细化本单位涉诈涉骚扰电话入网渠道处置规则",
+              "evidence_passage_ids": [
+                "e765cfe2a9e091908e0adbf1eddd023e"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "af508886f3b6ae5c7676d559"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作的监督检查，对存在问题进行整改",
+              "evidence_passage_ids": [
+                "e765cfe2a9e091908e0adbf1eddd023e"
+              ],
+              "fact_type": "responsibility",
+              "condition": "",
+              "candidate_id": "b0afe3c4cacf9202abc1707a"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "中国电信广西公司涉诈和涉骚扰电话处置 分别由哪个部门牵头",
+            "intents": [
+              "responsibility",
+              "policy"
+            ],
+            "conditions": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "required_slots": [
+              "subject",
+              "role",
+              "policy_fact",
+              "predicate:职责",
+              "涉诈",
+              "涉骚扰"
+            ],
+            "entities": [
+              "中国电信广西公司涉诈和涉",
+              "骚扰电话处置",
+              "分别由哪个部门牵头"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": true,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "responsibility",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "中国电信广西公司涉诈和涉",
+            "object": "骚扰电话处置",
+            "scope": [],
+            "selector": [],
+            "predicate": "职责",
+            "polarity": "positive",
+            "condition_slots": [
+              "涉诈",
+              "涉骚扰"
+            ],
+            "requested_attribute": "responsibility",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [
+              {
+                "text": "中国电信广西公司涉诈",
+                "anchors": [
+                  "中国电信广西公司涉诈"
+                ]
+              },
+              {
+                "text": "涉骚扰电话处置",
+                "anchors": [
+                  "涉骚扰电话处置"
+                ]
+              },
+              {
+                "text": "由哪个部门牵头",
+                "anchors": [
+                  "由哪个部门牵头"
+                ]
+              }
+            ],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "职责",
+              "中国电信广西公司涉诈和涉",
+              "骚扰电话处置",
+              "分别由哪个部门牵头"
+            ]
+          },
+          "input_count": 14,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "40427f6b0dd3166c83ab4009",
+              "record_id": "e765cfe2a9e091908e0adbf1eddd023e:r3",
+              "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "responsibility",
+              "subject": "职责",
+              "predicate": "职责",
+              "object": "市分公司、专业公司、生产单位是涉诈涉骚扰电话入网渠道处置工作的发展责任部门，负责本单位发展的入网渠道处置工作的具体落实，具体职责包括：",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "市分公司、专业公司、生产单位是涉诈涉骚扰电话入网渠道处置工作的发展责任部门，负责本单位发展的入网渠道处置工作的具体落实，具体职责包括：",
+              "evidence_spans": [
+                [
+                  0,
+                  68
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 16.500000000000004,
+              "unstructured_rejected": false,
+              "group_id": "9c6ece4c369940c0",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:职责": "hit",
+                "涉诈": "hit",
+                "涉骚扰": "hit",
+                "anchor:职责": "hit",
+                "anchor:中国电信广西公司涉诈和涉": "miss",
+                "anchor:骚扰电话处置": "miss",
+                "anchor:分别由哪个部门牵头": "miss"
+              },
+              "slot_spans": {
+                "predicate:职责": [
+                  62,
+                  64
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "66b09b15f420bc81cb92f000",
+              "record_id": "e46b643a3a3217691163b8e65c618eea:r4",
+              "passage_id": "e46b643a3a3217691163b8e65c618eea",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "responsibility",
+              "subject": "职责",
+              "predicate": "职责",
+              "object": "数字生活中心（号百中心）是涉诈涉骚扰电话通报工作的数据支撑部门，负责通报工作，具体职责包括：",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "数字生活中心（号百中心）是涉诈涉骚扰电话通报工作的数据支撑部门，负责通报工作，具体职责包括：",
+              "evidence_spans": [
+                [
+                  0,
+                  46
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 16.500000000000004,
+              "unstructured_rejected": false,
+              "group_id": "9c6ece4c369940c0",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:职责": "hit",
+                "涉诈": "hit",
+                "涉骚扰": "hit",
+                "anchor:职责": "hit",
+                "anchor:中国电信广西公司涉诈和涉": "miss",
+                "anchor:骚扰电话处置": "miss",
+                "anchor:分别由哪个部门牵头": "miss"
+              },
+              "slot_spans": {
+                "predicate:职责": [
+                  41,
+                  43
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "235bbc6a6c4cb156294087ec",
+              "record_id": "e765cfe2a9e091908e0adbf1eddd023e:r1",
+              "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "responsibility",
+              "subject": "职责",
+              "predicate": "职责",
+              "object": "配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+              "evidence_spans": [
+                [
+                  0,
+                  38
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 16.400000000000002,
+              "unstructured_rejected": false,
+              "group_id": "9c6ece4c369940c0",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:职责": "hit",
+                "涉诈": "miss",
+                "涉骚扰": "miss",
+                "anchor:职责": "hit",
+                "anchor:中国电信广西公司涉诈和涉": "miss",
+                "anchor:骚扰电话处置": "miss",
+                "anchor:分别由哪个部门牵头": "miss"
+              },
+              "slot_spans": {
+                "predicate:职责": [
+                  23,
+                  25
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "dcafead81e75e3e63a253982",
+              "record_id": "e46b643a3a3217691163b8e65c618eea:r3",
+              "passage_id": "e46b643a3a3217691163b8e65c618eea",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "responsibility",
+              "subject": "职责",
+              "predicate": "职责",
+              "object": "配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+              "evidence_spans": [
+                [
+                  0,
+                  38
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 16.400000000000002,
+              "unstructured_rejected": false,
+              "group_id": "9c6ece4c369940c0",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "hit",
+                "role": "hit",
+                "policy_fact": "hit",
+                "predicate:职责": "hit",
+                "涉诈": "miss",
+                "涉骚扰": "miss",
+                "anchor:职责": "hit",
+                "anchor:中国电信广西公司涉诈和涉": "miss",
+                "anchor:骚扰电话处置": "miss",
+                "anchor:分别由哪个部门牵头": "miss"
+              },
+              "slot_spans": {
+                "predicate:职责": [
+                  23,
+                  25
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "af508886f3b6ae5c7676d559",
+              "record_id": "e765cfe2a9e091908e0adbf1eddd023e:r4",
+              "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "responsibility",
+              "subject": "",
+              "predicate": "职责",
+              "object": "负责细化本单位涉诈涉骚扰电话入网渠道处置规则",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责细化本单位涉诈涉骚扰电话入网渠道处置规则",
+              "evidence_spans": [
+                [
+                  0,
+                  22
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 7.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "9c6ece4c369940c0",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "unknown",
+                "role": "unknown",
+                "policy_fact": "hit",
+                "predicate:职责": "miss",
+                "涉诈": "hit",
+                "涉骚扰": "hit",
+                "anchor:职责": "miss",
+                "anchor:中国电信广西公司涉诈和涉": "miss",
+                "anchor:骚扰电话处置": "miss",
+                "anchor:分别由哪个部门牵头": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "b0afe3c4cacf9202abc1707a",
+              "record_id": "e765cfe2a9e091908e0adbf1eddd023e:r6",
+              "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "fact_kind": "responsibility",
+              "subject": "",
+              "predicate": "职责",
+              "object": "负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作的监督检查，对存在问题进行整改",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作的监督检查，对存在问题进行整改",
+              "evidence_spans": [
+                [
+                  0,
+                  39
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "version_year": 2026,
+              "score": 7.3999999999999995,
+              "unstructured_rejected": false,
+              "group_id": "9c6ece4c369940c0",
+              "polarity": "positive",
+              "value_dimension": "",
+              "slot_match": {
+                "subject": "unknown",
+                "role": "unknown",
+                "policy_fact": "hit",
+                "predicate:职责": "miss",
+                "涉诈": "hit",
+                "涉骚扰": "hit",
+                "anchor:职责": "miss",
+                "anchor:中国电信广西公司涉诈和涉": "miss",
+                "anchor:骚扰电话处置": "miss",
+                "anchor:分别由哪个部门牵头": "miss"
+              },
+              "slot_spans": {},
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "subject": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "hit",
+              "dcafead81e75e3e63a253982": "hit",
+              "af508886f3b6ae5c7676d559": "unknown",
+              "b0afe3c4cacf9202abc1707a": "unknown",
+              "08e557b1d5e01b7a894f6c0f": "unknown",
+              "97d7a66bbb9d91299439472d": "unknown",
+              "d2db15d539b5b6506e9b9c09": "unknown",
+              "5faf58bc1b84f2cf1d68f553": "unknown",
+              "7ddcc7784857e47509071898": "unknown",
+              "c78142c403e316a27520aae1": "unknown",
+              "bd44886c0e5ee1ab1784d893": "unknown",
+              "b7ebd9ce1990fff3de8fe41c": "unknown"
+            },
+            "role": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "hit",
+              "dcafead81e75e3e63a253982": "hit",
+              "af508886f3b6ae5c7676d559": "unknown",
+              "b0afe3c4cacf9202abc1707a": "unknown",
+              "08e557b1d5e01b7a894f6c0f": "unknown",
+              "97d7a66bbb9d91299439472d": "unknown",
+              "d2db15d539b5b6506e9b9c09": "unknown",
+              "5faf58bc1b84f2cf1d68f553": "unknown",
+              "7ddcc7784857e47509071898": "unknown",
+              "c78142c403e316a27520aae1": "unknown",
+              "bd44886c0e5ee1ab1784d893": "unknown",
+              "b7ebd9ce1990fff3de8fe41c": "unknown"
+            },
+            "policy_fact": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "hit",
+              "dcafead81e75e3e63a253982": "hit",
+              "af508886f3b6ae5c7676d559": "hit",
+              "b0afe3c4cacf9202abc1707a": "hit",
+              "08e557b1d5e01b7a894f6c0f": "hit",
+              "97d7a66bbb9d91299439472d": "hit",
+              "d2db15d539b5b6506e9b9c09": "hit",
+              "5faf58bc1b84f2cf1d68f553": "hit",
+              "7ddcc7784857e47509071898": "hit",
+              "c78142c403e316a27520aae1": "hit",
+              "bd44886c0e5ee1ab1784d893": "hit",
+              "b7ebd9ce1990fff3de8fe41c": "hit"
+            },
+            "predicate:职责": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "hit",
+              "dcafead81e75e3e63a253982": "hit",
+              "af508886f3b6ae5c7676d559": "miss",
+              "b0afe3c4cacf9202abc1707a": "miss",
+              "08e557b1d5e01b7a894f6c0f": "miss",
+              "97d7a66bbb9d91299439472d": "miss",
+              "d2db15d539b5b6506e9b9c09": "miss",
+              "5faf58bc1b84f2cf1d68f553": "miss",
+              "7ddcc7784857e47509071898": "miss",
+              "c78142c403e316a27520aae1": "miss",
+              "bd44886c0e5ee1ab1784d893": "miss",
+              "b7ebd9ce1990fff3de8fe41c": "miss"
+            },
+            "涉诈": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "miss",
+              "dcafead81e75e3e63a253982": "miss",
+              "af508886f3b6ae5c7676d559": "hit",
+              "b0afe3c4cacf9202abc1707a": "hit",
+              "08e557b1d5e01b7a894f6c0f": "hit",
+              "97d7a66bbb9d91299439472d": "hit",
+              "d2db15d539b5b6506e9b9c09": "hit",
+              "5faf58bc1b84f2cf1d68f553": "hit",
+              "7ddcc7784857e47509071898": "hit",
+              "c78142c403e316a27520aae1": "hit",
+              "bd44886c0e5ee1ab1784d893": "hit",
+              "b7ebd9ce1990fff3de8fe41c": "hit"
+            },
+            "涉骚扰": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "miss",
+              "dcafead81e75e3e63a253982": "miss",
+              "af508886f3b6ae5c7676d559": "hit",
+              "b0afe3c4cacf9202abc1707a": "hit",
+              "08e557b1d5e01b7a894f6c0f": "hit",
+              "97d7a66bbb9d91299439472d": "hit",
+              "d2db15d539b5b6506e9b9c09": "hit",
+              "5faf58bc1b84f2cf1d68f553": "hit",
+              "7ddcc7784857e47509071898": "hit",
+              "c78142c403e316a27520aae1": "hit",
+              "bd44886c0e5ee1ab1784d893": "hit",
+              "b7ebd9ce1990fff3de8fe41c": "hit"
+            }
+          },
+          "primary_group_id": "9c6ece4c369940c0",
+          "covered_slots": [
+            "policy_fact",
+            "predicate:职责",
+            "role",
+            "subject",
+            "涉诈",
+            "涉骚扰"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "9c6ece4c369940c0",
+                "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "e765cfe2a9e091908e0adbf1eddd023e",
+                  "e46b643a3a3217691163b8e65c618eea",
+                  "fcd763c29555217f5f7d2107c7798dd3"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  0.9145000000000001,
+                  0.0,
+                  0.0
+                ],
+                "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+                "section": "3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、 > 4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作 > 第六条 对涉及的代理商营业员、代理商（网点），分涉诈、",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 9.829,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "e765cfe2a9e091908e0adbf1eddd023e:r0",
+                  "e765cfe2a9e091908e0adbf1eddd023e:r1",
+                  "e765cfe2a9e091908e0adbf1eddd023e:r2",
+                  "e765cfe2a9e091908e0adbf1eddd023e:r3",
+                  "e765cfe2a9e091908e0adbf1eddd023e:r4",
+                  "e765cfe2a9e091908e0adbf1eddd023e:r5",
+                  "e765cfe2a9e091908e0adbf1eddd023e:r6",
+                  "e46b643a3a3217691163b8e65c618eea:r0",
+                  "e46b643a3a3217691163b8e65c618eea:r1",
+                  "e46b643a3a3217691163b8e65c618eea:r2",
+                  "e46b643a3a3217691163b8e65c618eea:r3",
+                  "e46b643a3a3217691163b8e65c618eea:r4",
+                  "e46b643a3a3217691163b8e65c618eea:r5",
+                  "e46b643a3a3217691163b8e65c618eea:r6",
+                  "e46b643a3a3217691163b8e65c618eea:r7",
+                  "e46b643a3a3217691163b8e65c618eea:r8",
+                  "fcd763c29555217f5f7d2107c7798dd3:r0",
+                  "fcd763c29555217f5f7d2107c7798dd3:r1",
+                  "fcd763c29555217f5f7d2107c7798dd3:r2",
+                  "fcd763c29555217f5f7d2107c7798dd3:r3",
+                  "fcd763c29555217f5f7d2107c7798dd3:r4",
+                  "fcd763c29555217f5f7d2107c7798dd3:r5"
+                ]
+              }
+            ],
+            "primary_group_id": "9c6ece4c369940c0",
+            "secondary_group_ids": [],
+            "multi_subquery": true,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "中国电信广西公司涉诈和涉",
+                "分别由哪个部门牵头",
+                "骚扰电话处置"
+              ],
+              "selection": [
+                {
+                  "group_id": "9c6ece4c369940c0",
+                  "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                  "score": 9.829,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "subject",
+            "role",
+            "policy_fact",
+            "predicate:职责",
+            "涉诈",
+            "涉骚扰"
+          ],
+          "candidate_ids": [
+            "40427f6b0dd3166c83ab4009",
+            "66b09b15f420bc81cb92f000",
+            "235bbc6a6c4cb156294087ec",
+            "dcafead81e75e3e63a253982",
+            "af508886f3b6ae5c7676d559",
+            "b0afe3c4cacf9202abc1707a"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "responsibility",
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact",
+            "predicate:职责",
+            "role",
+            "subject",
+            "涉诈",
+            "涉骚扰"
+          ],
+          "coverage_matrix": {
+            "subject": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "hit",
+              "dcafead81e75e3e63a253982": "hit",
+              "af508886f3b6ae5c7676d559": "unknown",
+              "b0afe3c4cacf9202abc1707a": "unknown",
+              "08e557b1d5e01b7a894f6c0f": "unknown",
+              "97d7a66bbb9d91299439472d": "unknown",
+              "d2db15d539b5b6506e9b9c09": "unknown",
+              "5faf58bc1b84f2cf1d68f553": "unknown",
+              "7ddcc7784857e47509071898": "unknown",
+              "c78142c403e316a27520aae1": "unknown",
+              "bd44886c0e5ee1ab1784d893": "unknown",
+              "b7ebd9ce1990fff3de8fe41c": "unknown"
+            },
+            "role": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "hit",
+              "dcafead81e75e3e63a253982": "hit",
+              "af508886f3b6ae5c7676d559": "unknown",
+              "b0afe3c4cacf9202abc1707a": "unknown",
+              "08e557b1d5e01b7a894f6c0f": "unknown",
+              "97d7a66bbb9d91299439472d": "unknown",
+              "d2db15d539b5b6506e9b9c09": "unknown",
+              "5faf58bc1b84f2cf1d68f553": "unknown",
+              "7ddcc7784857e47509071898": "unknown",
+              "c78142c403e316a27520aae1": "unknown",
+              "bd44886c0e5ee1ab1784d893": "unknown",
+              "b7ebd9ce1990fff3de8fe41c": "unknown"
+            },
+            "policy_fact": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "hit",
+              "dcafead81e75e3e63a253982": "hit",
+              "af508886f3b6ae5c7676d559": "hit",
+              "b0afe3c4cacf9202abc1707a": "hit",
+              "08e557b1d5e01b7a894f6c0f": "hit",
+              "97d7a66bbb9d91299439472d": "hit",
+              "d2db15d539b5b6506e9b9c09": "hit",
+              "5faf58bc1b84f2cf1d68f553": "hit",
+              "7ddcc7784857e47509071898": "hit",
+              "c78142c403e316a27520aae1": "hit",
+              "bd44886c0e5ee1ab1784d893": "hit",
+              "b7ebd9ce1990fff3de8fe41c": "hit"
+            },
+            "predicate:职责": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "hit",
+              "dcafead81e75e3e63a253982": "hit",
+              "af508886f3b6ae5c7676d559": "miss",
+              "b0afe3c4cacf9202abc1707a": "miss",
+              "08e557b1d5e01b7a894f6c0f": "miss",
+              "97d7a66bbb9d91299439472d": "miss",
+              "d2db15d539b5b6506e9b9c09": "miss",
+              "5faf58bc1b84f2cf1d68f553": "miss",
+              "7ddcc7784857e47509071898": "miss",
+              "c78142c403e316a27520aae1": "miss",
+              "bd44886c0e5ee1ab1784d893": "miss",
+              "b7ebd9ce1990fff3de8fe41c": "miss"
+            },
+            "涉诈": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "miss",
+              "dcafead81e75e3e63a253982": "miss",
+              "af508886f3b6ae5c7676d559": "hit",
+              "b0afe3c4cacf9202abc1707a": "hit",
+              "08e557b1d5e01b7a894f6c0f": "hit",
+              "97d7a66bbb9d91299439472d": "hit",
+              "d2db15d539b5b6506e9b9c09": "hit",
+              "5faf58bc1b84f2cf1d68f553": "hit",
+              "7ddcc7784857e47509071898": "hit",
+              "c78142c403e316a27520aae1": "hit",
+              "bd44886c0e5ee1ab1784d893": "hit",
+              "b7ebd9ce1990fff3de8fe41c": "hit"
+            },
+            "涉骚扰": {
+              "40427f6b0dd3166c83ab4009": "hit",
+              "66b09b15f420bc81cb92f000": "hit",
+              "235bbc6a6c4cb156294087ec": "miss",
+              "dcafead81e75e3e63a253982": "miss",
+              "af508886f3b6ae5c7676d559": "hit",
+              "b0afe3c4cacf9202abc1707a": "hit",
+              "08e557b1d5e01b7a894f6c0f": "hit",
+              "97d7a66bbb9d91299439472d": "hit",
+              "d2db15d539b5b6506e9b9c09": "hit",
+              "5faf58bc1b84f2cf1d68f553": "hit",
+              "7ddcc7784857e47509071898": "hit",
+              "c78142c403e316a27520aae1": "hit",
+              "bd44886c0e5ee1ab1784d893": "hit",
+              "b7ebd9ce1990fff3de8fe41c": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "中国电信广西公司涉诈和涉骚扰电话处置 分别由哪个部门牵头",
+          "intents": [
+            "responsibility",
+            "policy"
+          ],
+          "conditions": [
+            "涉诈",
+            "涉骚扰"
+          ],
+          "required_slots": [
+            "subject",
+            "role",
+            "policy_fact",
+            "predicate:职责",
+            "涉诈",
+            "涉骚扰"
+          ],
+          "entities": [
+            "中国电信广西公司涉诈和涉",
+            "骚扰电话处置",
+            "分别由哪个部门牵头"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": true,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "responsibility",
+            "policy",
+            "prohibition"
+          ],
+          "subject": "中国电信广西公司涉诈和涉",
+          "object": "骚扰电话处置",
+          "scope": [],
+          "selector": [],
+          "predicate": "职责",
+          "polarity": "positive",
+          "condition_slots": [
+            "涉诈",
+            "涉骚扰"
+          ],
+          "requested_attribute": "responsibility",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [
+            {
+              "text": "中国电信广西公司涉诈",
+              "anchors": [
+                "中国电信广西公司涉诈"
+              ]
+            },
+            {
+              "text": "涉骚扰电话处置",
+              "anchors": [
+                "涉骚扰电话处置"
+              ]
+            },
+            {
+              "text": "由哪个部门牵头",
+              "anchors": [
+                "由哪个部门牵头"
+              ]
+            }
+          ],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "职责",
+            "中国电信广西公司涉诈和涉",
+            "骚扰电话处置",
+            "分别由哪个部门牵头"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "9c6ece4c369940c0",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "document_family_id": "topic:涉诈涉骚扰电话号码入网渠道处置细则",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "e765cfe2a9e091908e0adbf1eddd023e",
+                "e46b643a3a3217691163b8e65c618eea",
+                "fcd763c29555217f5f7d2107c7798dd3"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                0.9145000000000001,
+                0.0,
+                0.0
+              ],
+              "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+              "section": "3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、 > 4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作 > 第六条 对涉及的代理商营业员、代理商（网点），分涉诈、",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 9.829,
+              "rejection_reasons": [],
+              "record_ids": [
+                "e765cfe2a9e091908e0adbf1eddd023e:r0",
+                "e765cfe2a9e091908e0adbf1eddd023e:r1",
+                "e765cfe2a9e091908e0adbf1eddd023e:r2",
+                "e765cfe2a9e091908e0adbf1eddd023e:r3",
+                "e765cfe2a9e091908e0adbf1eddd023e:r4",
+                "e765cfe2a9e091908e0adbf1eddd023e:r5",
+                "e765cfe2a9e091908e0adbf1eddd023e:r6",
+                "e46b643a3a3217691163b8e65c618eea:r0",
+                "e46b643a3a3217691163b8e65c618eea:r1",
+                "e46b643a3a3217691163b8e65c618eea:r2",
+                "e46b643a3a3217691163b8e65c618eea:r3",
+                "e46b643a3a3217691163b8e65c618eea:r4",
+                "e46b643a3a3217691163b8e65c618eea:r5",
+                "e46b643a3a3217691163b8e65c618eea:r6",
+                "e46b643a3a3217691163b8e65c618eea:r7",
+                "e46b643a3a3217691163b8e65c618eea:r8",
+                "fcd763c29555217f5f7d2107c7798dd3:r0",
+                "fcd763c29555217f5f7d2107c7798dd3:r1",
+                "fcd763c29555217f5f7d2107c7798dd3:r2",
+                "fcd763c29555217f5f7d2107c7798dd3:r3",
+                "fcd763c29555217f5f7d2107c7798dd3:r4",
+                "fcd763c29555217f5f7d2107c7798dd3:r5"
+              ]
+            }
+          ],
+          "primary_group_id": "9c6ece4c369940c0",
+          "secondary_group_ids": [],
+          "multi_subquery": true,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "中国电信广西公司涉诈和涉",
+              "分别由哪个部门牵头",
+              "骚扰电话处置"
+            ],
+            "selection": [
+              {
+                "group_id": "9c6ece4c369940c0",
+                "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+                "score": 9.829,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "职责"
+            ],
+            "predicate:职责": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "40427f6b0dd3166c83ab4009"
+              ],
+              "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "text": "- 市分公司、专业公司、生产单位是涉诈涉骚扰电话入网渠道处置工作的发展责任部门，负责本单位发展的入网渠道处置工作的具体落实，具体职责包括",
+              "fact_kind": "responsibility"
+            },
+            {
+              "rendered_candidate_ids": [
+                "66b09b15f420bc81cb92f000"
+              ],
+              "passage_id": "e46b643a3a3217691163b8e65c618eea",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "text": "- 数字生活中心（号百中心）是涉诈涉骚扰电话通报工作的数据支撑部门，负责通报工作，具体职责包括",
+              "fact_kind": "responsibility"
+            },
+            {
+              "rendered_candidate_ids": [
+                "235bbc6a6c4cb156294087ec"
+              ],
+              "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "text": "- 配合牵头组织部门开展入网渠道处置的监督检查，对职责范围内的存在问题按要求整改",
+              "fact_kind": "responsibility"
+            }
+          ],
+          "answer_len": 157
+        },
+        "primary_group_id": "9c6ece4c369940c0",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "type": "knowledge",
+              "label": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab"
+            },
+            {
+              "id": "19369e35-835f-4481-8090-5fa27d8d3eb5",
+              "type": "block",
+              "label": "（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "a531fed9-6bdc-4dc8-985d-c7854123d6e7",
+              "type": "block",
+              "label": "[第4页]",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "e0f8a976-b752-4548-99e8-9aa9e293e881",
+              "type": "block",
+              "label": "商佣金等罚金；",
+              "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+            },
+            {
+              "id": "91006138-d944-4b1c-b5b6-6b0ab0e34440",
+              "type": "knowledge",
+              "label": "中电信桂-2021-125号-关于印发中国电信广西公司2021年社会渠道费用标准的通知--91006138"
+            },
+            {
+              "id": "af1f904e-36d3-48e5-a6b4-a4c416c33488",
+              "type": "knowledge",
+              "label": "渠道-2026-2号-关于印发中国电信广西公司营业用房租赁管理规范的通知--af1f904e"
+            }
+          ],
+          "edges": [
+            {
+              "source": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "target": "19369e35-835f-4481-8090-5fa27d8d3eb5",
+              "type": "contains"
+            },
+            {
+              "source": "a531fed9-6bdc-4dc8-985d-c7854123d6e7",
+              "target": "19369e35-835f-4481-8090-5fa27d8d3eb5",
+              "type": "parent"
+            },
+            {
+              "source": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "target": "e0f8a976-b752-4548-99e8-9aa9e293e881",
+              "type": "contains"
+            },
+            {
+              "source": "a531fed9-6bdc-4dc8-985d-c7854123d6e7",
+              "target": "e0f8a976-b752-4548-99e8-9aa9e293e881",
+              "type": "parent"
+            },
+            {
+              "source": "91006138-d944-4b1c-b5b6-6b0ab0e34440",
+              "target": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "type": "related"
+            },
+            {
+              "source": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+              "target": "af1f904e-36d3-48e5-a6b4-a4c416c33488",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 6
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+          ],
+          "accepted_block_ids": [
+            "19369e35-835f-4481-8090-5fa27d8d3eb5"
+          ],
+          "accepted_passage_ids": [
+            "e765cfe2a9e091908e0adbf1eddd023e",
+            "e46b643a3a3217691163b8e65c618eea",
+            "fcd763c29555217f5f7d2107c7798dd3"
+          ],
+          "generation_knowledge_ids": [
+            "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934"
+          ],
+          "top_score": 0.5645,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "7ed3d3a4fd1d50cfcb52565d"
+        },
+        "snapshot_fingerprint": "7ed3d3a4fd1d50cfcb52565d",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 2,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 43.3
+  },
+  "top_candidate_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+  "candidates": [
+    {
+      "knowledge_id": "51b17abe-8fe3-42fb-8c90-2b9b3d6fb934",
+      "passage_id": "e765cfe2a9e091908e0adbf1eddd023e",
+      "title": "市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab",
+      "score": 0.9145000000000001,
+      "final_relevance_score": 0.5645,
+      "text": "【文档】市场-2026-8号-关于印发中国电信广西公司涉诈涉骚扰电话号码入网渠道处置细则-2026年版-的通知--51b17ab\n【章节】3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、 > 4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作 > 第六条 对涉及的代理商营业员、代理商（网点），分涉诈、\n提取需处置入网渠道的号码；\n3.配合牵头组织部门开展入网渠道处置的监督检查，对职责\n范围内的存在问题按要求整改。\n（五） 数字化运营支撑中心是涉诈涉骚扰电话入网渠道处置\n工作的数据支撑部门， 负责配合提供涉诈涉骚扰电话入网渠道处\n置工作所需的数据。\n（六）市分公司、专业公司、生产单位是涉诈涉骚扰电话入\n网渠道处置工作的发展责任部门， 负责本单位发展的入网渠道处\n置工作的具体落实，具体职责包括：\n—5—1.贯彻落实政府部门、集团公司、区公司上级主管部门的涉\n诈涉骚扰电话入网渠道处置政策和规定，承接入网渠道处置工\n作，完成相关工作要求和目标；\n2.负责细化本单位涉诈涉骚扰电话入网渠道处置规则；\n3.负责本单位涉诈涉骚扰电话入网渠道的预警帮扶、处罚、\n整改等日常管理工作，集中处置涉及的自营渠道奖励、绩效等罚\n金；\n4.负责组织本单位开展涉诈涉骚扰电话入网渠道处置工作\n的监督检查，对存在问题进行整改。\n第六条 对涉及的代理商营业员、代理商（网点），分涉诈、\n涉骚扰二类性质分别进行处置。"
+    }
+  ],
+  "search_ms": 41613.52,
+  "ask_ms": 43.3,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "rS0H2q9F88C8pE_0yZmlWlECx--9iLjc",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

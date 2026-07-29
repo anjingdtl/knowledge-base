@@ -7,6 +7,7 @@ same question.
 """
 from __future__ import annotations
 
+import re
 from typing import Any, Callable
 
 from src.models.search_execution import SearchExecution
@@ -355,6 +356,47 @@ def build_canonical_snapshot(
         retrieval_unit="passage" if is_passage else "block",
     )
 
+    # SPEC v6: when query asks for numeric limits/penalties but accepted bodies
+    # lack money cues, promote same-knowledge passages from the raw pool that
+    # carry value patterns (general, not Golden-bound).
+    if re.search(r"限额|金额|处罚|奖金|占比|多少|上限|元", q):
+        money_re = re.compile(r"\d+(?:\.\d+)?\s*(?:万元|元|%|％)")
+        need_money = not any(
+            money_re.search(str(r.get("text") or r.get("body_text") or ""))
+            for r in accepted[:top_k]
+            if isinstance(r, dict)
+        )
+        if need_money:
+            primary_kids = {
+                str(r.get("knowledge_id") or "").strip()
+                for r in accepted[:top_k]
+                if isinstance(r, dict) and r.get("knowledge_id")
+            }
+            promoted = 0
+            for r in pool:
+                if not isinstance(r, dict):
+                    continue
+                kid = str(r.get("knowledge_id") or "").strip()
+                if kid not in primary_kids:
+                    continue
+                text = str(r.get("text") or r.get("body_text") or "")
+                if not money_re.search(text):
+                    continue
+                pid = str(r.get("passage_id") or "").strip()
+                if pid and pid in seen_p:
+                    continue
+                # Promote into accepted/generation for fact extraction.
+                row = dict(r)
+                row["promoted_numeric_passage"] = True
+                accepted.append(row)
+                generation_items.append(row)
+                if pid:
+                    seen_p.add(pid)
+                    accepted_passages.append(pid)
+                promoted += 1
+                if promoted >= 4:
+                    break
+
     # Optional same-doc ±1 passage neighbors for generation context only.
     passage_adj: list[dict[str, Any]] = []
     passage_adj_n = 0
@@ -454,6 +496,21 @@ def build_canonical_snapshot(
         if r.get("passage_id")
     ]
 
+    # SPEC v6 §4.1: stable fingerprint for search/ask accepted evidence identity.
+    import hashlib
+    fp_raw = "|".join(
+        [
+            q.strip(),
+            str(threshold),
+            str(top_k),
+            ",".join(accepted_passages),
+            ",".join(accepted_kids),
+            str(bool(decision.get("accept"))),
+            str(decision.get("reason") or ""),
+        ]
+    )
+    snapshot_fingerprint = hashlib.sha256(fp_raw.encode("utf-8")).hexdigest()[:24]
+
     return {
         "query": q,
         "expanded_queries": list(expanded_queries or [q]),
@@ -476,6 +533,7 @@ def build_canonical_snapshot(
         "adjacent_fallback_reason": adj_audit.get("adjacent_fallback_reason") or "",
         "gate_evidence": list(decision.get("evidence") or []),
         "version_exclusions": version_exclusions,
+        "snapshot_fingerprint": snapshot_fingerprint,
         "stages": {
             "gate": {
                 "accept": bool(decision.get("accept")),
@@ -492,6 +550,7 @@ def build_canonical_snapshot(
             "adjacent_count": adj_audit.get("adjacent_count"),
             "adjacent_fallback_reason": adj_audit.get("adjacent_fallback_reason"),
             "focus_not_found": adj_audit.get("focus_not_found"),
+            "snapshot_fingerprint": snapshot_fingerprint,
         },
         "direct_slot_evidence": bool(decision.get("direct_slot_evidence")),
         "direct_slot_audit": decision.get("direct_slot_audit") or {},

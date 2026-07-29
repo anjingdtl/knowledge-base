@@ -1,0 +1,1521 @@
+{
+  "case": {
+    "case_id": "KB-002",
+    "category": "精确关键词",
+    "query": "翼支付业务管理办法 个人支付账户余额年付款限额",
+    "expected_knowledge_ids": [
+      "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+    ],
+    "expected_title_keywords": [
+      "翼支付",
+      "2026"
+    ],
+    "required_facts": [
+      "10万元",
+      "20万元"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2026〕61号，II类/III类账户限额"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "match_channel": "passage_fts",
+          "match_channels": [
+            "passage_fts",
+            "keyword"
+          ],
+          "block_id": "ce77dccb-618e-4407-830e-bb93fc38d37c",
+          "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+          "passage_id": "b70adbe973c7e295104418fba7e0fac0",
+          "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+          "text": "【文档】中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4\n【章节】第十七条按照央行颁发的《非银行机构网络支付业务管理 > （一）翼支付个人会员账户：分为翼支付个人未实名会员账 > （二）翼支付个人支付账户：分为翼支付个人II类支付账\n\n（六）申请人申请查询、支取账户持有人翼支付账户余额时，\n应填写翼支付账户余额查询/支取确认单确认表，同时区分不同\n情况，提交证明材料清单、翼支付账户余额查询/支取确认单、\n继承人身份证明（仅供查询使用）、承诺书、情况证明（继承使\n用）、情况证明（遗赠使用）等基本证明材料。\n第四章账户及限额管理\n第十七条按照央行颁发的《非银行机构网络支付业务管理\n办法》的监管要求，翼支付对个人账户进行了分类管理。翼支付\n—10—个人账户主要指，根据个人客户真实意愿为其注册的翼支付个人\n会员账户（或称“客户标识”），或在其完成实名认证且完善个人\n身份信息后开立的翼支付个人支付账户。这两者的主要区别为：\n（一）翼支付个人会员账户：分为翼支付个人未实名会员账\n号（仅注册，即原未实名游客），无交易权限；翼支付个人已实\n名会员账号（注册且实名，即原已实名游客），有部分交易权限，\n如使用优惠券或绑卡进行快捷支付。\n（二）翼支付个人支付账户：分为翼支付个人II类支付账\n户（即原二星账户），支持消费、转账、提现，交易额度较已实\n名会员高；翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。",
+          "document_family_id": "topic:翼支付业务管理办法",
+          "version_year": 2026,
+          "section_path": "第十七条按照央行颁发的《非银行机构网络支付业务管理 > （一）翼支付个人会员账户：分为翼支付个人未实名会员账 > （二）翼支付个人支付账户：分为翼支付个人II类支付账",
+          "block_ids": [
+            "ce77dccb-618e-4407-830e-bb93fc38d37c",
+            "aca418c6-0312-443c-b284-c6531c8bfff4",
+            "f1c119eb-2e2f-4f89-a2d2-4c4e34ec27e3",
+            "8ca377f1-70ac-48cb-a746-9bf384b3586c",
+            "c9723ad2-5d8f-4cf0-957a-a22ee7e03789",
+            "47516262-be4f-4ab0-9f6e-d8db6e19f566",
+            "8927ac64-a3c2-458d-8518-74f2c1f132b9",
+            "77927f2d-a003-4d68-8249-c26b6f32e054",
+            "2d4e364a-f950-4979-9a17-c634edc78407",
+            "d5d741ec-781b-4f95-8b83-888a18c22895",
+            "f1007960-4611-461c-81e0-6f0a89f0d847",
+            "680fcff4-e7bb-42fa-9e69-da498a0a42cc",
+            "a7de430e-d67b-428b-8e3c-fa0e44dadd3e",
+            "a783bfb9-4740-4a8c-a7cb-b5b1dc6ac6a9",
+            "da119733-6d99-4b61-88ca-41e17bee510a",
+            "bf87edbb-34d3-4b86-98e0-7dc885f6c9e3",
+            "ec9dc47f-022f-4ef6-a096-abafc698e39d",
+            "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+            "620e77a4-8513-4d74-bcaf-0079a637cf60",
+            "2bca454d-0227-467d-be2d-37305fc587c4"
+          ],
+          "retrieval_unit": "passage",
+          "candidate_type": "passage",
+          "fts_rank": -57.247163980232145,
+          "fts_score": 1.0,
+          "score": 1.0,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "relevance": {
+            "semantic_score": 0.9811,
+            "fts_score": 1.0,
+            "title_score": 0.5556,
+            "numeric_unit_score": 0.5,
+            "phrase_coverage": 0.0,
+            "query_term_coverage": 0.9811,
+            "freshness_score": 0.5,
+            "final_relevance_score": 0.7739,
+            "features": {
+              "exact_number_unit_match": false,
+              "number_match_unit_mismatch": false,
+              "context_phrase_match": false
+            }
+          },
+          "final_relevance_score": 0.7739,
+          "ranking_score": 1.0,
+          "version_rank": {
+            "version_year": 2026,
+            "deprecated": false,
+            "family_key": "topic:翼支付业务管理办法",
+            "family_newest_year": 2026,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.7739,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+        ],
+        "evidence_snapshot_id": "vBUrab9B5wMYgkFtAf1xrabN_fylDDR2",
+        "snapshot_fingerprint": "17fbc083fe810c74572eeb5a",
+        "accepted_passage_ids": [
+          "b70adbe973c7e295104418fba7e0fac0",
+          "bb21d01a87b4b9d237a62c9fc366c1e0",
+          "3c7a08568ce26db0437fda38059ae1da"
+        ],
+        "adjacent_unit": "passage",
+        "adjacent_count": 2,
+        "adjacent_fallback_reason": "passage_index_neighbors"
+      }
+    },
+    "latency_ms": 66466.83
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- III类支付账户，其余额年付款限额为20万元（不含提现）。\n- 其中，II类支付账户，其余额年付款限额为10万元（不含提现）；\n- III类支付账户，其余额年付款限额为20万元（不含提现）",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+            "block_id": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+            "block_ids": [
+              "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "620e77a4-8513-4d74-bcaf-0079a637cf60",
+              "2bca454d-0227-467d-be2d-37305fc587c4",
+              "49349b40-089b-4650-bde6-b4c95117eaaa",
+              "109d0655-0d18-4552-b0f2-0d7af4ae01bc",
+              "b4506a73-fe3d-4453-ac21-be82dd2db45b",
+              "a57673a7-6c11-452d-b007-1a6c866458ac",
+              "0d03a541-4138-42d9-96ed-2d8454c1febf",
+              "06bd7321-9728-495a-852a-2f27fa1f1e65",
+              "3beed2ff-f60c-4d41-b704-14a3cfe6517c",
+              "13d58800-59bd-4b2b-be6f-94b57c81d8fb",
+              "881b4178-67f9-41a0-b227-bef8cb99c399",
+              "c69ba7f8-5eb3-4775-9906-7ff04fe69ed6",
+              "d9277126-3adc-481a-b435-26a288a236cd",
+              "276d29f1-8a97-41b5-a6a6-cecd22a330d0",
+              "9f6086b6-d21f-4da7-abed-e5c15dea4990"
+            ],
+            "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+            "text": "翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。\n第十八条翼支付按照账户等级、交易场景、商户类型、支\n付资金源四个维度对用户交易进行限额，任何一笔交易同时受到\n四个维度的交叉限额控制，当前星级可享额度可登录翼支付客户\n端“我的”频道的“设置”页面查看。翼支付用户必须完成实名认\n证，方可使用翼支付各项支付功能。除注册过程中上传实名信息\n进行认证外，用户还可通过翼支付门户网站或客户端完成在线实\n名认证，同一个身份证名下最多可申请10个实名会员账户、最\n多可升级开通5个支付账户，所有等级认证均以翼支付客户端认\n—11—证要求为准。\n第五章充值、转账及提现业务管理\n第十九条充值业务管理\n翼支付账户充值业务分为个人账户充值与单位账户（对公）\n充值。",
+            "score": 0.0,
+            "document_family_id": "topic:翼支付业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null,
+            "is_adjacent_extension": true
+          },
+          {
+            "source": "knowledge",
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "passage_id": "b70adbe973c7e295104418fba7e0fac0",
+            "block_id": "ce77dccb-618e-4407-830e-bb93fc38d37c",
+            "block_ids": [
+              "ce77dccb-618e-4407-830e-bb93fc38d37c",
+              "aca418c6-0312-443c-b284-c6531c8bfff4",
+              "f1c119eb-2e2f-4f89-a2d2-4c4e34ec27e3",
+              "8ca377f1-70ac-48cb-a746-9bf384b3586c",
+              "c9723ad2-5d8f-4cf0-957a-a22ee7e03789",
+              "47516262-be4f-4ab0-9f6e-d8db6e19f566",
+              "8927ac64-a3c2-458d-8518-74f2c1f132b9",
+              "77927f2d-a003-4d68-8249-c26b6f32e054",
+              "2d4e364a-f950-4979-9a17-c634edc78407",
+              "d5d741ec-781b-4f95-8b83-888a18c22895",
+              "f1007960-4611-461c-81e0-6f0a89f0d847",
+              "680fcff4-e7bb-42fa-9e69-da498a0a42cc",
+              "a7de430e-d67b-428b-8e3c-fa0e44dadd3e",
+              "a783bfb9-4740-4a8c-a7cb-b5b1dc6ac6a9",
+              "da119733-6d99-4b61-88ca-41e17bee510a",
+              "bf87edbb-34d3-4b86-98e0-7dc885f6c9e3",
+              "ec9dc47f-022f-4ef6-a096-abafc698e39d",
+              "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "620e77a4-8513-4d74-bcaf-0079a637cf60",
+              "2bca454d-0227-467d-be2d-37305fc587c4"
+            ],
+            "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+            "text": "\n（六）申请人申请查询、支取账户持有人翼支付账户余额时，\n应填写翼支付账户余额查询/支取确认单确认表，同时区分不同\n情况，提交证明材料清单、翼支付账户余额查询/支取确认单、\n继承人身份证明（仅供查询使用）、承诺书、情况证明（继承使\n用）、情况证明（遗赠使用）等基本证明材料。\n第四章账户及限额管理\n第十七条按照央行颁发的《非银行机构网络支付业务管理\n办法》的监管要求，翼支付对个人账户进行了分类管理。翼支付\n—10—个人账户主要指，根据个人客户真实意愿为其注册的翼支付个人\n会员账户（或称“客户标识”），或在其完成实名认证且完善个人\n身份信息后开立的翼支付个人支付账户。这两者的主要区别为：\n（一）翼支付个人会员账户：分为翼支付个人未实名会员账\n号（仅注册，即原未实名游客），无交易权限；翼支付个人已实\n名会员账号（注册且实名，即原已实名游客），有部分交易权限，\n如使用优惠券或绑卡进行快捷支付。\n（二）翼支付个人支付账户：分为翼支付个人II类支付账\n户（即原二星账户），支持消费、转账、提现，交易额度较已实\n名会员高；翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。",
+            "score": 1.0,
+            "document_family_id": "topic:翼支付业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "III类支付账户，其余额年付款限额为20万元（不含提现）。",
+            "evidence_passage_ids": [
+              "3c7a08568ce26db0437fda38059ae1da"
+            ],
+            "fact_type": "numeric",
+            "condition": "III类",
+            "candidate_id": "879847e9e04d4c3025273d29"
+          },
+          {
+            "text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）；",
+            "evidence_passage_ids": [
+              "3c7a08568ce26db0437fda38059ae1da"
+            ],
+            "fact_type": "numeric",
+            "condition": "II类",
+            "candidate_id": "0592124c19eca654c9137780"
+          },
+          {
+            "text": "III类支付账户，其余额年付款限额为20万元（不含提现）",
+            "evidence_passage_ids": [
+              "3c7a08568ce26db0437fda38059ae1da"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "af6093e34c2a35e42b2f8442"
+          },
+          {
+            "text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）",
+            "evidence_passage_ids": [
+              "b70adbe973c7e295104418fba7e0fac0"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "58438dfc3623760c6879ee34"
+          },
+          {
+            "text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）",
+            "evidence_passage_ids": [
+              "3c7a08568ce26db0437fda38059ae1da"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "3baf5079a2fb44be22853131"
+          },
+          {
+            "text": "第四章账户及限额管理第十七条按照央行颁发的《非银行机构网络支付业务管理办法》的监管要求，翼支付对个人账户进行了分类管理",
+            "evidence_passage_ids": [
+              "b70adbe973c7e295104418fba7e0fac0"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "0def585b321dc058d836ed9a"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+            "block_id": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+            "block_ids": [
+              "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "620e77a4-8513-4d74-bcaf-0079a637cf60",
+              "2bca454d-0227-467d-be2d-37305fc587c4",
+              "49349b40-089b-4650-bde6-b4c95117eaaa",
+              "109d0655-0d18-4552-b0f2-0d7af4ae01bc",
+              "b4506a73-fe3d-4453-ac21-be82dd2db45b",
+              "a57673a7-6c11-452d-b007-1a6c866458ac",
+              "0d03a541-4138-42d9-96ed-2d8454c1febf",
+              "06bd7321-9728-495a-852a-2f27fa1f1e65",
+              "3beed2ff-f60c-4d41-b704-14a3cfe6517c",
+              "13d58800-59bd-4b2b-be6f-94b57c81d8fb",
+              "881b4178-67f9-41a0-b227-bef8cb99c399",
+              "c69ba7f8-5eb3-4775-9906-7ff04fe69ed6",
+              "d9277126-3adc-481a-b435-26a288a236cd",
+              "276d29f1-8a97-41b5-a6a6-cecd22a330d0",
+              "9f6086b6-d21f-4da7-abed-e5c15dea4990"
+            ],
+            "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+            "path": "",
+            "text": "翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。\n第十八条翼支付按照账户等级、交易场景、商户类型、支\n付资金源四个维度对用户交易进行限额，任何一笔交易同时受到\n四个维度的交叉限额控制，当前星级可享额度可登录翼支付客户\n端“我的”频道的“设置”页面查看。翼支付用户必须完成实名认\n证，方可使用翼支付各项支付功能。除注册过程中上传实名信息\n进行认证外，用户还可通过翼支付门户网站或客户端完成在线实\n名认证，同一个身份证名下最多可申请10个实名会员账户、最\n多可升级开通5个支付账户，所有等级认证均以翼支付客户端认\n—11—证要求为准。\n第五章充值、转账及提现业务管理\n第十九条充值业务管理\n翼支付账户充值业务分为个人账户充值与单位账户（对公）\n充值。",
+            "body_text": "翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。\n第十八条翼支付按照账户等级、交易场景、商户类型、支\n付资金源四个维度对用户交易进行限额，任何一笔交易同时受到\n四个维度的交叉限额控制，当前星级可享额度可登录翼支付客户\n端“我的”频道的“设置”页面查看。翼支付用户必须完成实名认\n证，方可使用翼支付各项支付功能。除注册过程中上传实名信息\n进行认证外，用户还可通过翼支付门户网站或客户端完成在线实\n名认证，同一个身份证名下最多可申请10个实名会员账户、最\n多可升级开通5个支付账户，所有等级认证均以翼支付客户端认\n—11—证要求为准。\n第五章充值、转账及提现业务管理\n第十九条充值业务管理\n翼支付账户充值业务分为个人账户充值与单位账户（对公）\n充值。",
+            "score": 0.0,
+            "document_family_id": "topic:翼支付业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          },
+          {
+            "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+            "passage_id": "b70adbe973c7e295104418fba7e0fac0",
+            "block_id": "ce77dccb-618e-4407-830e-bb93fc38d37c",
+            "block_ids": [
+              "ce77dccb-618e-4407-830e-bb93fc38d37c",
+              "aca418c6-0312-443c-b284-c6531c8bfff4",
+              "f1c119eb-2e2f-4f89-a2d2-4c4e34ec27e3",
+              "8ca377f1-70ac-48cb-a746-9bf384b3586c",
+              "c9723ad2-5d8f-4cf0-957a-a22ee7e03789",
+              "47516262-be4f-4ab0-9f6e-d8db6e19f566",
+              "8927ac64-a3c2-458d-8518-74f2c1f132b9",
+              "77927f2d-a003-4d68-8249-c26b6f32e054",
+              "2d4e364a-f950-4979-9a17-c634edc78407",
+              "d5d741ec-781b-4f95-8b83-888a18c22895",
+              "f1007960-4611-461c-81e0-6f0a89f0d847",
+              "680fcff4-e7bb-42fa-9e69-da498a0a42cc",
+              "a7de430e-d67b-428b-8e3c-fa0e44dadd3e",
+              "a783bfb9-4740-4a8c-a7cb-b5b1dc6ac6a9",
+              "da119733-6d99-4b61-88ca-41e17bee510a",
+              "bf87edbb-34d3-4b86-98e0-7dc885f6c9e3",
+              "ec9dc47f-022f-4ef6-a096-abafc698e39d",
+              "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "620e77a4-8513-4d74-bcaf-0079a637cf60",
+              "2bca454d-0227-467d-be2d-37305fc587c4"
+            ],
+            "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+            "path": "",
+            "text": "\n（六）申请人申请查询、支取账户持有人翼支付账户余额时，\n应填写翼支付账户余额查询/支取确认单确认表，同时区分不同\n情况，提交证明材料清单、翼支付账户余额查询/支取确认单、\n继承人身份证明（仅供查询使用）、承诺书、情况证明（继承使\n用）、情况证明（遗赠使用）等基本证明材料。\n第四章账户及限额管理\n第十七条按照央行颁发的《非银行机构网络支付业务管理\n办法》的监管要求，翼支付对个人账户进行了分类管理。翼支付\n—10—个人账户主要指，根据个人客户真实意愿为其注册的翼支付个人\n会员账户（或称“客户标识”），或在其完成实名认证且完善个人\n身份信息后开立的翼支付个人支付账户。这两者的主要区别为：\n（一）翼支付个人会员账户：分为翼支付个人未实名会员账\n号（仅注册，即原未实名游客），无交易权限；翼支付个人已实\n名会员账号（注册且实名，即原已实名游客），有部分交易权限，\n如使用优惠券或绑卡进行快捷支付。\n（二）翼支付个人支付账户：分为翼支付个人II类支付账\n户（即原二星账户），支持消费、转账、提现，交易额度较已实\n名会员高；翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。",
+            "body_text": "\n（六）申请人申请查询、支取账户持有人翼支付账户余额时，\n应填写翼支付账户余额查询/支取确认单确认表，同时区分不同\n情况，提交证明材料清单、翼支付账户余额查询/支取确认单、\n继承人身份证明（仅供查询使用）、承诺书、情况证明（继承使\n用）、情况证明（遗赠使用）等基本证明材料。\n第四章账户及限额管理\n第十七条按照央行颁发的《非银行机构网络支付业务管理\n办法》的监管要求，翼支付对个人账户进行了分类管理。翼支付\n—10—个人账户主要指，根据个人客户真实意愿为其注册的翼支付个人\n会员账户（或称“客户标识”），或在其完成实名认证且完善个人\n身份信息后开立的翼支付个人支付账户。这两者的主要区别为：\n（一）翼支付个人会员账户：分为翼支付个人未实名会员账\n号（仅注册，即原未实名游客），无交易权限；翼支付个人已实\n名会员账号（注册且实名，即原已实名游客），有部分交易权限，\n如使用优惠券或绑卡进行快捷支付。\n（二）翼支付个人支付账户：分为翼支付个人II类支付账\n户（即原二星账户），支持消费、转账、提现，交易额度较已实\n名会员高；翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。",
+            "score": 1.0,
+            "document_family_id": "topic:翼支付业务管理办法",
+            "version_year": 2026,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.7739,
+              "threshold": 0.35,
+              "reason": null,
+              "direct_slot_evidence": false
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "passage",
+            "direct_slot_audit": {},
+            "adjacent_unit": "passage",
+            "adjacent_count": 2,
+            "adjacent_fallback_reason": "passage_index_neighbors",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "17fbc083fe810c74572eeb5a",
+            "snapshot_id_count": 3,
+            "adjacent_expanded": false,
+            "passage_context": true
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [
+              "个人"
+            ],
+            "fact_types": [
+              "numeric"
+            ],
+            "raw": "翼支付业务管理办法 个人支付账户余额年付款限额"
+          },
+          "fact_plan": {
+            "raw": "翼支付业务管理办法 个人支付账户余额年付款限额",
+            "intents": [
+              "numeric",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "dim:年付款",
+              "dim:II类",
+              "dim:III类",
+              "policy_fact",
+              "predicate:限额"
+            ],
+            "entities": [
+              "翼支付业务管理办法",
+              "个人支付账户余额年付款限"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "翼支付业务管理办法",
+            "object": "个人支付账户余额年付款限",
+            "scope": [
+              "个人"
+            ],
+            "selector": [
+              "年付款"
+            ],
+            "predicate": "限额",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric_limit",
+            "value_dimensions": [
+              "年付款",
+              "II类",
+              "III类"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [
+              {
+                "from": "个人支付账户余额年付款限额",
+                "to": "II类/III类年付款限额",
+                "source": "domain_normalize_account_limits"
+              }
+            ],
+            "anchors": [
+              "限额",
+              "翼支付业务管理办法",
+              "个人支付账户余额年付款限",
+              "年付款"
+            ]
+          },
+          "kept": [
+            {
+              "condition": "III类",
+              "value": "20",
+              "unit": "万元",
+              "evidence_passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "record_id": "3c7a08568ce26db0437fda38059ae1da:r3",
+              "exact_text": "III类支付账户，其余额年付款限额为20万元（不含提现）。",
+              "table_row_ref": "3c7a08568ce26db0437fda38059ae1da:t0",
+              "value_dimension": "III类",
+              "group_id": "f13a8be54fde0bd2"
+            },
+            {
+              "condition": "II类",
+              "value": "10",
+              "unit": "万元",
+              "evidence_passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "record_id": "3c7a08568ce26db0437fda38059ae1da:r2",
+              "exact_text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）；",
+              "table_row_ref": "3c7a08568ce26db0437fda38059ae1da:t0",
+              "value_dimension": "II类",
+              "group_id": "f13a8be54fde0bd2"
+            }
+          ],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 17,
+          "candidate_count": 9
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "III类支付账户，其余额年付款限额为20万元（不含提现）。",
+              "evidence_passage_ids": [
+                "3c7a08568ce26db0437fda38059ae1da"
+              ],
+              "fact_type": "numeric",
+              "condition": "III类",
+              "candidate_id": "879847e9e04d4c3025273d29"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）；",
+              "evidence_passage_ids": [
+                "3c7a08568ce26db0437fda38059ae1da"
+              ],
+              "fact_type": "numeric",
+              "condition": "II类",
+              "candidate_id": "0592124c19eca654c9137780"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "III类支付账户，其余额年付款限额为20万元（不含提现）",
+              "evidence_passage_ids": [
+                "3c7a08568ce26db0437fda38059ae1da"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "af6093e34c2a35e42b2f8442"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）",
+              "evidence_passage_ids": [
+                "b70adbe973c7e295104418fba7e0fac0"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "58438dfc3623760c6879ee34"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）",
+              "evidence_passage_ids": [
+                "3c7a08568ce26db0437fda38059ae1da"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "3baf5079a2fb44be22853131"
+            },
+            "reason": "kept"
+          },
+          {
+            "claim": {
+              "text": "第四章账户及限额管理第十七条按照央行颁发的《非银行机构网络支付业务管理办法》的监管要求，翼支付对个人账户进行了分类管理",
+              "evidence_passage_ids": [
+                "b70adbe973c7e295104418fba7e0fac0"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "0def585b321dc058d836ed9a"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "翼支付业务管理办法 个人支付账户余额年付款限额",
+            "intents": [
+              "numeric",
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "value",
+              "unit",
+              "dim:年付款",
+              "dim:II类",
+              "dim:III类",
+              "policy_fact",
+              "predicate:限额"
+            ],
+            "entities": [
+              "翼支付业务管理办法",
+              "个人支付账户余额年付款限"
+            ],
+            "wants_numeric": true,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "numeric",
+              "policy",
+              "prohibition"
+            ],
+            "subject": "翼支付业务管理办法",
+            "object": "个人支付账户余额年付款限",
+            "scope": [
+              "个人"
+            ],
+            "selector": [
+              "年付款"
+            ],
+            "predicate": "限额",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "numeric_limit",
+            "value_dimensions": [
+              "年付款",
+              "II类",
+              "III类"
+            ],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [
+              {
+                "from": "个人支付账户余额年付款限额",
+                "to": "II类/III类年付款限额",
+                "source": "domain_normalize_account_limits"
+              }
+            ],
+            "anchors": [
+              "限额",
+              "翼支付业务管理办法",
+              "个人支付账户余额年付款限",
+              "年付款"
+            ]
+          },
+          "input_count": 9,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "879847e9e04d4c3025273d29",
+              "record_id": "3c7a08568ce26db0437fda38059ae1da:r3",
+              "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "20万元",
+              "qualifiers": [],
+              "condition": "III类",
+              "value": "20",
+              "unit": "万元",
+              "exact_text": "III类支付账户，其余额年付款限额为20万元（不含提现）。",
+              "evidence_spans": [
+                [
+                  18,
+                  22
+                ]
+              ],
+              "table_row_ref": "3c7a08568ce26db0437fda38059ae1da:t0",
+              "document_family_id": "topic:翼支付业务管理办法",
+              "version_year": 2026,
+              "score": 12.300000000000004,
+              "unstructured_rejected": false,
+              "group_id": "f13a8be54fde0bd2",
+              "polarity": "",
+              "value_dimension": "III类",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "dim:年付款": "hit",
+                "dim:II类": "hit",
+                "dim:III类": "hit",
+                "policy_fact": "hit",
+                "predicate:限额": "hit",
+                "anchor:限额": "hit",
+                "anchor:翼支付业务管理办法": "miss",
+                "anchor:个人支付账户余额年付款限": "miss",
+                "anchor:年付款": "hit"
+              },
+              "slot_spans": {
+                "value": [
+                  18,
+                  22
+                ],
+                "predicate:限额": [
+                  15,
+                  17
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "0592124c19eca654c9137780",
+              "record_id": "3c7a08568ce26db0437fda38059ae1da:r2",
+              "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "fact_kind": "numeric",
+              "subject": "",
+              "predicate": "限额/处罚",
+              "object": "10万元",
+              "qualifiers": [],
+              "condition": "II类",
+              "value": "10",
+              "unit": "万元",
+              "exact_text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）；",
+              "evidence_spans": [
+                [
+                  20,
+                  24
+                ]
+              ],
+              "table_row_ref": "3c7a08568ce26db0437fda38059ae1da:t0",
+              "document_family_id": "topic:翼支付业务管理办法",
+              "version_year": 2026,
+              "score": 12.000000000000004,
+              "unstructured_rejected": false,
+              "group_id": "f13a8be54fde0bd2",
+              "polarity": "",
+              "value_dimension": "II类",
+              "slot_match": {
+                "value": "hit",
+                "unit": "hit",
+                "dim:年付款": "hit",
+                "dim:II类": "hit",
+                "dim:III类": "miss",
+                "policy_fact": "hit",
+                "predicate:限额": "hit",
+                "anchor:限额": "hit",
+                "anchor:翼支付业务管理办法": "miss",
+                "anchor:个人支付账户余额年付款限": "miss",
+                "anchor:年付款": "hit"
+              },
+              "slot_spans": {
+                "value": [
+                  20,
+                  24
+                ],
+                "predicate:限额": [
+                  17,
+                  19
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "af6093e34c2a35e42b2f8442",
+              "record_id": "3c7a08568ce26db0437fda38059ae1da:r3",
+              "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "fact_kind": "policy",
+              "subject": "限额",
+              "predicate": "限额",
+              "object": "III类支付账户，其余额年付款限额为20万元（不含提现）",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "III类支付账户，其余额年付款限额为20万元（不含提现）",
+              "evidence_spans": [
+                [
+                  0,
+                  28
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:翼支付业务管理办法",
+              "version_year": 2026,
+              "score": 16.650000000000002,
+              "unstructured_rejected": false,
+              "group_id": "f13a8be54fde0bd2",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "unknown",
+                "unit": "unknown",
+                "dim:年付款": "hit",
+                "dim:II类": "hit",
+                "dim:III类": "hit",
+                "policy_fact": "hit",
+                "predicate:限额": "hit",
+                "anchor:限额": "hit",
+                "anchor:翼支付业务管理办法": "miss",
+                "anchor:个人支付账户余额年付款限": "miss",
+                "anchor:年付款": "hit"
+              },
+              "slot_spans": {
+                "predicate:限额": [
+                  15,
+                  17
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "58438dfc3623760c6879ee34",
+              "record_id": "b70adbe973c7e295104418fba7e0fac0:r2",
+              "passage_id": "b70adbe973c7e295104418fba7e0fac0",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "fact_kind": "policy",
+              "subject": "限额",
+              "predicate": "限额",
+              "object": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）",
+              "evidence_spans": [
+                [
+                  131,
+                  161
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:翼支付业务管理办法",
+              "version_year": 2026,
+              "score": 16.35,
+              "unstructured_rejected": false,
+              "group_id": "f13a8be54fde0bd2",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "unknown",
+                "unit": "unknown",
+                "dim:年付款": "hit",
+                "dim:II类": "hit",
+                "dim:III类": "miss",
+                "policy_fact": "hit",
+                "predicate:限额": "hit",
+                "anchor:限额": "hit",
+                "anchor:翼支付业务管理办法": "miss",
+                "anchor:个人支付账户余额年付款限": "miss",
+                "anchor:年付款": "hit"
+              },
+              "slot_spans": {
+                "predicate:限额": [
+                  17,
+                  19
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "3baf5079a2fb44be22853131",
+              "record_id": "3c7a08568ce26db0437fda38059ae1da:r2",
+              "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "fact_kind": "policy",
+              "subject": "限额",
+              "predicate": "限额",
+              "object": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "其中，II类支付账户，其余额年付款限额为10万元（不含提现）",
+              "evidence_spans": [
+                [
+                  0,
+                  30
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:翼支付业务管理办法",
+              "version_year": 2026,
+              "score": 16.35,
+              "unstructured_rejected": false,
+              "group_id": "f13a8be54fde0bd2",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "unknown",
+                "unit": "unknown",
+                "dim:年付款": "hit",
+                "dim:II类": "hit",
+                "dim:III类": "miss",
+                "policy_fact": "hit",
+                "predicate:限额": "hit",
+                "anchor:限额": "hit",
+                "anchor:翼支付业务管理办法": "miss",
+                "anchor:个人支付账户余额年付款限": "miss",
+                "anchor:年付款": "hit"
+              },
+              "slot_spans": {
+                "predicate:限额": [
+                  17,
+                  19
+                ]
+              },
+              "trace_repaired": false
+            },
+            {
+              "candidate_id": "0def585b321dc058d836ed9a",
+              "record_id": "b70adbe973c7e295104418fba7e0fac0:r0",
+              "passage_id": "b70adbe973c7e295104418fba7e0fac0",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "fact_kind": "policy",
+              "subject": "限额",
+              "predicate": "限额",
+              "object": "第四章账户及限额管理第十七条按照央行颁发的《非银行机构网络支付业务管理办法》的监管要求，翼支付对个人账户进行了分类管理",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第四章账户及限额管理第十七条按照央行颁发的《非银行机构网络支付业务管理办法》的监管要求，翼支付对个人账户进行了分类管理",
+              "evidence_spans": [
+                [
+                  130,
+                  189
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "topic:翼支付业务管理办法",
+              "version_year": 2026,
+              "score": 10.3,
+              "unstructured_rejected": false,
+              "group_id": "f13a8be54fde0bd2",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "value": "unknown",
+                "unit": "unknown",
+                "dim:年付款": "unknown",
+                "dim:II类": "miss",
+                "dim:III类": "miss",
+                "policy_fact": "hit",
+                "predicate:限额": "hit",
+                "anchor:限额": "hit",
+                "anchor:翼支付业务管理办法": "miss",
+                "anchor:个人支付账户余额年付款限": "miss",
+                "anchor:年付款": "miss"
+              },
+              "slot_spans": {
+                "predicate:限额": [
+                  6,
+                  8
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "value": {
+              "af6093e34c2a35e42b2f8442": "unknown",
+              "58438dfc3623760c6879ee34": "unknown",
+              "3baf5079a2fb44be22853131": "unknown",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "unknown",
+              "1cdead67dd89f76b5a253859": "unknown"
+            },
+            "unit": {
+              "af6093e34c2a35e42b2f8442": "unknown",
+              "58438dfc3623760c6879ee34": "unknown",
+              "3baf5079a2fb44be22853131": "unknown",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "unknown",
+              "1cdead67dd89f76b5a253859": "unknown"
+            },
+            "dim:年付款": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "hit",
+              "3baf5079a2fb44be22853131": "hit",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "unknown",
+              "1cdead67dd89f76b5a253859": "unknown"
+            },
+            "dim:II类": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "hit",
+              "3baf5079a2fb44be22853131": "hit",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "miss",
+              "1cdead67dd89f76b5a253859": "miss"
+            },
+            "dim:III类": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "miss",
+              "3baf5079a2fb44be22853131": "miss",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "miss",
+              "0def585b321dc058d836ed9a": "miss",
+              "1cdead67dd89f76b5a253859": "miss"
+            },
+            "policy_fact": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "hit",
+              "3baf5079a2fb44be22853131": "hit",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "hit",
+              "1cdead67dd89f76b5a253859": "hit"
+            },
+            "predicate:限额": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "hit",
+              "3baf5079a2fb44be22853131": "hit",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "hit",
+              "1cdead67dd89f76b5a253859": "hit"
+            }
+          },
+          "primary_group_id": "f13a8be54fde0bd2",
+          "covered_slots": [
+            "III类",
+            "II类",
+            "dim:III类",
+            "dim:II类",
+            "dim:年付款",
+            "policy_fact",
+            "predicate:限额",
+            "unit",
+            "value"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "f13a8be54fde0bd2",
+                "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+                "document_family_id": "topic:翼支付业务管理办法",
+                "document_revision": "2026",
+                "effective_date": "",
+                "version_year": 2026,
+                "passage_ids": [
+                  "b70adbe973c7e295104418fba7e0fac0",
+                  "bb21d01a87b4b9d237a62c9fc366c1e0",
+                  "3c7a08568ce26db0437fda38059ae1da"
+                ],
+                "retrieval_ranks": [
+                  0,
+                  1,
+                  2
+                ],
+                "retrieval_scores": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+                "section": "第十七条按照央行颁发的《非银行机构网络支付业务管理 > （一）翼支付个人会员账户：分为翼支付个人未实名会员账 > （二）翼支付个人支付账户：分为翼支付个人II类支付账",
+                "family_unknown": false,
+                "query_anchor_coverage": 0.5,
+                "predicate_coverage": 1.0,
+                "freshness_score": 0.0,
+                "group_score": 11.5,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "b70adbe973c7e295104418fba7e0fac0:r0",
+                  "b70adbe973c7e295104418fba7e0fac0:r1",
+                  "b70adbe973c7e295104418fba7e0fac0:r2",
+                  "bb21d01a87b4b9d237a62c9fc366c1e0:r0",
+                  "bb21d01a87b4b9d237a62c9fc366c1e0:r1",
+                  "bb21d01a87b4b9d237a62c9fc366c1e0:r2",
+                  "bb21d01a87b4b9d237a62c9fc366c1e0:r3",
+                  "bb21d01a87b4b9d237a62c9fc366c1e0:r4",
+                  "bb21d01a87b4b9d237a62c9fc366c1e0:r5",
+                  "3c7a08568ce26db0437fda38059ae1da:r0",
+                  "3c7a08568ce26db0437fda38059ae1da:r1",
+                  "3c7a08568ce26db0437fda38059ae1da:r2",
+                  "3c7a08568ce26db0437fda38059ae1da:r3",
+                  "3c7a08568ce26db0437fda38059ae1da:r4",
+                  "3c7a08568ce26db0437fda38059ae1da:r5",
+                  "3c7a08568ce26db0437fda38059ae1da:r6",
+                  "3c7a08568ce26db0437fda38059ae1da:r7"
+                ]
+              }
+            ],
+            "primary_group_id": "f13a8be54fde0bd2",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "个人支付账户余额年付款限",
+                "翼支付业务管理办法"
+              ],
+              "selection": [
+                {
+                  "group_id": "f13a8be54fde0bd2",
+                  "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+                  "score": 11.5,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "value",
+            "unit",
+            "dim:年付款",
+            "dim:II类",
+            "dim:III类",
+            "policy_fact",
+            "predicate:限额"
+          ],
+          "candidate_ids": [
+            "879847e9e04d4c3025273d29",
+            "0592124c19eca654c9137780",
+            "af6093e34c2a35e42b2f8442",
+            "58438dfc3623760c6879ee34",
+            "3baf5079a2fb44be22853131",
+            "0def585b321dc058d836ed9a"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "numeric",
+            "policy"
+          ],
+          "covered_slots": [
+            "III类",
+            "II类",
+            "dim:III类",
+            "dim:II类",
+            "dim:年付款",
+            "policy_fact",
+            "predicate:限额",
+            "unit",
+            "value"
+          ],
+          "coverage_matrix": {
+            "value": {
+              "af6093e34c2a35e42b2f8442": "unknown",
+              "58438dfc3623760c6879ee34": "unknown",
+              "3baf5079a2fb44be22853131": "unknown",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "unknown",
+              "1cdead67dd89f76b5a253859": "unknown"
+            },
+            "unit": {
+              "af6093e34c2a35e42b2f8442": "unknown",
+              "58438dfc3623760c6879ee34": "unknown",
+              "3baf5079a2fb44be22853131": "unknown",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "unknown",
+              "1cdead67dd89f76b5a253859": "unknown"
+            },
+            "dim:年付款": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "hit",
+              "3baf5079a2fb44be22853131": "hit",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "unknown",
+              "1cdead67dd89f76b5a253859": "unknown"
+            },
+            "dim:II类": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "hit",
+              "3baf5079a2fb44be22853131": "hit",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "miss",
+              "1cdead67dd89f76b5a253859": "miss"
+            },
+            "dim:III类": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "miss",
+              "3baf5079a2fb44be22853131": "miss",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "miss",
+              "0def585b321dc058d836ed9a": "miss",
+              "1cdead67dd89f76b5a253859": "miss"
+            },
+            "policy_fact": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "hit",
+              "3baf5079a2fb44be22853131": "hit",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "hit",
+              "1cdead67dd89f76b5a253859": "hit"
+            },
+            "predicate:限额": {
+              "af6093e34c2a35e42b2f8442": "hit",
+              "58438dfc3623760c6879ee34": "hit",
+              "3baf5079a2fb44be22853131": "hit",
+              "879847e9e04d4c3025273d29": "hit",
+              "3e6a32ac2f402ba1f8127ae6": "hit",
+              "107dc941f84a913021c2e7f5": "hit",
+              "0592124c19eca654c9137780": "hit",
+              "0def585b321dc058d836ed9a": "hit",
+              "1cdead67dd89f76b5a253859": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "翼支付业务管理办法 个人支付账户余额年付款限额",
+          "intents": [
+            "numeric",
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "value",
+            "unit",
+            "dim:年付款",
+            "dim:II类",
+            "dim:III类",
+            "policy_fact",
+            "predicate:限额"
+          ],
+          "entities": [
+            "翼支付业务管理办法",
+            "个人支付账户余额年付款限"
+          ],
+          "wants_numeric": true,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "numeric",
+            "policy",
+            "prohibition"
+          ],
+          "subject": "翼支付业务管理办法",
+          "object": "个人支付账户余额年付款限",
+          "scope": [
+            "个人"
+          ],
+          "selector": [
+            "年付款"
+          ],
+          "predicate": "限额",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "numeric_limit",
+          "value_dimensions": [
+            "年付款",
+            "II类",
+            "III类"
+          ],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [
+            {
+              "from": "个人支付账户余额年付款限额",
+              "to": "II类/III类年付款限额",
+              "source": "domain_normalize_account_limits"
+            }
+          ],
+          "anchors": [
+            "限额",
+            "翼支付业务管理办法",
+            "个人支付账户余额年付款限",
+            "年付款"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "f13a8be54fde0bd2",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "document_family_id": "topic:翼支付业务管理办法",
+              "document_revision": "2026",
+              "effective_date": "",
+              "version_year": 2026,
+              "passage_ids": [
+                "b70adbe973c7e295104418fba7e0fac0",
+                "bb21d01a87b4b9d237a62c9fc366c1e0",
+                "3c7a08568ce26db0437fda38059ae1da"
+              ],
+              "retrieval_ranks": [
+                0,
+                1,
+                2
+              ],
+              "retrieval_scores": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+              "section": "第十七条按照央行颁发的《非银行机构网络支付业务管理 > （一）翼支付个人会员账户：分为翼支付个人未实名会员账 > （二）翼支付个人支付账户：分为翼支付个人II类支付账",
+              "family_unknown": false,
+              "query_anchor_coverage": 0.5,
+              "predicate_coverage": 1.0,
+              "freshness_score": 0.0,
+              "group_score": 11.5,
+              "rejection_reasons": [],
+              "record_ids": [
+                "b70adbe973c7e295104418fba7e0fac0:r0",
+                "b70adbe973c7e295104418fba7e0fac0:r1",
+                "b70adbe973c7e295104418fba7e0fac0:r2",
+                "bb21d01a87b4b9d237a62c9fc366c1e0:r0",
+                "bb21d01a87b4b9d237a62c9fc366c1e0:r1",
+                "bb21d01a87b4b9d237a62c9fc366c1e0:r2",
+                "bb21d01a87b4b9d237a62c9fc366c1e0:r3",
+                "bb21d01a87b4b9d237a62c9fc366c1e0:r4",
+                "bb21d01a87b4b9d237a62c9fc366c1e0:r5",
+                "3c7a08568ce26db0437fda38059ae1da:r0",
+                "3c7a08568ce26db0437fda38059ae1da:r1",
+                "3c7a08568ce26db0437fda38059ae1da:r2",
+                "3c7a08568ce26db0437fda38059ae1da:r3",
+                "3c7a08568ce26db0437fda38059ae1da:r4",
+                "3c7a08568ce26db0437fda38059ae1da:r5",
+                "3c7a08568ce26db0437fda38059ae1da:r6",
+                "3c7a08568ce26db0437fda38059ae1da:r7"
+              ]
+            }
+          ],
+          "primary_group_id": "f13a8be54fde0bd2",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "个人支付账户余额年付款限",
+              "翼支付业务管理办法"
+            ],
+            "selection": [
+              {
+                "group_id": "f13a8be54fde0bd2",
+                "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+                "score": 11.5,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "dim:II类": true,
+            "dim:III类": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "879847e9e04d4c3025273d29"
+              ],
+              "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "text": "- III类支付账户，其余额年付款限额为20万元（不含提现）。",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "0592124c19eca654c9137780"
+              ],
+              "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "text": "- 其中，II类支付账户，其余额年付款限额为10万元（不含提现）；",
+              "fact_kind": "numeric"
+            },
+            {
+              "rendered_candidate_ids": [
+                "af6093e34c2a35e42b2f8442"
+              ],
+              "passage_id": "3c7a08568ce26db0437fda38059ae1da",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "text": "- III类支付账户，其余额年付款限额为20万元（不含提现）",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 96
+        },
+        "primary_group_id": "f13a8be54fde0bd2",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "type": "knowledge",
+              "label": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4"
+            },
+            {
+              "id": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "type": "block",
+              "label": "立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+            },
+            {
+              "id": "4ab47bdd-03e7-486a-8a00-133e14412879",
+              "type": "block",
+              "label": "[第10页]",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+            },
+            {
+              "id": "ce77dccb-618e-4407-830e-bb93fc38d37c",
+              "type": "block",
+              "label": "情况，提交证明材料清单、翼支付账户余额查询/支取确认单、",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+            },
+            {
+              "id": "3a37557e-3fd9-4f88-aba4-44493d72e653",
+              "type": "block",
+              "label": "[第9页]",
+              "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+            },
+            {
+              "id": "dfe59a14-9903-488e-9257-a523defaaef3",
+              "type": "knowledge",
+              "label": "中电信桂-2023-371号-关于印发中国电信广西公司原子能力管理办法-试行-的通知--dfe59a14"
+            }
+          ],
+          "edges": [
+            {
+              "source": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "target": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "type": "contains"
+            },
+            {
+              "source": "4ab47bdd-03e7-486a-8a00-133e14412879",
+              "target": "f2211604-0deb-4bac-ac5d-9e3a69b36ba6",
+              "type": "parent"
+            },
+            {
+              "source": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "target": "ce77dccb-618e-4407-830e-bb93fc38d37c",
+              "type": "contains"
+            },
+            {
+              "source": "3a37557e-3fd9-4f88-aba4-44493d72e653",
+              "target": "ce77dccb-618e-4407-830e-bb93fc38d37c",
+              "type": "parent"
+            },
+            {
+              "source": "dfe59a14-9903-488e-9257-a523defaaef3",
+              "target": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 6
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 1,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+          ],
+          "accepted_block_ids": [
+            "ce77dccb-618e-4407-830e-bb93fc38d37c"
+          ],
+          "accepted_passage_ids": [
+            "b70adbe973c7e295104418fba7e0fac0",
+            "bb21d01a87b4b9d237a62c9fc366c1e0",
+            "3c7a08568ce26db0437fda38059ae1da"
+          ],
+          "generation_knowledge_ids": [
+            "27922ca4-aa1a-4cee-bf16-b4ee182a5201"
+          ],
+          "top_score": 0.7739,
+          "intent": "ordinary",
+          "adjacent_count": 2,
+          "adjacent_unit": "passage",
+          "adjacent_fallback_reason": "passage_index_neighbors",
+          "direct_slot_evidence": false,
+          "direct_slot_audit": {},
+          "snapshot_fingerprint": "17fbc083fe810c74572eeb5a"
+        },
+        "snapshot_fingerprint": "17fbc083fe810c74572eeb5a",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 2,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 42.61
+  },
+  "top_candidate_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+  "candidates": [
+    {
+      "knowledge_id": "27922ca4-aa1a-4cee-bf16-b4ee182a5201",
+      "passage_id": "b70adbe973c7e295104418fba7e0fac0",
+      "title": "中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4",
+      "score": 1.0,
+      "final_relevance_score": 0.7739,
+      "text": "【文档】中电信桂-2026-61号-关于印发中国电信广西公司翼支付业务管理办法-2026年版-的通知--27922ca4\n【章节】第十七条按照央行颁发的《非银行机构网络支付业务管理 > （一）翼支付个人会员账户：分为翼支付个人未实名会员账 > （二）翼支付个人支付账户：分为翼支付个人II类支付账\n\n（六）申请人申请查询、支取账户持有人翼支付账户余额时，\n应填写翼支付账户余额查询/支取确认单确认表，同时区分不同\n情况，提交证明材料清单、翼支付账户余额查询/支取确认单、\n继承人身份证明（仅供查询使用）、承诺书、情况证明（继承使\n用）、情况证明（遗赠使用）等基本证明材料。\n第四章账户及限额管理\n第十七条按照央行颁发的《非银行机构网络支付业务管理\n办法》的监管要求，翼支付对个人账户进行了分类管理。翼支付\n—10—个人账户主要指，根据个人客户真实意愿为其注册的翼支付个人\n会员账户（或称“客户标识”），或在其完成实名认证且完善个人\n身份信息后开立的翼支付个人支付账户。这两者的主要区别为：\n（一）翼支付个人会员账户：分为翼支付个人未实名会员账\n号（仅注册，即原未实名游客），无交易权限；翼支付个人已实\n名会员账号（注册且实名，即原已实名游客），有部分交易权限，\n如使用优惠券或绑卡进行快捷支付。\n（二）翼支付个人支付账户：分为翼支付个人II类支付账\n户（即原二星账户），支持消费、转账、提现，交易额度较已实\n名会员高；翼支付个人III类支付账户（即原三星账户），支持\n消费、转账、提现，交易额度最高。II类和III类支付账户的开\n立需上传证件照片、绑卡并完善个人身份信息。其中，II类支付\n账户，其余额年付款限额为10万元（不含提现）；III类支付账\n户，其余额年付款限额为20万元（不含提现）。"
+    }
+  ],
+  "search_ms": 66466.83,
+  "ask_ms": 42.61,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "vBUrab9B5wMYgkFtAf1xrabN_fylDDR2",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

@@ -1,0 +1,782 @@
+{
+  "case": {
+    "case_id": "KB-011",
+    "category": "同义词与口语表达",
+    "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+    "expected_knowledge_ids": [
+      "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+    ],
+    "expected_title_keywords": [
+      "线上合作",
+      "2025"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万",
+      "等级保护"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕155号第九条；口语'线上店铺入驻'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "candidate_type": "raw_block",
+          "block_id": "9480cbf9a23d2b0cf19cdaa58d8b6803",
+          "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+          "title": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+          "text": "【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；",
+          "score": 0.7,
+          "match_channels": [
+            "raw",
+            "semantic"
+          ],
+          "warnings": [],
+          "source_layer": "evidence",
+          "score_breakdown": {
+            "rerank_score": 0.5,
+            "rrf_score": 0.008658008658008658,
+            "vector_score": 0.8024578094482422,
+            "rank": 7
+          },
+          "citation": {
+            "document": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+            "path": "",
+            "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+            "block_id": "06fca140-b168-417b-9d65-5bee871331ab",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.0,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": null,
+              "rrf": null,
+              "rerank": null
+            },
+            "match_channels": [],
+            "reason": "match",
+            "text": "【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；"
+          },
+          "_semantic_similarity": 0.011979166666666666,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "fts_score": 0.13197916666666665,
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2020,
+            "deprecated": false,
+            "family_key": "中电信贺州关于印发中国电信贺州分公司代理商管理规范的通知d2901dbf",
+            "family_newest_year": 2020,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3389,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "d2901dbf-a0b2-47d8-9e72-0f627589ddcc"
+        ],
+        "evidence_snapshot_id": "Ot0U2LqGE5GU61DbXOU-la-NmWTDjl5M",
+        "snapshot_fingerprint": "b0048ee2b8fa671235ecc703",
+        "accepted_passage_ids": [],
+        "adjacent_unit": "block",
+        "adjacent_count": 0,
+        "adjacent_fallback_reason": "no_list_blocks_fn"
+      }
+    },
+    "latency_ms": 114045.11
+  },
+  "read": null,
+  "ask": {
+    "envelope": {
+      "ok": true,
+      "data": {
+        "answer": "- 第四章代理商资质管理第十二条代理商准入一、准入资格要求1、外包营业厅和专营店的代理商应符合以下要求",
+        "answer_mode": "raw_only",
+        "sources": [
+          {
+            "source": "knowledge",
+            "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+            "passage_id": "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803",
+            "block_id": "9480cbf9a23d2b0cf19cdaa58d8b6803",
+            "block_ids": [
+              "9480cbf9a23d2b0cf19cdaa58d8b6803"
+            ],
+            "title": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+            "text": "销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；",
+            "score": 0.7,
+            "document_family_id": "",
+            "version_year": null,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "source_layer": "evidence",
+            "citation": null
+          }
+        ],
+        "claims_used": [
+          {
+            "text": "第四章代理商资质管理第十二条代理商准入一、准入资格要求1、外包营业厅和专营店的代理商应符合以下要求：",
+            "evidence_passage_ids": [
+              "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803"
+            ],
+            "fact_type": "policy",
+            "condition": "",
+            "candidate_id": "24c775b95c030517ceb64131"
+          }
+        ],
+        "raw_evidence_used": [
+          {
+            "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+            "passage_id": "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803",
+            "block_id": "9480cbf9a23d2b0cf19cdaa58d8b6803",
+            "block_ids": [
+              "9480cbf9a23d2b0cf19cdaa58d8b6803"
+            ],
+            "title": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+            "path": "",
+            "text": "销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；",
+            "body_text": "销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；",
+            "score": 0.7,
+            "document_family_id": "",
+            "version_year": null,
+            "retrieval_unit": "passage",
+            "candidate_type": "passage",
+            "citation": null
+          }
+        ],
+        "conflicts": [],
+        "fallbacks": [],
+        "warnings": [],
+        "trace_id": "",
+        "conflict_disclosed": false,
+        "freshness_sensitive": false,
+        "search_trace": {
+          "mode": "preaccepted_snapshot",
+          "route": null,
+          "stages": {
+            "gate": {
+              "accept": true,
+              "top_score": 0.3389,
+              "threshold": 0.35,
+              "reason": "direct_slot_evidence",
+              "direct_slot_evidence": true
+            },
+            "freshness_applied_after_relevance": true,
+            "local_version_filtered": false,
+            "retrieval_unit": "block",
+            "direct_slot_audit": {
+              "matched_slots": [
+                "准入"
+              ],
+              "passage_id": null,
+              "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "spans": [
+                {
+                  "slot": "准入",
+                  "surface": "准入",
+                  "synonym_source": "literal",
+                  "span": [
+                    114,
+                    116
+                  ],
+                  "excerpt": "2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客"
+                }
+              ],
+              "reason": "typed_plan_match",
+              "query_slots": [
+                "准入",
+                "公司和外部商家合作卖东西",
+                "的线上店铺入驻门槛",
+                "入驻门槛"
+              ],
+              "score": 0.75,
+              "typed_plan": {
+                "anchors": [
+                  "准入",
+                  "公司和外部商家合作卖东西",
+                  "的线上店铺入驻门槛",
+                  "入驻门槛"
+                ],
+                "predicate": "准入",
+                "conditions": [],
+                "polarity": "neutral"
+              }
+            },
+            "adjacent_unit": "block",
+            "adjacent_count": 0,
+            "adjacent_fallback_reason": "no_list_blocks_fn",
+            "focus_not_found": 0,
+            "snapshot_fingerprint": "b0048ee2b8fa671235ecc703",
+            "snapshot_id_count": 1
+          },
+          "sources": {
+            "preaccepted": true
+          }
+        },
+        "reason": "structured_claim_answer",
+        "answer_validation_decision": "structured_claim_answer",
+        "user_notice": "",
+        "numeric_fact_audit": {
+          "query_slots": {
+            "conditions": [],
+            "fact_types": [],
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛"
+          },
+          "fact_plan": {
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:准入"
+            ],
+            "entities": [
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ],
+            "subject": "公司和外部商家合作卖东西",
+            "object": "的线上店铺入驻门槛",
+            "scope": [],
+            "selector": [],
+            "predicate": "准入",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "准入",
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛",
+              "入驻门槛"
+            ]
+          },
+          "kept": [],
+          "dropped": [],
+          "table_structure_ambiguous": false,
+          "logical_record_count": 13,
+          "candidate_count": 1
+        },
+        "claim_audit": [
+          {
+            "claim": {
+              "text": "第四章代理商资质管理第十二条代理商准入一、准入资格要求1、外包营业厅和专营店的代理商应符合以下要求：",
+              "evidence_passage_ids": [
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803"
+              ],
+              "fact_type": "policy",
+              "condition": "",
+              "candidate_id": "24c775b95c030517ceb64131"
+            },
+            "reason": "kept"
+          }
+        ],
+        "fact_candidate_audit": {
+          "plan": {
+            "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+            "intents": [
+              "policy"
+            ],
+            "conditions": [],
+            "required_slots": [
+              "policy_fact",
+              "predicate:准入"
+            ],
+            "entities": [
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛"
+            ],
+            "wants_numeric": false,
+            "wants_deadline": false,
+            "wants_version": false,
+            "wants_policy": true,
+            "wants_responsibility": false,
+            "wants_scope": false,
+            "wants_relationship": false,
+            "allow_fact_kinds": [
+              "policy",
+              "prohibition"
+            ],
+            "subject": "公司和外部商家合作卖东西",
+            "object": "的线上店铺入驻门槛",
+            "scope": [],
+            "selector": [],
+            "predicate": "准入",
+            "polarity": "neutral",
+            "condition_slots": [],
+            "requested_attribute": "policy",
+            "value_dimensions": [],
+            "unit": "",
+            "time_or_version": "",
+            "subqueries": [],
+            "query_rewrite_trace": [],
+            "anchors": [
+              "准入",
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛",
+              "入驻门槛"
+            ]
+          },
+          "input_count": 1,
+          "dropped": [],
+          "selected": [
+            {
+              "candidate_id": "24c775b95c030517ceb64131",
+              "record_id": "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r9",
+              "passage_id": "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803",
+              "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "fact_kind": "policy",
+              "subject": "准入",
+              "predicate": "准入",
+              "object": "第四章代理商资质管理第十二条代理商准入一、准入资格要求1、外包营业厅和专营店的代理商应符合以下要求：",
+              "qualifiers": [],
+              "condition": "",
+              "value": "",
+              "unit": "",
+              "exact_text": "第四章代理商资质管理第十二条代理商准入一、准入资格要求1、外包营业厅和专营店的代理商应符合以下要求：",
+              "evidence_spans": [
+                [
+                  0,
+                  52
+                ]
+              ],
+              "table_row_ref": "",
+              "document_family_id": "",
+              "version_year": null,
+              "score": 12.3,
+              "unstructured_rejected": false,
+              "group_id": "2c3d8123d1be8196",
+              "polarity": "",
+              "value_dimension": "",
+              "slot_match": {
+                "policy_fact": "hit",
+                "predicate:准入": "hit",
+                "anchor:准入": "hit",
+                "anchor:公司和外部商家合作卖东西": "miss",
+                "anchor:的线上店铺入驻门槛": "miss",
+                "anchor:入驻门槛": "miss"
+              },
+              "slot_spans": {
+                "predicate:准入": [
+                  17,
+                  19
+                ]
+              },
+              "trace_repaired": false
+            }
+          ],
+          "table_structure_ambiguous": false,
+          "coverage_matrix": {
+            "policy_fact": {
+              "24c775b95c030517ceb64131": "hit"
+            },
+            "predicate:准入": {
+              "24c775b95c030517ceb64131": "hit"
+            }
+          },
+          "primary_group_id": "2c3d8123d1be8196",
+          "covered_slots": [
+            "policy_fact",
+            "predicate:准入"
+          ],
+          "missing_after_select": [],
+          "evidence_groups": {
+            "groups": [
+              {
+                "group_id": "2c3d8123d1be8196",
+                "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+                "document_family_id": "",
+                "document_revision": "2020",
+                "effective_date": "",
+                "version_year": 2020,
+                "passage_ids": [
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803"
+                ],
+                "retrieval_ranks": [
+                  0
+                ],
+                "retrieval_scores": [
+                  0.7
+                ],
+                "title": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+                "section": "",
+                "family_unknown": true,
+                "query_anchor_coverage": 0.0,
+                "predicate_coverage": 0.0,
+                "freshness_score": 0.0,
+                "group_score": 7.4,
+                "rejection_reasons": [],
+                "record_ids": [
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r0",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r1",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r2",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r3",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r4",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r5",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r6",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r7",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r8",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r9",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r10",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r11",
+                  "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r12"
+                ]
+              }
+            ],
+            "primary_group_id": "2c3d8123d1be8196",
+            "secondary_group_ids": [],
+            "multi_subquery": false,
+            "ambiguous": false,
+            "audit": {
+              "wants_freshness": false,
+              "query_tokens": [
+                "公司和外部商家合作卖东西",
+                "的线上店铺入驻门槛"
+              ],
+              "selection": [
+                {
+                  "group_id": "2c3d8123d1be8196",
+                  "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+                  "score": 7.4,
+                  "role": "primary",
+                  "rejection_reasons": []
+                }
+              ]
+            }
+          },
+          "passage_repair": []
+        },
+        "answer_plan": {
+          "required_slots": [
+            "policy_fact",
+            "predicate:准入"
+          ],
+          "candidate_ids": [
+            "24c775b95c030517ceb64131"
+          ],
+          "missing_slots": [],
+          "complete": true,
+          "intents": [
+            "policy"
+          ],
+          "covered_slots": [
+            "policy_fact",
+            "predicate:准入"
+          ],
+          "coverage_matrix": {
+            "policy_fact": {
+              "24c775b95c030517ceb64131": "hit"
+            },
+            "predicate:准入": {
+              "24c775b95c030517ceb64131": "hit"
+            }
+          }
+        },
+        "query_plan": {
+          "raw": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+          "intents": [
+            "policy"
+          ],
+          "conditions": [],
+          "required_slots": [
+            "policy_fact",
+            "predicate:准入"
+          ],
+          "entities": [
+            "公司和外部商家合作卖东西",
+            "的线上店铺入驻门槛"
+          ],
+          "wants_numeric": false,
+          "wants_deadline": false,
+          "wants_version": false,
+          "wants_policy": true,
+          "wants_responsibility": false,
+          "wants_scope": false,
+          "wants_relationship": false,
+          "allow_fact_kinds": [
+            "policy",
+            "prohibition"
+          ],
+          "subject": "公司和外部商家合作卖东西",
+          "object": "的线上店铺入驻门槛",
+          "scope": [],
+          "selector": [],
+          "predicate": "准入",
+          "polarity": "neutral",
+          "condition_slots": [],
+          "requested_attribute": "policy",
+          "value_dimensions": [],
+          "unit": "",
+          "time_or_version": "",
+          "subqueries": [],
+          "query_rewrite_trace": [],
+          "anchors": [
+            "准入",
+            "公司和外部商家合作卖东西",
+            "的线上店铺入驻门槛",
+            "入驻门槛"
+          ]
+        },
+        "evidence_groups": {
+          "groups": [
+            {
+              "group_id": "2c3d8123d1be8196",
+              "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "document_family_id": "",
+              "document_revision": "2020",
+              "effective_date": "",
+              "version_year": 2020,
+              "passage_ids": [
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803"
+              ],
+              "retrieval_ranks": [
+                0
+              ],
+              "retrieval_scores": [
+                0.7
+              ],
+              "title": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+              "section": "",
+              "family_unknown": true,
+              "query_anchor_coverage": 0.0,
+              "predicate_coverage": 0.0,
+              "freshness_score": 0.0,
+              "group_score": 7.4,
+              "rejection_reasons": [],
+              "record_ids": [
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r0",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r1",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r2",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r3",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r4",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r5",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r6",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r7",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r8",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r9",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r10",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r11",
+                "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803:r12"
+              ]
+            }
+          ],
+          "primary_group_id": "2c3d8123d1be8196",
+          "secondary_group_ids": [],
+          "multi_subquery": false,
+          "ambiguous": false,
+          "audit": {
+            "wants_freshness": false,
+            "query_tokens": [
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛"
+            ],
+            "selection": [
+              {
+                "group_id": "2c3d8123d1be8196",
+                "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+                "score": 7.4,
+                "role": "primary",
+                "rejection_reasons": []
+              }
+            ]
+          }
+        },
+        "render_validation": {
+          "ok": true,
+          "missing_slots": [],
+          "checks": {
+            "policy_anchors": [
+              "准入"
+            ],
+            "predicate:准入": true
+          },
+          "bullet_audit": [
+            {
+              "rendered_candidate_ids": [
+                "24c775b95c030517ceb64131"
+              ],
+              "passage_id": "block:d2901dbf-a0b2-47d8-9e72-0f627589ddcc:9480cbf9a23d2b0cf19cdaa58d8b6803",
+              "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "text": "- 第四章代理商资质管理第十二条代理商准入一、准入资格要求1、外包营业厅和专营店的代理商应符合以下要求",
+              "fact_kind": "policy"
+            }
+          ],
+          "answer_len": 51
+        },
+        "primary_group_id": "2c3d8123d1be8196",
+        "source_graph": {
+          "nodes": [
+            {
+              "id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "type": "knowledge",
+              "label": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf"
+            },
+            {
+              "id": "14f06ce8-e67a-4713-b88f-fa7738ee0b87",
+              "type": "knowledge",
+              "label": "中电信桂-2008-312号-关于印发-中国电信广西公司代理商管理规范-的通知--14f06ce8"
+            },
+            {
+              "id": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "type": "knowledge",
+              "label": "关于印发中国电信南宁分公司代理商管理办法的通知-试行--e0a6c23a"
+            }
+          ],
+          "edges": [
+            {
+              "source": "14f06ce8-e67a-4713-b88f-fa7738ee0b87",
+              "target": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "type": "related"
+            },
+            {
+              "source": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "target": "e0a6c23a-bf1e-4bd7-a07c-41046b17ed29",
+              "type": "related"
+            }
+          ],
+          "truncated": false,
+          "node_count": 3
+        },
+        "route": {
+          "mode": "raw_only",
+          "explanation": "verified answer path: raw_only",
+          "search_mode": "preaccepted_snapshot",
+          "intent": "ordinary"
+        },
+        "block_contexts": {},
+        "wiki_context": "",
+        "citation_integrity": {
+          "preaccepted": 1,
+          "adjacent_extension": 0,
+          "rejected": 0
+        },
+        "evidence_snapshot": {
+          "accepted_knowledge_ids": [
+            "d2901dbf-a0b2-47d8-9e72-0f627589ddcc"
+          ],
+          "accepted_block_ids": [
+            "9480cbf9a23d2b0cf19cdaa58d8b6803"
+          ],
+          "accepted_passage_ids": [],
+          "generation_knowledge_ids": [
+            "d2901dbf-a0b2-47d8-9e72-0f627589ddcc"
+          ],
+          "top_score": 0.3389,
+          "intent": "ordinary",
+          "adjacent_count": 0,
+          "adjacent_unit": "block",
+          "adjacent_fallback_reason": "no_list_blocks_fn",
+          "direct_slot_evidence": true,
+          "direct_slot_audit": {
+            "matched_slots": [
+              "准入"
+            ],
+            "passage_id": null,
+            "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+            "spans": [
+              {
+                "slot": "准入",
+                "surface": "准入",
+                "synonym_source": "literal",
+                "span": [
+                  114,
+                  116
+                ],
+                "excerpt": "2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客"
+              }
+            ],
+            "reason": "typed_plan_match",
+            "query_slots": [
+              "准入",
+              "公司和外部商家合作卖东西",
+              "的线上店铺入驻门槛",
+              "入驻门槛"
+            ],
+            "score": 0.75,
+            "typed_plan": {
+              "anchors": [
+                "准入",
+                "公司和外部商家合作卖东西",
+                "的线上店铺入驻门槛",
+                "入驻门槛"
+              ],
+              "predicate": "准入",
+              "conditions": [],
+              "polarity": "neutral"
+            }
+          },
+          "snapshot_fingerprint": "b0048ee2b8fa671235ecc703"
+        },
+        "snapshot_fingerprint": "b0048ee2b8fa671235ecc703",
+        "snapshot_reused": true,
+        "retrieval_count": 0,
+        "retrieval_decision": "accepted"
+      },
+      "meta": {
+        "source_count": 1,
+        "warning_count": 0,
+        "route_mode": "raw_only",
+        "graph_truncated": false,
+        "trace_id": ""
+      }
+    },
+    "latency_ms": 37.75
+  },
+  "top_candidate_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+  "candidates": [
+    {
+      "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+      "passage_id": null,
+      "title": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+      "score": 0.7,
+      "final_relevance_score": 0.35,
+      "text": "【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；"
+    }
+  ],
+  "search_ms": 114045.11,
+  "ask_ms": 37.75,
+  "read_ms": 0.0,
+  "snapshot_reused": true,
+  "snapshot_id": "Ot0U2LqGE5GU61DbXOU-la-NmWTDjl5M",
+  "retrieval_count": 0,
+  "answer_validation_decision": "structured_claim_answer",
+  "retrieval_decision": "accepted"
+}

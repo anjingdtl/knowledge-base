@@ -586,6 +586,8 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
             intent=snapshot.get("intent"),
             accepted_knowledge_ids=list(snapshot.get("accepted_knowledge_ids") or []),
             evidence_snapshot_id=snap_id,
+            snapshot_fingerprint=snapshot.get("snapshot_fingerprint"),
+            accepted_passage_ids=list(snapshot.get("accepted_passage_ids") or []),
             adjacent_unit=snapshot.get("adjacent_unit"),
             adjacent_count=snapshot.get("adjacent_count"),
             adjacent_fallback_reason=snapshot.get("adjacent_fallback_reason"),
@@ -1113,7 +1115,9 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
                 "adjacent_unit": snapshot.get("adjacent_unit"),
                 "adjacent_count": snapshot.get("adjacent_count"),
                 "adjacent_fallback_reason": snapshot.get("adjacent_fallback_reason"),
+                "snapshot_fingerprint": snapshot.get("snapshot_fingerprint"),
             },
+            "snapshot_fingerprint": snapshot.get("snapshot_fingerprint"),
         }
 
     def _run_verified() -> dict:
@@ -1322,7 +1326,9 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
                 "adjacent_fallback_reason": snapshot.get("adjacent_fallback_reason"),
                 "direct_slot_evidence": bool(snapshot.get("direct_slot_evidence")),
                 "direct_slot_audit": snapshot.get("direct_slot_audit") or {},
+                "snapshot_fingerprint": snapshot.get("snapshot_fingerprint"),
             }
+            result["snapshot_fingerprint"] = snapshot.get("snapshot_fingerprint")
             # SPEC v4: structured no_answer must keep answer empty and sources empty.
             if result.get("answer_mode") == "no_answer":
                 result["answer"] = ""

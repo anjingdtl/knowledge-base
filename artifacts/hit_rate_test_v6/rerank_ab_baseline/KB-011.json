@@ -1,0 +1,227 @@
+{
+  "case": {
+    "case_id": "KB-011",
+    "category": "同义词与口语表达",
+    "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+    "expected_knowledge_ids": [
+      "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+    ],
+    "expected_title_keywords": [
+      "线上合作",
+      "2025"
+    ],
+    "required_facts": [
+      "注册资本",
+      "100万",
+      "等级保护"
+    ],
+    "forbidden_facts": [],
+    "expected_no_answer": false,
+    "notes": "中电信桂〔2025〕155号第九条；口语'线上店铺入驻'"
+  },
+  "search": {
+    "envelope": {
+      "ok": true,
+      "data": [
+        {
+          "source": "knowledge",
+          "candidate_type": "raw_block",
+          "block_id": "9480cbf9a23d2b0cf19cdaa58d8b6803",
+          "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+          "title": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+          "text": "【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；",
+          "score": 0.7,
+          "match_channels": [
+            "raw",
+            "semantic"
+          ],
+          "warnings": [],
+          "source_layer": "evidence",
+          "score_breakdown": {
+            "rerank_score": 0.8,
+            "rrf_score": 0.008658008658008658,
+            "vector_score": 0.8121200203895569,
+            "rank": 3
+          },
+          "citation": {
+            "document": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+            "path": "",
+            "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+            "block_id": "06fca140-b168-417b-9d65-5bee871331ab",
+            "location": {
+              "page": null,
+              "sheet": null,
+              "slide": null,
+              "heading_path": [],
+              "paragraph_index": null,
+              "line_start": null,
+              "line_end": null
+            },
+            "score": 0.0,
+            "score_breakdown": {
+              "vector": null,
+              "keyword": null,
+              "rrf": null,
+              "rerank": null
+            },
+            "match_channels": [],
+            "reason": "match",
+            "text": "【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；"
+          },
+          "_semantic_similarity": 0.013068181818181817,
+          "numeric_unit_features": {
+            "exact_number_unit_match": false,
+            "number_match_unit_mismatch": false,
+            "context_phrase_match": false
+          },
+          "fts_score": 0.1330681818181818,
+          "direct_slot_evidence": true,
+          "final_relevance_score": 0.35,
+          "ranking_score": 0.7,
+          "version_rank": {
+            "version_year": 2020,
+            "deprecated": false,
+            "family_key": "中电信贺州关于印发中国电信贺州分公司代理商管理规范的通知d2901dbf",
+            "family_newest_year": 2020,
+            "is_family_newest": true
+          }
+        }
+      ],
+      "meta": {
+        "total_estimate": 1,
+        "top_k": 5,
+        "limit": 5,
+        "no_match": false,
+        "top_score": 0.3389,
+        "source_path": "canonical_snapshot",
+        "intent": "ordinary",
+        "accepted_knowledge_ids": [
+          "d2901dbf-a0b2-47d8-9e72-0f627589ddcc"
+        ],
+        "evidence_snapshot_id": "CaNU-ktP79Lb7y_6QvAPTj-65kntGbBO",
+        "snapshot_fingerprint": "b0048ee2b8fa671235ecc703",
+        "accepted_passage_ids": [],
+        "adjacent_unit": "block",
+        "adjacent_count": 0,
+        "adjacent_fallback_reason": "no_list_blocks_fn"
+      }
+    },
+    "latency_ms": 154340.44,
+    "status": 200,
+    "raw_result": {
+      "jsonrpc": "2.0",
+      "id": 12,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"ok\":true,\"data\":[{\"source\":\"knowledge\",\"candidate_type\":\"raw_block\",\"block_id\":\"9480cbf9a23d2b0cf19cdaa58d8b6803\",\"knowledge_id\":\"d2901dbf-a0b2-47d8-9e72-0f627589ddcc\",\"title\":\"中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\",\"text\":\"【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\\n非电信公司） 。详细分类详见附件二\\n第十一条 各要素间逻辑关系\\n一个经营主体可经营多个销售点。\\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\\n以有多个。\\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\\n一一对应关系，有一个进驻经营主体就有一个店中商。\\n店中商可以是电信班组，也可以是驻店商班组。\\n店中商与销售员是一对多的管理关系。\\n经营主体与销售员是一对多的聘用关系。\\n第四章 代理商资质管理\\n第十二条 代理商准入\\n一、准入资格要求\\n1、外包营业厅和专营店的代理商应符合以下要求：\\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\\n营许可证和经营通信类产品的准销证；\\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\\n违法行为或法人为失信人员；\",\"score\":0.7,\"match_channels\":[\"raw\",\"semantic\"],\"warnings\":[],\"source_layer\":\"evidence\",\"score_breakdown\":{\"rerank_score\":0.8,\"rrf_score\":0.008658008658008658,\"vector_score\":0.8121200203895569,\"rank\":3},\"citation\":{\"document\":\"中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\",\"path\":\"\",\"knowledge_id\":\"d2901dbf-a0b2-47d8-9e72-0f627589ddcc\",\"block_id\":\"06fca140-b168-417b-9d65-5bee871331ab\",\"location\":{\"page\":null,\"sheet\":null,\"slide\":null,\"heading_path\":[],\"paragraph_index\":null,\"line_start\":null,\"line_end\":null},\"score\":0.0,\"score_breakdown\":{\"vector\":null,\"keyword\":null,\"rrf\":null,\"rerank\":null},\"match_channels\":[],\"reason\":\"match\",\"text\":\"【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\\n非电信公司） 。详细分类详见附件二\\n第十一条 各要素间逻辑关系\\n一个经营主体可经营多个销售点。\\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\\n以有多个。\\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\\n一一对应关系，有一个进驻经营主体就有一个店中商。\\n店中商可以是电信班组，也可以是驻店商班组。\\n店中商与销售员是一对多的管理关系。\\n经营主体与销售员是一对多的聘用关系。\\n第四章 代理商资质管理\\n第十二条 代理商准入\\n一、准入资格要求\\n1、外包营业厅和专营店的代理商应符合以下要求：\\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\\n营许可证和经营通信类产品的准销证；\\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\\n违法行为或法人为失信人员；\"},\"_semantic_similarity\":0.013068181818181817,\"numeric_unit_features\":{\"exact_number_unit_match\":false,\"number_match_unit_mismatch\":false,\"context_phrase_match\":false},\"fts_score\":0.1330681818181818,\"direct_slot_evidence\":true,\"final_relevance_score\":0.35,\"ranking_score\":0.7,\"version_rank\":{\"version_year\":2020,\"deprecated\":false,\"family_key\":\"中电信贺州关于印发中国电信贺州分公司代理商管理规范的通知d2901dbf\",\"family_newest_year\":2020,\"is_family_newest\":true}}],\"meta\":{\"total_estimate\":1,\"top_k\":5,\"limit\":5,\"no_match\":false,\"top_score\":0.3389,\"source_path\":\"canonical_snapshot\",\"intent\":\"ordinary\",\"accepted_knowledge_ids\":[\"d2901dbf-a0b2-47d8-9e72-0f627589ddcc\"],\"evidence_snapshot_id\":\"CaNU-ktP79Lb7y_6QvAPTj-65kntGbBO\",\"snapshot_fingerprint\":\"b0048ee2b8fa671235ecc703\",\"accepted_passage_ids\":[],\"adjacent_unit\":\"block\",\"adjacent_count\":0,\"adjacent_fallback_reason\":\"no_list_blocks_fn\"}}"
+          }
+        ],
+        "structuredContent": {
+          "ok": true,
+          "data": [
+            {
+              "source": "knowledge",
+              "candidate_type": "raw_block",
+              "block_id": "9480cbf9a23d2b0cf19cdaa58d8b6803",
+              "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+              "title": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+              "text": "【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；",
+              "score": 0.7,
+              "match_channels": [
+                "raw",
+                "semantic"
+              ],
+              "warnings": [],
+              "source_layer": "evidence",
+              "score_breakdown": {
+                "rerank_score": 0.8,
+                "rrf_score": 0.008658008658008658,
+                "vector_score": 0.8121200203895569,
+                "rank": 3
+              },
+              "citation": {
+                "document": "中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf",
+                "path": "",
+                "knowledge_id": "d2901dbf-a0b2-47d8-9e72-0f627589ddcc",
+                "block_id": "06fca140-b168-417b-9d65-5bee871331ab",
+                "location": {
+                  "page": null,
+                  "sheet": null,
+                  "slide": null,
+                  "heading_path": [],
+                  "paragraph_index": null,
+                  "line_start": null,
+                  "line_end": null
+                },
+                "score": 0.0,
+                "score_breakdown": {
+                  "vector": null,
+                  "keyword": null,
+                  "rrf": null,
+                  "rerank": null
+                },
+                "match_channels": [],
+                "reason": "match",
+                "text": "【文档】中电信贺州-2020-81号-关于印发中国电信贺州分公司代理商管理规范的通知--d2901dbf\n【章节】第十二条 代理商准入 > 一、准入资格要求 > 1、外包营业厅和专营店的代理商应符合以下要求：\n销客户经理为非电信人员） 。 高冬花(渠道运营中心)\n— 6 —电子渠道：通过人机交互系统与客户沟通的营销服务渠道，\n分为：自有电子（经营主体是电信公司） 、社会电子（经营主体\n非电信公司） 。详细分类详见附件二\n第十一条 各要素间逻辑关系\n一个经营主体可经营多个销售点。\n一个销售点的所属经营主体只能有一个， 但进驻经营主体可\n以有多个。\n销售点与店中商为一对多的关系； 店中商与进驻经营主体为\n一一对应关系，有一个进驻经营主体就有一个店中商。\n店中商可以是电信班组，也可以是驻店商班组。\n店中商与销售员是一对多的管理关系。\n经营主体与销售员是一对多的聘用关系。\n第四章 代理商资质管理\n第十二条 代理商准入\n一、准入资格要求\n1、外包营业厅和专营店的代理商应符合以下要求：\n①取得企业法人营业执照； 具备通信行业主管部门颁发的经\n营许可证和经营通信类产品的准销证；\n②代理商不能为通讯行业黑名单代理商， 不得出现严重违规\n违法行为或法人为失信人员；"
+              },
+              "_semantic_similarity": 0.013068181818181817,
+              "numeric_unit_features": {
+                "exact_number_unit_match": false,
+                "number_match_unit_mismatch": false,
+                "context_phrase_match": false
+              },
+              "fts_score": 0.1330681818181818,
+              "direct_slot_evidence": true,
+              "final_relevance_score": 0.35,
+              "ranking_score": 0.7,
+              "version_rank": {
+                "version_year": 2020,
+                "deprecated": false,
+                "family_key": "中电信贺州关于印发中国电信贺州分公司代理商管理规范的通知d2901dbf",
+                "family_newest_year": 2020,
+                "is_family_newest": true
+              }
+            }
+          ],
+          "meta": {
+            "total_estimate": 1,
+            "top_k": 5,
+            "limit": 5,
+            "no_match": false,
+            "top_score": 0.3389,
+            "source_path": "canonical_snapshot",
+            "intent": "ordinary",
+            "accepted_knowledge_ids": [
+              "d2901dbf-a0b2-47d8-9e72-0f627589ddcc"
+            ],
+            "evidence_snapshot_id": "CaNU-ktP79Lb7y_6QvAPTj-65kntGbBO",
+            "snapshot_fingerprint": "b0048ee2b8fa671235ecc703",
+            "accepted_passage_ids": [],
+            "adjacent_unit": "block",
+            "adjacent_count": 0,
+            "adjacent_fallback_reason": "no_list_blocks_fn"
+          }
+        },
+        "isError": false
+      }
+    }
+  },
+  "row": {
+    "case_id": "KB-011",
+    "label": "baseline",
+    "query": "公司和外部商家合作卖东西的线上店铺入驻门槛",
+    "expected_knowledge_ids": [
+      "35c01dbd-bf6a-49a7-a111-6f65fd689111"
+    ],
+    "top_ids": [
+      "d2901dbf-a0b2-47d8-9e72-0f627589ddcc"
+    ],
+    "top1_ok": false,
+    "recall5_ok": false,
+    "search_ms": 154340.44,
+    "n_results": 1,
+    "snapshot_fingerprint": null
+  }
+}

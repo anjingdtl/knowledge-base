@@ -275,10 +275,28 @@ class AnswerService:
                 row["final_relevance_score"] = r.get("final_relevance_score")
             norm_rows.append(row)
 
-        use_structured = bool(has_any_passage) and not has_claims
+        # SPEC v6: always prefer FactCandidate path. When only block rows exist,
+        # synthesize a stable passage_id so claim/trace can proceed without free-form LLM.
+        for row in norm_rows:
+            if not row.get("passage_id"):
+                bid = ""
+                bids = row.get("block_ids") or []
+                if bids:
+                    bid = str(bids[0])
+                bid = bid or str(row.get("block_id") or "")
+                kid = str(row.get("knowledge_id") or "")
+                if bid or kid:
+                    row["passage_id"] = f"block:{kid}:{bid}" if kid or bid else ""
+                    row["retrieval_unit"] = row.get("retrieval_unit") or "block"
+                    row["candidate_type"] = row.get("candidate_type") or "raw_block"
+                    row["retrieval_fallback"] = row.get("retrieval_fallback") or "block"
+                    has_any_passage = bool(row.get("passage_id")) or has_any_passage
+
+        use_structured = bool(norm_rows) and not has_claims
         structured: dict[str, Any] = {}
         if use_structured:
             llm_json = None
+            # Only claim-JSON from LLM; never free-form prose (SPEC v6 process-prose ban).
             if use_llm and llm_answer is None and self._llm is not None:
                 llm_json = self._try_claim_json(question, norm_rows)
             elif isinstance(llm_answer, str) and llm_answer.strip().startswith("{"):
@@ -288,10 +306,25 @@ class AnswerService:
                 evidence_rows=norm_rows,
                 llm_json=llm_json,
                 prefer_latest_family=prefer_latest,
-                require_passage=True,
+                # Block-fallback IDs are acceptable when passage index missed the hit.
+                require_passage=bool(has_any_passage),
             )
 
         if use_structured:
+            ans = structured.get("answer") or ""
+            # Hard reject process prose that leaked past claim parse.
+            import re as _re
+            if _re.search(r"问题拆解|推理过程|组合推理|##\s*一、|chain[- ]?of[- ]?thought", ans, _re.I):
+                structured = {
+                    **structured,
+                    "answer": "",
+                    "answer_mode": "no_answer",
+                    "sources": [],
+                    "raw_evidence_used": [],
+                    "reason": "process_prose_rejected",
+                    "answer_validation_decision": "process_prose_rejected",
+                    "user_notice": "知识库中未找到可直接支持该问题的证据。",
+                }
             payload = {
                 "answer": structured.get("answer") or "",
                 "answer_mode": structured.get("answer_mode") or "no_answer",
@@ -320,14 +353,20 @@ class AnswerService:
                 "fact_candidate_audit": structured.get("fact_candidate_audit") or {},
                 "answer_plan": structured.get("answer_plan") or {},
                 "query_plan": structured.get("query_plan") or {},
+                "evidence_groups": structured.get("evidence_groups") or {},
+                "render_validation": structured.get("render_validation") or {},
+                "primary_group_id": structured.get("primary_group_id"),
             }
             if structured.get("answer_mode") == "no_answer":
                 payload["sources"] = []
                 payload["raw_evidence_used"] = []
                 payload["answer"] = ""
         else:
+            # Verified-claim / hybrid path keeps assemble_answer_payload.
+            # Free-form LLM generation is disabled for raw evidence (use_llm
+            # only when claim JSON is not used above).
             generate_fn = None
-            if use_llm and llm_answer is None:
+            if has_claims and use_llm and llm_answer is None:
                 generate_fn = self._generator.make_generate_fn()
             payload = assemble_answer_payload(
                 question,
@@ -337,6 +376,21 @@ class AnswerService:
                 disclose_claims=disclose_rows,
                 generate_fn=generate_fn,
             )
+            # Reject process prose even on legacy assemble path.
+            import re as _re
+            ans = str(payload.get("answer") or "")
+            if _re.search(
+                r"问题拆解|推理过程|组合推理|##\s*一、|chain[- ]?of[- ]?thought",
+                ans,
+                _re.I,
+            ):
+                payload["answer"] = ""
+                payload["answer_mode"] = "no_answer"
+                payload["sources"] = []
+                payload["raw_evidence_used"] = []
+                payload["reason"] = "process_prose_rejected"
+                payload["answer_validation_decision"] = "process_prose_rejected"
+                payload["user_notice"] = "知识库中未找到可直接支持该问题的证据。"
         payload.setdefault(
             "source_graph",
             {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
