@@ -308,3 +308,65 @@ def plan_query(question: str) -> QueryPlan:
 def _tokenize_simple(text: str) -> list[str]:
     """Compatibility helper for older callers."""
     return _query_phrases(text, limit=8)
+
+
+# --- Organizational scope discrimination (SPEC Phase 3.1) --------------------
+# Two recurrent wrong-family failure patterns both stem from HQ-vs-branch
+# confusion: the query explicitly asks for a branch (e.g. "号百分公司") but
+# top-1 returns the HQ regulation, or the query is generic and top-1 returns a
+# branch regulation.  The signals below are derived purely from Chinese
+# corporate-org linguistic form (no document names, no evaluation examples)
+# so they remain domain-agnostic and audit-friendly.
+
+# A "branch token" is a multi-char substring that marks a corporate sub-unit.
+# Each branch captured with its prefix (e.g. "南宁分公司") lets us tell two
+# branch docs apart, not just HQ-vs-branch.  "号百" is captured bare because it
+# is a distinctive brand-style branch marker in this corpus.
+_BRANCH_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"号百"),
+    re.compile(r"([\u4e00-\u9fff]{1,4}分公司)"),
+    re.compile(r"([\u4e00-\u9fff]{1,4}子公司)"),
+    re.compile(r"([\u4e00-\u9fff]{1,4}支公司)"),
+    re.compile(r"([\u4e00-\u9fff]{1,4}营业部)"),
+    re.compile(r"([\u4e00-\u9fff]{1,4}办事处)"),
+    re.compile(r"([\u4e00-\u9fff]{1,4}代表处)"),
+)
+# A "HQ token" is a top-level org noun that is NOT immediately followed by a
+# branch suffix — "集团分公司" would be a branch, not HQ.  Use a negative
+# lookahead so "集团" inside "号百分公司" cannot accidentally flip the signal.
+_HQ_PATTERN = re.compile(r"(?:总部|集团公司)(?!分公司|子公司|支公司|营业部)")
+
+
+def extract_org_scope(query: str) -> dict[str, Any]:
+    """Return organizational scope signals parsed from the user query.
+
+    Used by the relevance gate to discriminate between HQ and branch documents
+    so a query that explicitly asks for "号百分公司" no longer surfaces the HQ
+    regulation at top-1, and a generic query no longer surfaces a branch doc.
+
+    Returns a dict with:
+      * ``query_branches`` — list of branch tokens found in the query
+        (e.g. ``["号百"]`` or ``["南宁分公司"]``).  ``"号百"`` is captured
+        bare because it is a distinctive brand marker.
+      * ``is_branch_query`` — True when the query explicitly asks for a branch
+        and does NOT also name HQ (mutually exclusive with ``is_hq_query``).
+      * ``is_hq_query`` — True when the query explicitly names HQ and does not
+        also name a branch.
+      * ``has_scope_signal`` — True when either signal fired.
+    """
+    q = query or ""
+    branches: list[str] = []
+    for pat in _BRANCH_PATTERNS:
+        for m in pat.finditer(q):
+            tok = m.group(0)
+            if tok and tok not in branches:
+                branches.append(tok)
+    hq_match = _HQ_PATTERN.search(q)
+    is_hq = bool(hq_match) and not branches
+    is_branch = bool(branches) and not is_hq
+    return {
+        "query_branches": branches,
+        "is_branch_query": is_branch,
+        "is_hq_query": is_hq,
+        "has_scope_signal": is_branch or is_hq,
+    }

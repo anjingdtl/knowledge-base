@@ -158,9 +158,18 @@ class TestAskTimeoutControl:
         import concurrent.futures
 
         import src.mcp_server as mcp_mod
+        from src.application.ask_probe import ProbeResult
 
         mock_container = MagicMock()
         mock_container.rag_pipeline.query.side_effect = concurrent.futures.TimeoutError()
+        # Phase 2 Task 2.4: ``_do_ask`` delegates to ``container.ask_probe``;
+        # inject an accepting probe (``no_answer_payload=None``) so the legacy
+        # runner — which times out — is reached, preserving the test's intent.
+        class _AcceptingProbe:
+            def probe(self, question, *, evidence_snapshot_id=None, top_k=None, threshold=None):
+                return ProbeResult()
+
+        mock_container.ask_probe = _AcceptingProbe()
         original = mcp_mod._get_container
         mcp_mod._get_container = lambda: mock_container
         try:

@@ -45,6 +45,64 @@ def canonical_terms(query: str) -> list[str]:
     return _terms(query)[:8]
 
 
+# --- General Chinese surface synonyms (SPEC Phase 3.2) -----------------------
+# These map colloquial Chinese surface forms to their formal literary
+# equivalents.  They are NOT a domain vocabulary: every entry is a standard
+# Chinese language synonym pair that would apply to any business/policy
+# corpus (e.g. 比赛→竞赛, 店铺→门店).  No entry references a specific
+# document title, knowledge ID, or evaluation question.
+#
+# Used by ``build_alias_query_variants`` to generate synonym-expanded query
+# variants for hybrid retrieval so that a formal document titled "竞赛办法"
+# can be found from a colloquial query "比赛办法".
+_GENERIC_SYNONYMS: dict[str, tuple[str, ...]] = {
+    "比赛": ("竞赛",),
+    "赛事": ("竞赛",),
+    "奖金": ("奖励",),
+    "发奖金": ("奖励",),
+    "商家": ("合作商",),
+    "店铺": ("门店", "网店"),
+    "入驻": ("准入",),
+    "门槛": ("条件",),
+    "供货商": ("供应商",),
+    "外包商": ("服务商",),
+}
+
+
+def build_alias_query_variants(query: str, *, max_variants: int = 3) -> list[dict[str, str]]:
+    """Generate synonym-expanded query variants for hybrid retrieval.
+
+    Returns a list of ``{"query": variant, "source": "alias:<term>→<syn>"}``
+    dicts.  Each variant substitutes exactly one colloquial surface term with
+    its formal Chinese synonym.  Multi-substitution is intentionally avoided
+    to keep variants auditable and prevent drift from the user's phrasing.
+
+    The synonyms are general Chinese language pairs — no document titles, no
+    knowledge IDs, no evaluation-question-specific mappings.  This function is
+    deliberately separate from ``build_deterministic_query_variants`` (which is
+    constrained to preserve the user's exact vocabulary).
+    """
+    q = (query or "").strip()
+    if not q:
+        return []
+    variants: list[dict[str, str]] = []
+    seen: set[str] = {q}
+    for term, synonyms in _GENERIC_SYNONYMS.items():
+        if term not in q:
+            continue
+        for syn in synonyms:
+            v = q.replace(term, syn, 1)
+            if v != q and v not in seen:
+                seen.add(v)
+                variants.append({
+                    "query": v,
+                    "source": f"alias:{term}→{syn}",
+                })
+                if len(variants) >= max_variants:
+                    return variants
+    return variants
+
+
 def merge_candidates_by_query(base_query: str, candidate_lists: list[list[dict[str, Any]]]) -> list[dict[str, Any]]:
     """Merge candidate lists while preserving raw passage diversity."""
     merged: dict[str, dict[str, Any]] = {}

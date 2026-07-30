@@ -107,6 +107,29 @@ class CoreEvidenceProvider(_LazyProviderBase):
         return self._lazy("search_service", self._build_search_service)
 
     @property
+    def candidate_retrieval_service(self) -> Any:
+        """Phase 2 Task 2.3: shared candidate retrieval for Search and Ask.
+
+        MCP adapters must call this port instead of holding the retrieval
+        business logic themselves (ADR ``retrieval-answer-boundaries-v2`` §3).
+        """
+        return self._lazy(
+            "candidate_retrieval_service", self._build_candidate_retrieval_service,
+        )
+
+    @property
+    def evidence_snapshot_service(self) -> Any:
+        """Phase 2 Task 2.3: shared snapshot boundary for Search and Ask.
+
+        MCP ``search`` and ``ask`` build / register / load snapshots via this
+        port rather than reaching into PassageStore / Database private methods
+        (ADR ``retrieval-answer-boundaries-v2`` §3 / §8).
+        """
+        return self._lazy(
+            "evidence_snapshot_service", self._build_evidence_snapshot_service,
+        )
+
+    @property
     def path_indexer(self) -> Any:
         return self._lazy("path_indexer", self._build_path_indexer)
 
@@ -130,6 +153,27 @@ class CoreEvidenceProvider(_LazyProviderBase):
             c.llm,
             wiki_repository=wiki_repo,
             wiki_serving_gate=wiki_gate,
+        )
+
+    def _build_candidate_retrieval_service(self) -> Any:
+        from src.application.candidate_retrieval_service import CandidateRetrievalService
+
+        c = self._c
+        # Construct search_service first so the candidate retriever can use the
+        # unified RawRetriever path; falls back to compatibility commands if
+        # search_service is unavailable.
+        return CandidateRetrievalService(c)
+
+    def _build_evidence_snapshot_service(self) -> Any:
+        from src.application.evidence_snapshot_service import EvidenceSnapshotService
+
+        c = self._c
+        # Inject the candidate retrieval service so the snapshot boundary owns
+        # one retrieval authority (CandidatePoolPolicy parity with RawRetriever).
+        return EvidenceSnapshotService(
+            c.groups.core.candidate_retrieval_service,
+            config=c.config,
+            container=c,
         )
 
     def _build_path_indexer(self) -> Any:

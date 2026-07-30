@@ -277,6 +277,18 @@ class AppContainer:
     def search_service(self):
         return self.groups.core.search_service
 
+    # --- Phase 2 Task 2.3: application-layer shared services (flat compat) ---
+    # Prefer container.groups.core.* in new code; these flat proxies exist so
+    # MCP / API adapters can keep the existing container.attr call shape.
+
+    @property
+    def candidate_retrieval_service(self):
+        return self.groups.core.candidate_retrieval_service
+
+    @property
+    def evidence_snapshot_service(self):
+        return self.groups.core.evidence_snapshot_service
+
     @property
     def file_graph_service(self):
         if self._file_graph_service is None:

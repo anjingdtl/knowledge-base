@@ -153,6 +153,21 @@ def apply_direct_slot_accept(
     if out.get("accept"):
         out.setdefault("direct_slot_evidence", False)
         return out
+    # SPEC Phase 3.2 §3.3: never override an explicit no-answer short-circuit.
+    # ``live_external`` (today/quotes/forecasts) and ``out_of_domain`` (consumer
+    # recs / HQ address / HR private data) intents are decided at the gate level
+    # — direct slot matching on weak lexical hits must not resurrect them into
+    # an answer. This guard is the second of two: the MCP search tool also
+    # skips its colloquial fallback for these intents, but ``ask`` calls this
+    # function after generation, so the same intent check must hold here too.
+    intent = out.get("intent")
+    if intent in ("live_external", "out_of_domain"):
+        out["direct_slot_evidence"] = False
+        out.setdefault(
+            "direct_slot_audit",
+            {"reason": f"intent_short_circuit:{intent}"},
+        )
+        return out
     top_score = float(out.get("top_score") or 0.0)
     # Near-threshold retrieval with one independently verifiable query anchor
     # plus a factual cue is stronger than a score-only rejection.  This is an
@@ -170,6 +185,26 @@ def apply_direct_slot_accept(
     if not evidence.get("direct_slot_evidence"):
         return out
     candidate = evidence.get("candidate")
+    # SPEC Phase 3.1: organizational scope veto.  When the query explicitly
+    # asks for a branch (e.g. "号百分公司") but the direct-slot candidate is
+    # the HQ regulation (or vice versa), the lexical anchor match is real but
+    # the *family* is wrong — accepting it would resurrect a wrong-family
+    # top-1 pick.  The veto fires ONLY for explicit scope mismatch
+    # (signal <= -0.10) so the mild -0.05 no-scope branch penalty is handled
+    # by the score alone without blocking an otherwise-valid direct-slot accept.
+    if isinstance(candidate, dict):
+        from src.services.relevance_gate import compute_scope_signal
+        scope_signal, scope_reason = compute_scope_signal(
+            question, str(candidate.get("title") or ""),
+        )
+        if scope_signal <= -0.10:
+            out["direct_slot_evidence"] = False
+            out["direct_slot_audit"] = {
+                "reason": f"scope_veto:{scope_reason}",
+                "scope_signal": round(scope_signal, 4),
+                "scope_reason": scope_reason,
+            }
+            return out
     items = list(out.get("items") or [])
     if isinstance(candidate, dict):
         row = dict(candidate)

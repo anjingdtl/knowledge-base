@@ -288,6 +288,7 @@ def test_do_ask_catches_non_timeout_exception(monkeypatch):
     """S3.2:_do_ask 必须兜住非超时异常(S1.4 后 query() 会传播),返回结构化部分结果,
     不冒泡成未处理 MCP 错误。"""
     from src import mcp_server
+    from src.application.ask_probe import ProbeResult
     from unittest.mock import MagicMock
 
     # This regression targets the legacy RAG error envelope specifically;
@@ -295,11 +296,20 @@ def test_do_ask_catches_non_timeout_exception(monkeypatch):
     monkeypatch.setattr(mcp_server, "_should_use_verified_ask", lambda: False)
 
     # Use a non-AppContainer double so the shared-snapshot probe is skipped
-    # and the legacy rag_pipeline.query error path is exercised.
+    # and the legacy rag_pipeline.query error path is exercised. Phase 2
+    # Task 2.4: ``_do_ask`` now delegates to ``container.ask_probe``; inject
+    # an accepting probe (``no_answer_payload=None``) so the legacy runner
+    # — which raises — is reached, preserving the regression's intent.
     mock_container = MagicMock()
     mock_container.rag_pipeline.query.side_effect = RuntimeError(
         "simulated pipeline failure"
     )
+
+    class _AcceptingProbe:
+        def probe(self, question, *, evidence_snapshot_id=None, top_k=None, threshold=None):
+            return ProbeResult()
+
+    mock_container.ask_probe = _AcceptingProbe()
     monkeypatch.setattr(mcp_server, "_get_container", lambda: mock_container)
 
     result = mcp_server._do_ask("any question")

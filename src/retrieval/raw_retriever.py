@@ -159,6 +159,11 @@ _GENERIC_QUERY_ALIASES = {
     "比赛": ("竞赛",),
     "赛事": ("竞赛",),
     "奖金": ("奖励",),
+    "发奖金": ("奖励",),
+    "商家": ("合作商",),
+    "店铺": ("门店", "网店"),
+    "入驻": ("准入",),
+    "门槛": ("条件",),
     "钱": ("金额", "费用"),
 }
 
@@ -353,7 +358,20 @@ class RawRetriever:
             vq = v.get("query") or ""
             if vq and vq not in queries:
                 queries.append(vq)
-        queries = queries[:6]
+        # SPEC Phase 3.2: general Chinese synonym-expanded variants.  These
+        # substitute colloquial surface forms (比赛→竞赛, 店铺→门店) so formal
+        # documents can be found from informal phrasing.  Synonyms are general
+        # language pairs — no document titles or evaluation-question mappings.
+        from src.services.query_rewrite import build_alias_query_variants
+
+        alias_variants = build_alias_query_variants(query, max_variants=3)
+        if alias_variants:
+            trace["stages"]["alias_query_variants"] = alias_variants
+            for v in alias_variants:
+                vq = v.get("query") or ""
+                if vq and vq not in queries:
+                    queries.append(vq)
+        queries = queries[:9]
 
         # Explicit public top_k vs internal fetch_k (ADR §5 CandidatePoolPolicy).
         # Main path and BlockStore fallback share the same policy object.
@@ -367,6 +385,44 @@ class RawRetriever:
             "requested_pool_k": raw_pool_k,
             "ms": round((time.monotonic() - t_ret0) * 1000, 2),
         }
+
+        # SPEC Phase 3.2: tag candidates that were surfaced via alias-expanded
+        # synonym variants. When a candidate's TITLE contains the synonym word
+        # (e.g. 竞赛/门店) but NOT the original colloquial word (比赛/店铺), it
+        # was likely retrieved by the alias variant query. Tag it with
+        # ``alias_fts_match=True`` so the relevance gate can credit it (the
+        # FTS/vector channel verified the lexical match via the synonym).
+        # Title-only check is intentional: body text often contains incidental
+        # synonym mentions (e.g. 奖惩办法 body mentions 奖励), which would
+        # produce false positives. The title is the authoritative signal for
+        # which regulation family the candidate belongs to.
+        if alias_variants:
+            # Build {original_word: [synonyms]} map from the variant sources.
+            alias_pairs: list[tuple[str, str]] = []
+            for v in alias_variants:
+                src = v.get("source") or ""
+                if src.startswith("alias:") and "→" in src:
+                    parts = src[len("alias:"):].split("→", 1)
+                    if len(parts) == 2 and parts[0] and parts[1]:
+                        alias_pairs.append((parts[0], parts[1]))
+            if alias_pairs:
+                for cand in candidates:
+                    if not isinstance(cand, dict):
+                        continue
+                    if cand.get("alias_fts_match"):
+                        continue  # already tagged
+                    # Check title from candidate or its metadata.
+                    cand_title = str(
+                        cand.get("title")
+                        or (cand.get("metadata") or {}).get("title")
+                        or ""
+                    )
+                    if not cand_title:
+                        continue
+                    for orig, syn in alias_pairs:
+                        if syn in cand_title and orig not in cand_title:
+                            cand["alias_fts_match"] = True
+                            break
 
         # Entity+predicate joint-hit boost before rerank (SPEC v6 §4.2).
         candidates = self._boost_entity_predicate_hits(query, candidates)
@@ -760,6 +816,52 @@ class RawRetriever:
                 "match_channels": r.get("match_channels", []),
                 "warnings": r.get("warnings", []),
             }
+            # SPEC Phase 3.2: carry forward the alias_fts_match flag set by
+            # the retrieve() method so the relevance gate can credit
+            # synonym-matched candidates.
+            if r.get("alias_fts_match"):
+                entry["alias_fts_match"] = True
+            # SPEC Phase 3.3: carry forward retrieval-channel scores so
+            # score_candidate_relevance can use the genuine vector similarity
+            # as a semantic floor (e.g. when lexical coverage is low because
+            # the query is colloquial but the embedding matched the right doc).
+            # Without this, a high-confidence vector hit loses its signal at
+            # the relevance gate and is rejected as insufficient evidence.
+            for _fwd_key in (
+                "_semantic_similarity",
+                "vector_score",
+                "fts_score",
+                "fts_rank",
+                "keyword_score",
+                "rerank_score",
+            ):
+                _v = r.get(_fwd_key)
+                if _v is not None:
+                    entry[_fwd_key] = _v
+            # SPEC Phase 3.3: second-pass alias tagging. The first pass in
+            # retrieve() runs on raw candidates whose ``title`` field may not
+            # be populated yet (the title is resolved above from the DB).
+            # Re-check here now that the title is known, so candidates surfaced
+            # via alias-expanded synonym variants (比赛→竞赛, 店铺→门店)
+            # receive the ``alias_fts_match`` flag and the relevance gate can
+            # credit them.
+            if not entry.get("alias_fts_match") and title and title != "未知":
+                try:
+                    from src.services.query_rewrite import build_alias_query_variants
+
+                    for v in build_alias_query_variants(query):
+                        src = v.get("source") or ""
+                        if not (src.startswith("alias:") and "→" in src):
+                            continue
+                        parts = src[len("alias:"):].split("→", 1)
+                        if len(parts) != 2 or not parts[0] or not parts[1]:
+                            continue
+                        orig, syn = parts[0], parts[1]
+                        if syn in title and orig not in title:
+                            entry["alias_fts_match"] = True
+                            break
+                except Exception as _alias_err:  # noqa: BLE001
+                    logger.debug("second-pass alias tagging failed: %s", _alias_err)
             if citation_builder is not None:
                 entry["citation"] = citation_builder.build(r, item).to_dict()
             output.append(entry)

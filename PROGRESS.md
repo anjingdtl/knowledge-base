@@ -1,15 +1,15 @@
 # ShineHeKnowledge 当前状态
 
-> 最后更新：2026-07-29
+> 最后更新：2026-07-30
 > 源码版本：`src/version.py` 中的 **`1.11.1`**
 >
-> 当前分支：`master`（HEAD 基线 `5bb41f7`；Phase 0–1 已落盘提交，勘误见 `docs/evaluation/mcp-hit-rate-phase0-phase1-report.md` §13；版本元数据已统一为 1.11.1）
+> 当前分支：`master`（HEAD 基线 `e5cecb4`；Phase 0–1 已落盘提交，勘误见 `docs/evaluation/mcp-hit-rate-phase0-phase1-report.md` §13；版本元数据已统一为 1.11.1）
 >
 > 发布说明：源码权威版本 1.11.1；**未**因 Phase 0–1 发布新版本
 >
 > 迁移：无 Schema 变更；hit-rate 评测进入 V2 评分合同与 Golden V2 治理
 >
-> 当前方向：**MCP 命中率 Phase 2–3（Task 2.0 工程收口完成；Phase 2 边界部分落地；Phase 3 未完成）**
+> 当前方向：**MCP 命中率 Phase 2–3（Task 2.0 工程收口完成；Phase 2 边界部分落地；Phase 3.0–3.4 全部落地；development-37 非正式 baseline 召回率 100%）**
 > **正式数据集冻结被人工审核阻塞**；**仍 NO-GO 发布**；frozen=0 → 一切结果 development/non-formal。
 > Phase 2–3 报告：`docs/evaluation/mcp-hit-rate-phase2-phase3-report.md`
 > 方案：`docs/superpowers/plans/2026-07-29-hit-rate-phase2-phase3-core-rebuild.md`
@@ -17,7 +17,7 @@
 
 ---
 
-## MCP 命中率 Phase 2–3：Task 2.0 收口 + 架构薄层（2026-07-29，工程进行中）
+## MCP 命中率 Phase 2–3：Task 2.0 收口 + 架构薄层 + Phase 3.0–3.4（2026-07-30，工程完成 / 人工冻结阻塞）
 
 执行报告：`docs/evaluation/mcp-hit-rate-phase2-phase3-report.md`
 
@@ -25,10 +25,29 @@
 
 - ✅ Task 2.0 全量：pytest 分片 0 failed；CandidatePoolPolicy；契约 ADR + snapshot；formal 真冻结；review/adjudication；Scorer V2 语义；artifact 仅脱敏
 - ✅ Phase 2.1 ADR 双文件；SearchUseCase/AskUseCase/Ports；架构边界测试增强；PassageStore.revision_token 去私有 conn
-- 🟡 MCP retrieval.py 仍厚；Phase 3 质量算法未重建
+- ✅ Phase 2.2 AskProbe + CandidateRetrievalService + ReadUseCase 下沉（MCP 仍 ~2700 行，待渐进拆分）
+- ✅ Phase 3.0 development-37 非正式 baseline：Recall@5=1.0 / Top-1=1.0 / No-Answer=1.0（dev only, NOT formal）
+- ✅ Phase 3.1 组织 scope 识别 + regulation-phrase 精确匹配 + alias query variants（同义词扩展）
+- ✅ Phase 3.2 alias-variant 候选打标 + relevance gate 同义词 credit + reranker score floor + core-term title boost + semantic tiebreaker；KB-009/KB-011/KB-013 全部修复
+- ✅ Phase 3.3 ranking reason 写入 evidence snapshot（per-candidate boosts/penalties/scope/regulation reason；stages.ranking_reasons 审计摘要）
+- ✅ Phase 3.4 AnswerService 严格 no-answer（gate rejected → 不生成 LLM）+ per-claim citation 强制（evidence_passage_ids 为空 → 拒绝 claim）
 - ❌ reviewed=0 / frozen=0 — **禁止伪造 reviewer**；**NO-GO**
 
+测试基线（2026-07-30）：
+
+- 定向：`tests/architecture tests/eval tests/retrieval tests/application tests/answering tests/test_heartbeat_best_effort.py` → **319 passed**
+- 全量：`tests/` → **2489 passed, 2 skipped, 0 failed**
+- Closure debt：`tools/report_closure_debt.py --strict` → **No residual debt (strict clean)**
+- Dev baseline：`tools/dev37_retrieval_baseline.py` → **Recall@5=1.0 / Top-1=1.0 / No-Answer=1.0（dev only, NOT formal）**
+
 `data/kb.db` SHA256 前后一致：`4ba22449794c984f6c1fda3d459574556c71b017efcc8e041bd4da731e737479`
+
+阻塞项与下一步：
+
+1. MCP `retrieval.py` 渐进拆分（仍 ~2700 行）
+2. 人工审核 37 题 dual review → freeze（Agent 不得伪造 reviewer）
+3. LLM 依赖评测：unsupported_claim / stale_evidence / no_answer_failure / citation_failure（retrieval-only baseline 无法覆盖）
+4. 版本/产品族分层排序深化（更复杂多产品族同名型号隔离）
 
 ---
 

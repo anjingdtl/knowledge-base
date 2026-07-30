@@ -139,404 +139,72 @@ def ping() -> dict:
         "uptime_hint": "ok",
     })
 
-def _passage_fts_hits(query: str, *, limit: int = 10) -> list[dict]:
-    """SPEC v3: FTS over retrieval_passages (not micro-blocks)."""
-    try:
-        from src.services.passage_store import PassageStore
-        store = PassageStore()
-        hits = store.fts_search(query, top_k=limit) or []
-    except Exception as exc:  # noqa: BLE001
-        logger.debug("passage FTS failed: %s", exc)
-        return []
-    out: list[dict] = []
-    for h in hits:
-        if not isinstance(h, dict):
-            continue
-        meta = h.get("metadata") or {}
-        kid = h.get("knowledge_id") or meta.get("knowledge_id") or meta.get("page_id") or ""
-        pid = h.get("passage_id") or h.get("id") or meta.get("passage_id") or ""
-        primary_block = h.get("block_id") or meta.get("block_id") or ""
-        if not primary_block:
-            bids = meta.get("block_ids") or h.get("block_ids") or []
-            primary_block = bids[0] if bids else ""
-        out.append({
-            "source": "knowledge",
-            "match_channel": "passage_fts",
-            "match_channels": ["passage_fts", "keyword"],
-            "block_id": primary_block,
-            "knowledge_id": kid,
-            "passage_id": pid,
-            "title": h.get("title") or meta.get("title") or "",
-            "text": h.get("text") or "",
-            "document_family_id": h.get("document_family_id") or meta.get("document_family_id") or "",
-            "version_year": h.get("version_year") or meta.get("version_year"),
-            "section_path": meta.get("section_path") or "",
-            "block_ids": meta.get("block_ids") or h.get("block_ids") or [],
-            "retrieval_unit": "passage",
-            "candidate_type": "passage",
-            "fts_rank": h.get("fts_rank", 0),
-            "fts_score": h.get("keyword_score") or h.get("fts_rank") or 0,
-            "score": float(h.get("keyword_score") or h.get("rrf_score") or 0.5),
-        })
-    return out
+def _mcp_fulltext_as_list_fn(
+    query: str, *, limit: int = 10, offset: int = 0
+) -> list[dict]:
+    """Adapt MCP ``search_fulltext`` envelope to a plain list.
+
+    The application ``CandidateRetrievalService`` expects a list from its
+    ``fulltext_search_fn``; the MCP ``search_fulltext`` tool returns an
+    ``ok(...)`` envelope. This adapter extracts ``data`` so existing
+    ``monkeypatch.setattr(retrieval, "search_fulltext", ...)`` test fixtures
+    keep intercepting the FTS recall aid after Phase 2 thinning.
+    """
+    envelope = search_fulltext(query, limit=limit, offset=offset)
+    if isinstance(envelope, dict) and envelope.get("ok"):
+        return list(envelope.get("data") or [])
+    return []
 
 
-def _enrich_with_passages(results: list[dict]) -> list[dict]:
-    """Replace truncated micro-block text with owning passage when available."""
-    if not results:
-        return results
-    try:
-        from src.services.passage_store import PassageStore
-        store = PassageStore()
-    except Exception:
-        return results
-    cache: dict[str, list[dict]] = {}
-    out: list[dict] = []
-    for item in results:
-        row = dict(item) if isinstance(item, dict) else {"text": str(item)}
-        text = str(row.get("text") or "")
-        kid = str(row.get("knowledge_id") or "").strip()
-        # Already a full passage.
-        if row.get("retrieval_unit") == "passage" or row.get("passage_id") or len(text) >= 200:
-            out.append(row)
-            continue
-        if not kid:
-            out.append(row)
-            continue
-        if kid not in cache:
-            try:
-                cache[kid] = store.get_by_knowledge(kid) or []
-            except Exception:
-                cache[kid] = []
-        passages = cache[kid]
-        if not passages:
-            out.append(row)
-            continue
-        bid = str(row.get("block_id") or "").strip()
-        best = None
-        # Prefer passage that includes the hit block_id.
-        if bid:
-            for p in passages:
-                bids = p.get("block_ids") or []
-                if bid in bids:
-                    best = p
-                    break
-        # Else prefer passage containing the short snippet / query-ish text.
-        if best is None and text:
-            for p in passages:
-                if text[:20] and text[:20] in (p.get("text") or ""):
-                    best = p
-                    break
-        if best is None:
-            # Fall back to longest passage of the document (better than 20-char block).
-            best = max(passages, key=lambda p: int(p.get("char_count") or len(p.get("text") or "")))
-        if best:
-            row["text"] = best.get("text") or text
-            row["passage_id"] = best.get("id")
-            row["retrieval_unit"] = "passage"
-            row["candidate_type"] = "passage"
-            row["document_family_id"] = best.get("document_family_id") or row.get("document_family_id") or ""
-            row["version_year"] = best.get("version_year") or row.get("version_year")
-            row["section_path"] = best.get("section_path") or ""
-            try:
-                import json as _json
-                row["block_ids"] = _json.loads(best.get("block_ids_json") or "[]") if isinstance(best.get("block_ids_json"), str) else (best.get("block_ids") or [])
-            except Exception:
-                row["block_ids"] = best.get("block_ids") or []
-        out.append(row)
-    return out
+def _get_candidate_retrieval_service():
+    """Phase 2 Task 2.3: resolve the application candidate retrieval port.
+
+    Prefer the container-wired service (production path). When unavailable
+    (e.g. test doubles exposing only ``search_service`` / ``db``), construct
+    a fallback that injects the MCP ``search_fulltext`` adapter so existing
+    module-level monkeypatches keep intercepting the FTS recall aid.
+    """
+    container = _get_container()
+    svc = getattr(container, "candidate_retrieval_service", None)
+    if svc is not None:
+        return svc
+    from src.application.candidate_retrieval_service import (
+        CandidateRetrievalService,
+    )
+
+    return CandidateRetrievalService(
+        container,
+        fulltext_search_fn=_mcp_fulltext_as_list_fn,
+    )
+
+
+def _get_evidence_snapshot_service():
+    """Phase 2 Task 2.3: resolve the shared snapshot service for search/ask."""
+    container = _get_container()
+    svc = getattr(container, "evidence_snapshot_service", None)
+    if svc is not None:
+        return svc
+    from src.application.evidence_snapshot_service import (
+        EvidenceSnapshotService,
+    )
+
+    return EvidenceSnapshotService(
+        _get_candidate_retrieval_service(),
+        config=getattr(container, "config", None),
+        container=container,
+    )
 
 
 def _retrieve_candidates(query: str, *, fetch_k: int) -> list[dict]:
-    """Shared retrieval used by ``search`` and ``ask`` pre-LLM evidence probe.
+    """Phase 2 Task 2.3: delegate to CandidateRetrievalService.
 
-    Runs semantic search (same path as the ``search`` tool) with the same
-    numeric-unit ranking, document-level dedupe, title-overlap boost and
-    version-freshness re-rank. This guarantees ``search`` and ``ask`` evaluate
-    the SAME candidate set with the SAME scores (SPEC Phase 1.4) and that the
-    newest effective version of a regulation ranks first.
-
-    The compatibility path retains user-derived query variants so formal
-    wording can be found from colloquial wording. The original query always
-    runs first and wins score ties.
-
-    SPEC v3: prefer passage units for both semantic and FTS channels; enrich
-    any residual micro-block hits with owning passage text.
+    The application service owns candidate generation; MCP only delegates.
+    Behaviour is preserved bit-for-bit with the previous inline implementation
+    (unified RawRetriever path with compatibility fallback).
     """
-    # One production retrieval authority for MCP search and ask.  Keeping this
-    # path aligned with RawRetriever avoids separate legacy synonym tables and
-    # makes the A/B candidate snapshot representative of MCP behavior.
-    try:
-        container = _get_container()
-        service = getattr(container, "search_service", None)
-        if service is not None:
-            raw = service._get_raw_retriever()
-            result = raw.retrieve(query, top_k=max(fetch_k, 5), include_legacy_wiki_fts=False)
-            return [dict(row) for row in result.candidates if isinstance(row, dict)]
-    except Exception as exc:  # legacy path remains an availability fallback
-        logger.debug("unified raw retrieval failed; using compatibility path: %s", exc)
-
-    from src.application.retrieval_commands import RetrievalCommands
-    from src.services.numeric_unit_match import apply_numeric_unit_ranking
-    from src.services.query_rewrite import expand_query, merge_candidates_by_query
-    from src.services.result_dedupe import boost_title_term_overlap, dedupe_retrieval_hits
-
-    def _semantic(q: str) -> list:
-        try:
-            container = _get_container()
-            if getattr(container, "search_service", None) is not None:
-                hits = list(
-                    RetrievalCommands(container).semantic_search(q, top_k=fetch_k) or []
-                )
-                # Tag genuine vector-similarity scores so the relevance gate can
-                # credit high-confidence semantic matches that lexical coverage
-                # can underestimate.
-                # This tag is only set on candidates from the semantic_search
-                # path — never on ask's pipeline source dicts — so it preserves
-                # the search/ask symmetry invariant.
-                for h in hits:
-                    if isinstance(h, dict) and h.get("score") is not None:
-                        try:
-                            h["_semantic_similarity"] = float(h["score"])
-                        except (TypeError, ValueError):
-                            pass
-                return hits
-        except Exception as exc:  # noqa: BLE001
-            logger.debug("shared retrieval semantic path failed: %s", exc)
-        return []
-
-    # SPEC Phase 3.3: run the original query AND alias-expanded variants, then
-    # merge. The original query runs first so its hits win score ties.
-    variants = expand_query(query)
-    if len(variants) <= 1:
-        results = _semantic(query)
-    else:
-        candidate_lists = [_semantic(v) for v in variants]
-        results = merge_candidates_by_query(query, candidate_lists)
-
-    # SPEC v3: always merge passage FTS (semantic unit) — do not rely on block FTS.
-    from src.services.query_rewrite import canonical_terms
-
-    passage_lists = [_passage_fts_hits(query, limit=max(fetch_k, 10))]
-    for term in canonical_terms(query):
-        hits = _passage_fts_hits(term, limit=max(fetch_k, 10))
-        for h in hits:
-            h["alias_fts_match"] = True
-        passage_lists.append(hits)
-    passage_items = merge_candidates_by_query(query, [x for x in passage_lists if x]) if any(passage_lists) else []
-    if passage_items:
-        results = merge_candidates_by_query(query, [results, passage_items])
-
-    # SPEC Phase 3.3 (legacy FTS recall aid): if still weak, also run block/knowledge FTS
-    # then enrich to passages. Keep gate threshold unchanged.
-    if not results or max(
-        (float(r.get("score") or r.get("fts_score") or 0.0) for r in results),
-        default=0.0,
-    ) < 0.35:
-        ft_lists = []
-        # Original query as one FTS pass (idx 0 — not tagged).
-        ft = search_fulltext(query, limit=max(fetch_k, 10), offset=0)
-        if ft.get("ok"):
-            ft_lists.append(list(ft.get("data") or [])[: max(fetch_k, 10)])
-        # Each canonical expansion term as its own FTS pass (tagged).
-        for term in canonical_terms(query):
-            ft = search_fulltext(term, limit=max(fetch_k, 10), offset=0)
-            if ft.get("ok"):
-                hits = list(ft.get("data") or [])[: max(fetch_k, 10)]
-                for h in hits:
-                    if isinstance(h, dict):
-                        h["alias_fts_match"] = True
-                ft_lists.append(hits)
-        if ft_lists:
-            ft_items = merge_candidates_by_query(query, ft_lists)
-            # Merge FTS hits with semantic hits (semantic wins ties).
-            results = merge_candidates_by_query(query, [results, ft_items])
-
-    # Prefer passage text over micro-block snippets for evidence quality.
-    results = _enrich_with_passages(results)
-
-    apply_numeric_unit_ranking(query, results)
-    # SPEC v5: keep multi-passage diversity within a document (do not collapse
-    # all passages of one knowledge_id to a single hit).
-    results = dedupe_retrieval_hits(results, max_passages_per_knowledge=3)
-    results = boost_title_term_overlap(query, results)
-    # NOTE: rank_with_freshness is intentionally NOT applied here. SPEC v2
-    # requires freshness to run AFTER final relevance ranking so a later
-    # re-score cannot bury the newest edition.
-
-    out = []
-    for item in results:
-        row = dict(item) if isinstance(item, dict) else {"text": str(item)}
-        if not row.get("knowledge_id") and row.get("id"):
-            row["knowledge_id"] = row["id"]
-        out.append(row)
-    return out
-
-
-def _list_blocks_for_snapshot(page_id: str) -> list[dict]:
-    """Block loader for adjacent allowlist / expansion (production path)."""
-    try:
-        return _list_blocks_for_page(page_id)
-    except Exception as exc:  # noqa: BLE001
-        logger.debug("snapshot block list failed for %s: %s", page_id, exc)
-        return []
-
-
-def _neighbor_passages_for_snapshot(
-    knowledge_id: str,
-    passage_id: str,
-    window: int = 1,
-) -> list[dict]:
-    """Load same-doc passage_index ±window neighbors (SPEC v5 §3)."""
-    try:
-        from src.services.passage_store import PassageStore
-        store = PassageStore()
-        all_p = store.get_by_knowledge(knowledge_id) or []
-    except Exception as exc:  # noqa: BLE001
-        logger.debug("neighbor passages failed for %s: %s", knowledge_id, exc)
-        return []
-    if not all_p:
-        return []
-    # Locate focus by id
-    idx = None
-    for i, p in enumerate(all_p):
-        pid = str(p.get("id") or p.get("passage_id") or "").strip()
-        if pid == passage_id:
-            idx = i
-            break
-    if idx is None:
-        return []
-    lo = max(0, idx - int(window))
-    hi = min(len(all_p), idx + int(window) + 1)
-    out: list[dict] = []
-    for j in range(lo, hi):
-        if j == idx:
-            continue
-        p = all_p[j]
-        pid = str(p.get("id") or p.get("passage_id") or "").strip()
-        meta = p.get("metadata") if isinstance(p.get("metadata"), dict) else {}
-        bids = p.get("block_ids") or meta.get("block_ids") or []
-        if isinstance(bids, str):
-            try:
-                import json as _json
-                bids = _json.loads(bids)
-            except Exception:
-                bids = []
-        out.append({
-            "source": "knowledge",
-            "knowledge_id": knowledge_id,
-            "passage_id": pid,
-            "title": p.get("title") or p.get("title_prefix") or meta.get("title") or "",
-            "text": p.get("text") or "",
-            "block_id": (bids[0] if bids else ""),
-            "block_ids": list(bids) if isinstance(bids, list) else [],
-            "document_family_id": p.get("document_family_id") or "",
-            "version_year": p.get("version_year"),
-            "section_path": p.get("section_path") or meta.get("section_path") or "",
-            "retrieval_unit": "passage",
-            "candidate_type": "passage",
-            "score": 0.0,
-            "passage_index": p.get("passage_index"),
-        })
-    return out
-
-
-def _select_document_passages_for_snapshot(
-    knowledge_id: str,
-    query: str,
-    existing_passage_ids: set[str],
-    limit: int = 3,
-) -> list[dict]:
-    """Return a bounded, query-relevant passage supplement for one accepted doc."""
-    try:
-        from src.services.passage_store import PassageStore
-        passages = PassageStore().get_by_knowledge(knowledge_id) or []
-        from src.answering.query_planner import plan_query
-        plan = plan_query(query)
-        terms = [x for x in (plan.anchors or []) if len(x) >= 2][:12]
-    except Exception as exc:
-        logger.debug("document passage selection failed for %s: %s", knowledge_id, exc)
-        return []
-
-    scored: list[tuple[float, int, dict]] = []
-    for index, passage in enumerate(passages):
-        pid = str(passage.get("id") or passage.get("passage_id") or "").strip()
-        if not pid or pid in existing_passage_ids:
-            continue
-        text = str(passage.get("text") or "")
-        if not text:
-            continue
-        hits = sum(1 for term in terms if term in text)
-        score = float(hits)
-        if plan.predicate and plan.predicate in text:
-            score += 2.0
-        if any(condition in text for condition in (plan.conditions or [])):
-            score += 1.5
-        if plan.wants_numeric and re.search(r"\d+(?:\.\d+)?\s*(?:元|万元|%|％|天|年|月)", text):
-            score += 1.0
-        if plan.polarity == "negative" and re.search(r"不得|禁止|取消|不再|废止|停止", text):
-            score += 1.0
-        if score <= 0:
-            continue
-        meta = passage.get("metadata") if isinstance(passage.get("metadata"), dict) else {}
-        block_ids = passage.get("block_ids") or meta.get("block_ids") or []
-        if isinstance(block_ids, str):
-            try:
-                import json as _json
-                block_ids = _json.loads(block_ids)
-            except Exception:
-                block_ids = []
-        scored.append((score, index, {
-            "source": "knowledge",
-            "knowledge_id": knowledge_id,
-            "passage_id": pid,
-            "block_id": block_ids[0] if isinstance(block_ids, list) and block_ids else "",
-            "block_ids": list(block_ids) if isinstance(block_ids, list) else [],
-            "title": passage.get("title") or passage.get("title_prefix") or meta.get("title") or "",
-            "text": text,
-            "document_family_id": passage.get("document_family_id") or "",
-            "version_year": passage.get("version_year"),
-            "section_path": passage.get("section_path") or meta.get("section_path") or "",
-            "retrieval_unit": "passage",
-            "candidate_type": "passage",
-            "score": score,
-        }))
-    scored.sort(key=lambda item: (-item[0], item[1]))
-    return [row for _, _, row in scored[:max(0, int(limit))]]
-
-
-def _snapshot_config_bits() -> dict:
-    return {
-        "no_answer_threshold": Config.get("rag.ask.no_answer_threshold", 0.35),
-        "no_match_threshold": Config.get("rag.search.no_match_threshold", 0.35),
-        "max_sources": Config.get("rag.ask.max_sources", 5),
-        "retrieval_unit": "passage",
-    }
-
-
-def _index_revision() -> str:
-    try:
-        from src.services.passage_store import PassageStore
-        return PassageStore().revision_token()
-    except Exception:
-        return "passages:unknown"
-
-
-def _db_revision() -> str:
-    try:
-        container = _get_container()
-        db = getattr(container, "db", None)
-        if db is None:
-            return "db:unknown"
-        conn = db.get_conn() if hasattr(db, "get_conn") else None
-        if conn is None:
-            return "db:unknown"
-        row = conn.execute(
-            "SELECT COUNT(*) FROM knowledge_items WHERE deleted_at IS NULL OR deleted_at = ''"
-        ).fetchone()
-        return f"knowledge:{row[0]}"
-    except Exception:
-        return "db:unknown"
+    return _get_candidate_retrieval_service().retrieve_candidates(
+        query, fetch_k=fetch_k,
+    )
 
 
 def _build_shared_snapshot(
@@ -546,41 +214,20 @@ def _build_shared_snapshot(
     threshold: float,
     fetch_k: int | None = None,
 ) -> dict:
-    """Build the single canonical retrieval snapshot for search and ask."""
-    from src.retrieval.candidate_pool import CandidatePoolPolicy
-    from src.retrieval.canonical_snapshot import build_canonical_snapshot
-    from src.services.query_rewrite import expand_query
+    """Phase 2 Task 2.3: delegate to EvidenceSnapshotService.build."""
+    from src.application.evidence_snapshot_service import SnapshotBuildRequest
 
-    # ADR §5: same CandidatePoolPolicy as RawRetriever (4x/20 floor).
-    if fetch_k is not None:
-        fk = int(fetch_k)
-    else:
-        fk = CandidatePoolPolicy.from_request(top_k).fetch_k
-    candidates = _retrieve_candidates(query, fetch_k=fk)
-    # SPEC v5: passage path — no list_blocks_fn; optional passage neighbors.
-    return build_canonical_snapshot(
-        query,
-        candidates,
-        threshold=threshold,
-        top_k=top_k,
-        expanded_queries=expand_query(query),
-        list_blocks_fn=None,
-        list_neighbor_passages_fn=_neighbor_passages_for_snapshot,
-        select_document_passages_fn=_select_document_passages_for_snapshot,
-        adjacent_window=1,
+    return _get_evidence_snapshot_service().build(
+        SnapshotBuildRequest(
+            query=query, top_k=top_k, threshold=threshold, fetch_k=fetch_k,
+        )
     )
 
 
 def _register_snapshot(snapshot: dict, *, query: str, top_k: int) -> str:
-    from src.retrieval.snapshot_registry import compute_config_hash, put_snapshot
-
-    return put_snapshot(
-        snapshot,
-        query=query,
-        top_k=top_k,
-        config_hash=compute_config_hash(_snapshot_config_bits()),
-        index_revision=_index_revision(),
-        db_revision=_db_revision(),
+    """Phase 2 Task 2.3: delegate to EvidenceSnapshotService.register."""
+    return _get_evidence_snapshot_service().register(
+        snapshot, query=query, top_k=top_k,
     )
 
 
@@ -590,15 +237,9 @@ def _load_snapshot(
     query: str,
     top_k: int,
 ) -> tuple[dict | None, str, bool]:
-    from src.retrieval.snapshot_registry import compute_config_hash, get_snapshot
-
-    return get_snapshot(
-        snapshot_id,
-        query=query,
-        top_k=top_k,
-        config_hash=compute_config_hash(_snapshot_config_bits()),
-        index_revision=_index_revision(),
-        db_revision=_db_revision(),
+    """Phase 2 Task 2.3: delegate to EvidenceSnapshotService.load."""
+    return _get_evidence_snapshot_service().load(
+        snapshot_id, query=query, top_k=top_k,
     )
 
 
@@ -675,10 +316,17 @@ def search(query: str, top_k: int = 5, limit: int | None = None) -> dict:
     # Low-confidence colloquial surface: when the gate rejects but alias FTS
     # found something, return marked low_confidence hits so the agent can still
     # read them. Ask still decides answerability via the gate (no threshold cut).
+    # SPEC Phase 3.2 §3.3: skip the colloquial fallback for ``out_of_domain``
+    # intents so consumer recommendations / HQ address / HR private data do
+    # not resurface weak lexical hits after the unified gate rejected them.
     from src.services.query_rewrite import canonical_terms, merge_candidates_by_query
+    from src.services.relevance_gate import classify_query_intent
     from src.services.result_dedupe import dedupe_by_knowledge_id
 
-    if canonical_terms(query):
+    if (
+        canonical_terms(query)
+        and classify_query_intent(query) != "out_of_domain"
+    ):
         ft_lists = []
         ft = search_fulltext(query, limit=max(k, 10), offset=0)
         if ft.get("ok"):
@@ -1033,6 +681,29 @@ def ask_verified(
     )
 
 
+def _get_ask_probe():
+    """Phase 2 Task 2.4: resolve the application AskProbe.
+
+    Prefer the container-wired probe. When unavailable, construct a fallback
+    that wraps the current container and reuses the MCP adapter's own
+    snapshot helpers (``_load_snapshot`` / ``_build_shared_snapshot`` /
+    ``_register_snapshot``) so existing module-level monkeypatches keep
+    intercepting the snapshot lifecycle.
+    """
+    container = _get_container()
+    svc = getattr(container, "ask_probe", None)
+    if svc is not None:
+        return svc
+    from src.application.ask_probe import AskProbe
+
+    return AskProbe(
+        container,
+        snapshot_loader=_load_snapshot,
+        snapshot_builder=_build_shared_snapshot,
+        snapshot_registerer=_register_snapshot,
+    )
+
+
 def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
     # BUG-2 fix (50轮测试报告): ask 工具增加总超时控制。
     # Phase 4: verified hybrid 时优先 SearchService + AnswerService
@@ -1042,6 +713,8 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
     # ``evaluate_evidence_unified`` — search and ask now score the same evidence
     # identically.
     # SPEC v5: optional evidence_snapshot_id reuses search snapshot (no re-retrieval).
+    # Phase 2 Task 2.4: pre-LLM probe (live-external short-circuit + snapshot
+    # load/build/reuse + gate rejection) moved to :class:`AskProbe`.
     from src.mcp.tools.support import DeadlineTimeout, run_with_deadline
     from src.services.relevance_gate import (
         classify_query_intent,
@@ -1054,157 +727,30 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
     timeout_label = f"{total_timeout:g}"
     started = time.monotonic()
     weak_threshold = float(Config.get("rag.ask.no_answer_threshold", 0.35) or 0.35)
-
-    # Only true live-external queries (today/live quotes/news) short-circuit.
-    # Local-version queries ("最新版本/最新修订版") proceed to retrieval.
-    if is_current_information_query(question):
-        return {
-            "answer": "",
-            "sources": [],
-            "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
-            "route": {
-                "mode": "no_answer",
-                "explanation": "requires_current_external_data",
-            },
-            "query_plan": {},
-            "block_contexts": {},
-            "warnings": ["requires_current_external_data"],
-            "wiki_context": "",
-            "trace_id": "",
-            "answer_mode": "no_answer",
-            "reason": "requires_current_external_data",
-            "retrieval_decision": "requires_current_external_data",
-            "answer_validation_decision": "",
-            "snapshot_reused": False,
-            "retrieval_count": 0,
-            "conflict_disclosed": False,
-            "claims_used": [],
-            "raw_evidence_used": [],
-            "conflicts": [],
-            "fallbacks": [],
-        }
+    probe_k = int(Config.get("rag.ask.max_sources", 5) or 5)
 
     container = _get_container()
 
-    # --- SPEC v2 Phase 1 + v5 snapshot reuse --------------------------------
-    snapshot: dict | None = None
-    accepted_kids: set[str] = set()
-    accepted_blocks: set[str] = set()
-    adjacent_allowlist: list[dict] = []
-    snapshot_reused = False
-    snapshot_reuse_reason = ""
-    retrieval_count = 0
-    probe_k = int(Config.get("rag.ask.max_sources", 5) or 5)
-    # Only real AppContainer has a trustworthy search_service for shared snapshot.
-    # MagicMock / test doubles must fall through to legacy timeout/error envelopes.
-    probe_available = (
-        isinstance(container, AppContainer)
-        and getattr(container, "search_service", None) is not None
+    # --- Phase 2 Task 2.4: pre-LLM probe via AskProbe ----------------------
+    probe = _get_ask_probe()
+    probe_result = probe.probe(
+        question,
+        evidence_snapshot_id=evidence_snapshot_id,
+        top_k=probe_k,
+        threshold=weak_threshold,
     )
+    if probe_result.no_answer_payload is not None:
+        # Gate rejected (live-external / insufficient evidence / out-of-domain).
+        # The payload already mirrors the public ask contract — return as-is.
+        return probe_result.no_answer_payload
 
-    if evidence_snapshot_id and probe_available:
-        loaded, miss_reason, reused = _load_snapshot(
-            evidence_snapshot_id, query=question, top_k=probe_k,
-        )
-        if reused and loaded is not None:
-            snapshot = loaded
-            snapshot_reused = True
-            snapshot_reuse_reason = ""
-            retrieval_count = 0
-        else:
-            snapshot_reuse_reason = miss_reason or "snapshot_load_failed"
-            snapshot_reused = False
-
-    if snapshot is None and probe_available:
-        try:
-            from src.retrieval.candidate_pool import CandidatePoolPolicy
-
-            snapshot = _build_shared_snapshot(
-                question,
-                top_k=probe_k,
-                threshold=weak_threshold,
-                fetch_k=CandidatePoolPolicy.from_request(probe_k).fetch_k,
-            )
-            retrieval_count = 1
-            # Register for potential subsequent reuse.
-            try:
-                _register_snapshot(snapshot, query=question, top_k=probe_k)
-            except Exception:  # noqa: BLE001
-                pass
-        except Exception as exc:  # noqa: BLE001 - probe is best-effort
-            logger.debug("ask shared snapshot probe failed: %s", exc)
-            snapshot = None
-
-    if snapshot is not None:
-        accepted_kids = {
-            k for k in (snapshot.get("accepted_knowledge_ids") or []) if k
-        }
-        accepted_blocks = {
-            b for b in (snapshot.get("accepted_block_ids") or []) if b
-        }
-        adjacent_allowlist = list(snapshot.get("adjacent_allowlist") or [])
-        for entry in adjacent_allowlist:
-            bid = (entry.get("block_id") or "").strip()
-            kid = (entry.get("knowledge_id") or "").strip()
-            if bid:
-                accepted_blocks.add(bid)
-            if kid:
-                accepted_kids.add(kid)
-
-    if snapshot is not None and not snapshot.get("accept"):
-        warn = (
-            f"evidence gate blocked generation "
-            f"(top_score={snapshot.get('top_score', 0)} < {weak_threshold})"
-        )
-        if snapshot.get("direct_slot_audit"):
-            warn += f"; direct_slot={snapshot.get('direct_slot_audit')}"
-        gate_reason = snapshot.get("reason") or "retrieval_gate_rejected"
-        return {
-            "answer": "",
-            "sources": [],
-            "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
-            "route": {
-                "mode": "no_answer",
-                "explanation": gate_reason,
-            },
-            "query_plan": {},
-            "block_contexts": {},
-            "warnings": [warn],
-            "wiki_context": "",
-            "trace_id": "",
-            "answer_mode": "no_answer",
-            "reason": gate_reason,
-            "retrieval_decision": gate_reason,
-            "answer_validation_decision": "",
-            "snapshot_reused": snapshot_reused,
-            "snapshot_reuse_reason": snapshot_reuse_reason,
-            "retrieval_count": retrieval_count,
-            "user_notice": "知识库中未找到可直接支持该问题的证据。",
-            "conflict_disclosed": False,
-            "claims_used": [],
-            "raw_evidence_used": [],
-            "conflicts": [],
-            "fallbacks": [],
-            "evidence_snapshot": {
-                "accepted_knowledge_ids": list(snapshot.get("accepted_knowledge_ids") or []),
-                "accepted_block_ids": list(snapshot.get("accepted_block_ids") or []),
-                "accepted_passage_ids": list(snapshot.get("accepted_passage_ids") or []),
-                "adjacent_passage_ids": [
-                    str(entry.get("passage_id"))
-                    for entry in (snapshot.get("adjacent_allowlist") or [])
-                    if isinstance(entry, dict) and entry.get("passage_id")
-                ],
-                "top_score": snapshot.get("top_score"),
-                "intent": snapshot.get("intent"),
-                "direct_slot_evidence": bool(snapshot.get("direct_slot_evidence")),
-                "direct_slot_audit": snapshot.get("direct_slot_audit") or {},
-                "adjacent_unit": snapshot.get("adjacent_unit"),
-                "adjacent_count": snapshot.get("adjacent_count"),
-                "adjacent_fallback_reason": snapshot.get("adjacent_fallback_reason"),
-                "snapshot_fingerprint": snapshot.get("snapshot_fingerprint"),
-            },
-            "snapshot_fingerprint": snapshot.get("snapshot_fingerprint"),
-        }
+    snapshot = probe_result.snapshot
+    accepted_kids = probe_result.accepted_knowledge_ids
+    accepted_blocks = probe_result.accepted_block_ids
+    adjacent_allowlist = probe_result.adjacent_allowlist
+    snapshot_reused = probe_result.snapshot_reused
+    snapshot_reuse_reason = probe_result.snapshot_reuse_reason
+    retrieval_count = probe_result.retrieval_count
 
     def _run_verified() -> dict:
         return ask_verified(
@@ -1551,6 +1097,22 @@ def _do_ask(question: str, evidence_snapshot_id: str | None = None) -> dict:
 
     return result
 
+def _get_read_use_case():
+    """Phase 2 Task 2.4: resolve the application ReadUseCase.
+
+    Prefer the container-wired service. When unavailable (e.g. test doubles),
+    construct a fallback that wraps the current container so DB / wiki repo /
+    serving gate access stays in the application layer.
+    """
+    container = _get_container()
+    svc = getattr(container, "read_use_case", None)
+    if svc is not None:
+        return svc
+    from src.application.read_use_case import ReadUseCase
+
+    return ReadUseCase(container=container)
+
+
 def _resolve_read_target(
     *,
     item_id: str | None = None,
@@ -1561,171 +1123,51 @@ def _resolve_read_target(
 ) -> dict | None:
     """Phase 4 Spec §8.4: read by claim_id / block_id / page_id / knowledge_id.
 
-    Returns an envelope dict when a typed target is resolved; None to fall through
-    to legacy knowledge-item read.
+    Thin MCP adapter: dispatches to :class:`ReadUseCase.resolve_typed` and
+    wraps the structured ``ReadResult`` in an MCP envelope (``ok`` /
+    ``fail``). Returns ``None`` when the request is a legacy fallback (no
+    typed target resolved) so the caller falls through to the legacy
+    knowledge-item read path.
+
+    Business logic (DB SQL, wiki repo access, serving gate evaluation, claim
+    evidence collection) lives in :class:`ReadUseCase`, not here.
     """
-    container = _get_container()
-    raw = (claim_id or block_id or page_id or knowledge_id or item_id or "").strip()
-    if not raw and not any([claim_id, block_id, page_id, knowledge_id]):
+    from src.application.read_use_case import ReadRequest
+
+    use_case = _get_read_use_case()
+    request = ReadRequest(
+        item_id=item_id,
+        block_id=block_id,
+        claim_id=claim_id,
+        page_id=page_id,
+        knowledge_id=knowledge_id,
+    )
+    result = use_case.resolve_typed(request)
+    if result.legacy_fallback:
         return None
-
-    kind = None
-    value = raw
+    # The envelope's *_id kwarg preserves the INPUT parameter name, not the
+    # resolved payload type (e.g. a page_id input that resolves to a wiki_page
+    # payload still tags the envelope with page_id=...). This keeps the
+    # public contract stable.
     if claim_id:
-        kind, value = "claim", claim_id
+        kw_name = "claim_id"
     elif block_id:
-        kind, value = "block", block_id
+        kw_name = "block_id"
     elif page_id:
-        kind, value = "page", page_id
+        kw_name = "page_id"
     elif knowledge_id:
-        kind, value = "knowledge", knowledge_id
-    elif item_id:
-        lower = item_id.lower()
-        if lower.startswith("claim:"):
-            kind, value = "claim", item_id.split(":", 1)[1]
-        elif lower.startswith("block:"):
-            kind, value = "block", item_id.split(":", 1)[1]
-        elif lower.startswith("page:"):
-            kind, value = "page", item_id.split(":", 1)[1]
-        else:
-            # Heuristic: claim_ prefix or looks like claim id in wiki repo
-            if item_id.startswith("claim_") or item_id.startswith("cl_"):
-                kind, value = "claim", item_id
-            else:
-                return None  # legacy knowledge path
-
-    if kind == "claim":
-        try:
-            repo = container.wiki_repository
-            claim = repo.get_claim(value) if repo is not None else None
-        except Exception as e:  # noqa: BLE001
-            return fail(ErrorCode.INTERNAL_ERROR, f"读取 Claim 失败: {e}", claim_id=value)
-        if claim is None:
-            return fail(ErrorCode.NOT_FOUND, f"Claim 不存在: {value}", claim_id=value)
-        # Resolve evidence validity via Serving Gate when available
-        gate = getattr(container, "wiki_serving_gate", None)
-        decision = None
-        if gate is not None:
-            try:
-                decision = gate.evaluate(claim)
-            except Exception:  # noqa: BLE001
-                decision = None
-        evidence_rows = []
-        for ev in claim.evidence:
-            block = None
-            try:
-                if ev.block_id:
-                    block = container.db.get_conn().execute(
-                        "SELECT id, page_id, content, properties FROM blocks WHERE id = ?",
-                        (ev.block_id,),
-                    ).fetchone()
-            except Exception:  # noqa: BLE001
-                block = None
-            block_dict = dict(block) if block is not None and hasattr(block, "keys") else (
-                {"id": block[0], "page_id": block[1], "content": block[2]} if block else None
-            ) if block is not None else None
-            evidence_rows.append({
-                "evidence_id": ev.evidence_id,
-                "knowledge_id": ev.knowledge_id,
-                "block_id": ev.block_id,
-                "stance": ev.stance.value if hasattr(ev.stance, "value") else str(ev.stance),
-                "stale": bool(ev.stale),
-                "excerpt_hash": ev.excerpt_hash,
-                "excerpt": (block_dict or {}).get("content", "")[:500] if block_dict else "",
-                "valid": (not ev.stale) and block_dict is not None,
-            })
-        relations = []
-        for rel in (claim.relations or []):
-            if hasattr(rel, "__dict__"):
-                relations.append({
-                    k: getattr(rel, k) for k in ("relation_type", "target_id", "direction")
-                    if hasattr(rel, k)
-                } or {"raw": str(rel)})
-            elif isinstance(rel, dict):
-                relations.append(rel)
-            else:
-                relations.append({"raw": str(rel)})
-        payload = {
-            "type": "claim",
-            "claim_id": claim.claim_id,
-            "statement": claim.statement,
-            "normalized_statement": claim.normalized_statement,
-            "status": claim.status.value if hasattr(claim.status, "value") else str(claim.status),
-            "revision": claim.revision,
-            "confidence": claim.confidence,
-            "relations": relations,
-            "evidence": evidence_rows,
-            "serving": {
-                "eligible": bool(decision.eligible) if decision else None,
-                "disclose_only": bool(decision.disclose_only) if decision else None,
-                "reason_codes": list(decision.reason_codes) if decision else [],
-            },
-        }
-        return ok(payload, claim_id=value)
-
-    if kind == "block":
-        try:
-            row = container.db.get_conn().execute(
-                "SELECT id, page_id, content, block_type, properties, order_idx "
-                "FROM blocks WHERE id = ?",
-                (value,),
-            ).fetchone()
-        except Exception as e:  # noqa: BLE001
-            return fail(ErrorCode.INTERNAL_ERROR, f"读取 Block 失败: {e}", block_id=value)
-        if row is None:
-            return fail(ErrorCode.NOT_FOUND, f"Block 不存在: {value}", block_id=value)
-        if hasattr(row, "keys"):
-            block = dict(row)
-        else:
-            block = {
-                "id": row[0], "page_id": row[1], "content": row[2],
-                "block_type": row[3], "properties": row[4], "order_idx": row[5],
-            }
-        kid = block.get("page_id") or ""
-        item = container.db.get_knowledge(kid) if kid else None
-        return ok({
-            "type": "block",
-            "block_id": block.get("id"),
-            "knowledge_id": kid,
-            "content": block.get("content"),
-            "block_type": block.get("block_type"),
-            "properties": block.get("properties"),
-            "knowledge": item,
-        }, block_id=value)
-
-    if kind == "page":
-        try:
-            repo = container.wiki_repository
-            page = repo.get_page(value) if repo is not None and hasattr(repo, "get_page") else None
-        except Exception as e:  # noqa: BLE001
-            return fail(ErrorCode.INTERNAL_ERROR, f"读取 Page 失败: {e}", page_id=value)
-        if page is None:
-            # Fall back to knowledge item
-            item = container.db.get_knowledge(value)
-            if item:
-                return ok({"type": "knowledge", **item}, page_id=value)
-            return fail(ErrorCode.NOT_FOUND, f"Page 不存在: {value}", page_id=value)
-        if hasattr(page, "to_dict"):
-            payload = page.to_dict()
-        elif isinstance(page, dict):
-            payload = page
-        else:
-            payload = {
-                "page_id": getattr(page, "page_id", value),
-                "title": getattr(page, "title", ""),
-                "status": str(getattr(page, "status", "")),
-            }
-        payload = dict(payload)
-        payload["type"] = "wiki_page"
-        return ok(payload, page_id=value)
-
-    if kind == "knowledge":
-        item = container.db.get_knowledge(value)
-        if not item:
-            return fail(ErrorCode.NOT_FOUND, f"知识条目不存在: {value}", knowledge_id=value)
-        return ok({"type": "knowledge", **item}, knowledge_id=value)
-
-    return None
+        kw_name = "knowledge_id"
+    else:
+        # item_id with prefix or claim_ heuristic
+        kw_name = f"{result.kind}_id" if result.kind != "wiki_page" else "page_id"
+    kw = {kw_name: result.target_id} if result.target_id else {}
+    if result.not_found:
+        return fail(ErrorCode.NOT_FOUND, result.error or "not found", **kw)
+    if result.error:
+        return fail(ErrorCode.INTERNAL_ERROR, result.error, **kw)
+    if result.payload is None:
+        return None
+    return ok(result.payload, **kw)
 
 @_define_tool(
     name="read",

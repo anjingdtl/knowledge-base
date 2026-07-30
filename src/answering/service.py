@@ -179,6 +179,88 @@ class AnswerService:
         }
         return items, trace, []
 
+    def _strict_no_answer_payload(
+        self,
+        *,
+        trace: dict[str, Any],
+        reason: str,
+        evidence_snapshot: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """SPEC Phase 3.4: return a strict no-answer when the evidence gate
+        rejected the snapshot.
+
+        The AnswerService must NOT attempt generation when the canonical
+        snapshot already determined the evidence is insufficient. This
+        method produces the deterministic no-answer payload with full
+        traceability (gate reason, snapshot fingerprint, ranking reasons)
+        so case-level audits can trace why no answer was produced.
+        """
+        gate = dict(trace.get("gate") or {})
+        stages = dict(trace.get("stages") or {})
+        snapshot_meta: dict[str, Any] = {}
+        if evidence_snapshot is not None:
+            snapshot_meta = {
+                "accepted_knowledge_ids": list(
+                    evidence_snapshot.get("accepted_knowledge_ids") or []
+                ),
+                "accepted_block_ids": list(
+                    evidence_snapshot.get("accepted_block_ids") or []
+                ),
+                "accepted_passage_ids": list(
+                    evidence_snapshot.get("accepted_passage_ids") or []
+                ),
+                "adjacent_allowlist": list(
+                    evidence_snapshot.get("adjacent_allowlist") or []
+                ),
+                "generation_knowledge_ids": list(
+                    evidence_snapshot.get("generation_knowledge_ids") or []
+                ),
+                "snapshot_fingerprint": evidence_snapshot.get("snapshot_fingerprint"),
+                "ranking_reasons": list(
+                    evidence_snapshot.get("ranking_reasons") or []
+                ),
+            }
+        return {
+            "answer": "",
+            "answer_mode": "no_answer",
+            "conflict_disclosed": False,
+            "claims_used": [],
+            "raw_evidence_used": [],
+            "conflicts": [],
+            "fallbacks": [],
+            "warnings": [],
+            "sources": [],
+            "freshness_sensitive": False,
+            "trace_id": trace.get("trace_id") or "",
+            "search_trace": {
+                "mode": trace.get("mode"),
+                "route": "no_answer_gate_rejected",
+                "stages": stages,
+                "sources": trace.get("sources"),
+            },
+            "reason": reason,
+            "answer_validation_decision": reason,
+            "user_notice": "知识库中未找到可直接支持该问题的证据。",
+            "numeric_fact_audit": {},
+            "claim_audit": [],
+            "fact_candidate_audit": {},
+            "answer_plan": {},
+            "query_plan": {},
+            "evidence_groups": {},
+            "render_validation": {},
+            "primary_group_id": None,
+            "source_graph": {"nodes": [], "edges": [], "truncated": False, "node_count": 0},
+            "route": {
+                "mode": "no_answer",
+                "explanation": f"evidence gate rejected: {reason}",
+                "search_mode": trace.get("mode"),
+                "intent": gate.get("intent"),
+            },
+            "block_contexts": {},
+            "wiki_context": "",
+            "_evidence_snapshot": snapshot_meta,
+        }
+
     def _expand_adjacent_into_results(
         self,
         results: list[dict[str, Any]],
@@ -216,6 +298,20 @@ class AnswerService:
                 if isinstance(r, dict)
             }
             trace.setdefault("stages", {})["snapshot_id_count"] = len(snap_ids)
+            # SPEC Phase 3.4: strict no-answer when the canonical evidence
+            # gate rejected the snapshot. The AnswerService must NOT attempt
+            # generation (LLM or deterministic) when the shared gate already
+            # determined the evidence is insufficient — doing so risks
+            # hallucinated answers that cite no real evidence. This guard is
+            # the AnswerService-level enforcement of the no-answer contract.
+            if evidence_snapshot.get("accept") is False:
+                return self._strict_no_answer_payload(
+                    trace=trace,
+                    reason=str(
+                        evidence_snapshot.get("reason") or "evidence_gate_rejected"
+                    ),
+                    evidence_snapshot=evidence_snapshot,
+                )
         else:
             results, trace, disclose_rows = self._run_search(question, top_k=top_k)
 

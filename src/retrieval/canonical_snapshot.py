@@ -281,6 +281,8 @@ def snapshot_to_search_execution(snapshot: dict[str, Any]) -> SearchExecution:
         "accepted_block_ids": list(snapshot.get("accepted_block_ids") or []),
         "adjacent_allowlist": list(snapshot.get("adjacent_allowlist") or []),
         "stages": dict(snapshot.get("stages") or {}),
+        # SPEC Phase 3.3: per-candidate ranking audit trail.
+        "ranking_reasons": list(snapshot.get("ranking_reasons") or []),
     }
     return SearchExecution(results=results, trace=trace)
 
@@ -334,6 +336,10 @@ def build_canonical_snapshot(
     seen_k: set[str] = set()
     seen_b: set[str] = set()
     seen_p: set[str] = set()
+    # SPEC Phase 3.3: surface per-candidate ranking_reason at the top level of
+    # each accepted item so audits do not need to dig into ``relevance``. Also
+    # collect a compact summary for the snapshot's stages block.
+    ranking_reasons_summary: list[dict[str, Any]] = []
     for r in accepted:
         kid = str(r.get("knowledge_id") or "").strip()
         bid = str(r.get("block_id") or "").strip()
@@ -347,6 +353,24 @@ def build_canonical_snapshot(
         if pid and pid not in seen_p:
             seen_p.add(pid)
             accepted_passages.append(pid)
+        # Promote ranking_reason from the relevance sub-dict to the item top
+        # level so downstream consumers (MCP envelope, audit logs) can read it
+        # without re-scoring.
+        rel = r.get("relevance") if isinstance(r.get("relevance"), dict) else {}
+        rr = rel.get("ranking_reason") if isinstance(rel.get("ranking_reason"), dict) else None
+        if rr:
+            r["ranking_reason"] = rr
+            ranking_reasons_summary.append({
+                "knowledge_id": kid,
+                "passage_id": pid,
+                "title": (r.get("title") or "")[:60],
+                "final_relevance_score": r.get("final_relevance_score"),
+                "primary_signal": rr.get("primary_signal"),
+                "boosts": rr.get("boosts") or [],
+                "penalties": rr.get("penalties") or [],
+                "scope_reason": rr.get("scope_reason"),
+                "regulation_phrase_reason": rr.get("regulation_phrase_reason"),
+            })
 
     is_passage = _items_are_passages(accepted[:top_k]) or bool(accepted_passages)
     # SPEC v5: passage path must not call list_blocks_fn / expand whole pages.
@@ -568,6 +592,7 @@ def build_canonical_snapshot(
         "gate_evidence": list(decision.get("evidence") or []),
         "version_exclusions": version_exclusions,
         "snapshot_fingerprint": snapshot_fingerprint,
+        "ranking_reasons": ranking_reasons_summary,
         "stages": {
             "gate": {
                 "accept": bool(decision.get("accept")),
@@ -585,6 +610,11 @@ def build_canonical_snapshot(
             "adjacent_fallback_reason": adj_audit.get("adjacent_fallback_reason"),
             "focus_not_found": adj_audit.get("focus_not_found"),
             "snapshot_fingerprint": snapshot_fingerprint,
+            # SPEC Phase 3.3: per-candidate ranking audit trail. Each entry
+            # records which boosts/penalties drove the candidate's final score
+            # so case-level failure taxonomy can trace wrong_product /
+            # wrong_version / wrong_family back to the signal that accepted it.
+            "ranking_reasons": ranking_reasons_summary,
         },
         "direct_slot_evidence": bool(decision.get("direct_slot_evidence")),
         "direct_slot_audit": decision.get("direct_slot_audit") or {},

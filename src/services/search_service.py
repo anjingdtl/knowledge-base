@@ -395,6 +395,50 @@ class SearchService:
                 "candidate_type": "passage" if is_passage else "raw_block",
                 "retrieval_unit": "passage" if is_passage else "block",
             }
+            # SPEC Phase 3.2: carry forward the alias_fts_match flag set by
+            # the retrieve() method so the relevance gate can credit
+            # synonym-matched candidates.
+            if r.get("alias_fts_match"):
+                entry["alias_fts_match"] = True
+            # SPEC Phase 3.3: carry forward retrieval-channel scores so
+            # score_candidate_relevance can use the genuine vector similarity
+            # as a semantic floor (e.g. when lexical coverage is low because
+            # the query is colloquial but the embedding matched the right doc).
+            for _fwd_key in (
+                "_semantic_similarity",
+                "vector_score",
+                "fts_score",
+                "fts_rank",
+                "keyword_score",
+                "rerank_score",
+            ):
+                _v = r.get(_fwd_key)
+                if _v is not None:
+                    entry[_fwd_key] = _v
+            # SPEC Phase 3.3: second-pass alias tagging. The first pass in
+            # retrieve() runs on raw candidates whose ``title`` field may not
+            # be populated yet (the title is resolved above from the DB).
+            # Re-check here now that the title is known, so candidates surfaced
+            # via alias-expanded synonym variants (比赛→竞赛, 店铺→门店)
+            # receive the ``alias_fts_match`` flag and the relevance gate can
+            # credit them.
+            if not entry.get("alias_fts_match") and title and title != "未知":
+                try:
+                    from src.services.query_rewrite import build_alias_query_variants
+
+                    for v in build_alias_query_variants(query):
+                        src = v.get("source") or ""
+                        if not (src.startswith("alias:") and "→" in src):
+                            continue
+                        parts = src[len("alias:"):].split("→", 1)
+                        if len(parts) != 2 or not parts[0] or not parts[1]:
+                            continue
+                        orig, syn = parts[0], parts[1]
+                        if syn in title and orig not in title:
+                            entry["alias_fts_match"] = True
+                            break
+                except Exception:  # noqa: BLE001
+                    pass
             if is_passage:
                 entry["passage_id"] = r.get("passage_id") or meta.get("passage_id") or unit_id
                 entry["document_family_id"] = (
